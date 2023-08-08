@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -113,7 +119,6 @@ export class ContentChoiceCreationComponent
       this.newAnswerOptionChecked = false;
       this.resetAnswerInputEvent.emit(true);
       this.fillCorrectAnswers();
-      document.getElementById('answer-input').focus();
       this.announceService.announce('content.a11y-answer-added');
     } else {
       const msg = this.translationService.instant('content.max-answers');

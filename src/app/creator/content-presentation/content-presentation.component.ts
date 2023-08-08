@@ -119,15 +119,12 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   initScale() {
     if (this.isPresentation) {
       const scale = this.presentationService.getScale();
-      document.getElementById(
-        'stepper-container'
-      ).style.transform = `scale(${scale})`;
-      document.getElementById(
-        'stepper-container'
-      ).style.left = `calc(50vw - calc(305px * ${scale})`;
-      document.getElementById(
-        'stepper-container'
-      ).style.top = `calc(4vw - calc(1em * ${scale}))`;
+      const stepperContainer = document.getElementById('stepper-container');
+      if (stepperContainer) {
+        stepperContainer.style.transform = `scale(${scale})`;
+        stepperContainer.style.left = `calc(50vw - calc(305px * ${scale})`;
+        stepperContainer.style.top = `calc(4vw - calc(1em * ${scale}))`;
+      }
     }
   }
 
@@ -176,7 +173,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
                 this.contentIndex = initial ? this.entryIndex : 0;
                 this.currentStep = this.contentIndex;
                 setTimeout(() => {
-                  this.stepper.init(this.contentIndex, this.contents.length);
+                  this.stepper?.init(this.contentIndex, this.contents.length);
                   this.updateURL(this.contentIndex, true);
                   if (this.isPresentation && !initial) {
                     this.updateStateChange();
@@ -184,12 +181,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
                 }, 0);
               }
               this.updateInfoBar();
-              setTimeout(() => {
-                const id = this.isPresentation
-                  ? 'presentation-mode-message'
-                  : 'presentation-message';
-                document.getElementById(id).focus();
-              }, 700);
             });
         } else {
           this.finishInit(initial);
@@ -243,13 +234,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     this.updateInfoBar();
     setTimeout(() => {
       this.indexChanged.emit(this.currentStep);
-      const id =
-        [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
-          this.contents[index].format
-        ) > -1
-          ? 'message-type-info-button'
-          : 'message-button';
-      document.getElementById(id).focus();
     }, 300);
   }
 

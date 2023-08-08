@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AbstractLiveFeedbackPage } from '@app/common/abstract/abstract-live-feedback-page';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
@@ -24,7 +24,7 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 })
 export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPage
-  implements OnInit, OnDestroy, AfterContentInit
+  implements OnInit, OnDestroy
 {
   private hotkeyRefs: symbol[] = [];
 
@@ -50,12 +50,6 @@ export class LiveFeedbackPageComponent
       globalStorageService,
       route
     );
-  }
-
-  ngAfterContentInit() {
-    setTimeout(() => {
-      document.getElementById('message-announcer-button').focus();
-    }, 500);
   }
 
   ngOnInit() {
@@ -94,9 +88,10 @@ export class LiveFeedbackPageComponent
     this.focusModeService.updateFeedbackState(this.room, !this.isClosed);
     setTimeout(() => {
       const scale = Math.max(Math.min(innerWidth, 2100) / 1500, 1);
-      document.getElementById(
-        'live-feedback'
-      ).style.transform = `scale(${scale})`;
+      const liveFeedback = document.getElementById('live-feedback');
+      if (liveFeedback) {
+        liveFeedback.style.transform = `scale(${scale})`;
+      }
     });
   }
 

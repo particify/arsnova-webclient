@@ -1,10 +1,4 @@
-import {
-  AfterContentInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
@@ -41,7 +35,7 @@ import { FocusModeService } from '@app/participant/_services/focus-mode.service'
   templateUrl: './participant-content-carousel-page.component.html',
 })
 export class ParticipantContentCarouselPageComponent
-  implements OnInit, AfterContentInit, OnDestroy
+  implements OnInit, OnDestroy
 {
   @ViewChild(StepperComponent) stepper: StepperComponent;
 
@@ -95,12 +89,6 @@ export class ParticipantContentCarouselPageComponent
     private contentPublishService: ContentPublishService,
     private focusModeService: FocusModeService
   ) {}
-
-  ngAfterContentInit() {
-    setTimeout(() => {
-      document.getElementById('live-announcer-button').focus();
-    }, 700);
-  }
 
   ngOnDestroy(): void {
     this.destroyed$.next(null);

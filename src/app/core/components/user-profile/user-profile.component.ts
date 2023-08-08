@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
@@ -34,8 +34,6 @@ export class FormField {
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
-  @ViewChild('messageButton', { static: true }) announceButton: ElementRef;
-
   auth: ClientAuthentication;
   user: User;
   formFields: FormField[] = [];
@@ -88,7 +86,6 @@ export class UserProfileComponent implements OnInit {
             new FormField(this.user.person?.mail, 'mail', 'mail'),
           ];
           this.isLoading = false;
-          this.announceButton.nativeElement.focus();
         });
     });
   }

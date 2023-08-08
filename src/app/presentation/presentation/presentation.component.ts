@@ -72,9 +72,6 @@ export class PresentationComponent implements OnInit, OnDestroy {
             );
           });
       }
-      setTimeout(() => {
-        document.getElementById('welcome-message').focus();
-      }, 500);
     });
   }
 
@@ -101,8 +98,6 @@ export class PresentationComponent implements OnInit, OnDestroy {
         const groupName = group || this.lastGroup;
         urlList.push(groupName);
       }
-    } else {
-      document.getElementById('welcome-message').focus();
     }
     this.router.navigate(urlList);
   }

@@ -1,4 +1,10 @@
-import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
@@ -26,8 +32,9 @@ import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/f
   templateUrl: './comment-answer.component.html',
   styleUrls: ['./comment-answer.component.scss'],
 })
-export class CommentAnswerComponent implements OnInit, AfterContentInit {
+export class CommentAnswerComponent implements OnInit {
   readonly dialogId = 'comment-answer';
+  @ViewChild('answerInput') answerInput: ElementRef;
 
   comment: Comment;
   answer: string;
@@ -45,16 +52,6 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngAfterContentInit() {
-    setTimeout(() => {
-      if (!this.data.isEditor) {
-        document.getElementById('answer-text').focus();
-      } else {
-        document.getElementById('message-button').focus();
-      }
-    }, 700);
-  }
-
   ngOnInit() {
     this.comment = this.data.comment;
     this.answer = this.comment.answer;
@@ -64,8 +61,8 @@ export class CommentAnswerComponent implements OnInit, AfterContentInit {
   editAnswer() {
     this.edit = true;
     setTimeout(() => {
-      document.getElementById('answer-input').focus();
-    }, 500);
+      this.answerInput.nativeElement.focus();
+    });
   }
 
   saveAnswer() {

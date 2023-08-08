@@ -7,7 +7,7 @@
   <button mat-icon-button (click)="close()" aria-labelledby="exit">
     <mat-icon class="exit-icon">arrow_back</mat-icon>
   </button>
-  <div id="message-button" tabIndex="-1" class="visually-hidden">
+  <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{ 'comment-page.a11y-message-answer' | a11yIntro | async }}
   </div>
   <div fxFill fxLayout="column" fxLayoutGap="10px">
@@ -23,12 +23,7 @@
     </div>
     <div fxLayout="row" fxLayoutAlign="center">
       <mat-card class="answer" *ngIf="isEditor || answer">
-        <div
-          tabindex="-1"
-          id="answer-text"
-          class="visually-hidden"
-          appHotkey="1"
-        >
+        <div tabindex="-1" [appAutofocus] class="visually-hidden" appHotkey="1">
           {{
             'comment-page.a11y-entered-answer' | translate: { answer: answer }
           }}
@@ -68,7 +63,6 @@
               ></app-formatting-toolbar>
               <mat-form-field class="input-block" appearance="outline">
                 <textarea
-                  id="answer-input"
                   #answerInput
                   [(ngModel)]="answer"
                   (focus)="edit = true"

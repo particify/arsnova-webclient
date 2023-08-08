@@ -5,8 +5,8 @@
 >
   <div
     *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1"
-    tabindex="0"
-    id="message-type-info-button"
+    tabindex="-1"
+    [appAutofocus]
     class="visually-hidden"
   >
     {{ 'statistic.a11y-message-type-info' | translate: { index: index + 1 } }}
@@ -14,7 +14,7 @@
   <div
     *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1"
   >
-    <div tabindex="0" id="message-button" class="visually-hidden">
+    <div tabindex="0" [appAutofocus] class="visually-hidden">
       {{
         (answerCount === 0
           ? 'statistic.a11y-message-evaluation'

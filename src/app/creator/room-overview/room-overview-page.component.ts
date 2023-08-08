@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AdvancedSnackBarTypes,
@@ -26,7 +26,7 @@ import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-ove
 })
 export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPage
-  implements OnInit, OnDestroy, AfterContentInit
+  implements OnInit, OnDestroy
 {
   isModerator = false;
 
@@ -51,12 +51,6 @@ export class RoomOverviewPageComponent
       wsCommentService,
       eventService
     );
-  }
-
-  ngAfterContentInit(): void {
-    setTimeout(() => {
-      document.getElementById('live-announcer-button').focus();
-    }, 700);
   }
 
   ngOnInit() {

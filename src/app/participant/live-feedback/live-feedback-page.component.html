@@ -1,4 +1,4 @@
-<div class="visually-hidden" id="message-announcer-button" tabIndex="-1">
+<div class="visually-hidden" [appAutofocus] tabIndex="-1">
   {{ 'survey.a11y-message' | a11yIntro | async }}
 </div>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>

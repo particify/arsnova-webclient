@@ -1,11 +1,11 @@
 <div fxLayout="column" fxLayoutAlign="start" fxLayoutGap="20px" fxFill>
   <div fxLayout="row" fxLayoutAlign="center">
     <mat-card>
+      <div tabindex="-1" class="visually-hidden" [appAutofocus]>
+        {{ 'statistic.a11y-message-overview' | a11yIntro | async }}
+      </div>
       <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
       <div *ngIf="!isLoading">
-        <div tabindex="-1" class="visually-hidden" id="message-button">
-          {{ 'statistic.a11y-message-overview' | a11yIntro | async }}
-        </div>
         <div fxLayout="row wrap" fxLayoutAlign="space-between">
           <mat-form-field appearance="outline" class="no-field-hint">
             <mat-label>{{

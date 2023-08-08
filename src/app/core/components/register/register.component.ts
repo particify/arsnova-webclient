@@ -41,7 +41,6 @@ export class RegisterComponent implements OnInit {
     this.accountServiceTitle =
       data.apiConfig.ui.registration?.service || 'ARSnova';
     this.linkOfToS = data.apiConfig.ui.links.tos.url;
-    document.getElementById('email-input').focus();
   }
 
   activateValidators() {

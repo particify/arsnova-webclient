@@ -311,9 +311,6 @@ export class GroupContentComponent
   initContentList(contentList: Content[]) {
     this.contents = contentList;
     this.isLoading = false;
-    setTimeout(() => {
-      document.getElementById('message-button').focus();
-    }, 500);
   }
 
   reloadContentGroup(imported = false) {
@@ -377,10 +374,7 @@ export class GroupContentComponent
   goInTitleEditMode(): void {
     this.updatedName = this.groupName;
     this.isInTitleEditMode = true;
-    setTimeout(() => {
-      document.getElementById('nameInput').focus();
-      this.nameInput.nativeElement.selectionStart = this.updatedName.length;
-    }, 100);
+    this.nameInput.nativeElement.selectionStart = this.updatedName.length;
   }
 
   leaveTitleEditMode(): void {

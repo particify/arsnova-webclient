@@ -3,6 +3,7 @@ import { NavBarComponent } from './nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
+  ActivatedRouteStub,
   JsonTranslationLoader,
   MockGlobalStorageService,
 } from '@testing/test-helpers';
@@ -33,6 +34,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable()
 class MockContentGroupService {
@@ -110,6 +112,20 @@ describe('NavBarComponent', () => {
   mockFocusModeService.getState.and.returnValue(of({}));
   mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
 
+  const room = new Room();
+  room.settings = {
+    feedbackLocked: false,
+  };
+  const snapshot = new ActivatedRouteSnapshot();
+  snapshot.data = {
+    room: room,
+    userRole: UserRole.EDITOR,
+    viewRole: UserRole.PARTICIPANT,
+  };
+
+  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  activatedRouteStub['children'] = {};
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [NavBarComponent],
@@ -153,6 +169,10 @@ describe('NavBarComponent', () => {
           provide: CommentSettingsService,
           useValue: mockCommentSettingsService,
         },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub,
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -176,10 +196,13 @@ describe('NavBarComponent', () => {
     room.settings = {
       feedbackLocked: false,
     };
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
+      userRole: UserRole.EDITOR,
+      viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
@@ -190,11 +213,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#overview-button' })
@@ -212,12 +236,13 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     const feedbackButtonElement =
       fixture.nativeElement.querySelector('#feedback-button');
@@ -230,12 +255,13 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       userRole: UserRole.OWNER,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     feedbackButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#feedback-button' })
@@ -249,12 +275,13 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       userRole: UserRole.OWNER,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     const stats = {
       groupStats: [
         {
@@ -278,11 +305,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -296,11 +324,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -320,11 +349,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -338,11 +368,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -357,11 +388,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#overview-button' })
@@ -377,11 +409,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#comments-button' })
@@ -401,11 +434,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#feedback-button' })
@@ -425,11 +459,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     const stats = {
       groupStats: [
         {
@@ -459,11 +494,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     const stats = {
       groupStats: [
         {
@@ -498,11 +534,12 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       viewRole: UserRole.OWNER,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     const stats = {
       groupStats: [
         {
@@ -544,12 +581,13 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     const stats = {
       groupStats: [
         {
@@ -592,12 +630,13 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     const stats = {
       groupStats: [
         {
@@ -637,12 +676,13 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     let feedbackButtonElement =
       fixture.nativeElement.querySelector('#feedback-button');
@@ -668,12 +708,13 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     let feedbackBadge = fixture.nativeElement.querySelector('#feedback-badge');
     expect(feedbackBadge).toBeNull();
@@ -695,12 +736,13 @@ describe('NavBarComponent', () => {
       feedbackLocked: false,
     };
     room.shortId = '12345678';
-    const data = {
+    const snapshot = new ActivatedRouteSnapshot();
+    snapshot.data = {
       room: room,
       userRole: UserRole.PARTICIPANT,
       viewRole: UserRole.PARTICIPANT,
     };
-    route.data = of(data);
+    route.snapshot = snapshot;
     fixture.detectChanges();
     let feedbackButtonElement =
       fixture.nativeElement.querySelector('#feedback-button');

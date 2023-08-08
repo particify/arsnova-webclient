@@ -18,6 +18,7 @@
           matInput
           type="email"
           #userName
+          [appAutofocus]
           [formControl]="usernameFormControl"
           [errorStateMatcher]="matcher"
           (blur)="activateValidators()"

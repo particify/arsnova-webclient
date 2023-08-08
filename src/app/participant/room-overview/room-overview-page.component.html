@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="center">
-  <div id="live-announcer-button" tabIndex="-1" class="visually-hidden">
+  <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{ 'room-page.a11y-room-message' | a11yIntro: { name: room.name } | async }}
   </div>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>

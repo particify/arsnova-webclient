@@ -149,11 +149,6 @@ export class ContentParticipantComponent implements OnInit {
 
   goToStats() {
     this.flipped = !this.flipped;
-    setTimeout(() => {
-      document
-        .getElementById(this.flipped ? 'message-button' : 'content-message')
-        .focus();
-    }, 500);
   }
 
   goToNextContent(last: boolean) {

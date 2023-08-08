@@ -296,7 +296,6 @@ export class ContentCreationComponent
           }
           this.contentGroupService.saveGroupInMemoryStorage(this.contentGroup);
           this.resetAfterSubmit();
-          document.getElementById('body-input').focus();
         });
     } else {
       this.refId.emit(this.content.id);

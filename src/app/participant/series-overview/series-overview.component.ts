@@ -247,6 +247,9 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private createChart(id: string, color: string, data: number[]): Chart {
+    if (!document.getElementById(id)) {
+      return;
+    }
     const dataSets = [
       {
         data: data,
@@ -257,7 +260,6 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
         circumference: 180,
       },
     ];
-
     Chart.register(
       PieController,
       DoughnutController,

@@ -7,7 +7,7 @@
     fxLayoutAlign="center"
   >
     <div class="visually-hidden">
-      <div id="message-button" tabIndex="-1">
+      <div [appAutofocus] tabIndex="-1">
         {{
           'content.a11y-content-list-message'
             | a11yIntro: { name: contentGroup.name }

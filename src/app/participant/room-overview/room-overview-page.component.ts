@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
@@ -28,7 +28,7 @@ import { HintType } from '@app/core/models/hint-type.enum';
 })
 export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPage
-  implements OnInit, OnDestroy, AfterContentInit
+  implements OnInit, OnDestroy
 {
   surveyEnabled = false;
   commentsEnabled = false;
@@ -61,12 +61,6 @@ export class RoomOverviewPageComponent
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-  }
-
-  ngAfterContentInit(): void {
-    setTimeout(() => {
-      document.getElementById('live-announcer-button').focus();
-    }, 700);
   }
 
   ngOnInit() {

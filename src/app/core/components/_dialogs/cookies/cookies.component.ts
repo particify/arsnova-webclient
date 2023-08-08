@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-  Inject,
-} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -23,10 +16,8 @@ import {
   templateUrl: './cookies.component.html',
   styleUrls: ['./cookies.component.scss'],
 })
-export class CookiesComponent implements OnInit, AfterViewInit {
+export class CookiesComponent {
   readonly dialogId = 'cookie-settings';
-
-  @ViewChild('header') dialogTitle: ElementRef;
 
   categories: CookieCategory[];
   privacyUrl: string;
@@ -42,17 +33,6 @@ export class CookiesComponent implements OnInit, AfterViewInit {
   ) {
     this.categories = data.categories;
     this.privacyUrl = data.privacyUrl;
-  }
-
-  ngOnInit() {
-    // not really the nicest way but should do its job until a better or native solution was found
-    setTimeout(() => document.getElementById('cookie-header').focus(), 400);
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      document.getElementById('cookie-header').focus();
-    }, 500);
   }
 
   acceptAllCookies() {
@@ -75,8 +55,5 @@ export class CookiesComponent implements OnInit, AfterViewInit {
     this.dialogRef.close(consentGiven);
     const msg = this.translateService.instant('cookies.settings-saved');
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-    setTimeout(() => {
-      document.getElementById('room-id-input').focus();
-    }, 500);
   }
 }
