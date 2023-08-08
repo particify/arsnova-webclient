@@ -11,7 +11,11 @@ import {
 import { EventService } from '@app/core/services/util/event.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
-import { AbstractHttpService } from './abstract-http.service';
+import {
+  AbstractHttpService,
+  HttpOptions,
+  HttpMethod,
+} from './abstract-http.service';
 
 export abstract class AbstractCachingHttpService<
   T,
@@ -45,24 +49,55 @@ export abstract class AbstractCachingHttpService<
 
   /**
    * Performs a HTTP GET request and caches the Observable while the request is
-   * in flight. If an request with identical URI and params is already in
+   * in flight. If a GET request with identical URI and params is already in
    * flight, the cached Observable is returned.
    */
   protected fetchOnce<U extends T | T[]>(
     uri: string,
     params?: HttpParams
   ): Observable<U> {
-    const key = uri + (params ? '?' + params.toString() : '');
+    return this.requestOnce('GET', uri, null, { params: params });
+  }
+
+  /**
+   * Performs a HTTP request and caches the Observable while the request is in
+   * flight. If an request with identical method, URI, params and body is
+   * already in flight, the cached Observable is returned.
+   */
+  protected requestOnce<U extends T | T[]>(
+    method: HttpMethod,
+    uri: string,
+    body: U,
+    options: Omit<HttpOptions, 'body'> = {}
+  ): Observable<U> {
+    (options as HttpOptions).body = body;
+    const key = this.generateRequestKey(method, uri, options);
     if (this.inflightRequests.has(key)) {
       return this.inflightRequests.get(key) as Observable<U>;
     }
-    const request$ = this.performGet<U>(uri, { params: params }).pipe(
+    const request$ = this.performRequest<U>(method, uri, body, options).pipe(
       tap(() => this.inflightRequests.delete(key)),
       share()
     );
     this.inflightRequests.set(key, request$);
 
     return request$;
+  }
+
+  private generateRequestKey(
+    method: HttpMethod,
+    uri: string,
+    options?: HttpOptions
+  ): string {
+    let key = `${method}\n${uri}`;
+    if (options.params) {
+      key += '?' + options.params.toString();
+    }
+    if (options.body != null) {
+      key += '\n' + JSON.stringify(options.body);
+    }
+
+    return key;
   }
 
   /**

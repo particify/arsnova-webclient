@@ -61,7 +61,7 @@ export class CommentService extends AbstractEntityService<Comment> {
 
   addComment(comment: Comment): Observable<Comment> {
     const connectionUrl = this.buildUri('/', comment.roomId);
-    return this.http.post<Comment>(connectionUrl, comment, httpOptions).pipe(
+    return this.requestOnce('POST', connectionUrl, comment, httpOptions).pipe(
       tap(() => {
         const event = new CommentCreated();
         this.eventService.broadcast(event.type);

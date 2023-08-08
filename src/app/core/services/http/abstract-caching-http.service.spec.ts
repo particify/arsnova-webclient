@@ -18,6 +18,10 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { Observable } from 'rxjs';
+import {
+  HttpMethod,
+  HttpOptions,
+} from '@app/core/services/http/abstract-http.service';
 
 @Injectable()
 class MockWsConnectorService {}
@@ -48,14 +52,23 @@ class TestCachingHttpService extends AbstractCachingHttpService<object> {
     );
   }
 
-  public fetchOnce<U extends object | object[]>(
+  public override fetchOnce<U extends object | object[]>(
     uri: string,
     params?: HttpParams
   ): Observable<U> {
     return super.fetchOnce(uri, params);
   }
 
-  public fetchWithCache(uri: string): Observable<object> {
+  public override requestOnce<U extends object | object[]>(
+    method: HttpMethod,
+    uri: string,
+    body: U,
+    options?: Omit<HttpOptions, 'body'>
+  ): Observable<U> {
+    return super.requestOnce(method, uri, body, options);
+  }
+
+  public override fetchWithCache(uri: string): Observable<object> {
     return super.fetchWithCache(uri);
   }
 }
@@ -194,6 +207,26 @@ describe('AbstractCachingHttpService', () => {
         req1.flush(data1);
         req2.flush(data1);
         req3.flush(data1);
+      }
+    ));
+  });
+
+  describe('requestOnce', () => {
+    it('should not reuse in-flight request if methods do not match', inject(
+      [TestCachingHttpService],
+      (service: TestCachingHttpService) => {
+        service
+          .requestOnce('POST', TEST_URI1, data1)
+          .subscribe((data) => expect(data).toEqual(data1));
+        const req1 = httpTestingController.expectOne(TEST_URI1);
+
+        service
+          .requestOnce('PUT', TEST_URI1, data1)
+          .subscribe((data) => expect(data).toEqual(data1));
+        const req2 = httpTestingController.expectOne(TEST_URI1);
+
+        req1.flush(data1);
+        req2.flush(data1);
       }
     ));
   });
