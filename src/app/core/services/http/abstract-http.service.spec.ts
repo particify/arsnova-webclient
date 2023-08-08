@@ -1,5 +1,5 @@
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
-import { AbstractHttpService } from './abstract-http.service';
+import { AbstractHttpService, HttpMethod } from './abstract-http.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -47,7 +47,8 @@ class TestHttpService extends AbstractHttpService<object> {
     return super.performGet(url, options);
   }
 
-  public override performPost<U extends object | object[]>(
+  public override performRequest<U extends object | object[]>(
+    method: HttpMethod,
     uri: string,
     body: U,
     options?: {
@@ -55,7 +56,7 @@ class TestHttpService extends AbstractHttpService<object> {
       retryInitialInterval?: number;
     }
   ): Observable<U> {
-    return super.performPost(uri, body, options);
+    return super.performRequest(method, uri, body, options);
   }
 }
 
@@ -160,16 +161,17 @@ describe('AbstractHttpService', () => {
     ));
   });
 
-  describe('performPost', () => {
+  describe('performRequest(POST, ...)', () => {
     it('should perform a POST request and pass the response', inject(
       [TestHttpService],
       (service: TestHttpService) => {
+        const method = 'POST';
         service
-          .performPost(TEST_URI1, data1)
+          .performRequest(method, TEST_URI1, data1)
           .subscribe((data) => expect(data).toEqual(data1));
         const req = httpTestingController.expectOne({
           url: TEST_URI1,
-          method: 'POST',
+          method: method,
         });
         req.flush(data1);
       }

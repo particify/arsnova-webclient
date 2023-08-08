@@ -24,9 +24,12 @@ function defaultRetryBackoff(initialInterval = 3000) {
   );
 }
 
-type HttpOptions = {
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+export type HttpOptions = {
   params?: HttpParams;
   headers?: HttpHeaders;
+  body?: any;
   retry?: boolean;
   retryInitialInterval?: number;
 };
@@ -53,55 +56,41 @@ export abstract class AbstractHttpService<T> {
    */
   protected performGet<U extends T | T[]>(
     uri: string,
-    options?: HttpOptions
+    options: HttpOptions = {}
   ): Observable<U> {
-    return this.performGenericGet(uri, options);
+    options.retry ??= true;
+    return this.performGenericRequest('GET', uri, options);
   }
 
   protected performForeignGet<U>(
     uri: string,
-    options?: HttpOptions
+    options: HttpOptions = {}
   ): Observable<U> {
-    return this.performGenericGet(uri, options);
-  }
-
-  private performGenericGet<U>(
-    uri: string,
-    options?: HttpOptions
-  ): Observable<U> {
-    const request$ = this.httpClient.get<U>(uri, options);
-    return options?.retry ?? true
-      ? request$.pipe(defaultRetryBackoff(options?.retryInitialInterval))
-      : request$;
+    options.retry ??= true;
+    return this.performGenericRequest('GET', uri, options);
   }
 
   /**
-   * Performs a HTTP POST request. If options.retry is true, the request will be
+   * Performs a HTTP request. If options.retry is true, the request will be
    * send again up to 5 times with exponential backoff delay on failure.
    */
-  protected performPost<U extends T | T[]>(
+  protected performRequest<U extends T | T[]>(
+    method: HttpMethod,
     uri: string,
     body: U,
-    options?: HttpOptions
+    options: Omit<HttpOptions, 'body'> = {}
   ): Observable<U> {
-    return this.performGenericPost(uri, body, options);
+    (options as HttpOptions).body = body;
+    return this.performGenericRequest(method, uri, options);
   }
 
-  protected performForeignPost<U>(
+  protected performGenericRequest<U>(
+    method: HttpMethod,
     uri: string,
-    body: any,
     options?: HttpOptions
   ): Observable<U> {
-    return this.performGenericPost(uri, body, options);
-  }
-
-  private performGenericPost<U>(
-    uri: string,
-    body: any,
-    options?: HttpOptions
-  ): Observable<U> {
-    const request$ = this.httpClient.post<U>(uri, body, options);
-    return options?.retry ?? true
+    const request$ = this.httpClient.request<U>(method, uri, options);
+    return options?.retry
       ? request$.pipe(defaultRetryBackoff(options?.retryInitialInterval))
       : request$;
   }

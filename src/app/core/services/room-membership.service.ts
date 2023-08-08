@@ -258,7 +258,10 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   requestMembership(roomShortId: string, token?: string): Observable<Room> {
     const uri = this.buildForeignUri('/request-membership', '~' + roomShortId);
     const payload = token ? { token: token } : {};
-    return this.performForeignPost<Room>(uri, payload, { retry: true }).pipe(
+    return this.performGenericRequest<Room>('POST', uri, {
+      body: payload,
+      retry: true,
+    }).pipe(
       tap(() => {
         const event = new MembershipsChanged();
         this.eventService.broadcast(event.type, event.payload);
@@ -272,7 +275,10 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
    */
   cancelMembership(roomShortId: string): Observable<Room> {
     const uri = this.buildForeignUri('/cancel-membership', '~' + roomShortId);
-    return this.performForeignPost<Room>(uri, {}, { retry: true }).pipe(
+    return this.performGenericRequest<Room>('POST', uri, {
+      body: {},
+      retry: true,
+    }).pipe(
       tap(() => {
         const event = new MembershipsChanged();
         this.eventService.broadcast(event.type, event.payload);
