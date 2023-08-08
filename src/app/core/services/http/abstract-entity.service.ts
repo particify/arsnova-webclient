@@ -171,13 +171,11 @@ export abstract class AbstractEntityService<
       throw new Error('Entity property "id" must not be set for new entities.');
     }
     const uri = this.buildUri('/', roomId);
-    return this.httpClient
-      .post<T>(uri, entity)
-      .pipe(
-        tap((updatedEntity) =>
-          this.handleEntityCaching(updatedEntity.id, updatedEntity)
-        )
-      );
+    return this.requestOnce('POST', uri, entity).pipe(
+      tap((updatedEntity) =>
+        this.handleEntityCaching(updatedEntity.id, updatedEntity)
+      )
+    );
   }
 
   /**
@@ -191,13 +189,11 @@ export abstract class AbstractEntityService<
       throw new Error('Required entity property "id" is missing.');
     }
     const uri = this.buildUri(`/${entity.id}`, roomId);
-    return this.httpClient
-      .put<T>(uri, entity)
-      .pipe(
-        tap((updatedEntity) =>
-          this.handleEntityCaching(updatedEntity.id, updatedEntity)
-        )
-      );
+    return this.requestOnce('PUT', uri, entity).pipe(
+      tap((updatedEntity) =>
+        this.handleEntityCaching(updatedEntity.id, updatedEntity)
+      )
+    );
   }
 
   /**
@@ -209,13 +205,13 @@ export abstract class AbstractEntityService<
    */
   patchEntity(
     idOrAlias: string,
-    changes: { [key: string]: any },
+    changes: Partial<T>,
     roomId?: string
   ): Observable<T> {
     const uri = this.buildUri(`/${idOrAlias}`, roomId);
-    return this.httpClient
-      .patch<T>(uri, changes)
-      .pipe(tap((entity) => this.handleEntityCaching(idOrAlias, entity)));
+    return this.requestOnce('PATCH', uri, changes as T).pipe(
+      tap((entity) => this.handleEntityCaching(idOrAlias, entity))
+    );
   }
 
   /**
@@ -226,9 +222,9 @@ export abstract class AbstractEntityService<
    */
   deleteEntity(id: string, roomId?: string): Observable<T> {
     const uri = this.buildUri(`/${id}`, roomId);
-    return this.httpClient
-      .delete<T>(uri)
-      .pipe(tap(() => this.cache.remove(this.generateCacheKey(id))));
+    return this.requestOnce('DELETE', uri, null).pipe(
+      tap(() => this.cache.remove(this.generateCacheKey(id)))
+    );
   }
 
   protected handleEntityCaching(idOrAlias: string, entity: T) {
