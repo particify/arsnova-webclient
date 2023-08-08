@@ -106,6 +106,6 @@
     "typescript": "5.0.4"
   },
   "resolutions": {
-    "webpack": "5.82.0"
+    "webpack": "5.88.2"
   }
 }
