@@ -145,9 +145,9 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     answerText: TextAnswer
   ): Observable<TextAnswer> {
     const url = this.buildUri('/', roomId);
-    return this.http
-      .post<TextAnswer>(url, answerText, httpOptions)
-      .pipe(catchError(this.handleError<TextAnswer>('addTextAnswer')));
+    return this.requestOnce('POST', url, answerText, httpOptions).pipe(
+      catchError(this.handleError<TextAnswer>('addTextAnswer'))
+    );
   }
 
   addAnswerChoice(
@@ -155,9 +155,9 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     answerChoice: ChoiceAnswer
   ): Observable<ChoiceAnswer> {
     const url = this.buildUri('/', roomId);
-    return this.http
-      .post<ChoiceAnswer>(url, answerChoice, httpOptions)
-      .pipe(catchError(this.handleError<ChoiceAnswer>('addChoiceAnswer')));
+    return this.requestOnce('POST', url, answerChoice, httpOptions).pipe(
+      catchError(this.handleError<ChoiceAnswer>('addChoiceAnswer'))
+    );
   }
 
   addAnswerPrioritization(
@@ -165,20 +165,18 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     answer: PrioritizationAnswer
   ): Observable<PrioritizationAnswer> {
     const url = this.buildUri('/', roomId);
-    return this.http
-      .post<PrioritizationAnswer>(url, answer, httpOptions)
-      .pipe(
-        catchError(
-          this.handleError<PrioritizationAnswer>('addAnswerPrioritization')
-        )
-      );
+    return this.requestOnce('POST', url, answer, httpOptions).pipe(
+      catchError(
+        this.handleError<PrioritizationAnswer>('addAnswerPrioritization')
+      )
+    );
   }
 
   addAnswer<T extends Answer>(roomId: string, answer: T): Observable<T> {
     const url = this.buildUri('/', roomId);
-    return this.http
-      .post<T>(url, answer, httpOptions)
-      .pipe(catchError(this.handleError<T>('addAnswer')));
+    return this.requestOnce('POST', url, answer, httpOptions).pipe(
+      catchError(this.handleError<T>('addAnswer'))
+    );
   }
 
   getAnswerText(roomId: string, id: string): Observable<TextAnswer> {
