@@ -10,6 +10,7 @@ import {
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
+  MockFeatureFlagService,
   MockGlobalStorageService,
   MockNotificationService,
   MockRouter,
@@ -41,6 +42,7 @@ import { Room } from '@app/core/models/room';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 @Injectable()
 class MockContentService {
@@ -201,6 +203,10 @@ describe('GroupContentComponent', () => {
         {
           provide: ContentPublishService,
           useClass: ContentPublishService,
+        },
+        {
+          provide: FeatureFlagService,
+          useClass: MockFeatureFlagService,
         },
       ],
       imports: [

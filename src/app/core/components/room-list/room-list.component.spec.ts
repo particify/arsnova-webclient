@@ -7,6 +7,7 @@ import {
   JsonTranslationLoader,
   MockNotificationService,
   MockGlobalStorageService,
+  MockFeatureFlagService,
 } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -22,6 +23,7 @@ import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { MatMenuModule } from '@angular/material/menu';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 describe('RoomListComponent', () => {
   let component: RoomListComponent;
@@ -118,6 +120,10 @@ describe('RoomListComponent', () => {
         {
           provide: SplitShortIdPipe,
           useValue: mockSplitShortId,
+        },
+        {
+          provide: FeatureFlagService,
+          useClass: MockFeatureFlagService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

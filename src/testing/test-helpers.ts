@@ -216,3 +216,11 @@ export class MockMatDialogRef {
 }
 
 export class MockMatDialogData {}
+
+// FeatureFlagService
+
+export class MockFeatureFlagService {
+  isEnabled(feature: string) {
+    return true;
+  }
+}

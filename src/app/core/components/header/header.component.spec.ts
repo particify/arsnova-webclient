@@ -11,6 +11,7 @@ import {
   MockRouter,
   MockThemeService,
   MockMatDialog,
+  MockFeatureFlagService,
 } from '@testing/test-helpers';
 import {
   AdvancedSnackBarTypes,
@@ -46,6 +47,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
@@ -185,6 +187,10 @@ describe('HeaderComponent', () => {
         {
           provide: RoomService,
           useValue: roomService,
+        },
+        {
+          provide: FeatureFlagService,
+          useClass: MockFeatureFlagService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
