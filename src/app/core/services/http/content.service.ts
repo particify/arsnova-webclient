@@ -21,6 +21,8 @@ import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -29,6 +31,7 @@ const httpOptions = {
 @Injectable()
 export class ContentService extends AbstractEntityService<Content> {
   answersDeleted = new BehaviorSubject<string>(null);
+  private roundStarted = new BehaviorSubject<Content>(null);
 
   serviceApiUrl = {
     answer: '/answer',
@@ -56,7 +59,8 @@ export class ContentService extends AbstractEntityService<Content> {
     protected notificationService: NotificationService,
     cachingService: CachingService,
     private router: Router,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private dialog: MatDialog
   ) {
     super(
       'Content',
@@ -374,5 +378,40 @@ export class ContentService extends AbstractEntityService<Content> {
     return [ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].includes(
       format
     );
+  }
+
+  startNewRound(content: Content) {
+    const dialogRef = this.dialog.open(BaseDialogComponent, {
+      data: {
+        section: 'dialog',
+        headerLabel: 'sure',
+        body: 'really-start-new-round',
+        confirmLabel: 'start',
+        abortLabel: 'cancel',
+        type: 'button-primary',
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'start') {
+        const changes = { state: content.state };
+        changes.state.round = 2;
+        this.patchContent(content, changes).subscribe((updatedContent) => {
+          content.state.round = updatedContent.state.round;
+          this.roundStarted.next(content);
+          this.translateService
+            .get('dialog.started-new-round')
+            .subscribe((msg) => {
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.SUCCESS
+              );
+            });
+        });
+      }
+    });
+  }
+
+  getRoundStarted(): Observable<Content> {
+    return this.roundStarted;
   }
 }

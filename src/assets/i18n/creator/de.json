@@ -296,8 +296,6 @@
     "reset-banned-answers": "Gebannte Wörter zurücksetzen",
     "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt.",
     "start-new-round": "Neue Runde starten",
-    "started-new-round": "Neue Runde wurde gestartet.",
-    "canceled": "Du hast den Vorgang abgebrochen.",
     "round": "Runde",
     "round-displayed": "Die Runde {{rounds}} wird zurzeit angezeigt",
     "rounds-displayed": "Die Runden {{rounds}} werden zurzeit angezeigt"
@@ -541,9 +539,7 @@
     "really-discard-announcement": "Willst du deine Eingaben wirklich verwerfen?",
     "discard": "Verwefen",
     "ban": "Verbannen",
-    "really-ban-answer": "Willst du das Schlagwort wirklich verbannen?",
-    "really-start-new-round": "Willst du wirklich eine neue Runde starten?",
-    "start": "Starten"
+    "really-ban-answer": "Willst du das Schlagwort wirklich verbannen?"
   },
   "utils": {
     "formatting-image-hint": "Bitte beachte, dass Bilder mit hoher Dateigröße die Ladezeiten beeinträchtigen können."

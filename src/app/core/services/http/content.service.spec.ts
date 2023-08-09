@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   MockEventService,
+  MockMatDialog,
   MockNotificationService,
   MockRouter,
   MockTranslateService,
@@ -16,6 +17,7 @@ import { Cache, CachingService } from '@app/core/services/util/caching.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable()
 class MockWsConnectorService {}
@@ -62,6 +64,10 @@ describe('ContentService', () => {
         {
           provide: DialogService,
           useClass: MockDialogService,
+        },
+        {
+          provide: MatDialog,
+          useClass: MockMatDialog,
         },
       ],
       imports: [HttpClientTestingModule],

@@ -567,7 +567,7 @@
                         <mat-icon>clear_all</mat-icon>
                         <span>{{ 'content.delete-answers' | translate }}</span>
                       </button>
-                      <app-start-new-round
+                      <button
                         *ngIf="
                           [
                             ContentType.CHOICE,
@@ -575,10 +575,13 @@
                             ContentType.SCALE
                           ].indexOf(content.format) > -1
                         "
-                        [content]="content"
-                        [resetEvent]="resetAnswerEvent"
+                        mat-menu-item
+                        (click)="startNewRound(content)"
+                        [disabled]="content.state.round > 1"
                       >
-                      </app-start-new-round>
+                        <mat-icon>replay</mat-icon>
+                        {{ 'content.start-new-round' | translate }}
+                      </button>
                       <button mat-menu-item (click)="deleteContent(content)">
                         <mat-icon color="warn">delete_forever</mat-icon>
                         <span>{{ 'content.delete-content' | translate }}</span>

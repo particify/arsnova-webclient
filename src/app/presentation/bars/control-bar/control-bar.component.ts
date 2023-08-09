@@ -100,7 +100,6 @@ export class ControlBarComponent
   isCurrentContentPublished = false;
   contentIndex = 0;
   content: Content;
-  resetAnswerEvent: Subject<string> = new Subject<string>();
   notificationMessage: string;
   notificationIcon: string;
   showNotification = false;
@@ -326,9 +325,16 @@ export class ControlBarComponent
       .subscribe((contentId) => {
         if (contentId === this.content?.id) {
           this.content.state.round = 1;
-          this.resetAnswerEvent.next(this.content.id);
           this.changeRound(0);
           this.multipleRounds = false;
+        }
+      });
+    this.contentService
+      .getRoundStarted()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((content) => {
+        if (content) {
+          this.afterRoundStarted(content);
         }
       });
   }
@@ -652,5 +658,9 @@ export class ControlBarComponent
     this.content = content;
     this.changeRound(this.content.state.round - 1);
     this.multipleRounds = true;
+  }
+
+  startNewRound() {
+    this.contentService.startNewRound(this.content);
   }
 }
