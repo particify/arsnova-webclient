@@ -4,6 +4,7 @@ import { FooterComponent } from './footer.component';
 import {
   ActivatedRouteStub,
   JsonTranslationLoader,
+  MockFeatureFlagService,
 } from '@testing/test-helpers';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ConsentService } from '@app/core/services/util/consent.service';
@@ -15,6 +16,7 @@ import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { RouterTestingModule } from '@angular/router/testing';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;
@@ -70,6 +72,10 @@ describe('FooterComponent', () => {
         {
           provide: ConsentService,
           useValue: consentService,
+        },
+        {
+          provide: FeatureFlagService,
+          useClass: MockFeatureFlagService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
