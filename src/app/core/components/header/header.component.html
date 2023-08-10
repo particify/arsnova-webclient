@@ -35,7 +35,8 @@
       <mat-icon class="header-icons">arrow_back</mat-icon>
     </button>
     <lib-extension-point
-      extensionId="header-logo"
+      extensionId="branding-logo"
+      [extensionData]="{ headerPlacement: true }"
       *ngIf="router.url === '/'"
     ></lib-extension-point>
     <span class="fill-remaining-space"></span>
