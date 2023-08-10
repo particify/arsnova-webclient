@@ -325,9 +325,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cdk@npm:16.1.7":
-  version: 16.1.7
-  resolution: "@angular/cdk@npm:16.1.7"
+"@angular/cdk@npm:16.1.8":
+  version: 16.1.8
+  resolution: "@angular/cdk@npm:16.1.8"
   dependencies:
     parse5: ^7.1.2
     tslib: ^2.3.0
@@ -338,7 +338,7 @@ __metadata:
   dependenciesMeta:
     parse5:
       optional: true
-  checksum: de646014cc8ec07436dc5b11f36533c8b71e00857c2d52f76993e2a8b434d4910ee2b9526029030d38562ebf30a8ed8de9696c987b1a5e8b0c2afc013928ab3a
+  checksum: 62f96022d7f43934983091d9bc614af87b98696a4862e53007bd13db6b3ad7c5bae63427988ebdc0e1c1a00ccbb3b4717b1be16cccd737c95a50dc796e477e5d
   languageName: node
   linkType: hard
 
@@ -467,9 +467,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/material@npm:16.1.7":
-  version: 16.1.7
-  resolution: "@angular/material@npm:16.1.7"
+"@angular/material@npm:16.1.8":
+  version: 16.1.8
+  resolution: "@angular/material@npm:16.1.8"
   dependencies:
     "@material/animation": 15.0.0-canary.b994146f6.0
     "@material/auto-init": 15.0.0-canary.b994146f6.0
@@ -521,13 +521,13 @@ __metadata:
     tslib: ^2.3.0
   peerDependencies:
     "@angular/animations": ^16.0.0 || ^17.0.0
-    "@angular/cdk": 16.1.7
+    "@angular/cdk": 16.1.8
     "@angular/common": ^16.0.0 || ^17.0.0
     "@angular/core": ^16.0.0 || ^17.0.0
     "@angular/forms": ^16.0.0 || ^17.0.0
     "@angular/platform-browser": ^16.0.0 || ^17.0.0
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: a825283fca5d95cfe3027418d747ed1d62f2f8905d2c3ecf4f2bbf903b953ca330e67bdadc977eba25cd1d90fdb0defb8ce024a170eeb6ccfb6afd17ac93f964
+  checksum: 2f3d4fc5ac064e4a13e0fb8b7bb8c773e85e987924b98355513c8bd9f6070b80f3fa65093a34ffd3c50c650239219696e1b94c8636f3bd4072bf7158cddf0769
   languageName: node
   linkType: hard
 
@@ -8111,7 +8111,7 @@ __metadata:
     "@angular-eslint/schematics": 16.1.0
     "@angular-eslint/template-parser": 16.1.0
     "@angular/animations": 16.1.8
-    "@angular/cdk": 16.1.7
+    "@angular/cdk": 16.1.8
     "@angular/cli": 16.1.8
     "@angular/common": 16.1.8
     "@angular/compiler": 16.1.8
@@ -8120,7 +8120,7 @@ __metadata:
     "@angular/flex-layout": 15.0.0-beta.42
     "@angular/forms": 16.1.8
     "@angular/language-service": 16.1.8
-    "@angular/material": 16.1.7
+    "@angular/material": 16.1.8
     "@angular/platform-browser": 16.1.8
     "@angular/platform-browser-dynamic": 16.1.8
     "@angular/router": 16.1.8
