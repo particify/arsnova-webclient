@@ -8160,7 +8160,7 @@ __metadata:
     chart.js: 4.3.3
     chartjs-plugin-datalabels: 2.2.0
     css-loader: 6.7.4
-    d3-cloud: 1.2.5
+    d3-cloud: 1.2.7
     dayjs: 1.11.9
     eslint: 8.46.0
     eslint-import-resolver-typescript: 3.5.5
@@ -9564,12 +9564,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-cloud@npm:1.2.5":
-  version: 1.2.5
-  resolution: "d3-cloud@npm:1.2.5"
+"d3-cloud@npm:1.2.7":
+  version: 1.2.7
+  resolution: "d3-cloud@npm:1.2.7"
   dependencies:
     d3-dispatch: ^1.0.3
-  checksum: e01d6f7adcc75d58b4de0f206cb2937bf840845efd7521e9530b81fa93524861e83884c0c9b75c86177619fbe64fefd54d654b6b51ab304267e795f4422c6080
+  checksum: 6217c46e32250daf1cfd71c2f5515a433b12bdb28affff55d27bf3249b8b12ebaab391d15ed973cbf0790758d8834d9870b9315790691dfcdc3e2b82a6f20631
   languageName: node
   linkType: hard
 
