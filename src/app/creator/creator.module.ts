@@ -33,7 +33,6 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
 import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
 import { CreateAnswerOptionComponent } from './content-creation/create-answer-option/create-answer-option.component';
 import { ContentPrioritizationCreationComponent } from './content-creation/content-prioritization-creation/content-prioritization-creation.component';
-import { StartNewRoundComponent } from './start-new-round/start-new-round.component';
 import { StatisticListComponent } from '@app/creator/statistic-list/statistic-list.component';
 import { StatisticsPageComponent } from '@app/creator/statistics-page/statistics-page.component';
 import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
@@ -98,10 +97,9 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
     ContentPrioritizationCreationComponent,
     StatisticListComponent,
     StatisticsPageComponent,
-    StartNewRoundComponent,
     CreatorPageComponent,
   ],
-  exports: [ContentPresentationComponent, StartNewRoundComponent],
+  exports: [ContentPresentationComponent],
   providers: [
     { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
     DialogService,

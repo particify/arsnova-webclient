@@ -246,7 +246,10 @@
     "contribute-to-lang": "Puede contribuir a la traducción a través del siguiente enlace: ",
     "translation-server": "Ir al servidor de traducción",
     "leave": "Deja",
-    "really-leave-room": "¿De verdad quieres salir de la sala?"
+    "really-leave-room": "¿De verdad quieres salir de la sala?",
+    "really-start-new-round": "¿De verdad quieres empezar una nueva ronda?",
+    "start": "Comenzar",
+    "started-new-round": "Se ha iniciado una nueva ronda."
   },
   "errors": {
     "not-authorized": "No estás autorizado para ver esta página.",

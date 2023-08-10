@@ -246,7 +246,10 @@
     "contribute-to-lang": "You can contribute to the translation via the following link: ",
     "translation-server": "Go to translation server",
     "leave": "Leave",
-    "really-leave-room": "Do you really want to leave the room?"
+    "really-leave-room": "Do you really want to leave the room?",
+    "really-start-new-round": "Do you really want to start a new round?",
+    "start": "Start",
+    "started-new-round": "New round has been started."
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",

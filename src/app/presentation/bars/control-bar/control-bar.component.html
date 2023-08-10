@@ -167,13 +167,15 @@
               (roundChanged)="changeRound($event)"
             >
             </app-multiple-round-selection>
-            <app-start-new-round
+            <button
               *ngIf="content && hasFormatRounds(content.format)"
-              [content]="content"
-              [resetEvent]="resetAnswerEvent"
-              (roundStarted)="afterRoundStarted($event)"
+              mat-menu-item
+              (click)="startNewRound()"
+              [disabled]="content.state.round > 1"
             >
-            </app-start-new-round>
+              <mat-icon>replay</mat-icon>
+              {{ 'content.start-new-round' | translate }}
+            </button>
           </ng-container>
         </mat-menu>
         <div class="bar-divider"></div>

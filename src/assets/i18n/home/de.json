@@ -246,7 +246,10 @@
     "contribute-to-lang": "Über den folgenden Link können Sie zur Übersetzung beitragen: ",
     "translation-server": "Zum Übersetzungsserver",
     "leave": "Verlassen",
-    "really-leave-room": "Willst du den Raum wirklich verlassen?"
+    "really-leave-room": "Willst du den Raum wirklich verlassen?",
+    "really-start-new-round": "Willst du wirklich eine neue Runde starten?",
+    "start": "Starten",
+    "started-new-round": "Neue Runde wurde gestartet."
   },
   "errors": {
     "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",

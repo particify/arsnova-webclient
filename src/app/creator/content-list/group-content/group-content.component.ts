@@ -937,4 +937,8 @@ export class GroupContentComponent
         );
       });
   }
+
+  startNewRound(content: Content) {
+    this.contentService.startNewRound(content);
+  }
 }

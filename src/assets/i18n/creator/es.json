@@ -296,8 +296,7 @@
     "banned-keywords-reset": "Las palabras clave prohibidas han sido restablecidas.",
     "import-export-content-group": "Importación/Exportación",
     "start-new-round": "Iniciar nueva ronda",
-    "started-new-round": "Se ha iniciado una nueva ronda.",
-    "canceled": "Has cancelado el proceso.",
+    "starting-new-round-not-possible": "Actualmente sólo se pueden iniciar dos rondas. Una vez borradas las respuestas, puedes volver a iniciar una segunda ronda.",
     "round": "Ronda",
     "round-displayed": "Se muestra la ronda {{rounds}}",
     "rounds-displayed": "Se muestran las rondas {{rounds}}"
@@ -541,9 +540,7 @@
     "discard": "Descartar",
     "ban": "Prohibir",
     "really-ban-answer": "¿Realmente quieres prohibir la palabra clave?",
-    "all-rounds-will-be-deleted": "Atención: Todas las rondas serán eliminadas.",
-    "really-start-new-round": "¿De verdad quieres empezar una nueva ronda?",
-    "start": "Comenzar"
+    "all-rounds-will-be-deleted": "Atención: Todas las rondas serán eliminadas."
   },
   "utils": {
     "formatting-image-hint": "Ten en cuenta que las imágenes con un tamaño de archivo grande pueden afectar los tiempos de carga."

@@ -296,8 +296,7 @@
     "reset-banned-answers": "Reset banned keywords",
     "banned-keywords-reset": "Banned keywords have been reset.",
     "start-new-round": "Start new round",
-    "started-new-round": "New round has been started.",
-    "canceled": "You've cancelled the process.",
+    "starting-new-round-not-possible": "Currently only two rounds can be started. Once the answers have been deleted, you can start a second round again.",
     "round": "Round",
     "round-displayed": "Round {{rounds}} is displayed",
     "rounds-displayed": "Rounds {{rounds}} are displayed"
@@ -541,9 +540,7 @@
     "really-discard-announcement": "Do you really want to discard your input?",
     "discard": "Discard",
     "ban": "Ban",
-    "really-ban-answer": "Do you really want to ban the keyword?",
-    "really-start-new-round": "Do you really want to start a new round?",
-    "start": "Start"
+    "really-ban-answer": "Do you really want to ban the keyword?"
   },
   "utils": {
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."
