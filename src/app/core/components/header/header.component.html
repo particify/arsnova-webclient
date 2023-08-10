@@ -1,8 +1,4 @@
 <mat-toolbar class="mat-elevation-z2">
-  <lib-extension-point
-    *ngIf="!!room && hasRole(UserRole.PARTICIPANT)"
-    extensionId="participant-header"
-  ></lib-extension-point>
   <ng-template #focusModeHeader>
     <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
       <span class="focus-mode-hint">{{
