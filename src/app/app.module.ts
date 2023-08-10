@@ -101,6 +101,7 @@ import { TitleStrategy } from '@angular/router';
 import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
 import { MaterialCssVarsModule } from 'angular-material-css-vars';
 import { AppErrorHandler } from '@app/app-error-handler';
+import { ENVIRONMENT } from '@environments/environment-token';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -166,6 +167,10 @@ export function initializeApp(appConfig: AppConfig) {
     {
       provide: ErrorHandler,
       useClass: AppErrorHandler,
+    },
+    {
+      provide: ENVIRONMENT,
+      useValue: environment,
     },
     {
       provide: APP_INITIALIZER,
