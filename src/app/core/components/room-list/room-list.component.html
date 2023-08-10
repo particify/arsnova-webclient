@@ -106,16 +106,19 @@
           {{ 'room-list.join-room' | translate }}
         </button>
       </div>
-      <mat-list *ngIf="rooms?.length > 0">
-        <mat-list-item
+      <mat-action-list *ngIf="rooms?.length > 0">
+        <button
+          disableRipple
+          mat-list-item
+          (click)="
+            setCurrentRoom(room.summary.shortId, room.membership.primaryRole)
+          "
           class="bottom-border full-width-list-item"
           *ngFor="let room of displayRooms; let i = index"
           [ngSwitch]="room.membership.primaryRole"
         >
           <div fxLayout="row" fxFill class="outer">
             <div
-              tabindex="0"
-              role="button"
               fxLayout="row"
               fxLayoutAlign="space-between center"
               class="inner container"
@@ -128,18 +131,6 @@
                         role: roles.get(room.membership.primaryRole)
                       }
               }}"
-              (click)="
-                setCurrentRoom(
-                  room.summary.shortId,
-                  room.membership.primaryRole
-                )
-              "
-              (keyup.enter)="
-                setCurrentRoom(
-                  room.summary.shortId,
-                  room.membership.primaryRole
-                )
-              "
             >
               <p class="ellipsis">
                 {{ room.summary.name }}
@@ -208,6 +199,7 @@
               <button
                 mat-icon-button
                 color="primary"
+                (click)="$event.stopPropagation()"
                 [matMenuTriggerFor]="moreActions"
                 aria-labelledby="more-options"
                 matTooltip="{{ 'room-list.more-options' | translate }}"
@@ -249,8 +241,8 @@
               </mat-menu>
             </div>
           </div>
-        </mat-list-item>
-      </mat-list>
+        </button>
+      </mat-action-list>
     </mat-card>
   </div>
 
