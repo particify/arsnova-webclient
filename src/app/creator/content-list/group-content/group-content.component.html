@@ -567,21 +567,29 @@
                         <mat-icon>clear_all</mat-icon>
                         <span>{{ 'content.delete-answers' | translate }}</span>
                       </button>
-                      <button
-                        *ngIf="
-                          [
-                            ContentType.CHOICE,
-                            ContentType.BINARY,
-                            ContentType.SCALE
-                          ].indexOf(content.format) > -1
+                      <div
+                        [matTooltip]="
+                          'content.starting-new-round-not-possible' | translate
                         "
-                        mat-menu-item
-                        (click)="startNewRound(content)"
-                        [disabled]="content.state.round > 1"
+                        [matTooltipDisabled]="content.state.round === 1"
+                        matTooltipPosition="before"
                       >
-                        <mat-icon>replay</mat-icon>
-                        {{ 'content.start-new-round' | translate }}
-                      </button>
+                        <button
+                          *ngIf="
+                            [
+                              ContentType.CHOICE,
+                              ContentType.BINARY,
+                              ContentType.SCALE
+                            ].indexOf(content.format) > -1
+                          "
+                          mat-menu-item
+                          (click)="startNewRound(content)"
+                          [disabled]="content.state.round > 1"
+                        >
+                          <mat-icon>replay</mat-icon>
+                          {{ 'content.start-new-round' | translate }}
+                        </button>
+                      </div>
                       <button mat-menu-item (click)="deleteContent(content)">
                         <mat-icon color="warn">delete_forever</mat-icon>
                         <span>{{ 'content.delete-content' | translate }}</span>
