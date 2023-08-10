@@ -159,14 +159,40 @@
               <mat-icon>settings_suggest</mat-icon>
               <span>{{ 'content.preferences' | translate }}</span>
             </button>
-            <app-multiple-round-selection
+            <button
               *ngIf="content && hasFormatRounds(content.format)"
-              [standalone]="false"
               [disabled]="!multipleRounds"
-              [round]="this.contentRounds.get(content.id)"
-              (roundChanged)="changeRound($event)"
+              mat-menu-item
+              [matMenuTriggerFor]="roundMenu"
+              [attr.aria-label]="
+                'content.round' +
+                  (this.contentRounds.get(content.id) > 1 ? 's-' : '-') +
+                  'displayed'
+                  | translate
+                    : { rounds: rounds[this.contentRounds.get(content.id)] }
+              "
             >
-            </app-multiple-round-selection>
+              <mat-icon>tune</mat-icon>
+              {{ 'content.round' | translate }}&nbsp;{{
+                rounds[this.contentRounds.get(content.id)]
+              }}
+            </button>
+            <mat-menu #roundMenu>
+              <button
+                mat-menu-item
+                *ngFor="let roundItem of rounds; let i = index"
+                (click)="changeRound(i)"
+              >
+                <span
+                  [ngClass]="{
+                    'selected-menu-item':
+                      this.contentRounds.get(content.id) === i
+                  }"
+                >
+                  {{ 'content.round' | translate }}&nbsp;{{ roundItem }}
+                </span>
+              </button>
+            </mat-menu>
             <button
               *ngIf="content && hasFormatRounds(content.format)"
               mat-menu-item
