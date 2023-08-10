@@ -239,7 +239,6 @@
               mat-button
               class="abort"
               (click)="leaveSortingMode(true)"
-              (keyup.enter)="leaveTitleEditMode()"
               aria-labelledby="discard-changes"
               appTrackInteraction="Content group sorting finished"
               appTrackName="reset"
@@ -250,7 +249,6 @@
               *ngIf="isInSortingMode"
               mat-raised-button
               color="primary"
-              (keyup.enter)="saveSorting()"
               (click)="saveSorting()"
               appTrackInteraction="Content group sorting finished"
               appTrackName="save"
@@ -293,8 +291,13 @@
           <p class="hint" *ngIf="contents.length === 0">
             {{ 'content.no-contents-yet' | translate }}
           </p>
-          <mat-list *ngIf="!isInSortingMode && contents.length > 0" fxFill>
-            <mat-list-item
+          <mat-action-list
+            *ngIf="!isInSortingMode && contents.length > 0"
+            fxFill
+          >
+            <button
+              disableRipple
+              mat-list-item
               *ngFor="let content of contents; index as i"
               attr.aria-label="{{
                 'content.a11y-content-item-selected'
@@ -307,8 +310,6 @@
               }}"
               class="bottom-border list-item"
               (click)="navigateToContentStats(content)"
-              (keyup.enter)="navigateToContentStats(content)"
-              tabindex="0"
               [ngClass]="{
                 'not-supported': contentTypes.indexOf(content.format) === -1,
                 'locked-content': !isPublished(i),
@@ -504,7 +505,6 @@
                       *ngIf="!isModerator"
                       mat-icon-button
                       color="primary"
-                      (keyup.enter)="menuTrigger.openMenu()"
                       #menuTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="moreActions"
                       (click)="$event.stopPropagation()"
@@ -651,8 +651,8 @@
                   </button>
                 </div>
               </div>
-            </mat-list-item>
-          </mat-list>
+            </button>
+          </mat-action-list>
           <div *ngIf="isInSortingMode" fxFill>
             <mat-list
               cdkDropList
