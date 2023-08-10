@@ -8159,7 +8159,7 @@ __metadata:
     backoff-rxjs: 7.0.0
     chart.js: 4.3.3
     chartjs-plugin-datalabels: 2.2.0
-    css-loader: 6.7.4
+    css-loader: 6.8.1
     d3-cloud: 1.2.7
     dayjs: 1.11.9
     eslint: 8.46.0
@@ -9452,24 +9452,6 @@ __metadata:
   version: 3.2.0
   resolution: "css-functions-list@npm:3.2.0"
   checksum: fe912ea852fad500aef9a4f04db9a0371c7b0eb1ac1a45fbd8df0156ae0538cee7492ebd620b9bb502fe5bf2b5ed3bf3c16b6659cf67c7144eff0b597bcc3891
-  languageName: node
-  linkType: hard
-
-"css-loader@npm:6.7.4":
-  version: 6.7.4
-  resolution: "css-loader@npm:6.7.4"
-  dependencies:
-    icss-utils: ^5.1.0
-    postcss: ^8.4.21
-    postcss-modules-extract-imports: ^3.0.0
-    postcss-modules-local-by-default: ^4.0.1
-    postcss-modules-scope: ^3.0.0
-    postcss-modules-values: ^4.0.0
-    postcss-value-parser: ^4.2.0
-    semver: ^7.3.8
-  peerDependencies:
-    webpack: ^5.0.0
-  checksum: 6021fa9e375d767b9675e295c1513f2ee4ae04f76d9de69a75b8446e05f6e02b2170407ea72939925b788dcd5aa308527f6b41be3870dc1f4b0bfff8d2532c6e
   languageName: node
   linkType: hard
 
@@ -15653,7 +15635,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-modules-local-by-default@npm:^4.0.1, postcss-modules-local-by-default@npm:^4.0.3":
+"postcss-modules-local-by-default@npm:^4.0.3":
   version: 4.0.3
   resolution: "postcss-modules-local-by-default@npm:4.0.3"
   dependencies:
