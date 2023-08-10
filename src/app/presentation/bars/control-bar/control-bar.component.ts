@@ -143,6 +143,7 @@ export class ControlBarComponent
 
   multipleRounds = false;
   contentRounds = new Map<string, number>();
+  rounds = ['1', '2', '1 & 2'];
   ContentType: typeof ContentType = ContentType;
 
   constructor(

@@ -1,18 +1,16 @@
 <div fxLayout="row" fxLayoutAlign="end">
   <button
-    *ngIf="standalone"
-    [disabled]="disabled"
     mat-stroked-button
     [matMenuTriggerFor]="roundMenu"
     [matTooltip]="
-      'content.round' + (currentRound > 1 ? 's-' : '-') + 'displayed'
-        | translate: { rounds: rounds[currentRound] }
+      'content.round' + (round > 1 ? 's-' : '-') + 'displayed'
+        | translate: { rounds: rounds[round] }
     "
   >
     <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="8px">
       <div
-        *ngFor="let round of [0, 1]; let i = index"
-        [ngClass]="{ disabled: currentRound !== i && currentRound !== 2 }"
+        *ngFor="let roundItem of [0, 1]; let i = index"
+        [ngClass]="{ disabled: round !== i && round !== 2 }"
         class="round-legend primary-background"
         fxLayoutAlign="center center"
       >
@@ -20,27 +18,14 @@
       </div>
     </div>
   </button>
-  <button
-    *ngIf="!standalone"
-    [disabled]="disabled"
-    mat-menu-item
-    [matMenuTriggerFor]="roundMenu"
-    [attr.aria-label]="
-      'content.round' + (currentRound > 1 ? 's-' : '-') + 'displayed'
-        | translate: { rounds: rounds[currentRound] }
-    "
-  >
-    <mat-icon>tune</mat-icon>
-    {{ 'content.round' | translate }}&nbsp;{{ rounds[currentRound] }}
-  </button>
   <mat-menu #roundMenu>
     <button
       mat-menu-item
-      *ngFor="let round of rounds; let i = index"
+      *ngFor="let roundItem of rounds; let i = index"
       (click)="changeRound(i)"
     >
-      <span [ngClass]="{ 'selected-menu-item': currentRound === i }">
-        {{ 'content.round' | translate }}&nbsp;{{ round }}
+      <span [ngClass]="{ 'selected-menu-item': round === i }">
+        {{ 'content.round' | translate }}&nbsp;{{ roundItem }}
       </span>
     </button>
   </mat-menu>
