@@ -86,7 +86,7 @@
     "eslint-plugin-jsdoc": "46.4.6",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-storybook": "0.6.13",
-    "file-system-cache": "2.4.3",
+    "file-system-cache": "2.4.4",
     "jasmine-core": "5.1.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.2",

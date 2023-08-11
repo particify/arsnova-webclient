@@ -7178,7 +7178,7 @@ __metadata:
     eslint-plugin-jsdoc: 46.4.6
     eslint-plugin-prefer-arrow: 1.2.3
     eslint-plugin-storybook: 0.6.13
-    file-system-cache: 2.4.3
+    file-system-cache: 2.4.4
     is-docker: 3.0.0
     jasmine-core: 5.1.0
     jasmine-spec-reporter: 7.0.0
@@ -9947,15 +9947,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-system-cache@npm:2.4.3":
-  version: 2.4.3
-  resolution: "file-system-cache@npm:2.4.3"
+"file-system-cache@npm:2.4.4":
+  version: 2.4.4
+  resolution: "file-system-cache@npm:2.4.4"
   dependencies:
     "@types/fs-extra": 11.0.1
     "@types/ramda": 0.29.3
     fs-extra: 11.1.1
     ramda: 0.29.0
-  checksum: b799f53a02a564fdcbed81e8341ec8aaaec6e185de24d231e814611becb30c68172452df04945c327e434271e34ddab8f6401afc4f0758729e095466d6fdc683
+  checksum: 6a21ede78b90f6da30d1659ee9a4ea3d3fa68154207323fe0de333f293c7c1269980ccffc466fd806a38e41bcf1698747beb0cb1d0ed503afa47bfafb3aaa655
   languageName: node
   linkType: hard
 
