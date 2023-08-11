@@ -34,10 +34,7 @@
       "@testing/*": ["./testing/*"],
       "@environments/*": ["./environments/*"],
       "@projects/*": ["../projects/*"],
-      "extension-point": [
-        "dist/extension-point/extension-point",
-        "dist/extension-point"
-      ]
+      "@ext-point/*": ["../projects/extension-point/src/lib/*"]
     }
   },
   "angularCompilerOptions": {

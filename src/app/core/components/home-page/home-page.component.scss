@@ -6,54 +6,9 @@
   height: 40%;
 }
 
-.main-heading-primary {
-  display: block;
-  font-size: 150%;
-  text-align: center;
-  letter-spacing: 7px;
-  animation: move-in-left 2s ease-out;
-  padding-top: 10px;
-}
-
-.main-heading-secondary {
-  display: block;
-  font-weight: normal;
-  font-size: 60%;
-  text-align: center;
-  color: var(--on-background);
-  animation: move-in-right 1s ease-out;
-}
-
-@keyframes move-in-left {
-  0% {
-    opacity: 0;
-    transform: translateX(-100px);
-  }
-
-  80% {
-    transform: translateX(10px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translate(0);
-  }
-}
-
-@keyframes move-in-right {
-  0% {
-    opacity: 0;
-    transform: translateX(100px);
-  }
-
-  80% {
-    transform: translateX(-10px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translate(0);
-  }
+.logo-container {
+  max-width: 300px;
+  height: 65px;
 }
 
 .mat-mdc-button {
