@@ -1,7 +1,7 @@
 {
-  "name": "ARSnova",
-  "short_name": "ARSnova",
-  "description": "An innovative audience response system app developed at THM",
+  "name": "arsnova",
+  "short_name": "arsnova",
+  "description": "Design interactive lectures and trainings with arsnova.",
   "icons": [
     {
       "src": "/assets/icons/16x16.png",
@@ -30,7 +30,7 @@
     }
   ],
   "theme_color": "#000000",
-  "background_color": "#03dac6",
+  "background_color": "#ffffff",
   "scope": "/",
   "start_url": "./?entry=pwa",
   "display": "standalone"
