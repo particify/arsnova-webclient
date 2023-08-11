@@ -159,49 +159,49 @@
               <mat-icon>settings_suggest</mat-icon>
               <span>{{ 'content.preferences' | translate }}</span>
             </button>
-            <button
-              *ngIf="content && hasFormatRounds(content.format)"
-              [disabled]="!multipleRounds"
-              mat-menu-item
-              [matMenuTriggerFor]="roundMenu"
-              [attr.aria-label]="
-                'content.round' +
-                  (this.contentRounds.get(content.id) > 1 ? 's-' : '-') +
-                  'displayed'
-                  | translate
-                    : { rounds: rounds[this.contentRounds.get(content.id)] }
-              "
-            >
-              <mat-icon>tune</mat-icon>
-              {{ 'content.round' | translate }}&nbsp;{{
-                rounds[this.contentRounds.get(content.id)]
-              }}
-            </button>
-            <mat-menu #roundMenu>
+            <ng-container *ngIf="content && hasFormatRounds(content.format)">
+              <button
+                [disabled]="!multipleRounds"
+                mat-menu-item
+                [matMenuTriggerFor]="roundMenu"
+                [attr.aria-label]="
+                  'content.round' +
+                    (this.contentRounds.get(content.id) > 1 ? 's-' : '-') +
+                    'displayed'
+                    | translate
+                      : { rounds: rounds[this.contentRounds.get(content.id)] }
+                "
+              >
+                <mat-icon>tune</mat-icon>
+                {{ 'content.round' | translate }}&nbsp;{{
+                  rounds[this.contentRounds.get(content.id)]
+                }}
+              </button>
+              <mat-menu #roundMenu>
+                <button
+                  mat-menu-item
+                  *ngFor="let roundItem of rounds; let i = index"
+                  (click)="changeRound(i)"
+                >
+                  <span
+                    [ngClass]="{
+                      'selected-menu-item':
+                        this.contentRounds.get(content.id) === i
+                    }"
+                  >
+                    {{ 'content.round' | translate }}&nbsp;{{ roundItem }}
+                  </span>
+                </button>
+              </mat-menu>
               <button
                 mat-menu-item
-                *ngFor="let roundItem of rounds; let i = index"
-                (click)="changeRound(i)"
+                (click)="startNewRound()"
+                [disabled]="content.state.round > 1"
               >
-                <span
-                  [ngClass]="{
-                    'selected-menu-item':
-                      this.contentRounds.get(content.id) === i
-                  }"
-                >
-                  {{ 'content.round' | translate }}&nbsp;{{ roundItem }}
-                </span>
+                <mat-icon>replay</mat-icon>
+                {{ 'content.start-new-round' | translate }}
               </button>
-            </mat-menu>
-            <button
-              *ngIf="content && hasFormatRounds(content.format)"
-              mat-menu-item
-              (click)="startNewRound()"
-              [disabled]="content.state.round > 1"
-            >
-              <mat-icon>replay</mat-icon>
-              {{ 'content.start-new-round' | translate }}
-            </button>
+            </ng-container>
           </ng-container>
         </mat-menu>
         <div class="bar-divider"></div>
