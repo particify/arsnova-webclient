@@ -2,7 +2,7 @@
   "admin-area": {
     "title": "Administration",
     "general": "General",
-    "system-health": "System Status",
+    "system-health": "System status",
     "status-details": "Status details",
     "status-ldap": "LDAP",
     "status-diskspace": "Disk space",
@@ -19,7 +19,7 @@
     "activate-user": "Activate account",
     "user-activated": "The account has been activated.",
     "rooms": "Rooms",
-    "room-management": "Room Management",
+    "room-management": "Room management",
     "search-room": "Search room with room number or ID",
     "room-new-owner-id": "ID of new room owner",
     "delete-room": "Delete room",
