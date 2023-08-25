@@ -27,14 +27,10 @@
       <mat-icon>delete</mat-icon>
       {{ 'admin-area.delete-user' | translate }}
     </button>
-    <button
-      mat-raised-button
-      color="primary"
+    <app-loading-button
+      name="admin-area.activate-user"
+      (clicked)="activateUser()"
       [disabled]="user.account?.activated"
-      (click)="activateUser()"
-    >
-      <mat-icon>lock_open</mat-icon>
-      {{ 'admin-area.activate-user' | translate }}
-    </button>
+    ></app-loading-button>
   </div>
 </mat-card>

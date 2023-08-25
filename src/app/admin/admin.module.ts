@@ -21,6 +21,7 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { InputDialogComponent } from './_dialogs/input-dialog/input-dialog.component';
 import { HealthStatusComponent } from './health-status/health-status.component';
 import { UserSearchComponent } from './user-search/user-search.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { UserSearchComponent } from './user-search/user-search.component';
       isolate: true,
     }),
     ExtensionPointModule,
+    LoadingButtonComponent,
   ],
   declarations: [
     AdminHomeComponent,
