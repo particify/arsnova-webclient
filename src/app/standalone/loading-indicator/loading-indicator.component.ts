@@ -8,10 +8,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [CommonModule, FlexModule, MatProgressSpinnerModule],
   selector: 'app-loading-indicator',
   templateUrl: './loading-indicator.component.html',
+  styleUrls: ['./loading-indicator.component.scss'],
 })
 export class LoadingIndicatorComponent implements OnInit {
   @Input() size = 40;
   @Input() height;
+  @Input() disabled = false;
 
   ngOnInit(): void {
     if (!this.height) {

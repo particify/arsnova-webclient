@@ -9,6 +9,7 @@
     class="loading-indicator-container"
   >
     <mat-progress-spinner
+      [ngClass]="{ 'disabled-spinner': disabled }"
       mode="indeterminate"
       diameter="{{ size }}"
     ></mat-progress-spinner>
