@@ -12,6 +12,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-wordcloud-participant',
@@ -20,8 +21,6 @@ import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentWordcloud;
   @Input() answer: MultipleTextsAnswer;
-  @Input() alreadySent: boolean;
-  @Input() sendEvent: EventEmitter<string>;
   @Output() answerChanged = new EventEmitter<MultipleTextsAnswer>();
 
   givenAnswer: MultipleTextsAnswer;
@@ -35,14 +34,16 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     public eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
-    protected router: Router
+    protected router: Router,
+    protected formService: FormService
   ) {
     super(
       notificationService,
       translateService,
       route,
       globalStorageService,
-      router
+      router,
+      formService
     );
   }
 
@@ -74,6 +75,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       });
       return;
     }
+    this.disableForm();
     this.answerService
       .addAnswer(this.content.roomId, {
         id: null,
@@ -93,7 +95,10 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
           );
         });
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 
   abstain() {
@@ -111,6 +116,9 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       .subscribe((answer) => {
         this.createAnswer();
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 }

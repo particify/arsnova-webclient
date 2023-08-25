@@ -68,7 +68,7 @@
                 "
                 [answer]="choiceAnswer"
                 [content]="choiceContent"
-                [alreadySent]="alreadySent"
+                [isDisabled]="formDisabled || alreadySent"
                 (answerChanged)="forwardAnswerMessage($event)"
                 [sendEvent]="sendEvent"
                 [statsPublished]="statsPublished"
@@ -79,7 +79,7 @@
                 *ngIf="content.format === ContentType.SCALE"
                 [answer]="choiceAnswer"
                 [content]="scaleContent"
-                [alreadySent]="alreadySent"
+                [isDisabled]="formDisabled || alreadySent"
                 (answerChanged)="forwardAnswerMessage($event)"
                 [sendEvent]="sendEvent"
                 [statsPublished]="statsPublished"
@@ -89,7 +89,7 @@
                 *ngIf="content.format === ContentType.TEXT"
                 [answer]="textAnswer"
                 [content]="content"
-                [alreadySent]="alreadySent"
+                [isDisabled]="formDisabled || alreadySent"
                 [sendEvent]="sendEvent"
                 (answerChanged)="forwardAnswerMessage($event)"
               ></app-content-text-participant>
@@ -97,7 +97,7 @@
                 *ngIf="content.format === ContentType.SORT"
                 [answer]="choiceAnswer"
                 [content]="choiceContent"
-                [alreadySent]="alreadySent"
+                [isDisabled]="formDisabled || alreadySent"
                 [sendEvent]="sendEvent"
                 (answerChanged)="forwardAnswerMessage($event)"
                 [statsPublished]="statsPublished"
@@ -108,7 +108,7 @@
                 *ngIf="content.format === ContentType.WORDCLOUD"
                 [answer]="wordcloudAnswer"
                 [content]="wordloudContent"
-                [alreadySent]="alreadySent"
+                [isDisabled]="formDisabled || alreadySent"
                 [sendEvent]="sendEvent"
                 (answerChanged)="forwardAnswerMessage($event)"
               >
@@ -117,7 +117,7 @@
                 *ngIf="content.format === ContentType.PRIORITIZATION"
                 [answer]="prioritizationAnswer"
                 [content]="prioritizationContent"
-                [alreadySent]="alreadySent"
+                [isDisabled]="formDisabled || alreadySent"
                 [sendEvent]="sendEvent"
                 (answerChanged)="forwardAnswerMessage($event)"
               >
@@ -158,16 +158,7 @@
                   >
                     {{ 'answer.abstain' | translate }}
                   </button>
-                  <button
-                    tabindex="{{ alreadySent ? '-1' : '0' }}"
-                    mat-raised-button
-                    color="primary"
-                    [ngClass]="{ disabled: alreadySent }"
-                    type="submit"
-                    aria-labelledby="submit"
-                  >
-                    {{ 'answer.submit' | translate }}
-                  </button>
+                  <app-loading-button name="answer.submit"></app-loading-button>
                 </div>
               </div>
             </div>

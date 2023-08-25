@@ -14,6 +14,7 @@ import {
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-scale-participant',
@@ -22,8 +23,6 @@ import { SelectableAnswer } from '@app/core/models/selectable-answer';
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentScale;
   @Input() answer: ChoiceAnswer;
-  @Input() alreadySent: boolean;
-  @Input() sendEvent: EventEmitter<string>;
   @Input() statsPublished: boolean;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
@@ -38,14 +37,16 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
-    private likertScaleService: LikertScaleService
+    private likertScaleService: LikertScaleService,
+    protected formService: FormService
   ) {
     super(
       notificationService,
       translateService,
       route,
       globalStorageService,
-      router
+      router,
+      formService
     );
   }
 
@@ -77,6 +78,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
       });
       return;
     }
+    this.disableForm();
     this.answerService
       .addAnswerChoice(this.content.roomId, {
         contentId: this.content.id,
@@ -84,16 +86,21 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
         selectedChoiceIndexes: [this.selectedAnswerIndex],
         format: ContentType.SCALE,
       } as ChoiceAnswer)
-      .subscribe((answer) => {
-        this.answer = answer;
-        this.translateService.get('answer.sent').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
-        this.sendStatusToParent(answer);
-      });
+      .subscribe(
+        (answer) => {
+          this.answer = answer;
+          this.translateService.get('answer.sent').subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
+          this.sendStatusToParent(answer);
+        },
+        () => {
+          this.enableForm();
+        }
+      );
   }
 
   abstain() {
@@ -106,6 +113,9 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
       .subscribe((answer) => {
         this.hasAbstained = true;
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 }

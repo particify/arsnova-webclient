@@ -1,7 +1,7 @@
 <app-content-prioritization-answer
   *ngIf="!isLoading"
   [answerOptions]="answerOptions"
-  [isDisabled]="alreadySent"
+  [isDisabled]="isDisabled"
   [assignablePoints]="content.assignablePoints"
   (assignedPoints)="setAssignedPoints($event)"
 ></app-content-prioritization-answer>
