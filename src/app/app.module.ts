@@ -102,6 +102,7 @@ import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
 import { MaterialCssVarsModule } from 'angular-material-css-vars';
 import { AppErrorHandler } from '@app/app-error-handler';
 import { ENVIRONMENT } from '@environments/environment-token';
+import { LoadingButtonComponent } from './standalone/loading-button/loading-button.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -140,6 +141,7 @@ export function initializeApp(appConfig: AppConfig) {
     BrowserAnimationsModule,
     CoreModule,
     FooterComponent,
+    LoadingButtonComponent,
     LoadingIndicatorComponent,
     SettingsPanelHeaderComponent,
     SettingsSlideToggleComponent,

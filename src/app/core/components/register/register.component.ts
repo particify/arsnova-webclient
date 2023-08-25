@@ -10,13 +10,15 @@ import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent extends FormComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
   usernameFormControl = new UntypedFormControl();
@@ -32,10 +34,14 @@ export class RegisterComponent implements OnInit {
     public notificationService: NotificationService,
     public eventService: EventService,
     private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit(): void {
+    this.setFormControl(this.usernameFormControl);
     this.usernameFormControl.clearValidators();
     const data = this.route.snapshot.data;
     this.accountServiceTitle =
@@ -59,8 +65,10 @@ export class RegisterComponent implements OnInit {
       password
     ) {
       if (this.acceptToS) {
+        this.disableForm();
         this.userService.register(username, password).subscribe(
           () => {
+            this.enableForm();
             this.router.navigateByUrl('login', {
               state: { data: { username: username, password: password } },
             });
@@ -74,6 +82,7 @@ export class RegisterComponent implements OnInit {
               });
           },
           () => {
+            this.enableForm();
             this.translationService
               .get('register.register-request-error')
               .subscribe((message) => {

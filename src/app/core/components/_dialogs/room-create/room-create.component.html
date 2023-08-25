@@ -7,6 +7,7 @@
       <mat-form-field appearance="outline" fxFill>
         <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
         <input
+          [disabled]="formDisabled"
           (keypress)="resetEmptyInputs()"
           matInput
           #roomName
@@ -38,9 +39,11 @@
     fxLayoutAling="end"
     fxLayoutGap="10px"
   >
-    <button (click)="checkLogin()" mat-flat-button color="primary">
-      {{ 'dialog.create-room' | translate }}
-    </button>
+    <app-loading-button
+      name="dialog.create-room"
+      [isDialog]="true"
+      (clicked)="checkLogin()"
+    ></app-loading-button>
     <button
       (click)="closeDialog()"
       aria-labelledby="cancel"

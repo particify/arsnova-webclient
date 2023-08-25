@@ -40,11 +40,7 @@
             <div>
               <span>{{ 'user-profile.delete-account-info' | translate }}</span>
             </div>
-            <button
-              mat-stroked-button
-              color="warn"
-              (click)="openDeleteUserDialog()"
-            >
+            <button mat-stroked-button color="warn" (click)="deleteAccount()">
               <mat-icon>delete</mat-icon>
               {{ 'user-profile.delete-account' | translate }}
             </button>

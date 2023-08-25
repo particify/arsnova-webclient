@@ -70,7 +70,8 @@ export class DialogService {
     dialogIdSuffix: string,
     body: string,
     bodyElement?: string,
-    confirmLabel?: string
+    confirmLabel?: string,
+    confirmAction?: () => Observable<object | void>
   ): MatDialogRef<BaseDialogComponent> {
     return this.openDialog(BaseDialogComponent, {
       width: this.size.small,
@@ -83,6 +84,7 @@ export class DialogService {
         abortLabel: 'cancel',
         type: 'button-warn',
         bodyElement: bodyElement,
+        confirmAction: confirmAction,
       },
     });
   }
@@ -96,12 +98,14 @@ export class DialogService {
   // Shared dialogs
 
   openRoomCreateDialog(
-    duplicatedName?: string
+    duplicatedName?: string,
+    roomId?: string
   ): MatDialogRef<RoomCreateComponent> {
     return this.openDialog(RoomCreateComponent, {
       width: this.size.xsmall,
       data: {
         duplicatedName: duplicatedName,
+        roomId: roomId,
       },
     });
   }

@@ -29,13 +29,18 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
+export class LoginComponent
+  extends FormComponent
+  implements AfterContentInit, OnChanges, OnInit
+{
   @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
   isStandard = true;
@@ -64,10 +69,14 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
     public eventService: EventService,
     private dialogService: DialogService,
     private route: ActivatedRoute,
-    private routingService: RoutingService
-  ) {}
+    private routingService: RoutingService,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit() {
+    this.setFormControl(this.loginIdFormControl);
     this.loginIdFormControl.clearValidators();
     this.route.data.subscribe(
       (data) => (this.authProviders = data.apiConfig.authenticationProviders)
@@ -156,9 +165,11 @@ export class LoginComponent implements AfterContentInit, OnChanges, OnInit {
   loginWithUsernamePassword(providerId = 'user-db'): void {
     const password = this.passwordEntry.getPassword();
     if (this.loginIdFormControl.valid && password) {
+      this.disableForm();
       this.authenticationService
         .login(this.username, password, providerId)
         .subscribe((loginSuccessful) => {
+          this.enableForm();
           this.checkLogin(loginSuccessful);
         });
     } else {

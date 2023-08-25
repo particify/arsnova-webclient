@@ -5,13 +5,7 @@ import {
   Input,
   ViewChild,
 } from '@angular/core';
-import {
-  FormControl,
-  UntypedFormControl,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdvancedSnackBarTypes,
@@ -19,6 +13,8 @@ import {
 } from '@app/core/services/util/notification.service';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
+import { FormService } from '@app/core/services/util/form.service';
+import { FormComponent } from '@app/standalone/form/form.component';
 
 enum Strength {
   WEAK = 1,
@@ -45,7 +41,10 @@ const PATTERNS: RegExp[] = [
   templateUrl: './password-entry.component.html',
   styleUrls: ['./password-entry.component.scss'],
 })
-export class PasswordEntryComponent implements AfterViewInit {
+export class PasswordEntryComponent
+  extends FormComponent
+  implements AfterViewInit
+{
   @ViewChild('passwordInput') passwordInput: ElementRef;
 
   @Input() checkStrength = false;
@@ -65,10 +64,14 @@ export class PasswordEntryComponent implements AfterViewInit {
   constructor(
     private translationService: TranslateService,
     public notificationService: NotificationService,
-    private _autofill: AutofillMonitor
-  ) {}
+    private _autofill: AutofillMonitor,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngAfterViewInit(): void {
+    this.setFormControl(this.passwordFormControl);
     this.passwordFormControl.clearValidators();
     this._autofill.monitor(this.passwordInput).subscribe((p) => {
       this.autofilled = p.isAutofilled;
