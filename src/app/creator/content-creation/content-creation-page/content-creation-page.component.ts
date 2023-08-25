@@ -13,6 +13,8 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 class ContentFormat {
   type: ContentType;
@@ -25,7 +27,10 @@ class ContentFormat {
   templateUrl: './content-creation-page.component.html',
   styleUrls: ['./content-creation-page.component.scss'],
 })
-export class ContentCreationPageComponent implements OnInit {
+export class ContentCreationPageComponent
+  extends FormComponent
+  implements OnInit
+{
   @ViewChild('questionInput') bodyInput: ElementRef;
   createEventSubject: Subject<boolean> = new Subject<boolean>();
   question: string;
@@ -52,8 +57,11 @@ export class ContentCreationPageComponent implements OnInit {
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
     private formattingService: FormattingService,
-    private contentService: ContentService
-  ) {}
+    private contentService: ContentService,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit() {
     const iconList = this.contentService.getTypeIcons();
@@ -91,8 +99,11 @@ export class ContentCreationPageComponent implements OnInit {
   }
 
   reset() {
+    this.enableForm();
     this.question = '';
-    this.bodyInput.nativeElement.focus();
+    setTimeout(() => {
+      this.bodyInput.nativeElement.focus();
+    });
     this.content = null;
     this.created = true;
     setTimeout(() => {

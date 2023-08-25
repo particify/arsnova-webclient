@@ -18,13 +18,15 @@ import { UpdateEvent } from '@app/creator/settings-page/settings-page.component'
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-room-edit',
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.scss'],
 })
-export class RoomComponent implements OnInit {
+export class RoomComponent extends FormComponent implements OnInit {
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
@@ -48,37 +50,36 @@ export class RoomComponent implements OnInit {
     private dialogService: DialogService,
     private route: ActivatedRoute,
     private formattingService: FormattingService,
-    private focusModeService: FocusModeService
-  ) {}
+    private focusModeService: FocusModeService,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
   ngOnInit(): void {
     this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
     this.focusModeEnabled = this.editRoom.focusModeEnabled;
   }
 
-  openDeleteRoomDialog(): void {
+  deleteRoom(): void {
     const dialogRef = this.dialogService.openDeleteDialog(
       'room',
       'really-delete-room',
-      this.editRoom.name
+      this.editRoom.name,
+      undefined,
+      () => this.roomService.deleteRoom(this.editRoom.id)
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
-        this.deleteRoom(this.editRoom);
+        this.translationService.get('settings.deleted').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            this.editRoom.name + msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
+        const event = new RoomDeleted(this.editRoom.id);
+        this.eventService.broadcast(event.type, event.payload);
+        this.router.navigateByUrl('user');
       }
-    });
-  }
-
-  deleteRoom(room: Room): void {
-    this.roomService.deleteRoom(room.id).subscribe(() => {
-      this.translationService.get('settings.deleted').subscribe((msg) => {
-        this.notificationService.showAdvanced(
-          room.name + msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
-      const event = new RoomDeleted(room.id);
-      this.eventService.broadcast(event.type, event.payload);
-      this.router.navigateByUrl('user');
     });
   }
 

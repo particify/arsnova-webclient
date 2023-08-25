@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-yes-no-creation',
@@ -27,7 +28,8 @@ export class ContentYesNoCreationComponent
     protected translationService: TranslateService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService
+    protected announceService: AnnounceService,
+    protected formService: FormService
   ) {
     super(
       contentService,
@@ -35,7 +37,8 @@ export class ContentYesNoCreationComponent
       translationService,
       route,
       contentGroupService,
-      announceService
+      announceService,
+      formService
     );
   }
 

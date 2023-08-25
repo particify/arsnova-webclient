@@ -16,6 +16,7 @@ import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.ser
 import { TranslateService } from '@ngx-translate/core';
 import { Message } from '@stomp/stompjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-live-feedback-page',
@@ -96,23 +97,36 @@ export class LiveFeedbackPageComponent
   }
 
   changeType() {
-    this.type = this.roomService.changeFeedbackType(this.room.id, this.type);
+    this.roomService
+      .changeFeedbackType(this.room, this.type)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((room) => {
+        this.type = room.extensions['feedback']['type'];
+      });
   }
 
   toggle() {
-    this.roomService.changeFeedbackLock(this.room.id, !this.isClosed);
-    if (this.isClosed) {
-      this.wsFeedbackService.reset(this.room.id);
-    }
-    const state = this.isClosed ? 'started' : 'stopped';
-    this.translateService.get('survey.' + state).subscribe((msg) => {
-      this.notificationService.showAdvanced(
-        msg,
-        state === 'started'
-          ? AdvancedSnackBarTypes.SUCCESS
-          : AdvancedSnackBarTypes.WARNING
-      );
-    });
+    this.roomService
+      .changeFeedbackLock(this.room, !this.isClosed)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((room) => {
+        this.loadConfig(room);
+        this.focusModeService.updateFeedbackState(this.room, !this.isClosed);
+        this.presentationService.updateFeedbackStarted(!this.isClosed);
+        if (this.isClosed) {
+          this.updateFeedback([0, 0, 0, 0]);
+          this.wsFeedbackService.reset(this.room.id);
+        }
+        const state = this.isClosed ? 'stopped' : 'started';
+        this.translateService.get('survey.' + state).subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            state === 'started'
+              ? AdvancedSnackBarTypes.SUCCESS
+              : AdvancedSnackBarTypes.WARNING
+          );
+        });
+      });
   }
 
   protected parseIncomingMessage(message: Message) {
@@ -121,16 +135,6 @@ export class LiveFeedbackPageComponent
     const type = msg.type;
     if (type === FeedbackMessageType.CHANGED) {
       this.updateFeedback(payload.values);
-    } else {
-      this.roomService.getRoom(this.room.id).subscribe((room) => {
-        this.loadConfig(room);
-      });
-      this.isClosed = type === FeedbackMessageType.STOPPED;
-      this.focusModeService.updateFeedbackState(this.room, !this.isClosed);
-      this.presentationService.updateFeedbackStarted(!this.isClosed);
-      if (this.isClosed) {
-        this.updateFeedback([0, 0, 0, 0]);
-      }
     }
   }
 }

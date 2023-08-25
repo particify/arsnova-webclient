@@ -4,12 +4,14 @@ import { ContentGroupCreationComponent } from './content-group-creation.componen
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { EventService } from '@app/core/services/util/event.service';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   JsonTranslationLoader,
-  MockEventService,
   MockNotificationService,
   MockMatDialog,
   MockMatDialogRef,
@@ -44,16 +46,16 @@ describe('ContentGroupCreationComponent', () => {
           useClass: MockMatDialog,
         },
         {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
         {
           provide: MatDialogRef,
           useClass: MockMatDialogRef,
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {},
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

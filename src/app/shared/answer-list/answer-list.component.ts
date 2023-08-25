@@ -47,24 +47,24 @@ export class AnswerListComponent implements OnInit {
       `${action}-answer`,
       `really-${action}-answer`,
       answer.answer,
-      action
+      action,
+      () =>
+        this.banMode
+          ? this.contentService.banKeywordForContent(
+              this.roomId,
+              this.contentId,
+              answer.answer
+            )
+          : this.contentAnswerService.hideAnswerText(this.roomId, answer.id)
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === action) {
         if (this.banMode) {
-          this.contentService
-            .banKeywordForContent(this.roomId, this.contentId, answer.answer)
-            .subscribe(() => {
-              this.removeAnswerFromList(action);
-              this.answerBanned.emit(answer.answer);
-            });
+          this.removeAnswerFromList(action);
+          this.answerBanned.emit(answer.answer);
         } else {
-          this.contentAnswerService
-            .hideAnswerText(this.roomId, answer.id)
-            .subscribe(() => {
-              this.removeAnswerFromList(action);
-              this.answerDeleted.emit(answer.id);
-            });
+          this.removeAnswerFromList(action);
+          this.answerDeleted.emit(answer.id);
         }
       }
     });

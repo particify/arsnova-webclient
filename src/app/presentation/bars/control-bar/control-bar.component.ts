@@ -530,24 +530,20 @@ export class ControlBarComponent
   }
 
   publishContentGroup(contentGroup: ContentGroup = this.group) {
+    const changes = { published: true };
     const dialogRef = this.dialogService.openPublishGroupDialog(
-      contentGroup.name
+      contentGroup.name,
+      () => this.contentGroupService.patchContentGroup(contentGroup, changes)
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'publish') {
-        const changes = { published: true };
-        this.contentGroupService
-          .patchContentGroup(contentGroup, changes)
-          .subscribe((updatedGroup) => {
-            const msg = this.translateService.instant(
-              'content.group-published'
-            );
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.SUCCESS
-            );
-            this.updateGroup(updatedGroup);
-          });
+        const msg = this.translateService.instant('content.group-published');
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+        contentGroup.published = true;
+        this.updateGroup(contentGroup);
       }
     });
   }
@@ -635,18 +631,14 @@ export class ControlBarComponent
   }
 
   deleteContentAnswers() {
-    const dialogRef = this.dialogService.openDeleteDialog(
+    this.dialogService.openDeleteDialog(
       'content-answers',
-      'really-delete-answers'
+      'really-delete-answers',
+      undefined,
+      undefined,
+      () =>
+        this.contentService.deleteAnswersOfContent(this.content.id, this.roomId)
     );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
-        this.contentService.deleteAnswersOfContent(
-          this.content.id,
-          this.roomId
-        );
-      }
-    });
   }
 
   changeRound(round: number) {

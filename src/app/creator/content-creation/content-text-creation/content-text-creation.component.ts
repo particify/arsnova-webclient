@@ -8,6 +8,7 @@ import { ContentCreationComponent } from '@app/creator/content-creation/content-
 import { ContentType } from '@app/core/models/content-type.enum';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Content } from '@app/core/models/content';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-text-creation',
@@ -25,7 +26,8 @@ export class ContentTextCreationComponent
     protected translationService: TranslateService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService
+    protected announceService: AnnounceService,
+    protected formService: FormService
   ) {
     super(
       contentService,
@@ -33,7 +35,8 @@ export class ContentTextCreationComponent
       translationService,
       route,
       contentGroupService,
-      announceService
+      announceService,
+      formService
     );
   }
 

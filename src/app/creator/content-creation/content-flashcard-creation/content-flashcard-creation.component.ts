@@ -14,6 +14,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-flashcard-creation',
@@ -35,7 +36,8 @@ export class ContentFlashcardCreationComponent
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
     public eventService: EventService,
-    private formattingService: FormattingService
+    private formattingService: FormattingService,
+    protected formService: FormService
   ) {
     super(
       contentService,
@@ -43,7 +45,8 @@ export class ContentFlashcardCreationComponent
       translationService,
       route,
       contentGroupService,
-      announceService
+      announceService,
+      formService
     );
   }
 

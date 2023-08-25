@@ -45,6 +45,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @NgModule({
   imports: [
@@ -71,6 +72,7 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
     RenderedTextComponent,
     AnswerCountComponent,
     FormattingToolbarComponent,
+    LoadingButtonComponent,
   ],
   declarations: [
     ContentChoiceCreationComponent,

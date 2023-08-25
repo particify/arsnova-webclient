@@ -4,7 +4,7 @@ import { RoomSummary } from '@app/core/models/room-summary';
 import { SurveyStarted } from '@app/core/models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { catchError, map, tap, switchMap } from 'rxjs/operators';
+import { catchError, map, tap, switchMap, mergeMap } from 'rxjs/operators';
 import {
   AuthenticationService,
   AUTH_HEADER_KEY,
@@ -230,39 +230,40 @@ export class RoomService extends AbstractEntityService<Room> {
     );
   }
 
-  changeFeedbackLock(roomId: string, isFeedbackLocked: boolean) {
-    this.getRoom(roomId).subscribe((room) => {
-      const changes: { feedbackLocked: boolean; settings: object } = {
-        feedbackLocked: isFeedbackLocked,
-        settings: room.settings,
-      };
-      room.settings['feedbackLocked'] = isFeedbackLocked;
-      this.patchRoom(roomId, changes).subscribe(() => {
-        if (!isFeedbackLocked) {
+  changeFeedbackLock(room: Room, isFeedbackLocked: boolean): Observable<Room> {
+    const changes: { feedbackLocked: boolean; settings: object } = {
+      feedbackLocked: isFeedbackLocked,
+      settings: room.settings,
+    };
+    room.settings['feedbackLocked'] = isFeedbackLocked;
+    return this.patchRoom(room.id, changes).pipe(
+      map((updatedRoom) => {
+        if (isFeedbackLocked) {
           const event = new SurveyStarted();
           this.eventService.broadcast(event.type);
         }
-      });
-    });
+        return updatedRoom;
+      })
+    );
   }
 
-  changeFeedbackType(roomId: string, feedbackType: LiveFeedbackType) {
+  changeFeedbackType(
+    room: Room,
+    feedbackType: LiveFeedbackType
+  ): Observable<Room> {
     const newType =
       feedbackType === LiveFeedbackType.FEEDBACK
         ? LiveFeedbackType.SURVEY
         : LiveFeedbackType.FEEDBACK;
-    this.getRoom(roomId).subscribe((room) => {
-      const feedbackExtension: { type: string } = { type: newType };
-      if (!room.extensions) {
-        room.extensions = {};
-        room.extensions.feedback = feedbackExtension;
-      } else {
-        room.extensions.feedback = feedbackExtension;
-      }
-      const changes: { extensions: object } = { extensions: room.extensions };
-      this.patchRoom(roomId, changes).subscribe();
-    });
-    return newType;
+    const feedbackExtension: { type: string } = { type: newType };
+    if (!room.extensions) {
+      room.extensions = {};
+      room.extensions.feedback = feedbackExtension;
+    } else {
+      room.extensions.feedback = feedbackExtension;
+    }
+    const changes: { extensions: object } = { extensions: room.extensions };
+    return this.patchRoom(room.id, changes);
   }
 
   parseExtensions(room: Room): Room {

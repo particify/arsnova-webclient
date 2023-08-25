@@ -12,6 +12,7 @@ import {
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { ContentScale } from '@app/core/models/content-scale';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-scale-creation',
@@ -36,7 +37,8 @@ export class ContentScaleCreationComponent
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected likertScaleService: LikertScaleService,
-    protected announceService: AnnounceService
+    protected announceService: AnnounceService,
+    protected formService: FormService
   ) {
     super(
       contentService,
@@ -44,7 +46,8 @@ export class ContentScaleCreationComponent
       translationService,
       route,
       contentGroupService,
-      announceService
+      announceService,
+      formService
     );
   }
 

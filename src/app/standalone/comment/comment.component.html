@@ -114,7 +114,7 @@
         mat-icon-button
         color="warn"
         *ngIf="isEditor && archived"
-        (click)="openDeleteCommentDialog()"
+        (click)="deleteComment()"
         [matTooltip]="'comment-page.delete' | translate"
       >
         <mat-icon>delete </mat-icon>
@@ -158,11 +158,7 @@
             ) | translate
           }}</span>
         </button>
-        <button
-          *ngIf="isEditor"
-          mat-menu-item
-          (click)="openDeleteCommentDialog()"
-        >
+        <button *ngIf="isEditor" mat-menu-item (click)="deleteComment()">
           <mat-icon color="warn">delete</mat-icon>
           <span>{{ 'comment-page.delete' | translate }}</span>
         </button>

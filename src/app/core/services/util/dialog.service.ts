@@ -89,9 +89,14 @@ export class DialogService {
     });
   }
 
-  openContentGroupCreationDialog(): MatDialogRef<ContentGroupCreationComponent> {
+  openContentGroupCreationDialog(
+    roomId?: string
+  ): MatDialogRef<ContentGroupCreationComponent> {
     return this.openDialog(ContentGroupCreationComponent, {
       width: this.size.small,
+      data: {
+        roomId: roomId,
+      },
     });
   }
 
@@ -139,7 +144,10 @@ export class DialogService {
     return this.openDialog(ExportComponent);
   }
 
-  openPublishGroupDialog(groupName: string): MatDialogRef<BaseDialogComponent> {
+  openPublishGroupDialog(
+    groupName: string,
+    confirmAction: () => Observable<object>
+  ): MatDialogRef<BaseDialogComponent> {
     return this.openDialog(BaseDialogComponent, {
       width: this.size.small,
       data: {
@@ -151,6 +159,7 @@ export class DialogService {
         abortLabel: 'cancel',
         type: 'button-primary',
         bodyElement: groupName,
+        confirmAction: confirmAction,
       },
     });
   }

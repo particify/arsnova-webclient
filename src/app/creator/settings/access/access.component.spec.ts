@@ -232,6 +232,7 @@ describe('AccessComponent', () => {
     component.loginId = 'c@d.cd';
     fixture.detectChanges();
     component.getUser();
+    fixture.detectChanges();
     await inviteButton.click();
     expect(mockAccessTokenService.invite).toHaveBeenCalled();
   });

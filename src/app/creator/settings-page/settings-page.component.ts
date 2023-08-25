@@ -15,6 +15,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { FormService } from '@app/core/services/util/form.service';
 
 export interface Settings {
   name: string;
@@ -56,7 +57,8 @@ export class SettingsPageComponent implements OnInit {
     private globalStorageService: GlobalStorageService,
     private router: Router,
     private location: Location,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -96,19 +98,26 @@ export class SettingsPageComponent implements OnInit {
 
   saveRoom(updateEvent: UpdateEvent) {
     if (!updateEvent.loadRoom) {
-      this.roomService.updateRoom(updateEvent.room).subscribe((room) => {
-        this.room = room;
-        if (updateEvent.showSuccessInfo) {
-          this.translateService
-            .get('settings.changes-successful')
-            .subscribe((msg) => {
-              this.notificationService.showAdvanced(
-                msg,
-                AdvancedSnackBarTypes.SUCCESS
-              );
-            });
+      this.formService.disableForm();
+      this.roomService.updateRoom(updateEvent.room).subscribe(
+        (room) => {
+          this.room = room;
+          if (updateEvent.showSuccessInfo) {
+            this.translateService
+              .get('settings.changes-successful')
+              .subscribe((msg) => {
+                this.notificationService.showAdvanced(
+                  msg,
+                  AdvancedSnackBarTypes.SUCCESS
+                );
+              });
+          }
+          this.formService.enableForm();
+        },
+        () => {
+          this.formService.enableForm();
         }
-      });
+      );
     } else {
       this.roomService.getRoom(this.room.id).subscribe((room) => {
         this.room = room;

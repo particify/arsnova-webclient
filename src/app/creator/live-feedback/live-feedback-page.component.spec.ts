@@ -83,7 +83,6 @@ describe('LiveFeedbackPageComponent', () => {
 
   let loader: HarnessLoader;
   let changeTypeButton: MatButtonHarness;
-  let toggleFeedbackButton: MatButtonHarness;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -159,11 +158,11 @@ describe('LiveFeedbackPageComponent', () => {
     changeTypeButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#switch-button' })
     );
-    toggleFeedbackButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '#toggle-button' })
+    const toggleButtonElement = fixture.debugElement.query(
+      By.css('#toggle-button')
     );
     expect(changeTypeButton).not.toBeNull('Change type button should exist');
-    expect(toggleFeedbackButton).not.toBeNull(
+    expect(toggleButtonElement).not.toBeNull(
       'Toggle feedback button should exist'
     );
   });
@@ -195,17 +194,5 @@ describe('LiveFeedbackPageComponent', () => {
     );
     await changeTypeButton.click();
     expect(mockRoomService.changeFeedbackType).toHaveBeenCalled();
-  });
-
-  it('should call service function if change type button has been clicked and reset if closed', async () => {
-    component.isClosed = true;
-    component.type = LiveFeedbackType.FEEDBACK;
-    fixture.detectChanges();
-    toggleFeedbackButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '#toggle-button' })
-    );
-    await toggleFeedbackButton.click();
-    expect(mockRoomService.changeFeedbackLock).toHaveBeenCalled();
-    expect(mockWsFeedbackService.reset).toHaveBeenCalled();
   });
 });

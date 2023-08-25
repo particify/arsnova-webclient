@@ -7,6 +7,7 @@
   <mat-form-field appearance="outline">
     <mat-label>{{ 'comment-page.your-comment' | translate }}</mat-label>
     <textarea
+      [disabled]="formDisabled"
       matInput
       #commentBody
       cdkTextareaAutosize
@@ -31,6 +32,7 @@
       'comment-page.tag' | translate
     }}</mat-label>
     <mat-select class="comment-tag">
+      [disabled]="formDisabled"
       <mat-option
         *ngFor="let tag of data.tags"
         value="{{ tag }}"
@@ -54,13 +56,11 @@
   ></lib-extension-point>
   <div fxLayoutAlign="end">
     <div fxLayout="row-reverse" fxLayoutAling="end" fxLayoutGap="10px">
-      <button
-        (click)="closeDialog(commentBody.value)"
-        mat-flat-button
-        color="primary"
-      >
-        {{ 'comment-page.send' | translate }}
-      </button>
+      <app-loading-button
+        name="comment-page.send"
+        [isDialog]="true"
+        (clicked)="closeDialog(commentBody.value)"
+      ></app-loading-button>
       <button
         (click)="onNoClick()"
         aria-labelledby="cancel"

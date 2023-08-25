@@ -4,6 +4,7 @@
       <mat-label>{{ 'content.add-answer' | translate }}</mat-label>
       <input
         matInput
+        [disabled]="disabled"
         name="answer"
         #answerInput
         aria-labelledby="answer"
@@ -11,12 +12,14 @@
         autocomplete="off"
       />
       <button
+        [disabled]="disabled"
+        color="primary"
         class="add-button"
         mat-icon-button
         matSuffix
         (click)="createAnswer()"
       >
-        <mat-icon color="primary">add_circle</mat-icon>
+        <mat-icon>add_circle</mat-icon>
       </button>
     </mat-form-field>
   </form>

@@ -5,6 +5,7 @@
   fxLayoutAlign="start"
 >
   <mat-radio-group
+    [disabled]="disabled"
     [(ngModel)]="yesno"
     [ngModelOptions]="{ standalone: true }"
     fxLayout="column"
