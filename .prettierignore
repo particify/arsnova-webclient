@@ -1,3 +1,4 @@
+*.svg
 .angular
 .git-blame-ignore-revs
 .pnp.*
