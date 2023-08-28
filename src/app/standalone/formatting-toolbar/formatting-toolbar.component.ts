@@ -17,6 +17,7 @@ import {
 })
 export class FormattingToolbarComponent {
   @Input() inputElement: HTMLTextAreaElement;
+  @Input() disabled: boolean;
   @Output() valueChanged = new EventEmitter<string>();
 
   formattingOptions: FormattingOption[] = [

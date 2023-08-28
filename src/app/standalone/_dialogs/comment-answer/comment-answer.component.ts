@@ -19,6 +19,9 @@ import { CoreModule } from '@app/core/core.module';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { DateComponent } from '@app/standalone/date/date.component';
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @Component({
   standalone: true,
@@ -27,12 +30,13 @@ import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/f
     RenderedTextComponent,
     DateComponent,
     FormattingToolbarComponent,
+    LoadingButtonComponent,
   ],
   selector: 'app-comment-answer',
   templateUrl: './comment-answer.component.html',
   styleUrls: ['./comment-answer.component.scss'],
 })
-export class CommentAnswerComponent implements OnInit {
+export class CommentAnswerComponent extends FormComponent implements OnInit {
   readonly dialogId = 'comment-answer';
   @ViewChild('answerInput') answerInput: ElementRef;
 
@@ -49,8 +53,11 @@ export class CommentAnswerComponent implements OnInit {
     protected commentService: CommentService,
     private dialogService: DialogService,
     public dialogRef: MatDialogRef<CommentAnswerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit() {
     this.comment = this.data.comment;
@@ -66,42 +73,45 @@ export class CommentAnswerComponent implements OnInit {
   }
 
   saveAnswer() {
-    this.commentService.answer(this.comment, this.answer).subscribe(() => {
-      this.translateService
-        .get('comment-page.comment-answered')
-        .subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
-      this.edit = false;
-    });
-  }
-
-  openDeleteAnswerDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog(
-      'comment-answer',
-      'really-delete-answer'
-    );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
-        this.deleteAnswer();
+    this.disableForm();
+    this.commentService.answer(this.comment, this.answer).subscribe(
+      () => {
+        this.translateService
+          .get('comment-page.comment-answered')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
+        this.edit = false;
+        this.enableForm();
+      },
+      () => {
+        this.enableForm();
       }
-    });
+    );
   }
 
   deleteAnswer() {
-    this.answer = '';
-    this.commentService.answer(this.comment, this.answer).subscribe(() => {
-      this.translateService
-        .get('comment-page.answer-deleted')
-        .subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.WARNING
-          );
-        });
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'comment-answer',
+      'really-delete-answer',
+      undefined,
+      undefined,
+      () => this.commentService.answer(this.comment, this.answer)
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'delete') {
+        this.answer = '';
+        const msg = this.translateService.instant(
+          'comment-page.answer-deleted'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      }
     });
   }
 

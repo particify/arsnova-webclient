@@ -15,6 +15,9 @@ import { CommentService } from '@app/core/services/http/comment.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { CoreModule } from '@app/core/core.module';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 export interface DialogData {
   userId: string;
@@ -27,11 +30,11 @@ export interface DialogData {
 
 @Component({
   standalone: true,
-  imports: [CoreModule, ExtensionPointModule],
+  imports: [CoreModule, ExtensionPointModule, LoadingButtonComponent],
   selector: 'app-submit-comment',
   templateUrl: './create-comment.component.html',
 })
-export class CreateCommentComponent implements OnInit {
+export class CreateCommentComponent extends FormComponent implements OnInit {
   readonly dialogId = 'create-comment';
 
   comment: Comment;
@@ -45,8 +48,11 @@ export class CreateCommentComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private globalStorageService: GlobalStorageService,
     private commentService: CommentService,
-    private notificationService: NotificationService
-  ) {}
+    private notificationService: NotificationService,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit() {
     this.translateService.use(
@@ -86,28 +92,34 @@ export class CreateCommentComponent implements OnInit {
 
   send(comment: Comment): void {
     let message;
-    this.commentService.addComment(comment).subscribe((newComment) => {
-      this.eventsSubject.next(newComment.id);
-      if (this.data.directSend) {
-        this.translateService
-          .get('comment-page.comment-sent')
-          .subscribe((msg) => {
-            message = msg;
-          });
-        comment.ack = true;
-      } else {
-        this.translateService
-          .get('comment-page.comment-sent-to-moderator')
-          .subscribe((msg) => {
-            message = msg;
-          });
+    this.disableForm();
+    this.commentService.addComment(comment).subscribe(
+      (newComment) => {
+        this.eventsSubject.next(newComment.id);
+        if (this.data.directSend) {
+          this.translateService
+            .get('comment-page.comment-sent')
+            .subscribe((msg) => {
+              message = msg;
+            });
+          comment.ack = true;
+        } else {
+          this.translateService
+            .get('comment-page.comment-sent-to-moderator')
+            .subscribe((msg) => {
+              message = msg;
+            });
+        }
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+        this.dialogRef.close(true);
+      },
+      () => {
+        this.enableForm();
       }
-      this.notificationService.showAdvanced(
-        message,
-        AdvancedSnackBarTypes.SUCCESS
-      );
-      this.dialogRef.close(true);
-    });
+    );
   }
 
   closeDialog(body?: string) {

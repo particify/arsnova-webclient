@@ -1,6 +1,7 @@
 <div fxLayout="row wrap" fxLayoutGap="4px">
   <button
     mat-icon-button
+    [disabled]="disabled"
     *ngFor="let option of formattingOptions"
     (click)="addFormatting(option)"
     [matTooltip]="'formatting.' + option.name | translate"

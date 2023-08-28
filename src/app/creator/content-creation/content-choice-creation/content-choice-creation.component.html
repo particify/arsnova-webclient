@@ -1,6 +1,7 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
   <div fxLayout="column">
     <mat-checkbox
+      [disabled]="disabled"
       [checked]="multipleCorrectAnswers"
       [(ngModel)]="multipleCorrectAnswers"
       name="multiple"
@@ -8,6 +9,7 @@
       <span>{{ 'content.multiple-answers-allowed' | translate }}</span>
     </mat-checkbox>
     <mat-checkbox
+      [disabled]="disabled"
       [checked]="noCorrectAnswers"
       [(ngModel)]="noCorrectAnswers"
       (ngModelChange)="removeCorrectAnswers()"
@@ -23,6 +25,7 @@
         <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
           <mat-checkbox
             id="answer-{{ i }}"
+            [disabled]="disabled"
             *ngIf="!noCorrectAnswers"
             (ngModelChange)="switchValue(answer.answerOption.label, i)"
             [(ngModel)]="answer.correct"
@@ -40,6 +43,7 @@
                 id="answerEdit-{{ i }}"
                 name="answerEdit"
                 matInput
+                [disabled]="disabled"
                 [(ngModel)]="answer.answerOption.label"
                 (focus)="goInEditMode(i)"
                 (blur)="leaveEditMode()"
@@ -68,6 +72,7 @@
     *ngIf="!isEditMode || noAnswersYet"
     (answerCreated)="addAnswer($event)"
     [resetEvent]="resetAnswerInputEvent"
+    [disabled]="disabled"
   ></app-create-answer-option>
 </div>
 

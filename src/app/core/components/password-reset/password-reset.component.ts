@@ -15,6 +15,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -35,7 +37,7 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './password-reset.component.html',
   styleUrls: ['./password-reset.component.scss'],
 })
-export class PasswordResetComponent implements OnInit {
+export class PasswordResetComponent extends FormComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
 
   keyFormControl = new UntypedFormControl('', [Validators.required]);
@@ -51,10 +53,14 @@ export class PasswordResetComponent implements OnInit {
     private notificationService: NotificationService,
     public eventService: EventService,
     private route: ActivatedRoute,
-    private router: Router
-  ) {}
+    private router: Router,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit(): void {
+    this.setFormControl(this.keyFormControl);
     this.email = this.route.snapshot.params['email'];
     this.isLoading = false;
   }
@@ -62,9 +68,9 @@ export class PasswordResetComponent implements OnInit {
   setNewPassword(key: string) {
     const password = this.passwordEntry.getPassword();
     if (this.email !== '' && key !== '' && password) {
-      this.userService
-        .setNewPassword(this.email, key, password)
-        .subscribe(() => {
+      this.disableForm();
+      this.userService.setNewPassword(this.email, key, password).subscribe(
+        () => {
           this.translationService
             .get('password-reset.new-password-successful')
             .subscribe((message) => {
@@ -76,7 +82,11 @@ export class PasswordResetComponent implements OnInit {
           this.router.navigateByUrl('login', {
             state: { data: { username: this.email, password: password } },
           });
-        });
+        },
+        () => {
+          this.enableForm();
+        }
+      );
     } else {
       this.translationService
         .get('login.inputs-incorrect')

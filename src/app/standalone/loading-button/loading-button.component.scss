@@ -1,0 +1,6 @@
+// Keep initial button width if text is hidden
+.hidden {
+  display: flex;
+  height: 0px;
+  visibility: hidden;
+}

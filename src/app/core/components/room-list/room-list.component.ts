@@ -234,33 +234,40 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   openDeleteRoomDialog(room: RoomDataView) {
-    if (room.membership.roles.indexOf(UserRole.OWNER) === -1) {
-      const dialogRef = this.dialogService.openDeleteDialog(
-        'room-membership',
-        'really-cancel-room-membership',
-        room.summary.name
-      );
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result === 'delete') {
-          this.cancelMembership(room);
+    const isOwner = room.membership.roles.includes(UserRole.OWNER);
+    const dialogRef = this.dialogService.openDeleteDialog(
+      isOwner ? 'room' : 'room-membership',
+      isOwner ? 'really-delete-room' : 'really-cancel-room-membership',
+      room.summary.name,
+      undefined,
+      () =>
+        isOwner
+          ? this.roomService.deleteRoom(room.summary.id)
+          : this.roomMembershipService.cancelMembership(room.summary.shortId)
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'delete') {
+        let msg: string;
+        if (isOwner) {
+          msg = this.translateService.instant(
+            'room-list.room-successfully-deleted'
+          );
+          const event = new RoomDeleted(room.summary.id);
+          this.eventService.broadcast(event.type, event.payload);
         } else {
-          this.roomDeletionCanceled();
+          msg = this.translateService.instant(
+            'room-list.room-successfully-removed'
+          );
         }
-      });
-    } else {
-      const dialogRef = this.dialogService.openDeleteDialog(
-        'room',
-        'really-delete-room',
-        room.summary.name
-      );
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result === 'delete') {
-          this.deleteRoom(room);
-        } else {
-          this.roomDeletionCanceled();
-        }
-      });
-    }
+        this.removeRoomFromList(room);
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      } else {
+        this.roomDeletionCanceled();
+      }
+    });
   }
 
   roomDeletionCanceled() {
@@ -294,38 +301,6 @@ export class RoomListComponent implements OnInit, OnDestroy {
       new Date(b.membership.lastVisit).getTime() -
       new Date(a.membership.lastVisit).getTime()
     );
-  }
-
-  deleteRoom(room: RoomDataView) {
-    this.roomService.deleteRoom(room.summary.id).subscribe(() => {
-      this.translateService
-        .get('room-list.room-successfully-deleted')
-        .subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.WARNING
-          );
-        });
-      const event = new RoomDeleted(room.summary.id);
-      this.eventService.broadcast(event.type, event.payload);
-      this.removeRoomFromList(room);
-    });
-  }
-
-  cancelMembership(room: RoomDataView) {
-    this.roomMembershipService
-      .cancelMembership(room.summary.shortId)
-      .subscribe(() => {
-        this.translateService
-          .get('room-list.room-successfully-removed')
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-          });
-        this.removeRoomFromList(room);
-      });
   }
 
   roleToString(role: UserRole): string {
@@ -413,23 +388,10 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   duplicateRoom(roomId: string, roomName: string) {
-    const dialogRef = this.dialogService.openRoomCreateDialog(roomName);
+    const dialogRef = this.dialogService.openRoomCreateDialog(roomName, roomId);
     dialogRef.afterClosed().subscribe((name) => {
       if (name) {
-        this.roomService
-          .duplicateRoom(roomId, false, name)
-          .subscribe((room) => {
-            const event = new RoomCreated(room.id, room.shortId);
-            this.eventService.broadcast(event.type, event.payload);
-            this.loadRoomDataViews();
-            const msg = this.translateService.instant(
-              'room-list.room-duplicated'
-            );
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.SUCCESS
-            );
-          });
+        this.loadRoomDataViews();
       }
     });
   }

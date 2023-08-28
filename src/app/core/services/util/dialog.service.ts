@@ -70,7 +70,8 @@ export class DialogService {
     dialogIdSuffix: string,
     body: string,
     bodyElement?: string,
-    confirmLabel?: string
+    confirmLabel?: string,
+    confirmAction?: () => Observable<object | void>
   ): MatDialogRef<BaseDialogComponent> {
     return this.openDialog(BaseDialogComponent, {
       width: this.size.small,
@@ -83,25 +84,33 @@ export class DialogService {
         abortLabel: 'cancel',
         type: 'button-warn',
         bodyElement: bodyElement,
+        confirmAction: confirmAction,
       },
     });
   }
 
-  openContentGroupCreationDialog(): MatDialogRef<ContentGroupCreationComponent> {
+  openContentGroupCreationDialog(
+    roomId?: string
+  ): MatDialogRef<ContentGroupCreationComponent> {
     return this.openDialog(ContentGroupCreationComponent, {
       width: this.size.small,
+      data: {
+        roomId: roomId,
+      },
     });
   }
 
   // Shared dialogs
 
   openRoomCreateDialog(
-    duplicatedName?: string
+    duplicatedName?: string,
+    roomId?: string
   ): MatDialogRef<RoomCreateComponent> {
     return this.openDialog(RoomCreateComponent, {
       width: this.size.xsmall,
       data: {
         duplicatedName: duplicatedName,
+        roomId: roomId,
       },
     });
   }
@@ -135,7 +144,10 @@ export class DialogService {
     return this.openDialog(ExportComponent);
   }
 
-  openPublishGroupDialog(groupName: string): MatDialogRef<BaseDialogComponent> {
+  openPublishGroupDialog(
+    groupName: string,
+    confirmAction: () => Observable<object>
+  ): MatDialogRef<BaseDialogComponent> {
     return this.openDialog(BaseDialogComponent, {
       width: this.size.small,
       data: {
@@ -147,6 +159,7 @@ export class DialogService {
         abortLabel: 'cancel',
         type: 'button-primary',
         bodyElement: groupName,
+        confirmAction: confirmAction,
       },
     });
   }

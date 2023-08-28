@@ -24,6 +24,7 @@ import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { InfoChartComponent } from './series-overview/info-chart/info-chart.component';
 import { HintComponent } from '@app/standalone/hint/hint.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
     FooterComponent,
     RenderedTextComponent,
     HintComponent,
+    LoadingButtonComponent,
   ],
   declarations: [
     ContentChoiceParticipantComponent,

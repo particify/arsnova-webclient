@@ -41,24 +41,22 @@
         [isNew]="true"
       ></app-password-entry>
 
-      <mat-checkbox [(ngModel)]="acceptToS" name="accept">
+      <mat-checkbox
+        [(ngModel)]="acceptToS"
+        [disabled]="formDisabled"
+        name="accept"
+      >
         {{ 'register.accept' | translate
         }}<a href="{{ linkOfToS }}" target="_blank">{{
           'register.terms' | translate
         }}</a
         >{{ 'register.accept-2' | translate }}
       </mat-checkbox>
-      <div fxLayout="column" fxLayoutAlign="center center">
-        <button
-          color="primary"
-          class="login-button"
-          mat-raised-button
-          type="submit"
-          (click)="register(userName.value)"
-        >
-          {{ 'register.register' | translate }}
-        </button>
-      </div>
+      <app-loading-button
+        name="register.register"
+        [fullWidth]="true"
+        (clicked)="register(userName.value)"
+      ></app-loading-button>
       <div fxLayout="row" fxLayoutAlign="center">
         <p class="smaller-text">
           {{ 'register.already-registered' | translate }}

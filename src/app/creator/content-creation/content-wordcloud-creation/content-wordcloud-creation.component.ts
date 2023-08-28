@@ -12,6 +12,7 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { EventService } from '@app/core/services/util/event.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import { FormService } from '@app/core/services/util/form.service';
 
 const MAX_KEYWORDS = 10;
 
@@ -35,7 +36,8 @@ export class ContentWordcloudCreationComponent
     protected translationService: TranslateService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService
+    protected announceService: AnnounceService,
+    protected formService: FormService
   ) {
     super(
       contentService,
@@ -43,7 +45,8 @@ export class ContentWordcloudCreationComponent
       translationService,
       route,
       contentGroupService,
-      announceService
+      announceService,
+      formService
     );
   }
 

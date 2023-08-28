@@ -24,17 +24,18 @@ import {
   AuthenticationProviderType,
 } from '@app/core/models/api-config';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-room-create',
   templateUrl: './room-create.component.html',
 })
-export class RoomCreateComponent implements OnInit {
+export class RoomCreateComponent extends FormComponent implements OnInit {
   readonly dialogId = 'create-room';
 
   emptyInputs = false;
   newRoom = new Room();
-  roomId: string;
   auth: ClientAuthentication;
   HintType = HintType;
   anonymousProvider: AuthenticationProvider;
@@ -50,8 +51,12 @@ export class RoomCreateComponent implements OnInit {
     public eventService: EventService,
     private globalStorageService: GlobalStorageService,
     private apiConfigService: ApiConfigService,
-    @Inject(MAT_DIALOG_DATA) private data: { duplicatedName: string }
-  ) {}
+    @Inject(MAT_DIALOG_DATA)
+    private data: { duplicatedName?: string; roomId?: string },
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit() {
     this.createDuplication = !!this.data?.duplicatedName;
@@ -106,10 +111,6 @@ export class RoomCreateComponent implements OnInit {
 
   addRoom() {
     this.newRoom.name = this.newRoom.name.trim();
-    if (this.createDuplication) {
-      this.dialogRef.close(this.newRoom.name);
-      return;
-    }
     if (!this.newRoom.name) {
       this.emptyInputs = true;
       this.translateService.get('dialog.no-empty-name').subscribe((msg) => {
@@ -117,28 +118,50 @@ export class RoomCreateComponent implements OnInit {
       });
       return;
     }
+    if (this.createDuplication) {
+      this.disableForm();
+      this.roomService
+        .duplicateRoom(this.data.roomId, false, this.newRoom.name)
+        .subscribe(
+          (room) => {
+            this.dialogRef.close(room.name);
+            const event = new RoomCreated(room.id, room.shortId);
+            this.eventService.broadcast(event.type, event.payload);
+            const msg = this.translateService.instant(
+              'room-list.room-duplicated'
+            );
+            this.notification.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+          },
+          () => this.enableForm()
+        );
+      return;
+    }
     this.newRoom.abbreviation = '00000000';
     this.newRoom.description = '';
     this.newRoom.ownerId = this.auth.userId;
-    this.roomService.addRoom(this.newRoom).subscribe((room) => {
-      this.newRoom = room;
-      let msg1: string;
-      let msg2: string;
-      this.translateService.get('home-page.created-1').subscribe((msg) => {
-        msg1 = msg;
-      });
-      this.translateService.get('home-page.created-2').subscribe((msg) => {
-        msg2 = msg;
-      });
-      this.notification.showAdvanced(
-        msg1 + this.newRoom.name + msg2,
-        AdvancedSnackBarTypes.SUCCESS
-      );
-      const event = new RoomCreated(room.id, room.shortId);
-      this.eventService.broadcast(event.type, event.payload);
-      this.router.navigate(['edit', room.shortId]);
-      this.closeDialog(true);
-    });
+    this.disableForm();
+    this.roomService.addRoom(this.newRoom).subscribe(
+      (room) => {
+        this.newRoom = room;
+        let msg1: string;
+        let msg2: string;
+        this.translateService.get('home-page.created-1').subscribe((msg) => {
+          msg1 = msg;
+        });
+        this.translateService.get('home-page.created-2').subscribe((msg) => {
+          msg2 = msg;
+        });
+        this.notification.showAdvanced(
+          msg1 + this.newRoom.name + msg2,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+        const event = new RoomCreated(room.id, room.shortId);
+        this.eventService.broadcast(event.type, event.payload);
+        this.router.navigate(['edit', room.shortId]);
+        this.closeDialog(true);
+      },
+      () => this.enableForm()
+    );
   }
 
   closeDialog(result?: boolean): void {

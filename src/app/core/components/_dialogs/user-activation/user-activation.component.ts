@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -8,13 +8,15 @@ import { UntypedFormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '@app/core/services/util/event.service';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-user-activation',
   templateUrl: './user-activation.component.html',
   styleUrls: ['./user-activation.component.scss'],
 })
-export class UserActivationComponent {
+export class UserActivationComponent extends FormComponent implements OnInit {
   readonly dialogId = 'activate-user';
 
   activationKeyFormControl = new UntypedFormControl('', [Validators.required]);
@@ -25,8 +27,15 @@ export class UserActivationComponent {
     public notificationService: NotificationService,
     public dialogRef: MatDialogRef<UserActivationComponent>,
     private translationService: TranslateService,
-    public eventService: EventService
-  ) {}
+    public eventService: EventService,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
+
+  ngOnInit(): void {
+    this.setFormControl(this.activationKeyFormControl);
+  }
 
   login(activationKey: string): void {
     if (activationKey.length < 1) {
@@ -40,11 +49,13 @@ export class UserActivationComponent {
         });
     } else {
       activationKey = activationKey.trim();
+      this.disableForm();
       this.userService.activate(this.data, activationKey).subscribe(
         () => {
           this.dialogRef.close({ success: true });
         },
         () => {
+          this.enableForm();
           this.translationService
             .get('user-activation.key-incorrect')
             .subscribe((msg) => {

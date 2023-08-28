@@ -11,6 +11,7 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-user-management',
@@ -31,7 +32,8 @@ export class UserManagementComponent
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
     protected apiConfigService: ApiConfigService,
-    protected dialog: MatDialog
+    protected dialog: MatDialog,
+    private formService: FormService
   ) {
     super(userService);
   }
@@ -57,35 +59,36 @@ export class UserManagementComponent
   deleteEntity() {
     const dialogRef = this.dialogService.openDeleteDialog(
       'account-as-admin',
-      'really-delete-account-admin'
+      'really-delete-account-admin',
+      undefined,
+      undefined,
+      () => this.userService.delete(this.user.id)
     );
     dialogRef.afterClosed().subscribe((closeAction) => {
       if (closeAction === 'delete') {
-        this.userService.delete(this.user.id).subscribe(() => {
-          const msg = this.translateService.instant('admin-area.user-deleted');
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.WARNING
-          );
-          this.clear();
-        });
+        const msg = this.translateService.instant('admin-area.user-deleted');
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+        this.clear();
       }
     });
   }
 
   activateUser() {
-    this.adminService
-      .activateUser(this.user.id)
-      .subscribe(() =>
-        this.translateService
-          .get('admin-area.user-activated')
-          .subscribe((message) =>
-            this.notificationService.showAdvanced(
-              message,
-              AdvancedSnackBarTypes.SUCCESS
-            )
+    this.formService.disableForm();
+    this.adminService.activateUser(this.user.id).subscribe(() => {
+      this.formService.enableForm();
+      this.translateService
+        .get('admin-area.user-activated')
+        .subscribe((message) =>
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.SUCCESS
           )
-      );
+        );
+    });
   }
 
   addAccount() {
@@ -95,20 +98,25 @@ export class UserManagementComponent
         primaryAction: 'add-account',
       },
     });
-    dialogRef.afterClosed().subscribe((loginId) => {
+    dialogRef.componentInstance.clicked$.subscribe((loginId) => {
       if (!loginId) {
         return;
       }
-      this.adminService.addAccount(loginId).subscribe(() => {
-        this.translateService
-          .get('admin-area.account-added')
-          .subscribe((message) =>
-            this.notificationService.showAdvanced(
-              message,
-              AdvancedSnackBarTypes.SUCCESS
-            )
-          );
-      });
+      this.adminService.addAccount(loginId).subscribe(
+        () => {
+          this.formService.enableForm();
+          dialogRef.close();
+          this.translateService
+            .get('admin-area.account-added')
+            .subscribe((message) =>
+              this.notificationService.showAdvanced(
+                message,
+                AdvancedSnackBarTypes.SUCCESS
+              )
+            );
+        },
+        () => this.formService.enableForm()
+      );
     });
   }
 }

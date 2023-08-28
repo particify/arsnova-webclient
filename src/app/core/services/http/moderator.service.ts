@@ -44,10 +44,10 @@ export class ModeratorService extends AbstractHttpService<Moderator> {
       .pipe(catchError(this.handleError('addModerator')));
   }
 
-  delete(roomId: string, userId: string) {
+  delete(roomId: string, userId: string): Observable<Moderator> {
     const url = this.buildUri(`/${userId}`, roomId);
     return this.http
-      .delete(url, httpOptions)
-      .pipe(catchError(this.handleError('deleteModerator')));
+      .delete<Moderator>(url, httpOptions)
+      .pipe(catchError(this.handleError<Moderator>('deleteModerator')));
   }
 }

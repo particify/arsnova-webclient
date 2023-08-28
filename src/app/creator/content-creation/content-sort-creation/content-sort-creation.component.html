@@ -37,6 +37,7 @@
                 id="answerEdit-{{ i }}"
                 name="answerEdit"
                 matInput
+                [disabled]="disabled"
                 [(ngModel)]="answer.answerOption.label"
                 (focus)="goInEditMode(i)"
                 (blur)="leaveEditMode()"
@@ -66,5 +67,6 @@
     *ngIf="!isEditMode || noAnswersYet"
     (answerCreated)="addAnswer($event)"
     [resetEvent]="resetAnswerInputEvent"
+    [disabled]="disabled"
   ></app-create-answer-option>
 </div>

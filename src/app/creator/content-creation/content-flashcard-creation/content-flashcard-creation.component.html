@@ -4,6 +4,7 @@
     <textarea
       #answerInput
       (input)="updateTextContainsImage(answerInput.value)"
+      [disabled]="disabled"
       [(ngModel)]="answer"
       aria-labelledby="answer"
       id="body-input"

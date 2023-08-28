@@ -90,29 +90,26 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  deleteAccount(id: string) {
-    this.userService.delete(id).subscribe(() => {
-      this.authenticationService.logout();
-      this.translationService.get('header.account-deleted').subscribe((msg) => {
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
-      this.navToHome();
-    });
-  }
-
-  openDeleteUserDialog() {
+  deleteAccount() {
     const dialogRef = this.dialogService.openDeleteDialog(
       'account',
-      'really-delete-account'
+      'really-delete-account',
+      undefined,
+      undefined,
+      () => this.userService.delete(this.auth.userId)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'abort') {
-        return;
-      } else if (result === 'delete') {
-        this.deleteAccount(this.auth.userId);
+      if (result === 'delete') {
+        this.authenticationService.logout();
+        this.translationService
+          .get('header.account-deleted')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
+        this.navToHome();
       }
     });
   }

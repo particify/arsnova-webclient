@@ -16,6 +16,7 @@ import {
 export class CreateAnswerOptionComponent implements OnInit {
   @ViewChild('answerInput') answerInput: ElementRef;
   @Input() resetEvent: EventEmitter<boolean>;
+  @Input() disabled: boolean;
   @Output() answerCreated: EventEmitter<string> = new EventEmitter<string>();
   newAnswer = '';
 

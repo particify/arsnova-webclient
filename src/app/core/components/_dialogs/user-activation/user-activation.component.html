@@ -40,13 +40,11 @@
   fxLayout="row-reverse"
   fxLayoutGap="10px"
 >
-  <button
-    mat-flat-button
-    color="primary"
-    (click)="login(userActivationKey.value)"
-  >
-    {{ 'user-activation.activate' | translate }}
-  </button>
+  <app-loading-button
+    name="user-activation.activate"
+    [isDialog]="true"
+    (clicked)="login(userActivationKey.value)"
+  ></app-loading-button>
   <button mat-button (click)="cancel()">
     {{ 'user-activation.cancel' | translate }}
   </button>

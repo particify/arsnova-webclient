@@ -11,13 +11,18 @@ import { AnnouncementService } from '@app/core/services/http/announcement.servic
 import { MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-announcement-settings',
   templateUrl: './announcement-settings.component.html',
   styleUrls: ['./announcement-settings.component.scss'],
 })
-export class AnnouncementSettingsComponent implements OnInit {
+export class AnnouncementSettingsComponent
+  extends FormComponent
+  implements OnInit
+{
   @ViewChild('inputTabs') inputTabs: MatTabGroup;
   @ViewChild('titleInput') titleInput: ElementRef;
 
@@ -38,8 +43,11 @@ export class AnnouncementSettingsComponent implements OnInit {
     private translateService: TranslateService,
     private notificationService: NotificationService,
     private announcementService: AnnouncementService,
-    private dialogService: DialogService
-  ) {}
+    private dialogService: DialogService,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit(): void {
     this.announcementService
@@ -59,24 +67,20 @@ export class AnnouncementSettingsComponent implements OnInit {
     const dialogRef = this.dialogService.openDeleteDialog(
       'announcement',
       'really-delete-announcement',
-      announcement.title
+      announcement.title,
+      undefined,
+      () => this.announcementService.delete(this.room.id, announcement.id)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'abort') {
-        return;
-      } else if (result === 'delete') {
-        this.announcementService
-          .delete(this.room.id, announcement.id)
-          .subscribe(() => {
-            const msg = this.translateService.instant('announcement.deleted');
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-            this.announcements = this.announcements.filter(
-              (n) => n.id !== announcement.id
-            );
-          });
+      if (result === 'delete') {
+        const msg = this.translateService.instant('announcement.deleted');
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+        this.announcements = this.announcements.filter(
+          (n) => n.id !== announcement.id
+        );
       }
     });
   }
@@ -92,34 +96,48 @@ export class AnnouncementSettingsComponent implements OnInit {
       return;
     }
     if (this.editId) {
+      this.disableForm();
       this.announcementService
         .update(this.room.id, this.editId, this.title, this.body)
-        .subscribe((announcement) => {
-          const index = this.announcements
-            .map((a) => a.id)
-            .indexOf(announcement.id);
-          this.announcements[index] = announcement;
-          const msg = this.translateService.instant(
-            'announcement.changes-saved'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-          this.reset();
-        });
+        .subscribe(
+          (announcement) => {
+            const index = this.announcements
+              .map((a) => a.id)
+              .indexOf(announcement.id);
+            this.announcements[index] = announcement;
+            const msg = this.translateService.instant(
+              'announcement.changes-saved'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+            this.reset();
+            this.enableForm();
+          },
+          () => {
+            this.enableForm();
+          }
+        );
     } else {
+      this.disableForm();
       this.announcementService
         .add(this.room.id, this.title, this.body)
-        .subscribe((announcement) => {
-          this.announcements.unshift(announcement);
-          const msg = this.translateService.instant('announcement.created');
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-          this.reset();
-        });
+        .subscribe(
+          (announcement) => {
+            this.announcements.unshift(announcement);
+            const msg = this.translateService.instant('announcement.created');
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+            this.reset();
+            this.enableForm();
+          },
+          () => {
+            this.enableForm();
+          }
+        );
     }
   }
 

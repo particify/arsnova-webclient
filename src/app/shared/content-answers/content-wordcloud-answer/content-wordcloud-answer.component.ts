@@ -11,6 +11,7 @@ export class ContentWordcloudAnswerComponent {
 
   @Input() words: string[] = [];
   @Input() givenAnswer: MultipleTextsAnswer;
+  @Input() disabled: boolean;
   currentInputIndex: number;
 
   trackByIndex(index: number) {

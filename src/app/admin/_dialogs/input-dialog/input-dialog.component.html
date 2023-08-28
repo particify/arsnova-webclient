@@ -28,9 +28,11 @@
       fxLayoutAling="end"
       fxLayoutGap="10px"
     >
-      <button (click)="submit()" mat-flat-button color="primary">
-        {{ 'admin-area.' + primaryAction | translate }}
-      </button>
+      <app-loading-button
+        [name]="'admin-area.' + primaryAction"
+        (clicked)="submit()"
+        [isDialog]="true"
+      ></app-loading-button>
       <button
         (click)="close()"
         aria-labelledby="cancel"

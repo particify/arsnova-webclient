@@ -5,7 +5,13 @@
   <form fxLayout="column" fxLayoutGap="1em">
     <mat-form-field class="input-block no-field-hint" appearance="outline">
       <mat-label>{{ 'announcement.title' | translate }}</mat-label>
-      <input #titleInput [(ngModel)]="title" matInput name="title" />
+      <input
+        #titleInput
+        [disabled]="formDisabled"
+        [(ngModel)]="title"
+        matInput
+        name="title"
+      />
     </mat-form-field>
     <div class="relative">
       <mat-tab-group
@@ -19,6 +25,7 @@
             *ngIf="!renderPreview"
             class="tab-group-formatting-bar-mobile"
             [inputElement]="bodyInput"
+            [disabled]="formDisabled"
             (valueChanged)="body = $event"
           ></app-formatting-toolbar>
           <mat-form-field
@@ -28,6 +35,7 @@
           >
             <textarea
               #bodyInput
+              [disabled]="formDisabled"
               [(ngModel)]="body"
               matInput
               cdkTextareaAutosize
@@ -53,6 +61,7 @@
         *ngIf="!renderPreview"
         class="tab-group-formatting-bar"
         [inputElement]="bodyInput"
+        [disabled]="formDisabled"
         (valueChanged)="body = $event"
       ></app-formatting-toolbar>
     </div>
@@ -60,9 +69,10 @@
       <button mat-stroked-button *ngIf="editId" (click)="reset()">
         {{ 'announcement.cancel' | translate }}
       </button>
-      <button mat-raised-button color="primary" (click)="save()">
-        {{ (editId ? 'announcement.save' : 'announcement.create') | translate }}
-      </button>
+      <app-loading-button
+        [name]="editId ? 'announcement.save' : 'announcement.create'"
+        (clicked)="save()"
+      ></app-loading-button>
     </div>
   </form>
   <div

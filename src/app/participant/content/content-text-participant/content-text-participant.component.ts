@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { Content } from '@app/core/models/content';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-text-participant',
@@ -21,8 +22,6 @@ import { Content } from '@app/core/models/content';
 export class ContentTextParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: Content;
   @Input() answer: TextAnswer;
-  @Input() alreadySent: boolean;
-  @Input() sendEvent: EventEmitter<string>;
   @Output() answerChanged = new EventEmitter<TextAnswer>();
 
   givenAnswer: TextAnswer;
@@ -36,14 +35,16 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     protected eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
-    protected router: Router
+    protected router: Router,
+    protected formService: FormService
   ) {
     super(
       notificationService,
       translateService,
       route,
       globalStorageService,
-      router
+      router,
+      formService
     );
   }
 
@@ -72,6 +73,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       this.textAnswer = '';
       return;
     }
+    this.disableForm();
     this.answerService
       .addAnswerText(this.content.roomId, {
         id: null,
@@ -93,7 +95,10 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
           );
         });
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 
   abstain() {
@@ -110,6 +115,9 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       .subscribe((answer) => {
         this.createAnswer();
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 }

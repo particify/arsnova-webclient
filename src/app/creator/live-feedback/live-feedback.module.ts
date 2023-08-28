@@ -8,6 +8,7 @@ import { LiveFeedbackComponent } from '@app/standalone/live-feedback/live-feedba
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CoreModule } from '@app/core/core.module';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @NgModule({
   declarations: [LiveFeedbackPageComponent],
@@ -19,6 +20,7 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
     LiveFeedbackComponent,
     LoadingIndicatorComponent,
     AnswerCountComponent,
+    LoadingButtonComponent,
   ],
 })
 export class LiveFeedbackModule {}

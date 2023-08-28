@@ -7,13 +7,18 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { Answer } from '@app/core/models/answer';
+import { FormService } from '@app/core/services/util/form.service';
+import { FormComponent } from '@app/standalone/form/form.component';
 
 @Component({
   template: '',
 })
-export abstract class ContentParticipantBaseComponent implements OnInit {
+export abstract class ContentParticipantBaseComponent
+  extends FormComponent
+  implements OnInit
+{
   @Output() answerChanged = new EventEmitter();
-  @Input() alreadySent: boolean;
+  @Input() isDisabled: boolean;
   @Input() sendEvent: EventEmitter<string>;
 
   isLoading = true;
@@ -25,8 +30,11 @@ export abstract class ContentParticipantBaseComponent implements OnInit {
     protected translateService: TranslateService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
-    protected router: Router
-  ) {}
+    protected router: Router,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit() {
     this.translateService.use(

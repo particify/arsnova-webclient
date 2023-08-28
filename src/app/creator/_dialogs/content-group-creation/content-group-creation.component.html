@@ -1,4 +1,4 @@
-<form>
+<form (ngSubmit)="addContentGroup()">
   <div
     mat-dialog-content
     fxLayout="column"
@@ -8,6 +8,7 @@
     <mat-form-field appearance="outline">
       <mat-label>{{ 'dialog.content-group-name' | translate }}</mat-label>
       <input
+        [disabled]="formDisabled"
         matInput
         #nameInput
         class="input-block"
@@ -27,9 +28,8 @@
       fxLayoutAling="end"
       fxLayoutGap="10px"
     >
-      <button (click)="addContentGroup()" mat-flat-button color="primary">
-        {{ 'dialog.create-content-group' | translate }}
-      </button>
+      <app-loading-button name="dialog.create-content-group" [isDialog]="true">
+      </app-loading-button>
       <button
         (click)="closeDialog()"
         aria-labelledby="cancel"

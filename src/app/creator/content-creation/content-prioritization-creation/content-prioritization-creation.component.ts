@@ -14,6 +14,7 @@ import {
 } from '@app/creator/content-creation/content-creation/content-creation.component';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-prioritization-creation',
@@ -33,7 +34,8 @@ export class ContentPrioritizationCreationComponent
     protected translationService: TranslateService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService
+    protected announceService: AnnounceService,
+    protected formService: FormService
   ) {
     super(
       contentService,
@@ -41,7 +43,8 @@ export class ContentPrioritizationCreationComponent
       translationService,
       route,
       contentGroupService,
-      announceService
+      announceService,
+      formService
     );
   }
 

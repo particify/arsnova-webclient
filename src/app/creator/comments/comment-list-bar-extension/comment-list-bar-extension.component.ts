@@ -42,7 +42,16 @@ export class CommentListBarExtensionComponent {
       'comments',
       this.isModeration
         ? 'really-delete-banned-comments'
-        : 'really-delete-comments'
+        : 'really-delete-comments',
+      undefined,
+      undefined,
+      () =>
+        this.isModeration
+          ? this.commentService.deleteCommentsById(
+              this.room.id,
+              this.comments.map((c) => c.id)
+            )
+          : this.commentService.deleteCommentsByRoomId(this.room.id)
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
@@ -53,30 +62,15 @@ export class CommentListBarExtensionComponent {
 
   deleteComments(): void {
     if (this.isModeration) {
-      this.commentService
-        .deleteCommentsById(
-          this.room.id,
-          this.comments.map((c) => c.id)
-        )
-        .subscribe(() => {
-          const msg = this.translateService.instant(
-            'comment-list.banned-comments-deleted'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.WARNING
-          );
-        });
+      const msg = this.translateService.instant(
+        'comment-list.banned-comments-deleted'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     } else {
-      this.commentService.deleteCommentsByRoomId(this.room.id).subscribe(() => {
-        const msg = this.translateService.instant(
-          'comment-list.all-comments-deleted'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
+      const msg = this.translateService.instant(
+        'comment-list.all-comments-deleted'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }
   }
 

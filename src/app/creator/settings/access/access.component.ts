@@ -25,6 +25,8 @@ import { debounceTime, map, Subject, takeUntil } from 'rxjs';
 import { AccessTokenService } from '@app/core/services/http/access-token.service';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 export interface Role {
   name: string;
@@ -36,7 +38,10 @@ export interface Role {
   templateUrl: './access.component.html',
   styleUrls: ['./access.component.scss'],
 })
-export class AccessComponent implements OnInit, OnDestroy {
+export class AccessComponent
+  extends FormComponent
+  implements OnInit, OnDestroy
+{
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
@@ -66,10 +71,14 @@ export class AccessComponent implements OnInit, OnDestroy {
     protected userService: UserService,
     public eventService: EventService,
     private authenticationService: AuthenticationService,
-    private accessTokenService: AccessTokenService
-  ) {}
+    private accessTokenService: AccessTokenService,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit() {
+    this.setFormControl(this.usernameFormControl);
     this.selectedRole = this.roles[0];
     this.getModerators();
     this.authenticationService
@@ -84,7 +93,7 @@ export class AccessComponent implements OnInit, OnDestroy {
           )
           .subscribe(() => {
             this.newModeratorId = null;
-            if (this.loginIdIsEmail) {
+            if (this.loginIdIsEmail && this.loginId) {
               this.getUser();
             }
           });
@@ -161,6 +170,7 @@ export class AccessComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.newModeratorId) {
+      this.disableForm();
       this.moderatorService
         .add(this.room.id, this.newModeratorId, this.selectedRole)
         .subscribe(() => {
@@ -174,6 +184,7 @@ export class AccessComponent implements OnInit, OnDestroy {
             AdvancedSnackBarTypes.SUCCESS
           );
           this.loginId = '';
+          this.enableForm();
         });
     } else {
       this.inviteModerator();
@@ -193,29 +204,24 @@ export class AccessComponent implements OnInit, OnDestroy {
       });
   }
 
-  openDeleteRoomDialog(moderator: Moderator): void {
+  removeModerator(moderator: Moderator): void {
     const dialogRef = this.dialogService.openDeleteDialog(
       'room-moderator',
       'really-delete-user-rights',
       moderator.loginId,
-      'remove'
+      'remove',
+      () => this.moderatorService.delete(this.room.id, moderator.userId)
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'remove') {
-        this.removeModerator(
-          moderator.userId,
-          this.moderators.indexOf(moderator)
+        this.saveEvent.emit(new UpdateEvent(null, false, true));
+        const msg = this.translationService.instant('settings.user-removed');
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
         );
+        this.moderators.splice(this.moderators.indexOf(moderator), 1);
       }
-    });
-  }
-
-  removeModerator(userId: string, index: number) {
-    this.moderatorService.delete(this.room.id, userId).subscribe(() => {
-      this.saveEvent.emit(new UpdateEvent(null, false, true));
-      const msg = this.translationService.instant('settings.user-removed');
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      this.moderators.splice(index, 1);
     });
   }
 

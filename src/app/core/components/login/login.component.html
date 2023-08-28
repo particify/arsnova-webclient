@@ -80,27 +80,22 @@
             {{ 'login.password-reset' | translate }}
           </a>
         </div>
-        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
-          <button
-            *ngFor="let provider of usernamePasswordProviders"
-            color="primary"
-            class="login-button"
-            mat-raised-button
-            (click)="loginWithUsernamePassword(provider.id)"
-            aria-labelledby="login-description"
-          >
-            <ng-container
-              *ngIf="
-                usernamePasswordProviders.length === 1;
-                else multipleUsernamePasswordLogins
-              "
-              >{{ 'login.login' | translate }}</ng-container
-            >
-            <ng-template #multipleUsernamePasswordLogins
-              >{{ 'login.login-with' | translate }}
-              {{ provider.title }}</ng-template
-            >
-          </button>
+        <div fxLayout="column" fxLayoutGap="5px">
+          <div *ngFor="let provider of usernamePasswordProviders">
+            <app-loading-button
+              *ngIf="usernamePasswordProviders.length === 1"
+              name="login.login"
+              [fullWidth]="true"
+              (clicked)="loginWithUsernamePassword(provider.id)"
+            ></app-loading-button>
+            <app-loading-button
+              *ngIf="usernamePasswordProviders.length > 1"
+              name="{{ 'login.login-with' | translate }}
+              {{ provider.title }}"
+              [fullWidth]="true"
+              (clicked)="loginWithUsernamePassword(provider.id)"
+            ></app-loading-button>
+          </div>
         </div>
         <div *ngIf="dbLoginEnabled" fxLayout="row" fxLayoutAlign="center">
           <p class="smaller-text">{{ 'login.not-registered' | translate }}</p>

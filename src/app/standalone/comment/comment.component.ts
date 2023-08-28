@@ -135,18 +135,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       .subscribe((updatedComment) => (this.comment = updatedComment));
   }
 
-  openDeleteCommentDialog(): void {
-    const dialogRef = this.dialogService.openDeleteDialog(
-      'comment',
-      'really-delete-comment'
-    );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
-        this.delete();
-      }
-    });
-  }
-
   answerComment() {
     if (!this.inAnswerView) {
       this.dialog.open(CommentAnswerComponent, {
@@ -159,13 +147,22 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
-  delete(): void {
-    this.commentService.deleteComment(this.comment).subscribe(() => {
-      this.translateService
-        .get('comment-list.comment-deleted')
-        .subscribe((msg) => {
-          this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-        });
+  deleteComment(): void {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'comment',
+      'really-delete-comment',
+      undefined,
+      undefined,
+      () => this.commentService.deleteComment(this.comment)
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'delete') {
+        this.translateService
+          .get('comment-list.comment-deleted')
+          .subscribe((msg) => {
+            this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+          });
+      }
     });
   }
 

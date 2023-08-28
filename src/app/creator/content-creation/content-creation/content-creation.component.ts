@@ -22,6 +22,7 @@ import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
 import { DragDropBaseComponent } from '@app/shared/drag-drop-base/drag-drop-base.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 export class DisplayAnswer {
   answerOption: AnswerOption;
@@ -49,6 +50,7 @@ export class ContentCreationComponent
   @Input() contentGroup;
   @Input() abstentionsAllowed: boolean;
   @Input() editContent: Content;
+  @Input() disabled;
   @Output() contentReset = new EventEmitter<boolean>();
   @Output() contentSent = new EventEmitter<Content>();
   @Output() refId = new EventEmitter<string>();
@@ -67,7 +69,8 @@ export class ContentCreationComponent
     protected translationService: TranslateService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService
+    protected announceService: AnnounceService,
+    protected formService: FormService
   ) {
     super();
   }
@@ -85,6 +88,7 @@ export class ContentCreationComponent
         if (this.prepareContent()) {
           if (this.createContent()) {
             if (submit) {
+              this.formService.disableForm();
               this.submitContent();
             } else {
               this.contentSent.emit(this.content);

@@ -20,12 +20,11 @@
   >
     {{ data.section + data.abortLabel | translate }}
   </button>
-  <button
-    mat-flat-button
-    color="{{ data.type === 'button-primary' ? 'primary' : 'warn' }}"
-    [attr.aria-label]="data.section + 'a11y-' + data.confirmLabel | translate"
-    (click)="closeDialog(data.confirmLabel)"
-  >
-    {{ data.section + data.confirmLabel | translate }}
-  </button>
+  <app-loading-button
+    [name]="data.section + data.confirmLabel"
+    [color]="data.type === 'button-primary' ? 'primary' : 'warn'"
+    [isDialog]="true"
+    [aria]="data.section + 'a11y-' + data.confirmLabel"
+    (clicked)="closeDialog(data.confirmLabel)"
+  ></app-loading-button>
 </div>

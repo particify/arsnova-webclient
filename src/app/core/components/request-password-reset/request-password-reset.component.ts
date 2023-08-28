@@ -9,13 +9,18 @@ import {
 import { EventService } from '@app/core/services/util/event.service';
 import { PasswordResetErrorStateMatcher } from '@app/core/components/password-reset/password-reset.component';
 import { Router } from '@angular/router';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-request-password-reset',
   templateUrl: './request-password-reset.component.html',
   styleUrls: ['./request-password-reset.component.scss'],
 })
-export class RequestPasswordResetComponent implements OnInit {
+export class RequestPasswordResetComponent
+  extends FormComponent
+  implements OnInit
+{
   usernameFormControl = new UntypedFormControl();
   matcher = new PasswordResetErrorStateMatcher();
   deviceWidth = innerWidth;
@@ -26,10 +31,14 @@ export class RequestPasswordResetComponent implements OnInit {
     private userService: UserService,
     private notificationService: NotificationService,
     public eventService: EventService,
-    private router: Router
-  ) {}
+    private router: Router,
+    protected formService: FormService
+  ) {
+    super(formService);
+  }
 
   ngOnInit(): void {
+    this.setFormControl(this.usernameFormControl);
     this.usernameFormControl.clearValidators();
     const userData = history.state.data;
     if (userData && userData.username) {
@@ -52,6 +61,7 @@ export class RequestPasswordResetComponent implements OnInit {
       !this.usernameFormControl.hasError('email')
     ) {
       this.username = this.username.trim();
+      this.disableForm();
       this.userService.setNewPassword(this.username).subscribe(
         () => {
           this.translationService
@@ -65,6 +75,7 @@ export class RequestPasswordResetComponent implements OnInit {
           this.router.navigate(['password-reset', this.username]);
         },
         () => {
+          this.enableForm();
           this.translationService
             .get('password-reset.request-failed')
             .subscribe((msg) => {

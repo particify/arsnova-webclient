@@ -79,24 +79,11 @@ export class RoomOverviewPageComponent
 
   openCreateContentGroupDialog() {
     this.dialogService
-      .openContentGroupCreationDialog()
+      .openContentGroupCreationDialog(this.room.id)
       .afterClosed()
       .subscribe((name) => {
         if (name) {
-          const newGroup = new ContentGroup();
-          newGroup.roomId = this.room.id;
-          newGroup.name = name;
-          this.contentGroupService.post(newGroup).subscribe(() => {
-            this.translateService
-              .get('room-page.content-group-created')
-              .subscribe((msg) => {
-                this.notificationService.showAdvanced(
-                  msg,
-                  AdvancedSnackBarTypes.SUCCESS
-                );
-              });
-            this.router.navigate(['edit', this.room.shortId, 'series', name]);
-          });
+          this.router.navigate(['edit', this.room.shortId, 'series', name]);
         }
       });
   }

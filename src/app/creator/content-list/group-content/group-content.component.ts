@@ -222,23 +222,13 @@ export class GroupContentComponent
     const dialogRef = this.dialogService.openDeleteDialog(
       'content',
       'really-delete-content',
-      this.contents[index].body
+      this.contents[index].body,
+      undefined,
+      () =>
+        this.contentService.deleteContent(this.room.id, this.contents[index].id)
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
-        this.updateContentChanges(index);
-      }
-    });
-  }
-
-  editContent(content: Content, group: string) {
-    this.contentService.goToEdit(content.id, this.room.shortId, group);
-  }
-
-  updateContentChanges(index: number) {
-    this.contentService
-      .deleteContent(this.room.id, this.contents[index].id)
-      .subscribe(() => {
         this.removeContentFromList(index);
         this.translateService
           .get('content.content-deleted')
@@ -248,7 +238,12 @@ export class GroupContentComponent
               AdvancedSnackBarTypes.WARNING
             );
           });
-      });
+      }
+    });
+  }
+
+  editContent(content: Content, group: string) {
+    this.contentService.goToEdit(content.id, this.room.shortId, group);
   }
 
   removeContentFromList(index: number) {
@@ -575,16 +570,13 @@ export class GroupContentComponent
       content.state.round > 1
         ? this.translateService.instant('dialog.all-rounds-will-be-deleted')
         : null;
-    const dialogRef = this.dialogService.openDeleteDialog(
+    this.dialogService.openDeleteDialog(
       'content-answers',
       'really-delete-answers',
-      multipleRoundsHint
+      multipleRoundsHint,
+      undefined,
+      () => this.contentService.deleteAnswersOfContent(content.id, this.room.id)
     );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
-        this.contentService.deleteAnswersOfContent(content.id, this.room.id);
-      }
-    });
   }
 
   deleteAllAnswers() {
@@ -873,22 +865,21 @@ export class GroupContentComponent
       'content-group',
       'really-delete-content-group',
       this.contentGroup.name,
-      'delete'
+      'delete',
+      () => this.contentGroupService.delete(this.contentGroup)
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
-        this.contentGroupService.delete(this.contentGroup).subscribe(() => {
-          this.routingService.goBack();
-          this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
-          this.translateService
-            .get('content.content-group-deleted')
-            .subscribe((msg) => {
-              this.notificationService.showAdvanced(
-                msg,
-                AdvancedSnackBarTypes.WARNING
-              );
-            });
-        });
+        this.routingService.goBack();
+        this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
+        this.translateService
+          .get('content.content-group-deleted')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
       }
     });
   }

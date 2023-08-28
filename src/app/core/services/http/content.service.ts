@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -234,15 +234,18 @@ export class ContentService extends AbstractEntityService<Content> {
       .pipe(catchError(this.handleError<Content>('deleteAnswers')));
   }
 
-  showDeleteAllAnswersDialog(contentGroup: ContentGroup) {
+  showDeleteAllAnswersDialog(contentGroup: ContentGroup): Observable<void> {
     const dialogRef = this.dialogService.openDeleteDialog(
       'content-answers',
-      'really-delete-all-answers'
+      'really-delete-all-answers',
+      undefined,
+      undefined,
+      () => this.deleteAllAnswersOfContentGroup(contentGroup)
     );
     return dialogRef.afterClosed().pipe(
       switchMap((result) => {
         if (result === 'delete') {
-          return this.deleteAllAnswersOfContentGroup(contentGroup);
+          return of();
         }
       })
     );
@@ -354,16 +357,18 @@ export class ContentService extends AbstractEntityService<Content> {
     this.router.navigate(['edit', shortId, 'series', group, 'edit', contentId]);
   }
 
-  deleteAnswersOfContent(contentId, roomId) {
-    this.deleteAnswers(roomId, contentId).subscribe(() => {
-      this.translateService.get('dialog.answers-deleted').subscribe((msg) => {
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-        this.answersDeleted.next(contentId);
-      });
-    });
+  deleteAnswersOfContent(contentId, roomId): Observable<Content> {
+    return this.deleteAnswers(roomId, contentId).pipe(
+      tap(() => {
+        this.translateService.get('dialog.answers-deleted').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+          this.answersDeleted.next(contentId);
+        });
+      })
+    );
   }
 
   getAnswersDeleted(): Observable<string> {
@@ -381,6 +386,8 @@ export class ContentService extends AbstractEntityService<Content> {
   }
 
   startNewRound(content: Content) {
+    const changes = { state: content.state };
+    changes.state.round = 2;
     const dialogRef = this.dialog.open(BaseDialogComponent, {
       data: {
         section: 'dialog',
@@ -389,24 +396,21 @@ export class ContentService extends AbstractEntityService<Content> {
         confirmLabel: 'start',
         abortLabel: 'cancel',
         type: 'button-primary',
+        confirmAction: () => this.patchContent(content, changes),
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'start') {
-        const changes = { state: content.state };
-        changes.state.round = 2;
-        this.patchContent(content, changes).subscribe((updatedContent) => {
-          content.state.round = updatedContent.state.round;
-          this.roundStarted.next(content);
-          this.translateService
-            .get('dialog.started-new-round')
-            .subscribe((msg) => {
-              this.notificationService.showAdvanced(
-                msg,
-                AdvancedSnackBarTypes.SUCCESS
-              );
-            });
-        });
+        content.state.round = 2;
+        this.roundStarted.next(content);
+        this.translateService
+          .get('dialog.started-new-round')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
       }
     });
   }

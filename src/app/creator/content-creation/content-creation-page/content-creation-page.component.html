@@ -31,7 +31,7 @@
                   <mat-select
                     panelClass="bigger-panel"
                     [(value)]="selectedFormat"
-                    [disabled]="isEditMode"
+                    [disabled]="isEditMode || formDisabled"
                     [hideSingleSelectionIndicator]="true"
                     appHotkey="2"
                     [appHotkeyTitle]="'content.format' | translate"
@@ -83,6 +83,7 @@
                 <app-formatting-toolbar
                   [inputElement]="questionInput"
                   (valueChanged)="question = $event"
+                  [disabled]="formDisabled"
                 ></app-formatting-toolbar>
               </div>
               <mat-form-field
@@ -96,6 +97,7 @@
                   ) | translate
                 }}</mat-label>
                 <textarea
+                  [disabled]="formDisabled"
                   #questionInput
                   (input)="updateTextContainsImage(questionInput.value)"
                   [(ngModel)]="question"
@@ -126,6 +128,7 @@
             </form>
             <div>
               <mat-checkbox
+                [disabled]="formDisabled"
                 *ngIf="
                   ['slide', 'flashcard'].indexOf(selectedFormat.name) === -1
                 "
@@ -144,6 +147,7 @@
                 [abstentionsAllowed]="abstentionsAllowed"
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
+                [disabled]="formDisabled"
               >
               </app-content-choice-creation>
               <app-content-scale-creation
@@ -155,6 +159,7 @@
                 [abstentionsAllowed]="abstentionsAllowed"
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
+                [disabled]="formDisabled"
               >
               </app-content-scale-creation>
               <app-content-yes-no-creation
@@ -166,6 +171,7 @@
                 [abstentionsAllowed]="abstentionsAllowed"
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
+                [disabled]="formDisabled"
               >
               </app-content-yes-no-creation>
               <app-content-text-creation
@@ -178,6 +184,7 @@
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
                 [format]="ContentType.TEXT"
+                [disabled]="formDisabled"
               >
               </app-content-text-creation>
               <app-content-text-creation
@@ -189,6 +196,7 @@
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
                 [format]="ContentType.SLIDE"
+                [disabled]="formDisabled"
               >
               </app-content-text-creation>
               <app-content-flashcard-creation
@@ -199,6 +207,7 @@
                 [contentBody]="questionInput.value"
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
+                [disabled]="formDisabled"
               >
               </app-content-flashcard-creation>
               <app-content-sort-creation
@@ -210,6 +219,7 @@
                 [abstentionsAllowed]="abstentionsAllowed"
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
+                [disabled]="formDisabled"
               >
               </app-content-sort-creation>
               <app-content-wordcloud-creation
@@ -221,6 +231,7 @@
                 [abstentionsAllowed]="abstentionsAllowed"
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
+                [disabled]="formDisabled"
               >
               </app-content-wordcloud-creation>
               <app-content-prioritization-creation
@@ -232,6 +243,7 @@
                 [abstentionsAllowed]="abstentionsAllowed"
                 [createEvent]="createEventSubject.asObservable()"
                 [editContent]="content"
+                [disabled]="formDisabled"
               >
               </app-content-prioritization-creation>
               <div
@@ -241,22 +253,17 @@
                 [ngClass]="{ 'top-space': isEditMode }"
               >
                 <button
+                  [disabled]="formDisabled"
                   (click)="showPreview()"
                   attr.aria-label="{{ 'content.a11y-preview' | translate }}"
                   mat-stroked-button
                 >
                   {{ 'content.preview' | translate }}
                 </button>
-                <button
-                  (click)="emitCreateEvent(true)"
-                  attr.aria-label="{{ 'content.a11y-submit' | translate }}"
-                  color="primary"
-                  mat-raised-button
-                >
-                  {{
-                    (isEditMode ? 'content.save' : 'content.create') | translate
-                  }}
-                </button>
+                <app-loading-button
+                  [name]="isEditMode ? 'content.save' : 'content.create'"
+                  (clicked)="emitCreateEvent(true)"
+                ></app-loading-button>
               </div>
             </div>
           </div>

@@ -59,11 +59,13 @@
                 *ngIf="!renderPreview"
                 class="tab-group-formatting-bar-mobile"
                 [inputElement]="answerInput"
+                [disabled]="formDisabled"
                 (valueChanged)="answer = $event"
               ></app-formatting-toolbar>
               <mat-form-field class="input-block" appearance="outline">
                 <textarea
                   #answerInput
+                  [disabled]="formDisabled"
                   [(ngModel)]="answer"
                   (focus)="edit = true"
                   matInput
@@ -102,6 +104,7 @@
             *ngIf="!renderPreview"
             class="tab-group-formatting-bar"
             [inputElement]="answerInput"
+            [disabled]="formDisabled"
             (valueChanged)="answer = $event"
           ></app-formatting-toolbar>
         </div>
@@ -111,19 +114,15 @@
             *ngIf="isEditor && answer && edit"
             color="warn"
             aria-labelledby="delete"
-            (click)="openDeleteAnswerDialog()"
+            (click)="deleteAnswer()"
           >
             {{ 'comment-page.delete-answer' | translate }}
           </button>
-          <button
-            mat-raised-button
+          <app-loading-button
             *ngIf="isEditor && (edit || !answer)"
-            color="primary"
-            aria-labelledby="submit"
-            (click)="saveAnswer()"
-          >
-            {{ 'comment-page.save-answer' | translate }}
-          </button>
+            name="comment-page.save-answer"
+            (clicked)="saveAnswer()"
+          ></app-loading-button>
         </div>
       </mat-card>
     </div>

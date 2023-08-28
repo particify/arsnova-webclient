@@ -6,6 +6,7 @@ import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import { FormService } from '@app/core/services/util/form.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import {
   AdvancedSnackBarTypes,
@@ -14,6 +15,7 @@ import {
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Message } from '@stomp/stompjs';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-live-feedback-page',
@@ -37,7 +39,8 @@ export class LiveFeedbackPageComponent
     protected translateService: TranslateService,
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    private formService: FormService
   ) {
     super(
       wsFeedbackService,
@@ -60,24 +63,43 @@ export class LiveFeedbackPageComponent
   }
 
   changeType() {
-    this.type = this.roomService.changeFeedbackType(this.room.id, this.type);
-    this.announceType();
+    this.formService.disableForm();
+    this.roomService
+      .changeFeedbackType(this.room, this.type)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((room) => {
+        this.type = room.extensions['feedback']['type'];
+        this.announceType();
+        this.formService.enableForm();
+      });
   }
 
   toggle() {
-    this.roomService.changeFeedbackLock(this.room.id, !this.isClosed);
-    if (this.isClosed) {
-      this.wsFeedbackService.reset(this.room.id);
-    }
-    const state = this.isClosed ? 'started' : 'stopped';
-    this.translateService.get('survey.' + state).subscribe((msg) => {
-      this.notificationService.showAdvanced(
-        msg,
-        state === 'started'
-          ? AdvancedSnackBarTypes.SUCCESS
-          : AdvancedSnackBarTypes.WARNING
+    this.formService.disableForm();
+    this.roomService
+      .changeFeedbackLock(this.room, !this.isClosed)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(
+        (room) => {
+          this.loadConfig(room);
+          const state = this.isClosed ? 'stopped' : 'started';
+          const msg = this.translateService.instant('survey.' + state);
+          this.notificationService.showAdvanced(
+            msg,
+            !this.isClosed
+              ? AdvancedSnackBarTypes.SUCCESS
+              : AdvancedSnackBarTypes.WARNING
+          );
+          if (this.isClosed) {
+            this.updateFeedback([0, 0, 0, 0]);
+            this.wsFeedbackService.reset(this.room.id);
+          }
+          this.formService.enableForm();
+        },
+        () => {
+          this.formService.enableForm();
+        }
       );
-    });
   }
 
   private announceType() {
@@ -95,14 +117,6 @@ export class LiveFeedbackPageComponent
     const type = msg.type;
     if (type === FeedbackMessageType.CHANGED) {
       this.updateFeedback(payload.values);
-    } else {
-      this.roomService.getRoom(this.room.id).subscribe((room) => {
-        this.loadConfig(room);
-      });
-      this.isClosed = type === FeedbackMessageType.STOPPED;
-      if (this.isClosed) {
-        this.updateFeedback([0, 0, 0, 0]);
-      }
     }
   }
 }

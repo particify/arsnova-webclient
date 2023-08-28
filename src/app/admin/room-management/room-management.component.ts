@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '@app/core/services/http/user.service';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-room-management',
@@ -29,7 +30,8 @@ export class RoomManagementComponent {
     protected notificationService: NotificationService,
     protected translateService: TranslateService,
     protected dialog: MatDialog,
-    protected userService: UserService
+    protected userService: UserService,
+    private formService: FormService
   ) {}
 
   showRoom(searchResult: string) {
@@ -66,21 +68,21 @@ export class RoomManagementComponent {
     const dialogRef = this.dialogService.openDeleteDialog(
       'room-as-admin',
       'really-delete-room',
-      this.room.name
+      this.room.name,
+      undefined,
+      () => this.roomService.deleteRoom(this.room.id)
     );
     dialogRef.afterClosed().subscribe((closeAction) => {
       if (closeAction === 'delete') {
-        this.roomService.deleteRoom(this.room.id).subscribe(() => {
-          this.translateService
-            .get('admin-area.room-deleted')
-            .subscribe((message) =>
-              this.notificationService.showAdvanced(
-                message,
-                AdvancedSnackBarTypes.WARNING
-              )
-            );
-          this.room = null;
-        });
+        this.translateService
+          .get('admin-area.room-deleted')
+          .subscribe((message) =>
+            this.notificationService.showAdvanced(
+              message,
+              AdvancedSnackBarTypes.WARNING
+            )
+          );
+        this.room = null;
       }
     });
   }
@@ -93,19 +95,25 @@ export class RoomManagementComponent {
         useUserSearch: true,
       },
     });
-    dialogRef.afterClosed().subscribe((userId) => {
+    dialogRef.componentInstance.clicked$.subscribe((userId) => {
+      console.log(userId);
       if (!userId) {
         return;
       }
-      this.adminService.transferRoom(this.room.id, userId).subscribe(() => {
-        const msg = this.translateService.instant(
-          'admin-area.room-transferred'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-      });
+      this.adminService.transferRoom(this.room.id, userId).subscribe(
+        () => {
+          this.formService.enableForm();
+          dialogRef.close();
+          const msg = this.translateService.instant(
+            'admin-area.room-transferred'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        },
+        () => this.formService.enableForm()
+      );
     });
   }
 }

@@ -33,6 +33,7 @@ import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { DateComponent } from '@app/standalone/date/date.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
     RenderedTextComponent,
     DateComponent,
     AnswerCountComponent,
+    LoadingButtonComponent,
   ],
   declarations: [
     StatisticChoiceComponent,

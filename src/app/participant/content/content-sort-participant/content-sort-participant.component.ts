@@ -13,6 +13,7 @@ import { ContentParticipantBaseComponent } from '@app/participant/content/conten
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentService } from '@app/core/services/http/content.service';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-sort-participant',
@@ -22,8 +23,6 @@ import { ContentService } from '@app/core/services/http/content.service';
 export class ContentSortParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentChoice;
   @Input() answer: ChoiceAnswer;
-  @Input() alreadySent: boolean;
-  @Input() sendEvent: EventEmitter<string>;
   @Input() statsPublished: boolean;
   @Input() correctOptionsPublished: boolean;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
@@ -41,20 +40,22 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
-    private contentService: ContentService
+    private contentService: ContentService,
+    protected formService: FormService
   ) {
     super(
       notificationService,
       translateService,
       route,
       globalStorageService,
-      router
+      router,
+      formService
     );
   }
 
   init() {
     if (this.answer) {
-      this.alreadySent = true;
+      this.isDisabled = true;
       if (this.answer.selectedChoiceIndexes) {
         this.setSortOfAnswer(this.answer.selectedChoiceIndexes);
         this.checkIfCorrect();
@@ -107,6 +108,7 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   }
 
   submitAnswer() {
+    this.disableForm();
     this.answerService
       .addAnswerChoice(this.content.roomId, {
         id: null,
@@ -117,17 +119,22 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
         creationTimestamp: null,
         format: ContentType.SORT,
       } as ChoiceAnswer)
-      .subscribe((answer) => {
-        this.answer = answer;
-        this.checkIfCorrect();
-        this.translateService.get('answer.sent').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
-        this.sendStatusToParent(answer);
-      });
+      .subscribe(
+        (answer) => {
+          this.answer = answer;
+          this.checkIfCorrect();
+          this.translateService.get('answer.sent').subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
+          this.sendStatusToParent(answer);
+        },
+        () => {
+          this.enableForm();
+        }
+      );
   }
 
   abstain() {
@@ -144,6 +151,9 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
       .subscribe((answer) => {
         this.hasAbstained = true;
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 }

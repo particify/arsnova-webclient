@@ -66,7 +66,12 @@
       color="primary"
       class="add-user-button"
       (click)="addModerator()"
-      [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
+      [disabled]="
+        isGuest ||
+        !currentInputIsChecked ||
+        loginId.length === 0 ||
+        formDisabled
+      "
       id="add-button"
       appTrackInteraction="Room member role invited"
       [appTrackName]="selectedRole"
@@ -80,7 +85,12 @@
       color="primary"
       class="add-user-button"
       (click)="addModerator()"
-      [disabled]="isGuest || !currentInputIsChecked || loginId.length === 0"
+      [disabled]="
+        isGuest ||
+        !currentInputIsChecked ||
+        loginId.length === 0 ||
+        formDisabled
+      "
       id="invite-button"
       appTrackInteraction="Room member role assigned"
       [appTrackName]="selectedRole"
@@ -132,7 +142,7 @@
             color="warn"
             *ngIf="moderator.role !== UserRole.OWNER"
             class="close"
-            (click)="openDeleteRoomDialog(moderator)"
+            (click)="removeModerator(moderator)"
             fxFlex
             attr.aria-label="{{
               'settings.a11y-delete-moderator'

@@ -22,6 +22,7 @@ import {
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
 import { CreateAnswerOptionComponent } from '@app/creator/content-creation/create-answer-option/create-answer-option.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-choice-creation',
@@ -47,7 +48,8 @@ export class ContentChoiceCreationComponent
     protected translationService: TranslateService,
     protected contentGroupService: ContentGroupService,
     protected route: ActivatedRoute,
-    protected announceService: AnnounceService
+    protected announceService: AnnounceService,
+    protected formService: FormService
   ) {
     super(
       contentService,
@@ -55,7 +57,8 @@ export class ContentChoiceCreationComponent
       translationService,
       route,
       contentGroupService,
-      announceService
+      announceService,
+      formService
     );
   }
 

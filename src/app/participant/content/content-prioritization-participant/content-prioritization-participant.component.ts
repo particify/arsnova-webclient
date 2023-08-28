@@ -12,6 +12,7 @@ import {
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-prioritization-participant',
@@ -20,8 +21,6 @@ import { ContentParticipantBaseComponent } from '@app/participant/content/conten
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentPrioritization;
   @Input() answer: PrioritizationAnswer;
-  @Input() alreadySent: boolean;
-  @Input() sendEvent: EventEmitter<string>;
   @Output() answerChanged = new EventEmitter<PrioritizationAnswer>();
 
   isLoading = true;
@@ -37,19 +36,21 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
     protected translateService: TranslateService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
-    protected router: Router
+    protected router: Router,
+    protected formService: FormService
   ) {
     super(
       notificationService,
       translateService,
       route,
       globalStorageService,
-      router
+      router,
+      formService
     );
   }
 
   init() {
-    if (this.alreadySent) {
+    if (this.isDisabled) {
       this.hasAbstained = !this.answer.assignedPoints;
     }
     this.initAnswers();
@@ -97,6 +98,7 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
+    this.disableForm();
     this.answerService
       .addAnswerPrioritization(this.content.roomId, {
         id: null,
@@ -107,16 +109,21 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
         creationTimestamp: null,
         format: ContentType.PRIORITIZATION,
       } as PrioritizationAnswer)
-      .subscribe((answer) => {
-        this.answer = answer;
-        this.translateService.get('answer.sent').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
-        this.sendStatusToParent(answer);
-      });
+      .subscribe(
+        (answer) => {
+          this.answer = answer;
+          this.translateService.get('answer.sent').subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
+          this.sendStatusToParent(answer);
+        },
+        () => {
+          this.enableForm();
+        }
+      );
   }
 
   abstain() {
@@ -133,6 +140,9 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
       .subscribe((answer) => {
         this.hasAbstained = true;
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 }

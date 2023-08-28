@@ -13,13 +13,17 @@ import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import { FormComponent } from '@app/standalone/form/form.component';
 
 @Component({
   selector: 'app-content-participant',
   templateUrl: './content-participant.component.html',
   styleUrls: ['./content-participant.component.scss'],
 })
-export class ContentParticipantComponent implements OnInit {
+export class ContentParticipantComponent
+  extends FormComponent
+  implements OnInit
+{
   @Input() content: Content;
   @Input() answer: Answer;
   @Input() lastContent: boolean;
@@ -142,6 +146,7 @@ export class ContentParticipantComponent implements OnInit {
   forwardAnswerMessage($event: Answer) {
     this.answerChanged.emit($event);
     setTimeout(() => {
+      this.enableForm();
       this.checkIfAbstention($event);
       this.alreadySent = true;
     }, 100);

@@ -1,7 +1,7 @@
 <div>
   <mat-checkbox
     [(ngModel)]="neutralOption"
-    [disabled]="isEditMode && !noAnswersYet"
+    [disabled]="(isEditMode && !noAnswersYet) || disabled"
     >{{ 'content.offer-neutral-option' | translate }}</mat-checkbox
   >
   <div style="padding: 0 16px">
@@ -14,7 +14,7 @@
         <mat-label>{{ 'content.answer-template' | translate }}</mat-label>
         <mat-select
           [(value)]="selectedTemplate"
-          [disabled]="isEditMode && !noAnswersYet"
+          [disabled]="(isEditMode && !noAnswersYet) || disabled"
         >
           <mat-option
             *ngFor="let template of templates; let i = index"

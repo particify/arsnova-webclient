@@ -13,6 +13,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { ContentService } from '@app/core/services/http/content.service';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-choice-participant',
@@ -21,8 +22,6 @@ import { SelectableAnswer } from '@app/core/models/selectable-answer';
 export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent {
   @Input() content: ContentChoice;
   @Input() answer: ChoiceAnswer;
-  @Input() alreadySent: boolean;
-  @Input() sendEvent: EventEmitter<string>;
   @Input() statsPublished: boolean;
   @Input() correctOptionsPublished: boolean;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
@@ -46,14 +45,16 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
-    private contentService: ContentService
+    private contentService: ContentService,
+    protected formService: FormService
   ) {
     super(
       notificationService,
       translateService,
       route,
       globalStorageService,
-      router
+      router,
+      formService
     );
   }
 
@@ -186,6 +187,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       }
       return;
     }
+    this.disableForm();
     this.answerService
       .addAnswerChoice(this.content.roomId, {
         id: null,
@@ -206,7 +208,10 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
           );
         });
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 
   abstain() {
@@ -224,6 +229,9 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
         this.resetCheckedAnswers();
         this.hasAbstained = true;
         this.sendStatusToParent(answer);
-      });
+      }),
+      () => {
+        this.enableForm();
+      };
   }
 }

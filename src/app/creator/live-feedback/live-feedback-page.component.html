@@ -28,6 +28,7 @@
         [appHotkeyAction]="HotkeyAction.FOCUS"
         appTrackInteraction="Survey type toggled"
         [appTrackName]="type.toLowerCase()"
+        appDisableForm
       >
         {{ 'survey.change-type' | translate }}
       </button>
@@ -53,21 +54,17 @@
         [size]="'medium'"
       ></app-answer-count>
     </div>
-    <button
-      tabindex="0"
-      mat-raised-button
+    <app-loading-button
       id="toggle-button"
-      color="primary"
       class="bottom-button"
-      (click)="toggle()"
-      aria-labelledby="toggle"
-      [appHotkey]="toggleKey"
-      [appHotkeyTitle]="(isClosed ? 'survey.start' : 'survey.stop') | translate"
-      [appHotkeyAction]="HotkeyAction.FOCUS"
-      appTrackInteraction="Survey toggled"
-      [appTrackName]="isClosed ? 'on' : 'off'"
+      [name]="isClosed ? 'survey.start' : 'survey.stop'"
+      (clicked)="toggle()"
+      [hotkey]="toggleKey"
+      [hotkeyTitle]="(isClosed ? 'survey.start' : 'survey.stop') | translate"
+      [hotkeyAction]="HotkeyAction.FOCUS"
+      trackInteraction="Survey toggled"
+      [trackName]="isClosed ? 'on' : 'off'"
     >
-      {{ (isClosed ? 'survey.start' : 'survey.stop') | translate }}
-    </button>
+    </app-loading-button>
   </div>
 </app-base-card>
