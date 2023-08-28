@@ -21,7 +21,7 @@ export class WsConnectorService {
     authService
       .getAuthenticationChanges()
       .subscribe(async (auth: ClientAuthentication) => {
-        if (this.client.connected) {
+        if (this.client.connected()) {
           await this.client.deactivate();
         }
 
@@ -37,7 +37,7 @@ export class WsConnectorService {
   }
 
   public send(destination: string, body: string): void {
-    if (this.client.connected) {
+    if (this.client.connected()) {
       this.client.publish({
         destination: destination,
         headers: defaultMessageHeaders,
@@ -47,9 +47,7 @@ export class WsConnectorService {
   }
 
   public getWatcher(topic: string): Observable<IMessage> {
-    if (this.client.connected) {
-      return this.client.watch(topic);
-    }
+    return this.client.watch(topic);
   }
 
   public getConnectionState(): Observable<RxStompState> {

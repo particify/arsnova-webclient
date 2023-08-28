@@ -180,6 +180,7 @@ export class CommentsPageComponent
       comment.id
     );
     this.presentationService.updateCommentState(commentPresentationState);
+
     this.focusModeService.updateCommentState(this.room, comment.id);
     if (!this.isLoading) {
       this.scrollToComment(index);

@@ -343,6 +343,7 @@ export class CommentService extends AbstractEntityService<Comment> {
           dateB = new Date(b.timestamp);
         return +dateB > +dateA ? 1 : +dateA > +dateB ? -1 : 0;
       }
+      return 1;
     });
   }
 

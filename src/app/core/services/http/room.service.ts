@@ -133,8 +133,6 @@ export class RoomService extends AbstractEntityService<Room> {
   }
 
   addRoom(room: Room): Observable<Room> {
-    delete room.id;
-    delete room.revision;
     return this.postEntity(room).pipe(
       catchError(this.handleError<Room>(`add Room ${room}`))
     );

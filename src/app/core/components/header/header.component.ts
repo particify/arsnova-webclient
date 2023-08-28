@@ -36,7 +36,6 @@ import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
-import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -95,14 +94,11 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authenticationService
-      .getAuthenticationChanges()
-      .pipe(finalize(() => (this.auth = undefined)))
-      .subscribe((auth) => {
-        this.auth = auth;
-        this.userCharacter = this.auth?.loginId.slice(0, 1).toLocaleUpperCase();
-        this.getAnnouncementState();
-      });
+    this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
+      this.auth = auth;
+      this.userCharacter = this.auth?.loginId.slice(0, 1).toLocaleUpperCase();
+      this.getAnnouncementState();
+    });
     this.eventService
       .on('EntityChangeNotification')
       .subscribe((notification) => {

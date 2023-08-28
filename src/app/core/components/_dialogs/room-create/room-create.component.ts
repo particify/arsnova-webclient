@@ -100,17 +100,18 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
   }
 
   checkLogin() {
-    if (!this.auth) {
-      this.authenticationService.loginGuest().subscribe((result) => {
-        this.auth = result.authentication;
-        this.addRoom();
-      });
+    if (this.auth) {
+      this.addRoom(this.auth);
     } else {
-      this.addRoom();
+      this.authenticationService.loginGuest().subscribe((result) => {
+        if (result.authentication) {
+          this.addRoom(result.authentication);
+        }
+      });
     }
   }
 
-  addRoom() {
+  private addRoom(auth: ClientAuthentication) {
     this.newRoom.name = this.newRoom.name.trim();
     if (!this.newRoom.name) {
       this.emptyInputs = true;
@@ -139,7 +140,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     }
     this.newRoom.abbreviation = '00000000';
     this.newRoom.description = '';
-    this.newRoom.ownerId = this.auth.userId;
+    this.newRoom.ownerId = auth.userId;
     this.disableForm();
     this.roomService.addRoom(this.newRoom).subscribe(
       (room) => {

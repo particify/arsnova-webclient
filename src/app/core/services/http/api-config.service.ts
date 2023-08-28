@@ -92,17 +92,15 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
 
   private freezeRecursively(obj: object) {
     /* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze */
-    if (Object.freeze) {
-      const propNames = Object.getOwnPropertyNames(obj);
+    const propNames = Object.getOwnPropertyNames(obj);
 
-      /* Freeze properties before freezing self */
-      for (const name of propNames) {
-        const value = obj[name];
-        obj[name] =
-          value && typeof value === 'object'
-            ? this.freezeRecursively(value)
-            : value;
-      }
+    /* Freeze properties before freezing self */
+    for (const name of propNames) {
+      const value = obj[name as keyof object];
+      (obj as { [key: string]: object })[name] =
+        value && typeof value === 'object'
+          ? this.freezeRecursively(value)
+          : value;
     }
 
     return Object.freeze(obj);

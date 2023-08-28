@@ -350,16 +350,28 @@ export class AbstractCommentsPageComponent {
 
   handleCommentPatch(changes: object, id: string, index: number): boolean {
     for (const [key, value] of Object.entries(changes)) {
-      if (key === CommentFilter.ACK) {
+      if (key === 'ack') {
         this.handleCommentPatchAck(id, value);
         return true;
       } else {
         if (index > -1) {
-          this.comments[index][key] = value;
+          switch (key) {
+            case 'answer':
+              this.comments[index].answer = value;
+              break;
+            case 'correct':
+              this.comments[index].correct = value;
+              break;
+            case 'favorite':
+              this.comments[index].favorite = value;
+              break;
+            case 'score':
+              this.comments[index].score = value;
+          }
         }
-        return false;
       }
     }
+    return false;
   }
 
   handleCommentPatchAck(id: string, value: boolean) {
@@ -397,8 +409,8 @@ export class AbstractCommentsPageComponent {
 
   openCreateDialog(): void {
     let tags;
-    if (this.room.extensions?.tags && this.room.extensions.tags['tags']) {
-      tags = this.room.extensions.tags['tags'];
+    if (this.room.extensions?.comments?.tags) {
+      tags = this.room.extensions.comments.tags;
     }
     this.dialog.open(CreateCommentComponent, {
       width: '400px',

@@ -80,8 +80,6 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   }
 
   post(entity: ContentGroup): Observable<ContentGroup> {
-    delete entity.id;
-    delete entity.revision;
     return this.postEntity(entity, entity.roomId).pipe(
       tap((group) => {
         this.roomStatsService.removeCacheEntry(entity.roomId);

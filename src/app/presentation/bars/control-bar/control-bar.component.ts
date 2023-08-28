@@ -428,16 +428,16 @@ export class ControlBarComponent
     return (this.features.map((f) => f.name).indexOf(name) + 1).toString();
   }
 
-  updateFeature(feature: string) {
+  updateFeature(feature?: string) {
+    if (!feature) {
+      this.currentRouteIndex = undefined;
+      return;
+    }
     if (
       this.currentRouteIndex !==
       this.barItems.map((i) => i.name).indexOf(feature)
     ) {
-      if (feature) {
-        this.getCurrentRouteIndex(feature);
-      } else {
-        this.currentRouteIndex = undefined;
-      }
+      this.getCurrentRouteIndex(feature);
       this.activeFeature.emit(feature);
       if (feature === RoutingFeature.CONTENTS) {
         this.setArrowsState(this.contentStepState);

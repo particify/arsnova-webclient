@@ -267,13 +267,13 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         this.currentStep,
         this.contents.length
       );
+      const state = new ContentPresentationState(
+        position,
+        index,
+        this.contents[this.currentStep]
+      );
+      this.presentationService.updateContentState(state);
     }
-    const state = new ContentPresentationState(
-      position,
-      index,
-      this.contents[this.currentStep]
-    );
-    this.presentationService.updateContentState(state);
   }
 
   lockContent() {
