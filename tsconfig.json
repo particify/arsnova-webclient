@@ -7,11 +7,11 @@
     // All of the strictness settings below are enabled implicitly when strict = true
     "strict": false,
     "alwaysStrict": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitThis": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "useUnknownInCatchVariables": true,
     // All of the strictness settings above are enabled implicitly when strict = true
