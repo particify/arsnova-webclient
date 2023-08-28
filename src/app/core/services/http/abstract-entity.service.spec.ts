@@ -24,8 +24,12 @@ class MockCachingService {
   }
 }
 
+class TestEntity {
+  id: string;
+}
+
 @Injectable()
-class TestEntityService extends AbstractEntityService<object> {
+class TestEntityService extends AbstractEntityService<TestEntity> {
   constructor(
     protected httpClient: HttpClient,
     protected wsConnector: WsConnectorService,

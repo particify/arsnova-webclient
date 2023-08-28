@@ -64,7 +64,7 @@ describe('LiveFeedbackPageComponent', () => {
 
   const room = new Room();
   room.id = 'roomId';
-  room.settings = {};
+  room.settings = { feedbackLocked: true };
   const data = {
     room: room,
     viewRole: UserRole.PARTICIPANT,
@@ -73,7 +73,7 @@ describe('LiveFeedbackPageComponent', () => {
   snapshot.data = {
     isPresentation: false,
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   const mockHotkeyService = jasmine.createSpyObj([
     'registerHotkey',

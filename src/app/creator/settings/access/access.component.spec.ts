@@ -226,7 +226,7 @@ describe('AccessComponent', () => {
     fixture.detectChanges();
     await inviteButton.click();
     expect(mockModeratorService.add).toHaveBeenCalled();
-    component.newModeratorId = null;
+    component.newModeratorId = '';
     mockUserService.getUserByLoginId.and.returnValue(of([]));
     fixture.detectChanges();
     component.loginId = 'c@d.cd';
@@ -260,7 +260,7 @@ describe('AccessComponent', () => {
     fixture.detectChanges();
     await addButton.click();
     expect(mockModeratorService.add).toHaveBeenCalled();
-    component.newModeratorId = null;
+    component.newModeratorId = '';
     mockUserService.getUserByLoginId.and.returnValue(of([]));
     fixture.detectChanges();
     component.loginId = 'c@d.cd';

@@ -39,7 +39,11 @@ describe('ContentWordcloudParticipantComponent', () => {
 
   snapshot.params = of([params]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -88,13 +92,10 @@ describe('ContentWordcloudParticipantComponent', () => {
     component = fixture.componentInstance;
     component.content = new ContentWordcloud(
       '1234',
-      '1',
-      '1234',
       'subject',
       'body',
       [],
       ContentType.WORDCLOUD,
-      new ContentState(1, new Date(), false),
       3
     );
     component.sendEvent = new EventEmitter<string>();

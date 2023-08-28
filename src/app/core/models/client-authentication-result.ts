@@ -9,7 +9,7 @@ export enum AuthenticationStatus {
 
 export class ClientAuthenticationResult {
   constructor(
-    public authentication: ClientAuthentication | null,
+    public authentication?: ClientAuthentication,
     public status: AuthenticationStatus = AuthenticationStatus.SUCCESS
   ) {}
 }

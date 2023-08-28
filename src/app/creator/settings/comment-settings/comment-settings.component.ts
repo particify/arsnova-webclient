@@ -15,13 +15,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '@app/core/services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
-
-export class CommentExtensions {
-  enableThreshold: boolean;
-  commentThreshold: number;
-  enableTags: boolean;
-  tags: string[];
-}
+import { CommentExtensions } from '@app/core/models/room-extensions';
 
 @Component({
   selector: 'app-comment-settings',
@@ -124,7 +118,9 @@ export class CommentSettingsComponent implements OnInit {
     commentExtension.commentThreshold = this.threshold;
     commentExtension.enableTags = this.enableTags;
     commentExtension.tags = this.tags;
-    this.room.extensions.comments = commentExtension;
+    if (this.room.extensions) {
+      this.room.extensions.comments = commentExtension;
+    }
     this.saveChanges();
   }
 

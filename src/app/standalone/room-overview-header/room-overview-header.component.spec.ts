@@ -29,7 +29,11 @@ describe('RoomOverviewHeaderComponent', () => {
     },
   };
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const mockRoutingService = jasmine.createSpyObj('RoutingService', [
     'getRoomJoinUrl',

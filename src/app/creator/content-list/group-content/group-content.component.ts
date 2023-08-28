@@ -26,7 +26,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, of } from 'rxjs';
 import { mergeMap, takeUntil } from 'rxjs/operators';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
@@ -77,8 +77,8 @@ export class GroupContentComponent
   lastPublishedIndex = -1;
   lastPublishedIndexBackup = -1;
   firstPublishedIndexBackup = -1;
-  copiedContents = [];
-  activeMenuIndex: number;
+  copiedContents: Content[] = [];
+  activeMenuIndex?: number;
   activeContentId: string;
   contentHotkeysRegistered = false;
   markdownFeatureset = MarkdownFeatureset.MINIMUM;
@@ -400,9 +400,12 @@ export class GroupContentComponent
           this.updatedName
         );
         this.groupName = this.contentGroup.name;
-        this.contentGroupStats.find(
+        const groupStats = this.contentGroupStats.find(
           (s) => s.id === this.contentGroup.id
-        ).groupName = this.groupName;
+        );
+        if (groupStats) {
+          groupStats.groupName = this.groupName;
+        }
         this.translateService
           .get('content.updated-content-group')
           .subscribe((msg) => {
@@ -569,7 +572,7 @@ export class GroupContentComponent
     const multipleRoundsHint =
       content.state.round > 1
         ? this.translateService.instant('dialog.all-rounds-will-be-deleted')
-        : null;
+        : undefined;
     this.dialogService.openDeleteDialog(
       'content-answers',
       'really-delete-answers',
@@ -602,7 +605,7 @@ export class GroupContentComponent
       content.state.answersPublished = !content.state.answersPublished;
     }
     this.contentService
-      .changeState(content)
+      .changeState(content, content.state)
       .subscribe((updatedContent) => (content = updatedContent));
   }
 
@@ -626,7 +629,7 @@ export class GroupContentComponent
     });
   }
 
-  dropContent(event: CdkDragDrop<string[]>) {
+  dropContent(event: CdkDragDrop<Content[]>) {
     const current = event.currentIndex;
     const prev = event.previousIndex;
     this.moveItem(prev, current);
@@ -641,7 +644,7 @@ export class GroupContentComponent
     }
   }
 
-  setNewRange(prev, current: number) {
+  setNewRange(prev: number, current: number) {
     if (this.firstPublishedIndex === this.lastPublishedIndex) {
       this.setRangeForSingleContent(prev, current);
     } else {
@@ -649,7 +652,7 @@ export class GroupContentComponent
     }
   }
 
-  setRangeForSingleContent(prev, current: number) {
+  setRangeForSingleContent(prev: number, current: number) {
     const publishedIndex = this.firstPublishedIndex;
     if (prev === publishedIndex) {
       this.setTempRange(current, current);
@@ -660,7 +663,7 @@ export class GroupContentComponent
     }
   }
 
-  setRangeForMultipleContents(prev, current: number) {
+  setRangeForMultipleContents(prev: number, current: number) {
     if (this.isInCurrentRange(prev)) {
       this.setNewRangeInCurrentRange(current);
     } else {
@@ -681,7 +684,7 @@ export class GroupContentComponent
     }
   }
 
-  isOutsideOfCurrentRange(prev, current: number) {
+  isOutsideOfCurrentRange(prev: number, current: number) {
     return (
       this.isInRangeExclusive(current) ||
       (this.isAboveRange(prev) && this.isEnd(current)) ||
@@ -713,7 +716,7 @@ export class GroupContentComponent
     }
   }
 
-  publishedRangeHasChanged(prev, current: number): boolean {
+  publishedRangeHasChanged(prev: number, current: number): boolean {
     return (
       prev !== current &&
       !(
@@ -815,13 +818,21 @@ export class GroupContentComponent
   exportToCsv() {
     const dialogRef = this.dialogService.openExportDialog();
     dialogRef.afterClosed().subscribe((options) => {
-      const blob$ = this.contentService.export(
-        options.exportType,
-        this.room.id,
-        this.contentGroup.contentIds,
-        options.charset
-      );
-      this.localFileService.download(blob$, this.generateExportFilename('csv'));
+      if (!this.contentGroup.contentIds) {
+        return;
+      }
+      if (options) {
+        const blob$ = this.contentService.export(
+          options.exportType,
+          this.room.id,
+          this.contentGroup.contentIds,
+          options.charset
+        );
+        this.localFileService.download(
+          blob$,
+          this.generateExportFilename('csv')
+        );
+      }
     });
   }
 
@@ -832,13 +843,16 @@ export class GroupContentComponent
     ]);
     blob$
       .pipe(
-        mergeMap((blob) =>
-          this.contentGroupService.import(
+        mergeMap((blob) => {
+          if (!blob) {
+            return of();
+          }
+          return this.contentGroupService.import(
             this.room.id,
             this.contentGroup.id,
             blob
-          )
-        )
+          );
+        })
       )
       .subscribe(() => {
         this.reloadContentGroup(true);
@@ -858,7 +872,7 @@ export class GroupContentComponent
   }
 
   closedMenu() {
-    this.activeMenuIndex = null;
+    this.activeMenuIndex = undefined;
   }
 
   deleteGroup() {

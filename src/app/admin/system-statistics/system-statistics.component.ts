@@ -84,9 +84,13 @@ export class SystemStatisticsComponent implements OnInit {
   initTabs() {
     this.tabs = [];
     Object.keys(this.stats).forEach((key) => {
-      if (this.stats[key]) {
+      if (this.stats[key as keyof AdminStats]) {
         this.tabs.push(key);
       }
     });
+  }
+
+  getStats(key: string) {
+    return this.stats[key as keyof AdminStats];
   }
 }

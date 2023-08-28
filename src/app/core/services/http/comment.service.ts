@@ -215,13 +215,17 @@ export class CommentService extends AbstractEntityService<Comment> {
   // Non http functions
 
   getExportData(comments: Comment[], delimiter: string): string {
-    const exportComments = JSON.parse(JSON.stringify(comments));
+    const exportComments: Comment[] = JSON.parse(JSON.stringify(comments));
     let valueFields = '';
     exportComments.forEach((element) => {
       valueFields +=
         this.filterNotSupportedCharacters(element['body']) + delimiter;
       const time = element['timestamp'];
-      valueFields += time.slice(0, 10) + '-' + time.slice(11, 16) + delimiter;
+      valueFields +=
+        time.toString().slice(0, 10) +
+        '-' +
+        time.toString().slice(11, 16) +
+        delimiter;
       const answer = element['answer'];
       valueFields +=
         (answer ? this.filterNotSupportedCharacters(answer) : '') + delimiter;
@@ -348,7 +352,7 @@ export class CommentService extends AbstractEntityService<Comment> {
   ): Comment[] {
     const currentTime = new Date();
     const hourInSeconds = 3600000;
-    let periodInSeconds;
+    let periodInSeconds: number;
     if (period !== CommentPeriod.ALL) {
       switch (period) {
         case CommentPeriod.ONEHOUR:

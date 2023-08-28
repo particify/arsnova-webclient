@@ -96,8 +96,6 @@ describe('StatisticSortComponent', () => {
     fixture = TestBed.createComponent(StatisticSortComponent);
     component = fixture.componentInstance;
     component.content = new ContentChoice(
-      '1234',
-      '0',
       'room1234',
       'subject',
       'body',
@@ -105,8 +103,7 @@ describe('StatisticSortComponent', () => {
       [],
       [1, 2, 3, 4],
       false,
-      ContentType.SORT,
-      new ContentState(1, new Date(), false)
+      ContentType.SORT
     );
     fixture.detectChanges();
   });

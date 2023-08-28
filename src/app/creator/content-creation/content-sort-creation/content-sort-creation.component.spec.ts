@@ -46,7 +46,7 @@ describe('ContentSortCreationComponent', () => {
 
   snapshot.params = of([{ seriesName: 'SERIES' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ContentSortCreationComponent],

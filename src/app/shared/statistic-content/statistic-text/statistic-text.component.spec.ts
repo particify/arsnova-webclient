@@ -89,15 +89,12 @@ describe('StatisticTextComponent', () => {
     fixture = TestBed.createComponent(StatisticTextComponent);
     component = fixture.componentInstance;
     component.content = new Content(
-      '1234',
-      '0',
       'room1234',
       'subject',
       'body',
       [],
       ContentType.TEXT,
-      {},
-      new ContentState(1, new Date(), false)
+      {}
     );
     fixture.detectChanges();
   });

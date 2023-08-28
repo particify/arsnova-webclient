@@ -28,7 +28,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
 
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
-  selectedAnswerIndex: number;
+  selectedAnswerIndex?: number;
   selectableAnswers: SelectableAnswer[] = [];
   correctOptionIndexes: number[] = [];
   isCorrect = false;
@@ -144,10 +144,10 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     for (const answer of this.selectableAnswers) {
       answer.checked = false;
     }
-    this.setAnswerIndex(null);
+    this.setAnswerIndex(undefined);
   }
 
-  setAnswerIndex(index: number) {
+  setAnswerIndex(index?: number) {
     this.selectedAnswerIndex = index;
   }
 
@@ -188,16 +188,13 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       return;
     }
     this.disableForm();
+    const answer = new ChoiceAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.selectedChoiceIndexes = selectedAnswers;
+    answer.format = ContentType.CHOICE;
     this.answerService
-      .addAnswerChoice(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        selectedChoiceIndexes: selectedAnswers,
-        creationTimestamp: null,
-        format: ContentType.CHOICE,
-      } as ChoiceAnswer)
+      .addAnswerChoice(this.content.roomId, answer)
       .subscribe((answer) => {
         this.answer = answer;
         this.getCorrectAnswerOptions();
@@ -215,16 +212,12 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   }
 
   abstain() {
+    const answer = new ChoiceAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.format = ContentType.CHOICE;
     this.answerService
-      .addAnswerChoice(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        selectedChoiceIndexes: [],
-        creationTimestamp: null,
-        format: ContentType.CHOICE,
-      } as ChoiceAnswer)
+      .addAnswerChoice(this.content.roomId, answer)
       .subscribe((answer) => {
         this.resetCheckedAnswers();
         this.hasAbstained = true;

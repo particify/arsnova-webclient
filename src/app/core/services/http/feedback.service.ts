@@ -18,7 +18,7 @@ const httpOptions = {
 @Injectable()
 export class FeedbackService extends AbstractHttpService<number[]> {
   public messageEvent = new EventEmitter<Message>();
-  sub: Subscription;
+  sub: Subscription | null;
 
   constructor(
     private http: HttpClient,
@@ -62,7 +62,7 @@ export class FeedbackService extends AbstractHttpService<number[]> {
     }
   }
 
-  emitMessage(message) {
+  emitMessage(message: Message) {
     this.messageEvent.emit(message);
   }
 

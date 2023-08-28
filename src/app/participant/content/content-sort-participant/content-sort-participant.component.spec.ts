@@ -43,7 +43,11 @@ describe('ContentSortParticipantComponent', () => {
 
   snapshot.params = of([params]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -92,16 +96,13 @@ describe('ContentSortParticipantComponent', () => {
     component = fixture.componentInstance;
     component.content = new ContentChoice(
       '1234',
-      '1',
-      '1234',
       'subject',
       'body',
       [],
       [],
       [],
       false,
-      ContentType.SORT,
-      new ContentState(1, new Date(), false)
+      ContentType.SORT
     );
     component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();

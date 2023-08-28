@@ -79,10 +79,13 @@ export class ContentScaleCreationComponent
 
   updateOptionLabels() {
     const optionCount = this.determineOptionCount(this.neutralOption);
-    this.answerLabels = this.likertScaleService.getOptionLabels(
+    const labels = this.likertScaleService.getOptionLabels(
       this.selectedTemplate,
       optionCount
     );
+    if (labels) {
+      this.answerLabels = labels;
+    }
     this.isLoading = false;
   }
 

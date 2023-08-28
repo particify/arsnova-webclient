@@ -43,7 +43,9 @@ describe('FormattingToolbarComponent', () => {
     const boldOption = component.formattingOptions.find(
       (o) => o.name === 'bold'
     );
-    component.addFormatting(boldOption);
+    if (boldOption) {
+      component.addFormatting(boldOption);
+    }
     expect(component.inputElement.value).toBe(
       'I would like to start the next sentence with a bold word. ****'
     );
@@ -56,7 +58,9 @@ describe('FormattingToolbarComponent', () => {
     const boldOption = component.formattingOptions.find(
       (o) => o.name === 'bold'
     );
-    component.addFormatting(boldOption);
+    if (boldOption) {
+      component.addFormatting(boldOption);
+    }
     expect(component.inputElement.value).toBe(
       'I would like to make **THIS** bold.'
     );
@@ -69,7 +73,9 @@ describe('FormattingToolbarComponent', () => {
     const boldOption = component.formattingOptions.find(
       (o) => o.name === 'bold'
     );
-    component.addFormatting(boldOption);
+    if (boldOption) {
+      component.addFormatting(boldOption);
+    }
     expect(component.inputElement.value).toBe(
       'I no longer want to make THIS bold.'
     );
@@ -82,7 +88,9 @@ describe('FormattingToolbarComponent', () => {
     const listOption = component.formattingOptions.find(
       (o) => o.name === 'list'
     );
-    component.addFormatting(listOption);
+    if (listOption) {
+      component.addFormatting(listOption);
+    }
     expect(component.inputElement.value).toBe(
       'List:\n* This should be a list item'
     );
@@ -96,7 +104,9 @@ describe('FormattingToolbarComponent', () => {
     const listOption = component.formattingOptions.find(
       (o) => o.name === 'list'
     );
-    component.addFormatting(listOption);
+    if (listOption) {
+      component.addFormatting(listOption);
+    }
     expect(component.inputElement.value).toBe(
       'List:\n* This should be a list item\nThis should be another list item later'
     );
@@ -109,7 +119,9 @@ describe('FormattingToolbarComponent', () => {
     const listOption = component.formattingOptions.find(
       (o) => o.name === 'list'
     );
-    component.addFormatting(listOption);
+    if (listOption) {
+      component.addFormatting(listOption);
+    }
     expect(component.inputElement.value).toBe('List:\nThis is a list item');
   });
 
@@ -120,7 +132,9 @@ describe('FormattingToolbarComponent', () => {
     const imageOption = component.formattingOptions.find(
       (o) => o.name === 'image'
     );
-    component.addFormatting(imageOption);
+    if (imageOption) {
+      component.addFormatting(imageOption);
+    }
     expect(component.inputElement.value).toBe(
       'See the following image: ![alt text](https://)'
     );
@@ -134,7 +148,9 @@ describe('FormattingToolbarComponent', () => {
     const imageOption = component.formattingOptions.find(
       (o) => o.name === 'image'
     );
-    component.addFormatting(imageOption);
+    if (imageOption) {
+      component.addFormatting(imageOption);
+    }
     expect(component.inputElement.value).toBe(
       'See the following image: ![alt text](https://example.com/image)'
     );
@@ -148,13 +164,15 @@ describe('FormattingToolbarComponent', () => {
     const boldOption = component.formattingOptions.find(
       (o) => o.name === 'bold'
     );
-    component.addFormatting(boldOption);
-    expect(component.inputElement.selectionStart).toBe(
-      component.inputElement.value.length - boldOption.openingTag.length
-    );
-    expect(component.inputElement.selectionEnd).toBe(
-      component.inputElement.value.length - boldOption.openingTag.length
-    );
+    if (boldOption) {
+      component.addFormatting(boldOption);
+      expect(component.inputElement.selectionStart).toBe(
+        component.inputElement.value.length - boldOption.openingTag.length
+      );
+      expect(component.inputElement.selectionEnd).toBe(
+        component.inputElement.value.length - boldOption.openingTag.length
+      );
+    }
   });
 
   it('should offset the text selection when formatting it bold', () => {
@@ -164,7 +182,9 @@ describe('FormattingToolbarComponent', () => {
     const boldOption = component.formattingOptions.find(
       (o) => o.name === 'bold'
     );
-    component.addFormatting(boldOption);
+    if (boldOption) {
+      component.addFormatting(boldOption);
+    }
     expect(component.inputElement.selectionStart).toBe(23);
     expect(component.inputElement.selectionEnd).toBe(27);
   });
@@ -176,7 +196,9 @@ describe('FormattingToolbarComponent', () => {
     const imageOption = component.formattingOptions.find(
       (o) => o.name === 'image'
     );
-    component.addFormatting(imageOption);
+    if (imageOption) {
+      component.addFormatting(imageOption);
+    }
     expect(component.inputElement.selectionStart).toBe(37);
     expect(component.inputElement.selectionEnd).toBe(45);
   });
@@ -189,7 +211,9 @@ describe('FormattingToolbarComponent', () => {
     const imageOption = component.formattingOptions.find(
       (o) => o.name === 'image'
     );
-    component.addFormatting(imageOption);
+    if (imageOption) {
+      component.addFormatting(imageOption);
+    }
     // Expect offset of 12 for opening tag
     expect(component.inputElement.selectionStart).toBe(25 + 12);
     expect(component.inputElement.selectionEnd).toBe(50 + 12);

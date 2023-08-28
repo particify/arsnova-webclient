@@ -6,7 +6,7 @@ export class FormattingOption {
   icon: string;
   openingTag: string;
   closingTag?: string;
-  placeholder: string;
+  placeholder?: string;
   pattern: RegExp;
 
   constructor(
@@ -28,10 +28,6 @@ export class FormattingOption {
           )}`
         )
       : new RegExp(`^${this.escapeTag(openingTag)}`);
-  }
-
-  hasClosingTag() {
-    return !!this.closingTag;
   }
 
   getPattern() {

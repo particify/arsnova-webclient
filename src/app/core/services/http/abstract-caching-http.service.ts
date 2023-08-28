@@ -52,11 +52,11 @@ export abstract class AbstractCachingHttpService<
    * in flight. If a GET request with identical URI and params is already in
    * flight, the cached Observable is returned.
    */
-  protected fetchOnce<U extends T | T[]>(
+  protected fetchOnce<U extends T | T[] = T>(
     uri: string,
     params?: HttpParams
   ): Observable<U> {
-    return this.requestOnce('GET', uri, null, { params: params });
+    return this.requestOnce('GET', uri, undefined, { params: params });
   }
 
   /**
@@ -64,10 +64,10 @@ export abstract class AbstractCachingHttpService<
    * flight. If an request with identical method, URI, params and body is
    * already in flight, the cached Observable is returned.
    */
-  protected requestOnce<U extends T | T[]>(
+  protected requestOnce<U extends T | T[] = T>(
     method: HttpMethod,
     uri: string,
-    body: U,
+    body?: T | Omit<T, 'id'>,
     options: Omit<HttpOptions, 'body'> = {}
   ): Observable<U> {
     (options as HttpOptions).body = body;
@@ -90,10 +90,10 @@ export abstract class AbstractCachingHttpService<
     options?: HttpOptions
   ): string {
     let key = `${method}\n${uri}`;
-    if (options.params) {
+    if (options?.params) {
       key += '?' + options.params.toString();
     }
-    if (options.body != null) {
+    if (options?.body != null) {
       key += '\n' + JSON.stringify(options.body);
     }
 

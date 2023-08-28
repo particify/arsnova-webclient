@@ -48,10 +48,10 @@ export class CookiesComponent {
 
   handleCookieSelection() {
     console.log('Accepted cookie categories: ', this.categories);
-    const consentGiven: ConsentGiven = this.categories.reduce((map, item) => {
-      map[item.id] = item.consent;
-      return map;
-    }, {});
+    const consentGiven: ConsentGiven = {};
+    this.categories.forEach((value) => {
+      consentGiven[value.id] = value.consent;
+    });
     this.dialogRef.close(consentGiven);
     const msg = this.translateService.instant('cookies.settings-saved');
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);

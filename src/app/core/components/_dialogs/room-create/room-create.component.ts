@@ -36,7 +36,8 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
 
   emptyInputs = false;
   newRoom = new Room();
-  auth: ClientAuthentication;
+  roomId: string;
+  auth?: ClientAuthentication;
   HintType = HintType;
   anonymousProvider: AuthenticationProvider;
   createDuplication: boolean;
@@ -60,7 +61,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
 
   ngOnInit() {
     this.createDuplication = !!this.data?.duplicatedName;
-    if (this.createDuplication) {
+    if (this.createDuplication && this.data.duplicatedName) {
       this.newRoom.name = this.data.duplicatedName;
     }
     this.translateService.use(
@@ -118,7 +119,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
       });
       return;
     }
-    if (this.createDuplication) {
+    if (this.createDuplication && this.data.roomId) {
       this.disableForm();
       this.roomService
         .duplicateRoom(this.data.roomId, false, this.newRoom.name)
@@ -143,14 +144,8 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     this.roomService.addRoom(this.newRoom).subscribe(
       (room) => {
         this.newRoom = room;
-        let msg1: string;
-        let msg2: string;
-        this.translateService.get('home-page.created-1').subscribe((msg) => {
-          msg1 = msg;
-        });
-        this.translateService.get('home-page.created-2').subscribe((msg) => {
-          msg2 = msg;
-        });
+        const msg1 = this.translateService.instant('home-page.created-1');
+        const msg2 = this.translateService.instant('home-page.created-2');
         this.notification.showAdvanced(
           msg1 + this.newRoom.name + msg2,
           AdvancedSnackBarTypes.SUCCESS

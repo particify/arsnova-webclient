@@ -57,12 +57,16 @@ export class UserManagementComponent
   }
 
   deleteEntity() {
+    if (!this.user) {
+      return;
+    }
+    const confirmAction = this.userService.delete(this.user.id);
     const dialogRef = this.dialogService.openDeleteDialog(
       'account-as-admin',
       'really-delete-account-admin',
       undefined,
       undefined,
-      () => this.userService.delete(this.user.id)
+      () => confirmAction
     );
     dialogRef.afterClosed().subscribe((closeAction) => {
       if (closeAction === 'delete') {
@@ -77,6 +81,9 @@ export class UserManagementComponent
   }
 
   activateUser() {
+    if (!this.user) {
+      return;
+    }
     this.formService.disableForm();
     this.adminService.activateUser(this.user.id).subscribe(() => {
       this.formService.enableForm();

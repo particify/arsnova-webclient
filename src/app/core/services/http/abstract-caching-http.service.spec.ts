@@ -62,7 +62,7 @@ class TestCachingHttpService extends AbstractCachingHttpService<object> {
   public override requestOnce<U extends object | object[]>(
     method: HttpMethod,
     uri: string,
-    body: U,
+    body: object,
     options?: Omit<HttpOptions, 'body'>
   ): Observable<U> {
     return super.requestOnce(method, uri, body, options);

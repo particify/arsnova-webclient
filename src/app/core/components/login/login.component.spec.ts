@@ -18,6 +18,7 @@ import {
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { AuthProvider } from '@app/core/models/auth-provider';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -37,11 +38,11 @@ describe('LoginComponent', () => {
 
   const data = {
     apiConfig: {
-      authenticationProviders: [],
+      authenticationProviders: [] as AuthProvider[],
     },
   };
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data);
 
   beforeEach(async () => {
     TestBed.configureTestingModule({

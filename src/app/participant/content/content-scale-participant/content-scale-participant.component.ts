@@ -51,9 +51,15 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   }
 
   init() {
-    this.selectableAnswers = this.likertScaleService
-      .getOptionLabels(this.content.optionTemplate, this.content.optionCount)
-      .map((label) => new SelectableAnswer(new AnswerOption(label), false));
+    const optionLabels = this.likertScaleService.getOptionLabels(
+      this.content.optionTemplate,
+      this.content.optionCount
+    );
+    if (optionLabels) {
+      this.selectableAnswers = optionLabels.map(
+        (label) => new SelectableAnswer(new AnswerOption(label), false)
+      );
+    }
     if (this.answer) {
       if (this.answer.selectedChoiceIndexes?.length > 0) {
         this.selectedAnswerIndex = this.answer.selectedChoiceIndexes[0];
@@ -79,37 +85,35 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
       return;
     }
     this.disableForm();
-    this.answerService
-      .addAnswerChoice(this.content.roomId, {
-        contentId: this.content.id,
-        round: this.content.state.round,
-        selectedChoiceIndexes: [this.selectedAnswerIndex],
-        format: ContentType.SCALE,
-      } as ChoiceAnswer)
-      .subscribe(
-        (answer) => {
-          this.answer = answer;
-          this.translateService.get('answer.sent').subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.SUCCESS
-            );
-          });
-          this.sendStatusToParent(answer);
-        },
-        () => {
-          this.enableForm();
-        }
-      );
+    const answer = new ChoiceAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.selectedChoiceIndexes = [this.selectedAnswerIndex];
+    answer.format = ContentType.SCALE;
+    this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
+      (answer) => {
+        this.answer = answer;
+        this.translateService.get('answer.sent').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
+        this.sendStatusToParent(answer);
+      },
+      () => {
+        this.enableForm();
+      }
+    );
   }
 
   abstain() {
+    const answer = new ChoiceAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.format = ContentType.SCALE;
     this.answerService
-      .addAnswerChoice(this.content.roomId, {
-        contentId: this.content.id,
-        round: this.content.state.round,
-        format: ContentType.SCALE,
-      } as ChoiceAnswer)
+      .addAnswerChoice(this.content.roomId, answer)
       .subscribe((answer) => {
         this.hasAbstained = true;
         this.sendStatusToParent(answer);

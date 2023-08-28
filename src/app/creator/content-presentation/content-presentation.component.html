@@ -1,5 +1,5 @@
 <app-info-bar
-  *ngIf="!isLoading && isPresentation && contents?.length > 1"
+  *ngIf="!isLoading && isPresentation && contents && contents.length > 1"
   [barItems]="infoBarItems"
   [isPresentation]="true"
   [position]="'right'"
@@ -24,14 +24,14 @@
     {{ 'statistic.a11y-message-presentation' | translate }}
   </div>
   <div
-    *ngIf="isPresentation"
+    *ngIf="isPresentation && !isLoading"
     tabindex="-1"
     [appAutofocus]
     class="visually-hidden"
   >
     {{
       'presentation.a11y-content-message'
-        | translate: { group: contentGroup?.name }
+        | translate: { group: contentGroup.name }
     }}
   </div>
   <div
@@ -41,10 +41,9 @@
     [ngClass]="{ scalable: isPresentation }"
   >
     <app-stepper
-      *ngIf="contents?.length > 0 && !isLoading"
+      *ngIf="contents && contents.length > 0 && !isLoading"
       (newIndex)="updateURL($event)"
       [listLength]="contents.length"
-      [completed]=""
       [isPresentation]="isPresentation"
       i18nPrefix="content"
     >

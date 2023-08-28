@@ -127,8 +127,8 @@ export abstract class AbstractEntityService<
       map((uncachedEntites) =>
         ids.map(
           (id) =>
-            entities.find((e) => e.id === id) ??
-            uncachedEntites.find((e) => e.id === id)
+            (entities.find((e) => e.id === id) ??
+              uncachedEntites.find((e) => e.id === id)) as T
         )
       )
     );
@@ -166,10 +166,7 @@ export abstract class AbstractEntityService<
    * @param entity The new entity
    * @param roomId The entity's room ID
    */
-  postEntity(entity: T, roomId?: string): Observable<T> {
-    if (entity.id) {
-      throw new Error('Entity property "id" must not be set for new entities.');
-    }
+  postEntity(entity: Omit<T, 'id'>, roomId?: string): Observable<T> {
     const uri = this.buildUri('/', roomId);
     return this.requestOnce('POST', uri, entity).pipe(
       tap((updatedEntity) =>
@@ -222,7 +219,7 @@ export abstract class AbstractEntityService<
    */
   deleteEntity(id: string, roomId?: string): Observable<T> {
     const uri = this.buildUri(`/${id}`, roomId);
-    return this.requestOnce('DELETE', uri, null).pipe(
+    return this.requestOnce('DELETE', uri).pipe(
       tap(() => this.cache.remove(this.generateCacheKey(id)))
     );
   }
@@ -232,7 +229,8 @@ export abstract class AbstractEntityService<
       this.aliasIdMapping.set(idOrAlias, entity.id);
     }
     const entityType = this.uriPrefix.replace(/\//, '');
-    const roomId = entityType === 'room' ? entity.id : entity['roomId'];
+    const roomId =
+      entityType === 'room' ? entity.id : entity['roomId' as keyof T];
     if (
       this.useChangeSubscriptions &&
       !this.stompSubscriptions.has(entity.id)
@@ -257,14 +255,14 @@ export abstract class AbstractEntityService<
   private handleCacheDisposeEvent(id: string) {
     const subscription = this.stompSubscriptions.get(id);
     if (subscription) {
-      this.stompSubscriptions.get(id).unsubscribe();
+      subscription.unsubscribe();
       this.stompSubscriptions.delete(id);
     }
   }
 
   private handleEntityChangeEvent(id: string, msg: IMessage) {
     const changes: object = JSON.parse(msg.body);
-    const entity = this.cache.get(this.generateCacheKey(id));
+    const entity = this.cache.get(this.generateCacheKey(id)) as T;
     this.mergeChangesRecursively(entity, changes);
     const event = new EntityChanged<T>(
       this.entityType,
@@ -286,12 +284,15 @@ export abstract class AbstractEntityService<
   private mergeChangesRecursively(originalObject: object, changes: object) {
     for (const [key, value] of Object.entries(changes)) {
       if (value && typeof value === 'object' && !(value instanceof Array)) {
-        if (!originalObject[key]) {
-          originalObject[key] = {};
+        if (!originalObject[key as keyof object]) {
+          (originalObject as { [key: string]: object })[key] = {};
         }
-        this.mergeChangesRecursively(originalObject[key], value);
+        this.mergeChangesRecursively(
+          originalObject[key as keyof object],
+          value
+        );
       } else {
-        originalObject[key] = value;
+        (originalObject as { [key: string]: object })[key] = value;
       }
     }
   }

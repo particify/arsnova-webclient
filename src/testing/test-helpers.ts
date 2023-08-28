@@ -26,7 +26,7 @@ export class JsonTranslationLoader implements TranslateLoader {
   getTranslation(code = ''): Observable<object> {
     const uppercased = code.toUpperCase();
 
-    return of(TRANSLATIONS[uppercased]);
+    return of((TRANSLATIONS as { [key: string]: any })[uppercased]);
   }
 }
 
@@ -79,7 +79,7 @@ export class MockAnnounceService {
 // GlobalStorageService
 
 export class MockGlobalStorageService {
-  getItem(key: symbol) {
+  getItem(key: symbol): any {
     return undefined;
   }
 
@@ -98,9 +98,9 @@ export class MockRenderer2 {}
 
 export class ActivatedRouteStub {
   private subject = new ReplaySubject<ParamMap>();
-  data: Observable<any>;
-  snapshot: ActivatedRouteSnapshot;
-  params: Observable<Params>;
+  data?: Observable<any>;
+  snapshot?: ActivatedRouteSnapshot;
+  params: Observable<Params | undefined>;
 
   constructor(
     initialParams?: Params,
@@ -116,18 +116,20 @@ export class ActivatedRouteStub {
   readonly paramMap = this.subject.asObservable();
 
   setParamMap(params?: Params) {
-    this.subject.next(convertToParamMap(params));
+    if (params) {
+      this.subject.next(convertToParamMap(params));
+    }
   }
 
   setData(data: any) {
     this.data = of(data);
   }
 
-  setSnapshot(snapshot: ActivatedRouteSnapshot) {
+  setSnapshot(snapshot?: ActivatedRouteSnapshot) {
     this.snapshot = snapshot;
   }
 
-  setParams(params: Params) {
+  setParams(params?: Params) {
     this.params = of(params);
   }
 }
@@ -165,10 +167,10 @@ export class MockNotificationService {
 // ThemeService
 
 export class MockThemeService {
-  private currentTheme$ = new BehaviorSubject(null);
+  private currentTheme$ = new BehaviorSubject<Theme | null>(null);
   private themes: string[];
 
-  getCurrentTheme$(): Observable<Theme> {
+  getCurrentTheme$(): Observable<Theme | null> {
     return this.currentTheme$;
   }
 
@@ -176,8 +178,8 @@ export class MockThemeService {
     return this.themes;
   }
 
-  activate(name) {
-    this.currentTheme$.next(name);
+  activate(theme: Theme) {
+    this.currentTheme$.next(theme);
   }
 
   getColor(name: string) {

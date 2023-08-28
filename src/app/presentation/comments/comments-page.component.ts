@@ -156,8 +156,10 @@ export class CommentsPageComponent
     return Math.max(this.displayComments.indexOf(comment), 0);
   }
 
-  getCurrentIndex(): number {
-    return this.getIndexOfComment(this.activeComment);
+  getCurrentIndex(): number | undefined {
+    if (this.activeComment) {
+      return this.getIndexOfComment(this.activeComment);
+    }
   }
 
   updateCurrentComment(comment: Comment, idChanged = false) {
@@ -189,7 +191,7 @@ export class CommentsPageComponent
     return document.getElementsByName('comment');
   }
 
-  scrollToComment(index) {
+  scrollToComment(index: number) {
     this.getCommentElements()[index]?.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
@@ -204,7 +206,7 @@ export class CommentsPageComponent
 
   nextComment() {
     const index = this.getCurrentIndex();
-    if (index < this.displayComments.length - 1) {
+    if (index !== undefined && index < this.displayComments.length - 1) {
       const nextComment = this.displayComments[index + 1];
       this.updateCurrentComment(nextComment);
     }
@@ -212,7 +214,7 @@ export class CommentsPageComponent
 
   prevComment() {
     const index = this.getCurrentIndex();
-    if (index > 0) {
+    if (index !== undefined && index > 0) {
       const prevComment = this.displayComments[index - 1];
       this.updateCurrentComment(prevComment);
     }

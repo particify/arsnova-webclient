@@ -19,7 +19,6 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { CommentSettings } from '@app/core/models/comment-settings';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
@@ -41,7 +40,7 @@ export class AbstractCommentsPageComponent {
   filteredComments: Comment[];
   commentsFilteredByTime: Comment[] = [];
   displayComments: Comment[] = [];
-  activeComment: Comment;
+  activeComment?: Comment;
   newestComment = new Comment();
   hideCommentsList = false;
   publicCounter = 0;
@@ -210,7 +209,7 @@ export class AbstractCommentsPageComponent {
         : 'auto';
     document
       .getElementById('routing-content')
-      .scrollTo({ top: 0, behavior: behavior });
+      ?.scrollTo({ top: 0, behavior: behavior });
   }
 
   searchComments(input?: string): void {
@@ -233,11 +232,11 @@ export class AbstractCommentsPageComponent {
 
   getThresholdSettings() {
     if (this.room?.extensions?.comments) {
-      this.thresholdEnabled =
-        !!this.room.extensions.comments['enableThreshold'];
+      this.thresholdEnabled = !!this.room.extensions.comments.enableThreshold;
     }
-    if (this.thresholdEnabled) {
-      this.commentThreshold = this.room.extensions.comments['commentThreshold'];
+    const threshold = this.room.extensions?.comments?.commentThreshold;
+    if (this.thresholdEnabled && threshold) {
+      this.commentThreshold = threshold;
     }
   }
 
@@ -392,7 +391,7 @@ export class AbstractCommentsPageComponent {
 
   checkIfActiveComment(id: string) {
     if (id === this.activeComment?.id) {
-      this.activeComment = null;
+      this.activeComment = undefined;
     }
   }
 

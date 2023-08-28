@@ -41,7 +41,7 @@ describe('ContentPrioritizationCreationComponent', () => {
 
   snapshot.params = of([{ seriesName: 'SERIES' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

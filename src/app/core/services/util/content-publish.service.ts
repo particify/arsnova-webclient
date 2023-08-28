@@ -3,12 +3,15 @@ import { ContentGroup } from '@app/core/models/content-group';
 
 @Injectable()
 export class ContentPublishService {
-  isContentPublished(contentGroup: ContentGroup, contentId: string) {
+  isContentPublished(contentGroup: ContentGroup, contentId: string): boolean {
+    if (!contentGroup.contentIds) {
+      return false;
+    }
     const i = contentGroup.contentIds.indexOf(contentId);
     return this.isIndexPublished(contentGroup, i);
   }
 
-  isIndexPublished(group: ContentGroup, index): boolean {
+  isIndexPublished(group: ContentGroup, index: number): boolean {
     return (
       this.areContentsPublished(group) &&
       index > -1 &&
@@ -25,30 +28,33 @@ export class ContentPublishService {
     );
   }
 
-  areContentsPublished(group: ContentGroup) {
+  areContentsPublished(group: ContentGroup): boolean {
     return group.firstPublishedIndex > -1;
   }
 
-  isSingleContentPublished(group: ContentGroup) {
+  isSingleContentPublished(group: ContentGroup): boolean {
     return group.firstPublishedIndex === group.lastPublishedIndex;
   }
 
-  isFirstPublished(group: ContentGroup, index: number) {
+  isFirstPublished(group: ContentGroup, index: number): boolean {
     return group.firstPublishedIndex === index;
   }
 
-  isLastPublished(group: ContentGroup, index: number) {
+  isLastPublished(group: ContentGroup, index: number): boolean {
+    if (!group.contentIds) {
+      return false;
+    }
     return (
       group.lastPublishedIndex === index ||
       (index === group.contentIds.length - 1 && group.lastPublishedIndex === -1)
     );
   }
 
-  isBeforeRange(group: ContentGroup, index: number) {
+  isBeforeRange(group: ContentGroup, index: number): boolean {
     return index < group.firstPublishedIndex;
   }
 
-  isDirectlyAfterRange(group: ContentGroup, index: number) {
+  isDirectlyAfterRange(group: ContentGroup, index: number): boolean {
     return index === group.lastPublishedIndex + 1;
   }
 }

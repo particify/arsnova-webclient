@@ -64,11 +64,11 @@ describe('LiveFeedbackPageComponent', () => {
 
   const room = new Room();
   room.id = 'roomId';
-  room.settings = {};
+  room.settings = { feedbackLocked: true };
   const data = {
     room: room,
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, data, null);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, undefined);
 
   const mockRemoteService = jasmine.createSpyObj(['updateFeedbackStateChange']);
 

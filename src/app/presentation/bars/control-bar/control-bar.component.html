@@ -3,7 +3,7 @@
   [extensionData]="{ isPresentation: true }"
 ></lib-extension-point>
 <div
-  *ngIf="currentRouteIndex > -1"
+  *ngIf="currentRouteIndex && currentRouteIndex > -1"
   class="info-container"
   fxLayout="row"
   fxLayoutGap="1em"
@@ -92,7 +92,9 @@
             fxLayoutAlign="space-between center"
             *ngFor="let contentGroup of contentGroups"
             [value]="contentGroup.name"
-            [disabled]="contentGroup.contentIds?.length < 1"
+            [disabled]="
+              !contentGroup.contentIds || contentGroup.contentIds.length === 0
+            "
             (click)="changeGroup(contentGroup)"
             [ngClass]="{
               'locked-group': !contentGroup.published
@@ -166,15 +168,20 @@
                 [matMenuTriggerFor]="roundMenu"
                 [attr.aria-label]="
                   'content.round' +
-                    (this.contentRounds.get(content.id) > 1 ? 's-' : '-') +
+                    ((this.contentRounds.get(content.id) || 0) > 1
+                      ? 's-'
+                      : '-') +
                     'displayed'
                     | translate
-                      : { rounds: rounds[this.contentRounds.get(content.id)] }
+                      : {
+                          rounds:
+                            rounds[this.contentRounds.get(content.id) || 0]
+                        }
                 "
               >
                 <mat-icon>tune</mat-icon>
                 {{ 'content.round' | translate }}&nbsp;{{
-                  rounds[this.contentRounds.get(content.id)]
+                  rounds[this.contentRounds.get(content.id) || 0]
                 }}
               </button>
               <mat-menu #roundMenu>

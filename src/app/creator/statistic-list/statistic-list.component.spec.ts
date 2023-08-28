@@ -42,7 +42,11 @@ describe('StatisticListComponent', () => {
   snapshot.params = {
     shortId: '12345678',
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
 

@@ -50,11 +50,11 @@ describe('PresentationComponent', () => {
   Object.defineProperty(snapshot, 'firstChild', { value: firstChild });
 
   const room = new Room();
-  room.settings = {};
+  room.settings = { feedbackLocked: true };
   const data = {
     room: room,
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
   const focusModeService = jasmine.createSpyObj('FocusModeService', ['init']);
 
   beforeEach(waitForAsync(() => {

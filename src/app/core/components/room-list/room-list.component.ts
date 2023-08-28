@@ -151,7 +151,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           document
             .getElementById('guest-rooms')
-            .scrollIntoView({ behavior: 'smooth' });
+            ?.scrollIntoView({ behavior: 'smooth' });
         }, 50);
       } else if (this.isLoading) {
         this.translateService
@@ -374,9 +374,10 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   updateLastAccess(shortId: string) {
-    this.rooms.find(
-      (r) => r.membership.roomShortId === shortId
-    ).membership.lastVisit = new Date().toISOString();
+    const room = this.rooms.find((r) => r.membership.roomShortId === shortId);
+    if (room) {
+      room.membership.lastVisit = new Date().toISOString();
+    }
   }
 
   openCreateRoomDialog(): void {

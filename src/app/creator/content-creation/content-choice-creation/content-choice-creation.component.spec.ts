@@ -64,18 +64,6 @@ class MatListStubComponent {}
 @Component({ selector: 'mat-list-item', template: '' })
 class MatListItemStubComponent {}
 
-@Component({ selector: 'mat-radio-group', template: '' })
-class MatRadioGroupStubComponent {
-  @Input() ngModel;
-  @Input() ngModelOptions;
-}
-
-@Component({ selector: 'mat-radio-button', template: '' })
-class MatRadioButtonStubComponent {
-  @Input() value;
-  @Input() checked;
-}
-
 @Component({ selector: 'mat-divider', template: '' })
 class MatDividerStubComponent {}
 
@@ -88,10 +76,6 @@ class MatCardStubComponent {}
 @Component({ selector: 'mat-placeholder', template: '' })
 class MatPlaceholderStubComponent {}
 
-@Component({ selector: 'input', template: '' })
-class InputStubComponent {
-  @Input() ngModel;
-}
 /* eslint-enable @angular-eslint/component-selector */
 
 describe('ContentChoiceCreationComponent', () => {
@@ -108,7 +92,7 @@ describe('ContentChoiceCreationComponent', () => {
 
   snapshot.params = of([{ seriesName: 'SERIES' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -119,13 +103,10 @@ describe('ContentChoiceCreationComponent', () => {
         MatCheckboxStubComponent,
         MatListStubComponent,
         MatListItemStubComponent,
-        MatRadioGroupStubComponent,
-        MatRadioButtonStubComponent,
         MatDividerStubComponent,
         MatLabelStubComponent,
         MatCardStubComponent,
         MatPlaceholderStubComponent,
-        InputStubComponent,
       ],
       providers: [
         {

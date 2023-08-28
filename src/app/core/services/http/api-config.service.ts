@@ -65,14 +65,17 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
    * Converts array-like objects to real arrays so array methods can be used.
    * Example: {"0": "val0", "1": "val1", "2": {"0": "nestedVal"}} => ["val0", "val1", ["nestedVal"]]
    */
-  private convertNestedListObjectsToArrays(value: any): any {
+  private convertNestedListObjectsToArrays(
+    value: object | object[]
+  ): object | object[] {
     if (Array.isArray(value)) {
-      const arr = value as any[];
+      const arr = value as object[];
       return arr.map((item) => this.convertNestedListObjectsToArrays(item));
     } else if (typeof value === 'object') {
       const obj = value as object;
       for (const [name, objValue] of Object.entries(obj)) {
-        obj[name] = objValue && this.convertNestedListObjectsToArrays(objValue);
+        (obj as { [key: string]: object })[name] =
+          objValue && this.convertNestedListObjectsToArrays(objValue);
       }
 
       return this.convertListObjectToArray(obj);

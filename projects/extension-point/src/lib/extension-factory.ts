@@ -50,7 +50,7 @@ export class ExtensionFactory {
       if (!environment.production) {
         console.log(`No extension found for "${id}".`);
       }
-      return;
+      return null;
     }
     ref.clear();
     const factory = this.resolver.resolveComponentFactory(extension.getType());
@@ -60,7 +60,7 @@ export class ExtensionFactory {
     }
     if (data) {
       for (const key of Object.keys(data)) {
-        componentRef.instance[key] = data[key];
+        componentRef.instance[key] = data[key as keyof object];
       }
     }
     componentRef.instance.event = eventEmitter;

@@ -22,7 +22,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 })
 export class RenderedTextComponent implements OnChanges {
   @Input() rawText: string;
-  @Input() renderedText: string;
+  @Input() renderedText?: string;
   @Input() dynamic = false;
   @Input() markdown = true;
   @Input() latex = true;

@@ -2,7 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {
+  MatSlideToggleChange,
+  MatSlideToggleModule,
+} from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -24,7 +27,7 @@ export class SettingsSlideToggleComponent {
   @Input() disabled = false;
   @Output() toggleEvent = new EventEmitter<boolean>();
 
-  toggle(event) {
+  toggle(event: MatSlideToggleChange) {
     this.toggleEvent.emit(event.checked);
   }
 }

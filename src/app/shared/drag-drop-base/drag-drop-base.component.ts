@@ -8,7 +8,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 export class DragDropBaseComponent {
   @ViewChildren('sortListItem') listItems: QueryList<ElementRef>;
 
-  dragDroplist = [];
+  dragDroplist: object[] = [];
   selectedSortItem: number;
 
   drop(previousIndex: number, currentIndex: number) {

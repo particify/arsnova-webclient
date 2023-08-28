@@ -19,7 +19,7 @@
 
   <mat-card appearance="outlined">
     <app-entity-properties
-      [entity]="stats[tabs[selectedTab]]"
+      [entity]="getStats(tabs[selectedTab])"
       [translateKeys]="true"
       [expandOnInit]="tabs[selectedTab] !== 'summary'"
     ></app-entity-properties>

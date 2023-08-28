@@ -15,7 +15,7 @@ export class ContentChoiceAnswerComponent {
   @Input() hasAbstained: boolean;
   @Input() hasCorrectAnswer: boolean;
   @Input() isCorrectAnswerPublished: boolean;
-  @Input() selectedAnswerIndex: number;
+  @Input() selectedAnswerIndex?: number;
   @Input() correctOptionIndexes: number[] = [];
   @Input() contentId: string;
   @Input() dynamicRendering: boolean;

@@ -15,7 +15,11 @@ describe('RoomActionButtonComponent', () => {
 
   const snapshot = new ActivatedRouteSnapshot();
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const mockHotkeyService = jasmine.createSpyObj('HotkeyService', [
     'registerHotkey',

@@ -10,7 +10,7 @@ import {
 export class TrackInteractionDirective implements OnInit, OnDestroy {
   @Input() appTrackInteraction: string;
   @Input() appTrackCategory = EventCategory.UI_INTERACTION;
-  @Input() appTrackName?: string;
+  @Input() appTrackName: string;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,

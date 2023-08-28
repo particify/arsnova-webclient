@@ -38,7 +38,11 @@ describe('ContentPrioritizationParticipantComponent', () => {
 
   snapshot.params = of([params]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -83,14 +87,11 @@ describe('ContentPrioritizationParticipantComponent', () => {
     component = fixture.componentInstance;
     component.content = new ContentPrioritization(
       '1234',
-      '1',
-      '1234',
       'subject',
       'body',
       [],
       [],
       ContentType.PRIORITIZATION,
-      new ContentState(1, new Date(), false),
       100
     );
     component.sendEvent = new EventEmitter<string>();

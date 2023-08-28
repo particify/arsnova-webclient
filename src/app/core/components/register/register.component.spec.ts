@@ -39,7 +39,11 @@ describe('RegisterComponent', () => {
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = data;
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

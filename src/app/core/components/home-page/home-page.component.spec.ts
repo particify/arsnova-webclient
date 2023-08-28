@@ -20,12 +20,6 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
-
-@Component({ selector: 'app-room-join', template: '' })
-class RoomJoinStubComponent {
-  @Input() inputA11yString;
-}
-
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'lib-extension-point',
@@ -62,13 +56,16 @@ describe('HomePageComponent', () => {
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = data;
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [
         HomePageComponent,
-        RoomJoinStubComponent,
         LibExtensionPointStubComponent,
         A11yIntroPipe,
       ],

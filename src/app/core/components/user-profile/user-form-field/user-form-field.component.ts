@@ -11,7 +11,7 @@ export class UserFormFieldComponent {
   @Output() fieldUpdated: EventEmitter<FormField> =
     new EventEmitter<FormField>();
 
-  beforeEdit: string;
+  beforeEdit?: string;
 
   goIntoEdit() {
     this.beforeEdit = this.formField.value;
@@ -21,6 +21,6 @@ export class UserFormFieldComponent {
     if (this.formField.value !== this.beforeEdit) {
       this.fieldUpdated.emit(this.formField);
     }
-    this.beforeEdit = null;
+    this.beforeEdit = undefined;
   }
 }

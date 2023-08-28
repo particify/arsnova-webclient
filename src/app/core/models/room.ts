@@ -1,3 +1,6 @@
+import { RoomExtensions } from './room-extensions';
+import { RoomSettings } from './room-settings';
+
 export class Room {
   id: string;
   revision: string;
@@ -10,9 +13,9 @@ export class Room {
   passwordProtected: boolean;
   focusModeEnabled: boolean;
   closed: boolean;
-  settings: object;
-  lmsCourseId: string;
-  extensions: { [key: string]: object };
+  settings: RoomSettings;
+  lmsCourseId?: string;
+  extensions?: RoomExtensions;
 
   constructor(
     ownerId = '',
@@ -21,9 +24,8 @@ export class Room {
     name = '',
     description = '',
     closed = false,
-    extensions: { [key: string]: object } = {}
+    extensions: RoomExtensions = {}
   ) {
-    this.id = '';
     this.ownerId = ownerId;
     this.shortId = shortId;
     this.abbreviation = abbreviation;

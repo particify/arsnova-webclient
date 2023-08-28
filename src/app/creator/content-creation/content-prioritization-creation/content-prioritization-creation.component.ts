@@ -49,18 +49,7 @@ export class ContentPrioritizationCreationComponent
   }
 
   initContentCreation() {
-    this.content = new ContentPrioritization(
-      null,
-      null,
-      '',
-      '',
-      '',
-      [],
-      [],
-      ContentType.PRIORITIZATION,
-      null,
-      100
-    );
+    this.content = new ContentPrioritization();
     this.fillCorrectAnswers();
   }
 
@@ -69,15 +58,17 @@ export class ContentPrioritizationCreationComponent
     this.checkIfAnswersExist();
   }
 
-  answerInputCheck(answer): boolean {
+  answerInputCheck(answer: string): boolean {
     if (answer !== '') {
       if (!this.answerExists(answer)) {
         return true;
       } else {
         this.showWarning('content.same-answer');
+        return false;
       }
     } else {
       this.showWarning('content.no-empty2');
+      return false;
     }
   }
 
@@ -129,13 +120,14 @@ export class ContentPrioritizationCreationComponent
 
   createContent(): boolean {
     if (!this.saveAnswerLabels(true)) {
-      return;
+      return false;
     }
     if (this.displayAnswers.length >= 2) {
       return true;
     } else {
       const msg = this.translationService.instant('content.need-answers');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return false;
     }
   }
 

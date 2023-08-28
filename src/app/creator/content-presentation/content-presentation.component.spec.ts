@@ -31,7 +31,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ContentGroup } from '@app/core/models/content-group';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentState } from '@app/core/models/content-state';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { AuthProvider } from '@app/core/models/auth-provider';
@@ -47,21 +46,11 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 class MockContentService {
   getContentsByIds() {
     return of([
-      new Content(
-        '1234',
-        '0',
-        '1',
-        'subject',
-        'body',
-        [],
-        ContentType.CHOICE,
-        {},
-        new ContentState(1, new Date(), true)
-      ),
+      new Content('1', 'subject', 'body', [], ContentType.CHOICE, {}),
     ]);
   }
 
-  getSupportedContents() {
+  getSupportedContents(): Content[] {
     return [];
   }
 }
@@ -72,9 +61,9 @@ class MockRoomService {}
 @Injectable()
 class MockContentGroupService {
   getByRoomIdAndName() {
-    return of(new ContentGroup('1234', '0', 'roomId', 'name', [], true));
+    return of(new ContentGroup('roomId', 'name', [], true));
   }
-  patchContentGroup(group) {
+  patchContentGroup(group: ContentGroup) {
     return of(group);
   }
 }
@@ -97,7 +86,7 @@ describe('ContentPresentationComponent', () => {
 
   snapshot.params = of([{ seriesName: 'SERIES' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   const mockPresentationService = jasmine.createSpyObj([
     'getScale',

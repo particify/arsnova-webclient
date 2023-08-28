@@ -49,7 +49,7 @@ describe('LiveFeedbackPageComponent', () => {
   mockFeedbackService.get.and.returnValue(of([0, 0, 0, 0]));
 
   const room = new Room();
-  room.settings = {};
+  room.settings = { feedbackLocked: true };
   const data = {
     room: room,
     viewRole: UserRole.PARTICIPANT,
@@ -58,7 +58,7 @@ describe('LiveFeedbackPageComponent', () => {
   snapshot.data = {
     isPresentation: false,
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   const mockFocusModeService = jasmine.createSpyObj(['updateFeedbackState']);
 

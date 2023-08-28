@@ -24,13 +24,13 @@ export class EntityPropertiesComponent implements OnChanges {
     }
   }
 
-  toNode(object: object) {
+  toNode(object: object): object[] {
     if (typeof object === 'object') {
       return object
         ? Object.entries(object).map((item) => {
             return { key: item[0], value: this.toNode(item[1]) };
           })
-        : null;
+        : [];
     }
 
     return object;

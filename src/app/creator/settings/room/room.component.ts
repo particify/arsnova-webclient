@@ -20,6 +20,7 @@ import { HintType } from '@app/core/models/hint-type.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-room-edit',
@@ -89,7 +90,7 @@ export class RoomComponent extends FormComponent implements OnInit {
     this.saveEvent.emit(new UpdateEvent(this.editRoom, true));
   }
 
-  descriptionTabChanged($event) {
+  descriptionTabChanged($event: MatTabChangeEvent) {
     this.renderPreview = $event.index === 1;
   }
 

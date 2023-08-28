@@ -27,7 +27,9 @@ export class WsConnectorService {
 
         if (auth && auth.userId) {
           const copiedConf = ARSRxStompConfig;
-          copiedConf.connectHeaders.token = auth.token;
+          if (copiedConf?.connectHeaders) {
+            copiedConf.connectHeaders.token = auth.token;
+          }
           this.client.configure(copiedConf);
           this.client.activate();
         }

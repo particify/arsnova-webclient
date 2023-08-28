@@ -35,12 +35,18 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
 
   init(stats: AnswerStatistics) {
     const scaleContent = this.content as ContentScale;
-    const optionLabels$ = this.likertScaleService
-      .getOptionLabels(scaleContent.optionTemplate, scaleContent.optionCount)
-      .map((l) => this.translateService.get(l) as Observable<string>);
-    forkJoin(optionLabels$).subscribe(
-      (labels) => (this.options = labels.map((l) => ({ label: l })))
+    const scaleOptions = this.likertScaleService.getOptionLabels(
+      scaleContent.optionTemplate,
+      scaleContent.optionCount
     );
+    if (scaleOptions) {
+      const optionLabels$ = scaleOptions.map(
+        (l) => this.translateService.get(l) as Observable<string>
+      );
+      forkJoin(optionLabels$).subscribe(
+        (labels) => (this.options = labels.map((l) => ({ label: l })))
+      );
+    }
     this.correctOptionIndexes = [];
     super.init(stats);
   }

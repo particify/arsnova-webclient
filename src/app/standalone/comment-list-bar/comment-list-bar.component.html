@@ -35,7 +35,8 @@
   <div class="button-bar" fxLayoutAlign="center center" fxLayoutGap="14px">
     <h3
       *ngIf="
-        (!searchActive && commentCounter) || currentFilter !== filtering.NONE
+        (!searchActive && commentCounter) ||
+        currentFilter !== CommentFilter.NONE
       "
       [ngClass]="{
         'show-counter': scroll || showAlways
@@ -48,7 +49,7 @@
     <button
       id="search-button"
       mat-mini-fab
-      (click)="activateSearch(); filter(filtering.NONE)"
+      (click)="activateSearch(); filter(CommentFilter.NONE)"
       class="bar-icon"
       *ngIf="!searchActive"
       matTooltip="{{ 'comment-list.filter-search' | translate }}"
@@ -128,32 +129,44 @@
 
     <button
       mat-menu-item
-      (click)="filter(filtering.FAVORITE)"
+      (click)="filter(CommentFilter.FAVORITE)"
       [attr.aria-label]="'comment-list.a11y-filter-favorite' | translate"
       appTrackInteraction="Comments filtered"
       appTrackName="favorite"
     >
-      <mat-icon [ngClass]="{ favorite: 'yellow icon-important' }[currentFilter]"
+      <mat-icon
+        [ngClass]="{
+          'yellow icon-important': currentFilter === CommentFilter.FAVORITE
+        }"
         >grade</mat-icon
       >
-      <span [ngClass]="{ favorite: 'selected-menu-item' }[currentFilter]">{{
-        'comment-list.filter-favorite' | translate
-      }}</span>
+      <span
+        [ngClass]="{
+          'selected-menu-item': currentFilter === CommentFilter.FAVORITE
+        }"
+        >{{ 'comment-list.filter-favorite' | translate }}</span
+      >
     </button>
 
     <button
       mat-menu-item
-      (click)="filter(filtering.ANSWER)"
+      (click)="filter(CommentFilter.ANSWER)"
       [attr.aria-label]="'comment-list.a11y-filter-answer' | translate"
       appTrackInteraction="Comments filtered"
       appTrackName="answer"
     >
-      <mat-icon [ngClass]="{ answer: 'blue icon-important' }[currentFilter]"
+      <mat-icon
+        [ngClass]="{
+          'blue icon-important': currentFilter === CommentFilter.ANSWER
+        }"
         >comment</mat-icon
       >
-      <span [ngClass]="{ answer: 'selected-menu-item' }[currentFilter]">{{
-        'comment-list.filter-answered' | translate
-      }}</span>
+      <span
+        [ngClass]="{
+          'selected-menu-item': currentFilter === CommentFilter.ANSWER
+        }"
+        >{{ 'comment-list.filter-answered' | translate }}</span
+      >
     </button>
 
     <button
@@ -163,16 +176,16 @@
     >
       <mat-icon
         [ngClass]="{
-          'green icon-important': currentFilter === filtering.CORRECT,
-          'red icon-important': currentFilter === filtering.WRONG
+          'green icon-important': currentFilter === CommentFilter.CORRECT,
+          'red icon-important': currentFilter === CommentFilter.WRONG
         }"
         >tune</mat-icon
       >
       <span
         [ngClass]="{
           'selected-menu-item':
-            currentFilter === filtering.CORRECT ||
-            currentFilter === filtering.WRONG
+            currentFilter === CommentFilter.CORRECT ||
+            currentFilter === CommentFilter.WRONG
         }"
         >{{ 'comment-list.filter-more' | translate }}</span
       >
@@ -180,7 +193,7 @@
 
     <button
       mat-menu-item
-      (focus)="filter(filtering.NONE)"
+      (focus)="filter(CommentFilter.NONE)"
       [attr.aria-label]="'comment-list.a11y-filter-close' | translate"
       appTrackInteraction="Comments filtered"
       appTrackName="reset"
@@ -193,32 +206,44 @@
   <mat-menu #moreFilterMenu="matMenu">
     <button
       mat-menu-item
-      (click)="filter(filtering.CORRECT)"
+      (click)="filter(CommentFilter.CORRECT)"
       [attr.aria-label]="'comment-list.a11y-filter-correct' | translate"
       appTrackInteraction="Comments filtered"
       appTrackName="correct"
     >
-      <mat-icon [ngClass]="{ correct: 'green icon-important' }[currentFilter]"
+      <mat-icon
+        [ngClass]="{
+          'green icon-important': currentFilter === CommentFilter.CORRECT
+        }"
         >check_circle</mat-icon
       >
-      <span [ngClass]="{ correct: 'selected-menu-item' }[currentFilter]">{{
-        'comment-list.filter-correct' | translate
-      }}</span>
+      <span
+        [ngClass]="{
+          'selected-menu-item': currentFilter === CommentFilter.CORRECT
+        }"
+        >{{ 'comment-list.filter-correct' | translate }}</span
+      >
     </button>
 
     <button
       mat-menu-item
-      (click)="filter(filtering.WRONG)"
+      (click)="filter(CommentFilter.WRONG)"
       [attr.aria-label]="'comment-list.a11y-filter-wrong' | translate"
       appTrackInteraction="Comments filtered"
       appTrackName="wrong"
     >
-      <mat-icon [ngClass]="{ wrong: 'red icon-important' }[currentFilter]"
+      <mat-icon
+        [ngClass]="{
+          'red icon-important': currentFilter === CommentFilter.WRONG
+        }"
         >cancel</mat-icon
       >
-      <span [ngClass]="{ wrong: 'selected-menu-item' }[currentFilter]">{{
-        'comment-list.filter-wrong' | translate
-      }}</span>
+      <span
+        [ngClass]="{
+          'selected-menu-item': currentFilter === CommentFilter.WRONG
+        }"
+        >{{ 'comment-list.filter-wrong' | translate }}</span
+      >
     </button>
   </mat-menu>
 

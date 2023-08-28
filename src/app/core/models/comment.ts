@@ -24,7 +24,7 @@ export class Comment {
     read = false,
     correct: CorrectWrong = CorrectWrong.NULL,
     favorite = false,
-    creationTimestamp: Date = null,
+    creationTimestamp: Date = new Date(),
     score = 0,
     createdFromLecturer = false,
     highlighted = false,

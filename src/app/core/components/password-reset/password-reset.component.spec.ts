@@ -29,7 +29,11 @@ describe('PasswordResetComponent', () => {
 
   snapshot.params = of([{ email: 'a@b.cd' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(async () => {
     TestBed.configureTestingModule({

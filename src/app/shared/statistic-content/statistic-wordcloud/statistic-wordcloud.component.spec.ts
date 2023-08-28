@@ -16,6 +16,7 @@ import { of } from 'rxjs';
 import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 
 describe('StatisticWordcloudComponent', () => {
   let component: StatisticWordcloudComponent;
@@ -79,18 +80,12 @@ describe('StatisticWordcloudComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StatisticWordcloudComponent);
     component = fixture.componentInstance;
-    component.content = new ContentChoice(
-      '1234',
-      '0',
+    component.content = new ContentWordcloud(
       'room1234',
       'subject',
       'body',
       [],
-      [],
-      [],
-      false,
-      ContentType.WORDCLOUD,
-      new ContentState(1, new Date(), false)
+      ContentType.WORDCLOUD
     );
     fixture.detectChanges();
   });

@@ -71,7 +71,7 @@ describe('CommentsPageComponent', () => {
   const data = {
     room: room,
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, data);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data);
 
   const mockFocusModeService = jasmine.createSpyObj([
     'getFocusModeEnabled',

@@ -97,8 +97,6 @@ describe('StatisticChoiceComponent', () => {
     fixture = TestBed.createComponent(StatisticChoiceComponent);
     component = fixture.componentInstance;
     component.content = new ContentChoice(
-      '1234',
-      '0',
       'room1234',
       'subject',
       'body',
@@ -106,8 +104,7 @@ describe('StatisticChoiceComponent', () => {
       [],
       [],
       false,
-      ContentType.CHOICE,
-      new ContentState(1, new Date(), false)
+      ContentType.CHOICE
     );
     component.settings = new UserSettings();
     fixture.detectChanges();

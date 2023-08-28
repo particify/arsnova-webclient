@@ -46,11 +46,11 @@ export class ContentCreationComponent
   private createEventSubscription: Subscription;
 
   @Input() createEvent: Observable<boolean>;
-  @Input() contentBody;
-  @Input() contentGroup;
+  @Input() contentBody: string;
+  @Input() contentGroup: string;
   @Input() abstentionsAllowed: boolean;
-  @Input() editContent: Content;
-  @Input() disabled;
+  @Input() disabled: boolean;
+  @Input() editContent?: Content;
   @Output() contentReset = new EventEmitter<boolean>();
   @Output() contentSent = new EventEmitter<Content>();
   @Output() refId = new EventEmitter<string>();
@@ -145,7 +145,9 @@ export class ContentCreationComponent
   }
 
   initContentTextEditBase() {
-    this.content = this.editContent;
+    if (this.editContent) {
+      this.content = this.editContent;
+    }
   }
 
   initContentFlashcardEditBase() {

@@ -33,7 +33,17 @@ import { ContentType } from '@app/core/models/content-type.enum';
 @Injectable()
 class MockContentService {
   getTypeIcons() {
-    return new Map<ContentType, string>();
+    return new Map<ContentType, string>([
+      [ContentType.CHOICE, 'list'],
+      [ContentType.SCALE, 'mood'],
+      [ContentType.BINARY, 'rule'],
+      [ContentType.TEXT, 'description'],
+      [ContentType.WORDCLOUD, 'cloud'],
+      [ContentType.SORT, 'move_up'],
+      [ContentType.PRIORITIZATION, 'sort'],
+      [ContentType.SLIDE, 'info'],
+      [ContentType.FLASHCARD, 'school'],
+    ]);
   }
 }
 
@@ -74,11 +84,7 @@ describe('ContentCreationPageComponent', () => {
 
   snapshot.params = of([{ seriesName: 'SERIES' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
-
-  let translateService: TranslateService;
-
-  const a11yIntroPipe = new A11yIntroPipe(translateService);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -131,10 +137,6 @@ describe('ContentCreationPageComponent', () => {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
-        },
-        {
-          provide: A11yIntroPipe,
-          useValue: a11yIntroPipe,
         },
       ],
       imports: [

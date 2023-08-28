@@ -7,14 +7,14 @@ import { UserService } from '@app/core/services/http/user.service';
   template: '',
 })
 export class UserSearchComponent {
-  user: User;
+  user?: User;
   users: User[];
   searchResults: string[];
 
   constructor(protected userService: UserService) {}
 
   clear() {
-    this.user = null;
+    this.user = undefined;
     this.users = [];
     this.searchResults = [];
   }

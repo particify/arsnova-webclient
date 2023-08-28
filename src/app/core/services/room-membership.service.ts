@@ -111,10 +111,15 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
     token?: string
   ): Observable<Membership[]> {
     const url = this.buildUri(this.serviceApiUrl.byUser + '/' + userId);
-    const httpHeaders = token
-      ? new HttpHeaders().set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`)
-      : null;
-    return this.performGet<Membership[]>(url, { headers: httpHeaders }).pipe(
+    const httpOtions = token
+      ? {
+          headers: new HttpHeaders().set(
+            AUTH_HEADER_KEY,
+            `${AUTH_SCHEME} ${token}`
+          ),
+        }
+      : undefined;
+    return this.performGet<Membership[]>(url, httpOtions).pipe(
       tap((memberships) =>
         memberships.forEach(
           (m) => (m.primaryRole = this.selectPrimaryRole(m.roles))

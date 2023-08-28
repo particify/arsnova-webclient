@@ -17,20 +17,21 @@ export class VotingComponent {
   @Input() commentId: string;
   @Input()
   set parseVote(vote: Vote) {
-    if (vote) {
-      this.hasVoted = vote.vote;
+    if (vote.vote !== 0) {
+      this.currentVote = vote.vote;
     }
   }
-  hasVoted = 0;
-  currentVote: string;
+
+  currentVote: number;
+  currentVoteString: string;
 
   constructor(private voteService: VoteService) {}
 
-  vote(vote: number) {
+  voteComment(vote: number) {
     const voteString = vote.toString();
     let subscription;
-    if (this.hasVoted !== vote) {
-      if (voteString === '1') {
+    if (this.currentVote !== vote) {
+      if (vote === 1) {
         subscription = this.voteService.voteUp(
           this.roomId,
           this.commentId,
@@ -43,16 +44,16 @@ export class VotingComponent {
           this.userId
         );
       }
-      this.currentVote = voteString;
-      this.hasVoted = vote;
+      this.currentVote = vote;
+      this.currentVoteString = voteString;
     } else {
       subscription = this.voteService.deleteVote(
         this.roomId,
         this.commentId,
         this.userId
       );
-      this.hasVoted = 0;
-      this.currentVote = '0';
+      this.currentVote = 0;
+      this.currentVoteString = '0';
     }
     subscription.subscribe(() => {
       this.resetVotingAnimation();
@@ -61,7 +62,7 @@ export class VotingComponent {
 
   resetVotingAnimation() {
     setTimeout(() => {
-      this.currentVote = '';
+      this.currentVoteString = '';
     }, 1000);
   }
 }

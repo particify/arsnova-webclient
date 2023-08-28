@@ -13,7 +13,7 @@ export class AnnouncementComponent {
   @Input() roomName: string;
   @Input() role: UserRole;
   @Input() editMode = false;
-  @Input() label: string;
+  @Input() label?: string;
   @Output() deleteEvent = new EventEmitter<Announcement>();
   @Output() editEvent = new EventEmitter<Announcement>();
 

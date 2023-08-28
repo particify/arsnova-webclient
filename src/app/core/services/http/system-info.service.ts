@@ -58,7 +58,7 @@ export class SystemInfoService extends AbstractHttpService<void> {
       );
   }
 
-  getServiceStats(tenantId?: string): Observable<Map<string, any>> {
+  getServiceStats(tenantId?: string): Observable<{ [key: string]: any }> {
     let connectionUrl = this.apiUrl.base + this.serviceApiUrl.serviceStats;
     if (tenantId) {
       connectionUrl += '?tenantId=' + tenantId;

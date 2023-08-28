@@ -55,7 +55,7 @@ export class StatisticChoiceComponent
   rounds: number;
   roundsToDisplay = 0;
   roundsDisplayed: number;
-  independentAnswerCount = [[], [], []];
+  independentAnswerCount: number[][] = [[], [], []];
   ContentType: typeof ContentType = ContentType;
 
   constructor(
@@ -231,8 +231,8 @@ export class StatisticChoiceComponent
           datalabels: {
             formatter: (value, context) => {
               return this.getDataLabel(
-                context.dataset.data[context.dataIndex],
-                context.dataset.data
+                context.dataset.data[context.dataIndex] as number,
+                context.dataset.data as number[]
               );
             },
             display: (context) => {
@@ -344,7 +344,7 @@ export class StatisticChoiceComponent
     this.updateCounterForRound();
   }
 
-  setData(stats, roundIndex) {
+  setData(stats: AnswerStatistics, roundIndex: number) {
     let abstentionCount = 0;
     this.data[roundIndex] = stats.roundStatistics[roundIndex].independentCounts;
     if (this.content.abstentionsAllowed) {

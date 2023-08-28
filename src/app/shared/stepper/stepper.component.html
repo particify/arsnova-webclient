@@ -76,6 +76,6 @@
     [@slideContainer]="containerAnimationState"
     (@slideContainer.done)="containerAnimationDone()"
   >
-    <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+    <ng-container [ngTemplateOutlet]="selected?.content || null"></ng-container>
   </div>
 </div>

@@ -6,12 +6,12 @@ export class EntityChanged<T extends Entity> {
   payload: EntityChangedPayload<T>;
 
   constructor(entityType: string, entity: T, changedProperties: string[]) {
-    const roomId = entity['roomId'] ?? entity.id;
+    const roomId = entity['roomId' as keyof T] ?? entity.id;
     this.type = 'EntityChanged';
     this.payload = {
       entityType: entityType,
       id: entity.id,
-      roomId: roomId,
+      roomId: roomId as string,
       entity: entity,
       changedProperties: changedProperties,
     };

@@ -38,15 +38,15 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable()
 class MockContentGroupService {
-  getById(id) {
-    return of(new ContentGroup(id, 'rev', 'roomId', 'Test'));
+  getById(id: string) {
+    return of(new ContentGroup('roomId', 'Test'));
   }
 
   getByIds(ids: string[]) {
-    return of(ids.map((id) => new ContentGroup(id, 'rev', 'roomId', 'Test')));
+    return of(ids.map((id) => new ContentGroup('roomId', 'Test')));
   }
 
-  sortContentGroupsByName(groups) {
+  sortContentGroupsByName(groups: ContentGroup[]) {
     return groups;
   }
 }
@@ -123,8 +123,12 @@ describe('NavBarComponent', () => {
     viewRole: UserRole.PARTICIPANT,
   };
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
-  activatedRouteStub['children'] = {};
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
+  (activatedRouteStub as { [key: string]: any })['children'] = {};
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -649,8 +653,6 @@ describe('NavBarComponent', () => {
     mockRoomStatsService.getStats.and.returnValue(of(stats));
     fixture.detectChanges();
     const entity = new ContentGroup(
-      'id-1111',
-      'rev-1111',
       'room-id-1111',
       'Test',
       ['1', '2'],

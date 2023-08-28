@@ -31,17 +31,18 @@ const scaleOptionLabels = new Map([
 export class LikertScaleService {
   getOptionLabels(template: LikertScaleTemplate, optionCount: number) {
     const labels = this.getStaticOptionLabels(template, optionCount);
-    return labels
-      ? labels
-      : scaleOptions
-          .get(optionCount)
-          .map(
+    const scaleOption = scaleOptions.get(optionCount);
+    if (scaleOption) {
+      return labels
+        ? labels
+        : scaleOption.map(
             (suffix) =>
               'option-template.' +
               template.toLowerCase().replace(/_/g, '-') +
               '-' +
               suffix
           );
+    }
   }
 
   getStaticOptionLabels(template: LikertScaleTemplate, optionCount: number) {

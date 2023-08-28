@@ -1,23 +1,19 @@
 import { Content } from './content';
 import { ContentType } from './content-type.enum';
-import { ContentState } from './content-state';
 
 export class ContentFlashcard extends Content {
   additionalText: string;
   renderedAdditionalText: string;
 
   constructor(
-    id: string,
-    revision: string,
-    roomId: string,
-    subject: string,
-    body: string,
-    additionalText: string,
-    groups: string[],
-    format: ContentType,
-    state: ContentState
+    roomId: string = '',
+    subject: string = '',
+    body: string = '',
+    additionalText: string = '',
+    groups: string[] = [],
+    format: ContentType = ContentType.FLASHCARD
   ) {
-    super(id, revision, roomId, subject, body, groups, format, {}, state);
+    super(roomId, subject, body, groups, format, {});
     this.additionalText = additionalText;
   }
 }

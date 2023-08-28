@@ -11,7 +11,7 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 })
 export class PresentCommentComponent implements OnInit, OnDestroy {
   @Input() isPresentation = false;
-  @Input() comment: Comment;
+  @Input() comment?: Comment;
 
   currentZoom = 1;
 
@@ -60,8 +60,11 @@ export class PresentCommentComponent implements OnInit, OnDestroy {
   }
 
   updateFontSize(): void {
-    document.getElementById('comment').style.fontSize =
-      'calc(' + this.currentZoom * 18 + 'px + 1.5vw)';
+    const commentElement = document.getElementById('comment');
+    if (commentElement) {
+      commentElement.style.fontSize =
+        'calc(' + this.currentZoom * 18 + 'px + 1.5vw)';
+    }
     this.presentationService.updateCommentZoom(this.currentZoom * 100);
   }
 

@@ -108,7 +108,7 @@ export class CommentsPageComponent
   }
 
   getVote(comment: Comment): Vote {
-    return this.commentVoteMap.get(comment.id);
+    return this.commentVoteMap.get(comment.id) || new Vote();
   }
 
   handleSettings(settings: CommentSettings) {

@@ -86,15 +86,19 @@ describe('ControlBarComponent', () => {
   ]);
 
   const room = new Room();
-  room.settings = {};
+  room.settings = { feedbackLocked: true };
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
     room: room,
     userRole: UserRole.EDITOR,
     viewRole: UserRole.PARTICIPANT,
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
-  activatedRouteStub['children'] = {};
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
+  (activatedRouteStub as { [key: string]: any })['children'] = {};
 
   const splitShortIdPipe = new SplitShortIdPipe();
 

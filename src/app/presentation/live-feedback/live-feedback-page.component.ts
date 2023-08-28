@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Message } from '@stomp/stompjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { takeUntil } from 'rxjs';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 @Component({
   selector: 'app-live-feedback-page',
@@ -101,7 +102,8 @@ export class LiveFeedbackPageComponent
       .changeFeedbackType(this.room, this.type)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((room) => {
-        this.type = room.extensions['feedback']['type'];
+        this.type =
+          room.extensions?.feedback?.type || LiveFeedbackType.FEEDBACK;
       });
   }
 

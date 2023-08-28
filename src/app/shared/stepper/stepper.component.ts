@@ -64,8 +64,8 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   containerAnimationState = 'current';
   headerAnimationState = 'init';
   nextIndex = 0;
-  swipeXLocation?: number;
-  swipeTime?: number;
+  swipeXLocation: number;
+  swipeTime: number;
 
   private hotkeyRefs: symbol[] = [];
 
@@ -152,7 +152,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
         if (this.selectedIndex < this.listLength - 1 || this.finished) {
           this.onClick(this.selectedIndex + 1);
           setTimeout(() => {
-            document.getElementById('step').focus();
+            document.getElementById('step')?.focus();
           }, 300);
         } else {
           this.announceService.announce('statistic.a11y-no-more-questions');
@@ -168,7 +168,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
       if (this.selectedIndex > 0) {
         this.onClick(this.selectedIndex - 1);
         setTimeout(() => {
-          document.getElementById('step').focus();
+          document.getElementById('step')?.focus();
         }, 300);
       }
     }

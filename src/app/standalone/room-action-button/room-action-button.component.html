@@ -5,7 +5,7 @@
     color="primary"
     class="main-button no-ripple"
     [disableRipple]="true"
-    [routerLink]="[url ?? feature]"
+    [routerLink]="[url || feature]"
     [attr.aria-label]="'room-page.a11y-' + feature | translate"
     [appHotkey]="hotkey"
     [appHotkeyTitle]="'room-page.' + feature | translate"

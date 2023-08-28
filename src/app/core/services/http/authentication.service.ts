@@ -63,8 +63,6 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     headers: new HttpHeaders({}),
   };
 
-  private redirect: string;
-
   serviceApiUrl = {
     guest: '/guest',
     login: '/login',
@@ -139,7 +137,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * Returns the current authentication. If no authentication is available, a
    * login as guest is performed.
    */
-  requireAuthentication(): Observable<ClientAuthentication> {
+  requireAuthentication(): Observable<ClientAuthentication | undefined> {
     return this.auth$$.pipe(
       switchAll(),
       first(),
@@ -227,7 +225,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
         } else if (result.status === AuthenticationStatus.SUCCESS && guest) {
           this.globalStorageService.setItem(
             STORAGE_KEYS.GUEST_TOKEN,
-            result.authentication.token
+            result.authentication?.token
           );
         }
       })
@@ -286,7 +284,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
               if (loginResult.status === AuthenticationStatus.SUCCESS) {
                 this.globalStorageService.setItem(
                   STORAGE_KEYS.GUEST_TOKEN,
-                  loginResult.authentication.token
+                  loginResult.authentication?.token
                 );
               }
             })
@@ -319,8 +317,8 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
       `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`
     );
     const auth$ = timer(0, 500).pipe(
-      map(() => popup.closed),
-      filter((closed) => closed),
+      map(() => popup?.closed),
+      filter((closed) => closed || false),
       concatMap(() =>
         this.http.post<ClientAuthentication>(loginUrl, null, {
           withCredentials: true,
@@ -337,6 +335,10 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   logout() {
     this.globalStorageService.removeItem(STORAGE_KEYS.USER);
+    // FIXME: This is currently needed to assign null
+    // This should be refactored at some point
+    // eslint-disable-next-line
+    // @ts-ignore
     this.auth$$.next(of(null));
   }
 
@@ -373,7 +375,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   handleUnauthorizedError() {
     this.logout();
-    this.routingService.setRedirect(null, true);
+    this.routingService.setRedirect(undefined, true);
     this.router.navigateByUrl('login');
     this.translateService
       .get('login.authentication-expired')
@@ -400,7 +402,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
           return new ClientAuthenticationResult(auth);
         } else {
           return new ClientAuthenticationResult(
-            null,
+            undefined,
             AuthenticationStatus.UNKNOWN_ERROR
           );
         }
@@ -411,21 +413,21 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
         if (e.error?.errorType === 'DisabledException') {
           return of(
             new ClientAuthenticationResult(
-              null,
+              undefined,
               AuthenticationStatus.ACTIVATION_PENDING
             )
           );
         } else if (e.status === 401 || e.status === 403) {
           return of(
             new ClientAuthenticationResult(
-              null,
+              undefined,
               AuthenticationStatus.INVALID_CREDENTIALS
             )
           );
         }
         return of(
           new ClientAuthenticationResult(
-            null,
+            undefined,
             AuthenticationStatus.UNKNOWN_ERROR
           )
         );
@@ -434,7 +436,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     /* Publish authentication (w/o result meta data) */
     this.auth$$.next(
       auth$.pipe(
-        map((result) => result.authentication),
+        map((result) => result.authentication as ClientAuthentication),
         tap((auth) => restoreGuestOnFailure && !auth && this.loginGuest())
       )
     );

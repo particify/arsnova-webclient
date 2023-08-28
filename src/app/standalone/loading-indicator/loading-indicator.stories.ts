@@ -17,6 +17,6 @@ type Story = StoryObj<LoadingIndicatorComponent>;
 export const LoadingIndicator: Story = {
   args: {
     size: 40,
-    height: 0,
+    height: '0',
   },
 };

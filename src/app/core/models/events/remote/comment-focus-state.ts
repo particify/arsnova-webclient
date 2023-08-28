@@ -1,7 +1,7 @@
 export class CommentFocusState {
   commentId: string;
 
-  constructor(commentId) {
+  constructor(commentId: string) {
     this.commentId = commentId;
   }
 }

@@ -123,7 +123,8 @@ export class FocusModeService extends AbstractFocusModeService {
       return;
     }
     let timeout = initial ? DELAY_AFTER_NAVIGATION : 0;
-    const newFeature = RoutingFeature[state.feature];
+    const newFeature =
+      RoutingFeature[state.feature as keyof typeof RoutingFeature];
     if (this.currentFeature !== newFeature) {
       timeout = DELAY_AFTER_NAVIGATION;
       if (newFeature === RoutingFeature.CONTENTS) {
@@ -143,7 +144,11 @@ export class FocusModeService extends AbstractFocusModeService {
 
   private updateFeatureState(
     feature: RoutingFeature,
-    state: ContentFocusState | CommentFocusState | FeedbackFocusState,
+    state:
+      | ContentFocusState
+      | CommentFocusState
+      | FeedbackFocusState
+      | undefined,
     timeout: number
   ) {
     setTimeout(() => {

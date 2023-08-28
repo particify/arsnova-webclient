@@ -42,7 +42,7 @@
         >
           <mat-icon matPrefix class="search-icon">search</mat-icon>
           <input
-            [disabled]="rooms?.length === 0"
+            [disabled]="rooms.length === 0"
             matInput
             class="search-input"
             [ngClass]="{ 'full-width-search': !showImportMenu }"
@@ -106,7 +106,7 @@
           {{ 'room-list.join-room' | translate }}
         </button>
       </div>
-      <mat-action-list *ngIf="rooms?.length > 0">
+      <mat-action-list *ngIf="rooms.length > 0">
         <button
           disableRipple
           mat-list-item

@@ -23,9 +23,9 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
     control: UntypedFormControl | null,
     form: FormGroupDirective | NgForm | null
   ): boolean {
-    const isSubmitted = form && form.submitted;
+    const isSubmitted = !!form && form.submitted;
     return (
-      control &&
+      !!control &&
       control.invalid &&
       (control.dirty || control.touched || isSubmitted)
     );
