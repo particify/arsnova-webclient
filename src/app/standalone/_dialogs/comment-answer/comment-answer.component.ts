@@ -99,7 +99,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
       'really-delete-answer',
       undefined,
       undefined,
-      () => this.commentService.answer(this.comment, this.answer)
+      () => this.commentService.answer(this.comment, '')
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
