@@ -83,7 +83,7 @@
     "eslint": "8.48.0",
     "eslint-import-resolver-typescript": "3.6.0",
     "eslint-plugin-import": "2.28.1",
-    "eslint-plugin-jsdoc": "46.5.0",
+    "eslint-plugin-jsdoc": "46.5.1",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-storybook": "0.6.13",
     "file-system-cache": "2.4.4",
