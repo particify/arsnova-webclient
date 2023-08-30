@@ -31,8 +31,7 @@
     <mat-label aria-labelledby="category">{{
       'comment-page.tag' | translate
     }}</mat-label>
-    <mat-select class="comment-tag">
-      [disabled]="formDisabled"
+    <mat-select class="comment-tag" [disabled]="formDisabled">
       <mat-option
         *ngFor="let tag of data.tags"
         value="{{ tag }}"
