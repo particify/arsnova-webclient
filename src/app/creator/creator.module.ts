@@ -9,8 +9,7 @@ import { ContentYesNoCreationComponent } from './content-creation/content-yes-no
 import { CoreModule } from '@app/core/core.module';
 import { RoomComponent } from './settings/room/room.component';
 import { SharedModule } from '@app/shared/shared.module';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
+import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { AccessComponent } from './settings/access/access.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
@@ -21,8 +20,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ContentCreationComponent } from './content-creation/content-creation/content-creation.component';
 import { PreviewComponent } from './content-creation/preview/preview.component';
-import { TRANSLATION_MODULE_NAME } from '@app/translate-module-name-token';
-import { TranslateHttpLoaderFactory } from '@app/translate-http-loader-factory';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { ContentSortCreationComponent } from './content-creation/content-sort-creation/content-sort-creation.component';
 import { ContentFlashcardCreationComponent } from './content-creation/content-flashcard-creation/content-flashcard-creation.component';
@@ -54,14 +51,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     CoreModule,
     SharedModule,
     DragDropModule,
-    TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: TranslateHttpLoaderFactory,
-        deps: [HttpClient, TRANSLATION_MODULE_NAME],
-      },
-      isolate: true,
-    }),
+    TranslocoModule,
     CdkStepperModule,
     ExtensionPointModule,
     SettingsPanelHeaderComponent,
@@ -103,7 +93,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   ],
   exports: [ContentPresentationComponent],
   providers: [
-    { provide: TRANSLATION_MODULE_NAME, useValue: 'creator' },
+    provideTranslocoScope('creator'),
     DialogService,
     FocusModeService,
   ],

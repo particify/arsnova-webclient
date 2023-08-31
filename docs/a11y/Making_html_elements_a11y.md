@@ -14,7 +14,7 @@
 
 <!--Hidden Div's for a11y-Descriptions-->
 <div class="visually-hidden">
-  <div id="meeting_room">{{'header.a11y-meeting_room' | translate}}</div>
+  <div id="meeting_room">{{'header.a11y-meeting_room' | transloco}}</div>
 </div>
 ```
 
@@ -42,7 +42,7 @@ For usage only the `attr.` tag prefix must be added like in following code examp
       attr.aria-labelledby="{{ ariaPrefix + 'cancel' }}"
 ...
 ...
-<div id="{{ ariaPrefix + 'cancel'}}">{{ buttonsLabelSection + '.cancel-description' | translate }}</div>
+<div id="{{ ariaPrefix + 'cancel'}}">{{ buttonsLabelSection + '.cancel-description' | transloco }}</div>
 ```
 
 @see: [Accessible components: #2 dynamic ARIA labels](https://blog.prototypr.io/accessible-components-2-dynamic-aria-labels-6bf281f26d17)

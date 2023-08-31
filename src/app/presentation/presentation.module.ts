@@ -5,10 +5,7 @@ import { ControlBarComponent } from './bars/control-bar/control-bar.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { PresentationComponent } from './presentation/presentation.component';
 import { SharedModule } from '@app/shared/shared.module';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoaderFactory } from '@app/translate-http-loader-factory';
-import { HttpClient } from '@angular/common/http';
-import { TRANSLATION_MODULE_NAME } from '@app/translate-module-name-token';
+import { TranslocoModule } from '@ngneat/transloco';
 import { QrCodeModule } from 'ng-qrcode';
 import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
 import { BarNotificationComponent } from './bars/bar-notification/bar-notification.component';
@@ -32,14 +29,7 @@ import { CopyUrlComponent } from '@app/standalone/copy-url/copy-url.component';
     CreatorModule,
     ExtensionPointModule,
     SharedModule,
-    TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: TranslateHttpLoaderFactory,
-        deps: [HttpClient, TRANSLATION_MODULE_NAME],
-      },
-      isolate: true,
-    }),
+    TranslocoModule,
     QrCodeModule,
     CopyUrlComponent,
   ],
