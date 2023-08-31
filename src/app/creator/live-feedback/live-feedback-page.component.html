@@ -59,6 +59,7 @@
       class="bottom-button"
       [name]="isClosed ? 'survey.start' : 'survey.stop'"
       (clicked)="toggle()"
+      [useDirectives]="true"
       [hotkey]="toggleKey"
       [hotkeyTitle]="(isClosed ? 'survey.start' : 'survey.stop') | translate"
       [hotkeyAction]="HotkeyAction.FOCUS"

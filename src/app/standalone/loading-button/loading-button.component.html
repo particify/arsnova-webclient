@@ -1,36 +1,48 @@
 <button
-  *ngIf="isDialog"
+  *ngIf="isDialog; else raisedButtons"
   mat-flat-button
   type="submit"
   [color]="color"
-  [disabled]="formDisabled"
-  [attr.aria-label]="aria | translate"
-  (click)="click()"
->
-  <span [ngClass]="{ hidden: formDisabled }">
-    {{ name | translate }}
-  </span>
-  <app-loading-indicator
-    *ngIf="formDisabled"
-    [size]="18"
-    [disabled]="true"
-  ></app-loading-indicator>
-</button>
-<button
-  *ngIf="!isDialog"
-  mat-raised-button
-  type="submit"
-  [color]="color"
   [disabled]="(formDisabled && loading) || disabled"
-  [ngClass]="{ 'login-button': fullWidth }"
-  [appHotkey]="hotkey"
-  [appHotkeyTitle]="hotkeyTitle"
-  [appHotkeyAction]="hotkeyAction"
-  [appTrackInteraction]="trackInteraction"
-  [appTrackName]="trackName"
   [attr.aria-label]="aria | translate"
   (click)="click()"
 >
+  <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
+</button>
+<ng-template #raisedButtons>
+  <button
+    *ngIf="!useDirectives; else withDirective"
+    mat-raised-button
+    type="submit"
+    [color]="color"
+    [disabled]="(formDisabled && loading) || disabled"
+    [ngClass]="{ 'login-button': fullWidth }"
+    [attr.aria-label]="aria | translate"
+    (click)="click()"
+  >
+    <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
+  </button>
+  <ng-template #withDirective>
+    <button
+      mat-raised-button
+      type="submit"
+      [color]="color"
+      [disabled]="(formDisabled && loading) || disabled"
+      [ngClass]="{ 'login-button': fullWidth }"
+      [appHotkey]="hotkey"
+      [appHotkeyTitle]="hotkeyTitle"
+      [appHotkeyAction]="hotkeyAction"
+      [appTrackInteraction]="trackInteraction"
+      [appTrackName]="trackName"
+      [attr.aria-label]="aria ?? name | translate"
+      (click)="click()"
+    >
+      <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
+    </button>
+  </ng-template>
+</ng-template>
+
+<ng-template #innerButton>
   <span [ngClass]="{ hidden: formDisabled && loading }">
     {{ name | translate }}
   </span>
@@ -39,4 +51,4 @@
     [size]="18"
     [disabled]="true"
   ></app-loading-indicator>
-</button>
+</ng-template>

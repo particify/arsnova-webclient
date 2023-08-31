@@ -17,12 +17,13 @@ export class LoadingButtonComponent extends FormComponent {
   @Input() fullWidth = false;
   @Input() color = 'primary';
   @Input() aria?: string;
-  @Input() hotkey?: string;
-  @Input() hotkeyTitle?: string;
-  @Input() hotkeyAction?: HotkeyAction;
-  @Input() trackInteraction?: string;
-  @Input() trackName?: string;
+  @Input() hotkey: string;
+  @Input() hotkeyTitle: string;
+  @Input() hotkeyAction: HotkeyAction;
+  @Input() trackInteraction: string;
+  @Input() trackName: string;
   @Input() disabled = false;
+  @Input() useDirectives = false;
   @Output() clicked = new EventEmitter<void>();
 
   loading = false;
