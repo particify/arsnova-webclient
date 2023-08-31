@@ -12,7 +12,7 @@
       ></app-health-status>
     </div>
     <p>
-      {{ 'admin-area.system-health' | translate }}
+      {{ 'admin-area.system-health' | transloco }}
     </p>
   </div>
   <div fxLayout="column" fxLayoutAlign="center center">
@@ -20,7 +20,7 @@
       <span>{{ (stats | async)?.connectedUsers }}</span>
     </div>
     <p>
-      {{ 'admin-area.connected-users' | translate }}
+      {{ 'admin-area.connected-users' | transloco }}
     </p>
   </div>
   <div fxLayout="column" fxLayoutAlign="center center">
@@ -28,7 +28,7 @@
       <span>{{ (stats | async)?.users }}</span>
     </div>
     <p>
-      {{ 'admin-area.user-accounts' | translate }}
+      {{ 'admin-area.user-accounts' | transloco }}
     </p>
   </div>
   <div fxLayout="column" fxLayoutAlign="center center">
@@ -36,7 +36,7 @@
       <span>{{ (stats | async)?.rooms }}</span>
     </div>
     <p>
-      {{ 'admin-area.rooms' | translate }}
+      {{ 'admin-area.rooms' | transloco }}
     </p>
   </div>
 </div>

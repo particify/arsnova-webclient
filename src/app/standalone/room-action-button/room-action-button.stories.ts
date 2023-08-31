@@ -3,7 +3,7 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { RoomActionButtonComponent } from './room-action-button.component';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 class MockHotkeyService {
   registerHotkey() {}
@@ -18,7 +18,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslateModule.forRoot(), RoomActionButtonComponent],
+      imports: [TranslocoModule, RoomActionButtonComponent],
       providers: [
         {
           provide: HotkeyService,

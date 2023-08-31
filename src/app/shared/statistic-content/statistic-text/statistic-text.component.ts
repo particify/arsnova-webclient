@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Content } from '@app/core/models/content';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { TextAnswer } from '@app/core/models/text-answer';
@@ -28,7 +28,7 @@ export class StatisticTextComponent
   constructor(
     protected contentService: ContentService,
     private contentAnswerService: ContentAnswerService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     protected eventService: EventService
   ) {
     super(contentService, eventService);
@@ -104,7 +104,7 @@ export class StatisticTextComponent
       return a.count > b.count ? -1 : 1;
     });
     if (this.abstentionCount > 0) {
-      const abstentionString = this.translateService.instant(
+      const abstentionString = this.translateService.translate(
         this.abstentionCount === 1
           ? 'statistic.abstention'
           : 'statistic.abstentions'

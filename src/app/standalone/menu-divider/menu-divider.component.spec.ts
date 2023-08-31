@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MenuDividerComponent } from './menu-divider.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { JsonTranslationLoader } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 describe('MenuDividerComponent', () => {
   let component: MenuDividerComponent;
@@ -10,16 +9,7 @@ describe('MenuDividerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MenuDividerComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [MenuDividerComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MenuDividerComponent);

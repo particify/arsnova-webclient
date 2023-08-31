@@ -37,7 +37,7 @@
               [(ngModel)]="updatedName"
               aria-labelledby="edit-content-group-name"
               appHotkey="6"
-              [appHotkeyTitle]="'content.content-group-name' | translate"
+              [appHotkeyTitle]="'content.content-group-name' | transloco"
               [appHotkeyDisabled]="isModerator"
             />
           </mat-form-field>
@@ -52,13 +52,13 @@
             [matTooltip]="
               'content.statistics-are' +
                 (statisticsPublished ? '' : '-not') +
-                '-published' | translate
+                '-published' | transloco
             "
             [attr.aria-labelledby]="
               ('content.a11y-statistics-are' + statisticsPublished
                 ? ''
                 : '-not' + '-published'
-              ) | translate
+              ) | transloco
             "
           >
             bar_chart
@@ -72,13 +72,13 @@
             [matTooltip]="
               'content.correct-options-are' +
                 (correctOptionsPublished ? '' : '-not') +
-                '-published' | translate
+                '-published' | transloco
             "
             [attr.aria-labelledby]="
               ('content.a11y-correct-options-are' + correctOptionsPublished
                 ? ''
                 : '-not' + '-published'
-              ) | translate
+              ) | transloco
             "
           >
             done_all
@@ -106,10 +106,10 @@
               class="add-desktop"
               (click)="navigateToSubroute('create')"
               appHotkey="1"
-              [appHotkeyTitle]="'room-page.create-content' | translate"
+              [appHotkeyTitle]="'room-page.create-content' | transloco"
             >
               <mat-icon>add</mat-icon>
-              {{ 'room-page.create-content' | translate }}
+              {{ 'room-page.create-content' | transloco }}
             </button>
             <button
               mat-fab
@@ -121,7 +121,7 @@
                 'mobile-add-hide': !onInit
               }"
               (click)="navigateToSubroute('create')"
-              [matTooltip]="'room-page.create-content' | translate"
+              [matTooltip]="'room-page.create-content' | transloco"
             >
               <mat-icon>add</mat-icon>
             </button>
@@ -133,10 +133,10 @@
                 (click)="navigateToSubroute('statistics')"
                 [disabled]="contents.length === 0"
                 appHotkey="2"
-                [appHotkeyTitle]="'room-page.answer-statistics' | translate"
+                [appHotkeyTitle]="'room-page.answer-statistics' | transloco"
               >
                 <mat-icon>insert_chart</mat-icon>
-                {{ 'room-page.answer-statistics' | translate }}
+                {{ 'room-page.answer-statistics' | transloco }}
               </button>
               <button
                 mat-button
@@ -144,10 +144,10 @@
                 class="settings-button"
                 [matMenuTriggerFor]="groupSettings"
                 appHotkey="3"
-                [appHotkeyTitle]="'content.group-settings' | translate"
+                [appHotkeyTitle]="'content.group-settings' | transloco"
               >
                 <mat-icon>settings</mat-icon>
-                {{ 'content.group-settings' | translate }}
+                {{ 'content.group-settings' | transloco }}
               </button>
             </div>
             <mat-menu #groupSettings="matMenu">
@@ -162,7 +162,7 @@
                   (statisticsPublished
                     ? 'content.dont-publish-statistics'
                     : 'content.publish-statistics'
-                  ) | translate
+                  ) | transloco
                 }}
               </button>
               <button
@@ -176,7 +176,7 @@
                   (correctOptionsPublished
                     ? 'content.dont-publish-correct-options'
                     : 'content.publish-correct-options'
-                  ) | translate
+                  ) | transloco
                 }}
               </button>
               <mat-divider></mat-divider>
@@ -188,11 +188,11 @@
                 appTrackInteraction="Content group sorting started"
               >
                 <mat-icon>sort</mat-icon>
-                {{ 'content.sort-content-group' | translate }}
+                {{ 'content.sort-content-group' | transloco }}
               </button>
               <button mat-menu-item [matMenuTriggerFor]="importExportMenu">
                 <mat-icon>swap_vert</mat-icon>
-                {{ 'content.import-export-content-group' | translate }}
+                {{ 'content.import-export-content-group' | transloco }}
               </button>
               <mat-menu #importExportMenu="matMenu">
                 <button
@@ -200,14 +200,14 @@
                   (click)="exportToCsv()"
                   [disabled]="contents.length === 0"
                 >
-                  {{ 'export.export-series' | translate }}
+                  {{ 'export.export-series' | transloco }}
                 </button>
                 <button
                   mat-menu-item
                   (click)="importFromCsv()"
                   appTrackInteraction="File dialog for CSV import opened"
                 >
-                  {{ 'import.import-series' | translate }}
+                  {{ 'import.import-series' | transloco }}
                 </button>
                 <mat-divider *ngIf="hasSeriesExportExtension"></mat-divider>
                 <lib-extension-point
@@ -225,11 +225,11 @@
                 [disabled]="contents.length === 0"
               >
                 <mat-icon>clear_all</mat-icon>
-                <span>{{ 'content.delete-answers' | translate }}</span>
+                <span>{{ 'content.delete-answers' | transloco }}</span>
               </button>
               <button mat-menu-item (click)="deleteGroup()">
                 <mat-icon color="warn">delete_forever</mat-icon>
-                {{ 'content.delete-content-group' | translate }}
+                {{ 'content.delete-content-group' | transloco }}
               </button>
             </mat-menu>
           </div>
@@ -243,7 +243,7 @@
               appTrackInteraction="Content group sorting finished"
               appTrackName="reset"
             >
-              {{ 'content.abort' | translate }}
+              {{ 'content.abort' | transloco }}
             </button>
             <button
               *ngIf="isInSortingMode"
@@ -253,7 +253,7 @@
               appTrackInteraction="Content group sorting finished"
               appTrackName="save"
             >
-              {{ 'content.save' | translate }}
+              {{ 'content.save' | transloco }}
             </button>
           </div>
           <div
@@ -267,11 +267,11 @@
               [(ngModel)]="published"
               labelPosition="before"
               appHotkey="4"
-              [appHotkeyTitle]="'content.unlock-collection' | translate"
+              [appHotkeyTitle]="'content.unlock-collection' | transloco"
               appTrackInteraction="Content group publish toggled"
               [appTrackName]="published ? 'off' : 'on'"
             >
-              {{ 'content.unlock-collection' | translate }}
+              {{ 'content.unlock-collection' | transloco }}
             </mat-slide-toggle>
           </div>
         </div>
@@ -281,15 +281,15 @@
             id="content-list"
             class="visually-hidden"
             appHotkey="5"
-            [appHotkeyTitle]="'content.contents' | translate"
+            [appHotkeyTitle]="'content.contents' | transloco"
           >
             {{
               'content.a11y-content-list-contents'
-                | translate: { count: contents.length }
+                | transloco: { count: contents.length }
             }}
           </div>
           <p class="hint" *ngIf="contents.length === 0">
-            {{ 'content.no-contents-yet' | translate }}
+            {{ 'content.no-contents-yet' | transloco }}
           </p>
           <mat-action-list
             *ngIf="!isInSortingMode && contents.length > 0"
@@ -301,7 +301,7 @@
               *ngFor="let content of contents; index as i"
               attr.aria-label="{{
                 'content.a11y-content-item-selected'
-                  | translate
+                  | transloco
                     : {
                         index: i + 1,
                         length: contents.length,
@@ -370,10 +370,10 @@
                         $event.stopPropagation()
                       "
                       attr.aria-label="{{
-                        'content.a11y-dont-publish-answers' | translate
+                        'content.a11y-dont-publish-answers' | transloco
                       }}"
                       matTooltip="{{
-                        'content.dont-publish-answers' | translate
+                        'content.dont-publish-answers' | transloco
                       }}"
                       appTrackInteraction="Content publish text answers toggled"
                       appTrackName="off"
@@ -393,9 +393,9 @@
                         $event.stopPropagation()
                       "
                       attr.aria-label="{{
-                        'content.a11y-publish-answers' | translate
+                        'content.a11y-publish-answers' | transloco
                       }}"
-                      matTooltip="{{ 'content.publish-answers' | translate }}"
+                      matTooltip="{{ 'content.publish-answers' | transloco }}"
                       appTrackInteraction="Content publish text answers toggled"
                       appTrackName="on"
                     >
@@ -409,7 +409,7 @@
                       #publishTrigger="matMenuTrigger"
                       [matMenuTriggerFor]="publishActions"
                       (menuOpened)="openedMenu(i)"
-                      [matTooltip]="'content.unlock' | translate"
+                      [matTooltip]="'content.unlock' | transloco"
                       #lockMenu
                     >
                       <mat-icon class="lock-icon">lock_open</mat-icon>
@@ -435,7 +435,7 @@
                           <mat-icon class="icon-important"
                             >vertical_align_center</mat-icon
                           >
-                          {{ 'content.unlock-this-content' | translate }}
+                          {{ 'content.unlock-this-content' | transloco }}
                         </button>
                         <button
                           mat-menu-item
@@ -447,7 +447,7 @@
                           <mat-icon class="icon-important"
                             >vertical_align_top</mat-icon
                           >
-                          {{ 'content.unlock-contents-from' | translate }}
+                          {{ 'content.unlock-contents-from' | transloco }}
                         </button>
                         <button
                           mat-menu-item
@@ -459,7 +459,7 @@
                           <mat-icon class="icon-important"
                             >vertical_align_bottom</mat-icon
                           >
-                          {{ 'content.unlock-contents-up-to' | translate }}
+                          {{ 'content.unlock-contents-up-to' | transloco }}
                         </button>
                       </div>
                       <div *ngIf="isPublished(i)" class="menu-lock">
@@ -473,7 +473,7 @@
                           <mat-icon class="icon-important"
                             >vertical_align_center</mat-icon
                           >
-                          {{ 'content.lock-this-content' | translate }}
+                          {{ 'content.lock-this-content' | transloco }}
                         </button>
                         <button
                           mat-menu-item
@@ -485,7 +485,7 @@
                           <mat-icon class="icon-important"
                             >vertical_align_top</mat-icon
                           >
-                          {{ 'content.lock-contents-up-to' | translate }}
+                          {{ 'content.lock-contents-up-to' | transloco }}
                         </button>
                         <button
                           mat-menu-item
@@ -497,7 +497,7 @@
                           <mat-icon class="icon-important"
                             >vertical_align_bottom</mat-icon
                           >
-                          {{ 'content.lock-contents-from' | translate }}
+                          {{ 'content.lock-contents-from' | transloco }}
                         </button>
                       </div>
                     </mat-menu>
@@ -509,7 +509,7 @@
                       [matMenuTriggerFor]="moreActions"
                       (click)="$event.stopPropagation()"
                       (menuOpened)="openedMenu(i)"
-                      matTooltip="{{ 'content.more-options' | translate }}"
+                      matTooltip="{{ 'content.more-options' | transloco }}"
                     >
                       <mat-icon>more_vert</mat-icon>
                     </button>
@@ -523,7 +523,7 @@
                         (click)="editContent(content, contentGroup.name)"
                       >
                         <mat-icon>edit</mat-icon>
-                        <span> {{ 'content.edit-content' | translate }}</span>
+                        <span> {{ 'content.edit-content' | transloco }}</span>
                       </button>
                       <mat-divider></mat-divider>
                       <button
@@ -533,7 +533,7 @@
                       >
                         <mat-icon>library_add</mat-icon>
                         <span>{{
-                          'content.copy-content-to-group' | translate
+                          'content.copy-content-to-group' | transloco
                         }}</span>
                       </button>
                       <button
@@ -543,13 +543,13 @@
                       >
                         <mat-icon>drive_file_move_outline</mat-icon>
                         <span>{{
-                          'content.move-content-to-group' | translate
+                          'content.move-content-to-group' | transloco
                         }}</span>
                       </button>
                       <button mat-menu-item (click)="duplicate(content.id)">
                         <mat-icon>dynamic_feed</mat-icon>
                         <span>{{
-                          'content.duplicate-content' | translate
+                          'content.duplicate-content' | transloco
                         }}</span>
                       </button>
                       <mat-divider></mat-divider>
@@ -560,16 +560,16 @@
                       >
                         <mat-icon>lock_reset</mat-icon>
                         <span>{{
-                          'content.reset-banned-answers' | translate
+                          'content.reset-banned-answers' | transloco
                         }}</span>
                       </button>
                       <button mat-menu-item (click)="deleteAnswers(content)">
                         <mat-icon>clear_all</mat-icon>
-                        <span>{{ 'content.delete-answers' | translate }}</span>
+                        <span>{{ 'content.delete-answers' | transloco }}</span>
                       </button>
                       <div
                         [matTooltip]="
-                          'content.starting-new-round-not-possible' | translate
+                          'content.starting-new-round-not-possible' | transloco
                         "
                         [matTooltipDisabled]="content.state.round === 1"
                         matTooltipPosition="before"
@@ -587,12 +587,12 @@
                           [disabled]="content.state.round > 1"
                         >
                           <mat-icon>replay</mat-icon>
-                          {{ 'content.start-new-round' | translate }}
+                          {{ 'content.start-new-round' | transloco }}
                         </button>
                       </div>
                       <button mat-menu-item (click)="deleteContent(content)">
                         <mat-icon color="warn">delete_forever</mat-icon>
-                        <span>{{ 'content.delete-content' | translate }}</span>
+                        <span>{{ 'content.delete-content' | transloco }}</span>
                       </button>
                     </mat-menu>
 
@@ -614,7 +614,7 @@
                           "
                           attr.aria-label="{{
                             'content.a11y-add-to-this-content-group'
-                              | translate: { name: groupStats.groupName }
+                              | transloco: { name: groupStats.groupName }
                           }}"
                         >
                           <span>{{ groupStats.groupName }}</span>
@@ -626,12 +626,12 @@
                             showContentGroupCreationDialog(content.id, action)
                           "
                           attr.aria-label="{{
-                            'content.a11y-new-content-group' | translate
+                            'content.a11y-new-content-group' | transloco
                           }}"
                         >
                           <mat-icon>add</mat-icon>
                           <span>{{
-                            'content.new-content-group' | translate
+                            'content.new-content-group' | transloco
                           }}</span>
                         </button>
                       </ng-template>
@@ -643,7 +643,7 @@
                     mat-icon-button
                     #warning="matTooltip"
                     matTooltip="{{
-                      'content.format-not-supported' | translate
+                      'content.format-not-supported' | transloco
                     }}"
                     (click)="warning.toggle(); $event.stopPropagation()"
                   >
@@ -672,7 +672,7 @@
                 }"
                 [attr.aria-label]="
                   'content.a11y-sort-content'
-                    | translate
+                    | transloco
                       : {
                           content: content.renderedBody | a11yRenderedBody,
                           index: i + 1,
@@ -708,6 +708,6 @@
 
 <div class="visually-hidden">
   <div id="edit-content-group-name">
-    {{ 'content.a11y-edit-content-group-name' | translate }}
+    {{ 'content.a11y-edit-content-group-name' | transloco }}
   </div>
 </div>

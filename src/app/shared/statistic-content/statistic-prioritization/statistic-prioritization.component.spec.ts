@@ -8,13 +8,12 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { ContentType } from '@app/core/models/content-type.enum';
 import {
-  JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
   MockThemeService,
 } from '@testing/test-helpers';
 import { ThemeService } from '@app/core/theme/theme.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of } from 'rxjs';
 
 import { StatisticPrioritizationComponent } from './statistic-prioritization.component';
@@ -63,15 +62,7 @@ describe('StatisticPrioritizationComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StatisticPrioritizationComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: EventService,

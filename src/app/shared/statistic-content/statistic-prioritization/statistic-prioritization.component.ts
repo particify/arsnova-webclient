@@ -16,7 +16,7 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { EventService } from '@app/core/services/util/event.service';
@@ -57,7 +57,7 @@ export class StatisticPrioritizationComponent
 
   constructor(
     protected contentService: ContentService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected themeService: ThemeService,
     protected eventService: EventService,
     protected presentationService: PresentationService
@@ -314,16 +314,16 @@ export class StatisticPrioritizationComponent
   getA11yMessage(): string {
     let a11yMsg = '';
     if (this.answerCount === 0) {
-      a11yMsg = this.translateService.instant('statistic.no-answers');
+      a11yMsg = this.translateService.translate('statistic.no-answers');
     } else {
       this.options.forEach((option, i) => {
         a11yMsg +=
           this.chartData[i] +
           ' ' +
-          this.translateService.instant('statistic.points') +
+          this.translateService.translate('statistic.points') +
           ': ';
         a11yMsg +=
-          this.translateService.instant('statistic.answer') + (i + 1) + ': ';
+          this.translateService.translate('statistic.answer') + (i + 1) + ': ';
         a11yMsg += option.label + ', ';
       });
     }

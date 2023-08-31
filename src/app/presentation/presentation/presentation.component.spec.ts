@@ -5,9 +5,8 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  JsonTranslationLoader,
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
@@ -60,15 +59,7 @@ describe('PresentationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PresentationComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: RoomStatsService,

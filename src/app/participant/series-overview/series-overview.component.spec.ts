@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SeriesOverviewComponent } from './series-overview.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { MockThemeService, JsonTranslationLoader } from '@testing/test-helpers';
+import { MockThemeService } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -46,15 +46,7 @@ describe('SeriesOverviewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SeriesOverviewComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: ThemeService,

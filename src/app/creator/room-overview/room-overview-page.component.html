@@ -44,16 +44,16 @@
     >
       <ng-container *ngIf="contentGroups?.length === 0">
         <p class="hint-sm">
-          {{ 'room-page.no-content-groups' | translate }}
+          {{ 'room-page.no-content-groups' | transloco }}
         </p>
         <p
           tabindex="-1"
           id="no-content-groups"
           class="visually-hidden"
           appHotkey="4"
-          [appHotkeyTitle]="'content.groups' | translate"
+          [appHotkeyTitle]="'content.groups' | transloco"
         >
-          {{ 'room-page.a11y-no-content-groups' | translate }}
+          {{ 'room-page.a11y-no-content-groups' | transloco }}
         </p>
       </ng-container>
       <button
@@ -62,13 +62,13 @@
         mat-stroked-button
         color="primary"
         class="add-group"
-        [attr.aria-label]="'room-page.a11y-create-content-group' | translate"
+        [attr.aria-label]="'room-page.a11y-create-content-group' | transloco"
         (click)="openCreateContentGroupDialog()"
         appHotkey="3"
-        [appHotkeyTitle]="'room-page.create-content-group' | translate"
+        [appHotkeyTitle]="'room-page.create-content-group' | transloco"
       >
         <mat-icon>playlist_add</mat-icon>
-        {{ 'room-page.create-content-group' | translate }}
+        {{ 'room-page.create-content-group' | transloco }}
       </button>
       <ng-container *ngIf="!!contentGroups">
         <p
@@ -76,11 +76,11 @@
           id="content-groups"
           class="visually-hidden"
           appHotkey="4"
-          [appHotkeyTitle]="'content.groups' | translate"
+          [appHotkeyTitle]="'content.groups' | transloco"
         >
           {{
             'room-page.a11y-content-groups'
-              | translate: { count: contentGroups.length }
+              | transloco: { count: contentGroups.length }
           }}
         </p>
       </ng-container>

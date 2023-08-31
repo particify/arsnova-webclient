@@ -1,6 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-header/room-overview-header.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -23,7 +23,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        TranslateModule.forRoot(),
+        TranslocoModule,
         RoomOverviewHeaderComponent,
         RouterTestingModule,
       ],

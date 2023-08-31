@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ExportFileType } from '@app/core/models/export-file-type';
 
 const charsets = ['UTF-8', 'UTF-16LE'] as const;
@@ -28,7 +28,7 @@ export class ExportComponent {
   selectedCharset = this.charsets[1];
 
   constructor(
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     private dialogRef: MatDialogRef<ExportComponent, ExportOptions>
   ) {}
 

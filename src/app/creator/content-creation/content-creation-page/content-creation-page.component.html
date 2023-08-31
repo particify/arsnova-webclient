@@ -34,7 +34,7 @@
                     [disabled]="isEditMode || formDisabled"
                     [hideSingleSelectionIndicator]="true"
                     appHotkey="2"
-                    [appHotkeyTitle]="'content.format' | translate"
+                    [appHotkeyTitle]="'content.format' | transloco"
                   >
                     <mat-select-trigger>
                       <div
@@ -47,7 +47,7 @@
                           selectedFormat.icon
                         }}</mat-icon>
                         <span>{{
-                          'content.format-' + selectedFormat.name | translate
+                          'content.format-' + selectedFormat.name | transloco
                         }}</span>
                       </div>
                     </mat-select-trigger>
@@ -63,17 +63,17 @@
                         <div fxLayout="column" fxLayoutAlign="center">
                           <span
                             attr.aria-label="{{
-                              'content.a11y-format-' + format.name | translate
+                              'content.a11y-format-' + format.name | transloco
                             }}"
                             class="format-name"
                           >
                             {{
-                              'content.format-' + format.name | translate
+                              'content.format-' + format.name | transloco
                             }}</span
                           >
                           <span class="format-description">{{
                             'content.format-' + format.name + '-description'
-                              | translate
+                              | transloco
                           }}</span>
                         </div>
                       </div>
@@ -94,7 +94,7 @@
                   (selectedFormat.name !== 'slide'
                     ? 'content.body'
                     : 'content.body-neutral'
-                  ) | translate
+                  ) | transloco
                 }}</mat-label>
                 <textarea
                   [disabled]="formDisabled"
@@ -111,7 +111,7 @@
                   }}"
                   name="questionInput"
                   appHotkey="1"
-                  [appHotkeyTitle]="'content.body' | translate"
+                  [appHotkeyTitle]="'content.body' | transloco"
                 ></textarea>
               </mat-form-field>
               <app-hint
@@ -134,7 +134,7 @@
                 "
                 [(ngModel)]="abstentionsAllowed"
               >
-                {{ 'content.abstentions-allowed' | translate }}
+                {{ 'content.abstentions-allowed' | transloco }}
               </mat-checkbox>
             </div>
             <div *ngIf="!isLoading" class="content-action-container">
@@ -255,10 +255,10 @@
                 <button
                   [disabled]="formDisabled"
                   (click)="showPreview()"
-                  attr.aria-label="{{ 'content.a11y-preview' | translate }}"
+                  attr.aria-label="{{ 'content.a11y-preview' | transloco }}"
                   mat-stroked-button
                 >
-                  {{ 'content.preview' | translate }}
+                  {{ 'content.preview' | transloco }}
                 </button>
                 <app-loading-button
                   [name]="isEditMode ? 'content.save' : 'content.create'"
@@ -286,27 +286,27 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="subject">{{ 'content.a11y-enter-subject' | translate }}</div>
+  <div id="subject">{{ 'content.a11y-enter-subject' | transloco }}</div>
   <div id="body">
     {{
       (created ? 'content.a11y-content-created' : 'content.a11y-enter-body')
-        | translate
+        | transloco
     }}
   </div>
-  <div id="format-choice">{{ 'content.a11y-format-choice' | translate }}</div>
-  <div id="format-scale">{{ 'content.a11y-format-likert' | translate }}</div>
-  <div id="format-binary">{{ 'content.a11y-format-binary' | translate }}</div>
-  <div id="format-text">{{ 'content.a11y-format-text' | translate }}</div>
-  <div id="format-slide">{{ 'content.a11y-format-slide' | translate }}</div>
-  <div id="format-sort">{{ 'content.a11y-format-sort' | translate }}</div>
+  <div id="format-choice">{{ 'content.a11y-format-choice' | transloco }}</div>
+  <div id="format-scale">{{ 'content.a11y-format-likert' | transloco }}</div>
+  <div id="format-binary">{{ 'content.a11y-format-binary' | transloco }}</div>
+  <div id="format-text">{{ 'content.a11y-format-text' | transloco }}</div>
+  <div id="format-slide">{{ 'content.a11y-format-slide' | transloco }}</div>
+  <div id="format-sort">{{ 'content.a11y-format-sort' | transloco }}</div>
   <div id="format-wordcloud">
-    {{ 'content.a11y-format-wordcloud' | translate }}
+    {{ 'content.a11y-format-wordcloud' | transloco }}
   </div>
   <div id="choose-format">
     {{
       'content.a11y-choose-format'
-        | translate
-          : { format: 'content.format-' + selectedFormat.name | translate }
+        | transloco
+          : { format: 'content.format-' + selectedFormat.name | transloco }
     }}
   </div>
 </div>

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
@@ -32,7 +32,7 @@ export class ContentSortCreationComponent
   constructor(
     protected contentService: ContentService,
     protected notificationService: NotificationService,
-    protected translationService: TranslateService,
+    protected translationService: TranslocoService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
@@ -83,7 +83,7 @@ export class ContentSortCreationComponent
         this.updateDragDropList();
         this.resetAnswerInputEvent.emit(true);
       } else {
-        const msg = this.translationService.instant('content.max-answers');
+        const msg = this.translationService.translate('content.max-answers');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -99,7 +99,7 @@ export class ContentSortCreationComponent
   }
 
   showWarning(translationKey: string) {
-    const msg = this.translationService.instant(translationKey);
+    const msg = this.translationService.translate(translationKey);
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
   }
 
@@ -121,7 +121,7 @@ export class ContentSortCreationComponent
       ).map((index) => parseInt(index, 10));
       return true;
     } else {
-      const msg = this.translationService.instant('content.need-answers');
+      const msg = this.translationService.translate('content.need-answers');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }

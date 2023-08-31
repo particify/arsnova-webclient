@@ -5,7 +5,7 @@
   fxLayoutGap="20px"
 >
   <mat-form-field appearance="outline">
-    <mat-label>{{ 'comment-page.your-comment' | translate }}</mat-label>
+    <mat-label>{{ 'comment-page.your-comment' | transloco }}</mat-label>
     <textarea
       [disabled]="formDisabled"
       matInput
@@ -29,7 +29,7 @@
     class="no-field-hint"
   >
     <mat-label aria-labelledby="category">{{
-      'comment-page.tag' | translate
+      'comment-page.tag' | transloco
     }}</mat-label>
     <mat-select class="comment-tag" [disabled]="formDisabled">
       <mat-option
@@ -37,12 +37,12 @@
         value="{{ tag }}"
         (click)="updateTag(tag)"
         attr.aria-label="{{
-          'comment-page.a11y-select-tag' | translate: { tag: tag }
+          'comment-page.a11y-select-tag' | transloco: { tag: tag }
         }}"
         >{{ tag }}</mat-option
       >
       <mat-option (click)="updateTag('')">{{
-        'comment-page.none' | translate
+        'comment-page.none' | transloco
       }}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -66,11 +66,11 @@
         mat-button
         type="button"
       >
-        {{ 'comment-page.cancel' | translate }}
+        {{ 'comment-page.cancel' | transloco }}
       </button>
     </div>
   </div>
   <div class="visually-hidden">
-    <div id="category">{{ 'comment-page.a11y-tag' | translate }}</div>
+    <div id="category">{{ 'comment-page.a11y-tag' | transloco }}</div>
   </div>
 </div>

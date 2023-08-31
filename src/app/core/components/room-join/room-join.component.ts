@@ -8,7 +8,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { EventService } from '@app/core/services/util/event.service';
@@ -39,7 +39,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     public notificationService: NotificationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     public authenticationService: AuthenticationService,
     public eventService: EventService,
     private globalStorageService: GlobalStorageService
@@ -73,7 +73,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
       return;
     }
     if (shortId.length !== 8) {
-      const msg = this.translateService.instant('home-page.exactly-8');
+      const msg = this.translateService.translate('home-page.exactly-8');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
@@ -102,7 +102,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
         ? 1
         : 0;
     if (!rawShortId.match(/^[0-9\s]*$/)) {
-      const msg = this.translateService.instant('home-page.only-numbers');
+      const msg = this.translateService.translate('home-page.only-numbers');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }
     const shortId = rawShortId

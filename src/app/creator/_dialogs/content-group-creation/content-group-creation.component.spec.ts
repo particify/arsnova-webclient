@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentGroupCreationComponent } from './content-group-creation.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
@@ -11,7 +11,6 @@ import {
 } from '@angular/material/dialog';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
-  JsonTranslationLoader,
   MockNotificationService,
   MockMatDialog,
   MockMatDialogRef,
@@ -27,15 +26,7 @@ describe('ContentGroupCreationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ContentGroupCreationComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: NotificationService,

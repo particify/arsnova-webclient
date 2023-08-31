@@ -4,8 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AnnouncementState } from '@app/core/models/announcement-state';
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { JsonTranslationLoader, MockMatDialogRef } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MockMatDialogRef } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of } from 'rxjs';
 
 import { AnnouncementListComponent } from './announcement-list.component';
@@ -49,15 +49,7 @@ describe('AnnouncementListComponent', () => {
           useValue: announcementService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Location } from '@angular/common';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { UserService } from '@app/core/services/http/user.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -71,7 +71,7 @@ export class HeaderComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
     public router: Router,
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     private langService: LanguageService,
     private userService: UserService,
     public eventService: EventService,
@@ -90,7 +90,7 @@ export class HeaderComponent implements OnInit {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
     );
-    this.currentLang = this.translationService.currentLang;
+    this.currentLang = this.translationService.getActiveLang();
   }
 
   ngOnInit() {
@@ -195,7 +195,7 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authenticationService.logout();
-    const msg = this.translationService.instant('header.logged-out');
+    const msg = this.translationService.translate('header.logged-out');
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     this.navToHome();
   }
@@ -223,9 +223,14 @@ export class HeaderComponent implements OnInit {
   deleteAccount(id: string) {
     this.userService.delete(id).subscribe();
     this.authenticationService.logout();
-    this.translationService.get('header.account-deleted').subscribe((msg) => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    });
+    this.translationService
+      .selectTranslate('header.account-deleted')
+      .subscribe((msg) => {
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      });
     this.navToHome();
   }
 

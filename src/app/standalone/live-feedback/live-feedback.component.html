@@ -12,12 +12,12 @@
         'label-icon': !fixedSize,
         'icon-fixed-size': fixedSize
       }"
-      [matTooltip]="'survey.' + feedbackLabels[i] | translate"
+      [matTooltip]="'survey.' + feedbackLabels[i] | transloco"
     >
       {{ feedbackIcons[i] }}</mat-icon
     >
     <p *ngIf="type === LiveFeedbackType.SURVEY" class="answer-label">
-      {{ surveyLabels[i] | translate }}
+      {{ surveyLabels[i] | transloco }}
     </p>
     <mat-progress-bar
       class="survey-progress custom-height"
@@ -31,6 +31,6 @@
 </div>
 <div class="text invisible" [ngClass]="{ visible: isClosed }">
   <h3 tabindex="-1" id="stopped-label">
-    {{ 'survey.is-stopped' | translate }}
+    {{ 'survey.is-stopped' | transloco }}
   </h3>
 </div>

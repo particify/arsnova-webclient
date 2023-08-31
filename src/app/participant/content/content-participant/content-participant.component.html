@@ -1,7 +1,7 @@
 <div
   [appAutofocus]
   tabindex="-1"
-  attr.aria-label="{{ a11yMsg | translate: { index: index + 1 } }}"
+  attr.aria-label="{{ a11yMsg | transloco: { index: index + 1 } }}"
 >
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <section class="card-container with-margin" *ngIf="!isLoading">
@@ -17,16 +17,16 @@
             <div tabindex="0" class="visually-hidden" *ngIf="alreadySent">
               {{
                 hasAbstained
-                  ? ('answer.a11y-has-abstained' | translate)
+                  ? ('answer.a11y-has-abstained' | transloco)
                   : content.format !== ContentType.TEXT
                   ? ('answer.a11y-already-answered-' +
                       (isMultiple ? 'multiple' : 'single')
-                    | translate
+                    | transloco
                       : {
                           answers: answersString
                         })
                   : ('answer.a11y-already-answered-text'
-                    | translate: { answer: answersString })
+                    | transloco: { answer: answersString })
               }}
             </div>
             <span class="fill-remaining-space"></span>
@@ -43,7 +43,7 @@
               mat-icon-button
               color="primary"
               (click)="goToStats()"
-              matTooltip="{{ 'answer.go-to-stats' | translate }}"
+              matTooltip="{{ 'answer.go-to-stats' | transloco }}"
               aria-labelledby="flip-to-stats"
               appHotkey=" "
               [appHotkeyAction]="HotkeyAction.CLICK"
@@ -138,10 +138,10 @@
                 class="text"
               >
                 <p class="primary" *ngIf="!hasAbstained">
-                  {{ 'answer.has-voted' | translate }}
+                  {{ 'answer.has-voted' | transloco }}
                 </p>
                 <p class="primary" *ngIf="hasAbstained">
-                  {{ 'answer.has-abstained' | translate }}
+                  {{ 'answer.has-abstained' | transloco }}
                 </p>
               </div>
               <div [ngClass]="{ invisible: alreadySent }">
@@ -156,7 +156,7 @@
                     (click)="submitAnswerEvent($event, 'abstention')"
                     aria-labelledby="abstain"
                   >
-                    {{ 'answer.abstain' | translate }}
+                    {{ 'answer.abstain' | transloco }}
                   </button>
                   <app-loading-button name="answer.submit"></app-loading-button>
                 </div>
@@ -175,7 +175,7 @@
                 [appHotkeyAction]="HotkeyAction.CLICK"
                 [appHotkeyDisabled]="!active"
               >
-                {{ 'answer.show-back' | translate }}
+                {{ 'answer.show-back' | transloco }}
               </button>
             </div>
           </form>
@@ -210,7 +210,7 @@
                   [appHotkeyAction]="HotkeyAction.CLICK"
                   [appHotkeyDisabled]="!active"
                 >
-                  {{ 'answer.show-front' | translate }}
+                  {{ 'answer.show-front' | transloco }}
                 </button>
                 <button
                   mat-raised-button
@@ -222,7 +222,7 @@
                     (lastContent
                       ? 'answer.first-content'
                       : 'answer.next-content'
-                    ) | translate
+                    ) | transloco
                   }}
                 </button>
               </div>
@@ -233,11 +233,11 @@
     </div>
   </section>
   <div tabindex="-1" class="visually-hidden">
-    <div id="submit">{{ 'answer.a11y-submit' | translate }}</div>
-    <div id="abstain">{{ 'answer.a11y-abstain' | translate }}</div>
-    <div id="flip-to-stats">{{ 'answer.a11y-go-to-stats' | translate }}</div>
-    <div id="show-back">{{ 'answer.a11y-show-back' | translate }}</div>
-    <div id="show-front">{{ 'answer.a11y-show-front' | translate }}</div>
-    <div id="next-content">{{ 'answer.a11y-next-content' | translate }}</div>
+    <div id="submit">{{ 'answer.a11y-submit' | transloco }}</div>
+    <div id="abstain">{{ 'answer.a11y-abstain' | transloco }}</div>
+    <div id="flip-to-stats">{{ 'answer.a11y-go-to-stats' | transloco }}</div>
+    <div id="show-back">{{ 'answer.a11y-show-back' | transloco }}</div>
+    <div id="show-front">{{ 'answer.a11y-show-front' | transloco }}</div>
+    <div id="next-content">{{ 'answer.a11y-next-content' | transloco }}</div>
   </div>
 </div>

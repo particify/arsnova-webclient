@@ -1,10 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StepperComponent } from './stepper.component';
-import {
-  MockAnnounceService,
-  JsonTranslationLoader,
-} from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MockAnnounceService } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { Directionality } from '@angular/cdk/bidi';
@@ -30,16 +27,7 @@ describe('StepperComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [StepperComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-        BrowserAnimationsModule,
-      ],
+      imports: [getTranslocoModule(), BrowserAnimationsModule],
       providers: [
         {
           provide: AnnounceService,

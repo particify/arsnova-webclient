@@ -3,13 +3,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslocoModule,
     FlexModule,
     MatButtonModule,
     MatIconModule,

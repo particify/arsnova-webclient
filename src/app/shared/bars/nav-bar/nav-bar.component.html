@@ -17,9 +17,9 @@
       }"
       (click)="navToUrl(i)"
       [matTooltip]="
-        (getFeatureText(barItem.name) | translate) +
+        (getFeatureText(barItem.name) | transloco) +
         ' ' +
-        (getFocusInfo(barItem.name) | translate)
+        (getFocusInfo(barItem.name) | transloco)
       "
       #menuTrigger="matMenuTrigger"
       matTooltipPosition="right"
@@ -28,7 +28,7 @@
       (menuOpened)="checkMenu(barItem.name, menuTrigger)"
       [attr.aria-label]="
         'sidebar.a11y-switch-to-feature'
-          | translate: { feature: ('sidebar.' + barItem.name | translate) }
+          | transloco: { feature: ('sidebar.' + barItem.name | transloco) }
       "
     >
       <mat-icon class="button-icon">
@@ -44,7 +44,7 @@
         class="focus-indicator"
       ></div>
       <span class="text ellipsis">{{
-        getFeatureText(barItem.name) | translate
+        getFeatureText(barItem.name) | transloco
       }}</span>
       <div class="menu-container">
         <mat-menu #groupMenu="matMenu" class="series-menu">
@@ -74,9 +74,9 @@
     fxLayoutAlign="center center"
     fxLayoutGap="4px"
     id="user-count-container"
-    [matTooltip]="'sidebar.user-counter' | translate"
+    [matTooltip]="'sidebar.user-counter' | transloco"
     attr.aria-label="{{
-      'sidebar.a11y-user-counter' | translate: { count: userCount }
+      'sidebar.a11y-user-counter' | transloco: { count: userCount }
     }}"
   >
     <mat-icon>people</mat-icon>

@@ -21,7 +21,7 @@
         ></lib-extension-point>
         <ng-container *ngIf="!isGuest; else guestHint">
           <p class="username">
-            {{ ('user-profile.username' | translate) + ': ' + auth.loginId }}
+            {{ ('user-profile.username' | transloco) + ': ' + auth.loginId }}
           </p>
         </ng-container>
         <ng-template #guestHint>
@@ -38,11 +38,11 @@
             fxLayoutGap="16px"
           >
             <div>
-              <span>{{ 'user-profile.delete-account-info' | translate }}</span>
+              <span>{{ 'user-profile.delete-account-info' | transloco }}</span>
             </div>
             <button mat-stroked-button color="warn" (click)="deleteAccount()">
               <mat-icon>delete</mat-icon>
-              {{ 'user-profile.delete-account' | translate }}
+              {{ 'user-profile.delete-account' | transloco }}
             </button>
           </div>
         </div>
@@ -61,7 +61,7 @@
       </mat-expansion-panel-header>
       <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
       <div *ngIf="!isLoading">
-        <span>{{ 'user-profile.preferences-description' | translate }}</span>
+        <span>{{ 'user-profile.preferences-description' | transloco }}</span>
         <app-settings-slide-toggle
           label="user-profile.visualization-unit-percent"
           [isChecked]="settings.contentVisualizationUnitPercent"

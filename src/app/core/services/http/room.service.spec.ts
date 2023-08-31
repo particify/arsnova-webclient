@@ -7,9 +7,9 @@ import {
   MockEventService,
   MockGlobalStorageService,
   MockNotificationService,
-  MockTranslateService,
+  MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Cache, CachingService } from '@app/core/services/util/caching.service';
@@ -46,8 +46,8 @@ describe('RoomService', () => {
           useClass: MockEventService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: NotificationService,

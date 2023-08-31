@@ -1,11 +1,11 @@
 <div mat-dialog-content tabindex="0">
-  <h3>{{ data.section + data.headerLabel | translate }}</h3>
-  <p>{{ data.section + data.body | translate }}</p>
+  <h3>{{ data.section + data.headerLabel | transloco }}</h3>
+  <p>{{ data.section + data.body | transloco }}</p>
   <p *ngIf="data.additionalBody">
-    {{ data.section + data.additionalBody | translate }}
+    {{ data.section + data.additionalBody | transloco }}
   </p>
   <a *ngIf="data.link" target="_blank" [href]="data.link">{{
-    data.linkText ? (data.section + data.linkText | translate) : data.link
+    data.linkText ? (data.section + data.linkText | transloco) : data.link
   }}</a>
   <p *ngIf="data.bodyElement">
     <strong>{{ data.bodyElement }}</strong>
@@ -15,10 +15,10 @@
   <button
     *ngIf="data.abortLabel"
     mat-button
-    [attr.aria-label]="data.section + 'a11y-' + data.abortLabel | translate"
+    [attr.aria-label]="data.section + 'a11y-' + data.abortLabel | transloco"
     (click)="closeDialog(data.abortLabel)"
   >
-    {{ data.section + data.abortLabel | translate }}
+    {{ data.section + data.abortLabel | transloco }}
   </button>
   <app-loading-button
     [name]="data.section + data.confirmLabel"

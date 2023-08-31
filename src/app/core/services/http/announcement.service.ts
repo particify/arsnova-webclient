@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { catchError, first, Observable } from 'rxjs';
 import { Announcement } from '@app/core/models/announcement';
 import { AnnouncementState } from '@app/core/models/announcement-state';
@@ -16,7 +16,7 @@ export class AnnouncementService extends AbstractHttpService<Announcement> {
   constructor(
     private http: HttpClient,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService
   ) {
     super(

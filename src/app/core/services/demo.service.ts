@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Observable } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { DemoRoomCreated } from '@app/core/models/events/demo-room-created';
@@ -13,7 +13,7 @@ export class DemoService {
   constructor(
     private apiConfigService: ApiConfigService,
     private roomService: RoomService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private eventService: EventService
   ) {}
 
@@ -31,8 +31,8 @@ export class DemoService {
   }
 
   getLocalizedDemoRoomId(): Observable<string> {
-    const lang = this.translateService.currentLang;
-    const fallbackLang = this.translateService.defaultLang;
+    const lang = this.translateService.getActiveLang();
+    const fallbackLang = this.translateService.getDefaultLang();
     return this.apiConfigService.getApiConfig$().pipe(
       map((config) => {
         let id = config.ui.demo?.[lang];

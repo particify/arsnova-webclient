@@ -33,7 +33,7 @@
         'survey.a11y-' +
           (type === LiveFeedbackType.SURVEY
             ? surveyLabels[i]
-            : feedbackLabels[i]) | translate
+            : feedbackLabels[i]) | transloco
       "
       (click)="submitAnswer(i)"
       tabIndex="0"
@@ -42,7 +42,7 @@
         'survey.a11y-' +
           (type === LiveFeedbackType.SURVEY
             ? surveyLabels[i]
-            : feedbackLabels[i]) | translate
+            : feedbackLabels[i]) | transloco
       "
     >
       <span
@@ -54,7 +54,7 @@
       <mat-icon
         *ngIf="type === LiveFeedbackType.FEEDBACK"
         class="button-label-icon"
-        [matTooltip]="'survey.' + feedbackLabels[i] | translate"
+        [matTooltip]="'survey.' + feedbackLabels[i] | transloco"
       >
         {{ feedbackIcons[i] }}</mat-icon
       >

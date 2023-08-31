@@ -2,11 +2,10 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { UpdateInfoComponent } from './update-info.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
-  JsonTranslationLoader,
   MockMatDialogRef,
   MockGlobalStorageService,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { of } from 'rxjs';
@@ -38,15 +37,7 @@ describe('UpdateInfoComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [UpdateInfoComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: GlobalStorageService,

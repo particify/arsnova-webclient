@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Content } from '@app/core/models/content';
 import {
   GlobalStorageService,
@@ -66,7 +66,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute,
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private globalStorageService: GlobalStorageService,
     private location: Location,
     private router: Router,
@@ -79,7 +79,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.isPresentation = this.route.snapshot.data.isPresentation;
@@ -139,7 +139,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
           this.initGroup();
         });
       this.translateService
-        .get('control-bar.publish-or-lock-content')
+        .selectTranslate('control-bar.publish-or-lock-content')
         .subscribe((t) =>
           this.hotkeyService.registerHotkey(
             {

@@ -4,13 +4,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { Cache, CachingService } from '@app/core/services/util/caching.service';
 import {
   MockEventService,
   MockNotificationService,
-  MockTranslateService,
+  MockTranslocoService,
 } from '@testing/test-helpers';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
@@ -34,7 +34,7 @@ class TestEntityService extends AbstractEntityService<TestEntity> {
     protected httpClient: HttpClient,
     protected wsConnector: WsConnectorService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     cachingService: CachingService
   ) {
@@ -65,8 +65,8 @@ describe('AbstractEntityService', () => {
           useClass: MockNotificationService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: WsConnectorService,

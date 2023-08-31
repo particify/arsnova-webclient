@@ -8,9 +8,9 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import {
   MockNotificationService,
   MockRouter,
-  MockTranslateService,
+  MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
@@ -48,8 +48,8 @@ describe('AuthenticationGuard', () => {
           useClass: MockNotificationService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: RoutingService,

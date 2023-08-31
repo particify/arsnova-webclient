@@ -7,9 +7,9 @@ import {
   MockGlobalStorageService,
   MockNotificationService,
   MockRouter,
-  MockTranslateService,
+  MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -31,8 +31,8 @@ describe('AuthenticationService', () => {
           useClass: MockEventService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: NotificationService,

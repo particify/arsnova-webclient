@@ -17,7 +17,6 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockEventService,
   MockRouter,
 } from '@testing/test-helpers';
@@ -27,7 +26,6 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { of } from 'rxjs';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { ContentGroup } from '@app/core/models/content-group';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -41,6 +39,7 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
 import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 @Injectable()
 class MockContentService {
@@ -126,6 +125,7 @@ describe('ContentPresentationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ContentPresentationComponent, StepperComponent],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: ContentService,
@@ -183,15 +183,6 @@ describe('ContentPresentationComponent', () => {
           provide: ContentPublishService,
           useClass: ContentPublishService,
         },
-      ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

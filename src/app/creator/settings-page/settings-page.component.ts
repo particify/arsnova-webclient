@@ -3,7 +3,7 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -55,7 +55,7 @@ export class SettingsPageComponent implements OnInit {
     protected roomService: RoomService,
     protected route: ActivatedRoute,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     private globalStorageService: GlobalStorageService,
     private router: Router,
     private location: Location,
@@ -64,7 +64,7 @@ export class SettingsPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.settings = [
@@ -106,7 +106,7 @@ export class SettingsPageComponent implements OnInit {
           this.room = room;
           if (updateEvent.showSuccessInfo) {
             this.translateService
-              .get('settings.changes-successful')
+              .selectTranslate('settings.changes-successful')
               .subscribe((msg) => {
                 this.notificationService.showAdvanced(
                   msg,

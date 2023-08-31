@@ -4,7 +4,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ActivatedRoute } from '@angular/router';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
@@ -30,7 +30,7 @@ export class ContentFlashcardCreationComponent
   constructor(
     protected contentService: ContentService,
     protected notificationService: NotificationService,
-    protected translationService: TranslateService,
+    protected translationService: TranslocoService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
@@ -67,7 +67,7 @@ export class ContentFlashcardCreationComponent
       (this.content as ContentFlashcard).additionalText = this.answer;
       return true;
     } else {
-      const msg = this.translationService.instant('content.need-answer');
+      const msg = this.translationService.translate('content.need-answer');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }

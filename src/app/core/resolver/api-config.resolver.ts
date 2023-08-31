@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { Resolve } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Observable, timer } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { SnackBarAdvancedComponent } from '@app/core/components/snack-bar-advanced/snack-bar-advanced.component';
@@ -17,7 +17,7 @@ export class ApiConfigResolver implements Resolve<ApiConfig> {
   constructor(
     private apiConfigService: ApiConfigService,
     private notificationService: NotificationService,
-    private translateService: TranslateService
+    private translateService: TranslocoService
   ) {}
 
   resolve(): Observable<ApiConfig> {
@@ -31,7 +31,7 @@ export class ApiConfigResolver implements Resolve<ApiConfig> {
         takeUntil(config$),
         tap(() => {
           this.translateService
-            .get('errors.establishing-connection')
+            .selectTranslate('errors.establishing-connection')
             .subscribe(
               (msg) =>
                 (snackbarRef = this.notificationService.showAdvanced(

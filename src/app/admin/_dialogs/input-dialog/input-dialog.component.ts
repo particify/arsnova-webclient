@@ -6,7 +6,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 import { FormService } from '@app/core/services/util/form.service';
 
@@ -34,7 +34,7 @@ export class InputDialogComponent extends UserSearchComponent {
     private dialogRef: MatDialogRef<InputDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     protected userService: UserService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     private formService: FormService
   ) {
@@ -55,7 +55,9 @@ export class InputDialogComponent extends UserSearchComponent {
         this.formService.disableForm();
         this.clicked$.emit(this.user.id);
       } else {
-        const msg = this.translateService.instant('admin-area.user-not-found');
+        const msg = this.translateService.translate(
+          'admin-area.user-not-found'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.FAILED

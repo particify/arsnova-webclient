@@ -7,7 +7,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   ContentCreationComponent,
   DisplayAnswer,
@@ -31,7 +31,7 @@ export class ContentPrioritizationCreationComponent
   constructor(
     protected contentService: ContentService,
     protected notificationService: NotificationService,
-    protected translationService: TranslateService,
+    protected translationService: TranslocoService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
@@ -91,7 +91,7 @@ export class ContentPrioritizationCreationComponent
         );
         this.resetAnswerInputEvent.emit(true);
       } else {
-        const msg = this.translationService.instant('content.max-answers');
+        const msg = this.translationService.translate('content.max-answers');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -106,7 +106,7 @@ export class ContentPrioritizationCreationComponent
   }
 
   showWarning(translationKey: string) {
-    const msg = this.translationService.instant(translationKey);
+    const msg = this.translationService.translate(translationKey);
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
   }
 
@@ -125,7 +125,7 @@ export class ContentPrioritizationCreationComponent
     if (this.displayAnswers.length >= 2) {
       return true;
     } else {
-      const msg = this.translationService.instant('content.need-answers');
+      const msg = this.translationService.translate('content.need-answers');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }

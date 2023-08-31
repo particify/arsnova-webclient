@@ -13,7 +13,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -37,14 +37,14 @@ export class AbstractLiveFeedbackPage {
     protected wsFeedbackService: WsFeedbackService,
     protected feedbackService: FeedbackService,
     protected roomService: RoomService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute
   ) {}
 
   initData() {
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.route.data.subscribe((data) => {

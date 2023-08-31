@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { DateComponent } from '@app/standalone/date/date.component';
 
 export default {
@@ -8,7 +8,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslateModule.forRoot(), DateComponent],
+      imports: [TranslocoModule, DateComponent],
     }),
   ],
 } as Meta;

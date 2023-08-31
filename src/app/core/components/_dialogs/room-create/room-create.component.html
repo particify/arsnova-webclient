@@ -5,7 +5,7 @@
       [extensionData]="{ userId: auth?.userId, room: newRoom }"
     >
       <mat-form-field appearance="outline" fxFill>
-        <mat-label>{{ 'dialog.room-name' | translate }}</mat-label>
+        <mat-label>{{ 'dialog.room-name' | transloco }}</mat-label>
         <input
           [disabled]="formDisabled"
           (keypress)="resetEmptyInputs()"
@@ -50,7 +50,7 @@
       mat-button
       type="button"
     >
-      {{ 'dialog.cancel' | translate }}
+      {{ 'dialog.cancel' | transloco }}
     </button>
   </div>
 </div>

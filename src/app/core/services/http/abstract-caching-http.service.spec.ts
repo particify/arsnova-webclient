@@ -5,13 +5,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { CachingService } from '@app/core/services/util/caching.service';
 import {
   MockEventService,
   MockNotificationService,
-  MockTranslateService,
+  MockTranslocoService,
 } from '@testing/test-helpers';
 import {
   HttpClientTestingModule,
@@ -37,7 +37,7 @@ class TestCachingHttpService extends AbstractCachingHttpService<object> {
     httpClient: HttpClient,
     protected wsConnector: WsConnectorService,
     eventService: EventService,
-    translateService: TranslateService,
+    translateService: TranslocoService,
     notificationService: NotificationService,
     protected cachingService: CachingService
   ) {
@@ -96,8 +96,8 @@ describe('AbstractCachingHttpService', () => {
           useClass: MockNotificationService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: WsConnectorService,

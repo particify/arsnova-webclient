@@ -1,6 +1,6 @@
 <form>
   <mat-form-field appearance="outline" class="no-field-hint">
-    <mat-label>{{ 'content.answer' | translate }}</mat-label>
+    <mat-label>{{ 'content.answer' | transloco }}</mat-label>
     <textarea
       #answerInput
       (input)="updateTextContainsImage(answerInput.value)"
@@ -25,5 +25,5 @@
 </form>
 
 <div class="visually-hidden">
-  <div id="answer">{{ 'content.a11y-enter-flashcard-answer' | translate }}</div>
+  <div id="answer">{{ 'content.a11y-enter-flashcard-answer' | transloco }}</div>
 </div>

@@ -3,12 +3,11 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FooterComponent } from './footer.component';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockFeatureFlagService,
 } from '@testing/test-helpers';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ConsentService } from '@app/core/services/util/consent.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
@@ -53,13 +52,7 @@ describe('FooterComponent', () => {
         BrowserAnimationsModule,
         ReactiveFormsModule,
         MatMenuModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
         ExtensionPointModule,
         RouterLink,
         RouterTestingModule,

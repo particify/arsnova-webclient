@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RoomJoinComponent } from './room-join.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -9,7 +9,6 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
 } from '@testing/test-helpers';
@@ -64,13 +63,7 @@ describe('RoomJoinComponent', () => {
         MatInputModule,
         MatIconModule,
         FormsModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
         HttpClientTestingModule,
       ],
       providers: [

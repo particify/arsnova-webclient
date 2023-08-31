@@ -6,13 +6,13 @@ import {
   MatSlideToggleChange,
   MatSlideToggleModule,
 } from '@angular/material/slide-toggle';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslocoModule,
     MatSlideToggleModule,
     FormsModule,
     FlexModule,

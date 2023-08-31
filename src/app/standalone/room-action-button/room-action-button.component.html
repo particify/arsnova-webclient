@@ -6,9 +6,9 @@
     class="main-button no-ripple"
     [disableRipple]="true"
     [routerLink]="[url || feature]"
-    [attr.aria-label]="'room-page.a11y-' + feature | translate"
+    [attr.aria-label]="'room-page.a11y-' + feature | transloco"
     [appHotkey]="hotkey"
-    [appHotkeyTitle]="'room-page.' + feature | translate"
+    [appHotkeyTitle]="'room-page.' + feature | transloco"
   >
     <mat-icon
       matBadge="{{ badgeCounter }}"
@@ -18,7 +18,7 @@
       {{ icon }}
     </mat-icon>
     <p class="button-text">
-      {{ 'room-page.' + feature | translate }}
+      {{ 'room-page.' + feature | transloco }}
     </p>
   </button>
 </div>

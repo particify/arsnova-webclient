@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentListAddButtonComponent } from './comment-list-add-button.component';
-import { JsonTranslationLoader } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 describe('CommentListAddButtonComponent', () => {
   let component: CommentListAddButtonComponent;
@@ -10,16 +9,7 @@ describe('CommentListAddButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        CommentListAddButtonComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [CommentListAddButtonComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CommentListAddButtonComponent);

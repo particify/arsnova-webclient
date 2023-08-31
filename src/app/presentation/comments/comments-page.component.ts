@@ -28,7 +28,7 @@ import {
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { takeUntil } from 'rxjs';
 
 @Component({
@@ -46,7 +46,7 @@ export class CommentsPageComponent
 
   constructor(
     protected commentService: CommentService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected dialog: MatDialog,
     protected wsCommentService: WsCommentService,
     protected notificationService: NotificationService,
@@ -127,7 +127,7 @@ export class CommentsPageComponent
 
   registerHotkeys() {
     this.translateService
-      .get(['comment-list.next', 'comment-list.previous'])
+      .selectTranslate(['comment-list.next', 'comment-list.previous'])
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {
@@ -235,7 +235,7 @@ export class CommentsPageComponent
         this.disabled = updatedSettings.disabled;
         this.isLoading = true;
         this.init(true);
-        const msg = this.translateService.instant(
+        const msg = this.translateService.translate(
           'comment-list.q-and-a-enabled'
         );
         this.notificationService.showAdvanced(

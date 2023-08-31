@@ -12,7 +12,7 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
@@ -22,7 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MatIconModule,
     MatTooltipModule,
     FlexModule,
-    TranslateModule,
+    TranslocoModule,
     ListBadgeComponent,
   ],
   selector: 'app-content-groups',

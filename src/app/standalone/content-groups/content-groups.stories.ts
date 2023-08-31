@@ -1,6 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { ContentGroupsComponent } from './content-groups.component';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,7 +16,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        TranslateModule.forRoot(),
+        TranslocoModule,
         ContentGroupsComponent,
         BrowserAnimationsModule,
         RouterTestingModule,

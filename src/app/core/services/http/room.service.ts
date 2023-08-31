@@ -18,7 +18,7 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import {
@@ -52,7 +52,7 @@ export class RoomService extends AbstractEntityService<Room> {
     private authService: AuthenticationService,
     private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     private feedbackService: FeedbackService,
     protected cachingService: CachingService

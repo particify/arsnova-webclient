@@ -3,9 +3,9 @@ import { inject, TestBed } from '@angular/core/testing';
 import { DemoService } from '@app/core/services/demo.service';
 import { Injectable } from '@angular/core';
 import { EventService } from '@app/core/services/util/event.service';
-import { MockEventService, MockTranslateService } from '@testing/test-helpers';
+import { MockEventService, MockTranslocoService } from '@testing/test-helpers';
 import { RoomService } from '@app/core/services/http/room.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 
 @Injectable()
@@ -20,8 +20,8 @@ describe('DemoService', () => {
       providers: [
         DemoService,
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: EventService,

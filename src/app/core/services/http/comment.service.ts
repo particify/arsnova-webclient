@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Comment } from '@app/core/models/comment';
 import { catchError, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { CommentCreated } from '@app/core/models/events/comment-created';
@@ -35,7 +35,7 @@ export class CommentService extends AbstractEntityService<Comment> {
     private http: HttpClient,
     protected ws: WsConnectorService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     cachingService: CachingService,
     protected wsCommentService: WsCommentService
@@ -264,7 +264,7 @@ export class CommentService extends AbstractEntityService<Comment> {
       'comment-export.tag',
     ];
     let keyFields;
-    this.translateService.get(fieldNames).subscribe((msgs) => {
+    this.translateService.selectTranslate(fieldNames).subscribe((msgs) => {
       keyFields = [
         msgs[fieldNames[0]],
         msgs[fieldNames[1]],

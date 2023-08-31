@@ -4,7 +4,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
@@ -21,6 +21,7 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-room-edit',
@@ -43,11 +44,11 @@ export class RoomComponent extends FormComponent implements OnInit {
 
   constructor(
     public notificationService: NotificationService,
-    public translationService: TranslateService,
+    public translationService: TranslocoService,
     protected roomService: RoomService,
     public router: Router,
     public eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     private dialogService: DialogService,
     private route: ActivatedRoute,
     private formattingService: FormattingService,
@@ -71,12 +72,15 @@ export class RoomComponent extends FormComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
-        this.translationService.get('settings.deleted').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            this.editRoom.name + msg,
-            AdvancedSnackBarTypes.WARNING
-          );
-        });
+        this.translationService
+          .selectTranslate('settings.deleted')
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              this.editRoom.name + msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
         const event = new RoomDeleted(this.editRoom.id);
         this.eventService.broadcast(event.type, event.payload);
         this.router.navigateByUrl('user');

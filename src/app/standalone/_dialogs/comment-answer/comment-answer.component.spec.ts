@@ -5,13 +5,12 @@ import { CommentService } from '@app/core/services/http/comment.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
-  JsonTranslationLoader,
   MockAnnounceService,
   MockGlobalStorageService,
   MockMatDialogRef,
   MockNotificationService,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Comment } from '@app/core/models/comment';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -42,13 +41,7 @@ describe('CommentAnswerComponent', () => {
         CommentAnswerComponent,
         CommentComponent,
         CoreModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
         MatTooltipModule,
         BrowserAnimationsModule,
       ],

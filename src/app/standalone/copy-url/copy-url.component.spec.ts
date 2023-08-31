@@ -1,11 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import {
-  JsonTranslationLoader,
-  MockNotificationService,
-} from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MockNotificationService } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { CopyUrlComponent } from './copy-url.component';
 
@@ -15,16 +12,7 @@ describe('CopyRoomUrlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        CopyUrlComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [CopyUrlComponent, getTranslocoModule()],
       providers: [
         {
           provide: NotificationService,

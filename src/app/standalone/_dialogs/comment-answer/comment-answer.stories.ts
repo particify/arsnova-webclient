@@ -1,7 +1,7 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -46,7 +46,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        TranslateModule.forRoot(),
+        TranslocoModule,
         CommentAnswerComponent,
         BrowserAnimationsModule,
       ],

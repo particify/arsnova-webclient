@@ -8,7 +8,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { GroupContentComponent } from '@app/creator/content-list/group-content/group-content.component';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -34,7 +34,7 @@ export class ContentGroupCreationComponent extends FormComponent {
     public dialogRef: MatDialogRef<GroupContentComponent>,
     public dialog: MatDialog,
     private notificationService: NotificationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private contentGroupService: ContentGroupService,
     @Inject(MAT_DIALOG_DATA) private data: DialogData,
     protected formService: FormService
@@ -56,7 +56,7 @@ export class ContentGroupCreationComponent extends FormComponent {
         this.contentGroupService.post(newGroup).subscribe(
           () => {
             this.translateService
-              .get('room-page.content-group-created')
+              .selectTranslate('room-page.content-group-created')
               .subscribe((msg) => {
                 this.notificationService.showAdvanced(
                   msg,
@@ -71,7 +71,7 @@ export class ContentGroupCreationComponent extends FormComponent {
         );
       } else {
         this.translateService
-          .get('content.duplicate-series-name')
+          .selectTranslate('content.duplicate-series-name')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -80,13 +80,15 @@ export class ContentGroupCreationComponent extends FormComponent {
           });
       }
     } else {
-      this.translateService.get('dialog.please-enter-name').subscribe((msg) => {
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-        this.nameInput.nativeElement.focus();
-      });
+      this.translateService
+        .selectTranslate('dialog.please-enter-name')
+        .subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+          this.nameInput.nativeElement.focus();
+        });
     }
   }
 

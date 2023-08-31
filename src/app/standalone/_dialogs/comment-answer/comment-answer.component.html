@@ -25,7 +25,7 @@
       <mat-card class="answer" *ngIf="isEditor || answer">
         <div tabindex="-1" [appAutofocus] class="visually-hidden" appHotkey="1">
           {{
-            'comment-page.a11y-entered-answer' | translate: { answer: answer }
+            'comment-page.a11y-entered-answer' | transloco: { answer: answer }
           }}
         </div>
         <div *ngIf="(!isEditor || !edit) && answer">
@@ -44,7 +44,7 @@
               aria-labelledby="edit"
             >
               <mat-icon>edit</mat-icon>
-              {{ 'comment-page.edit-answer' | translate }}
+              {{ 'comment-page.edit-answer' | transloco }}
             </button>
           </div>
         </div>
@@ -54,7 +54,7 @@
             [dynamicHeight]="true"
             (selectedTabChange)="tabChanged($event)"
           >
-            <mat-tab label="{{ 'comment-page.your-answer' | translate }}">
+            <mat-tab label="{{ 'comment-page.your-answer' | transloco }}">
               <app-formatting-toolbar
                 *ngIf="!renderPreview"
                 class="tab-group-formatting-bar-mobile"
@@ -75,7 +75,7 @@
                   maxlength="500"
                   name="answer"
                   aria-labelledby="answer"
-                  [placeholder]="'comment-page.enter-answer' | translate"
+                  [placeholder]="'comment-page.enter-answer' | transloco"
                   appHotkey="1"
                 >
                 </textarea>
@@ -87,7 +87,7 @@
               </mat-form-field>
             </mat-tab>
             <mat-tab
-              label="{{ 'room.preview' | translate }}"
+              label="{{ 'room.preview' | transloco }}"
               [disabled]="!answer"
             >
               <div class="preview-container">
@@ -116,7 +116,7 @@
             aria-labelledby="delete"
             (click)="deleteAnswer()"
           >
-            {{ 'comment-page.delete-answer' | translate }}
+            {{ 'comment-page.delete-answer' | transloco }}
           </button>
           <app-loading-button
             *ngIf="isEditor && (edit || !answer)"
@@ -129,11 +129,11 @@
   </div>
   <div>
     <div class="visually-hidden">
-      <div id="answer">{{ 'comment-page.a11y-enter-answer' | translate }}</div>
-      <div id="delete">{{ 'comment-page.a11y-delete-answer' | translate }}</div>
-      <div id="submit">{{ 'comment-page.a11y-save-answer' | translate }}</div>
-      <div id="edit">{{ 'comment-page.a11y-edit-answer' | translate }}</div>
-      <div id="exit">{{ 'comment-page.a11y-close' | translate }}</div>
+      <div id="answer">{{ 'comment-page.a11y-enter-answer' | transloco }}</div>
+      <div id="delete">{{ 'comment-page.a11y-delete-answer' | transloco }}</div>
+      <div id="submit">{{ 'comment-page.a11y-save-answer' | transloco }}</div>
+      <div id="edit">{{ 'comment-page.a11y-edit-answer' | transloco }}</div>
+      <div id="exit">{{ 'comment-page.a11y-close' | transloco }}</div>
     </div>
   </div>
 </div>

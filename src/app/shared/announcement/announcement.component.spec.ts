@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DateFormatPipe } from '@app/core/pipes/date-format.pipe';
-import { JsonTranslationLoader } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { AnnouncementComponent } from './announcement.component';
 import { UserAnnouncement } from '@app/core/models/user-announcement';
@@ -14,15 +13,7 @@ describe('AnnouncementComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AnnouncementComponent, DateFormatPipe],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

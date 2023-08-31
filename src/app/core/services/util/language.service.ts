@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { EventEmitter, Inject, Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService, getBrowserLang } from '@ngneat/transloco';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
@@ -29,7 +29,7 @@ export class LanguageService {
   ];
 
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private globalStorageService: GlobalStorageService,
     @Inject(DOCUMENT) private document: Document
   ) {}
@@ -43,7 +43,7 @@ export class LanguageService {
     let key = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     // If no language is stored in storage yet or it's not supported, get browser lang
     if (!key || !this.getLangWithKey(key)) {
-      key = this.translateService.getBrowserLang();
+      key = getBrowserLang();
       const lang = this.getLangWithKey(key);
       // If browser lang is not officially supported, use english as fallback
       if (!lang || lang.category !== LanguageCategory.OFFICIAL) {
@@ -54,7 +54,7 @@ export class LanguageService {
   }
 
   setLang(key: string) {
-    this.translateService.use(key);
+    this.translateService.setActiveLang(key);
     this.globalStorageService.setItem(STORAGE_KEYS.LANGUAGE, key);
     this.document.documentElement.lang = key;
     this.langEmitter.emit(key);

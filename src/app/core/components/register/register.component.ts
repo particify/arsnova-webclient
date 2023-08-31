@@ -5,7 +5,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
@@ -29,7 +29,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
   accountServiceTitle: string;
 
   constructor(
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     public userService: UserService,
     public notificationService: NotificationService,
     public eventService: EventService,
@@ -73,7 +73,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
               state: { data: { username: username, password: password } },
             });
             this.translationService
-              .get('register.register-successful')
+              .selectTranslate('register.register-successful')
               .subscribe((message) => {
                 this.notificationService.showAdvanced(
                   message,
@@ -84,7 +84,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
           () => {
             this.enableForm();
             this.translationService
-              .get('register.register-request-error')
+              .selectTranslate('register.register-request-error')
               .subscribe((message) => {
                 this.notificationService.showAdvanced(
                   message,
@@ -95,7 +95,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
         );
       } else {
         this.translationService
-          .get('register.please-accept')
+          .selectTranslate('register.please-accept')
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -105,7 +105,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
       }
     } else {
       this.translationService
-        .get('register.register-unsuccessful')
+        .selectTranslate('register.register-unsuccessful')
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

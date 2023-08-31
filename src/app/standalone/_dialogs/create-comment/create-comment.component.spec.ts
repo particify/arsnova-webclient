@@ -4,12 +4,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
-  JsonTranslationLoader,
   MockMatDialogRef,
   MockNotificationService,
   MockGlobalStorageService,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -32,13 +31,7 @@ describe('CreateCommentComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         CreateCommentComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
         MatTooltipModule,
         BrowserAnimationsModule,
       ],

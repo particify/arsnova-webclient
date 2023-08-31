@@ -4,7 +4,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ActivatedRoute } from '@angular/router';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
@@ -33,7 +33,7 @@ export class ContentWordcloudCreationComponent
     public eventService: EventService,
     protected contentService: ContentService,
     protected notificationService: NotificationService,
-    protected translationService: TranslateService,
+    protected translationService: TranslocoService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
@@ -66,7 +66,7 @@ export class ContentWordcloudCreationComponent
       (this.content as ContentWordcloud).maxAnswers = this.maxAnswers;
       return true;
     } else {
-      const msg = this.translationService.instant(
+      const msg = this.translationService.translate(
         'content.max-keywords-out-of-range',
         { min: 1, max: MAX_KEYWORDS }
       );

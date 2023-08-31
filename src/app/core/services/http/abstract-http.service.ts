@@ -5,7 +5,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Observable, pipe, throwError } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -46,7 +46,7 @@ export abstract class AbstractHttpService<T> {
     protected uriPrefix: string,
     protected httpClient: HttpClient,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService
   ) {}
 
@@ -112,7 +112,7 @@ export abstract class AbstractHttpService<T> {
           break;
       }
       if (message) {
-        this.translateService.get(message).subscribe((msg) => {
+        this.translateService.selectTranslate(message).subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,
             AdvancedSnackBarTypes.FAILED

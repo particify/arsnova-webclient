@@ -6,7 +6,7 @@ import {
 import { UserService } from '@app/core/services/http/user.service';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
@@ -26,7 +26,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
     public userService: UserService,
     public notificationService: NotificationService,
     public dialogRef: MatDialogRef<UserActivationComponent>,
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     public eventService: EventService,
     protected formService: FormService
   ) {
@@ -40,7 +40,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   login(activationKey: string): void {
     if (activationKey.length < 1) {
       this.translationService
-        .get('user-activation.key-required')
+        .selectTranslate('user-activation.key-required')
         .subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,
@@ -57,7 +57,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
         () => {
           this.enableForm();
           this.translationService
-            .get('user-activation.key-incorrect')
+            .selectTranslate('user-activation.key-incorrect')
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -72,7 +72,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   resetActivation(): void {
     this.userService.resetActivation(this.data.trim()).subscribe(() => {
       this.translationService
-        .get('user-activation.sent-again')
+        .selectTranslate('user-activation.sent-again')
         .subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,

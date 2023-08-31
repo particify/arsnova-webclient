@@ -6,9 +6,9 @@ import { EventService } from '@app/core/services/util/event.service';
 import {
   MockEventService,
   MockNotificationService,
-  MockTranslateService,
+  MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { Injectable } from '@angular/core';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
@@ -29,8 +29,8 @@ describe('FeedbackService', () => {
           useClass: MockEventService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: NotificationService,

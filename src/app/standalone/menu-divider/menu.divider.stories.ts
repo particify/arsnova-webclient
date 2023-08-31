@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { MenuDividerComponent } from '@app/standalone/menu-divider/menu-divider.component';
 
 export default {
@@ -8,7 +8,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslateModule.forRoot(), MenuDividerComponent],
+      imports: [TranslocoModule, MenuDividerComponent],
     }),
   ],
 } as Meta;

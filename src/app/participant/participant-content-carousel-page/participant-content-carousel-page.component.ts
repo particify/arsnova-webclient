@@ -3,7 +3,7 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { ContentGroup } from '@app/core/models/content-group';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { StepperComponent } from '@app/shared/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -74,7 +74,7 @@ export class ParticipantContentCarouselPageComponent
 
   constructor(
     private contentService: ContentService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     private contentgroupService: ContentGroupService,
     protected route: ActivatedRoute,
     private announceService: AnnounceService,
@@ -111,7 +111,7 @@ export class ParticipantContentCarouselPageComponent
       .subscribe((focusModeEnabled) => {
         this.focusModeEnabled = focusModeEnabled;
       });
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     const params = this.route.snapshot.params;
@@ -256,7 +256,7 @@ export class ParticipantContentCarouselPageComponent
           currentContent.state.round = newRound;
           this.answers[this.currentStep] = undefined;
           this.alreadySent.set(this.currentStep, false);
-          const msg = this.translateService.instant(
+          const msg = this.translateService.translate(
             content.state.round === 1
               ? 'content.answers-reset'
               : 'content.new-round-started'
@@ -434,7 +434,7 @@ export class ParticipantContentCarouselPageComponent
           },
           () => {
             this.finishLoading();
-            const msg = this.translateService.instant(
+            const msg = this.translateService.translate(
               'answer.group-not-available'
             );
             this.notificationService.showAdvanced(
@@ -464,10 +464,10 @@ export class ParticipantContentCarouselPageComponent
         } else {
           if (!this.displaySnackBar) {
             this.displaySnackBar = true;
-            const contentsChangedMessage = this.translateService.instant(
+            const contentsChangedMessage = this.translateService.translate(
               'answer.state-changed'
             );
-            const loadString = this.translateService.instant('answer.load');
+            const loadString = this.translateService.translate('answer.load');
             this.notificationService.show(contentsChangedMessage, loadString, {
               duration: 5000,
             });

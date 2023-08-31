@@ -6,7 +6,7 @@
     fxLayoutGap="10px"
   >
     <mat-form-field appearance="outline">
-      <mat-label>{{ 'dialog.content-group-name' | translate }}</mat-label>
+      <mat-label>{{ 'dialog.content-group-name' | transloco }}</mat-label>
       <input
         [disabled]="formDisabled"
         matInput
@@ -17,7 +17,7 @@
         [(ngModel)]="name"
         name="contentGroupName"
         autocomplete="off"
-        [placeholder]="'dialog.content-group-example' | translate"
+        [placeholder]="'dialog.content-group-example' | transloco"
       />
     </mat-form-field>
   </div>
@@ -36,7 +36,7 @@
         mat-button
         type="button"
       >
-        {{ 'dialog.cancel' | translate }}
+        {{ 'dialog.cancel' | transloco }}
       </button>
     </div>
   </div>

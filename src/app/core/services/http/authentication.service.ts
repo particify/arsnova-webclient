@@ -26,7 +26,7 @@ import {
 } from '@app/core/models/client-authentication-result';
 import { EventService } from '@app/core/services/util/event.service';
 import JwtDecode from 'jwt-decode';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -74,7 +74,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     private globalStorageService: GlobalStorageService,
     public eventService: EventService,
     private http: HttpClient,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     private apiConfigService: ApiConfigService,
     private routingService: RoutingService,
@@ -378,7 +378,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     this.routingService.setRedirect(undefined, true);
     this.router.navigateByUrl('login');
     this.translateService
-      .get('login.authentication-expired')
+      .selectTranslate('login.authentication-expired')
       .subscribe((msg) => {
         this.notificationService.showAdvanced(
           msg,

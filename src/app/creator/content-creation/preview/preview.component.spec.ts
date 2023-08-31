@@ -2,8 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PreviewComponent } from './preview.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { JsonTranslationLoader } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { Content } from '@app/core/models/content';
@@ -33,15 +32,7 @@ describe('PreviewComponent', () => {
           useClass: MockLikertScaleService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()

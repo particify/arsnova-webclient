@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { CopyUrlComponent } from '@app/standalone/copy-url/copy-url.component';
 import { NotificationService } from '@app/core/services/util/notification.service';
 
@@ -11,7 +11,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslateModule.forRoot(), CopyUrlComponent],
+      imports: [TranslocoModule, CopyUrlComponent],
       providers: [
         {
           provide: NotificationService,

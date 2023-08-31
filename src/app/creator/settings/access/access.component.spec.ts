@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessComponent } from './access.component';
-import { JsonTranslationLoader, MockEventService } from '@testing/test-helpers';
+import { MockEventService } from '@testing/test-helpers';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { Room } from '@app/core/models/room';
@@ -108,15 +108,7 @@ describe('AccessComponent', () => {
           useValue: mockAccessTokenService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

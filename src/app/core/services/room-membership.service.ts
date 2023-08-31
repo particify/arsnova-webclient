@@ -21,7 +21,7 @@ import {
 import { EventService } from './util/event.service';
 import { Membership } from '@app/core/models/membership';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from './util/notification.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Room } from '@app/core/models/room';
@@ -45,7 +45,7 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
     protected wsConnector: WsConnectorService,
     protected eventService: EventService,
     protected authenticationService: AuthenticationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService
   ) {
     super(

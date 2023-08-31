@@ -1,7 +1,7 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommentListAddButtonComponent } from './comment-list-add-button.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 export default {
   component: CommentListAddButtonComponent,
@@ -10,7 +10,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        TranslateModule.forRoot(),
+        TranslocoModule,
         CommentListAddButtonComponent,
         BrowserAnimationsModule,
       ],

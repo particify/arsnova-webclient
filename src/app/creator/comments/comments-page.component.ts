@@ -15,7 +15,7 @@ import {
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
 import { Observable, takeUntil } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -36,7 +36,7 @@ export class CommentsPageComponent
 
   constructor(
     protected commentService: CommentService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected dialog: MatDialog,
     protected wsCommentService: WsCommentService,
     protected notificationService: NotificationService,
@@ -220,7 +220,7 @@ export class CommentsPageComponent
         this.disabled = updatedSettings.disabled;
         this.isLoading = true;
         this.init(true);
-        const msg = this.translateService.instant(
+        const msg = this.translateService.translate(
           'comment-list.q-and-a-enabled'
         );
         this.notificationService.showAdvanced(

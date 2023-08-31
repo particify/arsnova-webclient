@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Injectable()
 export class AnnounceService {
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private liveAnnouncer: LiveAnnouncer
   ) {}
 
   announce(key: string, args?: object) {
-    this.translateService.get(key, args).subscribe((msg) => {
+    this.translateService.selectTranslate(key, args).subscribe((msg) => {
       this.liveAnnouncer.clear();
       this.liveAnnouncer.announce(msg, 'assertive');
     });

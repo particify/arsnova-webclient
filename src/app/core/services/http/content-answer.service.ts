@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { Answer } from '@app/core/models/answer';
@@ -29,7 +29,7 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     private http: HttpClient,
     protected ws: WsConnectorService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     cachingService: CachingService
   ) {

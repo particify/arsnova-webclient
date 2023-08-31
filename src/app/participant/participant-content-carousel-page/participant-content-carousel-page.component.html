@@ -26,7 +26,7 @@
           *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
           appHotkey="1"
           [appHotkeyDisabled]="currentStep !== i"
-          [appHotkeyTitle]="'content.description' | translate"
+          [appHotkeyTitle]="'content.description' | transloco"
         >
           <app-loading-indicator
             *ngIf="isReloadingCurrentContent"
@@ -58,7 +58,7 @@
     <span
       *ngIf="!isLoading && !isReloading && contents.length === 0"
       class="hint"
-      >{{ 'answer.no-contents-published' | translate }}</span
+      >{{ 'answer.no-contents-published' | transloco }}</span
     >
   </div>
 </div>

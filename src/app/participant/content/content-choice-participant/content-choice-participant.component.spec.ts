@@ -6,8 +6,7 @@ import {
   Router,
 } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { JsonTranslationLoader } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
   MockGlobalStorageService,
@@ -49,15 +48,7 @@ describe('ContentChoiceParticipantComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ContentChoiceParticipantComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: ContentAnswerService,

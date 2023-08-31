@@ -15,7 +15,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
 import { takeUntil } from 'rxjs/operators';
 import { ThemeService } from '@app/core/theme/theme.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Combination } from '@app/core/models/round-statistics';
 import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -54,7 +54,7 @@ export class StatisticSortComponent
   constructor(
     protected contentService: ContentService,
     private themeService: ThemeService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     protected eventService: EventService,
     private presentationService: PresentationService,
     private contentAnswerService: ContentAnswerService
@@ -131,12 +131,14 @@ export class StatisticSortComponent
         );
       } else {
         this.labels.push(
-          this.translateService.instant('statistic.other-combinations')
+          this.translateService.translate('statistic.other-combinations')
         );
       }
     }
     if (this.content.abstentionsAllowed) {
-      this.labels.push(this.translateService.instant('statistic.abstentions'));
+      this.labels.push(
+        this.translateService.translate('statistic.abstentions')
+      );
     }
   }
 

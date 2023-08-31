@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -52,7 +52,7 @@ export class ContentCreationPageComponent
   created = false;
 
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
@@ -99,7 +99,7 @@ export class ContentCreationPageComponent
         this.isLoading = false;
       }
     });
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
   }

@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { Announcement } from '@app/core/models/announcement';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -40,7 +40,7 @@ export class AnnouncementSettingsComponent
   UserRole = UserRole;
 
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private notificationService: NotificationService,
     private announcementService: AnnouncementService,
     private dialogService: DialogService,
@@ -73,7 +73,7 @@ export class AnnouncementSettingsComponent
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
-        const msg = this.translateService.instant('announcement.deleted');
+        const msg = this.translateService.translate('announcement.deleted');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -91,7 +91,7 @@ export class AnnouncementSettingsComponent
 
   save() {
     if (!this.title || !this.body) {
-      const msg = this.translateService.instant('announcement.missing-input');
+      const msg = this.translateService.translate('announcement.missing-input');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
@@ -105,7 +105,7 @@ export class AnnouncementSettingsComponent
               .map((a) => a.id)
               .indexOf(announcement.id);
             this.announcements[index] = announcement;
-            const msg = this.translateService.instant(
+            const msg = this.translateService.translate(
               'announcement.changes-saved'
             );
             this.notificationService.showAdvanced(
@@ -126,7 +126,7 @@ export class AnnouncementSettingsComponent
         .subscribe(
           (announcement) => {
             this.announcements.unshift(announcement);
-            const msg = this.translateService.instant('announcement.created');
+            const msg = this.translateService.translate('announcement.created');
             this.notificationService.showAdvanced(
               msg,
               AdvancedSnackBarTypes.SUCCESS

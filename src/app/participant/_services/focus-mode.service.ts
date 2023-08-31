@@ -12,7 +12,7 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
 import { EventService } from '@app/core/services/util/event.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -40,7 +40,7 @@ export class FocusModeService extends AbstractFocusModeService {
     protected eventService: EventService,
     private router: Router,
     private routingService: RoutingService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private notificationService: NotificationService
   ) {
     super(wsConnector, http, eventService, featureFlagService);
@@ -70,7 +70,7 @@ export class FocusModeService extends AbstractFocusModeService {
         if (focusModeEnabled) {
           this.evaluateNewState();
         } else {
-          const msg = this.translateService.instant('focus-mode.stopped');
+          const msg = this.translateService.translate('focus-mode.stopped');
           this.notificationService.showAdvanced(
             msg,
             AdvancedSnackBarTypes.INFO

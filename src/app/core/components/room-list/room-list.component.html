@@ -21,10 +21,10 @@
             (click)="openCreateRoomDialog()"
             id="create-room-button"
             appHotkey="2"
-            [appHotkeyTitle]="'home-page.create-room' | translate"
+            [appHotkeyTitle]="'home-page.create-room' | transloco"
           >
             <mat-icon class="add-icon">add</mat-icon>
-            <span>{{ 'home-page.create-room' | translate }}</span>
+            <span>{{ 'home-page.create-room' | transloco }}</span>
           </button>
           <button
             *ngIf="showImportMenu"
@@ -33,7 +33,7 @@
             aria-labelledby="import-options"
           >
             <mat-icon class="add-icon">file_upload</mat-icon>
-            <span>{{ 'room-list.import' | translate }}</span>
+            <span>{{ 'room-list.import' | transloco }}</span>
           </button>
         </div>
         <div
@@ -48,7 +48,7 @@
             [ngClass]="{ 'full-width-search': !showImportMenu }"
             #search
             (keyup)="filterRooms(search.value)"
-            placeholder="{{ 'room-list.filter-message' | translate }}"
+            placeholder="{{ 'room-list.filter-message' | transloco }}"
             aria-labelledby="filter-rooms"
           />
         </div>
@@ -69,7 +69,7 @@
           (click)="getGuestRooms()"
         >
           <mat-icon color="primary">swap_horiz</mat-icon>
-          <span>{{ 'room-list.rooms-from-guest' | translate }}</span>
+          <span>{{ 'room-list.rooms-from-guest' | transloco }}</span>
         </button>
         <lib-extension-point extensionId="import-token"></lib-extension-point>
       </mat-menu>
@@ -85,9 +85,9 @@
         <h3 class="hint">
           {{
             rooms.length === 0
-              ? ('room-list.no-rooms' | translate)
+              ? ('room-list.no-rooms' | transloco)
               : ('room-list.a11y-list-summary'
-                | translate: { count: rooms.length })
+                | transloco: { count: rooms.length })
           }}
         </h3>
       </div>
@@ -96,14 +96,14 @@
         fxLayout="column"
         fxLayoutAlign="center center"
       >
-        <h3 class="hint">{{ 'room-list.no-rooms-found' | translate }}</h3>
+        <h3 class="hint">{{ 'room-list.no-rooms-found' | transloco }}</h3>
         <button
           mat-stroked-button
           color="primary"
           class="alt-button"
           routerLink=""
         >
-          {{ 'room-list.join-room' | translate }}
+          {{ 'room-list.join-room' | transloco }}
         </button>
       </div>
       <mat-action-list *ngIf="rooms.length > 0">
@@ -124,7 +124,7 @@
               class="inner container"
               attr.aria-label="{{
                 'room-list.a11y-join-room'
-                  | translate
+                  | transloco
                     : {
                         room: room.summary.name,
                         id: room.summary.shortId,
@@ -146,11 +146,11 @@
                   class="active-label primary"
                   [matTooltip]="
                     'room-list.active-info'
-                      | translate
+                      | transloco
                         : { userCount: room.summary.stats.roomUserCount }
                   "
                 >
-                  <span>{{ 'room-list.active' | translate }}</span>
+                  <span>{{ 'room-list.active' | transloco }}</span>
                 </div>
                 <app-list-badge
                   *ngIf="room.summary.stats.ackCommentCount"
@@ -162,16 +162,16 @@
                 <mat-icon
                   mat-list-icon
                   *ngSwitchCase="creatorRole"
-                  matTooltip="{{ 'room-list.creator-role' | translate }}"
-                  title="{{ 'room-list.creator-role' | translate }}"
+                  matTooltip="{{ 'room-list.creator-role' | transloco }}"
+                  title="{{ 'room-list.creator-role' | transloco }}"
                 >
                   record_voice_over
                 </mat-icon>
                 <mat-icon
                   mat-list-icon
                   *ngSwitchCase="participantRole"
-                  matTooltip="{{ 'room-list.participant-role' | translate }}"
-                  title="{{ 'room-list.participant-role' | translate }}"
+                  matTooltip="{{ 'room-list.participant-role' | transloco }}"
+                  title="{{ 'room-list.participant-role' | transloco }}"
                 >
                   people
                 </mat-icon>
@@ -179,17 +179,17 @@
                   mat-list-icon
                   *ngSwitchCase="executiveModeratorRole"
                   matTooltip="{{
-                    'room-list.executive-moderator-role' | translate
+                    'room-list.executive-moderator-role' | transloco
                   }}"
-                  title="{{ 'room-list.executive-moderator-role' | translate }}"
+                  title="{{ 'room-list.executive-moderator-role' | transloco }}"
                 >
                   gavel
                 </mat-icon>
                 <mat-icon
                   mat-list-icon
                   *ngSwitchCase="editorRole"
-                  matTooltip="{{ 'room-list.editor-role' | translate }}"
-                  title="{{ 'room-list.editor-role' | translate }}"
+                  matTooltip="{{ 'room-list.editor-role' | transloco }}"
+                  title="{{ 'room-list.editor-role' | transloco }}"
                 >
                   edit
                 </mat-icon>
@@ -202,7 +202,7 @@
                 (click)="$event.stopPropagation()"
                 [matMenuTriggerFor]="moreActions"
                 aria-labelledby="more-options"
-                matTooltip="{{ 'room-list.more-options' | translate }}"
+                matTooltip="{{ 'room-list.more-options' | transloco }}"
               >
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -217,7 +217,7 @@
                   (click)="navToSettings(room.summary.shortId)"
                 >
                   <mat-icon>settings</mat-icon>
-                  <span> {{ 'room-list.room-settings' | translate }}</span>
+                  <span> {{ 'room-list.room-settings' | transloco }}</span>
                 </button>
                 <button
                   mat-menu-item
@@ -225,7 +225,7 @@
                   (click)="duplicateRoom(room.summary.id, room.summary.name)"
                 >
                   <mat-icon>dynamic_feed</mat-icon>
-                  <span> {{ 'room-list.duplicate-room' | translate }}</span>
+                  <span> {{ 'room-list.duplicate-room' | transloco }}</span>
                 </button>
                 <button mat-menu-item (click)="openDeleteRoomDialog(room)">
                   <mat-icon color="warn">delete_forever</mat-icon>
@@ -234,7 +234,7 @@
                       (room.membership.primaryRole !== creatorRole
                         ? 'room-list.panel-remove-room'
                         : 'room-list.panel-delete-room'
-                      ) | translate
+                      ) | transloco
                     }}</span
                   >
                 </button>
@@ -252,12 +252,12 @@
     class="account-memberships"
   >
     <div fxLayout="row" fxLayoutAlign="space-between">
-      <h3>{{ 'room-list.rooms-from-guest' | translate }}</h3>
+      <h3>{{ 'room-list.rooms-from-guest' | transloco }}</h3>
       <button mat-stroked-button (click)="showRoomsFromGuest = false">
-        {{ 'room-list.hide-guest-rooms' | translate }}
+        {{ 'room-list.hide-guest-rooms' | transloco }}
       </button>
     </div>
-    <p>{{ 'room-list.transfer-rooms-from-guest' | translate }}</p>
+    <p>{{ 'room-list.transfer-rooms-from-guest' | transloco }}</p>
     <mat-card-content>
       <mat-list class="rooms-from-guest" *ngIf="roomsFromGuest">
         <ng-container
@@ -294,8 +294,8 @@
                   mat-list-icon
                   *ngSwitchCase="creatorRole"
                   class="role"
-                  matTooltip="{{ 'room-list.creator-role' | translate }}"
-                  title="{{ 'room-list.creator-role' | translate }}"
+                  matTooltip="{{ 'room-list.creator-role' | transloco }}"
+                  title="{{ 'room-list.creator-role' | transloco }}"
                 >
                   record_voice_over
                 </mat-icon>
@@ -303,8 +303,8 @@
                   mat-list-icon
                   *ngSwitchCase="participantRole"
                   class="role"
-                  matTooltip="{{ 'room-list.participant-role' | translate }}"
-                  title="{{ 'room-list.participant-role' | translate }}"
+                  matTooltip="{{ 'room-list.participant-role' | transloco }}"
+                  title="{{ 'room-list.participant-role' | transloco }}"
                 >
                   people
                 </mat-icon>
@@ -313,9 +313,9 @@
                   *ngSwitchCase="executiveModeratorRole"
                   class="role"
                   matTooltip="{{
-                    'room-list.executive-moderator-role' | translate
+                    'room-list.executive-moderator-role' | transloco
                   }}"
-                  title="{{ 'room-list.executive-moderator-role' | translate }}"
+                  title="{{ 'room-list.executive-moderator-role' | transloco }}"
                 >
                   gavel
                 </mat-icon>
@@ -330,7 +330,7 @@
                   appTrackName="owner"
                 >
                   <mat-icon>swap_horiz</mat-icon>
-                  {{ 'room-list.transfer' | translate }}
+                  {{ 'room-list.transfer' | transloco }}
                 </button>
                 <button
                   mat-button
@@ -341,7 +341,7 @@
                   appTrackName="participant"
                 >
                   <mat-icon>add</mat-icon>
-                  {{ 'room-list.add' | translate }}
+                  {{ 'room-list.add' | transloco }}
                 </button>
               </div>
             </div>
@@ -353,9 +353,9 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="filter-rooms">{{ 'room-list.filter' | translate }}</div>
+  <div id="filter-rooms">{{ 'room-list.filter' | transloco }}</div>
   <div id="import-options">
-    {{ 'room-list.a11y-import-options' | translate }}
+    {{ 'room-list.a11y-import-options' | transloco }}
   </div>
-  <div id="more-options">{{ 'room-list.a11y-more-options' | translate }}</div>
+  <div id="more-options">{{ 'room-list.a11y-more-options' | transloco }}</div>
 </div>

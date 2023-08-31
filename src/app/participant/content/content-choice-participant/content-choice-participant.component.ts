@@ -7,7 +7,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
@@ -41,7 +41,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   constructor(
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
@@ -170,7 +170,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     if (selectedAnswers.length === 0) {
       if (this.content.multiple) {
         this.translateService
-          .get('answer.at-least-one')
+          .selectTranslate('answer.at-least-one')
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -178,12 +178,14 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
             );
           });
       } else {
-        this.translateService.get('answer.please-one').subscribe((message) => {
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.WARNING
-          );
-        });
+        this.translateService
+          .selectTranslate('answer.please-one')
+          .subscribe((message) => {
+            this.notificationService.showAdvanced(
+              message,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
       }
       return;
     }
@@ -198,12 +200,14 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       .subscribe((answer) => {
         this.answer = answer;
         this.getCorrectAnswerOptions();
-        this.translateService.get('answer.sent').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
+        this.translateService
+          .selectTranslate('answer.sent')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
         this.sendStatusToParent(answer);
       }),
       () => {

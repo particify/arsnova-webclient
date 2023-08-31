@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
@@ -27,7 +27,7 @@ export class RequestPasswordResetComponent
   username: string;
 
   constructor(
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     private userService: UserService,
     private notificationService: NotificationService,
     public eventService: EventService,
@@ -65,7 +65,7 @@ export class RequestPasswordResetComponent
       this.userService.setNewPassword(this.username).subscribe(
         () => {
           this.translationService
-            .get('password-reset.reset-successful')
+            .selectTranslate('password-reset.reset-successful')
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -77,7 +77,7 @@ export class RequestPasswordResetComponent
         () => {
           this.enableForm();
           this.translationService
-            .get('password-reset.request-failed')
+            .selectTranslate('password-reset.request-failed')
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -88,7 +88,7 @@ export class RequestPasswordResetComponent
       );
     } else {
       this.translationService
-        .get('login.input-incorrect')
+        .selectTranslate('login.input-incorrect')
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

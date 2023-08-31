@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { LanguageService } from '@app/core/services/util/language.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -10,7 +10,7 @@ import {
 describe('LanguageService', () => {
   let langService: LanguageService;
 
-  const translateService = jasmine.createSpyObj('TranslateService', [
+  const translateService = jasmine.createSpyObj('TranslocoService', [
     'setDefaultLang',
     'getBrowserLang',
     'use',
@@ -26,7 +26,7 @@ describe('LanguageService', () => {
       providers: [
         LanguageService,
         {
-          provide: TranslateService,
+          provide: TranslocoService,
           useValue: translateService,
         },
         {

@@ -10,7 +10,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ModeratorService } from '@app/core/services/http/moderator.service';
 import { Moderator } from '@app/core/models/moderator';
 import { UntypedFormControl, Validators } from '@angular/forms';
@@ -66,7 +66,7 @@ export class AccessComponent
   constructor(
     private dialogService: DialogService,
     public notificationService: NotificationService,
-    public translationService: TranslateService,
+    public translationService: TranslocoService,
     protected moderatorService: ModeratorService,
     protected userService: UserService,
     public eventService: EventService,
@@ -132,9 +132,11 @@ export class AccessComponent
             );
           });
           if (this.isGuest) {
-            this.translationService.get('settings.you').subscribe((msg) => {
-              this.moderators[0].loginId = msg;
-            });
+            this.translationService
+              .selectTranslate('settings.you')
+              .subscribe((msg) => {
+                this.moderators[0].loginId = msg;
+              });
           }
           this.moderators = this.moderators.sort((a) => {
             return a.role === UserRole.OWNER ? -1 : 1;
@@ -155,7 +157,9 @@ export class AccessComponent
           this.addModerator();
         }
       } else if (!this.loginIdIsEmail) {
-        const msg = this.translationService.instant('settings.user-not-found');
+        const msg = this.translationService.translate(
+          'settings.user-not-found'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.FAILED
@@ -178,7 +182,7 @@ export class AccessComponent
           this.moderators.push(
             new Moderator(this.newModeratorId, this.loginId, this.selectedRole)
           );
-          const msg = this.translationService.instant('settings.user-added');
+          const msg = this.translationService.translate('settings.user-added');
           this.notificationService.showAdvanced(
             msg,
             AdvancedSnackBarTypes.SUCCESS
@@ -195,7 +199,7 @@ export class AccessComponent
     this.accessTokenService
       .invite(this.room.id, this.selectedRole, this.loginId)
       .subscribe(() => {
-        const msg = this.translationService.instant('settings.user-invited');
+        const msg = this.translationService.translate('settings.user-invited');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.SUCCESS
@@ -215,7 +219,7 @@ export class AccessComponent
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'remove') {
         this.saveEvent.emit(new UpdateEvent(null, false, true));
-        const msg = this.translationService.instant('settings.user-removed');
+        const msg = this.translationService.translate('settings.user-removed');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING

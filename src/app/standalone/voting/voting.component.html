@@ -13,7 +13,7 @@
       (currentVote === 1
         ? 'comment-page.withdraw-upvote'
         : 'comment-page.vote-up'
-      ) | translate
+      ) | transloco
     "
   >
     <mat-icon class="voting-icon" [ngClass]="{ green: currentVote === 1 }"
@@ -28,7 +28,7 @@
       (currentVote === -1
         ? 'comment-page.withdraw-downvote'
         : 'comment-page.vote-down'
-      ) | translate
+      ) | transloco
     "
   >
     <mat-icon class="voting-icon" [ngClass]="{ red: currentVote === -1 }"

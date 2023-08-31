@@ -5,14 +5,10 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import {
-  MockRouter,
-  ActivatedRouteStub,
-  JsonTranslationLoader,
-} from '@testing/test-helpers';
+import { MockRouter, ActivatedRouteStub } from '@testing/test-helpers';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { Room } from '@app/core/models/room';
 import { of } from 'rxjs';
 import { RoomStats } from '@app/core/models/room-stats';
@@ -42,15 +38,7 @@ describe('StatisticsPageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [StatisticsPageComponent, A11yIntroPipe],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: RoomStatsService,

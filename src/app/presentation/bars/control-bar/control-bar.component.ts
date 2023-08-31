@@ -28,7 +28,7 @@ import { Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
@@ -161,7 +161,7 @@ export class ControlBarComponent
     protected focusModeService: FocusModeService,
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private contentService: ContentService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
@@ -542,7 +542,7 @@ export class ControlBarComponent
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'publish') {
-        const msg = this.translateService.instant('content.group-published');
+        const msg = this.translateService.translate('content.group-published');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.SUCCESS
@@ -602,7 +602,7 @@ export class ControlBarComponent
     };
     this.generalItems.forEach((item) =>
       this.translateService
-        .get('control-bar.' + item.name)
+        .selectTranslate('control-bar.' + item.name)
         .pipe(
           map(
             (t) =>

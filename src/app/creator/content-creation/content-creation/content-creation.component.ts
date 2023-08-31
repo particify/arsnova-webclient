@@ -11,7 +11,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Content } from '@app/core/models/content';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -66,7 +66,7 @@ export class ContentCreationComponent
   constructor(
     protected contentService: ContentService,
     protected notificationService: NotificationService,
-    protected translationService: TranslateService,
+    protected translationService: TranslocoService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
@@ -109,15 +109,17 @@ export class ContentCreationComponent
   }
 
   initTemplateAnswers() {
-    this.translationService.get(this.answerLabels).subscribe((msgs) => {
-      for (let i = 0; i < this.answerLabels.length; i++) {
-        (this.content as ContentChoice).options.push(
-          new AnswerOption(msgs[this.answerLabels[i]])
-        );
-      }
-      this.fillCorrectAnswers();
-      this.isLoading = false;
-    });
+    this.translationService
+      .selectTranslate(this.answerLabels)
+      .subscribe((msgs) => {
+        for (let i = 0; i < this.answerLabels.length; i++) {
+          (this.content as ContentChoice).options.push(
+            new AnswerOption(msgs[this.answerLabels[i]])
+          );
+        }
+        this.fillCorrectAnswers();
+        this.isLoading = false;
+      });
   }
 
   initContentForEditing() {
@@ -163,12 +165,14 @@ export class ContentCreationComponent
     this.content.body = this.contentBody;
     this.content.abstentionsAllowed = this.abstentionsAllowed;
     if (this.contentBody === '') {
-      this.translationService.get('content.no-empty').subscribe((message) => {
-        this.notificationService.showAdvanced(
-          message,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
+      this.translationService
+        .selectTranslate('content.no-empty')
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
       return false;
     }
     return true;
@@ -192,7 +196,7 @@ export class ContentCreationComponent
   afterAnswerDeletion() {
     this.announceService.announce('content.a11y-answer-deleted');
     this.translationService
-      .get('content.answer-deleted')
+      .selectTranslate('content.answer-deleted')
       .subscribe((message) => {
         this.notificationService.showAdvanced(
           message,
@@ -205,7 +209,7 @@ export class ContentCreationComponent
     if (
       this.displayAnswers.map((o) => o.answerOption.label).indexOf(label) >= 0
     ) {
-      const msg = this.translationService.instant('content.same-answer');
+      const msg = this.translationService.translate('content.same-answer');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return true;
     } else {
@@ -230,7 +234,7 @@ export class ContentCreationComponent
       const labels = answerLabels.map((a) => a.label);
       if (labels.includes('')) {
         this.translationService
-          .get('content.no-empty2')
+          .selectTranslate('content.no-empty2')
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -239,7 +243,7 @@ export class ContentCreationComponent
           });
         valid = false;
       } else if (this.checkForDuplicates(labels)) {
-        const msg = this.translationService.instant('content.same-answer');
+        const msg = this.translationService.translate('content.same-answer');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -272,12 +276,14 @@ export class ContentCreationComponent
       (this.content as ContentChoice).correctOptionIndexes = [];
       this.fillCorrectAnswers();
     }
-    this.translationService.get('content.submitted').subscribe((message) => {
-      this.notificationService.showAdvanced(
-        message,
-        AdvancedSnackBarTypes.SUCCESS
-      );
-    });
+    this.translationService
+      .selectTranslate('content.submitted')
+      .subscribe((message) => {
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      });
     this.resetAnswers();
   }
 
@@ -311,7 +317,7 @@ export class ContentCreationComponent
           this.content = updateContent;
           window.history.back();
           this.translationService
-            .get('content.changes-made')
+            .selectTranslate('content.changes-made')
             .subscribe((message) => {
               this.notificationService.showAdvanced(
                 message,

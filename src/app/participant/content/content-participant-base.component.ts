@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
@@ -27,7 +27,7 @@ export abstract class ContentParticipantBaseComponent
 
   protected constructor(
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
@@ -37,7 +37,7 @@ export abstract class ContentParticipantBaseComponent
   }
 
   ngOnInit() {
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.init();

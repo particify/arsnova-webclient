@@ -24,22 +24,22 @@
         (click)="changeType()"
         aria-labelledby="change-type"
         [appHotkey]="changeKey"
-        [appHotkeyTitle]="'survey.change-type' | translate"
+        [appHotkeyTitle]="'survey.change-type' | transloco"
         [appHotkeyAction]="HotkeyAction.FOCUS"
         appTrackInteraction="Survey type toggled"
         [appTrackName]="type.toLowerCase()"
         appDisableForm
       >
-        {{ 'survey.change-type' | translate }}
+        {{ 'survey.change-type' | transloco }}
       </button>
       <ng-template #noSwitching>
         <div
           tabindex="-1"
           class="visually-hidden"
           [appHotkey]="changeKey"
-          [appHotkeyTitle]="'survey.change-type' | translate"
+          [appHotkeyTitle]="'survey.change-type' | transloco"
         >
-          {{ 'survey.a11y-first-stop-survey' | translate }}
+          {{ 'survey.a11y-first-stop-survey' | transloco }}
         </div>
       </ng-template>
     </div>
@@ -61,7 +61,7 @@
       (clicked)="toggle()"
       [useDirectives]="true"
       [hotkey]="toggleKey"
-      [hotkeyTitle]="(isClosed ? 'survey.start' : 'survey.stop') | translate"
+      [hotkeyTitle]="(isClosed ? 'survey.start' : 'survey.stop') | transloco"
       [hotkeyAction]="HotkeyAction.FOCUS"
       trackInteraction="Survey toggled"
       [trackName]="isClosed ? 'on' : 'off'"

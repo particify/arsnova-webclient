@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
 import {
@@ -50,7 +50,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     protected commentService: CommentService,
     private dialogService: DialogService,
     public dialogRef: MatDialogRef<CommentAnswerComponent>,
@@ -78,7 +78,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
     this.commentService.answer(this.comment, this.answer).subscribe(
       () => {
         this.translateService
-          .get('comment-page.comment-answered')
+          .selectTranslate('comment-page.comment-answered')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -105,7 +105,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
         this.answer = '';
-        const msg = this.translateService.instant(
+        const msg = this.translateService.translate(
           'comment-page.answer-deleted'
         );
         this.notificationService.showAdvanced(

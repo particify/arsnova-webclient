@@ -2,9 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomListComponent } from './room-list.component';
 import { Router } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  JsonTranslationLoader,
   MockNotificationService,
   MockGlobalStorageService,
   MockFeatureFlagService,
@@ -70,16 +69,7 @@ describe('RoomListComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [RoomListComponent, SplitShortIdPipe],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-        MatMenuModule,
-      ],
+      imports: [getTranslocoModule(), MatMenuModule],
       providers: [
         {
           provide: RoomService,

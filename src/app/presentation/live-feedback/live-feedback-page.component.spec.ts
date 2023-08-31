@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LiveFeedbackPageComponent } from './live-feedback-page.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockAnnounceService,
   MockGlobalStorageService,
   MockNotificationService,
@@ -74,17 +73,7 @@ describe('LiveFeedbackPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LiveFeedbackPageComponent],
-      imports: [
-        CoreModule,
-        LoadingIndicatorComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [CoreModule, LoadingIndicatorComponent, getTranslocoModule()],
       providers: [
         {
           provide: NotificationService,

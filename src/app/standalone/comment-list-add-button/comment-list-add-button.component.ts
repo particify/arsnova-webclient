@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 
 @Component({
@@ -11,7 +11,7 @@ import { ExtensionPointModule } from '@projects/extension-point/src/lib/extensio
   imports: [
     CommonModule,
     FlexModule,
-    TranslateModule,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     ExtensionPointModule,

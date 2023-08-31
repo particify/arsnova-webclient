@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LanguageService } from '@app/core/services/util/language.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-creator-page',
@@ -9,11 +9,11 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class CreatorPageComponent {
   constructor(
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected langService: LanguageService
   ) {
     langService.langEmitter.subscribe((lang) => {
-      translateService.use(lang);
+      translateService.setActiveLang(lang);
     });
   }
 }

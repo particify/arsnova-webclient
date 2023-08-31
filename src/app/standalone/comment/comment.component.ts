@@ -12,7 +12,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { LanguageService } from '@app/core/services/util/language.service';
 import {
   animate,
@@ -77,7 +77,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   constructor(
     private commentService: CommentService,
     private notification: NotificationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private dialogService: DialogService,
     protected langService: LanguageService,
     private announceService: AnnounceService,
@@ -91,7 +91,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.language = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
-    this.translateService.use(this.language);
+    this.translateService.setActiveLang(this.language);
     this.extensionData = {
       roomId: this.comment.roomId,
       refId: this.comment.id,
@@ -158,7 +158,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
         this.translateService
-          .get('comment-list.comment-deleted')
+          .selectTranslate('comment-list.comment-deleted')
           .subscribe((msg) => {
             this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
           });
@@ -171,7 +171,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       .toggleAck(this.comment)
       .subscribe((updatedComment) => (this.comment = updatedComment));
     this.translateService
-      .get(
+      .selectTranslate(
         this.comment.ack
           ? 'comment-page.a11y-rejected'
           : 'comment-page.a11y-banned'

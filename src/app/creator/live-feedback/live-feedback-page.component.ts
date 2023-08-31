@@ -14,7 +14,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
 import { takeUntil } from 'rxjs';
 
@@ -37,7 +37,7 @@ export class LiveFeedbackPageComponent
     protected wsFeedbackService: WsFeedbackService,
     protected feedbackService: FeedbackService,
     protected roomService: RoomService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
@@ -85,7 +85,7 @@ export class LiveFeedbackPageComponent
         (room) => {
           this.loadConfig(room);
           const state = this.isClosed ? 'stopped' : 'started';
-          const msg = this.translateService.instant('survey.' + state);
+          const msg = this.translateService.translate('survey.' + state);
           this.notificationService.showAdvanced(
             msg,
             !this.isClosed
@@ -105,7 +105,7 @@ export class LiveFeedbackPageComponent
   }
 
   private announceType() {
-    const type = this.translateService.instant(
+    const type = this.translateService.translate(
       'survey.a11y-type-' + this.type.toLowerCase()
     );
     this.announceService.announce('survey.a11y-selected-type', {

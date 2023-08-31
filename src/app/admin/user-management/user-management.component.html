@@ -7,7 +7,7 @@
 </app-admin-page-header>
 
 <app-search-bar
-  label="{{ 'admin-area.search-account-with-id' | translate }}"
+  label="{{ 'admin-area.search-account-with-id' | transloco }}"
   [results]="searchResults"
   (inputChanged)="search($event)"
   (inputCleared)="clear()"
@@ -25,7 +25,7 @@
   <div fxLayoutAlign="space-between">
     <button mat-stroked-button color="warn" (click)="deleteEntity()">
       <mat-icon>delete</mat-icon>
-      {{ 'admin-area.delete-user' | translate }}
+      {{ 'admin-area.delete-user' | transloco }}
     </button>
     <app-loading-button
       name="admin-area.activate-user"

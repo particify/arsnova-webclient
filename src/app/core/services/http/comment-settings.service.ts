@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { catchError, map, shareReplay, tap } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
@@ -23,7 +23,7 @@ export class CommentSettingsService extends AbstractCachingHttpService<CommentSe
     private http: HttpClient,
     protected wsConnectorService: WsConnectorService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     protected cachingService: CachingService,
     protected wsCommentService: WsCommentService,

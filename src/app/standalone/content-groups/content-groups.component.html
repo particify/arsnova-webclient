@@ -9,11 +9,11 @@
   (click)="viewContents()"
   attr.aria-label="{{
     'room-page.a11y-enter-content-group'
-      | translate
+      | transloco
         : {
             name: contentGroupName,
             locked:
-              'room-page.' + (isLocked ? 'locked' : 'unlocked') | translate
+              'room-page.' + (isLocked ? 'locked' : 'unlocked') | transloco
           }
   }}"
   (keyup.enter)="viewContents()"
@@ -27,7 +27,7 @@
     <mat-icon
       *ngIf="isLocked"
       class="locked"
-      [matTooltip]="'room-page.group-locked' | translate"
+      [matTooltip]="'room-page.group-locked' | transloco"
       >locked</mat-icon
     >
   </div>

@@ -8,7 +8,7 @@
       matInput
       [disabled]="disabled"
       [(ngModel)]="words[i]"
-      placeholder="{{ ('answer.word' | translate) + ' ' + (i + 1) }}"
+      placeholder="{{ ('answer.word' | transloco) + ' ' + (i + 1) }}"
       [disabled]="!!givenAnswer"
       [maxLength]="maxLength"
       (focus)="currentInputIndex = i"

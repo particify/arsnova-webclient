@@ -8,7 +8,7 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -56,7 +56,7 @@ export class ContentService extends AbstractEntityService<Content> {
     private http: HttpClient,
     private ws: WsConnectorService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     cachingService: CachingService,
     private router: Router,
@@ -361,13 +361,15 @@ export class ContentService extends AbstractEntityService<Content> {
   ): Observable<Content> {
     return this.deleteAnswers(roomId, contentId).pipe(
       tap(() => {
-        this.translateService.get('dialog.answers-deleted').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.WARNING
-          );
-          this.answersDeleted.next(contentId);
-        });
+        this.translateService
+          .selectTranslate('dialog.answers-deleted')
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+            this.answersDeleted.next(contentId);
+          });
       })
     );
   }
@@ -405,7 +407,7 @@ export class ContentService extends AbstractEntityService<Content> {
         content.state.round = 2;
         this.roundStarted.next(content);
         this.translateService
-          .get('dialog.started-new-round')
+          .selectTranslate('dialog.started-new-round')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

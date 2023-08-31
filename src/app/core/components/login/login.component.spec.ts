@@ -13,9 +13,8 @@ import {
   MockMatDialog,
   MockNotificationService,
   MockRouter,
-  JsonTranslationLoader,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AuthProvider } from '@app/core/models/auth-provider';
@@ -47,15 +46,7 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: AuthenticationService,

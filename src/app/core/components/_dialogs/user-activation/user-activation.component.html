@@ -6,7 +6,7 @@
     fxLayoutGap="10px"
   >
     <mat-form-field class="input-block" appearance="outline">
-      <mat-label>{{ 'user-activation.key' | translate }}</mat-label>
+      <mat-label>{{ 'user-activation.key' | transloco }}</mat-label>
       <input
         matInput
         #userActivationKey
@@ -18,10 +18,10 @@
     </mat-form-field>
   </form>
   <p tabindex="0">
-    {{ 'user-activation.verification-info' | translate }}
+    {{ 'user-activation.verification-info' | transloco }}
   </p>
   <div fxLayout="row" fxLayoutAlign="start center">
-    <p>{{ 'user-activation.didnt-get' | translate }}</p>
+    <p>{{ 'user-activation.didnt-get' | transloco }}</p>
     <button
       mat-button
       color="accent"
@@ -30,7 +30,7 @@
         resetActivation(); $event.preventDefault(); $event.stopPropagation()
       "
     >
-      {{ 'user-activation.reset-button' | translate }}
+      {{ 'user-activation.reset-button' | transloco }}
     </button>
   </div>
 </div>
@@ -46,10 +46,10 @@
     (clicked)="login(userActivationKey.value)"
   ></app-loading-button>
   <button mat-button (click)="cancel()">
-    {{ 'user-activation.cancel' | translate }}
+    {{ 'user-activation.cancel' | transloco }}
   </button>
 </div>
 
 <div class="visually-hidden">
-  <div id="key-input">{{ 'user-activation.a11y-key-input' | translate }}</div>
+  <div id="key-input">{{ 'user-activation.a11y-key-input' | transloco }}</div>
 </div>

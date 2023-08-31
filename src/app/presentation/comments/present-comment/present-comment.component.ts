@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Comment } from '@app/core/models/comment';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 
@@ -18,7 +18,7 @@ export class PresentCommentComponent implements OnInit, OnDestroy {
   private hotkeyRefs: symbol[] = [];
 
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private presentationService: PresentationService,
     private hotkeyService: HotkeyService
   ) {}
@@ -34,7 +34,7 @@ export class PresentCommentComponent implements OnInit, OnDestroy {
 
   registerHotkeys() {
     this.translateService
-      .get(['comment-page.zoom-in', 'comment-page.zoom-out'])
+      .selectTranslate(['comment-page.zoom-in', 'comment-page.zoom-out'])
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {

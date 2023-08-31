@@ -22,11 +22,11 @@
           *ngIf="!isEditMode || noAnswersYet"
           attr.aria-label="{{
             'content.a11y-delete-answer'
-              | translate: { answer: answer.answerOption.label }
+              | transloco: { answer: answer.answerOption.label }
           }}"
           class="delete"
           (click)="deleteAnswer(i)"
-          matTooltip="{{ 'content.delete-answer' | translate }}"
+          matTooltip="{{ 'content.delete-answer' | transloco }}"
         >
           <mat-icon>clear</mat-icon>
         </button>

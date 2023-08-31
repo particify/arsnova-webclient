@@ -7,10 +7,10 @@
             extensionId="app-logo"
             [extensionData]="{ height: '36px' }"
           >
-            <h2>{{ 'admin-area.title' | translate }}</h2>
+            <h2>{{ 'admin-area.title' | transloco }}</h2>
           </lib-extension-point>
         </div>
-        <p class="section-header">{{ 'admin-area.general' | translate }}</p>
+        <p class="section-header">{{ 'admin-area.general' | transloco }}</p>
         <div class="button-container" fxLayout="column" fxLayoutGap="8px">
           <button
             mat-button
@@ -20,7 +20,7 @@
             [ngClass]="{ 'primary-variant': currentPage === 'stats' }"
           >
             <mat-icon>insights</mat-icon>
-            {{ 'admin-area.system-stats' | translate }}
+            {{ 'admin-area.system-stats' | transloco }}
           </button>
           <button
             mat-button
@@ -30,7 +30,7 @@
             [ngClass]="{ 'primary-variant': currentPage === 'users' }"
           >
             <mat-icon>people</mat-icon>
-            {{ 'admin-area.user-management' | translate }}
+            {{ 'admin-area.user-management' | transloco }}
           </button>
           <button
             mat-button
@@ -40,7 +40,7 @@
             [ngClass]="{ 'primary-variant': currentPage === 'rooms' }"
           >
             <mat-icon>room_preferences</mat-icon>
-            {{ 'admin-area.room-management' | translate }}
+            {{ 'admin-area.room-management' | transloco }}
           </button>
           <button
             *ngIf="(healthInfo | async)?.details"
@@ -51,7 +51,7 @@
             [ngClass]="{ 'primary-variant': currentPage === 'status' }"
           >
             <mat-icon>dns</mat-icon>
-            {{ 'admin-area.status-details' | translate }}
+            {{ 'admin-area.status-details' | transloco }}
           </button>
         </div>
         <lib-extension-point
