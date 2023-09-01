@@ -582,15 +582,16 @@ export class GroupContentComponent
   deleteAllAnswers() {
     this.contentService
       .showDeleteAllAnswersDialog(this.contentGroup)
-      .subscribe(() => {
-        this.translateService
-          .get('content.all-answers-deleted')
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-          });
+      .subscribe((result) => {
+        if (result === 'delete') {
+          const msg = this.translateService.instant(
+            'content.all-answers-deleted'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        }
       });
   }
 
