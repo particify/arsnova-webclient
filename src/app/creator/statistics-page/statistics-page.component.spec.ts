@@ -37,7 +37,7 @@ describe('StatisticsPageComponent', () => {
   snapshot.params = {
     seriesName: 'Quiz',
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

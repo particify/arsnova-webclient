@@ -24,7 +24,7 @@ export class Colors {
 @Injectable()
 export class ThemeService {
   private currentTheme: Theme;
-  private currentTheme$ = new BehaviorSubject(null);
+  private currentTheme$ = new BehaviorSubject<Theme | null>(null);
   private themes = [Theme.LIGHT, Theme.DARK];
   private barColors = [
     'blue',
@@ -63,7 +63,7 @@ export class ThemeService {
     this.lightColors = colors;
   }
 
-  getCurrentTheme$(): Observable<Theme> {
+  getCurrentTheme$(): Observable<Theme | null> {
     return this.currentTheme$;
   }
 

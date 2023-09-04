@@ -109,45 +109,36 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
 
   submitAnswer() {
     this.disableForm();
-    this.answerService
-      .addAnswerChoice(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        selectedChoiceIndexes: this.setSorting(),
-        creationTimestamp: null,
-        format: ContentType.SORT,
-      } as ChoiceAnswer)
-      .subscribe(
-        (answer) => {
-          this.answer = answer;
-          this.checkIfCorrect();
-          this.translateService.get('answer.sent').subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.SUCCESS
-            );
-          });
-          this.sendStatusToParent(answer);
-        },
-        () => {
-          this.enableForm();
-        }
-      );
+    const answer = new ChoiceAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.selectedChoiceIndexes = this.setSorting();
+    answer.format = ContentType.SORT;
+    this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
+      (answer) => {
+        this.answer = answer;
+        this.checkIfCorrect();
+        this.translateService.get('answer.sent').subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
+        this.sendStatusToParent(answer);
+      },
+      () => {
+        this.enableForm();
+      }
+    );
   }
 
   abstain() {
+    const answer = new ChoiceAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.format = ContentType.SORT;
     this.answerService
-      .addAnswerChoice(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        selectedChoiceIndexes: [],
-        creationTimestamp: null,
-        format: ContentType.CHOICE,
-      } as ChoiceAnswer)
+      .addAnswerChoice(this.content.roomId, answer)
       .subscribe((answer) => {
         this.hasAbstained = true;
         this.sendStatusToParent(answer);

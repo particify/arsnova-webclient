@@ -73,7 +73,7 @@ export class StatisticListComponent implements OnInit {
   shortId: number;
   deviceType: string;
   isLoading = true;
-  statisticsAdded;
+  statisticsAdded: number;
   statsLength: number;
   multipleRounds = false;
 
@@ -101,15 +101,17 @@ export class StatisticListComponent implements OnInit {
 
   public getContents() {
     this.isLoading = true;
-    this.contentService
-      .getContentsByIds(
-        this.contentGroup.roomId,
-        this.contentGroup.contentIds,
-        true
-      )
-      .subscribe((contents) => {
-        this.getData(this.contentService.getSupportedContents(contents));
-      });
+    if (this.contentGroup.contentIds) {
+      this.contentService
+        .getContentsByIds(
+          this.contentGroup.roomId,
+          this.contentGroup.contentIds,
+          true
+        )
+        .subscribe((contents) => {
+          this.getData(this.contentService.getSupportedContents(contents));
+        });
+    }
   }
 
   goToStats(id: string) {

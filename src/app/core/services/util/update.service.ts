@@ -104,7 +104,7 @@ export class UpdateService {
   }
 
   private handleUpdateReady(
-    currentVersion: VersionInfo,
+    currentVersion: VersionInfo | undefined,
     latestVersion: VersionInfo,
     importance: UpdateImportance
   ) {
@@ -141,7 +141,7 @@ export class UpdateService {
         environment.version.commitHash,
         '',
         '',
-        null,
+        UpdateImportance.OPTIONAL,
         0
       );
       this.eventService.broadcast(updateEvent.type, updateEvent.payload);
@@ -154,20 +154,20 @@ export class UpdateService {
 
   private determineLatestVersion(versionInfos: VersionInfo[]) {
     return versionInfos.reduce((acc, cur) => {
-      return cur.id > (acc?.id ?? 0) ? cur : acc;
-    }, null);
+      return cur.id > acc.id ? cur : acc;
+    }, versionInfos[0]);
   }
 
   private determineRelevantVersions(
     versionInfos: VersionInfo[],
-    currentVersion: VersionInfo
+    currentVersion?: VersionInfo
   ) {
     return versionInfos.filter((vi) => vi.id > (currentVersion?.id ?? 0));
   }
 
   private determineUpdateImportance(
     versionInfos: VersionInfo[],
-    currentVersion: VersionInfo
+    currentVersion?: VersionInfo
   ) {
     if (versionInfos.length === 0) {
       /* There are no version infos available. */

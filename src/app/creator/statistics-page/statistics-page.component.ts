@@ -45,7 +45,7 @@ export class StatisticsPageComponent implements OnInit {
             this.contentGroups.push(group);
             if (this.contentGroups.length === contentGroupsLength) {
               this.contentGroups = this.contentGroups.filter(
-                (cg) => cg.contentIds?.length > 0
+                (cg) => cg?.contentIds
               );
               this.initCurrentGroup(groupName);
               this.isLoading = false;
@@ -64,7 +64,10 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   setCurrentGroupByName(name: string) {
-    this.currentGroup = this.contentGroups.find((cg) => cg.name === name);
+    const group = this.contentGroups.find((cg) => cg.name === name);
+    if (group) {
+      this.currentGroup = group;
+    }
   }
 
   updateCollection() {

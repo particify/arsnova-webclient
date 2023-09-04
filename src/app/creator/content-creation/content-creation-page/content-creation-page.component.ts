@@ -43,7 +43,7 @@ export class ContentCreationPageComponent
 
   flipped = false;
 
-  content: Content;
+  content?: Content;
   textContainsImage = false;
   HintType = HintType;
   abstentionsAllowed = true;
@@ -66,11 +66,14 @@ export class ContentCreationPageComponent
   ngOnInit() {
     const iconList = this.contentService.getTypeIcons();
     for (const type of Object.values(ContentType)) {
-      this.formats.push({
-        type: type,
-        name: type.toLowerCase(),
-        icon: iconList.get(type),
-      });
+      const icon = iconList.get(type);
+      if (icon) {
+        this.formats.push({
+          type: type,
+          name: type.toLowerCase(),
+          icon: icon,
+        });
+      }
     }
     this.selectedFormat = this.formats[0];
     this.route.data.subscribe((data) => {
@@ -82,9 +85,12 @@ export class ContentCreationPageComponent
             this.question = this.content.body;
             this.abstentionsAllowed = this.content.abstentionsAllowed;
             this.isEditMode = true;
-            this.selectedFormat = this.formats.find(
-              (c) => c.name === this.content.format.toLowerCase()
+            const format = this.formats.find(
+              (c) => c.name === this.content?.format.toLowerCase()
             );
+            if (format) {
+              this.selectedFormat = format;
+            }
             this.prepareAttachmentData();
             this.isLoading = false;
           });
@@ -104,24 +110,24 @@ export class ContentCreationPageComponent
     setTimeout(() => {
       this.bodyInput.nativeElement.focus();
     });
-    this.content = null;
+    this.content = undefined;
     this.created = true;
     setTimeout(() => {
       this.created = false;
     }, 300);
   }
 
-  flipBack($event) {
+  flipBack(flip: boolean) {
     this.flipped = false;
     this.announceService.announce('content.a11y-back-in-creation');
-    if ($event) {
+    if (flip) {
       this.emitCreateEvent(true);
     }
-    this.content = null;
+    this.content = undefined;
   }
 
-  saveContent($event) {
-    this.content = $event;
+  saveContent(content: Content) {
+    this.content = content;
   }
 
   changeFormat(format: ContentFormat) {
@@ -152,7 +158,7 @@ export class ContentCreationPageComponent
       eventsSubject: this.linkAttachmentsSubject,
       refType: 'content',
       detailedView: false,
-      refId: this.isEditMode ? this.content.id : null,
+      refId: this.isEditMode ? this.content?.id : null,
       role: UserRole.OWNER,
     };
   }

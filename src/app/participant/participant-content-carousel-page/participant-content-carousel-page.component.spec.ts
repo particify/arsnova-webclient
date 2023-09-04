@@ -6,11 +6,7 @@ import {
   Router,
 } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   JsonTranslationLoader,
   MockNotificationService,
@@ -104,14 +100,11 @@ describe('ParticipantContentCarouselPageComponent', () => {
 
   snapshot.params = of([params]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
   const route = {
     params: params,
   };
   mockRoutingService.getRouteChanges.and.returnValue(of(route));
-
-  let translateService: TranslateService;
-  const a11yIntroPipe = new A11yIntroPipe(translateService);
 
   const mockFocusModeService = jasmine.createSpyObj([
     'getFocusModeEnabled',
@@ -180,10 +173,6 @@ describe('ParticipantContentCarouselPageComponent', () => {
         {
           provide: EventService,
           useClass: MockEventService,
-        },
-        {
-          provide: A11yIntroPipe,
-          useValue: a11yIntroPipe,
         },
         {
           provide: UserService,

@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -12,7 +6,6 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { TranslateService } from '@ngx-translate/core';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
@@ -63,19 +56,7 @@ export class ContentChoiceCreationComponent
   }
 
   initContentCreation() {
-    this.content = new ContentChoice(
-      null,
-      null,
-      '',
-      '',
-      '',
-      [],
-      [],
-      [],
-      true,
-      ContentType.CHOICE,
-      null
-    );
+    this.content = new ContentChoice();
     this.isLoading = false;
   }
 
@@ -204,7 +185,7 @@ export class ContentChoiceCreationComponent
     if ((this.content as ContentChoice).options.length < 2) {
       const msg = this.translationService.instant('content.need-answers');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return;
+      return false;
     }
     if (
       !this.multipleCorrectAnswers &&
@@ -213,7 +194,7 @@ export class ContentChoiceCreationComponent
     ) {
       const msg = this.translationService.instant('content.select-one');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return;
+      return false;
     }
     if (
       this.multipleCorrectAnswers &&
@@ -222,16 +203,16 @@ export class ContentChoiceCreationComponent
     ) {
       const msg = this.translationService.instant('content.at-least-one');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return;
+      return false;
     }
     if (this.createAnswerOptionComponent?.newAnswer.length > 0) {
       const msg = this.translationService.instant('content.unsaved-answer');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return;
+      return false;
     }
     (this.content as ContentChoice).multiple = this.multipleCorrectAnswers;
     if (!this.saveAnswerLabels(true)) {
-      return;
+      return false;
     }
     return true;
   }

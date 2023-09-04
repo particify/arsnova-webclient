@@ -74,18 +74,15 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       return;
     }
     this.disableForm();
+    const answer = new TextAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.subject = this.content.subject;
+    answer.body = this.textAnswer;
+    answer.read = 'false';
+    answer.format = ContentType.TEXT;
     this.answerService
-      .addAnswerText(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        subject: this.content.subject,
-        body: this.textAnswer,
-        read: 'false',
-        creationTimestamp: null,
-        format: ContentType.TEXT,
-      } as TextAnswer)
+      .addAnswerText(this.content.roomId, answer)
       .subscribe((answer) => {
         this.createAnswer(this.textAnswer);
         this.translateService.get('answer.sent').subscribe((msg) => {
@@ -102,16 +99,12 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
   }
 
   abstain() {
+    const answer = new TextAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.format = ContentType.TEXT;
     this.answerService
-      .addAnswerText(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        body: null,
-        creationTimestamp: null,
-        format: ContentType.TEXT,
-      } as TextAnswer)
+      .addAnswerText(this.content.roomId, answer)
       .subscribe((answer) => {
         this.createAnswer();
         this.sendStatusToParent(answer);

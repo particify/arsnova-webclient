@@ -12,7 +12,7 @@
       [disabled]="!!givenAnswer"
       [maxLength]="maxLength"
       (focus)="currentInputIndex = i"
-      (blur)="currentInputIndex = null"
+      (blur)="currentInputIndex = undefined"
     />
     <mat-hint matTextSuffix *ngIf="currentInputIndex === i">{{
       word.length + ' / ' + maxLength

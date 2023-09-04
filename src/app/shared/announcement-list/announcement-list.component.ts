@@ -63,7 +63,7 @@ export class AnnouncementListComponent implements OnInit {
     } else if (readTimestamp < announcement.updateTimestamp) {
       return 'edited';
     }
-    return null;
+    return;
   }
 
   close() {

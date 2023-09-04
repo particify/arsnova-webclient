@@ -273,7 +273,7 @@
             class="back side"
           >
             <app-preview
-              *ngIf="flipped"
+              *ngIf="flipped && content"
               [content]="content"
               [isEditMode]="isEditMode"
               (flipEvent)="flipBack($event)"

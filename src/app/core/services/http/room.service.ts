@@ -3,8 +3,8 @@ import { Room } from '@app/core/models/room';
 import { RoomSummary } from '@app/core/models/room-summary';
 import { SurveyStarted } from '@app/core/models/events/survey-started';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { catchError, map, tap, switchMap, mergeMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
+import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import {
   AuthenticationService,
   AUTH_HEADER_KEY,
@@ -41,8 +41,8 @@ export class RoomService extends AbstractEntityService<Room> {
     summary: '/_view/room/summary',
   };
 
-  private currentRoom: Room;
-  private currentRoomStream$: BehaviorSubject<Room> = new BehaviorSubject(null);
+  private currentRoom?: Room;
+  private currentRoomStream$ = new BehaviorSubject<Room | undefined>(undefined);
   private messageStream$: Observable<IMessage>;
   private messageStreamSubscription: Subscription;
 
@@ -84,7 +84,7 @@ export class RoomService extends AbstractEntityService<Room> {
     this.cachingService.getCache(DefaultCache.CURRENT_ROOM).clear();
     if (this.messageStreamSubscription) {
       this.messageStreamSubscription.unsubscribe();
-      this.messageStream$ = null;
+      this.messageStream$ = of();
     }
     if (!room) {
       this.feedbackService.unsubscribe();
@@ -104,7 +104,7 @@ export class RoomService extends AbstractEntityService<Room> {
     this.joinRoom();
   }
 
-  getCurrentRoomStream(): Observable<Room> {
+  getCurrentRoomStream(): Observable<Room | undefined> {
     return this.currentRoomStream$;
   }
 
@@ -133,8 +133,6 @@ export class RoomService extends AbstractEntityService<Room> {
   }
 
   addRoom(room: Room): Observable<Room> {
-    delete room.id;
-    delete room.revision;
     return this.postEntity(room).pipe(
       catchError(this.handleError<Room>(`add Room ${room}`))
     );
@@ -255,7 +253,7 @@ export class RoomService extends AbstractEntityService<Room> {
       feedbackType === LiveFeedbackType.FEEDBACK
         ? LiveFeedbackType.SURVEY
         : LiveFeedbackType.FEEDBACK;
-    const feedbackExtension: { type: string } = { type: newType };
+    const feedbackExtension: { type: LiveFeedbackType } = { type: newType };
     if (!room.extensions) {
       room.extensions = {};
       room.extensions.feedback = feedbackExtension;
@@ -268,7 +266,7 @@ export class RoomService extends AbstractEntityService<Room> {
 
   parseExtensions(room: Room): Room {
     if (room.extensions) {
-      const extensions: { [key: string]: object } = room.extensions;
+      const extensions = room.extensions;
       room.extensions = extensions;
     }
     return room;

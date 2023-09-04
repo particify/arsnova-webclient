@@ -41,14 +41,11 @@ describe('ContentParticipantComponent', () => {
     component = fixture.componentInstance;
     component.content = new Content(
       '1234',
-      '1',
-      '1234',
       'subject',
       'body',
       [],
       ContentType.CHOICE,
-      {},
-      new ContentState(1, new Date(), false)
+      {}
     );
     fixture.detectChanges();
   });

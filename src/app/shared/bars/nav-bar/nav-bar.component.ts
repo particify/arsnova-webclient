@@ -13,7 +13,7 @@ import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { EventService } from '@app/core/services/util/event.service';
-import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, map, takeUntil } from 'rxjs';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { DataChanged } from '@app/core/models/events/data-changed';
@@ -27,6 +27,7 @@ import { IMessage } from '@stomp/stompjs';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
+import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
 
 export class NavBarItem extends BarItem {
   url: string;
@@ -78,7 +79,7 @@ export class NavBarComponent
     new BarItem(RoutingFeature.CONTENTS, 'equalizer'),
     new BarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
   ];
-  currentRouteIndex: number;
+  currentRouteIndex?: number;
   activeFeatures: string[] = [RoutingFeature.OVERVIEW];
   group: ContentGroup;
   groupName: string;
@@ -137,7 +138,7 @@ export class NavBarComponent
     if (this.roomSub) {
       this.roomSub.unsubscribe();
     }
-    this.destroyed$.next(null);
+    this.destroyed$.next();
     this.destroyed$.complete();
   }
 
@@ -170,8 +171,12 @@ export class NavBarComponent
         .getState()
         .pipe(takeUntil(this.destroyed$))
         .subscribe((state) => {
-          this.focusFeature =
-            RoutingFeature[state?.feature] || RoutingFeature.OVERVIEW;
+          if (state) {
+            this.focusFeature =
+              RoutingFeature[state?.feature as keyof typeof RoutingFeature];
+          } else {
+            this.focusFeature = RoutingFeature.OVERVIEW;
+          }
         });
     }
     this.isLoading = false;
@@ -185,7 +190,7 @@ export class NavBarComponent
     this.roomId = routeData.room.id;
     this.room = routeData.room;
     if (
-      !routeData.room.settings['feedbackLocked'] ||
+      !routeData.room.settings.feedbackLocked ||
       this.viewRole !== UserRole.PARTICIPANT
     ) {
       this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
@@ -275,14 +280,14 @@ export class NavBarComponent
         this.updateGroupName(newGroup);
       }
       this.getCurrentRouteIndex();
-      if (this.currentRouteIndex > -1) {
+      if (this.currentRouteIndex && this.currentRouteIndex > -1) {
         this.disableNewsForCurrentRoute();
       }
     });
   }
 
   subscribeToContentGroupEvents() {
-    const createdEvent = new SeriesCreated();
+    const createdEvent = new SeriesCreated(new ContentGroup());
     this.eventService
       .on<typeof createdEvent.payload>(createdEvent.type)
       .subscribe((group) => {
@@ -397,7 +402,9 @@ export class NavBarComponent
   }
 
   disableNewsForCurrentRoute() {
-    this.barItems[this.currentRouteIndex].changeIndicator = false;
+    if (this.currentRouteIndex) {
+      this.barItems[this.currentRouteIndex].changeIndicator = false;
+    }
   }
 
   updateGroups(
@@ -485,6 +492,7 @@ export class NavBarComponent
   subscribeToContentGroups() {
     this.changesSubscription = this.eventService
       .on('EntityChanged')
+      .pipe(map((changes) => changes as EntityChangedPayload<ContentGroup>))
       .subscribe((changes) => {
         this.handleContentGroupChanges(changes);
       });
@@ -600,7 +608,7 @@ export class NavBarComponent
     }
   }
 
-  handleContentGroupChanges(changes) {
+  handleContentGroupChanges(changes: EntityChangedPayload<ContentGroup>) {
     if (changes.entityType === 'ContentGroup') {
       const index = this.contentGroups
         .map((cg) => cg.id)
@@ -626,7 +634,7 @@ export class NavBarComponent
     }
   }
 
-  checkChanges(changes) {
+  checkChanges(changes: EntityChangedPayload<ContentGroup>) {
     const changedEvent = new EntityChanged(
       'ContentGroup',
       changes.entity,

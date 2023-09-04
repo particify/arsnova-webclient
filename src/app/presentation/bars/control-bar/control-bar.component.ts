@@ -133,8 +133,8 @@ export class ControlBarComponent
   ];
   moreItem: KeyNavBarItem = new KeyNavBarItem('more', 'more_horiz', '', 'm');
 
-  cursorTimer;
-  barTimer;
+  cursorTimer?: ReturnType<typeof setTimeout>;
+  barTimer?: ReturnType<typeof setTimeout>;
   cursorVisible = true;
   barVisible = false;
   HotkeyAction = HotkeyAction;
@@ -219,7 +219,10 @@ export class ControlBarComponent
       this.surveyStarted = !data.room.settings.feedbackLocked;
       this.setSurveyState();
       if (this.groupName && this.contentGroups.length > 0) {
-        this.group = this.contentGroups.find((g) => g.name === this.groupName);
+        const group = this.contentGroups.find((g) => g.name === this.groupName);
+        if (group) {
+          this.group = group;
+        }
         this.checkIfContentLocked();
         if (
           this.isActiveFeature(RoutingFeature.CONTENTS) &&
@@ -253,7 +256,7 @@ export class ControlBarComponent
   }
 
   hideCursor() {
-    this.cursorTimer = null;
+    this.cursorTimer = undefined;
     document.body.style.cursor = 'none';
     this.cursorVisible = false;
   }
@@ -291,7 +294,9 @@ export class ControlBarComponent
     this.presentationService
       .getMultipleRoundState()
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((multipleRounds) => (this.multipleRounds = multipleRounds));
+      .subscribe(
+        (multipleRounds) => (this.multipleRounds = multipleRounds || false)
+      );
   }
 
   subscribeToEvents() {
@@ -340,7 +345,7 @@ export class ControlBarComponent
       });
   }
 
-  evaluateContentState(state: ContentPresentationState) {
+  evaluateContentState(state?: ContentPresentationState) {
     if (state) {
       this.contentStepState = state.position;
       this.contentIndex = state.index;
@@ -355,7 +360,7 @@ export class ControlBarComponent
     }
   }
 
-  evaluateCommentState(state: CommentPresentationState) {
+  evaluateCommentState(state?: CommentPresentationState) {
     if (state) {
       this.commentStepState = state.stepState;
       if (this.isActiveFeature(RoutingFeature.COMMENTS)) {
@@ -423,16 +428,16 @@ export class ControlBarComponent
     return (this.features.map((f) => f.name).indexOf(name) + 1).toString();
   }
 
-  updateFeature(feature: string) {
+  updateFeature(feature?: string) {
+    if (!feature) {
+      this.currentRouteIndex = undefined;
+      return;
+    }
     if (
       this.currentRouteIndex !==
       this.barItems.map((i) => i.name).indexOf(feature)
     ) {
-      if (feature) {
-        this.getCurrentRouteIndex(feature);
-      } else {
-        this.currentRouteIndex = undefined;
-      }
+      this.getCurrentRouteIndex(feature);
       this.activeFeature.emit(feature);
       if (feature === RoutingFeature.CONTENTS) {
         this.setArrowsState(this.contentStepState);
@@ -568,7 +573,7 @@ export class ControlBarComponent
   }
 
   hideBar() {
-    this.barTimer = null;
+    this.barTimer = undefined;
     this.barVisible = false;
     this.sendControlBarState();
   }
@@ -590,7 +595,7 @@ export class ControlBarComponent
   }
 
   private registerHotkeys() {
-    const actions = {
+    const actions: Record<string, () => void> = {
       share: () => this.updateFeature(undefined),
       fullscreen: () => this.toggleFullscreen(),
       exit: () => this.exitPresentation(),

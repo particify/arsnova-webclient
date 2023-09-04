@@ -83,8 +83,8 @@ export class AuthenticationGuard implements CanActivate {
                           } else {
                             this.handleUnknownError();
                           }
-                          return of(false);
                         }
+                        return of(false);
                       })
                     );
                 } else {

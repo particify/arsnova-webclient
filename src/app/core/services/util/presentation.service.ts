@@ -15,9 +15,15 @@ const MAX_SCALE = 1.9;
 export class PresentationService {
   private currentGroup$ = new Subject<string>();
   private feedbackStarted$ = new Subject<boolean>();
-  private contentState$ = new BehaviorSubject<ContentPresentationState>(null);
-  private conmmentState$ = new BehaviorSubject<CommentPresentationState>(null);
-  private multipleRoundState$ = new BehaviorSubject<boolean>(null);
+  private contentState$ = new BehaviorSubject<
+    ContentPresentationState | undefined
+  >(undefined);
+  private conmmentState$ = new BehaviorSubject<
+    CommentPresentationState | undefined
+  >(undefined);
+  private multipleRoundState$ = new BehaviorSubject<boolean | undefined>(
+    undefined
+  );
 
   private commentSortChanged = new Subject<CommentSort>();
   private commentZoomChanged = new Subject<number>();
@@ -29,7 +35,7 @@ export class PresentationService {
   }
 
   getStepState(index: number, listLength: number) {
-    let state;
+    let state = PresentationStepPosition.MIDDLE;
     if (index === 0) {
       state = PresentationStepPosition.START;
     } else if (index === listLength - 1) {
@@ -48,7 +54,7 @@ export class PresentationService {
 
   // States
 
-  getContentState(): Observable<ContentPresentationState> {
+  getContentState(): Observable<ContentPresentationState | undefined> {
     return this.contentState$;
   }
 
@@ -56,7 +62,7 @@ export class PresentationService {
     this.contentState$.next(state);
   }
 
-  getCommentState(): Observable<CommentPresentationState> {
+  getCommentState(): Observable<CommentPresentationState | undefined> {
     return this.conmmentState$;
   }
 
@@ -64,7 +70,7 @@ export class PresentationService {
     this.conmmentState$.next(state);
   }
 
-  getMultipleRoundState(): Observable<boolean> {
+  getMultipleRoundState(): Observable<boolean | undefined> {
     return this.multipleRoundState$;
   }
 

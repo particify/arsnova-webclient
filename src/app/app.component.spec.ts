@@ -22,6 +22,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JsonTranslationLoader } from '@testing/test-helpers';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
+import { AuthProvider } from './core/models/auth-provider';
 
 // Stub for downstream template
 @Component({ selector: 'app-header', template: '' })
@@ -73,7 +74,7 @@ describe('AppComponent', () => {
           },
         ],
       },
-      authenticationProviders: [],
+      authenticationProvider: [] as AuthProvider[],
       features: {},
     };
 

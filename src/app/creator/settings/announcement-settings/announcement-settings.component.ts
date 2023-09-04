@@ -8,7 +8,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -32,7 +32,7 @@ export class AnnouncementSettingsComponent
   body: string;
   announcements: Announcement[] = [];
 
-  editId: string;
+  editId?: string;
   renderPreview = false;
   markdownFeatureset = MarkdownFeatureset.SIMPLE;
   isLoading = true;
@@ -85,7 +85,7 @@ export class AnnouncementSettingsComponent
     });
   }
 
-  tabChanged(event) {
+  tabChanged(event: MatTabChangeEvent) {
     this.renderPreview = event.index === 1;
   }
 
@@ -151,7 +151,7 @@ export class AnnouncementSettingsComponent
       const dialogRef = this.dialogService.openDeleteDialog(
         'announcement',
         'really-discard-announcement',
-        null,
+        undefined,
         'discard'
       );
       dialogRef.afterClosed().subscribe((result) => {
@@ -166,7 +166,7 @@ export class AnnouncementSettingsComponent
   }
 
   reset() {
-    this.editId = null;
+    this.editId = undefined;
     this.inputTabs.selectedIndex = 0;
     this.renderPreview = false;
     this.resetInputs();

@@ -40,7 +40,7 @@ describe('CommentComponent', () => {
   const data = {
     viewRole: UserRole.PARTICIPANT,
   };
-  const activatedRouteStub = new ActivatedRouteStub(null, data);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data);
 
   const mockVoteService = jasmine.createSpyObj('VoteService', [
     'voteUp',

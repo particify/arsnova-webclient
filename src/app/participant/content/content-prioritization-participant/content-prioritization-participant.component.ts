@@ -99,16 +99,13 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
       return;
     }
     this.disableForm();
+    const answer = new PrioritizationAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.assignedPoints = this.assignedPoints;
+    answer.format = ContentType.PRIORITIZATION;
     this.answerService
-      .addAnswerPrioritization(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        assignedPoints: this.assignedPoints,
-        creationTimestamp: null,
-        format: ContentType.PRIORITIZATION,
-      } as PrioritizationAnswer)
+      .addAnswerPrioritization(this.content.roomId, answer)
       .subscribe(
         (answer) => {
           this.answer = answer;
@@ -127,16 +124,12 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
   }
 
   abstain() {
+    const answer = new PrioritizationAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.format = ContentType.PRIORITIZATION;
     this.answerService
-      .addAnswerPrioritization(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        assignedPoints: [],
-        creationTimestamp: null,
-        format: ContentType.PRIORITIZATION,
-      } as PrioritizationAnswer)
+      .addAnswerPrioritization(this.content.roomId, answer)
       .subscribe((answer) => {
         this.hasAbstained = true;
         this.sendStatusToParent(answer);

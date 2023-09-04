@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -9,6 +8,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 @Component({
   selector: 'app-content-yes-no-creation',
@@ -43,19 +43,8 @@ export class ContentYesNoCreationComponent
   }
 
   initContentCreation() {
-    this.content = new ContentChoice(
-      null,
-      null,
-      '',
-      '',
-      '',
-      [],
-      [],
-      [],
-      false,
-      ContentType.BINARY,
-      null
-    );
+    this.content = new ContentChoice();
+    this.content.format = ContentType.BINARY;
     this.initTemplateAnswers();
   }
 

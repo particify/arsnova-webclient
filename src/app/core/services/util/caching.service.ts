@@ -4,7 +4,7 @@ import { interval } from 'rxjs';
 import { LRUCache } from 'lru-cache';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 
-const LRU_OPTIONS: LRUCache.Options<string, any, unknown> = {
+const LRU_OPTIONS = {
   max: 30,
   ttl: 15 * 60 * 1000,
   noDisposeOnSet: true,
@@ -75,7 +75,7 @@ export class CachingService {
 }
 
 export class Cache<T> {
-  private cache: LRUCache<string, T>;
+  private cache: LRUCache<string, any>;
   private disposeHandlers: {
     type: string;
     handler: (id: string, value: T) => void;
@@ -87,12 +87,14 @@ export class Cache<T> {
       dispose: (value, key) => this.dispatchDispose(key, value),
     };
     lruOptions.max = max;
-    this.cache = new LRUCache(lruOptions);
+    this.cache = new LRUCache(
+      lruOptions as LRUCache.Options<string, any, unknown>
+    );
     /* Explicitly prune the cache so the disponse handlers are called early. */
     interval(PRUNE_INTERVAL_MS).subscribe(() => this.cache.purgeStale());
   }
 
-  get(key: CacheKey): T {
+  get(key: CacheKey): T | undefined {
     return this.cache.get(this.keyToString(key));
   }
 

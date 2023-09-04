@@ -20,6 +20,7 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { of } from 'rxjs';
 import { MockMatDialogData } from '@testing/test-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { AuthProvider } from '@app/core/models/auth-provider';
 
 describe('RoomCreateComponent', () => {
   let component: RoomCreateComponent;
@@ -34,7 +35,7 @@ describe('RoomCreateComponent', () => {
 
   const mockApiConfigService = jasmine.createSpyObj(['getApiConfig$']);
   const config = {
-    authenticationProviders: [],
+    authenticationProviders: [] as AuthProvider[],
   };
   mockApiConfigService.getApiConfig$.and.returnValue(of(config));
 

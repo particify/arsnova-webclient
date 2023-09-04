@@ -70,7 +70,7 @@
         <mat-icon>playlist_add</mat-icon>
         {{ 'room-page.create-content-group' | translate }}
       </button>
-      <ng-container *ngIf="contentGroups?.length > 0">
+      <ng-container *ngIf="!!contentGroups">
         <p
           tabindex="-1"
           id="content-groups"
@@ -89,7 +89,7 @@
       <app-content-groups
         *ngFor="let contentGroup of contentGroups"
         [contentGroupName]="contentGroup.name"
-        [length]="contentGroup.contentIds?.length"
+        [length]="contentGroup.contentIds ? contentGroup.contentIds.length : 0"
         [isLocked]="!contentGroup.published"
         [role]="role"
         [shortId]="room.shortId"

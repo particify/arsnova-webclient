@@ -15,13 +15,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '@app/core/services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
-
-export class CommentExtensions {
-  enableThreshold: boolean;
-  commentThreshold: number;
-  enableTags: boolean;
-  tags: string[];
-}
+import { CommentExtensions } from '@app/core/models/room-extensions';
 
 @Component({
   selector: 'app-comment-settings',
@@ -42,7 +36,6 @@ export class CommentSettingsComponent implements OnInit {
   settings: CommentSettings;
   tags: string[] = [];
   timestamp = new Date();
-  tagExtension: object;
   tagName = '';
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   isLoading = true;
@@ -80,12 +73,8 @@ export class CommentSettingsComponent implements OnInit {
 
   initTags() {
     this.enableTags = this.commentExtension.enableTags ?? this.enableTags;
-    if (this.room.extensions.tags) {
-      this.tagExtension = this.room.extensions.tags;
-      this.tags = this.room.extensions.tags['tags'] || [];
-    } else {
-      this.tagExtension = { enableTags: true };
-      this.room.extensions.tags = this.tagExtension;
+    if (this.room.extensions?.comments?.tags) {
+      this.tags = this.room.extensions.comments.tags || [];
     }
   }
 
@@ -100,7 +89,7 @@ export class CommentSettingsComponent implements OnInit {
       } else {
         this.tags.push(this.tagName);
         this.tagName = '';
-        this.room.extensions.tags = { enableTags: true, tags: this.tags };
+        this.setTags();
         this.saveChanges(true);
       }
     }
@@ -112,19 +101,27 @@ export class CommentSettingsComponent implements OnInit {
 
   deleteTag(tag: string) {
     this.tags = this.tags.filter((o) => o !== tag);
-    this.tagExtension['tags'] = this.tags;
-    this.room.extensions.tags = this.tagExtension;
+    this.setTags();
     this.saveChanges(false);
+  }
+
+  setTags() {
+    if (this.room.extensions?.comments) {
+      this.room.extensions.comments.tags = this.tags;
+    }
   }
 
   updateCommentExtensions(enableTreshold?: boolean) {
     this.enableThreshold = enableTreshold ?? this.enableThreshold;
-    const commentExtension: CommentExtensions = new CommentExtensions();
-    commentExtension.enableThreshold = this.enableThreshold;
-    commentExtension.commentThreshold = this.threshold;
-    commentExtension.enableTags = this.enableTags;
-    commentExtension.tags = this.tags;
-    this.room.extensions.comments = commentExtension;
+    const commentExtension: CommentExtensions = {
+      enableThreshold: this.enableThreshold,
+      commentThreshold: this.threshold,
+      enableTags: this.enableTags,
+      tags: this.tags,
+    };
+    if (this.room.extensions) {
+      this.room.extensions.comments = commentExtension;
+    }
     this.saveChanges();
   }
 

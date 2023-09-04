@@ -85,7 +85,7 @@ export class StatisticTextComponent
       if (answer.body) {
         const answerBody = answer.body.toLowerCase();
         const count = answersMap.has(answerBody)
-          ? answersMap.get(answerBody).count + 1
+          ? (answersMap.get(answerBody)?.count || 0) + 1
           : 1;
         answersMap.set(
           answerBody,

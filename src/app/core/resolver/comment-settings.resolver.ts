@@ -9,6 +9,6 @@ export class CommentSettingsResolver implements Resolve<CommentSettings> {
   constructor(private commentSettingService: CommentSettingsService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<CommentSettings> {
-    return this.commentSettingService.get(route.parent.data.room.id);
+    return this.commentSettingService.get(route.parent?.data.room.id);
   }
 }

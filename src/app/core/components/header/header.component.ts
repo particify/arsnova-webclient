@@ -43,7 +43,7 @@ import { RoomService } from '@app/core/services/http/room.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  auth: ClientAuthentication;
+  auth?: ClientAuthentication;
   deviceType: string;
 
   role: UserRole;
@@ -63,8 +63,8 @@ export class HeaderComponent implements OnInit {
   isPreview: boolean;
   userCharacter: string;
   openPresentationDirectly = false;
-  announcementState: AnnouncementState;
-  room: Room;
+  announcementState?: AnnouncementState;
+  room?: Room;
 
   constructor(
     public location: Location,
@@ -117,7 +117,9 @@ export class HeaderComponent implements OnInit {
       });
     this.currentTheme = this.themeService.getCurrentTheme();
     this.themeService.getCurrentTheme$().subscribe((theme) => {
-      this.currentTheme = theme;
+      if (theme) {
+        this.currentTheme = theme;
+      }
     });
     this.themes = this.themeService.getThemes();
     this.langs = this.langService.getLangs();
@@ -150,7 +152,7 @@ export class HeaderComponent implements OnInit {
           this.announcementState = state;
         });
     } else {
-      this.announcementState = null;
+      this.announcementState = undefined;
     }
   }
 
@@ -159,7 +161,7 @@ export class HeaderComponent implements OnInit {
     this.currentLang = lang.key;
 
     if (lang.category === LanguageCategory.COMMUNITY) {
-      const data = {
+      const data: { [key: string]: string } = {
         dialogId: 'community-lang',
         section: 'dialog',
         headerLabel: 'you-are-using-community-lang',
@@ -233,7 +235,7 @@ export class HeaderComponent implements OnInit {
       'really-delete-account'
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'abort') {
+      if (result === 'abort' || !this.auth) {
         return;
       } else if (result === 'delete') {
         this.deleteAccount(this.auth.userId);
@@ -278,7 +280,9 @@ export class HeaderComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((newReadTimestamp) => {
-      this.announcementState.readTimestamp = newReadTimestamp;
+      if (this.announcementState) {
+        this.announcementState.readTimestamp = newReadTimestamp;
+      }
     });
   }
 
@@ -286,7 +290,7 @@ export class HeaderComponent implements OnInit {
     const dialogRef = this.dialogService.openDeleteDialog(
       'leave-room',
       'really-leave-room',
-      null,
+      undefined,
       'leave'
     );
     dialogRef.afterClosed().subscribe((result) => {

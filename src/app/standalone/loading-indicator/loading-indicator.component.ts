@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class LoadingIndicatorComponent implements OnInit {
   @Input() size = 40;
-  @Input() height;
+  @Input() height: string;
   @Input() disabled = false;
 
   ngOnInit(): void {

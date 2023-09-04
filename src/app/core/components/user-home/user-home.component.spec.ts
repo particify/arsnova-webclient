@@ -16,11 +16,6 @@ class MockAuthenticationService {
   }
 }
 
-@Component({ selector: 'app-room-join', template: '' })
-class RoomJoinStubComponent {
-  @Input() inputA11yString;
-}
-
 @Component({ selector: 'app-room-list', template: '' })
 class RoomListStubComponent {
   @Input() auth: ClientAuthentication;
@@ -39,7 +34,6 @@ describe('UserHomeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         UserHomeComponent,
-        RoomJoinStubComponent,
         RoomListStubComponent,
         MatIconStubComponent,
         A11yIntroPipe,

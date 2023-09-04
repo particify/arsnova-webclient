@@ -54,7 +54,7 @@ export abstract class AbstractHttpService<T> {
    * Performs a HTTP GET request. By default, if the request fails, it is send
    * again up to 5 times with exponential backoff delay.
    */
-  protected performGet<U extends T | T[]>(
+  protected performGet<U extends T | T[] = T>(
     uri: string,
     options: HttpOptions = {}
   ): Observable<U> {
@@ -74,10 +74,10 @@ export abstract class AbstractHttpService<T> {
    * Performs a HTTP request. If options.retry is true, the request will be
    * send again up to 5 times with exponential backoff delay on failure.
    */
-  protected performRequest<U extends T | T[]>(
+  protected performRequest<U extends T | T[] = T>(
     method: HttpMethod,
     uri: string,
-    body: U,
+    body?: T | Omit<T, 'id'>,
     options: Omit<HttpOptions, 'body'> = {}
   ): Observable<U> {
     (options as HttpOptions).body = body;

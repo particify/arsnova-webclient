@@ -29,6 +29,7 @@ import { ContentCarouselService } from '@app/core/services/util/content-carousel
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
+import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -56,13 +57,13 @@ export class ParticipantContentCarouselPageComponent
     PRE_START: 'PRE_START',
   };
   started: string;
-  answers: Answer[];
+  answers: (Answer | undefined)[];
   currentStep: number;
   isReloading = false;
   isReloadingCurrentContent = false;
   displaySnackBar = false;
   focusModeEnabled = false;
-  lockedContentId: string;
+  lockedContentId?: string;
   changesSubscription: Subscription;
   routeChangedSubscription: Subscription;
 
@@ -91,7 +92,7 @@ export class ParticipantContentCarouselPageComponent
   ) {}
 
   ngOnDestroy(): void {
-    this.destroyed$.next(null);
+    this.destroyed$.next();
     this.destroyed$.complete();
     if (this.changesSubscription) {
       this.changesSubscription.unsubscribe();
@@ -133,7 +134,7 @@ export class ParticipantContentCarouselPageComponent
     this.changesSubscription = this.eventService
       .on('EntityChanged')
       .subscribe((changes) => {
-        this.handleStateEvent(changes);
+        this.handleStateEvent(changes as EntityChangedPayload<ContentGroup>);
       });
     this.eventService
       .on<EntityChangeNotification>('EntityChangeNotification')
@@ -160,7 +161,7 @@ export class ParticipantContentCarouselPageComponent
               this.contentGroupName = group.name;
               this.contentGroup = group;
               this.isReloading = true;
-              this.getContents(null);
+              this.getContents();
             });
         }
       });
@@ -192,7 +193,7 @@ export class ParticipantContentCarouselPageComponent
             .then(() => {
               this.contentGroup = group;
               this.isReloading = true;
-              this.getContents(null, state.contentId);
+              this.getContents(undefined, state.contentId);
             });
         });
     }
@@ -202,7 +203,7 @@ export class ParticipantContentCarouselPageComponent
     return this.contents.map((c) => c.id).indexOf(id);
   }
 
-  getContents(lastContentIndex, nextContentId?: string) {
+  getContents(lastContentIndex?: number, nextContentId?: string) {
     this.contents = [];
     const publishedIds = this.contentPublishService.filterPublishedIds(
       this.contentGroup
@@ -215,7 +216,10 @@ export class ParticipantContentCarouselPageComponent
           if (nextContentId) {
             lastContentIndex = this.getIndexOfContentById(nextContentId);
           }
-          if (lastContentIndex >= this.contents.length) {
+          if (
+            lastContentIndex !== undefined &&
+            lastContentIndex >= this.contents.length
+          ) {
             lastContentIndex = this.contents.length - 1;
           }
           if (this.isReloading) {
@@ -223,7 +227,7 @@ export class ParticipantContentCarouselPageComponent
               const newIndex = this.getIndexOfContentById(this.lockedContentId);
               if (newIndex) {
                 lastContentIndex = newIndex;
-                this.lockedContentId = null;
+                this.lockedContentId = undefined;
               }
             }
             this.updateContentIndexUrl(lastContentIndex);
@@ -250,7 +254,7 @@ export class ParticipantContentCarouselPageComponent
         const newRound = content.state.round;
         if (currentContent.state.round !== newRound) {
           currentContent.state.round = newRound;
-          this.answers[this.currentStep] = null;
+          this.answers[this.currentStep] = undefined;
           this.alreadySent.set(this.currentStep, false);
           const msg = this.translateService.instant(
             content.state.round === 1
@@ -275,7 +279,7 @@ export class ParticipantContentCarouselPageComponent
   checkIfLastContentExists(contentIndex?: number) {
     this.checkState();
     // Since `null >= 0` is `true` trough a type coercion with `ToPrimitive() this muste be checked seperately
-    if (contentIndex === 0 || contentIndex > 0) {
+    if (contentIndex !== undefined && (contentIndex == 0 || contentIndex > 0)) {
       this.initStepper(contentIndex);
     } else {
       if (!this.focusModeEnabled) {
@@ -298,7 +302,7 @@ export class ParticipantContentCarouselPageComponent
     this.updateContentIndexUrl(index);
   }
 
-  updateContentIndexUrl(index?: number) {
+  updateContentIndexUrl(index: number = 0) {
     if ((!!index && this.currentStep !== index) || !this.isReloading) {
       this.currentStep = index || 0;
       this.replaceUrl([
@@ -334,7 +338,7 @@ export class ParticipantContentCarouselPageComponent
     return [ContentType.SLIDE, ContentType.FLASHCARD].includes(content.format);
   }
 
-  getFirstUnansweredContentIndex(): number {
+  getFirstUnansweredContentIndex(): number | undefined {
     for (let i = 0; i < this.alreadySent.size; i++) {
       if (
         this.alreadySent.get(i) === false &&
@@ -343,13 +347,13 @@ export class ParticipantContentCarouselPageComponent
         return i;
       }
     }
-    return null;
+    return;
   }
 
   checkState() {
     this.isPureInfoSeries = this.checkIfPureInfoSeries();
     this.isFinished =
-      this.getFirstUnansweredContentIndex() === null ||
+      this.getFirstUnansweredContentIndex() === undefined ||
       this.contentCarouselService.isLastContentAnswered();
   }
 
@@ -370,7 +374,7 @@ export class ParticipantContentCarouselPageComponent
     });
   }
 
-  replaceUrl(url) {
+  replaceUrl(url: any[]) {
     const urlTree = this.router.createUrlTree(url);
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
@@ -378,7 +382,7 @@ export class ParticipantContentCarouselPageComponent
   receiveSentStatus(answer: Answer, index: number) {
     this.alreadySent.set(index, !!answer);
     if (index === this.contents.length - 1) {
-      this.hasAnsweredLastContent = this.alreadySent.get(index);
+      this.hasAnsweredLastContent = this.alreadySent.get(index) || false;
     }
     this.contentCarouselService.setLastContentAnswered(
       this.hasAnsweredLastContent
@@ -391,7 +395,7 @@ export class ParticipantContentCarouselPageComponent
           if (index < this.contents.length - 1) {
             this.nextContent();
             setTimeout(() => {
-              document.getElementById('step').focus();
+              document.getElementById('step')?.focus();
             }, 200);
           } else {
             this.goToOverview();
@@ -401,7 +405,7 @@ export class ParticipantContentCarouselPageComponent
     }
   }
 
-  getAnswers(lastContentIndex: number) {
+  getAnswers(lastContentIndex?: number) {
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
       this.answerService
         .getAnswersByUserIdContentIds(
@@ -442,7 +446,7 @@ export class ParticipantContentCarouselPageComponent
     });
   }
 
-  handleStateEvent(changes) {
+  handleStateEvent(changes: EntityChangedPayload<ContentGroup>) {
     if (changes.entity.id === this.contentGroup.id) {
       this.contentGroup = changes.entity;
       const changedEvent = new EntityChanged(

@@ -90,7 +90,7 @@ export class RoomOverviewPageComponent
   }
 
   getFeedback() {
-    this.surveyEnabled = !this.room.settings['feedbackLocked'];
+    this.surveyEnabled = !this.room.settings.feedbackLocked;
     this.feedbackService.startSub(this.room.id);
     this.feedbackService.messageEvent
       .pipe(takeUntil(this.destroyed$))

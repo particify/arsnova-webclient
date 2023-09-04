@@ -41,7 +41,7 @@ export class InputDialogComponent extends UserSearchComponent {
     super(userService);
     this.primaryAction = data.primaryAction;
     this.inputName = data.inputName;
-    this.useUserSearch = data.useUserSearch;
+    this.useUserSearch = data.useUserSearch || false;
   }
 
   selectUser(searchResult: string) {

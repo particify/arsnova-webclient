@@ -24,12 +24,12 @@ export class CustomPageTitleStrategy extends TitleStrategy {
     translateService.onLangChange.subscribe(() => {
       // Only update title if already set
       if (this.title) {
-        this.updateTitle(null);
+        this.updateTitle(undefined);
       }
     });
   }
 
-  override updateTitle(snapshot: RouterStateSnapshot): void {
+  override updateTitle(snapshot?: RouterStateSnapshot): void {
     if (snapshot) {
       this.setHomeTitle();
       this.buildTitle(snapshot);

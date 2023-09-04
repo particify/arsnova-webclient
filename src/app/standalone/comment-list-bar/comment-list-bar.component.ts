@@ -53,8 +53,7 @@ export class CommentListBarComponent {
 
   searchActive = false;
   searchData = '';
-  sorting = CommentSort;
-  filtering = CommentFilter;
+  CommentFilter = CommentFilter;
   periodsList = Object.values(CommentPeriod);
 
   sortItems: SortItem[] = [

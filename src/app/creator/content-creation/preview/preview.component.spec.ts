@@ -49,15 +49,12 @@ describe('PreviewComponent', () => {
         fixture = TestBed.createComponent(PreviewComponent);
         component = fixture.componentInstance;
         component.content = new Content(
-          '1234',
-          '0',
           '1',
           'subject',
           'body',
           [],
           ContentType.CHOICE,
-          {},
-          new ContentState(1, new Date(), true)
+          {}
         );
         fixture.detectChanges();
       });

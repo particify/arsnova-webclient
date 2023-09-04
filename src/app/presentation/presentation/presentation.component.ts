@@ -41,9 +41,11 @@ export class PresentationComponent implements OnInit, OnDestroy {
     );
     const params = this.route.snapshot.params;
     this.shortId = params['shortId'];
-    const childRoute = this.route.snapshot.firstChild.firstChild;
-    this.featureString = childRoute.url[0]?.path;
-    this.lastGroup = childRoute.params['seriesName'];
+    const childRoute = this.route.snapshot?.firstChild?.firstChild;
+    if (childRoute) {
+      this.featureString = childRoute.url[0]?.path;
+      this.lastGroup = childRoute.params['seriesName'];
+    }
     this.route.data.subscribe((data) => {
       this.roomId = data.room.id;
       this.passwordProtected = data.room.passwordProtected;

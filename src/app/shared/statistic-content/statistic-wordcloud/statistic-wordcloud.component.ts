@@ -6,6 +6,7 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
 import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
+import { WordCloudItem } from '@app/shared/wordcloud/wordcloud.component';
 
 @Component({
   selector: 'app-statistic-wordcloud',
@@ -18,7 +19,7 @@ export class StatisticWordcloudComponent
 {
   @Input() showModeration = false;
 
-  wordWeights: [string, number][] = [];
+  wordWeights: WordCloudItem[] = [];
 
   answerList: TextStatistic[] = [];
 
@@ -61,17 +62,17 @@ export class StatisticWordcloudComponent
         return;
       }
       this.wordWeights = stats.roundStatistics[0].independentCounts.map(
-        (count, i) => [texts[i], count]
+        (count, i) => new WordCloudItem(texts[i], count)
       );
       this.answerList = Array.from(
         this.wordWeights,
-        ([answer, count]) => new TextStatistic(answer, count)
+        (w) => new TextStatistic(w.text, w.size)
       );
     }
   }
 
   filterAnswers(keyword: string) {
-    this.wordWeights = this.wordWeights.filter((w) => w[0] !== keyword);
+    this.wordWeights = this.wordWeights.filter((w) => w.text !== keyword);
     this.answerList = this.answerList.filter((a) => a.answer !== keyword);
   }
 }

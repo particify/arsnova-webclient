@@ -45,7 +45,11 @@ describe('RoomComponent', () => {
     userRole: UserRole.OWNER,
   };
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const mockFocusModeService = jasmine.createSpyObj('FocusModeService', [
     'updateOverviewState',

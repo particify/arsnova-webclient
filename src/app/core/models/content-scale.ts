@@ -7,7 +7,7 @@ export class ContentScale extends ContentChoice {
   optionCount: number;
 
   constructor(optionTemplate: LikertScaleTemplate, optionCount: number) {
-    super(null, null, '', '', '', [], [], [], false, ContentType.SCALE, null);
+    super('', '', '', [], [], [], false, ContentType.SCALE);
     this.optionTemplate = optionTemplate;
     this.optionCount = optionCount;
   }

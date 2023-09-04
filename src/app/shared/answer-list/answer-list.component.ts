@@ -42,20 +42,23 @@ export class AnswerListComponent implements OnInit {
   }
 
   addToModerationList(answer: TextStatistic) {
+    if (!answer.id) {
+      return;
+    }
     const action = this.banMode ? 'ban' : 'delete';
+    const confirmAction = this.banMode
+      ? this.contentService.banKeywordForContent(
+          this.roomId,
+          this.contentId,
+          answer.answer
+        )
+      : this.contentAnswerService.hideAnswerText(this.roomId, answer.id);
     const dialogRef = this.dialogService.openDeleteDialog(
       `${action}-answer`,
       `really-${action}-answer`,
       answer.answer,
       action,
-      () =>
-        this.banMode
-          ? this.contentService.banKeywordForContent(
-              this.roomId,
-              this.contentId,
-              answer.answer
-            )
-          : this.contentAnswerService.hideAnswerText(this.roomId, answer.id)
+      () => confirmAction
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === action) {

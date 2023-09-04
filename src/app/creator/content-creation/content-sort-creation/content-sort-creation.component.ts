@@ -6,7 +6,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ActivatedRoute } from '@angular/router';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { AnswerOption } from '@app/core/models/answer-option';
@@ -16,6 +15,7 @@ import {
 } from '@app/creator/content-creation/content-creation/content-creation.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 @Component({
   selector: 'app-content-sort-creation',
@@ -50,19 +50,8 @@ export class ContentSortCreationComponent
   }
 
   initContentCreation() {
-    this.content = new ContentChoice(
-      null,
-      null,
-      '',
-      '',
-      '',
-      [],
-      [],
-      [],
-      true,
-      ContentType.SORT,
-      null
-    );
+    this.content = new ContentChoice();
+    this.content.format = ContentType.SORT;
     this.fillCorrectAnswers();
   }
 
@@ -72,7 +61,7 @@ export class ContentSortCreationComponent
     this.checkIfAnswersExist();
   }
 
-  answerInputCheck(answer): boolean {
+  answerInputCheck(answer: string): boolean {
     if (answer !== '') {
       if (!this.answerExists(answer)) {
         return true;
@@ -82,6 +71,7 @@ export class ContentSortCreationComponent
     } else {
       this.showWarning('content.no-empty2');
     }
+    return false;
   }
 
   addAnswer(answer: string) {
@@ -123,7 +113,7 @@ export class ContentSortCreationComponent
 
   createContent(): boolean {
     if (!this.saveAnswerLabels(true)) {
-      return;
+      return false;
     }
     if (this.displayAnswers.length >= 2) {
       (this.content as ContentChoice).correctOptionIndexes = Object.keys(
@@ -133,6 +123,7 @@ export class ContentSortCreationComponent
     } else {
       const msg = this.translationService.instant('content.need-answers');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return false;
     }
   }
 

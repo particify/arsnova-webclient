@@ -142,7 +142,7 @@ export class UserService extends AbstractEntityService<User> {
   getUserSettingsByLoginId(loginId: string): Observable<UserSettings> {
     const url = this.buildUri(this.apiUrl.find) + '?view=owner';
     return this.http
-      .post<UserSettings>(url, {
+      .post<User[]>(url, {
         properties: { loginId: loginId },
         externalFilters: {},
       })

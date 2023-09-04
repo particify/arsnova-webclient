@@ -54,7 +54,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   infoBarItems: InfoBarItem[] = [
     new InfoBarItem('content-counter', 'people', ''),
   ];
-  answerCount;
+  answerCount: number;
   indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup: ContentGroup;
   canAnswerContent = false;
@@ -112,7 +112,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
-    this.destroyed$.next(null);
+    this.destroyed$.next();
     this.destroyed$.complete();
   }
 
@@ -229,7 +229,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
       this.updateRoute('edit', urlIndex);
     }
     if (index !== this.entryIndex) {
-      this.contentIndex = null;
+      this.contentIndex = -1;
     }
     this.updateInfoBar();
     setTimeout(() => {
@@ -237,9 +237,9 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     }, 300);
   }
 
-  updateCounter($event, isActive) {
+  updateCounter(count: number, isActive: boolean) {
     if (isActive) {
-      this.answerCount = $event;
+      this.answerCount = count;
     }
   }
 
@@ -267,13 +267,13 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         this.currentStep,
         this.contents.length
       );
+      const state = new ContentPresentationState(
+        position,
+        index,
+        this.contents[this.currentStep]
+      );
+      this.presentationService.updateContentState(state);
     }
-    const state = new ContentPresentationState(
-      position,
-      index,
-      this.contents[this.currentStep]
-    );
-    this.presentationService.updateContentState(state);
   }
 
   lockContent() {
@@ -318,7 +318,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((action) => {
       if (action === ContentPublishActionType.UP_TO_HERE) {
         firstIndex = this.currentStep + 1;
-        if (lastIndex === -1) {
+        if (lastIndex === -1 && this.contentGroup.contentIds) {
           lastIndex = this.contentGroup.contentIds.length - 1;
         }
       } else if (action === ContentPublishActionType.FROM_HERE) {

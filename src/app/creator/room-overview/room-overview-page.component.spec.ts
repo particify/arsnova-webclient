@@ -63,17 +63,17 @@ describe('RoomOverviewPageComponent', () => {
     'sortContentGroupsByName',
   ]);
   mockContentGroupService.getByRoomIdAndName.and.returnValue(
-    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+    of(new ContentGroup('roomId', 'name', [], true))
   );
   mockContentGroupService.getById.and.returnValue(
-    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+    of(new ContentGroup('roomId', 'name', [], true))
   );
   mockContentGroupService.getByIds.and.returnValue(
-    of([new ContentGroup('1234', '0', 'roomId', 'name', [], true)])
+    of([new ContentGroup('roomId', 'name', [], true)])
   );
   mockContentGroupService.isIndexPublished.and.returnValue(true);
   mockContentGroupService.sortContentGroupsByName.and.returnValue([
-    new ContentGroup('1234', '0', 'roomId', 'name', [], true),
+    new ContentGroup('roomId', 'name', [], true),
   ]);
 
   const mockDialogService = jasmine.createSpyObj('DialogService', [
@@ -88,7 +88,7 @@ describe('RoomOverviewPageComponent', () => {
 
   snapshot.params = of([{ seriesName: 'SERIES' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   const splitShortIdPipe = new SplitShortIdPipe();
 

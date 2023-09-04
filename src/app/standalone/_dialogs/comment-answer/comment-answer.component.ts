@@ -22,6 +22,7 @@ import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/f
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   standalone: true,
@@ -115,7 +116,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
     });
   }
 
-  tabChanged($event) {
+  tabChanged($event: MatTabChangeEvent) {
     this.renderPreview = $event.index === 1;
   }
 

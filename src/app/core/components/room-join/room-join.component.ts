@@ -93,7 +93,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     // `Event` is used here because `(input)` returns this type
     const inputField = event.target as HTMLInputElement;
     const rawShortId = inputField.value;
-    const pos = inputField.selectionStart;
+    const pos = inputField.selectionStart as number;
     const ins = (event as InputEvent).inputType?.startsWith('insert');
     const del = (event as InputEvent).inputType === 'deleteContentForward';
     const spaceOffset =
@@ -116,7 +116,10 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   enforceLengthLimit(event: InputEvent): void {
     const inputField = event.target as HTMLInputElement;
     const ins = event.inputType.startsWith('insert');
-    const selection = inputField.selectionEnd > inputField.selectionStart;
+    const selection =
+      inputField.selectionEnd &&
+      inputField.selectionStart &&
+      inputField.selectionEnd > inputField.selectionStart;
     if (ins && !selection && inputField.value.length >= 9) {
       event.preventDefault();
     }

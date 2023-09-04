@@ -69,16 +69,22 @@ export class PreviewComponent implements OnInit {
       }
     } else if (format === ContentType.SCALE) {
       const scaleContent = this.content as ContentScale;
-      const optionLabels$ = this.likertScaleService
-        .getOptionLabels(scaleContent.optionTemplate, scaleContent.optionCount)
-        .map((l) => <Observable<string>>this.translateService.get(l));
-      forkJoin(optionLabels$).subscribe(
-        (labels) =>
-          (this.answerOptions = labels.map((l) => ({
-            label: l,
-            renderedLabel: l,
-          })))
+      const optionLabels = this.likertScaleService.getOptionLabels(
+        scaleContent.optionTemplate,
+        scaleContent.optionCount
       );
+      if (optionLabels) {
+        const optionLabels$ = optionLabels.map(
+          (l) => <Observable<string>>this.translateService.get(l)
+        );
+        forkJoin(optionLabels$).subscribe(
+          (labels) =>
+            (this.answerOptions = labels.map((l) => ({
+              label: l,
+              renderedLabel: l,
+            })))
+        );
+      }
     } else if (format === ContentType.WORDCLOUD) {
       this.words = new Array<string>(
         (this.content as ContentWordcloud).maxAnswers

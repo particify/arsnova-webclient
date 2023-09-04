@@ -65,7 +65,7 @@ export class AbstractLiveFeedbackPage {
 
   protected loadConfig(room: Room) {
     this.room = room;
-    this.isClosed = room.settings['feedbackLocked'];
+    this.isClosed = room.settings.feedbackLocked;
     this.type = this.feedbackService.getType(this.room);
   }
 

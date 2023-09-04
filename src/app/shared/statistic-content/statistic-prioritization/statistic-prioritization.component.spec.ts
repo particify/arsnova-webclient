@@ -6,7 +6,6 @@ import { EventService } from '@app/core/services/util/event.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
-import { ContentState } from '@app/core/models/content-state';
 import { ContentType } from '@app/core/models/content-type.enum';
 import {
   JsonTranslationLoader,
@@ -21,6 +20,8 @@ import { of } from 'rxjs';
 import { StatisticPrioritizationComponent } from './statistic-prioritization.component';
 import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
+import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
+import { Content } from '@app/core/models/content';
 
 describe('StatisticPrioritizationComponent', () => {
   let component: StatisticPrioritizationComponent;
@@ -48,7 +49,11 @@ describe('StatisticPrioritizationComponent', () => {
   };
   mockContentService.getAnswer.and.returnValue(of(stats));
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
-  const contentState = new ContentPresentationState(null, null, null);
+  const contentState = new ContentPresentationState(
+    PresentationStepPosition.START,
+    0,
+    new Content()
+  );
   mockContentService.getAnswersDeleted.and.returnValue(of(contentState));
 
   const mockPresentationService = jasmine.createSpyObj('PresentationService', [
@@ -95,15 +100,12 @@ describe('StatisticPrioritizationComponent', () => {
     fixture = TestBed.createComponent(StatisticPrioritizationComponent);
     component = fixture.componentInstance;
     component.content = new ContentPrioritization(
-      '1234',
-      '0',
       'room1234',
       'subject',
       'body',
       [],
       [],
       ContentType.PRIORITIZATION,
-      new ContentState(1, new Date(), false),
       0
     );
     fixture.detectChanges();

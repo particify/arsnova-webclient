@@ -51,21 +51,13 @@ export class ContentWordcloudCreationComponent
   }
 
   initContentCreation() {
-    this.content = new ContentWordcloud(
-      null,
-      null,
-      '',
-      '',
-      '',
-      [],
-      ContentType.WORDCLOUD,
-      null,
-      1
-    );
+    this.content = new ContentWordcloud();
   }
 
   initContentForEditing() {
-    this.content = this.editContent;
+    if (this.editContent) {
+      this.content = this.editContent;
+    }
     this.maxAnswers = (this.content as ContentWordcloud).maxAnswers;
   }
 

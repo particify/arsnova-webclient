@@ -13,9 +13,7 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
 @Injectable()
 export abstract class AbstractFocusModeService implements OnDestroy {
   destroyed$ = new Subject<void>();
-  protected focusModeEnabled$: BehaviorSubject<boolean> = new BehaviorSubject(
-    null
-  );
+  protected focusModeEnabled$ = new BehaviorSubject<boolean>(false);
 
   protected currentRoom: Room;
 
@@ -27,7 +25,7 @@ export abstract class AbstractFocusModeService implements OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.destroyed$.next(null);
+    this.destroyed$.next();
     this.destroyed$.complete();
   }
 
@@ -70,7 +68,7 @@ export abstract class AbstractFocusModeService implements OnDestroy {
       });
   }
 
-  protected abstract handleState(state?: FocusEvent, initial?: boolean);
+  protected abstract handleState(state?: FocusEvent, initial?: boolean): void;
 
   getFocusModeEnabled() {
     return this.focusModeEnabled$;

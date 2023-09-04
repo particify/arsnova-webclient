@@ -15,7 +15,7 @@ export class LocalFileService {
     data.subscribe((blob) => this.save(blob, filename));
   }
 
-  upload(accept?: string[]): Observable<Blob> {
+  upload(accept?: string[]): Observable<Blob | null> {
     const input = document.createElement('input');
     input.type = 'file';
     if (accept) {
@@ -24,8 +24,8 @@ export class LocalFileService {
     input.click();
     const fileChanged = fromEvent(input, 'change');
     return fileChanged.pipe(
-      filter((e) => (e.target as HTMLInputElement).files.length > 0),
-      map((e) => (e.target as HTMLInputElement).files[0])
+      filter((e) => !!(e.target as HTMLInputElement).files),
+      map((e) => ((e.target as HTMLInputElement).files as FileList).item(0))
     );
   }
 

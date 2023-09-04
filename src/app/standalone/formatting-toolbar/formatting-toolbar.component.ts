@@ -63,7 +63,7 @@ export class FormattingToolbarComponent {
     return option
       .getPattern()
       .test(
-        option.hasClosingTag()
+        option.closingTag
           ? this.replaceSelection(text, cursorStart, cursorEnd)
           : this.extractFromCurrentLine(text, cursorStart)
       );
@@ -100,9 +100,9 @@ export class FormattingToolbarComponent {
     reverse: boolean
   ): string {
     let formattedText: string;
-    let lineStartPos: number;
+    let lineStartPos: number | undefined;
 
-    if (option.hasClosingTag()) {
+    if (option.closingTag) {
       formattedText = this.getFormattedTextWithClosingTag(
         text,
         cursorStart,
@@ -122,7 +122,7 @@ export class FormattingToolbarComponent {
     // Add rest of text
     if (lineStartPos === undefined) {
       const restStart =
-        reverse && option.hasClosingTag()
+        reverse && !!option.closingTag
           ? cursorEnd + option.closingTag.length
           : cursorEnd;
       formattedText += text.substring(restStart, text.length);

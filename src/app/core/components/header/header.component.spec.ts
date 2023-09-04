@@ -78,7 +78,7 @@ class MockRoutingService {
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  const activatedRoute = new ActivatedRouteStub(null, {
+  const activatedRoute = new ActivatedRouteStub(undefined, {
     apiConfig: { ui: { demo: '27273589' } },
   });
   const notificationService = jasmine.createSpyObj('NotificationService', [
@@ -698,7 +698,7 @@ describe('HeaderComponent', () => {
   // # If not logged in
 
   it('should display user menu button if not logged in', async () => {
-    component.auth = null;
+    component.auth = undefined;
     userButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#menu-button' })
     );
@@ -706,7 +706,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should navigate to login route after when clicking login button', async () => {
-    component.auth = null;
+    component.auth = undefined;
     userButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#menu-button' })
     );

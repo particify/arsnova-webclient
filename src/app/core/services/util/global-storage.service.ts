@@ -275,22 +275,31 @@ export class GlobalStorageService {
     switch (this.getBackendFor(config)) {
       case StorageBackend.MEMORY:
         return this.memory.get(key);
-      case StorageBackend.SESSIONSTORAGE:
-        try {
-          return JSON.parse(sessionStorage.getItem(name));
-        } catch (error) {
-          console.error(error);
+      case StorageBackend.SESSIONSTORAGE: {
+        const sessionStorageItem = sessionStorage.getItem(name);
+        if (!sessionStorageItem) {
           return null;
         }
-      case StorageBackend.LOCALSTORAGE:
-        try {
-          return JSON.parse(localStorage.getItem(name));
-        } catch (error) {
-          console.error(error);
+        return this.parseItemFromJSON(sessionStorageItem);
+      }
+      case StorageBackend.LOCALSTORAGE: {
+        const localStorageItem = localStorage.getItem(name);
+        if (!localStorageItem) {
           return null;
         }
+        return this.parseItemFromJSON(localStorageItem);
+      }
       case StorageBackend.COOKIE:
         throw Error('Not implemented.');
+    }
+  }
+
+  parseItemFromJSON(item: string): any {
+    try {
+      return JSON.parse(item);
+    } catch (error) {
+      console.error(error);
+      return null;
     }
   }
 

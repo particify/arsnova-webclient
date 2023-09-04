@@ -46,8 +46,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   @Input() isPureInfoSeries: boolean;
 
   hasAnsweredLastContent: boolean;
-  private correctChart: Chart;
-  private progressChart: Chart;
+  private correctChart?: Chart;
+  private progressChart?: Chart;
   private colors = {
     chart: '',
     background: '',
@@ -246,7 +246,11 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private createChart(id: string, color: string, data: number[]): Chart {
+  private createChart(
+    id: string,
+    color: string,
+    data: number[]
+  ): Chart | undefined {
     if (!document.getElementById(id)) {
       return;
     }

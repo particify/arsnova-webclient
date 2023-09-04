@@ -7,6 +7,6 @@ import { HealthStatus } from '@app/admin/_models/health-status.enum';
   styleUrls: ['./health-status.component.scss'],
 })
 export class HealthStatusComponent {
-  @Input() status: HealthStatus;
+  @Input() status?: HealthStatus;
   HealthStatus = HealthStatus;
 }

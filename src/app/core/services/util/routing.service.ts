@@ -86,12 +86,12 @@ export class RoutingService {
         this.backRoute = [parentRoute];
       }
     } else {
-      this.backRoute = null;
+      this.backRoute = [];
     }
   }
 
   goBack() {
-    if (this.backRoute) {
+    if (this.backRoute.length > 0) {
       this.router.navigate(this.backRoute);
     } else {
       this.location.back();
@@ -108,7 +108,9 @@ export class RoutingService {
       if (!url && checkIfAlreadyOnLogin && this.location.path() !== '/login') {
         url = this.fullCurrentRoute ?? this.location.path();
       }
-      this.setRedirectUrl(url);
+      if (url) {
+        this.setRedirectUrl(url);
+      }
     }
   }
 
@@ -199,7 +201,7 @@ export class RoutingService {
     this.router.navigateByUrl(url);
   }
 
-  replaceRoleInUrl(url, oldRole, newRole): string {
+  replaceRoleInUrl(url: string, oldRole: string, newRole: string): string {
     const reg = new RegExp(`/${oldRole}+(|$)`);
     return url.replace(reg, newRole);
   }

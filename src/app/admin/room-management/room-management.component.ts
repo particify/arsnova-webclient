@@ -19,7 +19,7 @@ import { FormService } from '@app/core/services/util/form.service';
   styleUrls: ['../admin-styles.scss'],
 })
 export class RoomManagementComponent {
-  room: Room;
+  room?: Room;
   rooms: Room[];
   searchResults: string[];
 
@@ -61,30 +61,33 @@ export class RoomManagementComponent {
   clear() {
     this.rooms = [];
     this.searchResults = [];
-    this.room = null;
+    this.room = undefined;
   }
 
   deleteEntity() {
-    const dialogRef = this.dialogService.openDeleteDialog(
-      'room-as-admin',
-      'really-delete-room',
-      this.room.name,
-      undefined,
-      () => this.roomService.deleteRoom(this.room.id)
-    );
-    dialogRef.afterClosed().subscribe((closeAction) => {
-      if (closeAction === 'delete') {
-        this.translateService
-          .get('admin-area.room-deleted')
-          .subscribe((message) =>
-            this.notificationService.showAdvanced(
-              message,
-              AdvancedSnackBarTypes.WARNING
-            )
-          );
-        this.room = null;
-      }
-    });
+    if (this.room) {
+      const confirmAction = this.roomService.deleteRoom(this.room.id);
+      const dialogRef = this.dialogService.openDeleteDialog(
+        'room-as-admin',
+        'really-delete-room',
+        this.room.name,
+        undefined,
+        () => confirmAction
+      );
+      dialogRef.afterClosed().subscribe((closeAction) => {
+        if (closeAction === 'delete') {
+          this.translateService
+            .get('admin-area.room-deleted')
+            .subscribe((message) =>
+              this.notificationService.showAdvanced(
+                message,
+                AdvancedSnackBarTypes.WARNING
+              )
+            );
+          this.room = undefined;
+        }
+      });
+    }
   }
 
   transferRoom() {
@@ -96,8 +99,7 @@ export class RoomManagementComponent {
       },
     });
     dialogRef.componentInstance.clicked$.subscribe((userId) => {
-      console.log(userId);
-      if (!userId) {
+      if (!userId || !this.room) {
         return;
       }
       this.adminService.transferRoom(this.room.id, userId).subscribe(

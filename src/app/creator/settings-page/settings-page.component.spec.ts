@@ -12,11 +12,7 @@ import {
   MockRouter,
 } from '@testing/test-helpers';
 import { EventService } from '@app/core/services/util/event.service';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
@@ -41,11 +37,7 @@ describe('SettingsPageComponent', () => {
     userRole: UserRole.EDITOR,
   };
   snapshot.params = {};
-  const activatedRouteStub = new ActivatedRouteStub(null, data, snapshot);
-
-  let translateService: TranslateService;
-
-  const a11yIntroPipe = new A11yIntroPipe(translateService);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -70,10 +62,6 @@ describe('SettingsPageComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
-        },
-        {
-          provide: A11yIntroPipe,
-          useValue: a11yIntroPipe,
         },
         {
           provide: NotificationService,

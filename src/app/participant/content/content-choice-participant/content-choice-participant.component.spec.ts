@@ -40,7 +40,11 @@ describe('ContentChoiceParticipantComponent', () => {
 
   snapshot.params = of([params]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -89,16 +93,13 @@ describe('ContentChoiceParticipantComponent', () => {
     component = fixture.componentInstance;
     component.content = new ContentChoice(
       '1234',
-      '1',
-      '1234',
       'subject',
       'body',
       [],
       [],
       [],
       false,
-      ContentType.CHOICE,
-      new ContentState(1, new Date(), false)
+      ContentType.CHOICE
     );
     component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();

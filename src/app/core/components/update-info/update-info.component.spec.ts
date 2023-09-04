@@ -11,6 +11,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { VersionInfo } from '@app/core/models/version-info';
 
 describe('UpdateInfoComponent', () => {
   let component: UpdateInfoComponent;
@@ -31,7 +32,7 @@ describe('UpdateInfoComponent', () => {
   const mockMatDialogData = {
     updateAvailable: false,
     afterUpdate: true,
-    versions: [],
+    versions: [] as VersionInfo[],
   };
 
   beforeEach(waitForAsync(() => {

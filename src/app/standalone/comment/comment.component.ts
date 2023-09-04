@@ -62,7 +62,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() isSimpleView = false;
   @Input() isModeration = false;
   @Input() fileUploadEnabled = false;
-  @Input() parseVote?: Vote;
+  @Input() parseVote: Vote;
   @Input() userId?: string;
 
   @Output() clickedOnTag = new EventEmitter<string>();

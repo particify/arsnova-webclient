@@ -114,6 +114,7 @@ export class PasswordEntryComponent
     } else {
       const msg = this.translationService.instant('password.unsuccessful');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return '';
     }
   }
 

@@ -28,7 +28,7 @@ export class ParticipantPageComponent implements OnInit {
     this.route.data.subscribe((data) => {
       this.focusModeService.init(
         data.room,
-        this.route.snapshot.firstChild.firstChild.data.feature
+        this.route.snapshot.firstChild?.firstChild?.data.feature
       );
     });
     this.focusModeService

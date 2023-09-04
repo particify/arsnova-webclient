@@ -40,7 +40,7 @@ describe('FooterComponent', () => {
     },
   };
 
-  const activatedRoute = new ActivatedRouteStub(null, config);
+  const activatedRoute = new ActivatedRouteStub(undefined, config);
   const consentService = jasmine.createSpyObj('ConsentService', [
     'consentRequired',
     'openDialog',

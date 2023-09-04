@@ -25,7 +25,7 @@ export class ContentParticipantComponent
   implements OnInit
 {
   @Input() content: Content;
-  @Input() answer: Answer;
+  @Input() answer?: Answer;
   @Input() lastContent: boolean;
   @Input() active: boolean;
   @Input() index: number;
@@ -138,7 +138,7 @@ export class ContentParticipantComponent
     }
   }
 
-  submitAnswerEvent($event, type: string) {
+  submitAnswerEvent($event: MouseEvent, type: string) {
     $event.preventDefault();
     this.sendEvent.emit(type);
   }

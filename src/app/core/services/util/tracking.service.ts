@@ -1,4 +1,4 @@
-import { ErrorHandler, Injectable } from '@angular/core';
+import { ErrorHandler, Inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
@@ -67,11 +67,12 @@ export class TrackingService {
     private translateService: TranslateService,
     private themeService: ThemeService,
     private globalStorageService: GlobalStorageService,
-    errorHandler: ErrorHandler
+    errorHandler: ErrorHandler,
+    @Inject(Window) private _window: { [key: string]: object }
   ) {
     this.appErrorHandler = errorHandler as AppErrorHandler;
-    window['_paq'] = window['_paq'] || [];
-    this._paq = window['_paq'];
+    _window['_paq'] = _window['_paq'] || [];
+    this._paq = _window['_paq'] as any[];
     this.consentGiven = this.consentService.consentGiven(
       StorageItemCategory.STATISTICS
     );
@@ -120,7 +121,7 @@ export class TrackingService {
         ),
         map((event) => event as ActivationEnd),
         filter((event) => event.snapshot.outlet === 'primary'),
-        filter((event) => !event.snapshot.routeConfig.children)
+        filter((event) => !event.snapshot.routeConfig?.children)
       )
       .subscribe((event) => {
         this.addRoute(this.router.url, event.snapshot);
@@ -128,11 +129,11 @@ export class TrackingService {
     this.translateService.onLangChange.subscribe((event: LangChangeEvent) =>
       this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang)
     );
-    this.themeService
-      .getCurrentTheme$()
-      .subscribe((themeName) =>
-        this.setVisitDimension(VisitDimension.THEME, themeName)
-      );
+    this.themeService.getCurrentTheme$().subscribe((themeName) => {
+      if (themeName) {
+        this.setVisitDimension(VisitDimension.THEME, themeName);
+      }
+    });
     this.appErrorHandler.uiErrorCount$.subscribe((count) =>
       this.setVisitDimension(VisitDimension.UI_ERROR_COUNT, count.toString())
     );
@@ -159,7 +160,7 @@ export class TrackingService {
     trackerScript.src = this.uiConfig.tracking.url + 'matomo.js';
     trackerScript.async = true;
     trackerScript.defer = true;
-    trackerScript.onload = () => (this._paq = window['_paq']);
+    trackerScript.onload = () => (this._paq = this._window['_paq'] as any[]);
     document.body.appendChild(trackerScript);
 
     this.loaded = true;
@@ -272,18 +273,23 @@ export class TrackingService {
   addRoute(uri: string, route?: ActivatedRouteSnapshot) {
     const titleMatches = document.title.match(/^(.+?)( [|–•].*)?$/);
     let title = titleMatches ? titleMatches[1] : '';
-    const dimensions = {};
+    const dimensions: { [key: string]: string } = {};
     if (route) {
-      title = route.title;
+      if (route.title) {
+        title = route.title;
+      }
       const shortId = route.paramMap.get('shortId');
       const role: UserRole = route.data.viewRole;
       if (role) {
         dimensions['dimension' + ActionDimension.ROOM_ROLE] = role
           .toString()
           .toLowerCase();
-        if (this.specialRooms.has(shortId)) {
-          dimensions['dimension' + ActionDimension.SPECIAL_ROOM] =
-            this.specialRooms.get(shortId);
+        if (shortId && this.specialRooms.has(shortId)) {
+          const specialRoom = this.specialRooms.get(shortId);
+          if (specialRoom) {
+            dimensions['dimension' + ActionDimension.SPECIAL_ROOM] =
+              specialRoom;
+          }
         }
       }
     }
@@ -311,7 +317,7 @@ export class TrackingService {
     const event: (string | number)[] = ['trackEvent', category, action];
     /* Check for undefined explicitly because 0 is a valid value */
     if (name || typeof value !== 'undefined') {
-      event.push(name);
+      event.push(name || 'No name defined');
       if (typeof value !== 'undefined') {
         event.push(value);
       }

@@ -108,8 +108,6 @@ describe('StatisticScaleComponent', () => {
     fixture = TestBed.createComponent(StatisticScaleComponent);
     component = fixture.componentInstance;
     component.content = new ContentChoice(
-      '1234',
-      '0',
       'room1234',
       'subject',
       'body',
@@ -117,8 +115,7 @@ describe('StatisticScaleComponent', () => {
       [],
       [],
       false,
-      ContentType.SCALE,
-      new ContentState(1, new Date(), false)
+      ContentType.SCALE
     );
     component.settings = new UserSettings();
     fixture.detectChanges();

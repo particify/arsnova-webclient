@@ -10,6 +10,8 @@ import {
   BarElement,
   CategoryScale,
   Chart,
+  ChartMeta,
+  Element,
   LinearScale,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -196,7 +198,9 @@ export class StatisticPrioritizationComponent
           },
           datalabels: {
             formatter: (value, context) => {
-              return this.getDataLabel(context.dataset.data[context.dataIndex]);
+              return this.getDataLabel(
+                context.dataset.data[context.dataIndex] as number
+              );
             },
             display: (context) => {
               return (context.dataset.data[context.dataIndex] as number) > 0;
@@ -214,10 +218,10 @@ export class StatisticPrioritizationComponent
   reorderChart() {
     const reorderBar = {
       id: 'reorderBar',
-      beforeUpdate: (chart) => {
+      beforeUpdate: (chart: Chart) => {
         if (this.active) {
           // Get data from chart
-          const data = JSON.parse(
+          const data: number[] = JSON.parse(
             JSON.stringify(
               this.answersVisible ? this.chartData : this.emptyData
             )
@@ -235,18 +239,18 @@ export class StatisticPrioritizationComponent
           data.sort((a, b) => b - a);
 
           // Get current meta data, labels and colors
-          const meta = chart.getDatasetMeta(0);
-          const newMeta = [];
+          const meta: ChartMeta = chart.getDatasetMeta(0);
+          const newMeta: Element<object, object>[] = [];
           const labels = JSON.parse(
             JSON.stringify(this.options.map((o) => this.getLabel(o.label)))
           );
-          const newLabels = [];
-          const newColors = [];
+          const newLabels: string[] = [];
+          const newColors: string[] = [];
 
           // Set new data according to sorted indexes
-          meta.data.forEach((data, index) => {
+          meta.data.forEach((metaData, index) => {
             const newIndex = this.indexes.indexOf(index);
-            newMeta[newIndex] = data;
+            newMeta[newIndex] = metaData;
             newLabels[newIndex] = labels[index];
             newColors[newIndex] = this.chartColors[index];
           });
@@ -266,13 +270,13 @@ export class StatisticPrioritizationComponent
     return reorderBar;
   }
 
-  getDataLabel(value): string {
+  getDataLabel(value: number): string {
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
       label =
         (value / (this.answerCount - this.abstentionCount)).toFixed(0) + '%';
     } else {
-      label = value;
+      label = value.toString();
     }
     return label;
   }
@@ -349,7 +353,7 @@ export class StatisticPrioritizationComponent
     }
   }
 
-  getLabel(label: string): string {
+  getLabel(label: string): string | undefined {
     const chartContainer = document.getElementById('container-' + this.chartId);
     if (!chartContainer) {
       return;

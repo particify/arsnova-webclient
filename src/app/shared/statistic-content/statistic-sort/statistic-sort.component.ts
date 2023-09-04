@@ -276,7 +276,7 @@ export class StatisticSortComponent
       drawOnChartArea: !this.isPresentation,
     };
     const scale = this.presentationService.getScale();
-    this.data[0].barThickness = this.isPresentation ? 80 : null;
+    this.data[0].barThickness = this.isPresentation ? 80 : undefined;
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -325,8 +325,8 @@ export class StatisticSortComponent
           datalabels: {
             formatter: (value, context) => {
               return this.getDataLabel(
-                context.dataset.data[context.dataIndex],
-                context.dataset.data
+                context.dataset.data[context.dataIndex] as number,
+                context.dataset.data as number[]
               );
             },
             display: (context) => {
@@ -351,7 +351,7 @@ export class StatisticSortComponent
         this.createChart();
         return;
       }
-      if (this.chart.data.labels.toString() !== this.labels.toString()) {
+      if (this.chart?.data?.labels?.toString() !== this.labels.toString()) {
         this.chart.data.labels = this.labels;
       }
       this.chart.update();

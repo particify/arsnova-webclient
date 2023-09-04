@@ -70,28 +70,12 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  checkInputData(body: string): boolean {
-    body = body.trim();
-    if (!body) {
-      this.translateService
-        .get('comment-page.error-comment')
-        .subscribe((message) => {
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.WARNING
-          );
-        });
-      return false;
-    }
-    return true;
-  }
-
-  updateTag(tag) {
+  updateTag(tag: string) {
     this.selectedTag = tag;
   }
 
   send(comment: Comment): void {
-    let message;
+    let message: string;
     this.disableForm();
     this.commentService.addComment(comment).subscribe(
       (newComment) => {
@@ -123,15 +107,25 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
   }
 
   closeDialog(body?: string) {
-    if (this.checkInputData(body) === true) {
-      const comment = new Comment();
-      comment.roomId = this.data.roomId;
-      comment.body = body;
-      comment.creatorId = this.data.userId;
-      if (this.selectedTag !== null) {
-        comment.tag = this.selectedTag;
-      }
-      this.send(comment);
+    body = body?.trim();
+    if (!body) {
+      this.translateService
+        .get('comment-page.error-comment')
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
+      return;
     }
+    const comment = new Comment();
+    comment.roomId = this.data.roomId;
+    comment.body = body;
+    comment.creatorId = this.data.userId;
+    if (this.selectedTag !== null) {
+      comment.tag = this.selectedTag;
+    }
+    this.send(comment);
   }
 }

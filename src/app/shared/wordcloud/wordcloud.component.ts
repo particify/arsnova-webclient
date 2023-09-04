@@ -14,6 +14,16 @@ const RENDER_WIDTH = 800;
 const RATIO = 16 / 9;
 const ZOOM_EFFECT = 'zoom-effect';
 
+export class WordCloudItem {
+  text: string;
+  size: number;
+
+  constructor(text: string, size: number) {
+    this.text = text;
+    this.size = size;
+  }
+}
+
 @Component({
   selector: 'app-wordcloud',
   templateUrl: './wordcloud.component.svg',
@@ -27,7 +37,7 @@ const ZOOM_EFFECT = 'zoom-effect';
   ],
 })
 export class WordcloudComponent implements OnChanges {
-  @Input() wordWeights: [string, number][];
+  @Input() wordWeights: WordCloudItem[];
   @ViewChild('wordcloud') elementRef: ElementRef<SVGGeometryElement>;
 
   width: number = RENDER_WIDTH;
@@ -35,11 +45,10 @@ export class WordcloudComponent implements OnChanges {
   scale = 1.2;
   scaleOffsetX = 0;
   scaleOffsetY = 0;
-  renderedWords = [];
+  renderedWords: Wordcloud.Word[] = [];
   fontFamily: string;
   wordColorIndexes: string[] = [];
 
-  private canvas = document.createElement('canvas');
   private timerSubscription: Subscription;
 
   constructor() {
@@ -51,7 +60,7 @@ export class WordcloudComponent implements OnChanges {
   ngOnChanges() {
     // Sorting is not required but leads to a consistent color order based on
     // word frequency for the initially rendered cloud.
-    this.wordWeights.sort((a, b) => b[1] - a[1]);
+    this.wordWeights.sort((a, b) => b.size - a.size);
     this.updateColorIndex();
     this.updateWordcloud();
   }
@@ -61,12 +70,14 @@ export class WordcloudComponent implements OnChanges {
    * existing color index assignments for words do not change.
    */
   updateColorIndex() {
-    const updatedWords = this.wordWeights.map((ww) => ww[0]);
+    const updatedWords = this.wordWeights.map((ww) => ww.text);
     const newWords = updatedWords.filter(
       (word) => !this.wordColorIndexes.includes(word)
     );
     this.wordColorIndexes = this.wordColorIndexes
-      .map((word) => (updatedWords.includes(word) ? word : newWords.pop()))
+      .map((word) =>
+        updatedWords.includes(word) ? word : newWords.pop() || ''
+      )
       .concat(newWords);
   }
 
@@ -74,36 +85,39 @@ export class WordcloudComponent implements OnChanges {
     const max = this.max();
     Wordcloud()
       .size([this.width, this.height])
-      .canvas(this.canvas)
-      .words(this.wordWeights.map((d) => ({ text: d[0], size: d[1] })))
+      .words(this.wordWeights.map((d) => ({ text: d.text, size: d.size })))
       .padding(4)
-      .rotate((d) => (d.size === max ? 0 : ~~(Math.random() * 2) * 90))
+      .rotate((d: Wordcloud.Word) =>
+        d === max ? 0 : ~~(Math.random() * 2) * 90
+      )
       .font(this.fontFamily)
-      .fontSize((d) => this.fontSize(d))
-      .on('end', (d) => {
+      .fontSize((d: Wordcloud.Word) => this.fontSize(d))
+      .on('end', (d: Wordcloud.Word[]) => {
         this.determineScaling();
         return (this.renderedWords = d);
       })
       .start();
   }
 
-  wordIdentity(index: number, word: any) {
+  wordIdentity(index: number, word: Wordcloud.Word) {
     return word?.text;
   }
 
-  color(word: string) {
-    // TODO: Move color palette to theme service.
-    const colors = [
-      '#027db9',
-      '#eb0054',
-      '#4d8076',
-      '#9f6b3f',
-      '#8e79ab',
-      '#e64a19',
-      '#787b1d',
-    ];
-    const index = this.wordColorIndexes.indexOf(word);
-    return colors[index % colors.length];
+  color(word?: string) {
+    if (word) {
+      // TODO: Move color palette to theme service.
+      const colors = [
+        '#027db9',
+        '#eb0054',
+        '#4d8076',
+        '#9f6b3f',
+        '#8e79ab',
+        '#e64a19',
+        '#787b1d',
+      ];
+      const index = this.wordColorIndexes.indexOf(word);
+      return colors[index % colors.length];
+    }
   }
 
   /* Calculates the scale based on the bounding box of the word cloud so that
@@ -131,18 +145,19 @@ export class WordcloudComponent implements OnChanges {
   /* Calculates the font size based on word frequency (logarithmical). The font
    * size is reduced for long words (> 20 chars) if they would otherwise be
    * rendered with a large font size to ensure they will fit the canvas. */
-  private fontSize(word: any) {
-    let factor = Math.log2(word.size + 1) / Math.log2(this.max() + 1);
+  private fontSize(word: Wordcloud.Word) {
+    let factor =
+      Math.log2((word.size as number) + 1) / Math.log2(this.max() + 1);
     factor *=
-      factor > 0.9 && word.text.length > 20
-        ? Math.pow(0.95, word.text.length - 20)
+      factor > 0.9 && word.text && word.text.length > 20
+        ? Math.pow(0.95, word.text?.length - 20)
         : 1;
     return TARGET_FONT_SIZE * factor;
   }
 
   private max() {
     return this.wordWeights
-      .map((w) => w[1])
+      .map((w) => w.size)
       .reduce((a, b) => Math.max(a, b), 0);
   }
 }

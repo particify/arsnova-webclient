@@ -16,7 +16,7 @@ export class AbstractRoomOverviewPage {
 
   isLoading = true;
 
-  room: Room = null;
+  room: Room;
   role: UserRole;
   contentGroups: ContentGroup[] = [];
   roomStats: RoomStats;

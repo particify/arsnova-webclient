@@ -14,7 +14,7 @@ import { EventService } from '@app/core/services/util/event.service';
 
 @Injectable()
 export class FocusModeService extends AbstractFocusModeService {
-  state$: BehaviorSubject<FocusEvent> = new BehaviorSubject(null);
+  private state$ = new BehaviorSubject<FocusEvent | null>(null);
 
   constructor(
     protected wsConnector: WsConnectorService,
@@ -49,7 +49,7 @@ export class FocusModeService extends AbstractFocusModeService {
     this.subscribeToRoomChanges();
   }
 
-  getState(): Observable<FocusEvent> {
+  getState(): Observable<FocusEvent | null> {
     return this.state$;
   }
 

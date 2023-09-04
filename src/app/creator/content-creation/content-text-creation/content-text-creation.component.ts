@@ -41,17 +41,8 @@ export class ContentTextCreationComponent
   }
 
   initContentCreation() {
-    this.content = new Content(
-      null,
-      null,
-      '',
-      '',
-      '',
-      [],
-      this.format,
-      null,
-      null
-    );
+    this.content = new Content();
+    this.content.format = this.format;
   }
 
   initContentForEditing() {

@@ -55,8 +55,11 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     return this.roomStatsService
       .getStats(roomId, extendedView)
       .pipe(
-        map((stats) =>
-          stats.groupStats.find((groupStats) => groupStats.groupName === name)
+        map(
+          (stats) =>
+            stats.groupStats.find(
+              (groupStats) => groupStats.groupName === name
+            ) as ContentGroupStatistics
         )
       );
   }
@@ -70,15 +73,13 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
       map(
         (stats) =>
           stats.groupStats.find((groupStats) => groupStats.groupName === name)
-            .id
+            ?.id
       ),
-      mergeMap((id) => this.getById(id, { roomId: roomId }))
+      mergeMap((id) => this.getById(id as string, { roomId: roomId }))
     );
   }
 
   post(entity: ContentGroup): Observable<ContentGroup> {
-    delete entity.id;
-    delete entity.revision;
     return this.postEntity(entity, entity.roomId).pipe(
       tap((group) => {
         this.roomStatsService.removeCacheEntry(entity.roomId);
@@ -155,21 +156,22 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   }
 
   saveGroupInMemoryStorage(newGroup: string): boolean {
-    if (newGroup !== '') {
-      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, newGroup);
-      const groups: string[] =
-        this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS) || [];
-      if (groups) {
-        for (let i = 0; i < groups.length; i++) {
-          if (newGroup === groups[i]) {
-            return false;
-          }
+    if (newGroup === '') {
+      return false;
+    }
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, newGroup);
+    const groups: string[] =
+      this.globalStorageService.getItem(STORAGE_KEYS.CONTENT_GROUPS) || [];
+    if (groups) {
+      for (let i = 0; i < groups.length; i++) {
+        if (newGroup === groups[i]) {
+          return false;
         }
       }
-      groups.push(newGroup);
-      this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, groups);
-      return true;
     }
+    groups.push(newGroup);
+    this.globalStorageService.setItem(STORAGE_KEYS.CONTENT_GROUPS, groups);
+    return true;
   }
 
   updateGroupInMemoryStorage(oldName: string, newName: string) {

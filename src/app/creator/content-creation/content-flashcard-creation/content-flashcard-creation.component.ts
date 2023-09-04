@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
@@ -24,7 +23,7 @@ export class ContentFlashcardCreationComponent
   extends ContentCreationComponent
   implements OnInit
 {
-  answer: string;
+  answer?: string;
   textContainsImage: boolean;
   HintType = HintType;
 
@@ -51,17 +50,11 @@ export class ContentFlashcardCreationComponent
   }
 
   initContentCreation() {
-    this.content = new ContentFlashcard(
-      null,
-      null,
-      '',
-      '',
-      '',
-      '',
-      [],
-      ContentType.FLASHCARD,
-      null
-    );
+    this.content = new ContentFlashcard();
+  }
+
+  resetAnswers(): void {
+    this.answer = undefined;
   }
 
   initContentForEditing() {
@@ -78,10 +71,6 @@ export class ContentFlashcardCreationComponent
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }
-  }
-
-  resetAnswers() {
-    this.answer = null;
   }
 
   updateTextContainsImage(text: string) {

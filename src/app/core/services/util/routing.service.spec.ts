@@ -57,7 +57,7 @@ describe('RoutingService', () => {
         parentRoute: ParentRoute.HOME,
       };
       Object.defineProperty(snapshot, 'title', { value: 'user' });
-      service.getBackRoute(snapshot, null);
+      service.getBackRoute(snapshot, UserRole.PARTICIPANT);
       service.goBack();
       expect(routerSpy.navigate).toHaveBeenCalledWith(['']);
     }
@@ -71,7 +71,7 @@ describe('RoutingService', () => {
         parentRoute: ParentRoute.HOME,
       };
       Object.defineProperty(snapshot, 'title', { value: 'login' });
-      service.getBackRoute(snapshot, null);
+      service.getBackRoute(snapshot, UserRole.PARTICIPANT);
       service.goBack();
       expect(routerSpy.navigate).toHaveBeenCalledWith(['']);
     }
@@ -85,7 +85,7 @@ describe('RoutingService', () => {
         parentRoute: ParentRoute.LOGIN,
       };
       Object.defineProperty(snapshot, 'title', { value: 'register' });
-      service.getBackRoute(snapshot, null);
+      service.getBackRoute(snapshot, UserRole.PARTICIPANT);
       service.goBack();
       expect(routerSpy.navigate).toHaveBeenCalledWith(['login']);
     }
@@ -99,7 +99,7 @@ describe('RoutingService', () => {
         parentRoute: ParentRoute.USER,
       };
       Object.defineProperty(snapshot, 'title', { value: 'room' });
-      service.getBackRoute(snapshot, null);
+      service.getBackRoute(snapshot, UserRole.PARTICIPANT);
       service.goBack();
       expect(routerSpy.navigate).toHaveBeenCalledWith(['user']);
     }
@@ -118,7 +118,7 @@ describe('RoutingService', () => {
       };
       Object.defineProperty(snapshot, 'title', { value: 'comments' });
       service.getRoomUrlData(snapshot);
-      service.getBackRoute(snapshot, null);
+      service.getBackRoute(snapshot, UserRole.OWNER);
       service.goBack();
       expect(routerSpy.navigate).toHaveBeenCalledWith(['edit', '12345678']);
     }
@@ -130,7 +130,7 @@ describe('RoutingService', () => {
       const snapshot = new ActivatedRouteSnapshot();
       snapshot.data = {};
       Object.defineProperty(snapshot, 'title', { value: 'room' });
-      service.getBackRoute(snapshot, null);
+      service.getBackRoute(snapshot, UserRole.PARTICIPANT);
       service.goBack();
       expect(location.back).toHaveBeenCalled();
     }

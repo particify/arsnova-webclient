@@ -67,14 +67,15 @@ describe('UserProfileComponent', () => {
   );
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of(auth));
 
-  let translateService: TranslateService;
-  const a11yIntroPipe = new A11yIntroPipe(translateService);
-
   const snapshot = new ActivatedRouteSnapshot();
 
   snapshot.params = of([{ accountSettingsName: null }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -116,10 +117,6 @@ describe('UserProfileComponent', () => {
         {
           provide: DialogService,
           useValue: mockDialogService,
-        },
-        {
-          provide: A11yIntroPipe,
-          useValue: a11yIntroPipe,
         },
         {
           provide: ActivatedRoute,

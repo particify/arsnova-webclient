@@ -29,7 +29,11 @@ describe('QrCodeComponent', () => {
     },
   };
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const mockApiConfigService = jasmine.createSpyObj(ApiConfigService, [
     'getApiConfig$',

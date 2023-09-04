@@ -1,7 +1,7 @@
 export class TextStatistic {
   answer: string;
   count: number;
-  id: string;
+  id?: string;
 
   constructor(answer: string, count: number, id?: string) {
     this.answer = answer;

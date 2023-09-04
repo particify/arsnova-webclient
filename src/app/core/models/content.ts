@@ -15,24 +15,18 @@ export class Content {
   state: ContentState;
 
   constructor(
-    id: string,
-    revision: string,
-    roomId: string,
-    subject: string,
-    body: string,
-    groups: string[],
-    format: ContentType,
-    formatAttributes: { [key: string]: string },
-    state: ContentState
+    roomId: string = '',
+    subject: string = '',
+    body: string = '',
+    groups: string[] = [],
+    format: ContentType = ContentType.TEXT,
+    formatAttributes: { [key: string]: string } = {}
   ) {
-    this.id = id;
-    this.revision = revision;
     this.roomId = roomId;
     this.subject = subject;
     this.body = body;
     this.groups = groups;
     this.format = format;
     this.formatAttributes = formatAttributes;
-    this.state = state;
   }
 }

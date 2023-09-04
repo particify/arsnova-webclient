@@ -4,7 +4,12 @@ export class ContentFocusState {
   contentGroupId: string;
   contentGroupName: string;
 
-  constructor(contentId, contentIndex, contentGroupId, contentGroupName) {
+  constructor(
+    contentId: string,
+    contentIndex: number,
+    contentGroupId: string,
+    contentGroupName: string
+  ) {
     this.contentId = contentId;
     this.contentIndex = contentIndex;
     this.contentGroupId = contentGroupId;

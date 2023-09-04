@@ -76,16 +76,13 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       return;
     }
     this.disableForm();
+    const answer = new MultipleTextsAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.texts = words;
+    answer.format = ContentType.WORDCLOUD;
     this.answerService
-      .addAnswer(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        texts: words,
-        creationTimestamp: null,
-        format: ContentType.WORDCLOUD,
-      })
+      .addAnswer(this.content.roomId, answer)
       .subscribe((answer) => {
         this.createAnswer(words);
         this.translateService.get('answer.sent').subscribe((msg) => {
@@ -103,16 +100,12 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
 
   abstain() {
     this.words = [];
+    const answer = new MultipleTextsAnswer();
+    answer.contentId = this.content.id;
+    answer.round = this.content.state.round;
+    answer.format = ContentType.WORDCLOUD;
     this.answerService
-      .addAnswer(this.content.roomId, {
-        id: null,
-        revision: null,
-        contentId: this.content.id,
-        round: this.content.state.round,
-        texts: [],
-        creationTimestamp: null,
-        format: ContentType.WORDCLOUD,
-      })
+      .addAnswer(this.content.roomId, answer)
       .subscribe((answer) => {
         this.createAnswer();
         this.sendStatusToParent(answer);

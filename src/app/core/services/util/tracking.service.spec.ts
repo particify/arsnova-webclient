@@ -32,6 +32,7 @@ describe('TrackingService', () => {
     TestBed.configureTestingModule({
       providers: [
         TrackingService,
+        Window,
         {
           provide: Router,
           useClass: MockRouter,
@@ -59,6 +60,10 @@ describe('TrackingService', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
+        },
+        {
+          provide: Window,
+          useValue: Window,
         },
       ],
     });

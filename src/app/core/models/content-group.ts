@@ -11,8 +11,6 @@ export class ContentGroup {
   correctOptionsPublished: boolean;
 
   constructor(
-    id = '',
-    revision = '',
     roomId = '',
     name = '',
     contentIds: string[] = [],
@@ -22,8 +20,6 @@ export class ContentGroup {
     statisticsPublished = true,
     correctOptionsPublished = true
   ) {
-    this.id = id;
-    this.revision = revision;
     this.roomId = roomId;
     this.name = name;
     this.contentIds = contentIds;

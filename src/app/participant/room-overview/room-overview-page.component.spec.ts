@@ -57,21 +57,21 @@ describe('RoomOverviewPageComponent', () => {
     'sortContentGroupsByName',
   ]);
   mockContentGroupService.getByRoomIdAndName.and.returnValue(
-    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+    of(new ContentGroup('roomId', 'name', [], true))
   );
   mockContentGroupService.getById.and.returnValue(
-    of(new ContentGroup('1234', '0', 'roomId', 'name', [], true))
+    of(new ContentGroup('roomId', 'name', [], true))
   );
   mockContentGroupService.getByIds.and.returnValue(
-    of([new ContentGroup('1234', '0', 'roomId', 'name', [], true)])
+    of([new ContentGroup('roomId', 'name', [], true)])
   );
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
   mockContentGroupService.sortContentGroupsByName.and.returnValue([
-    new ContentGroup('1234', '0', 'roomId', 'name', [], true),
+    new ContentGroup('roomId', 'name', [], true),
   ]);
 
   const room = new Room();
-  room.settings = {};
+  room.settings = { feedbackLocked: true };
   const data = {
     room: room,
     userRole: UserRole.PARTICIPANT,
@@ -84,7 +84,7 @@ describe('RoomOverviewPageComponent', () => {
 
   mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
 
-  const activatedRouteStub = new ActivatedRouteStub(null, data);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data);
 
   const splitShortIdPipe = new SplitShortIdPipe();
 

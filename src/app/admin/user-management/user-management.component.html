@@ -30,7 +30,7 @@
     <app-loading-button
       name="admin-area.activate-user"
       (clicked)="activateUser()"
-      [disabled]="user.account?.activated"
+      [disabled]="user.account.activated || false"
     ></app-loading-button>
   </div>
 </mat-card>

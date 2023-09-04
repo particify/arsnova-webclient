@@ -36,30 +36,26 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { MatMenuModule } from '@angular/material/menu';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentState } from '@app/core/models/content-state';
 import { ContentGroup } from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { ContentState } from '@app/core/models/content-state';
 
 @Injectable()
 class MockContentService {
   getContentsByIds() {
-    return of([
-      new Content(
-        '1234',
-        '0',
-        '1',
-        'subject',
-        'body',
-        [],
-        ContentType.CHOICE,
-        {},
-        new ContentState(1, new Date(), true)
-      ),
-    ]);
+    const content = new Content(
+      '1',
+      'subject',
+      'body',
+      [],
+      ContentType.CHOICE,
+      {}
+    );
+    content.state = new ContentState(1, new Date(), true);
+    return of([content]);
   }
 
   getTypeIcons() {
@@ -84,7 +80,7 @@ class MockRoomService {}
 @Injectable()
 class MockContentGroupService {
   getByRoomIdAndName() {
-    return of(new ContentGroup('1234', '0', 'roomId', 'name', [], true));
+    return of(new ContentGroup('roomId', 'name', [], true));
   }
 }
 
@@ -125,10 +121,6 @@ describe('GroupContentComponent', () => {
   snapshot.params = params;
 
   const activatedRouteStub = new ActivatedRouteStub(params, data, snapshot);
-
-  let translateService: TranslateService;
-
-  const a11yIntroPipe = new A11yIntroPipe(translateService);
 
   const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
 
@@ -191,10 +183,6 @@ describe('GroupContentComponent', () => {
         {
           provide: HotkeyService,
           useClass: MockHotykeyService,
-        },
-        {
-          provide: A11yIntroPipe,
-          useValue: a11yIntroPipe,
         },
         {
           provide: A11yRenderedBodyPipe,

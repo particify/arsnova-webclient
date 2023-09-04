@@ -48,7 +48,7 @@ export class AccessComponent
   @Input() room: Room;
   moderators: Moderator[] = [];
   userIds: string[] = [];
-  newModeratorId: string;
+  newModeratorId?: string;
   loginId = '';
   isLoading = true;
   selectedRole: UserRole;
@@ -92,7 +92,7 @@ export class AccessComponent
             takeUntil(this.formSubscription)
           )
           .subscribe(() => {
-            this.newModeratorId = null;
+            this.newModeratorId = undefined;
             if (this.loginIdIsEmail && this.loginId) {
               this.getUser();
             }
@@ -127,7 +127,7 @@ export class AccessComponent
               new Moderator(
                 user.id,
                 user.loginId,
-                moderators.find((m) => m.userId === user.id).role
+                moderators.find((m) => m.userId === user.id)?.role
               )
             );
           });

@@ -8,7 +8,7 @@ import { StorageItemCategory } from '@app/core/models/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from './notification.service';
 import { EventService } from './event.service';
-import { ApiConfig } from '@app/core/models/api-config';
+import { ApiConfig, Feature } from '@app/core/models/api-config';
 import { ConsentChangedEvent } from '@app/core/models/events/consent-changed';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
@@ -65,7 +65,7 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     }, new Map());
   private consentSettings: ConsentSettings;
   private privacyUrl: string;
-  private consentRecording;
+  private consentRecording: Feature;
 
   constructor(
     public dialog: MatDialog,

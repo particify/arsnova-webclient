@@ -42,6 +42,6 @@ export class HintComponent implements OnInit {
   }
 
   getHintType() {
-    this.hint = HINTS.find((hint) => hint.type === this.type);
+    this.hint = HINTS.find((hint) => hint.type === this.type) || HINTS[0];
   }
 }

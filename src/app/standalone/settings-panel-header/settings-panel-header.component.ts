@@ -19,6 +19,6 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./settings-panel-header.component.scss'],
 })
 export class SettingsPanelHeaderComponent {
-  @Input() text;
-  @Input() icon;
+  @Input() text: string;
+  @Input() icon: string;
 }

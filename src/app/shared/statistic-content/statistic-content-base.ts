@@ -48,11 +48,11 @@ export abstract class StatisticContentBaseComponent implements OnInit {
       });
   }
 
-  abstract init(stats: any);
+  abstract init(stats: AnswerStatistics | TextAnswer[]): void;
 
-  abstract afterInit();
+  abstract afterInit(): void;
 
-  abstract deleteAnswers();
+  abstract deleteAnswers(): void;
 
   toggleAnswers(visible?: boolean): boolean {
     this.answersVisible = visible ?? !this.answersVisible;
@@ -63,7 +63,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
     return this.contentService.getAnswer(this.content.roomId, this.content.id);
   }
 
-  abstract updateData(stats: AnswerStatistics | TextAnswer[]);
+  abstract updateData(stats: AnswerStatistics | TextAnswer[]): void;
 
   getSum(list: number[]): number {
     if (list.length > 0) {
@@ -82,12 +82,12 @@ export abstract class StatisticContentBaseComponent implements OnInit {
     this.updateCounterEvent.emit(this.answerCount);
   }
 
-  getDataLabel(value, roundData): string {
+  getDataLabel(value: number, roundData: number[]): string {
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
       label = ((value / this.getSum(roundData)) * 100).toFixed(0) + '%';
     } else {
-      label = value;
+      label = value.toString();
     }
     return label;
   }

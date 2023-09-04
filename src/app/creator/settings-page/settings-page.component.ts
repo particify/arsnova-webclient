@@ -26,10 +26,12 @@ export interface Settings {
 export class UpdateEvent {
   room: Room;
   showSuccessInfo: boolean;
-  loadRoom = false;
+  loadRoom? = false;
 
-  constructor(room: Room, showSuccessInfo: boolean, loadRoom?: boolean) {
-    this.room = room;
+  constructor(room: Room | null, showSuccessInfo: boolean, loadRoom?: boolean) {
+    if (room) {
+      this.room = room;
+    }
     this.showSuccessInfo = showSuccessInfo;
     this.loadRoom = loadRoom;
   }

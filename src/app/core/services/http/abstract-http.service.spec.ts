@@ -47,10 +47,10 @@ class TestHttpService extends AbstractHttpService<object> {
     return super.performGet(url, options);
   }
 
-  public override performRequest<U extends object | object[]>(
+  public override performRequest<U extends object | object[] = object>(
     method: HttpMethod,
     uri: string,
-    body: U,
+    body?: object,
     options?: {
       retry?: boolean;
       retryInitialInterval?: number;

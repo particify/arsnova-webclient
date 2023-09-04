@@ -13,7 +13,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 import { By } from '@angular/platform-browser';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentState } from '@app/core/models/content-state';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 
@@ -86,41 +85,34 @@ describe('SeriesOverviewComponent', () => {
     fixture = TestBed.createComponent(SeriesOverviewComponent);
     component = fixture.componentInstance;
     component.group = new ContentGroup();
-    component.contents = [
-      new Content(
-        '1111',
-        '1',
-        '1',
-        'subject',
-        'body',
-        [],
-        ContentType.CHOICE,
-        {},
-        new ContentState(1, new Date(), true)
-      ),
-      new Content(
-        '2222',
-        '1',
-        '1',
-        'subject',
-        'body',
-        [],
-        ContentType.CHOICE,
-        {},
-        new ContentState(1, new Date(), true)
-      ),
-      new Content(
-        '3333',
-        '1',
-        '1',
-        'subject',
-        'body',
-        [],
-        ContentType.CHOICE,
-        {},
-        new ContentState(1, new Date(), true)
-      ),
-    ];
+    const content1 = new Content(
+      '1',
+      'subject',
+      'body',
+      [],
+      ContentType.CHOICE,
+      {}
+    );
+    content1.id = '1111';
+    const content2 = new Content(
+      '1',
+      'subject',
+      'body',
+      [],
+      ContentType.CHOICE,
+      {}
+    );
+    content2.id = '2222';
+    const content3 = new Content(
+      '1',
+      'subject',
+      'body',
+      [],
+      ContentType.CHOICE,
+      {}
+    );
+    content3.id = '3333';
+    component.contents = [content1, content2, content3];
   });
 
   it('should create', () => {

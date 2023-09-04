@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -23,6 +23,7 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ContentState } from '@app/core/models/content-state';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -30,8 +31,8 @@ const httpOptions = {
 
 @Injectable()
 export class ContentService extends AbstractEntityService<Content> {
-  answersDeleted = new BehaviorSubject<string>(null);
-  private roundStarted = new BehaviorSubject<Content>(null);
+  answersDeleted = new BehaviorSubject<string | null>(null);
+  private roundStarted = new BehaviorSubject<Content | null>(null);
 
   serviceApiUrl = {
     answer: '/answer',
@@ -200,8 +201,8 @@ export class ContentService extends AbstractEntityService<Content> {
       .pipe(catchError(this.handleError<Content>('patchContent')));
   }
 
-  changeState(content: Content): Observable<Content> {
-    const changes: { state: object } = { state: content.state };
+  changeState(content: Content, state: ContentState): Observable<Content> {
+    const changes: { state: object } = { state: state };
     return this.patchContent(content, changes).pipe();
   }
 
@@ -247,6 +248,9 @@ export class ContentService extends AbstractEntityService<Content> {
 
   deleteAllAnswersOfContentGroup(contentGroup: ContentGroup) {
     const observableBatch = [];
+    if (!contentGroup.contentIds) {
+      return of();
+    }
     for (const contentId of contentGroup.contentIds) {
       observableBatch.push(this.deleteAnswers(contentGroup.roomId, contentId));
     }
@@ -351,7 +355,10 @@ export class ContentService extends AbstractEntityService<Content> {
     this.router.navigate(['edit', shortId, 'series', group, 'edit', contentId]);
   }
 
-  deleteAnswersOfContent(contentId, roomId): Observable<Content> {
+  deleteAnswersOfContent(
+    contentId: string,
+    roomId: string
+  ): Observable<Content> {
     return this.deleteAnswers(roomId, contentId).pipe(
       tap(() => {
         this.translateService.get('dialog.answers-deleted').subscribe((msg) => {
@@ -365,7 +372,7 @@ export class ContentService extends AbstractEntityService<Content> {
     );
   }
 
-  getAnswersDeleted(): Observable<string> {
+  getAnswersDeleted(): Observable<string | null> {
     return this.answersDeleted;
   }
 
@@ -409,7 +416,7 @@ export class ContentService extends AbstractEntityService<Content> {
     });
   }
 
-  getRoundStarted(): Observable<Content> {
+  getRoundStarted(): Observable<Content | null> {
     return this.roundStarted;
   }
 }
