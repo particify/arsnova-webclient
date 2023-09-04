@@ -99,7 +99,8 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
         ? this.feedbackLabels
         : this.surveyLabels
     ).map((label) => 'survey.' + label);
-    const labels = this.translateService.translate<string[]>(typeLabels);
+    const labels =
+      this.translateService.translate<Record<string, string>>(typeLabels);
     const status = this.translateService.translate(
       this.isClosed ? 'survey.a11y-stopped' : 'survey.a11y-started'
     );
