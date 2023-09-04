@@ -65,7 +65,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
   submitAnswer() {
     if (this.textAnswer.trim().valueOf() === '') {
       this.translateService
-        .selectTranslate('answer.please-answer')
+        .selectTranslate('participant.answer.please-answer')
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -88,7 +88,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       .subscribe((answer) => {
         this.createAnswer(this.textAnswer);
         this.translateService
-          .selectTranslate('answer.sent')
+          .selectTranslate('participant.answer.sent')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

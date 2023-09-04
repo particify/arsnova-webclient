@@ -62,7 +62,7 @@
 
   <ng-container matColumnDef="round">
     <mat-header-cell *matHeaderCellDef>
-      {{ 'statistic.round' | transloco }}
+      {{ 'creator.statistic.round' | transloco }}
     </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
       {{ cp.round }}
@@ -95,7 +95,7 @@
 
   <ng-container matColumnDef="percentage">
     <mat-header-cell *matHeaderCellDef>
-      {{ 'statistic.correct' | transloco }}
+      {{ 'creator.statistic.correct' | transloco }}
     </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
       {{
@@ -111,7 +111,7 @@
 </table>
 
 <h3 *ngIf="!isLoading && this.dataSource.length === 0">
-  {{ 'statistic.no-contents' | transloco }}
+  {{ 'creator.statistic.no-contents' | transloco }}
 </h3>
 
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>

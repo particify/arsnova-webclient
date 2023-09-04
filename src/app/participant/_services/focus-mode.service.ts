@@ -70,7 +70,9 @@ export class FocusModeService extends AbstractFocusModeService {
         if (focusModeEnabled) {
           this.evaluateNewState();
         } else {
-          const msg = this.translateService.translate('focus-mode.stopped');
+          const msg = this.translateService.translate(
+            'participant.focus-mode.stopped'
+          );
           this.notificationService.showAdvanced(
             msg,
             AdvancedSnackBarTypes.INFO

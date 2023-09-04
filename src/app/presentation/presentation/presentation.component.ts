@@ -66,7 +66,7 @@ export class PresentationComponent implements OnInit, OnDestroy {
       }
       if (data.room.focusModeEnabled) {
         this.translateService
-          .selectTranslate('presentation.focus-mode-enabled-info')
+          .selectTranslate('creator.presentation.focus-mode-enabled-info')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

@@ -400,7 +400,7 @@ export class StatisticListComponent implements OnInit {
       .subscribe(() => {
         this.resetAllAnswers();
         this.translateService
-          .selectTranslate('content.all-answers-deleted')
+          .selectTranslate('creator.content.all-answers-deleted')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

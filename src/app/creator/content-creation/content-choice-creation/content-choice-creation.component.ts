@@ -71,7 +71,7 @@ export class ContentChoiceCreationComponent
   addAnswer(answer: string) {
     if (answer === '') {
       this.translationService
-        .selectTranslate('content.no-empty2')
+        .selectTranslate('creator.content.no-empty2')
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -88,7 +88,7 @@ export class ContentChoiceCreationComponent
       this.newAnswerOptionChecked
     ) {
       this.translationService
-        .selectTranslate('content.only-one')
+        .selectTranslate('creator.content.only-one')
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -107,9 +107,11 @@ export class ContentChoiceCreationComponent
       this.newAnswerOptionChecked = false;
       this.resetAnswerInputEvent.emit(true);
       this.fillCorrectAnswers();
-      this.announceService.announce('content.a11y-answer-added');
+      this.announceService.announce('creator.content.a11y-answer-added');
     } else {
-      const msg = this.translationService.translate('content.max-answers');
+      const msg = this.translationService.translate(
+        'creator.content.max-answers'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
     }
   }
@@ -187,7 +189,9 @@ export class ContentChoiceCreationComponent
 
   createContent(): boolean {
     if ((this.content as ContentChoice).options.length < 2) {
-      const msg = this.translationService.translate('content.need-answers');
+      const msg = this.translationService.translate(
+        'creator.content.need-answers'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }
@@ -196,7 +200,9 @@ export class ContentChoiceCreationComponent
       !this.noCorrectAnswers &&
       (this.content as ContentChoice).correctOptionIndexes.length !== 1
     ) {
-      const msg = this.translationService.translate('content.select-one');
+      const msg = this.translationService.translate(
+        'creator.content.select-one'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }
@@ -205,12 +211,16 @@ export class ContentChoiceCreationComponent
       !this.noCorrectAnswers &&
       (this.content as ContentChoice).correctOptionIndexes.length < 1
     ) {
-      const msg = this.translationService.translate('content.at-least-one');
+      const msg = this.translationService.translate(
+        'creator.content.at-least-one'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }
     if (this.createAnswerOptionComponent?.newAnswer.length > 0) {
-      const msg = this.translationService.translate('content.unsaved-answer');
+      const msg = this.translationService.translate(
+        'creator.content.unsaved-answer'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }

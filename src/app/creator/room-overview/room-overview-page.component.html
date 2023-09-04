@@ -2,7 +2,7 @@
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{
       (isModerator
-        ? 'room-page.a11y-moderator-message'
+        ? 'creator.room-page.a11y-moderator-message'
         : 'room-page.a11y-room-message'
       )
         | a11yIntro: { room: room.name, key: room.shortId }
@@ -44,7 +44,7 @@
     >
       <ng-container *ngIf="contentGroups?.length === 0">
         <p class="hint-sm">
-          {{ 'room-page.no-content-groups' | transloco }}
+          {{ 'creator.room-page.no-content-groups' | transloco }}
         </p>
         <p
           tabindex="-1"
@@ -62,13 +62,15 @@
         mat-stroked-button
         color="primary"
         class="add-group"
-        [attr.aria-label]="'room-page.a11y-create-content-group' | transloco"
+        [attr.aria-label]="
+          'creator.room-page.a11y-create-content-group' | transloco
+        "
         (click)="openCreateContentGroupDialog()"
         appHotkey="3"
-        [appHotkeyTitle]="'room-page.create-content-group' | transloco"
+        [appHotkeyTitle]="'creator.room-page.create-content-group' | transloco"
       >
         <mat-icon>playlist_add</mat-icon>
-        {{ 'room-page.create-content-group' | transloco }}
+        {{ 'creator.room-page.create-content-group' | transloco }}
       </button>
       <ng-container *ngIf="!!contentGroups">
         <p

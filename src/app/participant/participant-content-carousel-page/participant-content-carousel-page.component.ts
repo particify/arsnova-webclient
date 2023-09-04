@@ -258,8 +258,8 @@ export class ParticipantContentCarouselPageComponent
           this.alreadySent.set(this.currentStep, false);
           const msg = this.translateService.translate(
             content.state.round === 1
-              ? 'content.answers-reset'
-              : 'content.new-round-started'
+              ? 'participant.content.answers-reset'
+              : 'participant.content.new-round-started'
           );
           this.notificationService.show(msg);
         }
@@ -435,7 +435,7 @@ export class ParticipantContentCarouselPageComponent
           () => {
             this.finishLoading();
             const msg = this.translateService.translate(
-              'answer.group-not-available'
+              'participant.answer.group-not-available'
             );
             this.notificationService.showAdvanced(
               msg,
@@ -465,9 +465,11 @@ export class ParticipantContentCarouselPageComponent
           if (!this.displaySnackBar) {
             this.displaySnackBar = true;
             const contentsChangedMessage = this.translateService.translate(
-              'answer.state-changed'
+              'participant.answer.state-changed'
             );
-            const loadString = this.translateService.translate('answer.load');
+            const loadString = this.translateService.translate(
+              'participant.answer.load'
+            );
             this.notificationService.show(contentsChangedMessage, loadString, {
               duration: 5000,
             });

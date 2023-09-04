@@ -30,7 +30,7 @@
       color="primary"
       class="answer-button"
       [attr.aria-label]="
-        'survey.a11y-' +
+        'participant.survey.a11y-' +
           (type === LiveFeedbackType.SURVEY
             ? surveyLabels[i]
             : feedbackLabels[i]) | transloco
@@ -39,7 +39,7 @@
       tabIndex="0"
       [appHotkey]="key"
       [appHotkeyTitle]="
-        'survey.a11y-' +
+        'participant.survey.a11y-' +
           (type === LiveFeedbackType.SURVEY
             ? surveyLabels[i]
             : feedbackLabels[i]) | transloco
@@ -54,7 +54,7 @@
       <mat-icon
         *ngIf="type === LiveFeedbackType.FEEDBACK"
         class="button-label-icon"
-        [matTooltip]="'survey.' + feedbackLabels[i] | transloco"
+        [matTooltip]="'participant.survey.' + feedbackLabels[i] | transloco"
       >
         {{ feedbackIcons[i] }}</mat-icon
       >

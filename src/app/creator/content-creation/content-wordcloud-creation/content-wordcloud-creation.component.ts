@@ -67,7 +67,7 @@ export class ContentWordcloudCreationComponent
       return true;
     } else {
       const msg = this.translationService.translate(
-        'content.max-keywords-out-of-range',
+        'creator.content.max-keywords-out-of-range',
         { min: 1, max: MAX_KEYWORDS }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);

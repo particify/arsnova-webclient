@@ -139,7 +139,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
           this.initGroup();
         });
       this.translateService
-        .selectTranslate('control-bar.publish-or-lock-content')
+        .selectTranslate('creator.control-bar.publish-or-lock-content')
         .subscribe((t) =>
           this.hotkeyService.registerHotkey(
             {

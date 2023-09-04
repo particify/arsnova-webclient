@@ -63,12 +63,12 @@ export class CommentListBarExtensionComponent {
   deleteComments(): void {
     if (this.isModeration) {
       const msg = this.translateService.translate(
-        'comment-list.banned-comments-deleted'
+        'creator.comment-list.banned-comments-deleted'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     } else {
       const msg = this.translateService.translate(
-        'comment-list.all-comments-deleted'
+        'creator.comment-list.all-comments-deleted'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }

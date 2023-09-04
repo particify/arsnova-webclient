@@ -18,7 +18,7 @@
             (keyup)="moveAnswer($event, i)"
             #sortListItem
             [attr.aria-label]="
-              'content.a11y-sort-answer'
+              'creator.content.a11y-sort-answer'
                 | transloco
                   : {
                       index: i + 1,
@@ -50,12 +50,12 @@
             mat-icon-button
             *ngIf="!isEditMode || noAnswersYet"
             attr.aria-label="{{
-              'content.a11y-delete-answer'
+              'creator.content.a11y-delete-answer'
                 | transloco: { answer: answer.answerOption.label }
             }}"
             class="delete"
             (click)="deleteAnswer(i)"
-            matTooltip="{{ 'content.delete-answer' | transloco }}"
+            matTooltip="{{ 'creator.content.delete-answer' | transloco }}"
           >
             <mat-icon>clear</mat-icon>
           </button>

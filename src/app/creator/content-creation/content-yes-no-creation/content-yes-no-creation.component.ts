@@ -20,7 +20,7 @@ export class ContentYesNoCreationComponent
   implements OnInit
 {
   yesno = -1;
-  answerLabels = ['content.yes', 'content.no'];
+  answerLabels = ['creator.content.yes', 'creator.content.no'];
 
   constructor(
     protected contentService: ContentService,

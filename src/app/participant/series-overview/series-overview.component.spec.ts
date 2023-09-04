@@ -403,7 +403,7 @@ describe('SeriesOverviewComponent', () => {
     fixture.detectChanges();
     const headerText = fixture.debugElement.query(By.css('.header-text'));
     expect(headerText.nativeElement.textContent).toBe(
-      ' content.continue-where-you-stopped '
+      ' participant.content.continue-where-you-stopped '
     );
   });
 
@@ -440,7 +440,7 @@ describe('SeriesOverviewComponent', () => {
     fixture.detectChanges();
     const headerText = fixture.debugElement.query(By.css('.header-text'));
     expect(headerText.nativeElement.textContent).toBe(
-      ' content.thanks-for-participation '
+      ' participant.content.thanks-for-participation '
     );
   });
 });

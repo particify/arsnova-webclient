@@ -693,6 +693,6 @@ export class NavBarComponent
     if (!this.focusModeEnabled) {
       return '';
     }
-    return feature === this.focusFeature ? 'sidebar.focus-feature' : '';
+    return feature === this.focusFeature ? 'creator.sidebar.focus-feature' : '';
   }
 }

@@ -2,7 +2,7 @@
   <mat-checkbox
     [(ngModel)]="neutralOption"
     [disabled]="(isEditMode && !noAnswersYet) || disabled"
-    >{{ 'content.offer-neutral-option' | transloco }}</mat-checkbox
+    >{{ 'creator.content.offer-neutral-option' | transloco }}</mat-checkbox
   >
   <div style="padding: 0 16px">
     <div>
@@ -11,7 +11,9 @@
         class="no-field-hint"
         style="margin-top: 10px"
       >
-        <mat-label>{{ 'content.answer-template' | transloco }}</mat-label>
+        <mat-label>{{
+          'creator.content.answer-template' | transloco
+        }}</mat-label>
         <mat-select
           [(value)]="selectedTemplate"
           [disabled]="(isEditMode && !noAnswersYet) || disabled"

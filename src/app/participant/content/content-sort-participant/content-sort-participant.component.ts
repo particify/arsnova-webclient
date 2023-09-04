@@ -120,7 +120,7 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
         this.answer = answer;
         this.checkIfCorrect();
         this.translateService
-          .selectTranslate('answer.sent')
+          .selectTranslate('participant.answer.sent')
           .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(

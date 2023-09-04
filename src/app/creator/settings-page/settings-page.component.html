@@ -1,6 +1,6 @@
 <div class="visually-hidden">
   <div tabindex="-1" [appAutofocus]>
-    {{ 'settings.a11y-message' | a11yIntro | async }}
+    {{ 'creator.settings.a11y-message' | a11yIntro | async }}
   </div>
 </div>
 <div fxLayout="column" fxLayoutAlign="start center">
@@ -16,10 +16,10 @@
       <mat-expansion-panel-header
         [appHotkey]="setting.hotkey"
         [appHotkeyAction]="HotkeyAction.CLICK"
-        [appHotkeyTitle]="'settings.hotkey-' + setting.name | transloco"
+        [appHotkeyTitle]="'creator.settings.hotkey-' + setting.name | transloco"
       >
         <app-settings-panel-header
-          [text]="'settings.' + setting.name"
+          [text]="'creator.settings.' + setting.name"
           [icon]="setting.icon"
         ></app-settings-panel-header>
       </mat-expansion-panel-header>

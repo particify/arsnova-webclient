@@ -15,14 +15,14 @@
           id="progress-info-chart"
           chartId="progress-chart"
           [dataText]="getProgressDataText()"
-          [infoText]="'content.answer-state-neutral' | transloco"
+          [infoText]="'participant.content.answer-state-neutral' | transloco"
         ></app-info-chart>
         <app-info-chart
           *ngIf="hasScore"
           id="correct-info-chart"
           chartId="correct-chart"
           [dataText]="score + '%'"
-          [infoText]="'content.answer-state-correct' | transloco"
+          [infoText]="'participant.content.answer-state-correct' | transloco"
         ></app-info-chart>
       </div>
       <app-hint
@@ -33,8 +33,8 @@
         [type]="HintType.INFO"
         [text]="
           (getLockedContentCount() === 1
-            ? 'content.there-is-one-locked-content'
-            : 'content.there-are-locked-contents'
+            ? 'participant.content.there-is-one-locked-content'
+            : 'participant.content.there-are-locked-contents'
           ) | transloco: { count: getLockedContentCount() }
         "
       ></app-hint>
@@ -54,7 +54,9 @@
           (click)="goToFirstUnanswered()"
         >
           <mat-icon>arrow_forward</mat-icon>
-          <span>{{ 'content.continue-answering' | transloco }}</span>
+          <span>{{
+            'participant.content.continue-answering' | transloco
+          }}</span>
         </button>
       </div>
     </div>
@@ -89,7 +91,8 @@
                 (![ContentType.FLASHCARD, ContentType.SLIDE].includes(
                   contents[i].format
                 )
-                  ? 'content.answer-state-' + content.state.toLowerCase()
+                  ? 'participant.content.answer-state-' +
+                    content.state.toLowerCase()
                   : ''
                 ) | transloco
               "

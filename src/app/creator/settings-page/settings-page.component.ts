@@ -106,7 +106,7 @@ export class SettingsPageComponent implements OnInit {
           this.room = room;
           if (updateEvent.showSuccessInfo) {
             this.translateService
-              .selectTranslate('settings.changes-successful')
+              .selectTranslate('creator.settings.changes-successful')
               .subscribe((msg) => {
                 this.notificationService.showAdvanced(
                   msg,

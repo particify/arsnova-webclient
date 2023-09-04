@@ -9,7 +9,7 @@
         <div fxLayout="row wrap" fxLayoutAlign="space-between">
           <mat-form-field appearance="outline" class="no-field-hint">
             <mat-label>{{
-              'statistic.select-content-group' | transloco
+              'creator.statistic.select-content-group' | transloco
             }}</mat-label>
             <mat-select [(ngModel)]="currentGroup">
               <mat-option
@@ -27,7 +27,7 @@
             (click)="showDeleteDialog()"
             aria-labelledby="delete-answers"
           >
-            {{ 'content.delete-answers' | transloco }}
+            {{ 'creator.content.delete-answers' | transloco }}
           </button>
         </div>
         <app-list-statistic [contentGroup]="currentGroup"></app-list-statistic>
@@ -38,6 +38,6 @@
 
 <div class="visually-hidden">
   <div id="delete-answers">
-    {{ 'content.a11y-delete-all-answers' | transloco }}
+    {{ 'creator.content.a11y-delete-all-answers' | transloco }}
   </div>
 </div>

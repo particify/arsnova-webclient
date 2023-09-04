@@ -77,7 +77,7 @@ export class RoomManagementComponent {
       dialogRef.afterClosed().subscribe((closeAction) => {
         if (closeAction === 'delete') {
           this.translateService
-            .selectTranslate('admin-area.room-deleted')
+            .selectTranslate('admin.admin-area.room-deleted')
             .subscribe((message) =>
               this.notificationService.showAdvanced(
                 message,
@@ -107,7 +107,7 @@ export class RoomManagementComponent {
           this.formService.enableForm();
           dialogRef.close();
           const msg = this.translateService.translate(
-            'admin-area.room-transferred'
+            'admin.admin-area.room-transferred'
           );
           this.notificationService.showAdvanced(
             msg,

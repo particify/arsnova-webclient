@@ -78,7 +78,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
     this.commentService.answer(this.comment, this.answer).subscribe(
       () => {
         this.translateService
-          .selectTranslate('comment-page.comment-answered')
+          .selectTranslate('creator.comment-page.comment-answered')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

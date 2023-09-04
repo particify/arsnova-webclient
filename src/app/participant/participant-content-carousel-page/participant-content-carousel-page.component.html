@@ -1,7 +1,11 @@
 <app-loading-indicator *ngIf="isLoading || isReloading"></app-loading-indicator>
 <div>
   <div [appAutofocus] class="visually-hidden" tabindex="-1">
-    {{ 'answer.a11y-message' | a11yIntro: { group: contentGroupName } | async }}
+    {{
+      'participant.answer.a11y-message'
+        | a11yIntro: { group: contentGroupName }
+        | async
+    }}
   </div>
   <div
     *ngIf="!isLoading && !isReloading"
@@ -26,7 +30,7 @@
           *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
           appHotkey="1"
           [appHotkeyDisabled]="currentStep !== i"
-          [appHotkeyTitle]="'content.description' | transloco"
+          [appHotkeyTitle]="'participant.content.description' | transloco"
         >
           <app-loading-indicator
             *ngIf="isReloadingCurrentContent"
@@ -58,7 +62,7 @@
     <span
       *ngIf="!isLoading && !isReloading && contents.length === 0"
       class="hint"
-      >{{ 'answer.no-contents-published' | transloco }}</span
+      >{{ 'participant.answer.no-contents-published' | transloco }}</span
     >
   </div>
 </div>

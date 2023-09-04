@@ -166,7 +166,7 @@ export class GroupContentComponent
 
   registerHotkeys() {
     this.translateService
-      .selectTranslate('control-bar.publish-or-lock-content')
+      .selectTranslate('creator.control-bar.publish-or-lock-content')
       .subscribe((t) =>
         this.hotkeyService.registerHotkey(
           {
@@ -231,7 +231,7 @@ export class GroupContentComponent
       if (result === 'delete') {
         this.removeContentFromList(index);
         this.translateService
-          .selectTranslate('content.content-deleted')
+          .selectTranslate('creator.content.content-deleted')
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -274,7 +274,7 @@ export class GroupContentComponent
     groupStats: ContentGroupStatistics
   ) {
     const msg = this.translateService.translate(
-      `content.${actionString}-to-content-group`,
+      `creator.content.${actionString}-to-content-group`,
       { series: groupStats.groupName }
     );
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
@@ -329,7 +329,7 @@ export class GroupContentComponent
               this.initContentList(contents);
               if (imported) {
                 const msg = this.translateService.translate(
-                  'content.import-successful'
+                  'creator.content.import-successful'
                 );
                 this.notificationService.showAdvanced(
                   msg,
@@ -407,7 +407,7 @@ export class GroupContentComponent
           groupStats.groupName = this.groupName;
         }
         this.translateService
-          .selectTranslate('content.updated-content-group')
+          .selectTranslate('creator.content.updated-content-group')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -424,7 +424,7 @@ export class GroupContentComponent
     if (groupNames.includes(this.updatedName)) {
       this.updatedName = this.groupName;
       const msg = this.translateService.translate(
-        'content.duplicate-series-name'
+        'creator.content.duplicate-series-name'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
       return false;
@@ -475,7 +475,7 @@ export class GroupContentComponent
           this.contents = this.copiedContents;
           this.initContentList(this.contents);
           this.translateService
-            .selectTranslate('content.updated-sorting')
+            .selectTranslate('creator.content.updated-sorting')
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -571,7 +571,9 @@ export class GroupContentComponent
   deleteAnswers(content: Content) {
     const multipleRoundsHint =
       content.state.round > 1
-        ? this.translateService.translate('dialog.all-rounds-will-be-deleted')
+        ? this.translateService.translate(
+            'creator.dialog.all-rounds-will-be-deleted'
+          )
         : undefined;
     this.dialogService.openDeleteDialog(
       'content-answers',
@@ -588,7 +590,7 @@ export class GroupContentComponent
       .subscribe((result) => {
         if (result === 'delete') {
           const msg = this.translateService.translate(
-            'content.all-answers-deleted'
+            'creator.content.all-answers-deleted'
           );
           this.notificationService.showAdvanced(
             msg,
@@ -777,7 +779,7 @@ export class GroupContentComponent
         ? 'single'
         : 'range';
     const msg = this.translateService.translate(
-      'content.a11y-' + key + '-published',
+      'creator.content.a11y-' + key + '-published',
       { first: this.firstPublishedIndex + 1, last: this.lastPublishedIndex + 1 }
     );
     this.announceService.announce(msg);
@@ -888,7 +890,7 @@ export class GroupContentComponent
         this.routingService.goBack();
         this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
         this.translateService
-          .selectTranslate('content.content-group-deleted')
+          .selectTranslate('creator.content.content-group-deleted')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -916,7 +918,7 @@ export class GroupContentComponent
     this.duplicateContent$(contentId).subscribe((content) => {
       this.contents.push(content);
       const msg = this.translateService.translate(
-        'content.content-has-been-duplicated'
+        'creator.content.content-has-been-duplicated'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
@@ -935,7 +937,7 @@ export class GroupContentComponent
       .resetBannedKeywords(this.room.id, contentId)
       .subscribe(() => {
         const msg = this.translateService.translate(
-          'content.banned-keywords-reset'
+          'creator.content.banned-keywords-reset'
         );
         this.notificationService.showAdvanced(
           msg,

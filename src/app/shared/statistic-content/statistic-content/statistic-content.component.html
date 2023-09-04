@@ -17,7 +17,7 @@
     <div tabindex="0" [appAutofocus] class="visually-hidden">
       {{
         (answerCount === 0
-          ? 'statistic.a11y-message-evaluation'
+          ? 'creator.statistic.a11y-message-evaluation'
           : 'statistic.a11y-message-evaluation-answers'
         ) | transloco: { index: index + 1, answers: answerCount }
       }}
@@ -102,8 +102,8 @@
             (click)="toggleAnswers()"
             matTooltip="{{
               (answersVisible
-                ? 'statistic.hide-results'
-                : 'statistic.show-results'
+                ? 'creator.statistic.hide-results'
+                : 'creator.statistic.show-results'
               ) | transloco
             }}"
             appHotkey=" "
@@ -120,7 +120,7 @@
             "
             mat-icon-button
             color="primary"
-            matTooltip="{{ 'answer.go-to-content' | transloco }}"
+            matTooltip="{{ 'participant.answer.go-to-content' | transloco }}"
             (click)="customFlipEvent.emit()"
             aria-labelledby="flip-back"
             appHotkey=" "
@@ -149,8 +149,8 @@
       (click)="toggleAnswers()"
       [matTooltip]="
         (answersVisible
-          ? 'statistic.hide-flashcard-back'
-          : 'statistic.show-flashcard-back'
+          ? 'creator.statistic.hide-flashcard-back'
+          : 'creator.statistic.show-flashcard-back'
         ) | transloco
       "
     >

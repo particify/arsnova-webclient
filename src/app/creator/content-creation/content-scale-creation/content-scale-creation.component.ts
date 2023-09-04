@@ -25,7 +25,7 @@ export class ContentScaleCreationComponent
 {
   templates = LIKERT_SCALE_TEMPLATES;
   templateLabels = LIKERT_SCALE_TEMPLATES.map(
-    (t) => 'option-template.' + t.toLowerCase().replace(/_/g, '-')
+    (t) => 'creator.option-template.' + t.toLowerCase().replace(/_/g, '-')
   );
   selectedTemplate = LikertScaleTemplate.AGREEMENT;
   neutralOption = true;

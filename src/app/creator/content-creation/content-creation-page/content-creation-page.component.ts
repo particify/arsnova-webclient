@@ -119,7 +119,7 @@ export class ContentCreationPageComponent
 
   flipBack(flip: boolean) {
     this.flipped = false;
-    this.announceService.announce('content.a11y-back-in-creation');
+    this.announceService.announce('creator.content.a11y-back-in-creation');
     if (flip) {
       this.emitCreateEvent(true);
     }

@@ -290,10 +290,13 @@ export class StatisticContentComponent implements OnInit, OnDestroy {
     if (!isText || this.answerCount > 0) {
       const action = this.answersVisible ? 'expanded' : 'collapsed';
       const msg =
-        'statistic.a11y-' + action + '-answers' + (isText ? '-text' : '');
+        'creator.statistic.a11y-' +
+        action +
+        '-answers' +
+        (isText ? '-text' : '');
       this.announceService.announce(msg);
     } else {
-      this.announceService.announce('statistic.a11y-no-answers-yet');
+      this.announceService.announce('creator.statistic.a11y-no-answers-yet');
     }
   }
 

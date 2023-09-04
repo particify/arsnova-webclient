@@ -15,18 +15,18 @@
       *ngIf="role === 'OWNER'"
       [matMenuTriggerFor]="moreMenu"
       [disabled]="editMode"
-      [matTooltip]="'announcement.options' | transloco"
+      [matTooltip]="'creator.announcement.options' | transloco"
     >
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #moreMenu>
       <button mat-menu-item (click)="edit()">
         <mat-icon>edit</mat-icon>
-        {{ 'announcement.edit' | transloco }}
+        {{ 'creator.announcement.edit' | transloco }}
       </button>
       <button mat-menu-item (click)="delete()">
         <mat-icon color="warn">delete</mat-icon>
-        {{ 'announcement.delete' | transloco }}
+        {{ 'creator.announcement.delete' | transloco }}
       </button>
     </mat-menu>
   </div>

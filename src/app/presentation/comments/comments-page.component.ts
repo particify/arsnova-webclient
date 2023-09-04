@@ -127,13 +127,16 @@ export class CommentsPageComponent
 
   registerHotkeys() {
     this.translateService
-      .selectTranslate(['comment-list.next', 'comment-list.previous'])
+      .selectTranslate([
+        'creator.comment-list.next',
+        'creator.comment-list.previous',
+      ])
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {
             key: 'ArrowRight',
             action: () => this.nextComment(),
-            actionTitle: t['comment-list.next'],
+            actionTitle: t['creator.comment-list.next'],
           },
           this.hotkeyRefs
         );
@@ -141,7 +144,7 @@ export class CommentsPageComponent
           {
             key: 'ArrowLeft',
             action: () => this.prevComment(),
-            actionTitle: t['comment-list.previous'],
+            actionTitle: t['creator.comment-list.previous'],
           },
           this.hotkeyRefs
         );
@@ -200,7 +203,7 @@ export class CommentsPageComponent
   }
 
   announceCommentPresentation(index: number) {
-    this.announceService.announce('presentation.a11y-present-comment', {
+    this.announceService.announce('creator.presentation.a11y-present-comment', {
       comment: this.displayComments[index].body,
     });
   }
@@ -236,7 +239,7 @@ export class CommentsPageComponent
         this.isLoading = true;
         this.init(true);
         const msg = this.translateService.translate(
-          'comment-list.q-and-a-enabled'
+          'creator.comment-list.q-and-a-enabled'
         );
         this.notificationService.showAdvanced(
           msg,

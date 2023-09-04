@@ -67,7 +67,9 @@ export class ContentFlashcardCreationComponent
       (this.content as ContentFlashcard).additionalText = this.answer;
       return true;
     } else {
-      const msg = this.translationService.translate('content.need-answer');
+      const msg = this.translationService.translate(
+        'creator.content.need-answer'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }

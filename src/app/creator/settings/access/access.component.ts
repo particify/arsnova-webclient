@@ -133,7 +133,7 @@ export class AccessComponent
           });
           if (this.isGuest) {
             this.translationService
-              .selectTranslate('settings.you')
+              .selectTranslate('creator.settings.you')
               .subscribe((msg) => {
                 this.moderators[0].loginId = msg;
               });
@@ -158,7 +158,7 @@ export class AccessComponent
         }
       } else if (!this.loginIdIsEmail) {
         const msg = this.translationService.translate(
-          'settings.user-not-found'
+          'creator.settings.user-not-found'
         );
         this.notificationService.showAdvanced(
           msg,
@@ -182,7 +182,9 @@ export class AccessComponent
           this.moderators.push(
             new Moderator(this.newModeratorId, this.loginId, this.selectedRole)
           );
-          const msg = this.translationService.translate('settings.user-added');
+          const msg = this.translationService.translate(
+            'creator.settings.user-added'
+          );
           this.notificationService.showAdvanced(
             msg,
             AdvancedSnackBarTypes.SUCCESS
@@ -199,7 +201,9 @@ export class AccessComponent
     this.accessTokenService
       .invite(this.room.id, this.selectedRole, this.loginId)
       .subscribe(() => {
-        const msg = this.translationService.translate('settings.user-invited');
+        const msg = this.translationService.translate(
+          'creator.settings.user-invited'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.SUCCESS
@@ -219,7 +223,9 @@ export class AccessComponent
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'remove') {
         this.saveEvent.emit(new UpdateEvent(null, false, true));
-        const msg = this.translationService.translate('settings.user-removed');
+        const msg = this.translationService.translate(
+          'creator.settings.user-removed'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING

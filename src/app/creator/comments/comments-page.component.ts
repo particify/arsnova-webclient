@@ -221,7 +221,7 @@ export class CommentsPageComponent
         this.isLoading = true;
         this.init(true);
         const msg = this.translateService.translate(
-          'comment-list.q-and-a-enabled'
+          'creator.comment-list.q-and-a-enabled'
         );
         this.notificationService.showAdvanced(
           msg,

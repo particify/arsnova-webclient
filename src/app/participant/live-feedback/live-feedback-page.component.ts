@@ -67,10 +67,15 @@ export class LiveFeedbackPageComponent
   }
 
   private announceAnswer(label: string) {
-    const answer = this.translateService.translate('survey.' + label);
-    const msg = this.translateService.translate('survey.a11y-selected-answer', {
-      answer: answer,
-    });
+    const answer = this.translateService.translate(
+      'participant.survey.' + label
+    );
+    const msg = this.translateService.translate(
+      'participant.survey.a11y-selected-answer',
+      {
+        answer: answer,
+      }
+    );
     this.announceService.announce(msg);
   }
 

@@ -161,7 +161,7 @@ export class ContentParticipantComponent
   }
 
   getA11yMessage(): string {
-    let msg = 'answer.a11y-';
+    let msg = 'participant.answer.a11y-';
     if (this.alreadySent) {
       msg += 'already-answered';
     } else {

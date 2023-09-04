@@ -56,7 +56,7 @@ export class ContentGroupCreationComponent extends FormComponent {
         this.contentGroupService.post(newGroup).subscribe(
           () => {
             this.translateService
-              .selectTranslate('room-page.content-group-created')
+              .selectTranslate('creator.room-page.content-group-created')
               .subscribe((msg) => {
                 this.notificationService.showAdvanced(
                   msg,
@@ -71,7 +71,7 @@ export class ContentGroupCreationComponent extends FormComponent {
         );
       } else {
         this.translateService
-          .selectTranslate('content.duplicate-series-name')
+          .selectTranslate('creator.content.duplicate-series-name')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -81,7 +81,7 @@ export class ContentGroupCreationComponent extends FormComponent {
       }
     } else {
       this.translateService
-        .selectTranslate('dialog.please-enter-name')
+        .selectTranslate('creator.dialog.please-enter-name')
         .subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,

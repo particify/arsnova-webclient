@@ -56,7 +56,7 @@ export class InputDialogComponent extends UserSearchComponent {
         this.clicked$.emit(this.user.id);
       } else {
         const msg = this.translateService.translate(
-          'admin-area.user-not-found'
+          'admin.admin-area.user-not-found'
         );
         this.notificationService.showAdvanced(
           msg,

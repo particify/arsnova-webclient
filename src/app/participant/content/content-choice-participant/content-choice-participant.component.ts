@@ -170,7 +170,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     if (selectedAnswers.length === 0) {
       if (this.content.multiple) {
         this.translateService
-          .selectTranslate('answer.at-least-one')
+          .selectTranslate('participant.answer.at-least-one')
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -179,7 +179,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
           });
       } else {
         this.translateService
-          .selectTranslate('answer.please-one')
+          .selectTranslate('participant.answer.please-one')
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -201,7 +201,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
         this.answer = answer;
         this.getCorrectAnswerOptions();
         this.translateService
-          .selectTranslate('answer.sent')
+          .selectTranslate('participant.answer.sent')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

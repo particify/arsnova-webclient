@@ -85,14 +85,14 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
   submitAnswer() {
     if (!this.isPointSumCorrect()) {
       const msg = this.translateService.translate(
-        'answer.please-assign-points-correctly',
+        'participant.answer.please-assign-points-correctly',
         { points: this.content.assignablePoints }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     } else if (!this.arePointsInRange()) {
       const msg = this.translateService.translate(
-        'answer.please-assign-valid-points',
+        'participant.answer.please-assign-valid-points',
         { points: this.content.assignablePoints }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
@@ -110,7 +110,7 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
         (answer) => {
           this.answer = answer;
           this.translateService
-            .selectTranslate('answer.sent')
+            .selectTranslate('participant.answer.sent')
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,

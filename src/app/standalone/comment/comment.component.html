@@ -34,14 +34,14 @@
               comment: comment.body.trim(),
               correct:
                 comment.correct === 1
-                  ? ('comment-page.a11y-text-correct' | transloco)
+                  ? ('creator.comment-page.a11y-text-correct' | transloco)
                   : '',
               wrong:
                 comment.correct === 2
-                  ? ('comment-page.a11y-text-wrong' | transloco)
+                  ? ('creator.comment-page.a11y-text-wrong' | transloco)
                   : '',
               favorite: comment.favorite
-                ? ('comment-page.a11y-text-grade' | transloco)
+                ? ('creator.comment-page.a11y-text-grade' | transloco)
                 : '',
               answer: comment.answer
                 ? ('comment-page.a11y-text-answer' | transloco)
@@ -63,7 +63,7 @@
         *ngIf="comment.correct === 1"
         [disabled]="!isEditor"
         (click)="markCorrect(1)"
-        [matTooltip]="'comment-page.mark-not-correct' | transloco"
+        [matTooltip]="'creator.comment-page.mark-not-correct' | transloco"
       >
         <mat-icon class="green">check_circle </mat-icon>
       </button>
@@ -72,7 +72,7 @@
         *ngIf="comment.correct === 2"
         [disabled]="!isEditor"
         (click)="markCorrect(2)"
-        [matTooltip]="'comment-page.mark-not-wrong' | transloco"
+        [matTooltip]="'creator.comment-page.mark-not-wrong' | transloco"
       >
         <mat-icon class="red">cancel </mat-icon>
       </button>
@@ -81,7 +81,7 @@
         *ngIf="comment.favorite"
         [disabled]="!isEditor"
         (click)="setFavorite()"
-        [matTooltip]="'comment-page.mark-not-favorite' | transloco"
+        [matTooltip]="'creator.comment-page.mark-not-favorite' | transloco"
       >
         <mat-icon class="yellow">grade </mat-icon>
       </button>
@@ -98,7 +98,7 @@
         mat-icon-button
         color="primary"
         (click)="setAck()"
-        [matTooltip]="'comment-page.reject' | transloco"
+        [matTooltip]="'creator.comment-page.reject' | transloco"
       >
         <mat-icon>lock_open</mat-icon>
       </button>
@@ -106,7 +106,7 @@
         mat-icon-button
         *ngIf="isEditor && !inAnswerView && !isSimpleView && !archived"
         [matMenuTriggerFor]="actionsMenu"
-        [matTooltip]="'comment-page.show-actions' | transloco"
+        [matTooltip]="'creator.comment-page.show-actions' | transloco"
       >
         <mat-icon>more_horiz </mat-icon>
       </button>
@@ -115,7 +115,7 @@
         color="warn"
         *ngIf="isEditor && archived"
         (click)="deleteComment()"
-        [matTooltip]="'comment-page.delete' | transloco"
+        [matTooltip]="'creator.comment-page.delete' | transloco"
       >
         <mat-icon>delete </mat-icon>
       </button>
@@ -124,7 +124,7 @@
           <mat-icon class="blue icon-important">comment</mat-icon>
           <span>{{
             (!comment.answer
-              ? 'comment-page.answer'
+              ? 'creator.comment-page.answer'
               : 'comment-page.go-to-answer'
             ) | transloco
           }}</span>
@@ -134,8 +134,8 @@
           <mat-icon class="green icon-important">check_circle</mat-icon>
           <span>{{
             (comment.correct !== 1
-              ? 'comment-page.mark-correct'
-              : 'comment-page.mark-not-correct'
+              ? 'creator.comment-page.mark-correct'
+              : 'creator.comment-page.mark-not-correct'
             ) | transloco
           }}</span>
         </button>
@@ -144,8 +144,8 @@
           <mat-icon class="red icon-important">cancel</mat-icon>
           <span>{{
             (comment.correct !== 2
-              ? 'comment-page.mark-wrong'
-              : 'comment-page.mark-not-wrong'
+              ? 'creator.comment-page.mark-wrong'
+              : 'creator.comment-page.mark-not-wrong'
             ) | transloco
           }}</span>
         </button>
@@ -153,22 +153,24 @@
           <mat-icon class="yellow icon-important">grade</mat-icon>
           <span>{{
             (!comment.favorite
-              ? 'comment-page.mark-favorite'
-              : 'comment-page.mark-not-favorite'
+              ? 'creator.comment-page.mark-favorite'
+              : 'creator.comment-page.mark-not-favorite'
             ) | transloco
           }}</span>
         </button>
         <button *ngIf="isEditor" mat-menu-item (click)="deleteComment()">
           <mat-icon color="warn">delete</mat-icon>
-          <span>{{ 'comment-page.delete' | transloco }}</span>
+          <span>{{ 'creator.comment-page.delete' | transloco }}</span>
         </button>
         <button *ngIf="!isModeration" mat-menu-item (click)="setAck()">
           <mat-icon color="primary">{{
             comment.ack ? 'gavel' : 'lock_open'
           }}</mat-icon>
           <span>{{
-            (comment.ack ? 'comment-page.banish' : 'comment-page.reject')
-              | transloco
+            (comment.ack
+              ? 'creator.comment-page.banish'
+              : 'creator.comment-page.reject'
+            ) | transloco
           }}</span>
         </button>
       </mat-menu>

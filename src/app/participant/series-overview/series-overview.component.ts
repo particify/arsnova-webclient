@@ -338,18 +338,18 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       return this.group.name;
     } else {
       return this.finished
-        ? 'content.thanks-for-participation'
-        : 'content.continue-where-you-stopped';
+        ? 'participant.content.thanks-for-participation'
+        : 'participant.content.continue-where-you-stopped';
     }
   }
 
   getSubHeaderText(): string {
     if (this.isPureInfoSeries) {
-      return 'content.pure-info-contents';
+      return 'participant.content.pure-info-contents';
     } else {
       return this.finished
-        ? 'content.all-contents-answered'
-        : 'content.some-contents-answered';
+        ? 'participant.content.all-contents-answered'
+        : 'participant.content.some-contents-answered';
     }
   }
 

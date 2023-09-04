@@ -63,11 +63,11 @@ export class ContentPrioritizationCreationComponent
       if (!this.answerExists(answer)) {
         return true;
       } else {
-        this.showWarning('content.same-answer');
+        this.showWarning('creator.content.same-answer');
         return false;
       }
     } else {
-      this.showWarning('content.no-empty2');
+      this.showWarning('creator.content.no-empty2');
       return false;
     }
   }
@@ -91,7 +91,9 @@ export class ContentPrioritizationCreationComponent
         );
         this.resetAnswerInputEvent.emit(true);
       } else {
-        const msg = this.translationService.translate('content.max-answers');
+        const msg = this.translationService.translate(
+          'creator.content.max-answers'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -125,7 +127,9 @@ export class ContentPrioritizationCreationComponent
     if (this.displayAnswers.length >= 2) {
       return true;
     } else {
-      const msg = this.translationService.translate('content.need-answers');
+      const msg = this.translationService.translate(
+        'creator.content.need-answers'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }

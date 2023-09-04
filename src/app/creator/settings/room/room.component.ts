@@ -73,7 +73,7 @@ export class RoomComponent extends FormComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
         this.translationService
-          .selectTranslate('settings.deleted')
+          .selectTranslate('creator.settings.deleted')
           .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(

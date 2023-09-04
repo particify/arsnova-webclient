@@ -70,7 +70,9 @@ export class UserManagementComponent
     );
     dialogRef.afterClosed().subscribe((closeAction) => {
       if (closeAction === 'delete') {
-        const msg = this.translateService.translate('admin-area.user-deleted');
+        const msg = this.translateService.translate(
+          'admin.admin-area.user-deleted'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -88,7 +90,7 @@ export class UserManagementComponent
     this.adminService.activateUser(this.user.id).subscribe(() => {
       this.formService.enableForm();
       this.translateService
-        .selectTranslate('admin-area.user-activated')
+        .selectTranslate('admin.admin-area.user-activated')
         .subscribe((message) =>
           this.notificationService.showAdvanced(
             message,
@@ -114,7 +116,7 @@ export class UserManagementComponent
           this.formService.enableForm();
           dialogRef.close();
           this.translateService
-            .selectTranslate('admin-area.account-added')
+            .selectTranslate('admin.admin-area.account-added')
             .subscribe((message) =>
               this.notificationService.showAdvanced(
                 message,

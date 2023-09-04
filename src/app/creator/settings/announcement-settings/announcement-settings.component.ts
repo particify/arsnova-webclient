@@ -73,7 +73,9 @@ export class AnnouncementSettingsComponent
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
-        const msg = this.translateService.translate('announcement.deleted');
+        const msg = this.translateService.translate(
+          'creator.announcement.deleted'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -91,7 +93,9 @@ export class AnnouncementSettingsComponent
 
   save() {
     if (!this.title || !this.body) {
-      const msg = this.translateService.translate('announcement.missing-input');
+      const msg = this.translateService.translate(
+        'creator.announcement.missing-input'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
@@ -106,7 +110,7 @@ export class AnnouncementSettingsComponent
               .indexOf(announcement.id);
             this.announcements[index] = announcement;
             const msg = this.translateService.translate(
-              'announcement.changes-saved'
+              'creator.announcement.changes-saved'
             );
             this.notificationService.showAdvanced(
               msg,
@@ -126,7 +130,9 @@ export class AnnouncementSettingsComponent
         .subscribe(
           (announcement) => {
             this.announcements.unshift(announcement);
-            const msg = this.translateService.translate('announcement.created');
+            const msg = this.translateService.translate(
+              'creator.announcement.created'
+            );
             this.notificationService.showAdvanced(
               msg,
               AdvancedSnackBarTypes.SUCCESS

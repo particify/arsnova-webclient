@@ -20,8 +20,8 @@ export class ExportComponent {
   readonly dialogId = 'export';
 
   exportTypes = [
-    { label: 'export.tsv', value: ExportFileType.TSV },
-    { label: 'export.csv', value: ExportFileType.CSV },
+    { label: 'creator.export.tsv', value: ExportFileType.TSV },
+    { label: 'creator.export.csv', value: ExportFileType.CSV },
   ];
   charsets = charsets;
   selectedExportType = this.exportTypes[0];

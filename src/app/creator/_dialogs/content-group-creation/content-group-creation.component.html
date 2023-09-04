@@ -6,7 +6,9 @@
     fxLayoutGap="10px"
   >
     <mat-form-field appearance="outline">
-      <mat-label>{{ 'dialog.content-group-name' | transloco }}</mat-label>
+      <mat-label>{{
+        'creator.dialog.content-group-name' | transloco
+      }}</mat-label>
       <input
         [disabled]="formDisabled"
         matInput
@@ -17,7 +19,7 @@
         [(ngModel)]="name"
         name="contentGroupName"
         autocomplete="off"
-        [placeholder]="'dialog.content-group-example' | transloco"
+        [placeholder]="'creator.dialog.content-group-example' | transloco"
       />
     </mat-form-field>
   </div>
@@ -28,7 +30,10 @@
       fxLayoutAling="end"
       fxLayoutGap="10px"
     >
-      <app-loading-button name="dialog.create-content-group" [isDialog]="true">
+      <app-loading-button
+        name="creator.dialog.create-content-group"
+        [isDialog]="true"
+      >
       </app-loading-button>
       <button
         (click)="closeDialog()"

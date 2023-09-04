@@ -11,8 +11,8 @@
     (click)="voteComment(1)"
     [matTooltip]="
       (currentVote === 1
-        ? 'comment-page.withdraw-upvote'
-        : 'comment-page.vote-up'
+        ? 'participant.comment-page.withdraw-upvote'
+        : 'participant.comment-page.vote-up'
       ) | transloco
     "
   >
@@ -26,8 +26,8 @@
     (click)="voteComment(-1)"
     [matTooltip]="
       (currentVote === -1
-        ? 'comment-page.withdraw-downvote'
-        : 'comment-page.vote-down'
+        ? 'participant.comment-page.withdraw-downvote'
+        : 'participant.comment-page.vote-down'
       ) | transloco
     "
   >

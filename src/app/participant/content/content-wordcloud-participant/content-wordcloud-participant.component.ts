@@ -68,7 +68,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     const words = this.words.filter((w) => w);
     if (words.length === 0) {
       this.translateService
-        .selectTranslate('answer.please-answer')
+        .selectTranslate('participant.answer.please-answer')
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -88,7 +88,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       .subscribe((answer) => {
         this.createAnswer(words);
         this.translateService
-          .selectTranslate('answer.sent')
+          .selectTranslate('participant.answer.sent')
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

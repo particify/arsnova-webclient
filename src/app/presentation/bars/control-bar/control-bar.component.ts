@@ -65,7 +65,7 @@ export class KeyNavBarItem extends NavBarItem {
     const keyInfo = HotkeyService.getKeyDisplayInfo(key);
     this.key = key;
     this.displayKey = keyInfo.translateKeyName
-      ? 'control-bar.' + keyInfo.keyName
+      ? 'creator.control-bar.' + keyInfo.keyName
       : keyInfo.keySymbol;
     this.disabled = disabled;
   }
@@ -314,7 +314,7 @@ export class ControlBarComponent
       .subscribe((zoom) => {
         this.currentCommentZoom = Math.round(zoom);
         this.announceService.announce(
-          'presentation.a11y-comment-zoom-changed',
+          'creator.presentation.a11y-comment-zoom-changed',
           { zoom: this.currentCommentZoom }
         );
       });
@@ -384,14 +384,14 @@ export class ControlBarComponent
         : 'publish';
       if (!this.isCurrentContentPublished) {
         if (!this.showNotification) {
-          this.notificationMessage = 'control-bar.content-locked';
+          this.notificationMessage = 'creator.control-bar.content-locked';
           this.notificationIcon = 'lock';
           this.showNotification = true;
-          this.announceService.announce('control-bar.content-locked');
+          this.announceService.announce('creator.control-bar.content-locked');
         }
       } else if (this.showNotification) {
         this.showNotification = false;
-        this.announceService.announce('control-bar.content-published');
+        this.announceService.announce('creator.control-bar.content-published');
       }
     }
   }
@@ -502,12 +502,16 @@ export class ControlBarComponent
 
   requestFullscreen() {
     document.documentElement.requestFullscreen();
-    this.announceService.announce('presentation.a11y-entered-fullscreen');
+    this.announceService.announce(
+      'creator.presentation.a11y-entered-fullscreen'
+    );
   }
 
   exitFullscreen() {
     document.exitFullscreen();
-    this.announceService.announce('presentation.a11y-leaved-fullscreen');
+    this.announceService.announce(
+      'creator.presentation.a11y-leaved-fullscreen'
+    );
   }
 
   exitPresentation() {
@@ -542,7 +546,9 @@ export class ControlBarComponent
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'publish') {
-        const msg = this.translateService.translate('content.group-published');
+        const msg = this.translateService.translate(
+          'creator.content.group-published'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.SUCCESS
@@ -602,7 +608,7 @@ export class ControlBarComponent
     };
     this.generalItems.forEach((item) =>
       this.translateService
-        .selectTranslate('control-bar.' + item.name)
+        .selectTranslate('creator.control-bar.' + item.name)
         .pipe(
           map(
             (t) =>

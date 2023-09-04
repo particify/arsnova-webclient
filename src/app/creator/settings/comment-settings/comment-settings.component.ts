@@ -81,7 +81,9 @@ export class CommentSettingsComponent implements OnInit {
   addTag() {
     if (this.tagName.length > 0) {
       if (this.checkIfTagExists()) {
-        const msg = this.translationService.translate('settings.tag-error');
+        const msg = this.translationService.translate(
+          'creator.settings.tag-error'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -149,7 +151,7 @@ export class CommentSettingsComponent implements OnInit {
     this.saveEvent.emit(new UpdateEvent(this.room, false));
     if (addedTag !== undefined) {
       const msg = this.translationService.translate(
-        addedTag ? 'settings.tag-added' : 'settings.tag-removed'
+        addedTag ? 'creator.settings.tag-added' : 'creator.settings.tag-removed'
       );
       this.notificationService.showAdvanced(
         msg,
@@ -160,7 +162,7 @@ export class CommentSettingsComponent implements OnInit {
 
   announceThreshold() {
     this.translationService
-      .selectTranslate('settings.a11y-threshold-changed', {
+      .selectTranslate('creator.settings.a11y-threshold-changed', {
         value: this.threshold,
       })
       .subscribe((msg) => {

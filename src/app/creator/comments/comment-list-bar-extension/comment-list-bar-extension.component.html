@@ -5,8 +5,8 @@
     class="bar-icon"
     (click)="toggleReadonly()"
     matTooltip="{{
-      'comment-list.' + (readonly ? 'allow-creation' : 'dont-allow-creation')
-        | transloco
+      'creator.comment-list.' +
+        (readonly ? 'allow-creation' : 'dont-allow-creation') | transloco
     }}"
     appHotkey="6"
     appTrackInteraction="Comments readonly state toggled"
@@ -20,7 +20,7 @@
     mat-mini-fab
     class="bar-icon"
     [matMenuTriggerFor]="moreMenu"
-    matTooltip="{{ 'comment-list.more-options' | transloco }}"
+    matTooltip="{{ 'creator.comment-list.more-options' | transloco }}"
   >
     <mat-icon>construction</mat-icon>
   </button>
@@ -32,14 +32,14 @@
       isModeration ? 'question_answer' : 'gavel'
     }}</mat-icon>
     <span>{{
-      'comment-list.' + (isModeration ? 'public-list' : 'moderation')
+      'creator.comment-list.' + (isModeration ? 'public-list' : 'moderation')
         | transloco
     }}</span>
   </button>
 
   <button mat-menu-item (click)="navToSettings()" *ngIf="viewRole === 'OWNER'">
     <mat-icon class="settings-icon">settings</mat-icon>
-    <span>{{ 'comment-list.settings' | transloco }}</span>
+    <span>{{ 'creator.comment-list.settings' | transloco }}</span>
   </button>
 
   <mat-divider></mat-divider>
@@ -56,7 +56,7 @@
     appTrackInteraction="Comments exported"
   >
     <mat-icon class="settings-icon">save</mat-icon>
-    <span>{{ 'comment-list.export-comments' | transloco }}</span>
+    <span>{{ 'creator.comment-list.export-comments' | transloco }}</span>
   </button>
 
   <button
@@ -67,8 +67,9 @@
   >
     <mat-icon color="warn">delete_outline</mat-icon>
     <span>{{
-      'comment-list.delete-' + (isModeration ? 'banned' : 'all') + '-comments'
-        | transloco
+      'creator.comment-list.delete-' +
+        (isModeration ? 'banned' : 'all') +
+        '-comments' | transloco
     }}</span>
   </button>
 </mat-menu>

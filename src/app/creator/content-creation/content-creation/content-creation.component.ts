@@ -166,7 +166,7 @@ export class ContentCreationComponent
     this.content.abstentionsAllowed = this.abstentionsAllowed;
     if (this.contentBody === '') {
       this.translationService
-        .selectTranslate('content.no-empty')
+        .selectTranslate('creator.content.no-empty')
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -194,9 +194,9 @@ export class ContentCreationComponent
   }
 
   afterAnswerDeletion() {
-    this.announceService.announce('content.a11y-answer-deleted');
+    this.announceService.announce('creator.content.a11y-answer-deleted');
     this.translationService
-      .selectTranslate('content.answer-deleted')
+      .selectTranslate('creator.content.answer-deleted')
       .subscribe((message) => {
         this.notificationService.showAdvanced(
           message,
@@ -209,7 +209,9 @@ export class ContentCreationComponent
     if (
       this.displayAnswers.map((o) => o.answerOption.label).indexOf(label) >= 0
     ) {
-      const msg = this.translationService.translate('content.same-answer');
+      const msg = this.translationService.translate(
+        'creator.content.same-answer'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return true;
     } else {
@@ -234,7 +236,7 @@ export class ContentCreationComponent
       const labels = answerLabels.map((a) => a.label);
       if (labels.includes('')) {
         this.translationService
-          .selectTranslate('content.no-empty2')
+          .selectTranslate('creator.content.no-empty2')
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -243,7 +245,9 @@ export class ContentCreationComponent
           });
         valid = false;
       } else if (this.checkForDuplicates(labels)) {
-        const msg = this.translationService.translate('content.same-answer');
+        const msg = this.translationService.translate(
+          'creator.content.same-answer'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -277,7 +281,7 @@ export class ContentCreationComponent
       this.fillCorrectAnswers();
     }
     this.translationService
-      .selectTranslate('content.submitted')
+      .selectTranslate('creator.content.submitted')
       .subscribe((message) => {
         this.notificationService.showAdvanced(
           message,
@@ -317,7 +321,7 @@ export class ContentCreationComponent
           this.content = updateContent;
           window.history.back();
           this.translationService
-            .selectTranslate('content.changes-made')
+            .selectTranslate('creator.content.changes-made')
             .subscribe((message) => {
               this.notificationService.showAdvanced(
                 message,

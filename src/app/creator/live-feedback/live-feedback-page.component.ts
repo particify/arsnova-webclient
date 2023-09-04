@@ -85,7 +85,9 @@ export class LiveFeedbackPageComponent
         (room) => {
           this.loadConfig(room);
           const state = this.isClosed ? 'stopped' : 'started';
-          const msg = this.translateService.translate('survey.' + state);
+          const msg = this.translateService.translate(
+            'creator.survey.' + state
+          );
           this.notificationService.showAdvanced(
             msg,
             !this.isClosed
@@ -106,9 +108,9 @@ export class LiveFeedbackPageComponent
 
   private announceType() {
     const type = this.translateService.translate(
-      'survey.a11y-type-' + this.type.toLowerCase()
+      'creator.survey.a11y-type-' + this.type.toLowerCase()
     );
-    this.announceService.announce('survey.a11y-selected-type', {
+    this.announceService.announce('creator.survey.a11y-selected-type', {
       type: type,
     });
   }

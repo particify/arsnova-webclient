@@ -13,7 +13,8 @@
         : {
             name: contentGroupName,
             locked:
-              'room-page.' + (isLocked ? 'locked' : 'unlocked') | transloco
+              'creator.room-page.' + (isLocked ? 'locked' : 'unlocked')
+              | transloco
           }
   }}"
   (keyup.enter)="viewContents()"
@@ -27,7 +28,7 @@
     <mat-icon
       *ngIf="isLocked"
       class="locked"
-      [matTooltip]="'room-page.group-locked' | transloco"
+      [matTooltip]="'creator.room-page.group-locked' | transloco"
       >locked</mat-icon
     >
   </div>

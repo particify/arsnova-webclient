@@ -1,6 +1,6 @@
 <mat-dialog-content fxLayout="column">
   <mat-form-field appearance="outline">
-    <mat-label>{{ 'export.file-type' | transloco }}</mat-label>
+    <mat-label>{{ 'creator.export.file-type' | transloco }}</mat-label>
     <mat-select required [(ngModel)]="selectedExportType">
       <mat-option *ngFor="let exportType of exportTypes" [value]="exportType">{{
         exportType.label | transloco
@@ -8,7 +8,7 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="outline">
-    <mat-label>{{ 'export.charset' | transloco }}</mat-label>
+    <mat-label>{{ 'creator.export.charset' | transloco }}</mat-label>
     <mat-select required [(ngModel)]="selectedCharset">
       <mat-option *ngFor="let charset of charsets" [value]="charset">{{
         charset
@@ -32,6 +32,6 @@
     class="accept-button"
     (click)="export()"
   >
-    {{ 'export.export' | transloco }}
+    {{ 'creator.export.export' | transloco }}
   </button>
 </div>

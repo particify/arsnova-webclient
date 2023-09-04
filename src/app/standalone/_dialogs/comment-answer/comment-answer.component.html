@@ -8,7 +8,7 @@
     <mat-icon class="exit-icon">arrow_back</mat-icon>
   </button>
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
-    {{ 'comment-page.a11y-message-answer' | a11yIntro | async }}
+    {{ 'creator.comment-page.a11y-message-answer' | a11yIntro | async }}
   </div>
   <div fxFill fxLayout="column" fxLayoutGap="10px">
     <div fxLayout="row" fxLayoutAlign="center">
@@ -44,7 +44,7 @@
               aria-labelledby="edit"
             >
               <mat-icon>edit</mat-icon>
-              {{ 'comment-page.edit-answer' | transloco }}
+              {{ 'creator.comment-page.edit-answer' | transloco }}
             </button>
           </div>
         </div>
@@ -54,7 +54,9 @@
             [dynamicHeight]="true"
             (selectedTabChange)="tabChanged($event)"
           >
-            <mat-tab label="{{ 'comment-page.your-answer' | transloco }}">
+            <mat-tab
+              label="{{ 'creator.comment-page.your-answer' | transloco }}"
+            >
               <app-formatting-toolbar
                 *ngIf="!renderPreview"
                 class="tab-group-formatting-bar-mobile"
@@ -75,7 +77,9 @@
                   maxlength="500"
                   name="answer"
                   aria-labelledby="answer"
-                  [placeholder]="'comment-page.enter-answer' | transloco"
+                  [placeholder]="
+                    'creator.comment-page.enter-answer' | transloco
+                  "
                   appHotkey="1"
                 >
                 </textarea>
@@ -87,7 +91,7 @@
               </mat-form-field>
             </mat-tab>
             <mat-tab
-              label="{{ 'room.preview' | transloco }}"
+              label="{{ 'creator.room.preview' | transloco }}"
               [disabled]="!answer"
             >
               <div class="preview-container">
@@ -116,11 +120,11 @@
             aria-labelledby="delete"
             (click)="deleteAnswer()"
           >
-            {{ 'comment-page.delete-answer' | transloco }}
+            {{ 'creator.comment-page.delete-answer' | transloco }}
           </button>
           <app-loading-button
             *ngIf="isEditor && (edit || !answer)"
-            name="comment-page.save-answer"
+            name="creator.comment-page.save-answer"
             (clicked)="saveAnswer()"
           ></app-loading-button>
         </div>
@@ -129,11 +133,21 @@
   </div>
   <div>
     <div class="visually-hidden">
-      <div id="answer">{{ 'comment-page.a11y-enter-answer' | transloco }}</div>
-      <div id="delete">{{ 'comment-page.a11y-delete-answer' | transloco }}</div>
-      <div id="submit">{{ 'comment-page.a11y-save-answer' | transloco }}</div>
-      <div id="edit">{{ 'comment-page.a11y-edit-answer' | transloco }}</div>
-      <div id="exit">{{ 'comment-page.a11y-close' | transloco }}</div>
+      <div id="answer">
+        {{ 'creator.comment-page.a11y-enter-answer' | transloco }}
+      </div>
+      <div id="delete">
+        {{ 'creator.comment-page.a11y-delete-answer' | transloco }}
+      </div>
+      <div id="submit">
+        {{ 'creator.comment-page.a11y-save-answer' | transloco }}
+      </div>
+      <div id="edit">
+        {{ 'creator.comment-page.a11y-edit-answer' | transloco }}
+      </div>
+      <div id="exit">
+        {{ 'creator.comment-page.a11y-close' | transloco }}
+      </div>
     </div>
   </div>
 </div>

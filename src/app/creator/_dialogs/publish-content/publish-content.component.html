@@ -1,6 +1,6 @@
 <form fxLayout="column">
   <div mat-dialog-content>
-    <h3>{{ 'dialog.how-to-proceed' | transloco }}</h3>
+    <h3>{{ 'creator.dialog.how-to-proceed' | transloco }}</h3>
     <mat-radio-group
       [(ngModel)]="selectedAction"
       [ngModelOptions]="{ standalone: true }"
@@ -11,7 +11,7 @@
         *ngFor="let action of actions[actionType]"
         [value]="action"
         >{{
-          'dialog.' + actionType + '-' + action | transloco
+          'creator.dialog.' + actionType + '-' + action | transloco
         }}</mat-radio-button
       >
     </mat-radio-group>
@@ -21,7 +21,7 @@
       {{ 'dialog.cancel' | transloco }}
     </button>
     <button mat-flat-button color="primary" (click)="close(selectedAction)">
-      {{ 'dialog.' + actionType | transloco }}
+      {{ 'creator.dialog.' + actionType | transloco }}
     </button>
   </div>
 </form>

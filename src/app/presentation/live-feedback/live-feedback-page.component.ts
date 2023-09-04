@@ -57,7 +57,9 @@ export class LiveFeedbackPageComponent
   ngOnInit() {
     this.initData();
     this.translateService
-      .selectTranslate(this.isClosed ? 'survey.start' : 'survey.stop')
+      .selectTranslate(
+        this.isClosed ? 'creator.survey.start' : 'creator.survey.stop'
+      )
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {
@@ -69,7 +71,7 @@ export class LiveFeedbackPageComponent
         );
       });
     this.translateService
-      .selectTranslate('survey.change-type')
+      .selectTranslate('creator.survey.change-type')
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {
@@ -123,7 +125,7 @@ export class LiveFeedbackPageComponent
         }
         const state = this.isClosed ? 'stopped' : 'started';
         this.translateService
-          .selectTranslate('survey.' + state)
+          .selectTranslate('creator.survey.' + state)
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

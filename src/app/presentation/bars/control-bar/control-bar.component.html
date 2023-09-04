@@ -56,7 +56,7 @@
           [matTooltip]="
             ('sidebar.' + barItem.name | transloco) +
             ' (' +
-            ('control-bar.key' | transloco) +
+            ('creator.control-bar.key' | transloco) +
             ' ' +
             barItem.key +
             ')'
@@ -66,7 +66,9 @@
           [appHotkeyTitle]="'sidebar.' + barItem.name | transloco"
         >
           <mat-icon class="nav-icon">{{ barItem.icon }}</mat-icon>
-          <p class="text">{{ 'sidebar.' + barItem.name | transloco }}</p>
+          <p class="text">
+            {{ 'sidebar.' + barItem.name | transloco }}
+          </p>
         </div>
       </div>
       <div
@@ -123,27 +125,29 @@
           (menuOpened)="menuOpen = true"
           (menuClosed)="menuClosed()"
           [matTooltip]="
-            ('control-bar.' + moreItem.name | transloco) +
+            ('creator.control-bar.' + moreItem.name | transloco) +
             ' (' +
             moreItem.displayKey +
             ')'
           "
           [appHotkey]="moreItem.key"
           [appHotkeyAction]="HotkeyAction.CLICK"
-          [appHotkeyTitle]="'control-bar.' + moreItem.name | transloco"
+          [appHotkeyTitle]="'creator.control-bar.' + moreItem.name | transloco"
         >
           <mat-icon class="nav-icon">{{ moreItem.icon }}</mat-icon>
-          <p class="text">{{ 'control-bar.more' | transloco }}</p>
+          <p class="text">{{ 'creator.control-bar.more' | transloco }}</p>
         </div>
         <mat-menu #moreMenu="matMenu">
           <ng-container>
             <button
               mat-menu-item
               (click)="editContent()"
-              attr.aria-label="{{ 'content.a11y-edit-content' | transloco }}"
+              attr.aria-label="{{
+                'creator.content.a11y-edit-content' | transloco
+              }}"
             >
               <mat-icon>edit</mat-icon>
-              <span> {{ 'content.edit-content' | transloco }}</span>
+              <span> {{ 'creator.content.edit-content' | transloco }}</span>
             </button>
             <mat-divider
               *ngIf="content && hasFormatAnswer(content.format)"
@@ -152,14 +156,16 @@
               mat-menu-item
               *ngIf="content && hasFormatAnswer(content.format)"
               (click)="deleteContentAnswers()"
-              attr.aria-label="{{ 'content.a11y-delete-answers' | transloco }}"
+              attr.aria-label="{{
+                'creator.content.a11y-delete-answers' | transloco
+              }}"
             >
               <mat-icon>clear_all</mat-icon>
-              <span>{{ 'content.delete-answers' | transloco }}</span>
+              <span>{{ 'creator.content.delete-answers' | transloco }}</span>
             </button>
             <button mat-menu-item [routerLink]="'/account/preferences'">
               <mat-icon>settings_suggest</mat-icon>
-              <span>{{ 'content.preferences' | transloco }}</span>
+              <span>{{ 'creator.content.preferences' | transloco }}</span>
             </button>
             <ng-container *ngIf="content && hasFormatRounds(content.format)">
               <button
@@ -206,7 +212,7 @@
                 [disabled]="content.state.round > 1"
               >
                 <mat-icon>replay</mat-icon>
-                {{ 'content.start-new-round' | transloco }}
+                {{ 'creator.content.start-new-round' | transloco }}
               </button>
             </ng-container>
           </ng-container>
@@ -230,7 +236,9 @@
           (menuOpened)="menuOpen = true"
           (menuClosed)="menuClosed()"
         >
-          {{ 'control-bar.comment-sort-' + currentCommentSort | transloco }}
+          {{
+            'creator.control-bar.comment-sort-' + currentCommentSort | transloco
+          }}
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
         <mat-menu #sortMenu="matMenu">
@@ -243,7 +251,7 @@
             <span
               [ngClass]="{ 'selected-menu-item': sort === currentCommentSort }"
             >
-              {{ 'control-bar.comment-sort-' + sort | transloco }}
+              {{ 'creator.control-bar.comment-sort-' + sort | transloco }}
             </span>
           </button>
         </mat-menu>

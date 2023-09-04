@@ -78,7 +78,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   submitAnswer(): void {
     if (this.selectedAnswerIndex === undefined) {
       this.translateService
-        .selectTranslate('answer.please-one')
+        .selectTranslate('participant.answer.please-one')
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -97,7 +97,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
       (answer) => {
         this.answer = answer;
         this.translateService
-          .selectTranslate('answer.sent')
+          .selectTranslate('participant.answer.sent')
           .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
