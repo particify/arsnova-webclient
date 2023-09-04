@@ -234,7 +234,7 @@ export class ContentService extends AbstractEntityService<Content> {
       .pipe(catchError(this.handleError<Content>('deleteAnswers')));
   }
 
-  showDeleteAllAnswersDialog(contentGroup: ContentGroup): Observable<void> {
+  showDeleteAllAnswersDialog(contentGroup: ContentGroup): Observable<string> {
     const dialogRef = this.dialogService.openDeleteDialog(
       'content-answers',
       'really-delete-all-answers',
@@ -242,13 +242,7 @@ export class ContentService extends AbstractEntityService<Content> {
       undefined,
       () => this.deleteAllAnswersOfContentGroup(contentGroup)
     );
-    return dialogRef.afterClosed().pipe(
-      switchMap((result) => {
-        if (result === 'delete') {
-          return of();
-        }
-      })
-    );
+    return dialogRef.afterClosed();
   }
 
   deleteAllAnswersOfContentGroup(contentGroup: ContentGroup) {
