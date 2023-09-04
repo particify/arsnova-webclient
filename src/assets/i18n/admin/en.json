@@ -68,11 +68,5 @@
     "webSocketUserCount": "Connected users",
     "coreServiceStats": "Core service",
     "commentServiceStats": "Comment service"
-  },
-  "hotkeys": {
-    "a11y-help-key-announcement": "Press {{helpKey}} for a list of keyboard shortcuts."
-  },
-  "errors": {
-    "something-went-wrong": "Something went wrong."
   }
 }

@@ -68,11 +68,5 @@
     "webSocketUserCount": "Usuarios conectados",
     "coreServiceStats": "Servicio principal",
     "commentServiceStats": "Servicio de comentarios"
-  },
-  "hotkeys": {
-    "a11y-help-key-announcement": "Presiona {{helpKey}} para ver una lista de atajos de teclado."
-  },
-  "errors": {
-    "something-went-wrong": "Algo salió mal."
   }
 }
