@@ -47,6 +47,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { BROWSER_LANG } from '@app/core/services/util/language.service';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
@@ -185,6 +186,7 @@ describe('HeaderComponent', () => {
           provide: FeatureFlagService,
           useClass: MockFeatureFlagService,
         },
+        { provide: BROWSER_LANG, useValue: 'unsupported' },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

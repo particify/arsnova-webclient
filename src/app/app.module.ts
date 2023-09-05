@@ -22,7 +22,10 @@ import { AuthenticationInterceptor } from '@app/core/interceptors/authentication
 import { CoreModule } from '@app/core/core.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LanguageService } from '@app/core/services/util/language.service';
+import {
+  BROWSER_LANG,
+  LanguageService,
+} from '@app/core/services/util/language.service';
 import { HomePageComponent } from '@app/core/components/home-page/home-page.component';
 import { UserHomeComponent } from '@app/core/components/user-home/user-home.component';
 import { AppConfig } from './app.config';
@@ -30,6 +33,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@environments/environment';
 import { extensions } from '@environments/extensions';
 import { ModeratorService } from '@app/core/services/http/moderator.service';
+import { getBrowserLang } from '@ngneat/transloco';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -233,6 +237,10 @@ export function initializeApp(appConfig: AppConfig) {
       useValue: [],
     },
     { provide: TitleStrategy, useClass: CustomPageTitleStrategy },
+    {
+      provide: BROWSER_LANG,
+      useFactory: () => getBrowserLang(),
+    },
   ],
   bootstrap: [AppComponent],
 })

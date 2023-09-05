@@ -19,6 +19,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Comment } from '@app/core/models/comment';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { VoteService } from '@app/core/services/http/vote.service';
+import { BROWSER_LANG } from '@app/core/services/util/language.service';
 
 describe('CommentComponent', () => {
   let component: CommentComponent;
@@ -84,6 +85,7 @@ describe('CommentComponent', () => {
           provide: VoteService,
           useValue: mockVoteService,
         },
+        { provide: BROWSER_LANG, useValue: 'unsupported' },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

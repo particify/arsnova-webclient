@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LanguageService } from '@app/core/services/util/language.service';
+import {
+  BROWSER_LANG,
+  LanguageService,
+} from '@app/core/services/util/language.service';
 import { TranslocoService } from '@ngneat/transloco';
 import {
   GlobalStorageService,
@@ -13,7 +16,7 @@ describe('LanguageService', () => {
   const translateService = jasmine.createSpyObj('TranslocoService', [
     'setDefaultLang',
     'getBrowserLang',
-    'use',
+    'setActiveLang',
   ]);
 
   const globalStorageService = jasmine.createSpyObj('GlobalStorageService', [
@@ -33,46 +36,48 @@ describe('LanguageService', () => {
           provide: GlobalStorageService,
           useValue: globalStorageService,
         },
+        { provide: BROWSER_LANG, useValue: 'unsupported' },
       ],
     });
-    langService = TestBed.inject(LanguageService);
   });
 
   it('should be created', () => {
+    langService = TestBed.inject(LanguageService);
     expect(langService).toBeTruthy();
   });
 
   it('should use english as fallback if language stored in global storage is not supported and browser lang too', () => {
+    langService = TestBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
       .and.returnValue('unsupported');
-    translateService.getBrowserLang.and.returnValue('unsupported');
     langService.init();
     expect(setLangSpy).toHaveBeenCalledWith('en');
   });
 
   it('should use english as fallback if no language stored in global storage and browser lang is not supported', () => {
+    langService = TestBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
       .and.returnValue(null);
-    translateService.getBrowserLang.and.returnValue('unsupported');
     langService.init();
     expect(setLangSpy).toHaveBeenCalledWith('en');
   });
 
   it('should use english as fallback if no language stored in global storage and browser lang is supported but not officially', () => {
+    langService = overrideBrowserLang('es');
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
       .and.returnValue(null);
-    translateService.getBrowserLang.and.returnValue('es');
     langService.init();
     expect(setLangSpy).toHaveBeenCalledWith('en');
   });
 
   it('should use language stored in global storage if supported', () => {
+    langService = TestBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
@@ -82,6 +87,7 @@ describe('LanguageService', () => {
   });
 
   it('should use language stored in global storage if supported even if not officially', () => {
+    langService = TestBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
@@ -91,22 +97,27 @@ describe('LanguageService', () => {
   });
 
   it('should use browser lang if no language stored in global storage and browser lang is supported', () => {
+    langService = overrideBrowserLang('de');
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
       .and.returnValue(null);
-    translateService.getBrowserLang.and.returnValue('de');
     langService.init();
     expect(setLangSpy).toHaveBeenCalledWith('de');
   });
 
   it('should use browser lang if language stored in global storage is not supported but browser lang', () => {
+    langService = overrideBrowserLang('de');
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
       .and.returnValue('unsupported');
-    translateService.getBrowserLang.and.returnValue('de');
     langService.init();
     expect(setLangSpy).toHaveBeenCalledWith('de');
   });
 });
+
+function overrideBrowserLang(lang: string) {
+  TestBed.overrideProvider(BROWSER_LANG, { useValue: lang });
+  return TestBed.inject(LanguageService);
+}
