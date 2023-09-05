@@ -10,6 +10,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { take } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -37,6 +38,7 @@ export class CopyUrlComponent {
     if (success) {
       this.translateService
         .selectTranslate('room-page.url-copied')
+        .pipe(take(1))
         .subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,

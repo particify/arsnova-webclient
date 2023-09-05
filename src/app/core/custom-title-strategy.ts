@@ -6,6 +6,7 @@ import {
 } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { Title } from '@angular/platform-browser';
+import { take } from 'rxjs';
 
 @Injectable()
 export class CustomPageTitleStrategy extends TitleStrategy {
@@ -51,6 +52,7 @@ export class CustomPageTitleStrategy extends TitleStrategy {
         // Use tranlated title for page
         this.translateService
           .selectTranslate('title.' + this.title)
+          .pipe(take(1))
           .subscribe((msg) => {
             this.setDocumentTitle(msg);
           });

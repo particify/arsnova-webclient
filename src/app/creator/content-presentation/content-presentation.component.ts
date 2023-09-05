@@ -22,7 +22,7 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { UserSettings } from '@app/core/models/user-settings';
@@ -140,6 +140,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
         });
       this.translateService
         .selectTranslate('creator.control-bar.publish-or-lock-content')
+        .pipe(take(1))
         .subscribe((t) =>
           this.hotkeyService.registerHotkey(
             {

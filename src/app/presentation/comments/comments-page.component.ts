@@ -29,7 +29,7 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { TranslocoService } from '@ngneat/transloco';
-import { takeUntil } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-comments-page',
@@ -131,6 +131,7 @@ export class CommentsPageComponent
         'creator.comment-list.next',
         'creator.comment-list.previous',
       ])
+      .pipe(take(1))
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {

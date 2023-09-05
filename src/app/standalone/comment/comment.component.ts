@@ -28,7 +28,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
 import { DateComponent } from '@app/standalone/date/date.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -159,6 +159,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       if (result === 'delete') {
         this.translateService
           .selectTranslate('comment-list.comment-deleted')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
           });
@@ -176,6 +177,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           ? 'comment-page.a11y-rejected'
           : 'comment-page.a11y-banned'
       )
+      .pipe(take(1))
       .subscribe((status) => {
         this.announceService.announce('comment-page.a11y-comment-has-been', {
           status: status,

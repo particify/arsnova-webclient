@@ -26,6 +26,7 @@ import {
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-room-create',
@@ -117,6 +118,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
       this.emptyInputs = true;
       this.translateService
         .selectTranslate('dialog.no-empty-name')
+        .pipe(take(1))
         .subscribe((msg) => {
           this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
         });

@@ -16,6 +16,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
 import { CreateAnswerOptionComponent } from '@app/creator/content-creation/create-answer-option/create-answer-option.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-choice-creation',
@@ -72,6 +73,7 @@ export class ContentChoiceCreationComponent
     if (answer === '') {
       this.translationService
         .selectTranslate('creator.content.no-empty2')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -89,6 +91,7 @@ export class ContentChoiceCreationComponent
     ) {
       this.translationService
         .selectTranslate('creator.content.only-one')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

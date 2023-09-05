@@ -3,7 +3,7 @@ import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { Resolve } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { Observable, timer } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { take, takeUntil, tap } from 'rxjs/operators';
 import { SnackBarAdvancedComponent } from '@app/core/components/snack-bar-advanced/snack-bar-advanced.component';
 import { ApiConfig } from '@app/core/models/api-config';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -32,6 +32,7 @@ export class ApiConfigResolver implements Resolve<ApiConfig> {
         tap(() => {
           this.translateService
             .selectTranslate('errors.establishing-connection')
+            .pipe(take(1))
             .subscribe(
               (msg) =>
                 (snackbarRef = this.notificationService.showAdvanced(

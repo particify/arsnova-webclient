@@ -11,6 +11,7 @@ import { PasswordResetErrorStateMatcher } from '@app/core/components/password-re
 import { Router } from '@angular/router';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-request-password-reset',
@@ -66,6 +67,7 @@ export class RequestPasswordResetComponent
         () => {
           this.translationService
             .selectTranslate('password-reset.reset-successful')
+            .pipe(take(1))
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -78,6 +80,7 @@ export class RequestPasswordResetComponent
           this.enableForm();
           this.translationService
             .selectTranslate('password-reset.request-failed')
+            .pipe(take(1))
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -89,6 +92,7 @@ export class RequestPasswordResetComponent
     } else {
       this.translationService
         .selectTranslate('login.input-incorrect')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

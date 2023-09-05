@@ -79,6 +79,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     if (this.selectedAnswerIndex === undefined) {
       this.translateService
         .selectTranslate('participant.answer.please-one')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

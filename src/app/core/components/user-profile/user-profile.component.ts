@@ -15,6 +15,7 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { UserSettings } from '@app/core/models/user-settings';
 import { Location } from '@angular/common';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { take } from 'rxjs';
 
 export class FormField {
   value: string;
@@ -103,6 +104,7 @@ export class UserProfileComponent implements OnInit {
         this.authenticationService.logout();
         this.translationService
           .selectTranslate('header.account-deleted')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

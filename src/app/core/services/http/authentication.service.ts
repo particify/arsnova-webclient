@@ -379,6 +379,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     this.router.navigateByUrl('login');
     this.translateService
       .selectTranslate('login.authentication-expired')
+      .pipe(take(1))
       .subscribe((msg) => {
         this.notificationService.showAdvanced(
           msg,

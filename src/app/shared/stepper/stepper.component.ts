@@ -20,6 +20,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoService } from '@ngneat/transloco';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-stepper',
@@ -83,6 +84,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   ngOnInit() {
     this.translateService
       .selectTranslate(this.i18nPrefix + '.previous')
+      .pipe(take(1))
       .subscribe((t) =>
         this.hotkeyService.registerHotkey(
           {
@@ -95,6 +97,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
       );
     this.translateService
       .selectTranslate(this.i18nPrefix + '.next')
+      .pipe(take(1))
       .subscribe((t) =>
         this.hotkeyService.registerHotkey(
           {

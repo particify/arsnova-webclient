@@ -17,6 +17,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { take } from 'rxjs';
 
 export enum StatisticType {
   CHOICE = 'C',
@@ -401,6 +402,7 @@ export class StatisticListComponent implements OnInit {
         this.resetAllAnswers();
         this.translateService
           .selectTranslate('creator.content.all-answers-deleted')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

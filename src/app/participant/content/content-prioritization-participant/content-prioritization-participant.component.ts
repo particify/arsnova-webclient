@@ -13,6 +13,7 @@ import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { TranslocoService } from '@ngneat/transloco';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-prioritization-participant',
@@ -111,6 +112,7 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
           this.answer = answer;
           this.translateService
             .selectTranslate('participant.answer.sent')
+            .pipe(take(1))
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,

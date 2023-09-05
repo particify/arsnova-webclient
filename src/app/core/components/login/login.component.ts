@@ -31,6 +31,7 @@ import { PasswordEntryComponent } from '@app/core/components/password-entry/pass
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -175,6 +176,7 @@ export class LoginComponent
     } else {
       this.translationService
         .selectTranslate('login.input-incorrect')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -194,6 +196,7 @@ export class LoginComponent
     if (result.status === AuthenticationStatus.SUCCESS) {
       this.translationService
         .selectTranslate('login.login-successful')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -211,6 +214,7 @@ export class LoginComponent
     } else {
       this.translationService
         .selectTranslate('login.login-data-incorrect')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

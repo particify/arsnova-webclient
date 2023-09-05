@@ -14,6 +14,7 @@ import { GroupContentComponent } from '@app/creator/content-list/group-content/g
 import { ContentGroup } from '@app/core/models/content-group';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 interface DialogData {
   roomId?: string;
@@ -57,6 +58,7 @@ export class ContentGroupCreationComponent extends FormComponent {
           () => {
             this.translateService
               .selectTranslate('creator.room-page.content-group-created')
+              .pipe(take(1))
               .subscribe((msg) => {
                 this.notificationService.showAdvanced(
                   msg,
@@ -72,6 +74,7 @@ export class ContentGroupCreationComponent extends FormComponent {
       } else {
         this.translateService
           .selectTranslate('creator.content.duplicate-series-name')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -82,6 +85,7 @@ export class ContentGroupCreationComponent extends FormComponent {
     } else {
       this.translateService
         .selectTranslate('creator.dialog.please-enter-name')
+        .pipe(take(1))
         .subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,

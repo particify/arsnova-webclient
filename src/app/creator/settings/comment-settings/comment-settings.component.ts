@@ -16,6 +16,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { CommentExtensions } from '@app/core/models/room-extensions';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-comment-settings',
@@ -165,6 +166,7 @@ export class CommentSettingsComponent implements OnInit {
       .selectTranslate('creator.settings.a11y-threshold-changed', {
         value: this.threshold,
       })
+      .pipe(take(1))
       .subscribe((msg) => {
         this.liveAnnouncer.clear();
         this.liveAnnouncer.announce(msg);

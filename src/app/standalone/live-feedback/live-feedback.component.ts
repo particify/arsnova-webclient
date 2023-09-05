@@ -18,6 +18,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { TranslocoModule } from '@ngneat/transloco';
+import { take } from 'rxjs';
 
 class LiveFeedback {
   count = 0;
@@ -71,6 +72,7 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
     });
     this.translateService
       .selectTranslate('survey.status-summary')
+      .pipe(take(1))
       .subscribe((t) =>
         this.hotkeyService.registerHotkey(
           {

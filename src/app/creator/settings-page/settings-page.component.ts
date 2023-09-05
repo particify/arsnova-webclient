@@ -16,6 +16,7 @@ import {
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 export interface Settings {
   name: string;
@@ -107,6 +108,7 @@ export class SettingsPageComponent implements OnInit {
           if (updateEvent.showSuccessInfo) {
             this.translateService
               .selectTranslate('creator.settings.changes-successful')
+              .pipe(take(1))
               .subscribe((msg) => {
                 this.notificationService.showAdvanced(
                   msg,

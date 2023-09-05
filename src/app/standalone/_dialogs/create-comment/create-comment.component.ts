@@ -10,7 +10,7 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { CoreModule } from '@app/core/core.module';
@@ -83,6 +83,7 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
         if (this.data.directSend) {
           this.translateService
             .selectTranslate('comment-page.comment-sent')
+            .pipe(take(1))
             .subscribe((msg) => {
               message = msg;
             });
@@ -90,6 +91,7 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
         } else {
           this.translateService
             .selectTranslate('comment-page.comment-sent-to-moderator')
+            .pipe(take(1))
             .subscribe((msg) => {
               message = msg;
             });
@@ -111,6 +113,7 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
     if (!body) {
       this.translateService
         .selectTranslate('comment-page.error-comment')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

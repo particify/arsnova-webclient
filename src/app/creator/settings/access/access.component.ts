@@ -21,7 +21,7 @@ import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthProvider } from '@app/core/models/auth-provider';
-import { debounceTime, map, Subject, takeUntil } from 'rxjs';
+import { debounceTime, map, Subject, take, takeUntil } from 'rxjs';
 import { AccessTokenService } from '@app/core/services/http/access-token.service';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -134,6 +134,7 @@ export class AccessComponent
           if (this.isGuest) {
             this.translationService
               .selectTranslate('creator.settings.you')
+              .pipe(take(1))
               .subscribe((msg) => {
                 this.moderators[0].loginId = msg;
               });

@@ -12,6 +12,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-presentation',
@@ -67,6 +68,7 @@ export class PresentationComponent implements OnInit, OnDestroy {
       if (data.room.focusModeEnabled) {
         this.translateService
           .selectTranslate('creator.presentation.focus-mode-enabled-info')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

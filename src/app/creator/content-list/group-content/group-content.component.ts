@@ -27,7 +27,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Observable, Subject, Subscription, of } from 'rxjs';
-import { mergeMap, takeUntil } from 'rxjs/operators';
+import { mergeMap, take, takeUntil } from 'rxjs/operators';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
@@ -167,6 +167,7 @@ export class GroupContentComponent
   registerHotkeys() {
     this.translateService
       .selectTranslate('creator.control-bar.publish-or-lock-content')
+      .pipe(take(1))
       .subscribe((t) =>
         this.hotkeyService.registerHotkey(
           {
@@ -232,6 +233,7 @@ export class GroupContentComponent
         this.removeContentFromList(index);
         this.translateService
           .selectTranslate('creator.content.content-deleted')
+          .pipe(take(1))
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -408,6 +410,7 @@ export class GroupContentComponent
         }
         this.translateService
           .selectTranslate('creator.content.updated-content-group')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -476,6 +479,7 @@ export class GroupContentComponent
           this.initContentList(this.contents);
           this.translateService
             .selectTranslate('creator.content.updated-sorting')
+            .pipe(take(1))
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -891,6 +895,7 @@ export class GroupContentComponent
         this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
         this.translateService
           .selectTranslate('creator.content.content-group-deleted')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

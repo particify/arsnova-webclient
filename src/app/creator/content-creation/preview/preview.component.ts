@@ -8,7 +8,7 @@ import { ContentAnswerService } from '@app/core/services/http/content-answer.ser
 import { ContentScale } from '@app/core/models/content-scale';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { TranslocoService } from '@ngneat/transloco';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, take } from 'rxjs';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
@@ -75,7 +75,10 @@ export class PreviewComponent implements OnInit {
       );
       if (optionLabels) {
         const optionLabels$ = optionLabels.map(
-          (l) => <Observable<string>>this.translateService.selectTranslate(l)
+          (l) =>
+            <Observable<string>>(
+              this.translateService.selectTranslate(l).pipe(take(1))
+            )
         );
         forkJoin(optionLabels$).subscribe(
           (labels) =>

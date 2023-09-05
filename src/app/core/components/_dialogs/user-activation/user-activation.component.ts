@@ -10,6 +10,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-user-activation',
@@ -41,6 +42,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
     if (activationKey.length < 1) {
       this.translationService
         .selectTranslate('user-activation.key-required')
+        .pipe(take(1))
         .subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,
@@ -58,6 +60,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
           this.enableForm();
           this.translationService
             .selectTranslate('user-activation.key-incorrect')
+            .pipe(take(1))
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -73,6 +76,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
     this.userService.resetActivation(this.data.trim()).subscribe(() => {
       this.translationService
         .selectTranslate('user-activation.sent-again')
+        .pipe(take(1))
         .subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,

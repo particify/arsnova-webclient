@@ -23,6 +23,7 @@ import {
   map,
   shareReplay,
   switchMap,
+  take,
   takeUntil,
   tap,
 } from 'rxjs/operators';
@@ -115,11 +116,17 @@ export class RoomListComponent implements OnInit, OnDestroy {
       UserRole.EDITOR,
       UserRole.OWNER,
     ];
-    this.translateService.selectTranslate(roleKeys).subscribe(() => {
-      for (let i = 0; i < roleKeys.length; i++) {
-        this.roles.set(roles[i], this.translateService.translate(roleKeys[i]));
-      }
-    });
+    this.translateService
+      .selectTranslate(roleKeys)
+      .pipe(take(1))
+      .subscribe(() => {
+        for (let i = 0; i < roleKeys.length; i++) {
+          this.roles.set(
+            roles[i],
+            this.translateService.translate(roleKeys[i])
+          );
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -156,6 +163,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
       } else if (this.isLoading) {
         this.translateService
           .selectTranslate('room-list.transfer-no-rooms')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -273,6 +281,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   roomDeletionCanceled() {
     this.translateService
       .selectTranslate('room-list.canceled-remove')
+      .pipe(take(1))
       .subscribe((msg) => {
         this.notificationService.show(msg);
       });
@@ -342,6 +351,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
         tap(() =>
           this.translateService
             .selectTranslate('room-list.transferred-successfully')
+            .pipe(take(1))
             .subscribe((msg) =>
               this.notificationService.showAdvanced(
                 msg,
@@ -362,6 +372,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
         tap(() =>
           this.translateService
             .selectTranslate('room-list.added-successfully')
+            .pipe(take(1))
             .subscribe((msg) =>
               this.notificationService.showAdvanced(
                 msg,

@@ -23,6 +23,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { take } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -79,6 +80,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
       () => {
         this.translateService
           .selectTranslate('creator.comment-page.comment-answered')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

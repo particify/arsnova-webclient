@@ -16,7 +16,7 @@ import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.ser
 import { TranslocoService } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { takeUntil } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 @Component({
@@ -60,6 +60,7 @@ export class LiveFeedbackPageComponent
       .selectTranslate(
         this.isClosed ? 'creator.survey.start' : 'creator.survey.stop'
       )
+      .pipe(take(1))
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {
@@ -72,6 +73,7 @@ export class LiveFeedbackPageComponent
       });
     this.translateService
       .selectTranslate('creator.survey.change-type')
+      .pipe(take(1))
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {
@@ -126,6 +128,7 @@ export class LiveFeedbackPageComponent
         const state = this.isClosed ? 'stopped' : 'started';
         this.translateService
           .selectTranslate('creator.survey.' + state)
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

@@ -12,6 +12,7 @@ import { PasswordEntryComponent } from '@app/core/components/password-entry/pass
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -74,6 +75,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
             });
             this.translationService
               .selectTranslate('register.register-successful')
+              .pipe(take(1))
               .subscribe((message) => {
                 this.notificationService.showAdvanced(
                   message,
@@ -85,6 +87,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
             this.enableForm();
             this.translationService
               .selectTranslate('register.register-request-error')
+              .pipe(take(1))
               .subscribe((message) => {
                 this.notificationService.showAdvanced(
                   message,
@@ -96,6 +99,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
       } else {
         this.translationService
           .selectTranslate('register.please-accept')
+          .pipe(take(1))
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -106,6 +110,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
     } else {
       this.translationService
         .selectTranslate('register.register-unsuccessful')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, take } from 'rxjs';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -41,7 +41,10 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     );
     if (scaleOptions) {
       const optionLabels$ = scaleOptions.map(
-        (l) => this.translateService.selectTranslate(l) as Observable<string>
+        (l) =>
+          this.translateService
+            .selectTranslate(l)
+            .pipe(take(1)) as Observable<string>
       );
       forkJoin(optionLabels$).subscribe(
         (labels) => (this.options = labels.map((l) => ({ label: l })))

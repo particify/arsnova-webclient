@@ -13,6 +13,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { Content } from '@app/core/models/content';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-text-participant',
@@ -66,6 +67,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     if (this.textAnswer.trim().valueOf() === '') {
       this.translateService
         .selectTranslate('participant.answer.please-answer')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -89,6 +91,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
         this.createAnswer(this.textAnswer);
         this.translateService
           .selectTranslate('participant.answer.sent')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

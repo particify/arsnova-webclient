@@ -36,6 +36,7 @@ import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -225,6 +226,7 @@ export class HeaderComponent implements OnInit {
     this.authenticationService.logout();
     this.translationService
       .selectTranslate('header.account-deleted')
+      .pipe(take(1))
       .subscribe((msg) => {
         this.notificationService.showAdvanced(
           msg,

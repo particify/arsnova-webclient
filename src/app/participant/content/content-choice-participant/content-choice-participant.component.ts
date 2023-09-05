@@ -14,6 +14,7 @@ import { ContentParticipantBaseComponent } from '@app/participant/content/conten
 import { ContentService } from '@app/core/services/http/content.service';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-choice-participant',
@@ -171,6 +172,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       if (this.content.multiple) {
         this.translateService
           .selectTranslate('participant.answer.at-least-one')
+          .pipe(take(1))
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -180,6 +182,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       } else {
         this.translateService
           .selectTranslate('participant.answer.please-one')
+          .pipe(take(1))
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -202,6 +205,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
         this.getCorrectAnswerOptions();
         this.translateService
           .selectTranslate('participant.answer.sent')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

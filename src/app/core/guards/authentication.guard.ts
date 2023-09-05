@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
@@ -106,6 +106,7 @@ export class AuthenticationGuard implements CanActivate {
   handleUnknownError() {
     this.translateService
       .selectTranslate('errors.something-went-wrong')
+      .pipe(take(1))
       .subscribe((msg) =>
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED)
       );
@@ -114,6 +115,7 @@ export class AuthenticationGuard implements CanActivate {
   handleAccessDenied(auth?: ClientAuthentication, url?: string) {
     this.translateService
       .selectTranslate('errors.not-authorized')
+      .pipe(take(1))
       .subscribe((msg) => {
         this.notificationService.showAdvanced(
           msg,
@@ -133,6 +135,7 @@ export class AuthenticationGuard implements CanActivate {
   handleRoomNotFound() {
     this.translateService
       .selectTranslate('errors.room-not-found')
+      .pipe(take(1))
       .subscribe((msg) => {
         this.notificationService.showAdvanced(
           msg,

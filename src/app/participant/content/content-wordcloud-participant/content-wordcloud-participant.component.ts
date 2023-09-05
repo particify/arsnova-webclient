@@ -13,6 +13,7 @@ import { ContentParticipantBaseComponent } from '@app/participant/content/conten
 import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-wordcloud-participant',
@@ -69,6 +70,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     if (words.length === 0) {
       this.translateService
         .selectTranslate('participant.answer.please-answer')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -89,6 +91,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
         this.createAnswer(words);
         this.translateService
           .selectTranslate('participant.answer.sent')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

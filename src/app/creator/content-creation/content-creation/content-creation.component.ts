@@ -17,7 +17,7 @@ import { Content } from '@app/core/models/content';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { AnswerOption } from '@app/core/models/answer-option';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, take } from 'rxjs';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
@@ -111,6 +111,7 @@ export class ContentCreationComponent
   initTemplateAnswers() {
     this.translationService
       .selectTranslate(this.answerLabels)
+      .pipe(take(1))
       .subscribe((msgs) => {
         for (let i = 0; i < this.answerLabels.length; i++) {
           (this.content as ContentChoice).options.push(
@@ -167,6 +168,7 @@ export class ContentCreationComponent
     if (this.contentBody === '') {
       this.translationService
         .selectTranslate('creator.content.no-empty')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -197,6 +199,7 @@ export class ContentCreationComponent
     this.announceService.announce('creator.content.a11y-answer-deleted');
     this.translationService
       .selectTranslate('creator.content.answer-deleted')
+      .pipe(take(1))
       .subscribe((message) => {
         this.notificationService.showAdvanced(
           message,
@@ -237,6 +240,7 @@ export class ContentCreationComponent
       if (labels.includes('')) {
         this.translationService
           .selectTranslate('creator.content.no-empty2')
+          .pipe(take(1))
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -282,6 +286,7 @@ export class ContentCreationComponent
     }
     this.translationService
       .selectTranslate('creator.content.submitted')
+      .pipe(take(1))
       .subscribe((message) => {
         this.notificationService.showAdvanced(
           message,
@@ -322,6 +327,7 @@ export class ContentCreationComponent
           window.history.back();
           this.translationService
             .selectTranslate('creator.content.changes-made')
+            .pipe(take(1))
             .subscribe((message) => {
               this.notificationService.showAdvanced(
                 message,

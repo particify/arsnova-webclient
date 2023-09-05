@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, take, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -363,6 +363,7 @@ export class ContentService extends AbstractEntityService<Content> {
       tap(() => {
         this.translateService
           .selectTranslate('dialog.answers-deleted')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -408,6 +409,7 @@ export class ContentService extends AbstractEntityService<Content> {
         this.roundStarted.next(content);
         this.translateService
           .selectTranslate('dialog.started-new-round')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

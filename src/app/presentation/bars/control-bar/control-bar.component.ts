@@ -22,7 +22,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { EventService } from '@app/core/services/util/event.service';
 import { BarItem } from '@app/shared/bars/bar-base';
 import { ContentGroup } from '@app/core/models/content-group';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
@@ -610,6 +610,7 @@ export class ControlBarComponent
       this.translateService
         .selectTranslate('creator.control-bar.' + item.name)
         .pipe(
+          take(1),
           map(
             (t) =>
               ({

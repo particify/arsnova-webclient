@@ -12,6 +12,7 @@ import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dia
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '@app/core/services/http/user.service';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-room-management',
@@ -78,6 +79,7 @@ export class RoomManagementComponent {
         if (closeAction === 'delete') {
           this.translateService
             .selectTranslate('admin.admin-area.room-deleted')
+            .pipe(take(1))
             .subscribe((message) =>
               this.notificationService.showAdvanced(
                 message,
