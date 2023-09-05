@@ -194,14 +194,14 @@ describe('GroupContentComponent', () => {
       ],
       imports: [getTranslocoModule(), MatMenuModule],
       schemas: [NO_ERRORS_SCHEMA],
-    })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(GroupContentComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-      });
+    }).compileComponents();
   }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(GroupContentComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
