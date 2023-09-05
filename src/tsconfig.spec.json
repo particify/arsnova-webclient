@@ -5,6 +5,7 @@
     "baseUrl": "./",
     "types": ["jasmine", "node", "karma-viewport"],
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@app/*": ["./app/*"],
       "@testing/*": ["./testing/*"],
