@@ -393,6 +393,7 @@
   },
   "sidebar": {
     "a11y-user-counter": "Hay {{count}} personas en esta sala.",
+    "user-counter": "Número personas en esta sala",
     "moderation": "Moderación",
     "content-counter": "Posición actual en la serie de preguntas",
     "focus-feature": "(enfoque)"

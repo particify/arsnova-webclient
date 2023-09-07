@@ -468,7 +468,6 @@
   },
   "sidebar": {
     "a11y-switch-to-feature": "Cambiar a {{feature}}.",
-    "user-counter": "Número de participantes activos",
     "comments": "Q&A",
     "series": "Series",
     "feedback": "Feedback",

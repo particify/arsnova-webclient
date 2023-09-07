@@ -313,7 +313,7 @@
     "leave-room": "Raum verlassen"
   },
   "comment-list": {
-    "a11y-close-search": "Schließt den Suchvorgang von Beiträge",
+    "a11y-close-search": "Schließt den Suchvorgang von Beiträgen",
     "a11y-sort-time": "Sortiert Beiträge nach der Uhrzeit",
     "a11y-sort-voteasc": "Sortiert die Beiträge nach absteigenden Bewertungen",
     "a11y-sort-votedesc": "Sortiert die Beiträge nach aufsteigenden Bewertungen",
@@ -375,7 +375,7 @@
     "mark-not-correct": "Die vortragende Person hat den Beitrag bejaht.",
     "mark-not-favorite": "Die vortragende Person hat den Beitrag favorisiert.",
     "mark-not-wrong": "Die vortragende Person hat den Beitrag verneint",
-    "new-comment": "Eine neuer Beitrag mit dem Inhalt, {{ comment }}, wurde soeben gestellt.",
+    "new-comment": "Eine neuer Beitrag mit dem Inhalt, {{ comment }}, wurde soeben erstellt.",
     "no-comments": "Keine Beiträge vorhanden.",
     "no-comments-found": "Keine Beiträge gefunden.",
     "zoom-in": "Vergrößern",
@@ -468,7 +468,6 @@
   },
   "sidebar": {
     "a11y-switch-to-feature": "Zu {{feature}} wechseln.",
-    "user-counter": "Anzahl der teilnehmenden Personen",
     "comments": "Q&A",
     "series": "Fragenserie",
     "feedback": "Live Feedback",

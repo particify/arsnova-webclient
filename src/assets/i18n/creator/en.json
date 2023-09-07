@@ -393,6 +393,7 @@
   },
   "sidebar": {
     "a11y-user-counter": "There are {{count}} persons in this room.",
+    "user-counter": "Number of persons in this room",
     "moderation": "Moderation",
     "content-counter": "Current position in question series",
     "focus-feature": "(in focus)"
