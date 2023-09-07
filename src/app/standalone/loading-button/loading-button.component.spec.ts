@@ -5,8 +5,7 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { JsonTranslationLoader } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 describe('LoadingButtonComponent', () => {
   let component: LoadingButtonComponent;
@@ -27,13 +26,7 @@ describe('LoadingButtonComponent', () => {
         LoadingButtonComponent,
         CoreModule,
         LoadingIndicatorComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
       ],
       providers: [
         {

@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 export interface Hint {
   type: string;
@@ -26,7 +26,7 @@ export const HINTS: Hint[] = [
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FlexModule, MatIconModule, TranslateModule],
+  imports: [CommonModule, FlexModule, MatIconModule, TranslocoModule],
   selector: 'app-hint',
   templateUrl: './hint.component.html',
   styleUrls: ['./hint.component.scss'],

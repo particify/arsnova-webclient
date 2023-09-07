@@ -1,6 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { CommentListBarComponent } from './comment-list-bar.component';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
@@ -18,7 +18,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        TranslateModule.forRoot(),
+        TranslocoModule,
         CommentListBarComponent,
         BrowserAnimationsModule,
       ],

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { TranslateService } from '@ngx-translate/core';
-import { tap } from 'rxjs/operators';
+import { TranslocoService } from '@ngneat/transloco';
+import { take, tap } from 'rxjs/operators';
 import { UpdateInstalled } from '@app/core/models/events/update-installed';
 import { UpdateImportance, VersionInfo } from '@app/core/models/version-info';
 import { DialogService } from './dialog.service';
@@ -21,7 +21,7 @@ export class UpdateService {
     private eventService: EventService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     private window: Window
   ) {
     console.log(
@@ -129,7 +129,8 @@ export class UpdateService {
     if (this.globalStorageService.getItem(STORAGE_KEYS.UPDATED)) {
       this.globalStorageService.removeItem(STORAGE_KEYS.UPDATED);
       this.translationService
-        .get('home-page.update-successful')
+        .selectTranslate('home-page.update-successful')
+        .pipe(take(1))
         .subscribe((msg) => {
           this.notificationService.showAdvanced(
             msg,

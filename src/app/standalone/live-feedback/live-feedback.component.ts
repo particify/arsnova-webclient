@@ -16,7 +16,9 @@ import { LiveFeedbackSurveyLabel } from '@app/core/models/live-feedback-survey-l
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule } from '@ngneat/transloco';
+import { take } from 'rxjs';
 
 class LiveFeedback {
   count = 0;
@@ -26,7 +28,7 @@ class LiveFeedback {
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslocoModule,
     FlexModule,
     MatIconModule,
     MatTooltipModule,
@@ -58,7 +60,7 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
   private hotkeyRefs: symbol[] = [];
 
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private hotkeyService: HotkeyService,
     private announceService: AnnounceService
   ) {}
@@ -68,16 +70,19 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
     this.dataChanged.subscribe((data) => {
       this.setData(data);
     });
-    this.translateService.get('survey.status-summary').subscribe((t) =>
-      this.hotkeyService.registerHotkey(
-        {
-          key: '5',
-          action: () => !this.isClosed && this.announceStatus(),
-          actionTitle: t,
-        },
-        this.hotkeyRefs
-      )
-    );
+    this.translateService
+      .selectTranslate('survey.status-summary')
+      .pipe(take(1))
+      .subscribe((t) =>
+        this.hotkeyService.registerHotkey(
+          {
+            key: '5',
+            action: () => !this.isClosed && this.announceStatus(),
+            actionTitle: t,
+          },
+          this.hotkeyRefs
+        )
+      );
   }
 
   ngOnDestroy() {
@@ -96,11 +101,12 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
         ? this.feedbackLabels
         : this.surveyLabels
     ).map((label) => 'survey.' + label);
-    const labels = this.translateService.instant(typeLabels);
-    const status = this.translateService.instant(
+    const labels =
+      this.translateService.translate<Record<string, string>>(typeLabels);
+    const status = this.translateService.translate(
       this.isClosed ? 'survey.a11y-stopped' : 'survey.a11y-started'
     );
-    const summary = this.translateService.instant('survey.a11y-status', {
+    const summary = this.translateService.translate('survey.a11y-status', {
       status: status,
       state0: this.data[0] || 0,
       state1: this.data[1] || 0,

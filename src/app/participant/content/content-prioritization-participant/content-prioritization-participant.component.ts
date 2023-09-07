@@ -10,9 +10,10 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-prioritization-participant',
@@ -33,7 +34,7 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
   constructor(
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
@@ -84,15 +85,15 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
 
   submitAnswer() {
     if (!this.isPointSumCorrect()) {
-      const msg = this.translateService.instant(
-        'answer.please-assign-points-correctly',
+      const msg = this.translateService.translate(
+        'participant.answer.please-assign-points-correctly',
         { points: this.content.assignablePoints }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     } else if (!this.arePointsInRange()) {
-      const msg = this.translateService.instant(
-        'answer.please-assign-valid-points',
+      const msg = this.translateService.translate(
+        'participant.answer.please-assign-valid-points',
         { points: this.content.assignablePoints }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
@@ -109,12 +110,15 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
       .subscribe(
         (answer) => {
           this.answer = answer;
-          this.translateService.get('answer.sent').subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.SUCCESS
-            );
-          });
+          this.translateService
+            .selectTranslate('participant.answer.sent')
+            .pipe(take(1))
+            .subscribe((msg) => {
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.SUCCESS
+              );
+            });
           this.sendStatusToParent(answer);
         },
         () => {

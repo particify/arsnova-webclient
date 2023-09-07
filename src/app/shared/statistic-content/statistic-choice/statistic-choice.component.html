@@ -38,7 +38,7 @@
       class="chart-answer-label"
       [ngClass]="{ 'not-correct': colorLabel }"
     >
-      {{ 'statistic.abstentions' | translate }}
+      {{ 'statistic.abstentions' | transloco }}
     </p>
   </div>
   <div
@@ -59,18 +59,18 @@
       tabindex="0"
       [attr.aria-label]="
         ('statistic.a11y-choice-evaluation'
-          | translate: { label: labelLetters[i], answer: a.label }) +
+          | transloco: { label: labelLetters[i], answer: a.label }) +
         (rounds > 1
           ? ('statistic.a11y-multiple-round-counts'
-            | translate: { countRoundA: data[0][i], countRoundB: data[1][i] })
+            | transloco: { countRoundA: data[0][i], countRoundB: data[1][i] })
           : ('statistic.a11y-single-round-count'
-            | translate: { count: data[0][i] })) +
+            | transloco: { count: data[0][i] })) +
         (isSurvey
           ? ''
           : ((checkIfCorrect(i)
               ? 'statistic.a11y-correct'
               : 'statistic.a11y-wrong'
-            ) | translate))
+            ) | transloco))
       "
       *ngFor="let a of options; let i = index"
     >
@@ -92,7 +92,9 @@
 </div>
 <div class="visually-hidden">
   <div id="show-correct">
-    {{ 'statistic.a11y-answer-indicator' | translate }}
+    {{ 'participant.statistic.a11y-answer-indicator' | transloco }}
   </div>
-  <div id="show-chart">{{ 'statistic.a11y-show-chart' | translate }}</div>
+  <div id="show-chart">
+    {{ 'participant.statistic.a11y-show-chart' | transloco }}
+  </div>
 </div>

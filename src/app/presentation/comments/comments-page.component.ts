@@ -28,8 +28,8 @@ import {
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { TranslateService } from '@ngx-translate/core';
-import { takeUntil } from 'rxjs';
+import { TranslocoService } from '@ngneat/transloco';
+import { take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-comments-page',
@@ -46,7 +46,7 @@ export class CommentsPageComponent
 
   constructor(
     protected commentService: CommentService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected dialog: MatDialog,
     protected wsCommentService: WsCommentService,
     protected notificationService: NotificationService,
@@ -127,13 +127,17 @@ export class CommentsPageComponent
 
   registerHotkeys() {
     this.translateService
-      .get(['comment-list.next', 'comment-list.previous'])
+      .selectTranslate([
+        'creator.comment-list.next',
+        'creator.comment-list.previous',
+      ])
+      .pipe(take(1))
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {
             key: 'ArrowRight',
             action: () => this.nextComment(),
-            actionTitle: t['comment-list.next'],
+            actionTitle: t['creator.comment-list.next'],
           },
           this.hotkeyRefs
         );
@@ -141,7 +145,7 @@ export class CommentsPageComponent
           {
             key: 'ArrowLeft',
             action: () => this.prevComment(),
-            actionTitle: t['comment-list.previous'],
+            actionTitle: t['creator.comment-list.previous'],
           },
           this.hotkeyRefs
         );
@@ -200,7 +204,7 @@ export class CommentsPageComponent
   }
 
   announceCommentPresentation(index: number) {
-    this.announceService.announce('presentation.a11y-present-comment', {
+    this.announceService.announce('creator.presentation.a11y-present-comment', {
       comment: this.displayComments[index].body,
     });
   }
@@ -235,8 +239,8 @@ export class CommentsPageComponent
         this.disabled = updatedSettings.disabled;
         this.isLoading = true;
         this.init(true);
-        const msg = this.translateService.instant(
-          'comment-list.q-and-a-enabled'
+        const msg = this.translateService.translate(
+          'creator.comment-list.q-and-a-enabled'
         );
         this.notificationService.showAdvanced(
           msg,

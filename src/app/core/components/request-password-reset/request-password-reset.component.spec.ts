@@ -7,9 +7,8 @@ import {
   MockEventService,
   MockNotificationService,
   MockRouter,
-  JsonTranslationLoader,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { UserService } from '@app/core/services/http/user.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -24,15 +23,7 @@ describe('RequestPasswordResetComponent', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [RequestPasswordResetComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: UserService,

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AnswerCountComponent } from './answer-count.component';
-import { JsonTranslationLoader, MockEventService } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MockEventService } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { EventService } from '@app/core/services/util/event.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -11,16 +11,7 @@ describe('AnswerCountComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        AnswerCountComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [AnswerCountComponent, getTranslocoModule()],
       providers: [
         {
           provide: EventService,

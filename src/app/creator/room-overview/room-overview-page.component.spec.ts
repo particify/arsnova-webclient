@@ -5,7 +5,6 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
   MockNotificationService,
@@ -25,7 +24,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { ContentGroup } from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
@@ -149,15 +148,7 @@ describe('RoomOverviewPageComponent', () => {
           useClass: MockRoutingService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

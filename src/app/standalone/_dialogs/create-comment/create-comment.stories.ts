@@ -1,6 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -24,7 +24,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        TranslateModule.forRoot(),
+        TranslocoModule,
         CreateCommentComponent,
         BrowserAnimationsModule,
       ],

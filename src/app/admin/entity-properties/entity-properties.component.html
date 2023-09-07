@@ -9,7 +9,7 @@
       <button mat-icon-button disabled></button>
       <span
         >{{
-          (translateKeys ? 'admin-area.' : '') + node.key | translate
+          (translateKeys ? 'admin.admin-area.' : '') + node.key | transloco
         }}:</span
       >&nbsp;<span class="value">{{ node.value }}</span>
     </li>
@@ -28,7 +28,7 @@
         </button>
         <span
           >{{
-            (translateKeys ? 'admin-area.' : '') + node.key | translate
+            (translateKeys ? 'admin.admin-area.' : '') + node.key | transloco
           }}:</span
         >&nbsp;<span class="value-nested">{{ '{' }}...}</span>
       </div>

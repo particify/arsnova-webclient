@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 
 export default {
@@ -8,7 +8,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslateModule.forRoot(), SettingsSlideToggleComponent],
+      imports: [TranslocoModule, SettingsSlideToggleComponent],
     }),
   ],
 } as Meta;

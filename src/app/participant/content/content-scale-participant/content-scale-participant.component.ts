@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -15,6 +15,7 @@ import { ContentParticipantBaseComponent } from '@app/participant/content/conten
 import { AnswerOption } from '@app/core/models/answer-option';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-scale-participant',
@@ -33,7 +34,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   constructor(
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
@@ -76,12 +77,15 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
 
   submitAnswer(): void {
     if (this.selectedAnswerIndex === undefined) {
-      this.translateService.get('answer.please-one').subscribe((message) => {
-        this.notificationService.showAdvanced(
-          message,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
+      this.translateService
+        .selectTranslate('participant.answer.please-one')
+        .pipe(take(1))
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
       return;
     }
     this.disableForm();
@@ -93,12 +97,15 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
       (answer) => {
         this.answer = answer;
-        this.translateService.get('answer.sent').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
+        this.translateService
+          .selectTranslate('participant.answer.sent')
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
         this.sendStatusToParent(answer);
       },
       () => {

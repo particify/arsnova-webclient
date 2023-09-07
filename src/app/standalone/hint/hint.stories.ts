@@ -1,7 +1,7 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 export default {
   component: HintComponent,
@@ -9,7 +9,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslateModule.forRoot(), HintComponent],
+      imports: [TranslocoModule, HintComponent],
     }),
   ],
 } as Meta;

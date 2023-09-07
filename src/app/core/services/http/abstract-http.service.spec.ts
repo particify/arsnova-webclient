@@ -1,6 +1,6 @@
 import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { AbstractHttpService, HttpMethod } from './abstract-http.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { Injectable } from '@angular/core';
@@ -18,7 +18,7 @@ class MockEventService {}
 class MockNotificationService {}
 
 @Injectable()
-class MockTranslateService {
+class MockTranslocoService {
   public get(key: string): Observable<string> {
     return of(key);
   }
@@ -32,7 +32,7 @@ class TestHttpService extends AbstractHttpService<object> {
   constructor(
     http: HttpClient,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService
   ) {
     super('/test', http, eventService, translateService, notificationService);
@@ -76,8 +76,8 @@ describe('AbstractHttpService', () => {
           useClass: MockNotificationService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
       ],
       imports: [HttpClientTestingModule],

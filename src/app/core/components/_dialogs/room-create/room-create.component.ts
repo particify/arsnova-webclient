@@ -9,7 +9,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
@@ -26,6 +26,7 @@ import {
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-room-create',
@@ -47,7 +48,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     private router: Router,
     private notification: NotificationService,
     public dialogRef: MatDialogRef<RoomCreateComponent>,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private authenticationService: AuthenticationService,
     public eventService: EventService,
     private globalStorageService: GlobalStorageService,
@@ -64,7 +65,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     if (this.createDuplication && this.data.duplicatedName) {
       this.newRoom.name = this.data.duplicatedName;
     }
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.apiConfigService.getApiConfig$().subscribe((config) => {
@@ -115,9 +116,12 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     this.newRoom.name = this.newRoom.name.trim();
     if (!this.newRoom.name) {
       this.emptyInputs = true;
-      this.translateService.get('dialog.no-empty-name').subscribe((msg) => {
-        this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      });
+      this.translateService
+        .selectTranslate('dialog.no-empty-name')
+        .pipe(take(1))
+        .subscribe((msg) => {
+          this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        });
       return;
     }
     if (this.createDuplication && this.data.roomId) {
@@ -129,7 +133,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
             this.dialogRef.close(room.name);
             const event = new RoomCreated(room.id, room.shortId);
             this.eventService.broadcast(event.type, event.payload);
-            const msg = this.translateService.instant(
+            const msg = this.translateService.translate(
               'room-list.room-duplicated'
             );
             this.notification.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
@@ -145,8 +149,8 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     this.roomService.addRoom(this.newRoom).subscribe(
       (room) => {
         this.newRoom = room;
-        const msg1 = this.translateService.instant('home-page.created-1');
-        const msg2 = this.translateService.instant('home-page.created-2');
+        const msg1 = this.translateService.translate('home-page.created-1');
+        const msg2 = this.translateService.translate('home-page.created-2');
         this.notification.showAdvanced(
           msg1 + this.newRoom.name + msg2,
           AdvancedSnackBarTypes.SUCCESS

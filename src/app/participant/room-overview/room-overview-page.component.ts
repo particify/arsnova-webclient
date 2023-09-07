@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -42,7 +42,7 @@ export class RoomOverviewPageComponent
     protected wsCommentService: WsCommentService,
     protected eventService: EventService,
     protected route: ActivatedRoute,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected globalStorageService: GlobalStorageService,
     protected feedbackService: FeedbackService,
     protected commentSettingsService: CommentSettingsService,
@@ -72,7 +72,7 @@ export class RoomOverviewPageComponent
       this.getFeedback();
       this.commentsEnabled = !data.commentSettings.disabled;
     });
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.commentSettingsService

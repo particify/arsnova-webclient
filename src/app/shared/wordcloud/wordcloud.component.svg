@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100%" [attr.viewBox]="'0 0 ' + width + ' ' + height" tabindex="0" [attr.aria-label]="'content.a11y-wordcloud-info' | translate">
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" [attr.viewBox]="'0 0 ' + width + ' ' + height" tabindex="0" [attr.aria-label]="'content.a11y-wordcloud-info' | transloco">
   <g #wordcloud [attr.style]="'transform: scale(' + scale + ')' + 'translate(' + (width / 2 + scaleOffsetX) + 'px, ' + (height / 2 + scaleOffsetY) + 'px); transform-origin: center'" tabindex="0">
     <text *ngFor="let word of renderedWords; trackBy: wordIdentity"
           text-anchor="middle"

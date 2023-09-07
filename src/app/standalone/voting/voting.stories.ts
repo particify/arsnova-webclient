@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { VotingComponent } from '@app/standalone/voting/voting.component';
 import { VoteService } from '@app/core/services/http/vote.service';
 
@@ -11,7 +11,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslateModule.forRoot(), VotingComponent],
+      imports: [TranslocoModule, VotingComponent],
       providers: [
         {
           provide: VoteService,

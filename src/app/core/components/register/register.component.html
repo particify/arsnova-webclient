@@ -2,7 +2,7 @@
   <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
     <app-form-header
       [text]="
-        'register.info' | translate: { accountService: accountServiceTitle }
+        'register.info' | transloco: { accountService: accountServiceTitle }
       "
     ></app-form-header>
     <form
@@ -12,7 +12,7 @@
       fxLayoutGap="10px"
     >
       <mat-form-field class="input-block" appearance="outline">
-        <mat-label>{{ 'login.email' | translate }}</mat-label>
+        <mat-label>{{ 'login.email' | transloco }}</mat-label>
         <input
           id="email-input"
           matInput
@@ -29,10 +29,10 @@
             !usernameFormControl.hasError('required')
           "
         >
-          {{ 'login.email-invalid' | translate }}
+          {{ 'login.email-invalid' | transloco }}
         </mat-error>
         <mat-error *ngIf="usernameFormControl.hasError('required')">
-          {{ 'login.email-required' | translate }}
+          {{ 'login.email-required' | transloco }}
         </mat-error>
       </mat-form-field>
 
@@ -46,11 +46,11 @@
         [disabled]="formDisabled"
         name="accept"
       >
-        {{ 'register.accept' | translate
+        {{ 'register.accept' | transloco
         }}<a href="{{ linkOfToS }}" target="_blank">{{
-          'register.terms' | translate
+          'register.terms' | transloco
         }}</a
-        >{{ 'register.accept-2' | translate }}
+        >{{ 'register.accept-2' | transloco }}
       </mat-checkbox>
       <app-loading-button
         name="register.register"
@@ -59,14 +59,14 @@
       ></app-loading-button>
       <div fxLayout="row" fxLayoutAlign="center">
         <p class="smaller-text">
-          {{ 'register.already-registered' | translate }}
+          {{ 'register.already-registered' | transloco }}
         </p>
         <a
           class="action-link after-text-link"
           [routerLink]="'/login'"
           aria-labelledby="register"
         >
-          {{ 'login.login' | translate }}</a
+          {{ 'login.login' | transloco }}</a
         >
       </div>
     </form>

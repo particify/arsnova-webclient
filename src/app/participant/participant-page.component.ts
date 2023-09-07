@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { LanguageService } from '@app/core/services/util/language.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-participant-page',
@@ -14,13 +14,13 @@ export class ParticipantPageComponent implements OnInit {
   focusModeEnabled: boolean;
 
   constructor(
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected langService: LanguageService,
     private focusModeService: FocusModeService,
     private route: ActivatedRoute
   ) {
     langService.langEmitter.subscribe((lang) => {
-      translateService.use(lang);
+      translateService.setActiveLang(lang);
     });
   }
 

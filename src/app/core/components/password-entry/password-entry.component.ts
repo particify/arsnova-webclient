@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -62,7 +62,7 @@ export class PasswordEntryComponent
   lastInput: string;
 
   constructor(
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     public notificationService: NotificationService,
     private _autofill: AutofillMonitor,
     protected formService: FormService
@@ -112,7 +112,7 @@ export class PasswordEntryComponent
     if (this.strength >= Strength.OKAY || !this.checkStrength) {
       return this.password;
     } else {
-      const msg = this.translationService.instant('password.unsuccessful');
+      const msg = this.translationService.translate('password.unsuccessful');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return '';
     }

@@ -6,7 +6,7 @@
       [(ngModel)]="multipleCorrectAnswers"
       name="multiple"
     >
-      <span>{{ 'content.multiple-answers-allowed' | translate }}</span>
+      <span>{{ 'creator.content.multiple-answers-allowed' | transloco }}</span>
     </mat-checkbox>
     <mat-checkbox
       [disabled]="disabled"
@@ -15,7 +15,7 @@
       (ngModelChange)="removeCorrectAnswers()"
       name="noCorrect"
     >
-      <span>{{ 'content.no-correct-answer' | translate }}</span>
+      <span>{{ 'creator.content.no-correct-answer' | transloco }}</span>
     </mat-checkbox>
   </div>
   <div *ngIf="displayAnswers.length > 0">
@@ -32,8 +32,8 @@
             [checked]="answer.correct"
             name="{{ answer.answerOption.label }}"
             aria-label="{{
-              'content.a11y-answer-checkbox'
-                | translate: { answer: answer.answerOption.label }
+              'creator.content.a11y-answer-checkbox'
+                | transloco: { answer: answer.answerOption.label }
             }}"
           >
           </mat-checkbox>
@@ -55,12 +55,12 @@
             mat-icon-button
             *ngIf="!isEditMode || noAnswersYet"
             attr.aria-label="{{
-              'content.a11y-delete-answer'
-                | translate: { answer: answer.answerOption.label }
+              'creator.content.a11y-delete-answer'
+                | transloco: { answer: answer.answerOption.label }
             }}"
             class="delete"
             (click)="deleteAnswer(i)"
-            matTooltip="{{ 'content.delete-answer' | translate }}"
+            matTooltip="{{ 'creator.content.delete-answer' | transloco }}"
           >
             <mat-icon>clear</mat-icon>
           </button>
@@ -77,9 +77,13 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="single-choice">{{ 'content.a11y-single-choice' | translate }}</div>
-  <div id="multiple-choice">
-    {{ 'content.a11y-multiple-choice' | translate }}
+  <div id="single-choice">
+    {{ 'creator.content.a11y-single-choice' | transloco }}
   </div>
-  <div id="delete-answer">{{ 'content.a11y-delete-answer' | translate }}</div>
+  <div id="multiple-choice">
+    {{ 'creator.content.a11y-multiple-choice' | transloco }}
+  </div>
+  <div id="delete-answer">
+    {{ 'creator.content.a11y-delete-answer' | transloco }}
+  </div>
 </div>

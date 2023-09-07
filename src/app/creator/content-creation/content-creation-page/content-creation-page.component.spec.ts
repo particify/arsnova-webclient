@@ -5,11 +5,7 @@ import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { EventService } from '@app/core/services/util/event.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -18,7 +14,6 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockGlobalStorageService,
   MockMatDialog,
 } from '@testing/test-helpers';
@@ -139,25 +134,16 @@ describe('ContentCreationPageComponent', () => {
           useClass: MockFormattingService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-        MatMenuModule,
-      ],
+      imports: [getTranslocoModule(), MatMenuModule],
       schemas: [NO_ERRORS_SCHEMA],
-    })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(ContentCreationPageComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-      });
+    }).compileComponents();
   }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ContentCreationPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

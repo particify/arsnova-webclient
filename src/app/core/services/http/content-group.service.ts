@@ -9,7 +9,7 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomStatsService } from './room-stats.service';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
@@ -30,7 +30,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     protected ws: WsConnectorService,
     private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     private roomStatsService: RoomStatsService,
     cachingService: CachingService

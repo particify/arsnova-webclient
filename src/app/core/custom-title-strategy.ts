@@ -4,8 +4,9 @@ import {
   RouterStateSnapshot,
   TitleStrategy,
 } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Title } from '@angular/platform-browser';
+import { take } from 'rxjs';
 
 @Injectable()
 export class CustomPageTitleStrategy extends TitleStrategy {
@@ -16,12 +17,12 @@ export class CustomPageTitleStrategy extends TitleStrategy {
   title: string;
 
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private readonly titleService: Title
   ) {
     super();
     // Subscribe to lang changes and updated title
-    translateService.onLangChange.subscribe(() => {
+    translateService.langChanges$.subscribe(() => {
       // Only update title if already set
       if (this.title) {
         this.updateTitle(undefined);
@@ -49,9 +50,12 @@ export class CustomPageTitleStrategy extends TitleStrategy {
         break;
       default:
         // Use tranlated title for page
-        this.translateService.get('title.' + this.title).subscribe((msg) => {
-          this.setDocumentTitle(msg);
-        });
+        this.translateService
+          .selectTranslate('title.' + this.title)
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.setDocumentTitle(msg);
+          });
     }
   }
 

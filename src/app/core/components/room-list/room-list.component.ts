@@ -10,7 +10,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -23,6 +23,7 @@ import {
   map,
   shareReplay,
   switchMap,
+  take,
   takeUntil,
   tap,
 } from 'rxjs/operators';
@@ -75,7 +76,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
     protected roomMembershipService: RoomMembershipService,
     private authenticationService: AuthenticationService,
     public notificationService: NotificationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     protected router: Router,
     private dialogService: DialogService,
     private globalStorageService: GlobalStorageService,
@@ -115,11 +116,17 @@ export class RoomListComponent implements OnInit, OnDestroy {
       UserRole.EDITOR,
       UserRole.OWNER,
     ];
-    this.translateService.get(roleKeys).subscribe(() => {
-      for (let i = 0; i < roleKeys.length; i++) {
-        this.roles.set(roles[i], this.translateService.instant(roleKeys[i]));
-      }
-    });
+    this.translateService
+      .selectTranslate(roleKeys)
+      .pipe(take(1))
+      .subscribe(() => {
+        for (let i = 0; i < roleKeys.length; i++) {
+          this.roles.set(
+            roles[i],
+            this.translateService.translate(roleKeys[i])
+          );
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -155,7 +162,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
         }, 50);
       } else if (this.isLoading) {
         this.translateService
-          .get('room-list.transfer-no-rooms')
+          .selectTranslate('room-list.transfer-no-rooms')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -249,13 +257,13 @@ export class RoomListComponent implements OnInit, OnDestroy {
       if (result === 'delete') {
         let msg: string;
         if (isOwner) {
-          msg = this.translateService.instant(
+          msg = this.translateService.translate(
             'room-list.room-successfully-deleted'
           );
           const event = new RoomDeleted(room.summary.id);
           this.eventService.broadcast(event.type, event.payload);
         } else {
-          msg = this.translateService.instant(
+          msg = this.translateService.translate(
             'room-list.room-successfully-removed'
           );
         }
@@ -271,9 +279,12 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   roomDeletionCanceled() {
-    this.translateService.get('room-list.canceled-remove').subscribe((msg) => {
-      this.notificationService.show(msg);
-    });
+    this.translateService
+      .selectTranslate('room-list.canceled-remove')
+      .pipe(take(1))
+      .subscribe((msg) => {
+        this.notificationService.show(msg);
+      });
   }
 
   removeRoomFromList(room: RoomDataView) {
@@ -339,7 +350,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
         ),
         tap(() =>
           this.translateService
-            .get('room-list.transferred-successfully')
+            .selectTranslate('room-list.transferred-successfully')
+            .pipe(take(1))
             .subscribe((msg) =>
               this.notificationService.showAdvanced(
                 msg,
@@ -359,7 +371,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
       .pipe(
         tap(() =>
           this.translateService
-            .get('room-list.added-successfully')
+            .selectTranslate('room-list.added-successfully')
+            .pipe(take(1))
             .subscribe((msg) =>
               this.notificationService.showAdvanced(
                 msg,

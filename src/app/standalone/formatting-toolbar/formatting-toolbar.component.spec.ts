@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { JsonTranslationLoader } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { FormattingToolbarComponent } from './formatting-toolbar.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 describe('FormattingToolbarComponent', () => {
   let component: FormattingToolbarComponent;
@@ -13,14 +12,8 @@ describe('FormattingToolbarComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         FormattingToolbarComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
         MatIconModule,
+        getTranslocoModule(),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

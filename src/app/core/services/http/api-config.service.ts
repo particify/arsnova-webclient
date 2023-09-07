@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AbstractHttpService } from './abstract-http.service';
 import { ApiConfig } from '@app/core/models/api-config';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { EventService } from '@app/core/services/util/event.service';
@@ -18,7 +18,7 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
   constructor(
     private http: HttpClient,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService
   ) {
     super(

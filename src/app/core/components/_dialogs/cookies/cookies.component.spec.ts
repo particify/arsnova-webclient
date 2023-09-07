@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CookiesComponent } from './cookies.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  JsonTranslationLoader,
   MockNotificationService,
   MockMatDialogRef,
   ActivatedRouteStub,
@@ -46,15 +45,7 @@ describe('CookiesComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [CookiesComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         {

@@ -6,7 +6,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-sort-participant',
@@ -36,7 +37,7 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   constructor(
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
@@ -118,12 +119,15 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
       (answer) => {
         this.answer = answer;
         this.checkIfCorrect();
-        this.translateService.get('answer.sent').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
+        this.translateService
+          .selectTranslate('participant.answer.sent')
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
         this.sendStatusToParent(answer);
       },
       () => {

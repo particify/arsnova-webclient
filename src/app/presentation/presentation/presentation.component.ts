@@ -5,13 +5,14 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-presentation',
@@ -29,14 +30,14 @@ export class PresentationComponent implements OnInit, OnDestroy {
     public router: Router,
     private globalStorageService: GlobalStorageService,
     private roomStatsService: RoomStatsService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private presentationService: PresentationService,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     document.body.style.background = 'var(--surface)';
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     const params = this.route.snapshot.params;
@@ -66,7 +67,8 @@ export class PresentationComponent implements OnInit, OnDestroy {
       }
       if (data.room.focusModeEnabled) {
         this.translateService
-          .get('presentation.focus-mode-enabled-info')
+          .selectTranslate('creator.presentation.focus-mode-enabled-info')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

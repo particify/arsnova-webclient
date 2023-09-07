@@ -9,7 +9,7 @@
       (disabled
         ? 'comment-list.comments-are-not-enabled'
         : 'comment-list.creation-currently-not-allowed'
-      ) | translate
+      ) | transloco
     }}
   </p>
   <button
@@ -21,9 +21,9 @@
     <mat-icon>{{ disabled ? 'question_answer' : 'lock_open' }}</mat-icon>
     <span>{{
       (disabled
-        ? 'comment-list.activate-q-and-a'
-        : 'comment-list.unlock-creation'
-      ) | translate
+        ? 'creator.comment-list.activate-q-and-a'
+        : 'creator.comment-list.unlock-creation'
+      ) | transloco
     }}</span>
   </button>
 </div>

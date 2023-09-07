@@ -1,15 +1,15 @@
 <h2 mat-dialog-title tabindex="0">
-  {{ 'cookies.title' | translate }}
+  {{ 'cookies.title' | transloco }}
 </h2>
 <mat-dialog-content tabindex="-1">
   <div>
     <p tabindex="0">
-      {{ 'cookies.intro' | translate }}
-      {{ 'cookies.intro-privacy1' | translate }}
+      {{ 'cookies.intro' | transloco }}
+      {{ 'cookies.intro-privacy1' | transloco }}
       <a href="{{ privacyUrl }}" target="_blank">{{
-        'cookies.privacy-policy' | translate
+        'cookies.privacy-policy' | transloco
       }}</a>
-      {{ 'cookies.intro-privacy2' | translate }}
+      {{ 'cookies.intro-privacy2' | transloco }}
     </p>
     <div>
       <div class="cookie-cat" *ngFor="let category of categories">
@@ -20,19 +20,19 @@
         >
           <div
             class="slide-label"
-            [attr.aria-label]="'cookies.a11y-' + category.id | translate"
+            [attr.aria-label]="'cookies.a11y-' + category.id | transloco"
           >
-            {{ 'cookies.category-' + category.id | translate }}
+            {{ 'cookies.category-' + category.id | transloco }}
           </div>
         </mat-slide-toggle>
         <div class="cookie-cat-desc">
-          {{ 'cookies.category-' + category.id + '-desc' | translate }}
+          {{ 'cookies.category-' + category.id + '-desc' | transloco }}
         </div>
       </div>
     </div>
   </div>
   <p>
-    {{ 'cookies.update-later' | translate }}
+    {{ 'cookies.update-later' | transloco }}
   </p>
 </mat-dialog-content>
 <div mat-dialog-actions fxLayout="row wrap" fxLayoutAlign="end">
@@ -41,25 +41,25 @@
     (click)="acceptSelectedCookies()"
     [attr.aria-label]="
       'cookies.a11y-accept-selected'
-        | translate
+        | transloco
           : {
               functional: categories[1].consent
                 ? ''
-                : ('cookies.not' | translate),
+                : ('cookies.not' | transloco),
               statistic: categories[2].consent
                 ? ''
-                : ('cookies.not' | translate)
+                : ('cookies.not' | transloco)
             }
     "
   >
-    {{ 'cookies.cancel' | translate }}
+    {{ 'cookies.cancel' | transloco }}
   </button>
   <button
     mat-flat-button
     color="primary"
     (click)="acceptAllCookies()"
-    [attr.aria-label]="'cookies.a11y-accept' | translate"
+    [attr.aria-label]="'cookies.a11y-accept' | transloco"
   >
-    {{ 'cookies.accept' | translate }}
+    {{ 'cookies.accept' | transloco }}
   </button>
 </div>

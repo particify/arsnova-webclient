@@ -4,17 +4,19 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule } from '@ngneat/transloco';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { take } from 'rxjs';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslocoModule,
     ClipboardModule,
     MatTooltipModule,
     MatButtonModule,
@@ -28,18 +30,21 @@ export class CopyUrlComponent {
   @Input() url: string;
 
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private notificationService: NotificationService
   ) {}
 
   showNotification(success: boolean): void {
     if (success) {
-      this.translateService.get('room-page.url-copied').subscribe((msg) => {
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-      });
+      this.translateService
+        .selectTranslate('room-page.url-copied')
+        .pipe(take(1))
+        .subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
     }
   }
 }

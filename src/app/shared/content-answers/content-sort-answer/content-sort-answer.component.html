@@ -13,7 +13,7 @@
     tabindex="0"
     [attr.aria-label]="
       'answer.a11y-sort-item'
-        | translate
+        | transloco
           : { answer: answer.label, index: i + 1, length: answerOptions.length }
     "
     (keyup)="moveAnswer($event, i)"

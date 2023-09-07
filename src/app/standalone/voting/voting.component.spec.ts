@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VotingComponent } from './voting.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { JsonTranslationLoader } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { VoteService } from '@app/core/services/http/vote.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CoreModule } from '@app/core/core.module';
@@ -22,13 +21,7 @@ describe('VotingComponent', () => {
       imports: [
         VotingComponent,
         CoreModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
         MatTooltipModule,
       ],
       providers: [

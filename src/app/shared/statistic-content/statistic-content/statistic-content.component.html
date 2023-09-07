@@ -9,7 +9,7 @@
     [appAutofocus]
     class="visually-hidden"
   >
-    {{ 'statistic.a11y-message-type-info' | translate: { index: index + 1 } }}
+    {{ 'statistic.a11y-message-type-info' | transloco: { index: index + 1 } }}
   </div>
   <div
     *ngIf="[ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1"
@@ -17,9 +17,9 @@
     <div tabindex="0" [appAutofocus] class="visually-hidden">
       {{
         (answerCount === 0
-          ? 'statistic.a11y-message-evaluation'
+          ? 'creator.statistic.a11y-message-evaluation'
           : 'statistic.a11y-message-evaluation-answers'
-        ) | translate: { index: index + 1, answers: answerCount }
+        ) | transloco: { index: index + 1, answers: answerCount }
       }}
     </div>
     <div
@@ -49,7 +49,7 @@
               'statistic.' +
                 (settings.contentVisualizationUnitPercent
                   ? 'show-absolute'
-                  : 'show-percentage') | translate
+                  : 'show-percentage') | transloco
             "
             appHotkey="v"
             [appHotkeyAction]="HotkeyAction.CLICK"
@@ -67,7 +67,7 @@
             *ngIf="answersVisible && !survey && correctOptionsPublished"
             disableRipple
             (click)="toggleCorrect()"
-            matTooltip="{{ 'statistic.show-correct' | translate }}"
+            matTooltip="{{ 'statistic.show-correct' | transloco }}"
             appHotkey="c"
             [appHotkeyAction]="HotkeyAction.CLICK"
             [appHotkeyDisabled]="!active"
@@ -89,7 +89,7 @@
               (showWordcloudModeration
                 ? 'statistic.show-wordcloud'
                 : 'statistic.show-wordcloud-list'
-              ) | translate
+              ) | transloco
             }}"
           >
             <mat-icon>toc</mat-icon>
@@ -102,9 +102,9 @@
             (click)="toggleAnswers()"
             matTooltip="{{
               (answersVisible
-                ? 'statistic.hide-results'
-                : 'statistic.show-results'
-              ) | translate
+                ? 'creator.statistic.hide-results'
+                : 'creator.statistic.show-results'
+              ) | transloco
             }}"
             appHotkey=" "
             [appHotkeyAction]="HotkeyAction.CLICK"
@@ -120,7 +120,7 @@
             "
             mat-icon-button
             color="primary"
-            matTooltip="{{ 'answer.go-to-content' | translate }}"
+            matTooltip="{{ 'participant.answer.go-to-content' | transloco }}"
             (click)="customFlipEvent.emit()"
             aria-labelledby="flip-back"
             appHotkey=" "
@@ -149,9 +149,9 @@
       (click)="toggleAnswers()"
       [matTooltip]="
         (answersVisible
-          ? 'statistic.hide-flashcard-back'
-          : 'statistic.show-flashcard-back'
-        ) | translate
+          ? 'creator.statistic.hide-flashcard-back'
+          : 'creator.statistic.show-flashcard-back'
+        ) | transloco
       "
     >
       <mat-icon>fact_check</mat-icon>

@@ -5,7 +5,7 @@ import {
   ConsentGiven,
   CookieCategory,
 } from '@app/core/services/util/consent.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -28,7 +28,7 @@ export class CookiesComponent {
     data: { categories: CookieCategory[]; privacyUrl: string },
     private dialogRef: MatDialogRef<CookiesComponent>,
     protected route: ActivatedRoute,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private notificationService: NotificationService
   ) {
     this.categories = data.categories;
@@ -53,7 +53,7 @@ export class CookiesComponent {
       consentGiven[value.id] = value.consent;
     });
     this.dialogRef.close(consentGiven);
-    const msg = this.translateService.instant('cookies.settings-saved');
+    const msg = this.translateService.translate('cookies.settings-saved');
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
   }
 }

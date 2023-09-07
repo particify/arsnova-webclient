@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
@@ -11,6 +11,7 @@ import { PasswordResetErrorStateMatcher } from '@app/core/components/password-re
 import { Router } from '@angular/router';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-request-password-reset',
@@ -27,7 +28,7 @@ export class RequestPasswordResetComponent
   username: string;
 
   constructor(
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     private userService: UserService,
     private notificationService: NotificationService,
     public eventService: EventService,
@@ -65,7 +66,8 @@ export class RequestPasswordResetComponent
       this.userService.setNewPassword(this.username).subscribe(
         () => {
           this.translationService
-            .get('password-reset.reset-successful')
+            .selectTranslate('password-reset.reset-successful')
+            .pipe(take(1))
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -77,7 +79,8 @@ export class RequestPasswordResetComponent
         () => {
           this.enableForm();
           this.translationService
-            .get('password-reset.request-failed')
+            .selectTranslate('password-reset.request-failed')
+            .pipe(take(1))
             .subscribe((msg) => {
               this.notificationService.showAdvanced(
                 msg,
@@ -88,7 +91,8 @@ export class RequestPasswordResetComponent
       );
     } else {
       this.translationService
-        .get('login.input-incorrect')
+        .selectTranslate('login.input-incorrect')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

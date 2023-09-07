@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
 import {
@@ -23,6 +23,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { take } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -50,7 +51,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     protected commentService: CommentService,
     private dialogService: DialogService,
     public dialogRef: MatDialogRef<CommentAnswerComponent>,
@@ -78,7 +79,8 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
     this.commentService.answer(this.comment, this.answer).subscribe(
       () => {
         this.translateService
-          .get('comment-page.comment-answered')
+          .selectTranslate('creator.comment-page.comment-answered')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,
@@ -105,7 +107,7 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
         this.answer = '';
-        const msg = this.translateService.instant(
+        const msg = this.translateService.translate(
           'comment-page.answer-deleted'
         );
         this.notificationService.showAdvanced(

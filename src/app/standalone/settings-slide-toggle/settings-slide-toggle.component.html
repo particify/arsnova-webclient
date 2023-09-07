@@ -1,13 +1,13 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
   <div>
     <div fxLayout="row" fxLayoutAlign="start center">
-      <p class="slide-toggle-header">{{ label | translate }}</p>
+      <p class="slide-toggle-header">{{ label | transloco }}</p>
       <ng-content>
         <!-- Used by extensions -->
       </ng-content>
     </div>
     <p id="toggle-{{ label }}-description" class="slide-toggle-description">
-      {{ label + '-info' | translate }}
+      {{ label + '-info' | transloco }}
     </p>
   </div>
   <mat-slide-toggle

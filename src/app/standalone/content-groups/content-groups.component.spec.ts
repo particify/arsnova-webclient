@@ -1,12 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentGroupsComponent } from './content-groups.component';
 import { Router } from '@angular/router';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import {
-  JsonTranslationLoader,
-  MockGlobalStorageService,
-  MockRouter,
-} from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { MockGlobalStorageService, MockRouter } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -21,16 +17,7 @@ describe('ContentGroupsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ContentGroupsComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [ContentGroupsComponent, getTranslocoModule()],
       providers: [
         {
           provide: GlobalStorageService,

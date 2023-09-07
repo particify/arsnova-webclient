@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { Subject, takeUntil, timer } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { CoreModule } from '@app/core/core.module';
 
 const TIME_UPDATE_INTERVAL = 60000;
@@ -22,12 +22,12 @@ export class DateComponent implements OnInit, OnDestroy {
 
   language: string;
 
-  constructor(private translateService: TranslateService) {}
+  constructor(private translateService: TranslocoService) {}
 
   ngOnInit(): void {
-    this.language = this.translateService.currentLang;
-    this.translateService.onLangChange.subscribe((language) => {
-      this.language = language.lang;
+    this.language = this.translateService.getActiveLang();
+    this.translateService.langChanges$.subscribe((lang) => {
+      this.language = lang;
     });
     timer(TIME_UPDATE_INTERVAL, TIME_UPDATE_INTERVAL)
       .pipe(takeUntil(this.destroyed$))

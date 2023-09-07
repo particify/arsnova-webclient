@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -24,18 +24,18 @@ export class AdminHomeComponent implements OnInit {
 
   constructor(
     protected langService: LanguageService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
     protected systemInfoService: SystemInfoService
   ) {
     langService.langEmitter.subscribe((lang) => {
-      translateService.use(lang);
+      translateService.setActiveLang(lang);
     });
   }
 
   ngOnInit() {
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.healthInfo = this.getHealthInfo();

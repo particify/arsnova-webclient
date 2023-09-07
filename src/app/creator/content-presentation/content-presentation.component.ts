@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Content } from '@app/core/models/content';
 import {
   GlobalStorageService,
@@ -22,7 +22,7 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { UserSettings } from '@app/core/models/user-settings';
@@ -66,7 +66,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute,
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private globalStorageService: GlobalStorageService,
     private location: Location,
     private router: Router,
@@ -79,7 +79,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.isPresentation = this.route.snapshot.data.isPresentation;
@@ -139,7 +139,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
           this.initGroup();
         });
       this.translateService
-        .get('control-bar.publish-or-lock-content')
+        .selectTranslate('creator.control-bar.publish-or-lock-content')
+        .pipe(take(1))
         .subscribe((t) =>
           this.hotkeyService.registerHotkey(
             {

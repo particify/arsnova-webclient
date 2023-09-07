@@ -1,6 +1,6 @@
 <form>
   <mat-form-field appearance="outline" class="no-field-hint">
-    <mat-label>{{ 'content.answer' | translate }}</mat-label>
+    <mat-label>{{ 'creator.content.answer' | transloco }}</mat-label>
     <textarea
       #answerInput
       (input)="updateTextContainsImage(answerInput.value)"
@@ -18,12 +18,14 @@
   </mat-form-field>
   <app-hint
     *ngIf="textContainsImage"
-    text="utils.formatting-image-hint"
+    text="creator.utils.formatting-image-hint"
     [type]="HintType.WARNING"
   ></app-hint>
   <div class="form-spacer"></div>
 </form>
 
 <div class="visually-hidden">
-  <div id="answer">{{ 'content.a11y-enter-flashcard-answer' | translate }}</div>
+  <div id="answer">
+    {{ 'creator.content.a11y-enter-flashcard-answer' | transloco }}
+  </div>
 </div>

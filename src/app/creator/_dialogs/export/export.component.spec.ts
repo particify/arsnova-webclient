@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ExportComponent } from './export.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { JsonTranslationLoader, MockMatDialogRef } from '@testing/test-helpers';
+import { MockMatDialogRef } from '@testing/test-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ExportComponent', () => {
@@ -14,15 +14,7 @@ describe('ExportComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ExportComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: MatDialogRef,

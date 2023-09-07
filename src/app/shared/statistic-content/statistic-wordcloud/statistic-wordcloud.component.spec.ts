@@ -3,12 +3,8 @@ import { StatisticWordcloudComponent } from './statistic-wordcloud.component';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
-import {
-  JsonTranslationLoader,
-  MockEventService,
-  MockThemeService,
-} from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MockEventService, MockThemeService } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentState } from '@app/core/models/content-state';
@@ -50,15 +46,7 @@ describe('StatisticWordcloudComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [StatisticWordcloudComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: EventService,

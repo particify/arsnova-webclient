@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Observable } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
 import {
@@ -21,7 +21,7 @@ export class RoomStatsService extends AbstractCachingHttpService<RoomStats> {
     protected http: HttpClient,
     ws: WsConnectorService,
     eventService: EventService,
-    translateService: TranslateService,
+    translateService: TranslocoService,
     notificationService: NotificationService,
     cachingService: CachingService
   ) {

@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomOverviewPageComponent } from './room-overview-page.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  JsonTranslationLoader,
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
@@ -98,15 +97,7 @@ describe('RoomOverviewPageComponent', () => {
         A11yIntroPipe,
         SplitShortIdPipe,
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: RoomStatsService,

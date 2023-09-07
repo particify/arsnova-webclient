@@ -1,10 +1,10 @@
 <div fxLayout="column" fxLayoutGap="1em">
   <p class="info" tabindex="0">
-    {{ 'settings.announcements-info' | translate }}
+    {{ 'creator.settings.announcements-info' | transloco }}
   </p>
   <form fxLayout="column" fxLayoutGap="1em">
     <mat-form-field class="input-block no-field-hint" appearance="outline">
-      <mat-label>{{ 'announcement.title' | translate }}</mat-label>
+      <mat-label>{{ 'creator.announcement.title' | transloco }}</mat-label>
       <input
         #titleInput
         [disabled]="formDisabled"
@@ -20,7 +20,7 @@
         animationDuration="0"
         (selectedTabChange)="tabChanged($event)"
       >
-        <mat-tab label="{{ 'announcement.body' | translate }}">
+        <mat-tab label="{{ 'creator.announcement.body' | transloco }}">
           <app-formatting-toolbar
             *ngIf="!renderPreview"
             class="tab-group-formatting-bar-mobile"
@@ -42,12 +42,15 @@
               cdkAutosizeMinRows="3"
               cdkAutosizeMaxRows="5"
               name="body"
-              [placeholder]="'announcement.enter-body' | translate"
+              [placeholder]="'creator.announcement.enter-body' | transloco"
               aria-labelledby="body-description"
             ></textarea>
           </mat-form-field>
         </mat-tab>
-        <mat-tab label="{{ 'room.preview' | translate }}" [disabled]="!body">
+        <mat-tab
+          label="{{ 'creator.room.preview' | transloco }}"
+          [disabled]="!body"
+        >
           <div>
             <app-rendered-text
               [rawText]="bodyInput.value"
@@ -67,10 +70,12 @@
     </div>
     <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
       <button mat-stroked-button *ngIf="editId" (click)="reset()">
-        {{ 'announcement.cancel' | translate }}
+        {{ 'creator.announcement.cancel' | transloco }}
       </button>
       <app-loading-button
-        [name]="editId ? 'announcement.save' : 'announcement.create'"
+        [name]="
+          editId ? 'creator.announcement.save' : 'creator.announcement.create'
+        "
         (clicked)="save()"
       ></app-loading-button>
     </div>
@@ -96,6 +101,6 @@
 
 <div class="visually-hidden">
   <div id="body-description">
-    {{ 'settings.a11y-announcement-description' | translate }}
+    {{ 'creator.settings.a11y-announcement-description' | transloco }}
   </div>
 </div>

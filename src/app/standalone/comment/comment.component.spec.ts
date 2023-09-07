@@ -2,9 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentComponent } from './comment.component';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  JsonTranslationLoader,
   MockNotificationService,
   ActivatedRouteStub,
   MockGlobalStorageService,
@@ -20,6 +19,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Comment } from '@app/core/models/comment';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { VoteService } from '@app/core/services/http/vote.service';
+import { BROWSER_LANG } from '@app/core/services/util/language.service';
 
 describe('CommentComponent', () => {
   let component: CommentComponent;
@@ -51,14 +51,8 @@ describe('CommentComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        getTranslocoModule(),
         CommentComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
         BrowserAnimationsModule,
         MatMenuModule,
       ],
@@ -91,6 +85,7 @@ describe('CommentComponent', () => {
           provide: VoteService,
           useValue: mockVoteService,
         },
+        { provide: BROWSER_LANG, useValue: 'unsupported' },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

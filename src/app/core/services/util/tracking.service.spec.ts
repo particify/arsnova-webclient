@@ -5,9 +5,9 @@ import {
   MockEventService,
   MockRouter,
   MockThemeService,
-  MockTranslateService,
+  MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
 import { ThemeService } from '@app/core/theme/theme.service';
@@ -42,8 +42,8 @@ describe('TrackingService', () => {
           useClass: MockEventService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: ThemeService,

@@ -2,7 +2,7 @@
   <div mat-dialog-content>
     <app-search-bar
       *ngIf="useUserSearch; else standardSearch"
-      label="{{ 'admin-area.' + inputName | translate }}"
+      label="{{ 'admin.admin-area.' + inputName | transloco }}"
       [results]="searchResults"
       [showSuccessIndicator]="!!user"
       (inputChanged)="search($event)"
@@ -11,7 +11,7 @@
     ></app-search-bar>
     <ng-template #standardSearch>
       <mat-form-field appearance="outline">
-        <mat-label>{{ 'admin-area.' + inputName | translate }}</mat-label>
+        <mat-label>{{ 'admin.admin-area.' + inputName | transloco }}</mat-label>
         <input
           matInput
           [(ngModel)]="input"
@@ -29,7 +29,7 @@
       fxLayoutGap="10px"
     >
       <app-loading-button
-        [name]="'admin-area.' + primaryAction"
+        [name]="'admin.admin-area.' + primaryAction"
         (clicked)="submit()"
         [isDialog]="true"
       ></app-loading-button>
@@ -39,7 +39,7 @@
         mat-button
         type="button"
       >
-        {{ 'admin-area.cancel' | translate }}
+        {{ 'admin.admin-area.cancel' | transloco }}
       </button>
     </div>
   </div>

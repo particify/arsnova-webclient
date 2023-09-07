@@ -6,9 +6,8 @@ import {
   Router,
 } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  JsonTranslationLoader,
   MockNotificationService,
   ActivatedRouteStub,
   MockRouter,
@@ -120,15 +119,7 @@ describe('ParticipantContentCarouselPageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ParticipantContentCarouselPageComponent, A11yIntroPipe],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: ContentService,

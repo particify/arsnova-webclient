@@ -1,15 +1,15 @@
 <div *ngIf="editRoom">
   <div fxLayout="column">
     <div tabindex="0" id="room-settings" class="visually-hidden">
-      {{ 'settings.a11y-room' | translate }}
+      {{ 'creator.settings.a11y-room' | transloco }}
     </div>
     <mat-form-field class="input-block" appearance="outline">
-      <mat-label>{{ 'room.room-name' | translate }}</mat-label>
+      <mat-label>{{ 'creator.room.room-name' | transloco }}</mat-label>
       <input
         [disabled]="formDisabled"
         [(ngModel)]="name"
         matInput
-        placeholder="{{ 'settings.enter-room-name' | translate }}"
+        placeholder="{{ 'creator.settings.enter-room-name' | transloco }}"
         name="room-name"
         maxlength="30"
         aria-labelledby="room-name"
@@ -24,7 +24,7 @@
         animationDuration="0"
         (selectedTabChange)="descriptionTabChanged($event)"
       >
-        <mat-tab label="{{ 'settings.description' | translate }}">
+        <mat-tab label="{{ 'creator.settings.description' | transloco }}">
           <app-formatting-toolbar
             *ngIf="!renderPreview"
             class="tab-group-formatting-bar-mobile"
@@ -45,7 +45,9 @@
               maxlength="500"
               name="description"
               aria-labelledby="room-description"
-              placeholder="{{ 'settings.enter-room-description' | translate }}"
+              placeholder="{{
+                'creator.settings.enter-room-description' | transloco
+              }}"
             ></textarea>
             <mat-hint align="end">
               <span aria-hidden="true">
@@ -55,12 +57,12 @@
           </mat-form-field>
           <app-hint
             *ngIf="textContainsImage"
-            text="utils.formatting-image-hint"
+            text="creator.utils.formatting-image-hint"
             [type]="HintType.WARNING"
           ></app-hint>
         </mat-tab>
         <mat-tab
-          label="{{ 'room.preview' | translate }}"
+          label="{{ 'creator.room.preview' | transloco }}"
           [disabled]="!description"
         >
           <div class="preview-container">
@@ -84,7 +86,7 @@
   </div>
   <app-settings-slide-toggle
     *appFeatureFlag="'FOCUS_MODE'"
-    label="settings.focus-mode"
+    label="creator.settings.focus-mode"
     [isChecked]="focusModeEnabled"
     (toggleEvent)="toggleFocusMode($event)"
   >
@@ -99,20 +101,22 @@
       aria-labelledby="delete-room"
     >
       <mat-icon>delete</mat-icon>
-      {{ 'settings.delete-room' | translate }}
+      {{ 'creator.settings.delete-room' | transloco }}
     </button>
     <app-loading-button
-      name="settings.update"
+      name="creator.settings.update"
       (clicked)="saveChanges()"
     ></app-loading-button>
   </div>
 </div>
 
 <div class="visually-hidden">
-  <div id="room-name">{{ 'settings.a11y-room-name' | translate }}</div>
+  <div id="room-name">{{ 'creator.settings.a11y-room-name' | transloco }}</div>
   <div id="room-description">
-    {{ 'settings.a11y-room-description' | translate }}
+    {{ 'creator.settings.a11y-room-description' | transloco }}
   </div>
-  <div id="delete-room">{{ 'settings.a11y-delete-room' | translate }}</div>
-  <div id="save">{{ 'settings.a11y-save-changes' | translate }}</div>
+  <div id="delete-room">
+    {{ 'creator.settings.a11y-delete-room' | transloco }}
+  </div>
+  <div id="save">{{ 'creator.settings.a11y-save-changes' | transloco }}</div>
 </div>

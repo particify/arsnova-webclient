@@ -13,10 +13,10 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { takeUntil } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 @Component({
@@ -35,7 +35,7 @@ export class LiveFeedbackPageComponent
     protected wsFeedbackService: WsFeedbackService,
     protected feedbackService: FeedbackService,
     protected roomService: RoomService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
@@ -57,7 +57,10 @@ export class LiveFeedbackPageComponent
   ngOnInit() {
     this.initData();
     this.translateService
-      .get(this.isClosed ? 'survey.start' : 'survey.stop')
+      .selectTranslate(
+        this.isClosed ? 'creator.survey.start' : 'creator.survey.stop'
+      )
+      .pipe(take(1))
       .subscribe((t) => {
         this.hotkeyService.registerHotkey(
           {
@@ -68,16 +71,19 @@ export class LiveFeedbackPageComponent
           this.hotkeyRefs
         );
       });
-    this.translateService.get('survey.change-type').subscribe((t) => {
-      this.hotkeyService.registerHotkey(
-        {
-          key: 'c',
-          action: () => this.changeType(),
-          actionTitle: t,
-        },
-        this.hotkeyRefs
-      );
-    });
+    this.translateService
+      .selectTranslate('creator.survey.change-type')
+      .pipe(take(1))
+      .subscribe((t) => {
+        this.hotkeyService.registerHotkey(
+          {
+            key: 'c',
+            action: () => this.changeType(),
+            actionTitle: t,
+          },
+          this.hotkeyRefs
+        );
+      });
   }
 
   ngOnDestroy() {
@@ -120,14 +126,17 @@ export class LiveFeedbackPageComponent
           this.wsFeedbackService.reset(this.room.id);
         }
         const state = this.isClosed ? 'stopped' : 'started';
-        this.translateService.get('survey.' + state).subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            state === 'started'
-              ? AdvancedSnackBarTypes.SUCCESS
-              : AdvancedSnackBarTypes.WARNING
-          );
-        });
+        this.translateService
+          .selectTranslate('creator.survey.' + state)
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              state === 'started'
+                ? AdvancedSnackBarTypes.SUCCESS
+                : AdvancedSnackBarTypes.WARNING
+            );
+          });
       });
   }
 

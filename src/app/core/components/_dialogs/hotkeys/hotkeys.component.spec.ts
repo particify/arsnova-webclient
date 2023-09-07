@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HotkeysComponent } from './hotkeys.component';
-import { JsonTranslationLoader } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Hotkey } from '@app/core/services/util/hotkey.service';
@@ -17,15 +16,7 @@ describe('HotkeysComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [HotkeysComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: MAT_DIALOG_DATA,

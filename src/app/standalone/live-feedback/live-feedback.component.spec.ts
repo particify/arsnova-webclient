@@ -1,11 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LiveFeedbackComponent } from './live-feedback.component';
-import {
-  JsonTranslationLoader,
-  MockAnnounceService,
-} from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MockAnnounceService } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -28,16 +25,7 @@ describe('LiveFeedbackComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        LiveFeedbackComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [LiveFeedbackComponent, getTranslocoModule()],
       providers: [
         {
           provide: HotkeyService,

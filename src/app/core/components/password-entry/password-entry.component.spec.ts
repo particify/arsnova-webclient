@@ -1,11 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PasswordEntryComponent } from './password-entry.component';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import {
-  MockNotificationService,
-  JsonTranslationLoader,
-} from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MockNotificationService } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PasswordEntryComponent', () => {
@@ -15,15 +12,7 @@ describe('PasswordEntryComponent', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [PasswordEntryComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: NotificationService,

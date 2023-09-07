@@ -3,14 +3,13 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomComponent } from './room.component';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { RoomService } from '@app/core/services/http/room.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import {
@@ -96,15 +95,7 @@ describe('RoomComponent', () => {
           useValue: mockFocusModeService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

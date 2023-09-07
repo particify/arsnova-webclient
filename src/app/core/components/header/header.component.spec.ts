@@ -4,7 +4,6 @@ import { HeaderComponent } from './header.component';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
   MockRenderer2,
@@ -22,7 +21,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { UserService } from '@app/core/services/http/user.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
@@ -48,6 +47,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { BROWSER_LANG } from '@app/core/services/util/language.service';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
@@ -118,13 +118,7 @@ describe('HeaderComponent', () => {
         MatButtonModule,
         MatMenuModule,
         MatSelectModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
         HttpClientTestingModule,
       ],
       providers: [
@@ -192,6 +186,7 @@ describe('HeaderComponent', () => {
           provide: FeatureFlagService,
           useClass: MockFeatureFlagService,
         },
+        { provide: BROWSER_LANG, useValue: 'unsupported' },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

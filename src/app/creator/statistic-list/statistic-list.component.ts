@@ -6,7 +6,7 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { Combination } from '@app/core/models/round-statistics';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
@@ -17,6 +17,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { take } from 'rxjs';
 
 export enum StatisticType {
   CHOICE = 'C',
@@ -80,7 +81,7 @@ export class StatisticListComponent implements OnInit {
   constructor(
     private contentService: ContentService,
     private contentAnswerService: ContentAnswerService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private router: Router,
     protected route: ActivatedRoute,
     private globalStorageService: GlobalStorageService,
@@ -93,7 +94,7 @@ export class StatisticListComponent implements OnInit {
 
   ngOnInit() {
     this.shortId = this.route.snapshot.params['shortId'];
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.getContents();
@@ -400,7 +401,8 @@ export class StatisticListComponent implements OnInit {
       .subscribe(() => {
         this.resetAllAnswers();
         this.translateService
-          .get('content.all-answers-deleted')
+          .selectTranslate('creator.content.all-answers-deleted')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

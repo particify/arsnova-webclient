@@ -3,11 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RoomActionButtonComponent } from './room-action-button.component';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import {
-  ActivatedRouteStub,
-  JsonTranslationLoader,
-} from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { ActivatedRouteStub } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 describe('RoomActionButtonComponent', () => {
   let component: RoomActionButtonComponent;
@@ -28,16 +25,7 @@ describe('RoomActionButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RoomActionButtonComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [RoomActionButtonComponent, getTranslocoModule()],
       providers: [
         {
           provide: HotkeyService,

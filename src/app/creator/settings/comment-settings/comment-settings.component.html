@@ -2,16 +2,16 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="16px">
   <div>
     <div tabindex="0" id="comments-settings" class="visually-hidden">
-      {{ 'settings.a11y-comments' | translate }}
+      {{ 'creator.settings.a11y-comments' | transloco }}
     </div>
     <div fxLayout="column">
       <app-settings-slide-toggle
-        label="settings.enable-comments"
+        label="creator.settings.enable-comments"
         [isChecked]="!settings.disabled"
         (toggleEvent)="updateCommentSettings({ disabled: !$event })"
       ></app-settings-slide-toggle>
       <app-settings-slide-toggle
-        label="settings.threshold"
+        label="creator.settings.threshold"
         [isChecked]="enableThreshold"
         (toggleEvent)="updateCommentExtensions($event)"
         [disabled]="settings.disabled"
@@ -33,7 +33,7 @@
       </div>
     </div>
     <app-settings-slide-toggle
-      label="settings.direct-send"
+      label="creator.settings.direct-send"
       [isChecked]="settings.directSend"
       (toggleEvent)="updateCommentSettings({ directSend: $event })"
       [disabled]="settings.disabled"
@@ -47,11 +47,11 @@
   </div>
   <div>
     <div tabindex="0" id="tags-settings" class="visually-hidden">
-      {{ 'settings.a11y-categories' | translate }}
+      {{ 'creator.settings.a11y-categories' | transloco }}
     </div>
     <form>
       <mat-form-field class="full-width no-field-hint" appearance="outline">
-        <mat-label>{{ 'settings.tags' | translate }}</mat-label>
+        <mat-label>{{ 'creator.settings.tags' | transloco }}</mat-label>
         <mat-chip-grid #tagList [disabled]="settings.disabled">
           <mat-chip-row
             *ngFor="let tag of tags"
@@ -62,7 +62,7 @@
             <mat-icon
               matChipRemove
               attr.aria-label="{{
-                'settings.a11y-remove-tag' | translate: { name: tag }
+                'creator.settings.a11y-remove-tag' | transloco: { name: tag }
               }}"
               >cancel</mat-icon
             >
@@ -75,7 +75,7 @@
             [(ngModel)]="tagName"
             name="taginput"
             maxlength="15"
-            placeholder="{{ 'settings.new-tag' | translate }}"
+            placeholder="{{ 'creator.settings.new-tag' | transloco }}"
             [disabled]="settings.disabled"
           />
         </mat-chip-grid>

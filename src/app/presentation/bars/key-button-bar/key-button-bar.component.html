@@ -13,15 +13,15 @@
     *ngFor="let item of items"
     (click)="sendKeyEvent(item.key)"
     [matTooltip]="
-      ('control-bar.' + item.name | translate) +
+      ('creator.control-bar.' + item.name | transloco) +
       ' (' +
-      (item.displayKey | translate) +
+      (item.displayKey | transloco) +
       ')'
     "
   >
     <mat-icon [ngClass]="{ 'nav-icon': withText }">{{ item.icon }}</mat-icon>
     <p *ngIf="withText" class="text">
-      {{ 'control-bar.' + item.name | translate }}
+      {{ 'creator.control-bar.' + item.name | transloco }}
     </p>
   </div>
 </div>

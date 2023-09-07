@@ -12,7 +12,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { LanguageService } from '@app/core/services/util/language.service';
 import {
   animate,
@@ -28,7 +28,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
 import { DateComponent } from '@app/standalone/date/date.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -77,7 +77,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   constructor(
     private commentService: CommentService,
     private notification: NotificationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private dialogService: DialogService,
     protected langService: LanguageService,
     private announceService: AnnounceService,
@@ -91,7 +91,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.language = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
-    this.translateService.use(this.language);
+    this.translateService.setActiveLang(this.language);
     this.extensionData = {
       roomId: this.comment.roomId,
       refId: this.comment.id,
@@ -158,7 +158,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'delete') {
         this.translateService
-          .get('comment-list.comment-deleted')
+          .selectTranslate('comment-list.comment-deleted')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
           });
@@ -171,11 +172,12 @@ export class CommentComponent implements OnInit, OnDestroy {
       .toggleAck(this.comment)
       .subscribe((updatedComment) => (this.comment = updatedComment));
     this.translateService
-      .get(
+      .selectTranslate(
         this.comment.ack
           ? 'comment-page.a11y-rejected'
           : 'comment-page.a11y-banned'
       )
+      .pipe(take(1))
       .subscribe((status) => {
         this.announceService.announce('comment-page.a11y-comment-has-been', {
           status: status,

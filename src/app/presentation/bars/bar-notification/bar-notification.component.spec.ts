@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BarNotificationComponent } from './bar-notification.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { JsonTranslationLoader } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('BarNotificationComponent', () => {
@@ -11,15 +10,7 @@ describe('BarNotificationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [BarNotificationComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

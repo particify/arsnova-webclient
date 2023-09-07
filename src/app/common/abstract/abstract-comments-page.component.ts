@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -80,7 +80,7 @@ export class AbstractCommentsPageComponent {
 
   constructor(
     protected commentService: CommentService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected dialog: MatDialog,
     protected wsCommentService: WsCommentService,
     protected notificationService: NotificationService,
@@ -101,7 +101,7 @@ export class AbstractCommentsPageComponent {
     this.period =
       this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||
       CommentPeriod.ALL;
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.activeComments$.subscribe((comments) => {
@@ -495,7 +495,9 @@ export class AbstractCommentsPageComponent {
     const type = this.readonly
       ? AdvancedSnackBarTypes.WARNING
       : AdvancedSnackBarTypes.SUCCESS;
-    const msg = this.translateService.instant('comment-list.creation-' + state);
+    const msg = this.translateService.translate(
+      'comment-list.creation-' + state
+    );
     this.notificationService.showAdvanced(msg, type);
   }
 
@@ -510,7 +512,7 @@ export class AbstractCommentsPageComponent {
 
   announceNewComment(comment: Comment) {
     this.newestComment = comment;
-    const msg = this.translateService.instant('comment-page.new-comment', {
+    const msg = this.translateService.translate('comment-page.new-comment', {
       comment: comment.body,
     });
     this.announceService.announce(msg);

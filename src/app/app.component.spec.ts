@@ -1,4 +1,5 @@
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   TestBed,
   ComponentFixture,
@@ -17,9 +18,7 @@ import { UpdateService } from '@app/core/services/util/update.service';
 import { UpdateImportance } from '@app/core/models/version-info';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { MockTranslateService } from '@testing/test-helpers';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { JsonTranslationLoader } from '@testing/test-helpers';
+import { MockTranslocoService } from '@testing/test-helpers';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { AuthProvider } from './core/models/auth-provider';
@@ -90,8 +89,8 @@ describe('AppComponent', () => {
       providers: [
         AppComponent,
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: ApiConfigService,
@@ -123,13 +122,7 @@ describe('AppComponent', () => {
         },
       ],
       imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateHttpLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
         RouterTestingModule,
         HttpClientTestingModule,
       ],

@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NavBarComponent } from './nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockGlobalStorageService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
@@ -134,13 +133,7 @@ describe('NavBarComponent', () => {
     TestBed.configureTestingModule({
       declarations: [NavBarComponent],
       imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
+        getTranslocoModule(),
         BrowserAnimationsModule,
         ReactiveFormsModule,
         MatMenuModule,

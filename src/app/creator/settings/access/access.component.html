@@ -1,11 +1,11 @@
 <div fxLayout="column" fxLayoutGap="16px">
   <app-hint
     *ngIf="isGuest"
-    [text]="'settings.disabled-for-guests'"
+    [text]="'creator.settings.disabled-for-guests'"
     [type]="HintType.WARNING"
   ></app-hint>
   <div tabindex="0" id="access-settings" class="visually-hidden">
-    {{ 'settings.a11y-access' | translate }}
+    {{ 'creator.settings.a11y-access' | transloco }}
   </div>
   <div
     fxLayout="row wrap"
@@ -20,10 +20,10 @@
     >
       <mat-label>
         <ng-container *ngIf="loginIdIsEmail; else loginIdLabel">{{
-          'settings.email' | translate
+          'creator.settings.email' | transloco
         }}</ng-container>
         <ng-template #loginIdLabel>{{
-          'settings.login-id' | translate
+          'creator.settings.login-id' | transloco
         }}</ng-template>
       </mat-label>
       <input
@@ -46,14 +46,14 @@
           appearance="outline"
           fxFill
         >
-          <mat-label>{{ 'settings.role' | translate }}</mat-label>
+          <mat-label>{{ 'creator.settings.role' | transloco }}</mat-label>
 
           <mat-select
             [(ngModel)]="selectedRole"
             [disabled]="isGuest || roles.length === 1"
           >
             <mat-option *ngFor="let role of roles" [value]="role">
-              {{ 'settings.' + role.toLowerCase() | translate }}
+              {{ 'creator.settings.' + role.toLowerCase() | transloco }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -77,7 +77,7 @@
       [appTrackName]="selectedRole"
     >
       <mat-icon>mail</mat-icon>
-      {{ 'settings.invite-user' | translate }}
+      {{ 'creator.settings.invite-user' | transloco }}
     </button>
     <button
       [hidden]="!canBeAdded()"
@@ -96,12 +96,12 @@
       [appTrackName]="selectedRole"
     >
       <mat-icon>add</mat-icon>
-      {{ 'settings.add-user' | translate }}
+      {{ 'creator.settings.add-user' | transloco }}
     </button>
   </div>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <p *ngIf="!isLoading && moderators.length === 0">
-    {{ 'settings.no-users' | translate }}
+    {{ 'creator.settings.no-users' | transloco }}
   </p>
   <mat-list *ngIf="!isLoading && moderators.length > 0">
     <mat-list-item
@@ -129,9 +129,9 @@
             </p>
             <mat-chip-listbox class="role-chip">
               <mat-chip-option selectable="false">{{
-                'settings.' +
+                'creator.settings.' +
                   moderator.role.toLocaleString().toLocaleLowerCase()
-                  | translate
+                  | transloco
               }}</mat-chip-option>
             </mat-chip-listbox>
           </div>
@@ -145,8 +145,8 @@
             (click)="removeModerator(moderator)"
             fxFlex
             attr.aria-label="{{
-              'settings.a11y-delete-moderator'
-                | translate: { loginId: moderator.loginId }
+              'creator.settings.a11y-delete-moderator'
+                | transloco: { loginId: moderator.loginId }
             }}"
           >
             <mat-icon>close</mat-icon>

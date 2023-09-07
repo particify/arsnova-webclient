@@ -16,7 +16,7 @@
       matBadge="{{ barItem.count > 0 ? barItem.count : null }}"
       matBadgeOverlap="false"
       matBadgeColor="accent"
-      matTooltip="{{ 'sidebar.' + barItem.name | translate }}"
+      matTooltip="{{ 'sidebar.' + barItem.name | transloco }}"
     >
       {{ barItem.icon }}
     </mat-icon>
@@ -25,7 +25,7 @@
     <p
       *ngFor="let barItem of barItems; let i = index"
       class="count"
-      matTooltip="{{ 'sidebar.' + barItem.name | translate }}"
+      matTooltip="{{ 'sidebar.' + barItem.name | transloco }}"
     >
       {{ barItem.count }}
     </p>

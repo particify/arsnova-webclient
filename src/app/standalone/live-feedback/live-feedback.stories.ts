@@ -1,7 +1,7 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { LiveFeedbackComponent } from '@app/standalone/live-feedback/live-feedback.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
@@ -20,7 +20,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslateModule.forRoot(), LiveFeedbackComponent, CoreModule],
+      imports: [TranslocoModule, LiveFeedbackComponent, CoreModule],
       providers: [
         {
           provide: HotkeyService,

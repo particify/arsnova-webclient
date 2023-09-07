@@ -3,14 +3,13 @@ import { RoomCreateComponent } from './room-create.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
-  JsonTranslationLoader,
   MockMatDialogRef,
   MockNotificationService,
   MockGlobalStorageService,
   MockEventService,
   MockRouter,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Router } from '@angular/router';
@@ -42,15 +41,7 @@ describe('RoomCreateComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [RoomCreateComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: NotificationService,

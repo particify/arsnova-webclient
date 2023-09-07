@@ -9,7 +9,7 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
 
 @Component({
@@ -28,7 +28,7 @@ export class LiveFeedbackPageComponent
     protected wsFeedbackService: WsFeedbackService,
     protected feedbackService: FeedbackService,
     protected roomService: RoomService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute,
@@ -67,10 +67,15 @@ export class LiveFeedbackPageComponent
   }
 
   private announceAnswer(label: string) {
-    const answer = this.translateService.instant('survey.' + label);
-    const msg = this.translateService.instant('survey.a11y-selected-answer', {
-      answer: answer,
-    });
+    const answer = this.translateService.translate(
+      'participant.survey.' + label
+    );
+    const msg = this.translateService.translate(
+      'participant.survey.a11y-selected-answer',
+      {
+        answer: answer,
+      }
+    );
     this.announceService.announce(msg);
   }
 

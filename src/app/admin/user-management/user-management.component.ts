@@ -6,12 +6,13 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-user-management',
@@ -30,7 +31,7 @@ export class UserManagementComponent
     protected userService: UserService,
     protected dialogService: DialogService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected apiConfigService: ApiConfigService,
     protected dialog: MatDialog,
     private formService: FormService
@@ -70,7 +71,9 @@ export class UserManagementComponent
     );
     dialogRef.afterClosed().subscribe((closeAction) => {
       if (closeAction === 'delete') {
-        const msg = this.translateService.instant('admin-area.user-deleted');
+        const msg = this.translateService.translate(
+          'admin.admin-area.user-deleted'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -88,7 +91,8 @@ export class UserManagementComponent
     this.adminService.activateUser(this.user.id).subscribe(() => {
       this.formService.enableForm();
       this.translateService
-        .get('admin-area.user-activated')
+        .selectTranslate('admin.admin-area.user-activated')
+        .pipe(take(1))
         .subscribe((message) =>
           this.notificationService.showAdvanced(
             message,
@@ -114,7 +118,8 @@ export class UserManagementComponent
           this.formService.enableForm();
           dialogRef.close();
           this.translateService
-            .get('admin-area.account-added')
+            .selectTranslate('admin.admin-area.account-added')
+            .pipe(take(1))
             .subscribe((message) =>
               this.notificationService.showAdvanced(
                 message,

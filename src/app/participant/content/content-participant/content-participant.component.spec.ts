@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentParticipantComponent } from './content-participant.component';
-import { JsonTranslationLoader } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentState } from '@app/core/models/content-state';
 import { Content } from '@app/core/models/content';
@@ -17,15 +16,7 @@ describe('ContentParticipantComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ContentParticipantComponent, A11yRenderedBodyPipe],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: A11yRenderedBodyPipe,

@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Comment } from '@app/core/models/comment';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, take, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { CommentCreated } from '@app/core/models/events/comment-created';
@@ -35,7 +35,7 @@ export class CommentService extends AbstractEntityService<Comment> {
     private http: HttpClient,
     protected ws: WsConnectorService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     cachingService: CachingService,
     protected wsCommentService: WsCommentService
@@ -264,34 +264,37 @@ export class CommentService extends AbstractEntityService<Comment> {
       'comment-export.tag',
     ];
     let keyFields;
-    this.translateService.get(fieldNames).subscribe((msgs) => {
-      keyFields = [
-        msgs[fieldNames[0]],
-        msgs[fieldNames[1]],
-        msgs[fieldNames[2]],
-        msgs[fieldNames[3]],
-        msgs[fieldNames[4]],
-        msgs[fieldNames[5]],
-        msgs[fieldNames[6]],
-        msgs[fieldNames[7]],
-        '\r\n',
-      ];
-      const date = new Date();
-      const dateString = date.toLocaleDateString();
-      csv = keyFields + this.getExportData(comments, ',');
-      const myBlob = new Blob([csv], { type: 'text/csv' });
-      const link = document.createElement('a');
-      const fileName =
-        room.name +
-        '_' +
-        room.shortId +
-        '_' +
-        (name ? name : dateString) +
-        '.csv';
-      link.setAttribute('download', fileName);
-      link.href = window.URL.createObjectURL(myBlob);
-      link.click();
-    });
+    this.translateService
+      .selectTranslate(fieldNames)
+      .pipe(take(1))
+      .subscribe((msgs) => {
+        keyFields = [
+          msgs[fieldNames[0]],
+          msgs[fieldNames[1]],
+          msgs[fieldNames[2]],
+          msgs[fieldNames[3]],
+          msgs[fieldNames[4]],
+          msgs[fieldNames[5]],
+          msgs[fieldNames[6]],
+          msgs[fieldNames[7]],
+          '\r\n',
+        ];
+        const date = new Date();
+        const dateString = date.toLocaleDateString();
+        csv = keyFields + this.getExportData(comments, ',');
+        const myBlob = new Blob([csv], { type: 'text/csv' });
+        const link = document.createElement('a');
+        const fileName =
+          room.name +
+          '_' +
+          room.shortId +
+          '_' +
+          (name ? name : dateString) +
+          '.csv';
+        link.setAttribute('download', fileName);
+        link.href = window.URL.createObjectURL(myBlob);
+        link.click();
+      });
   }
 
   getUpdatedCommentCountWithMessage(count: number, message: Message): number {

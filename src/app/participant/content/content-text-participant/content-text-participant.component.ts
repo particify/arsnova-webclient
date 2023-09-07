@@ -5,7 +5,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { Content } from '@app/core/models/content';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-text-participant',
@@ -31,7 +32,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
   constructor(
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
@@ -64,12 +65,15 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
 
   submitAnswer() {
     if (this.textAnswer.trim().valueOf() === '') {
-      this.translateService.get('answer.please-answer').subscribe((message) => {
-        this.notificationService.showAdvanced(
-          message,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
+      this.translateService
+        .selectTranslate('participant.answer.please-answer')
+        .pipe(take(1))
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
       this.textAnswer = '';
       return;
     }
@@ -85,12 +89,15 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       .addAnswerText(this.content.roomId, answer)
       .subscribe((answer) => {
         this.createAnswer(this.textAnswer);
-        this.translateService.get('answer.sent').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
+        this.translateService
+          .selectTranslate('participant.answer.sent')
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
         this.sendStatusToParent(answer);
       }),
       () => {

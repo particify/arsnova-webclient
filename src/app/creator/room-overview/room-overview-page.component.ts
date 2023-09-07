@@ -4,7 +4,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -39,7 +39,7 @@ export class RoomOverviewPageComponent
     protected notificationService: NotificationService,
     protected route: ActivatedRoute,
     protected router: Router,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
     protected routingService: RoutingService
@@ -55,7 +55,7 @@ export class RoomOverviewPageComponent
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.route.data.subscribe((data) => {

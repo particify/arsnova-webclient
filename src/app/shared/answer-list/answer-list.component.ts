@@ -7,7 +7,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentService } from '@app/core/services/http/content.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 
@@ -29,7 +29,7 @@ export class AnswerListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private notificationService: NotificationService,
     private contentAnswerService: ContentAnswerService,
     private contentService: ContentService,
@@ -75,7 +75,9 @@ export class AnswerListComponent implements OnInit {
 
   removeAnswerFromList(action: 'ban' | 'delete') {
     const actionDone = action === 'ban' ? 'banned' : 'deleted';
-    const msg = this.translateService.instant(`statistic.answer-${actionDone}`);
+    const msg = this.translateService.translate(
+      `statistic.answer-${actionDone}`
+    );
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
   }
 }

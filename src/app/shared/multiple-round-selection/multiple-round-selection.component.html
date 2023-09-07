@@ -4,7 +4,7 @@
     [matMenuTriggerFor]="roundMenu"
     [matTooltip]="
       'content.round' + (round > 1 ? 's-' : '-') + 'displayed'
-        | translate: { rounds: rounds[round] }
+        | transloco: { rounds: rounds[round] }
     "
   >
     <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="8px">
@@ -25,7 +25,7 @@
       (click)="changeRound(i)"
     >
       <span [ngClass]="{ 'selected-menu-item': round === i }">
-        {{ 'content.round' | translate }}&nbsp;{{ roundItem }}
+        {{ 'content.round' | transloco }}&nbsp;{{ roundItem }}
       </span>
     </button>
   </mat-menu>

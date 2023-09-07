@@ -3,7 +3,7 @@ import { ContentChoice } from '@app/core/models/content-choice';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
@@ -20,12 +20,12 @@ export class ContentYesNoCreationComponent
   implements OnInit
 {
   yesno = -1;
-  answerLabels = ['content.yes', 'content.no'];
+  answerLabels = ['creator.content.yes', 'creator.content.no'];
 
   constructor(
     protected contentService: ContentService,
     protected notificationService: NotificationService,
-    protected translationService: TranslateService,
+    protected translationService: TranslocoService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,

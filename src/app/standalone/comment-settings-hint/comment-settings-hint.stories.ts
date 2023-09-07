@@ -1,6 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { CommentSettingsHintComponent } from './comment-settings-hint.component';
 
 export default {
@@ -10,7 +10,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        TranslateModule.forRoot(),
+        TranslocoModule,
         CommentSettingsHintComponent,
         BrowserAnimationsModule,
       ],

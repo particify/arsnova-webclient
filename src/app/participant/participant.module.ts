@@ -6,11 +6,8 @@ import { ContentChoiceParticipantComponent } from './content/content-choice-part
 import { ContentTextParticipantComponent } from './content/content-text-participant/content-text-participant.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
+import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 import { CdkStepperModule } from '@angular/cdk/stepper';
-import { TRANSLATION_MODULE_NAME } from '@app/translate-module-name-token';
-import { TranslateHttpLoaderFactory } from '@app/translate-http-loader-factory';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { ContentParticipantComponent } from './content/content-participant/content-participant.component';
 import { ContentSortParticipantComponent } from './content/content-sort-participant/content-sort-participant.component';
@@ -32,14 +29,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     ParticipantRoutingModule,
     CoreModule,
     SharedModule,
-    TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: TranslateHttpLoaderFactory,
-        deps: [HttpClient, TRANSLATION_MODULE_NAME],
-      },
-      isolate: true,
-    }),
+    TranslocoModule,
     CdkStepperModule,
     ExtensionPointModule,
     FooterComponent,
@@ -60,9 +50,6 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     ParticipantPageComponent,
     InfoChartComponent,
   ],
-  providers: [
-    { provide: TRANSLATION_MODULE_NAME, useValue: 'participant' },
-    ContentCarouselService,
-  ],
+  providers: [provideTranslocoScope('participant'), ContentCarouselService],
 })
 export class ParticipantModule {}

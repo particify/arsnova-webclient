@@ -1,17 +1,17 @@
 <div>
   <div fxLayout="row wrap" fxLayoutAlign="space-between">
     <h2 mat-dialog-title tabindex="0">
-      {{ 'announcement.announcements' | translate }}
+      {{ 'announcement.announcements' | transloco }}
     </h2>
     <mat-form-field appearance="outline" class="no-field-hint">
-      <mat-label>{{ 'announcement.filter' | translate }}</mat-label>
+      <mat-label>{{ 'announcement.filter' | transloco }}</mat-label>
       <mat-select
         [(value)]="selectedRoomId"
         (selectionChange)="filter()"
         [disabled]="announcements.length === 0"
       >
         <mat-option value="">{{
-          'announcement.all-rooms' | translate
+          'announcement.all-rooms' | transloco
         }}</mat-option>
         <mat-divider></mat-divider>
         <mat-option
@@ -24,7 +24,7 @@
   </div>
   <mat-dialog-content *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
     <p *ngIf="announcements.length === 0" class="hint-sm">
-      {{ 'announcement.no-announcements' | translate }}
+      {{ 'announcement.no-announcements' | transloco }}
     </p>
     <app-announcement
       *ngFor="let announcement of displayAnnouncements"
@@ -42,7 +42,7 @@
     class="bottom-buttons"
   >
     <button mat-flat-button color="primary" (click)="close()">
-      {{ 'announcement.close' | translate }}
+      {{ 'announcement.close' | transloco }}
     </button>
   </div>
 </div>

@@ -15,7 +15,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { takeUntil } from 'rxjs';
 
 @Component({
@@ -33,7 +33,7 @@ export class CommentsPageComponent
 
   constructor(
     protected commentService: CommentService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected dialog: MatDialog,
     protected wsCommentService: WsCommentService,
     protected notificationService: NotificationService,

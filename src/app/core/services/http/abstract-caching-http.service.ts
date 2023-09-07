@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { Observable, of, Subscription } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
 import {
@@ -30,7 +30,7 @@ export abstract class AbstractCachingHttpService<
     httpClient: HttpClient,
     protected wsConnector: WsConnectorService,
     eventService: EventService,
-    translateService: TranslateService,
+    translateService: TranslocoService,
     notificationService: NotificationService,
     protected cachingService: CachingService,
     useSharedCache = false

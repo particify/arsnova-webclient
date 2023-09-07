@@ -2,7 +2,7 @@
   <mat-checkbox
     [(ngModel)]="neutralOption"
     [disabled]="(isEditMode && !noAnswersYet) || disabled"
-    >{{ 'content.offer-neutral-option' | translate }}</mat-checkbox
+    >{{ 'creator.content.offer-neutral-option' | transloco }}</mat-checkbox
   >
   <div style="padding: 0 16px">
     <div>
@@ -11,7 +11,9 @@
         class="no-field-hint"
         style="margin-top: 10px"
       >
-        <mat-label>{{ 'content.answer-template' | translate }}</mat-label>
+        <mat-label>{{
+          'creator.content.answer-template' | transloco
+        }}</mat-label>
         <mat-select
           [(value)]="selectedTemplate"
           [disabled]="(isEditMode && !noAnswersYet) || disabled"
@@ -19,7 +21,7 @@
           <mat-option
             *ngFor="let template of templates; let i = index"
             [value]="template"
-            >{{ templateLabels[i] | translate }}</mat-option
+            >{{ templateLabels[i] | transloco }}</mat-option
           >
         </mat-select>
       </mat-form-field>
@@ -31,7 +33,7 @@
           *ngFor="let answerLabel of answerLabels"
         >
           <div fxLayout="row">
-            <p>{{ answerLabel | translate }}</p>
+            <p>{{ answerLabel | transloco }}</p>
           </div>
         </mat-list-item>
       </mat-list>

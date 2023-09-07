@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, TranslateModule, FlexModule],
+  imports: [CommonModule, TranslocoModule, FlexModule],
   selector: 'app-comment-list-hint',
   templateUrl: './comment-list-hint.component.html',
 })

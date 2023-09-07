@@ -23,7 +23,7 @@
   }"
 >
   <mat-icon>arrow_upward</mat-icon>
-  {{ 'comment-list.there-are-new-posts' | translate }}
+  {{ 'comment-list.there-are-new-posts' | transloco }}
 </button>
 
 <button
@@ -37,7 +37,7 @@
     'mobile-add-hide': !onInit
   }"
   [disabled]="addButtonDisabled"
-  matTooltip="{{ 'comment-list.add-comment' | translate }}"
+  matTooltip="{{ 'comment-list.add-comment' | transloco }}"
 >
   <mat-icon>add</mat-icon>
 </button>

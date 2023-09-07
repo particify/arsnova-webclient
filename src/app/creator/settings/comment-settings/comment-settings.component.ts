@@ -4,7 +4,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Router } from '@angular/router';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -16,6 +16,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { CommentExtensions } from '@app/core/models/room-extensions';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-comment-settings',
@@ -43,7 +44,7 @@ export class CommentSettingsComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public notificationService: NotificationService,
-    public translationService: TranslateService,
+    public translationService: TranslocoService,
     protected roomService: RoomService,
     public router: Router,
     public commentService: CommentService,
@@ -81,7 +82,9 @@ export class CommentSettingsComponent implements OnInit {
   addTag() {
     if (this.tagName.length > 0) {
       if (this.checkIfTagExists()) {
-        const msg = this.translationService.instant('settings.tag-error');
+        const msg = this.translationService.translate(
+          'creator.settings.tag-error'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -148,8 +151,8 @@ export class CommentSettingsComponent implements OnInit {
   saveChanges(addedTag?: boolean) {
     this.saveEvent.emit(new UpdateEvent(this.room, false));
     if (addedTag !== undefined) {
-      const msg = this.translationService.instant(
-        addedTag ? 'settings.tag-added' : 'settings.tag-removed'
+      const msg = this.translationService.translate(
+        addedTag ? 'creator.settings.tag-added' : 'creator.settings.tag-removed'
       );
       this.notificationService.showAdvanced(
         msg,
@@ -160,7 +163,10 @@ export class CommentSettingsComponent implements OnInit {
 
   announceThreshold() {
     this.translationService
-      .get('settings.a11y-threshold-changed', { value: this.threshold })
+      .selectTranslate('creator.settings.a11y-threshold-changed', {
+        value: this.threshold,
+      })
+      .pipe(take(1))
       .subscribe((msg) => {
         this.liveAnnouncer.clear();
         this.liveAnnouncer.announce(msg);

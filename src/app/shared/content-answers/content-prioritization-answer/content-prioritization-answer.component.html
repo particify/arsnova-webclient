@@ -17,7 +17,7 @@
           tabindex="-1"
           (click)="assignPoints(i, -1)"
           [disabled]="answer.points <= 0 || isDisabled"
-          [matTooltip]="'answer.remove-points' | translate"
+          [matTooltip]="'answer.remove-points' | transloco"
         >
           <mat-icon>remove</mat-icon>
         </button>
@@ -42,7 +42,7 @@
           tabindex="-1"
           (click)="assignPoints(i, 1)"
           [disabled]="pointsLeft < STEP_SIZE || isDisabled"
-          [matTooltip]="'answer.add-points' | translate"
+          [matTooltip]="'answer.add-points' | transloco"
         >
           <mat-icon>add</mat-icon>
         </button>
@@ -57,9 +57,9 @@
   style="margin-bottom: 16px"
 >
   <p *ngIf="pointsLeft >= 0">
-    <b>{{ pointsLeft }}</b> {{ 'answer.points-left' | translate }}
+    <b>{{ pointsLeft }}</b> {{ 'answer.points-left' | transloco }}
   </p>
   <p *ngIf="pointsLeft < 0">
-    <b>{{ -1 * pointsLeft }}</b> {{ 'answer.points-too-much' | translate }}
+    <b>{{ -1 * pointsLeft }}</b> {{ 'answer.points-too-much' | transloco }}
   </p>
 </div>

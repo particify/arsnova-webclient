@@ -8,12 +8,11 @@ import {
 import {
   MockGlobalStorageService,
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockRouter,
   MockNotificationService,
 } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -53,15 +52,7 @@ describe('StatisticListComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [StatisticListComponent, A11yRenderedBodyPipe],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: ContentService,

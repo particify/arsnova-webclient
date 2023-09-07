@@ -11,12 +11,13 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -48,7 +49,7 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
   isLoading = true;
 
   constructor(
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     private userService: UserService,
     private notificationService: NotificationService,
     public eventService: EventService,
@@ -72,7 +73,8 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
       this.userService.setNewPassword(this.email, key, password).subscribe(
         () => {
           this.translationService
-            .get('password-reset.new-password-successful')
+            .selectTranslate('password-reset.new-password-successful')
+            .pipe(take(1))
             .subscribe((message) => {
               this.notificationService.showAdvanced(
                 message,
@@ -89,7 +91,8 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
       );
     } else {
       this.translationService
-        .get('login.inputs-incorrect')
+        .selectTranslate('login.inputs-incorrect')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

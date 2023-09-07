@@ -7,11 +7,12 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '@app/core/services/http/user.service';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-room-management',
@@ -28,7 +29,7 @@ export class RoomManagementComponent {
     protected roomService: RoomService,
     protected dialogService: DialogService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected dialog: MatDialog,
     protected userService: UserService,
     private formService: FormService
@@ -77,7 +78,8 @@ export class RoomManagementComponent {
       dialogRef.afterClosed().subscribe((closeAction) => {
         if (closeAction === 'delete') {
           this.translateService
-            .get('admin-area.room-deleted')
+            .selectTranslate('admin.admin-area.room-deleted')
+            .pipe(take(1))
             .subscribe((message) =>
               this.notificationService.showAdvanced(
                 message,
@@ -106,8 +108,8 @@ export class RoomManagementComponent {
         () => {
           this.formService.enableForm();
           dialogRef.close();
-          const msg = this.translateService.instant(
-            'admin-area.room-transferred'
+          const msg = this.translateService.translate(
+            'admin.admin-area.room-transferred'
           );
           this.notificationService.showAdvanced(
             msg,

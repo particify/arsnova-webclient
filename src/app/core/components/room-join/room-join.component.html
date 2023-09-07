@@ -7,7 +7,7 @@
         class="no-field-hint"
         floatLabel="always"
       >
-        <mat-label>{{ 'home-page.room-id' | translate }}</mat-label>
+        <mat-label>{{ 'home-page.room-id' | transloco }}</mat-label>
         <input
           id="room-id-input"
           class="join-input"
@@ -21,14 +21,14 @@
           [formControl]="roomCodeFormControl"
           [errorStateMatcher]="matcher"
           [attr.aria-label]="
-            'home-page.a11y-welcome-message' | translate: { title: appTitle }
+            'home-page.a11y-welcome-message' | transloco: { title: appTitle }
           "
           autocomplete="off"
-          placeholder="{{ 'home-page.example' | translate }}{{
+          placeholder="{{ 'home-page.example' | transloco }}{{
             '11223344' | splitShortId: false
           }}"
           appHotkey="1"
-          [appHotkeyTitle]="'home-page.enter-room-number' | translate"
+          [appHotkeyTitle]="'home-page.enter-room-number' | transloco"
         />
         <button
           id="join-button"
@@ -38,7 +38,7 @@
           type="submit"
           role="button"
           (click)="joinRoom(roomCode.value)"
-          [attr.aria-label]="'home-page.a11y-join-button' | translate"
+          [attr.aria-label]="'home-page.a11y-join-button' | transloco"
           matSuffix
         >
           <mat-icon>arrow_forward</mat-icon>

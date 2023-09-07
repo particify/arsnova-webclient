@@ -5,7 +5,7 @@
   class="progress-container"
   attr.aria-label="{{
     'statistic.a11y-group-progress'
-      | translate: { group: contentGroup.name, percent: total.toFixed() }
+      | transloco: { group: contentGroup.name, percent: total.toFixed() }
   }}"
 >
   <mat-progress-bar
@@ -30,7 +30,7 @@
 >
   <ng-container matColumnDef="content">
     <mat-header-cell *matHeaderCellDef>
-      {{ 'statistic.content' | translate }}
+      {{ 'statistic.content' | transloco }}
     </mat-header-cell>
     <mat-cell
       tabindex="0"
@@ -38,7 +38,7 @@
       (click)="goToStats(cp.content.id)"
       attr.aria-label="{{
         ('statistic.a11y-content-result'
-          | translate
+          | transloco
             : {
                 content: cp.content.renderedBody | a11yRenderedBody,
                 count: cp.counts > -1 ? cp.counts : 0,
@@ -46,9 +46,9 @@
               }) +
           (cp.percent >= status.zero
             ? ('statistic.a11y-choice-result'
-              | translate: { percent: cp.percent.toFixed() })
+              | transloco: { percent: cp.percent.toFixed() })
             : '') +
-          ('statistic.a11y-go-to-statistic' | translate)
+          ('statistic.a11y-go-to-statistic' | transloco)
       }}"
       (keyup.enter)="goToStats(cp.content.id)"
     >
@@ -62,7 +62,7 @@
 
   <ng-container matColumnDef="round">
     <mat-header-cell *matHeaderCellDef>
-      {{ 'statistic.round' | translate }}
+      {{ 'creator.statistic.round' | transloco }}
     </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
       {{ cp.round }}
@@ -71,7 +71,7 @@
 
   <ng-container matColumnDef="counts">
     <mat-header-cell *matHeaderCellDef>
-      {{ 'statistic.answers' | translate }}
+      {{ 'statistic.answers' | transloco }}
     </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
       {{
@@ -82,7 +82,7 @@
 
   <ng-container matColumnDef="abstentions">
     <mat-header-cell *matHeaderCellDef>
-      {{ 'statistic.abstentions' | translate }}
+      {{ 'statistic.abstentions' | transloco }}
     </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
       {{
@@ -95,7 +95,7 @@
 
   <ng-container matColumnDef="percentage">
     <mat-header-cell *matHeaderCellDef>
-      {{ 'statistic.correct' | translate }}
+      {{ 'creator.statistic.correct' | transloco }}
     </mat-header-cell>
     <mat-cell *matCellDef="let cp" (click)="goToStats(cp.content.id)">
       {{
@@ -111,7 +111,7 @@
 </table>
 
 <h3 *ngIf="!isLoading && this.dataSource.length === 0">
-  {{ 'statistic.no-contents' | translate }}
+  {{ 'creator.statistic.no-contents' | transloco }}
 </h3>
 
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>

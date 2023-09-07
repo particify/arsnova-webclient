@@ -1,7 +1,7 @@
 <app-admin-page-header headerText="room-management"> </app-admin-page-header>
 
 <app-search-bar
-  label="{{ 'admin-area.search-room' | translate }}"
+  label="{{ 'admin.admin-area.search-room' | transloco }}"
   [results]="searchResults"
   (inputChanged)="search($event)"
   (inputCleared)="clear()"
@@ -18,11 +18,11 @@
   <div fxLayoutAlign="space-between">
     <button mat-stroked-button color="warn" (click)="deleteEntity()">
       <mat-icon>delete</mat-icon>
-      {{ 'admin-area.delete-room' | translate }}
+      {{ 'admin.admin-area.delete-room' | transloco }}
     </button>
     <button mat-raised-button color="primary" (click)="transferRoom()">
       <mat-icon>forward</mat-icon>
-      {{ 'admin-area.transfer-room' | translate }}
+      {{ 'admin.admin-area.transfer-room' | transloco }}
     </button>
   </div>
 </mat-card>

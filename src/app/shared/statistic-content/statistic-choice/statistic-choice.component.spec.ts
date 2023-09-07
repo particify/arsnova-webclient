@@ -4,12 +4,11 @@ import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import {
-  JsonTranslationLoader,
   MockEventService,
   MockThemeService,
   MockGlobalStorageService,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentState } from '@app/core/models/content-state';
@@ -58,15 +57,7 @@ describe('StatisticChoiceComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [StatisticChoiceComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: EventService,

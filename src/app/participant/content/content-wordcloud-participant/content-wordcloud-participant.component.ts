@@ -4,7 +4,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { ContentParticipantBaseComponent } from '@app/participant/content/conten
 import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-content-wordcloud-participant',
@@ -30,7 +31,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
   constructor(
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     public eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
@@ -67,12 +68,15 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
   submitAnswer() {
     const words = this.words.filter((w) => w);
     if (words.length === 0) {
-      this.translateService.get('answer.please-answer').subscribe((message) => {
-        this.notificationService.showAdvanced(
-          message,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
+      this.translateService
+        .selectTranslate('participant.answer.please-answer')
+        .pipe(take(1))
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
       return;
     }
     this.disableForm();
@@ -85,12 +89,15 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       .addAnswer(this.content.roomId, answer)
       .subscribe((answer) => {
         this.createAnswer(words);
-        this.translateService.get('answer.sent').subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        });
+        this.translateService
+          .selectTranslate('participant.answer.sent')
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          });
         this.sendStatusToParent(answer);
       }),
       () => {

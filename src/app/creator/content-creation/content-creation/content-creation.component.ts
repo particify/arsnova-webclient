@@ -11,13 +11,13 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Content } from '@app/core/models/content';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { AnswerOption } from '@app/core/models/answer-option';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, take } from 'rxjs';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
@@ -66,7 +66,7 @@ export class ContentCreationComponent
   constructor(
     protected contentService: ContentService,
     protected notificationService: NotificationService,
-    protected translationService: TranslateService,
+    protected translationService: TranslocoService,
     protected route: ActivatedRoute,
     protected contentGroupService: ContentGroupService,
     protected announceService: AnnounceService,
@@ -109,15 +109,18 @@ export class ContentCreationComponent
   }
 
   initTemplateAnswers() {
-    this.translationService.get(this.answerLabels).subscribe((msgs) => {
-      for (let i = 0; i < this.answerLabels.length; i++) {
-        (this.content as ContentChoice).options.push(
-          new AnswerOption(msgs[this.answerLabels[i]])
-        );
-      }
-      this.fillCorrectAnswers();
-      this.isLoading = false;
-    });
+    this.translationService
+      .selectTranslate(this.answerLabels)
+      .pipe(take(1))
+      .subscribe((msgs) => {
+        for (let i = 0; i < this.answerLabels.length; i++) {
+          (this.content as ContentChoice).options.push(
+            new AnswerOption(msgs[this.answerLabels[i]])
+          );
+        }
+        this.fillCorrectAnswers();
+        this.isLoading = false;
+      });
   }
 
   initContentForEditing() {
@@ -163,12 +166,15 @@ export class ContentCreationComponent
     this.content.body = this.contentBody;
     this.content.abstentionsAllowed = this.abstentionsAllowed;
     if (this.contentBody === '') {
-      this.translationService.get('content.no-empty').subscribe((message) => {
-        this.notificationService.showAdvanced(
-          message,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
+      this.translationService
+        .selectTranslate('creator.content.no-empty')
+        .pipe(take(1))
+        .subscribe((message) => {
+          this.notificationService.showAdvanced(
+            message,
+            AdvancedSnackBarTypes.WARNING
+          );
+        });
       return false;
     }
     return true;
@@ -190,9 +196,10 @@ export class ContentCreationComponent
   }
 
   afterAnswerDeletion() {
-    this.announceService.announce('content.a11y-answer-deleted');
+    this.announceService.announce('creator.content.a11y-answer-deleted');
     this.translationService
-      .get('content.answer-deleted')
+      .selectTranslate('creator.content.answer-deleted')
+      .pipe(take(1))
       .subscribe((message) => {
         this.notificationService.showAdvanced(
           message,
@@ -205,7 +212,9 @@ export class ContentCreationComponent
     if (
       this.displayAnswers.map((o) => o.answerOption.label).indexOf(label) >= 0
     ) {
-      const msg = this.translationService.instant('content.same-answer');
+      const msg = this.translationService.translate(
+        'creator.content.same-answer'
+      );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return true;
     } else {
@@ -230,7 +239,8 @@ export class ContentCreationComponent
       const labels = answerLabels.map((a) => a.label);
       if (labels.includes('')) {
         this.translationService
-          .get('content.no-empty2')
+          .selectTranslate('creator.content.no-empty2')
+          .pipe(take(1))
           .subscribe((message) => {
             this.notificationService.showAdvanced(
               message,
@@ -239,7 +249,9 @@ export class ContentCreationComponent
           });
         valid = false;
       } else if (this.checkForDuplicates(labels)) {
-        const msg = this.translationService.instant('content.same-answer');
+        const msg = this.translationService.translate(
+          'creator.content.same-answer'
+        );
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
@@ -272,12 +284,15 @@ export class ContentCreationComponent
       (this.content as ContentChoice).correctOptionIndexes = [];
       this.fillCorrectAnswers();
     }
-    this.translationService.get('content.submitted').subscribe((message) => {
-      this.notificationService.showAdvanced(
-        message,
-        AdvancedSnackBarTypes.SUCCESS
-      );
-    });
+    this.translationService
+      .selectTranslate('creator.content.submitted')
+      .pipe(take(1))
+      .subscribe((message) => {
+        this.notificationService.showAdvanced(
+          message,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      });
     this.resetAnswers();
   }
 
@@ -311,7 +326,8 @@ export class ContentCreationComponent
           this.content = updateContent;
           window.history.back();
           this.translationService
-            .get('content.changes-made')
+            .selectTranslate('creator.content.changes-made')
+            .pipe(take(1))
             .subscribe((message) => {
               this.notificationService.showAdvanced(
                 message,

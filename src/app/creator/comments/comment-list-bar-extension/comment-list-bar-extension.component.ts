@@ -9,7 +9,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-comment-list-bar-extension',
@@ -30,7 +30,7 @@ export class CommentListBarExtensionComponent {
   @Output() resetCommentsClicked = new EventEmitter<void>();
 
   constructor(
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private dialogService: DialogService,
     private commentService: CommentService,
     private notificationService: NotificationService,
@@ -62,13 +62,13 @@ export class CommentListBarExtensionComponent {
 
   deleteComments(): void {
     if (this.isModeration) {
-      const msg = this.translateService.instant(
-        'comment-list.banned-comments-deleted'
+      const msg = this.translateService.translate(
+        'creator.comment-list.banned-comments-deleted'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     } else {
-      const msg = this.translateService.instant(
-        'comment-list.all-comments-deleted'
+      const msg = this.translateService.translate(
+        'creator.comment-list.all-comments-deleted'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }

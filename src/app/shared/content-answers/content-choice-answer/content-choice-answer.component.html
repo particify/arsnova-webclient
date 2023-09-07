@@ -29,7 +29,7 @@
       [(ngModel)]="checkedAnswer.checked"
       name="answer"
       class="answer-checkbox choice-answer"
-      aria-label="{{ checkedAnswer.answerOption.label | translate }}"
+      aria-label="{{ checkedAnswer.answerOption.label | transloco }}"
     >
       <app-rendered-text
         [rawText]="checkedAnswer.answerOption.label"
@@ -70,13 +70,13 @@
         color="primary"
         class="answer-radio-button choice-answer"
         [ngClass]="{ 'answer-radio-checked': selectedAnswerIndex === i }"
-        aria-label="{{ checkedAnswer.answerOption.label | translate }}"
+        aria-label="{{ checkedAnswer.answerOption.label | transloco }}"
         [checked]="checkedAnswer.checked"
         [value]="i"
         name="answer"
       >
         <app-rendered-text
-          [rawText]="checkedAnswer.answerOption.label | translate"
+          [rawText]="checkedAnswer.answerOption.label | transloco"
           [renderedText]="checkedAnswer.answerOption.renderedLabel"
           [dynamic]="dynamicRendering"
           [markdown]="false"

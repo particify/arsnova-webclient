@@ -9,12 +9,11 @@ import { EventService } from '@app/core/services/util/event.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockAnnounceService,
   MockEventService,
   MockNotificationService,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of, Subject } from 'rxjs';
 
 import { ContentPrioritizationCreationComponent } from './content-prioritization-creation.component';
@@ -76,15 +75,7 @@ describe('ContentPrioritizationCreationComponent', () => {
           useValue: mockContentGroupService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

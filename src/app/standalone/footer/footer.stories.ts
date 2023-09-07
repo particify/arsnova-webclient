@@ -1,5 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConsentService } from '@app/core/services/util/consent.service';
@@ -14,7 +14,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [
-        TranslateModule.forRoot(),
+        TranslocoModule,
         FooterComponent,
         BrowserAnimationsModule,
         RouterTestingModule,

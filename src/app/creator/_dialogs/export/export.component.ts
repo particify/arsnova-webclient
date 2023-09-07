@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ExportFileType } from '@app/core/models/export-file-type';
 
 const charsets = ['UTF-8', 'UTF-16LE'] as const;
@@ -20,15 +20,15 @@ export class ExportComponent {
   readonly dialogId = 'export';
 
   exportTypes = [
-    { label: 'export.tsv', value: ExportFileType.TSV },
-    { label: 'export.csv', value: ExportFileType.CSV },
+    { label: 'creator.export.tsv', value: ExportFileType.TSV },
+    { label: 'creator.export.csv', value: ExportFileType.CSV },
   ];
   charsets = charsets;
   selectedExportType = this.exportTypes[0];
   selectedCharset = this.charsets[1];
 
   constructor(
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     private dialogRef: MatDialogRef<ExportComponent, ExportOptions>
   ) {}
 

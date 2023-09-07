@@ -4,17 +4,14 @@ import { ContentFlashcardCreationComponent } from './content-flashcard-creation.
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { EventService } from '@app/core/services/util/event.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { of, Subject } from 'rxjs';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import {
-  ActivatedRouteStub,
-  JsonTranslationLoader,
-} from '@testing/test-helpers';
+import { ActivatedRouteStub } from '@testing/test-helpers';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 
 const mockCreateEvent = new Subject<any>();
@@ -92,15 +89,7 @@ describe('ContentFlashcardCreationComponent', () => {
           useClass: MockFormattingService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()

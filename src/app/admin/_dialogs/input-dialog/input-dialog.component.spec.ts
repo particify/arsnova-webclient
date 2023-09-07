@@ -4,11 +4,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService } from '@app/core/services/http/user.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
-  JsonTranslationLoader,
   MockMatDialogRef,
   MockNotificationService,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { InputDialogComponent } from './input-dialog.component';
 
@@ -28,15 +27,7 @@ describe('InputDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [InputDialogComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: MatDialogRef,

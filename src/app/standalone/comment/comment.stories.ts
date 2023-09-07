@@ -2,7 +2,7 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { CommentComponent } from '@app/standalone/comment/comment.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -33,11 +33,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        TranslateModule.forRoot(),
-        CommentComponent,
-        BrowserAnimationsModule,
-      ],
+      imports: [TranslocoModule, CommentComponent, BrowserAnimationsModule],
       providers: [
         {
           provide: HotkeyService,

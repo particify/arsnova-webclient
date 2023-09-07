@@ -4,7 +4,7 @@
   type="submit"
   [color]="color"
   [disabled]="(formDisabled && loading) || disabled"
-  [attr.aria-label]="aria ?? name | translate"
+  [attr.aria-label]="aria ?? name | transloco"
   (click)="click()"
 >
   <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
@@ -17,7 +17,7 @@
     [color]="color"
     [disabled]="(formDisabled && loading) || disabled"
     [ngClass]="{ 'login-button': fullWidth }"
-    [attr.aria-label]="aria ?? name | translate"
+    [attr.aria-label]="aria ?? name | transloco"
     (click)="click()"
   >
     <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
@@ -34,7 +34,7 @@
       [appHotkeyAction]="hotkeyAction"
       [appTrackInteraction]="trackInteraction"
       [appTrackName]="trackName"
-      [attr.aria-label]="aria ?? name | translate"
+      [attr.aria-label]="aria ?? name | transloco"
       (click)="click()"
     >
       <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
@@ -44,7 +44,7 @@
 
 <ng-template #innerButton>
   <span [ngClass]="{ hidden: formDisabled && loading }">
-    {{ name | translate }}
+    {{ name | transloco }}
   </span>
   <app-loading-indicator
     *ngIf="formDisabled && loading"

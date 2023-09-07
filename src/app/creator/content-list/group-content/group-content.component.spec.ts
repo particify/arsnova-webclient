@@ -2,14 +2,9 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GroupContentComponent } from './group-content.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockFeatureFlagService,
   MockGlobalStorageService,
   MockNotificationService,
@@ -197,25 +192,16 @@ describe('GroupContentComponent', () => {
           useClass: MockFeatureFlagService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-        MatMenuModule,
-      ],
+      imports: [getTranslocoModule(), MatMenuModule],
       schemas: [NO_ERRORS_SCHEMA],
-    })
-      .compileComponents()
-      .then(() => {
-        fixture = TestBed.createComponent(GroupContentComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-      });
+    }).compileComponents();
   }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(GroupContentComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

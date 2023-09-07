@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RoomOverviewHeaderComponent } from './room-overview-header.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockNotificationService,
 } from '@testing/test-helpers';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
@@ -41,16 +40,7 @@ describe('RoomOverviewHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RoomOverviewHeaderComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [RoomOverviewHeaderComponent, getTranslocoModule()],
       providers: [
         {
           provide: ActivatedRoute,

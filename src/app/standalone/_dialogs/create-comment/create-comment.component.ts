@@ -5,12 +5,12 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { CoreModule } from '@app/core/core.module';
@@ -44,7 +44,7 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<CreateCommentComponent>,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private globalStorageService: GlobalStorageService,
     private commentService: CommentService,
@@ -55,7 +55,7 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translateService.use(
+    this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.eventsWrapper = {
@@ -82,14 +82,16 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
         this.eventsSubject.next(newComment.id);
         if (this.data.directSend) {
           this.translateService
-            .get('comment-page.comment-sent')
+            .selectTranslate('comment-page.comment-sent')
+            .pipe(take(1))
             .subscribe((msg) => {
               message = msg;
             });
           comment.ack = true;
         } else {
           this.translateService
-            .get('comment-page.comment-sent-to-moderator')
+            .selectTranslate('comment-page.comment-sent-to-moderator')
+            .pipe(take(1))
             .subscribe((msg) => {
               message = msg;
             });
@@ -110,7 +112,8 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
     body = body?.trim();
     if (!body) {
       this.translateService
-        .get('comment-page.error-comment')
+        .selectTranslate('comment-page.error-comment')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

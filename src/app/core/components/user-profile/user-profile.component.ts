@@ -5,7 +5,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { UserService } from '@app/core/services/http/user.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { UserSettings } from '@app/core/models/user-settings';
 import { Location } from '@angular/common';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { take } from 'rxjs';
 
 export class FormField {
   value: string;
@@ -48,7 +49,7 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private userService: UserService,
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     private notificationService: NotificationService,
     private dialogService: DialogService,
     private router: Router,
@@ -102,7 +103,8 @@ export class UserProfileComponent implements OnInit {
       if (result === 'delete') {
         this.authenticationService.logout();
         this.translationService
-          .get('header.account-deleted')
+          .selectTranslate('header.account-deleted')
+          .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
               msg,

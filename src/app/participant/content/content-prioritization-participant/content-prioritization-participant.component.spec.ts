@@ -12,12 +12,11 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import { ContentType } from '@app/core/models/content-type.enum';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockGlobalStorageService,
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of } from 'rxjs';
 
 import { ContentPrioritizationParticipantComponent } from './content-prioritization-participant.component';
@@ -47,15 +46,7 @@ describe('ContentPrioritizationParticipantComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ContentPrioritizationParticipantComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: ContentAnswerService,

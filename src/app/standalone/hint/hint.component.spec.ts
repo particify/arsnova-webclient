@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { JsonTranslationLoader } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { HintComponent } from './hint.component';
 
 describe('HintComponent', () => {
@@ -10,16 +9,7 @@ describe('HintComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HintComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [HintComponent, getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

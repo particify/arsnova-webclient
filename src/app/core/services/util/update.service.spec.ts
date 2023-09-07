@@ -10,7 +10,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { UpdateImportance, VersionInfo } from '@app/core/models/version-info';
 import { Injectable } from '@angular/core';
 import { MockEventService } from '@testing/test-helpers';
@@ -33,7 +33,7 @@ class MockSwUpdate extends SwUpdate {
 
 describe('UpdateService', () => {
   let service: UpdateService;
-  let translateService: TranslateService;
+  let translateService: TranslocoService;
   let dialogService: DialogService;
   const globalStorageService = jasmine.createSpyObj('GlobalStorageService', [
     'setItem',
@@ -73,7 +73,7 @@ describe('UpdateService', () => {
           useValue: window,
         },
         {
-          provide: TranslateService,
+          provide: TranslocoService,
           useValue: translateService,
         },
         {
@@ -83,7 +83,7 @@ describe('UpdateService', () => {
       ],
     });
     service = TestBed.inject(UpdateService);
-    translateService = TestBed.inject(TranslateService);
+    translateService = TestBed.inject(TranslocoService);
     dialogService = TestBed.inject(DialogService);
   });
 

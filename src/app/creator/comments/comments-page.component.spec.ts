@@ -2,10 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentsPageComponent } from './comments-page.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockAnnounceService,
   MockEventService,
   MockGlobalStorageService,
@@ -81,17 +80,7 @@ describe('CommentsPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CommentsPageComponent],
-      imports: [
-        CoreModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-        BrowserAnimationsModule,
-      ],
+      imports: [CoreModule, getTranslocoModule(), BrowserAnimationsModule],
       providers: [
         {
           provide: CommentService,

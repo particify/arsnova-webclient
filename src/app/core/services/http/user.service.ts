@@ -7,7 +7,7 @@ import { AccountCreated } from '@app/core/models/events/account-created';
 import { AccountDeleted } from '@app/core/models/events/account-deleted';
 import { catchError, map, tap } from 'rxjs/operators';
 import { EventService } from '@app/core/services/util/event.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { CachingService } from '@app/core/services/util/caching.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
@@ -30,7 +30,7 @@ export class UserService extends AbstractEntityService<User> {
     private http: HttpClient,
     protected ws: WsConnectorService,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     cachingService: CachingService
   ) {

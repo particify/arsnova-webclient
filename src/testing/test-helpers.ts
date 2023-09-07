@@ -1,4 +1,3 @@
-import { TranslateLoader } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BroadcastEvent } from '@app/core/services/util/event.service';
@@ -17,26 +16,9 @@ import { Theme } from '@app/core/theme/theme.service';
 
 // TranslateModule
 
-const TRANSLATIONS = {
-  DE: {},
-  EN: {},
-};
-
-export class JsonTranslationLoader implements TranslateLoader {
-  getTranslation(code = ''): Observable<object> {
-    const uppercased = code.toUpperCase();
-
-    return of((TRANSLATIONS as { [key: string]: any })[uppercased]);
-  }
-}
-
-export class MockTranslateService {
+export class MockTranslocoService {
   currentLang: string;
   defaultLang: string;
-
-  getBrowserLang(): string {
-    return 'de';
-  }
 
   setDefaultLang(lang: string): void {
     this.defaultLang = lang;
@@ -45,11 +27,8 @@ export class MockTranslateService {
   getDefaultLang(): string {
     return this.defaultLang;
   }
-  get(): string {
-    return this.currentLang;
-  }
 
-  use(lang: string) {
+  setActiveLang(lang: string) {
     this.currentLang = lang;
   }
 }

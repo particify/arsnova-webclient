@@ -39,9 +39,9 @@
           id="live-feedback-disabled"
           class="visually-hidden"
           appHotkey="2"
-          [appHotkeyTitle]="'room-page.live-feedback' | translate"
+          [appHotkeyTitle]="'room-page.live-feedback' | transloco"
         >
-          {{ 'room-page.a11y-live-feedback-disabled' | translate }}
+          {{ 'participant.room-page.a11y-live-feedback-disabled' | transloco }}
         </p>
       </div>
     </div>
@@ -51,11 +51,11 @@
         id="content-groups"
         class="visually-hidden"
         appHotkey="3"
-        [appHotkeyTitle]="'content.groups' | translate"
+        [appHotkeyTitle]="'content.groups' | transloco"
       >
         {{
           'room-page.a11y-content-groups'
-            | translate: { count: contentGroups.length }
+            | transloco: { count: contentGroups.length }
         }}
       </p>
     </ng-container>
@@ -65,9 +65,9 @@
         id="no-content-groups"
         class="visually-hidden"
         appHotkey="3"
-        [appHotkeyTitle]="'content.groups' | translate"
+        [appHotkeyTitle]="'content.groups' | transloco"
       >
-        {{ 'room-page.a11y-no-content-groups' | translate }}
+        {{ 'room-page.a11y-no-content-groups' | transloco }}
       </p>
     </ng-template>
     <div *ngIf="room && contentGroups && !focusModeEnabled">
@@ -82,7 +82,7 @@
     <div fxLayout="column" *ngIf="focusModeEnabled">
       <app-hint
         style="margin-top: 1em"
-        text="room-page.focus-mode-enabled"
+        text="participant.room-page.focus-mode-enabled"
         [type]="HintType.INFO"
       ></app-hint>
     </div>

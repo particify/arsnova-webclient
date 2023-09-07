@@ -8,8 +8,8 @@
               <div [appAutofocus] tabIndex="-1">
                 {{
                   (isEditMode
-                    ? 'content.a11y-content-edit-message'
-                    : 'content.a11y-content-create-message'
+                    ? 'creator.content.a11y-content-edit-message'
+                    : 'creator.content.a11y-content-create-message'
                   )
                     | a11yIntro
                     | async
@@ -34,7 +34,7 @@
                     [disabled]="isEditMode || formDisabled"
                     [hideSingleSelectionIndicator]="true"
                     appHotkey="2"
-                    [appHotkeyTitle]="'content.format' | translate"
+                    [appHotkeyTitle]="'creator.content.format' | transloco"
                   >
                     <mat-select-trigger>
                       <div
@@ -47,7 +47,8 @@
                           selectedFormat.icon
                         }}</mat-icon>
                         <span>{{
-                          'content.format-' + selectedFormat.name | translate
+                          'creator.content.format-' + selectedFormat.name
+                            | transloco
                         }}</span>
                       </div>
                     </mat-select-trigger>
@@ -63,17 +64,20 @@
                         <div fxLayout="column" fxLayoutAlign="center">
                           <span
                             attr.aria-label="{{
-                              'content.a11y-format-' + format.name | translate
+                              'creator.content.a11y-format-' + format.name
+                                | transloco
                             }}"
                             class="format-name"
                           >
                             {{
-                              'content.format-' + format.name | translate
+                              'creator.content.format-' + format.name
+                                | transloco
                             }}</span
                           >
                           <span class="format-description">{{
-                            'content.format-' + format.name + '-description'
-                              | translate
+                            'creator.content.format-' +
+                              format.name +
+                              '-description' | transloco
                           }}</span>
                         </div>
                       </div>
@@ -92,9 +96,9 @@
               >
                 <mat-label>{{
                   (selectedFormat.name !== 'slide'
-                    ? 'content.body'
-                    : 'content.body-neutral'
-                  ) | translate
+                    ? 'creator.content.body'
+                    : 'creator.content.body-neutral'
+                  ) | transloco
                 }}</mat-label>
                 <textarea
                   [disabled]="formDisabled"
@@ -111,12 +115,12 @@
                   }}"
                   name="questionInput"
                   appHotkey="1"
-                  [appHotkeyTitle]="'content.body' | translate"
+                  [appHotkeyTitle]="'creator.content.body' | transloco"
                 ></textarea>
               </mat-form-field>
               <app-hint
                 *ngIf="textContainsImage"
-                text="utils.formatting-image-hint"
+                text="creator.utils.formatting-image-hint"
                 [type]="HintType.WARNING"
               ></app-hint>
               <lib-extension-point
@@ -134,7 +138,7 @@
                 "
                 [(ngModel)]="abstentionsAllowed"
               >
-                {{ 'content.abstentions-allowed' | translate }}
+                {{ 'creator.content.abstentions-allowed' | transloco }}
               </mat-checkbox>
             </div>
             <div *ngIf="!isLoading" class="content-action-container">
@@ -255,13 +259,19 @@
                 <button
                   [disabled]="formDisabled"
                   (click)="showPreview()"
-                  attr.aria-label="{{ 'content.a11y-preview' | translate }}"
+                  attr.aria-label="{{
+                    'creator.content.a11y-preview' | transloco
+                  }}"
                   mat-stroked-button
                 >
-                  {{ 'content.preview' | translate }}
+                  {{ 'creator.content.preview' | transloco }}
                 </button>
                 <app-loading-button
-                  [name]="isEditMode ? 'content.save' : 'content.create'"
+                  [name]="
+                    isEditMode
+                      ? 'creator.content.save'
+                      : 'creator.content.create'
+                  "
                   (clicked)="emitCreateEvent(true)"
                 ></app-loading-button>
               </div>
@@ -286,27 +296,44 @@
 </div>
 
 <div class="visually-hidden">
-  <div id="subject">{{ 'content.a11y-enter-subject' | translate }}</div>
+  <div id="subject">{{ 'creator.content.a11y-enter-subject' | transloco }}</div>
   <div id="body">
     {{
-      (created ? 'content.a11y-content-created' : 'content.a11y-enter-body')
-        | translate
+      (created
+        ? 'creator.content.a11y-content-created'
+        : 'creator.content.a11y-enter-body'
+      ) | transloco
     }}
   </div>
-  <div id="format-choice">{{ 'content.a11y-format-choice' | translate }}</div>
-  <div id="format-scale">{{ 'content.a11y-format-likert' | translate }}</div>
-  <div id="format-binary">{{ 'content.a11y-format-binary' | translate }}</div>
-  <div id="format-text">{{ 'content.a11y-format-text' | translate }}</div>
-  <div id="format-slide">{{ 'content.a11y-format-slide' | translate }}</div>
-  <div id="format-sort">{{ 'content.a11y-format-sort' | translate }}</div>
+  <div id="format-choice">
+    {{ 'creator.content.a11y-format-choice' | transloco }}
+  </div>
+  <div id="format-scale">
+    {{ 'creator.content.a11y-format-likert' | transloco }}
+  </div>
+  <div id="format-binary">
+    {{ 'creator.content.a11y-format-binary' | transloco }}
+  </div>
+  <div id="format-text">
+    {{ 'creator.content.a11y-format-text' | transloco }}
+  </div>
+  <div id="format-slide">
+    {{ 'creator.content.a11y-format-slide' | transloco }}
+  </div>
+  <div id="format-sort">
+    {{ 'creator.content.a11y-format-sort' | transloco }}
+  </div>
   <div id="format-wordcloud">
-    {{ 'content.a11y-format-wordcloud' | translate }}
+    {{ 'creator.content.a11y-format-wordcloud' | transloco }}
   </div>
   <div id="choose-format">
     {{
-      'content.a11y-choose-format'
-        | translate
-          : { format: 'content.format-' + selectedFormat.name | translate }
+      'creator.content.a11y-choose-format'
+        | transloco
+          : {
+              format:
+                'creator.content.format-' + selectedFormat.name | transloco
+            }
     }}
   </div>
 </div>

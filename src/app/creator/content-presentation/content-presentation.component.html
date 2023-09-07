@@ -12,7 +12,7 @@
 ></app-answer-count>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 <div fxLayoutAlign="center center" *ngIf="!isLoading && !contents">
-  <p class="hint">{{ 'content.no-contents-yet' | translate }}</p>
+  <p class="hint">{{ 'creator.content.no-contents-yet' | transloco }}</p>
 </div>
 <div>
   <div
@@ -21,7 +21,7 @@
     [appAutofocus]
     class="visually-hidden"
   >
-    {{ 'statistic.a11y-message-presentation' | translate }}
+    {{ 'creator.statistic.a11y-message-presentation' | transloco }}
   </div>
   <div
     *ngIf="isPresentation && !isLoading"
@@ -30,8 +30,8 @@
     class="visually-hidden"
   >
     {{
-      'presentation.a11y-content-message'
-        | translate: { group: contentGroup.name }
+      'creator.presentation.a11y-content-message'
+        | transloco: { group: contentGroup.name }
     }}
   </div>
   <div
@@ -73,7 +73,7 @@
           </mat-card>
         </div>
         <div tabindex="0" class="visually-hidden">
-          {{ 'statistic.a11y-no-more-answers' | translate }}
+          {{ 'statistic.a11y-no-more-answers' | transloco }}
         </div>
       </cdk-step>
     </app-stepper>

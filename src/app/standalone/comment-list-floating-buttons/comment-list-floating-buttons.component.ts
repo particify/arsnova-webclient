@@ -5,14 +5,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
     FlexModule,
-    TranslateModule,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,

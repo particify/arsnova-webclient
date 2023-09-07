@@ -14,7 +14,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UntypedFormControl, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   AuthenticationProvider,
@@ -31,6 +31,7 @@ import { PasswordEntryComponent } from '@app/core/components/password-entry/pass
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -63,7 +64,7 @@ export class LoginComponent
   constructor(
     public authenticationService: AuthenticationService,
     public router: Router,
-    private translationService: TranslateService,
+    private translationService: TranslocoService,
     public notificationService: NotificationService,
     public dialog: MatDialog,
     public eventService: EventService,
@@ -174,7 +175,8 @@ export class LoginComponent
         });
     } else {
       this.translationService
-        .get('login.input-incorrect')
+        .selectTranslate('login.input-incorrect')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -193,7 +195,8 @@ export class LoginComponent
   private checkLogin(result: ClientAuthenticationResult) {
     if (result.status === AuthenticationStatus.SUCCESS) {
       this.translationService
-        .get('login.login-successful')
+        .selectTranslate('login.login-successful')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,
@@ -210,7 +213,8 @@ export class LoginComponent
       this.activateUser();
     } else {
       this.translationService
-        .get('login.login-data-incorrect')
+        .selectTranslate('login.login-data-incorrect')
+        .pipe(take(1))
         .subscribe((message) => {
           this.notificationService.showAdvanced(
             message,

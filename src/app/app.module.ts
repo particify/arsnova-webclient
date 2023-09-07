@@ -4,11 +4,7 @@ import { RegisterComponent } from '@app/core/components/register/register.compon
 import { PasswordResetComponent } from '@app/core/components/password-reset/password-reset.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {
-  HTTP_INTERCEPTORS,
-  HttpClient,
-  HttpClientModule,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserService } from '@app/core/services/http/user.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -26,7 +22,10 @@ import { AuthenticationInterceptor } from '@app/core/interceptors/authentication
 import { CoreModule } from '@app/core/core.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LanguageService } from '@app/core/services/util/language.service';
+import {
+  BROWSER_LANG,
+  LanguageService,
+} from '@app/core/services/util/language.service';
 import { HomePageComponent } from '@app/core/components/home-page/home-page.component';
 import { UserHomeComponent } from '@app/core/components/user-home/user-home.component';
 import { AppConfig } from './app.config';
@@ -34,7 +33,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@environments/environment';
 import { extensions } from '@environments/extensions';
 import { ModeratorService } from '@app/core/services/http/moderator.service';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getBrowserLang } from '@ngneat/transloco';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { CookiesComponent } from '@app/core/components//_dialogs/cookies/cookies.component';
@@ -61,8 +61,6 @@ import { FormattingService } from '@app/core/services/http/formatting.service';
 import { SnackBarAdvancedComponent } from '@app/core/components/snack-bar-advanced/snack-bar-advanced.component';
 import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { TranslateHttpLoaderFactory } from './translate-http-loader-factory';
-import { TRANSLATION_MODULE_NAME } from './translate-module-name-token';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { UpdateService } from '@app/core/services/util/update.service';
 import { CachingService } from '@app/core/services/util/caching.service';
@@ -151,14 +149,7 @@ export function initializeApp(appConfig: AppConfig) {
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: TranslateHttpLoaderFactory,
-        deps: [HttpClient, TRANSLATION_MODULE_NAME],
-      },
-      isolate: true,
-    }),
+    TranslocoRootModule,
     MaterialCssVarsModule.forRoot({
       isAutoContrast: true,
       darkThemeClass: 'theme-dark',
@@ -190,10 +181,6 @@ export function initializeApp(appConfig: AppConfig) {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
       multi: true,
-    },
-    {
-      provide: TRANSLATION_MODULE_NAME,
-      useValue: 'home',
     },
     UpdateService,
     WsConnectorService,
@@ -250,6 +237,10 @@ export function initializeApp(appConfig: AppConfig) {
       useValue: [],
     },
     { provide: TitleStrategy, useClass: CustomPageTitleStrategy },
+    {
+      provide: BROWSER_LANG,
+      useFactory: () => getBrowserLang(),
+    },
   ],
   bootstrap: [AppComponent],
 })

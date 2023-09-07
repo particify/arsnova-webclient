@@ -7,7 +7,7 @@
       class="label-container secondary-background"
     >
       <span class="label-text new-label">{{
-        'announcement.' + label | translate
+        'announcement.' + label | transloco
       }}</span>
     </div>
     <button
@@ -15,18 +15,18 @@
       *ngIf="role === 'OWNER'"
       [matMenuTriggerFor]="moreMenu"
       [disabled]="editMode"
-      [matTooltip]="'announcement.options' | translate"
+      [matTooltip]="'creator.announcement.options' | transloco"
     >
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #moreMenu>
       <button mat-menu-item (click)="edit()">
         <mat-icon>edit</mat-icon>
-        {{ 'announcement.edit' | translate }}
+        {{ 'creator.announcement.edit' | transloco }}
       </button>
       <button mat-menu-item (click)="delete()">
         <mat-icon color="warn">delete</mat-icon>
-        {{ 'announcement.delete' | translate }}
+        {{ 'creator.announcement.delete' | transloco }}
       </button>
     </mat-menu>
   </div>
@@ -38,7 +38,7 @@
       [responsive]="true"
     ></app-date>
     <span *ngIf="announcement.updateTimestamp"
-      >&nbsp;({{ 'announcement.edited' | translate }})</span
+      >&nbsp;({{ 'announcement.edited' | transloco }})</span
     >
   </p>
   <div>

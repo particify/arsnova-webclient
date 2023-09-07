@@ -6,14 +6,14 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
@@ -29,7 +29,7 @@ export class AuthenticationGuard implements CanActivate {
     private roomMembershipService: RoomMembershipService,
     private roomService: RoomService,
     private notificationService: NotificationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private routingService: RoutingService,
     private router: Router
   ) {}
@@ -105,32 +105,45 @@ export class AuthenticationGuard implements CanActivate {
 
   handleUnknownError() {
     this.translateService
-      .get('errors.something-went-wrong')
+      .selectTranslate('errors.something-went-wrong')
+      .pipe(take(1))
       .subscribe((msg) =>
         this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED)
       );
   }
 
   handleAccessDenied(auth?: ClientAuthentication, url?: string) {
-    this.translateService.get('errors.not-authorized').subscribe((msg) => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      if (url && auth?.authProvider === AuthProvider.ARSNOVA_GUEST) {
-        this.routingService.setRedirect(url);
-        this.router.navigate(['login']);
-      } else {
-        if (this.router.url !== '/user') {
-          this.router.navigate(['']);
+    this.translateService
+      .selectTranslate('errors.not-authorized')
+      .pipe(take(1))
+      .subscribe((msg) => {
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+        if (url && auth?.authProvider === AuthProvider.ARSNOVA_GUEST) {
+          this.routingService.setRedirect(url);
+          this.router.navigate(['login']);
+        } else {
+          if (this.router.url !== '/user') {
+            this.router.navigate(['']);
+          }
         }
-      }
-    });
+      });
   }
 
   handleRoomNotFound() {
-    this.translateService.get('errors.room-not-found').subscribe((msg) => {
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
-      if (this.router.url !== '/user') {
-        this.router.navigateByUrl('home');
-      }
-    });
+    this.translateService
+      .selectTranslate('errors.room-not-found')
+      .pipe(take(1))
+      .subscribe((msg) => {
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.FAILED
+        );
+        if (this.router.url !== '/user') {
+          this.router.navigateByUrl('home');
+        }
+      });
   }
 }

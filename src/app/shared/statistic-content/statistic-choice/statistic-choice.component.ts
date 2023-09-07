@@ -12,7 +12,7 @@ import {
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
@@ -60,7 +60,7 @@ export class StatisticChoiceComponent
 
   constructor(
     protected contentService: ContentService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected themeService: ThemeService,
     protected eventService: EventService,
     protected presentationService: PresentationService
@@ -156,7 +156,7 @@ export class StatisticChoiceComponent
     const scale = this.presentationService.getScale();
     const labels = Array.from(this.labelLetters).slice(0, this.options.length);
     if (this.content.abstentionsAllowed) {
-      const label = this.translateService.instant('statistic.abstentions');
+      const label = this.translateService.translate('statistic.abstentions');
       labels.push(label);
     }
     this.createChart(labels, dataSets, scale, gridConfig as GridLineOptions);

@@ -1,11 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentListBarExtensionComponent } from './comment-list-bar-extension.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import {
-  JsonTranslationLoader,
-  MockNotificationService,
-} from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { MockNotificationService } from '@testing/test-helpers';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -29,16 +26,7 @@ describe('CommentListBarExtensionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CommentListBarExtensionComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-        MatMenuModule,
-      ],
+      imports: [getTranslocoModule(), MatMenuModule],
       providers: [
         {
           provide: DialogService,

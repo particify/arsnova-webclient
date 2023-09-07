@@ -1,12 +1,11 @@
 import { Injectable, Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of } from 'rxjs';
 import { UserHomeComponent } from './user-home.component';
 
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { JsonTranslationLoader } from '@testing/test-helpers';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 @Injectable()
@@ -38,15 +37,7 @@ describe('UserHomeComponent', () => {
         MatIconStubComponent,
         A11yIntroPipe,
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: AuthenticationService,

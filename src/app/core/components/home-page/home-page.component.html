@@ -3,7 +3,7 @@
   tabindex="-1"
   [appAutofocus]="this.deviceType !== 'desktop'"
 >
-  {{ 'home-page.a11y-welcome-message' | translate: { title: appTitle } }}
+  {{ 'home-page.a11y-welcome-message' | transloco: { title: appTitle } }}
 </div>
 <div fxLayout="column" class="container">
   <div class="heading" fxLayout="column" fxLayoutAlign="center center">
@@ -25,10 +25,10 @@
           class="mat-button-classic"
           (click)="openCreateRoomDialog()"
           appHotkey="2"
-          [appHotkeyTitle]="'home-page.create-room' | translate"
+          [appHotkeyTitle]="'home-page.create-room' | transloco"
         >
           <mat-icon>add</mat-icon>
-          {{ 'home-page.create-room' | translate }}
+          {{ 'home-page.create-room' | transloco }}
         </button>
       </div>
     </div>

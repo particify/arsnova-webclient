@@ -7,10 +7,9 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import { UserRole } from '@app/core/models/user-roles.enum';
 import {
   ActivatedRouteStub,
-  JsonTranslationLoader,
   MockNotificationService,
 } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { AnswerListComponent } from './answer-list.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -42,15 +41,7 @@ describe('AnswerListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AnswerListComponent],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: ActivatedRoute,

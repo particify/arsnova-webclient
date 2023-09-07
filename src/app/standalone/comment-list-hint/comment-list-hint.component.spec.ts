@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentListHintComponent } from './comment-list-hint.component';
-import { JsonTranslationLoader } from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 describe('CommentListHintComponent', () => {
   let component: CommentListHintComponent;
@@ -10,16 +9,7 @@ describe('CommentListHintComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        CommentListHintComponent,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [CommentListHintComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CommentListHintComponent);

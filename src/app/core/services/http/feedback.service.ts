@@ -2,7 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { AbstractHttpService } from './abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventService } from '@app/core/services/util/event.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { Observable, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class FeedbackService extends AbstractHttpService<number[]> {
   constructor(
     private http: HttpClient,
     protected eventService: EventService,
-    protected translateService: TranslateService,
+    protected translateService: TranslocoService,
     protected notificationService: NotificationService,
     protected wsFeedbackService: WsFeedbackService
   ) {

@@ -2,24 +2,24 @@
   <h3 tabindex="0" aria-labelledby="update-header" class="secondary">
     {{
       (afterUpdate ? 'home-page.update-made' : 'home-page.update-available')
-        | translate
+        | transloco
     }}
   </h3>
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <div *ngIf="!isLoading">
     <div *ngIf="changes">
       <p *ngIf="newsUrl" tabindex="0">
-        {{ 'home-page.see-news' | translate
-        }}<a href="{{ newsUrl }}">{{ 'home-page.news' | translate }}</a
+        {{ 'home-page.see-news' | transloco
+        }}<a href="{{ newsUrl }}">{{ 'home-page.news' | transloco }}</a
         >.
       </p>
-      <p>{{ 'home-page.important-changes' | translate }}</p>
+      <p>{{ 'home-page.important-changes' | transloco }}</p>
       <ul tabindex="0">
         <li *ngFor="let change of changes">{{ change }}</li>
       </ul>
     </div>
     <p class="hot-fix" *ngIf="!changes" tabindex="0">
-      {{ 'home-page.hot-fix-update' | translate }}
+      {{ 'home-page.hot-fix-update' | transloco }}
     </p>
   </div>
 </div>
@@ -36,17 +36,17 @@
     [disabled]="!afterUpdate && !updateReady"
     (click)="close()"
   >
-    {{ (afterUpdate ? 'dialog.close' : 'home-page.update') | translate }}
+    {{ (afterUpdate ? 'dialog.close' : 'home-page.update') | transloco }}
   </button>
   <div class="visually-hidden">
     <div id="update-header">
       {{
         'home-page.a11y-update-' + (afterUpdate ? 'made' : 'available')
-          | translate
+          | transloco
       }}
     </div>
     <div id="update-button">
-      {{ 'home-page.a11y-' + (afterUpdate ? 'close' : 'update') | translate }}
+      {{ 'home-page.a11y-' + (afterUpdate ? 'close' : 'update') | transloco }}
     </div>
   </div>
 </div>

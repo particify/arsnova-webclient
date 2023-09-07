@@ -5,7 +5,7 @@ import {
   Router,
   RouterModule,
 } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { Room } from '@app/core/models/room';
 import { ConsentService } from '@app/core/services/util/consent.service';
 import { filter } from 'rxjs/operators';
@@ -18,7 +18,7 @@ import { FlexModule } from '@angular/flex-layout';
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslocoModule,
     MatMenuModule,
     ExtensionPointModule,
     FlexModule,

@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
 import { StorageItemCategory } from '@app/core/models/storage';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { EventService } from './event.service';
 import { ThemeService } from '@app/core/theme/theme.service';
@@ -64,7 +64,7 @@ export class TrackingService {
     private router: Router,
     private eventService: EventService,
     private authenticationService: AuthenticationService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     private themeService: ThemeService,
     private globalStorageService: GlobalStorageService,
     errorHandler: ErrorHandler,
@@ -126,8 +126,8 @@ export class TrackingService {
       .subscribe((event) => {
         this.addRoute(this.router.url, event.snapshot);
       });
-    this.translateService.onLangChange.subscribe((event: LangChangeEvent) =>
-      this.setVisitDimension(VisitDimension.UI_LANGUAGE, event.lang)
+    this.translateService.langChanges$.subscribe((lang: string) =>
+      this.setVisitDimension(VisitDimension.UI_LANGUAGE, lang)
     );
     this.themeService.getCurrentTheme$().subscribe((themeName) => {
       if (themeName) {
@@ -142,7 +142,7 @@ export class TrackingService {
     );
     this.setVisitDimension(
       VisitDimension.UI_LANGUAGE,
-      this.translateService.currentLang
+      this.translateService.getActiveLang()
     );
     this.setVisitDimension(
       VisitDimension.APP_VERSION,

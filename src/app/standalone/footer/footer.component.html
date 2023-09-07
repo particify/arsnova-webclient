@@ -7,8 +7,8 @@
   <lib-extension-point extensionId="footer-reference">
     <div fxLayout="row" fxLayoutAlign="center center" fxFill>
       <a [attr.href]="referenceUrl" target="_blank" class="slogan text">
-        <span class="powered-by">{{ 'footer.powered-by' | translate }}</span>
-        <span class="by">{{ 'footer.by' | translate }}</span>
+        <span class="powered-by">{{ 'footer.powered-by' | transloco }}</span>
+        <span class="by">{{ 'footer.by' | transloco }}</span>
         <span>Particify</span>
       </a>
     </div>
@@ -20,10 +20,10 @@
       (click)="showAccessibilityStatement()"
       class="link text"
     >
-      {{ 'footer.accessibility' | translate }}</a
+      {{ 'footer.accessibility' | transloco }}</a
     >
     <a [routerLink]="[]" [matMenuTriggerFor]="privacyMenu" class="link text">
-      {{ 'footer.dsgvo' | translate }}</a
+      {{ 'footer.dsgvo' | transloco }}</a
     >
     <a
       *ngIf="imprintUrl"
@@ -31,7 +31,7 @@
       (click)="showImprint()"
       class="link text"
     >
-      {{ 'footer.imprint' | translate }}</a
+      {{ 'footer.imprint' | transloco }}</a
     >
   </div>
   <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
@@ -41,10 +41,10 @@
       mat-menu-item
       (click)="showDataProtection()"
     >
-      {{ 'footer.privacy-policy' | translate }}
+      {{ 'footer.privacy-policy' | transloco }}
     </button>
     <button class="item-title" mat-menu-item (click)="showCookieSettings()">
-      {{ 'footer.cookie-settings' | translate }}
+      {{ 'footer.cookie-settings' | transloco }}
     </button>
   </mat-menu>
 </div>

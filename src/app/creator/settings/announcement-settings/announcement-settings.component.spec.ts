@@ -3,11 +3,8 @@ import { AnnouncementService } from '@app/core/services/http/announcement.servic
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { Room } from '@app/core/models/room';
-import {
-  MockNotificationService,
-  JsonTranslationLoader,
-} from '@testing/test-helpers';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MockNotificationService } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { AnnouncementSettingsComponent } from './announcement-settings.component';
 import { of } from 'rxjs';
@@ -46,15 +43,7 @@ describe('AnnouncementSettingsComponent', () => {
           useValue: dialogService,
         },
       ],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

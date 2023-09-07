@@ -20,14 +20,14 @@
     (input)="search()"
     (keyup.escape)="resetSearch()"
     [(ngModel)]="searchData"
-    [placeholder]="'comment-list.search-placeholder' | translate"
+    [placeholder]="'comment-list.search-placeholder' | transloco"
   />
   <button
     id="search-close-button"
     mat-icon-button
     *ngIf="searchData !== '' || searchActive"
     (click)="resetSearch()"
-    [attr.aria-label]="'comment-list.a11y-close-search' | translate"
+    [attr.aria-label]="'comment-list.a11y-close-search' | transloco"
   >
     <mat-icon>close</mat-icon>
   </button>
@@ -52,7 +52,7 @@
       (click)="activateSearch(); filter(CommentFilter.NONE)"
       class="bar-icon"
       *ngIf="!searchActive"
-      matTooltip="{{ 'comment-list.filter-search' | translate }}"
+      matTooltip="{{ 'comment-list.filter-search' | transloco }}"
       appHotkey="2"
       appTrackInteraction="Comment search opened"
     >
@@ -65,7 +65,7 @@
       class="bar-icon"
       *ngIf="!searchActive"
       [matMenuTriggerFor]="filterMenu"
-      matTooltip="{{ 'comment-list.filter-comments' | translate }}"
+      matTooltip="{{ 'comment-list.filter-comments' | transloco }}"
       appHotkey="4"
     >
       <mat-icon>filter_list</mat-icon>
@@ -77,7 +77,7 @@
       class="bar-icon"
       *ngIf="!searchActive"
       [matMenuTriggerFor]="timeMenu"
-      matTooltip="{{ 'comment-list.select-time' | translate }}"
+      matTooltip="{{ 'comment-list.select-time' | transloco }}"
       appHotkey="5"
     >
       <mat-icon>access_time</mat-icon>
@@ -92,7 +92,7 @@
       [disabled]="isAddButtonDisabled"
       *ngIf="!searchActive"
       (click)="create()"
-      matTooltip="{{ 'comment-list.add-comment' | translate }}"
+      matTooltip="{{ 'comment-list.add-comment' | transloco }}"
       appHotkey="1"
     >
       <mat-icon>add</mat-icon>
@@ -108,7 +108,7 @@
       *ngFor="let sortItem of sortItems"
       mat-menu-item
       (click)="sort(sortItem.name)"
-      [attr.aria-label]="'comment-list.a11y-sort-' + sortItem.name | translate"
+      [attr.aria-label]="'comment-list.a11y-sort-' + sortItem.name | transloco"
       appTrackInteraction="Comments sorted"
       [appTrackName]="sortItem.name"
     >
@@ -122,7 +122,7 @@
       >
       <span
         [ngClass]="{ 'selected-menu-item': currentSort === sortItem.name }"
-        >{{ 'comment-list.sort-' + sortItem.name | translate }}</span
+        >{{ 'comment-list.sort-' + sortItem.name | transloco }}</span
       >
     </button>
     <app-menu-divider label="comment-list.filter"></app-menu-divider>
@@ -130,7 +130,7 @@
     <button
       mat-menu-item
       (click)="filter(CommentFilter.FAVORITE)"
-      [attr.aria-label]="'comment-list.a11y-filter-favorite' | translate"
+      [attr.aria-label]="'comment-list.a11y-filter-favorite' | transloco"
       appTrackInteraction="Comments filtered"
       appTrackName="favorite"
     >
@@ -144,14 +144,14 @@
         [ngClass]="{
           'selected-menu-item': currentFilter === CommentFilter.FAVORITE
         }"
-        >{{ 'comment-list.filter-favorite' | translate }}</span
+        >{{ 'comment-list.filter-favorite' | transloco }}</span
       >
     </button>
 
     <button
       mat-menu-item
       (click)="filter(CommentFilter.ANSWER)"
-      [attr.aria-label]="'comment-list.a11y-filter-answer' | translate"
+      [attr.aria-label]="'comment-list.a11y-filter-answer' | transloco"
       appTrackInteraction="Comments filtered"
       appTrackName="answer"
     >
@@ -165,14 +165,14 @@
         [ngClass]="{
           'selected-menu-item': currentFilter === CommentFilter.ANSWER
         }"
-        >{{ 'comment-list.filter-answered' | translate }}</span
+        >{{ 'comment-list.filter-answered' | transloco }}</span
       >
     </button>
 
     <button
       mat-menu-item
       [matMenuTriggerFor]="moreFilterMenu"
-      [attr.aria-label]="'comment-list.a11y-filter-more' | translate"
+      [attr.aria-label]="'comment-list.a11y-filter-more' | transloco"
     >
       <mat-icon
         [ngClass]="{
@@ -187,19 +187,19 @@
             currentFilter === CommentFilter.CORRECT ||
             currentFilter === CommentFilter.WRONG
         }"
-        >{{ 'comment-list.filter-more' | translate }}</span
+        >{{ 'comment-list.filter-more' | transloco }}</span
       >
     </button>
 
     <button
       mat-menu-item
       (focus)="filter(CommentFilter.NONE)"
-      [attr.aria-label]="'comment-list.a11y-filter-close' | translate"
+      [attr.aria-label]="'comment-list.a11y-filter-close' | transloco"
       appTrackInteraction="Comments filtered"
       appTrackName="reset"
     >
       <mat-icon>close</mat-icon>
-      <span>{{ 'comment-list.filter-reset' | translate }}</span>
+      <span>{{ 'comment-list.filter-reset' | transloco }}</span>
     </button>
   </mat-menu>
 
@@ -207,7 +207,7 @@
     <button
       mat-menu-item
       (click)="filter(CommentFilter.CORRECT)"
-      [attr.aria-label]="'comment-list.a11y-filter-correct' | translate"
+      [attr.aria-label]="'comment-list.a11y-filter-correct' | transloco"
       appTrackInteraction="Comments filtered"
       appTrackName="correct"
     >
@@ -221,14 +221,14 @@
         [ngClass]="{
           'selected-menu-item': currentFilter === CommentFilter.CORRECT
         }"
-        >{{ 'comment-list.filter-correct' | translate }}</span
+        >{{ 'comment-list.filter-correct' | transloco }}</span
       >
     </button>
 
     <button
       mat-menu-item
       (click)="filter(CommentFilter.WRONG)"
-      [attr.aria-label]="'comment-list.a11y-filter-wrong' | translate"
+      [attr.aria-label]="'comment-list.a11y-filter-wrong' | transloco"
       appTrackInteraction="Comments filtered"
       appTrackName="wrong"
     >
@@ -242,7 +242,7 @@
         [ngClass]="{
           'selected-menu-item': currentFilter === CommentFilter.WRONG
         }"
-        >{{ 'comment-list.filter-wrong' | translate }}</span
+        >{{ 'comment-list.filter-wrong' | transloco }}</span
       >
     </button>
   </mat-menu>
@@ -252,12 +252,12 @@
       <button
         mat-menu-item
         (click)="setTimePeriod(periodItem)"
-        [attr.aria-label]="'comment-list.a11y-select-' + periodItem | translate"
+        [attr.aria-label]="'comment-list.a11y-select-' + periodItem | transloco"
         appTrackInteraction="Comments filtered (period)"
         [appTrackName]="periodItem"
       >
         <span [ngClass]="{ 'selected-menu-item': periodItem === period }">{{
-          'comment-list.select-' + periodItem | translate
+          'comment-list.select-' + periodItem | transloco
         }}</span>
       </button>
     </div>

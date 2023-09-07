@@ -9,7 +9,6 @@ import {
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import {
-  JsonTranslationLoader,
   MockEventService,
   MockGlobalStorageService,
   MockRouter,
@@ -19,11 +18,8 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { of } from 'rxjs';
 import { UserService } from '@app/core/services/http/user.service';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
@@ -80,15 +76,7 @@ describe('UserProfileComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [UserProfileComponent, A11yIntroPipe],
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: JsonTranslationLoader,
-          },
-          isolate: true,
-        }),
-      ],
+      imports: [getTranslocoModule()],
       providers: [
         {
           provide: Router,

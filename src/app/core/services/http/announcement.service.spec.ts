@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import {
   MockEventService,
   MockNotificationService,
-  MockTranslateService,
+  MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 
@@ -23,8 +23,8 @@ describe('AnnouncementService', () => {
           useClass: MockEventService,
         },
         {
-          provide: TranslateService,
-          useClass: MockTranslateService,
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
         },
         {
           provide: NotificationService,

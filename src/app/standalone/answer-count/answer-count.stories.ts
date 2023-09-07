@@ -1,6 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AnswerCountComponent } from './answer-count.component';
 import { EventService } from '@app/core/services/util/event.service';
@@ -18,11 +18,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        TranslateModule.forRoot(),
-        AnswerCountComponent,
-        BrowserAnimationsModule,
-      ],
+      imports: [TranslocoModule, AnswerCountComponent, BrowserAnimationsModule],
       providers: [
         {
           provide: EventService,

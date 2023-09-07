@@ -19,7 +19,8 @@ import {
 import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@ngneat/transloco';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-stepper',
@@ -72,7 +73,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   constructor(
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
-    private translateService: TranslateService,
+    private translateService: TranslocoService,
     dir: Directionality,
     changeDetectorRef: ChangeDetectorRef,
     elementRef: ElementRef<HTMLElement>
@@ -81,26 +82,32 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.translateService.get(this.i18nPrefix + '.previous').subscribe((t) =>
-      this.hotkeyService.registerHotkey(
-        {
-          key: 'ArrowLeft',
-          action: () => this.previous(),
-          actionTitle: t,
-        },
-        this.hotkeyRefs
-      )
-    );
-    this.translateService.get(this.i18nPrefix + '.next').subscribe((t) =>
-      this.hotkeyService.registerHotkey(
-        {
-          key: 'ArrowRight',
-          action: () => this.next(),
-          actionTitle: t,
-        },
-        this.hotkeyRefs
-      )
-    );
+    this.translateService
+      .selectTranslate(this.i18nPrefix + '.previous')
+      .pipe(take(1))
+      .subscribe((t) =>
+        this.hotkeyService.registerHotkey(
+          {
+            key: 'ArrowLeft',
+            action: () => this.previous(),
+            actionTitle: t,
+          },
+          this.hotkeyRefs
+        )
+      );
+    this.translateService
+      .selectTranslate(this.i18nPrefix + '.next')
+      .pipe(take(1))
+      .subscribe((t) =>
+        this.hotkeyService.registerHotkey(
+          {
+            key: 'ArrowRight',
+            action: () => this.next(),
+            actionTitle: t,
+          },
+          this.hotkeyRefs
+        )
+      );
   }
 
   ngOnDestroy() {

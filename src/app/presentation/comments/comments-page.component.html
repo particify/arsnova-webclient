@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="start">
   <div id="presentation-button" tabIndex="-1" class="visually-hidden">
-    {{ 'presentation.a11y-comment-message' | translate }}
+    {{ 'creator.presentation.a11y-comment-message' | transloco }}
   </div>
   <div class="presentation-container">
     <app-present-comment
@@ -29,8 +29,8 @@
       *ngIf="!isLoading"
       tabindex="-1"
       appHotkey="7"
-      [appHotkeyTitle]="'comment-list.list' | translate"
-      [attr.aria-label]="'comment-list.list' | translate"
+      [appHotkeyTitle]="'comment-list.list' | transloco"
+      [attr.aria-label]="'comment-list.list' | transloco"
     >
       <app-comment
         *ngFor="let comment of displayComments"
