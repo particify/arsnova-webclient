@@ -3,29 +3,14 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentListComponent } from './content-list.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import {
-  ActivatedRouteStub,
-  MockFeatureFlagService,
-  MockGlobalStorageService,
-  MockNotificationService,
-  MockRouter,
-} from '@testing/test-helpers';
+import { MockNotificationService, MockRouter } from '@testing/test-helpers';
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { EventService } from '@app/core/services/util/event.service';
-import { RoomService } from '@app/core/services/http/room.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { of } from 'rxjs';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { MatMenuModule } from '@angular/material/menu';
@@ -35,8 +20,8 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { ContentState } from '@app/core/models/content-state';
+import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 
 @Injectable()
 class MockContentService {
@@ -63,16 +48,6 @@ class MockContentService {
 }
 
 @Injectable()
-class MockEventService {
-  on() {
-    return of('1234');
-  }
-}
-
-@Injectable()
-class MockRoomService {}
-
-@Injectable()
 class MockContentGroupService {
   getByRoomIdAndName() {
     return of(new ContentGroup('roomId', 'name', [], true));
@@ -85,39 +60,18 @@ class MockAnnouncer {
 }
 
 @Injectable()
-class MockRoomStatsService {
-  getStats() {
-    return of({});
-  }
-}
-
-@Injectable()
 class MockDialogService {}
-
-@Injectable()
-class MockLocalFileService {}
-
-@Injectable()
-class MockHotykeyService {}
 
 describe('ContentListComponent', () => {
   let component: ContentListComponent;
   let fixture: ComponentFixture<ContentListComponent>;
 
-  const data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-  };
-
-  const snapshot = new ActivatedRouteSnapshot();
-  const params = {
-    seriesName: 'SERIES',
-  };
-
-  snapshot.params = params;
-
-  const activatedRouteStub = new ActivatedRouteStub(params, data, snapshot);
-
   const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
+
+  const mockHotkeyService = jasmine.createSpyObj([
+    'registerHotkey',
+    'unregisterHotkey',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -128,20 +82,8 @@ describe('ContentListComponent', () => {
           useClass: MockContentService,
         },
         {
-          provide: RoomStatsService,
-          useClass: MockRoomStatsService,
-        },
-        {
           provide: NotificationService,
           useClass: MockNotificationService,
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
-          provide: RoomService,
-          useClass: MockRoomService,
         },
         {
           provide: ContentGroupService,
@@ -152,20 +94,8 @@ describe('ContentListComponent', () => {
           useClass: MockAnnouncer,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: DialogService,
           useClass: MockDialogService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LocalFileService,
-          useClass: MockLocalFileService,
         },
         {
           provide: Router,
@@ -173,7 +103,7 @@ describe('ContentListComponent', () => {
         },
         {
           provide: HotkeyService,
-          useClass: MockHotykeyService,
+          UserActivation: mockHotkeyService,
         },
         {
           provide: A11yRenderedBodyPipe,
@@ -182,10 +112,6 @@ describe('ContentListComponent', () => {
         {
           provide: ContentPublishService,
           useClass: ContentPublishService,
-        },
-        {
-          provide: FeatureFlagService,
-          useClass: MockFeatureFlagService,
         },
       ],
       imports: [getTranslocoModule(), MatMenuModule],
@@ -196,6 +122,19 @@ describe('ContentListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentListComponent);
     component = fixture.componentInstance;
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
+    component.contentGroup = new ContentGroup('roomId', 'seriesName');
+    component.contents = [];
+    component.isModerator = false;
+    component.contentGroupStats = [
+      new ContentGroupStatistics('groupId', 'name', 0),
+    ];
     fixture.detectChanges();
   });
 

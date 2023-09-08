@@ -1,1 +1,69 @@
-// WIP
+.action-container {
+  margin: 0 0 10px;
+}
+
+.status-bar {
+  opacity: 0.8;
+}
+
+.inactive {
+  animation: disable 400ms;
+  color: var(--warn);
+}
+
+@keyframes activate {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  80% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes disable {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  80% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.active {
+  animation: activate 400ms;
+  color: var(--success);
+}
+
+@media (max-width: 500px) {
+  .add-desktop {
+    display: none;
+  }
+
+  .mat-mdc-card {
+    margin-bottom: 4vw;
+  }
+}
+
+@media (min-width: 501px) {
+  .mobile-add {
+    display: none;
+  }
+}

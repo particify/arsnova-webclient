@@ -69,6 +69,7 @@
     "a11y-format-sort": "Wählt das Format „Sortierung“ aus.",
     "a11y-format-flashcard": "Wählt das Format „Lernkarte“ aus.",
     "a11y-format-prioritization": "Wählt das Format Priorisierung aus.",
+    "a11y-format-wordcloud": "Wählt das Format Wortwolke“ aus.",
     "a11y-single-choice": "Momentan hast du was Format Single-Choice ausgewählt. Wechsle zu Multiple-Choice mit den Pfeiltasten.",
     "a11y-multiple-choice": "Momentan hast du was Format Multiple-Choice ausgewählt. Wechsle zu Single-Choice mit den Pfeiltasten.",
     "a11y-answer-yes": "Momentan ist der Inhalt mit „Ja“ beantwortet.",

@@ -69,6 +69,7 @@
     "a11y-format-sort": "Selecciona el formato “Ordenar”.",
     "a11y-format-flashcard": "Selecciona el formato “Tarjeta didáctica”.",
     "a11y-format-prioritization": "Selecciona el formato “Priorización”.",
+    "a11y-format-wordcloud": "Selecciona el formato “Nube de palabras”.",
     "a11y-single-choice": "Actualmente has seleccionado el formato de opción simple. Cambia a opción múltiple con las teclas de flecha.",
     "a11y-multiple-choice": "Actualmente has seleccionado el formato de opción múltiple. Cambia a opción simple con las teclas de flecha.",
     "a11y-answer-yes": "Actualmente la respuesta a este contenido es “Sí”. Cambia a “No” con las teclas de flecha.",

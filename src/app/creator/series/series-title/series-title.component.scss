@@ -1,0 +1,17 @@
+.card-title {
+  margin-top: -5px;
+  min-width: 240px;
+  align-items: center;
+}
+
+@media (max-width: 500px) {
+  .card-title {
+    margin: 0;
+  }
+}
+
+.active-input {
+  width: 100%;
+  font-size: larger;
+  font-weight: 500;
+}

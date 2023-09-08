@@ -56,9 +56,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./series/series.module').then((m) => m.SeriesModule),
     title: 'series',
-    data: {
-      parentRoute: ParentRoute.ROOM,
-    },
   },
   {
     path: 'comments',

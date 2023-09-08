@@ -49,10 +49,10 @@
           <button
             mat-icon-button
             *ngIf="!isEditMode || noAnswersYet"
-            attr.aria-label="{{
+            [attr.aria-label]="
               'creator.content.a11y-delete-answer'
                 | transloco: { answer: answer.answerOption.label }
-            }}"
+            "
             class="delete"
             (click)="deleteAnswer(i)"
             matTooltip="{{ 'creator.content.delete-answer' | transloco }}"

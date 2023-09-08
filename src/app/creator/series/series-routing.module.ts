@@ -4,11 +4,15 @@ import { SeriesPageComponent } from './series-page.component';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
+import { ParentRoute } from '@app/core/models/parent-route';
 
 const routes: Routes = [
   {
     path: '',
     component: SeriesPageComponent,
+    data: {
+      parentRoute: ParentRoute.ROOM,
+    },
   },
   {
     path: 'create',

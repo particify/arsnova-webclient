@@ -31,6 +31,9 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
+import { SeriesTitleComponent } from './series-title/series-title.component';
+import { ContentListSortComponent } from './content-list-sort/content-list-sort.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,8 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
     ContentTextCreationComponent,
     ContentYesNoCreationComponent,
     ContentPresentationComponent,
+    SeriesTitleComponent,
+    ContentListSortComponent,
   ],
   imports: [
     SeriesRoutingModule,
@@ -67,6 +72,7 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
     AnswerCountComponent,
     FormattingToolbarComponent,
     LoadingButtonComponent,
+    BaseCardComponent,
   ],
   exports: [ContentPresentationComponent],
   providers: [FocusModeService],

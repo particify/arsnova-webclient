@@ -69,6 +69,7 @@
     "a11y-format-sort": "Select the format “Sort”.",
     "a11y-format-flashcard": "Select the format “Flashcard”.",
     "a11y-format-prioritization": "Select the format “Prioritization”.",
+    "a11y-format-wordcloud": "Select the format “Wordcloud”.",
     "a11y-single-choice": "Currently you've chosen the format Single-Choice. Switch to multiple-choice with the arrow keys.",
     "a11y-multiple-choice": "Currently you've chosen the format multiple choice. Switch to Single-Choice with the arrow keys.",
     "a11y-answer-yes": "Currently the answer to this content is “Yes”. Change to “No” with the arrow keys.",

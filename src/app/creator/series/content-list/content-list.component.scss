@@ -17,11 +17,6 @@
   pointer-events: initial;
 }
 
-@mixin show-sort-icon {
-  opacity: 1;
-  max-width: 24px;
-}
-
 .show-bar {
   @include show-button-bar;
 }
@@ -39,37 +34,6 @@
   }
 }
 
-.content-box {
-  padding: 0 1em;
-  cursor: move;
-  background: var(--surface);
-
-  &:not(.cdk-drag-preview) {
-    border: 2px solid var(--surface);
-  }
-
-  &:focus {
-    border-color: var(--grey-light);
-  }
-}
-
-.sort-icon {
-  opacity: 0;
-  max-width: 0;
-}
-
-.content-box:hover,
-.content-box:focus-within {
-  * > .sort-icon {
-    @include show-sort-icon;
-  }
-}
-
-.active {
-  animation: activate 400ms;
-  color: var(--success);
-}
-
 .button-bar .active {
   @include show-button-bar;
 }
@@ -78,82 +42,12 @@
   .button-bar {
     @include show-button-bar;
   }
-
-  .sort-icon {
-    @include show-sort-icon;
-  }
-}
-
-.card-title {
-  margin-top: -5px;
-  min-width: 240px;
-  width: 50%;
-  align-items: center;
 }
 
 @media (max-width: 500px) {
-  .card-title {
-    margin: 0;
-  }
-
   .settings-buttons {
     margin-top: 10px;
   }
-}
-
-.action-container {
-  margin: 0 0 10px;
-}
-
-.status-bar {
-  opacity: 0.8;
-}
-
-.inactive {
-  animation: disable 400ms;
-  color: var(--warn);
-}
-
-@keyframes activate {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.9);
-  }
-
-  80% {
-    transform: scale(1.2);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes disable {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.9);
-  }
-
-  80% {
-    transform: scale(1.2);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-.active-input {
-  width: 100%;
-  font-size: larger;
-  font-weight: 500;
 }
 
 .mat-mdc-slide-toggle {
@@ -203,48 +97,12 @@
   overflow: hidden;
 }
 
-.cdk-drag-preview {
-  padding: 0 16px;
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow:
-    0 5px 5px -3px rgb(0 0 0 / 20%),
-    0 8px 10px 1px rgb(0 0 0 / 14%),
-    0 3px 14px 2px rgb(0 0 0 / 12%);
-}
-
-.cdk-drag-placeholder {
-  opacity: 0;
-}
-
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.content-list.cdk-drop-list-dragging .content-box:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
 .not-supported {
   cursor: initial;
 }
 
 @media (max-width: 500px) {
-  .add-desktop {
-    display: none;
-  }
-
-  .mat-mdc-card {
-    margin-bottom: 4vw;
-  }
-
   .type-icon {
-    display: none;
-  }
-}
-
-@media (min-width: 501px) {
-  .mobile-add {
     display: none;
   }
 }
