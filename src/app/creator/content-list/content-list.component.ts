@@ -42,11 +42,11 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { ExtensionFactory } from '@projects/extension-point/src/public-api';
 
 @Component({
-  selector: 'app-group-content',
-  templateUrl: './group-content.component.html',
-  styleUrls: ['./group-content.component.scss'],
+  selector: 'app-content-list',
+  templateUrl: './content-list.component.html',
+  styleUrls: ['./content-list.component.scss'],
 })
-export class GroupContentComponent
+export class ContentListComponent
   extends DragDropBaseComponent
   implements OnInit, OnDestroy
 {

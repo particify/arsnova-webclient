@@ -12,7 +12,7 @@ import { ContentPresentationComponent } from './content-presentation/content-pre
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
-import { GroupContentComponent } from './content-list/group-content/group-content.component';
+import { ContentListComponent } from './content-list/content-list.component';
 import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
@@ -100,7 +100,7 @@ const routes: Routes = [
   },
   {
     path: 'series/:seriesName',
-    component: GroupContentComponent,
+    component: ContentListComponent,
     title: 'series',
     data: {
       parentRoute: ParentRoute.ROOM,

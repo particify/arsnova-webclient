@@ -15,7 +15,7 @@ import { AccessComponent } from './settings/access/access.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
-import { GroupContentComponent } from './content-list/group-content/group-content.component';
+import { ContentListComponent } from './content-list/content-list.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ContentCreationComponent } from './content-creation/content-creation/content-creation.component';
@@ -76,7 +76,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     CommentSettingsComponent,
     ContentGroupCreationComponent,
     SettingsPageComponent,
-    GroupContentComponent,
+    ContentListComponent,
     ContentCreationComponent,
     PreviewComponent,
     ContentSortCreationComponent,

@@ -10,7 +10,6 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { GroupContentComponent } from '@app/creator/content-list/group-content/group-content.component';
 import { ContentGroup } from '@app/core/models/content-group';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
@@ -32,7 +31,7 @@ export class ContentGroupCreationComponent extends FormComponent {
   name = '';
 
   constructor(
-    public dialogRef: MatDialogRef<GroupContentComponent>,
+    public dialogRef: MatDialogRef<ContentGroupCreationComponent>,
     public dialog: MatDialog,
     private notificationService: NotificationService,
     private translateService: TranslocoService,

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { GroupContentComponent } from './group-content.component';
+import { ContentListComponent } from './content-list.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
@@ -100,9 +100,9 @@ class MockLocalFileService {}
 @Injectable()
 class MockHotykeyService {}
 
-describe('GroupContentComponent', () => {
-  let component: GroupContentComponent;
-  let fixture: ComponentFixture<GroupContentComponent>;
+describe('ContentListComponent', () => {
+  let component: ContentListComponent;
+  let fixture: ComponentFixture<ContentListComponent>;
 
   const data = {
     room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
@@ -121,11 +121,7 @@ describe('GroupContentComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        GroupContentComponent,
-        A11yIntroPipe,
-        A11yRenderedBodyPipe,
-      ],
+      declarations: [ContentListComponent, A11yIntroPipe, A11yRenderedBodyPipe],
       providers: [
         {
           provide: ContentService,
@@ -198,7 +194,7 @@ describe('GroupContentComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GroupContentComponent);
+    fixture = TestBed.createComponent(ContentListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
