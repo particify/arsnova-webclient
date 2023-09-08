@@ -1,28 +1,27 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
-import { ContentService } from '@app/core/services/http/content.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
 import { ActivatedRoute } from '@angular/router';
+import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentService } from '@app/core/services/http/content.service';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { AnswerOption } from '@app/core/models/answer-option';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   ContentCreationComponent,
   DisplayAnswer,
-} from '@app/creator/content-creation/content-creation/content-creation.component';
-import { AnnounceService } from '@app/core/services/util/announce.service';
+} from '@app/creator/series/content-creation/content-creation/content-creation.component';
+import { ContentPrioritization } from '@app/core/models/content-prioritization';
+import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
 import { FormService } from '@app/core/services/util/form.service';
-import { ContentType } from '@app/core/models/content-type.enum';
 
 @Component({
-  selector: 'app-content-sort-creation',
-  templateUrl: './content-sort-creation.component.html',
-  styleUrls: ['./content-sort-creation.component.scss'],
+  selector: 'app-content-prioritization-creation',
+  templateUrl: './content-prioritization-creation.component.html',
+  styleUrls: ['./content-prioritization-creation.component.scss'],
 })
-export class ContentSortCreationComponent
+export class ContentPrioritizationCreationComponent
   extends ContentCreationComponent
   implements OnInit
 {
@@ -50,14 +49,12 @@ export class ContentSortCreationComponent
   }
 
   initContentCreation() {
-    this.content = new ContentChoice();
-    this.content.format = ContentType.SORT;
+    this.content = new ContentPrioritization();
     this.fillCorrectAnswers();
   }
 
   initContentForEditing() {
     this.displayAnswers = this.initContentChoiceEditBase();
-    this.updateDragDropList();
     this.checkIfAnswersExist();
   }
 
@@ -67,11 +64,23 @@ export class ContentSortCreationComponent
         return true;
       } else {
         this.showWarning('creator.content.same-answer');
+        return false;
       }
     } else {
       this.showWarning('creator.content.no-empty2');
+      return false;
     }
-    return false;
+  }
+
+  checkIfAnswersExist() {
+    this.contentService
+      .getAnswer(this.content.roomId, this.content.id)
+      .subscribe((answer) => {
+        this.noAnswersYet = !!(
+          answer.roundStatistics[0] as PrioritizationRoundStatistics
+        ).assignedPoints;
+        this.isLoading = false;
+      });
   }
 
   addAnswer(answer: string) {
@@ -80,7 +89,6 @@ export class ContentSortCreationComponent
         this.displayAnswers.push(
           new DisplayAnswer(new AnswerOption(answer), true)
         );
-        this.updateDragDropList();
         this.resetAnswerInputEvent.emit(true);
       } else {
         const msg = this.translationService.translate(
@@ -97,7 +105,6 @@ export class ContentSortCreationComponent
   deleteAnswer(index: number) {
     this.displayAnswers.splice(index, 1);
     this.afterAnswerDeletion();
-    this.updateDragDropList();
   }
 
   showWarning(translationKey: string) {
@@ -118,9 +125,6 @@ export class ContentSortCreationComponent
       return false;
     }
     if (this.displayAnswers.length >= 2) {
-      (this.content as ContentChoice).correctOptionIndexes = Object.keys(
-        this.displayAnswers.map((a) => a.answerOption)
-      ).map((index) => parseInt(index, 10));
       return true;
     } else {
       const msg = this.translationService.translate(
@@ -131,7 +135,7 @@ export class ContentSortCreationComponent
     }
   }
 
-  updateDragDropList() {
-    this.dragDroplist = this.displayAnswers;
+  resetAnswers() {
+    this.displayAnswers = [];
   }
 }

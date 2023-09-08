@@ -4,7 +4,7 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import { TranslocoService } from '@ngneat/transloco';
 import { ActivatedRoute } from '@angular/router';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
+import { ContentCreationComponent } from '@app/creator/series/content-creation/content-creation/content-creation.component';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Content } from '@app/core/models/content';

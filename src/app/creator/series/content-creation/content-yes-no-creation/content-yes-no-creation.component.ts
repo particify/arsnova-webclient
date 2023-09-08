@@ -5,7 +5,7 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentCreationComponent } from '@app/creator/content-creation/content-creation/content-creation.component';
+import { ContentCreationComponent } from '@app/creator/series/content-creation/content-creation/content-creation.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
 import { ContentType } from '@app/core/models/content-type.enum';

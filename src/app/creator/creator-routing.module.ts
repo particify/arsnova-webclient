@@ -6,13 +6,12 @@ import {
 } from '@projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
-import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
-import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
+import { ContentCreationPageComponent } from './series/content-creation/content-creation-page/content-creation-page.component';
+import { StatisticsPageComponent } from './series/statistics-page/statistics-page.component';
+import { ContentPresentationComponent } from './series/content-presentation/content-presentation.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
-import { ContentListComponent } from './content-list/content-list.component';
 import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
@@ -53,27 +52,13 @@ const routes: Routes = [
     title: 'settings',
   },
   {
-    path: 'series/:seriesName/create',
-    component: ContentCreationPageComponent,
-    title: 'content-creation',
-  },
-  {
-    path: 'series/:seriesName/edit/:contentId',
-    component: ContentCreationPageComponent,
+    path: 'series/:seriesName',
+    loadChildren: () =>
+      import('./series/series.module').then((m) => m.SeriesModule),
+    title: 'series',
     data: {
-      isEditMode: true,
+      parentRoute: ParentRoute.ROOM,
     },
-    title: 'content-edit',
-  },
-  {
-    path: 'series/:seriesName/statistics',
-    component: StatisticsPageComponent,
-    title: 'series',
-  },
-  {
-    path: 'series/:seriesName/:contentIndex',
-    component: ContentPresentationComponent,
-    title: 'series',
   },
   {
     path: 'comments',
@@ -94,14 +79,6 @@ const routes: Routes = [
         (m) => m.LiveFeedbackModule
       ),
     title: 'live-feedback',
-    data: {
-      parentRoute: ParentRoute.ROOM,
-    },
-  },
-  {
-    path: 'series/:seriesName',
-    component: ContentListComponent,
-    title: 'series',
     data: {
       parentRoute: ParentRoute.ROOM,
     },

@@ -10,9 +10,9 @@ import { QrCodeModule } from 'ng-qrcode';
 import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
 import { BarNotificationComponent } from './bars/bar-notification/bar-notification.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
-import { CreatorModule } from '@app/creator/creator.module';
 import { CoreModule } from '@app/core/core.module';
 import { CopyUrlComponent } from '@app/standalone/copy-url/copy-url.component';
+import { SeriesModule } from '@app/creator/series/series.module';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,7 @@ import { CopyUrlComponent } from '@app/standalone/copy-url/copy-url.component';
     extensions,
     PresentationRoutingModule,
     CoreModule,
-    CreatorModule,
+    SeriesModule,
     ExtensionPointModule,
     SharedModule,
     TranslocoModule,

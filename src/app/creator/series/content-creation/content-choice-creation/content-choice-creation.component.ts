@@ -11,10 +11,10 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import {
   ContentCreationComponent,
   DisplayAnswer,
-} from '@app/creator/content-creation/content-creation/content-creation.component';
+} from '@app/creator/series/content-creation/content-creation/content-creation.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ActivatedRoute } from '@angular/router';
-import { CreateAnswerOptionComponent } from '@app/creator/content-creation/create-answer-option/create-answer-option.component';
+import { CreateAnswerOptionComponent } from '@app/creator/series/content-creation/create-answer-option/create-answer-option.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
