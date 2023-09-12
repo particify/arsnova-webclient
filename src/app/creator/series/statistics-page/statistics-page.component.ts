@@ -55,15 +55,7 @@ export class StatisticsPageComponent implements OnInit {
     });
   }
 
-  initCurrentGroup(routeGroup: string) {
-    if (routeGroup) {
-      this.setCurrentGroupByName(routeGroup);
-    } else {
-      this.currentGroup = this.contentGroups[0];
-    }
-  }
-
-  setCurrentGroupByName(name: string) {
+  initCurrentGroup(name: string) {
     const group = this.contentGroups.find((cg) => cg.name === name);
     if (group) {
       this.currentGroup = group;
@@ -80,14 +72,13 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   updateUrl() {
-    const urlList = [
+    this.router.navigate([
       'edit',
       this.shortId,
       'series',
       this.currentGroup.name,
       'statistics',
-    ];
-    this.router.navigate(urlList);
+    ]);
   }
 
   showDeleteDialog() {
