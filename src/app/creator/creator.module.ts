@@ -10,9 +10,7 @@ import { CommentSettingsComponent } from './settings/comment-settings/comment-se
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
-import { ExportComponent } from './_dialogs/export/export.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 import { AnnouncementSettingsComponent } from './settings/announcement-settings/announcement-settings.component';
 import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
@@ -48,8 +46,6 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     CommentSettingsComponent,
     ContentGroupCreationComponent,
     SettingsPageComponent,
-    ExportComponent,
-    PublishContentComponent,
     AnnouncementSettingsComponent,
     CreatorPageComponent,
   ],

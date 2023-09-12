@@ -19,7 +19,6 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { InfoBarItem } from '@app/shared/bars/info-bar/info-bar.component';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { Subject, take, takeUntil } from 'rxjs';
@@ -31,6 +30,7 @@ import { ContentPublishActionType } from '@app/core/models/content-publish-actio
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
+import { PublishContentComponent } from '@app/creator/series/_dialogs/publish-content/publish-content.component';
 
 @Component({
   selector: 'app-content-presentation',

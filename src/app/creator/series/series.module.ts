@@ -34,6 +34,8 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { SeriesTitleComponent } from './series-title/series-title.component';
 import { ContentListSortComponent } from './content-list-sort/content-list-sort.component';
+import { ExportComponent } from './_dialogs/export/export.component';
+import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { ContentListSortComponent } from './content-list-sort/content-list-sort.
     ContentPresentationComponent,
     SeriesTitleComponent,
     ContentListSortComponent,
+    ExportComponent,
+    PublishContentComponent,
   ],
   imports: [
     SeriesRoutingModule,

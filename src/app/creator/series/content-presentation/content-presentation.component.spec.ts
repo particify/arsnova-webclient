@@ -36,7 +36,7 @@ import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { UserSettings } from '@app/core/models/user-settings';
 import { StepperComponent } from '@app/shared/stepper/stepper.component';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { PublishContentComponent } from '@app/creator/_dialogs/publish-content/publish-content.component';
+import { PublishContentComponent } from '@app/creator/series/_dialogs/publish-content/publish-content.component';
 import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
