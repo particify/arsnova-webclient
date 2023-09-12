@@ -1,236 +1,128 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
-import { AnswerOption } from '@app/core/models/answer-option';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { ContentService } from '@app/core/services/http/content.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import {
-  ContentCreationComponent,
-  DisplayAnswer,
-} from '@app/creator/series/content-creation/content-creation/content-creation.component';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { ActivatedRoute } from '@angular/router';
+import { DisplayAnswer } from '@app/creator/series/content-creation/_models/display-answer';
 import { CreateAnswerOptionComponent } from '@app/creator/series/content-creation/create-answer-option/create-answer-option.component';
 import { FormService } from '@app/core/services/util/form.service';
-import { take } from 'rxjs';
+import { Content } from '@app/core/models/content';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { AnswerOptionListComponent } from '@app/creator/series/content-creation/answer-option-list/answer-option-list.component';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentCreation } from '@app/creator/series/content-creation/content-creation-page/content-creation';
+import { FormComponent } from '@app/standalone/form/form.component';
 
 @Component({
   selector: 'app-content-choice-creation',
   templateUrl: './content-choice-creation.component.html',
   styleUrls: ['./content-choice-creation.component.scss'],
+  providers: [
+    {
+      provide: 'ContentCreation',
+      useExisting: ContentChoiceCreationComponent,
+    },
+  ],
 })
 export class ContentChoiceCreationComponent
-  extends ContentCreationComponent
-  implements OnInit
+  extends FormComponent
+  implements OnInit, OnChanges, ContentCreation
 {
   @ViewChild(CreateAnswerOptionComponent)
-  createAnswerOptionComponent: CreateAnswerOptionComponent;
+  answerCreation: CreateAnswerOptionComponent;
+  @ViewChild(AnswerOptionListComponent)
+  answerList: AnswerOptionListComponent;
 
+  @Input() content?: Content;
+  @Input() isAnswered: boolean;
+  @Input() isEditMode: boolean;
+
+  displayAnswers: DisplayAnswer[] = [];
   multipleCorrectAnswers = false;
   noCorrectAnswers = false;
-  newAnswerOptionChecked = false;
-  resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
-  isAnswerEdit = -1;
 
   constructor(
-    protected contentService: ContentService,
-    protected notificationService: NotificationService,
-    protected translationService: TranslocoService,
-    protected contentGroupService: ContentGroupService,
-    protected route: ActivatedRoute,
-    protected announceService: AnnounceService,
+    private contentService: ContentService,
     protected formService: FormService
   ) {
-    super(
-      contentService,
-      notificationService,
-      translationService,
-      route,
-      contentGroupService,
-      announceService,
-      formService
+    super(formService);
+  }
+
+  ngOnInit(): void {
+    if (this.isEditMode) {
+      this.initContentForEditing();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.content.currentValue) {
+      this.displayAnswers = [];
+    }
+  }
+
+  changeMultiple(change: MatCheckboxChange) {
+    this.multipleCorrectAnswers = change.checked;
+  }
+
+  changeNoCorrect(change: MatCheckboxChange) {
+    this.noCorrectAnswers = change.checked;
+    this.displayAnswers.forEach((val) => (val.correct = false));
+  }
+
+  getContent(): Content | undefined {
+    if (!this.answerCreation || this.answerCreation.isFormValid()) {
+      if (
+        this.answerList.isListValid(
+          !this.noCorrectAnswers,
+          this.multipleCorrectAnswers
+        )
+      ) {
+        this.prepareContent();
+        return this.content;
+      }
+    }
+    return;
+  }
+
+  private prepareContent() {
+    if (!this.isEditMode) {
+      this.content = new ContentChoice();
+    }
+    (this.content as ContentChoice).multiple = this.multipleCorrectAnswers;
+    this.setAnswerOptions();
+    if (!this.noCorrectAnswers) {
+      this.setCorrectOptionIndexes();
+    }
+  }
+
+  private setAnswerOptions(): void {
+    (this.content as ContentChoice).options = this.displayAnswers.map(
+      (d) => d.answerOption
     );
   }
 
-  initContentCreation() {
-    this.content = new ContentChoice();
-    this.isLoading = false;
+  private setCorrectOptionIndexes(): void {
+    const correctOptionIndexes: number[] = [];
+    this.displayAnswers.forEach((val, index) => {
+      if (val.correct) {
+        correctOptionIndexes.push(index);
+      }
+    });
+    (this.content as ContentChoice).correctOptionIndexes = correctOptionIndexes;
   }
 
-  initContentForEditing() {
-    this.displayAnswers = this.initContentChoiceEditBase();
+  private initContentForEditing() {
+    const content = this.content as ContentChoice;
+    this.displayAnswers = this.contentService.getAnswerOptions(
+      content.options,
+      content.correctOptionIndexes
+    );
     this.multipleCorrectAnswers = (this.content as ContentChoice).multiple;
     this.noCorrectAnswers = !(this.content as ContentChoice)
       .correctOptionIndexes;
-    this.checkIfAnswersExist();
-  }
-
-  addAnswer(answer: string) {
-    if (answer === '') {
-      this.translationService
-        .selectTranslate('creator.content.no-empty2')
-        .pipe(take(1))
-        .subscribe((message) => {
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.FAILED
-          );
-        });
-      this.newAnswerOptionChecked = false;
-      this.resetAnswerInputEvent.emit(true);
-      return;
-    }
-    if (
-      !this.multipleCorrectAnswers &&
-      (this.content as ContentChoice).correctOptionIndexes?.length > 0 &&
-      this.newAnswerOptionChecked
-    ) {
-      this.translationService
-        .selectTranslate('creator.content.only-one')
-        .pipe(take(1))
-        .subscribe((message) => {
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.FAILED
-          );
-        });
-      this.newAnswerOptionChecked = false;
-      this.resetAnswerInputEvent.emit(true);
-      return;
-    }
-    if (this.answerExists(answer)) {
-      return;
-    }
-    if ((this.content as ContentChoice).options.length < 8) {
-      (this.content as ContentChoice).options.push(new AnswerOption(answer));
-      this.newAnswerOptionChecked = false;
-      this.resetAnswerInputEvent.emit(true);
-      this.fillCorrectAnswers();
-      this.announceService.announce('creator.content.a11y-answer-added');
-    } else {
-      const msg = this.translationService.translate(
-        'creator.content.max-answers'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
-    }
-  }
-
-  goInEditMode(index: number): void {
-    this.isAnswerEdit = index;
-  }
-
-  leaveEditMode(): void {
-    this.saveAnswerLabels();
-    this.isAnswerEdit = -1;
-  }
-
-  deleteAnswer(index: number) {
-    (this.content as ContentChoice).options.splice(index, 1);
-    for (
-      let j = 0;
-      j < (this.content as ContentChoice).correctOptionIndexes?.length;
-      j++
-    ) {
-      if ((this.content as ContentChoice).correctOptionIndexes[j] === index) {
-        (this.content as ContentChoice).correctOptionIndexes.splice(j, 1);
-      }
-      if ((this.content as ContentChoice).correctOptionIndexes[j] > index) {
-        (this.content as ContentChoice).correctOptionIndexes[j] =
-          (this.content as ContentChoice).correctOptionIndexes[j] - 1;
-      }
-    }
-    this.fillCorrectAnswers();
-    this.afterAnswerDeletion();
-  }
-
-  saveChanges(index: number, answer: DisplayAnswer) {
-    (this.content as ContentChoice).options[index].label =
-      answer.answerOption.label;
-    if (!(this.content as ContentChoice).correctOptionIndexes) {
-      (this.content as ContentChoice).correctOptionIndexes = [];
-    }
-    const indexInCorrectOptionIndexes = (
-      this.content as ContentChoice
-    ).correctOptionIndexes.indexOf(index);
-    if (indexInCorrectOptionIndexes === -1 && answer.correct) {
-      if (!this.multipleCorrectAnswers) {
-        (this.content as ContentChoice).correctOptionIndexes = [index];
-        this.fillCorrectAnswers();
-        return;
-      }
-      (this.content as ContentChoice).correctOptionIndexes.push(index);
-    }
-    if (indexInCorrectOptionIndexes !== -1 && !answer.correct) {
-      (this.content as ContentChoice).correctOptionIndexes.splice(
-        indexInCorrectOptionIndexes,
-        1
-      );
-    }
-    this.fillCorrectAnswers();
-  }
-
-  switchValue(label: string, index: number) {
-    const answer = new DisplayAnswer(
-      new AnswerOption(this.displayAnswers[index].answerOption.label),
-      !this.displayAnswers[index].correct
-    );
-    this.saveChanges(index, answer);
-    const state = answer.correct ? 'correct' : 'wrong';
-    this.announceService.announce('content.a11y-answer-marked-' + state);
-  }
-
-  removeCorrectAnswers() {
-    for (let i = 0; i < this.displayAnswers.length; i++) {
-      this.displayAnswers[i].correct = false;
-      this.saveChanges(i, this.displayAnswers[i]);
-    }
-  }
-
-  createContent(): boolean {
-    if ((this.content as ContentChoice).options.length < 2) {
-      const msg = this.translationService.translate(
-        'creator.content.need-answers'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return false;
-    }
-    if (
-      !this.multipleCorrectAnswers &&
-      !this.noCorrectAnswers &&
-      (this.content as ContentChoice).correctOptionIndexes.length !== 1
-    ) {
-      const msg = this.translationService.translate(
-        'creator.content.select-one'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return false;
-    }
-    if (
-      this.multipleCorrectAnswers &&
-      !this.noCorrectAnswers &&
-      (this.content as ContentChoice).correctOptionIndexes.length < 1
-    ) {
-      const msg = this.translationService.translate(
-        'creator.content.at-least-one'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return false;
-    }
-    if (this.createAnswerOptionComponent?.newAnswer.length > 0) {
-      const msg = this.translationService.translate(
-        'creator.content.unsaved-answer'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return false;
-    }
-    (this.content as ContentChoice).multiple = this.multipleCorrectAnswers;
-    if (!this.saveAnswerLabels(true)) {
-      return false;
-    }
-    return true;
   }
 }

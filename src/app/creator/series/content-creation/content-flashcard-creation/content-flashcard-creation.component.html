@@ -4,9 +4,11 @@
     <textarea
       #answerInput
       (input)="updateTextContainsImage(answerInput.value)"
-      [disabled]="disabled"
+      [disabled]="formDisabled"
       [(ngModel)]="answer"
-      aria-labelledby="answer"
+      [attr.aria-label]="
+        'creator.content.a11y-enter-flashcard-answer' | transloco
+      "
       id="body-input"
       cdkAutosizeMaxRows="8"
       cdkAutosizeMinRows="3"
@@ -23,9 +25,3 @@
   ></app-hint>
   <div class="form-spacer"></div>
 </form>
-
-<div class="visually-hidden">
-  <div id="answer">
-    {{ 'creator.content.a11y-enter-flashcard-answer' | transloco }}
-  </div>
-</div>

@@ -24,6 +24,8 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ContentState } from '@app/core/models/content-state';
+import { DisplayAnswer } from '@app/creator/series/content-creation/_models/display-answer';
+import { AnswerOption } from '@app/core/models/answer-option';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -422,5 +424,21 @@ export class ContentService extends AbstractEntityService<Content> {
 
   getRoundStarted(): Observable<Content | null> {
     return this.roundStarted;
+  }
+
+  getAnswerOptions(
+    options: AnswerOption[],
+    correctOptionIndexes?: number[]
+  ): DisplayAnswer[] {
+    const answers: DisplayAnswer[] = [];
+    options?.map((option, i) => {
+      answers.push(
+        new DisplayAnswer(
+          new AnswerOption(option.label),
+          correctOptionIndexes ? correctOptionIndexes.includes(i) : false
+        )
+      );
+    });
+    return answers;
   }
 }

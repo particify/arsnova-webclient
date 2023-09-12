@@ -1,18 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ContentService } from '@app/core/services/http/content.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@ngneat/transloco';
-import { ActivatedRoute } from '@angular/router';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentCreationComponent } from '@app/creator/series/content-creation/content-creation/content-creation.component';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
-import { EventService } from '@app/core/services/util/event.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { Content } from '@app/core/models/content';
+import { ContentCreation } from '@app/creator/series/content-creation/content-creation-page/content-creation';
 
 const MAX_KEYWORDS = 10;
 
@@ -20,58 +16,49 @@ const MAX_KEYWORDS = 10;
   selector: 'app-content-wordcloud-creation',
   templateUrl: './content-wordcloud-creation.component.html',
   styleUrls: ['./content-wordcloud-creation.component.scss'],
+  providers: [
+    {
+      provide: 'ContentCreation',
+      useExisting: ContentWordcloudCreationComponent,
+    },
+  ],
 })
 export class ContentWordcloudCreationComponent
-  extends ContentCreationComponent
-  implements OnInit
+  extends FormComponent
+  implements OnInit, ContentCreation
 {
-  @Input() format: ContentType;
+  @Input() content?: Content;
+  @Input() isEditMode: boolean;
 
   maxAnswers = 3;
 
   constructor(
-    public eventService: EventService,
-    protected contentService: ContentService,
-    protected notificationService: NotificationService,
-    protected translationService: TranslocoService,
-    protected route: ActivatedRoute,
-    protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService,
+    private notificationService: NotificationService,
+    private translateService: TranslocoService,
     protected formService: FormService
   ) {
-    super(
-      contentService,
-      notificationService,
-      translationService,
-      route,
-      contentGroupService,
-      announceService,
-      formService
-    );
+    super(formService);
   }
-
-  initContentCreation() {
-    this.content = new ContentWordcloud();
-  }
-
-  initContentForEditing() {
-    if (this.editContent) {
-      this.content = this.editContent;
+  ngOnInit(): void {
+    if (this.isEditMode) {
+      this.maxAnswers = (this.content as ContentWordcloud).maxAnswers;
     }
-    this.maxAnswers = (this.content as ContentWordcloud).maxAnswers;
   }
 
-  createContent(): boolean {
+  getContent(): Content | undefined {
+    if (!this.isEditMode) {
+      this.content = new ContentWordcloud();
+    }
     if (this.maxAnswers >= 1 && this.maxAnswers <= MAX_KEYWORDS) {
       (this.content as ContentWordcloud).maxAnswers = this.maxAnswers;
-      return true;
+      return this.content;
     } else {
-      const msg = this.translationService.translate(
+      const msg = this.translateService.translate(
         'creator.content.max-keywords-out-of-range',
         { min: 1, max: MAX_KEYWORDS }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return false;
+      return;
     }
   }
 }

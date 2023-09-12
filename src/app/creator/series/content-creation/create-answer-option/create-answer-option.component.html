@@ -4,14 +4,14 @@
       <mat-label>{{ 'creator.content.add-answer' | transloco }}</mat-label>
       <input
         matInput
-        [disabled]="disabled"
+        [disabled]="formDisabled"
         name="answer"
         #answerInput
         [(ngModel)]="newAnswer"
         autocomplete="off"
       />
       <button
-        [disabled]="disabled"
+        [disabled]="formDisabled"
         color="primary"
         class="add-button"
         mat-icon-button

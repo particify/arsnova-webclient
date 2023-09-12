@@ -1,89 +1,34 @@
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
+<div fxLayout="column" fxLayoutGap="10px">
   <div fxLayout="column">
     <mat-checkbox
-      [disabled]="disabled"
+      [disabled]="formDisabled"
       [checked]="multipleCorrectAnswers"
-      [(ngModel)]="multipleCorrectAnswers"
+      (change)="changeMultiple($event)"
       name="multiple"
     >
       <span>{{ 'creator.content.multiple-answers-allowed' | transloco }}</span>
     </mat-checkbox>
     <mat-checkbox
-      [disabled]="disabled"
+      [disabled]="formDisabled"
       [checked]="noCorrectAnswers"
-      [(ngModel)]="noCorrectAnswers"
-      (ngModelChange)="removeCorrectAnswers()"
+      (change)="changeNoCorrect($event)"
       name="noCorrect"
     >
       <span>{{ 'creator.content.no-correct-answer' | transloco }}</span>
     </mat-checkbox>
   </div>
-  <div *ngIf="displayAnswers.length > 0">
-    <app-divider></app-divider>
-    <mat-list>
-      <mat-list-item *ngFor="let answer of displayAnswers; let i = index">
-        <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
-          <mat-checkbox
-            id="answer-{{ i }}"
-            [disabled]="disabled"
-            *ngIf="!noCorrectAnswers"
-            (ngModelChange)="switchValue(answer.answerOption.label, i)"
-            [(ngModel)]="answer.correct"
-            [checked]="answer.correct"
-            name="{{ answer.answerOption.label }}"
-            aria-label="{{
-              'creator.content.a11y-answer-checkbox'
-                | transloco: { answer: answer.answerOption.label }
-            }}"
-          >
-          </mat-checkbox>
-          <form fxLayout="row" class="full-width">
-            <mat-form-field class="edit-input surface-input no-field-hint">
-              <input
-                id="answerEdit-{{ i }}"
-                name="answerEdit"
-                matInput
-                [disabled]="disabled"
-                [(ngModel)]="answer.answerOption.label"
-                (focus)="goInEditMode(i)"
-                (blur)="leaveEditMode()"
-                autocomplete="off"
-              />
-            </mat-form-field>
-          </form>
-          <button
-            mat-icon-button
-            *ngIf="!isEditMode || noAnswersYet"
-            attr.aria-label="{{
-              'creator.content.a11y-delete-answer'
-                | transloco: { answer: answer.answerOption.label }
-            }}"
-            class="delete"
-            (click)="deleteAnswer(i)"
-            matTooltip="{{ 'creator.content.delete-answer' | transloco }}"
-          >
-            <mat-icon>clear</mat-icon>
-          </button>
-        </div>
-      </mat-list-item>
-    </mat-list>
+  <div>
+    <app-divider *ngIf="displayAnswers.length > 0"></app-divider>
+    <app-answer-option-list
+      [answers]="displayAnswers"
+      [hasCorrectAnswers]="!noCorrectAnswers"
+      [hasMultipleCorrectAnswers]="multipleCorrectAnswers"
+      [allowDeletion]="!isEditMode || !isAnswered"
+      [disabled]="formDisabled"
+    ></app-answer-option-list>
   </div>
   <app-create-answer-option
-    *ngIf="!isEditMode || noAnswersYet"
-    (answerCreated)="addAnswer($event)"
-    [resetEvent]="resetAnswerInputEvent"
-    [disabled]="disabled"
+    *ngIf="!isEditMode || !isAnswered"
+    [answers]="displayAnswers"
   ></app-create-answer-option>
-</div>
-
-<div class="visually-hidden">
-  <div id="single-choice">
-    {{ 'creator.content.a11y-single-choice' | transloco }}
-  </div>
-  <div id="multiple-choice">
-    {{ 'creator.content.a11y-multiple-choice' | transloco }}
-  </div>
-  <div id="delete-answer">
-    {{ 'creator.content.a11y-delete-answer' | transloco }}
-  </div>
 </div>

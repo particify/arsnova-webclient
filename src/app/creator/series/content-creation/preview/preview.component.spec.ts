@@ -7,7 +7,6 @@ import { ContentAnswerService } from '@app/core/services/http/content-answer.ser
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentState } from '@app/core/models/content-state';
 
 @Injectable()
 class MockContentAnswerService {}

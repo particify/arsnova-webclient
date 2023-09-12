@@ -1,77 +1,78 @@
-import { Component, OnInit } from '@angular/core';
-import { ContentService } from '@app/core/services/http/content.service';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@ngneat/transloco';
-import { ActivatedRoute } from '@angular/router';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentCreationComponent } from '@app/creator/series/content-creation/content-creation/content-creation.component';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
-import { EventService } from '@app/core/services/util/event.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormService } from '@app/core/services/util/form.service';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { Content } from '@app/core/models/content';
+import { ContentCreation } from '@app/creator/series/content-creation/content-creation-page/content-creation';
 
 @Component({
   selector: 'app-content-flashcard-creation',
   templateUrl: './content-flashcard-creation.component.html',
+  providers: [
+    {
+      provide: 'ContentCreation',
+      useExisting: ContentFlashcardCreationComponent,
+    },
+  ],
 })
 export class ContentFlashcardCreationComponent
-  extends ContentCreationComponent
-  implements OnInit
+  extends FormComponent
+  implements OnInit, OnChanges, ContentCreation
 {
-  answer?: string;
+  @Input() content?: Content;
+  @Input() isEditMode: boolean;
+
+  answer: string;
   textContainsImage: boolean;
   HintType = HintType;
 
   constructor(
-    protected contentService: ContentService,
-    protected notificationService: NotificationService,
-    protected translationService: TranslocoService,
-    protected route: ActivatedRoute,
-    protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService,
-    public eventService: EventService,
+    private notificationService: NotificationService,
+    private translationService: TranslocoService,
     private formattingService: FormattingService,
     protected formService: FormService
   ) {
-    super(
-      contentService,
-      notificationService,
-      translationService,
-      route,
-      contentGroupService,
-      announceService,
-      formService
-    );
+    super(formService);
   }
 
-  initContentCreation() {
-    this.content = new ContentFlashcard();
+  ngOnInit(): void {
+    if (this.isEditMode) {
+      this.answer = (this.content as ContentFlashcard).additionalText;
+    }
   }
 
-  resetAnswers(): void {
-    this.answer = undefined;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.content.currentValue) {
+      this.answer = '';
+    }
   }
 
-  initContentForEditing() {
-    this.initContentFlashcardEditBase();
-    this.answer = (this.content as ContentFlashcard).additionalText;
-  }
-
-  createContent(): boolean {
+  getContent(): Content | undefined {
     if (this.answer) {
+      if (!this.isEditMode) {
+        this.content = new ContentFlashcard();
+      }
       (this.content as ContentFlashcard).additionalText = this.answer;
-      return true;
+      return this.content;
     } else {
       const msg = this.translationService.translate(
         'creator.content.need-answer'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return false;
+      return;
     }
   }
 

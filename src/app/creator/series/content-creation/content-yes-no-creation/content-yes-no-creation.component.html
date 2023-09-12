@@ -1,36 +1,17 @@
-<form
-  *ngIf="!isLoading"
-  (ngSubmit)="createContent()"
-  fxLayout="column"
-  fxLayoutAlign="start"
->
+<form fxLayout="column" fxLayoutAlign="start">
   <mat-radio-group
-    [disabled]="disabled"
-    [(ngModel)]="yesno"
+    [disabled]="formDisabled"
+    [(ngModel)]="currentOption"
     [ngModelOptions]="{ standalone: true }"
     fxLayout="column"
     fxLayoutAlign="center"
   >
     <mat-radio-button
-      [value]="-1"
-      [checked]="false"
-      aria-labelledby="answer-neither"
+      *ngFor="let option of options"
+      [value]="option"
+      [attr.aria-label]="'creator.content.a11y-answer-' + option | transloco"
     >
-      {{ 'creator.content.answer-neither' | transloco }}
-    </mat-radio-button>
-    <mat-radio-button [value]="0" [checked]="true" aria-labelledby="answer-yes">
-      {{ 'creator.content.answer-yes' | transloco }}
-    </mat-radio-button>
-    <mat-radio-button [value]="1" [checked]="false" aria-labelledby="answer-no">
-      {{ 'creator.content.answer-no' | transloco }}
+      {{ 'creator.content.answer-' + option | transloco }}
     </mat-radio-button>
   </mat-radio-group>
 </form>
-
-<div class="visually-hidden">
-  <div id="answer-yes">{{ 'creator.content.a11y-answer-yes' | transloco }}</div>
-  <div id="answer-no">{{ 'creator.content.a11y-answer-no' | transloco }}</div>
-  <div id="answer-neither">
-    {{ 'creator.content.a11y-answer-neither' | transloco }}
-  </div>
-</div>

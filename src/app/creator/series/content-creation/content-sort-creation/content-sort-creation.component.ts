@@ -1,137 +1,90 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
-import { ContentService } from '@app/core/services/http/content.service';
 import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
-import { ActivatedRoute } from '@angular/router';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { AnswerOption } from '@app/core/models/answer-option';
-import {
-  ContentCreationComponent,
-  DisplayAnswer,
-} from '@app/creator/series/content-creation/content-creation/content-creation.component';
-import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { DisplayAnswer } from '@app/creator/series/content-creation/_models/display-answer';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { Content } from '@app/core/models/content';
+import { CreateAnswerOptionComponent } from '@app/creator/series/content-creation/create-answer-option/create-answer-option.component';
+import { AnswerOptionListComponent } from '@app/creator/series/content-creation/answer-option-list/answer-option-list.component';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentCreation } from '@app/creator/series/content-creation/content-creation-page/content-creation';
 
 @Component({
   selector: 'app-content-sort-creation',
   templateUrl: './content-sort-creation.component.html',
-  styleUrls: ['./content-sort-creation.component.scss'],
+  providers: [
+    {
+      provide: 'ContentCreation',
+      useExisting: ContentSortCreationComponent,
+    },
+  ],
 })
 export class ContentSortCreationComponent
-  extends ContentCreationComponent
-  implements OnInit
+  extends FormComponent
+  implements OnInit, OnChanges, ContentCreation
 {
-  isAnswerEdit = -1;
-  resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @ViewChild(CreateAnswerOptionComponent)
+  answerCreation: CreateAnswerOptionComponent;
+  @ViewChild(AnswerOptionListComponent)
+  answerList: AnswerOptionListComponent;
+
+  @Input() content?: Content;
+  @Input() isEditMode: boolean;
+  @Input() isAnswered: boolean;
+
+  displayAnswers: DisplayAnswer[] = [];
 
   constructor(
-    protected contentService: ContentService,
-    protected notificationService: NotificationService,
-    protected translationService: TranslocoService,
-    protected route: ActivatedRoute,
-    protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService,
+    private contentService: ContentService,
     protected formService: FormService
   ) {
-    super(
-      contentService,
-      notificationService,
-      translationService,
-      route,
-      contentGroupService,
-      announceService,
-      formService
-    );
+    super(formService);
   }
 
-  initContentCreation() {
-    this.content = new ContentChoice();
-    this.content.format = ContentType.SORT;
-    this.fillCorrectAnswers();
-  }
-
-  initContentForEditing() {
-    this.displayAnswers = this.initContentChoiceEditBase();
-    this.updateDragDropList();
-    this.checkIfAnswersExist();
-  }
-
-  answerInputCheck(answer: string): boolean {
-    if (answer !== '') {
-      if (!this.answerExists(answer)) {
-        return true;
-      } else {
-        this.showWarning('creator.content.same-answer');
-      }
-    } else {
-      this.showWarning('creator.content.no-empty2');
-    }
-    return false;
-  }
-
-  addAnswer(answer: string) {
-    if (this.answerInputCheck(answer)) {
-      if (this.displayAnswers.length < 8) {
-        this.displayAnswers.push(
-          new DisplayAnswer(new AnswerOption(answer), true)
-        );
-        this.updateDragDropList();
-        this.resetAnswerInputEvent.emit(true);
-      } else {
-        const msg = this.translationService.translate(
-          'creator.content.max-answers'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      }
-    }
-  }
-
-  deleteAnswer(index: number) {
-    this.displayAnswers.splice(index, 1);
-    this.afterAnswerDeletion();
-    this.updateDragDropList();
-  }
-
-  showWarning(translationKey: string) {
-    const msg = this.translationService.translate(translationKey);
-    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-  }
-
-  goInEditMode(index: number): void {
-    this.isAnswerEdit = index;
-  }
-
-  leaveEditMode(): void {
-    this.isAnswerEdit = -1;
-  }
-
-  createContent(): boolean {
-    if (!this.saveAnswerLabels(true)) {
-      return false;
-    }
-    if (this.displayAnswers.length >= 2) {
-      (this.content as ContentChoice).correctOptionIndexes = Object.keys(
-        this.displayAnswers.map((a) => a.answerOption)
-      ).map((index) => parseInt(index, 10));
-      return true;
-    } else {
-      const msg = this.translationService.translate(
-        'creator.content.need-answers'
+  ngOnInit(): void {
+    if (this.isEditMode) {
+      const content = this.content as ContentChoice;
+      this.displayAnswers = this.contentService.getAnswerOptions(
+        content.options
       );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return false;
     }
   }
 
-  updateDragDropList() {
-    this.dragDroplist = this.displayAnswers;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.content.currentValue) {
+      this.displayAnswers = [];
+    }
+  }
+
+  getContent(): Content | undefined {
+    if (!this.answerCreation || this.answerCreation.isFormValid()) {
+      if (this.answerList.isListValid(false, false)) {
+        this.prepareContent();
+        return this.content;
+      }
+    }
+    return;
+  }
+
+  private prepareContent(): void {
+    if (!this.isEditMode) {
+      this.content = new ContentChoice();
+      this.content.format = ContentType.SORT;
+    }
+    this.setAnswerOptions();
+  }
+
+  private setAnswerOptions(): void {
+    (this.content as ContentChoice).options = this.displayAnswers.map(
+      (d) => d.answerOption
+    );
   }
 }

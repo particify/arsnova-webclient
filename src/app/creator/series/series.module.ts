@@ -9,7 +9,6 @@ import { CreateAnswerOptionComponent } from './content-creation/create-answer-op
 import { ContentPrioritizationCreationComponent } from './content-creation/content-prioritization-creation/content-prioritization-creation.component';
 import { StatisticListComponent } from './statistic-list/statistic-list.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
-import { ContentCreationComponent } from './content-creation/content-creation/content-creation.component';
 import { PreviewComponent } from './content-creation/preview/preview.component';
 import { ContentSortCreationComponent } from './content-creation/content-sort-creation/content-sort-creation.component';
 import { ContentFlashcardCreationComponent } from './content-creation/content-flashcard-creation/content-flashcard-creation.component';
@@ -17,7 +16,6 @@ import { ContentWordcloudCreationComponent } from './content-creation/content-wo
 import { ContentChoiceCreationComponent } from './content-creation/content-choice-creation/content-choice-creation.component';
 import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
 import { ContentScaleCreationComponent } from './content-creation/content-scale-creation/content-scale-creation.component';
-import { ContentTextCreationComponent } from './content-creation/content-text-creation/content-text-creation.component';
 import { ContentYesNoCreationComponent } from './content-creation/content-yes-no-creation/content-yes-no-creation.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { SharedModule } from '@app/shared/shared.module';
@@ -36,6 +34,7 @@ import { SeriesTitleComponent } from './series-title/series-title.component';
 import { ContentListSortComponent } from './content-list-sort/content-list-sort.component';
 import { ExportComponent } from './_dialogs/export/export.component';
 import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
+import { AnswerOptionListComponent } from './content-creation/answer-option-list/answer-option-list.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +44,6 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     ContentPrioritizationCreationComponent,
     StatisticListComponent,
     StatisticsPageComponent,
-    ContentCreationComponent,
     PreviewComponent,
     ContentSortCreationComponent,
     ContentFlashcardCreationComponent,
@@ -53,13 +51,13 @@ import { PublishContentComponent } from './_dialogs/publish-content/publish-cont
     ContentChoiceCreationComponent,
     ContentCreationPageComponent,
     ContentScaleCreationComponent,
-    ContentTextCreationComponent,
     ContentYesNoCreationComponent,
     ContentPresentationComponent,
     SeriesTitleComponent,
     ContentListSortComponent,
     ExportComponent,
     PublishContentComponent,
+    AnswerOptionListComponent,
   ],
   imports: [
     SeriesRoutingModule,

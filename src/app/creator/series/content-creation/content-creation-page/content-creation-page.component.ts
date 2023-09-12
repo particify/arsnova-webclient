@@ -15,6 +15,12 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
+import { ContentCreation } from '@app/creator/series/content-creation/content-creation-page/content-creation';
 
 class ContentFormat {
   type: ContentType;
@@ -31,18 +37,20 @@ export class ContentCreationPageComponent
   extends FormComponent
   implements OnInit
 {
+  @ViewChild('ContentCreation') private creationComponent: ContentCreation;
   @ViewChild('questionInput') bodyInput: ElementRef;
-  createEventSubject: Subject<boolean> = new Subject<boolean>();
+
   question: string;
   ContentType = ContentType;
   formats: ContentFormat[] = [];
   selectedFormat: ContentFormat;
+  seriesName: string;
+  roomId: string;
 
   attachmentData: any;
   linkAttachmentsSubject: Subject<string> = new Subject<string>();
 
   flipped = false;
-
   content?: Content;
   textContainsImage = false;
   HintType = HintType;
@@ -50,14 +58,17 @@ export class ContentCreationPageComponent
   isEditMode = false;
   isLoading = true;
   created = false;
+  isAnswered = false;
 
   constructor(
     private translateService: TranslocoService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
-    protected route: ActivatedRoute,
+    private route: ActivatedRoute,
     private formattingService: FormattingService,
     private contentService: ContentService,
+    private contentGroupService: ContentGroupService,
+    private notificationService: NotificationService,
     protected formService: FormService
   ) {
     super(formService);
@@ -76,7 +87,9 @@ export class ContentCreationPageComponent
       }
     }
     this.selectedFormat = this.formats[0];
+    this.seriesName = this.route.snapshot.params['seriesName'];
     this.route.data.subscribe((data) => {
+      this.roomId = data.room.id;
       if (data.isEditMode) {
         this.contentService
           .getContent(data.room.id, this.route.snapshot.params['contentId'])
@@ -92,7 +105,18 @@ export class ContentCreationPageComponent
               this.selectedFormat = format;
             }
             this.prepareAttachmentData();
-            this.isLoading = false;
+            this.contentService
+              .getAnswer(this.content.roomId, this.content.id)
+              .subscribe((answer) => {
+                console.log(answer.roundStatistics[0]);
+                const answerCount =
+                  answer.roundStatistics[0].independentCounts.reduce(
+                    (a, b) => a + b,
+                    0
+                  );
+                this.isAnswered = answerCount > 0;
+                this.isLoading = false;
+              });
           });
       } else {
         this.prepareAttachmentData();
@@ -104,7 +128,83 @@ export class ContentCreationPageComponent
     );
   }
 
-  reset() {
+  private prepareContent(): boolean {
+    if (!this.question) {
+      const msg = this.translateService.translate(
+        'creator.content.no-empty-fields-allowed'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return false;
+    }
+    if (!this.setContent() || !this.content) {
+      return false;
+    }
+    this.content.roomId = this.roomId;
+    this.content.body = this.question;
+    this.content.abstentionsAllowed = this.abstentionsAllowed;
+    return true;
+  }
+
+  togglePreview() {
+    if (this.flipped) {
+      this.flipBack();
+    } else {
+      if (this.prepareContent()) {
+        this.flipped = true;
+      }
+    }
+  }
+
+  updateTextContainsImage(text: string) {
+    this.textContainsImage = this.formattingService.containsTextAnImage(text);
+  }
+
+  submitContent(): void {
+    if (!this.prepareContent() || !this.content) {
+      return;
+    }
+    if (this.flipped && !this.isEditMode) {
+      this.flipBack();
+    }
+    this.disableForm();
+    if (!this.isEditMode) {
+      this.contentService.addContent(this.content).subscribe(
+        (createdContent) => {
+          this.attachmentData.refIf = createdContent.id;
+          this.linkAttachmentsSubject.next(createdContent.id);
+          this.contentGroupService
+            .addContentToGroup(this.roomId, this.seriesName, createdContent.id)
+            .subscribe();
+          this.contentGroupService.saveGroupInMemoryStorage(this.seriesName);
+          this.afterCreation();
+        },
+        () => {
+          this.enableForm();
+        }
+      );
+    } else {
+      this.contentService.updateContent(this.content).subscribe(
+        (updateContent) => {
+          this.content = updateContent;
+          window.history.back();
+          const msg = this.translateService.translate(
+            'creator.content.changes-made'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        },
+        () => {
+          this.enableForm();
+        }
+      );
+    }
+  }
+
+  private afterCreation() {
+    const msg = this.translateService.translate('creator.content.submitted');
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     this.enableForm();
     this.question = '';
     setTimeout(() => {
@@ -117,43 +217,12 @@ export class ContentCreationPageComponent
     }, 300);
   }
 
-  flipBack(flip: boolean) {
+  private flipBack() {
     this.flipped = false;
     this.announceService.announce('creator.content.a11y-back-in-creation');
-    if (flip) {
-      this.emitCreateEvent(true);
-    }
-    this.content = undefined;
   }
 
-  saveContent(content: Content) {
-    this.content = content;
-  }
-
-  changeFormat(format: ContentFormat) {
-    this.selectedFormat = format;
-  }
-
-  showPreview() {
-    this.emitCreateEvent(false);
-    if (this.content) {
-      this.flipped = true;
-    }
-  }
-
-  emitCreateEvent(submit: boolean) {
-    this.createEventSubject.next(submit);
-  }
-
-  updateTextContainsImage(text: string) {
-    this.textContainsImage = this.formattingService.containsTextAnImage(text);
-  }
-
-  linkAttachments(id: string) {
-    this.linkAttachmentsSubject.next(id);
-  }
-
-  prepareAttachmentData() {
+  private prepareAttachmentData() {
     this.attachmentData = {
       eventsSubject: this.linkAttachmentsSubject,
       refType: 'content',
@@ -161,5 +230,24 @@ export class ContentCreationPageComponent
       refId: this.isEditMode ? this.content?.id : null,
       role: UserRole.OWNER,
     };
+  }
+
+  private setContent(): boolean {
+    let content: Content | undefined;
+    if (this.selectedFormat.type !== ContentType.SLIDE) {
+      content = this.creationComponent.getContent();
+    } else {
+      if (!this.isEditMode) {
+        content = new Content();
+        content.format = this.selectedFormat.type;
+      } else {
+        return true;
+      }
+    }
+    if (content) {
+      this.content = content;
+      return true;
+    }
+    return false;
   }
 }

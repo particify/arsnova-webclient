@@ -1,141 +1,87 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentService } from '@app/core/services/http/content.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { AnswerOption } from '@app/core/models/answer-option';
-import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
 import {
-  ContentCreationComponent,
-  DisplayAnswer,
-} from '@app/creator/series/content-creation/content-creation/content-creation.component';
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import { DisplayAnswer } from '@app/creator/series/content-creation/_models/display-answer';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
-import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
 import { FormService } from '@app/core/services/util/form.service';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { Content } from '@app/core/models/content';
+import { CreateAnswerOptionComponent } from '@app/creator/series/content-creation/create-answer-option/create-answer-option.component';
+import { AnswerOptionListComponent } from '@app/creator/series/content-creation/answer-option-list/answer-option-list.component';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentCreation } from '@app/creator/series/content-creation/content-creation-page/content-creation';
 
 @Component({
   selector: 'app-content-prioritization-creation',
   templateUrl: './content-prioritization-creation.component.html',
-  styleUrls: ['./content-prioritization-creation.component.scss'],
+  providers: [
+    {
+      provide: 'ContentCreation',
+      useExisting: ContentPrioritizationCreationComponent,
+    },
+  ],
 })
 export class ContentPrioritizationCreationComponent
-  extends ContentCreationComponent
-  implements OnInit
+  extends FormComponent
+  implements OnInit, OnChanges, ContentCreation
 {
-  isAnswerEdit = -1;
-  resetAnswerInputEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @ViewChild(CreateAnswerOptionComponent)
+  answerCreation: CreateAnswerOptionComponent;
+  @ViewChild(AnswerOptionListComponent)
+  answerList: AnswerOptionListComponent;
+
+  @Input() content?: Content;
+  @Input() isEditMode: boolean;
+  @Input() isAnswered: boolean;
+
+  displayAnswers: DisplayAnswer[] = [];
 
   constructor(
-    protected contentService: ContentService,
-    protected notificationService: NotificationService,
-    protected translationService: TranslocoService,
-    protected route: ActivatedRoute,
-    protected contentGroupService: ContentGroupService,
-    protected announceService: AnnounceService,
+    private contentService: ContentService,
     protected formService: FormService
   ) {
-    super(
-      contentService,
-      notificationService,
-      translationService,
-      route,
-      contentGroupService,
-      announceService,
-      formService
-    );
+    super(formService);
   }
-
-  initContentCreation() {
-    this.content = new ContentPrioritization();
-    this.fillCorrectAnswers();
-  }
-
-  initContentForEditing() {
-    this.displayAnswers = this.initContentChoiceEditBase();
-    this.checkIfAnswersExist();
-  }
-
-  answerInputCheck(answer: string): boolean {
-    if (answer !== '') {
-      if (!this.answerExists(answer)) {
-        return true;
-      } else {
-        this.showWarning('creator.content.same-answer');
-        return false;
-      }
-    } else {
-      this.showWarning('creator.content.no-empty2');
-      return false;
-    }
-  }
-
-  checkIfAnswersExist() {
-    this.contentService
-      .getAnswer(this.content.roomId, this.content.id)
-      .subscribe((answer) => {
-        this.noAnswersYet = !!(
-          answer.roundStatistics[0] as PrioritizationRoundStatistics
-        ).assignedPoints;
-        this.isLoading = false;
-      });
-  }
-
-  addAnswer(answer: string) {
-    if (this.answerInputCheck(answer)) {
-      if (this.displayAnswers.length < 8) {
-        this.displayAnswers.push(
-          new DisplayAnswer(new AnswerOption(answer), true)
-        );
-        this.resetAnswerInputEvent.emit(true);
-      } else {
-        const msg = this.translationService.translate(
-          'creator.content.max-answers'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      }
-    }
-  }
-
-  deleteAnswer(index: number) {
-    this.displayAnswers.splice(index, 1);
-    this.afterAnswerDeletion();
-  }
-
-  showWarning(translationKey: string) {
-    const msg = this.translationService.translate(translationKey);
-    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-  }
-
-  goInEditMode(index: number): void {
-    this.isAnswerEdit = index;
-  }
-
-  leaveEditMode(): void {
-    this.isAnswerEdit = -1;
-  }
-
-  createContent(): boolean {
-    if (!this.saveAnswerLabels(true)) {
-      return false;
-    }
-    if (this.displayAnswers.length >= 2) {
-      return true;
-    } else {
-      const msg = this.translationService.translate(
-        'creator.content.need-answers'
+  ngOnInit(): void {
+    if (this.isEditMode) {
+      const content = this.content as ContentPrioritization;
+      this.displayAnswers = this.contentService.getAnswerOptions(
+        content.options
       );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return false;
     }
   }
 
-  resetAnswers() {
-    this.displayAnswers = [];
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.content.currentValue) {
+      this.displayAnswers = [];
+    }
+  }
+
+  getContent(): Content | undefined {
+    if (!this.answerCreation || this.answerCreation.isFormValid()) {
+      if (this.answerList.isListValid(false, false)) {
+        this.prepareContent();
+        return this.content;
+      }
+    }
+    return;
+  }
+
+  private prepareContent(): void {
+    if (!this.isEditMode) {
+      this.content = new ContentPrioritization();
+    }
+    this.setAnswerOptions();
+  }
+
+  private setAnswerOptions(): void {
+    (this.content as ContentPrioritization).options = this.displayAnswers.map(
+      (d) => d.answerOption
+    );
   }
 }

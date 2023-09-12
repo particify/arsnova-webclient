@@ -1,0 +1,72 @@
+<mat-list
+  cdkDropList
+  [cdkDropListData]="answers"
+  (cdkDropListDropped)="drop($event.previousIndex, $event.currentIndex)"
+  [cdkDropListDisabled]="disabled || !sortable"
+>
+  <mat-list-item cdkDrag *ngFor="let answer of answers; let i = index">
+    <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
+      <div
+        *ngIf="sortable"
+        cdkDragHandle
+        tabindex="0"
+        (keyup)="moveAnswer($event, i)"
+        #sortListItem
+        [attr.aria-label]="
+          'creator.content.a11y-sort-answer'
+            | transloco
+              : {
+                  index: i + 1,
+                  length: answers.length,
+                  answer: answer.answerOption.label
+                }
+        "
+      >
+        <mat-icon *ngIf="allowDeletion" class="drag-icon">
+          drag_handle
+        </mat-icon>
+      </div>
+      <mat-checkbox
+        id="answer-{{ i }}"
+        [disabled]="disabled"
+        *ngIf="hasCorrectAnswers"
+        (ngModelChange)="switchValue(i)"
+        [(ngModel)]="answer.correct"
+        [checked]="answer.correct"
+        name="{{ answer.answerOption.label }}"
+        [attr.aria-label]="
+          'creator.content.a11y-answer-checkbox'
+            | transloco: { answer: answer.answerOption.label }
+        "
+      >
+      </mat-checkbox>
+      <form fxLayout="row" class="full-width">
+        <mat-form-field class="edit-input surface-input no-field-hint">
+          <input
+            id="answerEdit-{{ i }}"
+            name="answerEdit"
+            matInput
+            [disabled]="disabled"
+            [(ngModel)]="answer.answerOption.label"
+            (focus)="goInEditMode(i)"
+            (blur)="leaveEditMode()"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </form>
+      <button
+        mat-icon-button
+        *ngIf="allowDeletion"
+        [attr.aria-label]="
+          'creator.content.a11y-delete-answer'
+            | transloco: { answer: answer.answerOption.label }
+        "
+        class="delete"
+        (click)="deleteAnswer(i)"
+        matTooltip="{{ 'creator.content.delete-answer' | transloco }}"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+  </mat-list-item>
+</mat-list>

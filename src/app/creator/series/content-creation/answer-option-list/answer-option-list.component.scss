@@ -33,3 +33,24 @@
 .delete:focus-within {
   @include button-hover;
 }
+
+.cdk-drop-list-dragging {
+  cursor: grabbing;
+}
+
+.cdk-drag-preview {
+  padding: 16px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-icon {
+  margin-right: 16px;
+  cursor: grabbing;
+}

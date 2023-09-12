@@ -1,22 +1,22 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { getTranslocoModule } from '@testing/transloco-testing.module';
 
-import { CreateAnswerOptionComponent } from './create-answer-option.component';
+import { AnswerOptionListComponent } from './answer-option-list.component';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   MockAnnounceService,
   MockNotificationService,
 } from '@testing/test-helpers';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-describe('CreateAnswerOptionComponent', () => {
-  let component: CreateAnswerOptionComponent;
-  let fixture: ComponentFixture<CreateAnswerOptionComponent>;
+describe('AnswerOptionListComponent', () => {
+  let component: AnswerOptionListComponent;
+  let fixture: ComponentFixture<AnswerOptionListComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [CreateAnswerOptionComponent],
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [AnswerOptionListComponent],
       imports: [getTranslocoModule()],
       providers: [
         {
@@ -29,9 +29,8 @@ describe('CreateAnswerOptionComponent', () => {
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(CreateAnswerOptionComponent);
+    });
+    fixture = TestBed.createComponent(AnswerOptionListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

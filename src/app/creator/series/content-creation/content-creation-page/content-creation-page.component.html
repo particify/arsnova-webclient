@@ -63,10 +63,10 @@
                         }}</mat-icon>
                         <div fxLayout="column" fxLayoutAlign="center">
                           <span
-                            attr.aria-label="{{
+                            [attr.aria-label]="
                               'creator.content.a11y-format-' + format.name
                                 | transloco
-                            }}"
+                            "
                             class="format-name"
                           >
                             {{
@@ -105,7 +105,12 @@
                   #questionInput
                   (input)="updateTextContainsImage(questionInput.value)"
                   [(ngModel)]="question"
-                  aria-labelledby="body"
+                  [attr.aria-label]="
+                    (created
+                      ? 'creator.content.a11y-content-created'
+                      : 'creator.content.a11y-enter-body'
+                    ) | transloco
+                  "
                   cdkAutosizeMaxRows="8"
                   cdkAutosizeMinRows="3"
                   matInput
@@ -133,148 +138,59 @@
             <div>
               <mat-checkbox
                 [disabled]="formDisabled"
-                *ngIf="
-                  ['slide', 'flashcard'].indexOf(selectedFormat.name) === -1
-                "
+                *ngIf="!['slide', 'flashcard'].includes(selectedFormat.name)"
                 [(ngModel)]="abstentionsAllowed"
               >
                 {{ 'creator.content.abstentions-allowed' | transloco }}
               </mat-checkbox>
             </div>
-            <div *ngIf="!isLoading" class="content-action-container">
+            <div *ngIf="!isLoading" [ngSwitch]="selectedFormat.type">
               <app-content-choice-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.CHOICE"
-                [contentBody]="questionInput.value"
-                [abstentionsAllowed]="abstentionsAllowed"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [disabled]="formDisabled"
+                *ngSwitchCase="ContentType.CHOICE"
+                [content]="content"
+                [isAnswered]="isAnswered"
+                [isEditMode]="isEditMode"
               >
               </app-content-choice-creation>
               <app-content-scale-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.SCALE"
-                [contentBody]="questionInput.value"
-                [abstentionsAllowed]="abstentionsAllowed"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [disabled]="formDisabled"
+                *ngSwitchCase="ContentType.SCALE"
+                [content]="content"
+                [isAnswered]="isAnswered"
+                [isEditMode]="isEditMode"
               >
               </app-content-scale-creation>
               <app-content-yes-no-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.BINARY"
-                [contentBody]="questionInput.value"
-                [abstentionsAllowed]="abstentionsAllowed"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [disabled]="formDisabled"
+                *ngSwitchCase="ContentType.BINARY"
+                [isEditMode]="isEditMode"
+                [content]="content"
               >
               </app-content-yes-no-creation>
-              <app-content-text-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.TEXT"
-                [contentBody]="questionInput.value"
-                [abstentionsAllowed]="abstentionsAllowed"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [format]="ContentType.TEXT"
-                [disabled]="formDisabled"
-              >
-              </app-content-text-creation>
-              <app-content-text-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.SLIDE"
-                [contentBody]="questionInput.value"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [format]="ContentType.SLIDE"
-                [disabled]="formDisabled"
-              >
-              </app-content-text-creation>
               <app-content-flashcard-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.FLASHCARD"
-                [contentBody]="questionInput.value"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [disabled]="formDisabled"
+                *ngSwitchCase="ContentType.FLASHCARD"
+                [content]="content"
+                [isEditMode]="isEditMode"
               >
               </app-content-flashcard-creation>
               <app-content-sort-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.SORT"
-                [contentBody]="questionInput.value"
-                [abstentionsAllowed]="abstentionsAllowed"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [disabled]="formDisabled"
+                *ngSwitchCase="ContentType.SORT"
+                [content]="content"
+                [isEditMode]="isEditMode"
+                [isAnswered]="isAnswered"
               >
               </app-content-sort-creation>
               <app-content-wordcloud-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.WORDCLOUD"
-                [contentBody]="questionInput.value"
-                [abstentionsAllowed]="abstentionsAllowed"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [disabled]="formDisabled"
+                *ngSwitchCase="ContentType.WORDCLOUD"
+                [content]="content"
+                [isEditMode]="isEditMode"
               >
               </app-content-wordcloud-creation>
               <app-content-prioritization-creation
-                (contentReset)="reset()"
-                (contentSent)="saveContent($event)"
-                (refId)="linkAttachments($event)"
-                *ngIf="selectedFormat.type === ContentType.PRIORITIZATION"
-                [contentBody]="questionInput.value"
-                [abstentionsAllowed]="abstentionsAllowed"
-                [createEvent]="createEventSubject.asObservable()"
-                [editContent]="content"
-                [disabled]="formDisabled"
+                *ngSwitchCase="ContentType.PRIORITIZATION"
+                [content]="content"
+                [isEditMode]="isEditMode"
+                [isAnswered]="isAnswered"
               >
               </app-content-prioritization-creation>
-              <div
-                fxLayout="row"
-                fxLayoutAlign="center"
-                fxLayoutGap="10px"
-                [ngClass]="{ 'top-space': isEditMode }"
-              >
-                <button
-                  [disabled]="formDisabled"
-                  (click)="showPreview()"
-                  attr.aria-label="{{
-                    'creator.content.a11y-preview' | transloco
-                  }}"
-                  mat-stroked-button
-                >
-                  {{ 'creator.content.preview' | transloco }}
-                </button>
-                <app-loading-button
-                  [name]="
-                    isEditMode
-                      ? 'creator.content.save'
-                      : 'creator.content.create'
-                  "
-                  (clicked)="emitCreateEvent(true)"
-                ></app-loading-button>
-              </div>
             </div>
           </div>
 
@@ -285,55 +201,32 @@
             <app-preview
               *ngIf="flipped && content"
               [content]="content"
-              [isEditMode]="isEditMode"
-              (flipEvent)="flipBack($event)"
             ></app-preview>
+          </div>
+          <div
+            [ngStyle]="{ transform: flipped ? 'rotateY(180deg)' : '' }"
+            fxLayout="row"
+            fxLayoutAlign="center"
+            fxLayoutGap="10px"
+            [ngClass]="{ 'top-space': isEditMode }"
+          >
+            <button
+              [disabled]="formDisabled"
+              (click)="togglePreview()"
+              [attr.aria-label]="'creator.content.a11y-preview' | transloco"
+              mat-stroked-button
+            >
+              {{ 'creator.content.preview' | transloco }}
+            </button>
+            <app-loading-button
+              [name]="
+                isEditMode ? 'creator.content.save' : 'creator.content.create'
+              "
+              (clicked)="submitContent()"
+            ></app-loading-button>
           </div>
         </mat-card>
       </div>
     </section>
-  </div>
-</div>
-
-<div class="visually-hidden">
-  <div id="subject">{{ 'creator.content.a11y-enter-subject' | transloco }}</div>
-  <div id="body">
-    {{
-      (created
-        ? 'creator.content.a11y-content-created'
-        : 'creator.content.a11y-enter-body'
-      ) | transloco
-    }}
-  </div>
-  <div id="format-choice">
-    {{ 'creator.content.a11y-format-choice' | transloco }}
-  </div>
-  <div id="format-scale">
-    {{ 'creator.content.a11y-format-likert' | transloco }}
-  </div>
-  <div id="format-binary">
-    {{ 'creator.content.a11y-format-binary' | transloco }}
-  </div>
-  <div id="format-text">
-    {{ 'creator.content.a11y-format-text' | transloco }}
-  </div>
-  <div id="format-slide">
-    {{ 'creator.content.a11y-format-slide' | transloco }}
-  </div>
-  <div id="format-sort">
-    {{ 'creator.content.a11y-format-sort' | transloco }}
-  </div>
-  <div id="format-wordcloud">
-    {{ 'creator.content.a11y-format-wordcloud' | transloco }}
-  </div>
-  <div id="choose-format">
-    {{
-      'creator.content.a11y-choose-format'
-        | transloco
-          : {
-              format:
-                'creator.content.format-' + selectedFormat.name | transloco
-            }
-    }}
   </div>
 </div>

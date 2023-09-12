@@ -1,7 +1,8 @@
 <div>
   <mat-checkbox
     [(ngModel)]="neutralOption"
-    [disabled]="(isEditMode && !noAnswersYet) || disabled"
+    (ngModelChange)="updateOptionLabels()"
+    [disabled]="(isEditMode && isAnswered) || formDisabled"
     >{{ 'creator.content.offer-neutral-option' | transloco }}</mat-checkbox
   >
   <div style="padding: 0 16px">
@@ -16,7 +17,8 @@
         }}</mat-label>
         <mat-select
           [(value)]="selectedTemplate"
-          [disabled]="(isEditMode && !noAnswersYet) || disabled"
+          (selectionChange)="updateOptionLabels()"
+          [disabled]="(isEditMode && isAnswered) || formDisabled"
         >
           <mat-option
             *ngFor="let template of templates; let i = index"
@@ -26,7 +28,7 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div *ngIf="!isLoading">
+    <div>
       <mat-list>
         <mat-list-item
           class="bottom-border"

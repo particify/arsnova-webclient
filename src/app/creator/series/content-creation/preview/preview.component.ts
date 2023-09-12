@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -23,9 +23,7 @@ import { ContentPrioritization } from '@app/core/models/content-prioritization';
 export class PreviewComponent implements OnInit {
   @Input() content: Content;
   @Input() isEditMode: boolean;
-  @Output() flipEvent = new EventEmitter<boolean>();
 
-  body: string;
   answerOptions: AnswerOption[];
   answerOptionsWithPoints: AnswerWithPoints[] = [];
   selectableAnswers: SelectableAnswer[] = [];
@@ -105,10 +103,6 @@ export class PreviewComponent implements OnInit {
         ? MarkdownFeatureset.EXTENDED
         : MarkdownFeatureset.SIMPLE;
     this.prepareAttachmentData();
-  }
-
-  emitFlipEvent(submit: boolean) {
-    this.flipEvent.emit(submit);
   }
 
   renderingFinished() {

@@ -1,4 +1,8 @@
-<h3 tabindex="0" [appAutofocus] aria-labelledby="header">
+<h3
+  tabindex="0"
+  [appAutofocus]
+  [attr.aria-label]="'creator.content.a11y-preview-header' | transloco"
+>
   {{
     (content.format !== 'FLASHCARD'
       ? 'creator.content.preview'
@@ -48,7 +52,7 @@
   ></app-content-text-answer>
 </mat-card>
 <div *ngIf="content.format === 'FLASHCARD'">
-  <h3 aria-labelledby="back">
+  <h3>
     {{ 'creator.content.flashcard-back' | transloco }}
   </h3>
   <mat-card class="mat-elevation-z2">
@@ -61,28 +65,4 @@
     >
     </app-rendered-text>
   </mat-card>
-</div>
-<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="10px">
-  <button
-    (click)="emitFlipEvent(false)"
-    attr.aria-label="{{ 'creator.content.a11y-leave-preview' | transloco }}"
-    mat-stroked-button
-  >
-    {{ 'creator.content.back' | transloco }}
-  </button>
-  <button
-    (click)="emitFlipEvent(true)"
-    attr.aria-label="{{ 'creator.content.a11y-preview-submit' | transloco }}"
-    color="primary"
-    mat-raised-button
-  >
-    {{
-      (isEditMode ? 'creator.content.save' : 'creator.content.create')
-        | transloco
-    }}
-  </button>
-</div>
-
-<div class="visually-hidden">
-  <div id="header">{{ 'creator.content.a11y-preview-header' | transloco }}</div>
 </div>
