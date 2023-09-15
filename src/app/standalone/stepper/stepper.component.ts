@@ -8,7 +8,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { CdkStepper } from '@angular/cdk/stepper';
+import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import {
   animate,
   state,
@@ -19,10 +19,13 @@ import {
 import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { take } from 'rxjs';
+import { CoreModule } from '@app/core/core.module';
 
 @Component({
+  standalone: true,
+  imports: [CoreModule, TranslocoModule, CdkStepperModule],
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
@@ -53,20 +56,16 @@ import { take } from 'rxjs';
 })
 export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Output() newIndex = new EventEmitter<number>();
+  @Input() showSteps = true;
+  @Input() allowNavigation = true;
   @Input() listLength: number;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
-  @Input() isPresentation = false;
-  @Input() isParticipant = false;
-  @Input() i18nPrefix: string;
-  @Input() finished = false;
-  @Input() overviewIndex: number;
-  @Input() focusModeEnabled = false;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';
-  nextIndex = 0;
-  swipeXLocation: number;
-  swipeTime: number;
+  private nextIndex = 0;
+  private swipeXLocation: number;
+  private swipeTime: number;
 
   private hotkeyRefs: symbol[] = [];
 
@@ -83,7 +82,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.translateService
-      .selectTranslate(this.i18nPrefix + '.previous')
+      .selectTranslate('content.previous')
       .pipe(take(1))
       .subscribe((t) =>
         this.hotkeyService.registerHotkey(
@@ -96,7 +95,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
         )
       );
     this.translateService
-      .selectTranslate(this.i18nPrefix + '.next')
+      .selectTranslate('content.next')
       .pipe(take(1))
       .subscribe((t) =>
         this.hotkeyService.registerHotkey(
@@ -154,9 +153,9 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   next(): void {
-    if (!this.focusModeEnabled) {
+    if (this.allowNavigation) {
       if (this.selectedIndex < this.listLength - 1) {
-        if (this.selectedIndex < this.listLength - 1 || this.finished) {
+        if (this.selectedIndex < this.listLength - 1) {
           this.onClick(this.selectedIndex + 1);
           setTimeout(() => {
             document.getElementById('step')?.focus();
@@ -171,7 +170,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   previous(): void {
-    if (!this.focusModeEnabled) {
+    if (this.allowNavigation) {
       if (this.selectedIndex > 0) {
         this.onClick(this.selectedIndex - 1);
         setTimeout(() => {

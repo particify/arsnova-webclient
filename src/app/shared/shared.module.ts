@@ -4,15 +4,12 @@ import { StatisticTextComponent } from './statistic-content/statistic-text/stati
 import { StatisticChoiceComponent } from './statistic-content/statistic-choice/statistic-choice.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { BaseDialogComponent } from './_dialogs/base-dialog/base-dialog.component';
-import { StepperComponent } from './stepper/stepper.component';
-import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
-import { StatisticContentComponent } from './statistic-content/statistic-content/statistic-content.component';
+import { ContentResultsComponent } from './content-results/content-results.component';
 import { ContentSortAnswerComponent } from './content-answers/content-sort-answer/content-sort-answer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { StatisticSortComponent } from './statistic-content/statistic-sort/statistic-sort.component';
-import { NavBarComponent } from './bars/nav-bar/nav-bar.component';
-import { InfoBarComponent } from './bars/info-bar/info-bar.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { StatisticWordcloudComponent } from './statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
@@ -39,7 +36,6 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   imports: [
     CoreModule,
     RouterModule,
-    CdkStepperModule,
     ExtensionPointModule,
     DragDropModule,
     FooterComponent,
@@ -57,12 +53,10 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     StatisticTextComponent,
     StatisticWordcloudComponent,
     BaseDialogComponent,
-    StepperComponent,
-    StatisticContentComponent,
+    ContentResultsComponent,
     ContentSortAnswerComponent,
     StatisticSortComponent,
     NavBarComponent,
-    InfoBarComponent,
     WordcloudComponent,
     ContentChoiceAnswerComponent,
     AnnouncementComponent,
@@ -77,16 +71,14 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   ],
   exports: [
     LoadingIndicatorComponent,
-    StepperComponent,
     StatisticChoiceComponent,
     StatisticScaleComponent,
     StatisticTextComponent,
     StatisticWordcloudComponent,
-    StatisticContentComponent,
+    ContentResultsComponent,
     ContentSortAnswerComponent,
     StatisticSortComponent,
     NavBarComponent,
-    InfoBarComponent,
     DividerComponent,
     WordcloudComponent,
     ContentChoiceAnswerComponent,

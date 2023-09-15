@@ -26,8 +26,11 @@ describe('StepperComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [StepperComponent],
-      imports: [getTranslocoModule(), BrowserAnimationsModule],
+      imports: [
+        StepperComponent,
+        getTranslocoModule(),
+        BrowserAnimationsModule,
+      ],
       providers: [
         {
           provide: AnnounceService,

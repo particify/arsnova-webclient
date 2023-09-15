@@ -21,20 +21,19 @@ import { ContentPresentationComponent } from './content-presentation/content-pre
 import { SharedModule } from '@app/shared/shared.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TranslocoModule } from '@ngneat/transloco';
-import { CdkStepperModule } from '@angular/cdk/stepper';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { SeriesTitleComponent } from './series-title/series-title.component';
 import { ContentListSortComponent } from './content-list-sort/content-list-sort.component';
 import { ExportComponent } from './_dialogs/export/export.component';
-import { PublishContentComponent } from './_dialogs/publish-content/publish-content.component';
 import { AnswerOptionListComponent } from './content-creation/answer-option-list/answer-option-list.component';
+import { StepperComponent } from '@app/standalone/stepper/stepper.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 
 @NgModule({
   declarations: [
@@ -56,7 +55,6 @@ import { AnswerOptionListComponent } from './content-creation/answer-option-list
     SeriesTitleComponent,
     ContentListSortComponent,
     ExportComponent,
-    PublishContentComponent,
     AnswerOptionListComponent,
   ],
   imports: [
@@ -67,6 +65,7 @@ import { AnswerOptionListComponent } from './content-creation/answer-option-list
     DragDropModule,
     TranslocoModule,
     CdkStepperModule,
+    StepperComponent,
     ExtensionPointModule,
     HintComponent,
     DividerComponent,
@@ -76,7 +75,5 @@ import { AnswerOptionListComponent } from './content-creation/answer-option-list
     LoadingButtonComponent,
     BaseCardComponent,
   ],
-  exports: [ContentPresentationComponent],
-  providers: [FocusModeService],
 })
 export class SeriesModule {}

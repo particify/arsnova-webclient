@@ -9,7 +9,7 @@ import {
 import {
   NavBarComponent,
   NavBarItem,
-} from '@app/shared/bars/nav-bar/nav-bar.component';
+} from '@app/shared/nav-bar/nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
@@ -20,7 +20,6 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { BarItem } from '@app/shared/bars/bar-base';
 import { ContentGroup } from '@app/core/models/content-group';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -104,10 +103,10 @@ export class ControlBarComponent
   notificationIcon: string;
   showNotification = false;
 
-  features: BarItem[] = [
-    new BarItem(RoutingFeature.COMMENTS, 'question_answer'),
-    new BarItem(RoutingFeature.CONTENTS, 'equalizer'),
-    new BarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
+  features: NavBarItem[] = [
+    new NavBarItem(RoutingFeature.COMMENTS, 'question_answer'),
+    new NavBarItem(RoutingFeature.CONTENTS, 'equalizer'),
+    new NavBarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
   ];
   groupItems: KeyNavBarItem[] = [
     new KeyNavBarItem('results', 'insert_chart', '', ' '),

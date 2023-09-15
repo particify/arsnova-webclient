@@ -1,5 +1,26 @@
-@import '../bar-base';
-@import '../../../../variables';
+@import '../../../variables';
+
+.list {
+  position: fixed;
+  background: var(--surface);
+  z-index: 1;
+}
+
+.icon-container {
+  display: flex;
+}
+
+@media (min-width: 1001px) {
+  .icon-container {
+    flex-direction: column;
+  }
+
+  .list {
+    left: 0;
+    top: $app-padding;
+    position: absolute;
+  }
+}
 
 .badge {
   position: absolute;

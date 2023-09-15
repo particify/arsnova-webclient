@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BarBaseComponent, BarItem } from '@app/shared/bars/bar-base';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
@@ -29,17 +28,20 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
 import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
 
-export class NavBarItem extends BarItem {
-  url: string;
-  changeIndicator: boolean;
+export class NavBarItem {
+  name: string;
+  icon: string;
+  url?: string;
+  changeIndicator?: boolean;
 
   constructor(
     name: string,
     icon: string,
-    url: string,
-    changeIndicator: boolean
+    url?: string,
+    changeIndicator?: boolean
   ) {
-    super(name, icon);
+    this.name = name;
+    this.icon = icon;
     this.url = url;
     this.changeIndicator = changeIndicator;
   }
@@ -67,17 +69,14 @@ export class PublishedContentsState {
   styleUrls: ['./nav-bar.component.scss'],
   providers: [FocusModeService],
 })
-export class NavBarComponent
-  extends BarBaseComponent
-  implements OnInit, OnDestroy
-{
+export class NavBarComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<void>();
   barItems: NavBarItem[] = [];
-  features: BarItem[] = [
-    new BarItem(RoutingFeature.OVERVIEW, 'home'),
-    new BarItem(RoutingFeature.COMMENTS, 'question_answer'),
-    new BarItem(RoutingFeature.CONTENTS, 'equalizer'),
-    new BarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
+  features: NavBarItem[] = [
+    new NavBarItem(RoutingFeature.OVERVIEW, 'home'),
+    new NavBarItem(RoutingFeature.COMMENTS, 'question_answer'),
+    new NavBarItem(RoutingFeature.CONTENTS, 'equalizer'),
+    new NavBarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
   ];
   currentRouteIndex?: number;
   activeFeatures: string[] = [RoutingFeature.OVERVIEW];
@@ -115,9 +114,7 @@ export class NavBarComponent
     protected roomService: RoomService,
     protected commentSettingsService: CommentSettingsService,
     protected focusModeService: FocusModeService
-  ) {
-    super();
-  }
+  ) {}
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {
@@ -140,6 +137,47 @@ export class NavBarComponent
     }
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  ngOnInit() {
+    const routeData = this.route.snapshot.data;
+    this.role = routeData.userRole;
+    this.viewRole = routeData.viewRole;
+    this.shortId = routeData.room.shortId;
+    this.roomId = routeData.room.id;
+    this.room = routeData.room;
+    if (
+      !routeData.room.settings.feedbackLocked ||
+      this.viewRole !== UserRole.PARTICIPANT
+    ) {
+      this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
+    }
+    if (
+      !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
+      this.viewRole !== UserRole.PARTICIPANT
+    ) {
+      this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
+    }
+    this.feedbackService.startSub(this.roomId);
+    let group = this.routingService.seriesName;
+    if (group === undefined) {
+      group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+    } else {
+      this.setGroupInSessionStorage(group);
+    }
+    this.roomStatsService
+      .getStats(this.roomId, this.viewRole !== UserRole.PARTICIPANT)
+      .subscribe((stats) => {
+        if (stats.groupStats) {
+          this.groupName = group || stats.groupStats[0].groupName;
+          this.setGroupInSessionStorage(this.groupName);
+          this.addContentFeatureItem(false);
+        }
+        this.getItems();
+        this.updateGroups(stats.groupStats ?? [], !!group, false);
+      });
+    this.subscribeToParticipantEvents();
+    this.subscribeToRouteChanges();
   }
 
   afterInit() {
@@ -180,47 +218,6 @@ export class NavBarComponent
         });
     }
     this.isLoading = false;
-  }
-
-  initItems() {
-    const routeData = this.route.snapshot.data;
-    this.role = routeData.userRole;
-    this.viewRole = routeData.viewRole;
-    this.shortId = routeData.room.shortId;
-    this.roomId = routeData.room.id;
-    this.room = routeData.room;
-    if (
-      !routeData.room.settings.feedbackLocked ||
-      this.viewRole !== UserRole.PARTICIPANT
-    ) {
-      this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
-    }
-    if (
-      !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
-      this.viewRole !== UserRole.PARTICIPANT
-    ) {
-      this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
-    }
-    this.feedbackService.startSub(this.roomId);
-    let group = this.routingService.seriesName;
-    if (group === undefined) {
-      group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-    } else {
-      this.setGroupInSessionStorage(group);
-    }
-    this.roomStatsService
-      .getStats(this.roomId, this.viewRole !== UserRole.PARTICIPANT)
-      .subscribe((stats) => {
-        if (stats.groupStats) {
-          this.groupName = group || stats.groupStats[0].groupName;
-          this.setGroupInSessionStorage(this.groupName);
-          this.addContentFeatureItem(false);
-        }
-        this.getItems();
-        this.updateGroups(stats.groupStats ?? [], !!group, false);
-      });
-    this.subscribeToParticipantEvents();
-    this.subscribeToRouteChanges();
   }
 
   parseUserCount(body: string) {
@@ -393,9 +390,6 @@ export class NavBarComponent
       route.push(item.name);
       if (item.name === RoutingFeature.CONTENTS) {
         route.push(this.groupName);
-        if (this.isPresentation) {
-          route.push('1');
-        }
       }
     }
     this.router.navigate(route);

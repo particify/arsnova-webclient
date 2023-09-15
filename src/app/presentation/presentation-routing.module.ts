@@ -9,7 +9,6 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { PresentationComponent } from './presentation/presentation.component';
-import { ContentPresentationComponent } from '@app/creator/series/content-presentation/content-presentation.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 
@@ -36,11 +35,8 @@ const routes: Routes = [
   },
   {
     path: 'series/:seriesName',
-    component: ContentPresentationComponent,
-  },
-  {
-    path: 'series/:seriesName/:contentIndex',
-    component: ContentPresentationComponent,
+    loadChildren: () =>
+      import('./series/series.module').then((m) => m.SeriesModule),
   },
 ];
 

@@ -17,10 +17,8 @@
       (newIndex)="updateContentIndexUrl($event)"
       [listLength]="contents.length"
       [completed]="alreadySent"
-      [finished]="isFinished"
-      [isParticipant]="true"
-      [focusModeEnabled]="focusModeEnabled"
-      i18nPrefix="content"
+      [showSteps]="!focusModeEnabled"
+      [allowNavigation]="!focusModeEnabled"
     >
       <cdk-step *ngFor="let content of contents; let i = index">
         <div
@@ -38,7 +36,7 @@
           <app-content-participant
             *ngIf="!isReloadingCurrentContent"
             (answerChanged)="receiveSentStatus($event, i)"
-            (next)="nextContent($event)"
+            (next)="nextContent()"
             [content]="content"
             [answer]="answers[i]"
             [lastContent]="i === contents.length - 1"

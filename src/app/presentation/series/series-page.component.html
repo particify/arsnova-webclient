@@ -1,0 +1,66 @@
+<div
+  *ngIf="!isLoading"
+  class="step-info-container"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+>
+  <div>
+    <p class="step-info">
+      {{ this.currentStep + 1 + ' / ' + this.contents.length }}
+    </p>
+  </div>
+</div>
+<app-answer-count
+  *ngIf="!isLoading && canAnswerContent"
+  [count]="answerCount"
+  [size]="'presentation'"
+></app-answer-count>
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<div fxLayoutAlign="center center" *ngIf="!isLoading && !contents">
+  <p class="hint">{{ 'creator.content.no-contents-yet' | transloco }}</p>
+</div>
+<div>
+  <div *ngIf="!isLoading" tabindex="-1" [appAutofocus] class="visually-hidden">
+    {{
+      'creator.presentation.a11y-content-message'
+        | transloco: { group: contentGroup.name }
+    }}
+  </div>
+  <div
+    id="stepper-container"
+    fxLayout="column"
+    fxLayoutAlign="start center"
+    class="scalable"
+  >
+    <app-stepper
+      *ngIf="contents && contents.length > 0 && !isLoading"
+      (newIndex)="updateURL($event)"
+      [listLength]="contents.length"
+      [showSteps]="false"
+    >
+      <cdk-step *ngFor="let content of contents; let i = index">
+        <div fxLayoutAlign="center" id="step">
+          <mat-card class="presentation-card">
+            <app-content-results
+              [content]="content"
+              [directShow]="
+                contentIndex === i && settings.showContentResultsDirectly
+              "
+              [active]="currentStep === i"
+              [index]="i"
+              [correctOptionsPublished]="true"
+              [isPresentation]="true"
+              (updatedCounter)="updateCounter($event, currentStep === i)"
+              [indexChanged]="indexChanged"
+              [settings]="settings"
+            >
+            </app-content-results>
+          </mat-card>
+        </div>
+        <div tabindex="0" class="visually-hidden">
+          {{ 'statistic.a11y-no-more-answers' | transloco }}
+        </div>
+      </cdk-step>
+    </app-stepper>
+  </div>
+</div>

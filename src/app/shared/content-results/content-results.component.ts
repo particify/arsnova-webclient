@@ -21,7 +21,6 @@ import { ActivatedRoute } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { UserSettings } from '@app/core/models/user-settings';
 import { StatisticPrioritizationComponent } from '@app/shared/statistic-content/statistic-prioritization/statistic-prioritization.component';
-import { ContentGroup } from '@app/core/models/content-group';
 import { RemoteService } from '@app/core/services/util/remote.service';
 import { Content } from '@app/core/models/content';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
@@ -31,11 +30,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 
 @Component({
-  selector: 'app-statistic-content',
-  templateUrl: './statistic-content.component.html',
-  styleUrls: ['./statistic-content.component.scss'],
+  selector: 'app-content-results',
+  templateUrl: './content-results.component.html',
+  styleUrls: ['./content-results.component.scss'],
 })
-export class StatisticContentComponent implements OnInit, OnDestroy {
+export class ContentResultsComponent implements OnInit, OnDestroy {
   @ViewChild(StatisticChoiceComponent)
   choiceStatistic: StatisticChoiceComponent;
   @ViewChild(StatisticScaleComponent) scaleStatistic: StatisticScaleComponent;
@@ -54,8 +53,7 @@ export class StatisticContentComponent implements OnInit, OnDestroy {
   @Input() index: number;
   @Input() correctOptionsPublished: boolean;
   @Input() isPresentation = false;
-  @Input() indexChanged: EventEmitter<number> = new EventEmitter<number>();
-  @Input() contentGroup: ContentGroup;
+  @Input() indexChanged: EventEmitter<void> = new EventEmitter<void>();
   @Input() useCustomFlipAction = false;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
   @Output() customFlipEvent = new EventEmitter();
@@ -104,7 +102,7 @@ export class StatisticContentComponent implements OnInit, OnDestroy {
     };
     this.format = this.content.format;
     this.checkIfSurvey();
-    if (this.directShow && this.format !== ContentType.FLASHCARD) {
+    if (this.directShow) {
       this.answersVisible = true;
     }
     this.roundsToDisplay = this.content.state.round - 1;
@@ -112,12 +110,12 @@ export class StatisticContentComponent implements OnInit, OnDestroy {
     this.isParticipant =
       this.route.snapshot.data.viewRole === UserRole.PARTICIPANT;
     this.isLoading = false;
-    this.indexChanged.subscribe((index) => {
+    this.indexChanged.subscribe(() => {
       this.updateCounter(this.answerCount);
       this.broadcastRoundState();
       if (
         this.settings.showContentResultsDirectly &&
-        index === this.index &&
+        this.active &&
         !this.answersVisible
       ) {
         this.toggleAnswers();

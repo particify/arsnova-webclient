@@ -1,15 +1,10 @@
 <div
   tabindex="-1"
   class="container"
-  [ngClass]="{ 'presentation-step': isPresentation }"
   (touchstart)="swipe($event, 'start')"
   (touchend)="swipe($event, 'end')"
 >
-  <div
-    fxLayout="row"
-    class="inner-container"
-    *ngIf="!isPresentation && !focusModeEnabled"
-  >
+  <div fxLayout="row" class="inner-container" *ngIf="showSteps">
     <button
       tabindex="-1"
       mat-icon-button
@@ -29,7 +24,8 @@
       }"
     >
       <div
-        class="stepper-navigation-bar"
+        fxLayout="row"
+        fxLayoutAlign="start"
         [@slideHeader]="{
           value: headerAnimationState,
           params: { position: headerPos * -20 }
@@ -73,6 +69,7 @@
     </button>
   </div>
   <div
+    fxFill
     [@slideContainer]="containerAnimationState"
     (@slideContainer.done)="containerAnimationDone()"
   >

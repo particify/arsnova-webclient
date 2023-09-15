@@ -187,7 +187,7 @@
           [ngClass]="{ 'invisible-card-content': !flipped }"
         >
           <div *ngIf="flipped" class="back-container">
-            <app-statistic-content
+            <app-content-results
               *ngIf="content.format !== ContentType.FLASHCARD && flipped"
               [content]="content"
               [active]="true"
@@ -195,7 +195,7 @@
               [correctOptionsPublished]="correctOptionsPublished"
               [useCustomFlipAction]="true"
               (customFlipEvent)="goToStats()"
-            ></app-statistic-content>
+            ></app-content-results>
             <div *ngIf="content.format === ContentType.FLASHCARD && flipped">
               <app-rendered-text
                 [rawText]="flashcardContent.additionalText"
@@ -217,7 +217,7 @@
                 <button
                   mat-raised-button
                   color="primary"
-                  (click)="goToNextContent(lastContent)"
+                  (click)="goToNextContent()"
                   aria-labelledby="next-content"
                 >
                   {{
