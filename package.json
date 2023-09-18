@@ -35,7 +35,7 @@
     "@angular/router": "16.1.9",
     "@angular/service-worker": "16.1.9",
     "@fontsource/roboto": "5.0.8",
-    "@ngneat/transloco": "5.0.7",
+    "@ngneat/transloco": "5.0.9",
     "@stomp/rx-stomp": "2.0.0",
     "@stomp/stompjs": "7.0.0",
     "angular-material-css-vars": "5.0.2",
