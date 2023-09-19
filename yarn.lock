@@ -7575,7 +7575,7 @@ __metadata:
     eslint: 8.49.0
     eslint-import-resolver-typescript: 3.6.0
     eslint-plugin-import: 2.28.1
-    eslint-plugin-jsdoc: 46.8.0
+    eslint-plugin-jsdoc: 46.8.1
     eslint-plugin-prefer-arrow: 1.2.3
     eslint-plugin-storybook: 0.6.13
     file-system-cache: 2.4.4
@@ -9902,9 +9902,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:46.8.0":
-  version: 46.8.0
-  resolution: "eslint-plugin-jsdoc@npm:46.8.0"
+"eslint-plugin-jsdoc@npm:46.8.1":
+  version: 46.8.1
+  resolution: "eslint-plugin-jsdoc@npm:46.8.1"
   dependencies:
     "@es-joy/jsdoccomment": ~0.40.1
     are-docs-informative: ^0.0.2
@@ -9917,7 +9917,7 @@ __metadata:
     spdx-expression-parse: ^3.0.1
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
-  checksum: 946d864d72646db368034f750b0f7353cd029aa955ac71e241e71e9d771f531fd71e15414893821d3186560e3b2ef430bfcd1dbd3ee6650828af16753221b064
+  checksum: 481be2d8684892039d1f5165172e8934cb40c595c2af54c91bbfe0c9dab89a19fadc03278631bbb2c30fc7431dca725678dd012b228333f6eecf2677c4e9ec4d
   languageName: node
   linkType: hard
 
