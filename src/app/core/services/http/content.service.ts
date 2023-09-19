@@ -24,7 +24,7 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ContentState } from '@app/core/models/content-state';
-import { DisplayAnswer } from '@app/creator/series/content-creation/_models/display-answer';
+import { DisplayAnswer } from '@app/creator/content-group/content-creation/_models/display-answer';
 import { AnswerOption } from '@app/core/models/answer-option';
 
 const httpOptions = {

@@ -36,7 +36,9 @@ const routes: Routes = [
   {
     path: 'series/:seriesName',
     loadChildren: () =>
-      import('./series/series.module').then((m) => m.SeriesModule),
+      import('./content-group/content-group.module').then(
+        (m) => m.ContentGroupModule
+      ),
   },
 ];
 

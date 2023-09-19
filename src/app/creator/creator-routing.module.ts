@@ -6,9 +6,6 @@ import {
 } from '@projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentCreationPageComponent } from './series/content-creation/content-creation-page/content-creation-page.component';
-import { StatisticsPageComponent } from './series/statistics-page/statistics-page.component';
-import { ContentPresentationComponent } from './series/content-presentation/content-presentation.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
@@ -54,7 +51,9 @@ const routes: Routes = [
   {
     path: 'series/:seriesName',
     loadChildren: () =>
-      import('./series/series.module').then((m) => m.SeriesModule),
+      import('./content-group/content-group.module').then(
+        (m) => m.ContentGroupModule
+      ),
     title: 'series',
   },
   {

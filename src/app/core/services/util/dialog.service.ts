@@ -16,7 +16,7 @@ import { VersionInfo } from '@app/core/models/version-info';
 import {
   ExportComponent,
   ExportOptions,
-} from '@app/creator/series/_dialogs/export/export.component';
+} from '@app/creator/content-group/_dialogs/export/export.component';
 import { EventCategory, TrackingService } from './tracking.service';
 
 @Injectable()
