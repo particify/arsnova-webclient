@@ -2,12 +2,12 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 
-import { ContentPrioritizationCreationComponent } from './content-prioritization-creation.component';
+import { PrioritizationContentFormComponent } from './prioritization-content-form.component';
 import { ContentService } from '@app/core/services/http/content.service';
 
-describe('ContentPrioritizationCreationComponent', () => {
-  let component: ContentPrioritizationCreationComponent;
-  let fixture: ComponentFixture<ContentPrioritizationCreationComponent>;
+describe('PrioritizationContentFormComponent', () => {
+  let component: PrioritizationContentFormComponent;
+  let fixture: ComponentFixture<PrioritizationContentFormComponent>;
 
   const mockContentService = jasmine.createSpyObj('ContentService', [
     'getAnswerOptions',
@@ -15,7 +15,7 @@ describe('ContentPrioritizationCreationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContentPrioritizationCreationComponent],
+      declarations: [PrioritizationContentFormComponent],
       imports: [getTranslocoModule()],
       providers: [
         {
@@ -26,7 +26,7 @@ describe('ContentPrioritizationCreationComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ContentPrioritizationCreationComponent);
+    fixture = TestBed.createComponent(PrioritizationContentFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -145,52 +145,52 @@
               </mat-checkbox>
             </div>
             <div *ngIf="!isLoading" [ngSwitch]="selectedFormat.type">
-              <app-content-choice-creation
+              <app-choice-content-form
                 *ngSwitchCase="ContentType.CHOICE"
                 [content]="content"
                 [isAnswered]="isAnswered"
                 [isEditMode]="isEditMode"
               >
-              </app-content-choice-creation>
-              <app-content-scale-creation
+              </app-choice-content-form>
+              <app-scale-content-form
                 *ngSwitchCase="ContentType.SCALE"
                 [content]="content"
                 [isAnswered]="isAnswered"
                 [isEditMode]="isEditMode"
               >
-              </app-content-scale-creation>
-              <app-content-yes-no-creation
+              </app-scale-content-form>
+              <app-binary-content-form
                 *ngSwitchCase="ContentType.BINARY"
                 [isEditMode]="isEditMode"
                 [content]="content"
               >
-              </app-content-yes-no-creation>
-              <app-content-flashcard-creation
+              </app-binary-content-form>
+              <app-flashcard-content-form
                 *ngSwitchCase="ContentType.FLASHCARD"
                 [content]="content"
                 [isEditMode]="isEditMode"
               >
-              </app-content-flashcard-creation>
-              <app-content-sort-creation
+              </app-flashcard-content-form>
+              <app-sort-content-form
                 *ngSwitchCase="ContentType.SORT"
                 [content]="content"
                 [isEditMode]="isEditMode"
                 [isAnswered]="isAnswered"
               >
-              </app-content-sort-creation>
-              <app-content-wordcloud-creation
+              </app-sort-content-form>
+              <app-wordcloud-content-form
                 *ngSwitchCase="ContentType.WORDCLOUD"
                 [content]="content"
                 [isEditMode]="isEditMode"
               >
-              </app-content-wordcloud-creation>
-              <app-content-prioritization-creation
+              </app-wordcloud-content-form>
+              <app-prioritization-content-form
                 *ngSwitchCase="ContentType.PRIORITIZATION"
                 [content]="content"
                 [isEditMode]="isEditMode"
                 [isAnswered]="isAnswered"
               >
-              </app-content-prioritization-creation>
+              </app-prioritization-content-form>
             </div>
           </div>
 

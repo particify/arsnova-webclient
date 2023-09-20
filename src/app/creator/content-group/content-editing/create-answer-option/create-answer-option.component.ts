@@ -6,7 +6,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { DisplayAnswer } from '@app/creator/content-group/content-creation/_models/display-answer';
+import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { TranslocoService } from '@ngneat/transloco';
 

@@ -1,30 +1,21 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ContentFlashcardCreationComponent } from './content-flashcard-creation.component';
-import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
+import { WordcloudContentFormComponent } from './wordcloud-content-form.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MockNotificationService } from '@testing/test-helpers';
-import { FormattingService } from '@app/core/services/http/formatting.service';
-
-@Injectable()
-class MockFormattingService {}
-
-describe('ContentFlashcardCreationComponent', () => {
-  let component: ContentFlashcardCreationComponent;
-  let fixture: ComponentFixture<ContentFlashcardCreationComponent>;
+describe('WordcloudContentFormComponent', () => {
+  let component: WordcloudContentFormComponent;
+  let fixture: ComponentFixture<WordcloudContentFormComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentFlashcardCreationComponent],
+      declarations: [WordcloudContentFormComponent],
       providers: [
         {
           provide: NotificationService,
           useClass: MockNotificationService,
-        },
-        {
-          provide: FormattingService,
-          useClass: MockFormattingService,
         },
       ],
       imports: [getTranslocoModule()],
@@ -32,7 +23,7 @@ describe('ContentFlashcardCreationComponent', () => {
     })
       .compileComponents()
       .then(() => {
-        fixture = TestBed.createComponent(ContentFlashcardCreationComponent);
+        fixture = TestBed.createComponent(WordcloudContentFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
       });

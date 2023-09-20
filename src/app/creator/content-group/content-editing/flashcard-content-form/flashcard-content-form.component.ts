@@ -16,21 +16,21 @@ import { HintType } from '@app/core/models/hint-type.enum';
 import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
-import { ContentCreation } from '@app/creator/content-group/content-creation/content-creation-page/content-creation';
+import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 
 @Component({
-  selector: 'app-content-flashcard-creation',
-  templateUrl: './content-flashcard-creation.component.html',
+  selector: 'app-flashcard-content-form',
+  templateUrl: './flashcard-content-form.component.html',
   providers: [
     {
-      provide: 'ContentCreation',
-      useExisting: ContentFlashcardCreationComponent,
+      provide: 'ContentForm',
+      useExisting: FlashcardContentFormComponent,
     },
   ],
 })
-export class ContentFlashcardCreationComponent
+export class FlashcardContentFormComponent
   extends FormComponent
-  implements OnInit, OnChanges, ContentCreation
+  implements OnInit, OnChanges, ContentForm
 {
   @Input() content?: Content;
   @Input() isEditMode: boolean;

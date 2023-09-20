@@ -8,22 +8,22 @@ import { ContentScale } from '@app/core/models/content-scale';
 import { Content } from '@app/core/models/content';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
-import { ContentCreation } from '@app/creator/content-group/content-creation/content-creation-page/content-creation';
+import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 
 @Component({
-  selector: 'app-content-scale-creation',
-  templateUrl: './content-scale-creation.component.html',
-  styleUrls: ['./content-scale-creation.component.scss'],
+  selector: 'app-scale-content-form',
+  templateUrl: './scale-content-form.component.html',
+  styleUrls: ['./scale-content-form.component.scss'],
   providers: [
     {
-      provide: 'ContentCreation',
-      useExisting: ContentScaleCreationComponent,
+      provide: 'ContentForm',
+      useExisting: ScaleContentFormComponent,
     },
   ],
 })
-export class ContentScaleCreationComponent
+export class ScaleContentFormComponent
   extends FormComponent
-  implements OnInit, ContentCreation
+  implements OnInit, ContentForm
 {
   @Input() content?: Content;
   @Input() isAnswered: boolean;

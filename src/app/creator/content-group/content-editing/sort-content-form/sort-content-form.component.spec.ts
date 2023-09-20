@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ContentSortCreationComponent } from './content-sort-creation.component';
+import { SortContentFormComponent } from './sort-content-form.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentService } from '@app/core/services/http/content.service';
 
-describe('ContentSortCreationComponent', () => {
-  let component: ContentSortCreationComponent;
-  let fixture: ComponentFixture<ContentSortCreationComponent>;
+describe('SortContentFormComponent', () => {
+  let component: SortContentFormComponent;
+  let fixture: ComponentFixture<SortContentFormComponent>;
 
   const mockContentService = jasmine.createSpyObj('ContentService', [
     'getAnswerOptions',
@@ -15,7 +15,7 @@ describe('ContentSortCreationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentSortCreationComponent],
+      declarations: [SortContentFormComponent],
       imports: [getTranslocoModule()],
       providers: [
         {
@@ -27,7 +27,7 @@ describe('ContentSortCreationComponent', () => {
     })
       .compileComponents()
       .then(() => {
-        fixture = TestBed.createComponent(ContentSortCreationComponent);
+        fixture = TestBed.createComponent(SortContentFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
       });

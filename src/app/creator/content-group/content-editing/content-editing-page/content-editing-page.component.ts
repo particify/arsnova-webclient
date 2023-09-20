@@ -20,7 +20,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { ContentCreation } from '@app/creator/content-group/content-creation/content-creation-page/content-creation';
+import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 
 class ContentFormat {
   type: ContentType;
@@ -29,15 +29,15 @@ class ContentFormat {
 }
 
 @Component({
-  selector: 'app-content-create-page',
-  templateUrl: './content-creation-page.component.html',
-  styleUrls: ['./content-creation-page.component.scss'],
+  selector: 'app-content-editing-page',
+  templateUrl: './content-editing-page.component.html',
+  styleUrls: ['./content-editing-page.component.scss'],
 })
-export class ContentCreationPageComponent
+export class ContentEditingPageComponent
   extends FormComponent
   implements OnInit
 {
-  @ViewChild('ContentCreation') private creationComponent: ContentCreation;
+  @ViewChild('ContentForm') private contentForm: ContentForm;
   @ViewChild('questionInput') bodyInput: ElementRef;
 
   question: string;
@@ -235,7 +235,7 @@ export class ContentCreationPageComponent
   private setContent(): boolean {
     let content: Content | undefined;
     if (this.selectedFormat.type !== ContentType.SLIDE) {
-      content = this.creationComponent.getContent();
+      content = this.contentForm.getContent();
     } else {
       if (!this.isEditMode) {
         content = new Content();

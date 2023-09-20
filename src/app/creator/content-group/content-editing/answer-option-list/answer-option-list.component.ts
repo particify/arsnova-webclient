@@ -5,7 +5,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { DisplayAnswer } from '@app/creator/content-group/content-creation/_models/display-answer';
+import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { DragDropBaseComponent } from '@app/shared/drag-drop-base/drag-drop-base.component';
 import { TranslocoService } from '@ngneat/transloco';
 

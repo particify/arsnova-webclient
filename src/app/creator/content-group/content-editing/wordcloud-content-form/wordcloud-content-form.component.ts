@@ -8,24 +8,24 @@ import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
-import { ContentCreation } from '@app/creator/content-group/content-creation/content-creation-page/content-creation';
+import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 
 const MAX_KEYWORDS = 10;
 
 @Component({
-  selector: 'app-content-wordcloud-creation',
-  templateUrl: './content-wordcloud-creation.component.html',
-  styleUrls: ['./content-wordcloud-creation.component.scss'],
+  selector: 'app-wordcloud-content-form',
+  templateUrl: './wordcloud-content-form.component.html',
+  styleUrls: ['./wordcloud-content-form.component.scss'],
   providers: [
     {
-      provide: 'ContentCreation',
-      useExisting: ContentWordcloudCreationComponent,
+      provide: 'ContentForm',
+      useExisting: WordcloudContentFormComponent,
     },
   ],
 })
-export class ContentWordcloudCreationComponent
+export class WordcloudContentFormComponent
   extends FormComponent
-  implements OnInit, ContentCreation
+  implements OnInit, ContentForm
 {
   @Input() content?: Content;
   @Input() isEditMode: boolean;

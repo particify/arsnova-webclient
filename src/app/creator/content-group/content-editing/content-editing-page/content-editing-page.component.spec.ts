@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ContentCreationPageComponent } from './content-creation-page.component';
+import { ContentEditingPageComponent } from './content-editing-page.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -65,9 +65,9 @@ class MockAnnouncer {}
 @Injectable()
 class MockFormattingService {}
 
-describe('ContentCreationPageComponent', () => {
-  let component: ContentCreationPageComponent;
-  let fixture: ComponentFixture<ContentCreationPageComponent>;
+describe('ContentEditingPageComponent', () => {
+  let component: ContentEditingPageComponent;
+  let fixture: ComponentFixture<ContentEditingPageComponent>;
 
   const data = {
     room: {
@@ -83,7 +83,7 @@ describe('ContentCreationPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentCreationPageComponent, A11yIntroPipe],
+      declarations: [ContentEditingPageComponent, A11yIntroPipe],
       providers: [
         {
           provide: DialogService,
@@ -140,7 +140,7 @@ describe('ContentCreationPageComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentCreationPageComponent);
+    fixture = TestBed.createComponent(ContentEditingPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

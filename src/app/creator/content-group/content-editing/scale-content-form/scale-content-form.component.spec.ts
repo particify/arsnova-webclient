@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ContentScaleCreationComponent } from './content-scale-creation.component';
+import { ScaleContentFormComponent } from './scale-content-form.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
@@ -9,13 +9,13 @@ class MockLikertScaleService {
   getOptionLabels() {}
 }
 
-describe('ContentScaleCreationComponent', () => {
-  let component: ContentScaleCreationComponent;
-  let fixture: ComponentFixture<ContentScaleCreationComponent>;
+describe('ScaleContentFormComponent', () => {
+  let component: ScaleContentFormComponent;
+  let fixture: ComponentFixture<ScaleContentFormComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentScaleCreationComponent],
+      declarations: [ScaleContentFormComponent],
       providers: [
         {
           provide: LikertScaleService,
@@ -27,7 +27,7 @@ describe('ContentScaleCreationComponent', () => {
     })
       .compileComponents()
       .then(() => {
-        fixture = TestBed.createComponent(ContentScaleCreationComponent);
+        fixture = TestBed.createComponent(ScaleContentFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
       });

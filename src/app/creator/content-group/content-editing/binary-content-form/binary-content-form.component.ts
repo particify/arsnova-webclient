@@ -6,7 +6,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { TranslocoService } from '@ngneat/transloco';
 import { AnswerOption } from '@app/core/models/answer-option';
-import { ContentCreation } from '@app/creator/content-group/content-creation/content-creation-page/content-creation';
+import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 
 enum BINARY_OPTION {
   NEITHER = 'neither',
@@ -15,19 +15,19 @@ enum BINARY_OPTION {
 }
 
 @Component({
-  selector: 'app-content-yes-no-creation',
-  templateUrl: './content-yes-no-creation.component.html',
-  styleUrls: ['./content-yes-no-creation.component.scss'],
+  selector: 'app-binary-content-form',
+  templateUrl: './binary-content-form.component.html',
+  styleUrls: ['./binary-content-form.component.scss'],
   providers: [
     {
-      provide: 'ContentCreation',
-      useExisting: ContentYesNoCreationComponent,
+      provide: 'ContentForm',
+      useExisting: BinaryContentFormComponent,
     },
   ],
 })
-export class ContentYesNoCreationComponent
+export class BinaryContentFormComponent
   extends FormComponent
-  implements OnInit, ContentCreation
+  implements OnInit, ContentForm
 {
   @Input() content?: Content;
   @Input() isEditMode: boolean;

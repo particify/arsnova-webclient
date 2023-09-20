@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ContentChoiceCreationComponent } from './content-choice-creation.component';
+import { ChoiceContentFormComponent } from './choice-content-form.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MatButtonModule } from '@angular/material/button';
 import { ContentService } from '@app/core/services/http/content.service';
 
-describe('ContentChoiceCreationComponent', () => {
-  let component: ContentChoiceCreationComponent;
-  let fixture: ComponentFixture<ContentChoiceCreationComponent>;
+describe('ChoiceContentFormComponent', () => {
+  let component: ChoiceContentFormComponent;
+  let fixture: ComponentFixture<ChoiceContentFormComponent>;
 
   const mockContentService = jasmine.createSpyObj('ContentService', [
     'getAnswerOptions',
@@ -16,7 +16,7 @@ describe('ContentChoiceCreationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentChoiceCreationComponent],
+      declarations: [ChoiceContentFormComponent],
       imports: [getTranslocoModule(), MatButtonModule],
       providers: [
         {
@@ -28,7 +28,7 @@ describe('ContentChoiceCreationComponent', () => {
     })
       .compileComponents()
       .then(() => {
-        fixture = TestBed.createComponent(ContentChoiceCreationComponent);
+        fixture = TestBed.createComponent(ChoiceContentFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
       });

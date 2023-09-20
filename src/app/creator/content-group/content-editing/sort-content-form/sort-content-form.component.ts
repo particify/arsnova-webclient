@@ -9,27 +9,27 @@ import {
 import { ContentChoice } from '@app/core/models/content-choice';
 import { FormService } from '@app/core/services/util/form.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { DisplayAnswer } from '@app/creator/content-group/content-creation/_models/display-answer';
+import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
-import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-creation/create-answer-option/create-answer-option.component';
-import { AnswerOptionListComponent } from '@app/creator/content-group/content-creation/answer-option-list/answer-option-list.component';
+import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
+import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentService } from '@app/core/services/http/content.service';
-import { ContentCreation } from '@app/creator/content-group/content-creation/content-creation-page/content-creation';
+import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 
 @Component({
-  selector: 'app-content-sort-creation',
-  templateUrl: './content-sort-creation.component.html',
+  selector: 'app-sort-content-form',
+  templateUrl: './sort-content-form.component.html',
   providers: [
     {
-      provide: 'ContentCreation',
-      useExisting: ContentSortCreationComponent,
+      provide: 'ContentForm',
+      useExisting: SortContentFormComponent,
     },
   ],
 })
-export class ContentSortCreationComponent
+export class SortContentFormComponent
   extends FormComponent
-  implements OnInit, OnChanges, ContentCreation
+  implements OnInit, OnChanges, ContentForm
 {
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation: CreateAnswerOptionComponent;

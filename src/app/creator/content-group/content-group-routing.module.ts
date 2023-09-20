@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ContentGroupPageComponent } from './content-group-page.component';
-import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
+import { ContentEditingPageComponent } from './content-editing/content-editing-page/content-editing-page.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { ParentRoute } from '@app/core/models/parent-route';
@@ -16,12 +16,12 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    component: ContentCreationPageComponent,
+    component: ContentEditingPageComponent,
     title: 'content-creation',
   },
   {
     path: 'edit/:contentId',
-    component: ContentCreationPageComponent,
+    component: ContentEditingPageComponent,
     data: {
       isEditMode: true,
     },

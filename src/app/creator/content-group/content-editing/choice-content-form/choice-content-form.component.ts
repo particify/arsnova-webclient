@@ -7,30 +7,30 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { DisplayAnswer } from '@app/creator/content-group/content-creation/_models/display-answer';
-import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-creation/create-answer-option/create-answer-option.component';
+import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
+import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { Content } from '@app/core/models/content';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { AnswerOptionListComponent } from '@app/creator/content-group/content-creation/answer-option-list/answer-option-list.component';
+import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentService } from '@app/core/services/http/content.service';
-import { ContentCreation } from '@app/creator/content-group/content-creation/content-creation-page/content-creation';
+import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { FormComponent } from '@app/standalone/form/form.component';
 
 @Component({
-  selector: 'app-content-choice-creation',
-  templateUrl: './content-choice-creation.component.html',
-  styleUrls: ['./content-choice-creation.component.scss'],
+  selector: 'app-choice-content-form',
+  templateUrl: './choice-content-form.component.html',
+  styleUrls: ['./choice-content-form.component.scss'],
   providers: [
     {
-      provide: 'ContentCreation',
-      useExisting: ContentChoiceCreationComponent,
+      provide: 'ContentForm',
+      useExisting: ChoiceContentFormComponent,
     },
   ],
 })
-export class ContentChoiceCreationComponent
+export class ChoiceContentFormComponent
   extends FormComponent
-  implements OnInit, OnChanges, ContentCreation
+  implements OnInit, OnChanges, ContentForm
 {
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation: CreateAnswerOptionComponent;
