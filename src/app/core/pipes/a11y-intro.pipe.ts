@@ -17,7 +17,7 @@ export class A11yIntroPipe implements PipeTransform {
       .pipe(
         take(1),
         map((t) => {
-          return t[i18nKey] + ' ' + t['hotkeys.a11y-help-key-announcement'];
+          return t[0] + ' ' + t[1];
         })
       );
   }
