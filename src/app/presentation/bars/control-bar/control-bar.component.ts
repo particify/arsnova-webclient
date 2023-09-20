@@ -461,7 +461,7 @@ export class ControlBarComponent
         index = this.barItems.map((s) => s.url).indexOf(matchingRoutes[0].url);
       }
     }
-    this.currentRouteIndex = index;
+    this.currentRouteIndex = index ?? -1;
   }
 
   subscribeFullscreen() {
