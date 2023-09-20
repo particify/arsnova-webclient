@@ -78,7 +78,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     new NavBarItem(RoutingFeature.CONTENTS, 'equalizer'),
     new NavBarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
   ];
-  currentRouteIndex?: number;
+  currentRouteIndex: number;
   activeFeatures: string[] = [RoutingFeature.OVERVIEW];
   group: ContentGroup;
   groupName: string;

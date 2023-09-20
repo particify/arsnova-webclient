@@ -39,6 +39,8 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { MatMenuModule } from '@angular/material/menu';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;
@@ -157,7 +159,7 @@ describe('ControlBarComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ControlBarComponent, SplitShortIdPipe],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), MatMenuModule],
       providers: [
         {
           provide: RoomStatsService,
