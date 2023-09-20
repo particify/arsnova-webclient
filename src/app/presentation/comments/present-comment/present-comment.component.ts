@@ -42,7 +42,7 @@ export class PresentCommentComponent implements OnInit, OnDestroy {
           {
             key: '+',
             action: () => this.updateZoom(1),
-            actionTitle: t['comment-page.zoom-in'],
+            actionTitle: t[0],
           },
           this.hotkeyRefs
         );
@@ -50,7 +50,7 @@ export class PresentCommentComponent implements OnInit, OnDestroy {
           {
             key: '-',
             action: () => this.updateZoom(-1),
-            actionTitle: t['comment-page.zoom-out'],
+            actionTitle: t[1],
           },
           this.hotkeyRefs
         );

@@ -137,7 +137,7 @@ export class CommentsPageComponent
           {
             key: 'ArrowRight',
             action: () => this.nextComment(),
-            actionTitle: t['creator.comment-list.next'],
+            actionTitle: t[0],
           },
           this.hotkeyRefs
         );
@@ -145,7 +145,7 @@ export class CommentsPageComponent
           {
             key: 'ArrowLeft',
             action: () => this.prevComment(),
-            actionTitle: t['creator.comment-list.previous'],
+            actionTitle: t[1],
           },
           this.hotkeyRefs
         );
