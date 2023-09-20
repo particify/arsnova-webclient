@@ -14,7 +14,7 @@ import { SortContentFormComponent } from './content-editing/sort-content-form/so
 import { FlashcardContentFormComponent } from './content-editing/flashcard-content-form/flashcard-content-form.component';
 import { WordcloudContentFormComponent } from './content-editing/wordcloud-content-form/wordcloud-content-form.component';
 import { ChoiceContentFormComponent } from './content-editing/choice-content-form/choice-content-form.component';
-import { ContentEditingPageComponent } from './content-editing/content-editing-page/content-editing-page.component';
+import { ContentEditingPageComponent } from './content-editing/content-editing-page.component';
 import { ScaleContentFormComponent } from './content-editing/scale-content-form/scale-content-form.component';
 import { BinaryContentFormComponent } from './content-editing/binary-content-form/binary-content-form.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
