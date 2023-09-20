@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContentGroupPageComponent } from './content-group-page.component';
+import { ContentsPageComponent } from './contents-page.component';
 import { ContentGroup } from '@app/core/models/content-group';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -31,7 +31,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
-import { PublishContentComponent } from '@app/presentation/content-group/_dialogs/publish-content/publish-content.component';
+import { PublishContentComponent } from '@app/presentation/contents/_dialogs/publish-content/publish-content.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 class MockContentService {
@@ -57,9 +57,9 @@ class MockContentGroupService {
   }
 }
 
-describe('ContentGroupPageComponent', () => {
-  let component: ContentGroupPageComponent;
-  let fixture: ComponentFixture<ContentGroupPageComponent>;
+describe('ContentsPageComponent', () => {
+  let component: ContentsPageComponent;
+  let fixture: ComponentFixture<ContentsPageComponent>;
 
   const dialogService = jasmine.createSpyObj('DialogService', ['openDialog']);
 
@@ -115,7 +115,7 @@ describe('ContentGroupPageComponent', () => {
     );
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentGroupPageComponent],
+      declarations: [ContentsPageComponent],
       imports: [getTranslocoModule()],
       providers: [
         {
@@ -170,7 +170,7 @@ describe('ContentGroupPageComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
-    fixture = TestBed.createComponent(ContentGroupPageComponent);
+    fixture = TestBed.createComponent(ContentsPageComponent);
     component = fixture.componentInstance;
     component.contentGroup = new ContentGroup();
     component.contentGroup.contentIds = ['0', '1', '2', '3', '4', '5', '6'];

@@ -29,14 +29,14 @@ import { ContentPublishActionType } from '@app/core/models/content-publish-actio
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
-import { PublishContentComponent } from '@app/presentation/content-group/_dialogs/publish-content/publish-content.component';
+import { PublishContentComponent } from '@app/presentation/contents/_dialogs/publish-content/publish-content.component';
 
 @Component({
-  selector: 'app-series-page',
-  templateUrl: './content-group-page.component.html',
-  styleUrls: ['./content-group-page.component.scss'],
+  selector: 'app-contents-page',
+  templateUrl: './contents-page.component.html',
+  styleUrls: ['./contents-page.component.scss'],
 })
-export class ContentGroupPageComponent implements OnInit, OnDestroy {
+export class ContentsPageComponent implements OnInit, OnDestroy {
   @ViewChild(StepperComponent) stepper: StepperComponent;
 
   destroyed$ = new Subject<void>();
