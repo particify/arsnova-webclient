@@ -1,0 +1,34 @@
+<div fxLayout="column" fxLayoutGap="10px">
+  <div fxLayout="column">
+    <mat-checkbox
+      [disabled]="formDisabled"
+      [checked]="multipleCorrectAnswers"
+      (change)="changeMultiple($event)"
+      name="multiple"
+    >
+      <span>{{ 'creator.content.multiple-answers-allowed' | transloco }}</span>
+    </mat-checkbox>
+    <mat-checkbox
+      [disabled]="formDisabled"
+      [checked]="noCorrectAnswers"
+      (change)="changeNoCorrect($event)"
+      name="noCorrect"
+    >
+      <span>{{ 'creator.content.no-correct-answer' | transloco }}</span>
+    </mat-checkbox>
+  </div>
+  <div>
+    <app-divider *ngIf="displayAnswers.length > 0"></app-divider>
+    <app-answer-option-list
+      [answers]="displayAnswers"
+      [hasCorrectAnswers]="!noCorrectAnswers"
+      [hasMultipleCorrectAnswers]="multipleCorrectAnswers"
+      [allowDeletion]="!isEditMode || !isAnswered"
+      [disabled]="formDisabled"
+    ></app-answer-option-list>
+  </div>
+  <app-create-answer-option
+    *ngIf="!isEditMode || !isAnswered"
+    [answers]="displayAnswers"
+  ></app-create-answer-option>
+</div>

@@ -1,0 +1,263 @@
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<app-base-card *ngIf="!isLoading">
+  <div class="visually-hidden">
+    <div [appAutofocus] tabIndex="-1">
+      {{
+        'creator.content.a11y-content-list-message'
+          | a11yIntro: { name: contentGroup.name }
+          | async
+      }}
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <app-content-group-title
+      fxFlex="50"
+      [disabled]="isModerator"
+      [seriesName]="groupName"
+      [contentGroupStats]="contentGroupStats"
+      (seriesNameChanged)="updateName($event)"
+    ></app-content-group-title>
+    <div fxLayoutAlign="center center" fxLayoutGap="8px" class="status-bar">
+      <mat-icon
+        class="status-icon"
+        [ngClass]="{
+          active: statisticsPublished,
+          inactive: !statisticsPublished
+        }"
+        [matTooltip]="
+          'creator.content.statistics-are' +
+            (statisticsPublished ? '' : '-not') +
+            '-published' | transloco
+        "
+        [attr.aria-labelledby]="
+          ('creator.content.a11y-statistics-are' + statisticsPublished
+            ? ''
+            : '-not' + '-published'
+          ) | transloco
+        "
+      >
+        bar_chart
+      </mat-icon>
+      <mat-icon
+        class="status-icon"
+        [ngClass]="{
+          active: correctOptionsPublished,
+          inactive: !correctOptionsPublished
+        }"
+        [matTooltip]="
+          'creator.content.correct-options-are' +
+            (correctOptionsPublished ? '' : '-not') +
+            '-published' | transloco
+        "
+        [attr.aria-labelledby]="
+          ('creator.content.a11y-correct-options-are' + correctOptionsPublished
+            ? ''
+            : '-not' + '-published'
+          ) | transloco
+        "
+      >
+        done_all
+      </mat-icon>
+    </div>
+  </div>
+  <div
+    *ngIf="!isLoading && !isModerator"
+    fxLayout="row wrap"
+    fxLayoutAlign="space-between center"
+    class="action-container"
+  >
+    <div
+      *ngIf="!isInSortingMode"
+      fxLayout="row wrap"
+      fxLayoutAlign="space-between center"
+      fxLayoutGap="10px"
+    >
+      <button
+        mat-raised-button
+        id="content-create-button"
+        color="primary"
+        class="add-desktop"
+        [routerLink]="'create'"
+        appHotkey="1"
+        [appHotkeyTitle]="'creator.room-page.create-content' | transloco"
+      >
+        <mat-icon>add</mat-icon>
+        {{ 'creator.room-page.create-content' | transloco }}
+      </button>
+      <button
+        mat-fab
+        color="primary"
+        id="content-create-button-mobile"
+        class="mobile-add"
+        [ngClass]="{
+          'mobile-add-above-nav': true,
+          'mobile-add-hide': !onInit
+        }"
+        [routerLink]="'create'"
+        [matTooltip]="'creator.room-page.create-content' | transloco"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+      <div class="settings-buttons">
+        <button
+          mat-button
+          id="statistic-button"
+          class="settings-button"
+          [routerLink]="'statistics'"
+          [disabled]="contents.length === 0"
+          appHotkey="2"
+          [appHotkeyTitle]="'room-page.answer-statistics' | transloco"
+        >
+          <mat-icon>insert_chart</mat-icon>
+          {{ 'room-page.answer-statistics' | transloco }}
+        </button>
+        <button
+          mat-button
+          id="settings-button"
+          class="settings-button"
+          [matMenuTriggerFor]="groupSettings"
+          appHotkey="3"
+          [appHotkeyTitle]="'creator.content.group-settings' | transloco"
+        >
+          <mat-icon>settings</mat-icon>
+          {{ 'creator.content.group-settings' | transloco }}
+        </button>
+      </div>
+      <mat-menu #groupSettings="matMenu">
+        <button
+          mat-menu-item
+          (click)="toggleStatisticsPublished()"
+          appTrackInteraction="Content group publish stats toggled"
+          [appTrackName]="statisticsPublished ? 'off' : 'on'"
+        >
+          <mat-icon>bar_chart</mat-icon>
+          {{
+            (statisticsPublished
+              ? 'creator.content.dont-publish-statistics'
+              : 'creator.content.publish-statistics'
+            ) | transloco
+          }}
+        </button>
+        <button
+          mat-menu-item
+          (click)="toggleCorrectOptionsPublished()"
+          appTrackInteraction="Content group publish correct options toggled"
+          [appTrackName]="correctOptionsPublished ? 'off' : 'on'"
+        >
+          <mat-icon>done_all</mat-icon>
+          {{
+            (correctOptionsPublished
+              ? 'creator.content.dont-publish-correct-options'
+              : 'creator.content.publish-correct-options'
+            ) | transloco
+          }}
+        </button>
+        <mat-divider></mat-divider>
+        <button
+          mat-menu-item
+          id="edit-group-sort"
+          (click)="goInSortingMode()"
+          [disabled]="contents.length < 2"
+          appTrackInteraction="Content group sorting started"
+        >
+          <mat-icon>sort</mat-icon>
+          {{ 'creator.content.sort-content-group' | transloco }}
+        </button>
+        <button mat-menu-item [matMenuTriggerFor]="importExportMenu">
+          <mat-icon>swap_vert</mat-icon>
+          {{ 'creator.content.import-export-content-group' | transloco }}
+        </button>
+        <mat-menu #importExportMenu="matMenu">
+          <button
+            mat-menu-item
+            (click)="exportToCsv()"
+            [disabled]="contents.length === 0"
+          >
+            {{ 'creator.export.export-series' | transloco }}
+          </button>
+          <button
+            mat-menu-item
+            (click)="importFromCsv()"
+            appTrackInteraction="File dialog for CSV import opened"
+          >
+            {{ 'creator.import.import-series' | transloco }}
+          </button>
+          <mat-divider *ngIf="hasSeriesExportExtension"></mat-divider>
+          <lib-extension-point
+            extensionId="series-results-export"
+            [extensionData]="{
+              series: contentGroup,
+              shortId: room.shortId
+            }"
+          ></lib-extension-point>
+        </mat-menu>
+        <mat-divider></mat-divider>
+        <button
+          mat-menu-item
+          (click)="deleteAllAnswers()"
+          [disabled]="contents.length === 0"
+        >
+          <mat-icon>clear_all</mat-icon>
+          <span>{{ 'creator.content.delete-answers' | transloco }}</span>
+        </button>
+        <button mat-menu-item (click)="deleteGroup()">
+          <mat-icon color="warn">delete_forever</mat-icon>
+          {{ 'creator.content.delete-content-group' | transloco }}
+        </button>
+      </mat-menu>
+    </div>
+    <div fxLayoutGap="10px">
+      <button
+        *ngIf="isInSortingMode"
+        mat-button
+        class="abort"
+        (click)="leaveSortingMode()"
+        appTrackInteraction="Content group sorting finished"
+        appTrackName="reset"
+      >
+        {{ 'creator.content.abort' | transloco }}
+      </button>
+      <button
+        *ngIf="isInSortingMode"
+        mat-raised-button
+        color="primary"
+        (click)="saveSorting()"
+        appTrackInteraction="Content group sorting finished"
+        appTrackName="save"
+      >
+        {{ 'creator.content.save' | transloco }}
+      </button>
+    </div>
+    <div
+      *ngIf="!isInSortingMode"
+      fxLayoutAlign="center center"
+      fxLayoutGap="16px"
+    >
+      <mat-slide-toggle
+        id="lock-group-slide"
+        (change)="publishContents()"
+        [(ngModel)]="published"
+        labelPosition="before"
+        appHotkey="4"
+        [appHotkeyTitle]="'creator.content.unlock-collection' | transloco"
+        appTrackInteraction="Content group publish toggled"
+        [appTrackName]="published ? 'off' : 'on'"
+      >
+        {{ 'creator.content.unlock-collection' | transloco }}
+      </mat-slide-toggle>
+    </div>
+  </div>
+  <app-content-list
+    *ngIf="!isInSortingMode"
+    [room]="room"
+    [contentGroup]="contentGroup"
+    [contents]="contents"
+    [contentGroupStats]="contentGroupStats"
+    [isModerator]="isModerator"
+  ></app-content-list>
+  <app-content-list-sort
+    *ngIf="isInSortingMode"
+    [contents]="copiedContents"
+    [contentGroup]="contentGroup"
+  ></app-content-list-sort>
+</app-base-card>

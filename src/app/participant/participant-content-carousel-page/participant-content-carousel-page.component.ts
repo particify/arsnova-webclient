@@ -4,7 +4,7 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { ContentGroup } from '@app/core/models/content-group';
 import { TranslocoService } from '@ngneat/transloco';
-import { StepperComponent } from '@app/shared/stepper/stepper.component';
+import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
@@ -357,8 +357,8 @@ export class ParticipantContentCarouselPageComponent
       this.contentCarouselService.isLastContentAnswered();
   }
 
-  nextContent(finish?: boolean) {
-    if (!finish) {
+  nextContent() {
+    if (this.currentStep < this.contents.length - 1) {
       this.stepper.next();
     } else {
       this.stepper.headerPos = 0;

@@ -1,0 +1,35 @@
+<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+<div>
+  <div tabindex="-1" [appAutofocus] class="visually-hidden">
+    {{ 'creator.statistic.a11y-message-presentation' | transloco }}
+  </div>
+  <div id="stepper-container" fxLayout="column" fxLayoutAlign="start center">
+    <app-stepper
+      *ngIf="!isLoading"
+      (newIndex)="updateURL($event)"
+      [listLength]="contents.length"
+    >
+      <cdk-step *ngFor="let content of contents; let i = index">
+        <div id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
+          <mat-card>
+            <app-content-results
+              [content]="content"
+              [directShow]="
+                currentStep === i && settings.showContentResultsDirectly
+              "
+              [active]="currentStep === i"
+              [index]="i"
+              [correctOptionsPublished]="true"
+              [indexChanged]="indexChanged"
+              [settings]="settings"
+            >
+            </app-content-results>
+          </mat-card>
+        </div>
+        <div tabindex="0" class="visually-hidden">
+          {{ 'statistic.a11y-no-more-answers' | transloco }}
+        </div>
+      </cdk-step>
+    </app-stepper>
+  </div>
+</div>

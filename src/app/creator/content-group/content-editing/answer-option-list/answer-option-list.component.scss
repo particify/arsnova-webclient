@@ -1,0 +1,56 @@
+.mat-mdc-list-item {
+  min-height: 52px;
+  padding: 0;
+}
+
+.edit-input {
+  height: 50px;
+  margin-left: 8px;
+
+  input {
+    padding-bottom: 20px;
+  }
+
+  margin-top: -16px;
+}
+
+.delete {
+  margin-left: 8px;
+  opacity: 0.3;
+}
+
+@mixin button-hover {
+  opacity: 0.6;
+}
+
+@media (hover: none) {
+  .delete {
+    @include button-hover;
+  }
+}
+
+.delete:hover,
+.delete:focus-within {
+  @include button-hover;
+}
+
+.cdk-drop-list-dragging {
+  cursor: grabbing;
+}
+
+.cdk-drag-preview {
+  padding: 16px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-icon {
+  margin-right: 16px;
+  cursor: grabbing;
+}

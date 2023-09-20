@@ -1,0 +1,11 @@
+<mat-form-field appearance="outline" class="initial-width">
+  <mat-label>{{ 'creator.content.max-keywords' | transloco }}</mat-label>
+  <input
+    matInput
+    [disabled]="formDisabled"
+    type="number"
+    min="1"
+    max="10"
+    [(ngModel)]="maxAnswers"
+  />
+</mat-form-field>

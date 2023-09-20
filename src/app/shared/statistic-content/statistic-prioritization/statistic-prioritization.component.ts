@@ -42,7 +42,7 @@ export class StatisticPrioritizationComponent
   };
 
   @Input() content: ContentPrioritization;
-  @Input() indexChanged: EventEmitter<number> = new EventEmitter<number>();
+  @Input() indexChanged: EventEmitter<void> = new EventEmitter<void>();
   @Input() isCreator = true;
 
   chartColors: string[] = [];

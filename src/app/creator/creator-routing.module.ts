@@ -6,13 +6,9 @@ import {
 } from '@projects/extension-point/src/lib/extension-route';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentCreationPageComponent } from './content-creation/content-creation-page/content-creation-page.component';
-import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
-import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
-import { GroupContentComponent } from './content-list/group-content/group-content.component';
 import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
@@ -53,26 +49,11 @@ const routes: Routes = [
     title: 'settings',
   },
   {
-    path: 'series/:seriesName/create',
-    component: ContentCreationPageComponent,
-    title: 'content-creation',
-  },
-  {
-    path: 'series/:seriesName/edit/:contentId',
-    component: ContentCreationPageComponent,
-    data: {
-      isEditMode: true,
-    },
-    title: 'content-edit',
-  },
-  {
-    path: 'series/:seriesName/statistics',
-    component: StatisticsPageComponent,
-    title: 'series',
-  },
-  {
-    path: 'series/:seriesName/:contentIndex',
-    component: ContentPresentationComponent,
+    path: 'series/:seriesName',
+    loadChildren: () =>
+      import('./content-group/content-group.module').then(
+        (m) => m.ContentGroupModule
+      ),
     title: 'series',
   },
   {
@@ -94,14 +75,6 @@ const routes: Routes = [
         (m) => m.LiveFeedbackModule
       ),
     title: 'live-feedback',
-    data: {
-      parentRoute: ParentRoute.ROOM,
-    },
-  },
-  {
-    path: 'series/:seriesName',
-    component: GroupContentComponent,
-    title: 'series',
     data: {
       parentRoute: ParentRoute.ROOM,
     },

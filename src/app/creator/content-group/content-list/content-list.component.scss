@@ -1,0 +1,112 @@
+.mat-mdc-list {
+  background-color: var(--surface);
+}
+
+.mat-mdc-list-item {
+  cursor: pointer !important;
+  transition-property: background-color, color;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in;
+}
+
+@mixin show-button-bar {
+  opacity: 1;
+
+  // This needs to contain extension buttons as well
+  max-width: 280px;
+  pointer-events: initial;
+}
+
+.show-bar {
+  @include show-button-bar;
+}
+
+.button-bar {
+  pointer-events: none;
+  opacity: 0;
+  max-width: 0;
+}
+
+.mat-mdc-list-item:hover,
+.mat-mdc-list-item:focus-within {
+  * > .button-bar {
+    @include show-button-bar;
+  }
+}
+
+.button-bar .active {
+  @include show-button-bar;
+}
+
+@media (hover: none) {
+  .button-bar {
+    @include show-button-bar;
+  }
+}
+
+@media (max-width: 500px) {
+  .settings-buttons {
+    margin-top: 10px;
+  }
+}
+
+.mat-mdc-slide-toggle {
+  font-size: 16px;
+  margin: 12px;
+}
+
+.lock-icon {
+  transition: 1s;
+}
+
+.unlocked {
+  color: var(--on-surface);
+}
+
+.locked-content {
+  opacity: 0.7;
+}
+
+.unlocked-content {
+  background-color: var(--unlocked) !important;
+
+  & p {
+    color: var(--on-surface);
+  }
+}
+
+.menu-lock {
+  & mat-icon {
+    color: var(--warn);
+  }
+}
+
+.menu-unlock {
+  & mat-icon {
+    color: var(--green);
+  }
+}
+
+.content-list {
+  max-width: 100%;
+  min-height: 40px;
+  min-width: 120px;
+  display: block;
+  background: var(--surface);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.not-supported {
+  cursor: initial;
+}
+
+@media (max-width: 500px) {
+  .type-icon {
+    display: none;
+  }
+}
+
+.type-icon {
+  opacity: 0.5;
+}

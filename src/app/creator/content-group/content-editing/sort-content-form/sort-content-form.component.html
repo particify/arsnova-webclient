@@ -1,0 +1,17 @@
+<div fxLayout="column" fxLayoutGap="10px">
+  <div>
+    <app-divider *ngIf="displayAnswers.length > 0"></app-divider>
+    <app-answer-option-list
+      [answers]="displayAnswers"
+      [hasCorrectAnswers]="false"
+      [hasMultipleCorrectAnswers]="false"
+      [allowDeletion]="!isEditMode || !isAnswered"
+      [disabled]="formDisabled"
+      [sortable]="true"
+    ></app-answer-option-list>
+  </div>
+  <app-create-answer-option
+    *ngIf="!isEditMode || !isAnswered"
+    [answers]="displayAnswers"
+  ></app-create-answer-option>
+</div>

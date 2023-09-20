@@ -156,8 +156,8 @@ export class ContentParticipantComponent
     this.flipped = !this.flipped;
   }
 
-  goToNextContent(last: boolean) {
-    this.next.emit(last);
+  goToNextContent() {
+    this.next.emit();
   }
 
   getA11yMessage(): string {

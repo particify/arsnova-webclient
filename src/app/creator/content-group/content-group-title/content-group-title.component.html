@@ -1,0 +1,27 @@
+<div class="card-title" fxLayout="row" fxLayoutAlign="start center">
+  <mat-form-field
+    class="active-input no-field-hint"
+    [ngClass]="{ 'hide-editing': !isInTitleEditMode && !inputFocus }"
+    appearance="outline"
+  >
+    <input
+      id="nameInput"
+      [disabled]="disabled"
+      #nameInput
+      (focus)="goInTitleEditMode()"
+      (blur)="leaveTitleEditMode()"
+      (mouseenter)="inputFocus = true"
+      (mouseleave)="inputFocus = false"
+      (keyup.enter)="removeFocusFromInput()"
+      matInput
+      maxlength="25"
+      [(ngModel)]="updatedName"
+      [attr.aria-label]="
+        'creator.content.a11y-edit-content-group-name' | transloco
+      "
+      appHotkey="6"
+      [appHotkeyTitle]="'creator.content.content-group-name' | transloco"
+      [appHotkeyDisabled]="disabled"
+    />
+  </mat-form-field>
+</div>

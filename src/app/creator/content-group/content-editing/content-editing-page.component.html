@@ -1,0 +1,232 @@
+<div fxLayout="column">
+  <div fxLayout="row" fxLayoutAlign="center">
+    <section class="card-container">
+      <div class="card" [ngClass]="{ flipped: flipped }">
+        <mat-card>
+          <div class="side" [ngClass]="{ 'invisible-card-content': flipped }">
+            <div class="visually-hidden">
+              <div [appAutofocus] tabIndex="-1">
+                {{
+                  (isEditMode
+                    ? 'creator.content.a11y-content-edit-message'
+                    : 'creator.content.a11y-content-create-message'
+                  )
+                    | a11yIntro
+                    | async
+                }}
+              </div>
+            </div>
+            <form fxLayout="column" fxLayoutGap="12px">
+              <div
+                class="header-container"
+                fxLayout="row wrap"
+                fxLayoutAlign="space-between center"
+                fxLayoutGap="1em"
+              >
+                <mat-form-field
+                  appearance="outline"
+                  class="no-field-hint primary-form-field smaller-select-input"
+                  tabindex="{{ isEditMode ? '-1' : '0' }}"
+                >
+                  <mat-select
+                    panelClass="bigger-panel"
+                    [(value)]="selectedFormat"
+                    [disabled]="isEditMode || formDisabled"
+                    [hideSingleSelectionIndicator]="true"
+                    appHotkey="2"
+                    [appHotkeyTitle]="'creator.content.format' | transloco"
+                  >
+                    <mat-select-trigger>
+                      <div
+                        fxLayout="row"
+                        fxLayoutAlign="start center"
+                        fxLayoutGap="10px"
+                        class="primary"
+                      >
+                        <mat-icon class="format-button-icon">{{
+                          selectedFormat.icon
+                        }}</mat-icon>
+                        <span>{{
+                          'creator.content.format-' + selectedFormat.name
+                            | transloco
+                        }}</span>
+                      </div>
+                    </mat-select-trigger>
+                    <mat-option
+                      *ngFor="let format of formats"
+                      [value]="format"
+                      class="higher-option"
+                    >
+                      <div fxLayout="row">
+                        <mat-icon class="format-icon">{{
+                          format.icon
+                        }}</mat-icon>
+                        <div fxLayout="column" fxLayoutAlign="center">
+                          <span
+                            [attr.aria-label]="
+                              'creator.content.a11y-format-' + format.name
+                                | transloco
+                            "
+                            class="format-name"
+                          >
+                            {{
+                              'creator.content.format-' + format.name
+                                | transloco
+                            }}</span
+                          >
+                          <span class="format-description">{{
+                            'creator.content.format-' +
+                              format.name +
+                              '-description' | transloco
+                          }}</span>
+                        </div>
+                      </div>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <app-formatting-toolbar
+                  [inputElement]="questionInput"
+                  (valueChanged)="question = $event"
+                  [disabled]="formDisabled"
+                ></app-formatting-toolbar>
+              </div>
+              <mat-form-field
+                appearance="outline"
+                class="input-block no-field-hint"
+              >
+                <mat-label>{{
+                  (selectedFormat.name !== 'slide'
+                    ? 'creator.content.body'
+                    : 'creator.content.body-neutral'
+                  ) | transloco
+                }}</mat-label>
+                <textarea
+                  [disabled]="formDisabled"
+                  #questionInput
+                  (input)="updateTextContainsImage(questionInput.value)"
+                  [(ngModel)]="question"
+                  [attr.aria-label]="
+                    (created
+                      ? 'creator.content.a11y-content-created'
+                      : 'creator.content.a11y-enter-body'
+                    ) | transloco
+                  "
+                  cdkAutosizeMaxRows="8"
+                  cdkAutosizeMinRows="3"
+                  matInput
+                  cdkTextareaAutosize
+                  maxlength="{{
+                    selectedFormat.name !== 'slide' ? 1000 : 2000
+                  }}"
+                  name="questionInput"
+                  appHotkey="1"
+                  [appHotkeyTitle]="'creator.content.body' | transloco"
+                ></textarea>
+              </mat-form-field>
+              <app-hint
+                *ngIf="textContainsImage"
+                text="creator.utils.formatting-image-hint"
+                [type]="HintType.WARNING"
+              ></app-hint>
+              <lib-extension-point
+                *ngIf="!isLoading"
+                extensionId="attachment-list"
+                [extensionData]="attachmentData"
+              ></lib-extension-point>
+              <div class="form-spacer"></div>
+            </form>
+            <div>
+              <mat-checkbox
+                [disabled]="formDisabled"
+                *ngIf="!['slide', 'flashcard'].includes(selectedFormat.name)"
+                [(ngModel)]="abstentionsAllowed"
+              >
+                {{ 'creator.content.abstentions-allowed' | transloco }}
+              </mat-checkbox>
+            </div>
+            <div *ngIf="!isLoading" [ngSwitch]="selectedFormat.type">
+              <app-choice-content-form
+                *ngSwitchCase="ContentType.CHOICE"
+                [content]="content"
+                [isAnswered]="isAnswered"
+                [isEditMode]="isEditMode"
+              >
+              </app-choice-content-form>
+              <app-scale-content-form
+                *ngSwitchCase="ContentType.SCALE"
+                [content]="content"
+                [isAnswered]="isAnswered"
+                [isEditMode]="isEditMode"
+              >
+              </app-scale-content-form>
+              <app-binary-content-form
+                *ngSwitchCase="ContentType.BINARY"
+                [isEditMode]="isEditMode"
+                [content]="content"
+              >
+              </app-binary-content-form>
+              <app-flashcard-content-form
+                *ngSwitchCase="ContentType.FLASHCARD"
+                [content]="content"
+                [isEditMode]="isEditMode"
+              >
+              </app-flashcard-content-form>
+              <app-sort-content-form
+                *ngSwitchCase="ContentType.SORT"
+                [content]="content"
+                [isEditMode]="isEditMode"
+                [isAnswered]="isAnswered"
+              >
+              </app-sort-content-form>
+              <app-wordcloud-content-form
+                *ngSwitchCase="ContentType.WORDCLOUD"
+                [content]="content"
+                [isEditMode]="isEditMode"
+              >
+              </app-wordcloud-content-form>
+              <app-prioritization-content-form
+                *ngSwitchCase="ContentType.PRIORITIZATION"
+                [content]="content"
+                [isEditMode]="isEditMode"
+                [isAnswered]="isAnswered"
+              >
+              </app-prioritization-content-form>
+            </div>
+          </div>
+
+          <div
+            [ngClass]="{ 'invisible-card-content': !flipped }"
+            class="back side"
+          >
+            <app-preview
+              *ngIf="flipped && content"
+              [content]="content"
+            ></app-preview>
+          </div>
+          <div
+            [ngStyle]="{ transform: flipped ? 'rotateY(180deg)' : '' }"
+            fxLayout="row"
+            fxLayoutAlign="center"
+            fxLayoutGap="10px"
+            [ngClass]="{ 'top-space': isEditMode }"
+          >
+            <button
+              [disabled]="formDisabled"
+              (click)="togglePreview()"
+              [attr.aria-label]="'creator.content.a11y-preview' | transloco"
+              mat-stroked-button
+            >
+              {{ 'creator.content.preview' | transloco }}
+            </button>
+            <app-loading-button
+              [name]="
+                isEditMode ? 'creator.content.save' : 'creator.content.create'
+              "
+              (clicked)="submitContent()"
+            ></app-loading-button>
+          </div>
+        </mat-card>
+      </div>
+    </section>
+  </div>
+</div>

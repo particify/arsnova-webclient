@@ -1,0 +1,27 @@
+<form>
+  <mat-form-field appearance="outline" class="no-field-hint">
+    <mat-label>{{ 'creator.content.answer' | transloco }}</mat-label>
+    <textarea
+      #answerInput
+      (input)="updateTextContainsImage(answerInput.value)"
+      [disabled]="formDisabled"
+      [(ngModel)]="answer"
+      [attr.aria-label]="
+        'creator.content.a11y-enter-flashcard-answer' | transloco
+      "
+      id="body-input"
+      cdkAutosizeMaxRows="8"
+      cdkAutosizeMinRows="3"
+      matInput
+      cdkTextareaAutosize
+      maxlength="2000"
+      name="questionInput"
+    ></textarea>
+  </mat-form-field>
+  <app-hint
+    *ngIf="textContainsImage"
+    text="creator.utils.formatting-image-hint"
+    [type]="HintType.WARNING"
+  ></app-hint>
+  <div class="form-spacer"></div>
+</form>

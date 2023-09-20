@@ -22,6 +22,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { InfoChartComponent } from './series-overview/info-chart/info-chart.component';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     CoreModule,
     SharedModule,
     TranslocoModule,
+    StepperComponent,
     CdkStepperModule,
     ExtensionPointModule,
     FooterComponent,
