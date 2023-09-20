@@ -428,13 +428,10 @@ export class ControlBarComponent
   }
 
   updateFeature(feature?: string) {
-    if (!feature) {
-      this.currentRouteIndex = undefined;
-      return;
-    }
     if (
+      !feature ||
       this.currentRouteIndex !==
-      this.barItems.map((i) => i.name).indexOf(feature)
+        this.barItems.map((i) => i.name).indexOf(feature)
     ) {
       this.getCurrentRouteIndex(feature);
       this.activeFeature.emit(feature);
