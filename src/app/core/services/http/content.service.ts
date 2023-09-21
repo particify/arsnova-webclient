@@ -21,7 +21,7 @@ import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
+import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ContentState } from '@app/core/models/content-state';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';

@@ -33,7 +33,7 @@ import {
 } from '@app/core/models/events/entity-change-notification';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
-import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
+import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { take } from 'rxjs';
