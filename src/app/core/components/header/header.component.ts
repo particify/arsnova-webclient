@@ -9,7 +9,6 @@ import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Location } from '@angular/common';
 import { TranslocoService } from '@ngneat/transloco';
-import { UserService } from '@app/core/services/http/user.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -33,10 +32,9 @@ import {
 } from '@app/core/models/events/entity-change-notification';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
-import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
+import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
-import { take } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -74,7 +72,6 @@ export class HeaderComponent implements OnInit {
     public router: Router,
     private translationService: TranslocoService,
     private langService: LanguageService,
-    private userService: UserService,
     public eventService: EventService,
     private _r: Renderer2,
     private dialogService: DialogService,
@@ -218,35 +215,6 @@ export class HeaderComponent implements OnInit {
 
   navToProfile() {
     this.router.navigateByUrl('account/user');
-  }
-
-  deleteAccount(id: string) {
-    this.userService.delete(id).subscribe();
-    this.authenticationService.logout();
-    this.translationService
-      .selectTranslate('header.account-deleted')
-      .pipe(take(1))
-      .subscribe((msg) => {
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
-    this.navToHome();
-  }
-
-  openDeleteUserDialog() {
-    const dialogRef = this.dialogService.openDeleteDialog(
-      'account',
-      'really-delete-account'
-    );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'abort' || !this.auth) {
-        return;
-      } else if (result === 'delete') {
-        this.deleteAccount(this.auth.userId);
-      }
-    });
   }
 
   toggleTheme() {

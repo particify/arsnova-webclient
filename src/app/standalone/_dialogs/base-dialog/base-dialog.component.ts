@@ -1,7 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CoreModule } from '@app/core/core.module';
 import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { Observable, takeUntil } from 'rxjs';
 
 interface DialogData {
@@ -19,6 +21,8 @@ interface DialogData {
 }
 
 @Component({
+  standalone: true,
+  imports: [CoreModule, LoadingButtonComponent],
   selector: 'app-base-dialog',
   templateUrl: './base-dialog.component.html',
 })

@@ -3,7 +3,6 @@ import { CoreModule } from '@app/core/core.module';
 import { StatisticTextComponent } from './statistic-content/statistic-text/statistic-text.component';
 import { StatisticChoiceComponent } from './statistic-content/statistic-choice/statistic-choice.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { BaseDialogComponent } from './_dialogs/base-dialog/base-dialog.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { ContentResultsComponent } from './content-results/content-results.component';
 import { ContentSortAnswerComponent } from './content-answers/content-sort-answer/content-sort-answer.component';
@@ -52,7 +51,6 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     StatisticScaleComponent,
     StatisticTextComponent,
     StatisticWordcloudComponent,
-    BaseDialogComponent,
     ContentResultsComponent,
     ContentSortAnswerComponent,
     StatisticSortComponent,

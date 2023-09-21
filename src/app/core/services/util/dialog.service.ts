@@ -7,7 +7,7 @@ import {
 } from '@angular/material/dialog';
 import { UpdateAvailableEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
-import { BaseDialogComponent } from '@app/shared/_dialogs/base-dialog/base-dialog.component';
+import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { ContentGroupCreationComponent } from '@app/creator/_dialogs/content-group-creation/content-group-creation.component';
 import { RoomCreateComponent } from '@app/core/components/_dialogs/room-create/room-create.component';
 import { UserActivationComponent } from '@app/core/components//_dialogs/user-activation/user-activation.component';

@@ -15,8 +15,7 @@ describe('BaseDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [BaseDialogComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), BaseDialogComponent],
       providers: [
         {
           provide: MatDialogRef,
