@@ -217,9 +217,6 @@
     "verification-info": "If you have not yet received a verification code, please check your e-mails again in a few minutes and make sure that it has not been filtered out as spam."
   },
   "dialog": {
-    "a11y-cancel": "Cancels the current process and closes the dialog.",
-    "a11y-delete": "Confirms the action and closes the dialog.",
-    "a11y-close": "Closes the dialog.",
     "a11y-update": "Save the changes and close the dialog.",
     "a11y-create-room": "Creates the new room.",
     "a11y-comment-presentation": "The post {{comment}} is now displayed in full screen mode. Press the Escape key to close the dialog and return to the Q&A page.",

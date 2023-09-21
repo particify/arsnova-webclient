@@ -217,9 +217,6 @@
     "verification-info": "Si aún no has recibido un código de verificación, por favor revisa tus correos electrónicos nuevamente en unos minutos y asegúrate de que no haya sido filtrado como correo no deseado."
   },
   "dialog": {
-    "a11y-cancel": "Cancela el proceso actual y cierra el diálogo.",
-    "a11y-delete": "Confirma la acción y cierra el diálogo.",
-    "a11y-close": "Cierra el diálogo.",
     "a11y-update": "Guarda los cambios y cierra el diálogo.",
     "a11y-create-room": "Crea la nueva sala.",
     "a11y-comment-presentation": "La publicación {{comment}} se muestra ahora en modo de pantalla completa. Presiona la tecla Escape para cerrar el diálogo y regresar a la página de preguntas y respuestas.",
