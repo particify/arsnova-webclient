@@ -216,13 +216,13 @@ export class AccessComponent
   removeModerator(moderator: Moderator): void {
     const dialogRef = this.dialogService.openDeleteDialog(
       'room-moderator',
-      'really-delete-user-rights',
+      'creator.dialog.really-delete-user-rights',
       moderator.loginId,
-      'remove',
+      'creator.dialog.remove',
       () => this.moderatorService.delete(this.room.id, moderator.userId)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'remove') {
+      if (result) {
         this.saveEvent.emit(new UpdateEvent(null, false, true));
         const msg = this.translationService.translate(
           'creator.settings.user-removed'

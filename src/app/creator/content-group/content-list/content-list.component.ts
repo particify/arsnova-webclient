@@ -125,14 +125,14 @@ export class ContentListComponent implements OnInit, OnDestroy {
   deleteContent(index: number) {
     const dialogRef = this.dialogService.openDeleteDialog(
       'content',
-      'really-delete-content',
+      'creator.dialog.really-delete-content',
       this.contents[index].body,
       undefined,
       () =>
         this.contentService.deleteContent(this.room.id, this.contents[index].id)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         this.removeContentFromList(index);
         const msg = this.translateService.translate(
           'creator.content.content-deleted'
@@ -271,7 +271,7 @@ export class ContentListComponent implements OnInit, OnDestroy {
         : undefined;
     this.dialogService.openDeleteDialog(
       'content-answers',
-      'really-delete-answers',
+      'creator.dialog.really-delete-answers',
       multipleRoundsHint,
       undefined,
       () => this.contentService.deleteAnswersOfContent(content.id, this.room.id)

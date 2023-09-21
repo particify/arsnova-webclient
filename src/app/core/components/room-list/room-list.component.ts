@@ -245,7 +245,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
     const isOwner = room.membership.roles.includes(UserRole.OWNER);
     const dialogRef = this.dialogService.openDeleteDialog(
       isOwner ? 'room' : 'room-membership',
-      isOwner ? 'really-delete-room' : 'really-cancel-room-membership',
+      'dialog.' +
+        (isOwner ? 'really-delete-room' : 'really-cancel-room-membership'),
       room.summary.name,
       undefined,
       () =>
@@ -254,7 +255,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
           : this.roomMembershipService.cancelMembership(room.summary.shortId)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         let msg: string;
         if (isOwner) {
           msg = this.translateService.translate(

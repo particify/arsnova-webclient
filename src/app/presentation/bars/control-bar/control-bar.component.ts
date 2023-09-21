@@ -541,7 +541,7 @@ export class ControlBarComponent
       () => this.contentGroupService.patchContentGroup(contentGroup, changes)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'publish') {
+      if (result) {
         const msg = this.translateService.translate(
           'creator.content.group-published'
         );
@@ -641,7 +641,7 @@ export class ControlBarComponent
   deleteContentAnswers() {
     this.dialogService.openDeleteDialog(
       'content-answers',
-      'really-delete-answers',
+      'creator.dialog.really-delete-answers',
       undefined,
       undefined,
       () =>
