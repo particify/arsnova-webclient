@@ -55,13 +55,13 @@ export class AnswerListComponent implements OnInit {
       : this.contentAnswerService.hideAnswerText(this.roomId, answer.id);
     const dialogRef = this.dialogService.openDeleteDialog(
       `${action}-answer`,
-      `really-${action}-answer`,
+      `creator.really-${action}-answer`,
       answer.answer,
-      action,
+      'dialog.' + action,
       () => confirmAction
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === action) {
+      if (result) {
         if (this.banMode) {
           this.removeAnswerFromList(action);
           this.answerBanned.emit(answer.answer);

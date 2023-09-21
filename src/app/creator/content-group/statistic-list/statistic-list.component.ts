@@ -398,17 +398,19 @@ export class StatisticListComponent implements OnInit {
   deleteAllAnswers() {
     this.contentService
       .showDeleteAllAnswersDialog(this.contentGroup)
-      .subscribe(() => {
-        this.resetAllAnswers();
-        this.translateService
-          .selectTranslate('creator.content.all-answers-deleted')
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-          });
+      .subscribe((result) => {
+        if (result) {
+          this.resetAllAnswers();
+          this.translateService
+            .selectTranslate('creator.content.all-answers-deleted')
+            .pipe(take(1))
+            .subscribe((msg) => {
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.WARNING
+              );
+            });
+        }
       });
   }
 }

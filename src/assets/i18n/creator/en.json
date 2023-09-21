@@ -370,6 +370,9 @@
     "statistic-good": "Good",
     "statistic-okay": "Okay",
     "statistic-negative": "Improvable",
+    "really-delete-answers": "Do you really want to delete the answers to this content?",
+    "answers-deleted": "Answers to this question has been deleted.",
+    "really-delete-all-answers": "Do you really want to delete all answers of this question series?",
     "all-rounds-will-be-deleted": "Attention: All rounds will be deleted.",
     "how-to-proceed": "How would you like to proceed?",
     "publish-single": "Release only this content",
@@ -384,7 +387,10 @@
     "really-discard-announcement": "Do you really want to discard your input?",
     "discard": "Discard",
     "ban": "Ban",
-    "really-ban-answer": "Do you really want to ban the keyword?"
+    "really-ban-answer": "Do you really want to ban the keyword?",
+    "really-start-new-round": "Do you really want to start a new round?",
+    "started-new-round": "New round has been started.",
+    "start": "Start"
   },
   "utils": {
     "formatting-image-hint": "Please note that images with a large file size can affect loading times."

@@ -99,13 +99,13 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
   deleteAnswer() {
     const dialogRef = this.dialogService.openDeleteDialog(
       'comment-answer',
-      'really-delete-answer',
+      'creator.dialog.really-delete-answer',
       undefined,
       undefined,
       () => this.commentService.answer(this.comment, '')
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         this.answer = '';
         const msg = this.translateService.translate(
           'comment-page.answer-deleted'

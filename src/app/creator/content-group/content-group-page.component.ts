@@ -291,7 +291,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     this.contentService
       .showDeleteAllAnswersDialog(this.contentGroup)
       .subscribe((result) => {
-        if (result === 'delete') {
+        if (result) {
           const msg = this.translateService.translate(
             'creator.content.all-answers-deleted'
           );
@@ -306,13 +306,13 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   deleteGroup() {
     const dialogRef = this.dialogService.openDeleteDialog(
       'content-group',
-      'really-delete-content-group',
+      'creator.dialog.really-delete-content-group',
       this.contentGroup.name,
-      'delete',
+      undefined,
       () => this.contentGroupService.delete(this.contentGroup)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         this.routingService.goBack();
         this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
         const msg = this.translateService.translate(

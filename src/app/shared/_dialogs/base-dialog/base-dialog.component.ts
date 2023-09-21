@@ -6,7 +6,6 @@ import { Observable, takeUntil } from 'rxjs';
 
 interface DialogData {
   dialogId: string;
-  section: string;
   headerLabel: string;
   body: string;
   confirmLabel: string;
@@ -32,7 +31,6 @@ export class BaseDialogComponent extends FormComponent {
     protected formService: FormService
   ) {
     super(formService);
-    data.section = data.section + '.';
     this.dialogId = data.dialogId;
   }
 

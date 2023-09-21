@@ -64,13 +64,13 @@ export class UserManagementComponent
     const confirmAction = this.userService.delete(this.user.id);
     const dialogRef = this.dialogService.openDeleteDialog(
       'account-as-admin',
-      'really-delete-account-admin',
+      'admin.dialog.really-delete-account-admin',
       undefined,
       undefined,
       () => confirmAction
     );
-    dialogRef.afterClosed().subscribe((closeAction) => {
-      if (closeAction === 'delete') {
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
         const msg = this.translateService.translate(
           'admin.admin-area.user-deleted'
         );

@@ -240,7 +240,7 @@ export class ContentService extends AbstractEntityService<Content> {
   showDeleteAllAnswersDialog(contentGroup: ContentGroup): Observable<string> {
     const dialogRef = this.dialogService.openDeleteDialog(
       'content-answers',
-      'really-delete-all-answers',
+      'creator.dialog.really-delete-all-answers',
       undefined,
       undefined,
       () => this.deleteAllAnswersOfContentGroup(contentGroup)
@@ -364,7 +364,7 @@ export class ContentService extends AbstractEntityService<Content> {
     return this.deleteAnswers(roomId, contentId).pipe(
       tap(() => {
         this.translateService
-          .selectTranslate('dialog.answers-deleted')
+          .selectTranslate('creator.dialog.answers-deleted')
           .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(
@@ -396,21 +396,20 @@ export class ContentService extends AbstractEntityService<Content> {
     changes.state.round = 2;
     const dialogRef = this.dialog.open(BaseDialogComponent, {
       data: {
-        section: 'dialog',
-        headerLabel: 'sure',
-        body: 'really-start-new-round',
-        confirmLabel: 'start',
-        abortLabel: 'cancel',
+        headerLabel: 'dialog.sure',
+        body: 'creator.dialog.really-start-new-round',
+        confirmLabel: 'creator.dialog.start',
+        abortLabel: 'dialog.cancel',
         type: 'button-primary',
         confirmAction: () => this.patchContent(content, changes),
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'start') {
+      if (result) {
         content.state.round = 2;
         this.roundStarted.next(content);
         this.translateService
-          .selectTranslate('dialog.started-new-round')
+          .selectTranslate('creator.dialog.started-new-round')
           .pipe(take(1))
           .subscribe((msg) => {
             this.notificationService.showAdvanced(

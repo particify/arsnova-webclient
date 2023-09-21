@@ -150,13 +150,13 @@ export class CommentComponent implements OnInit, OnDestroy {
   deleteComment(): void {
     const dialogRef = this.dialogService.openDeleteDialog(
       'comment',
-      'really-delete-comment',
+      'creator.dialog.really-delete-comment',
       undefined,
       undefined,
       () => this.commentService.deleteComment(this.comment)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         this.translateService
           .selectTranslate('comment-list.comment-deleted')
           .pipe(take(1))

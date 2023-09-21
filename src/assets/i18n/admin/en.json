@@ -68,5 +68,8 @@
     "webSocketUserCount": "Connected users",
     "coreServiceStats": "Core service",
     "commentServiceStats": "Comment service"
+  },
+  "dialog": {
+    "really-delete-account-admin": "Do you want to irrevocably delete this account with all rooms?"
   }
 }

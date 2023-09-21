@@ -164,16 +164,15 @@ export class HeaderComponent implements OnInit {
     if (lang.category === LanguageCategory.COMMUNITY) {
       const data: { [key: string]: string } = {
         dialogId: 'community-lang',
-        section: 'dialog',
-        headerLabel: 'you-are-using-community-lang',
-        body: 'community-lang',
-        confirmLabel: 'close',
+        headerLabel: 'dialog.you-are-using-community-lang',
+        body: 'dialog.community-lang',
+        confirmLabel: 'dialog.close',
         type: 'button-primary',
       };
       if (this.translateUrl) {
-        data['additionalBody'] = 'contribute-to-lang';
+        data['additionalBody'] = 'dialog.contribute-to-lang';
         data['link'] = this.translateUrl + lang.key;
-        data['linkText'] = 'translation-server';
+        data['linkText'] = 'dialog.translation-server';
       }
       this.dialog.open(BaseDialogComponent, {
         width: '400px',
@@ -296,12 +295,12 @@ export class HeaderComponent implements OnInit {
   leaveRoom() {
     const dialogRef = this.dialogService.openDeleteDialog(
       'leave-room',
-      'really-leave-room',
+      'dialog.really-leave-room',
       undefined,
-      'leave'
+      'dialog.leave'
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'leave') {
+      if (result) {
         this.router.navigateByUrl('user');
       }
     });

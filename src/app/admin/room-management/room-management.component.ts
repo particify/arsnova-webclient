@@ -70,13 +70,13 @@ export class RoomManagementComponent {
       const confirmAction = this.roomService.deleteRoom(this.room.id);
       const dialogRef = this.dialogService.openDeleteDialog(
         'room-as-admin',
-        'really-delete-room',
+        'dialog.really-delete-room',
         this.room.name,
         undefined,
         () => confirmAction
       );
-      dialogRef.afterClosed().subscribe((closeAction) => {
-        if (closeAction === 'delete') {
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
           this.translateService
             .selectTranslate('admin.admin-area.room-deleted')
             .pipe(take(1))

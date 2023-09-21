@@ -94,13 +94,13 @@ export class UserProfileComponent implements OnInit {
   deleteAccount() {
     const dialogRef = this.dialogService.openDeleteDialog(
       'account',
-      'really-delete-account',
+      'dialog.really-delete-account',
       undefined,
       undefined,
       () => this.userService.delete(this.auth.userId)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         this.authenticationService.logout();
         this.translationService
           .selectTranslate('header.account-deleted')

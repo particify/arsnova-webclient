@@ -65,13 +65,13 @@ export class RoomComponent extends FormComponent implements OnInit {
   deleteRoom(): void {
     const dialogRef = this.dialogService.openDeleteDialog(
       'room',
-      'really-delete-room',
+      'dialog.really-delete-room',
       this.editRoom.name,
       undefined,
       () => this.roomService.deleteRoom(this.editRoom.id)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         this.translationService
           .selectTranslate('creator.settings.deleted')
           .pipe(take(1))

@@ -66,13 +66,13 @@ export class AnnouncementSettingsComponent
   delete(announcement: Announcement) {
     const dialogRef = this.dialogService.openDeleteDialog(
       'announcement',
-      'really-delete-announcement',
+      'creator.dialog.really-delete-announcement',
       announcement.title,
       undefined,
       () => this.announcementService.delete(this.room.id, announcement.id)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         const msg = this.translateService.translate(
           'creator.announcement.deleted'
         );
@@ -156,14 +156,12 @@ export class AnnouncementSettingsComponent
     } else {
       const dialogRef = this.dialogService.openDeleteDialog(
         'announcement',
-        'really-discard-announcement',
+        'creator.dialog.really-discard-announcement',
         undefined,
-        'discard'
+        'creator.dialog.discard'
       );
       dialogRef.afterClosed().subscribe((result) => {
-        if (result === 'abort') {
-          return;
-        } else if (result === 'discard') {
+        if (result) {
           this.resetInputs();
           this.edit(announcement);
         }

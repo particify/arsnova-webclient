@@ -68,5 +68,8 @@
     "webSocketUserCount": "Usuarios conectados",
     "coreServiceStats": "Servicio principal",
     "commentServiceStats": "Servicio de comentarios"
+  },
+  "dialog": {
+    "really-delete-account-admin": "¿Deseas eliminar irrevocablemente esta cuenta con todas las salas?"
   }
 }

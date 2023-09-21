@@ -77,11 +77,10 @@ export class DialogService {
       width: this.size.small,
       data: {
         dialogId: 'delete-' + dialogIdSuffix,
-        section: 'dialog',
-        headerLabel: 'sure',
         body: body,
-        confirmLabel: confirmLabel ? confirmLabel : 'delete',
-        abortLabel: 'cancel',
+        headerLabel: 'dialog.sure',
+        confirmLabel: confirmLabel ? confirmLabel : 'dialog.delete',
+        abortLabel: 'dialog.cancel',
         type: 'button-warn',
         bodyElement: bodyElement,
         confirmAction: confirmAction,
@@ -152,11 +151,10 @@ export class DialogService {
       width: this.size.small,
       data: {
         dialogId: 'publish-content-group',
-        section: 'dialog',
-        headerLabel: 'publish-group',
-        body: 'want-publish-group',
-        confirmLabel: 'publish',
-        abortLabel: 'cancel',
+        headerLabel: 'creator.dialog.publish-group',
+        body: 'creator.dialog.want-publish-group',
+        confirmLabel: 'creator.dialog.publish',
+        abortLabel: 'dialog.cancel',
         type: 'button-primary',
         bodyElement: groupName,
         confirmAction: confirmAction,
@@ -164,7 +162,7 @@ export class DialogService {
     });
   }
 
-  private isCancelAction(action: any) {
-    return !action || action === 'cancel';
+  private isCancelAction(action?: string) {
+    return !action;
   }
 }

@@ -40,9 +40,10 @@ export class CommentListBarExtensionComponent {
   openDeleteCommentsDialog(): void {
     const dialogRef = this.dialogService.openDeleteDialog(
       'comments',
-      this.isModeration
-        ? 'really-delete-banned-comments'
-        : 'really-delete-comments',
+      'creator.dialog.' +
+        (this.isModeration
+          ? 'really-delete-banned-comments'
+          : 'really-delete-comments'),
       undefined,
       undefined,
       () =>
@@ -54,7 +55,7 @@ export class CommentListBarExtensionComponent {
           : this.commentService.deleteCommentsByRoomId(this.room.id)
     );
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'delete') {
+      if (result) {
         this.deleteComments();
       }
     });
