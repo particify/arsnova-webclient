@@ -10,7 +10,7 @@ describe('BaseDialogComponent', () => {
   let fixture: ComponentFixture<BaseDialogComponent>;
 
   const mockMatDialogData = {
-    section: 'section',
+    dialogId: 'dialogId',
   };
 
   beforeEach(waitForAsync(() => {
