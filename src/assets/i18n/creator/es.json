@@ -370,6 +370,10 @@
     "statistic-good": "Bueno",
     "statistic-okay": "De acuerdo",
     "statistic-negative": "Mejorable",
+    "really-delete-answers": "¿Realmente quieres eliminar las respuestas a este contenido?",
+    "answers-deleted": "Las respuestas a esta pregunta han sido eliminadas.",
+    "really-delete-all-answers": "¿Realmente deseas eliminar todas las respuestas de esta serie de preguntas?",
+    "all-rounds-will-be-deleted": "Atención: Todas las rondas serán eliminadas.",
     "how-to-proceed": "¿Cómo te gustaría proceder?",
     "publish-single": "Publicar solo este contenido",
     "publish-up-to-here": "Publicar contenidos hasta aquí",
@@ -384,7 +388,9 @@
     "discard": "Descartar",
     "ban": "Prohibir",
     "really-ban-answer": "¿Realmente quieres prohibir la palabra clave?",
-    "all-rounds-will-be-deleted": "Atención: Todas las rondas serán eliminadas."
+    "really-start-new-round": "¿De verdad quieres empezar una nueva ronda?",
+    "started-new-round": "Se ha iniciado una nueva ronda.",
+    "start": "Comenzar"
   },
   "utils": {
     "formatting-image-hint": "Ten en cuenta que las imágenes con un tamaño de archivo grande pueden afectar los tiempos de carga."

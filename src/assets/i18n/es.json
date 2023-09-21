@@ -236,19 +236,12 @@
     "really-delete-room": "¿Realmente quieres eliminar la siguiente sala? Esta acción no se puede deshacer.",
     "really-cancel-room-membership": "¿Realmente deseas eliminar la siguiente sala de tu lista? Si se te han otorgado permisos de acceso, esto también los eliminará.",
     "really-delete-account": "¿Deseas eliminar irrevocablemente tu cuenta con todas las salas?",
-    "really-delete-account-admin": "¿Deseas eliminar irrevocablemente esta cuenta con todas las salas?",
-    "really-delete-answers": "¿Realmente quieres eliminar las respuestas a este contenido?",
-    "answers-deleted": "Las respuestas a esta pregunta han sido eliminadas.",
-    "really-delete-all-answers": "¿Realmente deseas eliminar todas las respuestas de esta serie de preguntas?",
     "you-are-using-community-lang": "Utiliza una traducción comunitaria",
     "community-lang": "Este lenguaje es mantenido por la comunidad y, por tanto, puede estar incompleto o anticuado.",
     "contribute-to-lang": "Puede contribuir a la traducción a través del siguiente enlace: ",
     "translation-server": "Ir al servidor de traducción",
     "leave": "Deja",
-    "really-leave-room": "¿De verdad quieres salir de la sala?",
-    "really-start-new-round": "¿De verdad quieres empezar una nueva ronda?",
-    "start": "Comenzar",
-    "started-new-round": "Se ha iniciado una nueva ronda."
+    "really-leave-room": "¿De verdad quieres salir de la sala?"
   },
   "errors": {
     "not-authorized": "No estás autorizado para ver esta página.",

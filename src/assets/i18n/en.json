@@ -236,19 +236,12 @@
     "really-delete-room": "Do you really want to delete the following room? This action cannot be undone.",
     "really-cancel-room-membership": "Do you really want to remove the following room from your list? If you have been granted access permissions, this will also remove them.",
     "really-delete-account": "Do you want to irrevocably delete your account with all rooms?",
-    "really-delete-account-admin": "Do you want to irrevocably delete this account with all rooms?",
-    "really-delete-answers": "Do you really want to delete the answers to this content?",
-    "answers-deleted": "Answers to this question has been deleted.",
-    "really-delete-all-answers": "Do you really want to delete all answers of this question series?",
     "you-are-using-community-lang": "You're using a community translation",
     "community-lang": "This language is maintained by the community and therefore may be incomplete or outdated.",
     "contribute-to-lang": "You can contribute to the translation via the following link: ",
     "translation-server": "Go to translation server",
     "leave": "Leave",
-    "really-leave-room": "Do you really want to leave the room?",
-    "really-start-new-round": "Do you really want to start a new round?",
-    "start": "Start",
-    "started-new-round": "New round has been started."
+    "really-leave-room": "Do you really want to leave the room?"
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",
