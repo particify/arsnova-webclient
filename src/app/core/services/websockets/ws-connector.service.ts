@@ -21,9 +21,7 @@ export class WsConnectorService {
     authService
       .getAuthenticationChanges()
       .subscribe(async (auth: ClientAuthentication) => {
-        if (this.client.connected()) {
-          await this.client.deactivate();
-        }
+        await this.client.deactivate();
 
         if (auth && auth.userId) {
           const copiedConf = ARSRxStompConfig;
