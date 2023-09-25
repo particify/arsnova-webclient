@@ -6130,11 +6130,11 @@ __metadata:
   linkType: hard
 
 "@types/d3-cloud@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "@types/d3-cloud@npm:1.2.5"
+  version: 1.2.6
+  resolution: "@types/d3-cloud@npm:1.2.6"
   dependencies:
     "@types/d3": ^3
-  checksum: 964faf5a2ee6d616d1c5ac10b7adf0d1924d6ddc0ad179489fa8b835d3a0d4fe9916672793444fc711c706a77ea0de8f841314c3f99558b450f0b5690c736dec
+  checksum: ed3eb15fb0f1aec989a332e202d440927cbbf51d591e7641673c1ba53c9a99633639a3c417a45c72751c6780654546e77b23a09b9dc857c526265e430b3afacb
   languageName: node
   linkType: hard
 
