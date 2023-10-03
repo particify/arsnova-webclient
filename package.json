@@ -68,7 +68,7 @@
     "@storybook/addon-essentials": "7.4.5",
     "@storybook/angular": "7.4.5",
     "@storybook/blocks": "7.4.5",
-    "@storybook/testing-library": "0.2.1",
+    "@storybook/testing-library": "0.2.2",
     "@types/babel__core": "7.20.2",
     "@types/d3-cloud": "^1.2.5",
     "@types/express": "4.17.18",
