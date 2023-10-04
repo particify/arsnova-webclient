@@ -2,9 +2,9 @@
   "name": "arsnova-webclient",
   "private": true,
   "license": "MIT",
-  "packageManager": "yarn@3.6.3",
+  "packageManager": "yarn@3.6.4",
   "engines": {
-    "yarn": "3.6.3"
+    "yarn": "3.6.4"
   },
   "scripts": {
     "postinstall": "sh -c 'if [ -z \"$CI\" ]; then pip install pre-commit && pre-commit install; fi'",
