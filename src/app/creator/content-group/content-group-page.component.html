@@ -191,16 +191,25 @@
             }"
           ></lib-extension-point>
         </mat-menu>
-        <button
-          mat-menu-item
-          id="publish-as-template"
-          (click)="publishAsTemplate()"
-          [disabled]="contents.length < 1"
-          appTrackInteraction="Publish as template dialog opened"
+        <div
+          [matTooltip]="
+            'creator.content.publishing-template-not-possible' | transloco
+          "
+          [matTooltipDisabled]="!isGuest"
+          matTooltipPosition="before"
         >
-          <mat-icon>public</mat-icon>
-          {{ 'creator.content.publish-as-template' | transloco }}
-        </button>
+          <button
+            *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
+            mat-menu-item
+            id="publish-as-template"
+            (click)="publishAsTemplate()"
+            [disabled]="contents.length < 1 || isGuest"
+            appTrackInteraction="Publish as template dialog opened"
+          >
+            <mat-icon>public</mat-icon>
+            {{ 'creator.content.publish-as-template' | transloco }}
+          </button>
+        </div>
         <mat-divider></mat-divider>
         <button
           mat-menu-item

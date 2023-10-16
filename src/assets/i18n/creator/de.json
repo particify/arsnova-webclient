@@ -177,6 +177,7 @@
     "sort-content-group": "Sortieren",
     "import-export-content-group": "Import/Export",
     "publish-as-template": "Als Vorlage veröffentlichen",
+    "publishing-template-not-possible": "Bitte melde dich an, um deine Fragenserien als Vorlagen zu veröffentlichen.",
     "updated-sorting": "Deine Sortierung wurde gespeichert.",
     "format": "Format",
     "format-choice": "Multiple-Choice",

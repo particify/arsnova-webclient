@@ -177,6 +177,7 @@
     "sort-content-group": "Sort the question series",
     "import-export-content-group": "Import/Export",
     "publish-as-template": "Publish as template",
+    "publishing-template-not-possible": "Please login to publish your question series as templates.",
     "updated-sorting": "Your sorting has been saved.",
     "format": "Format",
     "format-choice": "Multiple-Choice",
