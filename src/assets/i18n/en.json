@@ -509,5 +509,28 @@
     "pace-neutral": "Average",
     "pace-positive-1": "Somewhat fast",
     "pace-positive-2": "Very fast"
+  },
+  "templates": {
+    "name": "Name",
+    "description": "Description",
+    "tags": "Tags",
+    "remove-tag": "Remove tag {{tag}}",
+    "tag-removed": "Tag {{tag}} has been removed.",
+    "create-new-tag": "Create new tag",
+    "language": "Language",
+    "license": "License",
+    "please-fill-name": "Please enter a name.",
+    "please-fill-description": "Please enter a description.",
+    "please-fill-tags": "Please select at least one tag.",
+    "license-description-cc0-1-0": "Allows others to distribute, remix, adapt and build upon the template without conditions.",
+    "license-description-cc-by-4-0": "Allows others to distribute, remix, adapt and build upon the template as long as attribution is given to the creator.",
+    "license-description-cc-by-sa-4-0": "Allows others to distribute, remix, adapt, and build upon the template as long as as attribution is given to the creator. Templates based on this must be licensed under identical terms.",
+    "license-description-cc-by-nc-4-0": "Allows others to distribute, remix, adapt and build upon the template for noncommercial purposes as long as attribution is given to the creator.",
+    "license-description-cc-by-nc-sa-4-0": "Allows others to distribute, remix, adapt, and build upon the template  for noncommercial purposes as long as as attribution is given to the creator. Templates based on this must be licensed under identical terms.",
+    "publish": "Publish",
+    "template-published": "Your template has been published.",
+    "lang-de": "German",
+    "lang-en": "English",
+    "lang-es": "Spanish"
   }
 }

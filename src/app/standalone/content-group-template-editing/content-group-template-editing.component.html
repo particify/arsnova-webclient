@@ -1,0 +1,122 @@
+<form [formGroup]="formGroup" fxLayout="column" fxLayoutGap="20px">
+  <mat-form-field [appAutofocus]="true" appearance="outline">
+    <mat-label>{{ 'templates.name' | transloco }}</mat-label>
+    <input
+      id="nameInput"
+      #nameInput
+      matInput
+      maxlength="25"
+      [(ngModel)]="name"
+      autocomplete="off"
+      formControlName="name"
+    />
+    <mat-hint align="end"
+      ><span aria-hidden="true"
+        >{{ nameInput.value.length || 0 }} / 25</span
+      ></mat-hint
+    >
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'templates.description' | transloco }}</mat-label>
+    <textarea
+      id="descriptionInput"
+      #descriptionInput
+      matInput
+      [(ngModel)]="description"
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="3"
+      cdkAutosizeMaxRows="10"
+      maxlength="250"
+      formControlName="description"
+    ></textarea>
+    <mat-hint align="end"
+      ><span aria-hidden="true"
+        >{{ descriptionInput.value.length || 0 }} / 250</span
+      ></mat-hint
+    >
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="no-field-hint">
+    <mat-label>{{ 'templates.language' | transloco }}</mat-label>
+    <mat-select [value]="selectedLang" formControlName="language">
+      <mat-option
+        *ngFor="let lang of langs"
+        [value]="lang"
+        (click)="updateLang(lang)"
+        >{{ 'templates.lang-' + lang | transloco }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="no-field-hint">
+    <mat-label>{{ 'templates.license' | transloco }}</mat-label>
+    <mat-select
+      panelClass="bigger-panel"
+      [value]="selectedLicense"
+      formControlName="licenses"
+    >
+      <mat-select-trigger>
+        {{ LICENSES.get(selectedLicense) }}
+      </mat-select-trigger>
+      <mat-option
+        *ngFor="let license of licenseKeys"
+        [value]="license"
+        (click)="updateLicense(license)"
+      >
+        <div class="license-option" fxLayout="column" fxLayoutGap="4px">
+          <span class="license-name"> {{ LICENSES.get(license) }}</span>
+          <span class="license-description">
+            {{
+              'templates.license-description-' + replaceDots(license)
+                | transloco
+            }}
+          </span>
+        </div>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field
+    appearance="outline"
+    class="no-field-hint"
+    [hideRequiredMarker]="true"
+  >
+    <mat-label>{{ 'templates.tags' | transloco }}</mat-label>
+    <mat-chip-grid #chipGrid formControlName="tags">
+      <mat-chip-row *ngFor="let tag of selectedTags" (removed)="remove(tag)">
+        {{ tag.name }}
+        <button
+          matChipRemove
+          [attr.aria-label]="'templates.remove-tag' | transloco: { tag: tag }"
+        >
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+      <input
+        id="tagsInput"
+        #tagsInput
+        matInput
+        formControlName="tag"
+        [matChipInputFor]="chipGrid"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [hideSingleSelectionIndicator]="true"
+        [autoSelectActiveOption]="false"
+        (optionSelected)="selected($event)"
+      >
+        <mat-option
+          *ngFor="let tag of filteredTags"
+          [value]="tag.name"
+          [disabled]="isTagSelected(tag)"
+        >
+          {{ tag.name }}
+        </mat-option>
+        <mat-option
+          *ngIf="filteredTags.length === 0 && tagsInput.value.length > 0"
+        >
+          <mat-icon>add</mat-icon>
+          {{ 'templates.create-new-tag' | transloco }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-chip-grid>
+  </mat-form-field>
+</form>
