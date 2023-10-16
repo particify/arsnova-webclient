@@ -191,6 +191,16 @@
             }"
           ></lib-extension-point>
         </mat-menu>
+        <button
+          mat-menu-item
+          id="publish-as-template"
+          (click)="publishAsTemplate()"
+          [disabled]="contents.length < 1"
+          appTrackInteraction="Publish as template dialog opened"
+        >
+          <mat-icon>public</mat-icon>
+          {{ 'creator.content.publish-as-template' | transloco }}
+        </button>
         <mat-divider></mat-divider>
         <button
           mat-menu-item

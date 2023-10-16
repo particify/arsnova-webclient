@@ -37,6 +37,9 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { TrackingService } from '@app/core/services/util/tracking.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
 
 @Injectable()
 class MockContentService {
@@ -117,6 +120,20 @@ describe('ContentGroupPageComponent', () => {
     'unregisterHotkey',
   ]);
 
+  const mockAuthService = jasmine.createSpyObj(AuthenticationService, [
+    'getCurrentAuthentication',
+  ]);
+  mockAuthService.getCurrentAuthentication.and.returnValue(
+    of(
+      new ClientAuthentication(
+        'userId',
+        'loginId',
+        AuthProvider.ARSNOVA,
+        'token'
+      )
+    )
+  );
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
@@ -189,6 +206,10 @@ describe('ContentGroupPageComponent', () => {
         {
           provide: TrackingService,
           useClass: MockTrackingService,
+        },
+        {
+          provide: AuthenticationService,
+          useValue: mockAuthService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

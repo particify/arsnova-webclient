@@ -34,6 +34,8 @@ import { ExportComponent } from './_dialogs/export/export.component';
 import { AnswerOptionListComponent } from './content-editing/answer-option-list/answer-option-list.component';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
+import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     ContentListSortComponent,
     ExportComponent,
     AnswerOptionListComponent,
+    PublishContentGroupTemplateComponent,
   ],
   imports: [
     ContentGroupRoutingModule,
@@ -74,6 +77,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     FormattingToolbarComponent,
     LoadingButtonComponent,
     BaseCardComponent,
+    ContentGroupTemplateEditingComponent,
   ],
 })
 export class ContentGroupModule {}

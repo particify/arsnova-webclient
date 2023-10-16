@@ -176,6 +176,7 @@
     "content-group-name": "Name der Fragenserie",
     "sort-content-group": "Sortieren",
     "import-export-content-group": "Import/Export",
+    "publish-as-template": "Als Vorlage veröffentlichen",
     "updated-sorting": "Deine Sortierung wurde gespeichert.",
     "format": "Format",
     "format-choice": "Multiple-Choice",
@@ -490,5 +491,9 @@
     "cancel": "Abbrechen",
     "options": "Optionen",
     "changes-saved": "Deine Änderungen wurden gespeichert."
+  },
+  "templates": {
+    "publish-template": "Vorlage veröffentlichen",
+    "content-group-template-creation-info": "Mit öffentlichen Vorlagen kannst du deine Fragenserien unter einer freien Lizenz mit anderen teilen."
   }
 }

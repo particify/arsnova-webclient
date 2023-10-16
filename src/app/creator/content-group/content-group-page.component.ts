@@ -19,6 +19,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
 import { TranslocoService } from '@ngneat/transloco';
 import { ExtensionFactory } from '@projects/extension-point/src/public-api';
 import { Observable, Subject, mergeMap, of } from 'rxjs';
@@ -333,6 +334,16 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
       this.published = this.contentGroup.published;
+    });
+  }
+
+  publishAsTemplate() {
+    this.dialogService.openDialog(PublishContentGroupTemplateComponent, {
+      width: '600px',
+      data: {
+        name: this.contentGroup.name,
+        contentGroupId: this.contentGroup.id,
+      },
     });
   }
 }
