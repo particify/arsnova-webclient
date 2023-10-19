@@ -6308,12 +6308,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jasminewd2@npm:2.0.11":
-  version: 2.0.11
-  resolution: "@types/jasminewd2@npm:2.0.11"
+"@types/jasminewd2@npm:2.0.12":
+  version: 2.0.12
+  resolution: "@types/jasminewd2@npm:2.0.12"
   dependencies:
     "@types/jasmine": "*"
-  checksum: 85d24579d9f89a0d8e4ef082648bec568a3ec352d0799ee6073f9a0e667ef87e31702fb7f2b07a321462cb235802c4f1b472b166b609ca78cf4798c1305c0298
+  checksum: 927c891a7bb0589ca831c6c736083a12279b9eb85738e7fe00a59fde7a025f05820c253ce315c53bcb705efabc03587ddd09d608524d1ff710b016a746f264b8
   languageName: node
   linkType: hard
 
@@ -7555,7 +7555,7 @@ __metadata:
     "@types/d3-cloud": ^1.2.5
     "@types/express": 4.17.20
     "@types/jasmine": 5.1.1
-    "@types/jasminewd2": 2.0.11
+    "@types/jasminewd2": 2.0.12
     "@types/node": 18.18.5
     "@types/react": 18.2.28
     "@types/wordcloud": 1.2.0
