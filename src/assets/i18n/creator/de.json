@@ -244,6 +244,7 @@
     "a11y-moderator-message": "Du befindest dich jetzt in dem Raum {{room}} welchen du moderierst.",
     "create-content": "Inhalt erstellen",
     "create-content-group": "Fragenserie erstellen",
+    "use-template": "Vorlage nutzen",
     "content-group-created": "Deine Fragenserie wurde erstellt.",
     "public-stream": "Q&A",
     "room-loading-error": "Der Raum konnte nicht geladen werden",

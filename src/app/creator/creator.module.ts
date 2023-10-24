@@ -22,7 +22,11 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { TemplateService } from '@app/creator/content-group/_services/template.service';
+import { TemplateService } from '@app/creator/_services/template.service';
+import { ContentGroupTemplateSelectionComponent } from './_dialogs/content-group-template-selection/content-group-template-selection.component';
+import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
+import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
+import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
 
 @NgModule({
   imports: [
@@ -40,6 +44,9 @@ import { TemplateService } from '@app/creator/content-group/_services/template.s
     RenderedTextComponent,
     FormattingToolbarComponent,
     LoadingButtonComponent,
+    ContentGroupTemplateComponent,
+    TemplateTagSelectionComponent,
+    TemplateLanguageSelectionComponent,
   ],
   declarations: [
     RoomComponent,
@@ -49,6 +56,7 @@ import { TemplateService } from '@app/creator/content-group/_services/template.s
     SettingsPageComponent,
     AnnouncementSettingsComponent,
     CreatorPageComponent,
+    ContentGroupTemplateSelectionComponent,
   ],
   providers: [
     provideTranslocoScope('creator'),

@@ -14,7 +14,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TemplateService } from '@app/creator/content-group/_services/template.service';
+import { TemplateService } from '@app/creator/_services/template.service';
 
 describe('PublishContentGroupTemplateComponent', () => {
   let component: PublishContentGroupTemplateComponent;

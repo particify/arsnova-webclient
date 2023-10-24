@@ -1,0 +1,59 @@
+<div fxFill fxLayout="column" fxLayoutAlign="space-between">
+  <mat-dialog-content>
+    <div
+      fxLayout.xs="column"
+      fxLayout.gt-xs="row wrap"
+      fxLayoutGap="1em"
+      fxLayoutAlign="space-between"
+    >
+      <mat-tab-group
+        (selectedTabChange)="switchList($event)"
+        [selectedIndex]="showPublic ? 0 : 1"
+        [disablePagination]="true"
+      >
+        <mat-tab [label]="'templates.public-templates' | transloco"> </mat-tab>
+        <mat-tab [label]="'templates.my-templates' | transloco"> </mat-tab>
+      </mat-tab-group>
+      <app-template-language-selection
+        *ngIf="showPublic"
+        fxFlex.xs="100"
+        [selectedLang]="selectedLang"
+        [smaller]="true"
+        (selectedLangChanged)="updateLanguage($event)"
+      ></app-template-language-selection>
+    </div>
+    <div class="tab-container" fxLayout="column" fxLayoutGap="1em">
+      <app-template-tag-selection
+        *ngIf="showPublic"
+        (selectedTagsChanged)="updateTags($event)"
+        [lang]="selectedLang"
+        [langChanged]="langChanged"
+        [selectedTags]="selectedTags"
+      ></app-template-tag-selection>
+      <div fxLayout="column" fxLayoutGap="1em">
+        <app-loading-indicator *ngIf="loadingTemplates"></app-loading-indicator>
+        <div
+          *ngIf="!loadingTemplates && templates.length === 0"
+          fxLayoutAlign="center"
+        >
+          <p class="hint">{{ 'templates.no-templates-found' | transloco }}</p>
+        </div>
+        <div class="template-container" fxLayout="column" fxLayoutGap="10px">
+          <app-content-group-template
+            *ngFor="let template of templates"
+            fxFlex="100"
+            [template]="template"
+            (templateSelected)="useTemplate($event)"
+            appearance="outlined"
+          ></app-content-group-template>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayoutAlign.xs="center" fxLayoutAlign.gt-xs="end">
+    <button mat-button matDialogClose>
+      <mat-icon>close</mat-icon>
+      {{ 'dialog.close' | transloco }}
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -514,6 +514,7 @@
     "name": "Name",
     "description": "Beschreibung",
     "tags": "Tags",
+    "select-tags": "Wähle Tags zum Filtern von Vorlagen",
     "remove-tag": "Entferne den Tag {{tag}}",
     "tag-removed": "Tag {{tag}} wurde entfernt.",
     "create-new-tag": "Neuen Tag erstellen",
@@ -531,6 +532,14 @@
     "template-published": "Deine Vorlage wurde veröffentlicht.",
     "lang-de": "Deutsch",
     "lang-en": "Englisch",
-    "lang-es": "Spanisch"
+    "lang-es": "Spanisch",
+    "public-templates": "Öffentliche Vorlagen",
+    "my-templates": "Meine Vorlagen",
+    "no-templates-found": "Keine Vorlagen gefunden.",
+    "contents": "Inhalte",
+    "licensed-under": "Lizensiert unter {{license}} von {{owner}}",
+    "anonymous": "Anonym",
+    "add": "Hinzufügen",
+    "template-added": "Die Vorlage wurde hinzugefügt."
   }
 }

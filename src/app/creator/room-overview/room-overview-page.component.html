@@ -37,6 +37,7 @@
     <app-divider></app-divider>
     <div
       fxLayout="column"
+      fxLayoutAlign.xs="start center"
       [ngClass]="{
         'group-container': contentGroups.length > 0,
         'empty-group-container': contentGroups.length === 0
@@ -56,28 +57,49 @@
           {{ 'room-page.a11y-no-content-groups' | transloco }}
         </p>
       </ng-container>
-      <button
+      <div
         *ngIf="!isModerator"
-        id="content-group-create-button"
-        mat-stroked-button
-        color="primary"
-        class="add-group"
-        [attr.aria-label]="
-          'creator.room-page.a11y-create-content-group' | transloco
-        "
-        (click)="openCreateContentGroupDialog()"
-        appHotkey="3"
-        [appHotkeyTitle]="'creator.room-page.create-content-group' | transloco"
+        class="button-container"
+        [ngClass]="{
+          empty: contentGroups.length === 0
+        }"
       >
-        <mat-icon>playlist_add</mat-icon>
-        {{ 'creator.room-page.create-content-group' | transloco }}
-      </button>
+        <button
+          *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
+          id="content-group-create-button"
+          mat-stroked-button
+          class="add-group"
+          (click)="openTemplateSelectionDialog()"
+          appHotkey="4"
+          [appHotkeyTitle]="'creator.room-page.use-template' | transloco"
+        >
+          <mat-icon>text_snippet</mat-icon>
+          {{ 'creator.room-page.use-template' | transloco }}
+        </button>
+        <button
+          id="content-group-create-button"
+          mat-raised-button
+          color="primary"
+          class="add-group"
+          [attr.aria-label]="
+            'creator.room-page.a11y-create-content-group' | transloco
+          "
+          (click)="openCreateContentGroupDialog()"
+          appHotkey="3"
+          [appHotkeyTitle]="
+            'creator.room-page.create-content-group' | transloco
+          "
+        >
+          <mat-icon>playlist_add</mat-icon>
+          {{ 'creator.room-page.create-content-group' | transloco }}
+        </button>
+      </div>
       <ng-container *ngIf="!!contentGroups">
         <p
           tabindex="-1"
           id="content-groups"
           class="visually-hidden"
-          appHotkey="4"
+          appHotkey="5"
           [appHotkeyTitle]="'content.groups' | transloco"
         >
           {{

@@ -1,0 +1,55 @@
+<mat-card
+  [appearance]="appearance"
+  fxFill
+  fxLayout="column"
+  fxLayoutAlign="space-between"
+  tabindex="0"
+>
+  <div>
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="1em">
+      <span class="template-name">{{ template.name }}</span>
+      <div
+        fxLayoutAlign="center center"
+        class="primary-variant content-count-container"
+      >
+        <span class="primary content-count"
+          >{{ template.templateIds.length }}
+          {{ 'templates.contents' | transloco }}</span
+        >
+      </div>
+    </div>
+    <p class="ellipsis template-description">
+      {{ template.description }}
+    </p>
+  </div>
+  <div>
+    <div class="template-license">
+      <span>
+        {{
+          'templates.licensed-under'
+            | transloco
+              : {
+                  license: LICENSES.get(template.license),
+                  owner:
+                    template.ownerName || ('templates.anonymous' | transloco)
+                }
+        }}
+      </span>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <mat-chip-set class="chip-container no-flex-flow">
+        <mat-chip *ngFor="let tag of template.tags">
+          {{ tag.name }}
+        </mat-chip>
+      </mat-chip-set>
+      <div fxLayout="row" fxLayoutAlign="end center" class="fade-container">
+        <div class="button-fade"></div>
+        <div class="button-container" fxLayout="row" fxLayoutGap="10px">
+          <button mat-raised-button color="primary" (click)="use()">
+            {{ 'templates.add' | transloco }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-card>

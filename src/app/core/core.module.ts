@@ -45,6 +45,7 @@ import { SplitShortIdPipe } from './pipes/split-short-id.pipe';
 import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directive';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { DisableFormDirective } from './directives/disable-form.directive';
+import { TemplateService } from '@app/creator/_services/template.service';
 
 @NgModule({
   declarations: [
@@ -123,6 +124,7 @@ import { DisableFormDirective } from './directives/disable-form.directive';
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { hideRequiredMarker: true },
     },
+    TemplateService,
   ],
 })
 export class CoreModule {}
