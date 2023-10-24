@@ -1,0 +1,16 @@
+<mat-form-field
+  fxFill
+  appearance="outline"
+  class="no-field-hint"
+  [ngClass]="{ 'smaller-select-input': smaller }"
+>
+  <mat-label>{{ 'templates.language' | transloco }}</mat-label>
+  <mat-select [value]="selectedLang" [disabled]="formDisabled">
+    <mat-option
+      *ngFor="let lang of langs"
+      [value]="lang"
+      (click)="updateLang(lang)"
+      >{{ 'templates.lang-' + lang | transloco }}</mat-option
+    >
+  </mat-select>
+</mat-form-field>

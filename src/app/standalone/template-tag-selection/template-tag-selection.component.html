@@ -1,0 +1,50 @@
+<mat-form-field fxFill appearance="outline" class="no-field-hint">
+  <mat-label>{{ 'templates.tags' | transloco }}</mat-label>
+  <mat-chip-grid #chipGrid [disabled]="formDisabled">
+    <mat-chip-row *ngFor="let tag of selectedTags" (removed)="remove(tag)">
+      {{ tag.name }}
+      <button
+        matChipRemove
+        [attr.aria-label]="'templates.remove-tag' | transloco: { tag: tag }"
+      >
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip-row>
+    <input
+      matInput
+      #tagInput
+      [placeholder]="
+        selectedTags.length === 0 && !allowCreation
+          ? ('templates.select-tags' | transloco)
+          : ''
+      "
+      [formControl]="tagFormControl"
+      [matChipInputFor]="chipGrid"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [hideSingleSelectionIndicator]="true"
+      [autoSelectActiveOption]="false"
+      (optionSelected)="selected($event)"
+    >
+      <mat-option
+        *ngFor="let tag of filteredTags"
+        [value]="tag.name"
+        [disabled]="isTagSelected(tag)"
+      >
+        {{ tag.name }}
+      </mat-option>
+      <mat-option
+        *ngIf="
+          filteredTags.length === 0 &&
+          tagInput.value.length > 0 &&
+          allowCreation
+        "
+      >
+        <mat-icon>add</mat-icon>
+        {{ 'templates.create-new-tag' | transloco }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-chip-grid>
+</mat-form-field>

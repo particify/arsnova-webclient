@@ -35,17 +35,9 @@
       ></mat-hint
     >
   </mat-form-field>
-  <mat-form-field appearance="outline" class="no-field-hint">
-    <mat-label>{{ 'templates.language' | transloco }}</mat-label>
-    <mat-select [value]="selectedLang" formControlName="language">
-      <mat-option
-        *ngFor="let lang of langs"
-        [value]="lang"
-        (click)="updateLang(lang)"
-        >{{ 'templates.lang-' + lang | transloco }}</mat-option
-      >
-    </mat-select>
-  </mat-form-field>
+  <app-template-language-selection
+    (selectedLangChanged)="updateLanguage($event)"
+  ></app-template-language-selection>
   <mat-form-field appearance="outline" class="no-field-hint">
     <mat-label>{{ 'templates.license' | transloco }}</mat-label>
     <mat-select
@@ -73,50 +65,10 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field
-    appearance="outline"
-    class="no-field-hint"
-    [hideRequiredMarker]="true"
-  >
-    <mat-label>{{ 'templates.tags' | transloco }}</mat-label>
-    <mat-chip-grid #chipGrid formControlName="tags">
-      <mat-chip-row *ngFor="let tag of selectedTags" (removed)="remove(tag)">
-        {{ tag.name }}
-        <button
-          matChipRemove
-          [attr.aria-label]="'templates.remove-tag' | transloco: { tag: tag }"
-        >
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip-row>
-      <input
-        id="tagsInput"
-        #tagsInput
-        matInput
-        formControlName="tag"
-        [matChipInputFor]="chipGrid"
-        [matAutocomplete]="auto"
-      />
-      <mat-autocomplete
-        #auto="matAutocomplete"
-        [hideSingleSelectionIndicator]="true"
-        [autoSelectActiveOption]="false"
-        (optionSelected)="selected($event)"
-      >
-        <mat-option
-          *ngFor="let tag of filteredTags"
-          [value]="tag.name"
-          [disabled]="isTagSelected(tag)"
-        >
-          {{ tag.name }}
-        </mat-option>
-        <mat-option
-          *ngIf="filteredTags.length === 0 && tagsInput.value.length > 0"
-        >
-          <mat-icon>add</mat-icon>
-          {{ 'templates.create-new-tag' | transloco }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-chip-grid>
-  </mat-form-field>
+  <app-template-tag-selection
+    (selectedTagsChanged)="updateTags($event)"
+    [lang]="selectedLang"
+    [langChanged]="langChanged"
+    [allowCreation]="true"
+  ></app-template-tag-selection>
 </form>
