@@ -9,13 +9,19 @@ import { TranslocoService } from '@ngneat/transloco';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
+import { Observable } from 'rxjs';
+import { IsoLanguage } from '@app/core/models/iso-language';
+import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { HttpClient } from '@angular/common/http';
 
 export const BROWSER_LANG = new InjectionToken<string>('BROWSER_LANG');
 
 @Injectable({
   providedIn: 'root',
 })
-export class LanguageService {
+export class LanguageService extends AbstractHttpService<void> {
   public readonly langEmitter = new EventEmitter<string>();
   private langs: Language[] = [
     {
@@ -36,11 +42,22 @@ export class LanguageService {
   ];
 
   constructor(
-    private translateService: TranslocoService,
+    protected httpClient: HttpClient,
+    protected eventService: EventService,
+    protected translateService: TranslocoService,
+    protected notificationService: NotificationService,
     private globalStorageService: GlobalStorageService,
     @Inject(DOCUMENT) private document: Document,
     @Inject(BROWSER_LANG) private browserLang: string
-  ) {}
+  ) {
+    super(
+      '/language',
+      httpClient,
+      eventService,
+      translateService,
+      notificationService
+    );
+  }
 
   private getLangWithKey(key: string) {
     return this.langs.find((lang) => lang.key === key);
@@ -70,5 +87,9 @@ export class LanguageService {
 
   getLangs() {
     return this.langs;
+  }
+
+  getIsoLanguages(): Observable<IsoLanguage[]> {
+    return this.httpClient.get<IsoLanguage[]>(this.buildUri('/'));
   }
 }

@@ -17,9 +17,17 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { Comment } from '@app/core/models/comment';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { VoteService } from '@app/core/services/http/vote.service';
-import { BROWSER_LANG } from '@app/core/services/util/language.service';
+import {
+  BROWSER_LANG,
+  LanguageService,
+} from '@app/core/services/util/language.service';
+import { of } from 'rxjs';
+
+class MockLanguageService {
+  langEmitter = new EventEmitter<string>();
+}
 
 describe('CommentComponent', () => {
   let component: CommentComponent;
@@ -84,6 +92,10 @@ describe('CommentComponent', () => {
         {
           provide: VoteService,
           useValue: mockVoteService,
+        },
+        {
+          provide: LanguageService,
+          useClass: MockLanguageService,
         },
         { provide: BROWSER_LANG, useValue: 'unsupported' },
       ],

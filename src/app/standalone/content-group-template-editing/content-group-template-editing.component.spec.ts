@@ -13,6 +13,7 @@ import { of } from 'rxjs';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 describe('ContentGroupTemplateEditingComponent', () => {
   let component: ContentGroupTemplateEditingComponent;
@@ -22,6 +23,11 @@ describe('ContentGroupTemplateEditingComponent', () => {
     'getTemplateTags',
   ]);
   mockTemplateService.getTemplateTags.and.returnValue(of([]));
+
+  const mockLangService = jasmine.createSpyObj(LanguageService, [
+    'getIsoLanguages',
+  ]);
+  mockLangService.getIsoLanguages.and.returnValue(of([]));
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -46,6 +52,10 @@ describe('ContentGroupTemplateEditingComponent', () => {
         {
           provide: AnnounceService,
           useClass: MockAnnounceService,
+        },
+        {
+          provide: LanguageService,
+          useValue: mockLangService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

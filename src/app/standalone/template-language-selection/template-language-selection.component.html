@@ -5,12 +5,14 @@
   [ngClass]="{ 'smaller-select-input': smaller }"
 >
   <mat-label>{{ 'templates.language' | transloco }}</mat-label>
+
   <mat-select [value]="selectedLang" [disabled]="formDisabled">
     <mat-option
       *ngFor="let lang of langs"
       [value]="lang"
       (click)="updateLang(lang)"
-      >{{ 'templates.lang-' + lang | transloco }}</mat-option
     >
+      {{ lang.nativeName }}
+    </mat-option>
   </mat-select>
 </mat-form-field>
