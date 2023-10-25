@@ -7210,9 +7210,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"angular-material-css-vars@npm:5.0.2":
-  version: 5.0.2
-  resolution: "angular-material-css-vars@npm:5.0.2"
+"angular-material-css-vars@npm:5.0.3":
+  version: 5.0.3
+  resolution: "angular-material-css-vars@npm:5.0.3"
   dependencies:
     "@ctrl/tinycolor": ^3.4.0
     tslib: ^2.3.0
@@ -7220,7 +7220,7 @@ __metadata:
     "@angular/common": ">=16"
     "@angular/core": ">=16"
     "@angular/material": ">=16"
-  checksum: 2732809b8bfa82b5f57f4c23c509268896febeb9eed1369576115a98a63d997a8f3d7f5d87ffc0a62b7c053e1469841aa23efdfabc035d40bcddbeb652377a68
+  checksum: f46721d8ffc952f9e0c4fe5d1b70fdeb5c2b24e605ea69e411a425780bcb2a9d49a97db9ae498b32b4aafdc43841c2e7120d435eb725238d7fdb2f1fda15050f
   languageName: node
   linkType: hard
 
@@ -7533,7 +7533,7 @@ __metadata:
     "@types/wordcloud": 1.2.1
     "@typescript-eslint/eslint-plugin": 6.9.0
     "@typescript-eslint/parser": 6.9.0
-    angular-material-css-vars: 5.0.2
+    angular-material-css-vars: 5.0.3
     backoff-rxjs: 7.0.0
     chart.js: 4.4.0
     chartjs-plugin-datalabels: 2.2.0
