@@ -10,6 +10,7 @@ import { SystemStatisticsComponent } from './system-statistics/system-statistics
 import { UserManagementComponent } from './user-management/user-management.component';
 import { RoomManagementComponent } from './room-management/room-management.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { TemplateManagementComponent } from '@app/admin/template-management/template-management.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
   {
     path: 'rooms',
     component: RoomManagementComponent,
+  },
+  {
+    path: 'templates',
+    component: TemplateManagementComponent,
   },
 ];
 

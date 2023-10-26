@@ -14,7 +14,7 @@
           {{ 'admin.admin-area.general' | transloco }}
         </p>
         <div class="button-container" fxLayout="column" fxLayoutGap="8px">
-          <div *ngFor="let button of getButtons()">
+          <ng-container *ngFor="let button of getButtons()">
             <button
               *ngIf="button.display | async"
               mat-button
@@ -26,7 +26,7 @@
               <mat-icon>{{ button.icon }}</mat-icon>
               {{ 'admin.admin-area.' + button.i18nName | transloco }}
             </button>
-          </div>
+          </ng-container>
         </div>
         <lib-extension-point
           extensionId="premium-admin"

@@ -73,7 +73,7 @@ export class TemplateTagSelectionComponent
   selected(event: MatAutocompleteSelectedEvent): void {
     const tag =
       this.filteredTags.length === 0
-        ? { id: '', name: this.tagInput.nativeElement.value }
+        ? { id: '', name: this.tagInput.nativeElement.value, verified: false }
         : this.tags.find((t) => t.name === event.option.viewValue);
     if (tag) {
       this.selectedTags.push(tag);

@@ -67,9 +67,24 @@
     "wsGatewayStats": "Websocket gateway service",
     "webSocketUserCount": "Connected users",
     "coreServiceStats": "Core service",
-    "commentServiceStats": "Comment service"
+    "commentServiceStats": "Comment service",
+    "template-management": "Template management",
+    "search-tags": "Search tags",
+    "no-tags-found": "No tags found.",
+    "filter": "Filter",
+    "filter-all": "All",
+    "filter-verified": "Verified",
+    "filter-unverified": "Unverified",
+    "tag": "Tag",
+    "save": "Save",
+    "verify": "Verify",
+    "tag-has-been-verified": "Tag has been verified.",
+    "tag-verification-has-been-removed": "Verification has been removed.",
+    "tag-deleted": "Tag has been deleted.",
+    "changes-have-been-saved": "Changes have been saved."
   },
   "dialog": {
-    "really-delete-account-admin": "Do you want to irrevocably delete this account with all rooms?"
+    "really-delete-account-admin": "Do you want to irrevocably delete this account with all rooms?",
+    "really-delete-tag": "Do you really want to delete the following tag?"
   }
 }

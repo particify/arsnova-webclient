@@ -9,6 +9,7 @@ import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { catchError, map, Observable, of, shareReplay } from 'rxjs';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { SystemHealth } from '@app/admin/_models/system-health';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 class NavButton {
   name: string;
@@ -46,7 +47,8 @@ export class AdminHomeComponent implements OnInit {
     protected translateService: TranslocoService,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
-    protected systemInfoService: SystemInfoService
+    protected systemInfoService: SystemInfoService,
+    protected featureFlagService: FeatureFlagService
   ) {
     langService.langEmitter.subscribe((lang) => {
       translateService.setActiveLang(lang);
@@ -70,6 +72,12 @@ export class AdminHomeComponent implements OnInit {
       new NavButton('stats', 'system-stats', 'insights'),
       new NavButton('users', 'user-management', 'people'),
       new NavButton('rooms', 'room-management', 'room_preferences'),
+      new NavButton(
+        'templates',
+        'template-management',
+        'text_snippet',
+        of(this.featureFlagService.isEnabled('CONTENT_GROUP_TEMPLATES'))
+      ),
       new NavButton(
         'status',
         'status-details',
