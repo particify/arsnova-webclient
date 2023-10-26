@@ -11,6 +11,18 @@
   justify-content: center;
 
   .add-group {
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
+  }
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  flex-direction: column-reverse;
+}
+
+@media (min-width: 600px) {
+  .button-container:not(.empty) {
+    flex-direction: row;
   }
 }

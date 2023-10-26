@@ -5,7 +5,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TemplateService } from '@app/creator/content-group/_services/template.service';
+import { TemplateService } from '@app/creator/_services/template.service';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { TranslocoService } from '@ngneat/transloco';

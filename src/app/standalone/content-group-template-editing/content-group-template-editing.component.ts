@@ -1,31 +1,35 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnInit,
   QueryList,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatInput } from '@angular/material/input';
 import { CoreModule } from '@app/core/core.module';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { LICENSES } from '@app/core/models/licenses';
 import { TemplateTag } from '@app/core/models/template-tag';
-import { BaseTemplateService } from '@app/core/services/http/base-template.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TranslocoService } from '@ngneat/transloco';
-import { startWith, takeUntil } from 'rxjs';
 
 @Component({
   standalone: true,
-  imports: [CoreModule],
+  imports: [
+    CoreModule,
+    TemplateLanguageSelectionComponent,
+    TemplateTagSelectionComponent,
+  ],
   selector: 'app-content-group-template-editing',
   templateUrl: './content-group-template-editing.component.html',
   styleUrls: ['./content-group-template-editing.component.scss'],
@@ -34,24 +38,22 @@ export class ContentGroupTemplateEditingComponent
   extends FormComponent
   implements OnInit
 {
-  @ViewChildren(MatInput) inputs: QueryList<HTMLInputElement>;
+  @ViewChildren(MatInput) inputs: QueryList<MatInput>;
+  @ViewChild(TemplateTagSelectionComponent)
+  templateTagSelectionComponent: TemplateTagSelectionComponent;
 
   @Input() name: string = '';
   description: string;
-  filteredTags: TemplateTag[] = [];
   selectedTags: TemplateTag[] = [];
   selectedLicense: string;
   selectedLang: string;
-  langs: string[];
+  langChanged = new EventEmitter<string>();
 
   licenseKeys = Array.from(LICENSES.keys());
   LICENSES = LICENSES;
-  tags: TemplateTag[] = [];
 
   constructor(
     protected formService: FormService,
-    private announceService: AnnounceService,
-    private templateService: BaseTemplateService,
     private translateService: TranslocoService,
     private notificationService: NotificationService
   ) {
@@ -64,92 +66,47 @@ export class ContentGroupTemplateEditingComponent
     this.formGroup = new FormGroup({
       name: new FormControl(this.name, Validators.required),
       description: new FormControl('', Validators.required),
-      language: new FormControl(this.selectedLang),
       licenses: new FormControl(this.selectedLicense),
-      tags: new FormControl([], Validators.required),
-      tag: new FormControl(),
     });
-    this.formGroup.valueChanges.pipe(startWith(null)).subscribe((form) => {
-      setTimeout(() => {
-        this.filteredTags = form?.tag
-          ? this.filterTags(form.tag)
-          : this.tags.slice();
-      });
-    });
-    this.langs = this.translateService
-      .getAvailableLangs()
-      .map((lang) => lang.toString());
-    this.loadTags();
   }
 
   replaceDots(key: string): string {
     return key.toLowerCase().replaceAll(/\./g, '-');
   }
 
-  updateLang(lang: string) {
+  updateLanguage(lang: string): void {
     this.selectedLang = lang;
-    this.loadTags();
+    this.langChanged.emit(this.selectedLang);
   }
 
-  updateLicense(license: string) {
+  updateLicense(license: string): void {
     this.selectedLicense = license;
   }
 
-  remove(tag: TemplateTag): void {
-    const index = this.selectedTags.map((t) => t.name).indexOf(tag.name);
-    if (index >= 0) {
-      this.selectedTags.splice(index, 1);
-      this.announceService.announce('templates.tag-removed', { tag: tag });
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    const tag =
-      this.filteredTags.length === 0
-        ? { name: this.formGroup.get('tag')?.value }
-        : this.tags.find((t) => t.name === event.option.viewValue);
-    if (tag) {
-      this.selectedTags.push(tag);
-      this.formGroup.patchValue({ tags: this.selectedTags });
-      this.formGroup.patchValue({ tag: '' });
-    }
-  }
-
-  private filterTags(value: string): TemplateTag[] {
-    const filterValue = value.toLowerCase();
-    return this.tags.filter((tag) =>
-      tag.name.toLowerCase().includes(filterValue)
-    );
-  }
-
-  loadTags() {
-    this.templateService
-      .getTemplateTags(this.selectedLang, false)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((tags) => {
-        this.tags = tags;
-        this.filteredTags = this.tags;
-      });
-  }
-
-  isTagSelected(tag: TemplateTag) {
-    return this.selectedTags.map((t) => t.name).includes(tag.name);
+  updateTags(tags: TemplateTag[]): void {
+    this.selectedTags = tags;
   }
 
   getTemplate(): ContentGroupTemplate | undefined {
+    let invalidInputName: string | undefined;
     for (const control in this.formGroup.controls) {
-      if (this.formGroup.get(control)?.invalid) {
+      if (this.formGroup.get(control)?.invalid && !invalidInputName) {
         this.inputs.find((i) => i.id === control + 'Input')?.focus();
-        const msg = this.translateService.translate(
-          'templates.please-fill-' + control
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-        return;
+        invalidInputName = control;
       }
     }
+    if (this.selectedTags.length === 0 && !invalidInputName) {
+      this.templateTagSelectionComponent.tagInput.nativeElement.focus();
+      invalidInputName = 'tags';
+    }
+    if (invalidInputName) {
+      const msg = this.translateService.translate(
+        'templates.please-fill-' + invalidInputName
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return;
+    }
+
     const template = new ContentGroupTemplate(
       this.name,
       this.description,

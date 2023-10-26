@@ -1,0 +1,21 @@
+@import '../../../../variables';
+
+.template-container {
+  max-width: 100%;
+  width: $card-width;
+}
+
+.tab-container {
+  padding-top: 1em;
+}
+
+.mat-mdc-dialog-content {
+  max-height: calc(100% - 70px);
+}
+
+.mat-mdc-dialog-actions {
+  border-style: none;
+  z-index: 1;
+  box-shadow: 0 0 2px 1px rgb(0 0 0 / 10%);
+  padding: 16px 24px !important;
+}

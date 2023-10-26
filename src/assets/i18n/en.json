@@ -514,6 +514,7 @@
     "name": "Name",
     "description": "Description",
     "tags": "Tags",
+    "select-tags": "Select tags to filter templates",
     "remove-tag": "Remove tag {{tag}}",
     "tag-removed": "Tag {{tag}} has been removed.",
     "create-new-tag": "Create new tag",
@@ -531,6 +532,14 @@
     "template-published": "Your template has been published.",
     "lang-de": "German",
     "lang-en": "English",
-    "lang-es": "Spanish"
+    "lang-es": "Spanish",
+    "public-templates": "Public templates",
+    "my-templates": "My templates",
+    "no-templates-found": "No templates found.",
+    "contents": "Contents",
+    "licensed-under": "Licensed under {{license}} by {{owner}}",
+    "anonymous": "Anonymous",
+    "add": "Add",
+    "template-added": "The template has been added."
   }
 }

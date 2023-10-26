@@ -8,6 +8,7 @@ export class ContentGroupTemplate {
   tags: TemplateTag[];
   license: string;
   templateIds: string[];
+  ownerName?: string;
 
   constructor(
     name: string,
@@ -15,7 +16,8 @@ export class ContentGroupTemplate {
     language: string,
     tags: TemplateTag[],
     license: string,
-    templateIds?: string[]
+    templateIds?: string[],
+    ownerName?: string
   ) {
     this.name = name;
     this.description = description;
@@ -25,5 +27,6 @@ export class ContentGroupTemplate {
     if (templateIds) {
       this.templateIds = templateIds;
     }
+    this.ownerName = ownerName;
   }
 }

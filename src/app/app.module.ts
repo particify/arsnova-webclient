@@ -101,6 +101,7 @@ import { MaterialCssVarsModule } from 'angular-material-css-vars';
 import { AppErrorHandler } from '@app/app-error-handler';
 import { ENVIRONMENT } from '@environments/environment-token';
 import { LoadingButtonComponent } from './standalone/loading-button/loading-button.component';
+import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -144,6 +145,7 @@ export function initializeApp(appConfig: AppConfig) {
     SettingsPanelHeaderComponent,
     SettingsSlideToggleComponent,
     ListBadgeComponent,
+    ContentGroupTemplateComponent,
     HintComponent,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

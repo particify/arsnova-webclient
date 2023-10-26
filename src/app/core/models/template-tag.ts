@@ -1,4 +1,4 @@
 export interface TemplateTag {
-  id?: string;
+  id: string;
   name: string;
 }
