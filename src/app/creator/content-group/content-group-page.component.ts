@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
 import { ContentGroup } from '@app/core/models/content-group';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
@@ -19,9 +21,10 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
 import { TranslocoService } from '@ngneat/transloco';
 import { ExtensionFactory } from '@projects/extension-point/src/public-api';
-import { Observable, Subject, mergeMap, of } from 'rxjs';
+import { Observable, Subject, mergeMap, of, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-content-group-page',
@@ -45,6 +48,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   isInSortingMode = false;
   copiedContents: Content[] = [];
   hasSeriesExportExtension = false;
+  isGuest = true;
 
   onInit = false;
 
@@ -60,7 +64,8 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     private localFileService: LocalFileService,
     private dialogService: DialogService,
     private extensionFactory: ExtensionFactory,
-    private routingService: RoutingService
+    private routingService: RoutingService,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +80,12 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     this.hasSeriesExportExtension = !!this.extensionFactory.getExtension(
       'series-results-export'
     );
+    this.authService
+      .getCurrentAuthentication()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((auth) => {
+        this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+      });
   }
 
   ngOnDestroy(): void {
@@ -333,6 +344,16 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
       this.published = this.contentGroup.published;
+    });
+  }
+
+  publishAsTemplate() {
+    this.dialogService.openDialog(PublishContentGroupTemplateComponent, {
+      width: '600px',
+      data: {
+        name: this.contentGroup.name,
+        contentGroupId: this.contentGroup.id,
+      },
     });
   }
 }

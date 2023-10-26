@@ -1,5 +1,5 @@
-import { Component, OnDestroy, Optional } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { FormService } from '@app/core/services/util/form.service';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -9,6 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 export abstract class FormComponent implements OnDestroy {
   protected destroyed$ = new Subject<void>();
   private formControl: FormControl;
+  protected formGroup: FormGroup;
   formDisabled = false;
 
   constructor(protected formService: FormService) {
@@ -32,12 +33,12 @@ export abstract class FormComponent implements OnDestroy {
   }
 
   protected handleFormChanges(): void {
-    if (this.formControl) {
-      if (this.formDisabled) {
-        this.formControl.disable();
-      } else {
-        this.formControl.enable();
-      }
+    if (this.formDisabled) {
+      this.formControl?.disable();
+      this.formGroup?.disable();
+    } else {
+      this.formControl?.enable();
+      this.formGroup?.enable();
     }
   }
 

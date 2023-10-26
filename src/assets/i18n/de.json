@@ -509,5 +509,28 @@
     "pace-neutral": "mittelmäßig",
     "pace-positive-1": "eher schnell",
     "pace-positive-2": "sehr schnell"
+  },
+  "templates": {
+    "name": "Name",
+    "description": "Beschreibung",
+    "tags": "Tags",
+    "remove-tag": "Entferne den Tag {{tag}}",
+    "tag-removed": "Tag {{tag}} wurde entfernt.",
+    "create-new-tag": "Neuen Tag erstellen",
+    "language": "Sprache",
+    "license": "Lizenz",
+    "please-fill-name": "Bitte gib einen Namen ein.",
+    "please-fill-description": "Bitte gib einen Beschreibung ein.",
+    "please-fill-tags": "Bitte wähle mindestens einen Tag aus.",
+    "license-description-cc0-1-0": "Erlaubt anderen, die Vorlage ohne Bedingungen zu verbreiten, zu remixen, anzupassen und auf ihr aufzubauen.",
+    "license-description-cc-by-4-0": "Erlaubt anderen, die Vorlage zu verbreiten, zu remixen, anzupassen und darauf aufzubauen, solange der Urheber genannt wird.",
+    "license-description-cc-by-sa-4-0": "Erlaubt anderen, die Vorlage zu verbreiten, zu remixen, anzupassen und darauf aufzubauen, solange der Urheber genannt wird. Vorlagen, die auf dieser basieren, müssen unter denselben Bedingungen lizenziert werden.",
+    "license-description-cc-by-nc-4-0": "Erlaubt anderen, die Vorlage für nicht-kommerzielle Zwecke zu verbreiten, zu remixen, anzupassen und darauf aufzubauen, solange der Urheber genannt wird.",
+    "license-description-cc-by-nc-sa-4-0": "Erlaubt anderen, die Vorlage für nicht-kommerzielle Zwecke zu verbreiten, zu remixen, anzupassen und darauf aufzubauen, solange der Urheber genannt wird. Vorlagen, die auf dieser basieren, müssen unter denselben Bedingungen lizenziert werden.",
+    "publish": "Veröffentlichen",
+    "template-published": "Deine Vorlage wurde veröffentlicht.",
+    "lang-de": "Deutsch",
+    "lang-en": "Englisch",
+    "lang-es": "Spanisch"
   }
 }

@@ -176,6 +176,8 @@
     "content-group-name": "Name of the question series",
     "sort-content-group": "Sort the question series",
     "import-export-content-group": "Import/Export",
+    "publish-as-template": "Publish as template",
+    "publishing-template-not-possible": "Please login to publish your question series as templates.",
     "updated-sorting": "Your sorting has been saved.",
     "format": "Format",
     "format-choice": "Multiple-Choice",
@@ -487,5 +489,9 @@
     "cancel": "Cancel",
     "options": "Options",
     "changes-saved": "Your changes have been saved."
+  },
+  "templates": {
+    "publish-template": "Publish template",
+    "content-group-template-creation-info": "With public templates you can share your question series with others under terms of a free license."
   }
 }

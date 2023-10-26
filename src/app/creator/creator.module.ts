@@ -22,6 +22,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { TemplateService } from '@app/creator/content-group/_services/template.service';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     provideTranslocoScope('creator'),
     DialogService,
     FocusModeService,
+    TemplateService,
   ],
 })
 export class CreatorModule {}

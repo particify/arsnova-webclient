@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>{{ 'creator.templates.publish-template' | transloco }}</h2>
+<mat-dialog-content fxLayout="column" fxLayoutGap="20px">
+  <p class="info">
+    {{ 'creator.templates.content-group-template-creation-info' | transloco }}
+  </p>
+  <app-content-group-template-editing
+    [name]="data.name"
+  ></app-content-group-template-editing>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button (click)="closeDialog()">
+    {{ 'dialog.cancel' | transloco }}
+  </button>
+  <app-loading-button
+    [isDialog]="true"
+    (clicked)="publish()"
+    name="templates.publish"
+  ></app-loading-button>
+</mat-dialog-actions>
