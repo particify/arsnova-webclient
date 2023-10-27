@@ -85,7 +85,7 @@ export class TemplateTagSelectionComponent
 
   loadTags(lang: string = this.lang): void {
     this.templateService
-      .getTemplateTags(lang, false)
+      .getTemplateTags(lang)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((tags) => {
         this.tags = tags;
