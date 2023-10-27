@@ -9,6 +9,14 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { EventService } from '@app/core/services/util/event.service';
+import {
+  MockEventService,
+  MockNotificationService,
+} from '@testing/test-helpers';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 describe('LanguageService', () => {
   let langService: LanguageService;
@@ -26,6 +34,7 @@ describe('LanguageService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, getTranslocoModule()],
       providers: [
         LanguageService,
         {
@@ -35,6 +44,14 @@ describe('LanguageService', () => {
         {
           provide: GlobalStorageService,
           useValue: globalStorageService,
+        },
+        {
+          provide: EventService,
+          useClass: MockEventService,
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService,
         },
         { provide: BROWSER_LANG, useValue: 'unsupported' },
       ],

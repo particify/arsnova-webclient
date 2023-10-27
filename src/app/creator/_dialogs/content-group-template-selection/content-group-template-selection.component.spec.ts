@@ -22,6 +22,8 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 describe('ContentGroupTemplateSelectionComponent', () => {
   let component: ContentGroupTemplateSelectionComponent;
@@ -63,6 +65,11 @@ describe('ContentGroupTemplateSelectionComponent', () => {
     of([{ id: 'tagId', name: 'tagName' }])
   );
 
+  const mockLangService = jasmine.createSpyObj(LanguageService, [
+    'getIsoLanguages',
+  ]);
+  mockLangService.getIsoLanguages.and.returnValue(of([]));
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ContentGroupTemplateSelectionComponent],
@@ -103,7 +110,12 @@ describe('ContentGroupTemplateSelectionComponent', () => {
           provide: BaseTemplateService,
           useValue: mockBaseTemplateService,
         },
+        {
+          provide: LanguageService,
+          useValue: mockLangService,
+        },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ContentGroupTemplateSelectionComponent);
     component = fixture.componentInstance;

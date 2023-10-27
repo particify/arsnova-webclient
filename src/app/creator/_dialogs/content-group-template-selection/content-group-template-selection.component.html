@@ -17,7 +17,7 @@
       <app-template-language-selection
         *ngIf="showPublic"
         fxFlex.xs="100"
-        [selectedLang]="selectedLang"
+        [defaultLang]="selectedLang"
         [smaller]="true"
         (selectedLangChanged)="updateLanguage($event)"
       ></app-template-language-selection>
