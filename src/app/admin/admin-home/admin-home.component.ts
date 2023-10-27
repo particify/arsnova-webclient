@@ -6,9 +6,28 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { Router } from '@angular/router';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
-import { catchError, Observable, of, shareReplay } from 'rxjs';
+import { catchError, map, Observable, of, shareReplay } from 'rxjs';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { SystemHealth } from '@app/admin/_models/system-health';
+
+class NavButton {
+  name: string;
+  i18nName: string;
+  icon: string;
+  display: Observable<boolean>;
+
+  constructor(
+    name: string,
+    i18nName: string,
+    icon: string,
+    display = of(true)
+  ) {
+    this.name = name;
+    this.i18nName = i18nName;
+    this.icon = icon;
+    this.display = display;
+  }
+}
 
 @Component({
   selector: 'app-admin-home',
@@ -44,6 +63,20 @@ export class AdminHomeComponent implements OnInit {
     setTimeout(() => {
       this.emitPageChange();
     }, 0);
+  }
+
+  getButtons(): NavButton[] {
+    return [
+      new NavButton('stats', 'system-stats', 'insights'),
+      new NavButton('users', 'user-management', 'people'),
+      new NavButton('rooms', 'room-management', 'room_preferences'),
+      new NavButton(
+        'status',
+        'status-details',
+        'dns',
+        this.healthInfo.pipe(map((h) => !!h?.details))
+      ),
+    ];
   }
 
   getHealthInfo() {

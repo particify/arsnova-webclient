@@ -14,47 +14,19 @@
           {{ 'admin.admin-area.general' | transloco }}
         </p>
         <div class="button-container" fxLayout="column" fxLayoutGap="8px">
-          <button
-            mat-button
-            class="nav-button"
-            (click)="changePage('stats')"
-            color="{{ currentPage === 'stats' ? 'primary' : '' }}"
-            [ngClass]="{ 'primary-variant': currentPage === 'stats' }"
-          >
-            <mat-icon>insights</mat-icon>
-            {{ 'admin.admin-area.system-stats' | transloco }}
-          </button>
-          <button
-            mat-button
-            class="nav-button"
-            (click)="changePage('users')"
-            color="{{ currentPage === 'users' ? 'primary' : '' }}"
-            [ngClass]="{ 'primary-variant': currentPage === 'users' }"
-          >
-            <mat-icon>people</mat-icon>
-            {{ 'admin.admin-area.user-management' | transloco }}
-          </button>
-          <button
-            mat-button
-            class="nav-button"
-            (click)="changePage('rooms')"
-            color="{{ currentPage === 'rooms' ? 'primary' : '' }}"
-            [ngClass]="{ 'primary-variant': currentPage === 'rooms' }"
-          >
-            <mat-icon>room_preferences</mat-icon>
-            {{ 'admin.admin-area.room-management' | transloco }}
-          </button>
-          <button
-            *ngIf="(healthInfo | async)?.details"
-            mat-button
-            class="nav-button"
-            (click)="changePage('status')"
-            color="{{ currentPage === 'status' ? 'primary' : '' }}"
-            [ngClass]="{ 'primary-variant': currentPage === 'status' }"
-          >
-            <mat-icon>dns</mat-icon>
-            {{ 'admin.admin-area.status-details' | transloco }}
-          </button>
+          <div *ngFor="let button of getButtons()">
+            <button
+              *ngIf="button.display | async"
+              mat-button
+              class="nav-button"
+              (click)="changePage(button.name)"
+              color="{{ currentPage === button.name ? 'primary' : '' }}"
+              [ngClass]="{ 'primary-variant': currentPage === button.name }"
+            >
+              <mat-icon>{{ button.icon }}</mat-icon>
+              {{ 'admin.admin-area.' + button.i18nName | transloco }}
+            </button>
+          </div>
         </div>
         <lib-extension-point
           extensionId="premium-admin"
