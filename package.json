@@ -75,7 +75,7 @@
     "@types/jasmine": "5.1.1",
     "@types/jasminewd2": "2.0.12",
     "@types/node": "18.18.7",
-    "@types/react": "18.2.32",
+    "@types/react": "18.2.33",
     "@types/wordcloud": "1.2.1",
     "@typescript-eslint/eslint-plugin": "6.9.0",
     "@typescript-eslint/parser": "6.9.0",
