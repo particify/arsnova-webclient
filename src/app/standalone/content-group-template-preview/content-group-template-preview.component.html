@@ -12,10 +12,12 @@
       fxLayoutGap="1em"
     >
       <span class="template-name">{{ template.name }}</span>
-      <button mat-flat-button color="primary" (click)="add()">
-        <mat-icon fxFlex="noshrink">add</mat-icon>
-        {{ 'templates.add' | transloco }}
-      </button>
+      <app-loading-button
+        (click)="add()"
+        [isDialog]="true"
+        name="templates.add"
+      >
+      </app-loading-button>
     </div>
     <p class="template-description">{{ template.description }}</p>
     <div fxLayout="column" fxLayoutGap="1em">

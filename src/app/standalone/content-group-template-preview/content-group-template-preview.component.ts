@@ -6,12 +6,18 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { LICENSES } from '@app/core/models/licenses';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ContentService } from '@app/core/services/http/content.service';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
 
 @Component({
   standalone: true,
-  imports: [CoreModule, LoadingIndicatorComponent, TemplateLicenseComponent],
+  imports: [
+    CoreModule,
+    LoadingIndicatorComponent,
+    TemplateLicenseComponent,
+    LoadingButtonComponent,
+  ],
   selector: 'app-content-group-template-preview',
   templateUrl: './content-group-template-preview.component.html',
   styleUrls: ['./content-group-template-preview.component.scss'],

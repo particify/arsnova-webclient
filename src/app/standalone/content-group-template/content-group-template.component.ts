@@ -5,10 +5,16 @@ import { CoreModule } from '@app/core/core.module';
 import { LICENSES } from '@app/core/models/licenses';
 import { MatCardAppearance } from '@angular/material/card';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, CoreModule, TemplateLicenseComponent],
+  imports: [
+    CommonModule,
+    CoreModule,
+    TemplateLicenseComponent,
+    LoadingButtonComponent,
+  ],
   selector: 'app-content-group-template',
   templateUrl: './content-group-template.component.html',
   styleUrls: ['./content-group-template.component.scss'],
