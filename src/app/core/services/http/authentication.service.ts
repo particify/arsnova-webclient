@@ -25,7 +25,7 @@ import {
   ClientAuthenticationResult,
 } from '@app/core/models/client-authentication-result';
 import { EventService } from '@app/core/services/util/event.service';
-import JwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { TranslocoService } from '@ngneat/transloco';
 import {
   AdvancedSnackBarTypes,
@@ -350,7 +350,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   }
 
   hasAdminRole(auth: ClientAuthentication) {
-    const decodedToken = JwtDecode<Jwt>(auth.token);
+    const decodedToken = jwtDecode<Jwt>(auth.token);
     return decodedToken.roles.some((role) => role === this.ADMIN_ROLE);
   }
 
