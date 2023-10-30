@@ -22,20 +22,11 @@
       {{ template.description }}
     </p>
   </div>
-  <div>
-    <div class="template-license">
-      <span>
-        {{
-          'templates.licensed-under'
-            | transloco
-              : {
-                  license: LICENSES.get(template.license),
-                  owner:
-                    template.ownerName || ('templates.anonymous' | transloco)
-                }
-        }}
-      </span>
-    </div>
+  <div fxLayout="column" fxLayoutGap="0.5em">
+    <app-template-license
+      [ownerName]="template.ownerName"
+      [license]="template.license"
+    ></app-template-license>
     <div fxLayout="row" fxLayoutAlign="start center">
       <mat-chip-set class="chip-container no-flex-flow">
         <mat-chip *ngFor="let tag of template.tags">
@@ -45,6 +36,9 @@
       <div fxLayout="row" fxLayoutAlign="end center" class="fade-container">
         <div class="button-fade"></div>
         <div class="button-container" fxLayout="row" fxLayoutGap="10px">
+          <button mat-stroked-button (click)="preview()">
+            {{ 'templates.preview' | transloco }}
+          </button>
           <button mat-raised-button color="primary" (click)="use()">
             {{ 'templates.add' | transloco }}
           </button>

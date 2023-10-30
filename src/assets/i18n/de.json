@@ -534,9 +534,12 @@
     "my-templates": "Meine Vorlagen",
     "no-templates-found": "Keine Vorlagen gefunden.",
     "contents": "Inhalte",
-    "licensed-under": "Lizensiert unter {{license}} von {{owner}}",
+    "licensed-under": "Lizensiert unter",
+    "by": "von",
     "anonymous": "Anonym",
     "add": "Hinzufügen",
-    "template-added": "Die Vorlage wurde hinzugefügt."
+    "template-added": "Die Vorlage wurde hinzugefügt.",
+    "preview": "Vorschau",
+    "back": "Zurück"
   }
 }

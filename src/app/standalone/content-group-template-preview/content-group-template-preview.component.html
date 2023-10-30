@@ -1,0 +1,54 @@
+<div fxLayout="column" fxLayoutGap="16px">
+  <div>
+    <button mat-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'templates.back' | transloco }}
+    </button>
+  </div>
+  <mat-card appearance="outlined" class="template-card">
+    <div
+      fxLayout="row-wrap"
+      fxLayoutAlign="space-between center"
+      fxLayoutGap="1em"
+    >
+      <span class="template-name">{{ template.name }}</span>
+      <button mat-flat-button color="primary" (click)="add()">
+        <mat-icon fxFlex="noshrink">add</mat-icon>
+        {{ 'templates.add' | transloco }}
+      </button>
+    </div>
+    <p class="template-description">{{ template.description }}</p>
+    <div fxLayout="column" fxLayoutGap="1em">
+      <app-template-license
+        [ownerName]="template.ownerName"
+        [license]="template.license"
+        [showLink]="true"
+      ></app-template-license>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-chip-set>
+          <mat-chip *ngFor="let tag of template.tags">
+            {{ tag.name }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+      <mat-list *ngIf="!isLoading">
+        <mat-list-item *ngFor="let content of contents" class="bottom-border">
+          <div
+            fxFill
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="12px"
+          >
+            <div fxLayoutAlign="center">
+              <mat-icon class="format-icon">{{
+                getIcon(content.format)
+              }}</mat-icon>
+            </div>
+            <p class="ellipsis">{{ content.body }}</p>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card>
+</div>

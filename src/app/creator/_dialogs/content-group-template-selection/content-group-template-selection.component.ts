@@ -34,6 +34,7 @@ export class ContentGroupTemplateSelectionComponent
   selectedTags: TemplateTag[] = [];
   langChanged = new EventEmitter<string>();
   showPublic = true;
+  previewTemplate: ContentGroupTemplate | undefined;
   creatorId: string;
 
   constructor(
@@ -81,6 +82,10 @@ export class ContentGroupTemplateSelectionComponent
         );
         this.closeDialog();
       });
+  }
+
+  showPreview(templateId: string): void {
+    this.previewTemplate = this.templates.find((t) => t.id === templateId);
   }
 
   updateLanguage(lang: string): void {

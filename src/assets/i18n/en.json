@@ -534,9 +534,12 @@
     "my-templates": "My templates",
     "no-templates-found": "No templates found.",
     "contents": "Contents",
-    "licensed-under": "Licensed under {{license}} by {{owner}}",
+    "licensed-under": "Licensed under",
+    "by": "by",
     "anonymous": "Anonymous",
     "add": "Add",
-    "template-added": "The template has been added."
+    "template-added": "The template has been added.",
+    "preview": "Preview",
+    "back": "Back"
   }
 }

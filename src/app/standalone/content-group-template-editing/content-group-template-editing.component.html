@@ -46,7 +46,7 @@
       formControlName="licenses"
     >
       <mat-select-trigger>
-        {{ LICENSES.get(selectedLicense) }}
+        {{ LICENSES.get(selectedLicense)?.name }}
       </mat-select-trigger>
       <mat-option
         *ngFor="let license of licenseKeys"
@@ -54,7 +54,7 @@
         (click)="updateLicense(license)"
       >
         <div class="license-option" fxLayout="column" fxLayoutGap="4px">
-          <span class="license-name"> {{ LICENSES.get(license) }}</span>
+          <span class="license-name"> {{ LICENSES.get(license)?.name }}</span>
           <span class="license-description">
             {{
               'templates.license-description-' + replaceDots(license)

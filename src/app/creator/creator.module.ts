@@ -27,6 +27,7 @@ import { ContentGroupTemplateSelectionComponent } from './_dialogs/content-group
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { TemplateLanguageSelectionComponent } from '@app/standalone/template-lan
     ContentGroupTemplateComponent,
     TemplateTagSelectionComponent,
     TemplateLanguageSelectionComponent,
+    ContentGroupTemplatePreviewComponent,
   ],
   declarations: [
     RoomComponent,

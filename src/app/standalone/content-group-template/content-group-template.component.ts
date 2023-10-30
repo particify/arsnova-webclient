@@ -4,10 +4,11 @@ import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { CoreModule } from '@app/core/core.module';
 import { LICENSES } from '@app/core/models/licenses';
 import { MatCardAppearance } from '@angular/material/card';
+import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, CoreModule],
+  imports: [CommonModule, CoreModule, TemplateLicenseComponent],
   selector: 'app-content-group-template',
   templateUrl: './content-group-template.component.html',
   styleUrls: ['./content-group-template.component.scss'],
@@ -16,9 +17,14 @@ export class ContentGroupTemplateComponent {
   @Input() template: ContentGroupTemplate;
   @Input() appearance: MatCardAppearance = 'raised';
   @Output() templateSelected = new EventEmitter<string>();
+  @Output() previewClicked = new EventEmitter<string>();
   LICENSES = LICENSES;
 
   use() {
     this.templateSelected.emit(this.template.id);
+  }
+
+  preview() {
+    this.previewClicked.emit(this.template.id);
   }
 }

@@ -1,6 +1,7 @@
 <div fxFill fxLayout="column" fxLayoutAlign="space-between">
   <mat-dialog-content>
     <div
+      *ngIf="!previewTemplate"
       fxLayout.xs="column"
       fxLayout.gt-xs="row wrap"
       fxLayoutGap="1em"
@@ -22,7 +23,19 @@
         (selectedLangChanged)="updateLanguage($event)"
       ></app-template-language-selection>
     </div>
-    <div class="tab-container" fxLayout="column" fxLayoutGap="1em">
+    <div *ngIf="previewTemplate" class="tab-container" fxLayout="column">
+      <app-content-group-template-preview
+        [template]="previewTemplate"
+        (backClicked)="previewTemplate = undefined"
+        (addClicked)="useTemplate($event)"
+      ></app-content-group-template-preview>
+    </div>
+    <div
+      *ngIf="!previewTemplate"
+      class="tab-container selection-container"
+      fxLayout="column"
+      fxLayoutGap="1em"
+    >
       <app-template-tag-selection
         *ngIf="showPublic"
         (selectedTagsChanged)="updateTags($event)"
@@ -38,12 +51,13 @@
         >
           <p class="hint">{{ 'templates.no-templates-found' | transloco }}</p>
         </div>
-        <div class="template-container" fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout="column" fxLayoutGap="10px">
           <app-content-group-template
             *ngFor="let template of templates"
             fxFlex="100"
             [template]="template"
             (templateSelected)="useTemplate($event)"
+            (previewClicked)="showPreview($event)"
             appearance="outlined"
           ></app-content-group-template>
         </div>
