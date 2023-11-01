@@ -1,0 +1,13 @@
+<div class="license">
+  <span>
+    {{ 'templates.licensed-under' | transloco }}
+  </span>
+  <a *ngIf="showLink" [href]="LICENSES.get(license)?.url" class="primary">{{
+    LICENSES.get(license)?.name
+  }}</a>
+  <span *ngIf="!showLink">{{ LICENSES.get(license)?.name }}</span>
+  <span>
+    {{ 'templates.by' | transloco }}
+    {{ ownerName || ('templates.anonymous' | transloco) }}
+  </span>
+</div>

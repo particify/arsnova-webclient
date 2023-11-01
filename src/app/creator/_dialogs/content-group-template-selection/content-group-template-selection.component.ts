@@ -10,11 +10,13 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TemplateService } from '@app/creator/_services/template.service';
+import { FormComponent } from '@app/standalone/form/form.component';
 import { TranslocoService } from '@ngneat/transloco';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -24,6 +26,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./content-group-template-selection.component.scss'],
 })
 export class ContentGroupTemplateSelectionComponent
+  extends FormComponent
   implements OnInit, OnDestroy
 {
   destroyed$ = new Subject<void>();
@@ -34,9 +37,11 @@ export class ContentGroupTemplateSelectionComponent
   selectedTags: TemplateTag[] = [];
   langChanged = new EventEmitter<string>();
   showPublic = true;
+  previewTemplate: ContentGroupTemplate | undefined;
   creatorId: string;
 
   constructor(
+    protected formService: FormService,
     private dialogRef: MatDialogRef<ContentGroupTemplateSelectionComponent>,
     @Inject(MAT_DIALOG_DATA)
     private data: { roomId: string },
@@ -44,7 +49,9 @@ export class ContentGroupTemplateSelectionComponent
     private translateService: TranslocoService,
     private notificationService: NotificationService,
     private authService: AuthenticationService
-  ) {}
+  ) {
+    super(formService);
+  }
 
   ngOnInit(): void {
     this.authService
@@ -71,16 +78,28 @@ export class ContentGroupTemplateSelectionComponent
   }
 
   useTemplate(templateId: string): void {
+    this.disableForm();
     this.templateService
       .createCopyFromContentGroupTemplate(templateId, this.data.roomId)
-      .subscribe(() => {
-        const msg = this.translateService.translate('templates.template-added');
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-        this.closeDialog();
+      .subscribe({
+        next: () => {
+          const msg = this.translateService.translate(
+            'templates.template-added'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          this.closeDialog();
+        },
+        error: () => {
+          this.enableForm();
+        },
       });
+  }
+
+  showPreview(templateId: string): void {
+    this.previewTemplate = this.templates.find((t) => t.id === templateId);
   }
 
   updateLanguage(lang: string): void {

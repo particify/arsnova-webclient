@@ -1,8 +1,5 @@
 @import '../../../variables';
 
-$xs-font-size: 12px;
-$s-font-size: 14px;
-
 .mat-mdc-card {
   padding-bottom: 8px;
 }
@@ -10,12 +7,6 @@ $s-font-size: 14px;
 .template-name {
   font-size: 20px;
   font-weight: $font-weight-bold;
-}
-
-.template-license {
-  opacity: 0.7;
-  font-size: $s-font-size;
-  margin-bottom: 0.5em;
 }
 
 .content-count-container {
@@ -109,10 +100,6 @@ $s-font-size: 14px;
   }
 
   .content-count {
-    font-size: $xs-font-size;
-  }
-
-  .template-license {
     font-size: $xs-font-size;
   }
 }

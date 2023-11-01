@@ -1,12 +1,12 @@
 @import '../../../../variables';
 
-.template-container {
-  max-width: 100%;
-  width: $card-width;
+.selection-container {
+  padding-top: 1em;
 }
 
 .tab-container {
-  padding-top: 1em;
+  max-width: 100%;
+  width: $card-width;
 }
 
 .mat-mdc-dialog-content {

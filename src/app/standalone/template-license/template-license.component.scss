@@ -1,0 +1,12 @@
+@import '../../../variables';
+
+.license {
+  font-size: $s-font-size;
+
+  > span {
+    opacity: 0.7;
+  }
+  @include xs {
+    font-size: $xs-font-size;
+  }
+}
