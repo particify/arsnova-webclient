@@ -83,8 +83,8 @@ export class SortContentFormComponent
   }
 
   private setAnswerOptions(): void {
-    (this.content as ContentChoice).options = this.displayAnswers.map(
-      (d) => d.answerOption
-    );
+    const content = this.content as ContentChoice;
+    content.options = this.displayAnswers.map((d) => d.answerOption);
+    content.correctOptionIndexes = Array.from(content.options.keys());
   }
 }
