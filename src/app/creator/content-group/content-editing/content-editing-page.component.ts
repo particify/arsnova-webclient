@@ -234,7 +234,9 @@ export class ContentEditingPageComponent
 
   private setContent(): boolean {
     let content: Content | undefined;
-    if (this.selectedFormat.type !== ContentType.SLIDE) {
+    if (
+      ![ContentType.SLIDE, ContentType.TEXT].includes(this.selectedFormat.type)
+    ) {
       content = this.contentForm.getContent();
     } else {
       if (!this.isEditMode) {
