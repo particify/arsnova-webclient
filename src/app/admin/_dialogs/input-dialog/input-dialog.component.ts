@@ -9,6 +9,7 @@ import {
 import { TranslocoService } from '@ngneat/transloco';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { AdminService } from '@app/core/services/http/admin.service';
 
 export interface DialogData {
   inputName: string;
@@ -37,9 +38,10 @@ export class InputDialogComponent extends UserSearchComponent {
     protected userService: UserService,
     protected translateService: TranslocoService,
     protected notificationService: NotificationService,
+    protected adminService: AdminService,
     private formService: FormService
   ) {
-    super(userService);
+    super(userService, adminService);
     this.primaryAction = data.primaryAction;
     this.inputName = data.inputName;
     this.useUserSearch = data.useUserSearch || false;

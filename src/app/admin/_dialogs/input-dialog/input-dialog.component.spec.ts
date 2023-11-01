@@ -10,6 +10,7 @@ import {
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { InputDialogComponent } from './input-dialog.component';
+import { AdminService } from '@app/core/services/http/admin.service';
 
 describe('InputDialogComponent', () => {
   let component: InputDialogComponent;
@@ -23,6 +24,8 @@ describe('InputDialogComponent', () => {
   const mockUserService = jasmine.createSpyObj('UserService', [
     'getUserByLoginId',
   ]);
+
+  const mockAdminService = jasmine.createSpyObj(AdminService, ['getUser']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -41,6 +44,10 @@ describe('InputDialogComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService,
+        },
+        {
+          provide: AdminService,
+          useValue: mockAdminService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
