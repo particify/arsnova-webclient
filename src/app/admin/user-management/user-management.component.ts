@@ -36,7 +36,7 @@ export class UserManagementComponent
     protected dialog: MatDialog,
     private formService: FormService
   ) {
-    super(userService);
+    super(userService, adminService);
   }
 
   ngOnInit(): void {

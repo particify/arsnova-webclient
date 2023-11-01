@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { User } from '@app/core/models/user';
+import { AdminService } from '@app/core/services/http/admin.service';
 import { UserService } from '@app/core/services/http/user.service';
 
 @Component({
@@ -11,7 +12,10 @@ export class UserSearchComponent {
   users: User[];
   searchResults: string[];
 
-  constructor(protected userService: UserService) {}
+  constructor(
+    protected userService: UserService,
+    protected adminService: AdminService
+  ) {}
 
   clear() {
     this.user = undefined;
@@ -19,15 +23,26 @@ export class UserSearchComponent {
     this.searchResults = [];
   }
 
-  search(loginId: string) {
+  search(input: string) {
     this.searchResults = [];
-    this.userService.getUserByLoginId(loginId).subscribe((users) => {
-      this.users = users;
-      if (this.users.length > 0) {
-        this.users.forEach((user) => {
-          this.searchResults.push(`${user.loginId} (${user.authProvider})`);
+    this.adminService.getUser(input).subscribe({
+      next: (user) => {
+        this.setUserData([user]);
+      },
+      error: () => {
+        this.userService.getUserByLoginId(input).subscribe((users) => {
+          this.setUserData(users);
         });
-      }
+      },
     });
+  }
+
+  setUserData(users: User[]) {
+    this.users = users;
+    if (users.length > 0) {
+      users.forEach((user) => {
+        this.searchResults.push(`${user.loginId} (${user.authProvider})`);
+      });
+    }
   }
 }
