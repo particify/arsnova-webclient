@@ -7,7 +7,7 @@
   <div
     *ngIf="!hasAbstained && statsPublished && correctOptionsPublished"
     class="solution invisible"
-    [ngClass]="{ visible: isDisabled }"
+    [ngClass]="{ visible: isDisabled && isCorrect !== undefined }"
   >
     <mat-icon
       class="icon-indicator"

@@ -30,7 +30,7 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
 
   isLoading = true;
   hasAbstained = false;
-  isCorrect = false;
+  isCorrect: boolean | undefined;
   correctOptionIndexes: number[];
   answerOptions: AnswerOption[] = [];
 
