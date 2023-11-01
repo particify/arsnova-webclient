@@ -67,9 +67,24 @@
     "wsGatewayStats": "Websocket-Gateway-Service",
     "webSocketUserCount": "Verbundene Benutzer",
     "coreServiceStats": "Core-Service",
-    "commentServiceStats": "Comment-Service"
+    "commentServiceStats": "Comment-Service",
+    "template-management": "Vorlagenverwaltung",
+    "search-tags": "Tags durchsuchen",
+    "no-tags-found": "Keine Tags gefunden.",
+    "filter": "Filter",
+    "filter-all": "Alle",
+    "filter-verified": "Verifiziert",
+    "filter-unverified": "Nicht verifiziert",
+    "tag": "Tag",
+    "save": "Speichern",
+    "verify": "Verifizieren",
+    "tag-has-been-verified": "Tag wurde verifiziert.",
+    "tag-verification-has-been-removed": "Verifizierung wurde entfernt.",
+    "tag-deleted": "Tag wurde gelöscht.",
+    "changes-have-been-saved": "Änderungen wurden gespeichert."
   },
   "dialog": {
-    "really-delete-account-admin": "Willst du das Konto mit allen Räumen unwiderruflich löschen?"
+    "really-delete-account-admin": "Willst du das Konto mit allen Räumen unwiderruflich löschen?",
+    "really-delete-tag": "Willst du den folgenden Tag wirklich löschen?"
   }
 }

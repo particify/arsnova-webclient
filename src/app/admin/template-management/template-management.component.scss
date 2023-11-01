@@ -1,0 +1,10 @@
+.hover-buttons {
+  display: none;
+}
+
+.list-item:hover,
+.list-item:focus-within {
+  * > .hover-buttons {
+    display: initial;
+  }
+}

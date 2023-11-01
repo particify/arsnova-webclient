@@ -14,6 +14,7 @@ export interface DialogData {
   inputName: string;
   primaryAction: string;
   useUserSearch?: boolean;
+  input: string;
 }
 
 @Component({
@@ -23,7 +24,7 @@ export interface DialogData {
 export class InputDialogComponent extends UserSearchComponent {
   clicked$ = new EventEmitter<string>();
 
-  input: string;
+  input?: string;
 
   inputName: string;
   primaryAction: string;
@@ -42,6 +43,7 @@ export class InputDialogComponent extends UserSearchComponent {
     this.primaryAction = data.primaryAction;
     this.inputName = data.inputName;
     this.useUserSearch = data.useUserSearch || false;
+    this.input = data.input;
   }
 
   selectUser(searchResult: string) {

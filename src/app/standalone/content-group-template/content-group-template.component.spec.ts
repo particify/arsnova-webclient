@@ -18,7 +18,7 @@ describe('ContentGroupTemplateComponent', () => {
       'Template name',
       'Template description',
       'en',
-      [{ id: 'id', name: 'Test tag' }],
+      [{ id: 'id', name: 'Test tag', verified: true }],
       'CC0-1.0',
       ['template1', 'template2', 'template3']
     );

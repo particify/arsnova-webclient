@@ -19,6 +19,9 @@ import { InputDialogComponent } from './_dialogs/input-dialog/input-dialog.compo
 import { HealthStatusComponent } from './health-status/health-status.component';
 import { UserSearchComponent } from './user-search/user-search.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { TemplateManagementComponent } from '@app/admin/template-management/template-management.component';
+import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { TemplateService } from '@app/admin/template-management/template.service';
 
 @NgModule({
   imports: [
@@ -30,6 +33,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     TranslocoModule,
     ExtensionPointModule,
     LoadingButtonComponent,
+    TemplateLanguageSelectionComponent,
   ],
   declarations: [
     AdminHomeComponent,
@@ -43,7 +47,8 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     InputDialogComponent,
     HealthStatusComponent,
     UserSearchComponent,
+    TemplateManagementComponent,
   ],
-  providers: [provideTranslocoScope('admin'), AdminService],
+  providers: [provideTranslocoScope('admin'), AdminService, TemplateService],
 })
 export class AdminModule {}
