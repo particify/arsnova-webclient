@@ -24,6 +24,9 @@ export class UserSearchComponent {
   }
 
   search(input: string) {
+    if (!input || this.user) {
+      return;
+    }
     this.searchResults = [];
     this.adminService.getUser(input).subscribe({
       next: (user) => {
