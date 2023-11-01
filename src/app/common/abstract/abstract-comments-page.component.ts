@@ -92,8 +92,18 @@ export class AbstractCommentsPageComponent {
     protected authenticationService: AuthenticationService
   ) {}
 
-  init(reload = false) {
+  load(reload = false) {
     this.resetReadTimestamp();
+    this.activeComments$.subscribe((comments) => {
+      this.comments = comments;
+      this.initRoom(reload);
+    });
+    if (!reload) {
+      this.init();
+    }
+  }
+
+  init(): void {
     const lastSort = this.globalStorageService.getItem(
       STORAGE_KEYS.COMMENT_SORT
     );
@@ -104,10 +114,6 @@ export class AbstractCommentsPageComponent {
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.activeComments$.subscribe((comments) => {
-      this.comments = comments;
-      this.initRoom(reload);
-    });
     this.authenticationService
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
