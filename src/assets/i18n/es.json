@@ -410,9 +410,7 @@
     "status-summary": "Resumen de estado"
   },
   "room-page": {
-    "a11y-comments": "Abre la página donde puedes crear publicaciones y votar a favor o en contra de otras publicaciones.",
     "a11y-room-message": "Ahora estás en la sala {{name}}.",
-    "a11y-live-feedback": "Abre la retroalimentación en vivo.",
     "a11y-content-groups": "En esta sala hay {{count}} series de preguntas. Cambia entre ellas y presiona Enter para responder a los contenidos de la serie de preguntas.",
     "a11y-no-content-groups": "Aún no hay contenidos en esta sala.",
     "a11y-enter-content-group": "Abre el grupo de contenido {{name}}.",
