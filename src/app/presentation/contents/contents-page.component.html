@@ -1,14 +1,12 @@
 <div
-  *ngIf="!isLoading"
+  *ngIf="!isLoading && contents"
   class="step-info-container"
   fxLayout="column"
   fxLayoutAlign="center center"
 >
-  <div>
-    <p class="step-info">
-      {{ this.currentStep + 1 + ' / ' + this.contents.length }}
-    </p>
-  </div>
+  <p class="step-info">
+    {{ this.currentStep + 1 + ' / ' + this.contents.length }}
+  </p>
 </div>
 <app-answer-count
   *ngIf="!isLoading && canAnswerContent"
