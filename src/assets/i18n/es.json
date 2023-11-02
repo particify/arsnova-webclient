@@ -423,7 +423,7 @@
   },
   "statistic": {
     "a11y-message-overview": "Ahora estás en la vista general de estadísticas.",
-    "a11y-message-evaluation-answers": "Ahora puedes ver los resultados. {{answers}} participantes han respondido al contenido. Navega a través de las respuestas con la tecla de tabulación o presiona la tecla de espacio para volver a tu respuesta.",
+    "a11y-message-evaluation-answers": "Ahora puedes ver los resultados. {{answers}} participantes han respondido al contenido. Navega a través de las respuestas con la tecla de tabulación.",
     "a11y-group-progress": "{{percent}} por ciento de los contenidos en la serie de preguntas {{group}} fueron respondidos correctamente.",
     "a11y-content-result": "El contenido {{content}} ha sido respondido por {{count}} personas hasta ahora, {{abstentions}} personas se han abstenido.",
     "a11y-choice-result": "El contenido fue respondido correctamente por {{percent}} por ciento.",

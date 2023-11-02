@@ -423,7 +423,7 @@
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview.",
-    "a11y-message-evaluation-answers": "You can now see the results. {{answers}} participants have answered the content. Navigate through the answers with the tab key or press the space key to return to your answer.",
+    "a11y-message-evaluation-answers": "You can now see the results. {{answers}} participants have answered the content. Navigate through the answers with the tab key.",
     "a11y-group-progress": "{{percent}} percent of the contents in the question series {{group}} were answered correctly.",
     "a11y-content-result": "The content {{content}} has been answered by {{count}} persons so far, {{abstentions}} persons have abstained.",
     "a11y-choice-result": "The content was answered correctly by {{percent}} percent.",
