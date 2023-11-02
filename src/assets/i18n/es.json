@@ -411,7 +411,7 @@
   },
   "room-page": {
     "a11y-room-message": "Ahora estás en la sala {{name}}.",
-    "a11y-content-groups": "En esta sala hay {{count}} series de preguntas. Cambia entre ellas y presiona Enter para responder a los contenidos de la serie de preguntas.",
+    "a11y-content-groups": "En esta sala hay {{count}} series de preguntas. Cambia entre ellas y presiona Enter para llegar a la serie de preguntas.",
     "a11y-no-content-groups": "Aún no hay contenidos en esta sala.",
     "a11y-enter-content-group": "Abre el grupo de contenido {{name}}.",
     "a11y-copy-url": "Copia el enlace de la sala al portapapeles",

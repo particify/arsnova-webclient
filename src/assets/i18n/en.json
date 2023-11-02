@@ -411,7 +411,7 @@
   },
   "room-page": {
     "a11y-room-message": "You're in the room {{name}} now.",
-    "a11y-content-groups": "In this room there are {{count}} question series. Tab between them and press Enter to answer the contents of the question series.",
+    "a11y-content-groups": "In this room there are {{count}} question series. Tab between them and press Enter to get to the question series.",
     "a11y-no-content-groups": "There are no contents in this room yet.",
     "a11y-enter-content-group": "Opens the content group {{name}}.",
     "a11y-copy-url": "Copy link to room to the clipboard",
