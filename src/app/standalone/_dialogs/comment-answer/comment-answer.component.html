@@ -23,16 +23,14 @@
     </div>
     <div fxLayout="row" fxLayoutAlign="center">
       <mat-card class="answer" *ngIf="isEditor || answer">
-        <div tabindex="-1" [appAutofocus] class="visually-hidden" appHotkey="1">
-          {{
-            'comment-page.a11y-entered-answer' | transloco: { answer: answer }
-          }}
-        </div>
         <div *ngIf="(!isEditor || !edit) && answer">
           <app-rendered-text
             [rawText]="answer"
             [dynamic]="true"
             [markdownFeatureset]="MarkdownFeatureset.SIMPLE"
+            [attr.aria-label]="
+              'comment-page.a11y-entered-answer' | transloco: { answer: answer }
+            "
           >
           </app-rendered-text>
           <div fxLayout="row" fxLayoutAlign="end">
