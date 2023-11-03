@@ -41,6 +41,9 @@
     "mark-correct": "Bejahen",
     "mark-favorite": "Favorisieren",
     "mark-wrong": "Verneinen",
+    "mark-not-correct": "Nicht bejahen",
+    "mark-not-favorite": "Nicht favorisieren",
+    "mark-not-wrong": "Nicht verneinen",
     "banish": "Aus der Liste verbannen",
     "reject": "Freigeben",
     "show-actions": "Zeige Optionen"

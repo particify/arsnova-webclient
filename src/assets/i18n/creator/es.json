@@ -41,6 +41,9 @@
     "mark-correct": "Marcar como correcta",
     "mark-favorite": "Marcar como favorita",
     "mark-wrong": "Marcar como incorrecta",
+    "mark-not-correct": "Marcar como no correcta",
+    "mark-not-favorite": "Marcar como no favorita",
+    "mark-not-wrong": "Marcar como no incorrecta",
     "banish": "Prohibir de la lista pública",
     "reject": "Liberar a la lista pública",
     "show-actions": "Mostrar opciones"

@@ -362,9 +362,6 @@
     "a11y-select-tag": "Selecciona la categoría {{tag}}.",
     "go-to-answer": "Ver la respuesta",
     "comment": "La publicación {{ comment }} fue realizada a las {{ time }} y actualmente tiene {{ votes }}. {{correct}} {{wrong}} {{favorite}} {{answer}}",
-    "mark-not-correct": "Marcada como correcta por el profesor",
-    "mark-not-favorite": "Marcada como favorita por el profesor.",
-    "mark-not-wrong": "Marcada como incorrecta por el profesor",
     "new-comment": "Se ha realizado una nueva publicación con el contenido: {{ comment }}.",
     "no-comments": "No hay publicaciones presentes.",
     "no-comments-found": "No se encontraron publicaciones.",
@@ -413,10 +410,8 @@
     "status-summary": "Resumen de estado"
   },
   "room-page": {
-    "a11y-comments": "Abre la página donde puedes crear publicaciones y votar a favor o en contra de otras publicaciones.",
     "a11y-room-message": "Ahora estás en la sala {{name}}.",
-    "a11y-live-feedback": "Abre la retroalimentación en vivo.",
-    "a11y-content-groups": "En esta sala hay {{count}} series de preguntas. Cambia entre ellas y presiona Enter para responder a los contenidos de la serie de preguntas.",
+    "a11y-content-groups": "En esta sala hay {{count}} series de preguntas. Cambia entre ellas y presiona Enter para llegar a la serie de preguntas.",
     "a11y-no-content-groups": "Aún no hay contenidos en esta sala.",
     "a11y-enter-content-group": "Abre el grupo de contenido {{name}}.",
     "a11y-copy-url": "Copia el enlace de la sala al portapapeles",
@@ -428,7 +423,7 @@
   },
   "statistic": {
     "a11y-message-overview": "Ahora estás en la vista general de estadísticas.",
-    "a11y-message-evaluation-answers": "Ahora puedes ver los resultados. {{answers}} participantes han respondido al contenido. Navega a través de las respuestas con la tecla de tabulación o presiona la tecla de espacio para volver a tu respuesta.",
+    "a11y-message-evaluation-answers": "Ahora puedes ver los resultados. {{answers}} participantes han respondido al contenido. Navega a través de las respuestas con la tecla de tabulación.",
     "a11y-group-progress": "{{percent}} por ciento de los contenidos en la serie de preguntas {{group}} fueron respondidos correctamente.",
     "a11y-content-result": "El contenido {{content}} ha sido respondido por {{count}} personas hasta ahora, {{abstentions}} personas se han abstenido.",
     "a11y-choice-result": "El contenido fue respondido correctamente por {{percent}} por ciento.",

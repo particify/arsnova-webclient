@@ -41,6 +41,9 @@
     "mark-correct": "Mark as correct",
     "mark-favorite": "Mark as favorite",
     "mark-wrong": "Mark as wrong",
+    "mark-not-correct": "Mark not as correct",
+    "mark-not-favorite": "Mark not as favorite",
+    "mark-not-wrong": "Mark not as wrong",
     "banish": "Ban from public list",
     "reject": "Release to public list",
     "show-actions": "Show options"
