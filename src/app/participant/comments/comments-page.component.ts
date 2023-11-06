@@ -72,7 +72,7 @@ export class CommentsPageComponent
         .getAckComments(this.room.id)
         .pipe(takeUntil(this.destroyed$));
       this.activeComments$ = this.publicComments$;
-      this.init();
+      this.load();
     });
     this.focusModeService
       .getFocusModeEnabled()

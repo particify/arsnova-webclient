@@ -77,7 +77,7 @@ export class CommentsPageComponent
       this.activeComments$ = this.isModeration
         ? this.moderationComments$
         : this.publicComments$;
-      this.init();
+      this.load();
       if (innerWidth > 1000) {
         this.scrollMax += innerWidth * 0.04 + 240;
         this.scrollStart = this.scrollMax;
@@ -202,7 +202,7 @@ export class CommentsPageComponent
       this.isModeration = false;
       this.activeComments$ = this.publicComments$;
     }
-    this.init(true);
+    this.load(true);
     this.updateUrl();
   }
 
@@ -219,7 +219,7 @@ export class CommentsPageComponent
       .subscribe((updatedSettings) => {
         this.disabled = updatedSettings.disabled;
         this.isLoading = true;
-        this.init(true);
+        this.load(true);
         const msg = this.translateService.translate(
           'creator.comment-list.q-and-a-enabled'
         );

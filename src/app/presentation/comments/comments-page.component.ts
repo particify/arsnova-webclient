@@ -85,7 +85,7 @@ export class CommentsPageComponent
       this.viewRole = data.viewRole;
       this.publicComments$ = this.commentService.getAckComments(this.room.id);
       this.activeComments$ = this.publicComments$;
-      this.init();
+      this.load();
       this.registerHotkeys();
     });
   }
@@ -238,7 +238,7 @@ export class CommentsPageComponent
       .subscribe((updatedSettings) => {
         this.disabled = updatedSettings.disabled;
         this.isLoading = true;
-        this.init(true);
+        this.load(true);
         const msg = this.translateService.translate(
           'creator.comment-list.q-and-a-enabled'
         );
