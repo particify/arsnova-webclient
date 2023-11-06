@@ -1,9 +1,16 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslocoModule } from '@ngneat/transloco';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { CommentListFloatingButtonsComponent } from './comment-list-floating-buttons.component';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 class MockHotkeyService {
   registerHotkey() {}
@@ -17,11 +24,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        TranslocoModule,
-        CommentListFloatingButtonsComponent,
-        BrowserAnimationsModule,
-      ],
+      imports: [CommentListFloatingButtonsComponent, BrowserAnimationsModule],
       providers: [
         {
           provide: TrackingService,
@@ -31,6 +34,12 @@ export default {
           provide: HotkeyService,
           useClass: MockHotkeyService,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

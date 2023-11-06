@@ -1,6 +1,13 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslocoModule } from '@ngneat/transloco';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 export default {
   component: SettingsPanelHeaderComponent,
@@ -8,7 +15,13 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, SettingsPanelHeaderComponent],
+      imports: [SettingsPanelHeaderComponent],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
+      ],
     }),
   ],
 } as Meta;

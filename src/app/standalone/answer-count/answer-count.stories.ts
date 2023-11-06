@@ -1,10 +1,17 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 
-import { TranslocoModule } from '@ngneat/transloco';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AnswerCountComponent } from './answer-count.component';
 import { EventService } from '@app/core/services/util/event.service';
 import { Observable, of } from 'rxjs';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
+import { HttpClientModule } from '@angular/common/http';
 
 class MockEventService {
   on(): Observable<boolean> {
@@ -18,12 +25,18 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, AnswerCountComponent, BrowserAnimationsModule],
+      imports: [AnswerCountComponent, BrowserAnimationsModule],
       providers: [
         {
           provide: EventService,
           useClass: MockEventService,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],
