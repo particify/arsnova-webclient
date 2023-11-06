@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
@@ -14,6 +14,7 @@ import { TranslocoModule } from '@ngneat/transloco';
     MatButtonModule,
     MatIconModule,
   ],
+  providers: [provideTranslocoScope('creator')],
   selector: 'app-comment-settings-hint',
   templateUrl: './comment-settings-hint.component.html',
   styleUrls: ['./comment-settings-hint.component.scss'],

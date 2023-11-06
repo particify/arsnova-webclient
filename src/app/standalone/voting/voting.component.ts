@@ -2,10 +2,12 @@ import { Component, Input } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Vote } from '@app/core/models/vote';
 import { VoteService } from '@app/core/services/http/vote.service';
+import { provideTranslocoScope } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
   imports: [CoreModule],
+  providers: [provideTranslocoScope('participant')],
   selector: 'app-voting',
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.scss'],

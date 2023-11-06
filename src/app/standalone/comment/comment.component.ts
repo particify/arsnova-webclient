@@ -12,7 +12,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, provideTranslocoScope } from '@ngneat/transloco';
 import { LanguageService } from '@app/core/services/util/language.service';
 import {
   animate,
@@ -40,6 +40,7 @@ import { Vote } from '@app/core/models/vote';
 @Component({
   standalone: true,
   imports: [CoreModule, DateComponent, ExtensionPointModule, VotingComponent],
+  providers: [provideTranslocoScope('creator')],
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
