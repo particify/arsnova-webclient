@@ -4,7 +4,6 @@ import {
   moduleMetadata,
   StoryObj,
 } from '@storybook/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommentListAddButtonComponent } from './comment-list-add-button.component';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,7 +15,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [CommentListAddButtonComponent, BrowserAnimationsModule],
+      imports: [CommentListAddButtonComponent],
     }),
     applicationConfig({
       providers: [

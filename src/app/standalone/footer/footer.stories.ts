@@ -7,7 +7,6 @@ import {
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConsentService } from '@app/core/services/util/consent.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import { TranslocoRootModule } from '@app/transloco-root.module';
@@ -20,7 +19,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [FooterComponent, BrowserAnimationsModule, RouterTestingModule],
+      imports: [FooterComponent, RouterTestingModule],
       providers: [
         {
           provide: ConsentService,

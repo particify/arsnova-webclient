@@ -4,7 +4,6 @@ import {
   moduleMetadata,
   StoryObj,
 } from '@storybook/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentGroupsComponent } from './content-groups.component';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -22,11 +21,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        ContentGroupsComponent,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-      ],
+      imports: [ContentGroupsComponent, RouterTestingModule],
       providers: [
         {
           provide: GlobalStorageService,

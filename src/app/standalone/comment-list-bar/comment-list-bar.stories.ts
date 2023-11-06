@@ -4,7 +4,6 @@ import {
   moduleMetadata,
   StoryObj,
 } from '@storybook/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommentListBarComponent } from './comment-list-bar.component';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
@@ -24,7 +23,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [CommentListBarComponent, BrowserAnimationsModule],
+      imports: [CommentListBarComponent],
       providers: [
         {
           provide: TrackingService,

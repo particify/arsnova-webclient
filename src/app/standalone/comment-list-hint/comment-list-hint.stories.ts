@@ -4,7 +4,6 @@ import {
   moduleMetadata,
   StoryObj,
 } from '@storybook/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommentListHintComponent } from './comment-list-hint.component';
 import { HttpClientModule } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
@@ -16,7 +15,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [CommentListHintComponent, BrowserAnimationsModule],
+      imports: [CommentListHintComponent],
     }),
     applicationConfig({
       providers: [

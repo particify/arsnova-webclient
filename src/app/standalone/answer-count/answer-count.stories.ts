@@ -5,7 +5,6 @@ import {
   StoryObj,
 } from '@storybook/angular';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AnswerCountComponent } from './answer-count.component';
 import { EventService } from '@app/core/services/util/event.service';
 import { Observable, of } from 'rxjs';
@@ -25,7 +24,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [AnswerCountComponent, BrowserAnimationsModule],
+      imports: [AnswerCountComponent],
       providers: [
         {
           provide: EventService,

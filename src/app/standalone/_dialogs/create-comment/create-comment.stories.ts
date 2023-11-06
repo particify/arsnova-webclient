@@ -9,7 +9,6 @@ import { CommentService } from '@app/core/services/http/comment.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CreateCommentComponent } from './create-comment.component';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -30,7 +29,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [CreateCommentComponent, BrowserAnimationsModule],
+      imports: [CreateCommentComponent],
       providers: [
         {
           provide: CommentService,
