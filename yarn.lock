@@ -6085,11 +6085,11 @@ __metadata:
   linkType: hard
 
 "@types/d3-cloud@npm:^1.2.5":
-  version: 1.2.7
-  resolution: "@types/d3-cloud@npm:1.2.7"
+  version: 1.2.8
+  resolution: "@types/d3-cloud@npm:1.2.8"
   dependencies:
     "@types/d3": "npm:^3"
-  checksum: 996b2e462188eb0ff93e1e374f1f983e6cbe0402d6b829567d09fac2934f0d970daf65de9d1db04e041d5a5b38c1121a2098a70ea58e10dadf9cfdc61ff7c4a9
+  checksum: 04f2599d8b8d4c6f5ab5cf656d7df8f8438c50ac170388c470a330d172e93d857f0f73dee9c72b1cc719d6106677081a4a8c3ac63e0cba8e5b21589bcf1df998
   languageName: node
   linkType: hard
 
