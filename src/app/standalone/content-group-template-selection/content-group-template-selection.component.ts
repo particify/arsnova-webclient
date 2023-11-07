@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { CoreModule } from '@app/core/core.module';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -16,12 +17,26 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TemplateService } from '@app/creator/_services/template.service';
+import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
+import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TranslocoService } from '@ngneat/transloco';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-content-group-template-selection',
+  imports: [
+    CoreModule,
+    TemplateLanguageSelectionComponent,
+    TemplateTagSelectionComponent,
+    ContentGroupTemplatePreviewComponent,
+    ContentGroupTemplateComponent,
+    LoadingIndicatorComponent,
+  ],
+  standalone: true,
   templateUrl: './content-group-template-selection.component.html',
   styleUrls: ['./content-group-template-selection.component.scss'],
 })

@@ -19,7 +19,7 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-overview-page';
-import { ContentGroupTemplateSelectionComponent } from '@app/creator/_dialogs/content-group-template-selection/content-group-template-selection.component';
+import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 @Component({
   selector: 'app-creator-overview',
   templateUrl: './room-overview-page.component.html',
