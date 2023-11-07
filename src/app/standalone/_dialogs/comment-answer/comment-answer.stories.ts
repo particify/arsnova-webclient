@@ -1,7 +1,11 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslocoModule } from '@ngneat/transloco';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -12,6 +16,9 @@ import { CommentAnswerComponent } from './comment-answer.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { Observable, of } from 'rxjs';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
+import { HttpClientModule } from '@angular/common/http';
 
 class MockHotkeyService {
   unregisterHotkey() {}
@@ -45,11 +52,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        TranslocoModule,
-        CommentAnswerComponent,
-        BrowserAnimationsModule,
-      ],
+      imports: [CommentAnswerComponent, BrowserAnimationsModule],
       providers: [
         {
           provide: HotkeyService,
@@ -83,6 +86,12 @@ export default {
           provide: FormattingService,
           useClass: MockFormattingService,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

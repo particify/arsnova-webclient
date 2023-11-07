@@ -1,12 +1,19 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 
-import { TranslocoModule } from '@ngneat/transloco';
 import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-header/room-overview-header.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { Observable, of } from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 class MockRoutingService {}
 class MockNotificationService {}
@@ -22,11 +29,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        TranslocoModule,
-        RoomOverviewHeaderComponent,
-        RouterTestingModule,
-      ],
+      imports: [RoomOverviewHeaderComponent, RouterTestingModule],
       providers: [
         {
           provide: RoutingService,
@@ -40,6 +43,12 @@ export default {
           provide: FormattingService,
           useClass: MockFormattingService,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

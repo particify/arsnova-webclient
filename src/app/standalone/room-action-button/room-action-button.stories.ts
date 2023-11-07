@@ -1,9 +1,16 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 
 import { RoomActionButtonComponent } from './room-action-button.component';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { ActivatedRoute } from '@angular/router';
-import { TranslocoModule } from '@ngneat/transloco';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 class MockHotkeyService {
   registerHotkey() {}
@@ -18,7 +25,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, RoomActionButtonComponent],
+      imports: [RoomActionButtonComponent],
       providers: [
         {
           provide: HotkeyService,
@@ -28,6 +35,12 @@ export default {
           provide: ActivatedRoute,
           useClass: MockActivatedRoute,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

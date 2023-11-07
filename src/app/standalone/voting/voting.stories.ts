@@ -1,7 +1,15 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslocoModule } from '@ngneat/transloco';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
+
 import { VotingComponent } from '@app/standalone/voting/voting.component';
 import { VoteService } from '@app/core/services/http/vote.service';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 class MockVoteService {}
 
@@ -11,12 +19,18 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, VotingComponent],
+      imports: [VotingComponent],
       providers: [
         {
           provide: VoteService,
           useClass: MockVoteService,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

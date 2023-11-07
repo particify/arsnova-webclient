@@ -1,8 +1,12 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { ActivatedRoute } from '@angular/router';
-import { TranslocoModule } from '@ngneat/transloco';
 import { CommentComponent } from '@app/standalone/comment/comment.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -11,8 +15,10 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, importProvidersFrom } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 class MockHotkeyService {
   unregisterHotkey() {}
@@ -33,7 +39,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, CommentComponent, BrowserAnimationsModule],
+      imports: [CommentComponent, BrowserAnimationsModule],
       providers: [
         {
           provide: HotkeyService,
@@ -67,6 +73,12 @@ export default {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

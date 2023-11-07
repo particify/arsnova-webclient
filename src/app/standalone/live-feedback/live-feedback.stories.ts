@@ -1,11 +1,17 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslocoModule } from '@ngneat/transloco';
 import { LiveFeedbackComponent } from '@app/standalone/live-feedback/live-feedback.component';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
-import { CoreModule } from '@app/core/core.module';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 class MockHotkeyService {
   registerHotkey() {}
@@ -20,7 +26,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, LiveFeedbackComponent, CoreModule],
+      imports: [LiveFeedbackComponent],
       providers: [
         {
           provide: HotkeyService,
@@ -30,6 +36,12 @@ export default {
           provide: AnnounceService,
           useClass: MockAnnounceService,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

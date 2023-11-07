@@ -7,10 +7,12 @@ import {
   FormattingOption,
   PATTERN_PLACEHOLDER,
 } from '@app/core/models/formatting-option';
+import { provideTranslocoScope } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
   imports: [CoreModule, FlexModule, MatButtonModule, MatIconModule],
+  providers: [provideTranslocoScope('creator')],
   selector: 'app-formatting-toolbar',
   templateUrl: './formatting-toolbar.component.html',
   styleUrls: ['./formatting-toolbar.component.scss'],

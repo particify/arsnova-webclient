@@ -1,6 +1,13 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslocoModule } from '@ngneat/transloco';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 import { MenuDividerComponent } from '@app/standalone/menu-divider/menu-divider.component';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 export default {
   component: MenuDividerComponent,
@@ -8,7 +15,13 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, MenuDividerComponent],
+      imports: [MenuDividerComponent],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
+      ],
     }),
   ],
 } as Meta;

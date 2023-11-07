@@ -1,7 +1,14 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { TranslocoModule } from '@ngneat/transloco';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 export default {
   component: HintComponent,
@@ -9,7 +16,13 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, HintComponent],
+      imports: [HintComponent],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
+      ],
     }),
   ],
 } as Meta;

@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
+import { provideTranslocoScope, TranslocoService } from '@ngneat/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
 import {
@@ -34,6 +34,7 @@ import { take } from 'rxjs';
     FormattingToolbarComponent,
     LoadingButtonComponent,
   ],
+  providers: [provideTranslocoScope('creator')],
   selector: 'app-comment-answer',
   templateUrl: './comment-answer.component.html',
   styleUrls: ['./comment-answer.component.scss'],

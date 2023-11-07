@@ -1,6 +1,14 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { TranslocoModule } from '@ngneat/transloco';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
+
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
+import { TranslocoRootModule } from '@app/transloco-root.module';
 
 export default {
   component: SettingsSlideToggleComponent,
@@ -8,7 +16,13 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [TranslocoModule, SettingsSlideToggleComponent],
+      imports: [SettingsSlideToggleComponent],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
+      ],
     }),
   ],
 } as Meta;

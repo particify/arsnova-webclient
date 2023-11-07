@@ -12,7 +12,7 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 
 @Component({
   standalone: true,
@@ -25,6 +25,7 @@ import { TranslocoModule } from '@ngneat/transloco';
     TranslocoModule,
     ListBadgeComponent,
   ],
+  providers: [provideTranslocoScope('creator')],
   selector: 'app-content-groups',
   templateUrl: './content-groups.component.html',
   styleUrls: ['./content-groups.component.scss'],

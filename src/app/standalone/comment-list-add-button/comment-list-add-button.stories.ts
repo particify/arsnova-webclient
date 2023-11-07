@@ -1,7 +1,13 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 import { CommentListAddButtonComponent } from './comment-list-add-button.component';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoRootModule } from '@app/transloco-root.module';
+import { HttpClientModule } from '@angular/common/http';
+import { importProvidersFrom } from '@angular/core';
 
 export default {
   component: CommentListAddButtonComponent,
@@ -9,10 +15,12 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        TranslocoModule,
-        CommentListAddButtonComponent,
-        BrowserAnimationsModule,
+      imports: [CommentListAddButtonComponent],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

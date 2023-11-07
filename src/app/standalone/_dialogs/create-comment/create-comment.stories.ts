@@ -1,14 +1,20 @@
-import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  Meta,
+  moduleMetadata,
+  StoryObj,
+} from '@storybook/angular';
 
-import { TranslocoModule } from '@ngneat/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CreateCommentComponent } from './create-comment.component';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { TranslocoRootModule } from '@app/transloco-root.module';
+import { importProvidersFrom } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 class MockCommentService {}
 class MockNotificationService {}
@@ -23,11 +29,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        TranslocoModule,
-        CreateCommentComponent,
-        BrowserAnimationsModule,
-      ],
+      imports: [CreateCommentComponent],
       providers: [
         {
           provide: CommentService,
@@ -57,6 +59,12 @@ export default {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
         },
+      ],
+    }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(TranslocoRootModule),
+        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],
