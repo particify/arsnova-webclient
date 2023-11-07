@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatCardAppearance } from '@angular/material/card';
+import { ActivatedRoute } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
@@ -27,23 +29,41 @@ export class ContentGroupTemplatePreviewComponent implements OnInit {
   @Output() addClicked = new EventEmitter<string>();
 
   @Input() template: ContentGroupTemplate;
+  @Input() appearance: MatCardAppearance = 'raised';
 
   contents: Content[];
   LICENSES = LICENSES;
 
-  isLoading = true;
+  isLoadingContentGroup = true;
+  isLoadingContents = true;
 
   constructor(
     private templateService: BaseTemplateService,
-    private contentService: ContentService
+    private contentService: ContentService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.template = this.template ?? history?.state?.data?.template;
+    if (this.template) {
+      this.getContentTemplates();
+      return;
+    }
+    this.templateService
+      .getContentGroupTemplate(this.route.snapshot.params.templateId)
+      .subscribe((template) => {
+        this.template = template;
+        this.getContentTemplates();
+      });
+  }
+
+  getContentTemplates(): void {
+    this.isLoadingContentGroup = false;
     this.templateService
       .getContentTemplates(this.template.templateIds)
       .subscribe((contentTemplates) => {
         this.contents = contentTemplates;
-        this.isLoading = false;
+        this.isLoadingContents = false;
       });
   }
 

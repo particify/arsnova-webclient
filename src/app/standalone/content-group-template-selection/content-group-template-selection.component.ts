@@ -4,6 +4,7 @@ import {
   Inject,
   OnDestroy,
   OnInit,
+  Optional,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -57,9 +58,10 @@ export class ContentGroupTemplateSelectionComponent
 
   constructor(
     protected formService: FormService,
+    @Optional()
     private dialogRef: MatDialogRef<ContentGroupTemplateSelectionComponent>,
     @Inject(MAT_DIALOG_DATA)
-    private data: { roomId: string },
+    public data: { roomId: string },
     private templateService: TemplateService,
     private translateService: TranslocoService,
     private notificationService: NotificationService,

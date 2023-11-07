@@ -1,5 +1,5 @@
-<div fxFill fxLayout="column" fxLayoutAlign="space-between">
-  <mat-dialog-content>
+<div fxFill fxLayout="column" fxLayoutAlign="space-between center">
+  <mat-dialog-content [ngClass]="{ 'no-dialog-container': !data.roomId }">
     <div
       *ngIf="!previewTemplate"
       fxLayout.xs="column"
@@ -23,8 +23,18 @@
         (selectedLangChanged)="updateLanguage($event)"
       ></app-template-language-selection>
     </div>
-    <div *ngIf="previewTemplate" class="tab-container" fxLayout="column">
+    <div
+      *ngIf="previewTemplate"
+      fxLayout="column"
+      fxLayoutGap="16px"
+      fxLayoutAlign="start start"
+    >
+      <button mat-button (click)="previewTemplate = undefined">
+        <mat-icon>arrow_back</mat-icon>
+        {{ 'templates.back' | transloco }}
+      </button>
       <app-content-group-template-preview
+        fxFill
         [template]="previewTemplate"
         (backClicked)="previewTemplate = undefined"
         (addClicked)="useTemplate($event)"
@@ -32,7 +42,7 @@
     </div>
     <div
       *ngIf="!previewTemplate"
-      class="tab-container selection-container"
+      class="selection-container"
       fxLayout="column"
       fxLayoutGap="1em"
     >
@@ -58,13 +68,17 @@
             [template]="template"
             (templateSelected)="useTemplate($event)"
             (previewClicked)="showPreview($event)"
-            appearance="outlined"
+            [appearance]="data.roomId ? 'outlined' : 'raised'"
           ></app-content-group-template>
         </div>
       </div>
     </div>
   </mat-dialog-content>
-  <mat-dialog-actions fxLayoutAlign.xs="center" fxLayoutAlign.gt-xs="end">
+  <mat-dialog-actions
+    *ngIf="data.roomId"
+    fxLayoutAlign.xs="center"
+    fxLayoutAlign.gt-xs="end"
+  >
     <button mat-button matDialogClose>
       <mat-icon>close</mat-icon>
       {{ 'dialog.close' | transloco }}
