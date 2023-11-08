@@ -6456,14 +6456,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.35":
-  version: 18.2.35
-  resolution: "@types/react@npm:18.2.35"
+"@types/react@npm:18.2.37":
+  version: 18.2.37
+  resolution: "@types/react@npm:18.2.37"
   dependencies:
     "@types/prop-types": "npm:*"
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: dbc19612ab404f06c3c9f150954a377ab223db5724905d39e3468a61e2be0a9fd9240e935af5c13cb5b3307a13bbaf2e8c09a810d720118120a8d0ac5aa9ff10
+  checksum: 79dd5d23da05bec54e7423ca17096e345eb8fd80a3bf8dd916bb5cdd60677d27c298523aa5b245d090fcc4ec100cfd58c1af4631fbac709d0a9d8be75f9d78a9
   languageName: node
   linkType: hard
 
@@ -7538,7 +7538,7 @@ __metadata:
     "@types/jasmine": "npm:5.1.2"
     "@types/jasminewd2": "npm:2.0.13"
     "@types/node": "npm:20.8.10"
-    "@types/react": "npm:18.2.35"
+    "@types/react": "npm:18.2.37"
     "@types/wordcloud": "npm:1.2.1"
     "@typescript-eslint/eslint-plugin": "npm:6.9.1"
     "@typescript-eslint/parser": "npm:6.9.1"
