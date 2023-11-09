@@ -6570,10 +6570,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/wordcloud@npm:1.2.1":
-  version: 1.2.1
-  resolution: "@types/wordcloud@npm:1.2.1"
-  checksum: 716c330d0160e23edbf6b05a8edce6af577d85772093a6ed0c0627875f61a4966924462d4dab89dbe39265781e5701693fa61a147427ca4bf7843c9986372177
+"@types/wordcloud@npm:1.2.2":
+  version: 1.2.2
+  resolution: "@types/wordcloud@npm:1.2.2"
+  checksum: 37c82d73c991505345ff80e81a33ba93995f5d8975f3ef768a27b238889fea44c5132037e7f58bbe986005303675e33f0ba1996c13db26c99c8f80b471b6e377
   languageName: node
   linkType: hard
 
@@ -7539,7 +7539,7 @@ __metadata:
     "@types/jasminewd2": "npm:2.0.13"
     "@types/node": "npm:20.8.10"
     "@types/react": "npm:18.2.37"
-    "@types/wordcloud": "npm:1.2.1"
+    "@types/wordcloud": "npm:1.2.2"
     "@typescript-eslint/eslint-plugin": "npm:6.9.1"
     "@typescript-eslint/parser": "npm:6.9.1"
     angular-material-css-vars: "npm:5.0.3"
