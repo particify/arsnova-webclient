@@ -8,7 +8,7 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { LICENSES } from '@app/core/models/licenses';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ContentService } from '@app/core/services/http/content.service';
-import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
 
@@ -18,7 +18,7 @@ import { TemplateLicenseComponent } from '@app/standalone/template-license/templ
     CoreModule,
     LoadingIndicatorComponent,
     TemplateLicenseComponent,
-    LoadingButtonComponent,
+    AddTemplateButtonComponent,
   ],
   selector: 'app-content-group-template-preview',
   templateUrl: './content-group-template-preview.component.html',
@@ -26,10 +26,11 @@ import { TemplateLicenseComponent } from '@app/standalone/template-license/templ
 })
 export class ContentGroupTemplatePreviewComponent implements OnInit {
   @Output() backClicked = new EventEmitter<void>();
-  @Output() addClicked = new EventEmitter<string>();
+  @Output() addClicked = new EventEmitter<void>();
 
   @Input() template: ContentGroupTemplate;
   @Input() appearance: MatCardAppearance = 'raised';
+  @Input() roomId?: string;
 
   contents: Content[];
   LICENSES = LICENSES;
@@ -72,7 +73,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit {
   }
 
   add(): void {
-    this.addClicked.emit(this.template.id);
+    this.addClicked.emit();
   }
 
   getIcon(format: ContentType): string {

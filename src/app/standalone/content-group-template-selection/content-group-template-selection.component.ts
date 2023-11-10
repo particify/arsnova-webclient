@@ -14,10 +14,6 @@ import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { FormService } from '@app/core/services/util/form.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
 import { TemplateService } from '@app/creator/_services/template.service';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
@@ -67,7 +63,6 @@ export class ContentGroupTemplateSelectionComponent
     public data: { roomId: string },
     private templateService: TemplateService,
     private translateService: TranslocoService,
-    private notificationService: NotificationService,
     private authService: AuthenticationService,
     private router: Router,
     private route: ActivatedRoute
@@ -124,27 +119,6 @@ export class ContentGroupTemplateSelectionComponent
     });
     this.tagIdsQueryParams = this.selectedTags.map((t) => t.id);
     this.loadTemplates();
-  }
-
-  useTemplate(templateId: string): void {
-    this.disableForm();
-    this.templateService
-      .createCopyFromContentGroupTemplate(templateId, this.data.roomId)
-      .subscribe({
-        next: () => {
-          const msg = this.translateService.translate(
-            'templates.template-added'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-          this.closeDialog();
-        },
-        error: () => {
-          this.enableForm();
-        },
-      });
   }
 
   showPreview(templateId: string): void {

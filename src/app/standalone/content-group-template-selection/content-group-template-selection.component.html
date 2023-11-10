@@ -36,8 +36,10 @@
       <app-content-group-template-preview
         fxFill
         [template]="previewTemplate"
-        (backClicked)="previewTemplate = undefined"
-        (addClicked)="useTemplate($event)"
+        appearance="outlined"
+        [roomId]="data.roomId"
+        (backClicked)="previewTemplateId = undefined"
+        (addClicked)="closeDialog()"
       ></app-content-group-template-preview>
     </div>
     <div
@@ -67,7 +69,8 @@
             *ngFor="let template of templates"
             fxFlex="100"
             [template]="template"
-            (templateSelected)="useTemplate($event)"
+            [roomId]="data.roomId"
+            (templateSelected)="closeDialog()"
             (previewClicked)="showPreview($event)"
             [appearance]="data.roomId ? 'outlined' : 'raised'"
           ></app-content-group-template>

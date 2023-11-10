@@ -11,12 +11,11 @@
       fxLayoutGap="1em"
     >
       <span class="template-name">{{ template.name }}</span>
-      <app-loading-button
-        (click)="add()"
-        [isDialog]="true"
-        name="templates.add"
-      >
-      </app-loading-button>
+      <app-add-template-button
+        [templateId]="template.id"
+        [roomId]="roomId"
+        (templateSelected)="add()"
+      ></app-add-template-button>
     </div>
     <p class="template-description">{{ template.description }}</p>
     <div fxLayout="column" fxLayoutGap="1em">

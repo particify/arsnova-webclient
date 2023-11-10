@@ -5,7 +5,7 @@ import { CoreModule } from '@app/core/core.module';
 import { LICENSES } from '@app/core/models/licenses';
 import { MatCardAppearance } from '@angular/material/card';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
-import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 
 @Component({
   standalone: true,
@@ -13,7 +13,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     CommonModule,
     CoreModule,
     TemplateLicenseComponent,
-    LoadingButtonComponent,
+    AddTemplateButtonComponent,
   ],
   selector: 'app-content-group-template',
   templateUrl: './content-group-template.component.html',
@@ -22,6 +22,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 export class ContentGroupTemplateComponent {
   @Input() template: ContentGroupTemplate;
   @Input() appearance: MatCardAppearance = 'raised';
+  @Input() roomId?: string;
   @Output() templateSelected = new EventEmitter<string>();
   @Output() previewClicked = new EventEmitter<string>();
   LICENSES = LICENSES;
