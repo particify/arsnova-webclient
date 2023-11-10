@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { TemplateTag } from '@app/core/models/template-tag';
@@ -55,6 +56,8 @@ export class ContentGroupTemplateSelectionComponent
   showPublic = true;
   previewTemplate: ContentGroupTemplate | undefined;
   creatorId: string;
+  previewTemplateId?: string;
+  tagIdsQueryParams: string[] = [];
 
   constructor(
     protected formService: FormService,
@@ -65,20 +68,41 @@ export class ContentGroupTemplateSelectionComponent
     private templateService: TemplateService,
     private translateService: TranslocoService,
     private notificationService: NotificationService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     super(formService);
   }
 
   ngOnInit(): void {
+    const queryParams = this.route.snapshot.queryParams;
+    // If lang is set via query param, use this one instead of active lang as default
+    this.selectedLang =
+      queryParams.lang || this.translateService.getActiveLang();
+    if (queryParams.tagIds) {
+      this.tagIdsQueryParams =
+        this.route.snapshot.queryParamMap.getAll('tagIds');
+    } else {
+      this.loadTemplates();
+    }
+    this.previewTemplateId = this.route.snapshot.params.templateId;
+    if (this.previewTemplateId) {
+      this.templateService
+        .getContentGroupTemplate(this.previewTemplateId)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((template) => {
+          this.previewTemplate = template;
+          this.loadingTemplates = false;
+        });
+      return;
+    }
     this.authService
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
         this.creatorId = auth.userId;
       });
-    this.selectedLang = this.translateService.getActiveLang();
-    this.loadTemplates();
   }
 
   ngOnDestroy(): void {
@@ -91,6 +115,14 @@ export class ContentGroupTemplateSelectionComponent
 
   updateTags(tags: TemplateTag[]): void {
     this.selectedTags = tags;
+    this.router.navigate([], {
+      queryParams: {
+        lang: this.selectedLang,
+        tagIds: this.selectedTags.map((t) => t.id),
+      },
+      replaceUrl: true,
+    });
+    this.tagIdsQueryParams = this.selectedTags.map((t) => t.id);
     this.loadTemplates();
   }
 
@@ -116,7 +148,18 @@ export class ContentGroupTemplateSelectionComponent
   }
 
   showPreview(templateId: string): void {
-    this.previewTemplate = this.templates.find((t) => t.id === templateId);
+    const template = this.templates.find((t) => t.id === templateId);
+    if (this.data.roomId) {
+      if (template) {
+        this.previewTemplateId = templateId;
+        this.previewTemplate = template;
+      }
+    } else {
+      this.router.navigate([templateId], {
+        relativeTo: this.route,
+        state: { data: { template: template } },
+      });
+    }
   }
 
   updateLanguage(lang: string): void {
