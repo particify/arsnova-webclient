@@ -238,7 +238,8 @@
     "contribute-to-lang": "Über den folgenden Link können Sie zur Übersetzung beitragen: ",
     "translation-server": "Zum Übersetzungsserver",
     "leave": "Verlassen",
-    "really-leave-room": "Willst du den Raum wirklich verlassen?"
+    "really-leave-room": "Willst du den Raum wirklich verlassen?",
+    "select-room": "Raum auswählen"
   },
   "errors": {
     "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatCardAppearance } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
@@ -11,6 +18,7 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -24,9 +32,10 @@ import { TemplateLicenseComponent } from '@app/standalone/template-license/templ
   templateUrl: './content-group-template-preview.component.html',
   styleUrls: ['./content-group-template-preview.component.scss'],
 })
-export class ContentGroupTemplatePreviewComponent implements OnInit {
+export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
+  private destroyed$ = new Subject<void>();
   @Output() backClicked = new EventEmitter<void>();
-  @Output() addClicked = new EventEmitter<void>();
+  @Output() templateAdded = new EventEmitter<void>();
 
   @Input() template: ContentGroupTemplate;
   @Input() appearance: MatCardAppearance = 'raised';
@@ -44,6 +53,11 @@ export class ContentGroupTemplatePreviewComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
   ngOnInit(): void {
     this.template = this.template ?? history?.state?.data?.template;
     if (this.template) {
@@ -52,6 +66,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit {
     }
     this.templateService
       .getContentGroupTemplate(this.route.snapshot.params.templateId)
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((template) => {
         this.template = template;
         this.getContentTemplates();
@@ -62,6 +77,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit {
     this.isLoadingContentGroup = false;
     this.templateService
       .getContentTemplates(this.template.templateIds)
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((contentTemplates) => {
         this.contents = contentTemplates;
         this.isLoadingContents = false;
@@ -72,8 +88,8 @@ export class ContentGroupTemplatePreviewComponent implements OnInit {
     this.backClicked.emit();
   }
 
-  add(): void {
-    this.addClicked.emit();
+  afterRoomAdded(): void {
+    this.templateAdded.emit();
   }
 
   getIcon(format: ContentType): string {

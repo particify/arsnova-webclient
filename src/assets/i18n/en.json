@@ -238,7 +238,8 @@
     "contribute-to-lang": "You can contribute to the translation via the following link: ",
     "translation-server": "Go to translation server",
     "leave": "Leave",
-    "really-leave-room": "Do you really want to leave the room?"
+    "really-leave-room": "Do you really want to leave the room?",
+    "select-room": "Select room"
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",
