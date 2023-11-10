@@ -64,7 +64,7 @@
     "@angular-eslint/template-parser": "16.3.1",
     "@angular/compiler-cli": "16.1.9",
     "@angular/language-service": "16.1.9",
-    "@babel/core": "7.23.2",
+    "@babel/core": "7.23.3",
     "@storybook/addon-essentials": "7.5.3",
     "@storybook/angular": "7.5.3",
     "@storybook/blocks": "7.5.3",
