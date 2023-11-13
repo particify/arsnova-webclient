@@ -981,3 +981,11 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
 .no-flex-flow .mdc-evolution-chip-set__chips {
   flex-flow: unset;
 }
+
+// Drawer
+
+// This is needed for full height of drawer backdrop on mobile devices
+.mat-drawer-backdrop.mat-drawer-shown {
+  position: fixed;
+  top: -$mobile-bar-height;
+}
