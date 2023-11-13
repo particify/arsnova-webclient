@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import {
   GlobalStorageService,
@@ -10,37 +10,18 @@ import { catchError, map, Observable, of, shareReplay } from 'rxjs';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { SystemHealth } from '@app/admin/_models/system-health';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
-
-class NavButton {
-  name: string;
-  i18nName: string;
-  icon: string;
-  display: Observable<boolean>;
-
-  constructor(
-    name: string,
-    i18nName: string,
-    icon: string,
-    display = of(true)
-  ) {
-    this.name = name;
-    this.i18nName = i18nName;
-    this.icon = icon;
-    this.display = display;
-  }
-}
-
+import {
+  NavButton,
+  NavButtonSection,
+} from '@app/standalone/navigation-drawer/navigation-drawer.component';
 @Component({
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.scss'],
 })
 export class AdminHomeComponent implements OnInit {
-  routePrefix = '/admin/';
-  currentPage: string;
-  pageChanged = new EventEmitter<string>();
-
   healthInfo: Observable<SystemHealth>;
+  navButtonSection: NavButtonSection[] = [];
 
   constructor(
     protected langService: LanguageService,
@@ -60,27 +41,29 @@ export class AdminHomeComponent implements OnInit {
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.healthInfo = this.getHealthInfo();
-    const url = this.router.url;
-    this.currentPage = url.slice(this.routePrefix.length, url.length);
-    setTimeout(() => {
-      this.emitPageChange();
-    }, 0);
+    this.navButtonSection.push(
+      new NavButtonSection(this.getButtons(), 'admin.admin-area.general')
+    );
   }
 
   getButtons(): NavButton[] {
     return [
-      new NavButton('stats', 'system-stats', 'insights'),
-      new NavButton('users', 'user-management', 'people'),
-      new NavButton('rooms', 'room-management', 'room_preferences'),
+      new NavButton('stats', 'admin.admin-area.system-stats', 'insights'),
+      new NavButton('users', 'admin.admin-area.user-management', 'people'),
+      new NavButton(
+        'rooms',
+        'admin.admin-area.room-management',
+        'room_preferences'
+      ),
       new NavButton(
         'templates',
-        'template-management',
+        'admin.admin-area.template-management',
         'text_snippet',
         of(this.featureFlagService.isEnabled('CONTENT_GROUP_TEMPLATES'))
       ),
       new NavButton(
         'status',
-        'status-details',
+        'admin.admin-area.status-details',
         'dns',
         this.healthInfo.pipe(map((h) => !!h?.details))
       ),
@@ -92,15 +75,5 @@ export class AdminHomeComponent implements OnInit {
       catchError((response) => of(response.error)),
       shareReplay()
     );
-  }
-
-  changePage(page: string) {
-    this.router.navigate([this.routePrefix, page]);
-    this.currentPage = page;
-    this.emitPageChange();
-  }
-
-  emitPageChange() {
-    this.pageChanged.emit(this.currentPage);
   }
 }

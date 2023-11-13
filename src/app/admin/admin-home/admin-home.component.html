@@ -1,47 +1,19 @@
-<div fxLayout="column" class="admin-container">
-  <div fxLayout="row" fxFill>
-    <mat-drawer-container fxFill>
-      <mat-drawer mode="side" opened>
-        <div fxLayout="row" fxLayoutAlign="start" class="title">
-          <lib-extension-point
-            extensionId="app-logo"
-            [extensionData]="{ height: '36px' }"
-          >
-            <h2>{{ 'admin.admin-area.title' | transloco }}</h2>
-          </lib-extension-point>
-        </div>
-        <p class="section-header">
-          {{ 'admin.admin-area.general' | transloco }}
-        </p>
-        <div class="button-container" fxLayout="column" fxLayoutGap="8px">
-          <ng-container *ngFor="let button of getButtons()">
-            <button
-              *ngIf="button.display | async"
-              mat-button
-              class="nav-button"
-              (click)="changePage(button.name)"
-              color="{{ currentPage === button.name ? 'primary' : '' }}"
-              [ngClass]="{ 'primary-variant': currentPage === button.name }"
-            >
-              <mat-icon>{{ button.icon }}</mat-icon>
-              {{ 'admin.admin-area.' + button.i18nName | transloco }}
-            </button>
-          </ng-container>
-        </div>
-        <lib-extension-point
-          extensionId="premium-admin"
-          [extensionData]="{ pageChanged: pageChanged }"
-          (extensionEvent)="changePage($event)"
-        ></lib-extension-point>
-      </mat-drawer>
-      <mat-drawer-content fxLayout="column">
-        <app-admin-summary-bar
-          [healthInfo]="healthInfo"
-        ></app-admin-summary-bar>
-        <div class="routing-container">
-          <router-outlet></router-outlet>
-        </div>
-      </mat-drawer-content>
-    </mat-drawer-container>
+<app-navigation-drawer
+  [buttonSections]="navButtonSection"
+  parentRoute="admin"
+  [showFooter]="false"
+  backgroundColor="surface"
+  [responsive]="false"
+>
+  <div header fxLayout="row" fxLayoutAlign="start" class="title">
+    <lib-extension-point
+      extensionId="app-logo"
+      [extensionData]="{ height: '36px' }"
+    >
+      <h2>{{ 'admin.admin-area.title' | transloco }}</h2>
+    </lib-extension-point>
   </div>
-</div>
+  <app-admin-summary-bar [healthInfo]="healthInfo"></app-admin-summary-bar>
+  <div class="routing-container">
+    <router-outlet></router-outlet></div
+></app-navigation-drawer>
