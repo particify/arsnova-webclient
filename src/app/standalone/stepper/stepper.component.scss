@@ -1,7 +1,10 @@
 .container {
+  overflow: hidden;
+}
+
+.fixed-width-container {
   width: calc(92vw + 10px);
   max-width: calc(810px + 2em);
-  overflow: hidden;
 }
 
 .inner-container {

@@ -1,6 +1,7 @@
 <div
   tabindex="-1"
   class="container"
+  [ngClass]="{ 'fixed-width-container': fixedWitdth }"
   (touchstart)="swipe($event, 'start')"
   (touchend)="swipe($event, 'end')"
 >
@@ -19,7 +20,7 @@
     </button>
     <div
       [ngClass]="{
-        container: listLength <= 5,
+        'fixed-width-container container': listLength <= 5,
         'stepper-container': listLength > 5
       }"
     >
