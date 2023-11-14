@@ -14,6 +14,8 @@ import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.res
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
 import { CreatorPageComponent } from '@app/creator/creator-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
+import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
+import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 
 const routes: Routes = [
   {
@@ -78,6 +80,16 @@ const routes: Routes = [
     data: {
       parentRoute: ParentRoute.ROOM,
     },
+  },
+  {
+    path: 'templates',
+    component: ContentGroupTemplateSelectionComponent,
+    title: 'templates',
+  },
+  {
+    path: 'templates/:templateId',
+    component: ContentGroupTemplatePreviewComponent,
+    title: 'templates',
   },
 ];
 

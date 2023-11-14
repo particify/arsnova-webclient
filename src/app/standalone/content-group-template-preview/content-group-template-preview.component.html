@@ -1,10 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <app-loading-indicator *ngIf="isLoadingContentGroup"></app-loading-indicator>
-  <mat-card
-    *ngIf="!isLoadingContentGroup"
-    [appearance]="appearance"
-    class="template-card"
-  >
+  <mat-card *ngIf="!isLoadingContentGroup" class="template-card">
     <div
       fxLayout="row-wrap"
       fxLayoutAlign="space-between center"
@@ -13,8 +9,7 @@
       <span class="template-name">{{ template.name }}</span>
       <app-add-template-button
         [templateId]="template.id"
-        [roomId]="roomId"
-        (templateAddedToRoom)="afterRoomAdded()"
+        [room]="room"
       ></app-add-template-button>
     </div>
     <p class="template-description">{{ template.description }}</p>

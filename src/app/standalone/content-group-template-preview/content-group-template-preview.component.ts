@@ -1,18 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { MatCardAppearance } from '@angular/material/card';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { LICENSES } from '@app/core/models/licenses';
+import { Room } from '@app/core/models/room';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
@@ -34,13 +27,9 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
-  @Output() backClicked = new EventEmitter<void>();
-  @Output() templateAdded = new EventEmitter<void>();
+  template: ContentGroupTemplate;
 
-  @Input() template: ContentGroupTemplate;
-  @Input() appearance: MatCardAppearance = 'raised';
-  @Input() roomId?: string;
-
+  room: Room;
   contents: Content[];
   LICENSES = LICENSES;
 
@@ -59,7 +48,8 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.template = this.template ?? history?.state?.data?.template;
+    this.room = this.route.snapshot.data.room;
+    this.template = history?.state?.data?.template;
     if (this.template) {
       this.getContentTemplates();
       return;
@@ -82,14 +72,6 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
         this.contents = contentTemplates;
         this.isLoadingContents = false;
       });
-  }
-
-  back(): void {
-    this.backClicked.emit();
-  }
-
-  afterRoomAdded(): void {
-    this.templateAdded.emit();
   }
 
   getIcon(format: ContentType): string {

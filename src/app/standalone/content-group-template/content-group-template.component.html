@@ -1,10 +1,4 @@
-<mat-card
-  [appearance]="appearance"
-  fxFill
-  fxLayout="column"
-  fxLayoutAlign="space-between"
-  tabindex="0"
->
+<mat-card fxLayout="column" fxLayoutAlign="space-between" tabindex="0">
   <div>
     <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="1em">
       <span class="template-name">{{ template.name }}</span>
@@ -42,8 +36,7 @@
           </button>
           <app-add-template-button
             [templateId]="template.id"
-            [roomId]="roomId"
-            (templateSelected)="use()"
+            [room]="room"
           ></app-add-template-button>
         </div>
       </div>

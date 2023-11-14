@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { Membership } from '@app/core/models/membership';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { FormService } from '@app/core/services/util/form.service';
@@ -25,8 +27,8 @@ import { takeUntil } from 'rxjs';
 })
 export class AddTemplateButtonComponent extends FormComponent {
   @Input() templateId: string;
-  @Input() roomId?: string;
-  @Output() templateAddedToRoom = new EventEmitter<string>();
+  @Input() room?: Room;
+  routeAfterSuccess: string[];
 
   constructor(
     protected formService: FormService,
@@ -41,47 +43,56 @@ export class AddTemplateButtonComponent extends FormComponent {
     super(formService);
   }
 
-  use(membership?: Membership) {
-    const roomId = this.roomId || membership?.roomId;
-    if (roomId) {
-      this.disableForm();
-      this.templateService
-        .createCopyFromContentGroupTemplate(this.templateId, roomId)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe({
-          next: () => {
-            const msg = this.translateService.translate(
-              'templates.template-added'
-            );
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.SUCCESS
-            );
-            this.enableForm();
-            this.templateAddedToRoom.emit(roomId);
-            if (membership) {
-              const role = this.membershipService.selectPrimaryRole(
-                membership.roles
-              );
-              this.router.navigate([
-                this.routingService.getRoleRoute(role),
-                membership.roomShortId,
-              ]);
-            }
-          },
-          error: () => {
-            this.enableForm();
-          },
-        });
+  useTemplate(): void {
+    if (this.room) {
+      this.setRoute(UserRole.EDITOR, this.room.shortId);
+      this.createTemplate(this.room.id);
     } else {
-      const dialogRef = this.dialog.open(RoomSelectionComponent, {
-        width: '600px',
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.use(result);
-        }
-      });
+      this.openRoomSelectionDialog();
     }
+  }
+
+  private createTemplate(roomId: string): void {
+    this.disableForm();
+    this.templateService
+      .createCopyFromContentGroupTemplate(this.templateId, roomId)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: () => {
+          const msg = this.translateService.translate(
+            'templates.template-added'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          this.enableForm();
+          if (this.routeAfterSuccess) {
+            this.router.navigate(this.routeAfterSuccess);
+          }
+        },
+        error: () => {
+          this.enableForm();
+        },
+      });
+  }
+
+  private setRoute(role: UserRole, shortId: string): void {
+    this.routeAfterSuccess = [this.routingService.getRoleRoute(role), shortId];
+  }
+
+  private openRoomSelectionDialog(): void {
+    const dialogRef = this.dialog.open(RoomSelectionComponent, {
+      width: '600px',
+    });
+    dialogRef.afterClosed().subscribe((membership?: Membership) => {
+      if (membership) {
+        this.setRoute(
+          this.membershipService.selectPrimaryRole(membership.roles),
+          membership.roomShortId
+        );
+        this.createTemplate(membership.roomId);
+      }
+    });
   }
 }

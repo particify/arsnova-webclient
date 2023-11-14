@@ -23,7 +23,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
-import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
@@ -98,7 +97,6 @@ describe('ContentGroupTemplateSelectionComponent', () => {
         getTranslocoModule(),
         TemplateLanguageSelectionComponent,
         TemplateTagSelectionComponent,
-        ContentGroupTemplatePreviewComponent,
         ContentGroupTemplateComponent,
       ],
       providers: [

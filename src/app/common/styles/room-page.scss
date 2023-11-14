@@ -5,6 +5,7 @@ $content-padding: 2em;
 
 .routing-container {
   width: calc(100% - $app-padding * 2);
+  max-width: $card-width;
   padding: $app-padding;
 }
 

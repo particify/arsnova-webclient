@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { CoreModule } from '@app/core/core.module';
 import { LICENSES } from '@app/core/models/licenses';
-import { MatCardAppearance } from '@angular/material/card';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
+import { Room } from '@app/core/models/room';
 
 @Component({
   standalone: true,
@@ -21,15 +21,9 @@ import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/
 })
 export class ContentGroupTemplateComponent {
   @Input() template: ContentGroupTemplate;
-  @Input() appearance: MatCardAppearance = 'raised';
-  @Input() roomId?: string;
-  @Output() templateSelected = new EventEmitter<string>();
+  @Input() room: Room;
   @Output() previewClicked = new EventEmitter<string>();
   LICENSES = LICENSES;
-
-  use() {
-    this.templateSelected.emit(this.template.id);
-  }
 
   preview() {
     this.previewClicked.emit(this.template.id);
