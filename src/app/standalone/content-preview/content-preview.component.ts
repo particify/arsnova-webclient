@@ -44,6 +44,8 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
 export class ContentPreviewComponent implements OnInit {
   @Input() content: Content;
   @Input() isEditMode: boolean;
+  @Input() renderAnswersDynamically = true;
+  @Input() showTitle = true;
 
   answerOptions: AnswerOption[];
   answerOptionsWithPoints: AnswerWithPoints[] = [];

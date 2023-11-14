@@ -1,4 +1,5 @@
 <h3
+  *ngIf="showTitle"
   tabindex="0"
   [appAutofocus]
   [attr.aria-label]="'creator.content.a11y-preview-header' | transloco"
@@ -31,12 +32,12 @@
     "
     [selectableAnswers]="selectableAnswers"
     [multipleAnswersAllowed]="multipleAnswers"
-    [dynamicRendering]="content.format === 'CHOICE'"
+    [dynamicRendering]="content.format === 'CHOICE' && renderAnswersDynamically"
   ></app-content-choice-answer>
   <app-content-sort-answer
     *ngIf="content.format === 'SORT'"
     [answerOptions]="answerOptions"
-    [dynamicRendering]="true"
+    [dynamicRendering]="renderAnswersDynamically"
   ></app-content-sort-answer>
   <app-content-wordcloud-answer
     *ngIf="content.format === 'WORDCLOUD'"
