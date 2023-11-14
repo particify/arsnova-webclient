@@ -9,7 +9,7 @@ import { CreateAnswerOptionComponent } from './content-editing/create-answer-opt
 import { PrioritizationContentFormComponent } from './content-editing/prioritization-content-form/prioritization-content-form.component';
 import { StatisticListComponent } from './statistic-list/statistic-list.component';
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
-import { PreviewComponent } from '@app/standalone/preview/preview.component';
+import { ContentPreviewComponent } from '@app/standalone/content-preview/content-preview.component';
 import { SortContentFormComponent } from './content-editing/sort-content-form/sort-content-form.component';
 import { FlashcardContentFormComponent } from './content-editing/flashcard-content-form/flashcard-content-form.component';
 import { WordcloudContentFormComponent } from './content-editing/wordcloud-content-form/wordcloud-content-form.component';
@@ -77,7 +77,7 @@ import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-gr
     LoadingButtonComponent,
     BaseCardComponent,
     ContentGroupTemplateEditingComponent,
-    PreviewComponent,
+    ContentPreviewComponent,
   ],
 })
 export class ContentGroupModule {}

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { PreviewComponent } from './preview.component';
+import { ContentPreviewComponent } from './content-preview.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -19,9 +19,9 @@ class MockContentAnswerService {}
 @Injectable()
 class MockLikertScaleService {}
 
-describe('PreviewComponent', () => {
-  let component: PreviewComponent;
-  let fixture: ComponentFixture<PreviewComponent>;
+describe('ContentPreviewComponent', () => {
+  let component: ContentPreviewComponent;
+  let fixture: ComponentFixture<ContentPreviewComponent>;
 
   const mockFormattingService = jasmine.createSpyObj(['postString']);
   mockFormattingService.postString.and.returnValue(of('rendered'));
@@ -46,12 +46,16 @@ describe('PreviewComponent', () => {
           useClass: MockFeatureFlagService,
         },
       ],
-      imports: [PreviewComponent, getTranslocoModule(), ExtensionPointModule],
+      imports: [
+        ContentPreviewComponent,
+        getTranslocoModule(),
+        ExtensionPointModule,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
       .then(() => {
-        fixture = TestBed.createComponent(PreviewComponent);
+        fixture = TestBed.createComponent(ContentPreviewComponent);
         component = fixture.componentInstance;
         component.content = new Content(
           '1',

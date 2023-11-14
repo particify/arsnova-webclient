@@ -25,7 +25,7 @@ import { ContentTextAnswerComponent } from '@app/standalone/content-answers/cont
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 
 @Component({
-  selector: 'app-preview',
+  selector: 'app-content-preview',
   standalone: true,
   imports: [
     CoreModule,
@@ -38,10 +38,10 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
     ContentTextAnswerComponent,
     ContentWordcloudAnswerComponent,
   ],
-  templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss'],
+  templateUrl: './content-preview.component.html',
+  styleUrls: ['./content-preview.component.scss'],
 })
-export class PreviewComponent implements OnInit {
+export class ContentPreviewComponent implements OnInit {
   @Input() content: Content;
   @Input() isEditMode: boolean;
 
