@@ -11,7 +11,7 @@
     ) | transloco
   }}
 </h3>
-<mat-card class="mat-elevation-z2">
+<mat-card appearance="outlined">
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <app-rendered-text
     tabindex="0"
@@ -56,7 +56,7 @@
   <h3>
     {{ 'creator.content.flashcard-back' | transloco }}
   </h3>
-  <mat-card class="mat-elevation-z2">
+  <mat-card appearance="outlined">
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <app-rendered-text
       [rawText]="additionalText"
