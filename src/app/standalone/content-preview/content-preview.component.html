@@ -12,13 +12,11 @@
   }}
 </h3>
 <mat-card appearance="outlined">
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
   <app-rendered-text
     tabindex="0"
     [rawText]="content.body"
     [dynamic]="true"
     [markdownFeatureset]="markdownFeatureset"
-    (rendered)="renderingFinished()"
   ></app-rendered-text>
   <lib-extension-point
     extensionId="attachment-list"
@@ -57,12 +55,10 @@
     {{ 'creator.content.flashcard-back' | transloco }}
   </h3>
   <mat-card appearance="outlined">
-    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <app-rendered-text
       [rawText]="additionalText"
       [dynamic]="true"
       [markdownFeatureset]="markdownFeatureset"
-      (rendered)="renderingFinished()"
     >
     </app-rendered-text>
   </mat-card>
