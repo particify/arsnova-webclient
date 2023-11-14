@@ -1,19 +1,21 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContentWordcloudAnswerComponent } from './content-wordcloud-answer.component';
+import { ContentSortAnswerComponent } from './content-sort-answer.component';
 
-describe('ContentWordcloudAnswerComponent', () => {
-  let component: ContentWordcloudAnswerComponent;
-  let fixture: ComponentFixture<ContentWordcloudAnswerComponent>;
+describe('ContentSortAnswerComponent', () => {
+  let component: ContentSortAnswerComponent;
+  let fixture: ComponentFixture<ContentSortAnswerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContentWordcloudAnswerComponent],
+      imports: [ContentSortAnswerComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(ContentWordcloudAnswerComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ContentSortAnswerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

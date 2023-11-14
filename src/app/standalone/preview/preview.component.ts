@@ -14,9 +14,30 @@ import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
+import { CoreModule } from '@app/core/core.module';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
+import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
+import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-answers/content-prioritization-answer/content-prioritization-answer.component';
+import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
+import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
+import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 
 @Component({
   selector: 'app-preview',
+  standalone: true,
+  imports: [
+    CoreModule,
+    RenderedTextComponent,
+    LoadingIndicatorComponent,
+    ExtensionPointModule,
+    ContentChoiceAnswerComponent,
+    ContentPrioritizationAnswerComponent,
+    ContentSortAnswerComponent,
+    ContentTextAnswerComponent,
+    ContentWordcloudAnswerComponent,
+  ],
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss'],
 })

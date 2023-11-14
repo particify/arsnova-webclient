@@ -1,9 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CoreModule } from '@app/core/core.module';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 
 @Component({
   selector: 'app-content-choice-answer',
+  standalone: true,
+  imports: [CoreModule, RenderedTextComponent],
   templateUrl: './content-choice-answer.component.html',
   styleUrls: ['./content-choice-answer.component.scss'],
 })

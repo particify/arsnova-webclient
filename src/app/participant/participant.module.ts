@@ -23,6 +23,11 @@ import { InfoChartComponent } from './series-overview/info-chart/info-chart.comp
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
+import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
+import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
+import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-answers/content-prioritization-answer/content-prioritization-answer.component';
+import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
+import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
 
 @NgModule({
   imports: [
@@ -38,6 +43,11 @@ import { StepperComponent } from '@app/standalone/stepper/stepper.component';
     RenderedTextComponent,
     HintComponent,
     LoadingButtonComponent,
+    ContentChoiceAnswerComponent,
+    ContentPrioritizationAnswerComponent,
+    ContentSortAnswerComponent,
+    ContentTextAnswerComponent,
+    ContentWordcloudAnswerComponent,
   ],
   declarations: [
     ContentChoiceParticipantComponent,

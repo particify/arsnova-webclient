@@ -10,8 +10,7 @@ describe('ContentPrioritizationAnswerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContentPrioritizationAnswerComponent],
-      imports: [getTranslocoModule()],
+      imports: [ContentPrioritizationAnswerComponent, getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

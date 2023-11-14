@@ -5,7 +5,6 @@ import { StatisticChoiceComponent } from './statistic-content/statistic-choice/s
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { ContentResultsComponent } from './content-results/content-results.component';
-import { ContentSortAnswerComponent } from './content-answers/content-sort-answer/content-sort-answer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { StatisticSortComponent } from './statistic-content/statistic-sort/statistic-sort.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -13,15 +12,11 @@ import { StatisticWordcloudComponent } from './statistic-content/statistic-wordc
 import { WordcloudComponent } from './wordcloud/wordcloud.component';
 import { StatisticScaleComponent } from './statistic-content/statistic-scale/statistic-scale.component';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
-import { ContentChoiceAnswerComponent } from './content-answers/content-choice-answer/content-choice-answer.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { AnswerListComponent } from './answer-list/answer-list.component';
 import { AnnouncementListComponent } from './announcement-list/announcement-list.component';
-import { ContentWordcloudAnswerComponent } from './content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 import { DragDropBaseComponent } from './drag-drop-base/drag-drop-base.component';
-import { ContentPrioritizationAnswerComponent } from './content-answers/content-prioritization-answer/content-prioritization-answer.component';
 import { StatisticPrioritizationComponent } from './statistic-content/statistic-prioritization/statistic-prioritization.component';
-import { ContentTextAnswerComponent } from './content-answers/content-text-answer/content-text-answer.component';
 import { MultipleRoundSelectionComponent } from './multiple-round-selection/multiple-round-selection.component';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
@@ -52,19 +47,14 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     StatisticTextComponent,
     StatisticWordcloudComponent,
     ContentResultsComponent,
-    ContentSortAnswerComponent,
     StatisticSortComponent,
     NavBarComponent,
     WordcloudComponent,
-    ContentChoiceAnswerComponent,
     AnnouncementComponent,
     AnswerListComponent,
     AnnouncementListComponent,
-    ContentWordcloudAnswerComponent,
     DragDropBaseComponent,
-    ContentPrioritizationAnswerComponent,
     StatisticPrioritizationComponent,
-    ContentTextAnswerComponent,
     MultipleRoundSelectionComponent,
   ],
   exports: [
@@ -74,17 +64,12 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     StatisticTextComponent,
     StatisticWordcloudComponent,
     ContentResultsComponent,
-    ContentSortAnswerComponent,
     StatisticSortComponent,
     NavBarComponent,
     DividerComponent,
     WordcloudComponent,
-    ContentChoiceAnswerComponent,
     AnnouncementComponent,
     AnswerListComponent,
-    ContentWordcloudAnswerComponent,
-    ContentPrioritizationAnswerComponent,
-    ContentTextAnswerComponent,
     MultipleRoundSelectionComponent,
   ],
 })
