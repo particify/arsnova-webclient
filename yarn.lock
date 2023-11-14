@@ -2861,10 +2861,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ctrl/tinycolor@npm:^3.4.0":
-  version: 3.6.0
-  resolution: "@ctrl/tinycolor@npm:3.6.0"
-  checksum: 9c651470ac4b10def674781b17cb8fcc3deb16d6b2b1ed36a308a645f4039a6158bcd385e86ba2dc75a0102e40f46d7456dff61b64a26ba68d20c6acf7d47285
+"@ctrl/tinycolor@npm:^4.0.0":
+  version: 4.0.2
+  resolution: "@ctrl/tinycolor@npm:4.0.2"
+  checksum: 4f04f28a5163a12d7692a3dbb017f7ea5659c0bb1c2b60b274aa873c9b91b0a5f81773f26aa62d8b0663f99979edfadb833c937a53ccc831d8243b6facb9b708
   languageName: node
   linkType: hard
 
@@ -7856,17 +7856,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"angular-material-css-vars@npm:5.0.3":
-  version: 5.0.3
-  resolution: "angular-material-css-vars@npm:5.0.3"
+"angular-material-css-vars@npm:6.0.1":
+  version: 6.0.1
+  resolution: "angular-material-css-vars@npm:6.0.1"
   dependencies:
-    "@ctrl/tinycolor": "npm:^3.4.0"
+    "@ctrl/tinycolor": "npm:^4.0.0"
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/common": ">=16"
-    "@angular/core": ">=16"
-    "@angular/material": ">=16"
-  checksum: 062279bc6586ae78fc0f0dd586a598a9a55c2a263962bf9e7af531c36d027c5e6802942b7bb00c9831718619c6043ca8bbf051c54050432761ecef3059ea149f
+    "@angular/common": ">=17"
+    "@angular/core": ">=17"
+    "@angular/material": ">=17"
+  checksum: 59fdd23ca43e2cfb750a1a48738582dd9d7f4e8fbdd1792973c897022e1e3c47803fa226311b1929c38e98f3e6b021e074b1c29f891e9be39b3c2456ba6ed61a
   languageName: node
   linkType: hard
 
@@ -8179,7 +8179,7 @@ __metadata:
     "@types/wordcloud": "npm:1.2.2"
     "@typescript-eslint/eslint-plugin": "npm:6.11.0"
     "@typescript-eslint/parser": "npm:6.11.0"
-    angular-material-css-vars: "npm:5.0.3"
+    angular-material-css-vars: "npm:6.0.1"
     backoff-rxjs: "npm:7.0.0"
     chart.js: "npm:4.4.0"
     chartjs-plugin-datalabels: "npm:2.2.0"
