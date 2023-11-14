@@ -301,6 +301,11 @@ textarea {
   }
 }
 
+.big-dialog-panel {
+  width: calc(100vw - $app-padding * 2);
+  max-width: $card-width !important;
+}
+
 .mat-mdc-dialog-title {
   color: var(--on-surface) !important;
   padding: 24px 24px 8px !important;

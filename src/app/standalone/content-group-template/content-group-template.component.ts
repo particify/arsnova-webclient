@@ -21,7 +21,7 @@ import { Room } from '@app/core/models/room';
 })
 export class ContentGroupTemplateComponent {
   @Input() template: ContentGroupTemplate;
-  @Input() room: Room;
+  @Input() room?: Room;
   @Output() previewClicked = new EventEmitter<string>();
   LICENSES = LICENSES;
 

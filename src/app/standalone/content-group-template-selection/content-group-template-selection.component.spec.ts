@@ -26,6 +26,7 @@ import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-sele
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { Room } from '@app/core/models/room';
 
 describe('ContentGroupTemplateSelectionComponent', () => {
   let component: ContentGroupTemplateSelectionComponent;
@@ -86,6 +87,9 @@ describe('ContentGroupTemplateSelectionComponent', () => {
   Object.defineProperty(snapshot, 'params', {
     value: {},
   });
+  snapshot.data = {
+    room: new Room(),
+  };
   const activatedRoute = new ActivatedRouteStub(undefined, undefined, snapshot);
 
   beforeEach(() => {

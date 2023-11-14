@@ -28,8 +28,12 @@
         </mat-chip-set>
       </div>
       <app-loading-indicator *ngIf="isLoadingContents"></app-loading-indicator>
-      <mat-list *ngIf="!isLoadingContents">
-        <mat-list-item *ngFor="let content of contents" class="bottom-border">
+      <mat-action-list *ngIf="!isLoadingContents">
+        <mat-list-item
+          *ngFor="let content of contents"
+          class="bottom-border"
+          (click)="openPreview(content)"
+        >
           <div
             fxFill
             fxLayout="row"
@@ -44,7 +48,7 @@
             <p class="ellipsis">{{ content.body }}</p>
           </div>
         </mat-list-item>
-      </mat-list>
+      </mat-action-list>
     </div>
   </mat-card>
 </div>

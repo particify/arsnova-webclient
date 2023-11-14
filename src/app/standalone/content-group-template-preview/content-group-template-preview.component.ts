@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
@@ -8,6 +9,7 @@ import { LICENSES } from '@app/core/models/licenses';
 import { Room } from '@app/core/models/room';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ContentService } from '@app/core/services/http/content.service';
+import { ContentTemplatePreviewComponent } from '@app/standalone/_dialogs/content-template-preview/content-template-preview.component';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
@@ -39,7 +41,8 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   constructor(
     private templateService: BaseTemplateService,
     private contentService: ContentService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {}
 
   ngOnDestroy(): void {
@@ -76,5 +79,15 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
 
   getIcon(format: ContentType): string {
     return this.contentService.getTypeIcons().get(format) || '';
+  }
+
+  openPreview(content: Content): void {
+    this.dialog.open(ContentTemplatePreviewComponent, {
+      data: {
+        contents: this.contents,
+        index: this.contents.map((c) => c.id).indexOf(content.id),
+      },
+      panelClass: 'big-dialog-panel',
+    });
   }
 }

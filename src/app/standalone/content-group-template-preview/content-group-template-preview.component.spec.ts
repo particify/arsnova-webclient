@@ -21,9 +21,13 @@ describe('ContentGroupTemplatePreviewComponent', () => {
   let fixture: ComponentFixture<ContentGroupTemplatePreviewComponent>;
 
   const mockBaseTemplateService = jasmine.createSpyObj(BaseTemplateService, [
+    'getContentGroupTemplate',
     'getContentTemplates',
   ]);
   mockBaseTemplateService.getContentTemplates.and.returnValue(of([]));
+  mockBaseTemplateService.getContentGroupTemplate.and.returnValue(
+    of(new ContentGroupTemplate('name', 'description', 'en', [], 'license'))
+  );
 
   const mockContentService = jasmine.createSpyObj(ContentService, [
     'getTypeIcons',

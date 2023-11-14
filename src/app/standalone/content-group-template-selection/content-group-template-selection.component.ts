@@ -43,7 +43,7 @@ export class ContentGroupTemplateSelectionComponent
   showPublic = true;
   creatorId: string;
   tagIdsQueryParams: string[] = [];
-  room: Room;
+  room?: Room;
 
   constructor(
     protected formService: FormService,
