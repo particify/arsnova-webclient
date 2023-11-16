@@ -50,11 +50,16 @@ describe('ContentGroupTemplateSelectionComponent', () => {
   ]);
   mockTemplateService.getContentGroupTemplates.and.returnValue(
     of([
-      new ContentGroupTemplate('name', 'description', 'en', [], 'CC0-1.0', [
-        '1',
-        '2',
-        '3',
-      ]),
+      new ContentGroupTemplate(
+        'name',
+        'description',
+        'en',
+        [],
+        'CC0-1.0',
+        false,
+        'attribution name',
+        ['1', '2', '3']
+      ),
     ])
   );
 

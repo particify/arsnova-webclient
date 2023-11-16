@@ -7,8 +7,9 @@ export class ContentGroupTemplate {
   language: string;
   tags: TemplateTag[];
   license: string;
-  templateIds: string[];
+  aiGenerated: boolean;
   attribution?: string;
+  templateIds: string[];
 
   constructor(
     name: string,
@@ -16,17 +17,19 @@ export class ContentGroupTemplate {
     language: string,
     tags: TemplateTag[],
     license: string,
-    templateIds?: string[],
-    attribution?: string
+    aiGenerated = false,
+    attribution?: string,
+    templateIds?: string[]
   ) {
     this.name = name;
     this.description = description;
     this.language = language;
     this.tags = tags;
     this.license = license;
+    this.aiGenerated = aiGenerated;
+    this.attribution = attribution;
     if (templateIds) {
       this.templateIds = templateIds;
     }
-    this.attribution = attribution;
   }
 }

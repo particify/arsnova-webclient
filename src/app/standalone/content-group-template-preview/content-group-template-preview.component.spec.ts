@@ -46,6 +46,8 @@ describe('ContentGroupTemplatePreviewComponent', () => {
       'en',
       [],
       'cc0-1.0',
+      false,
+      'attribution name',
       []
     );
     fixture.detectChanges();

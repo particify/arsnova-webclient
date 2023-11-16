@@ -10,4 +10,7 @@
     {{ 'templates.by' | transloco }}
     {{ ownerName || ('templates.anonymous' | transloco) }}
   </span>
+  <span *ngIf="!!aiGenerated"
+    >&bull; {{ 'templates.ai-generated-hint' | transloco }}</span
+  >
 </div>

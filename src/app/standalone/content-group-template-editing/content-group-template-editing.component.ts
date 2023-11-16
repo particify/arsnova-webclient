@@ -45,6 +45,7 @@ export class ContentGroupTemplateEditingComponent
   @Input() name: string = '';
   description: string;
   attribution: string;
+  aiGenerated = false;
   selectedTags: TemplateTag[] = [];
   selectedLicense: string;
   selectedLang: string;
@@ -120,7 +121,7 @@ export class ContentGroupTemplateEditingComponent
       this.selectedLang,
       this.selectedTags,
       this.selectedLicense,
-      undefined,
+      this.aiGenerated,
       this.attribution
     );
     return template;
