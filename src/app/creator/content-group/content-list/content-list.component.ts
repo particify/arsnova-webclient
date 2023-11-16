@@ -307,10 +307,10 @@ export class ContentListComponent implements OnInit, OnDestroy {
       this.firstPublishedIndex === -1
         ? 'no'
         : this.lastPublishedIndex === -1
-        ? 'all'
-        : this.firstPublishedIndex === this.lastPublishedIndex
-        ? 'single'
-        : 'range';
+          ? 'all'
+          : this.firstPublishedIndex === this.lastPublishedIndex
+            ? 'single'
+            : 'range';
     const msg = this.translateService.translate(
       'creator.content.a11y-' + key + '-published',
       { first: this.firstPublishedIndex + 1, last: this.lastPublishedIndex + 1 }

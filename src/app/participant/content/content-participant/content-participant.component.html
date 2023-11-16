@@ -19,14 +19,14 @@
                 hasAbstained
                   ? ('participant.answer.a11y-has-abstained' | transloco)
                   : content.format !== ContentType.TEXT
-                  ? ('participant.answer.a11y-already-answered-' +
-                      (isMultiple ? 'multiple' : 'single')
-                    | transloco
-                      : {
-                          answers: answersString
-                        })
-                  : ('participant.answer.a11y-already-answered-text'
-                    | transloco: { answer: answersString })
+                    ? ('participant.answer.a11y-already-answered-' +
+                        (isMultiple ? 'multiple' : 'single')
+                      | transloco
+                        : {
+                            answers: answersString
+                          })
+                    : ('participant.answer.a11y-already-answered-text'
+                      | transloco: { answer: answersString })
               }}
             </div>
             <span class="fill-remaining-space"></span>
