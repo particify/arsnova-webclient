@@ -527,6 +527,7 @@
     "license-description-cc-by-nc-4-0": "Allows others to distribute, remix, adapt and build upon the template for noncommercial purposes as long as attribution is given to the creator.",
     "license-description-cc-by-nc-sa-4-0": "Allows others to distribute, remix, adapt, and build upon the template  for noncommercial purposes as long as as attribution is given to the creator. Templates based on this must be licensed under identical terms.",
     "is-ai-generated": "This template was created with the help of AI.",
+    "ai-generated-hint": "Created with the help of AI",
     "publish": "Publish",
     "template-published": "Your template has been published.",
     "public-templates": "Public templates",

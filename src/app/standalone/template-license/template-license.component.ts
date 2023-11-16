@@ -13,6 +13,7 @@ export class TemplateLicenseComponent {
   @Input() ownerName?: string;
   @Input() license: string;
   @Input() showLink = false;
+  @Input() aiGenerated: boolean;
 
   LICENSES = LICENSES;
 }
