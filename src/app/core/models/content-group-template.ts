@@ -8,7 +8,7 @@ export class ContentGroupTemplate {
   tags: TemplateTag[];
   license: string;
   templateIds: string[];
-  ownerName?: string;
+  attribution?: string;
 
   constructor(
     name: string,
@@ -17,7 +17,7 @@ export class ContentGroupTemplate {
     tags: TemplateTag[],
     license: string,
     templateIds?: string[],
-    ownerName?: string
+    attribution?: string
   ) {
     this.name = name;
     this.description = description;
@@ -27,6 +27,6 @@ export class ContentGroupTemplate {
     if (templateIds) {
       this.templateIds = templateIds;
     }
-    this.ownerName = ownerName;
+    this.attribution = attribution;
   }
 }
