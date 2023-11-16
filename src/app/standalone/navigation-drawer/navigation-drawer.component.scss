@@ -1,0 +1,93 @@
+@import '../../../variables';
+
+$drawer-header-font-size: 20px;
+$drawer-header-padding: 24px;
+
+button {
+  margin-bottom: 0.5em;
+}
+
+.add-icon {
+  margin-right: 0.1em;
+}
+
+.mat-drawer {
+  width: $drawer-width;
+  background-color: var(--surface);
+}
+
+.mat-drawer-content {
+  background-color: var(--background);
+}
+
+.navigation-container {
+  height: calc(100vh - $bar-height);
+  margin: -$app-padding;
+  width: 100vw;
+}
+
+.mat-drawer-container {
+  height: 100%;
+}
+
+@include xs {
+  .navigation-container {
+    height: calc(100vh - $mobile-bar-height);
+  }
+}
+
+@include lt-md {
+  .responsive-drawer {
+    height: 100vh;
+    position: fixed;
+  }
+}
+
+@include gt-md {
+  .navigation-container {
+    margin-top: -$app-padding;
+    margin-bottom: -$app-padding;
+    margin-left: -$app-padding;
+    width: calc(100vw);
+  }
+
+  .mat-drawer-content {
+    width: calc(100% - #{$drawer-width});
+  }
+}
+
+.section-header {
+  padding: $drawer-header-padding;
+  font-weight: $font-weight-bold;
+  font-size: $drawer-header-font-size;
+}
+
+.subheader {
+  margin-top: 0;
+  opacity: 0.6;
+  font-size: $s-font-size;
+  padding: 0 $drawer-header-padding;
+}
+
+.button-container {
+  padding: 0 8px;
+}
+
+.mat-mdc-button {
+  place-content: start;
+  width: 100%;
+
+  .mat-icon {
+    margin-right: 8px;
+  }
+
+  &:not(.primary-variant) {
+    .mat-icon {
+      opacity: 0.6;
+    }
+  }
+}
+
+:host-context(.theme-dark) .mat-mdc-button.primary-variant {
+  color: var(--palette-primary-contrast-200);
+}

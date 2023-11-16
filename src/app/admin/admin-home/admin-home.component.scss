@@ -1,74 +1,12 @@
-$drawer-width: 256px;
-$app-padding: 4vw;
-$header-height: 64px;
 $container-padding: 2em;
 
-.admin-container {
-  margin-top: -$app-padding;
-  margin-bottom: -$app-padding;
-  height: calc(100vh - #{$header-height});
-  width: calc(100vw - #{$app-padding});
-}
-
-.mat-drawer-container {
-  background-color: var(--surface);
-  margin-left: -$app-padding;
-  width: calc(100vw + #{$app-padding}) !important;
-  height: 100%;
-}
-
-.mat-drawer {
-  width: $drawer-width;
-  background-color: var(--surface);
-}
-
-.mat-drawer-content {
-  width: calc(100% - #{$drawer-width});
-}
-
-h2 {
-  margin: 0;
-}
-
 .title {
-  padding: 36px 24px;
-}
-
-.section-header {
-  margin-top: 0;
-  opacity: 0.6;
-  font-size: 14px;
-  padding-left: 24px;
-}
-
-.button-container {
-  padding: 0 0.5em;
-}
-
-.mat-mdc-button {
-  place-content: start;
-  width: 100%;
-
-  .mat-icon {
-    margin-right: 8px;
-  }
-
-  &:not(.primary-variant) {
-    .mat-icon {
-      opacity: 0.6;
-    }
-  }
-}
-
-:host-context(.theme-dark) .mat-mdc-button.primary-variant {
-  color: var(--palette-primary-contrast-200);
+  padding: 12px 0;
 }
 
 .routing-container {
   width: calc(100% - $container-padding * 2);
   max-width: 1600px;
-  height: 100%;
-  background: var(--surface);
   padding: $container-padding;
   overflow-y: auto;
 }

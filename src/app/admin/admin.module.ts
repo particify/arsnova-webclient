@@ -22,6 +22,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 import { TemplateManagementComponent } from '@app/admin/template-management/template-management.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
 import { TemplateService } from '@app/admin/template-management/template.service';
+import { NavigationDrawerComponent } from '@app/standalone/navigation-drawer/navigation-drawer.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { TemplateService } from '@app/admin/template-management/template.service
     ExtensionPointModule,
     LoadingButtonComponent,
     TemplateLanguageSelectionComponent,
+    NavigationDrawerComponent,
   ],
   declarations: [
     AdminHomeComponent,

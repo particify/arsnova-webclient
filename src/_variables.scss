@@ -24,12 +24,30 @@ $app-padding: 4vw;
 
 $card-width: 832px;
 
+// Navigation drawer
+
+$drawer-width: 256px;
+
 // Breakpoints
 
 $screen-xs-min: 599px;
+$screen-s-max: 999px;
+$screen-md-min: 1000px;
 
 @mixin xs {
   @media (max-width: $screen-xs-min) {
+    @content;
+  }
+}
+
+@mixin lt-md {
+  @media (max-width: $screen-s-max) {
+    @content;
+  }
+}
+
+@mixin gt-md {
+  @media (min-width: $screen-md-min) {
     @content;
   }
 }
