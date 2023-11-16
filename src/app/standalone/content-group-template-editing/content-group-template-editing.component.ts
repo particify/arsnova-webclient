@@ -44,6 +44,7 @@ export class ContentGroupTemplateEditingComponent
 
   @Input() name: string = '';
   description: string;
+  attribution: string;
   selectedTags: TemplateTag[] = [];
   selectedLicense: string;
   selectedLang: string;
@@ -66,6 +67,7 @@ export class ContentGroupTemplateEditingComponent
     this.formGroup = new FormGroup({
       name: new FormControl(this.name, Validators.required),
       description: new FormControl('', Validators.required),
+      attribution: new FormControl(''),
       licenses: new FormControl(this.selectedLicense),
     });
   }
@@ -81,6 +83,12 @@ export class ContentGroupTemplateEditingComponent
 
   updateLicense(license: string): void {
     this.selectedLicense = license;
+    if (this.selectedLicense !== this.licenseKeys[0]) {
+      this.formGroup.get('attribution')?.addValidators(Validators.required);
+    } else {
+      this.formGroup.get('attribution')?.clearValidators();
+    }
+    this.formGroup.get('attribution')?.updateValueAndValidity();
   }
 
   updateTags(tags: TemplateTag[]): void {
@@ -106,13 +114,14 @@ export class ContentGroupTemplateEditingComponent
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
-
     const template = new ContentGroupTemplate(
       this.name,
       this.description,
       this.selectedLang,
       this.selectedTags,
-      this.selectedLicense
+      this.selectedLicense,
+      undefined,
+      this.attribution
     );
     return template;
   }
