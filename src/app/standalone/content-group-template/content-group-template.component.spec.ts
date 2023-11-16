@@ -20,6 +20,8 @@ describe('ContentGroupTemplateComponent', () => {
       'en',
       [{ id: 'id', name: 'Test tag', verified: true }],
       'CC0-1.0',
+      false,
+      'attribution name',
       ['template1', 'template2', 'template3']
     );
     fixture.detectChanges();
