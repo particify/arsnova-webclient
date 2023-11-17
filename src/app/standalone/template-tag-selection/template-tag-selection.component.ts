@@ -33,6 +33,7 @@ export class TemplateTagSelectionComponent
   @Input() lang: string;
   @Input() allowCreation = false;
   @Input() selectedTags: TemplateTag[] = [];
+  @Input() selectedTagIds: string[] = [];
   @Output() selectedTagsChanged = new EventEmitter<TemplateTag[]>();
   tags: TemplateTag[] = [];
   filteredTags: TemplateTag[] = [];
@@ -90,6 +91,12 @@ export class TemplateTagSelectionComponent
       .subscribe((tags) => {
         this.tags = tags;
         this.filteredTags = this.tags;
+        if (this.selectedTagIds.length > 0) {
+          this.selectedTags = this.tags.filter((t) =>
+            this.selectedTagIds.includes(t.id)
+          );
+          this.emitSelectionEvent();
+        }
       });
   }
 

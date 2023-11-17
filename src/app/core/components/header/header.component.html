@@ -121,6 +121,15 @@
         <span>{{ 'header.admin-area' | transloco }}</span>
       </button>
       <button
+        id="templates-button"
+        mat-menu-item
+        *ngIf="auth"
+        (click)="navToTemplates()"
+      >
+        <mat-icon>text_snippet</mat-icon>
+        <span>{{ 'header.public-templates' | transloco }}</span>
+      </button>
+      <button
         id="user-profile-button"
         mat-menu-item
         *ngIf="auth"

@@ -56,7 +56,8 @@
     "editing-view": "Edit",
     "room-settings": "Room settings",
     "present": "Present",
-    "presentation-mode": "Presentation mode"
+    "presentation-mode": "Presentation mode",
+    "public-templates": "Public templates"
   },
   "home-page": {
     "a11y-join-button": "Enter the room with the specified room number.",
@@ -238,7 +239,8 @@
     "contribute-to-lang": "You can contribute to the translation via the following link: ",
     "translation-server": "Go to translation server",
     "leave": "Leave",
-    "really-leave-room": "Do you really want to leave the room?"
+    "really-leave-room": "Do you really want to leave the room?",
+    "select-room": "Select room"
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",
@@ -261,7 +263,8 @@
     "settings": "Settings",
     "admin": "Administration",
     "presentation-mode": "Presentation",
-    "account": "My account"
+    "account": "My account",
+    "templates": "Public templates"
   },
   "comment-export": {
     "answer": "Answer",
@@ -537,7 +540,7 @@
     "licensed-under": "Licensed under",
     "by": "by",
     "anonymous": "Anonymous",
-    "add": "Add",
+    "use": "Use",
     "template-added": "The template has been added.",
     "preview": "Preview",
     "back": "Back"

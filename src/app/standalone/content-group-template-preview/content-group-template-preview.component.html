@@ -1,23 +1,21 @@
-<div fxLayout="column" fxLayoutGap="16px">
-  <div>
-    <button mat-button (click)="back()">
-      <mat-icon>arrow_back</mat-icon>
-      {{ 'templates.back' | transloco }}
-    </button>
-  </div>
-  <mat-card appearance="outlined" class="template-card">
+<div fxLayout="column" fxLayoutAlign="start center">
+  <app-loading-indicator *ngIf="isLoadingContentGroup"></app-loading-indicator>
+  <mat-card
+    *ngIf="!isLoadingContentGroup"
+    [appearance]="appearance"
+    class="template-card"
+  >
     <div
       fxLayout="row-wrap"
       fxLayoutAlign="space-between center"
       fxLayoutGap="1em"
     >
       <span class="template-name">{{ template.name }}</span>
-      <app-loading-button
-        (click)="add()"
-        [isDialog]="true"
-        name="templates.add"
-      >
-      </app-loading-button>
+      <app-add-template-button
+        [templateId]="template.id"
+        [roomId]="roomId"
+        (templateAddedToRoom)="afterRoomAdded()"
+      ></app-add-template-button>
     </div>
     <p class="template-description">{{ template.description }}</p>
     <div fxLayout="column" fxLayoutGap="1em">
@@ -34,8 +32,8 @@
           </mat-chip>
         </mat-chip-set>
       </div>
-      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-      <mat-list *ngIf="!isLoading">
+      <app-loading-indicator *ngIf="isLoadingContents"></app-loading-indicator>
+      <mat-list *ngIf="!isLoadingContents">
         <mat-list-item *ngFor="let content of contents" class="bottom-border">
           <div
             fxFill

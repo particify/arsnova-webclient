@@ -23,7 +23,7 @@ import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/f
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { TemplateService } from '@app/creator/_services/template.service';
-import { ContentGroupTemplateSelectionComponent } from './_dialogs/content-group-template-selection/content-group-template-selection.component';
+import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
@@ -49,6 +49,7 @@ import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-gr
     TemplateTagSelectionComponent,
     TemplateLanguageSelectionComponent,
     ContentGroupTemplatePreviewComponent,
+    ContentGroupTemplateSelectionComponent,
   ],
   declarations: [
     RoomComponent,
@@ -58,7 +59,6 @@ import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-gr
     SettingsPageComponent,
     AnnouncementSettingsComponent,
     CreatorPageComponent,
-    ContentGroupTemplateSelectionComponent,
   ],
   providers: [
     provideTranslocoScope('creator'),

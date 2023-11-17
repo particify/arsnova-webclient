@@ -40,12 +40,11 @@
           <button mat-stroked-button (click)="preview()">
             {{ 'templates.preview' | transloco }}
           </button>
-          <app-loading-button
-            (click)="use()"
-            [isDialog]="true"
-            name="templates.add"
-          >
-          </app-loading-button>
+          <app-add-template-button
+            [templateId]="template.id"
+            [roomId]="roomId"
+            (templateSelected)="use()"
+          ></app-add-template-button>
         </div>
       </div>
     </div>
