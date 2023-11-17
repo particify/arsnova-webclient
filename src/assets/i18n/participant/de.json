@@ -63,7 +63,8 @@
     "there-are-locked-contents": "Es sind {{count}} weitere Inhalte verfügbar, welche derzeit nicht freigegeben sind.",
     "there-is-one-locked-content": "Es ist {{count}} weiterer Inhalt verfügbar, welcher derzeit nicht freigegeben ist.",
     "new-round-started": "Es wurde eine neue Runde gestartet.",
-    "answers-reset": "Die Antworten wurden zurückgesetzt."
+    "answers-reset": "Die Antworten wurden zurückgesetzt.",
+    "attribution-info": "Dieser Inhalt basiert auf einer Vorlage von {{attribution}}, welche unter {{license}} lizenziert wurde."
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",

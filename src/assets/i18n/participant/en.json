@@ -63,7 +63,8 @@
     "there-are-locked-contents": "There are {{count}} more contents available, which are currently not released.",
     "there-is-one-locked-content": "There is {{count}} more content available, which is currently not released.",
     "new-round-started": "A new round has been started.",
-    "answers-reset": "Answers have been reset."
+    "answers-reset": "Answers have been reset.",
+    "attribution-info": "This content is based on a template by {{attribution}} which is licensed under {{license}}."
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",

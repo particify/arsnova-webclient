@@ -30,6 +30,8 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
+import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
+import { LICENSES } from '@app/core/models/licenses';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -71,6 +73,8 @@ export class ParticipantContentCarouselPageComponent
   isPureInfoSeries = false;
   hasAnsweredLastContent = false;
   showOverview = false;
+
+  attributions: ContentLicenseAttribution[];
 
   constructor(
     private contentService: ContentService,
@@ -125,6 +129,7 @@ export class ParticipantContentCarouselPageComponent
           (contentGroup) => {
             this.contentGroup = contentGroup;
             this.getContents(lastContentIndex);
+            this.loadAttributions();
           },
           () => {
             this.finishLoading();
@@ -162,6 +167,7 @@ export class ParticipantContentCarouselPageComponent
               this.contentGroup = group;
               this.isReloading = true;
               this.getContents();
+              this.loadAttributions();
             });
         }
       });
@@ -484,5 +490,35 @@ export class ParticipantContentCarouselPageComponent
         }
       }
     }
+  }
+
+  loadAttributions(): void {
+    this.contentgroupService
+      .getAttributions(this.contentGroup.roomId, this.contentGroup.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((attributions) => {
+        if (attributions.length > 0) {
+          this.attributions = attributions;
+        }
+      });
+  }
+
+  getAttribution(): string | undefined {
+    if (!this.attributions) {
+      return;
+    }
+    const attribution = this.attributions.find(
+      (a) => a.contentId === this.contents[this.currentStep].id
+    );
+    if (!attribution) {
+      return;
+    }
+    return this.translateService.translate(
+      'participant.content.attribution-info',
+      {
+        attribution: attribution.attribution,
+        license: LICENSES.get(attribution.license)?.name,
+      }
+    );
   }
 }

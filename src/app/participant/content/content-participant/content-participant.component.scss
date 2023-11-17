@@ -41,3 +41,14 @@ p {
   padding-top: 1px;
   margin-top: -1px;
 }
+
+.absolute-position {
+  position: absolute;
+  z-index: 1;
+}
+
+.attribution-button {
+  > mat-icon {
+    opacity: 0.5;
+  }
+}
