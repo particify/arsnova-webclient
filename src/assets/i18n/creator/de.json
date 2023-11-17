@@ -222,7 +222,8 @@
     "reset-banned-answers": "Gebannte Wörter zurücksetzen",
     "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt.",
     "start-new-round": "Neue Runde starten",
-    "starting-new-round-not-possible": "Aktuell können nur zwei Runden gestartet werden. Sobald die Antworten gelöscht wurden, kannst du erneut eine zweite Runde starten."
+    "starting-new-round-not-possible": "Aktuell können nur zwei Runden gestartet werden. Sobald die Antworten gelöscht wurden, kannst du erneut eine zweite Runde starten.",
+    "attribution-info-slide": "Info-Folie zu Lizenzen und Namensnennung"
   },
   "survey": {
     "a11y-stop-survey": "Stoppt das Live Feedback.",

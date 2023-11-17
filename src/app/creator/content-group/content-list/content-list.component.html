@@ -350,5 +350,16 @@
         </div>
       </div>
     </button>
+    <button
+      *ngIf="attributionsExist"
+      disableRipple
+      mat-list-item
+      [routerLink]="(this.contents.length + 1).toString()"
+    >
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+        <mat-icon class="type-icon">attribution</mat-icon>
+        <p>{{ 'creator.content.attribution-info-slide' | transloco }}</p>
+      </div>
+    </button>
   </mat-action-list>
 </div>

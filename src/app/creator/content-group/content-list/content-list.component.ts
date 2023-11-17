@@ -39,6 +39,7 @@ export class ContentListComponent implements OnInit, OnDestroy {
   @Input() contents: Content[];
   @Input() isModerator: boolean;
   @Input() contentGroupStats: ContentGroupStatistics[] = [];
+  @Input() attributionsExist = false;
 
   currentGroupIndex: number;
   contentTypes: string[] = Object.values(ContentType);
