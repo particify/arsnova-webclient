@@ -1,0 +1,57 @@
+<div fxLayout="row" fxLayoutAlign="start center" class="stepper-container">
+  <div class="desktop-buttons">
+    <ng-template [ngTemplateOutlet]="prevButton"></ng-template>
+  </div>
+  <mat-dialog-content class="dialog-content">
+    <app-stepper
+      [listLength]="data.contents.length"
+      [showSteps]="false"
+      (newIndex)="data.index = $event"
+      [fixedWitdth]="false"
+    >
+      <cdk-step *ngFor="let content of data.contents; let i = index">
+        <app-content-preview
+          [content]="content"
+          [renderAnswersDynamically]="false"
+          [showTitle]="false"
+        ></app-content-preview>
+      </cdk-step>
+    </app-stepper>
+  </mat-dialog-content>
+  <div class="desktop-buttons">
+    <ng-template [ngTemplateOutlet]="nextButton"></ng-template>
+  </div>
+</div>
+<mat-dialog-actions fxLayout="column" fxLayoutGap="1em">
+  <div class="mobile-buttons">
+    <div fxLayout="row" fxLayoutAlign="center">
+      <ng-template [ngTemplateOutlet]="prevButton"></ng-template>
+      <ng-template [ngTemplateOutlet]="nextButton"></ng-template>
+    </div>
+  </div>
+  <div fxFill fxLayout="row" fxLayoutAlign="end">
+    <button mat-button matDialogClose>{{ 'dialog.close' | transloco }}</button>
+  </div>
+</mat-dialog-actions>
+
+<ng-template #prevButton>
+  <button
+    mat-icon-button
+    [matTooltip]="'templates.previous-content' | transloco"
+    [disabled]="data.index === 0"
+    (click)="previousContent()"
+  >
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+</ng-template>
+
+<ng-template #nextButton>
+  <button
+    mat-icon-button
+    [matTooltip]="'templates.next-content' | transloco"
+    [disabled]="data.index === data.contents.length - 1"
+    (click)="nextContent()"
+  >
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</ng-template>

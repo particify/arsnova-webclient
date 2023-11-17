@@ -301,28 +301,9 @@ textarea {
   }
 }
 
-@media (max-width: 599px) {
-  .big-dialog-panel {
-    height: 100vh;
-    max-width: 100vw !important;
-  }
-}
-
-@media (min-width: 600px) {
-  .big-dialog-panel {
-    height: 80vh;
-    max-width: 92vw !important;
-    position: absolute !important;
-  }
-}
-
-@media (min-width: 1001px) {
-  .big-dialog-panel {
-    // This is needed to center dialog if there is a navigation rail on the left, 24px is dialog padding
-    left: calc(
-      calc(50vw - ($card-width / 2)) + ($navigation-rail-width / 2) - 24px
-    );
-  }
+.big-dialog-panel {
+  width: calc(100vw - $app-padding * 2);
+  max-width: $card-width !important;
 }
 
 .mat-mdc-dialog-title {

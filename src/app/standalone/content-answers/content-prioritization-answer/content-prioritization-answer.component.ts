@@ -1,8 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CoreModule } from '@app/core/core.module';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 
 @Component({
   selector: 'app-content-prioritization-answer',
+  standalone: true,
+  imports: [CoreModule, RenderedTextComponent],
   templateUrl: './content-prioritization-answer.component.html',
   styleUrls: ['./content-prioritization-answer.component.scss'],
 })

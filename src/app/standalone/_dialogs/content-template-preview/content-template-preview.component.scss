@@ -1,0 +1,21 @@
+@import '../../../../variables';
+
+@include lt-md {
+  .desktop-buttons {
+    display: none;
+  }
+}
+
+@include gt-md {
+  .mobile-buttons {
+    display: none;
+  }
+
+  .stepper-container {
+    padding: 20px 24px;
+  }
+
+  .dialog-content {
+    padding: 1em 1em 0;
+  }
+}

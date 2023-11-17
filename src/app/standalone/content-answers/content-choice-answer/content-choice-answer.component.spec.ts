@@ -9,7 +9,7 @@ describe('ContentChoiceAnswerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContentChoiceAnswerComponent],
+      imports: [ContentChoiceAnswerComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

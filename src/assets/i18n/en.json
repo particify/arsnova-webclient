@@ -543,6 +543,8 @@
     "use": "Use",
     "template-added": "The template has been added.",
     "preview": "Preview",
-    "back": "Back"
+    "back": "Back",
+    "previous-content": "Previous content",
+    "next-content": "Next content"
   }
 }

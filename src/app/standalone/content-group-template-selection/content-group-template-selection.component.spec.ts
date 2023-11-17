@@ -23,10 +23,10 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
-import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { Room } from '@app/core/models/room';
 
 describe('ContentGroupTemplateSelectionComponent', () => {
   let component: ContentGroupTemplateSelectionComponent;
@@ -87,6 +87,9 @@ describe('ContentGroupTemplateSelectionComponent', () => {
   Object.defineProperty(snapshot, 'params', {
     value: {},
   });
+  snapshot.data = {
+    room: new Room(),
+  };
   const activatedRoute = new ActivatedRouteStub(undefined, undefined, snapshot);
 
   beforeEach(() => {
@@ -98,7 +101,6 @@ describe('ContentGroupTemplateSelectionComponent', () => {
         getTranslocoModule(),
         TemplateLanguageSelectionComponent,
         TemplateTagSelectionComponent,
-        ContentGroupTemplatePreviewComponent,
         ContentGroupTemplateComponent,
       ],
       providers: [

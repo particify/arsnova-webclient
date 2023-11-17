@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { ContentTextAnswerComponent } from './content-text-answer.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ContentTextAnswerComponent', () => {
   let component: ContentTextAnswerComponent;
@@ -10,8 +11,11 @@ describe('ContentTextAnswerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [getTranslocoModule()],
-      declarations: [ContentTextAnswerComponent],
+      imports: [
+        ContentTextAnswerComponent,
+        BrowserAnimationsModule,
+        getTranslocoModule(),
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

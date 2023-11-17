@@ -1,21 +1,13 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  OnDestroy,
-  OnInit,
-  Optional,
-} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
+import { Room } from '@app/core/models/room';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { FormService } from '@app/core/services/util/form.service';
-import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -30,7 +22,6 @@ import { Subject, takeUntil } from 'rxjs';
     CoreModule,
     TemplateLanguageSelectionComponent,
     TemplateTagSelectionComponent,
-    ContentGroupTemplatePreviewComponent,
     ContentGroupTemplateComponent,
     LoadingIndicatorComponent,
   ],
@@ -50,17 +41,12 @@ export class ContentGroupTemplateSelectionComponent
   selectedTags: TemplateTag[] = [];
   langChanged = new EventEmitter<string>();
   showPublic = true;
-  previewTemplate: ContentGroupTemplate | undefined;
   creatorId: string;
-  previewTemplateId?: string;
   tagIdsQueryParams: string[] = [];
+  room?: Room;
 
   constructor(
     protected formService: FormService,
-    @Optional()
-    private dialogRef: MatDialogRef<ContentGroupTemplateSelectionComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: { roomId: string },
     private templateService: BaseTemplateService,
     private translateService: TranslocoService,
     private authService: AuthenticationService,
@@ -71,6 +57,7 @@ export class ContentGroupTemplateSelectionComponent
   }
 
   ngOnInit(): void {
+    this.room = this.route.snapshot.data.room;
     const queryParams = this.route.snapshot.queryParams;
     // If lang is set via query param, use this one instead of active lang as default
     this.selectedLang =
@@ -80,17 +67,6 @@ export class ContentGroupTemplateSelectionComponent
         this.route.snapshot.queryParamMap.getAll('tagIds');
     } else {
       this.loadTemplates();
-    }
-    this.previewTemplateId = this.route.snapshot.params.templateId;
-    if (this.previewTemplateId) {
-      this.templateService
-        .getContentGroupTemplate(this.previewTemplateId)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((template) => {
-          this.previewTemplate = template;
-          this.loadingTemplates = false;
-        });
-      return;
     }
     this.authService
       .getCurrentAuthentication()
@@ -102,10 +78,6 @@ export class ContentGroupTemplateSelectionComponent
 
   ngOnDestroy(): void {
     this.destroyed$.next();
-  }
-
-  closeDialog(): void {
-    this.dialogRef.close();
   }
 
   updateTags(tags: TemplateTag[]): void {
@@ -123,17 +95,11 @@ export class ContentGroupTemplateSelectionComponent
 
   showPreview(templateId: string): void {
     const template = this.templates.find((t) => t.id === templateId);
-    if (this.data.roomId) {
-      if (template) {
-        this.previewTemplateId = templateId;
-        this.previewTemplate = template;
-      }
-    } else {
-      this.router.navigate([templateId], {
-        relativeTo: this.route,
-        state: { data: { template: template } },
-      });
-    }
+
+    this.router.navigate([templateId], {
+      relativeTo: this.route,
+      state: { data: { template: template } },
+    });
   }
 
   updateLanguage(lang: string): void {

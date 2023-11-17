@@ -60,6 +60,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() allowNavigation = true;
   @Input() listLength: number;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
+  @Input() fixedWitdth = true;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';

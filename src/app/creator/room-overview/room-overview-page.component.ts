@@ -15,11 +15,9 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup } from '@app/core/models/content-group';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-overview-page';
-import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 @Component({
   selector: 'app-creator-overview',
   templateUrl: './room-overview-page.component.html',
@@ -89,12 +87,12 @@ export class RoomOverviewPageComponent
       });
   }
 
-  openTemplateSelectionDialog() {
-    this.dialogService.openDialog(ContentGroupTemplateSelectionComponent, {
-      panelClass: 'big-dialog-panel',
-      data: {
-        roomId: this.room.id,
-      },
-    });
+  navigateToTemplateSelection() {
+    console.log(this.routingService.getRoleRoute(UserRole.EDITOR));
+    this.router.navigate([
+      this.routingService.getRoleRoute(UserRole.EDITOR),
+      this.room.shortId,
+      'templates',
+    ]);
   }
 }

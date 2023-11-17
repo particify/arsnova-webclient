@@ -198,10 +198,10 @@
             [ngClass]="{ 'invisible-card-content': !flipped }"
             class="back side"
           >
-            <app-preview
+            <app-content-preview
               *ngIf="flipped && content"
               [content]="content"
-            ></app-preview>
+            ></app-content-preview>
           </div>
           <div
             [ngStyle]="{ transform: flipped ? 'rotateY(180deg)' : '' }"

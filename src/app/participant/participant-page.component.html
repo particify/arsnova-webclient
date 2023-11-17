@@ -21,8 +21,10 @@
         id="routing-content"
         [ngClass]="{ 'no-navigation': focusModeEnabled }"
       >
-        <div class="routing-container">
-          <router-outlet></router-outlet>
+        <div fxLayout="row" fxLayoutAlign="center">
+          <div class="routing-container">
+            <router-outlet></router-outlet>
+          </div>
         </div>
         <app-footer class="footer"></app-footer>
       </mat-drawer-content>
