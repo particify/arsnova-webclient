@@ -65,7 +65,6 @@ describe('ContentPreviewComponent', () => {
           ContentType.CHOICE,
           {}
         );
-        component.isLoading = false;
         fixture.detectChanges();
       });
   }));
