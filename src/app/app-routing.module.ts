@@ -19,6 +19,8 @@ import { DemoRoomGuard } from '@app/core/guards/demo-room.guard';
 import { UserProfileComponent } from '@app/core/components/user-profile/user-profile.component';
 import { RedeemTokenComponent } from '@app/core/components/redeem-token/redeem-token.component';
 import { ParentRoute } from '@app/core/models/parent-route';
+import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
+import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 
 const routes: Routes = [
   {
@@ -69,6 +71,17 @@ const routes: Routes = [
       parentRoute: ParentRoute.HOME,
     },
   },
+  {
+    path: 'templates',
+    component: ContentGroupTemplateSelectionComponent,
+    title: 'templates',
+  },
+  {
+    path: 'templates/:templateId',
+    component: ContentGroupTemplatePreviewComponent,
+    title: 'templates',
+  },
+
   {
     path: 'join/:shortId',
     redirectTo: 'p/:shortId',

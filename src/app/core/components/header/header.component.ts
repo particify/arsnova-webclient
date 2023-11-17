@@ -217,6 +217,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigateByUrl('account/user');
   }
 
+  navToTemplates() {
+    this.router.navigateByUrl('templates');
+  }
+
   toggleTheme() {
     this.themeService.toggleTheme();
     this.currentTheme = this.themeService.getCurrentTheme();

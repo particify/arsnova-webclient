@@ -56,7 +56,8 @@
     "editing-view": "Edit",
     "room-settings": "Room settings",
     "present": "Present",
-    "presentation-mode": "Presentation mode"
+    "presentation-mode": "Presentation mode",
+    "public-templates": "Public templates"
   },
   "home-page": {
     "a11y-join-button": "Enter the room with the specified room number.",
@@ -262,7 +263,8 @@
     "settings": "Settings",
     "admin": "Administration",
     "presentation-mode": "Presentation",
-    "account": "My account"
+    "account": "My account",
+    "templates": "Public templates"
   },
   "comment-export": {
     "answer": "Answer",

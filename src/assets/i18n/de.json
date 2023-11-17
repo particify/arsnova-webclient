@@ -56,7 +56,8 @@
     "editing-view": "Bearbeiten",
     "room-settings": "Raumeinstellungen",
     "present": "Präsentieren",
-    "presentation-mode": "Präsentationsmodus"
+    "presentation-mode": "Präsentationsmodus",
+    "public-templates": "Öffentliche Vorlagen"
   },
   "home-page": {
     "a11y-join-button": "Betritt den Raum, von welchem du die Nummer eingegeben hast.",
@@ -262,7 +263,8 @@
     "settings": "Einstellungen",
     "admin": "Administration",
     "presentation-mode": "Präsentation",
-    "account": "Mein Account"
+    "account": "Mein Account",
+    "templates": "Öffentliche Vorlagen"
   },
   "comment-export": {
     "answer": "Antwort",
@@ -541,6 +543,8 @@
     "use": "Verwenden",
     "template-added": "Die Vorlage wurde hinzugefügt.",
     "preview": "Vorschau",
-    "back": "Zurück"
+    "back": "Zurück",
+    "previous-content": "Vorheriger Inhalt",
+    "next-content": "Nächster Inhalt"
   }
 }

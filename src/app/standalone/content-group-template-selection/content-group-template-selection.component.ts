@@ -13,8 +13,8 @@ import { CoreModule } from '@app/core/core.module';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { FormService } from '@app/core/services/util/form.service';
-import { TemplateService } from '@app/creator/_services/template.service';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -61,7 +61,7 @@ export class ContentGroupTemplateSelectionComponent
     private dialogRef: MatDialogRef<ContentGroupTemplateSelectionComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: { roomId: string },
-    private templateService: TemplateService,
+    private templateService: BaseTemplateService,
     private translateService: TranslocoService,
     private authService: AuthenticationService,
     private router: Router,
