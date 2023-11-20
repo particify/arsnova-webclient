@@ -16,10 +16,11 @@ import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { Location } from '@angular/common';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup } from '@app/core/models/content-group';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '@app/core/services/http/user.service';
 import { UserSettings } from '@app/core/models/user-settings';
 import { Room } from '@app/core/models/room';
+import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 
 @Component({
   selector: 'app-content-presentation',
@@ -40,6 +41,8 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   indexChanged: EventEmitter<void> = new EventEmitter<void>();
   contentGroup: ContentGroup;
   settings: UserSettings;
+  attributions: ContentLicenseAttribution[];
+  stepCount = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -98,10 +101,20 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
             .subscribe((contents) => {
               this.contents =
                 this.contentService.getSupportedContents(contents);
-              this.isLoading = false;
-              setTimeout(() => {
-                this.stepper.init(this.currentStep, this.contents.length);
-              }, 0);
+              this.stepCount = this.contents.length;
+              this.contentGroupService
+                .getAttributions(this.room.id, this.contentGroup.id)
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe((attributions) => {
+                  if (attributions.length > 0) {
+                    this.attributions = attributions;
+                    this.stepCount++;
+                  }
+                  this.isLoading = false;
+                  setTimeout(() => {
+                    this.stepper.init(this.currentStep, this.stepCount);
+                  }, 0);
+                });
             });
         } else {
           this.isLoading = false;

@@ -45,10 +45,15 @@
             [ngClass]="{
               'primary-background primary-border': selectedIndex === i,
               'primary primary-border': completed.get(i) && selectedIndex !== i,
-              last: i === listLength
+              last: i === listLength - 1
             }"
           >
-            <span>{{ i + 1 }}</span>
+            <span *ngIf="!additionalStepIcon || i < listLength - 1">{{
+              i + 1
+            }}</span>
+            <mat-icon *ngIf="additionalStepIcon && i === listLength - 1">{{
+              additionalStepIcon
+            }}</mat-icon>
           </button>
         </div>
         <span class="fill-remaining-space"></span>

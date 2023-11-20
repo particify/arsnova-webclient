@@ -9,6 +9,7 @@ import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ContentsRoutingModule } from '@app/presentation/contents/contents-routing.module';
 import { ContentsPageComponent } from '@app/presentation/contents/contents-page.component';
+import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
 
 @NgModule({
   declarations: [ContentsPageComponent, PublishContentComponent],
@@ -20,6 +21,7 @@ import { ContentsPageComponent } from '@app/presentation/contents/contents-page.
     AnswerCountComponent,
     StepperComponent,
     CdkStepperModule,
+    AttributionsInfoComponent,
   ],
 })
 export class ContentModule {}

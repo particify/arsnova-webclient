@@ -5,7 +5,7 @@
   fxLayoutAlign="center center"
 >
   <p class="step-info">
-    {{ this.currentStep + 1 + ' / ' + this.contents.length }}
+    {{ currentStep + 1 + ' / ' + stepCount }}
   </p>
 </div>
 <app-answer-count
@@ -33,7 +33,7 @@
     <app-stepper
       *ngIf="contents && contents.length > 0 && !isLoading"
       (newIndex)="updateURL($event)"
-      [listLength]="contents.length"
+      [listLength]="stepCount"
       [showSteps]="false"
     >
       <cdk-step *ngFor="let content of contents; let i = index">
@@ -57,6 +57,16 @@
         </div>
         <div tabindex="0" class="visually-hidden">
           {{ 'statistic.a11y-no-more-answers' | transloco }}
+        </div>
+      </cdk-step>
+      <cdk-step *ngIf="!!attributions">
+        <div fxLayoutAlign="center" id="step">
+          <mat-card class="presentation-card">
+            <app-attributions-info
+              [attributions]="attributions"
+              [contents]="contents"
+            ></app-attributions-info>
+          </mat-card>
         </div>
       </cdk-step>
     </app-stepper>

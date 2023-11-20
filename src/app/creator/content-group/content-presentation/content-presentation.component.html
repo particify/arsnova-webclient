@@ -7,7 +7,8 @@
     <app-stepper
       *ngIf="!isLoading"
       (newIndex)="updateURL($event)"
-      [listLength]="contents.length"
+      [listLength]="stepCount"
+      [additionalStepIcon]="!!attributions ? 'attribution' : undefined"
     >
       <cdk-step *ngFor="let content of contents; let i = index">
         <div id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
@@ -28,6 +29,16 @@
         </div>
         <div tabindex="0" class="visually-hidden">
           {{ 'statistic.a11y-no-more-answers' | transloco }}
+        </div>
+      </cdk-step>
+      <cdk-step *ngIf="!!attributions">
+        <div id="step">
+          <mat-card>
+            <app-attributions-info
+              [attributions]="attributions"
+              [contents]="contents"
+            ></app-attributions-info>
+          </mat-card>
         </div>
       </cdk-step>
     </app-stepper>

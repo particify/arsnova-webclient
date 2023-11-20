@@ -140,6 +140,7 @@
         <mat-menu #moreMenu="matMenu">
           <ng-container>
             <button
+              *ngIf="content"
               mat-menu-item
               (click)="editContent()"
               attr.aria-label="{{
