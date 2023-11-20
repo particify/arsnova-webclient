@@ -5,7 +5,7 @@ import {
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { UpdateAvailableEvent } from '@angular/service-worker';
+import { VersionReadyEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { ContentGroupCreationComponent } from '@app/creator/_dialogs/content-group-creation/content-group-creation.component';
@@ -126,7 +126,7 @@ export class DialogService {
   openUpdateInfoDialog(
     afterUpdate: boolean,
     versions?: VersionInfo[],
-    updateAvailable?: Observable<UpdateAvailableEvent>
+    updateAvailable?: Observable<VersionReadyEvent>
   ): MatDialogRef<UpdateInfoComponent> {
     return this.openDialog(UpdateInfoComponent, {
       width: this.size.medium,
