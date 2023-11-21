@@ -6723,11 +6723,11 @@ __metadata:
   linkType: hard
 
 "@types/d3-cloud@npm:^1.2.5":
-  version: 1.2.8
-  resolution: "@types/d3-cloud@npm:1.2.8"
+  version: 1.2.9
+  resolution: "@types/d3-cloud@npm:1.2.9"
   dependencies:
     "@types/d3": "npm:^3"
-  checksum: 04f2599d8b8d4c6f5ab5cf656d7df8f8438c50ac170388c470a330d172e93d857f0f73dee9c72b1cc719d6106677081a4a8c3ac63e0cba8e5b21589bcf1df998
+  checksum: bb8dd363a7bb330db07ba5fa6cff5c73db6359b5b9fb2570fa1ac45911ec5b46f83d022d12a2c847da51fc2f894d887d60674bc8aa77cbb4dabafd0500f1e72c
   languageName: node
   linkType: hard
 
