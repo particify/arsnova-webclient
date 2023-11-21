@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { TranslocoService } from '@ngneat/transloco';
-import { take, tap } from 'rxjs/operators';
+import { filter, take, tap } from 'rxjs/operators';
 import { UpdateInstalled } from '@app/core/models/events/update-installed';
 import { UpdateImportance, VersionInfo } from '@app/core/models/version-info';
 import { DialogService } from './dialog.service';
@@ -67,10 +67,11 @@ export class UpdateService {
       console.log('No updates announced.');
     }
 
-    const updateReady$ = this.update.available.pipe(
-      tap(() => {
-        this.handleUpdateReady(currentVersion, latestVersion, this.importance);
-      })
+    const updateReady$ = this.update.versionUpdates.pipe(
+      filter((e): e is VersionReadyEvent => e.type === 'VERSION_READY'),
+      tap(() =>
+        this.handleUpdateReady(currentVersion, latestVersion, this.importance)
+      )
     );
 
     switch (this.importance) {

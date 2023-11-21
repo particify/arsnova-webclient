@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import {
   ServiceWorkerModule,
   SwUpdate,
-  UpdateAvailableEvent,
+  VersionReadyEvent,
 } from '@angular/service-worker';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -25,10 +25,10 @@ class MockDialogService {
 
 @Injectable()
 class MockSwUpdate extends SwUpdate {
-  private availableSubject = new Subject<UpdateAvailableEvent>();
+  private versionUpdatesSubject = new Subject<VersionReadyEvent>();
 
-  public available: Observable<UpdateAvailableEvent> =
-    this.availableSubject.asObservable();
+  public versionUpdates: Observable<VersionReadyEvent> =
+    this.versionUpdatesSubject.asObservable();
 }
 
 describe('UpdateService', () => {

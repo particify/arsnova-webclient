@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { UpdateAvailableEvent } from '@angular/service-worker';
+import { VersionReadyEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
 import { VersionInfo } from '@app/core/models/version-info';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -13,7 +13,7 @@ interface DialogData {
   afterUpdate: boolean;
   latestVersion?: VersionInfo;
   versions?: VersionInfo[];
-  updateAvailable?: Observable<UpdateAvailableEvent>;
+  updateAvailable?: Observable<VersionReadyEvent>;
 }
 
 @Component({
