@@ -1,16 +1,11 @@
-<div
-  mat-dialog-content
-  fxLayout="column"
-  fxLayoutAlign="center"
-  fxLayoutGap="16px"
->
+<div mat-dialog-content fxLayout="column" fxLayoutGap="16px">
   <button mat-icon-button (click)="close()" aria-labelledby="exit">
     <mat-icon class="exit-icon">arrow_back</mat-icon>
   </button>
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{ 'creator.comment-page.a11y-message-answer' | a11yIntro | async }}
   </div>
-  <div fxFill fxLayout="column" fxLayoutGap="10px">
+  <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
     <div fxLayout="row" fxLayoutAlign="center">
       <mat-card>
         <app-date
