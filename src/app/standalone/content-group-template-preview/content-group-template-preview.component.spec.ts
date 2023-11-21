@@ -17,6 +17,7 @@ import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ApiConfig } from '@app/core/models/api-config';
+import { ViolationReportService } from '@app/core/services/http/violation-report.service';
 
 describe('ContentGroupTemplatePreviewComponent', () => {
   let component: ContentGroupTemplatePreviewComponent;
@@ -54,6 +55,11 @@ describe('ContentGroupTemplatePreviewComponent', () => {
     of(new ApiConfig([], {}, {}))
   );
 
+  const mockViolationReportService = jasmine.createSpyObj(
+    ViolationReportService,
+    ['postViolationReport']
+  );
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -87,6 +93,10 @@ describe('ContentGroupTemplatePreviewComponent', () => {
         {
           provide: ApiConfigService,
           useValue: mockApiConfigService,
+        },
+        {
+          provide: ViolationReportService,
+          useValue: mockViolationReportService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

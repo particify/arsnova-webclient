@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>
+  {{ 'violation-report.report-' + targetTypeString | transloco }}
+</h2>
+<div mat-dialog-content>
+  <form fxLayout="column" fxLayoutGap="1em" [formGroup]="formGroup">
+    <p>
+      {{
+        'violation-report.please-select-reason-and-enter-description'
+          | transloco
+      }}
+    </p>
+    <mat-radio-group
+      fxLayout="column"
+      fxLayoutAlign="center"
+      formControlName="reason"
+      [(ngModel)]="selectedReason"
+    >
+      <mat-radio-button *ngFor="let reason of reasons" [value]="reason">
+        {{ 'violation-report.reason-' + getReasonString(reason) | transloco }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'violation-report.description' | transloco }}</mat-label>
+      <textarea
+        matInput
+        [(ngModel)]="description"
+        #descriptionInput
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="3"
+        cdkAutosizeMaxRows="10"
+        maxlength="500"
+        formControlName="description"
+      ></textarea>
+      <mat-hint align="end"
+        ><span aria-hidden="true"
+          >{{ description?.length || 0 }} / 500</span
+        ></mat-hint
+      >
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button matDialogClose>{{ 'dialog.close' | transloco }}</button>
+  <app-loading-button
+    (clicked)="sendReport()"
+    [name]="'violation-report.send'"
+  ></app-loading-button>
+</div>

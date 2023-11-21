@@ -22,6 +22,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { ViolationReportComponent } from '@app/standalone/_dialogs/violation-report/violation-report.component';
 
 @Component({
   standalone: true,
@@ -119,5 +120,15 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
       'templates.template-link-copied'
     );
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+  }
+
+  reportTemplate(): void {
+    this.dialog.open(ViolationReportComponent, {
+      width: '600px',
+      data: {
+        targetId: this.template.id,
+        targetType: ContentGroupTemplate.name,
+      },
+    });
   }
 }
