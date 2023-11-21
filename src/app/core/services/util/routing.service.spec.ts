@@ -2,12 +2,13 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { MockGlobalStorageService } from '@testing/test-helpers';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlSegment } from '@angular/router';
 import { Location } from '@angular/common';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
 import { ParentRoute } from '@app/core/models/parent-route';
+import { ApiConfig } from '@app/core/models/api-config';
 
 class MockLocation {
   back = jasmine.createSpy('BackSpy');
@@ -133,6 +134,34 @@ describe('RoutingService', () => {
       service.getBackRoute(snapshot, UserRole.PARTICIPANT);
       service.goBack();
       expect(location.back).toHaveBeenCalled();
+    }
+  ));
+
+  it('should return correct route when calling getRoute with no shortener and url array', inject(
+    [RoutingService],
+    (service: RoutingService) => {
+      const url = ['segment1', 'segment2'];
+      const config: ApiConfig = {
+        authenticationProviders: [],
+        features: {},
+        ui: { links: {} },
+      };
+      const route = service.getRoute(url, config);
+      expect(route).toBe(document.baseURI + 'segment1/segment2');
+    }
+  ));
+
+  it('should return correct route when calling getRoute with shortener and url array', inject(
+    [RoutingService],
+    (service: RoutingService) => {
+      const url = ['segment1', 'segment2'];
+      const config: ApiConfig = {
+        authenticationProviders: [],
+        features: {},
+        ui: { links: { join: { url: 'https://short/' } } },
+      };
+      const route = service.getRoute(url, config);
+      expect(route).toBe('https://short/segment1/segment2');
     }
   ));
 });

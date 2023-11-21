@@ -15,6 +15,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { ApiConfig } from '@app/core/models/api-config';
 
 describe('ContentGroupTemplatePreviewComponent', () => {
   let component: ContentGroupTemplatePreviewComponent;
@@ -42,8 +44,15 @@ describe('ContentGroupTemplatePreviewComponent', () => {
   );
 
   const mockRoutingService = jasmine.createSpyObj(RoutingService, [
-    'getRoleRoute',
+    'getCurrentRoute',
   ]);
+
+  const mockApiConfigService = jasmine.createSpyObj(ApiConfigService, [
+    'getApiConfig$',
+  ]);
+  mockApiConfigService.getApiConfig$.and.returnValue(
+    of(new ApiConfig([], {}, {}))
+  );
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -74,6 +83,10 @@ describe('ContentGroupTemplatePreviewComponent', () => {
         {
           provide: RoutingService,
           useValue: mockRoutingService,
+        },
+        {
+          provide: ApiConfigService,
+          useValue: mockApiConfigService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

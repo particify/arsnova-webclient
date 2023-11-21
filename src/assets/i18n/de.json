@@ -546,6 +546,8 @@
     "preview": "Vorschau",
     "back": "Zurück",
     "previous-content": "Vorheriger Inhalt",
-    "next-content": "Nächster Inhalt"
+    "next-content": "Nächster Inhalt",
+    "copy-template-link": "Link zu Vorlage kopieren",
+    "template-link-copied": "Link zu Vorlage in Zwischenablage kopiert."
   }
 }

@@ -72,6 +72,10 @@ const routes: Routes = [
     },
   },
   {
+    path: 't',
+    redirectTo: 'templates',
+  },
+  {
     path: 'templates',
     component: ContentGroupTemplateSelectionComponent,
     title: 'templates',

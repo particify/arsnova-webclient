@@ -5,6 +5,7 @@ import { filter, map } from 'rxjs/operators';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { ParentRoute } from '@app/core/models/parent-route';
+import { ApiConfig } from '@app/core/models/api-config';
 
 enum RoutePrefix {
   CREATOR = 'edit',
@@ -229,5 +230,9 @@ export class RoutingService {
 
   removeProtocolFromUrl(url: string): string {
     return url.replace(/^https?:\/\//, '');
+  }
+
+  getRoute(url: string[], config: ApiConfig): string {
+    return (config.ui.links?.join?.url || document.baseURI) + url.join('/');
   }
 }
