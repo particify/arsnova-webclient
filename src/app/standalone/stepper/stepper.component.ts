@@ -61,6 +61,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() listLength: number;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
   @Input() fixedWitdth = true;
+  @Input() additionalStepIcon?: string;
   headerPos = 0;
   containerAnimationState = 'current';
   headerAnimationState = 'init';

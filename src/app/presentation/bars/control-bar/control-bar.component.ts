@@ -349,7 +349,9 @@ export class ControlBarComponent
       this.contentStepState = state.position;
       this.contentIndex = state.index;
       this.content = state.content;
-      this.contentRounds.set(this.content.id, this.content.state.round - 1);
+      if (this.content) {
+        this.contentRounds.set(this.content.id, this.content.state.round - 1);
+      }
       this.globalStorageService.setItem(
         STORAGE_KEYS.LAST_INDEX,
         this.contentIndex

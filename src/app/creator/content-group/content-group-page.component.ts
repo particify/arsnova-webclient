@@ -4,6 +4,7 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
 import { ContentGroup } from '@app/core/models/content-group';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
+import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -51,6 +52,8 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   isGuest = true;
 
   onInit = false;
+
+  attributionsExist = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -131,6 +134,12 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
                 );
               }
               this.isLoading = false;
+            });
+          this.contentGroupService
+            .getAttributions(this.room.id, this.contentGroup.id)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((attributions) => {
+              this.attributionsExist = attributions.length > 0;
             });
         } else {
           this.isLoading = false;

@@ -30,6 +30,7 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
 import { PublishContentComponent } from '@app/presentation/contents/_dialogs/publish-content/publish-content.component';
+import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 
 @Component({
   selector: 'app-contents-page',
@@ -54,6 +55,8 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   contentGroup: ContentGroup;
   canAnswerContent = false;
   settings: UserSettings;
+  attributions: ContentLicenseAttribution[];
+  stepCount = 0;
 
   private hotkeyRefs: symbol[] = [];
 
@@ -136,13 +139,23 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
               if (this.entryIndex > -1) {
                 this.contentIndex = initial ? this.entryIndex : 0;
                 this.currentStep = this.contentIndex;
-                setTimeout(() => {
-                  this.stepper?.init(this.contentIndex, this.contents.length);
-                  this.updateURL(this.contentIndex, true);
-                  if (!initial) {
-                    this.updateStateChange();
-                  }
-                }, 0);
+                this.stepCount = this.contents.length;
+                this.contentGroupService
+                  .getAttributions(this.room.id, this.contentGroup.id)
+                  .pipe(takeUntil(this.destroyed$))
+                  .subscribe((attributions) => {
+                    if (attributions.length > 0) {
+                      this.attributions = attributions;
+                      this.stepCount++;
+                    }
+                    setTimeout(() => {
+                      this.stepper?.init(this.contentIndex, this.stepCount);
+                      this.updateURL(this.contentIndex, true);
+                      if (!initial) {
+                        this.updateStateChange();
+                      }
+                    }, 0);
+                  });
               }
               this.sendContentStepState();
             });
@@ -199,6 +212,13 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.currentStep = index;
     const urlIndex = index + 1;
     this.updateRoute('present', urlIndex);
+    this.sendContentStepState();
+    if (
+      this.attributions.length > 0 &&
+      this.currentStep === this.stepCount - 1
+    ) {
+      return;
+    }
     this.updateStateChange();
     this.canAnswerContent = ![
       ContentType.SLIDE,
@@ -207,7 +227,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     if (index !== this.entryIndex) {
       this.contentIndex = -1;
     }
-    this.sendContentStepState();
     setTimeout(() => {
       this.indexChanged.emit();
     }, 300);
@@ -236,7 +255,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       index = this.currentStep;
       position = this.presentationService.getStepState(
         this.currentStep,
-        this.contents.length
+        this.stepCount
       );
       const state = new ContentPresentationState(
         position,

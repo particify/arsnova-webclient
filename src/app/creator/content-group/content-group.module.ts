@@ -36,6 +36,7 @@ import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
+import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-gr
     BaseCardComponent,
     ContentGroupTemplateEditingComponent,
     ContentPreviewComponent,
+    AttributionsInfoComponent,
   ],
 })
 export class ContentGroupModule {}
