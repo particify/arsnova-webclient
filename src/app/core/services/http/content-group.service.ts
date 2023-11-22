@@ -18,6 +18,7 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
 import { AnswerResultOverview } from '@app/core/models/answer-result';
 import { SeriesCreated } from '@app/core/models/events/series-created';
 import { SeriesDeleted } from '@app/core/models/events/series-deleted';
+import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -219,5 +220,13 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
           this.handleError<AnswerResultOverview>('getAnswerResultOverview')
         )
       );
+  }
+
+  getAttributions(
+    roomId: string,
+    groupId: string
+  ): Observable<ContentLicenseAttribution[]> {
+    const connectionUrl = this.buildUri(`/${groupId}/attributions`, roomId);
+    return this.http.get<ContentLicenseAttribution[]>(connectionUrl);
   }
 }

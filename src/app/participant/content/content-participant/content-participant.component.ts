@@ -14,6 +14,7 @@ import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 
 @Component({
   selector: 'app-content-participant',
@@ -31,6 +32,7 @@ export class ContentParticipantComponent
   @Input() index: number;
   @Input() statsPublished: boolean;
   @Input() correctOptionsPublished: boolean;
+  @Input() attribution?: string;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<boolean>();
 
