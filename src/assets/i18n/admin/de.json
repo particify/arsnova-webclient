@@ -81,10 +81,29 @@
     "tag-has-been-verified": "Tag wurde verifiziert.",
     "tag-verification-has-been-removed": "Verifizierung wurde entfernt.",
     "tag-deleted": "Tag wurde gelöscht.",
-    "changes-have-been-saved": "Änderungen wurden gespeichert."
+    "changes-have-been-saved": "Änderungen wurden gespeichert.",
+    "reported-contents": "Gemeldete Inhalte",
+    "open": "Offen",
+    "no-reports-open": "Keine offenen Meldungen.",
+    "no-reports-closed": "Keine geschlossenen Meldungen.",
+    "view-template": "Vorlage ansehen",
+    "type": "Typ",
+    "reason": "Grund",
+    "description": "Beschreibung",
+    "decision": "Entscheidung",
+    "invalid": "Meldung ungültig",
+    "removal": "Inhalt gelöscht",
+    "dismiss-report": "Meldung ablehnen",
+    "delete-template": "Vorlage löschen",
+    "confirm": "Bestätigen",
+    "report-has-been-dismissed": "Meldung wurde abgelehnt.",
+    "report-has-been-confirmed": "Meldung wurde bestätigt."
   },
   "dialog": {
     "really-delete-account-admin": "Willst du das Konto mit allen Räumen unwiderruflich löschen?",
-    "really-delete-tag": "Willst du den folgenden Tag wirklich löschen?"
+    "really-delete-tag": "Willst du den folgenden Tag wirklich löschen?",
+    "really-dismiss-report": "Willst du die Meldung wirklich ablehnen?",
+    "really-confirm-report": "Willst du die Meldung wirklich bestätigen?",
+    "reported-content-will-be-deleted": "Achtung: Der gemeldete Inhalt wird unwiderruflich gelöscht."
   }
 }

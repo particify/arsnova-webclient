@@ -23,6 +23,7 @@ import { TemplateManagementComponent } from '@app/admin/template-management/temp
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
 import { TemplateService } from '@app/admin/template-management/template.service';
 import { NavigationDrawerComponent } from '@app/standalone/navigation-drawer/navigation-drawer.component';
+import { ReportManagementComponent } from '@app/admin/report-management/report-management.component';
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import { NavigationDrawerComponent } from '@app/standalone/navigation-drawer/nav
     HealthStatusComponent,
     UserSearchComponent,
     TemplateManagementComponent,
+    ReportManagementComponent,
   ],
   providers: [provideTranslocoScope('admin'), AdminService, TemplateService],
 })

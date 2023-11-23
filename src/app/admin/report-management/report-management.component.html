@@ -1,0 +1,83 @@
+<div fxLayout="row" fxLayoutAlign="space-between">
+  <app-admin-page-header headerText="reported-contents"></app-admin-page-header>
+</div>
+
+<div fxLayout="column" fxLayoutGap="1em">
+  <mat-tab-group
+    (selectedTabChange)="switchList($event.index)"
+    [selectedIndex]="selectedTab"
+    [dynamicHeight]="true"
+  >
+    <mat-tab [label]="'admin.admin-area.open' | transloco"></mat-tab>
+    <mat-tab [label]="'admin.admin-area.closed' | transloco"></mat-tab>
+  </mat-tab-group>
+
+  <p *ngIf="!isLoading && reports.length === 0" class="hint">
+    {{
+      'admin.admin-area.no-reports-' + (selectedTab === 0 ? 'open' : 'closed')
+        | transloco
+    }}
+  </p>
+
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <div
+    *ngIf="!isLoading && reports.length > 0"
+    fxLayout="column"
+    fxLayoutGap="10px"
+  >
+    <mat-card appearance="outlined" *ngFor="let report of reports">
+      <div>
+        <p>
+          {{ 'admin.admin-area.type' | transloco }}:
+          {{
+            'violation-report.' + getTargetType(report.targetType) | transloco
+          }}
+        </p>
+        <p>
+          {{ 'admin.admin-area.reason' | transloco }}:
+          {{
+            'violation-report.reason-' + getReasonString(report.reason)
+              | transloco
+          }}
+        </p>
+        <p>
+          {{ 'admin.admin-area.description' | transloco }}:
+          {{ report.description }}
+        </p>
+        <p *ngIf="report.decision">
+          {{ 'admin.admin-area.decision' | transloco }}:
+          {{ 'admin.admin-area.' + report.decision.toLowerCase() | transloco }}
+        </p>
+      </div>
+      <div
+        *ngIf="!report.decision"
+        fxLayout="row"
+        fxLayoutAlign="space-between"
+        fxLayoutGap="10px"
+      >
+        <button
+          mat-button
+          color="primary"
+          (click)="goToReportedContent(report)"
+        >
+          <mat-icon>open_in_new</mat-icon>
+          {{
+            'admin.admin-area.view-' + getTargetType(report.targetType)
+              | transloco
+          }}
+        </button>
+        <div fxLayoutGap="10px">
+          <button mat-stroked-button (click)="openSubmitDialog(report, false)">
+            {{ 'admin.admin-area.dismiss-report' | transloco }}
+          </button>
+          <button mat-stroked-button (click)="openSubmitDialog(report, true)">
+            {{
+              'admin.admin-area.delete-' + getTargetType(report.targetType)
+                | transloco
+            }}
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

@@ -27,4 +27,9 @@ export class TemplateService extends BaseTemplateService {
     const connectionUrl = this.buildUri(`/tag/${tagId}`);
     return this.httpClient.delete<void>(connectionUrl);
   }
+
+  deleteTemplate(templateId: string): Observable<void> {
+    const connectionUrl = this.buildUri(`/contentgroup/${templateId}`);
+    return this.httpClient.delete<void>(connectionUrl);
+  }
 }

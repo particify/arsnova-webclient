@@ -33,6 +33,22 @@ export class ViolationReportService extends AbstractHttpService<void> {
     return this.httpClient.post<ViolationReport>(connectionUrl, report);
   }
 
+  patchViolationReport(
+    id: string,
+    changes: object
+  ): Observable<ViolationReport> {
+    const url = this.buildUri(`/${id}?view=admin
+    `);
+    return this.httpClient.patch<ViolationReport>(url, changes);
+  }
+
+  getViolationReports(hasDecision: boolean): Observable<ViolationReport[]> {
+    const connectionUrl = this.buildUri(
+      `/?hasDecision=${hasDecision}&view=admin`
+    );
+    return this.httpClient.get<ViolationReport[]>(connectionUrl);
+  }
+
   getReasonString(reason: string): string {
     return reason.toLowerCase().replaceAll(/_/g, '-');
   }

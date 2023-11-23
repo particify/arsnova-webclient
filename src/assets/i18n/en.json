@@ -565,6 +565,8 @@
     "please-enter-reason": "Please select a reason.",
     "please-enter-description": "Please enter a description.",
     "reported-template": "Template has been reported.",
-    "reported-room": "Room has been reported."
+    "reported-room": "Room has been reported.",
+    "template": "Template",
+    "room": "Room"
   }
 }

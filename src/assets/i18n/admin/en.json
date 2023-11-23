@@ -81,10 +81,29 @@
     "tag-has-been-verified": "Tag has been verified.",
     "tag-verification-has-been-removed": "Verification has been removed.",
     "tag-deleted": "Tag has been deleted.",
-    "changes-have-been-saved": "Changes have been saved."
+    "changes-have-been-saved": "Changes have been saved.",
+    "reported-contents": "Reported contents",
+    "open": "Open",
+    "no-reports-open": "No open reports.",
+    "no-reports-closed": "No closed reports.",
+    "view-template": "View template",
+    "type": "Type",
+    "reason": "Reason",
+    "invalid": "Report invalid",
+    "removal": "Content deleted",
+    "description": "Description",
+    "decision": "Decision",
+    "dismiss-report": "Dismiss report",
+    "delete-template": "Delete template",
+    "confirm": "Confirm",
+    "report-has-been-dismissed": "Report has been dismissed.",
+    "report-has-been-confirmed": "Report has been confirmed."
   },
   "dialog": {
     "really-delete-account-admin": "Do you want to irrevocably delete this account with all rooms?",
-    "really-delete-tag": "Do you really want to delete the following tag?"
+    "really-delete-tag": "Do you really want to delete the following tag?",
+    "really-dismiss-report": "Do you really want to dismiss the report?",
+    "really-confirm-report": "Do you really want to confirm the report?",
+    "reported-content-will-be-deleted": "Attention: The reported content will be deleted irrevocably."
   }
 }

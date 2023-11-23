@@ -565,6 +565,8 @@
     "please-enter-description": "Bitte gib eine Beschreibung ein.",
     "send": "Senden",
     "reported-template": "Die Vorlage wurde gemeldet.",
-    "reported-room": "Der Raum wurde gemeldet."
+    "reported-room": "Der Raum wurde gemeldet.",
+    "template": "Vorlage",
+    "room": "Raum"
   }
 }
