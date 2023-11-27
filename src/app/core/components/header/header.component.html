@@ -123,7 +123,7 @@
       <button
         id="templates-button"
         mat-menu-item
-        *ngIf="auth"
+        *ngIf="auth && contentGroupTemplatesActive"
         (click)="navToTemplates()"
       >
         <mat-icon>text_snippet</mat-icon>
