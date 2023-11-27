@@ -23,6 +23,8 @@ import {
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ViolationReportComponent } from '@app/standalone/_dialogs/violation-report/violation-report.component';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { EditContentGroupTemplateComponent } from '@app/standalone/_dialogs/edit-content-group-template/edit-content-group-template.component';
 
 @Component({
   standalone: true,
@@ -48,6 +50,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   isLoadingContentGroup = true;
   isLoadingContents = true;
   url: string;
+  isCreator = false;
 
   constructor(
     private templateService: BaseTemplateService,
@@ -57,7 +60,8 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
     private translateService: TranslocoService,
     private notificationService: NotificationService,
     private routingService: RoutingService,
-    private apiConfigService: ApiConfigService
+    private apiConfigService: ApiConfigService,
+    private authService: AuthenticationService
   ) {}
 
   ngOnDestroy(): void {
@@ -79,6 +83,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
     this.template = history?.state?.data?.template;
     if (this.template) {
       this.getContentTemplates();
+      this.checkIfCreator();
       return;
     }
     this.templateService
@@ -87,6 +92,16 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
       .subscribe((template) => {
         this.template = template;
         this.getContentTemplates();
+        this.checkIfCreator();
+      });
+  }
+
+  checkIfCreator(): void {
+    this.authService
+      .getCurrentAuthentication()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((auth) => {
+        this.isCreator = auth.userId === this.template.creatorId;
       });
   }
 
@@ -130,5 +145,21 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
         targetType: ContentGroupTemplate.name,
       },
     });
+  }
+
+  editTemplate(): void {
+    this.dialog
+      .open(EditContentGroupTemplateComponent, {
+        width: '600px',
+        data: { template: this.template },
+      })
+      .afterClosed()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((template) => {
+        if (template) {
+          this.template = template;
+          history.replaceState({ template: this.template }, '');
+        }
+      });
   }
 }

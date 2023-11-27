@@ -18,6 +18,9 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ApiConfig } from '@app/core/models/api-config';
 import { ViolationReportService } from '@app/core/services/http/violation-report.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
 
 describe('ContentGroupTemplatePreviewComponent', () => {
   let component: ContentGroupTemplatePreviewComponent;
@@ -60,6 +63,21 @@ describe('ContentGroupTemplatePreviewComponent', () => {
     ['postViolationReport']
   );
 
+  const mockAuthenticationService = jasmine.createSpyObj(
+    AuthenticationService,
+    ['getCurrentAuthentication']
+  );
+  mockAuthenticationService.getCurrentAuthentication.and.returnValue(
+    of(
+      new ClientAuthentication(
+        'userId',
+        'loginId',
+        AuthProvider.ARSNOVA,
+        'token'
+      )
+    )
+  );
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -97,6 +115,10 @@ describe('ContentGroupTemplatePreviewComponent', () => {
         {
           provide: ViolationReportService,
           useValue: mockViolationReportService,
+        },
+        {
+          provide: AuthenticationService,
+          useValue: mockAuthenticationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

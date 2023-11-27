@@ -10,6 +10,8 @@ export class ContentGroupTemplate {
   aiGenerated: boolean;
   attribution?: string;
   templateIds: string[];
+  creatorId: string;
+  revision: string;
 
   constructor(
     name: string,

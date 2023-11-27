@@ -89,6 +89,7 @@
     (selectedTagsChanged)="updateTags($event)"
     [lang]="selectedLang"
     [langChanged]="langChanged"
+    [selectedTags]="selectedTags"
     [allowCreation]="true"
   ></app-template-tag-selection>
   <mat-checkbox [checked]="aiGenerated" (change)="aiGenerated = !aiGenerated">

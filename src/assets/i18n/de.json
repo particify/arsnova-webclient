@@ -550,7 +550,10 @@
     "next-content": "Nächster Inhalt",
     "copy-template-link": "Link zu Vorlage kopieren",
     "template-link-copied": "Link zu Vorlage in Zwischenablage kopiert.",
-    "report-template": "Vorlage melden"
+    "report-template": "Vorlage melden",
+    "edit-template": "Vorlage bearbeiten",
+    "save": "Speichern",
+    "changes-saved": "Die Änderungen wurden gespeichert."
   },
   "violation-report": {
     "report-template": "Vorlage melden",
