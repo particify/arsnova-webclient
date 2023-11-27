@@ -201,6 +201,14 @@ ul {
   @extend %on-secondary;
 }
 
+.theme-dark .on-primary-variant {
+  color: var(--palette-primary-contrast-200);
+}
+
+.theme-light .on-primary-variant {
+  @extend %primary;
+}
+
 .blue {
   color: var(--blue) !important;
 }
