@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CoreModule } from '@app/core/core.module';
 import { TemplateTag } from '@app/core/models/template-tag';
@@ -37,7 +37,10 @@ export class TemplateTagSelectionComponent
   @Output() selectedTagsChanged = new EventEmitter<TemplateTag[]>();
   tags: TemplateTag[] = [];
   filteredTags: TemplateTag[] = [];
-  tagFormControl = new FormControl('');
+  tagFormControl = new FormControl(
+    '',
+    Validators.pattern(/^[\p{Ll}\p{Lu}\d\s]*$/u)
+  );
 
   constructor(
     protected formService: FormService,
