@@ -7,7 +7,7 @@ import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentScale } from '@app/core/models/content-scale';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, provideTranslocoScope } from '@ngneat/transloco';
 import { forkJoin, Observable, take } from 'rxjs';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
@@ -36,12 +36,12 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
     ContentTextAnswerComponent,
     ContentWordcloudAnswerComponent,
   ],
+  providers: [provideTranslocoScope('creator')],
   templateUrl: './content-preview.component.html',
   styleUrls: ['./content-preview.component.scss'],
 })
 export class ContentPreviewComponent implements OnInit {
   @Input() content: Content;
-  @Input() isEditMode: boolean;
   @Input() renderAnswersDynamically = true;
   @Input() showTitle = true;
 
@@ -98,14 +98,15 @@ export class ContentPreviewComponent implements OnInit {
               this.translateService.selectTranslate(l).pipe(take(1))
             )
         );
-        forkJoin(optionLabels$).subscribe(
-          (labels) =>
-            (this.answerOptions = labels.map((l) => ({
-              label: l,
-              renderedLabel: l,
-            })))
-        );
+        forkJoin(optionLabels$).subscribe((labels) => {
+          this.answerOptions = labels.map((l) => ({
+            label: l,
+            renderedLabel: l,
+          }));
+          this.setSelectableAnswers();
+        });
       }
+      return;
     } else if (format === ContentType.WORDCLOUD) {
       this.words = new Array<string>(
         (this.content as ContentWordcloud).maxAnswers
@@ -113,16 +114,20 @@ export class ContentPreviewComponent implements OnInit {
     } else if (format === ContentType.FLASHCARD) {
       this.additionalText = (this.content as ContentFlashcard).additionalText;
     }
-    if (this.answerOptions) {
-      this.answerOptions.map((o) =>
-        this.selectableAnswers.push(new SelectableAnswer(o, false))
-      );
-    }
+    this.setSelectableAnswers();
     this.markdownFeatureset =
       [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1
         ? MarkdownFeatureset.EXTENDED
         : MarkdownFeatureset.SIMPLE;
     this.prepareAttachmentData();
+  }
+
+  setSelectableAnswers(): void {
+    if (this.answerOptions) {
+      this.answerOptions.map((o) => {
+        this.selectableAnswers.push(new SelectableAnswer(o, false));
+      });
+    }
   }
 
   prepareAttachmentData() {
