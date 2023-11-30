@@ -7,10 +7,25 @@
       fxLayoutGap="1em"
     >
       <span class="template-name">{{ template.name }}</span>
-      <app-add-template-button
-        [templateId]="template.id"
-        [room]="room"
-      ></app-add-template-button>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <button mat-icon-button [matMenuTriggerFor]="moreMenu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #moreMenu="matMenu">
+          <button
+            mat-menu-item
+            [cdkCopyToClipboard]="url"
+            (cdkCopyToClipboardCopied)="showNotificationAfterCopiedUrl()"
+          >
+            <mat-icon>link</mat-icon>
+            <span>{{ 'templates.copy-template-link' | transloco }}</span>
+          </button>
+        </mat-menu>
+        <app-add-template-button
+          [templateId]="template.id"
+          [room]="room"
+        ></app-add-template-button>
+      </div>
     </div>
     <p class="template-description">{{ template.description }}</p>
     <div fxLayout="column" fxLayoutGap="1em">

@@ -547,6 +547,8 @@
     "preview": "Preview",
     "back": "Back",
     "previous-content": "Previous content",
-    "next-content": "Next content"
+    "next-content": "Next content",
+    "copy-template-link": "Copy link to template",
+    "template-link-copied": "Link to template copied to clipboard."
   }
 }

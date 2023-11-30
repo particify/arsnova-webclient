@@ -14,6 +14,14 @@ import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
 import { Subject, takeUntil } from 'rxjs';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { TranslocoService } from '@ngneat/transloco';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
 
 @Component({
   standalone: true,
@@ -22,6 +30,7 @@ import { Subject, takeUntil } from 'rxjs';
     LoadingIndicatorComponent,
     TemplateLicenseComponent,
     AddTemplateButtonComponent,
+    ClipboardModule,
   ],
   selector: 'app-content-group-template-preview',
   templateUrl: './content-group-template-preview.component.html',
@@ -37,12 +46,17 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
 
   isLoadingContentGroup = true;
   isLoadingContents = true;
+  url: string;
 
   constructor(
     private templateService: BaseTemplateService,
     private contentService: ContentService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translateService: TranslocoService,
+    private notificationService: NotificationService,
+    private routingService: RoutingService,
+    private apiConfigService: ApiConfigService
   ) {}
 
   ngOnDestroy(): void {
@@ -51,6 +65,15 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.apiConfigService
+      .getApiConfig$()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((config) => {
+        this.url = this.routingService.getRoute(
+          ['t', this.route.snapshot.params['templateId']],
+          config
+        );
+      });
     this.room = this.route.snapshot.data.room;
     this.template = history?.state?.data?.template;
     if (this.template) {
@@ -89,5 +112,12 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
       },
       panelClass: 'big-dialog-panel',
     });
+  }
+
+  showNotificationAfterCopiedUrl(): void {
+    const msg = this.translateService.translate(
+      'templates.template-link-copied'
+    );
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
   }
 }
