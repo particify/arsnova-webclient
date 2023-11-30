@@ -35,6 +35,7 @@ import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 @Component({
   selector: 'app-header',
@@ -64,6 +65,7 @@ export class HeaderComponent implements OnInit {
   openPresentationDirectly = false;
   announcementState?: AnnouncementState;
   room?: Room;
+  contentGroupTemplatesActive = false;
 
   constructor(
     public location: Location,
@@ -83,7 +85,8 @@ export class HeaderComponent implements OnInit {
     private extensionFactory: ExtensionFactory,
     private dialog: MatDialog,
     private announcementService: AnnouncementService,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private featureFlagService: FeatureFlagService
   ) {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
@@ -140,6 +143,9 @@ export class HeaderComponent implements OnInit {
     });
     this.openPresentationDirectly =
       !this.extensionFactory.getExtension('present-in-new-tab');
+    this.contentGroupTemplatesActive = this.featureFlagService.isEnabled(
+      'CONTENT_GROUP_TEMPLATES'
+    );
   }
 
   getAnnouncementState() {

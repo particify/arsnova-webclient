@@ -11,10 +11,15 @@
         fxLayoutAlign="center center"
         class="primary-variant content-count-container"
       >
-        <span class="primary content-count"
+        <span class="on-primary-variant content-count"
           >{{ template.templateIds.length }}
-          {{ 'templates.contents' | transloco }}</span
-        >
+          <span *ngIf="template.templateIds.length === 1">{{
+            'templates.content' | transloco
+          }}</span>
+          <span *ngIf="template.templateIds.length > 1">{{
+            'templates.contents' | transloco
+          }}</span>
+        </span>
       </div>
     </div>
     <p class="ellipsis template-description">
