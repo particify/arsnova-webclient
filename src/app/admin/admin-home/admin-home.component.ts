@@ -62,6 +62,12 @@ export class AdminHomeComponent implements OnInit {
         of(this.featureFlagService.isEnabled('CONTENT_GROUP_TEMPLATES'))
       ),
       new NavButton(
+        'reports',
+        'admin.admin-area.reported-contents',
+        'flag',
+        of(this.featureFlagService.isEnabled('CONTENT_GROUP_TEMPLATES'))
+      ),
+      new NavButton(
         'status',
         'admin.admin-area.status-details',
         'dns',

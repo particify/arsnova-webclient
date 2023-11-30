@@ -11,6 +11,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { RoomManagementComponent } from './room-management/room-management.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { TemplateManagementComponent } from '@app/admin/template-management/template-management.component';
+import { ReportManagementComponent } from '@app/admin/report-management/report-management.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'templates',
     component: TemplateManagementComponent,
+  },
+  {
+    path: 'reports',
+    component: ReportManagementComponent,
   },
 ];
 

@@ -549,6 +549,25 @@
     "previous-content": "Vorheriger Inhalt",
     "next-content": "Nächster Inhalt",
     "copy-template-link": "Link zu Vorlage kopieren",
-    "template-link-copied": "Link zu Vorlage in Zwischenablage kopiert."
+    "template-link-copied": "Link zu Vorlage in Zwischenablage kopiert.",
+    "report-template": "Vorlage melden"
+  },
+  "violation-report": {
+    "report-template": "Vorlage melden",
+    "report-room": "Raum melden",
+    "please-select-reason-and-enter-description": "Bitte wähle einen zutreffenden Grund aus und gib eine Beschreibung ein.",
+    "description": "Beschreibung",
+    "reason-advertising": "Werbung",
+    "reason-copyright": "Urheberrecht",
+    "reason-disinformation": "Falschinformationen",
+    "reason-hate-speech": "Hassrede",
+    "reason-other": "Andere",
+    "please-enter-reason": "Bitte wähle einen Grund aus.",
+    "please-enter-description": "Bitte gib eine Beschreibung ein.",
+    "send": "Senden",
+    "reported-template": "Die Vorlage wurde gemeldet.",
+    "reported-room": "Der Raum wurde gemeldet.",
+    "template": "Vorlage",
+    "room": "Raum"
   }
 }
