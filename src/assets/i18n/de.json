@@ -247,7 +247,8 @@
     "room-not-found": "Es wurde kein Raum mit dieser Nummer gefunden.",
     "something-went-wrong": "Es ist etwas schief gegangen.",
     "http-too-many-requests": "Zu viele Anfragen aus deinem Netzwerk.",
-    "establishing-connection": "Verbindung wird aufgebaut …"
+    "establishing-connection": "Verbindung wird aufgebaut …",
+    "invalid-request": "Deine Anfrage ist ungültig."
   },
   "title": {
     "register": "Registrieren",
