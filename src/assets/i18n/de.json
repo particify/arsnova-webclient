@@ -516,6 +516,7 @@
     "remove-tag": "Entferne den Tag {{tag}}",
     "tag-removed": "Tag {{tag}} wurde entfernt.",
     "create-new-tag": "Neuen Tag erstellen",
+    "no-special-characters-allowed": "Keine Sonderzeichen erlaubt.",
     "language": "Sprache",
     "license": "Lizenz",
     "attribution": "Namensnennung",

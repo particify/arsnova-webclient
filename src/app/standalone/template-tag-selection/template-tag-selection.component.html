@@ -22,6 +22,12 @@
       [matChipInputFor]="chipGrid"
       [matAutocomplete]="auto"
     />
+    <mat-error
+      *ngIf="tagFormControl.invalid"
+      style="font-size: var(--mat-form-field-subscript-text-size)"
+    >
+      {{ 'templates.no-special-characters-allowed' | transloco }}
+    </mat-error>
     <mat-autocomplete
       #auto="matAutocomplete"
       [hideSingleSelectionIndicator]="true"
@@ -41,6 +47,7 @@
           tagInput.value.length > 0 &&
           allowCreation
         "
+        [disabled]="tagFormControl.invalid"
       >
         <mat-icon>add</mat-icon>
         {{ 'templates.create-new-tag' | transloco }}
