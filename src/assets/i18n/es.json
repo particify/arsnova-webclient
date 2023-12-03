@@ -245,8 +245,7 @@
     "room-not-found": "No se encontró ninguna sala con este número.",
     "something-went-wrong": "Algo salió mal.",
     "http-too-many-requests": "Demasiadas solicitudes desde tu red.",
-    "establishing-connection": "Estableciendo conexión …",
-    "request-invalid": "Su solicitud no es válida."
+    "establishing-connection": "Estableciendo conexión …"
   },
   "title": {
     "register": "Registrarse",
