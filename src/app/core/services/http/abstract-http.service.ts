@@ -96,13 +96,20 @@ export abstract class AbstractHttpService<T> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public handleError<T>(operation = 'operation', result?: T) {
+  public handleError<T>(
+    operation = 'operation',
+    result?: T,
+    badRequestMessage?: string
+  ) {
     return (error: any): Observable<T> => {
       console.error(error);
       let message = null;
       switch (error?.status) {
         case 401:
           // NOOP
+          break;
+        case 400:
+          message = badRequestMessage || 'errors.invalid-request';
           break;
         case 429:
           message = 'errors.http-too-many-requests';
