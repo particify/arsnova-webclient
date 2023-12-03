@@ -197,11 +197,21 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     return contentGroups.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  import(roomId: string, groupId: string, blob: Blob) {
+  import(roomId: string, groupId: string, blob: Blob): Observable<Blob> {
     const connectionUrl = this.buildUri(`/${groupId}/import`, roomId);
     const formData = new FormData();
     formData.append('file', blob);
-    return this.httpClient.post(connectionUrl, formData);
+    return this.httpClient
+      .post<Blob>(connectionUrl, formData)
+      .pipe(
+        catchError(
+          this.handleError<Blob>(
+            'importContentGroup',
+            undefined,
+            'creator.content.import-failed'
+          )
+        )
+      );
   }
 
   getAnswerStats(
