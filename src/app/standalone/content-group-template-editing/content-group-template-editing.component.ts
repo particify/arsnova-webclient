@@ -43,8 +43,9 @@ export class ContentGroupTemplateEditingComponent
   templateTagSelectionComponent: TemplateTagSelectionComponent;
 
   @Input() name: string = '';
-  description: string;
-  attribution: string;
+  @Input() template?: ContentGroupTemplate;
+  description = '';
+  attribution?: string = '';
   aiGenerated = false;
   selectedTags: TemplateTag[] = [];
   selectedLicense: string;
@@ -65,10 +66,19 @@ export class ContentGroupTemplateEditingComponent
   ngOnInit(): void {
     this.selectedLicense = this.licenseKeys[0];
     this.selectedLang = this.translateService.getActiveLang();
+    if (this.template) {
+      this.name = this.template.name;
+      this.description = this.template.description;
+      this.attribution = this.template.attribution;
+      this.aiGenerated = this.template.aiGenerated;
+      this.selectedTags = this.template.tags;
+      this.selectedLicense = this.template.license;
+      this.selectedLang = this.template.language;
+    }
     this.formGroup = new FormGroup({
       name: new FormControl(this.name, Validators.required),
-      description: new FormControl('', Validators.required),
-      attribution: new FormControl(''),
+      description: new FormControl(this.description, Validators.required),
+      attribution: new FormControl(this.attribution),
       licenses: new FormControl(this.selectedLicense),
     });
   }

@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{ 'templates.edit-template' | transloco }}</h2>
+<mat-dialog-content style="padding-top: 1em">
+  <app-content-group-template-editing
+    [template]="data.template"
+  ></app-content-group-template-editing>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button matDialogClose>
+    {{ 'dialog.cancel' | transloco }}
+  </button>
+  <app-loading-button
+    [isDialog]="true"
+    (clicked)="save()"
+    name="templates.save"
+  ></app-loading-button>
+</mat-dialog-actions>

@@ -551,7 +551,10 @@
     "next-content": "Next content",
     "copy-template-link": "Copy link to template",
     "template-link-copied": "Link to template copied to clipboard.",
-    "report-template": "Report template"
+    "report-template": "Report template",
+    "edit-template": "Edit template",
+    "save": "Save",
+    "changes-saved": "Changes have been saved."
   },
   "violation-report": {
     "report-template": "Report template",

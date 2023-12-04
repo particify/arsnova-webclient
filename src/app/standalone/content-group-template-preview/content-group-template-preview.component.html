@@ -24,6 +24,10 @@
             <mat-icon>flag</mat-icon>
             <span>{{ 'templates.report-template' | transloco }}</span>
           </button>
+          <button *ngIf="isCreator" mat-menu-item (click)="editTemplate()">
+            <mat-icon>edit</mat-icon>
+            <span>{{ 'templates.edit-template' | transloco }}</span>
+          </button>
         </mat-menu>
         <app-add-template-button
           [templateId]="template.id"

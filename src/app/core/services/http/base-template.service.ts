@@ -75,4 +75,11 @@ export class BaseTemplateService extends AbstractHttpService<void> {
     const connectionUrl = this.buildUri(`/contentgroup/${templateId}`);
     return this.httpClient.get<ContentGroupTemplate>(connectionUrl);
   }
+
+  updateContentGroupTemplate(
+    template: ContentGroupTemplate
+  ): Observable<ContentGroupTemplate> {
+    const connectionUrl = this.buildUri(`/contentgroup/${template.id}`);
+    return this.httpClient.put<ContentGroupTemplate>(connectionUrl, template);
+  }
 }
