@@ -3,11 +3,13 @@ import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { LICENSES } from '@app/core/models/licenses';
+import { provideTranslocoScope } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-attributions-info',
   standalone: true,
   imports: [CoreModule],
+  providers: [provideTranslocoScope('creator')],
   templateUrl: './attributions-info.component.html',
 })
 export class AttributionsInfoComponent {
