@@ -25,12 +25,12 @@ export class UpdateInfoComponent implements OnInit {
   readonly dialogId = 'update-info';
 
   isLoading = true;
-  changes: string[];
-  newsUrl: string;
+  changes: string[] = [];
+  newsUrl?: string;
   afterUpdate = false;
   versions: VersionInfo[];
   updateReady = false;
-  inputFocus: boolean;
+  inputFocus = false;
 
   constructor(
     public dialogRef: MatDialogRef<UpdateInfoComponent>,

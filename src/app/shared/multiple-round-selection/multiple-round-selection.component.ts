@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./multiple-round-selection.component.scss'],
 })
 export class MultipleRoundSelectionComponent {
-  @Input() round: number;
+  @Input({ required: true }) round!: number;
   @Output() roundChanged: EventEmitter<number> = new EventEmitter<number>();
 
   rounds = ['1', '2', '1 & 2'];

@@ -221,7 +221,7 @@
     </div>
   </div>
   <app-voting
-    *ngIf="!isEditor && userId"
+    *ngIf="!isEditor && userId && parseVote"
     [userId]="userId"
     [parseVote]="parseVote"
     [score]="comment.score"

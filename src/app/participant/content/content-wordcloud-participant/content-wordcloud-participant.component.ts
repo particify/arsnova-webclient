@@ -20,11 +20,11 @@ import { take } from 'rxjs';
   templateUrl: './content-wordcloud-participant.component.html',
 })
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
-  @Input() content: ContentWordcloud;
-  @Input() answer: MultipleTextsAnswer;
+  @Input({ required: true }) content!: ContentWordcloud;
+  @Input({ required: true }) answer!: MultipleTextsAnswer;
   @Output() answerChanged = new EventEmitter<MultipleTextsAnswer>();
 
-  givenAnswer: MultipleTextsAnswer;
+  givenAnswer?: MultipleTextsAnswer;
 
   words: string[] = [];
 
@@ -58,13 +58,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     this.isLoading = false;
   }
 
-  createAnswer(texts?: string[]) {
-    this.givenAnswer = new MultipleTextsAnswer();
-    if (texts) {
-      this.givenAnswer.texts = texts;
-    }
-  }
-
   submitAnswer() {
     const words = this.words.filter((w) => w);
     if (words.length === 0) {
@@ -80,15 +73,16 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       return;
     }
     this.disableForm();
-    const answer = new MultipleTextsAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
+    const answer = new MultipleTextsAnswer(
+      this.content.id,
+      this.content.state.round,
+      ContentType.WORDCLOUD
+    );
     answer.texts = words;
-    answer.format = ContentType.WORDCLOUD;
     this.answerService
       .addAnswer(this.content.roomId, answer)
       .subscribe((answer) => {
-        this.createAnswer(words);
+        this.givenAnswer = answer;
         this.translateService
           .selectTranslate('participant.answer.sent')
           .pipe(take(1))
@@ -107,14 +101,15 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
 
   abstain() {
     this.words = [];
-    const answer = new MultipleTextsAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
-    answer.format = ContentType.WORDCLOUD;
+    const answer = new MultipleTextsAnswer(
+      this.content.id,
+      this.content.state.round,
+      ContentType.WORDCLOUD
+    );
     this.answerService
       .addAnswer(this.content.roomId, answer)
       .subscribe((answer) => {
-        this.createAnswer();
+        this.givenAnswer = answer;
         this.sendStatusToParent(answer);
       }),
       () => {

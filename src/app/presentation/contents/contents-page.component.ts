@@ -38,11 +38,11 @@ import { ContentLicenseAttribution } from '@app/core/models/content-license-attr
   styleUrls: ['./contents-page.component.scss'],
 })
 export class ContentsPageComponent implements OnInit, OnDestroy {
-  @ViewChild(StepperComponent) stepper: StepperComponent;
+  @ViewChild(StepperComponent) stepper!: StepperComponent;
 
   destroyed$ = new Subject<void>();
 
-  contents: Content[];
+  contents: Content[] = [];
   isLoading = true;
   entryIndex = 0;
   contentIndex = 0;
@@ -50,12 +50,13 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   room: Room;
   contentGroupName: string;
   currentStep = 0;
-  answerCount: number;
+  answerCount = 0;
   indexChanged: EventEmitter<void> = new EventEmitter<void>();
-  contentGroup: ContentGroup;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  contentGroup!: ContentGroup;
   canAnswerContent = false;
-  settings: UserSettings;
-  attributions: ContentLicenseAttribution[];
+  settings = new UserSettings();
+  attributions: ContentLicenseAttribution[] = [];
   stepCount = 0;
 
   private hotkeyRefs: symbol[] = [];
@@ -74,9 +75,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private contentPublishService: ContentPublishService,
     private focusModeService: FocusModeService
-  ) {}
-
-  ngOnInit() {
+  ) {
     const routeSeriesName = this.route.snapshot.params['seriesName'];
     // Use index from route if available. Otherwise use the stored index or 0 as fallback.
     const routeContentIndex =
@@ -91,16 +90,19 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       STORAGE_KEYS.LAST_GROUP,
       this.contentGroupName
     );
+    this.room = this.route.snapshot.data.room;
+    this.shortId = this.route.snapshot.data.room.shortId;
+  }
+
+  ngOnInit() {
     const loginId = this.globalStorageService.getItem(
       STORAGE_KEYS.USER
     ).loginId;
     this.userService.getUserSettingsByLoginId(loginId).subscribe((settings) => {
-      this.settings = settings || new UserSettings();
-      this.route.data.subscribe((data) => {
-        this.room = data.room;
-        this.shortId = data.room.shortId;
-        this.initGroup(true);
-      });
+      if (settings) {
+        this.settings = settings;
+      }
+      this.initGroup(true);
     });
   }
 

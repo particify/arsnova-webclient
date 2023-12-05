@@ -21,7 +21,7 @@ export abstract class AbstractCachingHttpService<
   T,
 > extends AbstractHttpService<T> {
   protected cacheName = 'http';
-  protected stompSubscription: Subscription;
+  protected stompSubscription?: Subscription;
   protected cache: Cache<T>;
   private inflightRequests = new Map<string, Observable<T | T[]>>();
 

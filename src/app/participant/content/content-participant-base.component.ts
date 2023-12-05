@@ -18,8 +18,8 @@ export abstract class ContentParticipantBaseComponent
   implements OnInit
 {
   @Output() answerChanged = new EventEmitter();
-  @Input() isDisabled: boolean;
-  @Input() sendEvent: EventEmitter<string>;
+  @Input() isDisabled = false;
+  @Input({ required: true }) sendEvent!: EventEmitter<string>;
 
   isLoading = true;
   shortId: string;
@@ -34,6 +34,9 @@ export abstract class ContentParticipantBaseComponent
     protected formService: FormService
   ) {
     super(formService);
+    const params = route.snapshot.params;
+    this.shortId = params['shortId'];
+    this.contentGroupName = params['seriesName'];
   }
 
   ngOnInit() {
@@ -41,9 +44,7 @@ export abstract class ContentParticipantBaseComponent
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.init();
-    const params = this.route.snapshot.params;
-    this.shortId = params['shortId'];
-    this.contentGroupName = params['seriesName'];
+
     this.sendEvent.subscribe((send) => {
       if (send === 'answer') {
         this.submitAnswer();

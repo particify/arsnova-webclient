@@ -26,14 +26,21 @@ describe('StatisticsPageComponent', () => {
   const mockContentGroupService = jasmine.createSpyObj(['getById']);
   mockContentGroupService.getById.and.returnValue(of({}));
 
-  const data = {
-    room: new Room(),
-  };
+  const room = new Room();
+  room.id = 'roomId';
+
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = {
     seriesName: 'Quiz',
   };
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
+  snapshot.data = {
+    room: room,
+  };
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

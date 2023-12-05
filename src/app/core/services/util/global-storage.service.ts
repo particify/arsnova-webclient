@@ -168,7 +168,7 @@ const APP_PREFIX = 'ARS';
 @Injectable()
 export class GlobalStorageService {
   memory: Map<symbol, any> = new Map();
-  shortId: string;
+  shortId?: string;
   readonly storageConfig: Map<symbol, StorageItem> = new Map();
   readonly backendOverrides: Map<StorageItemCategory, StorageBackend> =
     new Map();

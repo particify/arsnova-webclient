@@ -10,8 +10,8 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ActivatedRouteStub, MockThemeService } from '@testing/test-helpers';
 import { RoomService } from '@app/core/services/http/room.service';
-import { RoomSummary, RoomSummaryStats } from '@app/core/models/room-summary';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { RoomSummary, RoomSummaryStats } from '@app/core/models/room-summary';
 
 describe('QrCodeComponent', () => {
   let component: QrCodeComponent;

@@ -8,7 +8,8 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
   styleUrls: ['./user-home.component.scss'],
 })
 export class UserHomeComponent implements OnInit {
-  auth: ClientAuthentication;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  auth!: ClientAuthentication;
 
   constructor(private authenticationService: AuthenticationService) {}
 

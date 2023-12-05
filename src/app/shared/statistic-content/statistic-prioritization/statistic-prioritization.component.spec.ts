@@ -1,6 +1,5 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentService } from '@app/core/services/http/content.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -31,13 +30,15 @@ describe('StatisticPrioritizationComponent', () => {
     'getAnswer',
     'getAnswersDeleted',
   ]);
-  const roundStatistics = new PrioritizationRoundStatistics();
-  roundStatistics.abstentionCount = 0;
-  roundStatistics.answerCount = 0;
-  roundStatistics.assignedPoints = [];
-  roundStatistics.round = 1;
-  const stats = new AnswerStatistics();
-  (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+  const roundStatistics = new PrioritizationRoundStatistics(
+    1,
+    [],
+    [],
+    0,
+    0,
+    []
+  );
+  const stats = { contentId: 'contentId', roundStatistics: [roundStatistics] };
   const body = {
     payload: {
       stats: stats,
@@ -99,6 +100,8 @@ describe('StatisticPrioritizationComponent', () => {
       ContentType.PRIORITIZATION,
       0
     );
+    component.visualizationUnitChanged = new EventEmitter<boolean>();
+    component.indexChanged = new EventEmitter<void>();
     fixture.detectChanges();
   });
 

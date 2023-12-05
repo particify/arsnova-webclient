@@ -37,8 +37,7 @@ export interface DialogData {
 export class CreateCommentComponent extends FormComponent implements OnInit {
   readonly dialogId = 'create-comment';
 
-  comment: Comment;
-  selectedTag: string;
+  selectedTag?: string;
   eventsSubject = new Subject<string | void>();
   eventsWrapper: any;
 
@@ -126,7 +125,7 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
     comment.roomId = this.data.roomId;
     comment.body = body;
     comment.creatorId = this.data.userId;
-    if (this.selectedTag !== null) {
+    if (this.selectedTag) {
       comment.tag = this.selectedTag;
     }
     this.send(comment);

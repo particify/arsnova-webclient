@@ -21,7 +21,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
   styleUrls: ['./rendered-text.component.scss'],
 })
 export class RenderedTextComponent implements OnChanges {
-  @Input() rawText: string;
+  @Input() rawText?: string;
   @Input() renderedText?: string;
   @Input() dynamic = false;
   @Input() markdown = true;
@@ -31,7 +31,7 @@ export class RenderedTextComponent implements OnChanges {
   @Input() linebreaks = true;
   @Input() listPreview = false;
   @Output() rendered = new EventEmitter();
-  displayedText: string | SafeHtml;
+  displayedText?: string | SafeHtml;
   isLoading = false;
 
   constructor(
@@ -40,7 +40,7 @@ export class RenderedTextComponent implements OnChanges {
   ) {}
 
   ngOnChanges() {
-    if (this.dynamic) {
+    if (this.dynamic && this.rawText) {
       this.render(this.rawText);
     } else {
       this.updateDisplayedText();

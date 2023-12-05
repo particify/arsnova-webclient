@@ -31,11 +31,11 @@ import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
   styleUrls: ['./content-groups.component.scss'],
 })
 export class ContentGroupsComponent {
-  @Input() contentGroupName: string;
-  @Input() length: number;
+  @Input({ required: true }) contentGroupName!: string;
+  @Input({ required: true }) length!: number;
+  @Input({ required: true }) role!: UserRole;
+  @Input({ required: true }) shortId!: string;
   @Input() isLocked = false;
-  @Input() role: UserRole;
-  @Input() shortId: string;
 
   constructor(
     private router: Router,

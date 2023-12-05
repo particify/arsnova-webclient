@@ -58,7 +58,7 @@ export class ContentStatistic {
   styleUrls: ['./statistic-list.component.scss'],
 })
 export class StatisticListComponent implements OnInit {
-  @Input() contentGroup: ContentGroup;
+  @Input({ required: true }) contentGroup!: ContentGroup;
   displayedColumns: string[] = [];
   status = {
     good: 85,
@@ -67,15 +67,15 @@ export class StatisticListComponent implements OnInit {
     empty: -1,
   };
   types: typeof StatisticType = StatisticType;
-  dataSource: ContentStatistic[];
+  dataSource: ContentStatistic[] = [];
   total = this.status.empty;
   totalP = 0;
   contentCounter = 0;
   shortId: number;
   deviceType: string;
   isLoading = true;
-  statisticsAdded: number;
-  statsLength: number;
+  statisticsAdded = 0;
+  statsLength = 0;
   multipleRounds = false;
 
   constructor(
@@ -90,13 +90,13 @@ export class StatisticListComponent implements OnInit {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
     );
-  }
-
-  ngOnInit() {
-    this.shortId = this.route.snapshot.params['shortId'];
+    this.shortId = route.snapshot.params['shortId'];
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
+  }
+
+  ngOnInit() {
     this.getContents();
   }
 

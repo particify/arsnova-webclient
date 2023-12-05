@@ -10,6 +10,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatIconHarness } from '@angular/material/icon/testing';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { By } from '@angular/platform-browser';
+import { EventEmitter } from '@angular/core';
 
 describe('LiveFeedbackComponent', () => {
   let component: LiveFeedbackComponent;
@@ -41,7 +42,7 @@ describe('LiveFeedbackComponent', () => {
     fixture = TestBed.createComponent(LiveFeedbackComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
-
+    component.dataChanged = new EventEmitter<number[]>();
     fixture.detectChanges();
   });
 

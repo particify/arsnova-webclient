@@ -31,7 +31,7 @@ export class UpdateService {
     );
   }
 
-  importance: UpdateImportance;
+  importance = UpdateImportance.OPTIONAL;
 
   public handleUpdate(versionInfos: VersionInfo[] = []) {
     const currentVersion = this.selectVersionByHash(

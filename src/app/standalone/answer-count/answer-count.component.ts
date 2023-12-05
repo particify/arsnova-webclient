@@ -12,8 +12,8 @@ import { TranslocoModule } from '@ngneat/transloco';
   styleUrls: ['./answer-count.component.scss'],
 })
 export class AnswerCountComponent implements OnInit {
-  @Input() count: number;
-  @Input() size: string;
+  @Input({ required: true }) count!: number;
+  @Input() size?: string;
 
   controlBar = false;
 

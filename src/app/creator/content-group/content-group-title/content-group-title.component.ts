@@ -20,14 +20,14 @@ import { TranslocoService } from '@ngneat/transloco';
   styleUrls: ['./content-group-title.component.scss'],
 })
 export class ContentGroupTitleComponent implements OnInit {
-  @ViewChild('nameInput') nameInput: ElementRef;
+  @ViewChild('nameInput') nameInput!: ElementRef;
 
   @Output() seriesNameChanged = new EventEmitter<string>();
 
-  @Input() disabled: boolean;
-  @Input() seriesName: string;
-  @Input() contentGroupStats: ContentGroupStatistics[];
-  updatedName: string;
+  @Input() disabled = false;
+  @Input({ required: true }) seriesName!: string;
+  @Input({ required: true }) contentGroupStats!: ContentGroupStatistics[];
+  updatedName = '';
   isInTitleEditMode = false;
   inputFocus = false;
 

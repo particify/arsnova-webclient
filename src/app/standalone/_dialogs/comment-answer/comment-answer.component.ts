@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { provideTranslocoScope, TranslocoService } from '@ngneat/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
@@ -39,9 +33,9 @@ import { take } from 'rxjs';
   templateUrl: './comment-answer.component.html',
   styleUrls: ['./comment-answer.component.scss'],
 })
-export class CommentAnswerComponent extends FormComponent implements OnInit {
+export class CommentAnswerComponent extends FormComponent {
   readonly dialogId = 'comment-answer';
-  @ViewChild('answerInput') answerInput: ElementRef;
+  @ViewChild('answerInput') answerInput!: ElementRef;
 
   comment: Comment;
   answer: string;
@@ -60,9 +54,6 @@ export class CommentAnswerComponent extends FormComponent implements OnInit {
     protected formService: FormService
   ) {
     super(formService);
-  }
-
-  ngOnInit() {
     this.comment = this.data.comment;
     this.answer = this.comment.answer;
     this.isEditor = !!this.data.isEditor;

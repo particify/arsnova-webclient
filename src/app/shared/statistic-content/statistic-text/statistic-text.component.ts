@@ -18,8 +18,8 @@ export class StatisticTextComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
-  @Input() content: Content;
-  @Input() directShow: boolean;
+  @Input({ required: true }) content!: Content;
+  @Input() directShow = false;
 
   answerStats: TextStatistic[] = [];
   answers: TextAnswer[] = [];

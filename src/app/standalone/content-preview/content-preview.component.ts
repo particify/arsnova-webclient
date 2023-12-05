@@ -41,19 +41,19 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
   styleUrls: ['./content-preview.component.scss'],
 })
 export class ContentPreviewComponent implements OnInit {
-  @Input() content: Content;
+  @Input({ required: true }) content!: Content;
   @Input() renderAnswersDynamically = true;
   @Input() showTitle = true;
 
-  answerOptions: AnswerOption[];
+  answerOptions: AnswerOption[] = [];
   answerOptionsWithPoints: AnswerWithPoints[] = [];
   selectableAnswers: SelectableAnswer[] = [];
-  multipleAnswers: boolean;
-  markdownFeatureset: MarkdownFeatureset;
+  multipleAnswers = false;
+  markdownFeatureset = MarkdownFeatureset.SIMPLE;
   attachmentData: any;
-  words: string[];
-  additionalText: string;
-  assignablePoints: number;
+  words: string[] = [];
+  additionalText?: string;
+  assignablePoints?: number;
 
   constructor(
     private answerService: ContentAnswerService,

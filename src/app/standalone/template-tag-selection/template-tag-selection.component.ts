@@ -27,10 +27,10 @@ export class TemplateTagSelectionComponent
   extends FormComponent
   implements OnInit
 {
-  @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
 
-  @Input() langChanged: EventEmitter<string>;
-  @Input() lang: string;
+  @Input({ required: true }) langChanged!: EventEmitter<string>;
+  @Input({ required: true }) lang!: string;
   @Input() allowCreation = false;
   @Input() selectedTags: TemplateTag[] = [];
   @Input() selectedTagIds: string[] = [];

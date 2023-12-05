@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -31,17 +31,13 @@ export const HINTS: Hint[] = [
   templateUrl: './hint.component.html',
   styleUrls: ['./hint.component.scss'],
 })
-export class HintComponent implements OnInit {
-  @Input() text: string;
+export class HintComponent {
+  @Input({ required: true }) text!: string;
   @Input() type: HintType = HintType.WARNING;
 
   hint: Hint;
 
-  ngOnInit(): void {
-    this.getHintType();
-  }
-
-  getHintType() {
+  constructor() {
     this.hint = HINTS.find((hint) => hint.type === this.type) || HINTS[0];
   }
 }

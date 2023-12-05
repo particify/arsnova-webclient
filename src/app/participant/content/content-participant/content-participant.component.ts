@@ -14,7 +14,7 @@ import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-content-participant',
@@ -25,13 +25,13 @@ export class ContentParticipantComponent
   extends FormComponent
   implements OnInit
 {
-  @Input() content: Content;
+  @Input({ required: true }) content!: Content;
   @Input() answer?: Answer;
-  @Input() lastContent: boolean;
-  @Input() active: boolean;
-  @Input() index: number;
-  @Input() statsPublished: boolean;
-  @Input() correctOptionsPublished: boolean;
+  @Input() lastContent = false;
+  @Input() active = false;
+  @Input({ required: true }) index!: number;
+  @Input() statsPublished = false;
+  @Input() correctOptionsPublished = false;
   @Input() attribution?: string;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<boolean>();
@@ -43,22 +43,27 @@ export class ContentParticipantComponent
   answersString = '';
   extensionData: any;
   alreadySent = false;
-  flipped: boolean;
-  isMultiple: boolean;
+  flipped = false;
+  isMultiple = false;
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
-  a11yMsg: string;
+  a11yMsg?: string;
 
-  choiceContent: ContentChoice;
-  prioritizationContent: ContentPrioritization;
-  flashcardContent: ContentFlashcard;
-  scaleContent: ContentScale;
-  wordloudContent: ContentWordcloud;
+  // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
+  choiceContent!: ContentChoice;
+  prioritizationContent!: ContentPrioritization;
+  flashcardContent!: ContentFlashcard;
+  scaleContent!: ContentScale;
+  wordloudContent!: ContentWordcloud;
 
-  choiceAnswer: ChoiceAnswer;
-  prioritizationAnswer: PrioritizationAnswer;
-  wordcloudAnswer: MultipleTextsAnswer;
-  textAnswer: TextAnswer;
+  choiceAnswer!: ChoiceAnswer;
+  prioritizationAnswer!: PrioritizationAnswer;
+  wordcloudAnswer!: MultipleTextsAnswer;
+  textAnswer!: TextAnswer;
+
+  constructor(protected formService: FormService) {
+    super(formService);
+  }
 
   ngOnInit(): void {
     this.setExtensionData(this.content.roomId, this.content.id);
@@ -79,25 +84,33 @@ export class ContentParticipantComponent
         this.content.format
       )
     ) {
-      this.choiceAnswer = this.answer as ChoiceAnswer;
-      for (const option of (this.answer as ChoiceAnswer)
-        .selectedChoiceIndexes ?? []) {
-        this.answersString = this.answersString.concat(
-          (this.content as ContentChoice).options[option].label + ','
-        );
-      }
+      this.initChoiceAnswerData();
     } else if (this.content.format === ContentType.WORDCLOUD) {
-      this.wordcloudAnswer = this.answer as MultipleTextsAnswer;
-      for (const text of (this.answer as MultipleTextsAnswer).texts ?? []) {
-        this.answersString = this.answersString.concat(text + ',');
-      }
+      this.initWordcloudAnswerData();
     } else if (this.content.format === ContentType.TEXT) {
       this.textAnswer = this.answer as TextAnswer;
-      this.answersString = (this.answer as TextAnswer).body;
+      this.answersString = (this.answer as TextAnswer).body || '';
     } else if (this.content.format === ContentType.PRIORITIZATION) {
       this.prioritizationAnswer = this.answer as PrioritizationAnswer;
     } else if (this.content.format === ContentType.SCALE) {
       this.choiceAnswer = this.answer as ChoiceAnswer;
+    }
+  }
+
+  initChoiceAnswerData() {
+    this.choiceAnswer = this.answer as ChoiceAnswer;
+    for (const option of (this.answer as ChoiceAnswer).selectedChoiceIndexes ??
+      []) {
+      this.answersString = this.answersString.concat(
+        (this.content as ContentChoice).options[option].label + ','
+      );
+    }
+  }
+
+  initWordcloudAnswerData() {
+    this.wordcloudAnswer = this.answer as MultipleTextsAnswer;
+    for (const text of (this.answer as MultipleTextsAnswer).texts ?? []) {
+      this.answersString = this.answersString.concat(text + ',');
     }
   }
 

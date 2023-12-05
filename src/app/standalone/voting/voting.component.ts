@@ -13,10 +13,10 @@ import { provideTranslocoScope } from '@ngneat/transloco';
   styleUrls: ['./voting.component.scss'],
 })
 export class VotingComponent {
-  @Input() score: number;
-  @Input() userId: string;
-  @Input() roomId: string;
-  @Input() commentId: string;
+  @Input() score?: number;
+  @Input({ required: true }) userId!: string;
+  @Input({ required: true }) roomId!: string;
+  @Input({ required: true }) commentId!: string;
   @Input()
   set parseVote(vote: Vote) {
     if (vote.vote !== 0) {
@@ -24,8 +24,8 @@ export class VotingComponent {
     }
   }
 
-  currentVote: number;
-  currentVoteString: string;
+  currentVote?: number;
+  currentVoteString = '';
 
   constructor(private voteService: VoteService) {}
 

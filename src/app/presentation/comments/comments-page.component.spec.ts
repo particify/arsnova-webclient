@@ -17,7 +17,11 @@ import { CommentSettingsService } from '@app/core/services/http/comment-settings
 import { EventService } from '@app/core/services/util/event.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
@@ -30,6 +34,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 describe('CommentsPageComponent', () => {
   let component: CommentsPageComponent;
@@ -64,11 +69,16 @@ describe('CommentsPageComponent', () => {
     'unregisterHotkey',
   ]);
 
-  const room = new Room();
-  const data = {
-    room: room,
+  const snapshot = new ActivatedRouteSnapshot();
+  snapshot.data = {
+    userRole: UserRole.PARTICIPANT,
+    room: new Room(),
   };
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const mockFocusModeService = jasmine.createSpyObj(['updateCommentState']);
 

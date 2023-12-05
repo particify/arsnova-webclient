@@ -9,7 +9,6 @@ import {
   Params,
   UrlTree,
 } from '@angular/router';
-import { EventEmitter } from '@angular/core';
 import { Theme } from '@app/core/theme/theme.service';
 
 // SERVICES - UTIL
@@ -17,8 +16,8 @@ import { Theme } from '@app/core/theme/theme.service';
 // TranslateModule
 
 export class MockTranslocoService {
-  currentLang: string;
-  defaultLang: string;
+  currentLang?: string;
+  defaultLang = 'en';
 
   setDefaultLang(lang: string): void {
     this.defaultLang = lang;
@@ -37,7 +36,7 @@ export class MockTranslocoService {
 
 export class MockEventService {
   private _eventBus = new Subject<BroadcastEvent>();
-  focusOnInput: boolean;
+  focusOnInput = false;
 
   broadcast = jasmine.createSpy('BroadcastSpy').and.returnValue({});
 
@@ -79,7 +78,7 @@ export class ActivatedRouteStub {
   private subject = new ReplaySubject<ParamMap>();
   data?: Observable<any>;
   snapshot?: ActivatedRouteSnapshot;
-  params: Observable<Params | undefined>;
+  params?: Observable<Params | undefined>;
 
   constructor(
     initialParams?: Params,
@@ -147,7 +146,7 @@ export class MockNotificationService {
 
 export class MockThemeService {
   private currentTheme$ = new BehaviorSubject<Theme | null>(null);
-  private themes: string[];
+  private themes: string[] = [];
 
   getCurrentTheme$(): Observable<Theme | null> {
     return this.currentTheme$;

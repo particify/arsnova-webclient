@@ -78,29 +78,29 @@ export class NavBarComponent implements OnInit, OnDestroy {
     new NavBarItem(RoutingFeature.CONTENTS, 'equalizer'),
     new NavBarItem(RoutingFeature.FEEDBACK, 'thumbs_up_down'),
   ];
-  currentRouteIndex: number;
+  currentRouteIndex = -1;
   activeFeatures: string[] = [RoutingFeature.OVERVIEW];
-  group: ContentGroup;
-  groupName: string;
+  group?: ContentGroup;
+  groupName?: string;
   role: UserRole;
   viewRole: UserRole;
   shortId: string;
   roomId: string;
   room: Room;
-  changesSubscription: Subscription;
-  statsChangesSubscription: Subscription;
-  feedbackSubscription: Subscription;
-  commentSettingsSubscription: Subscription;
+  private changesSubscription?: Subscription;
+  private statsChangesSubscription?: Subscription;
+  private feedbackSubscription?: Subscription;
+  private commentSettingsSubscription?: Subscription;
   contentGroups: ContentGroup[] = [];
   publishedStates: PublishedContentsState[] = [];
-  focusStateSubscription: Subscription;
+  private focusStateSubscription?: Subscription;
   isLoading = true;
 
-  userCount: number;
-  focusFeature: RoutingFeature;
-  focusModeEnabled: boolean;
-  private roomSub: Subscription;
-  private roomWatch: Observable<IMessage>;
+  userCount = 1;
+  focusFeature?: RoutingFeature;
+  focusModeEnabled = false;
+  private roomSub?: Subscription;
+  private roomWatch?: Observable<IMessage>;
 
   constructor(
     protected router: Router,
@@ -114,7 +114,14 @@ export class NavBarComponent implements OnInit, OnDestroy {
     protected roomService: RoomService,
     protected commentSettingsService: CommentSettingsService,
     protected focusModeService: FocusModeService
-  ) {}
+  ) {
+    const routeData = this.route.snapshot.data;
+    this.role = routeData.userRole;
+    this.viewRole = routeData.viewRole;
+    this.shortId = routeData.room.shortId;
+    this.roomId = routeData.room.id;
+    this.room = routeData.room;
+  }
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {
@@ -140,14 +147,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const routeData = this.route.snapshot.data;
-    this.role = routeData.userRole;
-    this.viewRole = routeData.viewRole;
-    this.shortId = routeData.room.shortId;
-    this.roomId = routeData.room.id;
-    this.room = routeData.room;
     if (
-      !routeData.room.settings.feedbackLocked ||
+      !this.room.settings.feedbackLocked ||
       this.viewRole !== UserRole.PARTICIPANT
     ) {
       this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
@@ -388,7 +389,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     ];
     if (item.name !== RoutingFeature.OVERVIEW) {
       route.push(item.name);
-      if (item.name === RoutingFeature.CONTENTS) {
+      if (item.name === RoutingFeature.CONTENTS && this.groupName) {
         route.push(this.groupName);
       }
     }
@@ -504,7 +505,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
   setGroup(group?: ContentGroup) {
     this.group = group || this.getFirstGroupWithPublishedContents();
     this.setGroupProperties();
-    this.updateGroupName(this.groupName);
+    if (this.groupName) {
+      this.updateGroupName(this.groupName);
+    }
   }
 
   getFirstGroupWithPublishedContents(): ContentGroup {
@@ -530,11 +533,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   setGroupProperties() {
-    this.groupName = this.group.name;
-    this.setPublishedState(
-      this.group.firstPublishedIndex,
-      this.group.lastPublishedIndex
-    );
+    if (this.group) {
+      this.groupName = this.group.name;
+      this.setPublishedState(
+        this.group.firstPublishedIndex,
+        this.group.lastPublishedIndex
+      );
+    }
   }
 
   setPublishedState(first: number, last: number) {

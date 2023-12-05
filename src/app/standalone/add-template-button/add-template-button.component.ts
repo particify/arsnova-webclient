@@ -26,9 +26,9 @@ import { takeUntil } from 'rxjs';
   templateUrl: './add-template-button.component.html',
 })
 export class AddTemplateButtonComponent extends FormComponent {
-  @Input() templateId: string;
+  @Input({ required: true }) templateId!: string;
   @Input() room?: Room;
-  routeAfterSuccess: string[];
+  routeAfterSuccess: string[] = [];
 
   constructor(
     protected formService: FormService,

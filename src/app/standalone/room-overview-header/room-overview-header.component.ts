@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -12,22 +12,20 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
   templateUrl: './room-overview-header.component.html',
   styleUrls: ['./room-overview-header.component.scss'],
 })
-export class RoomOverviewHeaderComponent implements OnInit {
-  @Input() name: string;
-  @Input() shortId: string;
-  @Input() description: string;
-  @Input() renderedDescription: string;
+export class RoomOverviewHeaderComponent {
+  @Input({ required: true }) name!: string;
+  @Input({ required: true }) shortId!: string;
+  @Input() description?: string;
+  @Input() renderedDescription?: string;
 
   roomJoinUrl: string;
 
   constructor(
     private routingService: RoutingService,
     private route: ActivatedRoute
-  ) {}
-
-  ngOnInit(): void {
-    this.roomJoinUrl = this.routingService.getRoomJoinUrl(
-      this.route.snapshot.data.apiConfig.ui.links?.join?.url
+  ) {
+    this.roomJoinUrl = routingService.getRoomJoinUrl(
+      route.snapshot.data.apiConfig.ui.links?.join?.url
     );
   }
 }

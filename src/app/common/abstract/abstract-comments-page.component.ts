@@ -31,13 +31,13 @@ export const itemRenderNumber = 20;
 export class AbstractCommentsPageComponent {
   protected destroyed$ = new Subject<void>();
 
-  protected publicComments$: Observable<Comment[]>;
-  protected activeComments$: Observable<Comment[]>;
+  protected publicComments$?: Observable<Comment[]>;
+  protected activeComments$?: Observable<Comment[]>;
 
   isLoading = true;
 
   comments: Comment[] = [];
-  filteredComments: Comment[];
+  filteredComments: Comment[] = [];
   commentsFilteredByTime: Comment[] = [];
   displayComments: Comment[] = [];
   activeComment?: Comment;
@@ -46,18 +46,18 @@ export class AbstractCommentsPageComponent {
   publicCounter = 0;
 
   viewRole: UserRole;
-  userId: string;
+  userId?: string;
   roomId: string;
   room: Room;
 
   currentSort: CommentSort;
   currentFilter = CommentFilter.NONE;
   period: CommentPeriod;
-  searchInput: string;
+  searchInput = '';
 
   scroll = false;
   scrollMax = 0;
-  scrollStart: number;
+  scrollStart?: number;
   scrollExtended = false;
   isScrollStart = false;
   scrollExtendedMax = 500;
@@ -65,17 +65,17 @@ export class AbstractCommentsPageComponent {
   scrollActive = false;
   scrollToTop = false;
 
-  disabled: boolean;
-  readonly: boolean;
-  directSend: boolean;
-  fileUploadEnabled: boolean;
-  thresholdEnabled: boolean;
-  commentThreshold: number;
+  disabled = false;
+  readonly = false;
+  directSend = false;
+  fileUploadEnabled = false;
+  thresholdEnabled = false;
+  commentThreshold?: number;
 
   commentCounter = itemRenderNumber;
   freeze = false;
-  readTimestamp: Date;
-  unreadCommentCount: number;
+  readTimestamp = new Date();
+  unreadCommentCount = 0;
   referenceEvent: Subject<string> = new Subject<string>();
 
   constructor(
@@ -90,30 +90,34 @@ export class AbstractCommentsPageComponent {
     protected globalStorageService: GlobalStorageService,
     protected commentSettingsService: CommentSettingsService,
     protected authenticationService: AuthenticationService
-  ) {}
+  ) {
+    const lastSort = globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT);
+    this.currentSort = lastSort || CommentSort.TIME;
+    this.period =
+      globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||
+      CommentPeriod.ALL;
+    translateService.setActiveLang(
+      globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
+    this.room = this.route.snapshot.data.room;
+    this.roomId = this.room.id;
+    this.viewRole = this.route.snapshot.data.viewRole;
+  }
 
   load(reload = false) {
     this.resetReadTimestamp();
-    this.activeComments$.subscribe((comments) => {
-      this.comments = comments;
-      this.initRoom(reload);
-    });
+    if (this.activeComments$) {
+      this.activeComments$.subscribe((comments) => {
+        this.comments = comments;
+        this.initRoom(reload);
+      });
+    }
     if (!reload) {
       this.init();
     }
   }
 
   init(): void {
-    const lastSort = this.globalStorageService.getItem(
-      STORAGE_KEYS.COMMENT_SORT
-    );
-    this.currentSort = lastSort || CommentSort.TIME;
-    this.period =
-      this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||
-      CommentPeriod.ALL;
-    this.translateService.setActiveLang(
-      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
-    );
     this.authenticationService
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
@@ -163,9 +167,11 @@ export class AbstractCommentsPageComponent {
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
     this.checkFreeze();
-    this.isScrollStart =
+    this.isScrollStart = !!(
+      this.scrollStart &&
       currentScroll >= this.scrollStart &&
-      currentScroll <= this.scrollStart + 200;
+      currentScroll <= this.scrollStart + 200
+    );
     this.showCommentsForScrollPosition(
       currentScroll,
       scrollElement.scrollHeight
@@ -225,8 +231,10 @@ export class AbstractCommentsPageComponent {
     if (this.searchInput) {
       if (this.searchInput.length > 0) {
         this.hideCommentsList = true;
-        this.filteredComments = this.commentsFilteredByTime.filter((c) =>
-          c.body.toLowerCase().includes(this.searchInput.toLowerCase())
+        this.filteredComments = this.commentsFilteredByTime.filter(
+          (c) =>
+            this.searchInput &&
+            c.body.toLowerCase().includes(this.searchInput.toLowerCase())
         );
         this.getDisplayComments();
       }
@@ -252,11 +260,11 @@ export class AbstractCommentsPageComponent {
     }
     if (this.hideCommentsList) {
       this.filteredComments = this.filteredComments.filter(
-        (x) => x.score >= this.commentThreshold
+        (x) => this.commentThreshold && x.score >= this.commentThreshold
       );
     } else {
       this.comments = this.comments.filter(
-        (x) => x.score >= this.commentThreshold
+        (x) => this.commentThreshold && x.score >= this.commentThreshold
       );
     }
   }

@@ -1,5 +1,6 @@
+// TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
 export abstract class DataChanged<T> {
-  type: string;
+  type!: string;
   payload: {
     dataType: string;
     roomId: string;

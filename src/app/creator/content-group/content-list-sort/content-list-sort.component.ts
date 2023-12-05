@@ -16,11 +16,11 @@ export class ContentListSortComponent
   extends DragDropBaseComponent
   implements OnInit
 {
-  @Input() contents: Content[];
-  @Input() contentGroup: ContentGroup;
+  @Input({ required: true }) contents!: Content[];
+  @Input({ required: true }) contentGroup!: ContentGroup;
 
-  firstPublishedIndex: number;
-  lastPublishedIndex: number;
+  firstPublishedIndex!: number;
+  lastPublishedIndex!: number;
 
   iconList: Map<ContentType, string>;
 
@@ -29,10 +29,10 @@ export class ContentListSortComponent
     private contentPublishService: ContentPublishService
   ) {
     super();
+    this.iconList = this.contentService.getTypeIcons();
   }
 
   ngOnInit() {
-    this.iconList = this.contentService.getTypeIcons();
     this.dragDroplist = this.contents;
     this.firstPublishedIndex = this.contentGroup.firstPublishedIndex;
     this.lastPublishedIndex = this.contentGroup.lastPublishedIndex;

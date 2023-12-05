@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   SummarizedStats,
   SystemInfoService,
@@ -12,13 +12,11 @@ import { SystemHealth } from '@app/admin/_models/system-health';
   templateUrl: './summary-bar.component.html',
   styleUrls: ['./summary-bar.component.scss'],
 })
-export class SummaryBarComponent implements OnInit {
-  @Input() healthInfo: Observable<SystemHealth>;
+export class SummaryBarComponent {
+  @Input({ required: true }) healthInfo!: Observable<SystemHealth>;
   stats: Observable<SummarizedStats>;
 
-  constructor(protected systemInfoService: SystemInfoService) {}
-
-  ngOnInit() {
+  constructor(protected systemInfoService: SystemInfoService) {
     this.stats = this.getStats();
   }
 

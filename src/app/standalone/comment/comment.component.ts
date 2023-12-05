@@ -53,17 +53,17 @@ import { Vote } from '@app/core/models/vote';
   ],
 })
 export class CommentComponent implements OnInit, OnDestroy {
-  @Input() comment: Comment;
+  @Input({ required: true }) comment!: Comment;
   @Input() isEditor = false;
 
-  @Input() isNew: boolean;
-  @Input() referenceEvent: Observable<string>;
+  @Input() isNew = false;
+  @Input() referenceEvent?: Observable<string>;
   @Input() inAnswerView = false;
   @Input() archived = false;
   @Input() isSimpleView = false;
   @Input() isModeration = false;
   @Input() fileUploadEnabled = false;
-  @Input() parseVote: Vote;
+  @Input() parseVote?: Vote;
   @Input() userId?: string;
 
   @Output() clickedOnTag = new EventEmitter<string>();
@@ -88,10 +88,10 @@ export class CommentComponent implements OnInit, OnDestroy {
     langService.langEmitter.subscribe((lang) => {
       this.language = lang;
     });
+    this.language = globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
   }
 
   ngOnInit() {
-    this.language = this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE);
     this.translateService.setActiveLang(this.language);
     this.extensionData = {
       roomId: this.comment.roomId,

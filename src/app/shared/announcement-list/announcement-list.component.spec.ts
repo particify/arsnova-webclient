@@ -14,9 +14,7 @@ describe('AnnouncementListComponent', () => {
   let component: AnnouncementListComponent;
   let fixture: ComponentFixture<AnnouncementListComponent>;
 
-  const dialogData = {
-    state: new AnnouncementState(),
-  };
+  const dialogData = new AnnouncementState();
 
   const authService = jasmine.createSpyObj('AuthenticationService', [
     'getCurrentAuthentication',

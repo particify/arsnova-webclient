@@ -11,7 +11,7 @@ import { TranslocoService } from '@ngneat/transloco';
   providers: [FocusModeService],
 })
 export class ParticipantPageComponent implements OnInit {
-  focusModeEnabled: boolean;
+  focusModeEnabled = false;
 
   constructor(
     protected translateService: TranslocoService,

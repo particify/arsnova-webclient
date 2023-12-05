@@ -8,7 +8,7 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
   styleUrls: ['./entity-properties.component.scss'],
 })
 export class EntityPropertiesComponent implements OnChanges {
-  @Input() entity: object;
+  @Input({ required: true }) entity!: object;
   @Input() translateKeys = false;
   @Input() expandOnInit = false;
   treeControl: NestedTreeControl<any> = new NestedTreeControl(

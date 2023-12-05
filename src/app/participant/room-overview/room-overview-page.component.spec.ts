@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomOverviewPageComponent } from './room-overview-page.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
@@ -69,21 +73,36 @@ describe('RoomOverviewPageComponent', () => {
     new ContentGroup('roomId', 'name', [], true),
   ]);
 
-  const room = new Room();
+  const room = new Room(
+    '1234',
+    'shortId',
+    'abbreviation',
+    'name',
+    'description'
+  );
   room.settings = { feedbackLocked: true };
-  const data = {
+
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.data = {
     room: room,
-    userRole: UserRole.PARTICIPANT,
     viewRole: UserRole.PARTICIPANT,
+    commentSettings: {
+      disabled: true,
+    },
   };
+
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const mockCommentSettingsService = jasmine.createSpyObj([
     'getSettingsStream',
   ]);
 
   mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
-
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data);
 
   const splitShortIdPipe = new SplitShortIdPipe();
 

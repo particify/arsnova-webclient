@@ -15,10 +15,10 @@ import { ExtensionFactory } from './extension-factory';
   styles: [':host:empty { display: none; }'],
 })
 export class ExtensionPointComponent implements OnInit {
-  @Input() extensionId: string;
-  @Input() extensionData: object;
+  @Input({ required: true }) extensionId!: string;
+  @Input() extensionData?: object;
   @Output() extensionEvent = new EventEmitter();
-  componentRef: ComponentRef<any> | null;
+  componentRef?: ComponentRef<any> | null;
   extensionUnavailable = false;
 
   constructor(
@@ -29,9 +29,9 @@ export class ExtensionPointComponent implements OnInit {
   ngOnInit() {
     this.componentRef = this.factory.createExtension(
       this.extensionId,
-      this.extensionData,
       this.extensionEvent,
-      this.viewContainerRef
+      this.viewContainerRef,
+      this.extensionData
     );
     this.extensionUnavailable = !this.componentRef;
   }

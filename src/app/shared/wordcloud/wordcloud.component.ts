@@ -37,8 +37,8 @@ export class WordCloudItem {
   ],
 })
 export class WordcloudComponent implements OnChanges {
-  @Input() wordWeights: WordCloudItem[];
-  @ViewChild('wordcloud') elementRef: ElementRef<SVGGeometryElement>;
+  @Input({ required: true }) wordWeights!: WordCloudItem[];
+  @ViewChild('wordcloud') elementRef!: ElementRef<SVGGeometryElement>;
 
   width: number = RENDER_WIDTH;
   height: number = RENDER_WIDTH / RATIO;
@@ -49,7 +49,7 @@ export class WordcloudComponent implements OnChanges {
   fontFamily: string;
   wordColorIndexes: string[] = [];
 
-  private timerSubscription: Subscription;
+  private timerSubscription?: Subscription;
 
   constructor() {
     // Determine theme CSS so we can avoid to hard code styles here.

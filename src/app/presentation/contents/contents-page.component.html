@@ -59,7 +59,7 @@
           {{ 'statistic.a11y-no-more-answers' | transloco }}
         </div>
       </cdk-step>
-      <cdk-step *ngIf="!!attributions">
+      <cdk-step *ngIf="attributions.length > 0">
         <div fxLayoutAlign="center" id="step">
           <mat-card class="presentation-card">
             <app-attributions-info

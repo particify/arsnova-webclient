@@ -9,11 +9,11 @@ import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
   styleUrls: ['./announcement.component.scss'],
 })
 export class AnnouncementComponent {
-  @Input() announcement: Announcement;
-  @Input() roomName: string;
-  @Input() role: UserRole;
-  @Input() editMode = false;
+  @Input({ required: true }) announcement!: Announcement;
+  @Input() role?: UserRole;
+  @Input() roomName?: string;
   @Input() label?: string;
+  @Input() editMode = false;
   @Output() deleteEvent = new EventEmitter<Announcement>();
   @Output() editEvent = new EventEmitter<Announcement>();
 

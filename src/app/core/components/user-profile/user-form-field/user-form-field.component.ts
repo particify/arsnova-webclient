@@ -6,7 +6,7 @@ import { FormField } from '@app/core/components/user-profile/user-profile.compon
   templateUrl: './user-form-field.component.html',
 })
 export class UserFormFieldComponent {
-  @Input() formField: FormField;
+  @Input({ required: true }) formField!: FormField;
   @Input() disabled = false;
   @Output() fieldUpdated: EventEmitter<FormField> =
     new EventEmitter<FormField>();

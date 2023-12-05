@@ -24,6 +24,7 @@
   </button>
   <ng-template #withDirective>
     <button
+      *ngIf="hotkey && trackInteraction"
       mat-raised-button
       type="submit"
       [color]="color"

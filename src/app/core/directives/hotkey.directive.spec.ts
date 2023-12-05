@@ -19,7 +19,7 @@ import { HotkeyDirective } from './hotkey.directive';
   </button>`,
 })
 class TestComponent {
-  @ViewChild('button') button: HTMLButtonElement;
+  @ViewChild('button') button!: HTMLButtonElement;
 
   click() {}
 }

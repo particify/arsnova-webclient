@@ -30,8 +30,8 @@ export class FocusModeService extends AbstractFocusModeService {
   private commentStateUpdated$ = new Subject<CommentFocusState>();
   private focusModeEnabled = false;
 
-  private currentFeature: RoutingFeature;
-  private wsConnectionState: RxStompState;
+  private currentFeature?: RoutingFeature;
+  private wsConnectionState?: RxStompState;
 
   constructor(
     protected wsConnector: WsConnectorService,
@@ -114,7 +114,7 @@ export class FocusModeService extends AbstractFocusModeService {
   }
 
   protected handleState(state?: FocusEvent, initial = false) {
-    if (this.currentRoom.focusModeEnabled) {
+    if (this.currentRoom?.focusModeEnabled) {
       this.evaluateNewState(state, initial);
     }
   }

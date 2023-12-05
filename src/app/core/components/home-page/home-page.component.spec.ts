@@ -25,7 +25,7 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
   template: '<svg>Particify</svg>',
 })
 class LibExtensionPointStubComponent {
-  @Input() extensionId: string;
+  @Input({ required: true }) extensionId!: string;
 }
 
 describe('HomePageComponent', () => {

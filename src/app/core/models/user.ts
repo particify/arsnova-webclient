@@ -16,7 +16,8 @@ export class User {
     authProvider: string,
     revision: string,
     person: Person,
-    settings: UserSettings = new UserSettings()
+    settings: UserSettings = new UserSettings(),
+    account: UserAccount = new UserAccount()
   ) {
     this.id = id;
     this.loginId = loginId;
@@ -24,10 +25,11 @@ export class User {
     this.revision = revision;
     this.person = person;
     this.settings = settings;
+    this.account = account;
   }
 }
 
 class UserAccount {
-  activated: boolean;
-  passwortResetTime: Date;
+  activated = false;
+  passwortResetTime?: Date;
 }

@@ -19,7 +19,7 @@ const API_LOGIN_URI_PATTERN = /^\/api\/auth\/login\/[^?].*/;
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
-  private token: string;
+  private token?: string;
 
   constructor(private authenticationService: AuthenticationService) {
     authenticationService

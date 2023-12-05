@@ -26,7 +26,7 @@ import { BaseTemplateService } from '@app/core/services/http/base-template.servi
 })
 export class EditContentGroupTemplateComponent extends FormComponent {
   @ViewChild(ContentGroupTemplateEditingComponent)
-  templateEditing: ContentGroupTemplateEditingComponent;
+  templateEditing!: ContentGroupTemplateEditingComponent;
 
   constructor(
     protected formService: FormService,

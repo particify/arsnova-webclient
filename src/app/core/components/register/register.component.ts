@@ -20,7 +20,7 @@ import { take } from 'rxjs';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent extends FormComponent implements OnInit {
-  @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
+  @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   usernameFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
@@ -39,15 +39,14 @@ export class RegisterComponent extends FormComponent implements OnInit {
     protected formService: FormService
   ) {
     super(formService);
+    this.accountServiceTitle =
+      route.snapshot.data.apiConfig.ui.registration?.service || 'ARSnova';
+    this.linkOfToS = route.snapshot.data.apiConfig.ui.links.tos?.url;
   }
 
   ngOnInit(): void {
     this.setFormControl(this.usernameFormControl);
     this.usernameFormControl.clearValidators();
-    const data = this.route.snapshot.data;
-    this.accountServiceTitle =
-      data.apiConfig.ui.registration?.service || 'ARSnova';
-    this.linkOfToS = data.apiConfig.ui.links.tos.url;
   }
 
   activateValidators() {

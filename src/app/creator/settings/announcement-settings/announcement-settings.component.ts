@@ -23,13 +23,13 @@ export class AnnouncementSettingsComponent
   extends FormComponent
   implements OnInit
 {
-  @ViewChild('inputTabs') inputTabs: MatTabGroup;
-  @ViewChild('titleInput') titleInput: ElementRef;
+  @ViewChild('inputTabs') inputTabs!: MatTabGroup;
+  @ViewChild('titleInput') titleInput!: ElementRef;
 
-  @Input() room: Room;
+  @Input({ required: true }) room!: Room;
 
-  title: string;
-  body: string;
+  title = '';
+  body = '';
   announcements: Announcement[] = [];
 
   editId?: string;

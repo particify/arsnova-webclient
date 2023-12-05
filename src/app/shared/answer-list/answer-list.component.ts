@@ -17,9 +17,9 @@ import { DialogService } from '@app/core/services/util/dialog.service';
   styleUrls: ['./answer-list.component.scss'],
 })
 export class AnswerListComponent implements OnInit {
-  @Input() answers: TextStatistic[] = [];
-  @Input() roomId: string;
-  @Input() contentId: string;
+  @Input({ required: true }) answers!: TextStatistic[];
+  @Input({ required: true }) roomId!: string;
+  @Input() contentId?: string;
   @Input() banMode = true;
   @Input() isPresentation = false;
   @Output() answerBanned = new EventEmitter<string>();
@@ -46,13 +46,14 @@ export class AnswerListComponent implements OnInit {
       return;
     }
     const action = this.banMode ? 'ban' : 'delete';
-    const confirmAction = this.banMode
-      ? this.contentService.banKeywordForContent(
-          this.roomId,
-          this.contentId,
-          answer.answer
-        )
-      : this.contentAnswerService.hideAnswerText(this.roomId, answer.id);
+    const confirmAction =
+      this.banMode && this.contentId
+        ? this.contentService.banKeywordForContent(
+            this.roomId,
+            this.contentId,
+            answer.answer
+          )
+        : this.contentAnswerService.hideAnswerText(this.roomId, answer.id);
     const dialogRef = this.dialogService.openDeleteDialog(
       `${action}-answer`,
       `creator.really-${action}-answer`,

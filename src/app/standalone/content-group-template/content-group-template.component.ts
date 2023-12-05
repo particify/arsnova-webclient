@@ -20,7 +20,7 @@ import { Room } from '@app/core/models/room';
   styleUrls: ['./content-group-template.component.scss'],
 })
 export class ContentGroupTemplateComponent {
-  @Input() template: ContentGroupTemplate;
+  @Input({ required: true }) template!: ContentGroupTemplate;
   @Input() room?: Room;
   @Output() previewClicked = new EventEmitter<string>();
   LICENSES = LICENSES;

@@ -7,7 +7,6 @@ import { MockEventService, MockThemeService } from '@testing/test-helpers';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentState } from '@app/core/models/content-state';
 import { of } from 'rxjs';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { RoundStatistics } from '@app/core/models/round-statistics';
@@ -15,7 +14,7 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { MockGlobalStorageService } from '@testing/test-helpers';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { UserSettings } from '@app/core/models/user-settings';
 
 describe('StatisticScaleComponent', () => {
@@ -27,12 +26,7 @@ describe('StatisticScaleComponent', () => {
     'getAnswer',
     'getAnswersDeleted',
   ]);
-  const roundStatistics = new RoundStatistics();
-  roundStatistics.abstentionCount = 0;
-  roundStatistics.answerCount = 0;
-  roundStatistics.combinatedCounts = [];
-  roundStatistics.independentCounts = [];
-  roundStatistics.round = 1;
+  const roundStatistics = new RoundStatistics(1, [], [], 0, 0);
   const stats = new AnswerStatistics();
   (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
   const body = {
@@ -106,6 +100,7 @@ describe('StatisticScaleComponent', () => {
       ContentType.SCALE
     );
     component.settings = new UserSettings();
+    component.visualizationUnitChanged = new EventEmitter<boolean>();
     fixture.detectChanges();
   });
 

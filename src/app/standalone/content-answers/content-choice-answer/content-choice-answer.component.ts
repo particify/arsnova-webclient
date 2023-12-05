@@ -12,17 +12,17 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
   styleUrls: ['./content-choice-answer.component.scss'],
 })
 export class ContentChoiceAnswerComponent {
-  @Input() answer: ChoiceAnswer;
+  @Input() answer?: ChoiceAnswer;
   @Input() selectableAnswers: SelectableAnswer[] = [];
-  @Input() isDisabled: boolean;
-  @Input() multipleAnswersAllowed: boolean;
-  @Input() hasAbstained: boolean;
-  @Input() hasCorrectAnswer: boolean;
-  @Input() isCorrectAnswerPublished: boolean;
+  @Input() isDisabled = false;
+  @Input() multipleAnswersAllowed = false;
+  @Input() hasAbstained = false;
+  @Input() hasCorrectAnswer = false;
+  @Input() isCorrectAnswerPublished = false;
   @Input() selectedAnswerIndex?: number;
   @Input() correctOptionIndexes: number[] = [];
-  @Input() contentId: string;
-  @Input() dynamicRendering: boolean;
+  @Input() contentId?: string;
+  @Input() dynamicRendering = false;
   @Output() answerIndexSelected = new EventEmitter<number>();
 
   selectSingleAnswer(index: number) {
@@ -60,7 +60,7 @@ export class ContentChoiceAnswerComponent {
   }
 
   isAnswerOptionSelected(index: number): boolean {
-    return this.answer?.selectedChoiceIndexes.includes(index);
+    return !this.answer || this.answer.selectedChoiceIndexes.includes(index);
   }
 
   isAnswerOptionCorrect(index: number): boolean {

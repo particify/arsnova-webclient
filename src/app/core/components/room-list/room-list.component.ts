@@ -33,7 +33,6 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
 import { ExtensionFactory } from '@projects/extension-point/src/lib/extension-factory';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { RoomCreated } from '@app/core/models/events/room-created';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
 
@@ -49,17 +48,17 @@ interface RoomDataView {
   styleUrls: ['./room-list.component.scss'],
 })
 export class RoomListComponent implements OnInit, OnDestroy {
-  @Input() auth: ClientAuthentication;
+  @Input({ required: true }) auth!: ClientAuthentication;
   showGuestAccountControls = false;
   isGuest = false;
   rooms: RoomDataView[] = [];
   roomIds: string[] = [];
-  displayRooms: RoomDataView[];
-  roomsFromGuest: RoomDataView[];
+  displayRooms: RoomDataView[] = [];
+  roomsFromGuest: RoomDataView[] = [];
   guestAuth$: Observable<ClientAuthentication>;
   showRoomsFromGuest = false;
   isLoading = true;
-  sub: Subscription;
+  sub?: Subscription;
   unsubscribe$ = new Subject<void>();
   deviceType: string;
   roles: Map<UserRole, string> = new Map<UserRole, string>();
@@ -82,12 +81,16 @@ export class RoomListComponent implements OnInit, OnDestroy {
     private globalStorageService: GlobalStorageService,
     private extensionFactory: ExtensionFactory,
     private routingService: RoutingService
-  ) {}
-
-  ngOnInit() {
+  ) {
+    this.deviceType = this.globalStorageService.getItem(
+      STORAGE_KEYS.DEVICE_TYPE
+    );
     this.guestAuth$ = this.authenticationService
       .fetchGuestAuthentication()
       .pipe(shareReplay());
+  }
+
+  ngOnInit() {
     this.loadRoomDataViews();
     if (this.auth.authProvider === AuthProvider.ARSNOVA_GUEST) {
       this.isGuest = true;
@@ -101,9 +104,6 @@ export class RoomListComponent implements OnInit, OnDestroy {
     this.sub = this.eventService.on<any>('RoomDeleted').subscribe((payload) => {
       this.rooms = this.rooms.filter((r) => r.summary.id !== payload.id);
     });
-    this.deviceType = this.globalStorageService.getItem(
-      STORAGE_KEYS.DEVICE_TYPE
-    );
     const roleKeys = [
       'room-list.a11y-participant-role',
       'room-list.a11y-executive-moderator-role',

@@ -6,7 +6,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@ngneat/transloco';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -21,11 +20,11 @@ import { take } from 'rxjs';
   styleUrls: ['./content-text-participant.component.scss'],
 })
 export class ContentTextParticipantComponent extends ContentParticipantBaseComponent {
-  @Input() content: Content;
-  @Input() answer: TextAnswer;
+  @Input({ required: true }) content!: Content;
+  @Input({ required: true }) answer!: TextAnswer;
   @Output() answerChanged = new EventEmitter<TextAnswer>();
 
-  givenAnswer: TextAnswer;
+  givenAnswer?: TextAnswer;
 
   textAnswer = '';
 
@@ -56,13 +55,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     this.isLoading = false;
   }
 
-  createAnswer(body?: string) {
-    this.givenAnswer = new TextAnswer();
-    if (body) {
-      this.givenAnswer.body = body;
-    }
-  }
-
   submitAnswer() {
     if (this.textAnswer.trim().valueOf() === '') {
       this.translateService
@@ -78,17 +70,15 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       return;
     }
     this.disableForm();
-    const answer = new TextAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
-    answer.subject = this.content.subject;
-    answer.body = this.textAnswer;
-    answer.read = 'false';
-    answer.format = ContentType.TEXT;
+    const answer = new TextAnswer(
+      this.content.id,
+      this.content.state.round,
+      this.textAnswer
+    );
     this.answerService
       .addAnswerText(this.content.roomId, answer)
       .subscribe((answer) => {
-        this.createAnswer(this.textAnswer);
+        this.givenAnswer = answer;
         this.translateService
           .selectTranslate('participant.answer.sent')
           .pipe(take(1))
@@ -106,14 +96,11 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
   }
 
   abstain() {
-    const answer = new TextAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
-    answer.format = ContentType.TEXT;
+    const answer = new TextAnswer(this.content.id, this.content.state.round);
     this.answerService
       .addAnswerText(this.content.roomId, answer)
       .subscribe((answer) => {
-        this.createAnswer();
+        this.givenAnswer = answer;
         this.sendStatusToParent(answer);
       }),
       () => {

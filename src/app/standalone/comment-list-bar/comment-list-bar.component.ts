@@ -32,17 +32,17 @@ class SortItem {
   styleUrls: ['./comment-list-bar.component.scss'],
 })
 export class CommentListBarComponent {
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput') searchInput!: ElementRef;
 
-  @Input() scroll: boolean;
-  @Input() scrollActive: boolean;
-  @Input() isScrollStart: boolean;
-  @Input() commentCounter: number;
+  @Input() scroll = false;
+  @Input() scrollActive = false;
+  @Input() isScrollStart = false;
+  @Input() commentCounter = 0;
   @Input() showAlways = false;
-  @Input() isAddButtonDisabled: boolean;
-  @Input() currentFilter: CommentFilter;
-  @Input() currentSort: CommentSort;
-  @Input() period: CommentPeriod;
+  @Input() isAddButtonDisabled = false;
+  @Input() currentFilter = CommentFilter.NONE;
+  @Input() currentSort = CommentSort.TIME;
+  @Input() period = CommentPeriod.ALL;
   @Input() navBarExists = true;
 
   @Output() searchInputChanged = new EventEmitter<string>();

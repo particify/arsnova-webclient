@@ -19,11 +19,11 @@ import { TranslocoService } from '@ngneat/transloco';
   ],
 })
 export class CommentListBarExtensionComponent {
-  @Input() room: Room;
+  @Input({ required: true }) room!: Room;
   @Input() isModeration = false;
   @Input() comments: Comment[] = [];
   @Input() readonly = false;
-  @Input() viewRole: UserRole;
+  @Input({ required: true }) viewRole!: UserRole;
 
   @Output() switchListClicked = new EventEmitter<number>();
   @Output() toggleReadonlyClicked = new EventEmitter<void>();

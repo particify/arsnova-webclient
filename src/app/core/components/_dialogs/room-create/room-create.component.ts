@@ -37,11 +37,10 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
 
   emptyInputs = false;
   newRoom = new Room();
-  roomId: string;
   auth?: ClientAuthentication;
   HintType = HintType;
-  anonymousProvider: AuthenticationProvider;
-  createDuplication: boolean;
+  anonymousProvider?: AuthenticationProvider;
+  createDuplication = false;
 
   constructor(
     private roomService: RoomService,

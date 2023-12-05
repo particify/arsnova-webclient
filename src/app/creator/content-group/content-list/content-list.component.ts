@@ -32,22 +32,22 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
   styleUrls: ['./content-list.component.scss'],
 })
 export class ContentListComponent implements OnInit, OnDestroy {
-  @ViewChildren('lockMenu') lockMenus: QueryList<MatButton>;
+  @ViewChildren('lockMenu') lockMenus!: QueryList<MatButton>;
 
-  @Input() room: Room;
-  @Input() contentGroup: ContentGroup;
-  @Input() contents: Content[];
-  @Input() isModerator: boolean;
-  @Input() contentGroupStats: ContentGroupStatistics[] = [];
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) contentGroup!: ContentGroup;
+  @Input({ required: true }) contents!: Content[];
+  @Input({ required: true }) contentGroupStats!: ContentGroupStatistics[];
+  @Input() isModerator = false;
   @Input() attributionsExist = false;
 
-  currentGroupIndex: number;
+  currentGroupIndex?: number;
   contentTypes: string[] = Object.values(ContentType);
 
   firstPublishedIndex = 0;
   lastPublishedIndex = -1;
   activeMenuIndex?: number;
-  activeContentId: string;
+  activeContentId?: string;
   contentHotkeysRegistered = false;
   markdownFeatureset = MarkdownFeatureset.MINIMUM;
 
@@ -66,10 +66,11 @@ export class ContentListComponent implements OnInit, OnDestroy {
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
     private contentPublishService: ContentPublishService
-  ) {}
+  ) {
+    this.iconList = this.contentService.getTypeIcons();
+  }
 
   ngOnInit() {
-    this.iconList = this.contentService.getTypeIcons();
     this.setRange();
     this.getCurrentGroupIndex();
     this.contentService.getAnswersDeleted().subscribe((contentId) => {
@@ -95,6 +96,9 @@ export class ContentListComponent implements OnInit, OnDestroy {
           {
             key: 'l',
             action: () => {
+              if (!this.activeContentId) {
+                return;
+              }
               const activeIndex = this.contents
                 .map((c) => c.id)
                 .indexOf(this.activeContentId);

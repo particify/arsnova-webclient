@@ -11,9 +11,9 @@ import { LICENSES } from '@app/core/models/licenses';
 })
 export class TemplateLicenseComponent {
   @Input() ownerName?: string;
-  @Input() license: string;
+  @Input({ required: true }) license!: string;
   @Input() showLink = false;
-  @Input() aiGenerated: boolean;
+  @Input() aiGenerated = false;
 
   LICENSES = LICENSES;
 }

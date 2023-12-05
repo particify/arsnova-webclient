@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 
 import { Subject, takeUntil, timer } from 'rxjs';
 import { TranslocoService } from '@ngneat/transloco';
@@ -13,8 +13,8 @@ const TIME_UPDATE_INTERVAL = 60000;
   templateUrl: './date.component.html',
   styleUrls: ['./date.component.scss'],
 })
-export class DateComponent implements OnInit, OnDestroy {
-  @Input() timestamp: Date;
+export class DateComponent implements OnDestroy {
+  @Input({ required: true }) timestamp!: Date;
   @Input() responsive = false;
 
   refreshCounter = 0;
@@ -22,9 +22,7 @@ export class DateComponent implements OnInit, OnDestroy {
 
   language: string;
 
-  constructor(private translateService: TranslocoService) {}
-
-  ngOnInit(): void {
+  constructor(private translateService: TranslocoService) {
     this.language = this.translateService.getActiveLang();
     this.translateService.langChanges$.subscribe((lang) => {
       this.language = lang;

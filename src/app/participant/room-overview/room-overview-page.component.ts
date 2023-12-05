@@ -20,6 +20,8 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-overview-page';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { DataChanged } from '@app/core/models/events/data-changed';
+import { RoomStats } from '@app/core/models/room-stats';
 
 @Component({
   selector: 'app-participant-overview',
@@ -54,7 +56,8 @@ export class RoomOverviewPageComponent
       commentService,
       contentGroupService,
       wsCommentService,
-      eventService
+      eventService,
+      route
     );
   }
 
@@ -65,13 +68,15 @@ export class RoomOverviewPageComponent
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.route.data.subscribe((data) => {
-      this.role = data.viewRole;
-      this.focusModeEnabled = data.room.focusModeEnabled;
-      this.initializeRoom(data.room, 'PublicDataChanged');
-      this.getFeedback();
-      this.commentsEnabled = !data.commentSettings.disabled;
-    });
+    this.focusModeEnabled = this.room.focusModeEnabled;
+    this.eventService
+      .on<DataChanged<RoomStats>>('PublicDataChanged')
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => this.initializeStats(true));
+    this.initializeStats(false);
+    this.subscribeCommentStream();
+    this.getFeedback();
+    this.commentsEnabled = !this.route.snapshot.data.commentSettings.disabled;
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );

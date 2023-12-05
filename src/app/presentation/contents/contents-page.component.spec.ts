@@ -75,18 +75,19 @@ describe('ContentsPageComponent', () => {
     'unregisterHotkey',
   ]);
 
-  const data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-  };
-
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
     isPresentation: false,
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
   };
 
   snapshot.params = of([{ seriesName: 'SERIES' }]);
 
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const mockUserService = jasmine.createSpyObj('UserService', [
     'getUserSettingsByLoginId',

@@ -26,7 +26,7 @@ interface DialogData {
 export class ContentGroupCreationComponent extends FormComponent {
   readonly dialogId = 'create-content-group';
 
-  @ViewChild('nameInput') nameInput: ElementRef;
+  @ViewChild('nameInput') nameInput!: ElementRef;
 
   name = '';
 

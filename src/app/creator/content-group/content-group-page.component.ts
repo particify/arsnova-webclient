@@ -4,7 +4,6 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
 import { ContentGroup } from '@app/core/models/content-group';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
-import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -38,10 +37,11 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   isLoading = true;
 
   room: Room;
-  contentGroup: ContentGroup;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  contentGroup!: ContentGroup;
   contents: Content[] = [];
   contentGroupStats: ContentGroupStatistics[] = [];
-  groupName: string;
+  groupName = '';
   published = false;
   statisticsPublished = true;
   correctOptionsPublished = true;
@@ -69,17 +69,16 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     private extensionFactory: ExtensionFactory,
     private routingService: RoutingService,
     private authService: AuthenticationService
-  ) {}
+  ) {
+    this.isModerator = route.snapshot.data.userRole === UserRole.MODERATOR;
+    this.room = route.snapshot.data.room;
+    route.params.subscribe((params) => {
+      this.setContentGroup(params['seriesName']);
+    });
+  }
 
   ngOnInit(): void {
     this.onInit = true;
-    this.route.data.subscribe((data) => {
-      this.isModerator = data.userRole === UserRole.MODERATOR;
-      this.room = data.room;
-      this.route.params.subscribe((params) => {
-        this.setContentGroup(params['seriesName']);
-      });
-    });
     this.hasSeriesExportExtension = !!this.extensionFactory.getExtension(
       'series-results-export'
     );

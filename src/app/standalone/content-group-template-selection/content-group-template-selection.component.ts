@@ -36,12 +36,13 @@ export class ContentGroupTemplateSelectionComponent
   destroyed$ = new Subject<void>();
 
   loadingTemplates = true;
-  templates: ContentGroupTemplate[];
+  templates: ContentGroupTemplate[] = [];
   selectedLang: string;
   selectedTags: TemplateTag[] = [];
   langChanged = new EventEmitter<string>();
   showPublic = true;
-  creatorId: string;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  creatorId!: string;
   tagIdsQueryParams: string[] = [];
   room?: Room;
 
@@ -54,9 +55,6 @@ export class ContentGroupTemplateSelectionComponent
     private route: ActivatedRoute
   ) {
     super(formService);
-  }
-
-  ngOnInit(): void {
     this.room = this.route.snapshot.data.room;
     const queryParams = this.route.snapshot.queryParams;
     // If lang is set via query param, use this one instead of active lang as default
@@ -68,6 +66,9 @@ export class ContentGroupTemplateSelectionComponent
     } else {
       this.loadTemplates();
     }
+  }
+
+  ngOnInit(): void {
     this.authService
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))

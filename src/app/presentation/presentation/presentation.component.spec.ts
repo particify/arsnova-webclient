@@ -50,11 +50,14 @@ describe('PresentationComponent', () => {
 
   const room = new Room();
   room.settings = { feedbackLocked: true };
-  const data = {
+  snapshot.data = {
     room: room,
   };
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
-  const focusModeService = jasmine.createSpyObj('FocusModeService', ['init']);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

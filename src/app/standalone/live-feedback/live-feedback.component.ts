@@ -39,11 +39,11 @@ class LiveFeedback {
   styleUrls: ['./live-feedback.component.scss'],
 })
 export class LiveFeedbackComponent implements OnInit, OnDestroy {
-  @Input() type: LiveFeedbackType;
-  @Input() isClosed: boolean;
-  @Input() fixedSize: boolean;
+  @Input() type = LiveFeedbackType.FEEDBACK;
+  @Input() isClosed = false;
+  @Input() fixedSize = false;
   @Input() data: number[] = [0, 0, 0, 0];
-  @Input() dataChanged = new EventEmitter<number[]>();
+  @Input({ required: true }) dataChanged!: EventEmitter<number[]>;
 
   displayData: LiveFeedback[] = [
     new LiveFeedback(),

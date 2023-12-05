@@ -1,18 +1,19 @@
 import { ContentType } from './content-type.enum';
 import { ContentState } from './content-state';
 
+// TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
 export class Content {
-  id: string;
-  revision: string;
+  id!: string;
+  revision!: string;
   roomId: string;
   subject: string;
   body: string;
-  renderedBody: string;
+  renderedBody!: string;
   groups: string[];
   format: ContentType;
   formatAttributes: { [key: string]: string };
-  abstentionsAllowed: boolean;
-  state: ContentState;
+  abstentionsAllowed = true;
+  state!: ContentState;
 
   constructor(
     roomId: string = '',

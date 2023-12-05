@@ -31,6 +31,7 @@ import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStats } from '@app/core/models/room-stats';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 class MockRoutingService {}
 
@@ -79,15 +80,18 @@ describe('RoomOverviewPageComponent', () => {
     'openContentGroupCreationDialog',
   ]);
 
-  const data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-  };
-
   const snapshot = new ActivatedRouteSnapshot();
 
-  snapshot.params = of([{ seriesName: 'SERIES' }]);
+  snapshot.data = {
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+    viewRole: UserRole.EDITOR,
+  };
 
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   const splitShortIdPipe = new SplitShortIdPipe();
 

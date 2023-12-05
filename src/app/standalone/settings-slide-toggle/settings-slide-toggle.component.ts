@@ -22,8 +22,8 @@ import { TranslocoModule } from '@ngneat/transloco';
   styleUrls: ['./settings-slide-toggle.component.scss'],
 })
 export class SettingsSlideToggleComponent {
-  @Input() isChecked: boolean;
-  @Input() label: string;
+  @Input() isChecked = false;
+  @Input({ required: true }) label!: string;
   @Input() disabled = false;
   @Output() toggleEvent = new EventEmitter<boolean>();
 

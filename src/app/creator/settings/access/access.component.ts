@@ -45,13 +45,13 @@ export class AccessComponent
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
-  @Input() room: Room;
+  @Input({ required: true }) room!: Room;
   moderators: Moderator[] = [];
   userIds: string[] = [];
   newModeratorId?: string;
   loginId = '';
   isLoading = true;
-  selectedRole: UserRole;
+  selectedRole = UserRole.MODERATOR;
   UserRole: typeof UserRole = UserRole;
   roles: UserRole[] = [UserRole.MODERATOR];
   isGuest = false;

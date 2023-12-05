@@ -40,6 +40,7 @@ import { TrackingService } from '@app/core/services/util/tracking.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 @Injectable()
 class MockContentService {
@@ -100,18 +101,22 @@ describe('ContentGroupPageComponent', () => {
   let component: ContentGroupPageComponent;
   let fixture: ComponentFixture<ContentGroupPageComponent>;
 
-  const data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-  };
-
   const snapshot = new ActivatedRouteSnapshot();
   const params = {
     seriesName: 'SERIES',
   };
 
   snapshot.params = params;
+  snapshot.data = {
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+    userRole: UserRole.EDITOR,
+  };
 
-  const activatedRouteStub = new ActivatedRouteStub(params, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    params,
+    undefined,
+    snapshot
+  );
 
   const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
 

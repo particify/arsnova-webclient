@@ -11,5 +11,5 @@ import { TranslocoModule } from '@ngneat/transloco';
   styleUrls: ['./menu-divider.component.scss'],
 })
 export class MenuDividerComponent {
-  @Input() label: string;
+  @Input({ required: true }) label!: string;
 }

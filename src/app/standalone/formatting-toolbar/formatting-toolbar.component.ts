@@ -18,8 +18,8 @@ import { provideTranslocoScope } from '@ngneat/transloco';
   styleUrls: ['./formatting-toolbar.component.scss'],
 })
 export class FormattingToolbarComponent {
-  @Input() inputElement: HTMLTextAreaElement;
-  @Input() disabled: boolean;
+  @Input({ required: true }) inputElement!: HTMLTextAreaElement;
+  @Input() disabled = false;
   @Output() valueChanged = new EventEmitter<string>();
 
   formattingOptions: FormattingOption[] = [

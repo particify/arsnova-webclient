@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./info-chart.component.scss'],
 })
 export class InfoChartComponent {
-  @Input() chartId: string;
-  @Input() dataText: string;
-  @Input() infoText: string;
+  @Input({ required: true }) chartId!: string;
+  @Input({ required: true }) dataText!: string;
+  @Input({ required: true }) infoText!: string;
 }

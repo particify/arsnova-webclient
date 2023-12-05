@@ -29,7 +29,7 @@ export class CommentsPageComponent
 {
   commentVoteMap = new Map<string, Vote>();
 
-  focusModeEnabled: boolean;
+  focusModeEnabled = false;
 
   constructor(
     protected commentService: CommentService,
@@ -63,17 +63,11 @@ export class CommentsPageComponent
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.room = data.room;
-      this.roomId = this.room.id;
-      this.focusModeEnabled = this.room.focusModeEnabled;
-      this.viewRole = data.viewRole;
-      this.publicComments$ = this.commentService
-        .getAckComments(this.room.id)
-        .pipe(takeUntil(this.destroyed$));
-      this.activeComments$ = this.publicComments$;
-      this.load();
-    });
+    this.publicComments$ = this.commentService
+      .getAckComments(this.room.id)
+      .pipe(takeUntil(this.destroyed$));
+    this.activeComments$ = this.publicComments$;
+    this.load();
     this.focusModeService
       .getFocusModeEnabled()
       .pipe(takeUntil(this.destroyed$))
@@ -91,14 +85,16 @@ export class CommentsPageComponent
   }
 
   afterCommentsLoadedHook() {
-    this.voteService
-      .getByRoomIdAndUserID(this.roomId, this.userId)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((votes) => {
-        for (const v of votes) {
-          this.commentVoteMap.set(v.commentId, v);
-        }
-      });
+    if (this.userId) {
+      this.voteService
+        .getByRoomIdAndUserID(this.roomId, this.userId)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((votes) => {
+          for (const v of votes) {
+            this.commentVoteMap.set(v.commentId, v);
+          }
+        });
+    }
     this.commentSettingsService
       .getSettingsStream()
       .pipe(takeUntil(this.destroyed$))

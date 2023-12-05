@@ -22,7 +22,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 
-class ContentFormat {
+interface ContentFormat {
   type: ContentType;
   name: string;
   icon: string;
@@ -37,10 +37,10 @@ export class ContentEditingPageComponent
   extends FormComponent
   implements OnInit
 {
-  @ViewChild('ContentForm') private contentForm: ContentForm;
-  @ViewChild('questionInput') bodyInput: ElementRef;
+  @ViewChild('ContentForm') private contentForm!: ContentForm;
+  @ViewChild('questionInput') bodyInput!: ElementRef;
 
-  question: string;
+  question = '';
   ContentType = ContentType;
   formats: ContentFormat[] = [];
   selectedFormat: ContentFormat;
@@ -72,9 +72,6 @@ export class ContentEditingPageComponent
     protected formService: FormService
   ) {
     super(formService);
-  }
-
-  ngOnInit() {
     const iconList = this.contentService.getTypeIcons();
     for (const type of Object.values(ContentType)) {
       const icon = iconList.get(type);
@@ -88,41 +85,45 @@ export class ContentEditingPageComponent
     }
     this.selectedFormat = this.formats[0];
     this.seriesName = this.route.snapshot.params['seriesName'];
-    this.route.data.subscribe((data) => {
-      this.roomId = data.room.id;
-      if (data.isEditMode) {
-        this.contentService
-          .getContent(data.room.id, this.route.snapshot.params['contentId'])
-          .subscribe((content) => {
-            this.content = content;
-            this.question = this.content.body;
-            this.abstentionsAllowed = this.content.abstentionsAllowed;
-            this.isEditMode = true;
-            const format = this.formats.find(
-              (c) => c.name === this.content?.format.toLowerCase()
-            );
-            if (format) {
-              this.selectedFormat = format;
-            }
-            this.prepareAttachmentData();
-            this.contentService
-              .getAnswer(this.content.roomId, this.content.id)
-              .subscribe((answer) => {
-                console.log(answer.roundStatistics[0]);
-                const answerCount =
-                  answer.roundStatistics[0].independentCounts.reduce(
-                    (a, b) => a + b,
-                    0
-                  );
-                this.isAnswered = answerCount > 0;
-                this.isLoading = false;
-              });
-          });
-      } else {
-        this.prepareAttachmentData();
-        this.isLoading = false;
-      }
-    });
+    this.roomId = this.route.snapshot.data.room.id;
+  }
+
+  ngOnInit() {
+    if (this.route.snapshot.data.isEditMode) {
+      this.contentService
+        .getContent(
+          this.route.snapshot.data.room.id,
+          this.route.snapshot.params['contentId']
+        )
+        .subscribe((content) => {
+          this.content = content;
+          this.question = content.body;
+          this.abstentionsAllowed = !!this.content?.abstentionsAllowed;
+          this.isEditMode = true;
+          const format = this.formats.find(
+            (c) => c.name === this.content?.format.toLowerCase()
+          );
+          if (format) {
+            this.selectedFormat = format;
+          }
+          this.prepareAttachmentData();
+          this.contentService
+            .getAnswer(content.roomId, content.id)
+            .subscribe((answer) => {
+              console.log(answer.roundStatistics[0]);
+              const answerCount =
+                answer.roundStatistics[0].independentCounts.reduce(
+                  (a, b) => a + b,
+                  0
+                );
+              this.isAnswered = answerCount > 0;
+              this.isLoading = false;
+            });
+        });
+    } else {
+      this.prepareAttachmentData();
+      this.isLoading = false;
+    }
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );

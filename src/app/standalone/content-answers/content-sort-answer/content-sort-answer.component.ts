@@ -15,9 +15,9 @@ export class ContentSortAnswerComponent
   extends DragDropBaseComponent
   implements OnInit
 {
-  @Input() answerOptions: AnswerOption[];
-  @Input() disabled: boolean;
-  @Input() dynamicRendering: boolean;
+  @Input({ required: true }) answerOptions!: AnswerOption[];
+  @Input() disabled = false;
+  @Input() dynamicRendering = false;
 
   constructor() {
     super();

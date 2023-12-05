@@ -13,10 +13,11 @@ export interface AnswerResult {
   state: AnswerResultType;
 }
 
+// TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
 export class AnswerResultOverview {
-  correctAnswerCount: number;
-  scorableContentCount: number;
-  achievedScore: number;
-  maxScore: number;
-  answerResults: AnswerResult[];
+  correctAnswerCount!: number;
+  scorableContentCount!: number;
+  achievedScore!: number;
+  maxScore!: number;
+  answerResults!: AnswerResult[];
 }

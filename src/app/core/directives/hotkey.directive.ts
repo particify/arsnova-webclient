@@ -23,16 +23,16 @@ const NON_TEXT_INPUT_TYPES = ['button', 'checkbox', 'radio'];
   selector: '[appHotkey]',
 })
 export class HotkeyDirective implements OnDestroy, OnChanges {
-  @Input() appHotkey: string;
+  @Input({ required: true }) appHotkey!: string;
   @Input() appHotkeyDisabled = false;
   @Input() appHotkeyControl = false;
   @Input() appHotkeyAlt = false;
   @Input() appHotkeyShift = false;
-  @Input() appHotkeyAction = HotkeyAction.FOCUS;
-  @Input() appHotkeyTitle: string;
-  @Input() matTooltip: string;
+  @Input() appHotkeyAction? = HotkeyAction.FOCUS;
+  @Input() appHotkeyTitle?: string;
+  @Input() matTooltip = '';
 
-  private hotkeyRef: symbol;
+  private hotkeyRef?: symbol;
 
   constructor(
     private elementRef: ElementRef<HTMLElement>,
@@ -40,7 +40,9 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
   ) {}
 
   ngOnDestroy(): void {
-    this.hotkeyService.unregisterHotkey(this.hotkeyRef);
+    if (this.hotkeyRef) {
+      this.hotkeyService.unregisterHotkey(this.hotkeyRef);
+    }
   }
 
   ngOnChanges() {

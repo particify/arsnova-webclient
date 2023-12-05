@@ -26,8 +26,8 @@ export class ScaleContentFormComponent
   implements OnInit, ContentForm
 {
   @Input() content?: Content;
-  @Input() isAnswered: boolean;
-  @Input() isEditMode: boolean;
+  @Input() isAnswered = false;
+  @Input() isEditMode = false;
 
   templates = LIKERT_SCALE_TEMPLATES;
   templateLabels = LIKERT_SCALE_TEMPLATES.map(

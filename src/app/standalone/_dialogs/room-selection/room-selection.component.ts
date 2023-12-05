@@ -19,8 +19,8 @@ import { Membership } from '@app/core/models/membership';
 export class RoomSelectionComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
   isLoading = true;
-  rooms: RoomSummary[];
-  memberships: Membership[];
+  rooms: RoomSummary[] = [];
+  memberships: Membership[] = [];
 
   constructor(
     private roomService: RoomService,

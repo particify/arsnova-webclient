@@ -115,6 +115,7 @@ describe('NavBarComponent', () => {
   room.settings = {
     feedbackLocked: false,
   };
+  room.shortId = '12345678';
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
     room: room,
@@ -193,13 +194,9 @@ describe('NavBarComponent', () => {
     room.settings = {
       feedbackLocked: false,
     };
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.EDITOR,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.EDITOR;
+    component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
@@ -210,12 +207,8 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#overview-button' })
@@ -233,13 +226,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.PARTICIPANT,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.PARTICIPANT;
+    component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     const feedbackButtonElement =
       fixture.nativeElement.querySelector('#feedback-button');
@@ -252,13 +241,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.OWNER,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.OWNER;
+    component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     feedbackButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#feedback-button' })
@@ -272,13 +257,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.OWNER,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.OWNER;
+    component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
         {
@@ -302,12 +283,8 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -321,12 +298,8 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -346,12 +319,8 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -365,12 +334,8 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -385,12 +350,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.OWNER;
+    component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#overview-button' })
@@ -406,12 +368,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.OWNER;
+    component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#comments-button' })
@@ -431,12 +390,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.OWNER;
+    component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#feedback-button' })
@@ -456,12 +412,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.OWNER;
+    component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
         {
@@ -491,12 +444,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.OWNER;
+    component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
         {
@@ -531,12 +481,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      viewRole: UserRole.OWNER,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.OWNER;
+    component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
         {
@@ -578,13 +525,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.PARTICIPANT,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.PARTICIPANT;
+    component.viewRole = UserRole.PARTICIPANT;
     const stats = {
       groupStats: [
         {
@@ -627,13 +570,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.PARTICIPANT,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.PARTICIPANT;
+    component.viewRole = UserRole.PARTICIPANT;
     const stats = {
       groupStats: [
         {
@@ -671,13 +610,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.PARTICIPANT,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.PARTICIPANT;
+    component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     let feedbackButtonElement =
       fixture.nativeElement.querySelector('#feedback-button');
@@ -703,13 +638,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: true,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.PARTICIPANT,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.PARTICIPANT;
+    component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     let feedbackBadge = fixture.nativeElement.querySelector('#feedback-badge');
     expect(feedbackBadge).toBeNull();
@@ -731,13 +662,9 @@ describe('NavBarComponent', () => {
       feedbackLocked: false,
     };
     room.shortId = '12345678';
-    const snapshot = new ActivatedRouteSnapshot();
-    snapshot.data = {
-      room: room,
-      userRole: UserRole.PARTICIPANT,
-      viewRole: UserRole.PARTICIPANT,
-    };
-    route.snapshot = snapshot;
+    component.room = room;
+    component.role = UserRole.PARTICIPANT;
+    component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     let feedbackButtonElement =
       fixture.nativeElement.querySelector('#feedback-button');

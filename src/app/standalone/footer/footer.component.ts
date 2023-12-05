@@ -6,7 +6,6 @@ import {
   RouterModule,
 } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { Room } from '@app/core/models/room';
 import { ConsentService } from '@app/core/services/util/consent.service';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -29,11 +28,9 @@ import { FlexModule } from '@angular/flex-layout';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  public room: Room;
-
-  privacyUrl: string;
-  imprintUrl: string;
-  accessibilityUrl: string;
+  privacyUrl?: string;
+  imprintUrl?: string;
+  accessibilityUrl?: string;
   referenceUrl = 'https://particify.de';
   showToolbar = true;
   viewWidth: number;
@@ -42,10 +39,11 @@ export class FooterComponent implements OnInit {
     public router: Router,
     private consentService: ConsentService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.viewWidth = innerWidth;
+  }
 
   ngOnInit() {
-    this.viewWidth = innerWidth;
     if (this.consentService.consentRequired()) {
       this.consentService.openDialog();
     }
@@ -74,15 +72,21 @@ export class FooterComponent implements OnInit {
   }
 
   showAccessibilityStatement() {
-    this.openUrlInNewTab(this.accessibilityUrl);
+    if (this.accessibilityUrl) {
+      this.openUrlInNewTab(this.accessibilityUrl);
+    }
   }
 
   showImprint() {
-    this.openUrlInNewTab(this.imprintUrl);
+    if (this.imprintUrl) {
+      this.openUrlInNewTab(this.imprintUrl);
+    }
   }
 
   showDataProtection() {
-    this.openUrlInNewTab(this.privacyUrl);
+    if (this.privacyUrl) {
+      this.openUrlInNewTab(this.privacyUrl);
+    }
   }
 
   showCookieSettings() {

@@ -15,7 +15,7 @@ export abstract class AbstractFocusModeService implements OnDestroy {
   destroyed$ = new Subject<void>();
   protected focusModeEnabled$ = new BehaviorSubject<boolean>(false);
 
-  protected currentRoom: Room;
+  protected currentRoom?: Room;
 
   constructor(
     protected wsConnector: WsConnectorService,
@@ -50,22 +50,26 @@ export abstract class AbstractFocusModeService implements OnDestroy {
   }
 
   protected loadState() {
-    this.http
-      .get<FocusEvent>(`api/room/${this.currentRoom.id}/focus-event`)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((state) => {
-        this.handleState(state, true);
-      });
+    if (this.currentRoom) {
+      this.http
+        .get<FocusEvent>(`api/room/${this.currentRoom.id}/focus-event`)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((state) => {
+          this.handleState(state, true);
+        });
+    }
   }
 
   protected subscribeToState() {
-    this.wsConnector
-      .getWatcher(`/topic/${this.currentRoom.id}.focus.state.stream`)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((msg: Message) => {
-        const state = JSON.parse(msg.body);
-        this.handleState(state);
-      });
+    if (this.currentRoom) {
+      this.wsConnector
+        .getWatcher(`/topic/${this.currentRoom.id}.focus.state.stream`)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((msg: Message) => {
+          const state = JSON.parse(msg.body);
+          this.handleState(state);
+        });
+    }
   }
 
   protected abstract handleState(state?: FocusEvent, initial?: boolean): void;

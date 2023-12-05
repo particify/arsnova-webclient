@@ -1,6 +1,6 @@
 <div fxLayout="column" fxFill>
   <div fxLayout="row" fxLayoutAlign="end">
-    <app-copy-url class="copy-url" [url]="url"></app-copy-url>
+    <app-copy-url *ngIf="url" class="copy-url" [url]="url"></app-copy-url>
   </div>
   <div fxFill fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8vw">
     <div

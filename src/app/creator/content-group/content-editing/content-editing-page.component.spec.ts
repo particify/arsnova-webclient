@@ -24,6 +24,7 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { MatMenuModule } from '@angular/material/menu';
 import { of } from 'rxjs';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { Room } from '@app/core/models/room';
 
 @Injectable()
 class MockContentService {
@@ -69,17 +70,18 @@ describe('ContentEditingPageComponent', () => {
   let component: ContentEditingPageComponent;
   let fixture: ComponentFixture<ContentEditingPageComponent>;
 
-  const data = {
-    room: {
-      id: '1234',
-    },
-  };
-
   const snapshot = new ActivatedRouteSnapshot();
 
   snapshot.params = of([{ seriesName: 'SERIES' }]);
+  snapshot.data = {
+    room: new Room(),
+  };
 
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

@@ -39,11 +39,12 @@ export class AdminStats {
   styleUrls: ['../admin-styles.scss'],
 })
 export class SystemStatisticsComponent implements OnInit {
-  stats: AdminStats;
-  isLoading: boolean;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  stats!: AdminStats;
+  isLoading = true;
   showDetails = false;
   selectedTab = 0;
-  tabs: string[];
+  tabs: string[] = [];
 
   constructor(
     protected systemInfoService: SystemInfoService,

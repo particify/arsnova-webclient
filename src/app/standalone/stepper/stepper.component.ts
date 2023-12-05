@@ -58,7 +58,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Output() newIndex = new EventEmitter<number>();
   @Input() showSteps = true;
   @Input() allowNavigation = true;
-  @Input() listLength: number;
+  @Input() listLength = 0;
   @Input() completed: Map<number, boolean> = new Map<number, boolean>();
   @Input() fixedWitdth = true;
   @Input() additionalStepIcon?: string;
@@ -66,8 +66,8 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   containerAnimationState = 'current';
   headerAnimationState = 'init';
   private nextIndex = 0;
-  private swipeXLocation: number;
-  private swipeTime: number;
+  private swipeXLocation = 0;
+  private swipeTime = 0;
 
   private hotkeyRefs: symbol[] = [];
 

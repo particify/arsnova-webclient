@@ -6,8 +6,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./bar-notification.component.scss'],
 })
 export class BarNotificationComponent {
-  @Input() message: string;
-  @Input() icon: string;
+  @Input({ required: true }) message!: string;
+  @Input({ required: true }) icon!: string;
   @Input() expanded = false;
   @Input() hidden = true;
 }

@@ -25,7 +25,7 @@ export class RequestPasswordResetComponent
   usernameFormControl = new UntypedFormControl();
   matcher = new PasswordResetErrorStateMatcher();
   deviceWidth = innerWidth;
-  username: string;
+  username?: string;
 
   constructor(
     private translationService: TranslocoService,

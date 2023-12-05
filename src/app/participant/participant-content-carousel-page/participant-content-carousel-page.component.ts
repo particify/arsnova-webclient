@@ -40,41 +40,36 @@ import { LICENSES } from '@app/core/models/licenses';
 export class ParticipantContentCarouselPageComponent
   implements OnInit, OnDestroy
 {
-  @ViewChild(StepperComponent) stepper: StepperComponent;
+  @ViewChild(StepperComponent) stepper!: StepperComponent;
 
   private destroyed$ = new Subject<void>();
 
   ContentType: typeof ContentType = ContentType;
 
   contents: Content[] = [];
-  contentGroup: ContentGroup;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  contentGroup!: ContentGroup;
   contentGroupName: string;
   shortId: string;
   isLoading = true;
-  alreadySent: Map<number, boolean>;
-  status = {
-    LAST_CONTENT: 'LAST_CONTENT',
-    FIRST_UNANSWERED: 'FIRST_UNANSWERED',
-    NORMAL: 'NORMAL',
-    PRE_START: 'PRE_START',
-  };
-  started: string;
-  answers: (Answer | undefined)[];
-  currentStep: number;
+  alreadySent: Map<number, boolean> = new Map<number, boolean>();
+  started = false;
+  answers: (Answer | undefined)[] = [];
+  currentStep = 0;
   isReloading = false;
   isReloadingCurrentContent = false;
   displaySnackBar = false;
   focusModeEnabled = false;
   lockedContentId?: string;
-  changesSubscription: Subscription;
-  routeChangedSubscription: Subscription;
+  changesSubscription?: Subscription;
+  routeChangedSubscription?: Subscription;
 
   isFinished = false;
   isPureInfoSeries = false;
   hasAnsweredLastContent = false;
   showOverview = false;
 
-  attributions: ContentLicenseAttribution[];
+  attributions: ContentLicenseAttribution[] = [];
 
   constructor(
     private contentService: ContentService,
@@ -93,7 +88,10 @@ export class ParticipantContentCarouselPageComponent
     private contentCarouselService: ContentCarouselService,
     private contentPublishService: ContentPublishService,
     private focusModeService: FocusModeService
-  ) {}
+  ) {
+    this.contentGroupName = route.snapshot.params['seriesName'];
+    this.shortId = route.snapshot.data.room.shortId;
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -120,22 +118,21 @@ export class ParticipantContentCarouselPageComponent
     );
     const params = this.route.snapshot.params;
     const lastContentIndex = params['contentIndex'] - 1;
-    this.contentGroupName = params['seriesName'];
-    this.route.data.subscribe((data) => {
-      this.shortId = data.room.shortId;
-      this.contentgroupService
-        .getByRoomIdAndName(data.room.id, this.contentGroupName)
-        .subscribe(
-          (contentGroup) => {
-            this.contentGroup = contentGroup;
-            this.getContents(lastContentIndex);
-            this.loadAttributions();
-          },
-          () => {
-            this.finishLoading();
-          }
-        );
-    });
+    this.contentgroupService
+      .getByRoomIdAndName(
+        this.route.snapshot.data.room.id,
+        this.contentGroupName
+      )
+      .subscribe(
+        (contentGroup) => {
+          this.contentGroup = contentGroup;
+          this.getContents(lastContentIndex);
+          this.loadAttributions();
+        },
+        () => {
+          this.finishLoading();
+        }
+      );
     this.changesSubscription = this.eventService
       .on('EntityChanged')
       .subscribe((changes) => {
@@ -181,7 +178,7 @@ export class ParticipantContentCarouselPageComponent
       ) {
         const newIndex = this.getIndexOfContentById(state.contentId);
         if (newIndex > -1) {
-          if (this.started === this.status.NORMAL) {
+          if (this.started) {
             this.stepper.onClick(newIndex);
           } else {
             this.initStepper(newIndex, 300);
@@ -299,7 +296,7 @@ export class ParticipantContentCarouselPageComponent
       this.currentStep = index;
       this.stepper.init(index, this.contents.length);
     }, delay);
-    this.started = this.status.NORMAL;
+    this.started = true;
   }
 
   goToContent(index: number) {
@@ -396,7 +393,7 @@ export class ParticipantContentCarouselPageComponent
     this.checkState();
     this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
     if (!this.focusModeEnabled) {
-      if (this.started === this.status.NORMAL) {
+      if (this.started) {
         setTimeout(() => {
           if (index < this.contents.length - 1) {
             this.nextContent();

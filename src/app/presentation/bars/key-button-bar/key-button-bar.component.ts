@@ -8,7 +8,7 @@ import { KeyNavBarItem } from '@app/presentation/bars/control-bar/control-bar.co
   styleUrls: ['./key-button-bar.component.scss'],
 })
 export class KeyButtonBarComponent {
-  @Input() items: KeyNavBarItem[];
+  @Input({ required: true }) items!: KeyNavBarItem[];
   @Input() withText = true;
 
   constructor(@Inject(DOCUMENT) private document: Document) {}

@@ -63,9 +63,9 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       map.set(category.key, category);
       return map;
     }, new Map());
-  private consentSettings: ConsentSettings;
-  private privacyUrl: string;
-  private consentRecording: Feature;
+  private consentSettings?: ConsentSettings;
+  private privacyUrl?: string;
+  private consentRecording?: Feature;
 
   constructor(
     public dialog: MatDialog,

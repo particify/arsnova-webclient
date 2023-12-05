@@ -23,7 +23,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
@@ -79,7 +79,7 @@ export class ControlBarComponent
   extends NavBarComponent
   implements OnInit, OnDestroy
 {
-  @Input() shortId: string;
+  @Input({ required: true }) shortId!: string;
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
   @Output() activeGroup: EventEmitter<string> = new EventEmitter<string>();
 
@@ -92,15 +92,15 @@ export class ControlBarComponent
   contentStepState = PresentationStepPosition.START;
   commentStepState = PresentationStepPosition.START;
   menuOpen = false;
-  joinUrl: string;
+  joinUrl?: string;
   currentCommentZoom = 100;
-  currentCommentSort: CommentSort;
+  currentCommentSort?: CommentSort;
   commentSortTypes = [CommentSort.TIME, CommentSort.VOTEDESC];
   isCurrentContentPublished = false;
   contentIndex = 0;
-  content: Content;
-  notificationMessage: string;
-  notificationIcon: string;
+  content?: Content;
+  notificationMessage = '';
+  notificationIcon = '';
   showNotification = false;
 
   features: NavBarItem[] = [
@@ -225,9 +225,10 @@ export class ControlBarComponent
         this.checkIfContentLocked();
         if (
           this.isActiveFeature(RoutingFeature.CONTENTS) &&
+          this.group &&
           !this.group.published
         ) {
-          this.publishContentGroup();
+          this.publishContentGroup(this.group);
         }
       }
     });
@@ -328,7 +329,7 @@ export class ControlBarComponent
       .getAnswersDeleted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((contentId) => {
-        if (contentId === this.content?.id) {
+        if (this.content && contentId === this.content?.id) {
           this.content.state.round = 1;
           this.changeRound(0);
           this.multipleRounds = false;
@@ -371,7 +372,7 @@ export class ControlBarComponent
   }
 
   checkIfContentLocked() {
-    if (this.contentIndex !== undefined) {
+    if (this.contentIndex !== undefined && this.group) {
       this.isCurrentContentPublished =
         this.contentPublishService.isIndexPublished(
           this.group,
@@ -439,8 +440,8 @@ export class ControlBarComponent
       this.activeFeature.emit(feature);
       if (feature === RoutingFeature.CONTENTS) {
         this.setArrowsState(this.contentStepState);
-        if (!this.group.published) {
-          this.publishContentGroup();
+        if (this.group && !this.group.published) {
+          this.publishContentGroup(this.group);
         }
       } else if (feature === RoutingFeature.COMMENTS) {
         this.setArrowsState(this.commentStepState);
@@ -522,7 +523,7 @@ export class ControlBarComponent
   }
 
   changeGroup(contentGroup: ContentGroup) {
-    if (this.group.id !== contentGroup.id) {
+    if (this.group?.id !== contentGroup.id) {
       if (contentGroup.published) {
         this.updateGroup(contentGroup);
       } else {
@@ -536,7 +537,7 @@ export class ControlBarComponent
     this.activeGroup.emit(this.groupName);
   }
 
-  publishContentGroup(contentGroup: ContentGroup = this.group) {
+  publishContentGroup(contentGroup: ContentGroup) {
     const changes = { published: true };
     const dialogRef = this.dialogService.openPublishGroupDialog(
       contentGroup.name,
@@ -633,6 +634,9 @@ export class ControlBarComponent
   }
 
   editContent() {
+    if (!this.content || !this.group) {
+      return;
+    }
     this.contentService.goToEdit(
       this.content.id,
       this.shortId,
@@ -647,11 +651,19 @@ export class ControlBarComponent
       undefined,
       undefined,
       () =>
-        this.contentService.deleteAnswersOfContent(this.content.id, this.roomId)
+        this.content
+          ? this.contentService.deleteAnswersOfContent(
+              this.content.id,
+              this.roomId
+            )
+          : of()
     );
   }
 
   changeRound(round: number) {
+    if (!this.content) {
+      return;
+    }
     this.contentRounds.set(this.content.id, round);
     const roundState = new RoundState(this.contentIndex, round);
     this.presentationService.updateRoundState(roundState);
@@ -664,6 +676,9 @@ export class ControlBarComponent
   }
 
   startNewRound() {
+    if (!this.content) {
+      return;
+    }
     this.contentService.startNewRound(this.content);
   }
 }
