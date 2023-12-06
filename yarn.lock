@@ -4800,9 +4800,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ngneat/transloco@npm:6.0.0":
-  version: 6.0.0
-  resolution: "@ngneat/transloco@npm:6.0.0"
+"@ngneat/transloco@npm:6.0.1":
+  version: 6.0.1
+  resolution: "@ngneat/transloco@npm:6.0.1"
   dependencies:
     "@ngneat/transloco-utils": "npm:^5.0.0"
     flat: "npm:6.0.0"
@@ -4814,7 +4814,7 @@ __metadata:
     tslib: "npm:^2.2.0"
   peerDependencies:
     "@angular/core": ">=16.0.0"
-  checksum: 0ba0f12d00fdb9dbdc03a26c323883231c426f240875f881045d7695c8f9939ccc7d9ab01a8f283dffc2fd65bee6ba3be04dd3da6b52914f97536156a6d70e2d
+  checksum: 8bd2ac47cacec3eb85ca012356bd3b356c834d4f9646dd555d499c9cb58c81db9023f9554d3a4e606814762d9aa838a0c9d323687bbf937969cf6eec93ce0536
   languageName: node
   linkType: hard
 
@@ -8446,7 +8446,7 @@ __metadata:
     "@angular/service-worker": "npm:17.0.5"
     "@babel/core": "npm:7.23.5"
     "@fontsource/roboto": "npm:5.0.8"
-    "@ngneat/transloco": "npm:6.0.0"
+    "@ngneat/transloco": "npm:6.0.1"
     "@stomp/rx-stomp": "npm:2.0.0"
     "@stomp/stompjs": "npm:7.0.0"
     "@storybook/addon-essentials": "npm:7.6.3"
