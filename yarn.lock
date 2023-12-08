@@ -317,9 +317,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cdk@npm:17.0.2":
-  version: 17.0.2
-  resolution: "@angular/cdk@npm:17.0.2"
+"@angular/cdk@npm:17.0.3":
+  version: 17.0.3
+  resolution: "@angular/cdk@npm:17.0.3"
   dependencies:
     parse5: "npm:^7.1.2"
     tslib: "npm:^2.3.0"
@@ -330,7 +330,7 @@ __metadata:
   dependenciesMeta:
     parse5:
       optional: true
-  checksum: e0640395b447cafa17d4e8002c88e0843f77b466b0a047e8c6533a4100afbdfc0b5bdcca267f1c22618f3c404ead09eccc965821e53be0d29137da94e9182808
+  checksum: 8e3608ec79952c8a61069e12efd77ad627364b384d80de469e972d3bd4f54e6ad9cb94e863640aeac338987a077a9999454316bfed8a4ac6157df1f1572a97d4
   languageName: node
   linkType: hard
 
@@ -459,9 +459,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/material@npm:17.0.2":
-  version: 17.0.2
-  resolution: "@angular/material@npm:17.0.2"
+"@angular/material@npm:17.0.3":
+  version: 17.0.3
+  resolution: "@angular/material@npm:17.0.3"
   dependencies:
     "@material/animation": "npm:15.0.0-canary.a246a4439.0"
     "@material/auto-init": "npm:15.0.0-canary.a246a4439.0"
@@ -513,13 +513,13 @@ __metadata:
     tslib: "npm:^2.3.0"
   peerDependencies:
     "@angular/animations": ^17.0.0 || ^18.0.0
-    "@angular/cdk": 17.0.2
+    "@angular/cdk": 17.0.3
     "@angular/common": ^17.0.0 || ^18.0.0
     "@angular/core": ^17.0.0 || ^18.0.0
     "@angular/forms": ^17.0.0 || ^18.0.0
     "@angular/platform-browser": ^17.0.0 || ^18.0.0
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: f4ac21cdf8c488e5ad724280613bc30184ee4d282351f03c93d5b5ac7edfdb39d8f8e947c996e33b08f8caa37ce986c4a4f165edc36967051dfedf84748323b6
+  checksum: 07758c55449c74685129b8269643cb26fdb05cc54618a006e67ebc920051317d988c516f0a6f2881e0a55f69c1c6366cb44bde6f983791087deeff3524cc1c8d
   languageName: node
   linkType: hard
 
@@ -8430,7 +8430,7 @@ __metadata:
     "@angular-eslint/schematics": "npm:17.1.1"
     "@angular-eslint/template-parser": "npm:17.1.1"
     "@angular/animations": "npm:17.0.6"
-    "@angular/cdk": "npm:17.0.2"
+    "@angular/cdk": "npm:17.0.3"
     "@angular/cli": "npm:17.0.6"
     "@angular/common": "npm:17.0.6"
     "@angular/compiler": "npm:17.0.6"
@@ -8439,7 +8439,7 @@ __metadata:
     "@angular/flex-layout": "npm:15.0.0-beta.42"
     "@angular/forms": "npm:17.0.6"
     "@angular/language-service": "npm:17.0.6"
-    "@angular/material": "npm:17.0.2"
+    "@angular/material": "npm:17.0.3"
     "@angular/platform-browser": "npm:17.0.6"
     "@angular/platform-browser-dynamic": "npm:17.0.6"
     "@angular/router": "npm:17.0.6"
