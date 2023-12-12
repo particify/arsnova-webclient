@@ -1,0 +1,4 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+  <mat-icon *ngIf="showIcon">timer</mat-icon>
+  <span>{{ timeLeft || ('timer.finished' | transloco) }}</span>
+</div>
