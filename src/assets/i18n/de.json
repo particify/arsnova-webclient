@@ -573,5 +573,9 @@
     "reported-room": "Der Raum wurde gemeldet.",
     "template": "Vorlage",
     "room": "Raum"
+  },
+  "timer": {
+    "finished": "Beendet",
+    "time-is-up": "Die Zeit ist abgelaufen."
   }
 }
