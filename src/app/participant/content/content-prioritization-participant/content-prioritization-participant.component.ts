@@ -20,14 +20,13 @@ import { take } from 'rxjs';
   templateUrl: './content-prioritization-participant.component.html',
 })
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {
-  @Input() content: ContentPrioritization;
-  @Input() answer: PrioritizationAnswer;
+  @Input({ required: true }) content!: ContentPrioritization;
+  @Input({ required: true }) answer!: PrioritizationAnswer;
   @Output() answerChanged = new EventEmitter<PrioritizationAnswer>();
 
   isLoading = true;
   hasAbstained = false;
   isCorrect = false;
-  correctOptionIndexes: number[];
   answerOptions: AnswerWithPoints[] = [];
   assignedPoints: number[] = [];
 
@@ -100,11 +99,12 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
       return;
     }
     this.disableForm();
-    const answer = new PrioritizationAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
+    const answer = new PrioritizationAnswer(
+      this.content.id,
+      this.content.state.round,
+      ContentType.PRIORITIZATION
+    );
     answer.assignedPoints = this.assignedPoints;
-    answer.format = ContentType.PRIORITIZATION;
     this.answerService
       .addAnswerPrioritization(this.content.roomId, answer)
       .subscribe(
@@ -128,10 +128,11 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
   }
 
   abstain() {
-    const answer = new PrioritizationAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
-    answer.format = ContentType.PRIORITIZATION;
+    const answer = new PrioritizationAnswer(
+      this.content.id,
+      this.content.state.round,
+      ContentType.PRIORITIZATION
+    );
     this.answerService
       .addAnswerPrioritization(this.content.roomId, answer)
       .subscribe((answer) => {

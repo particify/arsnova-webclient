@@ -40,7 +40,7 @@ export class CommentsPageComponent
   extends AbstractCommentsPageComponent
   implements OnInit, OnDestroy
 {
-  @ViewChild('commentList') commentListRef: ElementRef;
+  @ViewChild('commentList') commentListRef!: ElementRef;
 
   protected hotkeyRefs: symbol[] = [];
 
@@ -79,15 +79,10 @@ export class CommentsPageComponent
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.room = data.room;
-      this.roomId = this.room.id;
-      this.viewRole = data.viewRole;
-      this.publicComments$ = this.commentService.getAckComments(this.room.id);
-      this.activeComments$ = this.publicComments$;
-      this.load();
-      this.registerHotkeys();
-    });
+    this.publicComments$ = this.commentService.getAckComments(this.room.id);
+    this.activeComments$ = this.publicComments$;
+    this.load();
+    this.registerHotkeys();
   }
 
   ngOnDestroy(): void {

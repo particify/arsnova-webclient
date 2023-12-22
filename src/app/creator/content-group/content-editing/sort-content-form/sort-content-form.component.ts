@@ -32,13 +32,13 @@ export class SortContentFormComponent
   implements OnInit, OnChanges, ContentForm
 {
   @ViewChild(CreateAnswerOptionComponent)
-  answerCreation: CreateAnswerOptionComponent;
+  answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
-  answerList: AnswerOptionListComponent;
+  answerList!: AnswerOptionListComponent;
 
   @Input() content?: Content;
-  @Input() isEditMode: boolean;
-  @Input() isAnswered: boolean;
+  @Input() isEditMode = false;
+  @Input() isAnswered = false;
 
   displayAnswers: DisplayAnswer[] = [];
 

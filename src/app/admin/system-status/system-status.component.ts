@@ -8,7 +8,8 @@ import { SystemInfoService } from '@app/core/services/http/system-info.service';
   styleUrls: ['./system-status.component.scss'],
 })
 export class SystemStatusComponent implements OnInit {
-  dataSource: object;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  dataSource!: object;
   isLoading = true;
 
   constructor(protected systemInfoService: SystemInfoService) {}

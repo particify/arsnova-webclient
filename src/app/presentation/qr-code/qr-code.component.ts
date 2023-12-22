@@ -22,11 +22,11 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   bgColor: `#${string}`;
   fgColor: `#${string}`;
   destroyed$ = new Subject<void>();
-  url: string;
-  qrUrl: string;
-  displayUrl: string;
+  url?: string;
+  qrUrl?: string;
+  displayUrl?: string;
   useJoinUrl = false;
-  userCount: number;
+  userCount = 1;
 
   constructor(
     private themeService: ThemeService,
@@ -35,13 +35,18 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     private routingService: RoutingService,
     private roomService: RoomService,
     private focusModeService: FocusModeService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     const room = this.route.snapshot.data.room;
     this.shortId = room.shortId;
     this.roomId = room.id;
     this.passwordProtected = room.passwordProtected;
+    const minSize = Math.min(innerWidth, innerHeight);
+    this.qrSize = minSize * (innerWidth > 1279 ? 0.45 : 0.3);
+    this.bgColor = this.themeService.getColor('surface') as `#${string}`;
+    this.fgColor = this.themeService.getColor('on-surface') as `#${string}`;
+  }
+
+  ngOnInit(): void {
     this.initQrCode();
     this.roomService
       .getRoomSummaries([this.roomId])
@@ -52,14 +57,10 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     this.roomService.getCurrentRoomsMessageStream().subscribe((msg) => {
       this.userCount = JSON.parse(msg.body).UserCountChanged.userCount;
     });
-    this.focusModeService.updateOverviewState(room);
+    this.focusModeService.updateOverviewState(this.route.snapshot.data.room);
   }
 
   initQrCode() {
-    const minSize = Math.min(innerWidth, innerHeight);
-    this.qrSize = minSize * (innerWidth > 1279 ? 0.45 : 0.3);
-    this.bgColor = this.themeService.getColor('surface') as `#${string}`;
-    this.fgColor = this.themeService.getColor('on-surface') as `#${string}`;
     this.apiConfigService
       .getApiConfig$()
       .pipe(takeUntil(this.destroyed$))

@@ -1,6 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { UntypedFormControl, Validators } from '@angular/forms';
@@ -10,12 +8,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { EventService } from '@app/core/services/util/event.service';
-import {
-  GlobalStorageService,
-  STORAGE_KEYS,
-} from '@app/core/services/util/global-storage.service';
 import { THINSP } from '@app/core/utils/html-entities';
 
 @Component({
@@ -23,42 +16,22 @@ import { THINSP } from '@app/core/utils/html-entities';
   templateUrl: './room-join.component.html',
   styleUrls: ['./room-join.component.scss'],
 })
-export class RoomJoinComponent implements OnInit, OnDestroy {
-  @Input() appTitle: string;
-  @Input() focusInput: boolean;
-
-  auth: ClientAuthentication;
-  isDesktop: boolean;
+export class RoomJoinComponent {
+  @Input({ required: true }) appTitle!: string;
+  @Input() focusInput = false;
 
   roomCodeFormControl = new UntypedFormControl('', [
     Validators.pattern(/[0-9\s]*/),
   ]);
   matcher = new FormErrorStateMatcher();
-  destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
     public notificationService: NotificationService,
     private translateService: TranslocoService,
     public authenticationService: AuthenticationService,
-    public eventService: EventService,
-    private globalStorageService: GlobalStorageService
-  ) {
-    this.isDesktop =
-      this.globalStorageService.getItem(STORAGE_KEYS.DEVICE_TYPE) === 'desktop';
-  }
-
-  ngOnInit() {
-    this.authenticationService
-      .getAuthenticationChanges()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((auth) => (this.auth = auth));
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+    public eventService: EventService
+  ) {}
 
   onEnter(shortId: string) {
     this.joinRoom(shortId);

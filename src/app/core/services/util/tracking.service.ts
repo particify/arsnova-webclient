@@ -50,12 +50,12 @@ export enum EventCategory {
 @Injectable()
 export class TrackingService {
   _paq: any[];
-  loaded: boolean;
+  loaded = false;
   consentGiven: boolean;
   uiConfig: any;
-  previousAuth: ClientAuthentication;
+  previousAuth?: ClientAuthentication;
   firstAuth = true;
-  pingSubscription: Subscription;
+  pingSubscription?: Subscription;
   specialRooms = new Map<string, string>();
   appErrorHandler: AppErrorHandler;
 

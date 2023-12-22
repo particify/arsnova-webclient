@@ -21,7 +21,8 @@ export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPage
   implements OnInit, OnDestroy
 {
-  userId: string;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  userId!: string;
   voteKeys = ['1', '2', '3', '4'];
 
   constructor(

@@ -20,7 +20,7 @@ const TEST_TRACK_NAME = 'test-track-name';
   </button>`,
 })
 class TestComponent {
-  @ViewChild('button') button: ElementRef<HTMLButtonElement>;
+  @ViewChild('button') button!: ElementRef<HTMLButtonElement>;
 
   click() {}
 }

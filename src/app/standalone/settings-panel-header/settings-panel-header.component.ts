@@ -19,6 +19,6 @@ import { TranslocoModule } from '@ngneat/transloco';
   styleUrls: ['./settings-panel-header.component.scss'],
 })
 export class SettingsPanelHeaderComponent {
-  @Input() text: string;
-  @Input() icon: string;
+  @Input({ required: true }) text!: string;
+  @Input({ required: true }) icon!: string;
 }

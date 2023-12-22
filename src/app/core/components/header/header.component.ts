@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
@@ -11,10 +11,6 @@ import { Location } from '@angular/common';
 import { TranslocoService } from '@ngneat/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import {
-  GlobalStorageService,
-  STORAGE_KEYS,
-} from '@app/core/services/util/global-storage.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -44,24 +40,23 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
 })
 export class HeaderComponent implements OnInit {
   auth?: ClientAuthentication;
-  deviceType: string;
 
-  role: UserRole;
+  role?: UserRole;
   UserRole: typeof UserRole = UserRole;
 
   currentTheme: string;
-  themes: string[];
+  themes: string[] = [];
   deviceWidth = innerWidth;
-  helpUrl: string;
-  privacyUrl: string;
-  imprintUrl: string;
-  translateUrl: string;
+  helpUrl?: string;
+  privacyUrl?: string;
+  imprintUrl?: string;
+  translateUrl?: string;
   currentLang: string;
-  langs: Language[];
+  langs: Language[] = [];
   HotkeyAction = HotkeyAction;
-  isRoom: boolean;
-  isPreview: boolean;
-  userCharacter: string;
+  isRoom = false;
+  isPreview = false;
+  userCharacter?: string;
   openPresentationDirectly = false;
   announcementState?: AnnouncementState;
   room?: Room;
@@ -75,9 +70,7 @@ export class HeaderComponent implements OnInit {
     private translationService: TranslocoService,
     private langService: LanguageService,
     public eventService: EventService,
-    private _r: Renderer2,
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService,
     private themeService: ThemeService,
     private routingService: RoutingService,
     private route: ActivatedRoute,
@@ -88,10 +81,8 @@ export class HeaderComponent implements OnInit {
     private roomService: RoomService,
     private featureFlagService: FeatureFlagService
   ) {
-    this.deviceType = this.globalStorageService.getItem(
-      STORAGE_KEYS.DEVICE_TYPE
-    );
     this.currentLang = this.translationService.getActiveLang();
+    this.currentTheme = this.themeService.getCurrentTheme();
   }
 
   ngOnInit() {
@@ -116,7 +107,6 @@ export class HeaderComponent implements OnInit {
           }
         }
       });
-    this.currentTheme = this.themeService.getCurrentTheme();
     this.themeService.getCurrentTheme$().subscribe((theme) => {
       if (theme) {
         this.currentTheme = theme;

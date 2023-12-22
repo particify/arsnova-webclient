@@ -21,8 +21,8 @@ import { take } from 'rxjs';
 })
 export class RoomManagementComponent {
   room?: Room;
-  rooms: Room[];
-  searchResults: string[];
+  rooms: Room[] = [];
+  searchResults: string[] = [];
 
   constructor(
     protected adminService: AdminService,

@@ -1,19 +1,20 @@
 import { RoomExtensions } from './room-extensions';
 import { RoomSettings } from './room-settings';
 
+// TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
 export class Room {
-  id: string;
-  revision: string;
+  id!: string;
+  revision!: string;
   ownerId: string;
   shortId: string;
   abbreviation: string;
   name: string;
   description: string;
-  renderedDescription: string;
-  passwordProtected: boolean;
-  focusModeEnabled: boolean;
+  renderedDescription!: string;
+  passwordProtected = false;
+  focusModeEnabled = false;
   closed: boolean;
-  settings: RoomSettings;
+  settings!: RoomSettings;
   lmsCourseId?: string;
   extensions?: RoomExtensions;
 

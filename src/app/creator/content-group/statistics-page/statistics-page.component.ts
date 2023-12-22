@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -10,29 +10,26 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
   templateUrl: './statistics-page.component.html',
   styleUrls: ['./statistics-page.component.scss'],
 })
-export class StatisticsPageComponent implements OnInit {
+export class StatisticsPageComponent {
   shortId: string;
   contentGroups: ContentGroup[] = [];
   isLoading = true;
-  currentGroup: ContentGroup;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  currentGroup!: ContentGroup;
 
-  @ViewChild(StatisticListComponent) statisticList: StatisticListComponent;
+  @ViewChild(StatisticListComponent) statisticList!: StatisticListComponent;
 
   constructor(
     private route: ActivatedRoute,
     private roomStatsService: RoomStatsService,
     private contentGroupService: ContentGroupService,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.shortId = data.room.shortId;
-      this.getContentGroups(
-        data.room.id,
-        this.route.snapshot.params['seriesName']
-      );
-    });
+  ) {
+    this.shortId = route.snapshot.data.room.shortId;
+    this.getContentGroups(
+      route.snapshot.data.room.id,
+      route.snapshot.params['seriesName']
+    );
   }
 
   getContentGroups(id: string, groupName: string): void {

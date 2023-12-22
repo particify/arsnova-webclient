@@ -24,9 +24,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class ViolationReportComponent extends FormComponent implements OnInit {
   reasons = Object.keys(ViolationReportReason);
-  selectedReason: ViolationReportReason;
-  description: string;
-  targetTypeString: string;
+  selectedReason?: ViolationReportReason;
+  description = '';
+  targetTypeString?: string;
 
   constructor(
     protected formService: FormService,
@@ -58,7 +58,7 @@ export class ViolationReportComponent extends FormComponent implements OnInit {
     if (!this.data.targetType || !this.data.targetId) {
       return;
     }
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || !this.selectedReason) {
       for (const control in this.formGroup.controls) {
         if (this.formGroup.get(control)?.invalid) {
           const msg = this.translateService.translate(

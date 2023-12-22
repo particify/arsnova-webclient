@@ -23,6 +23,7 @@ import { RoomMembershipService } from '@app/core/services/room-membership.servic
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
 class MockService {}
 
@@ -125,6 +126,10 @@ export default {
           useValue: {
             snapshot: { data: {}, params: { templateId: 'templateId1' } },
           },
+        },
+        {
+          provide: AuthenticationService,
+          useClass: MockService,
         },
       ],
     }),

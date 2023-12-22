@@ -1,4 +1,10 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  EventEmitter,
+} from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentService } from '@app/core/services/http/content.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
@@ -33,18 +39,19 @@ export class StatisticSortComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
-  @Input() content: ContentChoice;
-  @Input() directShow: boolean;
+  @Input({ required: true }) content!: ContentChoice;
+  @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
+  @Input() directShow = false;
 
-  chart: Chart;
-  chartId: string;
+  chart?: Chart;
+  chartId = '';
   isLoading = true;
   answerIndexes: Array<Array<number>> = [];
   data: ChartDataset<'bar'>[] = [];
   labels: string[] = [];
   colors: string[] = [];
   indicationColors: string[] = [];
-  answerOptions: AnswerOption[];
+  answerOptions: AnswerOption[] = [];
   showCorrect = false;
   onSurface: string;
   surface: string;
@@ -60,6 +67,10 @@ export class StatisticSortComponent
     private contentAnswerService: ContentAnswerService
   ) {
     super(contentService, eventService);
+    this.onSurface = this.themeService.getColor('on-surface');
+    this.surface = this.themeService.getColor('surface');
+    this.green = this.themeService.getColor('green');
+    this.grey = this.themeService.getColor('grey');
   }
 
   ngOnDestroy() {
@@ -86,7 +97,9 @@ export class StatisticSortComponent
       });
     this.visualizationUnitChanged.subscribe((isUnitPercent) => {
       this.settings.contentVisualizationUnitPercent = isUnitPercent;
-      this.chart.update();
+      if (this.chart) {
+        this.chart.update();
+      }
     });
   }
 
@@ -223,13 +236,15 @@ export class StatisticSortComponent
       this.shuffleAnswerOptions();
     }
     this.initLabels();
-    const dataset = this.chart.config.data
+    const dataset = this.chart?.config.data
       .datasets[0] as BarControllerDatasetOptions;
     dataset.backgroundColor = this.showCorrect
       ? this.indicationColors
       : this.colors;
-    this.chart.data.labels = this.labels;
-    this.chart.update();
+    if (this.chart) {
+      this.chart.data.labels = this.labels;
+      this.chart.update();
+    }
   }
 
   checkIfCorrect(index: number): boolean {
@@ -256,10 +271,6 @@ export class StatisticSortComponent
   }
 
   initChart() {
-    this.onSurface = this.themeService.getColor('on-surface');
-    this.surface = this.themeService.getColor('surface');
-    this.green = this.themeService.getColor('green');
-    this.grey = this.themeService.getColor('grey');
     this.setColors();
   }
 

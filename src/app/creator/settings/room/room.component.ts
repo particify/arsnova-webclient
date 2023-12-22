@@ -32,9 +32,9 @@ export class RoomComponent extends FormComponent implements OnInit {
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
-  @Input() editRoom: Room;
-  @Input() name: string;
-  @Input() description: string;
+  @Input({ required: true }) editRoom!: Room;
+  @Input({ required: true }) name!: string;
+  @Input({ required: true }) description!: string;
   markdownFeatureset = MarkdownFeatureset.EXTENDED;
   renderPreview = false;
   textContainsImage = false;

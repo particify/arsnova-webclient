@@ -21,7 +21,7 @@ export class CookiesComponent {
 
   categories: CookieCategory[];
   privacyUrl: string;
-  inputFocus: boolean;
+  inputFocus = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)

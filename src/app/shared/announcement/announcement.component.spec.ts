@@ -19,7 +19,12 @@ describe('AnnouncementComponent', () => {
 
     fixture = TestBed.createComponent(AnnouncementComponent);
     component = fixture.componentInstance;
-    component.announcement = new UserAnnouncement('1234', 'title', 'body');
+    component.announcement = new UserAnnouncement(
+      '1234',
+      'title',
+      'body',
+      'roomName'
+    );
     fixture.detectChanges();
   });
 

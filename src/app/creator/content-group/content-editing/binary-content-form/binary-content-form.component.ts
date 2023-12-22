@@ -30,7 +30,7 @@ export class BinaryContentFormComponent
   implements OnInit, ContentForm
 {
   @Input() content?: Content;
-  @Input() isEditMode: boolean;
+  @Input() isEditMode = false;
   options: BINARY_OPTION[] = Object.values(BINARY_OPTION);
   currentOption = BINARY_OPTION.NEITHER;
 

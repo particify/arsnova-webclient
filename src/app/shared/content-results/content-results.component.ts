@@ -35,25 +35,26 @@ import { ContentService } from '@app/core/services/http/content.service';
   styleUrls: ['./content-results.component.scss'],
 })
 export class ContentResultsComponent implements OnInit, OnDestroy {
+  // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
   @ViewChild(StatisticChoiceComponent)
-  choiceStatistic: StatisticChoiceComponent;
-  @ViewChild(StatisticScaleComponent) scaleStatistic: StatisticScaleComponent;
-  @ViewChild(StatisticTextComponent) textStatistic: StatisticTextComponent;
-  @ViewChild(StatisticSortComponent) sortStatistic: StatisticSortComponent;
+  choiceStatistic!: StatisticChoiceComponent;
+  @ViewChild(StatisticScaleComponent) scaleStatistic!: StatisticScaleComponent;
+  @ViewChild(StatisticTextComponent) textStatistic!: StatisticTextComponent;
+  @ViewChild(StatisticSortComponent) sortStatistic!: StatisticSortComponent;
   @ViewChild(StatisticWordcloudComponent)
-  wordcloudStatistic: StatisticWordcloudComponent;
+  wordcloudStatistic!: StatisticWordcloudComponent;
   @ViewChild(StatisticPrioritizationComponent)
-  prioritizationStatistic: StatisticPrioritizationComponent;
+  prioritizationStatistic!: StatisticPrioritizationComponent;
 
   destroyed$: Subject<void> = new Subject();
 
-  @Input() content: Content;
-  @Input() directShow: boolean;
-  @Input() active: boolean;
-  @Input() index: number;
-  @Input() correctOptionsPublished: boolean;
+  @Input({ required: true }) content!: Content;
+  @Input() directShow = false;
+  @Input() active = false;
+  @Input() index = 0;
+  @Input() correctOptionsPublished = false;
   @Input() isPresentation = false;
-  @Input() indexChanged: EventEmitter<void> = new EventEmitter<void>();
+  @Input() indexChanged?: EventEmitter<void>;
   @Input() useCustomFlipAction = false;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
   @Output() customFlipEvent = new EventEmitter();
@@ -63,13 +64,13 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   answersVisible = false;
   correctVisible = false;
   survey = false;
-  answerCount: number;
+  answerCount = 0;
   isLoading = true;
-  format: ContentType;
+  format!: ContentType;
   ContentType: typeof ContentType = ContentType;
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
-  multipleRounds: boolean;
+  multipleRounds = false;
   roundsToDisplay = 0;
   showWordcloudModeration = false;
   isParticipant = true;
@@ -77,9 +78,10 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
 
   visualizationUnitChanged = new EventEmitter<boolean>();
 
-  choiceContent: ContentChoice;
-  prioritizationContent: ContentPrioritization;
-  flashcardContent: ContentFlashcard;
+  // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
+  choiceContent!: ContentChoice;
+  prioritizationContent!: ContentPrioritization;
+  flashcardContent!: ContentFlashcard;
 
   constructor(
     private announceService: AnnounceService,
@@ -110,17 +112,19 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     this.isParticipant =
       this.route.snapshot.data.viewRole === UserRole.PARTICIPANT;
     this.isLoading = false;
-    this.indexChanged.subscribe(() => {
-      this.updateCounter(this.answerCount);
-      this.broadcastRoundState();
-      if (
-        this.settings.showContentResultsDirectly &&
-        this.active &&
-        !this.answersVisible
-      ) {
-        this.toggleAnswers();
-      }
-    });
+    if (this.indexChanged) {
+      this.indexChanged.subscribe(() => {
+        this.updateCounter(this.answerCount);
+        this.broadcastRoundState();
+        if (
+          this.settings.showContentResultsDirectly &&
+          this.active &&
+          !this.answersVisible
+        ) {
+          this.toggleAnswers();
+        }
+      });
+    }
     this.broadcastRoundState();
     if (this.contentService.hasFormatRounds(this.content.format)) {
       this.presentationService

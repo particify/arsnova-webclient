@@ -17,7 +17,7 @@ import { TranslocoService } from '@ngneat/transloco';
 })
 export class PublishContentGroupTemplateComponent extends FormComponent {
   @ViewChild(ContentGroupTemplateEditingComponent)
-  templateEditing: ContentGroupTemplateEditingComponent;
+  templateEditing!: ContentGroupTemplateEditingComponent;
 
   constructor(
     protected formService: FormService,

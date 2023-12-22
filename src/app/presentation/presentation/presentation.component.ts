@@ -22,8 +22,8 @@ export class PresentationComponent implements OnInit, OnDestroy {
   shortId: string;
   roomId: string;
   passwordProtected: boolean;
-  lastGroup: string;
-  featureString: string;
+  lastGroup?: string;
+  featureString?: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,54 +33,53 @@ export class PresentationComponent implements OnInit, OnDestroy {
     private translateService: TranslocoService,
     private presentationService: PresentationService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    this.shortId = this.route.snapshot.params['shortId'];
+    const room = this.route.snapshot.data.room;
+    this.roomId = room.id;
+    this.passwordProtected = room.passwordProtected;
+    const childRoute = this.route.snapshot?.firstChild?.firstChild;
+    if (childRoute) {
+      this.featureString = childRoute.url[0]?.path;
+      this.lastGroup = childRoute.params['seriesName'];
+    }
+    if (room.focusModeEnabled) {
+      this.translateService
+        .selectTranslate(
+          'presentation.focus-mode-enabled-info',
+          undefined,
+          'creator'
+        )
+        .pipe(take(1))
+        .subscribe((msg) => {
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.INFO
+          );
+        });
+    }
+  }
 
   ngOnInit(): void {
     document.body.style.background = 'var(--surface)';
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    const params = this.route.snapshot.params;
-    this.shortId = params['shortId'];
-    const childRoute = this.route.snapshot?.firstChild?.firstChild;
-    if (childRoute) {
-      this.featureString = childRoute.url[0]?.path;
-      this.lastGroup = childRoute.params['seriesName'];
-    }
-    this.route.data.subscribe((data) => {
-      this.roomId = data.room.id;
-      this.passwordProtected = data.room.passwordProtected;
+    if (this.lastGroup === undefined) {
+      this.lastGroup = this.globalStorageService.getItem(
+        STORAGE_KEYS.LAST_GROUP
+      );
       if (this.lastGroup === undefined) {
-        this.lastGroup = this.globalStorageService.getItem(
-          STORAGE_KEYS.LAST_GROUP
-        );
-        if (this.lastGroup === undefined) {
-          this.roomStatsService
-            .getStats(this.roomId, true)
-            .subscribe((stats) => {
-              if (stats.groupStats) {
-                this.lastGroup = stats.groupStats[0].groupName;
-                this.setGroupInSessionStorage(this.lastGroup);
-              }
-            });
-        }
+        this.roomStatsService.getStats(this.roomId, true).subscribe((stats) => {
+          if (stats.groupStats) {
+            this.lastGroup = stats.groupStats[0].groupName;
+            if (this.lastGroup) {
+              this.setGroupInSessionStorage(this.lastGroup);
+            }
+          }
+        });
       }
-      if (data.room.focusModeEnabled) {
-        this.translateService
-          .selectTranslate(
-            'presentation.focus-mode-enabled-info',
-            undefined,
-            'creator'
-          )
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.INFO
-            );
-          });
-      }
-    });
+    }
   }
 
   ngOnDestroy(): void {
@@ -104,7 +103,9 @@ export class PresentationComponent implements OnInit, OnDestroy {
       urlList.push(this.featureString);
       if (isGroup) {
         const groupName = group || this.lastGroup;
-        urlList.push(groupName);
+        if (groupName) {
+          urlList.push(groupName);
+        }
       }
     }
     this.router.navigate(urlList);

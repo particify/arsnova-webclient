@@ -8,8 +8,8 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export abstract class FormComponent implements OnDestroy {
   protected destroyed$ = new Subject<void>();
-  private formControl: FormControl;
-  protected formGroup: FormGroup;
+  private formControl: FormControl = new FormControl();
+  protected formGroup: FormGroup = new FormGroup([]);
   formDisabled = false;
 
   constructor(protected formService: FormService) {
@@ -34,11 +34,11 @@ export abstract class FormComponent implements OnDestroy {
 
   protected handleFormChanges(): void {
     if (this.formDisabled) {
-      this.formControl?.disable();
-      this.formGroup?.disable();
+      this.formControl.disable();
+      this.formGroup.disable();
     } else {
-      this.formControl?.enable();
-      this.formGroup?.enable();
+      this.formControl.enable();
+      this.formGroup.enable();
     }
   }
 

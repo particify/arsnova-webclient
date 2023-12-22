@@ -1,6 +1,7 @@
+// TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
 export class ContentGroup {
-  id: string;
-  revision: string;
+  id!: string;
+  revision!: string;
   roomId: string;
   name: string;
   contentIds: string[];

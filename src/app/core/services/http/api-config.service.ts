@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AbstractHttpService } from './abstract-http.service';
 import { ApiConfig } from '@app/core/models/api-config';
 import { TranslocoService } from '@ngneat/transloco';
@@ -12,7 +12,7 @@ import * as dayjs from 'dayjs';
 
 @Injectable()
 export class ApiConfigService extends AbstractHttpService<ApiConfig> {
-  private config$: Observable<ApiConfig>;
+  private config$: Observable<ApiConfig> = of();
   private cacheExpiry: dayjs.Dayjs = dayjs();
 
   constructor(

@@ -18,12 +18,12 @@ export class AnswerOptionListComponent
   extends DragDropBaseComponent
   implements OnInit
 {
-  @Input() answers: DisplayAnswer[];
-  @Input() hasCorrectAnswers: boolean;
-  @Input() hasMultipleCorrectAnswers: boolean;
-  @Input() allowDeletion: boolean;
-  @Input() disabled: boolean;
-  @Input() sortable: boolean;
+  @Input() answers: DisplayAnswer[] = [];
+  @Input() hasCorrectAnswers = false;
+  @Input() hasMultipleCorrectAnswers = false;
+  @Input() allowDeletion = false;
+  @Input() disabled = false;
+  @Input() sortable = false;
 
   isAnswerEdit = -1;
 

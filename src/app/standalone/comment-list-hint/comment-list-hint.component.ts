@@ -10,6 +10,6 @@ import { TranslocoModule } from '@ngneat/transloco';
   templateUrl: './comment-list-hint.component.html',
 })
 export class CommentListHintComponent {
-  @Input() noPostsFound: boolean;
-  @Input() isListEmpty: boolean;
+  @Input() noPostsFound = false;
+  @Input() isListEmpty = false;
 }

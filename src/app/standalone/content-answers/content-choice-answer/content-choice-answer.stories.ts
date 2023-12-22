@@ -14,6 +14,7 @@ import { AnswerOption } from '@app/core/models/answer-option';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { FormattingService } from '@app/core/services/http/formatting.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 class MockFormattingService {}
 
@@ -53,7 +54,7 @@ selectableAnswers[0].answerOption.renderedLabel = '<b>answer 1</b>';
 
 export const ContentChoiceAnswer: Story = {
   args: {
-    answer: new ChoiceAnswer(),
+    answer: new ChoiceAnswer('contentId', 1, ContentType.CHOICE),
     selectableAnswers: selectableAnswers,
     isDisabled: false,
     multipleAnswersAllowed: false,

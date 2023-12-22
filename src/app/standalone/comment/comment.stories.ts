@@ -31,7 +31,9 @@ class MockLangService {
   langEmitter = new EventEmitter<string>();
 }
 class MockAnnounceService {}
-class MockGlobalStorageService {}
+class MockGlobalStorageService {
+  getItem() {}
+}
 
 export default {
   component: CommentComponent,

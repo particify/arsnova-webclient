@@ -6,9 +6,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./admin-page-header.component.scss'],
 })
 export class AdminPageHeaderComponent {
-  @Input() headerText: string;
-  @Input() buttonText: string;
-  @Input() buttonIcon: string;
+  @Input({ required: true }) headerText!: string;
+  @Input() buttonText?: string;
+  @Input() buttonIcon?: string;
   @Output() buttonClicked = new EventEmitter<void>();
 
   click() {

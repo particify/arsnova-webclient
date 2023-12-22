@@ -9,8 +9,8 @@ import { UserService } from '@app/core/services/http/user.service';
 })
 export class UserSearchComponent {
   user?: User;
-  users: User[];
-  searchResults: string[];
+  users: User[] = [];
+  searchResults: string[] = [];
 
   constructor(
     protected userService: UserService,

@@ -8,8 +8,8 @@ import { Message } from '@stomp/stompjs';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { DataChanged } from '@app/core/models/events/data-changed';
 import { EventService } from '@app/core/services/util/event.service';
+import { ActivatedRoute } from '@angular/router';
 
 export class AbstractRoomOverviewPage {
   destroyed$ = new Subject<void>();
@@ -19,31 +19,21 @@ export class AbstractRoomOverviewPage {
   room: Room;
   role: UserRole;
   contentGroups: ContentGroup[] = [];
-  roomStats: RoomStats;
-  commentCounter: number;
+  roomStats?: RoomStats;
+  commentCounter = 0;
 
-  attachmentData: object;
+  attachmentData?: object;
 
   constructor(
     protected roomStatsService: RoomStatsService,
     protected commentService: CommentService,
     protected contentGroupService: ContentGroupService,
     protected wsCommentService: WsCommentService,
-    protected eventService: EventService
-  ) {}
-
-  initializeRoom(
-    room: Room,
-    dataChangedEvent: string,
-    extendedStats = false
-  ): void {
-    this.room = room;
-    this.eventService
-      .on<DataChanged<RoomStats>>(dataChangedEvent)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => this.initializeStats(extendedStats));
-    this.initializeStats(extendedStats);
-    this.subscribeCommentStream();
+    protected eventService: EventService,
+    protected route: ActivatedRoute
+  ) {
+    this.role = route.snapshot.data.viewRole;
+    this.room = route.snapshot.data.room;
   }
 
   initializeStats(extendedStats: boolean) {
@@ -52,7 +42,7 @@ export class AbstractRoomOverviewPage {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((roomStats) => {
         this.roomStats = roomStats;
-        if (this.roomStats.groupStats?.length > 0) {
+        if (this.roomStats && this.roomStats.groupStats?.length > 0) {
           this.initializeGroups();
         } else {
           this.contentGroups = [];
@@ -63,6 +53,9 @@ export class AbstractRoomOverviewPage {
   }
 
   initializeGroups() {
+    if (!this.roomStats) {
+      return;
+    }
     this.contentGroups.splice(0, this.contentGroups.length);
     this.contentGroupService
       .getByIds(
@@ -73,7 +66,7 @@ export class AbstractRoomOverviewPage {
       .subscribe((groups) => {
         for (const group of groups) {
           this.contentGroups.push(group);
-          if (this.contentGroups.length === this.roomStats.groupStats.length) {
+          if (this.contentGroups.length === this.roomStats?.groupStats.length) {
             this.contentGroups =
               this.contentGroupService.sortContentGroupsByName(
                 this.contentGroups

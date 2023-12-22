@@ -16,9 +16,9 @@ import { TranslocoService } from '@ngneat/transloco';
   styleUrls: ['./create-answer-option.component.scss'],
 })
 export class CreateAnswerOptionComponent extends FormComponent {
-  @ViewChild('answerInput') answerInput: ElementRef;
+  @ViewChild('answerInput') answerInput!: ElementRef;
 
-  @Input() answers: DisplayAnswer[];
+  @Input({ required: true }) answers!: DisplayAnswer[];
 
   newAnswer = '';
 

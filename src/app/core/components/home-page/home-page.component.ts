@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -11,7 +11,7 @@ import {
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent {
   deviceType: string;
   appTitle: string;
 
@@ -23,9 +23,6 @@ export class HomePageComponent implements OnInit {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
     );
-  }
-
-  ngOnInit(): void {
     this.appTitle =
       this.route.snapshot.data.apiConfig.ui.registration?.service || 'ARSnova';
   }

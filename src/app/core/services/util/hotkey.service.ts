@@ -58,7 +58,6 @@ const excludedElementTypes = new Map<string, (el: Element) => boolean>([
 @Injectable()
 export class HotkeyService {
   hotkeyRegistrations: Map<symbol, Hotkey> = new Map();
-  unregisterHandler: () => void;
 
   private dialogRef?: MatDialogRef<HotkeysComponent>;
 

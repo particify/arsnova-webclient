@@ -13,14 +13,14 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 export class ContentPrioritizationAnswerComponent implements OnInit {
   readonly STEP_SIZE = 10;
 
-  @Input() answerOptions: AnswerWithPoints[];
-  @Input() assignablePoints: number;
-  @Input() isDisabled: boolean;
+  @Input({ required: true }) answerOptions!: AnswerWithPoints[];
+  @Input({ required: true }) assignablePoints!: number;
+  @Input() isDisabled = false;
   @Output() assignedPoints: EventEmitter<number[]> = new EventEmitter<
     number[]
   >();
 
-  pointsLeft: number;
+  pointsLeft!: number;
 
   ngOnInit() {
     this.getAssignedPoints();

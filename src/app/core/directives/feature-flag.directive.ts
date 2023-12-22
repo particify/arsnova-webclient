@@ -11,7 +11,7 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
   selector: '[appFeatureFlag]',
 })
 export class FeatureFlagDirective implements OnInit {
-  @Input() appFeatureFlag: string;
+  @Input({ required: true }) appFeatureFlag!: string;
 
   constructor(
     private featureFlagService: FeatureFlagService,

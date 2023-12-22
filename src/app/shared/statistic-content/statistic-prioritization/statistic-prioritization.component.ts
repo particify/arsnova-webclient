@@ -41,19 +41,19 @@ export class StatisticPrioritizationComponent
     left: 30,
   };
 
-  @Input() content: ContentPrioritization;
-  @Input() indexChanged: EventEmitter<void> = new EventEmitter<void>();
+  @Input({ required: true }) content!: ContentPrioritization;
+  @Input() indexChanged?: EventEmitter<void>;
   @Input() isCreator = true;
 
   chartColors: string[] = [];
   chartData: number[] = [];
   emptyData: number[] = [];
-  answerCount: number;
-  abstentionCount: number;
-  chartHeight: number;
-  scale: number;
-  fontSize: number;
-  indexes: number[];
+  answerCount = 0;
+  abstentionCount = 0;
+  chartHeight = 0;
+  scale = 0;
+  fontSize = 0;
+  indexes: number[] = [];
 
   constructor(
     protected contentService: ContentService,
@@ -91,9 +91,11 @@ export class StatisticPrioritizationComponent
     this.initChart();
     this.showChart(300);
     this.updateData(stats);
-    this.indexChanged.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-      this.showChart();
-    });
+    if (this.indexChanged) {
+      this.indexChanged.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+        this.showChart();
+      });
+    }
   }
 
   showChart(timeout = 0) {
@@ -227,7 +229,7 @@ export class StatisticPrioritizationComponent
             )
           );
           // Get array with indexes
-          if (!this.indexes) {
+          if (this.indexes.length === 0) {
             this.indexes = data.map((d, i) => i);
           }
           // Create copy of current indexes
@@ -331,10 +333,12 @@ export class StatisticPrioritizationComponent
   }
 
   prepareChart() {
-    this.chart.data.datasets[0].data = this.answersVisible
-      ? this.chartData
-      : this.emptyData;
-    this.chart.data.datasets[0].backgroundColor = this.chartColors;
+    if (this.chart) {
+      this.chart.data.datasets[0].data = this.answersVisible
+        ? this.chartData
+        : this.emptyData;
+      this.chart.data.datasets[0].backgroundColor = this.chartColors;
+    }
   }
 
   updateChart() {

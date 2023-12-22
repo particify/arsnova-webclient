@@ -20,7 +20,7 @@ export class TemplateLanguageSelectionComponent
   @Input() smaller = false;
   @Input() defaultLang?: string;
   selectedLang?: IsoLanguage;
-  langs: IsoLanguage[];
+  langs: IsoLanguage[] = [];
 
   constructor(
     protected formService: FormService,

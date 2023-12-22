@@ -33,13 +33,13 @@ export class ChoiceContentFormComponent
   implements OnInit, OnChanges, ContentForm
 {
   @ViewChild(CreateAnswerOptionComponent)
-  answerCreation: CreateAnswerOptionComponent;
+  answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
-  answerList: AnswerOptionListComponent;
+  answerList!: AnswerOptionListComponent;
 
   @Input() content?: Content;
-  @Input() isAnswered: boolean;
-  @Input() isEditMode: boolean;
+  @Input() isAnswered = false;
+  @Input() isEditMode = false;
 
   displayAnswers: DisplayAnswer[] = [];
   multipleCorrectAnswers = false;

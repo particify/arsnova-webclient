@@ -6,10 +6,10 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
   template: '',
 })
 export class DragDropBaseComponent {
-  @ViewChildren('sortListItem') listItems: QueryList<ElementRef>;
+  @ViewChildren('sortListItem') listItems!: QueryList<ElementRef>;
 
   dragDroplist: object[] = [];
-  selectedSortItem: number;
+  selectedSortItem?: number;
 
   drop(previousIndex: number, currentIndex: number) {
     this.moveItem(previousIndex, currentIndex);
@@ -36,6 +36,8 @@ export class DragDropBaseComponent {
   }
 
   setFocus() {
-    this.listItems.toArray()[this.selectedSortItem].nativeElement.focus();
+    if (this.selectedSortItem) {
+      this.listItems.toArray()[this.selectedSortItem].nativeElement.focus();
+    }
   }
 }

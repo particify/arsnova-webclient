@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ContentCarouselService {
-  private lastContentAnswered: boolean;
+  private lastContentAnswered = false;
 
   setLastContentAnswered(hasAnsweredLastContent: boolean) {
     this.lastContentAnswered = hasAnsweredLastContent;

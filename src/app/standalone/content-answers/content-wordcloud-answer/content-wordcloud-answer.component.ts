@@ -12,9 +12,9 @@ import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 export class ContentWordcloudAnswerComponent {
   readonly maxLength = 25;
 
-  @Input() words: string[] = [];
-  @Input() givenAnswer: MultipleTextsAnswer;
-  @Input() disabled: boolean;
+  @Input({ required: true }) words!: string[];
+  @Input() givenAnswer?: MultipleTextsAnswer;
+  @Input() disabled = false;
   currentInputIndex?: number;
 
   trackByIndex(index: number) {

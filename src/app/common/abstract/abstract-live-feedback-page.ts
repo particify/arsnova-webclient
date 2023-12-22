@@ -23,9 +23,9 @@ export class AbstractLiveFeedbackPage {
 
   room: Room;
   isClosed = false;
-  type: LiveFeedbackType;
+  type: LiveFeedbackType = LiveFeedbackType.FEEDBACK;
   answerCount = 0;
-  data: number[];
+  data: number[] = [];
   dataChanged = new EventEmitter<number[]>();
 
   LiveFeedbackType: typeof LiveFeedbackType = LiveFeedbackType;
@@ -41,7 +41,9 @@ export class AbstractLiveFeedbackPage {
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
     protected route: ActivatedRoute
-  ) {}
+  ) {
+    this.room = this.route.snapshot.data.room;
+  }
 
   initData() {
     this.translateService.setActiveLang(

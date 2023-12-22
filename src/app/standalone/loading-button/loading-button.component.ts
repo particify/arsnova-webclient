@@ -12,16 +12,16 @@ import { HotkeyAction } from '@app/core/directives/hotkey.directive';
   styleUrls: ['./loading-button.component.scss'],
 })
 export class LoadingButtonComponent extends FormComponent {
-  @Input() name: string;
+  @Input({ required: true }) name!: string;
   @Input() isDialog = false;
   @Input() fullWidth = false;
   @Input() color = 'primary';
   @Input() aria?: string;
-  @Input() hotkey: string;
-  @Input() hotkeyTitle: string;
-  @Input() hotkeyAction: HotkeyAction;
-  @Input() trackInteraction: string;
-  @Input() trackName: string;
+  @Input() hotkey?: string;
+  @Input() hotkeyTitle?: string;
+  @Input() hotkeyAction?: HotkeyAction;
+  @Input() trackInteraction?: string;
+  @Input() trackName?: string;
   @Input() disabled = false;
   @Input() useDirectives = false;
   @Output() clicked = new EventEmitter<void>();

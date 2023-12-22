@@ -1,4 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   BarController,
   BarControllerDatasetOptions,
@@ -32,29 +38,30 @@ export class StatisticChoiceComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
-  @Input() content: ContentChoice;
-  @Input() directShow: boolean;
-  @Input() isSurvey: boolean;
+  @Input({ required: true }) content!: ContentChoice;
+  @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
+  @Input() directShow = false;
+  @Input() isSurvey = false;
 
-  chart: Chart;
-  chartId: string;
+  chart?: Chart;
+  chartId = '';
   colors: Array<string[]> = [[], []];
   indicationColors: Array<string[]> = [[], []];
   labelLetters = 'ABCDEFGH';
   data: Array<number[]> = [[], []];
   colorLabel = false;
   survey = false;
-  options: AnswerOption[];
-  correctOptionIndexes: number[];
+  options: AnswerOption[] = [];
+  correctOptionIndexes: number[] = [];
   colorStrings = {
     onBackground: '',
     background: '',
     correct: '',
     abstention: '',
   };
-  rounds: number;
+  rounds = 1;
   roundsToDisplay = 0;
-  roundsDisplayed: number;
+  roundsDisplayed = 0;
   independentAnswerCount: number[][] = [[], [], []];
   ContentType: typeof ContentType = ContentType;
 
@@ -86,10 +93,6 @@ export class StatisticChoiceComponent
     this.correctOptionIndexes = this.content.correctOptionIndexes;
     this.initChart();
     this.updateData(stats);
-    this.visualizationUnitChanged.subscribe((isUnitPercent) => {
-      this.settings.contentVisualizationUnitPercent = isUnitPercent;
-      this.chart.update();
-    });
   }
 
   afterInit() {
@@ -103,7 +106,9 @@ export class StatisticChoiceComponent
       });
     this.visualizationUnitChanged.subscribe((isUnitPercent) => {
       this.settings.contentVisualizationUnitPercent = isUnitPercent;
-      this.chart.update();
+      if (this.chart) {
+        this.chart.update();
+      }
     });
   }
 
@@ -256,12 +261,14 @@ export class StatisticChoiceComponent
     } else {
       this.toggleChartColor(0, this.roundsDisplayed);
     }
-    this.chart.update();
+    if (this.chart) {
+      this.chart.update();
+    }
     this.colorLabel = !this.colorLabel;
   }
 
   toggleChartColor(dataSetIndex: number, roundIndex: number) {
-    const dataset = this.chart.config.data.datasets[
+    const dataset = this.chart?.config.data.datasets[
       dataSetIndex
     ] as BarControllerDatasetOptions;
     dataset.backgroundColor = this.colorLabel
@@ -380,14 +387,16 @@ export class StatisticChoiceComponent
   prepareChartForRoundCompare(resetChart: boolean) {
     for (let i = 0; i < this.rounds - 1; i++) {
       if (resetChart) {
-        this.chart.data.datasets.push({
+        this.chart?.data.datasets.push({
           data: this.data[i],
           backgroundColor: this.colorLabel
             ? this.indicationColors[i]
             : this.colors[i],
         });
       } else {
-        this.chart.data.datasets[i].data = this.data[i];
+        if (this.chart) {
+          this.chart.data.datasets[i].data = this.data[i];
+        }
       }
     }
   }
@@ -398,13 +407,15 @@ export class StatisticChoiceComponent
       ? this.indicationColors[this.roundsToDisplay]
       : this.colors[this.roundsToDisplay];
     if (resetChart) {
-      this.chart.data.datasets.push({
+      this.chart?.data.datasets.push({
         data: data,
         backgroundColor: colors,
       });
     } else {
-      this.chart.data.datasets[0].data = data;
-      this.chart.data.datasets[0].backgroundColor = colors;
+      if (this.chart) {
+        this.chart.data.datasets[0].data = data;
+        this.chart.data.datasets[0].backgroundColor = colors;
+      }
     }
   }
 

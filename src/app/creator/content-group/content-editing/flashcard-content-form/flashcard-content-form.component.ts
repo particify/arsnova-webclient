@@ -33,10 +33,10 @@ export class FlashcardContentFormComponent
   implements OnInit, OnChanges, ContentForm
 {
   @Input() content?: Content;
-  @Input() isEditMode: boolean;
+  @Input() isEditMode = false;
 
-  answer: string;
-  textContainsImage: boolean;
+  answer = '';
+  textContainsImage = false;
   HintType = HintType;
 
   constructor(

@@ -15,7 +15,7 @@ export class AnnouncementListComponent implements OnInit {
   displayAnnouncements: UserAnnouncement[] = [];
   announcementRooms = new Map<string, string>();
   selectedRoomId = '';
-  newReadTimestamp: Date;
+  newReadTimestamp = new Date();
   isLoading = true;
 
   constructor(

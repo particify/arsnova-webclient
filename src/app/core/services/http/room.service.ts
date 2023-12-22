@@ -43,8 +43,8 @@ export class RoomService extends AbstractEntityService<Room> {
 
   private currentRoom?: Room;
   private currentRoomStream$ = new BehaviorSubject<Room | undefined>(undefined);
-  private messageStream$: Observable<IMessage>;
-  private messageStreamSubscription: Subscription;
+  private messageStream$: Observable<IMessage> = of();
+  private messageStreamSubscription?: Subscription;
 
   constructor(
     private http: HttpClient,

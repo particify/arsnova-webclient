@@ -23,7 +23,7 @@ export class UserManagementComponent
   extends UserSearchComponent
   implements OnInit
 {
-  addButtonText: string;
+  addButtonText?: string;
   isLoading = false;
 
   constructor(

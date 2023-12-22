@@ -27,7 +27,7 @@ import { take } from 'rxjs';
   styleUrls: ['./copy-url.component.scss'],
 })
 export class CopyUrlComponent {
-  @Input() url: string;
+  @Input({ required: true }) url!: string;
 
   constructor(
     private translateService: TranslocoService,

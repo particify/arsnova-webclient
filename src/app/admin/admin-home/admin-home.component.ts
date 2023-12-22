@@ -34,13 +34,13 @@ export class AdminHomeComponent implements OnInit {
     langService.langEmitter.subscribe((lang) => {
       translateService.setActiveLang(lang);
     });
+    this.healthInfo = this.getHealthInfo();
   }
 
   ngOnInit() {
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.healthInfo = this.getHealthInfo();
     this.navButtonSection.push(
       new NavButtonSection(this.getButtons(), 'admin.admin-area.general')
     );

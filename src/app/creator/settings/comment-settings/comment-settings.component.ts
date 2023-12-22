@@ -27,14 +27,14 @@ export class CommentSettingsComponent implements OnInit {
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
-  @Input() room: Room;
-  @Input() roomId: string;
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) roomId!: string;
 
-  commentExtension: CommentExtensions;
+  commentExtension?: CommentExtensions;
   threshold = -50;
   enableThreshold = false;
   enableTags = false;
-  settings: CommentSettings;
+  settings = new CommentSettings();
   tags: string[] = [];
   timestamp = new Date();
   tagName = '';
@@ -73,7 +73,7 @@ export class CommentSettingsComponent implements OnInit {
   }
 
   initTags() {
-    this.enableTags = this.commentExtension.enableTags ?? this.enableTags;
+    this.enableTags = this.commentExtension?.enableTags ?? this.enableTags;
     if (this.room.extensions?.comments?.tags) {
       this.tags = this.room.extensions.comments.tags || [];
     }

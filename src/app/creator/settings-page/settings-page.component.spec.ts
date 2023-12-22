@@ -18,6 +18,7 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { Room } from '@app/core/models/room';
 
 @Injectable()
 class MockRoomService {}
@@ -26,17 +27,17 @@ describe('SettingsPageComponent', () => {
   let component: SettingsPageComponent;
   let fixture: ComponentFixture<SettingsPageComponent>;
 
-  const data = {
-    room: {
-      id: '1234',
-    },
-  };
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
     userRole: UserRole.EDITOR,
+    room: new Room(),
   };
-  snapshot.params = {};
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
+  snapshot.params = { settingsName: 'comments' };
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

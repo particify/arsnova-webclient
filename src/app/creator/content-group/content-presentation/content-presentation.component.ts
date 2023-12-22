@@ -28,20 +28,20 @@ import { ContentLicenseAttribution } from '@app/core/models/content-license-attr
   styleUrls: ['./content-presentation.component.scss'],
 })
 export class ContentPresentationComponent implements OnInit, OnDestroy {
-  @ViewChild(StepperComponent) stepper: StepperComponent;
+  @ViewChild(StepperComponent) stepper!: StepperComponent;
 
   destroyed$ = new Subject<void>();
 
-  contents: Content[];
+  contents: Content[] = [];
   isLoading = true;
   shortId: string;
   room: Room;
   contentGroupName: string;
   currentStep = 0;
   indexChanged: EventEmitter<void> = new EventEmitter<void>();
-  contentGroup: ContentGroup;
-  settings: UserSettings;
-  attributions: ContentLicenseAttribution[];
+  contentGroup?: ContentGroup;
+  settings = new UserSettings();
+  attributions: ContentLicenseAttribution[] = [];
   stepCount = 0;
 
   constructor(
@@ -52,21 +52,22 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     private userService: UserService
-  ) {}
+  ) {
+    this.contentGroupName = route.snapshot.params['seriesName'];
+    this.currentStep = route.snapshot.params['contentIndex'] - 1;
+    this.room = route.snapshot.data.room;
+    this.shortId = route.snapshot.data.room.shortId;
+  }
 
   ngOnInit() {
-    this.contentGroupName = this.route.snapshot.params['seriesName'];
-    this.currentStep = this.route.snapshot.params['contentIndex'] - 1;
     const loginId = this.globalStorageService.getItem(
       STORAGE_KEYS.USER
     ).loginId;
     this.userService.getUserSettingsByLoginId(loginId).subscribe((settings) => {
-      this.settings = settings || new UserSettings();
-      this.route.data.subscribe((data) => {
-        this.room = data.room;
-        this.shortId = data.room.shortId;
-        this.initGroup();
-      });
+      if (settings) {
+        this.settings = settings;
+      }
+      this.initGroup();
     });
   }
 
@@ -103,7 +104,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
                 this.contentService.getSupportedContents(contents);
               this.stepCount = this.contents.length;
               this.contentGroupService
-                .getAttributions(this.room.id, this.contentGroup.id)
+                .getAttributions(this.room.id, group.id)
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe((attributions) => {
                   if (attributions.length > 0) {

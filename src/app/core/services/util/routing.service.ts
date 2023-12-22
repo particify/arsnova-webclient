@@ -18,17 +18,17 @@ enum RoutePrefix {
   providedIn: 'root',
 })
 export class RoutingService {
-  private backRoute: string[];
-  private fullCurrentRoute: string;
-  private viewRole: UserRole;
-  private shortId: string;
-  private roomId: string;
-  role: UserRole;
+  private backRoute: string[] = [];
+  private fullCurrentRoute?: string;
+  private viewRole?: UserRole;
+  private shortId?: string;
+  private roomId?: string;
+  role?: UserRole;
   role$ = new EventEmitter<UserRole>();
-  isPreview: boolean;
+  isPreview = false;
   isPreview$ = new EventEmitter<boolean>();
   routeEvent = new EventEmitter<ActivatedRouteSnapshot>();
-  seriesName: string;
+  seriesName?: string;
 
   constructor(
     private router: Router,
@@ -82,7 +82,9 @@ export class RoutingService {
     const parentRoute = route.data.parentRoute;
     if (parentRoute !== undefined) {
       if (parentRoute === ParentRoute.ROOM) {
-        this.backRoute = [this.getRoleRoute(role), this.shortId];
+        if (this.shortId) {
+          this.backRoute = [this.getRoleRoute(role), this.shortId];
+        }
       } else {
         this.backRoute = [parentRoute];
       }
@@ -168,6 +170,9 @@ export class RoutingService {
   }
 
   navToPresentation(newTab = false) {
+    if (!this.fullCurrentRoute) {
+      return;
+    }
     const url = this.fullCurrentRoute.includes('/settings')
       ? this.getPresentationHomeUrl()
       : this.getPresentationUrl(this.fullCurrentRoute);
@@ -191,6 +196,9 @@ export class RoutingService {
   }
 
   switchRole() {
+    if (!this.fullCurrentRoute) {
+      return;
+    }
     const currentRoleString = this.getRoleRoute(this.role);
     const url =
       '/' +

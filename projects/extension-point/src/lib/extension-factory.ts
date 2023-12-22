@@ -41,9 +41,9 @@ export class ExtensionFactory {
 
   createExtension(
     id: string,
-    data: object,
     eventEmitter: EventEmitter<any>,
-    ref: ViewContainerRef
+    ref: ViewContainerRef,
+    data?: object
   ): ComponentRef<any> | null {
     const extension = this.getExtension(id);
     if (!extension) {

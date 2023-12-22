@@ -39,13 +39,13 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./password-reset.component.scss'],
 })
 export class PasswordResetComponent extends FormComponent implements OnInit {
-  @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
+  @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   keyFormControl = new UntypedFormControl('', [Validators.required]);
   matcher = new PasswordResetErrorStateMatcher();
 
   deviceWidth = innerWidth;
-  email: string;
+  email = '';
   isLoading = true;
 
   constructor(

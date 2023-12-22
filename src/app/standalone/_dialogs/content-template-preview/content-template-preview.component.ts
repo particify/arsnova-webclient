@@ -25,7 +25,7 @@ export class ContentTemplatePreviewComponent implements AfterViewInit {
     public data: { contents: Content[]; index: number }
   ) {}
 
-  @ViewChild(StepperComponent) stepper: StepperComponent;
+  @ViewChild(StepperComponent) stepper!: StepperComponent;
 
   ngAfterViewInit(): void {
     // Timeout is used for waiting until stepper component is available

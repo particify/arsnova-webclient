@@ -1,9 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -18,6 +14,9 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-overview-page';
+import { DataChanged } from '@app/core/models/events/data-changed';
+import { RoomStats } from '@app/core/models/room-stats';
+import { takeUntil } from 'rxjs';
 @Component({
   selector: 'app-creator-overview',
   templateUrl: './room-overview-page.component.html',
@@ -35,7 +34,6 @@ export class RoomOverviewPageComponent
     protected contentGroupService: ContentGroupService,
     protected wsCommentService: WsCommentService,
     protected eventService: EventService,
-    protected notificationService: NotificationService,
     protected route: ActivatedRoute,
     protected router: Router,
     protected translateService: TranslocoService,
@@ -48,7 +46,8 @@ export class RoomOverviewPageComponent
       commentService,
       contentGroupService,
       wsCommentService,
-      eventService
+      eventService,
+      route
     );
   }
 
@@ -57,11 +56,13 @@ export class RoomOverviewPageComponent
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.route.data.subscribe((data) => {
-      this.role = data.viewRole;
-      this.initializeRoom(data.room, 'ModeratorDataChanged', true);
-      this.isModerator = data.userRole === UserRole.MODERATOR;
-    });
+    this.eventService
+      .on<DataChanged<RoomStats>>('ModeratorDataChanged')
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => this.initializeStats(true));
+    this.initializeStats(true);
+    this.subscribeCommentStream();
+    this.isModerator = this.route.snapshot.data.userRole === UserRole.MODERATOR;
   }
 
   ngOnDestroy() {

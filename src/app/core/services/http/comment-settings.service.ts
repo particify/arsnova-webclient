@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { TranslocoService } from '@ngneat/transloco';
@@ -18,7 +18,7 @@ const httpOptions = {
 
 @Injectable()
 export class CommentSettingsService extends AbstractCachingHttpService<CommentSettings> {
-  private currentRoomSettings$: Observable<CommentSettings>;
+  private currentRoomSettings$: Observable<CommentSettings> = of();
   constructor(
     private http: HttpClient,
     protected wsConnectorService: WsConnectorService,
@@ -53,7 +53,9 @@ export class CommentSettingsService extends AbstractCachingHttpService<CommentSe
           );
         this.stompSubscription = this.currentRoomSettings$.subscribe();
       } else {
-        this.stompSubscription.unsubscribe();
+        if (this.stompSubscription) {
+          this.stompSubscription.unsubscribe();
+        }
       }
     });
   }

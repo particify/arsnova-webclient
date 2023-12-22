@@ -10,11 +10,11 @@ import { take } from 'rxjs';
 
 @Injectable()
 export class CustomPageTitleStrategy extends TitleStrategy {
-  homeTitle: string;
-  titleSuffix: string;
-  roomName: string;
-  seriesName: string;
-  title: string;
+  homeTitle?: string;
+  titleSuffix?: string;
+  roomName?: string;
+  seriesName?: string;
+  title?: string;
 
   constructor(
     private translateService: TranslocoService,
@@ -38,15 +38,21 @@ export class CustomPageTitleStrategy extends TitleStrategy {
     switch (this.title) {
       case 'home':
         // Use home title
-        this.setDocumentTitle(this.homeTitle, false);
+        if (this.homeTitle) {
+          this.setDocumentTitle(this.homeTitle, false);
+        }
         break;
       case 'room':
         // Use room name as title
-        this.setDocumentTitle(this.roomName);
+        if (this.roomName) {
+          this.setDocumentTitle(this.roomName);
+        }
         break;
       case 'series':
         // Use series name as title
-        this.setDocumentTitle(this.seriesName);
+        if (this.seriesName) {
+          this.setDocumentTitle(this.seriesName);
+        }
         break;
       default:
         // Use tranlated title for page

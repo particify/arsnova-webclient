@@ -29,7 +29,7 @@ export class CommentsPageComponent
   extends AbstractCommentsPageComponent
   implements OnInit, OnDestroy
 {
-  private moderationComments$: Observable<Comment[]>;
+  private moderationComments$?: Observable<Comment[]>;
 
   isModeration = false;
   moderationCounter = 0;
@@ -62,27 +62,22 @@ export class CommentsPageComponent
       commentSettingsService,
       authenticationService
     );
+    this.isModeration = route.snapshot.data.isModeration;
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.room = data.room;
-      this.roomId = this.room.id;
-      this.viewRole = data.viewRole;
-      this.isModeration = data.isModeration;
-      this.publicComments$ = this.commentService.getAckComments(this.room.id);
-      this.moderationComments$ = this.commentService.getRejectedComments(
-        this.room.id
-      );
-      this.activeComments$ = this.isModeration
-        ? this.moderationComments$
-        : this.publicComments$;
-      this.load();
-      if (innerWidth > 1000) {
-        this.scrollMax += innerWidth * 0.04 + 240;
-        this.scrollStart = this.scrollMax;
-      }
-    });
+    this.publicComments$ = this.commentService.getAckComments(this.room.id);
+    this.moderationComments$ = this.commentService.getRejectedComments(
+      this.room.id
+    );
+    this.activeComments$ = this.isModeration
+      ? this.moderationComments$
+      : this.publicComments$;
+    this.load();
+    if (innerWidth > 1000) {
+      this.scrollMax += innerWidth * 0.04 + 240;
+      this.scrollStart = this.scrollMax;
+    }
   }
 
   ngOnDestroy(): void {

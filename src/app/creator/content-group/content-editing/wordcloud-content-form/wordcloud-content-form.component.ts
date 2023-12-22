@@ -28,7 +28,7 @@ export class WordcloudContentFormComponent
   implements OnInit, ContentForm
 {
   @Input() content?: Content;
-  @Input() isEditMode: boolean;
+  @Input() isEditMode = false;
 
   maxAnswers = 3;
 

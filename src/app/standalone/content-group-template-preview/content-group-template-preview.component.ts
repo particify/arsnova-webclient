@@ -43,13 +43,13 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
   template: ContentGroupTemplate;
 
-  room: Room;
-  contents: Content[];
+  room?: Room;
+  contents: Content[] = [];
   LICENSES = LICENSES;
 
   isLoadingContentGroup = true;
   isLoadingContents = true;
-  url: string;
+  url!: string;
   isCreator = false;
 
   constructor(
@@ -62,7 +62,10 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
     private routingService: RoutingService,
     private apiConfigService: ApiConfigService,
     private authService: AuthenticationService
-  ) {}
+  ) {
+    this.template = history?.state?.data?.template;
+    this.room = route.snapshot.data.room;
+  }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -79,8 +82,6 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
           config
         );
       });
-    this.room = this.route.snapshot.data.room;
-    this.template = history?.state?.data?.template;
     if (this.template) {
       this.getContentTemplates();
       this.checkIfCreator();

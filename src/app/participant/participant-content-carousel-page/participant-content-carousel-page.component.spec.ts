@@ -88,9 +88,6 @@ describe('ParticipantContentCarouselPageComponent', () => {
     'getRouteChanges',
   ]);
 
-  const data = {
-    room: new Room(),
-  };
   const snapshot = new ActivatedRouteSnapshot();
   const params = {
     shortId: '12345678',
@@ -98,8 +95,15 @@ describe('ParticipantContentCarouselPageComponent', () => {
   };
 
   snapshot.params = of([params]);
+  snapshot.data = {
+    room: new Room(),
+  };
 
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
   const route = {
     params: params,
   };

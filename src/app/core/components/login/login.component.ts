@@ -42,19 +42,18 @@ export class LoginComponent
   extends FormComponent
   implements AfterContentInit, OnChanges, OnInit
 {
-  @ViewChild(PasswordEntryComponent) passwordEntry: PasswordEntryComponent;
+  @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   isStandard = true;
-  username: string;
-  password: string;
+  username = '';
+  password = '';
   passwordLoginEnabled = false;
   dbLoginEnabled = false;
-  usernamePasswordProviders: AuthenticationProvider[];
-  ssoProviders: AuthenticationProvider[];
+  usernamePasswordProviders: AuthenticationProvider[] = [];
+  ssoProviders: AuthenticationProvider[] = [];
   isLoading = true;
   deviceWidth = innerWidth;
-  providersLength: number;
-  authProviders: AuthenticationProvider[];
+  authProviders: AuthenticationProvider[] = [];
   loginIdIsEmail = false;
 
   loginIdFormControl = new UntypedFormControl();

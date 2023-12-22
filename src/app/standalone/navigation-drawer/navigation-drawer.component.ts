@@ -52,14 +52,14 @@ export class NavButton {
 export class NavigationDrawerComponent
   implements OnInit, OnDestroy, AfterViewInit
 {
-  @ViewChild('drawer') drawer: MatDrawer;
-  @Input() buttonSections: NavButtonSection[];
-  @Input() parentRoute: string;
+  @ViewChild('drawer') drawer!: MatDrawer;
+  @Input({ required: true }) buttonSections!: NavButtonSection[];
+  @Input({ required: true }) parentRoute!: string;
   @Input() showFooter = true;
   @Input() backgroundColor = 'background';
   @Input() responsive = true;
   currentPage?: string;
-  isMobile: boolean;
+  isMobile = false;
 
   constructor(
     private router: Router,

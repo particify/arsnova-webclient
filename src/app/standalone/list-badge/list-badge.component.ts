@@ -10,5 +10,5 @@ import { FlexModule } from '@angular/flex-layout';
   styleUrls: ['./list-badge.component.scss'],
 })
 export class ListBadgeComponent {
-  @Input() count: number;
+  @Input({ required: true }) count!: number;
 }

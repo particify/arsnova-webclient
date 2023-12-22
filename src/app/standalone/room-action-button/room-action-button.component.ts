@@ -10,9 +10,9 @@ import { CoreModule } from '@app/core/core.module';
   styleUrls: ['./room-action-button.component.scss'],
 })
 export class RoomActionButtonComponent {
-  @Input() feature: string;
-  @Input() url: string;
-  @Input() icon: string;
-  @Input() hotkey: string;
-  @Input() badgeCounter: number;
+  @Input({ required: true }) feature!: string;
+  @Input() url?: string;
+  @Input({ required: true }) icon!: string;
+  @Input({ required: true }) hotkey!: string;
+  @Input() badgeCounter?: number;
 }

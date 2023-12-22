@@ -11,17 +11,15 @@ import { UserSettings } from '@app/core/models/user-settings';
   template: '',
 })
 export abstract class StatisticContentBaseComponent implements OnInit {
-  @Input() content: Content;
-  @Input() directShow: boolean;
+  @Input({ required: true }) content!: Content;
+  @Input() directShow = false;
   @Output() updateCounterEvent: EventEmitter<number> =
     new EventEmitter<number>();
   @Input() isPresentation = false;
-  @Input() active: boolean;
-  @Input() visualizationUnitChanged = new EventEmitter<boolean>();
-  @Input() settings: UserSettings;
+  @Input() active = false;
+  @Input() settings: UserSettings = new UserSettings();
 
   destroyed$ = new Subject<void>();
-  contentId: string;
   isLoading = true;
   answersVisible = false;
   answerCount = 0;

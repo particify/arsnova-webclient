@@ -40,12 +40,12 @@ interface ContentResultView {
   styleUrls: ['./series-overview.component.scss'],
 })
 export class SeriesOverviewComponent implements OnInit, OnDestroy {
-  @Input() group: ContentGroup;
-  @Input() contents: Content[];
-  @Input() finished: boolean;
-  @Input() isPureInfoSeries: boolean;
+  @Input({ required: true }) group!: ContentGroup;
+  @Input({ required: true }) contents!: Content[];
+  @Input() finished = false;
+  @Input() isPureInfoSeries = false;
 
-  hasAnsweredLastContent: boolean;
+  hasAnsweredLastContent = false;
   private correctChart?: Chart;
   private progressChart?: Chart;
   private colors = {
@@ -53,21 +53,22 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     background: '',
     primary: '',
   };
-  private auth: ClientAuthentication;
-  private resultOverview: AnswerResultOverview;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  private auth!: ClientAuthentication;
+  private resultOverview!: AnswerResultOverview;
   private quizAnswerTypes = [AnswerResultType.CORRECT, AnswerResultType.WRONG];
 
-  contentsWithResults: ContentResultView[];
+  contentsWithResults: ContentResultView[] = [];
   resultTypes: typeof AnswerResultType = AnswerResultType;
   ContentType = ContentType;
   currentAnswerCount = 0;
-  totalContentCount: number;
+  totalContentCount = 0;
 
   isLoading = true;
   isLoadingLastContent = true;
   retryCount = 0;
   hasScore = false;
-  score: number;
+  score = 0;
   HintType = HintType;
 
   constructor(

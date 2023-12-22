@@ -16,8 +16,8 @@ import { Subject } from 'rxjs';
   styleUrls: ['./search-bar.component.scss'],
 })
 export class SearchBarComponent implements OnInit, OnDestroy {
-  @Input() label: string;
-  @Input() results: string[];
+  @Input() label?: string;
+  @Input() results: string[] = [];
   @Input() showSuccessIndicator = false;
   @Output() inputChanged: EventEmitter<string> = new EventEmitter();
   @Output() inputCleared: EventEmitter<void> = new EventEmitter();

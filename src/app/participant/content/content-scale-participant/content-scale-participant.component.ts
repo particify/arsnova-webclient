@@ -22,14 +22,14 @@ import { take } from 'rxjs';
   templateUrl: './content-scale-participant.component.html',
 })
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {
-  @Input() content: ContentScale;
-  @Input() answer: ChoiceAnswer;
-  @Input() statsPublished: boolean;
+  @Input({ required: true }) content!: ContentScale;
+  @Input({ required: true }) answer!: ChoiceAnswer;
+  @Input() statsPublished = false;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   selectableAnswers: SelectableAnswer[] = [];
   hasAbstained = false;
-  selectedAnswerIndex: number;
+  selectedAnswerIndex?: number;
 
   constructor(
     protected answerService: ContentAnswerService,
@@ -89,11 +89,13 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
       return;
     }
     this.disableForm();
-    const answer = new ChoiceAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
+    const answer = new ChoiceAnswer(
+      this.content.id,
+      this.content.state.round,
+      ContentType.SCALE
+    );
+
     answer.selectedChoiceIndexes = [this.selectedAnswerIndex];
-    answer.format = ContentType.SCALE;
     this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
       (answer) => {
         this.answer = answer;
@@ -115,10 +117,11 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   }
 
   abstain() {
-    const answer = new ChoiceAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
-    answer.format = ContentType.SCALE;
+    const answer = new ChoiceAnswer(
+      this.content.id,
+      this.content.state.round,
+      ContentType.SCALE
+    );
     this.answerService
       .addAnswerChoice(this.content.roomId, answer)
       .subscribe((answer) => {

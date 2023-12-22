@@ -21,10 +21,10 @@ import { take } from 'rxjs';
   templateUrl: './content-choice-participant.component.html',
 })
 export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent {
-  @Input() content: ContentChoice;
-  @Input() answer: ChoiceAnswer;
-  @Input() statsPublished: boolean;
-  @Input() correctOptionsPublished: boolean;
+  @Input({ required: true }) content!: ContentChoice;
+  @Input({ required: true }) answer!: ChoiceAnswer;
+  @Input() statsPublished = false;
+  @Input() correctOptionsPublished = false;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
@@ -35,7 +35,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   isCorrect = false;
   isChoice = false;
   hasAbstained = false;
-  shortId: string;
   multipleAlreadyAnswered = '';
   allAnswers = '';
 
@@ -193,11 +192,12 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       return;
     }
     this.disableForm();
-    const answer = new ChoiceAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
+    const answer = new ChoiceAnswer(
+      this.content.id,
+      this.content.state.round,
+      ContentType.CHOICE
+    );
     answer.selectedChoiceIndexes = selectedAnswers;
-    answer.format = ContentType.CHOICE;
     this.answerService
       .addAnswerChoice(this.content.roomId, answer)
       .subscribe((answer) => {
@@ -220,10 +220,11 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   }
 
   abstain() {
-    const answer = new ChoiceAnswer();
-    answer.contentId = this.content.id;
-    answer.round = this.content.state.round;
-    answer.format = ContentType.CHOICE;
+    const answer = new ChoiceAnswer(
+      this.content.id,
+      this.content.state.round,
+      ContentType.CHOICE
+    );
     this.answerService
       .addAnswerChoice(this.content.roomId, answer)
       .subscribe((answer) => {

@@ -4,17 +4,7 @@
     "baseUrl": "src/",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
-    // All of the strictness settings below are enabled implicitly when strict = true
-    "strict": false,
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": false,
-    "useUnknownInCatchVariables": true,
-    // All of the strictness settings above are enabled implicitly when strict = true
+    "strict": true,
     "noImplicitOverride": false,
     "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": false,

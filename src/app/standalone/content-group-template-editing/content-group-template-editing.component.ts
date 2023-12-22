@@ -38,9 +38,9 @@ export class ContentGroupTemplateEditingComponent
   extends FormComponent
   implements OnInit
 {
-  @ViewChildren(MatInput) inputs: QueryList<MatInput>;
+  @ViewChildren(MatInput) inputs!: QueryList<MatInput>;
   @ViewChild(TemplateTagSelectionComponent)
-  templateTagSelectionComponent: TemplateTagSelectionComponent;
+  templateTagSelectionComponent!: TemplateTagSelectionComponent;
 
   @Input() name: string = '';
   @Input() template?: ContentGroupTemplate;
@@ -61,11 +61,11 @@ export class ContentGroupTemplateEditingComponent
     private notificationService: NotificationService
   ) {
     super(formService);
+    this.selectedLicense = this.licenseKeys[0];
+    this.selectedLang = this.translateService.getActiveLang();
   }
 
   ngOnInit(): void {
-    this.selectedLicense = this.licenseKeys[0];
-    this.selectedLang = this.translateService.getActiveLang();
     if (this.template) {
       this.name = this.template.name;
       this.description = this.template.description;

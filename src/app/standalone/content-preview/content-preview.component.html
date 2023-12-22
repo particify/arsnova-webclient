@@ -42,7 +42,7 @@
     [words]="words"
   ></app-content-wordcloud-answer>
   <app-content-prioritization-answer
-    *ngIf="content.format === 'PRIORITIZATION'"
+    *ngIf="content.format === 'PRIORITIZATION' && assignablePoints"
     [answerOptions]="answerOptionsWithPoints"
     [assignablePoints]="assignablePoints"
   ></app-content-prioritization-answer>
@@ -56,6 +56,7 @@
   </h3>
   <mat-card appearance="outlined">
     <app-rendered-text
+      *ngIf="additionalText"
       [rawText]="additionalText"
       [dynamic]="true"
       [markdownFeatureset]="markdownFeatureset"

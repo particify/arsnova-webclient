@@ -13,8 +13,8 @@ import { provideTranslocoScope } from '@ngneat/transloco';
   templateUrl: './attributions-info.component.html',
 })
 export class AttributionsInfoComponent {
-  @Input() attributions: ContentLicenseAttribution[];
-  @Input() contents: Content[];
+  @Input({ required: true }) attributions!: ContentLicenseAttribution[];
+  @Input({ required: true }) contents!: Content[];
 
   LICENSES = LICENSES;
 

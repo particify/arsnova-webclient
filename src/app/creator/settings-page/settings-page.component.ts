@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,11 +25,11 @@ export interface Settings {
 }
 
 export class UpdateEvent {
-  room: Room;
+  room?: Room;
   showSuccessInfo: boolean;
-  loadRoom? = false;
+  loadRoom: boolean;
 
-  constructor(room: Room | null, showSuccessInfo: boolean, loadRoom?: boolean) {
+  constructor(room: Room | null, showSuccessInfo: boolean, loadRoom = false) {
     if (room) {
       this.room = room;
     }
@@ -43,7 +43,7 @@ export class UpdateEvent {
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss'],
 })
-export class SettingsPageComponent implements OnInit {
+export class SettingsPageComponent {
   settings: Settings[];
   room: Room;
   isLoading = true;
@@ -62,12 +62,7 @@ export class SettingsPageComponent implements OnInit {
     private location: Location,
     private notificationService: NotificationService,
     private formService: FormService
-  ) {}
-
-  ngOnInit(): void {
-    this.translateService.setActiveLang(
-      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
-    );
+  ) {
     this.settings = [
       {
         name: 'general',
@@ -90,17 +85,18 @@ export class SettingsPageComponent implements OnInit {
         hotkey: '4',
       },
     ];
+    this.translateService.setActiveLang(
+      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
+    );
     this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
     this.currentRoute =
-      this.route.snapshot.params['settingsName'] || this.settings[0].name;
-    this.route.data.subscribe((data) => {
-      this.room = data.room;
-      this.isLoading = false;
-    });
+      route.snapshot.params['settingsName'] || this.settings[0].name;
+    this.room = route.snapshot.data.room;
+    this.isLoading = false;
   }
 
   saveRoom(updateEvent: UpdateEvent) {
-    if (!updateEvent.loadRoom) {
+    if (!updateEvent.loadRoom && updateEvent.room) {
       this.formService.disableForm();
       this.roomService.updateRoom(updateEvent.room).subscribe(
         (room) => {

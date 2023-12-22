@@ -6,7 +6,6 @@ import { ThemeService } from '@app/core/theme/theme.service';
 import { MockEventService, MockThemeService } from '@testing/test-helpers';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentState } from '@app/core/models/content-state';
 import { of } from 'rxjs';
 import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
@@ -23,12 +22,7 @@ describe('StatisticTextComponent', () => {
     'getAnswers',
     'getAnswersDeleted',
   ]);
-  const roundStatistics = new RoundStatistics();
-  roundStatistics.abstentionCount = 0;
-  roundStatistics.answerCount = 0;
-  roundStatistics.combinatedCounts = [];
-  roundStatistics.independentCounts = [];
-  roundStatistics.round = 1;
+  const roundStatistics = new RoundStatistics(1, [], [], 0, 0);
   const stats = new AnswerStatistics();
   (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
   const body = {

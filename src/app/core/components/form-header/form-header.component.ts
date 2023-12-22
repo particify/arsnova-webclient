@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./form-header.component.scss'],
 })
 export class FormHeaderComponent {
-  @Input() text: string;
+  @Input({ required: true }) text!: string;
 }

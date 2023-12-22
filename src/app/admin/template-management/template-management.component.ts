@@ -29,9 +29,9 @@ export class TemplateManagementComponent
   implements OnInit
 {
   isLoading = true;
-  tags: TemplateTag[];
-  filteredTags: TemplateTag[];
-  currentFilter: FILTER;
+  tags: TemplateTag[] = [];
+  filteredTags: TemplateTag[] = [];
+  currentFilter = FILTER.ALL;
   FILTER = FILTER;
   filterOptions = Object.values(FILTER);
   searchFormControl = new FormControl('');
@@ -60,7 +60,6 @@ export class TemplateManagementComponent
       this.templateService.getTemplateTags(lang, true),
     ]).subscribe((tags) => {
       this.tags = tags.flat();
-      this.currentFilter = this.currentFilter ?? FILTER.ALL;
       this.filterTags(this.currentFilter);
       this.isLoading = false;
     });

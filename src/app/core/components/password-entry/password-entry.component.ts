@@ -45,13 +45,13 @@ export class PasswordEntryComponent
   extends FormComponent
   implements AfterViewInit
 {
-  @ViewChild('passwordInput') passwordInput: ElementRef;
+  @ViewChild('passwordInput') passwordInput!: ElementRef;
 
   @Input() checkStrength = false;
-  @Input() preFill: string;
+  @Input() preFill?: string;
   @Input() isNew = false;
 
-  password: string;
+  password = '';
   passwordFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
   strength = 0;
@@ -59,7 +59,7 @@ export class PasswordEntryComponent
   hidePw = true;
   showPwButton = false;
   autofilled = false;
-  lastInput: string;
+  lastInput = '';
 
   constructor(
     private translationService: TranslocoService,

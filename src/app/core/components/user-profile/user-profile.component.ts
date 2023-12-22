@@ -35,13 +35,14 @@ export class FormField {
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
-  auth: ClientAuthentication;
-  user: User;
+  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
+  auth!: ClientAuthentication;
+  user!: User;
   formFields: FormField[] = [];
   isGuest = false;
   isLoading = true;
 
-  settings: UserSettings;
+  settings = new UserSettings();
   page: string;
 
   HintType = HintType;
@@ -55,10 +56,11 @@ export class UserProfileComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private location: Location
-  ) {}
+  ) {
+    this.page = route.snapshot.params['accountSettingsName'];
+  }
 
   ngOnInit(): void {
-    this.page = this.route.snapshot.params['accountSettingsName'];
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
       this.auth = auth;
       this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
@@ -66,7 +68,9 @@ export class UserProfileComponent implements OnInit {
         .getUserByLoginId(this.auth.loginId, true)
         .subscribe((user) => {
           this.user = user[0];
-          this.settings = this.user.settings || new UserSettings();
+          if (this.user.settings) {
+            this.settings = this.user.settings;
+          }
           this.formFields = [
             new FormField(
               this.user.person?.firstName,

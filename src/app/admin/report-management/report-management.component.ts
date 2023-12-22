@@ -22,7 +22,7 @@ import { Observable } from 'rxjs';
 export class ReportManagementComponent implements OnInit {
   isLoading = true;
   selectedTab = 0;
-  reports: ViolationReport[];
+  reports: ViolationReport[] = [];
 
   panelOpenState = false;
   constructor(

@@ -4,7 +4,7 @@
       (inputEvent)="textAnswer = $event"
     ></app-content-text-answer>
   </form>
-  <div *ngIf="givenAnswer && givenAnswer.body">
+  <div *ngIf="givenAnswer">
     <p class="answer">{{ givenAnswer.body }}</p>
   </div>
 </div>
