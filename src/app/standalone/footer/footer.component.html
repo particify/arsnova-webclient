@@ -1,50 +1,15 @@
-<div
-  *ngIf="showToolbar"
-  id="footer-toolbar"
-  fxLayout="row wrap"
-  fxLayoutAlign="space-between"
->
+<div id="footer-toolbar" fxLayout="row wrap" fxLayoutAlign="space-between">
   <lib-extension-point extensionId="footer-reference">
     <div fxLayout="row" fxLayoutAlign="center center" fxFill>
-      <a [attr.href]="referenceUrl" target="_blank" class="slogan text">
+      <a [attr.href]="referenceUrl" target="_blank">
         <span class="powered-by">{{ 'footer.powered-by' | transloco }}</span>
         <span class="by">{{ 'footer.by' | transloco }}</span>
         <span>Particify</span>
       </a>
     </div>
   </lib-extension-point>
-  <div fxLayout="row wrap" fxLayoutAlign="end">
-    <a
-      *ngIf="accessibilityUrl"
-      [routerLink]="[]"
-      (click)="showAccessibilityStatement()"
-      class="link text"
-    >
-      {{ 'footer.accessibility' | transloco }}</a
-    >
-    <a [routerLink]="[]" [matMenuTriggerFor]="privacyMenu" class="link text">
-      {{ 'footer.dsgvo' | transloco }}</a
-    >
-    <a
-      *ngIf="imprintUrl"
-      [routerLink]="[]"
-      (click)="showImprint()"
-      class="link text"
-    >
-      {{ 'footer.imprint' | transloco }}</a
-    >
-  </div>
-  <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
-    <button
-      *ngIf="privacyUrl"
-      class="item-title"
-      mat-menu-item
-      (click)="showDataProtection()"
-    >
-      {{ 'footer.privacy-policy' | transloco }}
-    </button>
-    <button class="item-title" mat-menu-item (click)="showCookieSettings()">
-      {{ 'footer.cookie-settings' | transloco }}
-    </button>
-  </mat-menu>
+  <app-footer-links
+    *ngIf="showFooterLinks && uiConfig"
+    [uiConfig]="uiConfig"
+  ></app-footer-links>
 </div>

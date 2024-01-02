@@ -11,11 +11,10 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ConsentService } from '@app/core/services/util/consent.service';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { of } from 'rxjs';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 describe('NavigationDrawerComponent', () => {
   let component: NavigationDrawerComponent;
@@ -27,12 +26,10 @@ describe('NavigationDrawerComponent', () => {
   });
   const activatedRoute = new ActivatedRouteStub(undefined, undefined, snapshot);
 
-  const authenticationService = jasmine.createSpyObj('AuthenticationService', [
-    'getAuthenticationChanges',
+  const routingService = jasmine.createSpyObj('RoutingService', [
+    'showFooterLinks',
   ]);
-  authenticationService.getAuthenticationChanges.and.returnValue(
-    of({ loginId: 'test@test.de' })
-  );
+  routingService.showFooterLinks.and.returnValue(of(false));
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -50,8 +47,8 @@ describe('NavigationDrawerComponent', () => {
           useValue: activatedRoute,
         },
         {
-          provide: AuthenticationService,
-          useValue: authenticationService,
+          provide: RoutingService,
+          useValue: routingService,
         },
         {
           provide: FeatureFlagService,

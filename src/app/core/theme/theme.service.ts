@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -24,7 +24,7 @@ export class Colors {
 @Injectable()
 export class ThemeService {
   private currentTheme: Theme;
-  private currentTheme$ = new BehaviorSubject<Theme | null>(null);
+  private currentTheme$ = new Subject<Theme>();
   private themes = [Theme.LIGHT, Theme.DARK];
   private barColors = [
     'blue',
@@ -63,7 +63,7 @@ export class ThemeService {
     this.lightColors = colors;
   }
 
-  getCurrentTheme$(): Observable<Theme | null> {
+  getCurrentTheme$(): Observable<Theme> {
     return this.currentTheme$;
   }
 

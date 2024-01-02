@@ -1,17 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  ActivatedRoute,
-  ActivationEnd,
-  Router,
-  RouterModule,
-} from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { ConsentService } from '@app/core/services/util/consent.service';
-import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { FlexModule } from '@angular/flex-layout';
+import { UiConfig } from '@app/core/models/api-config';
+import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.component';
+import { Subject, takeUntil } from 'rxjs';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 @Component({
   standalone: true,
@@ -22,78 +19,36 @@ import { FlexModule } from '@angular/flex-layout';
     ExtensionPointModule,
     FlexModule,
     RouterModule,
+    FooterLinksComponent,
   ],
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent implements OnInit {
-  privacyUrl?: string;
-  imprintUrl?: string;
-  accessibilityUrl?: string;
+export class FooterComponent implements OnDestroy, OnInit {
+  destroyed$ = new Subject();
+  uiConfig?: UiConfig;
   referenceUrl = 'https://particify.de';
-  showToolbar = true;
-  viewWidth: number;
+  showFooterLinks = false;
 
   constructor(
-    public router: Router,
-    private consentService: ConsentService,
-    private route: ActivatedRoute
-  ) {
-    this.viewWidth = innerWidth;
-  }
+    private route: ActivatedRoute,
+    private routingService: RoutingService
+  ) {}
 
   ngOnInit() {
-    if (this.consentService.consentRequired()) {
-      this.consentService.openDialog();
-    }
     this.route.data.subscribe((data) => {
-      this.privacyUrl = data.apiConfig.ui.links?.privacy?.url;
-      this.imprintUrl = data.apiConfig.ui.links?.imprint?.url;
-      this.accessibilityUrl = data.apiConfig.ui.links?.accessibility?.url;
+      this.uiConfig = data.apiConfig.ui;
     });
-    this.checkToolbarCondition(this.router.url);
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof ActivationEnd),
-        filter(
-          (event) => (event as ActivationEnd).snapshot.outlet === 'primary'
-        )
-      )
-      .subscribe((activationEndEvent) => {
-        if ((<ActivationEnd>activationEndEvent).snapshot.component) {
-          this.checkToolbarCondition(this.router.url);
-        }
+    this.routingService
+      .showFooterLinks()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((showFooterLinks) => {
+        this.showFooterLinks = showFooterLinks;
       });
   }
 
-  openUrlInNewTab(url: string) {
-    window.open(url, '_blank');
-  }
-
-  showAccessibilityStatement() {
-    if (this.accessibilityUrl) {
-      this.openUrlInNewTab(this.accessibilityUrl);
-    }
-  }
-
-  showImprint() {
-    if (this.imprintUrl) {
-      this.openUrlInNewTab(this.imprintUrl);
-    }
-  }
-
-  showDataProtection() {
-    if (this.privacyUrl) {
-      this.openUrlInNewTab(this.privacyUrl);
-    }
-  }
-
-  showCookieSettings() {
-    this.consentService.openDialog();
-  }
-
-  checkToolbarCondition(url: string) {
-    this.showToolbar = this.viewWidth > 1000 || !url.match(/\/[0-9]+\/[^/]+/);
+  ngOnDestroy(): void {
+    this.destroyed$.next(null);
   }
 }

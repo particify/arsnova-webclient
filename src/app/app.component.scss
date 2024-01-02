@@ -1,3 +1,5 @@
+@import '../variables';
+
 .app-component {
   padding: 4%;
   background-color: var(--background);
@@ -5,4 +7,59 @@
 
 .presentation-mode {
   background-color: var(--surface);
+}
+
+.mat-drawer-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.mat-drawer {
+  height: 100vh;
+  width: $drawer-modal-width;
+  background-color: var(--surface);
+}
+
+.button-container {
+  padding: 8px;
+}
+
+.mat-icon {
+  min-width: 18px;
+  opacity: 0.6;
+}
+
+.mat-mdc-button {
+  opacity: 1;
+  place-content: start;
+}
+
+:host-context(.theme-dark) {
+  --mat-sidenav-scrim-color: rgb(100 100 100 / 60%);
+}
+
+.user-container {
+  padding: 24px 16px;
+}
+
+.user-id {
+  max-width: 160px;
+}
+
+.user-symbol {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+
+  span {
+    color: var(--black);
+  }
+
+  &:not(.primary-variant) {
+    background-color: var(--grey-light);
+  }
+}
+
+.user-info {
+  opacity: 0.7;
 }

@@ -1,0 +1,16 @@
+.link-container {
+  padding: 4px;
+
+  a {
+    margin: 6px;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.7;
+    color: var(--on-surface);
+  }
+}
+
+.container-padding {
+  padding: 8px 16px;
+}

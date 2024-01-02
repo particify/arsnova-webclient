@@ -10,30 +10,15 @@ footer {
 
 #footer-toolbar {
   background-color: var(--background);
-  height: 34px;
   padding: 0;
 }
 
 a {
-  font-size: 12px;
-  padding: 0.8em 0;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.link {
-  font-weight: $font-weight-bold;
-  margin-right: 1em;
-}
-
-.slogan {
-  margin: 0 1em;
+  margin: 1em;
   font-size: 10px;
-}
-
-.text {
   color: var(--on-background);
   opacity: 0.7;
+  text-decoration: none;
 }
 
 .by {

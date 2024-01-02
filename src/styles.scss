@@ -532,7 +532,7 @@ div {
 
 .theme-dark .mat-mdc-slide-toggle.mat-accent {
   --mdc-switch-selected-focus-state-layer-color: var(--palette-accent-600);
-  --mdc-switch-selected-handle-color: var(--palette-accent-600);
+  --mdc-switch-selected-handle-color: var(--palette-accent-900);
   --mdc-switch-selected-hover-state-layer-color: var(--palette-accent-600);
   --mdc-switch-selected-pressed-state-layer-color: var(--palette-accent-600);
   --mdc-switch-selected-focus-handle-color: var(--palette-accent-900);
@@ -977,4 +977,18 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
 .mat-drawer-backdrop.mat-drawer-shown {
   position: fixed;
   top: -$mobile-bar-height;
+}
+
+.button-width-additional-icon {
+  .mdc-button__label {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mdc-switch .mdc-switch__ripple {
+    height: 0;
+    width: 0;
+  }
 }
