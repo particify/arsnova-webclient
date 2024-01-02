@@ -14,6 +14,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ConsentService } from '@app/core/services/util/consent.service';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { of } from 'rxjs';
 
 describe('NavigationDrawerComponent', () => {
   let component: NavigationDrawerComponent;
@@ -24,10 +26,13 @@ describe('NavigationDrawerComponent', () => {
     value: { url: [{ path: 'path' }] },
   });
   const activatedRoute = new ActivatedRouteStub(undefined, undefined, snapshot);
-  const consentService = jasmine.createSpyObj('ConsentService', [
-    'consentRequired',
-    'openDialog',
+
+  const authenticationService = jasmine.createSpyObj('AuthenticationService', [
+    'getAuthenticationChanges',
   ]);
+  authenticationService.getAuthenticationChanges.and.returnValue(
+    of({ loginId: 'test@test.de' })
+  );
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,8 +50,8 @@ describe('NavigationDrawerComponent', () => {
           useValue: activatedRoute,
         },
         {
-          provide: ConsentService,
-          useValue: consentService,
+          provide: AuthenticationService,
+          useValue: authenticationService,
         },
         {
           provide: FeatureFlagService,

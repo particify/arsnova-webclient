@@ -1,15 +1,6 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { MatDrawer } from '@angular/material/sidenav';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
-import { DrawerService } from '@app/core/services/util/drawer.service';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { Observable, filter, of } from 'rxjs';
 
@@ -49,30 +40,19 @@ export class NavButton {
   templateUrl: './navigation-drawer.component.html',
   styleUrls: ['./navigation-drawer.component.scss'],
 })
-export class NavigationDrawerComponent
-  implements OnInit, OnDestroy, AfterViewInit
-{
-  @ViewChild('drawer') drawer!: MatDrawer;
+export class NavigationDrawerComponent implements OnInit {
   @Input({ required: true }) buttonSections!: NavButtonSection[];
   @Input({ required: true }) parentRoute!: string;
   @Input() showFooter = true;
   @Input() backgroundColor = 'background';
-  @Input() responsive = true;
   currentPage?: string;
-  isMobile = false;
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
-    private drawerService: DrawerService
+    private route: ActivatedRoute
   ) {}
 
-  ngOnDestroy(): void {
-    this.drawerService.setDrawer();
-  }
-
   ngOnInit() {
-    this.isMobile = innerWidth < 1000 && this.responsive;
     this.setCurrentPage();
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -81,20 +61,11 @@ export class NavigationDrawerComponent
       });
   }
 
-  ngAfterViewInit(): void {
-    if (this.isMobile) {
-      this.drawerService.setDrawer(this.drawer);
-    }
-  }
-
   setCurrentPage() {
     this.currentPage = this.route.snapshot.firstChild?.url[0].path;
   }
 
   changePage(page: string) {
-    if (this.isMobile) {
-      this.drawer.close();
-    }
     setTimeout(() => {
       this.router.navigate([this.parentRoute, page]);
       this.currentPage = page;
