@@ -7,7 +7,7 @@
     "yarn": "4.0.2"
   },
   "scripts": {
-    "postinstall": "sh -c 'if [ -z \"$CI\" ]; then pip install pre-commit && pre-commit install; fi'",
+    "postinstall": "sh -c 'if [ -z \"$CI\" ]; then pipx install pre-commit && pre-commit install; fi'",
     "g:ng": "cd $INIT_CWD && ng",
     "g:eslint": "cd $INIT_CWD && eslint",
     "g:prettier": "cd $INIT_CWD && prettier",
