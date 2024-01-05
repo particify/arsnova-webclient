@@ -1,14 +1,9 @@
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import {
-  TestBed,
-  ComponentFixture,
-  waitForAsync,
-  fakeAsync,
-} from '@angular/core/testing';
+import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -18,30 +13,35 @@ import { UpdateImportance } from '@app/core/models/version-info';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
+  ActivatedRouteStub,
   MockFeatureFlagService,
-  MockNotificationService,
-  MockThemeService,
+  MockRouter,
 } from '@testing/test-helpers';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { AuthProvider } from './core/models/auth-provider';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ThemeService } from '@app/core/theme/theme.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import { Theme, ThemeService } from '@app/core/theme/theme.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-// Stub for downstream template
-@Component({ selector: 'app-header', template: '' })
-class HeaderStubComponent {}
-
-// Stub for downstream template
-@Component({ selector: 'app-footer', template: '' })
-class FooterStubComponent {}
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { MatButtonHarness } from '@angular/material/button/testing';
+import {
+  MatMenuHarness,
+  MatMenuItemHarness,
+} from '@angular/material/menu/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { LanguageCategory } from '@app/core/models/language-category.enum';
+import { By } from '@angular/platform-browser';
 
 describe('AppComponent', () => {
-  let appComponent: AppComponent;
+  let component: AppComponent;
   // let's you access the debug elements to gain control over injected services etc.
   let fixture: ComponentFixture<AppComponent>;
 
@@ -93,7 +93,31 @@ describe('AppComponent', () => {
     'getLangs',
     'setLang',
   ]);
-  languageService.getLangs.and.returnValue([]);
+  languageService.getLangs.and.returnValue([
+    {
+      key: 'de',
+      name: 'Deutsch',
+      category: LanguageCategory.OFFICIAL,
+    },
+    {
+      key: 'en',
+      name: 'English',
+      category: LanguageCategory.OFFICIAL,
+    },
+    {
+      key: 'es',
+      name: 'Español',
+      category: LanguageCategory.COMMUNITY,
+    },
+  ]);
+
+  const themeService = jasmine.createSpyObj('ThemeService', [
+    'getCurrentTheme',
+    'getThemes',
+    'toggleTheme',
+  ]);
+  themeService.getCurrentTheme.and.returnValue(Theme.LIGHT);
+  themeService.getThemes.and.returnValue([Theme.LIGHT, Theme.DARK]);
 
   const roomService = jasmine.createSpyObj('RoomService', [
     'getCurrentRoomStream',
@@ -102,14 +126,37 @@ describe('AppComponent', () => {
 
   const authenticationService = jasmine.createSpyObj('AuthenticationService', [
     'getAuthenticationChanges',
+    'logout',
   ]);
   authenticationService.getAuthenticationChanges.and.returnValue(
     of({ loginId: 'test@test.de' })
   );
 
+  const notificationService = jasmine.createSpyObj('NotificationService', [
+    'showAdvanced',
+  ]);
+
+  const activatedRoute = new ActivatedRouteStub(undefined);
+
+  let routerSpy = jasmine.createSpyObj('MockRouter', [
+    'navigate',
+    'navigateByUrl',
+  ]);
+
+  let loader: HarnessLoader;
+  let langBtn: MatButtonHarness;
+  let themeBtn: MatButtonHarness;
+  let accountSettingsBtn: MatButtonHarness;
+  let myRoomsBtn: MatButtonHarness;
+  let templatesBtn: MatButtonHarness;
+  let logoutBtn: MatButtonHarness;
+  let loginBtn: MatButtonHarness;
+  let langMenu: MatMenuHarness;
+  let langMenuItems: MatMenuItemHarness[];
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AppComponent, HeaderStubComponent, FooterStubComponent],
+      declarations: [AppComponent],
       providers: [
         {
           provide: ApiConfigService,
@@ -145,20 +192,27 @@ describe('AppComponent', () => {
         },
         {
           provide: ThemeService,
-          useClass: MockThemeService,
+          useValue: themeService,
         },
         {
           provide: NotificationService,
-          useClass: MockNotificationService,
+          useValue: notificationService,
         },
         {
           provide: FeatureFlagService,
           useClass: MockFeatureFlagService,
         },
+        {
+          provide: Router,
+          useClass: MockRouter,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRoute,
+        },
       ],
       imports: [
         getTranslocoModule(),
-        RouterTestingModule,
         HttpClientTestingModule,
         BrowserAnimationsModule,
         MatMenuModule,
@@ -166,560 +220,226 @@ describe('AppComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(AppComponent);
-    appComponent = fixture.componentInstance;
+    component = fixture.componentInstance;
+    loader = TestbedHarnessEnvironment.loader(fixture);
+    routerSpy = TestBed.inject(Router);
     fixture.detectChanges();
   }));
 
   it('should create the app', () => {
-    fixture.detectChanges();
-    expect(appComponent).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
   it('should have a title', () => {
-    fixture.detectChanges();
-    expect(appComponent.title).toEqual('ARSnova');
+    expect(component.title).toEqual('ARSnova');
   });
 
-  it('should call the API config', fakeAsync(() => {
-    fixture.detectChanges();
+  it('should call the API config', async () => {
     expect(apiConfigService.getApiConfig$).toHaveBeenCalled();
-  }));
+  });
 
   it('should call the tracking service init on getting a tracking config', () => {
-    fixture.detectChanges();
     expect(trackingService.init).toHaveBeenCalled();
   });
 
   it('should call the update service to handle update', () => {
-    fixture.detectChanges();
     expect(updateService.handleUpdate).toHaveBeenCalled();
   });
 
   it('should call the consent service to set settings', () => {
-    fixture.detectChanges();
     expect(consentService.setConfig).toHaveBeenCalled();
   });
 
   it('default lang should has been set after init', () => {
-    fixture.detectChanges();
     expect(languageService.init).toHaveBeenCalled();
   });
 
   it('should call the routing service to start route subscription', () => {
-    fixture.detectChanges();
     expect(routingService.subscribeActivatedRoute).toHaveBeenCalled();
   });
 
-  // // # If logged in
+  it('should display following items no matter if logged in or not:', async () => {
+    component.auth = new ClientAuthentication(
+      '1234',
+      'a@b.cd',
+      AuthProvider.ARSNOVA,
+      'token'
+    );
+    fixture.detectChanges();
+    langBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#lang-btn' })
+    );
+    expect(langBtn).not.toBeNull('Language button');
+    themeBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#theme-btn' })
+    );
+    expect(themeBtn).not.toBeNull('Theme button');
+    component.auth = undefined;
+    fixture.detectChanges();
+    langBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#lang-btn' })
+    );
+    expect(langBtn).not.toBeNull('Language button');
+    themeBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#theme-btn' })
+    );
+    expect(themeBtn).not.toBeNull('Theme button');
+  });
 
-  // it('should display user menu button if logged in', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'a@b.cd',
-  //     AuthProvider.ARSNOVA,
-  //     'token'
-  //   );
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   expect(userButton).not.toBeNull();
-  // });
+  it('should display menu with language selection if language button clicked', async () => {
+    langBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#lang-btn' })
+    );
+    await langBtn.click();
+    langMenu = await loader.getHarness(
+      MatMenuHarness.with({ selector: '#lang-btn' })
+    );
+    expect(langMenu).not.toBeNull('Language menu should be displayed');
+    component.translateUrl = undefined;
+    langMenuItems = await langMenu.getItems();
+    fixture.detectChanges();
+    expect(langMenuItems.length).toBe(
+      component.langs.length,
+      'Lang menu should be contain items for all langs'
+    );
+    component.translateUrl = 'https://translate.url';
+    langMenuItems = await langMenu.getItems();
+    fixture.detectChanges();
+    expect(langMenuItems.length).toBe(
+      component.langs.length + 1,
+      'Lang menu should be contain items for all langs and a link item to translate server'
+    );
+  });
 
-  // it('should display user menu if user button has been clicked', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'a@b.cd',
-  //     AuthProvider.ARSNOVA,
-  //     'token'
-  //   );
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   const isOpen = await userMenu.isOpen();
-  //   expect(isOpen).toBe(true, 'UserMenu should be open after click');
-  // });
+  it('should toggle theme if theme button clicked', async () => {
+    themeBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#theme-btn' })
+    );
+    await themeBtn.click();
+    expect(themeService.toggleTheme).toHaveBeenCalled();
+  });
 
-  // // ## Logged in with E-Mail
+  it('should display footer links if ui config is provided', () => {
+    const footerLinks = fixture.debugElement.query(By.css('app-footer-links'));
+    expect(footerLinks).toBeTruthy();
+  });
 
-  // it(
-  //   'should display user menu with 5 items: AuthProvider: ARSNOVA, isAdmin: false, deviceWidth: 1001, ' +
-  //     'missing helpUrl',
-  //   async () => {
-  //     component.auth = new ClientAuthentication(
-  //       '1234',
-  //       'a@b.cd',
-  //       AuthProvider.ARSNOVA,
-  //       'token'
-  //     );
-  //     component.deviceWidth = 1001;
-  //     userButton = await loader.getHarness(
-  //       MatButtonHarness.with({ selector: '#menu-button' })
-  //     );
-  //     await userButton.click();
-  //     userMenu = await loader.getHarness(
-  //       MatMenuHarness.with({ selector: '#menu-button' })
-  //     );
-  //     userMenuItems = await userMenu.getItems();
-  //     const myRooms = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#my-rooms-button' })
-  //     );
-  //     expect(myRooms).not.toBeUndefined(
-  //       'Header should contain item "My Rooms"'
-  //     );
-  //     const theme = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#theme-switcher' })
-  //     );
-  //     expect(theme).not.toBeUndefined(
-  //       'Header should contain item "Dark mode"/"Light mode"'
-  //     );
-  //     const language = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#language-menu' })
-  //     );
-  //     expect(language).not.toBeUndefined(
-  //       'Header should contain item "Language"'
-  //     );
-  //     const myAccount = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#user-profile-button' })
-  //     );
-  //     expect(myAccount).not.toBeUndefined(
-  //       'Header should contain item "My account"'
-  //     );
-  //     const logout = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#logout-button' })
-  //     );
-  //     expect(logout).not.toBeUndefined('Header should contain item "Logout"');
-  //   }
-  // );
+  // # If logged in
 
-  // it('should display user menu with 6 items: AuthProvider: ARSNOVA, isAdmin: false, deviceWidth: 1001', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'a@b.cd',
-  //     AuthProvider.ARSNOVA,
-  //     'token'
-  //   );
-  //   component.deviceWidth = 1001;
-  //   component.helpUrl = 'help';
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems();
-  //   const myRooms = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#my-rooms-button' })
-  //   );
-  //   expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-  //   const help = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#help-button' })
-  //   );
-  //   expect(help).not.toBeUndefined('Header should contain item "Help"');
-  //   const theme = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#theme-switcher' })
-  //   );
-  //   expect(theme).not.toBeUndefined(
-  //     'Header should contain item "Dark mode"/"Light mode"'
-  //   );
-  //   const language = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#language-menu' })
-  //   );
-  //   expect(language).not.toBeUndefined('Header should contain item "Language"');
-  //   const myAccount = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#user-profile-button' })
-  //   );
-  //   expect(myAccount).not.toBeUndefined(
-  //     'Header should contain item "My account"'
-  //   );
-  //   const logout = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#logout-button' })
-  //   );
-  //   expect(logout).not.toBeUndefined('Header should contain item "Logout"');
-  // });
+  it('should display following items for user if logged in:', async () => {
+    component.auth = new ClientAuthentication(
+      '1234',
+      'a@b.cd',
+      AuthProvider.ARSNOVA,
+      'token'
+    );
+    fixture.detectChanges();
+    accountSettingsBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#account-settings-btn' })
+    );
+    expect(accountSettingsBtn).not.toBeNull('Account settings button');
+    myRoomsBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#my-rooms-btn' })
+    );
+    expect(myRoomsBtn).not.toBeNull('"My rooms" button');
+    templatesBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#templates-btn' })
+    );
+    expect(templatesBtn).not.toBeNull('Templates button');
+    logoutBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#logout-btn' })
+    );
+    expect(logoutBtn).not.toBeNull('Logout button');
+  });
 
-  // it('should display user menu with 7 items: AuthProvider: ARSNOVA, isAdmin: true, deviceWidth: 1001', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'a@b.cd',
-  //     AuthProvider.ARSNOVA,
-  //     'ADMIN_TOKEN'
-  //   );
-  //   component.deviceWidth = 1001;
-  //   component.helpUrl = 'help';
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems();
-  //   const myRooms = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#my-rooms-button' })
-  //   );
-  //   expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-  //   const help = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#help-button' })
-  //   );
-  //   expect(help).not.toBeUndefined('Header should contain item "Help"');
-  //   const theme = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#theme-switcher' })
-  //   );
-  //   expect(theme).not.toBeUndefined(
-  //     'Header should contain item "Dark mode"/"Light mode"'
-  //   );
-  //   const language = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#language-menu' })
-  //   );
-  //   expect(language).not.toBeUndefined('Header should contain item "Language"');
-  //   const admin = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#admin-button' })
-  //   );
-  //   expect(admin).not.toBeUndefined(
-  //     'Header should contain item "Administration"'
-  //   );
-  //   const myAccount = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#user-profile-button' })
-  //   );
-  //   expect(myAccount).not.toBeUndefined(
-  //     'Header should contain item "My account"'
-  //   );
-  //   const logout = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#logout-button' })
-  //   );
-  //   expect(logout).not.toBeUndefined('Header should contain item "Logout"');
-  // });
+  it('should navigate to user home when clicking my rooms button', async () => {
+    component.auth = new ClientAuthentication(
+      '1234',
+      'a@b.cd',
+      AuthProvider.ARSNOVA,
+      'token'
+    );
+    fixture.detectChanges();
+    myRoomsBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#my-rooms-btn' })
+    );
+    await myRoomsBtn.click();
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('user');
+  });
 
-  // it('should display user menu with 9 items: AuthProvider: ARSNOVA, isAdmin: true, deviceWidth: 420', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'a@b.cd',
-  //     AuthProvider.ARSNOVA,
-  //     'ADMIN_TOKEN'
-  //   );
-  //   component.deviceWidth = 420;
-  //   component.helpUrl = 'help';
-  //   component.privacyUrl = 'privacy';
-  //   component.imprintUrl = 'imprint';
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems();
-  //   const myRooms = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#my-rooms-button' })
-  //   );
-  //   expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-  //   const help = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#help-button' })
-  //   );
-  //   expect(help).not.toBeUndefined('Header should contain item "Help"');
-  //   const privacy = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#privacy-button' })
-  //   );
-  //   expect(privacy).not.toBeUndefined('Header should contain item "Privacy"');
-  //   const imprint = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#imprint-button' })
-  //   );
-  //   expect(imprint).not.toBeUndefined('Header should contain item "Imprint"');
-  //   const theme = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#theme-switcher' })
-  //   );
-  //   expect(theme).not.toBeUndefined(
-  //     'Header should contain item "Dark mode"/"Light mode"'
-  //   );
-  //   const language = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#language-menu' })
-  //   );
-  //   expect(language).not.toBeUndefined('Header should contain item "Language"');
-  //   const admin = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#admin-button' })
-  //   );
-  //   expect(admin).not.toBeUndefined(
-  //     'Header should contain item "Administration"'
-  //   );
-  //   const myAccount = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#user-profile-button' })
-  //   );
-  //   expect(myAccount).not.toBeUndefined(
-  //     'Header should contain item "My account"'
-  //   );
-  //   const logout = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#logout-button' })
-  //   );
-  //   expect(logout).not.toBeUndefined('Header should contain item "Logout"');
-  // });
+  it('should navigate to user home when clicking my rooms button', async () => {
+    component.auth = new ClientAuthentication(
+      '1234',
+      'a@b.cd',
+      AuthProvider.ARSNOVA,
+      'token'
+    );
+    fixture.detectChanges();
+    templatesBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#templates-btn' })
+    );
+    await templatesBtn.click();
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('templates');
+  });
 
-  // it('should display user menu with 8 items: AuthProvider: ARSNOVA, isAdmin: false, deviceWidth: 420', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'a@b.cd',
-  //     AuthProvider.ARSNOVA,
-  //     'token'
-  //   );
-  //   component.deviceWidth = 420;
-  //   component.helpUrl = 'help';
-  //   component.privacyUrl = 'privacy';
-  //   component.imprintUrl = 'imprint';
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems();
-  //   const myRooms = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#my-rooms-button' })
-  //   );
-  //   expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-  //   const help = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#help-button' })
-  //   );
-  //   expect(help).not.toBeUndefined('Header should contain item "Help"');
-  //   const privacy = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#privacy-button' })
-  //   );
-  //   expect(privacy).not.toBeUndefined('Header should contain item "Privacy"');
-  //   const imprint = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#imprint-button' })
-  //   );
-  //   expect(imprint).not.toBeUndefined('Header should contain item "Imprint"');
-  //   const theme = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#theme-switcher' })
-  //   );
-  //   expect(theme).not.toBeUndefined(
-  //     'Header should contain item "Dark mode"/"Light mode"'
-  //   );
-  //   const language = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#language-menu' })
-  //   );
-  //   expect(language).not.toBeUndefined('Header should contain item "Language"');
-  //   const myAccount = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#user-profile-button' })
-  //   );
-  //   expect(myAccount).not.toBeUndefined(
-  //     'Header should contain item "My account"'
-  //   );
-  //   const logout = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#logout-button' })
-  //   );
-  //   expect(logout).not.toBeUndefined('Header should contain item "Logout"');
-  // });
+  it('should call logout function and navigate to home when clicking logout button', async () => {
+    component.auth = new ClientAuthentication(
+      '1234',
+      'a@b.cd',
+      AuthProvider.ARSNOVA,
+      'token'
+    );
+    fixture.detectChanges();
+    logoutBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#logout-btn' })
+    );
+    await logoutBtn.click();
+    expect(authenticationService.logout).toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.SUCCESS
+    );
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('');
+  });
 
-  // // ## Logged in as guest
+  it('should call logout function and navigate to home when clicking logout button', async () => {
+    component.auth = new ClientAuthentication(
+      '1234',
+      'a@b.cd',
+      AuthProvider.ARSNOVA,
+      'token'
+    );
+    fixture.detectChanges();
+    logoutBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#logout-btn' })
+    );
+    await logoutBtn.click();
+    expect(authenticationService.logout).toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+      jasmine.any(String),
+      AdvancedSnackBarTypes.SUCCESS
+    );
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('');
+  });
 
-  // it(
-  //   'should display user menu with 4 items: ARSNOVA_GUEST, isGuest: true, deviceWidth: 1001,' +
-  //     'missing helpUrl',
-  //   async () => {
-  //     component.auth = new ClientAuthentication(
-  //       '1234',
-  //       'guest',
-  //       AuthProvider.ARSNOVA_GUEST,
-  //       'token'
-  //     );
-  //     component.deviceWidth = 1001;
-  //     userButton = await loader.getHarness(
-  //       MatButtonHarness.with({ selector: '#menu-button' })
-  //     );
-  //     await userButton.click();
-  //     userMenu = await loader.getHarness(
-  //       MatMenuHarness.with({ selector: '#menu-button' })
-  //     );
-  //     userMenuItems = await userMenu.getItems();
-  //     const myRooms = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#my-rooms-button' })
-  //     );
-  //     expect(myRooms).not.toBeUndefined(
-  //       'Header should contain item "My Rooms"'
-  //     );
-  //     const login = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#login-button' })
-  //     );
-  //     expect(login).not.toBeUndefined('Header should contain item "Login"');
-  //     const theme = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#theme-switcher' })
-  //     );
-  //     expect(theme).not.toBeUndefined(
-  //       'Header should contain item "Dark mode"/"Light mode"'
-  //     );
-  //     const language = await userMenu.getHarness(
-  //       MatMenuItemHarness.with({ selector: '#language-menu' })
-  //     );
-  //     expect(language).not.toBeUndefined(
-  //       'Header should contain item "Language"'
-  //     );
-  //   }
-  // );
+  // # If not logged in
 
-  // it('should display user menu with 5 items: AuthProvider: ARSNOVA_GUEST, isGuest: true, deviceWidth: 1001', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'guest',
-  //     AuthProvider.ARSNOVA_GUEST,
-  //     'token'
-  //   );
-  //   component.deviceWidth = 1001;
-  //   component.helpUrl = 'help';
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems();
-  //   const myRooms = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#my-rooms-button' })
-  //   );
-  //   expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-  //   const login = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#login-button' })
-  //   );
-  //   expect(login).not.toBeUndefined('Header should contain item "Login"');
-  //   const help = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#help-button' })
-  //   );
-  //   expect(help).not.toBeUndefined('Header should contain item "Help"');
-  //   const theme = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#theme-switcher' })
-  //   );
-  //   expect(theme).not.toBeUndefined(
-  //     'Header should contain item "Dark mode"/"Light mode"'
-  //   );
-  //   const language = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#language-menu' })
-  //   );
-  //   expect(language).not.toBeUndefined('Header should contain item "Language"');
-  // });
+  it('should display following items for user if not logged in:', async () => {
+    component.auth = undefined;
+    fixture.detectChanges();
+    loginBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#login-btn' })
+    );
+    expect(loginBtn).not.toBeNull('Login button');
+  });
 
-  // it('should display user menu with 7 items: AuthProvider: ARSNOVA_GUEST, isGuest: true, deviceWidth: 420', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'guest',
-  //     AuthProvider.ARSNOVA_GUEST,
-  //     'token'
-  //   );
-  //   component.deviceWidth = 420;
-  //   component.helpUrl = 'help';
-  //   component.privacyUrl = 'privacy';
-  //   component.imprintUrl = 'imprint';
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems();
-  //   const myRooms = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#my-rooms-button' })
-  //   );
-  //   expect(myRooms).not.toBeUndefined('Header should contain item "My Rooms"');
-  //   const login = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#login-button' })
-  //   );
-  //   expect(login).not.toBeUndefined('Header should contain item "Login"');
-  //   const help = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#help-button' })
-  //   );
-  //   expect(help).not.toBeUndefined('Header should contain item "Help"');
-  //   const privacy = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#privacy-button' })
-  //   );
-  //   expect(privacy).not.toBeUndefined('Header should contain item "Privacy"');
-  //   const imprint = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#imprint-button' })
-  //   );
-  //   expect(imprint).not.toBeUndefined('Header should contain item "Imprint"');
-  //   const theme = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#theme-switcher' })
-  //   );
-  //   expect(theme).not.toBeUndefined(
-  //     'Header should contain item "Dark mode"/"Light mode"'
-  //   );
-  //   const language = await userMenu.getHarness(
-  //     MatMenuItemHarness.with({ selector: '#language-menu' })
-  //   );
-  //   expect(language).not.toBeUndefined('Header should contain item "Language"');
-  // });
-
-  // // ## Navigate to user overview
-
-  // it('should navigate to user overview', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'a@b.cd',
-  //     AuthProvider.ARSNOVA,
-  //     'token'
-  //   );
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems({ selector: '#my-rooms-button' });
-  //   await userMenuItems[0].click();
-  //   expect(routerSpy.navigate).toHaveBeenCalledWith(['user']);
-  // });
-
-  // // ## Logout
-
-  // it('should navigate to home and display "Logged out" notification', async () => {
-  //   component.auth = new ClientAuthentication(
-  //     '1234',
-  //     'a@b.cd',
-  //     AuthProvider.ARSNOVA,
-  //     'token'
-  //   );
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems({ selector: '#logout-button' });
-  //   await userMenuItems[0].click();
-  //   expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('');
-  //   expect(notificationService.showAdvanced).toHaveBeenCalledWith(
-  //     jasmine.any(String),
-  //     AdvancedSnackBarTypes.SUCCESS
-  //   );
-  // });
-
-  // // # If not logged in
-
-  // it('should display user menu button if not logged in', async () => {
-  //   component.auth = undefined;
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   expect(userButton).not.toBeNull();
-  // });
-
-  // it('should navigate to login route after when clicking login button', async () => {
-  //   component.auth = undefined;
-  //   userButton = await loader.getHarness(
-  //     MatButtonHarness.with({ selector: '#menu-button' })
-  //   );
-  //   await userButton.click();
-  //   userMenu = await loader.getHarness(
-  //     MatMenuHarness.with({ selector: '#menu-button' })
-  //   );
-  //   userMenuItems = await userMenu.getItems({ selector: '#login-button' });
-  //   await userMenuItems[0].click();
-  //   expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('login');
-  // });
+  it('should navigate to login rout when clicking login button', async () => {
+    component.auth = undefined;
+    fixture.detectChanges();
+    loginBtn = await loader.getHarness(
+      MatButtonHarness.with({ selector: '#login-btn' })
+    );
+    await loginBtn.click();
+    expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('login');
+  });
 });

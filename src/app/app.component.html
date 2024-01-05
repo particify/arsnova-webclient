@@ -31,6 +31,7 @@
                 </div>
               </div>
               <button
+                id="account-settings-btn"
                 *ngIf="auth"
                 mat-icon-button
                 (click)="navToProfile()"
@@ -43,11 +44,11 @@
           <div *ngIf="auth">
             <mat-divider></mat-divider>
             <div class="button-container" fxLayout="column" fxLayoutGap="8px">
-              <button mat-button (click)="navToUserHome()">
+              <button id="my-rooms-btn" mat-button (click)="navToUserHome()">
                 <mat-icon>home</mat-icon>
                 {{ 'header.my-rooms' | transloco }}
               </button>
-              <button mat-button (click)="navToTemplates()">
+              <button id="templates-btn" mat-button (click)="navToTemplates()">
                 <mat-icon>text_snippet</mat-icon>
                 {{ 'header.public-templates' | transloco }}
               </button>
@@ -56,9 +57,9 @@
           <mat-divider></mat-divider>
           <div class="button-container" fxLayout="column" fxLayoutGap="8px">
             <button
+              id="lang-btn"
               mat-button
               class="button-width-additional-icon"
-              id="language-menu"
               [matMenuTriggerFor]="langMenu"
             >
               <mat-icon>language</mat-icon>
@@ -68,6 +69,7 @@
               </div>
             </button>
             <button
+              id="theme-btn"
               mat-button
               class="button-width-additional-icon"
               (click)="toggleTheme()"
@@ -86,7 +88,7 @@
           <div class="button-container" fxLayout="column" fxLayoutGap="8px">
             <button
               *ngIf="auth && !isGuest()"
-              id="logout-button"
+              id="logout-btn"
               mat-button
               (click)="logout()"
             >
@@ -95,7 +97,7 @@
             </button>
             <button
               *ngIf="!auth || isGuest()"
-              id="login-button"
+              id="login-btn"
               mat-button
               (click)="navToLogin()"
             >
