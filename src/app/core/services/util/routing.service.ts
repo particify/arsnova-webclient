@@ -6,6 +6,7 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ApiConfig } from '@app/core/models/api-config';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 enum RoutePrefix {
   CREATOR = 'edit',
@@ -29,6 +30,7 @@ export class RoutingService {
   isPreview$ = new EventEmitter<boolean>();
   routeEvent = new EventEmitter<ActivatedRouteSnapshot>();
   seriesName?: string;
+  showFooterLinks$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private router: Router,
@@ -52,6 +54,7 @@ export class RoutingService {
         if (snapshot.component) {
           this.getRoomUrlData(snapshot);
           this.getRoutes(snapshot);
+          this.showFooterLinks$.next(snapshot.data.showFooterLinks);
         }
       });
   }
@@ -242,5 +245,9 @@ export class RoutingService {
 
   getRoute(url: string[], config: ApiConfig): string {
     return (config.ui.links?.join?.url || document.baseURI) + url.join('/');
+  }
+
+  showFooterLinks(): BehaviorSubject<boolean> {
+    return this.showFooterLinks$;
   }
 }

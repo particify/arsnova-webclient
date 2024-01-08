@@ -1,33 +1,32 @@
 <div fxLayout="column" class="navigation-container">
   <mat-drawer-container>
-    <mat-drawer
-      #drawer
-      mode="side"
-      [opened]="!isMobile"
-      [mode]="isMobile ? 'over' : 'side'"
-      [ngClass]="{ 'responsive-drawer': responsive }"
-    >
-      <div class="section-header">
-        <ng-content select="[header]"></ng-content>
-      </div>
-      <div *ngFor="let section of buttonSections" fxLayoutGap="1em">
-        <p *ngIf="section.subheader" class="subheader">
-          {{ section.subheader | transloco }}
-        </p>
-        <div class="button-container" fxLayout="column" fxLayoutGap="8px">
-          <ng-container *ngFor="let button of section.buttons">
-            <button
-              *ngIf="button.display | async"
-              mat-button
-              class="nav-button"
-              (click)="changePage(button.name)"
-              color="{{ currentPage === button.name ? 'primary' : '' }}"
-              [ngClass]="{ 'primary-variant': currentPage === button.name }"
-            >
-              <mat-icon>{{ button.icon }}</mat-icon>
-              {{ button.i18nName | transloco }}
-            </button>
-          </ng-container>
+    <mat-drawer #drawer mode="side" [opened]="true" mode="side">
+      <div fxFill fxLayout="column" fxLayoutAlign="space-between">
+        <div>
+          <div class="section-header">
+            <ng-content select="[header]"></ng-content>
+          </div>
+          <mat-divider style="padding-bottom: 24px"></mat-divider>
+          <div *ngFor="let section of buttonSections" fxLayoutGap="1em">
+            <p *ngIf="section.subheader" class="subheader">
+              {{ section.subheader | transloco }}
+            </p>
+            <div class="button-container" fxLayout="column" fxLayoutGap="8px">
+              <ng-container *ngFor="let button of section.buttons">
+                <button
+                  *ngIf="button.display | async"
+                  mat-button
+                  class="nav-button"
+                  (click)="changePage(button.name)"
+                  color="{{ currentPage === button.name ? 'primary' : '' }}"
+                  [ngClass]="{ 'primary-variant': currentPage === button.name }"
+                >
+                  <mat-icon>{{ button.icon }}</mat-icon>
+                  {{ button.i18nName | transloco }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
         </div>
       </div>
     </mat-drawer>

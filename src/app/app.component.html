@@ -1,15 +1,157 @@
 <div fxLayout="column" fxFill>
-  <router-outlet *ngIf="!isPresentation" name="header"></router-outlet>
-  <div
-    fxFlex
-    class="app-component"
-    id="scroll_container"
-    [ngClass]="{ 'presentation-mode': isPresentation || isAdmin }"
-  >
-    <router-outlet></router-outlet>
-  </div>
-  <router-outlet
-    *ngIf="!isPresentation && !isAdmin && !isRoom"
-    name="footer"
-  ></router-outlet>
+  <mat-drawer-container>
+    <mat-drawer #mainDrawer position="end" mode="over" [autoFocus]="false">
+      <div fxFill fxLayout="column" fxLayoutAlign="space-between">
+        <div>
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+            class="user-container"
+          >
+            <div fxFill fxLayout="row" fxLayoutAlign="space-between center">
+              <div fxLayout="row" fxLayoutGap="16px">
+                <div
+                  fxLayoutAlign="center center"
+                  class="user-symbol"
+                  [ngClass]="{ 'primary-variant': auth && !isGuest() }"
+                >
+                  <span *ngIf="auth && !isGuest()">{{ userCharacter }}</span>
+                  <mat-icon *ngIf="!auth || isGuest()">person_outline</mat-icon>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="center" class="user-info">
+                  <span *ngIf="auth && !isGuest()" class="ellipsis user-id">{{
+                    auth.loginId
+                  }}</span>
+                  <span *ngIf="isGuest()">{{
+                    'header.guest-account' | transloco
+                  }}</span>
+                  <span *ngIf="!auth">{{
+                    'header.not-logged-in' | transloco
+                  }}</span>
+                </div>
+              </div>
+              <button
+                id="account-settings-btn"
+                *ngIf="auth"
+                mat-icon-button
+                (click)="navToProfile()"
+                [matTooltip]="'header.account-settings' | transloco"
+              >
+                <mat-icon>settings</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="auth">
+            <mat-divider></mat-divider>
+            <div class="button-container" fxLayout="column" fxLayoutGap="8px">
+              <button id="my-rooms-btn" mat-button (click)="navToUserHome()">
+                <mat-icon>home</mat-icon>
+                {{ 'header.my-rooms' | transloco }}
+              </button>
+              <button id="templates-btn" mat-button (click)="navToTemplates()">
+                <mat-icon>text_snippet</mat-icon>
+                {{ 'header.public-templates' | transloco }}
+              </button>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="button-container" fxLayout="column" fxLayoutGap="8px">
+            <button
+              id="lang-btn"
+              mat-button
+              class="button-width-additional-icon"
+              [matMenuTriggerFor]="langMenu"
+            >
+              <mat-icon>language</mat-icon>
+              {{ 'header.language' | transloco }}
+              <div>
+                <mat-icon>arrow_drop_down</mat-icon>
+              </div>
+            </button>
+            <button
+              id="theme-btn"
+              mat-button
+              class="button-width-additional-icon"
+              (click)="toggleTheme()"
+              appTrackInteraction="Theme switched"
+              [appTrackName]="currentTheme"
+            >
+              <mat-icon>dark_mode</mat-icon>
+              {{ 'header.dark-mode' | transloco }}
+              <mat-slide-toggle
+                hideIcon
+                [checked]="currentTheme === 'dark'"
+              ></mat-slide-toggle>
+            </button>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="button-container" fxLayout="column" fxLayoutGap="8px">
+            <button
+              *ngIf="auth && !isGuest()"
+              id="logout-btn"
+              mat-button
+              (click)="logout()"
+            >
+              <mat-icon>exit_to_app</mat-icon>
+              {{ 'header.logout' | transloco }}
+            </button>
+            <button
+              *ngIf="!auth || isGuest()"
+              id="login-btn"
+              mat-button
+              (click)="navToLogin()"
+            >
+              <mat-icon>exit_to_app</mat-icon>
+              {{ 'header.login' | transloco }}
+            </button>
+          </div>
+          <mat-menu #langMenu="matMenu">
+            <button
+              *ngFor="let lang of langs"
+              mat-menu-item
+              (click)="changeLanguage(lang)"
+              appTrackInteraction="Language switched"
+              [appTrackName]="lang.key"
+            >
+              <span
+                [ngClass]="{ 'selected-menu-item': currentLang === lang.key }"
+                >{{ lang.name }}</span
+              >
+            </button>
+            <div *ngIf="translateUrl">
+              <mat-divider></mat-divider>
+              <a
+                id="translation-server-button"
+                [attr.href]="translateUrl"
+                target="_blank"
+                mat-menu-item
+              >
+                <mat-icon>translate</mat-icon>
+                <span>{{ 'header.add-translation' | transloco }}</span>
+              </a>
+            </div>
+          </mat-menu>
+        </div>
+        <app-footer-links
+          *ngIf="uiConfig"
+          [auth]="auth"
+          [uiConfig]="uiConfig"
+          [showHelp]="true"
+          (inAppLinkClicked)="closeDrawer()"
+        ></app-footer-links>
+      </div>
+    </mat-drawer>
+    <mat-drawer-content fxLayout="column">
+      <router-outlet *ngIf="!isPresentation" name="header"></router-outlet>
+      <div
+        fxFlex
+        class="app-component"
+        id="scroll_container"
+        [ngClass]="{ 'presentation-mode': isPresentation || isAdmin }"
+      >
+        <router-outlet></router-outlet>
+      </div>
+      <router-outlet *ngIf="!isAdmin && !isRoom" name="footer"></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
 </div>

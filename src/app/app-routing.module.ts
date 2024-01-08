@@ -32,6 +32,9 @@ const routes: Routes = [
     path: '',
     component: HomePageComponent,
     title: 'home',
+    data: {
+      showFooterLinks: true,
+    },
   },
   {
     path: 'login',
@@ -39,6 +42,7 @@ const routes: Routes = [
     title: 'login',
     data: {
       parentRoute: ParentRoute.HOME,
+      showFooterLinks: true,
     },
   },
   {
@@ -47,12 +51,16 @@ const routes: Routes = [
     title: 'register',
     data: {
       parentRoute: ParentRoute.LOGIN,
+      showFooterLinks: true,
     },
   },
   {
     path: 'password-reset/:email',
     component: PasswordResetComponent,
     title: 'pw-reset',
+    data: {
+      showFooterLinks: true,
+    },
   },
   {
     path: 'request-password-reset',
@@ -60,6 +68,9 @@ const routes: Routes = [
     title: 'request-pw-reset',
     data: {
       parentRoute: ParentRoute.LOGIN,
+      data: {
+        showFooterLinks: true,
+      },
     },
   },
   {

@@ -66,6 +66,5 @@ export const NavigationDrawer: Story = {
     parentRoute: '',
     showFooter: true,
     backgroundColor: 'background',
-    responsive: true,
   },
 };

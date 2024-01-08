@@ -1,4 +1,4 @@
-<mat-toolbar class="mat-elevation-z2">
+<mat-toolbar class="mat-elevation-z2" fxLayoutAlign="center">
   <ng-template #focusModeHeader>
     <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
       <span class="focus-mode-hint">{{
@@ -36,158 +36,6 @@
       *ngIf="router.url === '/'"
     ></lib-extension-point>
     <span class="fill-remaining-space"></span>
-
-    <mat-menu
-      id="user-menu"
-      #userMenu="matMenu"
-      [overlapTrigger]="false"
-      xPosition="before"
-    >
-      <button
-        id="my-rooms-button"
-        mat-menu-item
-        *ngIf="auth"
-        (click)="navToUserHome()"
-        tabindex="0"
-      >
-        <mat-icon color="primary">home</mat-icon>
-        <span>{{ 'header.my-rooms' | transloco }}</span>
-      </button>
-      <button
-        id="login-button"
-        *ngIf="isGuest()"
-        mat-menu-item
-        (click)="navToLogin()"
-      >
-        <mat-icon color="primary">exit_to_app</mat-icon>
-        <span>{{ 'header.login' | transloco }}</span>
-      </button>
-      <a
-        id="help-button"
-        *ngIf="helpUrl"
-        [attr.href]="helpUrl"
-        target="_blank"
-        mat-menu-item
-      >
-        <mat-icon>help</mat-icon>
-        <span>{{ 'header.help' | transloco }}</span>
-      </a>
-      <button
-        id="theme-switcher"
-        mat-menu-item
-        (click)="toggleTheme()"
-        appTrackInteraction="Theme switched"
-        [appTrackName]="currentTheme"
-      >
-        <mat-icon>{{
-          currentTheme === 'light' ? 'dark_mode' : 'light_mode'
-        }}</mat-icon>
-        <span>{{
-          (currentTheme === 'light' ? 'header.dark-mode' : 'header.light-mode')
-            | transloco
-        }}</span>
-      </button>
-      <button id="language-menu" mat-menu-item [matMenuTriggerFor]="langMenu">
-        <mat-icon>language</mat-icon>
-        <span>{{ 'header.language' | transloco }}</span>
-      </button>
-      <div *ngIf="deviceWidth < 1000">
-        <button
-          id="privacy-button"
-          mat-menu-item
-          [matMenuTriggerFor]="privacyMenu"
-        >
-          <mat-icon>security</mat-icon>
-          <span>{{ 'footer.dsgvo' | transloco }}</span>
-        </button>
-        <a
-          id="imprint-button"
-          *ngIf="imprintUrl"
-          [attr.href]="imprintUrl"
-          target="_blank"
-          mat-menu-item
-        >
-          <mat-icon>contact_mail</mat-icon>
-          <span>{{ 'footer.imprint' | transloco }}</span>
-        </a>
-      </div>
-      <button
-        id="admin-button"
-        mat-menu-item
-        *ngIf="isAdmin()"
-        routerLink="/admin"
-      >
-        <mat-icon>build</mat-icon>
-        <span>{{ 'header.admin-area' | transloco }}</span>
-      </button>
-      <button
-        id="templates-button"
-        mat-menu-item
-        *ngIf="auth && contentGroupTemplatesActive"
-        (click)="navToTemplates()"
-      >
-        <mat-icon>text_snippet</mat-icon>
-        <span>{{ 'header.public-templates' | transloco }}</span>
-      </button>
-      <button
-        id="user-profile-button"
-        mat-menu-item
-        *ngIf="auth"
-        (click)="navToProfile()"
-      >
-        <mat-icon>account_box</mat-icon>
-        <span>{{ 'header.user-profile' | transloco }}</span>
-      </button>
-      <button
-        id="logout-button"
-        *ngIf="auth && !isGuest()"
-        mat-menu-item
-        (click)="logout()"
-      >
-        <mat-icon color="warn">exit_to_app</mat-icon>
-        <span>{{ 'header.logout' | transloco }}</span>
-      </button>
-    </mat-menu>
-
-    <mat-menu #langMenu="matMenu" xPosition="before" [overlapTrigger]="false">
-      <button
-        *ngFor="let lang of langs"
-        mat-menu-item
-        (click)="changeLanguage(lang)"
-        appTrackInteraction="Language switched"
-        [appTrackName]="lang.key"
-      >
-        <span [ngClass]="{ 'selected-menu-item': currentLang === lang.key }">{{
-          lang.name
-        }}</span>
-      </button>
-      <div *ngIf="translateUrl">
-        <mat-divider></mat-divider>
-        <a
-          id="translation-server-button"
-          [attr.href]="translateUrl"
-          target="_blank"
-          mat-menu-item
-        >
-          <mat-icon>translate</mat-icon>
-          <span>{{ 'header.add-translation' | transloco }}</span>
-        </a>
-      </div>
-    </mat-menu>
-
-    <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
-      <a
-        *ngIf="privacyUrl"
-        [attr.href]="privacyUrl"
-        target="_blank"
-        mat-menu-item
-      >
-        {{ 'footer.privacy-policy' | transloco }}</a
-      >
-      <button mat-menu-item (click)="showCookieSettings()">
-        {{ 'footer.cookie-settings' | transloco }}
-      </button>
-    </mat-menu>
 
     <div fxLayout="row" fxLayoutAlign="start center">
       <div *ngIf="!!role && !hasRole(UserRole.PARTICIPANT)">
@@ -298,13 +146,13 @@
         <button
           mat-icon-button
           class="user-button primary-variant"
-          [matMenuTriggerFor]="userMenu"
           aria-labelledby="room-label"
           id="menu-button"
           appHotkey="9"
           [appHotkeyTitle]="'header.menu' | transloco"
           [ngClass]="{ guest: isGuest() }"
           fxLayoutAlign="center center"
+          (click)="toggleDrawer()"
         >
           <mat-icon *ngIf="isGuest()">person_outline</mat-icon>
           <span *ngIf="!isGuest()">{{ userCharacter }}</span>

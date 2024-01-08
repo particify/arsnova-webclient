@@ -11,9 +11,10 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ConsentService } from '@app/core/services/util/consent.service';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { of } from 'rxjs';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 describe('NavigationDrawerComponent', () => {
   let component: NavigationDrawerComponent;
@@ -24,10 +25,11 @@ describe('NavigationDrawerComponent', () => {
     value: { url: [{ path: 'path' }] },
   });
   const activatedRoute = new ActivatedRouteStub(undefined, undefined, snapshot);
-  const consentService = jasmine.createSpyObj('ConsentService', [
-    'consentRequired',
-    'openDialog',
+
+  const routingService = jasmine.createSpyObj('RoutingService', [
+    'showFooterLinks',
   ]);
+  routingService.showFooterLinks.and.returnValue(of(false));
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,8 +47,8 @@ describe('NavigationDrawerComponent', () => {
           useValue: activatedRoute,
         },
         {
-          provide: ConsentService,
-          useValue: consentService,
+          provide: RoutingService,
+          useValue: routingService,
         },
         {
           provide: FeatureFlagService,
