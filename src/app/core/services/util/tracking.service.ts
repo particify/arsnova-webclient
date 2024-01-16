@@ -80,7 +80,11 @@ export class TrackingService {
 
   init(uiConfig: any) {
     this.uiConfig = uiConfig;
-    if (!uiConfig.tracking?.url || uiConfig.tracking?.provider !== 'matomo') {
+    if (
+      navigator.doNotTrack === '1' ||
+      !uiConfig.tracking?.url ||
+      uiConfig.tracking?.provider !== 'matomo'
+    ) {
       return;
     }
 
@@ -102,9 +106,13 @@ export class TrackingService {
 
     this.trackEntryOrReload();
 
-    if (this.consentGiven) {
+    if (!this.consentService.consentRequired()) {
+      if (!this.consentGiven) {
+        this._paq.unshift(['disableCookies']);
+      }
       this.loadTrackerScript();
     }
+
     /* Defer loading of tracking script if consent have not been given (yet). */
     this.eventService
       .on<ConsentChangedEvent>('ConsentChangedEvent')
@@ -112,9 +120,15 @@ export class TrackingService {
         this.consentGiven = this.consentService.consentGiven(
           StorageItemCategory.STATISTICS
         );
-        if (this.consentGiven) {
-          this.loadTrackerScript();
+        if (!this.consentGiven) {
+          if (this._paq.unshift) {
+            this._paq.unshift(['disableCookies']);
+          } else {
+            // We cannot use unshift once the Matomo script has loaded.
+            this._paq.push(['disableCookies']);
+          }
         }
+        this.loadTrackerScript();
       });
     this.router.events
       .pipe(
