@@ -22,7 +22,8 @@ export interface CookieCategory {
   key: StorageItemCategory;
   id: string;
   required: boolean;
-  consent: boolean;
+  consent?: boolean;
+  disabled?: boolean;
 }
 
 export interface ConsentSettings {
@@ -38,25 +39,28 @@ const httpOptions = {
 
 @Injectable()
 export class ConsentService extends AbstractHttpService<ConsentSettings> {
+  private essentialCategory: CookieCategory = {
+    key: StorageItemCategory.REQUIRED,
+    id: 'essential',
+    consent: true,
+    required: true,
+  };
+  private functionalCategory: CookieCategory = {
+    key: StorageItemCategory.FUNCTIONAL,
+    id: 'functional',
+    consent: true,
+    required: false,
+  };
+  private statisticsCategory: CookieCategory = {
+    key: StorageItemCategory.STATISTICS,
+    id: 'statistics',
+    consent: undefined,
+    required: false,
+  };
   private readonly categories: CookieCategory[] = [
-    {
-      key: StorageItemCategory.REQUIRED,
-      id: 'essential',
-      consent: true,
-      required: true,
-    },
-    {
-      key: StorageItemCategory.FUNCTIONAL,
-      id: 'functional',
-      consent: false,
-      required: false,
-    },
-    {
-      key: StorageItemCategory.STATISTICS,
-      id: 'statistics',
-      consent: false,
-      required: false,
-    },
+    this.essentialCategory,
+    this.functionalCategory,
+    this.statisticsCategory,
   ];
   private readonly categoryMap: Map<StorageItemCategory, CookieCategory> =
     this.categories.reduce((map, category) => {
@@ -82,23 +86,35 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       translateService,
       notificationService
     );
-    const settings = globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
-    this.init(settings);
   }
 
-  init(consentSettings: ConsentSettings) {
-    if (this.validateSettings(consentSettings)) {
-      this.consentSettings = consentSettings;
+  init(apiConfig: ApiConfig) {
+    this.setConfig(apiConfig);
+    this.initConsent();
+    if (this.consentRequired()) {
+      this.openDialog();
     }
-    this.loadLocalSettings();
-    this.globalStorageService.handleConsentChange({
-      categoriesSettings: this.categories,
-    });
   }
 
   setConfig(apiConfig: ApiConfig) {
     this.privacyUrl = apiConfig.ui.links?.privacy?.url;
     this.consentRecording = apiConfig.features?.consentRecording;
+    if (navigator.doNotTrack === '1' || !apiConfig.ui.tracking?.url) {
+      this.statisticsCategory.disabled = true;
+    }
+  }
+
+  initConsent() {
+    const settings = this.globalStorageService.getItem(
+      STORAGE_KEYS.COOKIE_CONSENT
+    );
+    if (this.validateSettings(settings)) {
+      this.consentSettings = settings;
+    }
+    this.loadLocalSettings();
+    this.globalStorageService.handleConsentChange({
+      categoriesSettings: this.categories,
+    });
   }
 
   /**
@@ -115,9 +131,9 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
    * Tells if the user still needs to give their consent.
    */
   consentRequired() {
-    return (
-      !this.consentSettings || this.consentSettings.version !== CONSENT_VERSION
-    );
+    return this.categories
+      .filter((c) => !c.disabled)
+      .some((c) => c.consent === undefined);
   }
 
   /**

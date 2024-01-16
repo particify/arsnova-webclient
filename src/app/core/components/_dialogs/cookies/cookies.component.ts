@@ -36,9 +36,11 @@ export class CookiesComponent {
   }
 
   acceptAllCookies() {
-    this.categories.forEach((item) => {
-      item.consent = true;
-    });
+    this.categories
+      .filter((c) => !c.disabled)
+      .forEach((item) => {
+        item.consent = true;
+      });
     this.handleCookieSelection();
   }
 
@@ -49,9 +51,11 @@ export class CookiesComponent {
   handleCookieSelection() {
     console.log('Accepted cookie categories: ', this.categories);
     const consentGiven: ConsentGiven = {};
-    this.categories.forEach((value) => {
-      consentGiven[value.id] = value.consent;
-    });
+    this.categories
+      .filter((c) => !c.disabled)
+      .forEach((c) => {
+        consentGiven[c.id] = !!c.consent;
+      });
     this.dialogRef.close(consentGiven);
     const msg = this.translateService.translate('cookies.settings-saved');
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);

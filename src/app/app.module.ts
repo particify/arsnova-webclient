@@ -177,6 +177,12 @@ export function initializeApp(appConfig: AppConfig) {
     },
     {
       provide: APP_INITIALIZER,
+      useFactory: initConsentService,
+      deps: [ConsentService, ApiConfigService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
       useFactory: initWsRoomEventDispatcherService,
       deps: [WsRoomEventDispatcherService],
       multi: true,
@@ -254,6 +260,16 @@ export function initAuthenticationService(
   authenticationService: AuthenticationService
 ) {
   return () => authenticationService.init();
+}
+
+export function initConsentService(
+  consentService: ConsentService,
+  apiConfigService: ApiConfigService
+) {
+  return () =>
+    apiConfigService
+      .getApiConfig$()
+      .subscribe((apiConfig) => consentService.init(apiConfig));
 }
 
 export function initWsRoomEventDispatcherService(

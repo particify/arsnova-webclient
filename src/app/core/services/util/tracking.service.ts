@@ -80,6 +80,9 @@ export class TrackingService {
 
   init(uiConfig: any) {
     this.uiConfig = uiConfig;
+    if (!uiConfig.tracking?.url || uiConfig.tracking?.provider !== 'matomo') {
+      return;
+    }
 
     const feedbackRoomShortId =
       uiConfig.links?.feedback?.url?.match(/\/([0-9]{8})$/)?.[1];
