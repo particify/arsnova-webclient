@@ -51,7 +51,7 @@ export enum EventCategory {
 export class TrackingService {
   _paq: any[];
   loaded = false;
-  consentGiven: boolean;
+  consentGiven?: boolean;
   uiConfig: any;
   previousAuth?: ClientAuthentication;
   firstAuth = true;
@@ -73,9 +73,14 @@ export class TrackingService {
     this.appErrorHandler = errorHandler as AppErrorHandler;
     _window['_paq'] = _window['_paq'] || [];
     this._paq = _window['_paq'] as any[];
-    this.consentGiven = this.consentService.consentGiven(
-      StorageItemCategory.STATISTICS
-    );
+    this.consentService
+      .consentInitialized()
+      .subscribe(
+        () =>
+          (this.consentGiven = this.consentService.consentGiven(
+            StorageItemCategory.STATISTICS
+          ))
+      );
   }
 
   init(uiConfig: any) {
@@ -106,12 +111,14 @@ export class TrackingService {
 
     this.trackEntryOrReload();
 
-    if (!this.consentService.consentRequired()) {
-      if (!this.consentGiven) {
-        this._paq.unshift(['disableCookies']);
+    this.consentService.consentRequired().subscribe((consentRequired) => {
+      if (!consentRequired) {
+        if (!this.consentGiven) {
+          this._paq.unshift(['disableCookies']);
+        }
+        this.loadTrackerScript();
       }
-      this.loadTrackerScript();
-    }
+    });
 
     /* Defer loading of tracking script if consent have not been given (yet). */
     this.eventService

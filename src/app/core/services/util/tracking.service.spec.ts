@@ -15,10 +15,15 @@ import { ConsentService } from '@app/core/services/util/consent.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Injectable } from '@angular/core';
 import { GlobalStorageService } from './global-storage.service';
+import { of } from 'rxjs';
 
 @Injectable()
 class MockConsentService {
   consentGiven() {}
+
+  consentInitialized() {
+    return of(true);
+  }
 }
 
 @Injectable()

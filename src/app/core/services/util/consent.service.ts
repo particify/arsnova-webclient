@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import {
+  catchError,
+  filter,
+  map,
+  shareReplay,
+  switchMap,
+  take,
+} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { CookiesComponent } from '@app/core/components//_dialogs/cookies/cookies.component';
 import { StorageItemCategory } from '@app/core/models/storage';
@@ -11,6 +18,8 @@ import { EventService } from './event.service';
 import { ApiConfig, Feature } from '@app/core/models/api-config';
 import { ConsentChangedEvent } from '@app/core/models/events/consent-changed';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
+import { ActivationEnd, Router } from '@angular/router';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 export const CONSENT_VERSION = 1;
 
@@ -70,6 +79,8 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
   private consentSettings?: ConsentSettings;
   private privacyUrl?: string;
   private consentRecording?: Feature;
+  private skipConsent$: Observable<boolean>;
+  private consentInitialized$ = new BehaviorSubject(false);
 
   constructor(
     public dialog: MatDialog,
@@ -77,7 +88,8 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
     protected translateService: TranslocoService,
-    protected notificationService: NotificationService
+    protected notificationService: NotificationService,
+    private router: Router
   ) {
     super(
       '/consent',
@@ -86,14 +98,24 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       translateService,
       notificationService
     );
+    this.skipConsent$ = this.router.events.pipe(
+      filter((event) => event instanceof ActivationEnd),
+      map((event) => event as ActivationEnd),
+      filter((event) => event.snapshot.outlet === 'primary'),
+      take(1),
+      map((event) => event.snapshot.data['skipConsent']),
+      shareReplay()
+    );
   }
 
   init(apiConfig: ApiConfig) {
     this.setConfig(apiConfig);
     this.initConsent();
-    if (this.consentRequired()) {
-      this.openDialog();
-    }
+    this.consentRequired().subscribe((consentRequired) => {
+      if (consentRequired) {
+        this.openDialog();
+      }
+    });
   }
 
   setConfig(apiConfig: ApiConfig) {
@@ -112,9 +134,12 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       this.consentSettings = settings;
     }
     this.loadLocalSettings();
-    this.globalStorageService.handleConsentChange({
-      categoriesSettings: this.categories,
-    });
+    this.consentInitialized$.next(true);
+    const event = new ConsentChangedEvent(
+      this.categories,
+      this.consentSettings
+    );
+    this.eventService.broadcast(event.type, event.payload);
   }
 
   /**
@@ -130,10 +155,25 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
   /**
    * Tells if the user still needs to give their consent.
    */
-  consentRequired() {
-    return this.categories
-      .filter((c) => !c.disabled)
-      .some((c) => c.consent === undefined);
+  consentRequired(): Observable<boolean> {
+    return this.consentInitialized().pipe(
+      switchMap(() => this.skipConsent$),
+      map(
+        (skip) =>
+          !skip &&
+          this.categories
+            .filter((c) => !c.disabled)
+            .some((c) => c.consent === undefined)
+      )
+    );
+  }
+
+  /** Returns an Observable which completes once consent has been initialized. */
+  consentInitialized(): Observable<boolean> {
+    return this.consentInitialized$.pipe(
+      filter((i) => i),
+      take(1)
+    );
   }
 
   /**
