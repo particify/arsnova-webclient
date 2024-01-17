@@ -201,7 +201,6 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     const dialogRef = this.dialog.open(CookiesComponent, {
       width: '90%',
       maxWidth: '600px',
-      autoFocus: true,
       data: { categories: this.categories, privacyUrl: this.privacyUrl },
     });
     dialogRef.disableClose = true;
