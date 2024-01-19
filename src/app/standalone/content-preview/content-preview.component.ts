@@ -22,6 +22,8 @@ import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-an
 import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
 import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
+import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
+import { ContentNumeric } from '@app/core/models/content-numeric';
 
 @Component({
   selector: 'app-content-preview',
@@ -35,6 +37,7 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
     ContentSortAnswerComponent,
     ContentTextAnswerComponent,
     ContentWordcloudAnswerComponent,
+    ContentNumericAnswerComponent,
   ],
   providers: [provideTranslocoScope('creator')],
   templateUrl: './content-preview.component.html',
@@ -54,6 +57,7 @@ export class ContentPreviewComponent implements OnInit {
   words: string[] = [];
   additionalText?: string;
   assignablePoints?: number;
+  numericContent?: ContentNumeric;
 
   constructor(
     private answerService: ContentAnswerService,
@@ -113,6 +117,8 @@ export class ContentPreviewComponent implements OnInit {
       ).fill('');
     } else if (format === ContentType.FLASHCARD) {
       this.additionalText = (this.content as ContentFlashcard).additionalText;
+    } else if (format === ContentType.NUMERIC) {
+      this.numericContent = this.content as ContentNumeric;
     }
     this.setSelectableAnswers();
     this.markdownFeatureset =
