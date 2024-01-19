@@ -45,7 +45,8 @@
     "state-changed": "The content list has been updated.",
     "load": "Load",
     "please-assign-points-correctly": "Please assign exactly {{points}} points.",
-    "please-assign-valid-points": "Please assign between 0 and {{points}} Points per answer."
+    "please-assign-valid-points": "Please assign between 0 and {{points}} Points per answer.",
+    "please-select-number-from-range": "Please select a number from the range."
   },
   "content": {
     "description": "Content description",

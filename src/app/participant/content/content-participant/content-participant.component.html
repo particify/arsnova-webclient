@@ -122,6 +122,16 @@
                 (answerChanged)="forwardAnswerMessage($event)"
               >
               </app-content-prioritization-participant>
+              <app-content-numeric-participant
+                *ngIf="content.format === ContentType.NUMERIC"
+                [answer]="numericAnswer"
+                [content]="numericContent"
+                [isDisabled]="formDisabled || alreadySent"
+                [sendEvent]="sendEvent"
+                (answerChanged)="forwardAnswerMessage($event)"
+                [correctOptionsPublished]="correctOptionsPublished"
+              >
+              </app-content-numeric-participant>
             </div>
             <div fxLayout="row-reverse" fxLayoutAlign="end">
               <div

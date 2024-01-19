@@ -15,6 +15,8 @@ import { ContentScale } from '@app/core/models/content-scale';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { ContentNumeric } from '@app/core/models/content-numeric';
+import { NumericAnswer } from '@app/core/models/numeric-answer';
 
 @Component({
   selector: 'app-content-participant',
@@ -55,11 +57,13 @@ export class ContentParticipantComponent
   flashcardContent!: ContentFlashcard;
   scaleContent!: ContentScale;
   wordloudContent!: ContentWordcloud;
+  numericContent!: ContentNumeric;
 
   choiceAnswer!: ChoiceAnswer;
   prioritizationAnswer!: PrioritizationAnswer;
   wordcloudAnswer!: MultipleTextsAnswer;
   textAnswer!: TextAnswer;
+  numericAnswer!: NumericAnswer;
 
   constructor(protected formService: FormService) {
     super(formService);
@@ -94,6 +98,8 @@ export class ContentParticipantComponent
       this.prioritizationAnswer = this.answer as PrioritizationAnswer;
     } else if (this.content.format === ContentType.SCALE) {
       this.choiceAnswer = this.answer as ChoiceAnswer;
+    } else if (this.content.format === ContentType.NUMERIC) {
+      this.numericAnswer = this.answer as NumericAnswer;
     }
   }
 
@@ -129,6 +135,8 @@ export class ContentParticipantComponent
       this.scaleContent = this.content as ContentScale;
     } else if (this.content.format === ContentType.FLASHCARD) {
       this.flashcardContent = this.content as ContentFlashcard;
+    } else if (this.content.format === ContentType.NUMERIC) {
+      this.numericContent = this.content as ContentNumeric;
     }
   }
 
@@ -148,6 +156,8 @@ export class ContentParticipantComponent
       this.hasAbstained = !((answer as MultipleTextsAnswer).texts?.length > 0);
     } else if (answer.format === ContentType.PRIORITIZATION) {
       this.hasAbstained = !(answer as PrioritizationAnswer).assignedPoints;
+    } else if (answer.format === ContentType.NUMERIC) {
+      this.hasAbstained = !(answer as NumericAnswer).selectedNumber;
     } else {
       this.hasAbstained = !(answer as ChoiceAnswer).selectedChoiceIndexes;
     }

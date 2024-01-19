@@ -394,7 +394,8 @@
     "points-too-much": "Punkte zu viel vergeben",
     "add-points": "10 Punkte hinzufügen",
     "remove-points": "10 Punkte entfernen",
-    "your-answer": "Deine Antwort"
+    "your-answer": "Deine Antwort",
+    "select-a-number-between": "Wähle eine Zahl zwischen {{min}} und {{max}}"
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback.",
