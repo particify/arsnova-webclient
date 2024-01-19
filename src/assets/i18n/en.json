@@ -395,7 +395,9 @@
     "add-points": "Add 10 points",
     "remove-points": "Remove 10 points",
     "your-answer": "Your answer",
-    "select-a-number-between": "Select a number between {{min}} and {{max}}"
+    "select-a-number-between": "Select a number between {{min}} and {{max}}",
+    "correct-answer-is": "The correct answer is",
+    "have-answered-correctly": "have answered correctly"
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode.",
@@ -453,7 +455,13 @@
     "answer": "Answer",
     "other-combinations": "Other",
     "no-answers": "There are no answers.",
-    "points": "Points"
+    "points": "Points",
+    "mean": "Mean",
+    "median": "Median",
+    "standardDeviation": "Standard deviation",
+    "variance": "Variance",
+    "minimum": "Minimum",
+    "maximum": "Maximum"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Switch to {{feature}}.",

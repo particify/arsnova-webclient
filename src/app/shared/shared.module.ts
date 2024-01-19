@@ -25,6 +25,8 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { DateComponent } from '@app/standalone/date/date.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { StatisticNumericComponent } from '@app/shared/statistic-content/statistic-numeric/statistic-numeric.component';
+import { StatisticInfoComponent } from '@app/standalone/statistic-info/statistic-info.component';
 
 @NgModule({
   imports: [
@@ -40,6 +42,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     DateComponent,
     AnswerCountComponent,
     LoadingButtonComponent,
+    StatisticInfoComponent,
   ],
   declarations: [
     StatisticChoiceComponent,
@@ -56,6 +59,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     DragDropBaseComponent,
     StatisticPrioritizationComponent,
     MultipleRoundSelectionComponent,
+    StatisticNumericComponent,
   ],
   exports: [
     LoadingIndicatorComponent,

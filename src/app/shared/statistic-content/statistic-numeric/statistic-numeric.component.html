@@ -1,0 +1,94 @@
+<div fxLayout="column">
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <div
+    *ngIf="!isLoading"
+    class="results-container"
+    [ngClass]="{
+      invisible: !answersVisible
+    }"
+  >
+    <div
+      class="chart-container"
+      [ngClass]="{
+        invisible: !answersVisible,
+        'normal-chart': !isPresentation && answersVisible,
+        'presentation-chart': isPresentation && answersVisible
+      }"
+    >
+      <canvas class="chart" id="{{ chartId }}"></canvas>
+    </div>
+    <div
+      *ngIf="answersVisible && !colorLabel"
+      class="border-container"
+      [ngClass]="{
+        'presentation-container-padding': isPresentation
+      }"
+    >
+      <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="1em">
+        <app-statistic-info
+          *ngFor="let statInfo of statInfos"
+          [label]="statInfo"
+          [round]="roundsDisplayed"
+          [data]="getInfoStats(statInfo)"
+          [hasAnswers]="answerCount > 0"
+        ></app-statistic-info>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="!isLoading"
+    class="results-container"
+    [ngClass]="{
+      invisible: !answersVisible || !colorLabel
+    }"
+    fxLayout="column"
+    fxLayoutAlign="start center"
+  >
+    <div
+      class="correct-container"
+      [ngClass]="{
+        'border-container': !isPresentation,
+        'column-container': isPresentation
+      }"
+    >
+      <mat-icon *ngIf="isPresentation" class="correct-icon"
+        >check_circle</mat-icon
+      >
+      <span class="info-text">{{
+        'answer.correct-answer-is' | transloco
+      }}</span>
+      <div
+        class="correct-number-container"
+        [ngClass]="{ 'relative-container': isPresentation }"
+      >
+        <b
+          class="correct-number"
+          [ngClass]="{ 'big-number': isPresentation }"
+          >{{ content.correctNumber }}</b
+        >
+        <span
+          *ngIf="content.tolerance"
+          [ngClass]="{ 'tolerance-absolute': isPresentation }"
+          >&plusmn;&nbsp;{{ content.tolerance }}</span
+        >
+      </div>
+      <mat-divider class="divider" [vertical]="!isPresentation"></mat-divider>
+      <div
+        class="inner-container"
+        [ngClass]="{ 'column-container': isPresentation }"
+      >
+        <div>
+          <b>{{
+            getCorrectPercentage(compareRounds() ? 0 : roundsDisplayed)
+          }}</b>
+          <b *ngIf="compareRounds()"
+            >&nbsp;&vert;&nbsp;{{ getCorrectPercentage(1) }}</b
+          >
+        </div>
+        <span class="info-text">{{
+          'answer.have-answered-correctly' | transloco
+        }}</span>
+      </div>
+    </div>
+  </div>
+</div>

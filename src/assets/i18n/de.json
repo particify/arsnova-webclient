@@ -395,7 +395,9 @@
     "add-points": "10 Punkte hinzufügen",
     "remove-points": "10 Punkte entfernen",
     "your-answer": "Deine Antwort",
-    "select-a-number-between": "Wähle eine Zahl zwischen {{min}} und {{max}}"
+    "select-a-number-between": "Wähle eine Zahl zwischen {{min}} und {{max}}",
+    "correct-answer-is": "Die richtige Antwort ist",
+    "have-answered-correctly": "haben richtig geantwortet"
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback.",
@@ -453,7 +455,13 @@
     "answer": "Antwort",
     "other-combinations": "Andere",
     "no-answers": "Es sind keine Antworten vorhanden.",
-    "points": "Punkte"
+    "points": "Punkte",
+    "mean": "Mittelwert",
+    "median": "Median",
+    "standardDeviation": "Standardabweichung",
+    "variance": "Varianz",
+    "minimum": "Minimum",
+    "maximum": "Maximum"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Zu {{feature}} wechseln.",
