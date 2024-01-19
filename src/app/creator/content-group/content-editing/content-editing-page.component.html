@@ -191,6 +191,12 @@
                 [isAnswered]="isAnswered"
               >
               </app-prioritization-content-form>
+              <app-numeric-content-form
+                *ngSwitchCase="ContentType.NUMERIC"
+                [content]="content"
+                [isEditMode]="isEditMode"
+              >
+              </app-numeric-content-form>
             </div>
           </div>
 

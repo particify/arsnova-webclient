@@ -110,13 +110,7 @@ export class ContentEditingPageComponent
           this.contentService
             .getAnswer(content.roomId, content.id)
             .subscribe((answer) => {
-              console.log(answer.roundStatistics[0]);
-              const answerCount =
-                answer.roundStatistics[0].independentCounts.reduce(
-                  (a, b) => a + b,
-                  0
-                );
-              this.isAnswered = answerCount > 0;
+              this.isAnswered = answer.roundStatistics[0].answerCount > 0;
               this.isLoading = false;
             });
         });

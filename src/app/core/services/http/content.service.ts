@@ -50,6 +50,7 @@ export class ContentService extends AbstractEntityService<Content> {
     [ContentType.WORDCLOUD, 'cloud'],
     [ContentType.SORT, 'move_up'],
     [ContentType.PRIORITIZATION, 'sort'],
+    [ContentType.NUMERIC, 'numbers'],
     [ContentType.SLIDE, 'info'],
     [ContentType.FLASHCARD, 'school'],
   ]);
@@ -386,9 +387,12 @@ export class ContentService extends AbstractEntityService<Content> {
   }
 
   hasFormatRounds(format: ContentType): boolean {
-    return [ContentType.CHOICE, ContentType.SCALE, ContentType.BINARY].includes(
-      format
-    );
+    return [
+      ContentType.CHOICE,
+      ContentType.SCALE,
+      ContentType.BINARY,
+      ContentType.NUMERIC,
+    ].includes(format);
   }
 
   startNewRound(content: Content) {
