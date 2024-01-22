@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { TrackingService } from '@app/core/services/util/tracking.service';
-import { ConsentService } from '@app/core/services/util/consent.service';
 import { UpdateService } from '@app/core/services/util/update.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { LanguageService } from '@app/core/services/util/language.service';
@@ -36,7 +35,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     private languageService: LanguageService,
     private apiConfigService: ApiConfigService,
     private trackingService: TrackingService,
-    private consentService: ConsentService,
     private updateService: UpdateService,
     private routingService: RoutingService,
     public route: ActivatedRoute,
@@ -81,16 +79,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.apiConfigService.getApiConfig$().subscribe((config) => {
       this.uiConfig = config.ui;
       this.translateUrl = config.ui.links?.translate?.url;
-      if (
-        config.ui.tracking?.url &&
-        config.ui.tracking?.provider === 'matomo'
-      ) {
-        this.trackingService.init(config.ui);
-      }
-      this.consentService.setConfig(config);
-      if (this.consentService.consentRequired()) {
-        this.consentService.openDialog();
-      }
+      this.trackingService.init(config.ui);
       this.updateService.handleUpdate(config.ui.versions);
     });
     this.roomService.getCurrentRoomStream().subscribe((room) => {

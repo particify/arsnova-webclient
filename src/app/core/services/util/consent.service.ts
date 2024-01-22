@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import {
+  catchError,
+  filter,
+  map,
+  shareReplay,
+  switchMap,
+  take,
+} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { CookiesComponent } from '@app/core/components//_dialogs/cookies/cookies.component';
 import { StorageItemCategory } from '@app/core/models/storage';
@@ -11,6 +18,8 @@ import { EventService } from './event.service';
 import { ApiConfig, Feature } from '@app/core/models/api-config';
 import { ConsentChangedEvent } from '@app/core/models/events/consent-changed';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
+import { ActivationEnd, Router } from '@angular/router';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 export const CONSENT_VERSION = 1;
 
@@ -22,7 +31,8 @@ export interface CookieCategory {
   key: StorageItemCategory;
   id: string;
   required: boolean;
-  consent: boolean;
+  consent?: boolean;
+  disabled?: boolean;
 }
 
 export interface ConsentSettings {
@@ -38,25 +48,28 @@ const httpOptions = {
 
 @Injectable()
 export class ConsentService extends AbstractHttpService<ConsentSettings> {
+  private essentialCategory: CookieCategory = {
+    key: StorageItemCategory.REQUIRED,
+    id: 'essential',
+    consent: true,
+    required: true,
+  };
+  private functionalCategory: CookieCategory = {
+    key: StorageItemCategory.FUNCTIONAL,
+    id: 'functional',
+    consent: true,
+    required: false,
+  };
+  private statisticsCategory: CookieCategory = {
+    key: StorageItemCategory.STATISTICS,
+    id: 'statistics',
+    consent: undefined,
+    required: false,
+  };
   private readonly categories: CookieCategory[] = [
-    {
-      key: StorageItemCategory.REQUIRED,
-      id: 'essential',
-      consent: true,
-      required: true,
-    },
-    {
-      key: StorageItemCategory.FUNCTIONAL,
-      id: 'functional',
-      consent: false,
-      required: false,
-    },
-    {
-      key: StorageItemCategory.STATISTICS,
-      id: 'statistics',
-      consent: false,
-      required: false,
-    },
+    this.essentialCategory,
+    this.functionalCategory,
+    this.statisticsCategory,
   ];
   private readonly categoryMap: Map<StorageItemCategory, CookieCategory> =
     this.categories.reduce((map, category) => {
@@ -66,6 +79,8 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
   private consentSettings?: ConsentSettings;
   private privacyUrl?: string;
   private consentRecording?: Feature;
+  private skipConsent$: Observable<boolean>;
+  private consentInitialized$ = new BehaviorSubject(false);
 
   constructor(
     public dialog: MatDialog,
@@ -73,7 +88,8 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     private globalStorageService: GlobalStorageService,
     protected eventService: EventService,
     protected translateService: TranslocoService,
-    protected notificationService: NotificationService
+    protected notificationService: NotificationService,
+    private router: Router
   ) {
     super(
       '/consent',
@@ -82,23 +98,48 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       translateService,
       notificationService
     );
-    const settings = globalStorageService.getItem(STORAGE_KEYS.COOKIE_CONSENT);
-    this.init(settings);
+    this.skipConsent$ = this.router.events.pipe(
+      filter((event) => event instanceof ActivationEnd),
+      map((event) => event as ActivationEnd),
+      filter((event) => event.snapshot.outlet === 'primary'),
+      take(1),
+      map((event) => event.snapshot.data['skipConsent']),
+      shareReplay()
+    );
   }
 
-  init(consentSettings: ConsentSettings) {
-    if (this.validateSettings(consentSettings)) {
-      this.consentSettings = consentSettings;
-    }
-    this.loadLocalSettings();
-    this.globalStorageService.handleConsentChange({
-      categoriesSettings: this.categories,
+  init(apiConfig: ApiConfig) {
+    this.setConfig(apiConfig);
+    this.initConsent();
+    this.consentRequired().subscribe((consentRequired) => {
+      if (consentRequired) {
+        this.openDialog();
+      }
     });
   }
 
   setConfig(apiConfig: ApiConfig) {
     this.privacyUrl = apiConfig.ui.links?.privacy?.url;
     this.consentRecording = apiConfig.features?.consentRecording;
+    if (navigator.doNotTrack === '1' || !apiConfig.ui.tracking?.url) {
+      this.statisticsCategory.disabled = true;
+    }
+  }
+
+  initConsent() {
+    const settings = this.globalStorageService.getItem(
+      STORAGE_KEYS.COOKIE_CONSENT
+    );
+    if (this.validateSettings(settings)) {
+      this.consentSettings = settings;
+    }
+    this.loadLocalSettings();
+    this.consentInitialized$.next(true);
+    const event = new ConsentChangedEvent(
+      this.categories,
+      this.consentSettings
+    );
+    this.eventService.broadcast(event.type, event.payload);
   }
 
   /**
@@ -114,9 +155,24 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
   /**
    * Tells if the user still needs to give their consent.
    */
-  consentRequired() {
-    return (
-      !this.consentSettings || this.consentSettings.version !== CONSENT_VERSION
+  consentRequired(): Observable<boolean> {
+    return this.consentInitialized().pipe(
+      switchMap(() => this.skipConsent$),
+      map(
+        (skip) =>
+          !skip &&
+          this.categories
+            .filter((c) => !c.disabled)
+            .some((c) => c.consent === undefined)
+      )
+    );
+  }
+
+  /** Returns an Observable which completes once consent has been initialized. */
+  consentInitialized(): Observable<boolean> {
+    return this.consentInitialized$.pipe(
+      filter((i) => i),
+      take(1)
     );
   }
 
@@ -145,7 +201,6 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
     const dialogRef = this.dialog.open(CookiesComponent, {
       width: '90%',
       maxWidth: '600px',
-      autoFocus: true,
       data: { categories: this.categories, privacyUrl: this.privacyUrl },
     });
     dialogRef.disableClose = true;

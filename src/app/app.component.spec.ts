@@ -246,10 +246,6 @@ describe('AppComponent', () => {
     expect(updateService.handleUpdate).toHaveBeenCalled();
   });
 
-  it('should call the consent service to set settings', () => {
-    expect(consentService.setConfig).toHaveBeenCalled();
-  });
-
   it('default lang should has been set after init', () => {
     expect(languageService.init).toHaveBeenCalled();
   });

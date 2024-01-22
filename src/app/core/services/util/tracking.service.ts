@@ -51,7 +51,7 @@ export enum EventCategory {
 export class TrackingService {
   _paq: any[];
   loaded = false;
-  consentGiven: boolean;
+  consentGiven?: boolean;
   uiConfig: any;
   previousAuth?: ClientAuthentication;
   firstAuth = true;
@@ -73,13 +73,25 @@ export class TrackingService {
     this.appErrorHandler = errorHandler as AppErrorHandler;
     _window['_paq'] = _window['_paq'] || [];
     this._paq = _window['_paq'] as any[];
-    this.consentGiven = this.consentService.consentGiven(
-      StorageItemCategory.STATISTICS
-    );
+    this.consentService
+      .consentInitialized()
+      .subscribe(
+        () =>
+          (this.consentGiven = this.consentService.consentGiven(
+            StorageItemCategory.STATISTICS
+          ))
+      );
   }
 
   init(uiConfig: any) {
     this.uiConfig = uiConfig;
+    if (
+      navigator.doNotTrack === '1' ||
+      !uiConfig.tracking?.url ||
+      uiConfig.tracking?.provider !== 'matomo'
+    ) {
+      return;
+    }
 
     const feedbackRoomShortId =
       uiConfig.links?.feedback?.url?.match(/\/([0-9]{8})$/)?.[1];
@@ -99,9 +111,15 @@ export class TrackingService {
 
     this.trackEntryOrReload();
 
-    if (this.consentGiven) {
-      this.loadTrackerScript();
-    }
+    this.consentService.consentRequired().subscribe((consentRequired) => {
+      if (!consentRequired) {
+        if (!this.consentGiven) {
+          this._paq.unshift(['disableCookies']);
+        }
+        this.loadTrackerScript();
+      }
+    });
+
     /* Defer loading of tracking script if consent have not been given (yet). */
     this.eventService
       .on<ConsentChangedEvent>('ConsentChangedEvent')
@@ -109,9 +127,15 @@ export class TrackingService {
         this.consentGiven = this.consentService.consentGiven(
           StorageItemCategory.STATISTICS
         );
-        if (this.consentGiven) {
-          this.loadTrackerScript();
+        if (!this.consentGiven) {
+          if (this._paq.unshift) {
+            this._paq.unshift(['disableCookies']);
+          } else {
+            // We cannot use unshift once the Matomo script has loaded.
+            this._paq.push(['disableCookies']);
+          }
         }
+        this.loadTrackerScript();
       });
     this.router.events
       .pipe(

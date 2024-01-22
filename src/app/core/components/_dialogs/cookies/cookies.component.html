@@ -16,7 +16,7 @@
         <mat-slide-toggle
           labelPosition="before"
           [(ngModel)]="category.consent"
-          [disabled]="category.required"
+          [disabled]="category.required || !!category.disabled"
         >
           <div
             class="slide-label"

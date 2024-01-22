@@ -146,6 +146,9 @@ const routes: Routes = [
       import('./participant/participant.module').then(
         (m) => m.ParticipantModule
       ),
+    data: {
+      skipConsent: true,
+    },
   },
   {
     path: 'moderator',
