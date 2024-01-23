@@ -24,13 +24,13 @@
       "@testing/*": ["./testing/*"],
       "@environments/*": ["./environments/*"],
       "@projects/*": ["../projects/*"],
-      "@ext-point/*": ["../projects/extension-point/src/lib/*"]
-    }
+      "@ext-point/*": ["../projects/extension-point/src/lib/*"],
+    },
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
+    "strictTemplates": true,
+  },
 }
