@@ -286,8 +286,9 @@
                     [
                       ContentType.CHOICE,
                       ContentType.BINARY,
-                      ContentType.SCALE
-                    ].indexOf(content.format) > -1
+                      ContentType.SCALE,
+                      ContentType.NUMERIC
+                    ].includes(content.format)
                   "
                   mat-menu-item
                   (click)="startNewRound(content)"

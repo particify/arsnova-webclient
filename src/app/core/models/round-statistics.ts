@@ -69,3 +69,46 @@ export class PrioritizationRoundStatistics extends RoundStatistics {
     this.assignedPoints = assignedPoints;
   }
 }
+
+export class NumericRoundStatistics extends RoundStatistics {
+  selectedNumbers: number[];
+  minimum: number;
+  maximum: number;
+  mean: number;
+  median: number;
+  standardDeviation: number;
+  variance: number;
+  correctAnswerFraction: number;
+
+  constructor(
+    round: number,
+    independentCounts: number[],
+    combinatedCounts: Combination[],
+    abstentionCount: number,
+    answerCount: number,
+    selectedNumbers: number[],
+    minimum: number,
+    maximum: number,
+    mean: number,
+    median: number,
+    standardDeviation: number,
+    variance: number,
+    correctAnswerFraction: number
+  ) {
+    super(
+      round,
+      independentCounts,
+      combinatedCounts,
+      abstentionCount,
+      answerCount
+    );
+    this.selectedNumbers = selectedNumbers;
+    this.minimum = minimum;
+    this.maximum = maximum;
+    this.mean = mean;
+    this.median = median;
+    this.standardDeviation = standardDeviation;
+    this.variance = variance;
+    this.correctAnswerFraction = correctAnswerFraction;
+  }
+}

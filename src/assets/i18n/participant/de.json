@@ -45,7 +45,8 @@
     "state-changed": "Die Fragenliste wurde aktualisiert.",
     "load": "Laden",
     "please-assign-points-correctly": "Bitte vergib genau {{points}} Punkte.",
-    "please-assign-valid-points": "Bitte vergib zwischen 0 und {{points}} Punkten pro Antwort."
+    "please-assign-valid-points": "Bitte vergib zwischen 0 und {{points}} Punkten pro Antwort.",
+    "please-select-number-from-range": "Bitte gib eine Zahl aus dem Bereich ein."
   },
   "content": {
     "description": "Inhaltsbeschreibung",

@@ -1,0 +1,25 @@
+.answer-container {
+  margin: 1em 0;
+}
+
+.answer-hint {
+  font-size: 14px;
+}
+
+.form-field-indication {
+  --mdc-outlined-text-field-disabled-input-text-color: var(--on-surface);
+}
+
+.wrong {
+  --mdc-outlined-text-field-disabled-outline-color: var(--warn);
+  --mdc-outlined-text-field-disabled-label-text-color: var(--warn);
+
+  color: var(--warn);
+}
+
+.correct {
+  --mdc-outlined-text-field-disabled-outline-color: var(--success);
+  --mdc-outlined-text-field-disabled-label-text-color: var(--success);
+
+  color: var(--success);
+}

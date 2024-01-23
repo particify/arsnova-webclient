@@ -13,6 +13,7 @@ import { CachingService } from '@app/core/services/util/caching.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
+import { NumericAnswer } from '@app/core/models/numeric-answer';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -181,6 +182,19 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
         this.handleError<PrioritizationAnswer>('addAnswerPrioritization')
       )
     );
+  }
+
+  addAnswerNumeric(
+    roomId: string,
+    answer: NumericAnswer
+  ): Observable<NumericAnswer> {
+    const url = this.buildUri('/', roomId);
+    return this.requestOnce<NumericAnswer>(
+      'POST',
+      url,
+      answer,
+      httpOptions
+    ).pipe(catchError(this.handleError<NumericAnswer>('addAnswerNumeric')));
   }
 
   addAnswer<T extends Answer>(roomId: string, answer: T): Observable<T> {

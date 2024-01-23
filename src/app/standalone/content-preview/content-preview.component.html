@@ -49,6 +49,10 @@
   <app-content-text-answer
     *ngIf="content.format === 'TEXT'"
   ></app-content-text-answer>
+  <app-content-numeric-answer
+    *ngIf="content.format === 'NUMERIC' && numericContent"
+    [content]="numericContent"
+  ></app-content-numeric-answer>
 </mat-card>
 <div *ngIf="content.format === 'FLASHCARD'">
   <h3>

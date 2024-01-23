@@ -28,6 +28,8 @@ import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/co
 import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-answers/content-prioritization-answer/content-prioritization-answer.component';
 import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
 import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
+import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
+import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
 
 @NgModule({
   imports: [
@@ -48,6 +50,7 @@ import { ContentTextAnswerComponent } from '@app/standalone/content-answers/cont
     ContentSortAnswerComponent,
     ContentTextAnswerComponent,
     ContentWordcloudAnswerComponent,
+    ContentNumericAnswerComponent,
   ],
   declarations: [
     ContentChoiceParticipantComponent,
@@ -61,6 +64,7 @@ import { ContentTextAnswerComponent } from '@app/standalone/content-answers/cont
     ContentPrioritizationParticipantComponent,
     ParticipantPageComponent,
     InfoChartComponent,
+    ContentNumericParticipantComponent,
   ],
   providers: [provideTranslocoScope('participant'), ContentCarouselService],
 })

@@ -28,6 +28,8 @@ import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
+import { ContentNumeric } from '@app/core/models/content-numeric';
+import { StatisticNumericComponent } from '@app/shared/statistic-content/statistic-numeric/statistic-numeric.component';
 
 @Component({
   selector: 'app-content-results',
@@ -45,6 +47,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   wordcloudStatistic!: StatisticWordcloudComponent;
   @ViewChild(StatisticPrioritizationComponent)
   prioritizationStatistic!: StatisticPrioritizationComponent;
+  @ViewChild(StatisticNumericComponent)
+  numericStatistic!: StatisticNumericComponent;
 
   destroyed$: Subject<void> = new Subject();
 
@@ -82,6 +86,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   choiceContent!: ContentChoice;
   prioritizationContent!: ContentPrioritization;
   flashcardContent!: ContentFlashcard;
+  numericContent!: ContentNumeric;
 
   constructor(
     private announceService: AnnounceService,
@@ -160,6 +165,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
       ContentType.CHOICE,
       ContentType.PRIORITIZATION,
       ContentType.SORT,
+      ContentType.NUMERIC,
     ].includes(this.content.format);
     this.initContentTypeObjects();
   }
@@ -178,6 +184,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
       this.prioritizationContent = this.content as ContentPrioritization;
     } else if (this.content.format === ContentType.FLASHCARD) {
       this.flashcardContent = this.content as ContentFlashcard;
+    } else if (this.content.format === ContentType.NUMERIC) {
+      this.numericContent = this.content as ContentNumeric;
     }
   }
 
@@ -228,6 +236,9 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
       case ContentType.PRIORITIZATION:
         this.answersVisible = this.prioritizationStatistic.toggleAnswers();
         break;
+      case ContentType.NUMERIC:
+        this.answersVisible = this.numericStatistic.toggleAnswers();
+        break;
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();
     }
@@ -237,6 +248,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     if (this.answersVisible && !this.survey) {
       if (this.format === ContentType.SORT) {
         this.sortStatistic.toggleCorrect();
+      } else if (this.format === ContentType.NUMERIC) {
+        this.numericStatistic.toggleCorrect();
       } else if (
         [ContentType.CHOICE, ContentType.BINARY].includes(this.format)
       ) {
@@ -276,6 +289,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
       const correctOptions = (this.content as ContentChoice)
         .correctOptionIndexes;
       noCorrect = !correctOptions || correctOptions.length === 0;
+    } else if (this.format === ContentType.NUMERIC) {
+      noCorrect = (this.content as ContentNumeric).correctNumber === undefined;
     }
     this.survey = noCorrect;
   }
@@ -303,10 +318,20 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   }
 
   changeRound(round: number) {
-    const chartComponent: StatisticChoiceComponent | StatisticScaleComponent =
-      this.content.format === ContentType.SCALE
-        ? this.scaleStatistic
-        : this.choiceStatistic;
+    let chartComponent:
+      | StatisticChoiceComponent
+      | StatisticScaleComponent
+      | StatisticNumericComponent;
+    switch (this.content.format) {
+      case ContentType.SCALE:
+        chartComponent = this.scaleStatistic;
+        break;
+      case ContentType.NUMERIC:
+        chartComponent = this.numericStatistic;
+        break;
+      default:
+        chartComponent = this.choiceStatistic;
+    }
     this.roundsToDisplay = round;
     chartComponent.roundsToDisplay = round;
     chartComponent.rounds = round + 1;

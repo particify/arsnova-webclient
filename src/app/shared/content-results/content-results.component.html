@@ -221,6 +221,16 @@
     [isCreator]="!isParticipant"
     [visualizationUnitChanged]="visualizationUnitChanged"
   ></app-statistic-prioritization>
+  <app-statistic-numeric
+    *ngIf="format === ContentType.NUMERIC"
+    [content]="numericContent"
+    [isPresentation]="isPresentation"
+    [directShow]="directShow"
+    (updateCounterEvent)="updateCounter($event)"
+    [active]="active"
+    [settings]="settings"
+    [visualizationUnitChanged]="visualizationUnitChanged"
+  ></app-statistic-numeric>
 </div>
 <div *ngIf="content.format === ContentType.FLASHCARD && answersVisible">
   <div class="divider-space"></div>

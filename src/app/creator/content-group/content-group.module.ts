@@ -37,6 +37,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
+import { NumericContentFormComponent } from '@app/creator/content-group/content-editing/numeric-content-form/numeric-content-form.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { AttributionsInfoComponent } from '@app/standalone/attributions-info/att
     ExportComponent,
     AnswerOptionListComponent,
     PublishContentGroupTemplateComponent,
+    NumericContentFormComponent,
   ],
   imports: [
     ContentGroupRoutingModule,

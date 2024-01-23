@@ -46,6 +46,7 @@ import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directiv
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { DisableFormDirective } from './directives/disable-form.directive';
 import { TemplateService } from '@app/creator/_services/template.service';
+import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-seperator.pipe';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { TemplateService } from '@app/creator/_services/template.service';
     DateFromNowPipe,
     DateFormatPipe,
     A11yRenderedBodyPipe,
+    LocalizeDecimalSeperatorPipe,
 
     // Directives
     HotkeyDirective,
@@ -108,6 +110,7 @@ import { TemplateService } from '@app/creator/_services/template.service';
     DateFromNowPipe,
     DateFormatPipe,
     A11yRenderedBodyPipe,
+    LocalizeDecimalSeperatorPipe,
 
     // Directives
     HotkeyDirective,
