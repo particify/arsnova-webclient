@@ -67,7 +67,7 @@
                   cdkTextareaAutosize
                   cdkAutosizeMinRows="3"
                   cdkAutosizeMaxRows="8"
-                  maxlength="500"
+                  maxlength="1000"
                   name="answer"
                   aria-labelledby="answer"
                   [placeholder]="
@@ -78,7 +78,7 @@
                 </textarea>
                 <mat-hint align="end">
                   <span aria-hidden="true">
-                    {{ answer ? answer.length : 0 }} / 500
+                    {{ answer ? answer.length : 0 }} / 1000
                   </span>
                 </mat-hint>
               </mat-form-field>
