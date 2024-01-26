@@ -27,6 +27,7 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { StatisticNumericComponent } from '@app/shared/statistic-content/statistic-numeric/statistic-numeric.component';
 import { StatisticInfoComponent } from '@app/standalone/statistic-info/statistic-info.component';
+import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { StatisticInfoComponent } from '@app/standalone/statistic-info/statistic
     AnswerCountComponent,
     LoadingButtonComponent,
     StatisticInfoComponent,
+    TextOverflowClipComponent,
   ],
   declarations: [
     StatisticChoiceComponent,

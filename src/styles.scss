@@ -648,6 +648,10 @@ div {
   }
 }
 
+.mat-mdc-button .mdc-button__label {
+  max-width: 100%;
+}
+
 .button-text {
   color: var(--on-surface);
   padding-left: 5px;
@@ -823,6 +827,10 @@ div {
   background-color: var(--dialog);
 }
 
+.mat-mdc-menu-item-text {
+  max-width: 100%;
+}
+
 .bigger-panel.mdc-menu-surface.mat-mdc-select-panel {
   @media (max-width: 767px) {
     min-width: 90vw;
@@ -915,6 +923,12 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
 
   & > p {
     @include ellipsis-mixin;
+  }
+}
+
+@include xs {
+  .rendered-list-preview > p {
+    font-size: $s-font-size;
   }
 }
 

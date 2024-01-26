@@ -5,6 +5,7 @@
     appearance="outline"
   >
     <input
+      class="name-input"
       id="nameInput"
       [disabled]="disabled"
       #nameInput
@@ -14,7 +15,7 @@
       (mouseleave)="inputFocus = false"
       (keyup.enter)="removeFocusFromInput()"
       matInput
-      maxlength="25"
+      maxlength="50"
       [(ngModel)]="updatedName"
       [attr.aria-label]="
         'creator.content.a11y-edit-content-group-name' | transloco

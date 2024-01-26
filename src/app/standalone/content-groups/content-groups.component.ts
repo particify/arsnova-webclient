@@ -12,6 +12,7 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
+import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 
 @Component({
@@ -24,6 +25,7 @@ import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
     FlexModule,
     TranslocoModule,
     ListBadgeComponent,
+    TextOverflowClipComponent,
   ],
   providers: [provideTranslocoScope('creator')],
   selector: 'app-content-groups',

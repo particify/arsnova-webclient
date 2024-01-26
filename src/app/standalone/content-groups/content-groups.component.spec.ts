@@ -39,6 +39,7 @@ describe('ContentGroupsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentGroupsComponent);
     component = fixture.componentInstance;
+    component.contentGroupName = 'This is a content group name';
     fixture.detectChanges();
   });
 
