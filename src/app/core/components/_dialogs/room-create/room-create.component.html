@@ -14,13 +14,13 @@
           class="input-block"
           type="text"
           autocomplete="off"
-          maxlength="30"
+          maxlength="50"
           [(ngModel)]="newRoom.name"
           name="roomName"
         />
         <mat-hint align="end" *ngIf="!emptyInputs"
           ><span aria-hidden="true"
-            >{{ roomName.value.length }} / 30</span
+            >{{ roomName.value.length }} / 50</span
           ></mat-hint
         >
       </mat-form-field>

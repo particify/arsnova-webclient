@@ -1,11 +1,19 @@
 <div>
-  <div class="header">
-    <span class="room-name">
-      {{ name }}
-    </span>
-    <app-copy-url [url]="roomJoinUrl">
-      <span class="room-short-id">{{ shortId | splitShortId }}</span>
-    </app-copy-url>
+  <div
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    fxLayoutGap="0.5em"
+    class="header"
+  >
+    <app-text-overflow-clip
+      class="ellipsis"
+      [text]="name"
+    ></app-text-overflow-clip>
+    <div class="room-short-id">
+      <app-copy-url [url]="roomJoinUrl">
+        <span>{{ shortId | splitShortId }}</span>
+      </app-copy-url>
+    </div>
   </div>
   <div *ngIf="description">
     <app-rendered-text

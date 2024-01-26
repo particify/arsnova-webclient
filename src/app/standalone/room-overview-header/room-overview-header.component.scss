@@ -1,36 +1,18 @@
-.header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
+@import '../../../variables';
 
-@media (min-width: 701px) {
-  .header {
-    flex-direction: row;
-    justify-content: space-between;
-
-    & > * {
-      font-size: 24px;
-    }
+@include xs {
+  .header > * {
+    font-size: $m-font-size;
   }
 }
 
-@media (max-width: 700px) {
-  .header {
-    flex-direction: column;
-    justify-content: center;
-
-    & > * {
-      font-size: 18px;
-    }
+@include gt-xs {
+  .header > * {
+    font-size: $l-font-size;
   }
-}
-
-.room-name {
-  word-break: break-all;
-  margin: 0;
 }
 
 .room-short-id {
+  flex-shrink: 0;
   opacity: 0.5;
 }

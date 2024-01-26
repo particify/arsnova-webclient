@@ -103,6 +103,7 @@ import { ENVIRONMENT } from '@environments/environment-token';
 import { LoadingButtonComponent } from './standalone/loading-button/loading-button.component';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.component';
+import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -150,6 +151,7 @@ export function initializeApp(appConfig: AppConfig) {
     HintComponent,
     HttpClientModule,
     FooterLinksComponent,
+    TextOverflowClipComponent,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),

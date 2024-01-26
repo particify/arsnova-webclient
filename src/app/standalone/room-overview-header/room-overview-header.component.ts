@@ -4,10 +4,16 @@ import { CoreModule } from '@app/core/core.module';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { CopyUrlComponent } from '@app/standalone/copy-url/copy-url.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 
 @Component({
   standalone: true,
-  imports: [CoreModule, CopyUrlComponent, RenderedTextComponent],
+  imports: [
+    CoreModule,
+    CopyUrlComponent,
+    RenderedTextComponent,
+    TextOverflowClipComponent,
+  ],
   selector: 'app-room-overview-header',
   templateUrl: './room-overview-header.component.html',
   styleUrls: ['./room-overview-header.component.scss'],
