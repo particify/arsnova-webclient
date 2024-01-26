@@ -129,7 +129,7 @@
     "need-answers": "Bitte füge mindestens zwei Antworten hinzu.",
     "need-answer": "Bitte gib eine Antwort ein.",
     "no-empty-fields-allowed": "Keine leeren Felder erlaubt.",
-    "max-answers": "Es sind maximal acht Antworten erlaubt.",
+    "max-answers": "Es sind maximal {{max}} Antworten erlaubt.",
     "reset": "Zurücksetzen",
     "reset-all": "Alle Eingaben wurden zurückgesetzt.",
     "same-answer": "Zweimal die selbe Antwort ist nicht erlaubt.",

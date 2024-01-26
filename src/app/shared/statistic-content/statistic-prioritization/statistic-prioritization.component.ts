@@ -84,8 +84,8 @@ export class StatisticPrioritizationComponent
     if (this.content.options) {
       this.options = [...this.content.options];
     }
-    this.scale = Math.min(1, 1 - 0.06 * (this.options.length - 4));
-    const chartScale = Math.min(1, 1 - 0.1 * (this.options.length - 4));
+    this.scale = Math.min(1, 1 - 0.06 * (this.options.length / 3));
+    const chartScale = Math.min(1, 1 - 0.1 * (this.options.length / 3));
     this.chartHeight = 80 * this.options.length * chartScale;
     this.fontSize = this.isPresentation ? 14 * this.scale : 12;
     this.initChart();
@@ -197,6 +197,9 @@ export class StatisticPrioritizationComponent
         plugins: {
           legend: {
             display: false,
+          },
+          tooltip: {
+            enabled: false,
           },
           datalabels: {
             formatter: (value, context) => {

@@ -14,6 +14,7 @@ import {
   ChartDataset,
   GridLineOptions,
   LinearScale,
+  Tooltip,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -22,7 +23,10 @@ import { TranslocoService } from '@ngneat/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
-import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
+import {
+  ABSTENTION_SIGN,
+  StatisticContentBaseComponent,
+} from '@app/shared/statistic-content/statistic-content-base';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentScale } from '@app/core/models/content-scale';
 import { EventService } from '@app/core/services/util/event.service';
@@ -47,7 +51,7 @@ export class StatisticChoiceComponent
   chartId = '';
   colors: Array<string[]> = [[], []];
   indicationColors: Array<string[]> = [[], []];
-  labelLetters = 'ABCDEFGH';
+  labelLetters = 'ABCDEFGHIJKL';
   data: Array<number[]> = [[], []];
   colorLabel = false;
   survey = false;
@@ -72,7 +76,7 @@ export class StatisticChoiceComponent
     protected eventService: EventService,
     protected presentationService: PresentationService
   ) {
-    super(contentService, eventService);
+    super(contentService, eventService, translateService);
   }
 
   ngOnDestroy() {
@@ -128,13 +132,13 @@ export class StatisticChoiceComponent
 
   prepareDataAndCreateChart(colors: Array<string[]>) {
     Chart.defaults.color = this.colorStrings.onBackground;
-    Chart.defaults.font.size = this.isPresentation ? 14 : 16;
     Chart.register(
       BarController,
       BarElement,
       CategoryScale,
       LinearScale,
-      ChartDataLabels
+      ChartDataLabels,
+      Tooltip
     );
 
     const gridConfig = {
@@ -143,26 +147,22 @@ export class StatisticChoiceComponent
         : this.colorStrings.onBackground,
       drawOnChartArea: !this.isPresentation,
     };
-    const barThickness = this.isPresentation ? 80 : null;
     const dataSets = [
       {
         data: this.data[this.roundsToDisplay],
         backgroundColor: colors[this.roundsToDisplay],
-        barThickness: barThickness,
       },
     ];
     if (this.roundsToDisplay > 1) {
       dataSets.push({
         data: this.data[1],
         backgroundColor: colors[1],
-        barThickness: barThickness,
       });
     }
     const scale = this.presentationService.getScale();
     const labels = Array.from(this.labelLetters).slice(0, this.options.length);
     if (this.content.abstentionsAllowed) {
-      const label = this.translateService.translate('statistic.abstentions');
-      labels.push(label);
+      labels.push(ABSTENTION_SIGN);
     }
     this.createChart(labels, dataSets, scale, gridConfig as GridLineOptions);
   }
@@ -232,6 +232,13 @@ export class StatisticChoiceComponent
         plugins: {
           legend: {
             display: false,
+          },
+          tooltip: {
+            mode: 'point',
+            displayColors: false,
+            callbacks: {
+              title: (items) => this.getTooltipTitle(items[0]),
+            },
           },
           datalabels: {
             formatter: (value, context) => {

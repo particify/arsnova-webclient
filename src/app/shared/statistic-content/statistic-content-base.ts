@@ -6,6 +6,10 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { EventService } from '@app/core/services/util/event.service';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { UserSettings } from '@app/core/models/user-settings';
+import { ChartTypeRegistry, TooltipItem } from 'chart.js';
+import { TranslocoService } from '@ngneat/transloco';
+
+export const ABSTENTION_SIGN = '–';
 
 @Component({
   template: '',
@@ -26,7 +30,8 @@ export abstract class StatisticContentBaseComponent implements OnInit {
 
   protected constructor(
     protected contentService: ContentService,
-    protected eventService: EventService
+    protected eventService: EventService,
+    protected translateService: TranslocoService
   ) {}
 
   ngOnInit(): void {
@@ -88,5 +93,13 @@ export abstract class StatisticContentBaseComponent implements OnInit {
       label = value.toString();
     }
     return label;
+  }
+
+  protected getTooltipTitle(
+    item: TooltipItem<keyof ChartTypeRegistry>
+  ): string {
+    return item.label === ABSTENTION_SIGN
+      ? this.translateService.translate('statistic.abstentions')
+      : item.label;
   }
 }

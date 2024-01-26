@@ -7,6 +7,7 @@ import { StatisticContentBaseComponent } from '@app/shared/statistic-content/sta
 import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import { WordCloudItem } from '@app/shared/wordcloud/wordcloud.component';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-statistic-wordcloud',
@@ -25,9 +26,10 @@ export class StatisticWordcloudComponent
 
   constructor(
     protected contentService: ContentService,
-    protected eventService: EventService
+    protected eventService: EventService,
+    protected translateService: TranslocoService
   ) {
-    super(contentService, eventService);
+    super(contentService, eventService, translateService);
   }
 
   afterInit() {

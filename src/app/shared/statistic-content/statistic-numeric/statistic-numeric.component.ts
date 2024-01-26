@@ -82,7 +82,7 @@ export class StatisticNumericComponent
     protected eventService: EventService,
     protected presentationService: PresentationService
   ) {
-    super(contentService, eventService);
+    super(contentService, eventService, translateService);
   }
 
   ngOnDestroy() {
@@ -337,7 +337,9 @@ export class StatisticNumericComponent
     });
   }
 
-  private getTooltipTitle(item: TooltipItem<keyof ChartTypeRegistry>): string {
+  protected getTooltipTitle(
+    item: TooltipItem<keyof ChartTypeRegistry>
+  ): string {
     const group = this.data[item.datasetIndex][item.dataIndex];
     return group.groupStart + '–' + group.groupEnd;
   }
