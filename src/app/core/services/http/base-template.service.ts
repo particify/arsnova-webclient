@@ -47,10 +47,14 @@ export class BaseTemplateService extends AbstractHttpService<void> {
     templateId: string,
     roomId: string
   ): Observable<void> {
-    const connectionUrl = this.buildUri(
-      `/contentgroup/${templateId}/create-copy`
+    const connectionUrl = this.buildForeignUri(
+      `/contentgroup/-/create-from-template`,
+      roomId
     );
-    return this.httpClient.post<void>(connectionUrl, { roomId: roomId });
+    return this.httpClient.post<void>(connectionUrl, {
+      id: templateId,
+      roomId: roomId,
+    });
   }
 
   getContentGroupTemplates(
