@@ -26,6 +26,7 @@ enum VisitDimension {
   ENTRY = 7,
   UI_ERROR_COUNT = 8,
   HTTP_ERROR_COUNT = 9,
+  HOTKEYS = 10,
 }
 
 /* This enum maps to Matomo dimension IDs for actions. */
@@ -287,6 +288,11 @@ export class TrackingService {
       .on<any>('SurveyStarted')
       .subscribe(() =>
         this.addEvent(EventCategory.FEATURE_USAGE_SURVEY, 'Survey started')
+      );
+    this.eventService
+      .on<any>('HotkeyActivated')
+      .subscribe((e) =>
+        this.setVisitDimension(VisitDimension.HOTKEYS, e.count.toString())
       );
   }
 
