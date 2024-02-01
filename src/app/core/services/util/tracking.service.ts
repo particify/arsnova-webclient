@@ -297,6 +297,11 @@ export class TrackingService {
   }
 
   setVisitDimension(dimension: VisitDimension, value: string) {
+    if (!environment.production) {
+      console.log(
+        `Tracking: setVisitDimension(dimension=${dimension}, value=${value})`
+      );
+    }
     this._paq.push(['setCustomDimension', dimension, value]);
   }
 
