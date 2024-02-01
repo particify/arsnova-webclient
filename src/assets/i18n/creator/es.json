@@ -189,7 +189,7 @@
     "format-flashcard": "Tarjeta de memoria",
     "format-choice-description": "Los participantes pueden elegir entre varias opciones de respuesta. Puede haber una o más respuestas correctas.",
     "format-scale-description": "Se puede seleccionar una de las respuestas predefinidas.",
-    "format-binary-description": "Se puede responder con ”Sí” o ”No”. Ninguna de las opciones debe ser correcta.",
+    "format-binary-description": "Se puede responder con “Sí” o “No”. Ninguna de las opciones debe ser correcta.",
     "format-text-description": "Los participantes pueden responder la pregunta con una entrada de texto.",
     "format-slide-description": "Las diapositivas se utilizan para presentar información.",
     "format-sort-description": "Los participantes pueden responder el contenido ordenando las respuestas.",
@@ -220,7 +220,27 @@
     "banned-keywords-reset": "Las palabras clave prohibidas han sido restablecidas.",
     "import-export-content-group": "Importación/Exportación",
     "start-new-round": "Iniciar nueva ronda",
-    "starting-new-round-not-possible": "Actualmente sólo se pueden iniciar dos rondas. Una vez borradas las respuestas, puedes volver a iniciar una segunda ronda."
+    "starting-new-round-not-possible": "Actualmente sólo se pueden iniciar dos rondas. Una vez borradas las respuestas, puedes volver a iniciar una segunda ronda.",
+    "correct-answer": "Respuesta correcta",
+    "numeric-minimum-has-to-be-lower-than-maximum": "El mínimo debe ser menor que el máximo.",
+    "attribution-info-slide": "Diapositiva informativa de atribución",
+    "publish-as-template": "Publicar como plantilla",
+    "publishing-template-not-possible": "Inicie sesión para publicar sus series de preguntas como plantillas.",
+    "format-numeric": "Encontrar un número",
+    "format-numeric-description": "Elija un intervalo de números en el que los participantes puedan responder. Opcionalmente, se puede definir una respuesta correcta.",
+    "attributions": "Atribuciones",
+    "attributions-subheader": "Los siguientes contenidos se basan en plantillas publicadas bajo licencias Creative Commons.",
+    "content": "Contenido",
+    "range": "Rango",
+    "minimum": "Mínimo",
+    "maximum": "Máximo",
+    "optional-tolerance": "Tolerancia (opcional)",
+    "all-answers-between-are-correct": "Todas las respuestas entre {{min}} y {{max}} son correctas.",
+    "numeric-minimum-too-large": "El mínimo no debe ser inferior a {{min}}.",
+    "numeric-maximum-too-large": "El máximo no debe ser mayor que {{max}}.",
+    "numeric-range-too-large": "El rango no debe ser mayor que {{maxRange}}.",
+    "select-correct-number-in-defined-range": "La respuesta correcta debe encontrarse dentro del intervalo definido.",
+    "import-failed": "El formato del archivo no es válido."
   },
   "survey": {
     "a11y-stop-survey": "Detiene la retroalimentación en vivo.",
@@ -252,7 +272,8 @@
     "no-content-groups": "No hay series de preguntas.",
     "group-locked": "La serie de preguntas no está publicada",
     "locked": "no publicada",
-    "unlocked": "publicada"
+    "unlocked": "publicada",
+    "use-template": "Utilizar plantilla"
   },
   "settings": {
     "a11y-message": "Ahora estás en la configuración de la sala.",
@@ -329,7 +350,10 @@
     "focus-mode-info": "Guíe a los participantes por la sala en tiempo real. Tu control en modo presentación se sincroniza con las vistas de los participantes.",
     "focus-mode": "Modo enfoque"
   },
-  "room": { "room-name": "Nombre de sala", "preview": "Previsualizar" },
+  "room": {
+    "room-name": "Nombre de sala",
+    "preview": "Previsualizar"
+  },
   "statistic": {
     "a11y-message-evaluation": "Contenido {{index}}. Todavía no hay respuestas. Navegue al contenido con la tecla tabulador.",
     "a11y-message-type-info": "Contenido {{index}}. Navegue al contenido con la tecla tabulador.",
@@ -413,7 +437,10 @@
     "charset": "Codificación de caracteres",
     "export-series": "Exportar la serie"
   },
-  "import": { "import": "Importar", "import-series": "Importar la serie" },
+  "import": {
+    "import": "Importar",
+    "import-series": "Importar la serie"
+  },
   "control-bar": {
     "results": "Resultados",
     "correct": "Correcto",
@@ -490,5 +517,9 @@
     "cancel": "Cancelar",
     "options": "Opciones",
     "changes-saved": "Tus cambios han sido guardados."
+  },
+  "templates": {
+    "publish-template": "Publicar plantilla",
+    "content-group-template-creation-info": "Con las plantillas públicas puedes compartir tus series de preguntas con otras personas bajo los términos de una licencia libre."
   }
 }

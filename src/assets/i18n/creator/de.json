@@ -350,7 +350,10 @@
     "focus-mode": "Fokus-Modus",
     "focus-mode-info": "Führe die Teilnehmenden in Echtzeit durch den Raum. Deine Steuerung im Präsentationsmodus wird mit der Ansicht der Teilnehmenden synchronisiert."
   },
-  "room": { "room-name": "Name des Raums", "preview": "Vorschau" },
+  "room": {
+    "room-name": "Name des Raums",
+    "preview": "Vorschau"
+  },
   "statistic": {
     "a11y-message-evaluation": "Inhalt {{index}}. Es gibt noch keine Antworten zu diesen Inhalt. Navigiere mit der Tab-Taste zum Inhalt.",
     "a11y-message-type-info": "Inhalt {{index}}. Navigiere mit der Tab-Taste zum Inhalt.",

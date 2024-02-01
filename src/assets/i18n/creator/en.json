@@ -193,7 +193,7 @@
     "format-numeric": "Find a number",
     "format-choice-description": "Participants can choose from several answer options. There can be one or more correct answers.",
     "format-scale-description": "One of the predefined answers can be selected.",
-    "format-binary-description": "It can be answered with \"Yes\" or \"No\". None of the options must be correct.",
+    "format-binary-description": "It can be answered with “Yes” or “No”. None of the options must be correct.",
     "format-text-description": "Participants can answer the question with a text entry.",
     "format-slide-description": "Slides are used to present information.",
     "format-sort-description": "Participants can answer the content by ordering the answers.",
@@ -350,7 +350,10 @@
     "focus-mode": "Focus mode",
     "focus-mode-info": "Guide the participants through the room in real time. Your control in presentation mode is synchronized with the participants' views."
   },
-  "room": { "room-name": "Room name", "preview": "Preview" },
+  "room": {
+    "room-name": "Room name",
+    "preview": "Preview"
+  },
   "statistic": {
     "a11y-message-evaluation": "Content {{index}}. There are no answers yet. Navigate to the content with the tab key.",
     "a11y-message-type-info": "Content {{index}}. Navigate to the content with the tab key.",
@@ -434,7 +437,10 @@
     "file-type": "File type",
     "charset": "Charset"
   },
-  "import": { "import-series": "Import series", "import": "Import" },
+  "import": {
+    "import-series": "Import series",
+    "import": "Import"
+  },
   "control-bar": {
     "results": "Results",
     "correct": "Correct",
@@ -463,7 +469,7 @@
   "presentation": {
     "a11y-welcome": "You are now in presentation mode. Information for joining the room are displayed.",
     "a11y-comment-message": "You are now presenting the Q&A list.",
-    "a11y-present-comment": "The following postFQ  is now presented: {{comment}}",
+    "a11y-present-comment": "The following post is now presented: {{comment}}",
     "a11y-comment-zoom-changed": "Zoom changed to {{zoom}} percent.",
     "a11y-content-message": "You are now presenting the contents of the question series {{group}}.",
     "a11y-entered-fullscreen": "You are now in fullscreen mode.",

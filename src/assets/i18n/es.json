@@ -55,7 +55,8 @@
     "editing-view": "Editar",
     "room-settings": "Configuración de la sala",
     "present": "Presentar",
-    "presentation-mode": "Modo de presentación"
+    "presentation-mode": "Modo de presentación",
+    "public-templates": "Plantillas públicas"
   },
   "home-page": {
     "a11y-join-button": "Ingresa a la sala con el número de sala especificado.",
@@ -68,7 +69,7 @@
     "a11y-update": "Realiza la actualización y cierra el diálogo. La página se recargará luego.",
     "a11y-close": "Cierra el diálogo y regresa a la última página.",
     "create-room": "Crear sala",
-    "created-1": "Se ha creado la sala ”",
+    "created-1": "Se ha creado la sala “",
     "created-2": "” ha sido creada.",
     "exactly-8": "Un número de sala tiene exactamente 8 dígitos.",
     "only-numbers": "Un número de sala solo contiene dígitos.",
@@ -237,14 +238,16 @@
     "contribute-to-lang": "Puede contribuir a la traducción a través del siguiente enlace: ",
     "translation-server": "Ir al servidor de traducción",
     "leave": "Deja",
-    "really-leave-room": "¿De verdad quieres salir de la sala?"
+    "really-leave-room": "¿De verdad quieres salir de la sala?",
+    "select-room": "Seleccione sala"
   },
   "errors": {
     "not-authorized": "No estás autorizado para ver esta página.",
     "room-not-found": "No se encontró ninguna sala con este número.",
     "something-went-wrong": "Algo salió mal.",
     "http-too-many-requests": "Demasiadas solicitudes desde tu red.",
-    "establishing-connection": "Estableciendo conexión …"
+    "establishing-connection": "Estableciendo conexión …",
+    "invalid-request": "Su solicitud no es válida."
   },
   "title": {
     "register": "Registrarse",
@@ -260,7 +263,8 @@
     "settings": "Configuración",
     "admin": "Administración",
     "presentation-mode": "Modo de presentación",
-    "account": "Mi cuenta"
+    "account": "Mi cuenta",
+    "templates": "Plantillas públicas"
   },
   "comment-export": {
     "answer": "Respuesta",
@@ -390,7 +394,10 @@
     "points-too-much": "Demasiados puntos asignados",
     "add-points": "Añade 10 puntos",
     "remove-points": "Elimina 10 puntos",
-    "your-answer": "Tu respuesta"
+    "your-answer": "Tu respuesta",
+    "select-a-number-between": "Selecciona un número entre {{min}} y {{max}}",
+    "correct-answer-is": "La respuesta correcta es",
+    "have-answered-correctly": "han respondido correctamente"
   },
   "survey": {
     "a11y-message": "Ahora estás en modo de retroalimentación en vivo.",
@@ -448,7 +455,13 @@
     "answer": "Respuesta",
     "other-combinations": "Otro",
     "no-answers": "No hay respuestas.",
-    "points": "Puntos"
+    "points": "Puntos",
+    "mean": "Media",
+    "median": "Mediana",
+    "variance": "Varianza",
+    "minimum": "Mínimo",
+    "maximum": "Máximo",
+    "standardDeviation": "Desviación típica"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Cambiar a {{feature}}.",
@@ -503,5 +516,74 @@
     "pace-neutral": "Promedio",
     "pace-positive-1": "Algo rápido",
     "pace-positive-2": "Muy rápido"
+  },
+  "timer": {
+    "time-is-up": "Se acabó el tiempo.",
+    "finished": "Terminado"
+  },
+  "templates": {
+    "description": "Descripción",
+    "tags": "Etiquetas",
+    "tag-removed": "Se ha eliminado la etiqueta {{tag}}.",
+    "create-new-tag": "Crear nueva etiqueta",
+    "attribution": "Atribución",
+    "name": "Nombre",
+    "select-tags": "Seleccionar etiquetas para filtrar plantillas",
+    "remove-tag": "Eliminar etiqueta {{tag}}",
+    "optional": "opcional",
+    "please-fill-attribution": "Introduzca una atribución.",
+    "license-description-cc-by-nc-sa-4-0": "Permite que otros distribuyan, remezclen, adapten y desarrollen la plantilla con fines no comerciales, siempre que se cite al creador. Las plantillas que se basen en este modelo deben tener las mismas condiciones de licencia.",
+    "is-ai-generated": "Esta plantilla se creó con ayuda de la IA.",
+    "ai-generated-hint": "Creado con ayuda de la IA",
+    "publish": "Publicar",
+    "template-published": "Su plantilla ha sido publicada.",
+    "public-templates": "Plantillas públicas",
+    "my-templates": "Mis plantillas",
+    "no-templates-found": "No hay plantillas.",
+    "contents": "Contenidos",
+    "licensed-under": "Con licencia",
+    "anonymous": "Anónimo",
+    "use": "Utilice",
+    "template-added": "Se ha añadido la plantilla.",
+    "back": "Volver",
+    "copy-template-link": "Copiar enlace a plantilla",
+    "template-link-copied": "Enlace a la plantilla copiada en el portapapeles.",
+    "report-template": "Plantilla de informe",
+    "edit-template": "Editar plantilla",
+    "language": "Idioma",
+    "license": "Licencia",
+    "please-fill-name": "Introduzca un nombre.",
+    "please-fill-description": "Introduzca una descripción.",
+    "please-fill-tags": "Seleccione al menos una etiqueta.",
+    "license-description-cc0-1-0": "Permite que otros distribuyan, remezclen, adapten y desarrollen la plantilla sin condiciones.",
+    "license-description-cc-by-4-0": "Permite que otros distribuyan, remezclen, adapten y construyan a partir de la plantilla siempre que se cite al creador.",
+    "no-special-characters-allowed": "No se admiten caracteres especiales.",
+    "license-description-cc-by-sa-4-0": "Permite que otros distribuyan, remezclen, adapten y construyan a partir de la plantilla siempre que se cite al creador. Las plantillas que se basen en este modelo deben tener las mismas condiciones de licencia.",
+    "license-description-cc-by-nc-4-0": "Permite que otros distribuyan, remezclen, adapten y desarrollen la plantilla con fines no comerciales, siempre que se cite al creador.",
+    "content": "Contenido",
+    "previous-content": "Contenido anterior",
+    "next-content": "Contenido siguiente",
+    "preview": "Vista previa",
+    "by": "de",
+    "save": "Guardar",
+    "changes-saved": "Se han guardado los cambios."
+  },
+  "violation-report": {
+    "reason-advertising": "Publicidad no solicitada",
+    "reason-copyright": "Infracción de los derechos de autor",
+    "reason-disinformation": "Desinformación",
+    "reason-hate-speech": "Discurso de odio",
+    "reason-other": "Otra",
+    "please-enter-reason": "Seleccione una razón.",
+    "please-enter-description": "Introduzca una descripción.",
+    "reported-room": "Se ha informado de la habitación.",
+    "template": "Plantilla",
+    "room": "Sala",
+    "send": "Enviar",
+    "description": "Descripción",
+    "please-select-reason-and-enter-description": "Seleccione un motivo aplicable e introduzca una descripción.",
+    "reported-template": "Se ha informado de la plantilla.",
+    "report-template": "Plantilla de informe",
+    "report-room": "Sala de informes"
   }
 }
