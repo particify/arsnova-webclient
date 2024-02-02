@@ -5,6 +5,12 @@ import { EventManager } from '@angular/platform-browser';
 import { environment } from '@environments/environment';
 import { HotkeysComponent } from '@app/core/components/_dialogs/hotkeys/hotkeys.component';
 import { DialogService } from './dialog.service';
+import { EventService } from '@app/core/services/util/event.service';
+import { HotkeyActivated } from '@app/core/models/events/hotkey-activated';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
 
 export const HELP_KEY = 'h';
 
@@ -60,14 +66,18 @@ export class HotkeyService {
   hotkeyRegistrations: Map<symbol, Hotkey> = new Map();
 
   private dialogRef?: MatDialogRef<HotkeysComponent>;
+  private counter: number;
 
   constructor(
     private eventManager: EventManager,
     private dialogService: DialogService,
+    private eventService: EventService,
+    private globalStorageService: GlobalStorageService,
     @Inject(DOCUMENT) private document: HTMLDocument
   ) {
     this.registerHandler();
     this.registerDialogHotkey();
+    this.counter = globalStorageService.getItem(STORAGE_KEYS.HOTKEY_COUNT) ?? 0;
   }
 
   static getKeyDisplayInfo(key: string): HotkeyDisplayInfo {
@@ -177,6 +187,7 @@ export class HotkeyService {
       }
       event.preventDefault();
       hotkey.action();
+      this.emitApplicationEvent();
     }
   }
 
@@ -215,5 +226,12 @@ export class HotkeyService {
         }
       }
     );
+  }
+
+  private emitApplicationEvent() {
+    this.counter++;
+    this.globalStorageService.setItem(STORAGE_KEYS.HOTKEY_COUNT, this.counter);
+    const event = new HotkeyActivated(this.counter);
+    this.eventService.broadcast(event.type, event.payload);
   }
 }

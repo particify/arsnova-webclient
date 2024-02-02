@@ -22,6 +22,8 @@ import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentState } from '@app/core/models/content-state';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
+import { EventService } from '@app/core/services/util/event.service';
+import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 
 @Injectable()
 class MockContentService {
@@ -60,7 +62,17 @@ class MockAnnouncer {
 }
 
 @Injectable()
+class MockEventService {}
+
+@Injectable()
 class MockDialogService {}
+
+@Injectable()
+class MockGlobalStorageService {
+  getItem(key: string) {
+    return 0;
+  }
+}
 
 describe('ContentListComponent', () => {
   let component: ContentListComponent;
@@ -112,6 +124,14 @@ describe('ContentListComponent', () => {
         {
           provide: ContentPublishService,
           useClass: ContentPublishService,
+        },
+        {
+          provide: EventService,
+          useClass: MockEventService,
+        },
+        {
+          provide: GlobalStorageService,
+          useClass: MockGlobalStorageService,
         },
       ],
       imports: [getTranslocoModule(), MatMenuModule],

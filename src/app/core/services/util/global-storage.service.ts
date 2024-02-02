@@ -35,6 +35,7 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   COMMENT_TIME_FILTER: Symbol(),
   BROWSER_SESSION_INITIALIZED: Symbol(),
   REDIRECT_URL: Symbol(),
+  HOTKEY_COUNT: Symbol(),
 };
 
 /**
@@ -142,6 +143,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
     key: STORAGE_KEYS.REDIRECT_URL,
     name: 'REDIRECT_URL',
     category: StorageItemCategory.FUNCTIONAL,
+    backend: StorageBackend.SESSIONSTORAGE,
+  },
+  {
+    key: STORAGE_KEYS.HOTKEY_COUNT,
+    name: 'HOTKEY_COUNT',
+    category: StorageItemCategory.STATISTICS,
     backend: StorageBackend.SESSIONSTORAGE,
   },
 ];
