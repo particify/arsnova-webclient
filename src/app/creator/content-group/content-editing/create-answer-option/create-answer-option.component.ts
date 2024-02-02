@@ -10,6 +10,8 @@ import { DisplayAnswer } from '@app/creator/content-group/content-editing/_model
 import { FormComponent } from '@app/standalone/form/form.component';
 import { TranslocoService } from '@ngneat/transloco';
 
+const MAX_ANSWER_OPTIONS = 12;
+
 @Component({
   selector: 'app-create-answer-option',
   templateUrl: './create-answer-option.component.html',
@@ -42,7 +44,7 @@ export class CreateAnswerOptionComponent extends FormComponent {
     if (this.answerExists()) {
       return;
     }
-    if (this.answers.length < 8) {
+    if (this.answers.length < MAX_ANSWER_OPTIONS) {
       this.answers.push(
         new DisplayAnswer(new AnswerOption(this.newAnswer), false)
       );
@@ -51,7 +53,8 @@ export class CreateAnswerOptionComponent extends FormComponent {
       this.answerInput.nativeElement.focus();
     } else {
       const msg = this.translateService.translate(
-        'creator.content.max-answers'
+        'creator.content.max-answers',
+        { max: MAX_ANSWER_OPTIONS }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
     }

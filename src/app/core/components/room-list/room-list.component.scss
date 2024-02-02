@@ -11,7 +11,12 @@
 
 .inner {
   outline: none;
-  height: 60px;
+}
+
+@include xs {
+  .inner {
+    font-size: $s-font-size;
+  }
 }
 
 .account-memberships {
@@ -69,7 +74,7 @@
   }
 }
 
-@media (max-width: 599px) {
+@include xs {
   .desktop-buttons {
     display: none;
   }
@@ -90,16 +95,9 @@
   .full-width-container {
     width: 100%;
   }
-}
 
-@media (min-width: 600px) {
-  .mobile-buttons {
+  app-list-badge {
     display: none;
-  }
-
-  .search-input {
-    font-size: 14px;
-    width: 150px;
   }
 }
 
@@ -111,7 +109,7 @@
   height: 36px;
 }
 
-@media (min-width: 600px) {
+@include gt-xs {
   .active-label {
     padding: 2px 6px;
     border-radius: 4px;
@@ -125,6 +123,15 @@
     }
 
     animation: border-lightning 2s infinite;
+  }
+
+  .mobile-buttons {
+    display: none;
+  }
+
+  .search-input {
+    font-size: 14px;
+    width: 150px;
   }
 }
 

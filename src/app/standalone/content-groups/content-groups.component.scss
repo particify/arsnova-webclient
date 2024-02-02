@@ -1,6 +1,7 @@
+@import '../../../variables';
+
 #content-group {
   width: 100%;
-  transition: all 150ms;
   margin-top: 10px;
   padding: 0 16px;
 
@@ -15,8 +16,21 @@
 
 .locked {
   opacity: 0.5;
+  flex-shrink: 0;
 }
 
-.badge {
-  margin: 0 5px 0 10px;
+.group-name {
+  margin: 16px 0;
+}
+
+@include xs {
+  .group-name {
+    font-size: $s-font-size;
+  }
+}
+
+@include gt-xs {
+  .group-name {
+    font-size: $m-font-size;
+  }
 }

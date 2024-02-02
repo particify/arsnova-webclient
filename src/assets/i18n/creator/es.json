@@ -129,7 +129,7 @@
     "need-answers": "Por favor, añade al menos dos respuestas.",
     "need-answer": "Por favor, ingresa una respuesta.",
     "no-empty-fields-allowed": "No se permiten campos vacíos.",
-    "max-answers": "El número máximo de respuestas es ocho.",
+    "max-answers": "El número máximo de respuestas es {{max}}.",
     "reset": "Reiniciar",
     "reset-all": "Se han reiniciado todas las entradas.",
     "same-answer": "No se permite la misma etiqueta de respuesta.",

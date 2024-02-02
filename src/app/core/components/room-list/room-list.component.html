@@ -121,6 +121,7 @@
             <div
               fxLayout="row"
               fxLayoutAlign="space-between center"
+              fxLayoutGap="0.5em"
               class="inner container"
               attr.aria-label="{{
                 'room-list.a11y-join-room'
@@ -132,9 +133,10 @@
                       }
               }}"
             >
-              <p class="ellipsis">
-                {{ room.summary.name }}
-              </p>
+              <app-text-overflow-clip
+                class="ellipsis"
+                [text]="room.summary.name"
+              ></app-text-overflow-clip>
               <div
                 fxLayout="row"
                 fxLayoutAlign="center center"

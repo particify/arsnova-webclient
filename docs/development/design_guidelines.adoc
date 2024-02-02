@@ -115,6 +115,8 @@ Card lists have a spacing of Small spacer ({small-spacer}) between items.
 ====== Interaction lists
 Interaction list like in content answering has a space of Smaller spacer (Smaller spacer ({smaller-spacer})) to ensure that the correct item is selected.
 
+Font size is {base-font-size} and {font-size-smaller} on mobile devices.
+
 ===== Card content
 Content in a card has a space of Smaller spacer ({smaller-spacer}) between items.
 

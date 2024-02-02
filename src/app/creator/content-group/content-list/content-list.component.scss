@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 .mat-mdc-list {
   background-color: var(--surface);
 }
@@ -7,6 +9,12 @@
   transition-property: background-color, color;
   transition-duration: 300ms;
   transition-timing-function: ease-in;
+}
+
+@include xs {
+  p {
+    font-size: $s-font-size;
+  }
 }
 
 @mixin show-button-bar {

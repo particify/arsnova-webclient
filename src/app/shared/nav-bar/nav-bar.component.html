@@ -39,9 +39,11 @@
         *ngIf="focusModeEnabled && barItem.name === focusFeature"
         class="focus-indicator"
       ></div>
-      <span class="text ellipsis">{{
-        getFeatureText(barItem.name) | transloco
-      }}</span>
+      <div class="ellipsis">
+        <span class="text ellipsis">{{
+          getFeatureText(barItem.name) | transloco
+        }}</span>
+      </div>
       <div class="menu-container">
         <mat-menu #groupMenu="matMenu" class="series-menu">
           <button
@@ -50,13 +52,17 @@
             [id]="group.name + '-series-button'"
             (click)="navToUrl(i, group)"
           >
-            <span
+            <div
               [ngClass]="{
                 'selected-menu-item':
                   group.name === groupName && i === currentRouteIndex
               }"
-              >{{ group.name }}</span
             >
+              <app-text-overflow-clip
+                class="ellipsis"
+                [text]="group.name"
+              ></app-text-overflow-clip>
+            </div>
           </button>
         </mat-menu>
         <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>

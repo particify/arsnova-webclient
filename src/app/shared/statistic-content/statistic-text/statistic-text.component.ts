@@ -28,10 +28,10 @@ export class StatisticTextComponent
   constructor(
     protected contentService: ContentService,
     private contentAnswerService: ContentAnswerService,
-    private translateService: TranslocoService,
+    protected translateService: TranslocoService,
     protected eventService: EventService
   ) {
-    super(contentService, eventService);
+    super(contentService, eventService, translateService);
   }
 
   loadData(): Observable<TextAnswer[]> {

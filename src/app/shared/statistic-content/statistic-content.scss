@@ -15,11 +15,14 @@
 
 .answer-item {
   background-color: var(--background);
-  margin-bottom: 10px;
   border-radius: 4px;
   align-items: center;
   color: var(--on-surface);
   padding: 0 16px;
+
+  &.all-animations {
+    margin-bottom: 10px;
+  }
 }
 
 .all-animations {

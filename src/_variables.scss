@@ -9,6 +9,8 @@ $font-weight-bold: 500;
 $font-weight-extra-bold: 700;
 $xs-font-size: 12px;
 $s-font-size: 14px;
+$m-font-size: 16px;
+$l-font-size: 20px;
 
 // Positioning
 
@@ -31,18 +33,25 @@ $drawer-modal-width: 288px;
 
 // Breakpoints
 
-$screen-xs-min: 599px;
-$screen-s-max: 999px;
+$screen-xs-max: 599px;
+$screen-sm-min: 600px;
+$screen-sm-max: 999px;
 $screen-md-min: 1000px;
 
 @mixin xs {
-  @media (max-width: $screen-xs-min) {
+  @media (max-width: $screen-xs-max) {
+    @content;
+  }
+}
+
+@mixin gt-xs {
+  @media (min-width: $screen-sm-min) {
     @content;
   }
 }
 
 @mixin lt-md {
-  @media (max-width: $screen-s-max) {
+  @media (max-width: $screen-sm-max) {
     @content;
   }
 }

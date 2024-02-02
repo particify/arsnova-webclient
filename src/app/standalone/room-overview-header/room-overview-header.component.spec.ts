@@ -59,6 +59,7 @@ describe('RoomOverviewHeaderComponent', () => {
 
     fixture = TestBed.createComponent(RoomOverviewHeaderComponent);
     component = fixture.componentInstance;
+    component.name = 'THis is a room name';
     fixture.detectChanges();
   });
 

@@ -19,12 +19,24 @@
   }}"
   (keyup.enter)="viewContents()"
 >
-  <div fxLayout="row" fxLayoutAlign="start center" class="container">
-    <h3 class="ellipsis">
-      {{ contentGroupName }}
-    </h3>
-    <app-list-badge class="badge" [count]="length"></app-list-badge>
-    <span class="fill-remaining-space"></span>
+  <div
+    fxFill
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    fxLayoutGap="0.5em"
+  >
+    <div
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      fxLayoutGap="0.5em"
+      class="ellipsis group-name"
+    >
+      <app-text-overflow-clip
+        class="ellipsis"
+        [text]="contentGroupName"
+      ></app-text-overflow-clip>
+      <app-list-badge *ngIf="length > 0" [count]="length"></app-list-badge>
+    </div>
     <mat-icon
       *ngIf="isLocked"
       class="locked"

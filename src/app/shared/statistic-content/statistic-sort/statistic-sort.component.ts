@@ -16,9 +16,13 @@ import {
   Chart,
   ChartDataset,
   LinearScale,
+  Tooltip,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
+import {
+  ABSTENTION_SIGN,
+  StatisticContentBaseComponent,
+} from '@app/shared/statistic-content/statistic-content-base';
 import { takeUntil } from 'rxjs/operators';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { TranslocoService } from '@ngneat/transloco';
@@ -61,12 +65,12 @@ export class StatisticSortComponent
   constructor(
     protected contentService: ContentService,
     private themeService: ThemeService,
-    private translateService: TranslocoService,
+    protected translateService: TranslocoService,
     protected eventService: EventService,
     private presentationService: PresentationService,
     private contentAnswerService: ContentAnswerService
   ) {
-    super(contentService, eventService);
+    super(contentService, eventService, translateService);
     this.onSurface = this.themeService.getColor('on-surface');
     this.surface = this.themeService.getColor('surface');
     this.green = this.themeService.getColor('green');
@@ -149,9 +153,7 @@ export class StatisticSortComponent
       }
     }
     if (this.content.abstentionsAllowed) {
-      this.labels.push(
-        this.translateService.translate('statistic.abstentions')
-      );
+      this.labels.push(ABSTENTION_SIGN);
     }
   }
 
@@ -276,20 +278,19 @@ export class StatisticSortComponent
 
   createChart() {
     Chart.defaults.color = this.onSurface;
-    Chart.defaults.font.size = this.isPresentation ? 14 : 16;
     Chart.register(
       BarController,
       BarElement,
       CategoryScale,
       LinearScale,
-      ChartDataLabels
+      ChartDataLabels,
+      Tooltip
     );
     const gridConfig = {
       tickColor: this.isPresentation ? this.surface : this.onSurface,
       drawOnChartArea: !this.isPresentation,
     };
     const scale = this.presentationService.getScale();
-    this.data[0].barThickness = this.isPresentation ? 80 : undefined;
     this.chart = new Chart(this.chartId, {
       type: 'bar',
       data: {
@@ -334,6 +335,13 @@ export class StatisticSortComponent
         plugins: {
           legend: {
             display: false,
+          },
+          tooltip: {
+            mode: 'point',
+            displayColors: false,
+            callbacks: {
+              title: (items) => this.getTooltipTitle(items[0]),
+            },
           },
           datalabels: {
             formatter: (value, context) => {

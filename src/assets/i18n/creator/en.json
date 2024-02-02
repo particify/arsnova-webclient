@@ -129,7 +129,7 @@
     "need-answers": "Please add at least two answers.",
     "need-answer": "Please enter an answer.",
     "no-empty-fields-allowed": "No empty field allowed.",
-    "max-answers": "There's a maximum of eight answers.",
+    "max-answers": "There's a maximum of {{max}} answers.",
     "reset": "Reset",
     "reset-all": "All entries have been reset.",
     "same-answer": "Same answer label is not allowed.",

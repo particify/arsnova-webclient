@@ -30,11 +30,15 @@ export class ThemeService {
     'blue',
     'yellow',
     'teal',
-    'red',
+    'deep-orange',
     'purple',
     'brown',
     'green',
     'pink',
+    'cyan',
+    'orange',
+    'light-green',
+    'red',
   ];
   private likertColors = [
     'strongly-agree',
