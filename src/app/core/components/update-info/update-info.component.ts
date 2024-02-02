@@ -49,7 +49,7 @@ export class UpdateInfoComponent implements OnInit {
       .reduce(
         (acc, cur) => (cur.id > acc.id ? cur : acc),
         this.versions[0]
-      )?.changes[lang];
+      )?.changes?.[lang];
     if (this.data.updateAvailable) {
       this.data.updateAvailable.subscribe(() => (this.updateReady = true));
     } else {
