@@ -12,18 +12,13 @@
       ) | transloco
     }}
   </p>
-  <button
+  <app-loading-button
     *ngIf="(disabled || readonly) && showToggleButton"
-    mat-raised-button
-    color="primary"
-    (click)="toggleSettings()"
-  >
-    <mat-icon>{{ disabled ? 'question_answer' : 'lock_open' }}</mat-icon>
-    <span>{{
-      (disabled
+    [name]="
+      disabled
         ? 'creator.comment-list.activate-q-and-a'
         : 'creator.comment-list.unlock-creation'
-      ) | transloco
-    }}</span>
-  </button>
+    "
+    (clicked)="toggleSettings()"
+  ></app-loading-button>
 </div>

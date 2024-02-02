@@ -1,31 +1,25 @@
 <div fxLayout="row" fxLayoutAlign="center">
   <div class="page-container">
-    <div
-      *ngIf="!disabled"
-      fxLayout="row"
-      fxLayoutAlign="center center"
-      class="header-container"
-    >
+    <div *ngIf="!disabled" fxLayout="row" fxLayoutAlign="space-between center">
       <app-comment-list-bar
-        [scroll]="scroll"
-        [scrollActive]="scrollActive"
-        [isScrollStart]="isScrollStart"
-        [commentCounter]="
-          filteredComments && hideCommentsList
-            ? filteredComments.length
-            : commentsFilteredByTime.length + unreadCommentCount
-        "
-        [showAlways]="true"
+        fxFill
+        [showFixedBar]="scroll && isScrollStart"
+        [commentCounter]="commentsFilteredByTime.length"
         [isAddButtonDisabled]="readonly"
         [currentFilter]="currentFilter"
         [currentSort]="currentSort"
         [period]="period"
         [navBarExists]="!focusModeEnabled"
+        [showAddButton]="true"
+        [categories]="this.room.extensions?.comments?.tags"
+        [selectedCategory]="currentTag"
+        [searchInput]="searchInput"
         (searchInputChanged)="searchComments($event)"
         (createCommentClicked)="openCreateDialog()"
         (filterSelected)="filterComments($event)"
         (sortingSelected)="sortCommentsManually($event)"
         (periodSelected)="setTimePeriod($event)"
+        (categorySelected)="selectTag($event)"
       >
       </app-comment-list-bar>
     </div>
@@ -56,9 +50,9 @@
         [referenceEvent]="referenceEvent.asObservable()"
         [isNew]="comment.id === newestComment.id"
         [fileUploadEnabled]="fileUploadEnabled"
-        (clickedOnTag)="clickedOnTag($event)"
         [parseVote]="getVote(comment)"
         [userId]="userId"
+        (clickedOnTag)="selectTag($event)"
       >
       </app-comment>
     </div>

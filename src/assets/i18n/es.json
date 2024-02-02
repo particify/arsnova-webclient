@@ -306,15 +306,12 @@
     "leave-room": "Deja la sala"
   },
   "comment-list": {
-    "a11y-close-search": "Cerrar búsqueda de publicaciones",
     "a11y-sort-time": "Ordenar publicaciones por tiempo",
     "a11y-sort-voteasc": "Ordenar publicaciones por votos descendentes",
     "a11y-sort-votedesc": "Ordenar publicaciones por votos ascendentes",
     "a11y-filter-correct": "Filtrar todas las publicaciones marcadas como correctas",
-    "a11y-filter-close": "Eliminar todos los filtros",
     "a11y-filter-favorite": "Filtrar todas las publicaciones favoritas",
     "a11y-filter-wrong": "Filtrar todas las publicaciones marcadas como incorrectas",
-    "a11y-filter-more": "Mostrar más filtros",
     "a11y-filter-answer": "Filtrar todas las publicaciones con respuestas",
     "a11y-select-time-1h": "Mostrar todas las publicaciones de la última hora",
     "a11y-select-time-3h": "Mostrar todas las publicaciones de las últimas 3 horas",
@@ -326,30 +323,29 @@
     "creation-not-allowed": "Ya no es posible crear publicaciones.",
     "creation-currently-not-allowed": "Actualmente no se permite la creación de publicaciones.",
     "comment-deleted": "La publicación ha sido eliminada.",
-    "filter-comments": "Filtrar y ordenar publicaciones",
+    "filter-comments": "Filtrar publicaciones",
+    "sort-comments": "Ordenar publicaciones",
     "filter-favorite": "Favorito",
     "filter-correct": "Afirmado",
     "filter-wrong": "Negado",
     "filter-answered": "Respondido",
-    "filter-more": "Más filtros",
-    "filter-reset": "Restablecer",
-    "filter-search": "Buscar publicaciones",
-    "search": "Buscar publicaciones",
-    "search-placeholder": "Buscar",
-    "select-time": "Seleccionar un período de tiempo",
+    "filter-time": "Período de tiempo",
+    "filter-categories": "Categorías",
+    "search-comments": "Buscar publicaciones",
+    "search-comments-with-count": "Buscar {{count}} publicaciones",
+    "no-posts-to-search": "No hay puestos para buscar",
     "select-time-1h": "Última hora",
     "select-time-3h": "Últimas 3 horas",
     "select-time-1d": "Últimas 24 horas",
     "select-time-1w": "Últimos 7 días",
     "select-time-all": "Sin límite",
-    "sort": "Ordenar",
-    "filter": "Filtrar",
     "sort-votedesc": "Mejor clasificación",
     "sort-voteasc": "Peor clasificación",
     "sort-time": "Última creación",
     "list": "Lista de publicaciones",
     "there-are-new-posts": "Hay nuevas publicaciones",
-    "comments-are-not-enabled": "La sección de preguntas y respuestas no está habilitada."
+    "comments-are-not-enabled": "La sección de preguntas y respuestas no está habilitada.",
+    "no-categories-in-this-room": "No hay categorías en esta sala"
   },
   "comment-page": {
     "a11y-message": "Ahora estás en la página de preguntas y respuestas.",
@@ -585,5 +581,8 @@
     "reported-template": "Se ha informado de la plantilla.",
     "report-template": "Plantilla de informe",
     "report-room": "Sala de informes"
+  },
+  "general": {
+    "a11y-remove-filter": "Quitar filtro"
   }
 }

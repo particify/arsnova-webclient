@@ -24,6 +24,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { UiConfig } from '@app/core/models/api-config';
+import { UiService } from '@app/core/services/util/ui.service';
 
 @Component({
   selector: 'app-root',
@@ -46,7 +47,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private notificationService: NotificationService,
     private translationService: TranslocoService,
     private dialog: MatDialog,
-    private featureFlagService: FeatureFlagService
+    private featureFlagService: FeatureFlagService,
+    private uiService: UiService
   ) {
     this.currentTheme = themeService.getCurrentTheme();
     this.themes = this.themeService.getThemes();
@@ -93,6 +95,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.contentGroupTemplatesActive = this.featureFlagService.isEnabled(
       'CONTENT_GROUP_TEMPLATES'
     );
+    this.uiService.setScrollbarWidthVariable();
   }
 
   ngAfterViewInit(): void {

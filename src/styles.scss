@@ -437,6 +437,24 @@ div {
   min-height: unset;
 }
 
+.minimal-height-input .mat-mdc-form-field-infix {
+  --mat-form-field-container-height: 0;
+
+  padding: 8px 0 !important;
+  font-size: 14px;
+  width: 600px;
+}
+
+.minimal-height-select-input {
+  min-width: 200px !important;
+}
+
+.minimal-height-select-input .mat-mdc-form-field-infix {
+  padding: 8px 0 !important;
+  min-height: unset;
+  max-height: 36px;
+}
+
 .active-input .mdc-text-field--outlined {
   margin: 4px 0 6px;
   transition: padding-left 0.5s;

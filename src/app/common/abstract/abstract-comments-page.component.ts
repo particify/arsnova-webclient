@@ -27,6 +27,8 @@ import { CreateCommentComponent } from '@app/standalone/_dialogs/create-comment/
 
 export const itemRenderNumber = 20;
 
+export const BAR_PADDING = 16;
+const APP_PADDING = 0.04;
 @Component({ template: '' })
 export class AbstractCommentsPageComponent {
   protected destroyed$ = new Subject<void>();
@@ -51,13 +53,13 @@ export class AbstractCommentsPageComponent {
   room: Room;
 
   currentSort: CommentSort;
-  currentFilter = CommentFilter.NONE;
+  currentFilter?: CommentFilter;
   period: CommentPeriod;
   searchInput = '';
+  currentTag?: string;
 
   scroll = false;
-  scrollMax = 0;
-  scrollStart?: number;
+  scrollStart = innerWidth * APP_PADDING - BAR_PADDING;
   scrollExtended = false;
   isScrollStart = false;
   scrollExtendedMax = 500;
@@ -167,11 +169,7 @@ export class AbstractCommentsPageComponent {
     this.scrollActive = this.scroll && currentScroll < this.lastScroll;
     this.scrollExtended = currentScroll >= this.scrollExtendedMax;
     this.checkFreeze();
-    this.isScrollStart = !!(
-      this.scrollStart &&
-      currentScroll >= this.scrollStart &&
-      currentScroll <= this.scrollStart + 200
-    );
+    this.isScrollStart = currentScroll >= this.scrollStart;
     this.showCommentsForScrollPosition(
       currentScroll,
       scrollElement.scrollHeight
@@ -180,10 +178,9 @@ export class AbstractCommentsPageComponent {
   }
 
   isScrollPosition(scrollPosition: number): boolean {
-    const additionalSpace = innerWidth < 1001 ? 56 + innerWidth * 0.04 : 0;
     return (
-      scrollPosition > this.scrollMax + additionalSpace ||
-      (scrollPosition > this.scrollMax && scrollPosition < this.lastScroll)
+      scrollPosition > 0 ||
+      (scrollPosition > 0 && scrollPosition < this.lastScroll)
     );
   }
 
@@ -225,23 +222,21 @@ export class AbstractCommentsPageComponent {
   }
 
   searchComments(input?: string): void {
-    if (input !== undefined) {
-      this.searchInput = input;
-    }
-    if (this.searchInput) {
-      if (this.searchInput.length > 0) {
-        this.hideCommentsList = true;
-        this.filteredComments = this.commentsFilteredByTime.filter(
-          (c) =>
-            this.searchInput &&
-            c.body.toLowerCase().includes(this.searchInput.toLowerCase())
-        );
-        this.getDisplayComments();
-      }
-    } else if (this.currentFilter === '') {
+    if (!input && this.searchInput) {
       this.hideCommentsList = false;
-      this.getDisplayComments();
+      this.searchInput = '';
+    } else if (input) {
+      this.currentFilter = undefined;
+      this.currentTag = undefined;
+      this.hideCommentsList = true;
+      this.searchInput = input;
+      this.filteredComments = this.commentsFilteredByTime.filter(
+        (c) =>
+          this.searchInput &&
+          c.body.toLowerCase().includes(this.searchInput.toLowerCase())
+      );
     }
+    this.getDisplayComments();
   }
 
   getThresholdSettings() {
@@ -439,24 +434,25 @@ export class AbstractCommentsPageComponent {
     });
   }
 
-  filterComments(type: CommentFilter, tag?: string): void {
-    if (
-      type === CommentFilter.NONE ||
-      (this.currentFilter === CommentFilter.TAG && type === CommentFilter.TAG)
-    ) {
-      this.filteredComments = this.commentsFilteredByTime;
+  filterComments(type?: CommentFilter, tag = this.currentTag): void {
+    if (this.currentFilter && !type) {
       this.hideCommentsList = false;
-      this.currentFilter = CommentFilter.NONE;
-      this.sortComments();
-      return;
+    } else if (type) {
+      this.searchInput = '';
+      this.filteredComments = this.commentService.filterComments(
+        this.commentsFilteredByTime,
+        type,
+        tag
+      );
+      this.hideCommentsList = true;
+      if (tag) {
+        this.currentTag = tag;
+      }
     }
-    this.filteredComments = this.commentService.filterComments(
-      this.commentsFilteredByTime,
-      type,
-      tag
-    );
+    if (type !== CommentFilter.TAG) {
+      this.currentTag = undefined;
+    }
     this.currentFilter = type;
-    this.hideCommentsList = true;
     this.sortComments();
   }
 
@@ -490,8 +486,15 @@ export class AbstractCommentsPageComponent {
     this.getDisplayComments();
   }
 
-  clickedOnTag(tag: string): void {
-    this.filterComments(CommentFilter.TAG, tag);
+  selectTag(tag?: string): void {
+    if (tag === this.currentTag) {
+      return;
+    }
+    if (tag) {
+      this.filterComments(CommentFilter.TAG, tag);
+    } else {
+      this.filterComments();
+    }
   }
 
   pauseCommentStream() {

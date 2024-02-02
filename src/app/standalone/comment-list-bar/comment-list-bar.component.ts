@@ -1,16 +1,9 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CommentPeriod } from '@app/core/models/comment-period.enum';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
-import { MenuDividerComponent } from '@app/standalone/menu-divider/menu-divider.component';
+import { FilterChipComponent } from '@app/standalone/filter-chip/filter-chip.component';
 
 class SortItem {
   name: CommentSort;
@@ -26,34 +19,33 @@ class SortItem {
 
 @Component({
   standalone: true,
-  imports: [CoreModule, MenuDividerComponent],
+  imports: [CoreModule, FilterChipComponent],
   selector: 'app-comment-list-bar',
   templateUrl: './comment-list-bar.component.html',
   styleUrls: ['./comment-list-bar.component.scss'],
 })
 export class CommentListBarComponent {
-  @ViewChild('searchInput') searchInput!: ElementRef;
-
-  @Input() scroll = false;
-  @Input() scrollActive = false;
-  @Input() isScrollStart = false;
+  @Input() showFixedBar = false;
   @Input() commentCounter = 0;
-  @Input() showAlways = false;
   @Input() isAddButtonDisabled = false;
-  @Input() currentFilter = CommentFilter.NONE;
+  @Input() currentFilter?: CommentFilter;
   @Input() currentSort = CommentSort.TIME;
   @Input() period = CommentPeriod.ALL;
   @Input() navBarExists = true;
+  @Input() showAddButton = false;
+  @Input() categories?: string[];
+  @Input() selectedCategory?: string;
+  @Input() searchInput = '';
 
   @Output() searchInputChanged = new EventEmitter<string>();
   @Output() createCommentClicked = new EventEmitter<void>();
   @Output() filterSelected = new EventEmitter<CommentFilter>();
   @Output() sortingSelected = new EventEmitter<CommentSort>();
   @Output() periodSelected = new EventEmitter<CommentPeriod>();
+  @Output() categorySelected = new EventEmitter<string>();
 
-  searchActive = false;
-  searchData = '';
   CommentFilter = CommentFilter;
+  CommentPeriod = CommentPeriod;
   periodsList = Object.values(CommentPeriod);
 
   sortItems: SortItem[] = [
@@ -63,18 +55,12 @@ export class CommentListBarComponent {
   ];
 
   search(): void {
-    this.searchInputChanged.emit(this.searchData);
-  }
-
-  activateSearch() {
-    this.searchActive = true;
-    this.searchInput.nativeElement.focus();
+    this.searchInputChanged.emit(this.searchInput);
   }
 
   resetSearch() {
-    this.searchData = '';
-    this.searchActive = false;
-    this.searchInputChanged.emit(this.searchData);
+    this.searchInput = '';
+    this.search();
   }
 
   create(): void {
@@ -82,7 +68,11 @@ export class CommentListBarComponent {
   }
 
   filter(type: CommentFilter): void {
-    this.filterSelected.emit(type);
+    if (type === this.currentFilter) {
+      this.filterSelected.emit(undefined);
+    } else {
+      this.filterSelected.emit(type);
+    }
   }
 
   sort(type: CommentSort): void {
@@ -91,5 +81,14 @@ export class CommentListBarComponent {
 
   setTimePeriod(period: CommentPeriod) {
     this.periodSelected.emit(period);
+  }
+
+  selectCategory(category?: string): void {
+    if (category && this.selectedCategory !== category) {
+      this.selectedCategory = category;
+    } else {
+      this.selectedCategory = undefined;
+    }
+    this.categorySelected.emit(this.selectedCategory);
   }
 }

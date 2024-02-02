@@ -4,6 +4,5 @@ export enum CommentFilter {
   WRONG = 'wrong',
   ACK = 'ack',
   TAG = 'tag',
-  ANSWER = 'answer',
-  NONE = '',
+  ANSWERED = 'answered',
 }

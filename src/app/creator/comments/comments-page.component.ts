@@ -14,16 +14,21 @@ import {
 } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
+import {
+  AbstractCommentsPageComponent,
+  BAR_PADDING,
+} from '@app/common/abstract/abstract-comments-page.component';
 import { TranslocoService } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
 import { Observable, takeUntil } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
+const TAB_GROUP_HEIGHT = 48;
+
 @Component({
   selector: 'app-comments-page',
   templateUrl: './comments-page.component.html',
-  styleUrls: ['./comments-page.component.scss'],
+  styleUrls: ['../../common/styles/comments-page.scss'],
 })
 export class CommentsPageComponent
   extends AbstractCommentsPageComponent
@@ -74,10 +79,7 @@ export class CommentsPageComponent
       ? this.moderationComments$
       : this.publicComments$;
     this.load();
-    if (innerWidth > 1000) {
-      this.scrollMax += innerWidth * 0.04 + 240;
-      this.scrollStart = this.scrollMax;
-    }
+    this.scrollStart += BAR_PADDING + TAB_GROUP_HEIGHT;
   }
 
   ngOnDestroy(): void {

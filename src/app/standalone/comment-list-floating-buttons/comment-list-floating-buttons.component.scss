@@ -1,6 +1,6 @@
 @import '../../../variables';
 
-@media (min-width: 1001px) {
+@media (min-width: 768px) {
   .add-button {
     visibility: hidden;
   }
@@ -53,7 +53,14 @@
   bottom: calc(4vw + 10px);
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 999px) {
+  // Padding (4vw) + nav bar height (56px)
+  .scroll-top {
+    bottom: calc(4vw + 56px);
+  }
+}
+
+@media (max-width: 767px) {
   .scroll-to-new-posts-visible.above-bar {
     bottom: calc($mobile-bar-height + 4vw + 10px);
   }
