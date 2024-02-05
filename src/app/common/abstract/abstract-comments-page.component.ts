@@ -151,7 +151,7 @@ export class AbstractCommentsPageComponent {
     }
     this.getComments();
     if (reload && this.searchInput) {
-      this.searchComments();
+      this.searchComments(this.searchInput);
     }
     if (!reload) {
       this.subscribeToStreams();
@@ -406,7 +406,7 @@ export class AbstractCommentsPageComponent {
   afterIncomingMessage() {
     this.setTimePeriod(this.period);
     if (this.hideCommentsList) {
-      this.searchComments();
+      this.searchComments(this.searchInput);
     }
   }
 
