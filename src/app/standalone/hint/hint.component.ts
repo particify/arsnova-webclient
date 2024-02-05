@@ -32,7 +32,7 @@ export const HINTS: Hint[] = [
   styleUrls: ['./hint.component.scss'],
 })
 export class HintComponent {
-  @Input({ required: true }) text!: string;
+  @Input() text?: string;
   @Input() type: HintType = HintType.WARNING;
 
   hint: Hint;
