@@ -61,3 +61,15 @@ $screen-md-min: 1000px;
     @content;
   }
 }
+
+// Viewport
+
+body {
+  --full-height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  body {
+    --full-height: 100dvh;
+  }
+}

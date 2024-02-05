@@ -11,12 +11,12 @@
 
 .mat-drawer-container {
   width: 100vw;
-  height: 100vh;
+  height: var(--full-height);
   background-color: unset;
 }
 
 .mat-drawer {
-  height: 100vh;
+  height: var(--full-height);
   width: $drawer-modal-width;
   background-color: var(--surface);
 }

@@ -1,6 +1,6 @@
 #comment {
   text-align: left;
-  max-height: calc(100vh - 4vw - 70px);
+  max-height: calc(var(--full-height) - 4vw - 70px);
   font-size: calc(18px + 1.5vw);
   margin: 5%;
   white-space: pre-line;
