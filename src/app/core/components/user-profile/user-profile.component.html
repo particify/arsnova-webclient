@@ -19,6 +19,9 @@
         <lib-extension-point
           extensionId="profile-subscription"
         ></lib-extension-point>
+        <lib-extension-point
+          extensionId="external-instance-hint"
+        ></lib-extension-point>
         <ng-container *ngIf="!isGuest; else guestHint">
           <p class="username">
             {{ ('user-profile.username' | transloco) + ': ' + auth.loginId }}

@@ -1,5 +1,10 @@
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
 
+<lib-extension-point
+  *ngIf="!isLoading"
+  extensionId="external-instance-hint"
+></lib-extension-point>
+
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
   <lib-extension-point
     extensionId="lms-course-room-list"
