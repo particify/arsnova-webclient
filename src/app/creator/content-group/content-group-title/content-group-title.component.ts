@@ -3,7 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnInit,
+  OnChanges,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -19,7 +19,7 @@ import { TranslocoService } from '@ngneat/transloco';
   templateUrl: './content-group-title.component.html',
   styleUrls: ['./content-group-title.component.scss'],
 })
-export class ContentGroupTitleComponent implements OnInit {
+export class ContentGroupTitleComponent implements OnChanges {
   @ViewChild('nameInput') nameInput!: ElementRef;
 
   @Output() seriesNameChanged = new EventEmitter<string>();
@@ -36,7 +36,7 @@ export class ContentGroupTitleComponent implements OnInit {
     private notificationService: NotificationService
   ) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.updatedName = this.seriesName;
   }
 
