@@ -496,9 +496,8 @@ export class StatisticNumericComponent
   }
 
   getCorrectPercentage(round: number): string {
-    return (
-      (this.roundStats[round]?.correctAnswerFraction * 100).toFixed(0) +
-      '\u202F%'
+    return this.getLabelWithPercentageSign(
+      (this.roundStats[round]?.correctAnswerFraction * 100).toFixed(0)
     );
   }
 }
