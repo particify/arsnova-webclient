@@ -222,7 +222,10 @@
               [attr.aria-label]="'creator.content.a11y-preview' | transloco"
               mat-stroked-button
             >
-              {{ 'creator.content.preview' | transloco }}
+              {{
+                (flipped ? 'creator.content.back' : 'creator.content.preview')
+                  | transloco
+              }}
             </button>
             <app-loading-button
               [name]="
