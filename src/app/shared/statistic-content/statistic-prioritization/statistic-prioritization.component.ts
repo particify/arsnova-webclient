@@ -278,8 +278,9 @@ export class StatisticPrioritizationComponent
   getDataLabel(value: number): string {
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
-      label =
-        (value / (this.answerCount - this.abstentionCount)).toFixed(0) + '%';
+      label = this.getLabelWithPercentageSign(
+        (value / (this.answerCount - this.abstentionCount)).toFixed(0)
+      );
     } else {
       label = value.toString();
     }

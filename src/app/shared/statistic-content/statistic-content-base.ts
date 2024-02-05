@@ -88,11 +88,17 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   getDataLabel(value: number, roundData: number[]): string {
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
-      label = ((value / this.getSum(roundData)) * 100).toFixed(0) + '%';
+      label = this.getLabelWithPercentageSign(
+        ((value / this.getSum(roundData)) * 100).toFixed(0)
+      );
     } else {
       label = value.toString();
     }
     return label;
+  }
+
+  protected getLabelWithPercentageSign(label: string) {
+    return label + '\u202F%';
   }
 
   protected getTooltipTitle(
