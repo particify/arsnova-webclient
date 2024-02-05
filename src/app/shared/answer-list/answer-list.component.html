@@ -22,7 +22,8 @@
           class="delete-button"
           (click)="addToModerationList(answer)"
           [matTooltip]="
-            'statistic.' + (banMode ? 'ban' : 'delete') + '-answer' | transloco
+            'creator.statistic.' + (banMode ? 'ban' : 'delete') + '-answer'
+              | transloco
           "
         >
           <mat-icon>close</mat-icon>
