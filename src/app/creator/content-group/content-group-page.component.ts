@@ -141,6 +141,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
               this.attributionsExist = attributions.length > 0;
             });
         } else {
+          this.contents = [];
           this.isLoading = false;
         }
       });
