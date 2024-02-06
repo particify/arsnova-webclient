@@ -218,7 +218,7 @@ export class AccessComponent
       'room-moderator',
       'creator.dialog.really-delete-user-rights',
       moderator.loginId,
-      'creator.dialog.remove',
+      'dialog.remove',
       () => this.moderatorService.delete(this.room.id, moderator.userId)
     );
     dialogRef.afterClosed().subscribe((result) => {
