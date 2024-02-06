@@ -51,7 +51,7 @@
       </cdk-step>
     </app-stepper>
     <app-series-overview
-      *ngIf="showOverview"
+      *ngIf="contents.length > 0 && showOverview"
       [group]="contentGroup"
       [contents]="contents"
       [finished]="isFinished"
