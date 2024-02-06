@@ -4,6 +4,7 @@ import { AbstractLiveFeedbackPage } from '@app/common/abstract/abstract-live-fee
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
@@ -30,6 +31,8 @@ export class LiveFeedbackPageComponent
   toggleKey = '1';
   changeKey = '2';
 
+  isModerator = false;
+
   HotkeyAction = HotkeyAction;
 
   constructor(
@@ -52,6 +55,7 @@ export class LiveFeedbackPageComponent
       globalStorageService,
       route
     );
+    this.isModerator = this.route.snapshot.data.userRole === UserRole.MODERATOR;
   }
 
   ngOnInit() {
