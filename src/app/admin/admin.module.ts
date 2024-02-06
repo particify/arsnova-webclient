@@ -24,6 +24,7 @@ import { TemplateLanguageSelectionComponent } from '@app/standalone/template-lan
 import { TemplateService } from '@app/admin/template-management/template.service';
 import { NavigationDrawerComponent } from '@app/standalone/navigation-drawer/navigation-drawer.component';
 import { ReportManagementComponent } from '@app/admin/report-management/report-management.component';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 @NgModule({
   imports: [
@@ -53,6 +54,11 @@ import { ReportManagementComponent } from '@app/admin/report-management/report-m
     TemplateManagementComponent,
     ReportManagementComponent,
   ],
-  providers: [provideTranslocoScope('admin'), AdminService, TemplateService],
+  providers: [
+    provideTranslocoScope('admin'),
+    AdminService,
+    TemplateService,
+    DialogService,
+  ],
 })
 export class AdminModule {}

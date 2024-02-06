@@ -21,6 +21,7 @@ import { ViolationReportService } from '@app/core/services/http/violation-report
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 describe('ContentGroupTemplatePreviewComponent', () => {
   let component: ContentGroupTemplatePreviewComponent;
@@ -78,6 +79,10 @@ describe('ContentGroupTemplatePreviewComponent', () => {
     )
   );
 
+  const mockDialogService = jasmine.createSpyObj(DialogService, [
+    'openRoomCreateDialog',
+  ]);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -119,6 +124,10 @@ describe('ContentGroupTemplatePreviewComponent', () => {
         {
           provide: AuthenticationService,
           useValue: mockAuthenticationService,
+        },
+        {
+          provide: DialogService,
+          useValue: mockDialogService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

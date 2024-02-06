@@ -1,10 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomService } from '@app/core/services/http/room.service';
-import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { RoomSummary } from '@app/core/models/room-summary';
 import { CoreModule } from '@app/core/core.module';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { Subject, takeUntil } from 'rxjs';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -24,8 +23,11 @@ export class RoomSelectionComponent implements OnInit, OnDestroy {
 
   constructor(
     private roomService: RoomService,
-    private membershipService: RoomMembershipService,
-    private dialogRef: MatDialogRef<ContentGroupTemplateSelectionComponent>
+    private dialogRef: MatDialogRef<ContentGroupTemplateSelectionComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    private data: {
+      memberships: Membership[];
+    }
   ) {}
 
   ngOnDestroy(): void {
@@ -34,22 +36,19 @@ export class RoomSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.membershipService
-      .getCurrentMemberships()
+    this.memberships = this.data.memberships.filter((m) =>
+      m.roles.includes(UserRole.OWNER)
+    );
+    this.memberships = this.memberships.sort(
+      (a, b) =>
+        new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime()
+    );
+    this.roomService
+      .getRoomSummaries(this.memberships.map((m) => m.roomId))
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((m) => {
-        this.memberships = m.filter((m) => m.roles.includes(UserRole.OWNER));
-        this.memberships = this.memberships.sort(
-          (a, b) =>
-            new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime()
-        );
-        this.roomService
-          .getRoomSummaries(this.memberships.map((m) => m.roomId))
-          .pipe(takeUntil(this.destroyed$))
-          .subscribe((rooms) => {
-            this.rooms = rooms;
-            this.isLoading = false;
-          });
+      .subscribe((rooms) => {
+        this.rooms = rooms;
+        this.isLoading = false;
       });
   }
 
