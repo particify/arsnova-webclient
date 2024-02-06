@@ -46,6 +46,7 @@ $content-padding: 2em;
 
   .mat-drawer-content:not(.no-navigation) {
     width: calc(100% - #{$drawer-width});
+    transition: none;
   }
 }
 
