@@ -1,23 +1,18 @@
-<div mat-dialog-content fxLayout="column" fxLayoutGap="16px">
-  <button mat-icon-button (click)="close()" aria-labelledby="exit">
-    <mat-icon class="exit-icon">arrow_back</mat-icon>
-  </button>
+<div mat-dialog-content fxLayout="column">
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{ 'creator.comment-page.a11y-message-answer' | a11yIntro | async }}
   </div>
-  <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <div fxLayout="column" fxLayoutGap="10px">
+    <mat-card appearance="outlined">
+      <app-date
+        class="date"
+        [responsive]="true"
+        [timestamp]="comment.timestamp"
+      ></app-date>
+      <p class="comment">{{ comment.body }}</p>
+    </mat-card>
     <div fxLayout="row" fxLayoutAlign="center">
-      <mat-card>
-        <app-date
-          class="date"
-          [responsive]="true"
-          [timestamp]="comment.timestamp"
-        ></app-date>
-        <p class="comment">{{ comment.body }}</p>
-      </mat-card>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="center">
-      <mat-card class="answer" *ngIf="isEditor || answer">
+      <mat-card appearance="outlined" class="answer" *ngIf="isEditor || answer">
         <div *ngIf="(!isEditor || !edit) && answer">
           <app-rendered-text
             [rawText]="answer"
@@ -30,7 +25,7 @@
           </app-rendered-text>
           <div fxLayout="row" fxLayoutAlign="end">
             <button
-              mat-raised-button
+              mat-flat-button
               *ngIf="isEditor && !edit"
               color="primary"
               (click)="editAnswer()"
@@ -144,3 +139,6 @@
     </div>
   </div>
 </div>
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>

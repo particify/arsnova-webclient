@@ -1,8 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="center">
   <div class="page-container">
-    <div fxLayout="row" class="header-container">
+    <div fxLayout="column" fxLayoutGap="1em">
       <mat-tab-group
-        class="tab-group"
         (selectedTabChange)="switchList($event.index)"
         [selectedIndex]="isModeration ? 1 : 0"
       >
@@ -18,23 +17,21 @@
         ></mat-tab>
       </mat-tab-group>
       <app-comment-list-bar
-        [scroll]="scroll"
-        [scrollActive]="scrollActive"
-        [isScrollStart]="isScrollStart"
-        [commentCounter]="
-          filteredComments && hideCommentsList
-            ? filteredComments.length
-            : commentsFilteredByTime.length + unreadCommentCount
-        "
+        [showFixedBar]="scroll && isScrollStart"
+        [commentCounter]="commentsFilteredByTime.length"
         [isAddButtonDisabled]="isModeration || readonly || disabled"
         [currentFilter]="currentFilter"
         [currentSort]="currentSort"
         [period]="period"
+        [categories]="this.room.extensions?.comments?.tags"
+        [selectedCategory]="currentTag"
+        [searchInput]="searchInput"
         (searchInputChanged)="searchComments($event)"
         (createCommentClicked)="openCreateDialog()"
         (filterSelected)="filterComments($event)"
         (sortingSelected)="sortCommentsManually($event)"
         (periodSelected)="setTimePeriod($event)"
+        (categorySelected)="selectTag($event)"
       >
         <app-comment-list-bar-extension
           [room]="room"
@@ -42,7 +39,7 @@
           [comments]="comments"
           [readonly]="readonly"
           [viewRole]="viewRole"
-          (switchListClicked)="switchList($event)"
+          (createCommentClicked)="openCreateDialog()"
           (toggleReadonlyClicked)="toggleReadonly()"
           (resetCommentsClicked)="resetComments()"
         ></app-comment-list-bar-extension>
@@ -80,24 +77,21 @@
         [isNew]="comment.id === newestComment.id"
         [fileUploadEnabled]="fileUploadEnabled"
         (activeComment)="updateCurrentComment($event)"
-        (clickedOnTag)="clickedOnTag($event)"
+        (clickedOnTag)="selectTag($event)"
       >
       </app-comment>
     </div>
     <app-comment-list-add-button
-      *ngIf="comments.length < 3 && !isLoading && !isModeration && !disabled"
+      *ngIf="comments.length < 3 && !isLoading && !disabled"
       [disabled]="readonly"
       (buttonClicked)="openCreateDialog()"
     ></app-comment-list-add-button>
     <app-comment-list-floating-buttons
-      [showAddButton]="!isModeration && !disabled"
-      [addButtonDisabled]="readonly"
       [showScrollButton]="scrollExtended && scrollActive"
       [showScrollToNewPostsButton]="scrollExtended && unreadCommentCount > 0"
       [navBarExists]="true"
       (scrollTopClicked)="scrollTop(true)"
       (loadAndScrollClicked)="loadAndScroll()"
-      (createClicked)="openCreateDialog()"
     ></app-comment-list-floating-buttons>
   </div>
 </div>

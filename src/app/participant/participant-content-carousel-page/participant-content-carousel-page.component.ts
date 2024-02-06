@@ -513,7 +513,9 @@ export class ParticipantContentCarouselPageComponent
     return this.translateService.translate(
       'participant.content.attribution-info',
       {
-        attribution: attribution.attribution,
+        attribution:
+          attribution.attribution ||
+          this.translateService.translate('templates.anonymous'),
         license: LICENSES.get(attribution.license)?.name,
       }
     );

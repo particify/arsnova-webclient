@@ -328,8 +328,11 @@ export class CommentService extends AbstractEntityService<Comment> {
         case CommentFilter.FAVORITE:
           return c.favorite;
         case CommentFilter.TAG:
-          return c.tag === tag;
-        case CommentFilter.ANSWER:
+          if (tag) {
+            return c.tag === tag;
+          }
+          return c;
+        case CommentFilter.ANSWERED:
           return c.answer;
       }
     });

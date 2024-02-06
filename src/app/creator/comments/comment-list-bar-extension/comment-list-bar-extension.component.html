@@ -1,48 +1,42 @@
-<div fxLayout="row" fxLayoutGap="14px">
+<div fxLayout="row" fxLayoutGap="8px">
   <button
     id="readonly-button"
-    mat-mini-fab
-    class="bar-icon"
+    mat-icon-button
     (click)="toggleReadonly()"
     matTooltip="{{
       'creator.comment-list.' +
         (readonly ? 'allow-creation' : 'dont-allow-creation') | transloco
     }}"
-    appHotkey="6"
+    appHotkey="5"
     appTrackInteraction="Comments readonly state toggled"
     appTrackName="{{ readonly ? 'off' : 'on' }}"
   >
-    <mat-icon>{{ readonly ? 'lock_open' : 'lock' }}</mat-icon>
+    <mat-icon class="bar-icon">{{ readonly ? 'lock_open' : 'lock' }}</mat-icon>
   </button>
 
   <button
     id="more-button"
-    mat-mini-fab
-    class="bar-icon"
+    mat-icon-button
     [matMenuTriggerFor]="moreMenu"
     matTooltip="{{ 'creator.comment-list.more-options' | transloco }}"
+    appHotkey="6"
   >
-    <mat-icon>construction</mat-icon>
+    <mat-icon class="bar-icon">more_vert</mat-icon>
   </button>
 </div>
 
 <mat-menu #moreMenu="matMenu">
-  <button mat-menu-item (click)="switchList(isModeration ? 0 : 1)">
-    <mat-icon color="primary">{{
-      isModeration ? 'question_answer' : 'gavel'
-    }}</mat-icon>
-    <span>{{
-      'creator.comment-list.' + (isModeration ? 'public-list' : 'moderation')
-        | transloco
-    }}</span>
+  <button mat-menu-item (click)="create()">
+    <mat-icon color="primary">add_box</mat-icon>
+    <span>{{ 'comment-list.add-comment' | transloco }}</span>
   </button>
+
+  <mat-divider></mat-divider>
 
   <button mat-menu-item (click)="navToSettings()" *ngIf="viewRole === 'OWNER'">
     <mat-icon class="settings-icon">settings</mat-icon>
     <span>{{ 'creator.comment-list.settings' | transloco }}</span>
   </button>
-
-  <mat-divider></mat-divider>
 
   <lib-extension-point
     extensionId="add-archive"

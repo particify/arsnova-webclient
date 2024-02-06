@@ -4,6 +4,7 @@ import { CommentListBarComponent } from './comment-list-bar.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockTrackingService {}
 
@@ -18,7 +19,11 @@ describe('CommentListBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommentListBarComponent, getTranslocoModule()],
+      imports: [
+        CommentListBarComponent,
+        getTranslocoModule(),
+        BrowserAnimationsModule,
+      ],
       providers: [
         {
           provide: TrackingService,

@@ -306,15 +306,12 @@
     "leave-room": "Raum verlassen"
   },
   "comment-list": {
-    "a11y-close-search": "Schließt den Suchvorgang von Beiträgen",
     "a11y-sort-time": "Sortiert Beiträge nach der Uhrzeit",
     "a11y-sort-voteasc": "Sortiert die Beiträge nach absteigenden Bewertungen",
     "a11y-sort-votedesc": "Sortiert die Beiträge nach aufsteigenden Bewertungen",
     "a11y-filter-correct": "Filtert alle bejahten Beiträge",
-    "a11y-filter-close": "Hebt alle Filter auf",
     "a11y-filter-favorite": "Filtert alle favorisierten Beiträge",
     "a11y-filter-wrong": "Filtert alle verneinten Beiträge",
-    "a11y-filter-more": "Zeigt weitere Filter",
     "a11y-filter-answer": "Filtert alle beantworteten Beiträge",
     "a11y-select-time-1h": "Zeige alle Beiträge der letzten Stunde an",
     "a11y-select-time-3h": "Zeige alle Beiträge der letzten 3 Stunden an",
@@ -326,30 +323,29 @@
     "creation-not-allowed": "Das Erstellen von Beiträgen ist jetzt nicht mehr möglich.",
     "creation-currently-not-allowed": "Das Erstellen neuer Beiträge ist zurzeit nicht erlaubt.",
     "comment-deleted": "Der Beitrag wurde gelöscht.",
-    "filter-comments": "Beiträge filtern und sortieren",
+    "filter-comments": "Beiträge filtern",
+    "sort-comments": "Beiträge sortieren",
     "filter-favorite": "Favorisiert",
     "filter-correct": "Bejaht",
     "filter-wrong": "Verneint",
     "filter-answered": "Beantwortet",
-    "filter-more": "Weitere Filter",
-    "filter-reset": "Zurücksetzen",
-    "filter-search": "Beiträge durchsuchen",
-    "search": "Beiträge durchsuchen",
-    "search-placeholder": "Suchen",
-    "select-time": "Wähle einen Zeitraum aus",
+    "filter-time": "Zeitraum",
+    "filter-categories": "Kategorien",
+    "search-comments": "Beiträge durchsuchen",
+    "search-comments-with-count": "{{count}} Beiträge durchsuchen",
+    "no-posts-to-search": "Keine Beiträge zu durchsuchen",
     "select-time-1h": "Letzte Stunde",
     "select-time-3h": "Letzte 3 Stunden",
     "select-time-1d": "Letzte 24 Stunden",
     "select-time-1w": "Letzte 7 Tage",
     "select-time-all": "Unbegrenzt",
-    "sort": "Sortieren",
-    "filter": "Filtern",
-    "sort-votedesc": "Positivste Bewertung",
-    "sort-voteasc": "Negativste Bewertung",
-    "sort-time": "Zuletzt erstellt",
+    "sort-votedesc": "Beste Bewertung",
+    "sort-voteasc": "Niedrige Bewertung",
+    "sort-time": "Neueste",
     "list": "Beitragsliste",
     "there-are-new-posts": "Es gibt neue Beiträge",
-    "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert."
+    "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert.",
+    "no-categories-in-this-room": "In diesem Raum gibt es keine Kategorien"
   },
   "comment-page": {
     "a11y-message": "Du befindest dich jetzt auf der Q&A-Seite.",
@@ -585,5 +581,8 @@
   "timer": {
     "finished": "Beendet",
     "time-is-up": "Die Zeit ist abgelaufen."
+  },
+  "general": {
+    "a11y-remove-filter": "Filter entfernen"
   }
 }

@@ -1,0 +1,9 @@
+<mat-chip [removable]="removable">
+  {{ name }}
+  <mat-icon
+    matChipRemove
+    (click)="remove()"
+    attr.aria-label="{{ 'general.a11y-remove-filter' | transloco }}"
+    >cancel</mat-icon
+  >
+</mat-chip>

@@ -21,7 +21,7 @@ import { takeUntil } from 'rxjs';
 @Component({
   selector: 'app-comments-page',
   templateUrl: './comments-page.component.html',
-  styleUrls: ['./comments-page.component.scss'],
+  styleUrls: ['../../common/styles/comments-page.scss'],
 })
 export class CommentsPageComponent
   extends AbstractCommentsPageComponent

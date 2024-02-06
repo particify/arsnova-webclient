@@ -25,7 +25,7 @@ export class CommentListBarExtensionComponent {
   @Input() readonly = false;
   @Input({ required: true }) viewRole!: UserRole;
 
-  @Output() switchListClicked = new EventEmitter<number>();
+  @Output() createCommentClicked = new EventEmitter<void>();
   @Output() toggleReadonlyClicked = new EventEmitter<void>();
   @Output() resetCommentsClicked = new EventEmitter<void>();
 
@@ -87,8 +87,8 @@ export class CommentListBarExtensionComponent {
     this.resetCommentsClicked.emit();
   }
 
-  switchList(index: number) {
-    this.switchListClicked.emit(index);
+  create() {
+    this.createCommentClicked.emit();
   }
 
   toggleReadonly() {
