@@ -53,16 +53,20 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     private globalStorageService: GlobalStorageService,
     private apiConfigService: ApiConfigService,
     @Inject(MAT_DIALOG_DATA)
-    private data: { duplicatedName?: string; roomId?: string },
+    private data: {
+      prefilledName?: string;
+      roomId?: string;
+      navigateAfterCreation: boolean;
+    },
     protected formService: FormService
   ) {
     super(formService);
   }
 
   ngOnInit() {
-    this.createDuplication = !!this.data?.duplicatedName;
-    if (this.createDuplication && this.data.duplicatedName) {
-      this.newRoom.name = this.data.duplicatedName;
+    this.createDuplication = !!this.data?.prefilledName;
+    if (this.createDuplication && this.data.prefilledName) {
+      this.newRoom.name = this.data.prefilledName;
     }
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
@@ -156,14 +160,16 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
         );
         const event = new RoomCreated(room.id, room.shortId);
         this.eventService.broadcast(event.type, event.payload);
-        this.router.navigate(['edit', room.shortId]);
-        this.closeDialog(true);
+        if (this.data.navigateAfterCreation) {
+          this.router.navigate(['edit', room.shortId]);
+        }
+        this.closeDialog(this.newRoom);
       },
       () => this.enableForm()
     );
   }
 
-  closeDialog(result?: boolean): void {
-    this.dialogRef.close(result);
+  closeDialog(room?: Room): void {
+    this.dialogRef.close(room);
   }
 }

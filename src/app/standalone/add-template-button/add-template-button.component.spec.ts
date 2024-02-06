@@ -8,6 +8,7 @@ import { BaseTemplateService } from '@app/core/services/http/base-template.servi
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { MockNotificationService } from '@testing/test-helpers';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 describe('AddTemplateButtonComponent', () => {
   let component: AddTemplateButtonComponent;
@@ -21,6 +22,10 @@ describe('AddTemplateButtonComponent', () => {
 
   const mockRoutingService = jasmine.createSpyObj(RoutingService, [
     'getRoleRoute',
+  ]);
+
+  const mockDialogService = jasmine.createSpyObj(DialogService, [
+    'openRoomCreateDialog',
   ]);
 
   beforeEach(() => {
@@ -46,6 +51,10 @@ describe('AddTemplateButtonComponent', () => {
         {
           provide: RoutingService,
           useValue: mockRoutingService,
+        },
+        {
+          provide: DialogService,
+          useValue: mockDialogService,
         },
       ],
     });

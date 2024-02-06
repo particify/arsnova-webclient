@@ -102,14 +102,16 @@ export class DialogService {
   // Shared dialogs
 
   openRoomCreateDialog(
-    duplicatedName?: string,
-    roomId?: string
+    prefilledName?: string,
+    roomId?: string,
+    navigateAfterCreation = true
   ): MatDialogRef<RoomCreateComponent> {
     return this.openDialog(RoomCreateComponent, {
       width: this.size.xsmall,
       data: {
-        duplicatedName: duplicatedName,
+        prefilledName: prefilledName,
         roomId: roomId,
+        navigateAfterCreation: navigateAfterCreation,
       },
     });
   }

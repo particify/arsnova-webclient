@@ -9,6 +9,7 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import { MockNotificationService } from '@testing/test-helpers';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 describe('ContentGroupTemplateComponent', () => {
   let component: ContentGroupTemplateComponent;
@@ -22,6 +23,10 @@ describe('ContentGroupTemplateComponent', () => {
 
   const mockRoutingService = jasmine.createSpyObj(RoutingService, [
     'getRoleRoute',
+  ]);
+
+  const mockDialogService = jasmine.createSpyObj(DialogService, [
+    'openRoomCreateDialog',
   ]);
 
   beforeEach(() => {
@@ -43,6 +48,10 @@ describe('ContentGroupTemplateComponent', () => {
         {
           provide: RoutingService,
           useValue: mockRoutingService,
+        },
+        {
+          provide: DialogService,
+          useValue: mockDialogService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
