@@ -39,6 +39,13 @@ export class AnswerListComponent implements OnInit {
   ngOnInit(): void {
     this.isModerator =
       this.route.snapshot.data.viewRole !== UserRole.PARTICIPANT;
+    this.answers = this.sortAnswers();
+  }
+
+  sortAnswers(): TextStatistic[] {
+    return this.answers
+      .sort((a, b) => (b.answer > a.answer ? -1 : 1))
+      .sort((a, b) => b.count - a.count);
   }
 
   addToModerationList(answer: TextStatistic) {
