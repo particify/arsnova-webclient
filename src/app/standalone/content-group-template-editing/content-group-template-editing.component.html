@@ -5,14 +5,14 @@
       id="nameInput"
       #nameInput
       matInput
-      maxlength="25"
+      maxlength="50"
       [(ngModel)]="name"
       autocomplete="off"
       formControlName="name"
     />
     <mat-hint align="end"
       ><span aria-hidden="true"
-        >{{ nameInput.value.length || 0 }} / 25</span
+        >{{ nameInput.value.length || 0 }} / 50</span
       ></mat-hint
     >
   </mat-form-field>
