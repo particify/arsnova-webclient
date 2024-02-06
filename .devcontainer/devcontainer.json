@@ -13,7 +13,7 @@
         "dbaeumer.vscode-eslint",
         "eamodio.gitlens",
         "editorconfig.editorconfig",
-        "esbenp.prettier-vscode",
+        "esbenp.prettier-vscode"
       ],
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -21,17 +21,17 @@
         "files.exclude": {
           ".angular": true,
           ".pnp.*": true,
-          ".yarn": true,
+          ".yarn": true
         },
         "search.exclude": {
           "**/node_modules": true,
-          "dist": true,
-        },
-      },
-    },
+          "dist": true
+        }
+      }
+    }
   },
   "postCreateCommand": "sudo chown -fR $USER:$USER $HOME/.yarn",
   "postStartCommand": "yarn",
   "shutdownAction": "none",
-  "remoteUser": "dev",
+  "remoteUser": "dev"
 }

@@ -3,9 +3,9 @@
   "compilerOptions": {
     "types": ["node"],
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "exclude": ["../src/test.ts", "../src/**/*.spec.ts", "../src/testing/*"],
   "include": ["../src/**/*", "./preview.ts"],
-  "files": ["./typings.d.ts"],
+  "files": ["./typings.d.ts"]
 }
