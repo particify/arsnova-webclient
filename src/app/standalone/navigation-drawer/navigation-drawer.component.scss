@@ -21,7 +21,7 @@ button {
 }
 
 .navigation-container {
-  height: calc(100vh - $bar-height);
+  height: calc(var(--full-height) - $bar-height);
   margin: -$app-padding;
   width: 100vw;
 }
@@ -32,7 +32,7 @@ button {
 
 @include xs {
   .navigation-container {
-    height: calc(100vh - $mobile-bar-height);
+    height: calc(var(--full-height) - $mobile-bar-height);
   }
 }
 

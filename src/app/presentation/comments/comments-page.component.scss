@@ -3,7 +3,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  height: calc(100vh - 2em - 72px);
+  height: calc(var(--full-height) - 2em - 72px);
   overflow: auto;
   width: calc(40vw - 4em);
   max-width: 800px;
@@ -16,5 +16,5 @@
   top: 4vw;
   left: 4vw;
   width: 52vw;
-  height: calc(100vh - 4vw - 72px);
+  height: calc(var(--full-height) - 4vw - 72px);
 }

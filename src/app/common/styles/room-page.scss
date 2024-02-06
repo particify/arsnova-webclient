@@ -12,7 +12,7 @@ $content-padding: 2em;
 .room-container {
   margin-top: -$app-padding;
   margin-bottom: -$app-padding;
-  height: calc(100vh - #{$bar-height});
+  height: calc(var(--full-height) - $bar-height);
   width: calc(100vw - #{$app-padding});
 }
 
@@ -29,13 +29,13 @@ $content-padding: 2em;
 
 @media (max-width: 599px) {
   .mat-drawer-container {
-    height: calc(100vh - $mobile-bar-height);
+    height: calc(var(--full-height) - $mobile-bar-height);
   }
 }
 
 @media (min-width: 600px) {
   .mat-drawer-container {
-    height: calc(100vh - $bar-height);
+    height: calc(var(--full-height) - $bar-height);
   }
 }
 
@@ -64,7 +64,7 @@ $content-padding: 2em;
 
   .mat-drawer-content {
     margin-left: 0 !important;
-    height: calc(100vh - $mobile-bar-height);
+    height: calc(var(--full-height) - $mobile-bar-height);
 
     &:not(.no-navigation) {
       margin-bottom: -$mobile-bar-height;

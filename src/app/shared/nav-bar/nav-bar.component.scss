@@ -84,7 +84,7 @@
 
   .list {
     padding: 0.5em 0 1em;
-    height: calc(100vh - $bar-height);
+    height: calc(var(--full-height) - $bar-height);
     top: 0;
     border-radius: 0;
     border-right: 1px solid var(--grey-light);
