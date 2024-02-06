@@ -32,7 +32,9 @@ export class TemplateLanguageSelectionComponent
 
   ngOnInit(): void {
     this.langService.getIsoLanguages().subscribe((langs) => {
-      this.langs = langs;
+      this.langs = langs.sort((a, b) =>
+        a.nativeName.localeCompare(b.nativeName)
+      );
       this.selectedLang = this.langs.find(
         (l) =>
           l.code === (this.defaultLang || this.translateService.getActiveLang())
