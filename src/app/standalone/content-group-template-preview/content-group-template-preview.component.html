@@ -20,7 +20,7 @@
             <mat-icon>link</mat-icon>
             <span>{{ 'templates.copy-template-link' | transloco }}</span>
           </button>
-          <button mat-menu-item (click)="reportTemplate()">
+          <button *ngIf="!isCreator" mat-menu-item (click)="reportTemplate()">
             <mat-icon>flag</mat-icon>
             <span>{{ 'templates.report-template' | transloco }}</span>
           </button>
