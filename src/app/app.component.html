@@ -1,7 +1,13 @@
 <div fxLayout="column" fxFill>
   <mat-drawer-container>
-    <mat-drawer #mainDrawer position="end" mode="over" [autoFocus]="false">
-      <div fxFill fxLayout="column" fxLayoutAlign="space-between">
+    <mat-drawer #mainDrawer position="end" mode="over" [autoFocus]="true">
+      <div
+        fxFill
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+        tabindex="0"
+        [attr.aria-label]="'header.a11y-sidenav-message' | transloco"
+      >
         <div>
           <div
             fxLayout="row"
@@ -36,6 +42,7 @@
                 mat-icon-button
                 (click)="navToProfile()"
                 [matTooltip]="'header.account-settings' | transloco"
+                [attr.aria-label]="'header.account-settings' | transloco"
               >
                 <mat-icon>settings</mat-icon>
               </button>
@@ -74,11 +81,18 @@
               class="button-width-additional-icon"
               (click)="toggleTheme()"
               appTrackInteraction="Theme switched"
+              [attr.aria-label]="
+                (currentTheme === 'dark'
+                  ? 'header.a11y-disable-dark-mode'
+                  : 'header.a11y-enable-dark-mode'
+                ) | transloco
+              "
               [appTrackName]="currentTheme"
             >
               <mat-icon>dark_mode</mat-icon>
               {{ 'header.dark-mode' | transloco }}
               <mat-slide-toggle
+                tabindex="-1"
                 hideIcon
                 [checked]="currentTheme === 'dark'"
               ></mat-slide-toggle>
