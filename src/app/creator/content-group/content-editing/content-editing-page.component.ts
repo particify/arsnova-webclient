@@ -107,12 +107,22 @@ export class ContentEditingPageComponent
             this.selectedFormat = format;
           }
           this.prepareAttachmentData();
-          this.contentService
-            .getAnswer(content.roomId, content.id)
-            .subscribe((answer) => {
-              this.isAnswered = answer.roundStatistics[0].answerCount > 0;
-              this.isLoading = false;
-            });
+          if (
+            [
+              ContentType.TEXT,
+              ContentType.FLASHCARD,
+              ContentType.SLIDE,
+            ].includes(this.selectedFormat.type)
+          ) {
+            this.isLoading = false;
+          } else {
+            this.contentService
+              .getAnswer(content.roomId, content.id)
+              .subscribe((answer) => {
+                this.isAnswered = answer.roundStatistics[0].answerCount > 0;
+                this.isLoading = false;
+              });
+          }
         });
     } else {
       this.prepareAttachmentData();
