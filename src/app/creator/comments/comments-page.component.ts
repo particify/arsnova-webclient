@@ -121,11 +121,16 @@ export class CommentsPageComponent
   parseIncomingModeratorMessage(message: Message) {
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
-    if (msg.type === 'CommentCreated') {
-      if (this.isModeration) {
-        this.addNewComment(payload);
-      }
-      this.moderationCounter++;
+    switch (msg.type) {
+      case 'CommentCreated':
+        if (this.isModeration) {
+          this.addNewComment(payload);
+        }
+        this.moderationCounter++;
+        break;
+      case 'CommentDeleted':
+        this.handleModeratorCommentDelete(payload.id);
+        break;
     }
     if (!this.freeze) {
       this.afterIncomingMessage();
@@ -150,15 +155,11 @@ export class CommentsPageComponent
     }
   }
 
-  handleCommentDelete(id: string) {
+  handleModeratorCommentDelete(id: string) {
     this.removeCommentFromList(id);
-    if (this.isModeration) {
-      this.moderationCounter--;
-    } else {
-      this.publicCounter--;
-      this.reduceCommentCounter();
-      this.checkIfActiveComment(id);
-    }
+    this.moderationCounter--;
+    this.reduceCommentCounter();
+    this.checkIfActiveComment(id);
   }
 
   toggleReadonly() {
