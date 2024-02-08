@@ -28,7 +28,8 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 export class FooterComponent implements OnDestroy, OnInit {
   destroyed$ = new Subject();
   uiConfig?: UiConfig;
-  referenceUrl = 'https://particify.de';
+  referenceUrl =
+    'https://particify.de/?mtm_campaign=powered-by&mtm_source=webclient';
   showFooterLinks = false;
 
   constructor(
