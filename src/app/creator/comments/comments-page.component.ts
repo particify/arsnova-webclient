@@ -118,13 +118,25 @@ export class CommentsPageComponent
       });
   }
 
+  override addNewComment(comment: Comment): void {
+    if (!this.isModeration) {
+      super.addNewComment(comment);
+    }
+  }
+
+  addNewModeratorComment(comment: Comment): void {
+    if (this.isModeration) {
+      super.addNewComment(comment);
+    }
+  }
+
   parseIncomingModeratorMessage(message: Message) {
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
     switch (msg.type) {
       case 'CommentCreated':
         if (this.isModeration) {
-          this.addNewComment(payload);
+          this.addNewModeratorComment(payload);
         }
         this.moderationCounter++;
         break;
