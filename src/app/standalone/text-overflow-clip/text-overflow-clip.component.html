@@ -1,8 +1,8 @@
 <div fxLayout="row" class="ellipsis">
   <span [attr.aria-label]="text" class="ellipsis">
-    {{ text.slice(0, -5) }}
+    {{ text.slice(0, -slicePosition) }}
   </span>
   <span aria-hidden="true">
-    {{ text.slice(-5) }}
+    {{ text.slice(-slicePosition) }}
   </span>
 </div>
