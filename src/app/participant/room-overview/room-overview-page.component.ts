@@ -72,7 +72,7 @@ export class RoomOverviewPageComponent
     this.eventService
       .on<DataChanged<RoomStats>>('PublicDataChanged')
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => this.initializeStats(true));
+      .subscribe(() => this.initializeStats(false));
     this.initializeStats(false);
     this.subscribeCommentStream();
     this.getFeedback();
