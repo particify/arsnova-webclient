@@ -287,10 +287,11 @@ textarea {
 
 .mat-mdc-dialog-actions {
   padding: 10px 24px 24px !important;
-}
+  gap: 8px;
 
-.mat-mdc-dialog-actions .mat-mdc-button-base {
-  margin-left: 10px !important;
+  .mat-mdc-button-base + .mat-mdc-button-base {
+    margin-left: 0 !important;
+  }
 }
 
 .screen-dialog {
