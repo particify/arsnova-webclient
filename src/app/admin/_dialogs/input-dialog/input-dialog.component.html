@@ -22,12 +22,7 @@
     </ng-template>
   </div>
   <div fxLayoutAlign="end">
-    <div
-      mat-dialog-actions
-      fxLayout="row-reverse"
-      fxLayoutAling="end"
-      fxLayoutGap="10px"
-    >
+    <div mat-dialog-actions fxLayout="row-reverse" fxLayoutAling="end">
       <app-loading-button
         [name]="'admin.admin-area.' + primaryAction"
         (clicked)="submit()"
