@@ -221,7 +221,9 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     ) {
       return;
     }
-    this.updateStateChange();
+    if (this.contentGroup.published) {
+      this.updateStateChange();
+    }
     this.canAnswerContent = ![
       ContentType.SLIDE,
       ContentType.FLASHCARD,
