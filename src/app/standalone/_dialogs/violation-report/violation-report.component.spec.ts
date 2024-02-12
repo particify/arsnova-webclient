@@ -7,7 +7,6 @@ import {
   MockMatDialogRef,
   MockNotificationService,
 } from '@testing/test-helpers';
-import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { ViolationReportService } from '@app/core/services/http/violation-report.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,7 +35,7 @@ describe('ViolationReportComponent', () => {
         {
           provide: MAT_DIALOG_DATA,
           useValue: {
-            targetType: ContentGroupTemplate.name,
+            targetType: 'ContentGroupTemplate',
             targetId: 'targetId',
           },
         },

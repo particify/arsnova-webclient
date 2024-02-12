@@ -13,7 +13,6 @@ import { ViolationReportComponent } from '@app/standalone/_dialogs/violation-rep
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { ViolationReportService } from '@app/core/services/http/violation-report.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { Room } from '@app/core/models/room';
 
 class MockMatDialogRef {}
@@ -27,7 +26,7 @@ class MockViolationReportService {
   getTargetTypeString(targetType: string): string {
     let type: string;
     switch (targetType) {
-      case ContentGroupTemplate.name:
+      case 'ContentGroupTemplate':
         type = 'template';
         break;
       case Room.name:

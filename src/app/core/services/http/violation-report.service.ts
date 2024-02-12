@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ContentGroupTemplate } from '@app/core/models/content-group-template';
-import { Room } from '@app/core/models/room';
 import { ViolationReport } from '@app/core/models/violation-report';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -56,10 +54,10 @@ export class ViolationReportService extends AbstractHttpService<void> {
   getTargetTypeString(targetType: string): string {
     let type: string;
     switch (targetType) {
-      case ContentGroupTemplate.name:
+      case 'ContentGroupTemplate':
         type = 'template';
         break;
-      case Room.name:
+      case 'Room':
         type = 'room';
         break;
       default:

@@ -143,7 +143,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
       width: '600px',
       data: {
         targetId: this.template.id,
-        targetType: ContentGroupTemplate.name,
+        targetType: 'ContentGroupTemplate',
       },
     });
   }
