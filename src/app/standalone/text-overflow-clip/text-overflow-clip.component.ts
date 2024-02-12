@@ -15,9 +15,22 @@ export class TextOverflowClipComponent implements OnChanges {
   slicePosition = INITIAL_SLICE_POSITION;
 
   ngOnChanges(): void {
-    this.slicePosition =
-      this.text.charAt(this.text.length - this.slicePosition) !== ' '
-        ? INITIAL_SLICE_POSITION
-        : INITIAL_SLICE_POSITION + 1;
+    this.slicePosition = this.getSlicePosition();
+  }
+
+  private getSlicePosition(): number {
+    const slicePositionIndex = this.text.length - INITIAL_SLICE_POSITION;
+    return (
+      INITIAL_SLICE_POSITION +
+      (this.isSpaceAtPosition(slicePositionIndex)
+        ? 1
+        : this.isSpaceAtPosition(slicePositionIndex - 1)
+          ? -1
+          : 0)
+    );
+  }
+
+  private isSpaceAtPosition(position: number): boolean {
+    return this.text.charAt(position) === ' ';
   }
 }
