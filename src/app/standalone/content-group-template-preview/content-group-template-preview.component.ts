@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
@@ -25,6 +25,7 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ViolationReportComponent } from '@app/standalone/_dialogs/violation-report/violation-report.component';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { EditContentGroupTemplateComponent } from '@app/standalone/_dialogs/edit-content-group-template/edit-content-group-template.component';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 @Component({
   standalone: true,
@@ -61,7 +62,9 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private routingService: RoutingService,
     private apiConfigService: ApiConfigService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private dialogService: DialogService,
+    private router: Router
   ) {
     this.template = history?.state?.data?.template;
     this.room = route.snapshot.data.room;
@@ -162,5 +165,27 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
           history.replaceState({ template: this.template }, '');
         }
       });
+  }
+
+  deleteTemplate(): void {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'content-group-template',
+      'dialog.really-delete-template',
+      undefined,
+      undefined,
+      () => this.templateService.deleteContentGroupTemplate(this.template.id)
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.router.navigate(['templates']);
+        const msg = this.translateService.translate(
+          'templates.template-deleted'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      }
+    });
   }
 }

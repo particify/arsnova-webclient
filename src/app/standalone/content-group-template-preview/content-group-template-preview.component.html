@@ -28,6 +28,10 @@
             <mat-icon>edit</mat-icon>
             <span>{{ 'templates.edit-template' | transloco }}</span>
           </button>
+          <button *ngIf="isCreator" mat-menu-item (click)="deleteTemplate()">
+            <mat-icon color="warn">delete</mat-icon>
+            <span>{{ 'templates.delete-template' | transloco }}</span>
+          </button>
         </mat-menu>
         <app-add-template-button
           [templateId]="template.id"
