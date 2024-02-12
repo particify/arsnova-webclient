@@ -95,6 +95,7 @@
     "description": "Descripción",
     "decision": "Decisión",
     "dismiss-report": "Desestimar el informe",
+    "dismiss": "Desestimar",
     "delete-template": "Eliminar plantilla",
     "confirm": "Confirme",
     "report-has-been-confirmed": "Se ha confirmado el informe."
