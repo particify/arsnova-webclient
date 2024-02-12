@@ -62,9 +62,8 @@
 .body {
   min-width: 200px;
   text-align: start;
-  overflow: auto;
   color: var(--on-surface);
-  white-space: pre-line;
+  word-break: break-word;
   hyphens: auto;
   min-height: 2em;
   line-height: 150%;
