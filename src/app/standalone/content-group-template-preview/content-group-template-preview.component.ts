@@ -26,6 +26,7 @@ import { ViolationReportComponent } from '@app/standalone/_dialogs/violation-rep
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { EditContentGroupTemplateComponent } from '@app/standalone/_dialogs/edit-content-group-template/edit-content-group-template.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { AuthProvider } from '@app/core/models/auth-provider';
 
 @Component({
   standalone: true,
@@ -52,6 +53,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   isLoadingContents = true;
   url!: string;
   isCreator = false;
+  isGuest = false;
 
   constructor(
     private templateService: BaseTemplateService,
@@ -105,7 +107,9 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
-        this.isCreator = auth.userId === this.template.creatorId;
+        this.isCreator = auth?.userId === this.template.creatorId;
+        this.isGuest =
+          !auth || auth.authProvider === AuthProvider.ARSNOVA_GUEST;
       });
   }
 

@@ -560,6 +560,7 @@
     "copy-template-link": "Copy link to template",
     "template-link-copied": "Link to template copied to clipboard.",
     "report-template": "Report template",
+    "login-to-report-template": "Log in to report this template.",
     "edit-template": "Edit",
     "save": "Save",
     "changes-saved": "Changes have been saved.",

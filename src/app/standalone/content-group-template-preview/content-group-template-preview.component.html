@@ -20,10 +20,20 @@
             <mat-icon>link</mat-icon>
             <span>{{ 'templates.copy-template-link' | transloco }}</span>
           </button>
-          <button *ngIf="!isCreator" mat-menu-item (click)="reportTemplate()">
-            <mat-icon>flag</mat-icon>
-            <span>{{ 'templates.report-template' | transloco }}</span>
-          </button>
+          <div
+            [matTooltip]="'templates.login-to-report-template' | transloco"
+            [matTooltipDisabled]="!isGuest"
+          >
+            <button
+              *ngIf="!isCreator"
+              [disabled]="isGuest"
+              mat-menu-item
+              (click)="reportTemplate()"
+            >
+              <mat-icon>flag</mat-icon>
+              <span>{{ 'templates.report-template' | transloco }}</span>
+            </button>
+          </div>
           <button *ngIf="isCreator" mat-menu-item (click)="editTemplate()">
             <mat-icon>edit</mat-icon>
             <span>{{ 'templates.edit-template' | transloco }}</span>
