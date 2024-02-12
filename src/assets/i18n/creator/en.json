@@ -197,7 +197,7 @@
     "format-text-description": "Participants can answer the question with a text entry.",
     "format-slide-description": "Slides are used to present information.",
     "format-sort-description": "Participants can answer the content by ordering the answers.",
-    "format-numeric-description": "Choose a number range in which the participants can answer. Optionally, a correct answer can be defined.",
+    "format-numeric-description": "A numerical range is defined in which the participants can answer.",
     "format-flashcard-description": "With flashcards participants can learn with front and back.",
     "format-wordcloud": "Word cloud",
     "format-wordcloud-description": "Participants can answer with keywords. The relative frequencies are visualized in the form of a word cloud.",
