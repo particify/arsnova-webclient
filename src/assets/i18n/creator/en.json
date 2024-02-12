@@ -190,7 +190,7 @@
     "format-slide": "Slide",
     "format-sort": "Sort",
     "format-flashcard": "Flashcard",
-    "format-numeric": "Find a number",
+    "format-numeric": "Find the number",
     "format-choice-description": "Participants can choose from several answer options. There can be one or more correct answers.",
     "format-scale-description": "One of the predefined answers can be selected.",
     "format-binary-description": "It can be answered with “Yes” or “No”. None of the options must be correct.",
