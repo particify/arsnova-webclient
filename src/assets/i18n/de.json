@@ -242,7 +242,8 @@
     "translation-server": "Zum Übersetzungsserver",
     "leave": "Verlassen",
     "really-leave-room": "Willst du den Raum wirklich verlassen?",
-    "select-room": "Raum auswählen"
+    "select-room": "Raum auswählen",
+    "really-delete-template": "Willst du die Vorlage wirklich löschen?"
   },
   "errors": {
     "not-authorized": "Du bist nicht autorisiert diese Seite zu sehen.",
@@ -559,9 +560,12 @@
     "copy-template-link": "Link zu Vorlage kopieren",
     "template-link-copied": "Link zu Vorlage in Zwischenablage kopiert.",
     "report-template": "Vorlage melden",
-    "edit-template": "Vorlage bearbeiten",
+    "login-to-report-template": "Melde dich an, um diese Vorlage zu melden.",
+    "edit-template": "Bearbeiten",
     "save": "Speichern",
-    "changes-saved": "Die Änderungen wurden gespeichert."
+    "changes-saved": "Die Änderungen wurden gespeichert.",
+    "delete-template": "Löschen",
+    "template-deleted": "Die Vorlage wurde gelöscht."
   },
   "violation-report": {
     "report-template": "Vorlage melden",

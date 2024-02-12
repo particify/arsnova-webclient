@@ -242,7 +242,8 @@
     "translation-server": "Ir al servidor de traducción",
     "leave": "Deja",
     "really-leave-room": "¿De verdad quieres salir de la sala?",
-    "select-room": "Seleccione sala"
+    "select-room": "Seleccione sala",
+    "really-delete-template": "¿Realmente quieres eliminar la plantilla?"
   },
   "errors": {
     "not-authorized": "No estás autorizado para ver esta página.",
@@ -548,7 +549,8 @@
     "copy-template-link": "Copiar enlace a plantilla",
     "template-link-copied": "Enlace a la plantilla copiada en el portapapeles.",
     "report-template": "Plantilla de informe",
-    "edit-template": "Editar plantilla",
+    "login-to-report-template": "Inicia sesión para informar de esta plantilla.",
+    "edit-template": "Editar",
     "language": "Idioma",
     "license": "Licencia",
     "please-fill-name": "Introduzca un nombre.",
@@ -565,7 +567,9 @@
     "preview": "Vista previa",
     "by": "de",
     "save": "Guardar",
-    "changes-saved": "Se han guardado los cambios."
+    "changes-saved": "Se han guardado los cambios.",
+    "delete-template": "Eliminar",
+    "template-deleted": "Se ha eliminado la plantilla."
   },
   "violation-report": {
     "reason-advertising": "Publicidad no solicitada",

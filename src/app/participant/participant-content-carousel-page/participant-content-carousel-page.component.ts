@@ -507,7 +507,7 @@ export class ParticipantContentCarouselPageComponent
     const attribution = this.attributions.find(
       (a) => a.contentId === this.contents[this.currentStep].id
     );
-    if (!attribution) {
+    if (!attribution || attribution.license === 'CC0-1.0') {
       return;
     }
     return this.translateService.translate(

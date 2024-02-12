@@ -242,7 +242,8 @@
     "translation-server": "Go to translation server",
     "leave": "Leave",
     "really-leave-room": "Do you really want to leave the room?",
-    "select-room": "Select room"
+    "select-room": "Select room",
+    "really-delete-template": "Do you really want to delete the template?"
   },
   "errors": {
     "not-authorized": "You're not authorized to view this page.",
@@ -559,9 +560,12 @@
     "copy-template-link": "Copy link to template",
     "template-link-copied": "Link to template copied to clipboard.",
     "report-template": "Report template",
-    "edit-template": "Edit template",
+    "login-to-report-template": "Log in to report this template.",
+    "edit-template": "Edit",
     "save": "Save",
-    "changes-saved": "Changes have been saved."
+    "changes-saved": "Changes have been saved.",
+    "delete-template": "Delete",
+    "template-deleted": "Template has been deleted."
   },
   "violation-report": {
     "report-template": "Report template",

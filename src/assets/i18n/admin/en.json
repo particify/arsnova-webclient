@@ -94,6 +94,7 @@
     "description": "Description",
     "decision": "Decision",
     "dismiss-report": "Dismiss report",
+    "dismiss": "Dismiss",
     "delete-template": "Delete template",
     "confirm": "Confirm",
     "report-has-been-dismissed": "Report has been dismissed.",

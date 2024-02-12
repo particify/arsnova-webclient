@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TemplateService } from '@app/admin/template-management/template.service';
-import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import {
   ViolationReport,
   ViolationReportDecision,
@@ -62,7 +61,7 @@ export class ReportManagementComponent implements OnInit {
 
   goToReportedContent(report: ViolationReport): void {
     let prefix = '';
-    if (report.targetType === ContentGroupTemplate.name) {
+    if (report.targetType === 'ContentGroupTemplate') {
       prefix = 'templates/';
     }
     if (prefix) {
@@ -94,7 +93,7 @@ export class ReportManagementComponent implements OnInit {
           msg,
           AdvancedSnackBarTypes.WARNING
         );
-        if (shouldRemove && report.targetType === ContentGroupTemplate.name) {
+        if (shouldRemove && report.targetType === 'ContentGroupTemplate') {
           this.templateService.deleteTemplate(report.targetId).subscribe();
         }
       }
