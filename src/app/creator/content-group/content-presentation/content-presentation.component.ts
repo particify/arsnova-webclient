@@ -107,7 +107,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
                 .getAttributions(this.room.id, group.id)
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe((attributions) => {
-                  if (attributions.length > 0) {
+                  if (attributions.some((a) => a.license !== 'CC0-1.0')) {
                     this.attributions = attributions;
                     this.stepCount++;
                   }

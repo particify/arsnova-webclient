@@ -138,7 +138,9 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
             .getAttributions(this.room.id, this.contentGroup.id)
             .pipe(takeUntil(this.destroyed$))
             .subscribe((attributions) => {
-              this.attributionsExist = attributions.length > 0;
+              this.attributionsExist = attributions.some(
+                (a) => a.license !== 'CC0-1.0'
+              );
             });
         } else {
           this.contents = [];
