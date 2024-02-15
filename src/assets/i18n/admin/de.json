@@ -70,6 +70,7 @@
     "SCALE": "Likert",
     "WORDCLOUD": "Wortwolke",
     "FLASHCARD": "Lernkarte",
+    "NUMERIC": "Finde die Zahl",
     "commentCount": "Beiträge",
     "voteCount": "Abstimmungen",
     "wsGatewayStats": "Websocket-Gateway-Service",

@@ -70,6 +70,7 @@
     "SCALE": "Escala de Likert",
     "WORDCLOUD": "Nube de palabras",
     "FLASHCARD": "Tarjeta flash",
+    "NUMERIC": "Encuentre el número",
     "commentCount": "Publicaciones",
     "voteCount": "Votos",
     "wsGatewayStats": "Servicio de puerta de enlace de Websocket",

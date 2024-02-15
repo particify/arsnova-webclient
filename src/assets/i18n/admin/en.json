@@ -70,6 +70,7 @@
     "SCALE": "Likert",
     "WORDCLOUD": "Wordcloud",
     "FLASHCARD": "Flashcard",
+    "NUMERIC": "Find the number",
     "commentCount": "Posts",
     "voteCount": "Votes",
     "wsGatewayStats": "Websocket gateway service",
