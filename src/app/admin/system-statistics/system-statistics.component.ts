@@ -8,6 +8,9 @@ export class AdminStats {
   contentGroup: object;
   content: object;
   answer: object;
+  contentGroupTemplate: object;
+  contentTemplate: object;
+  violationReport: object;
   announcement: object;
   comment: object;
   summary: object;
@@ -18,6 +21,9 @@ export class AdminStats {
     contentGroup: object,
     content: object,
     answer: object,
+    contentGroupTemplate: object,
+    contentTemplate: object,
+    violationReport: object,
     announcement: object,
     comment: object,
     summary: object
@@ -27,6 +33,9 @@ export class AdminStats {
     this.contentGroup = contentGroup;
     this.content = content;
     this.answer = answer;
+    this.contentGroupTemplate = contentGroupTemplate;
+    this.contentTemplate = contentTemplate;
+    this.violationReport = violationReport;
     this.announcement = announcement;
     this.comment = comment;
     this.summary = summary;
@@ -73,6 +82,9 @@ export class SystemStatisticsComponent implements OnInit {
         coreStats?.contentGroup,
         coreStats?.content,
         coreStats?.answer,
+        coreStats?.contentGroupTemplate,
+        coreStats?.contentTemplate,
+        coreStats?.violationReport,
         coreStats?.announcement,
         stats['commentServiceStats'],
         stats
