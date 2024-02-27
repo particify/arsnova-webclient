@@ -6386,7 +6386,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.58, @types/react@npm:>=16":
+"@types/react@npm:18.2.59":
+  version: 18.2.59
+  resolution: "@types/react@npm:18.2.59"
+  dependencies:
+    "@types/prop-types": "npm:*"
+    "@types/scheduler": "npm:*"
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/adbac5d78d755ce0f05fc91917b49344e127aaadf0515fa28dd19e3050514eeae6988ab04610fe403a6d7eb58b8dee7816c019d960373dfa22b008f842d7eaf8
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:>=16":
   version: 18.2.58
   resolution: "@types/react@npm:18.2.58"
   dependencies:
@@ -7495,7 +7506,7 @@ __metadata:
     "@types/jasmine": "npm:5.1.4"
     "@types/jasminewd2": "npm:2.0.13"
     "@types/node": "npm:20.11.20"
-    "@types/react": "npm:18.2.58"
+    "@types/react": "npm:18.2.59"
     "@types/wordcloud": "npm:1.2.2"
     "@typescript-eslint/eslint-plugin": "npm:6.21.0"
     "@typescript-eslint/parser": "npm:6.21.0"
