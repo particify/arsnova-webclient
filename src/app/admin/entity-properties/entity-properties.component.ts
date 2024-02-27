@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-entity-properties',
@@ -15,6 +16,8 @@ export class EntityPropertiesComponent implements OnChanges {
     (obj) => obj.value
   );
   dataSource = new MatTreeNestedDataSource<object>();
+
+  constructor(private translateService: TranslocoService) {}
 
   ngOnChanges() {
     this.dataSource.data = this.toNode(this.entity);
@@ -42,5 +45,14 @@ export class EntityPropertiesComponent implements OnChanges {
 
   isSimpleValue(value: any) {
     return typeof value !== 'object';
+  }
+
+  getItemText(key: string): string {
+    if (this.translateKeys) {
+      const translateKey = 'admin.admin-area.' + key;
+      const translatedKey = this.translateService.translate(translateKey);
+      return translatedKey !== translateKey ? translatedKey : key;
+    }
+    return key;
   }
 }
