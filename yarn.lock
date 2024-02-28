@@ -23,12 +23,12 @@ __metadata:
   linkType: hard
 
 "@angular-devkit/architect@npm:*":
-  version: 0.1702.1
-  resolution: "@angular-devkit/architect@npm:0.1702.1"
+  version: 0.1702.2
+  resolution: "@angular-devkit/architect@npm:0.1702.2"
   dependencies:
-    "@angular-devkit/core": "npm:17.2.1"
+    "@angular-devkit/core": "npm:17.2.2"
     rxjs: "npm:7.8.1"
-  checksum: 10c0/ff7f0849dad9e8ee5a92c8707dfacd9266ba65dfe083e5e9e11f1c50c658bc6771179edb412e2181d15d41747eb9c8bc42b2c41b5ed1e22f52d2b5771fc74b5d
+  checksum: 10c0/33f547114ac2059e3cc487b68f3ac330b3f1831e84dbde5770bf9d15998d23646e2da164856ba6213c93cebcfea826ee75493a95104233d5b41fb0eb97afae6b
   languageName: node
   linkType: hard
 
@@ -168,9 +168,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/core@npm:*, @angular-devkit/core@npm:17.2.1":
-  version: 17.2.1
-  resolution: "@angular-devkit/core@npm:17.2.1"
+"@angular-devkit/core@npm:*, @angular-devkit/core@npm:17.2.2":
+  version: 17.2.2
+  resolution: "@angular-devkit/core@npm:17.2.2"
   dependencies:
     ajv: "npm:8.12.0"
     ajv-formats: "npm:2.1.1"
@@ -183,7 +183,7 @@ __metadata:
   peerDependenciesMeta:
     chokidar:
       optional: true
-  checksum: 10c0/f458293f6627ff1ad47caed2677617179bb2ac2f38ea26cbe108a6fad83a3b9100a8657b2b8f41681ca63649b2fe031a525dbb8ed9b9c148acce0fc19098a435
+  checksum: 10c0/39ee1946a584a07fcc394006e8c482c946341b3ab3c8a5fb26ada29a2f12b30f34161230ba315c1add79b5602393a4a6f71860960d7d12548c74c2802972b0a7
   languageName: node
   linkType: hard
 
