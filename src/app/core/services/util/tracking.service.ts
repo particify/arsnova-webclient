@@ -155,9 +155,7 @@ export class TrackingService {
       this.setVisitDimension(VisitDimension.UI_LANGUAGE, lang)
     );
     this.themeService.getCurrentTheme$().subscribe((themeName) => {
-      if (themeName) {
-        this.setVisitDimension(VisitDimension.THEME, themeName);
-      }
+      this.setVisitDimension(VisitDimension.THEME, themeName);
     });
     this.appErrorHandler.uiErrorCount$.subscribe((count) =>
       this.setVisitDimension(VisitDimension.UI_ERROR_COUNT, count.toString())
