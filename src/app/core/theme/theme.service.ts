@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -24,7 +24,7 @@ export class Colors {
 @Injectable()
 export class ThemeService {
   private currentTheme: Theme;
-  private currentTheme$ = new Subject<Theme>();
+  private currentTheme$: BehaviorSubject<Theme>;
   private themes = [Theme.LIGHT, Theme.DARK];
   private barColors = [
     'blue',
@@ -60,6 +60,7 @@ export class ThemeService {
     if (!this.themes.includes(this.currentTheme)) {
       this.currentTheme = Theme.LIGHT;
     }
+    this.currentTheme$ = new BehaviorSubject(this.currentTheme);
     this.activate(this.currentTheme);
   }
 
