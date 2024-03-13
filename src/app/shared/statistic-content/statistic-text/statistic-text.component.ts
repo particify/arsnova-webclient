@@ -8,6 +8,11 @@ import { StatisticContentBaseComponent } from '@app/shared/statistic-content/sta
 import { Observable, takeUntil } from 'rxjs';
 import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 
 @Component({
   selector: 'app-statistic-text',
@@ -29,7 +34,9 @@ export class StatisticTextComponent
     protected contentService: ContentService,
     private contentAnswerService: ContentAnswerService,
     protected translateService: TranslocoService,
-    protected eventService: EventService
+    protected eventService: EventService,
+    private dialogService: DialogService,
+    private notificationService: NotificationService
   ) {
     super(contentService, eventService, translateService);
   }
@@ -115,7 +122,33 @@ export class StatisticTextComponent
     }
   }
 
-  filterAnswers(answerId: string) {
+  deleteAnswer(answer: TextStatistic): void {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'delete-answer',
+      'creator.dialog.really-delete-answer',
+      answer.answer,
+      'dialog.delete',
+      () =>
+        this.contentAnswerService.hideAnswerText(
+          this.content.roomId,
+          answer.id!
+        )
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const msg = this.translateService.translate(
+          'creator.statistic.answer-deleted'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+        this.filterAnswers(answer.id!);
+      }
+    });
+  }
+
+  private filterAnswers(answerId: string) {
     this.answerStats = this.answerStats.filter((a) => a.id !== answerId);
   }
 

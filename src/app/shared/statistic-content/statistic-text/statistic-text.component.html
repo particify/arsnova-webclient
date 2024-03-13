@@ -5,10 +5,9 @@
   <app-answer-list
     *ngIf="!isLoading && answersVisible"
     [answers]="answerStats"
-    [roomId]="content.roomId"
     [banMode]="false"
     [isPresentation]="isPresentation"
-    (answerDeleted)="filterAnswers($event)"
+    (deleteClicked)="deleteAnswer($event)"
   ></app-answer-list>
   <div fxLayoutAlign="center">
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
