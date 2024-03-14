@@ -20,7 +20,7 @@
           mat-icon-button
           color="warn"
           class="delete-button"
-          (click)="addToModerationList(answer)"
+          (click)="deleteAnswer(answer)"
           [matTooltip]="
             'creator.statistic.' + (banMode ? 'ban' : 'delete') + '-answer'
               | transloco

@@ -8,6 +8,11 @@ import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import { WordCloudItem } from '@app/shared/wordcloud/wordcloud.component';
 import { TranslocoService } from '@ngneat/transloco';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 
 @Component({
   selector: 'app-statistic-wordcloud',
@@ -27,7 +32,9 @@ export class StatisticWordcloudComponent
   constructor(
     protected contentService: ContentService,
     protected eventService: EventService,
-    protected translateService: TranslocoService
+    protected translateService: TranslocoService,
+    private dialogService: DialogService,
+    private notificationService: NotificationService
   ) {
     super(contentService, eventService, translateService);
   }
@@ -71,6 +78,33 @@ export class StatisticWordcloudComponent
         (w) => new TextStatistic(w.text, w.size)
       );
     }
+  }
+
+  banAnswer(answer: TextStatistic) {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'ban-answer',
+      'creator.dialog.really-ban-answer',
+      answer.answer,
+      'creator.dialog.ban',
+      () =>
+        this.contentService.banKeywordForContent(
+          this.content.roomId,
+          this.content.id,
+          answer.answer
+        )
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const msg = this.translateService.translate(
+          'creator.statistic.answer-banned'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+        this.filterAnswers(answer.answer);
+      }
+    });
   }
 
   filterAnswers(keyword: string) {

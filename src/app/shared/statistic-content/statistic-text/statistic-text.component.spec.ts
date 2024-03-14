@@ -3,7 +3,11 @@ import { StatisticTextComponent } from './statistic-text.component';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
-import { MockEventService, MockThemeService } from '@testing/test-helpers';
+import {
+  MockEventService,
+  MockNotificationService,
+  MockThemeService,
+} from '@testing/test-helpers';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { of } from 'rxjs';
@@ -12,6 +16,8 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Content } from '@app/core/models/content';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 describe('StatisticTextComponent', () => {
   let component: StatisticTextComponent;
@@ -38,8 +44,15 @@ describe('StatisticTextComponent', () => {
   mockContentService.getTextAnswerCreatedStream.and.returnValue(of(message));
   mockContentService.getAnswersDeleted.and.returnValue(of({}));
 
-  const mockContentAnswerService = jasmine.createSpyObj(['getAnswers']);
+  const mockContentAnswerService = jasmine.createSpyObj([
+    'getAnswers',
+    'hideAnswerText',
+  ]);
   mockContentAnswerService.getAnswers.and.returnValue(of([]));
+
+  const dialogService = jasmine.createSpyObj('DialogService', [
+    'openDeleteDialog',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -61,6 +74,14 @@ describe('StatisticTextComponent', () => {
         {
           provide: ContentAnswerService,
           useValue: mockContentAnswerService,
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService,
+        },
+        {
+          provide: DialogService,
+          useValue: dialogService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

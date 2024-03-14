@@ -15,9 +15,7 @@
     <app-answer-list
       *ngIf="showModeration"
       [answers]="answerList"
-      [roomId]="content.roomId"
-      [contentId]="content.id"
-      (answerBanned)="filterAnswers($event)"
+      (deleteClicked)="banAnswer($event)"
     ></app-answer-list>
   </div>
 </div>
