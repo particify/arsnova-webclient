@@ -8,19 +8,21 @@ import { SharedModule } from '@app/shared/shared.module';
 import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 import { QrCodeModule } from 'ng-qrcode';
 import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
-import { BarNotificationComponent } from './bars/bar-notification/bar-notification.component';
 import { QrCodeComponent } from './qr-code/qr-code.component';
 import { CoreModule } from '@app/core/core.module';
 import { CopyUrlComponent } from '@app/standalone/copy-url/copy-url.component';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { HotkeyActionButtonComponent } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
+import { PublishContentGroupDialogComponent } from '@app/presentation/_dialogs/publish-content-group-dialog/publish-content-group-dialog.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @NgModule({
   declarations: [
     ControlBarComponent,
     PresentationComponent,
     KeyButtonBarComponent,
-    BarNotificationComponent,
     QrCodeComponent,
+    PublishContentGroupDialogComponent,
   ],
   imports: [
     extensions,
@@ -31,6 +33,8 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
     TranslocoModule,
     QrCodeModule,
     CopyUrlComponent,
+    HotkeyActionButtonComponent,
+    LoadingButtonComponent,
   ],
   providers: [provideTranslocoScope('creator'), FocusModeService],
 })

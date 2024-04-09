@@ -247,24 +247,63 @@
         {{ 'creator.content.save' | transloco }}
       </button>
     </div>
-    <div
+    <mat-form-field
       *ngIf="!isInSortingMode"
-      fxLayoutAlign="center center"
-      fxLayoutGap="16px"
+      appearance="outline"
+      class="no-field-hint smaller-select-input"
     >
-      <mat-slide-toggle
-        id="lock-group-slide"
-        (change)="publishContents()"
-        [(ngModel)]="published"
-        labelPosition="before"
+      <mat-label>{{ 'creator.content.publishing-mode' | transloco }}</mat-label>
+      <mat-select
+        panelClass="mid-size-panel"
+        (selectionChange)="publishContents()"
+        [(value)]="selectedPublishingMode"
+        [hideSingleSelectionIndicator]="true"
         appHotkey="4"
-        [appHotkeyTitle]="'creator.content.unlock-collection' | transloco"
-        appTrackInteraction="Content group publish toggled"
-        [appTrackName]="published ? 'off' : 'on'"
+        [appHotkeyTitle]="'creator.content.edit-publishing' | transloco"
+        appTrackInteraction="Content group publishing mode changed"
+        [appTrackName]="contentGroup.publishingMode"
       >
-        {{ 'creator.content.unlock-collection' | transloco }}
-      </mat-slide-toggle>
-    </div>
+        <mat-select-trigger
+          style="margin-top: 2px"
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="10px"
+          class="primary"
+        >
+          <mat-icon>{{ selectedPublishingMode.icon }}</mat-icon>
+          <span class="trigger-text">{{
+            'creator.content.publishing-mode-' + selectedPublishingMode.name
+              | transloco
+          }}</span>
+        </mat-select-trigger>
+        <mat-option
+          *ngFor="let state of publishingModeItems"
+          [value]="state"
+          class="state-option"
+        >
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon>{{ state.icon }}</mat-icon>
+            <div fxLayout="column" fxLayoutAlign="center">
+              <span
+                [attr.aria-label]="
+                  'creator.content.a11y-publishing-mode-' + state.name
+                    | transloco
+                "
+                class="state-name"
+              >
+                {{
+                  'creator.content.publishing-mode-' + state.name | transloco
+                }}</span
+              >
+              <span class="state-description">{{
+                'creator.content.publishing-mode-description-' + state.name
+                  | transloco
+              }}</span>
+            </div>
+          </div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <app-content-list
     *ngIf="!isInSortingMode"
@@ -274,6 +313,7 @@
     [contentGroupStats]="contentGroupStats"
     [isModerator]="isModerator"
     [attributionsExist]="attributionsExist"
+    (contentGroupUpdated)="setContentGroupChanges($event)"
   ></app-content-list>
   <app-content-list-sort
     *ngIf="isInSortingMode"

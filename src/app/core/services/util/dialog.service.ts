@@ -18,6 +18,8 @@ import {
   ExportOptions,
 } from '@app/creator/content-group/_dialogs/export/export.component';
 import { EventCategory, TrackingService } from './tracking.service';
+import { ContentGroup } from '@app/core/models/content-group';
+import { PublishContentGroupDialogComponent } from '@app/presentation/_dialogs/publish-content-group-dialog/publish-content-group-dialog.component';
 
 @Injectable()
 export class DialogService {
@@ -146,20 +148,12 @@ export class DialogService {
   }
 
   openPublishGroupDialog(
-    groupName: string,
-    confirmAction: () => Observable<object>
-  ): MatDialogRef<BaseDialogComponent> {
-    return this.openDialog(BaseDialogComponent, {
+    contentGroup: ContentGroup
+  ): MatDialogRef<PublishContentGroupDialogComponent> {
+    return this.openDialog(PublishContentGroupDialogComponent, {
       width: this.size.small,
       data: {
-        dialogId: 'publish-content-group',
-        headerLabel: 'creator.dialog.publish-group',
-        body: 'creator.dialog.want-publish-group',
-        confirmLabel: 'creator.dialog.publish',
-        abortLabel: 'dialog.cancel',
-        type: 'button-primary',
-        bodyElement: groupName,
-        confirmAction: confirmAction,
+        contentGroup: contentGroup,
       },
     });
   }

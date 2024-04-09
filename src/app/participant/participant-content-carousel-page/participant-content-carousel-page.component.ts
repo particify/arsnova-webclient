@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
 import { TranslocoService } from '@ngneat/transloco';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -211,7 +211,10 @@ export class ParticipantContentCarouselPageComponent
     const publishedIds = this.contentPublishService.filterPublishedIds(
       this.contentGroup
     );
-    if (publishedIds.length > 0 && this.contentGroup.published) {
+    if (
+      publishedIds.length > 0 &&
+      this.contentGroup.publishingMode !== PublishingMode.NONE
+    ) {
       this.contentService
         .getContentsByIds(this.contentGroup.roomId, publishedIds)
         .subscribe((contents) => {
@@ -458,9 +461,8 @@ export class ParticipantContentCarouselPageComponent
         changes.changedProperties
       );
       if (
-        changedEvent.hasPropertyChanged('firstPublishedIndex') ||
-        changedEvent.hasPropertyChanged('lastPublishedIndex') ||
-        changedEvent.hasPropertyChanged('published')
+        changedEvent.hasPropertyChanged('publishingMode') ||
+        changedEvent.hasPropertyChanged('publishingIndex')
       ) {
         if (this.focusModeEnabled) {
           this.reloadContents();

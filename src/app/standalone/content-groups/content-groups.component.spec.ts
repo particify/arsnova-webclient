@@ -6,6 +6,8 @@ import { MockGlobalStorageService, MockRouter } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { ContentGroup } from '@app/core/models/content-group';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 describe('ContentGroupsComponent', () => {
   let component: ContentGroupsComponent;
@@ -19,6 +21,7 @@ describe('ContentGroupsComponent', () => {
     TestBed.configureTestingModule({
       imports: [ContentGroupsComponent, getTranslocoModule()],
       providers: [
+        ContentPublishService,
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
@@ -39,7 +42,7 @@ describe('ContentGroupsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentGroupsComponent);
     component = fixture.componentInstance;
-    component.contentGroupName = 'This is a content group name';
+    component.contentGroup = new ContentGroup();
     fixture.detectChanges();
   });
 

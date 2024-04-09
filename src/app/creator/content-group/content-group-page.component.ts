@@ -2,7 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
-import { ContentGroup } from '@app/core/models/content-group';
+import {
+  ContentGroup,
+  PUBLISHING_MODE_ITEMS,
+  PublishingMode,
+} from '@app/core/models/content-group';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -42,7 +46,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   contents: Content[] = [];
   contentGroupStats: ContentGroupStatistics[] = [];
   groupName = '';
-  published = false;
   statisticsPublished = true;
   correctOptionsPublished = true;
   isModerator = false;
@@ -54,6 +57,9 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   onInit = false;
 
   attributionsExist = false;
+
+  publishingModeItems = PUBLISHING_MODE_ITEMS;
+  selectedPublishingMode = this.publishingModeItems[0];
 
   constructor(
     private route: ActivatedRoute,
@@ -112,6 +118,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       .getByRoomIdAndName(this.room.id, this.groupName, true)
       .subscribe((group) => {
         this.contentGroup = group;
+        this.setSelectedPublishingMode();
         this.setSettings();
         this.getGroups();
         if (this.contentGroup.contentIds) {
@@ -150,7 +157,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   }
 
   setSettings() {
-    this.published = this.contentGroup.published;
     this.statisticsPublished = this.contentGroup.statisticsPublished;
     this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
   }
@@ -174,11 +180,22 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     ]);
   }
 
+  private setSelectedPublishingMode(): void {
+    this.selectedPublishingMode = this.publishingModeItems.find(
+      (s) => s.type === this.contentGroup.publishingMode
+    )!;
+  }
+
   updateContentGroup(changes: object): Observable<ContentGroup> {
     return this.contentGroupService.patchContentGroup(
       this.contentGroup,
       changes
     );
+  }
+
+  setContentGroupChanges(contentGroup: ContentGroup): void {
+    this.contentGroup = contentGroup;
+    this.setSelectedPublishingMode();
   }
 
   updateName(name: string) {
@@ -211,12 +228,10 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     if (this.contentGroup.contentIds !== newContentIdOrder) {
       const changes: {
         contentIds: string[];
-        firstPublishedIndex: number;
-        lastPublishedIndex: number;
+        publishingIndex: number;
       } = {
         contentIds: newContentIdOrder,
-        firstPublishedIndex: this.contentGroup.firstPublishedIndex,
-        lastPublishedIndex: this.contentGroup.lastPublishedIndex,
+        publishingIndex: this.contentGroup.publishingIndex,
       };
       this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
         this.contentGroup = updatedContentGroup;
@@ -349,12 +364,11 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   }
 
   publishContents() {
-    const changes: { published: boolean } = {
-      published: !this.contentGroup.published,
+    const changes: { publishingMode: PublishingMode } = {
+      publishingMode: this.selectedPublishingMode.type,
     };
     this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
-      this.published = this.contentGroup.published;
     });
   }
 

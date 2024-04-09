@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -15,8 +17,7 @@ import {
 import { TranslocoService } from '@ngneat/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup } from '@app/core/models/content-group';
-import { AnnounceService } from '@app/core/services/util/announce.service';
+import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
 import { take } from 'rxjs/operators';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
@@ -24,6 +25,7 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { Room } from '@app/core/models/room';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
+import { Observable } from 'rxjs';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 @Component({
@@ -40,12 +42,11 @@ export class ContentListComponent implements OnInit, OnDestroy {
   @Input({ required: true }) contentGroupStats!: ContentGroupStatistics[];
   @Input() isModerator = false;
   @Input() attributionsExist = false;
+  @Output() contentGroupUpdated = new EventEmitter<ContentGroup>();
 
   currentGroupIndex?: number;
   contentTypes: string[] = Object.values(ContentType);
 
-  firstPublishedIndex = 0;
-  lastPublishedIndex = -1;
   activeMenuIndex?: number;
   activeContentId?: string;
   contentHotkeysRegistered = false;
@@ -63,15 +64,13 @@ export class ContentListComponent implements OnInit, OnDestroy {
     private translateService: TranslocoService,
     private dialogService: DialogService,
     private contentGroupService: ContentGroupService,
-    private announceService: AnnounceService,
-    private hotkeyService: HotkeyService,
-    private contentPublishService: ContentPublishService
+    private contentPublishService: ContentPublishService,
+    private hotkeyService: HotkeyService
   ) {
     this.iconList = this.contentService.getTypeIcons();
   }
 
   ngOnInit() {
-    this.setRange();
     this.getCurrentGroupIndex();
     this.contentService.getAnswersDeleted().subscribe((contentId) => {
       if (contentId) {
@@ -207,66 +206,6 @@ export class ContentListComponent implements OnInit, OnDestroy {
     });
   }
 
-  publishContent(index: number, publish: boolean) {
-    if (publish) {
-      this.updatePublishedIndexes(index, index);
-    } else {
-      if (this.lastPublishedIndex === this.firstPublishedIndex) {
-        this.resetPublishing();
-      } else {
-        if (index === this.firstPublishedIndex) {
-          this.updatePublishedIndexes(index + 1, this.lastPublishedIndex);
-        } else if (this.isEnd(index)) {
-          this.updatePublishedIndexes(this.firstPublishedIndex, index - 1);
-        }
-      }
-    }
-  }
-
-  publishContentFrom(index: number, publish: boolean) {
-    if (publish) {
-      const last =
-        this.lastPublishedIndex === -1 || this.lastPublishedIndex < index
-          ? this.contents.length - 1
-          : this.lastPublishedIndex;
-      this.updatePublishedIndexes(index, last);
-    } else {
-      if (index === this.firstPublishedIndex) {
-        this.resetPublishing();
-      } else {
-        const first =
-          this.firstPublishedIndex === -1 || this.firstPublishedIndex > index
-            ? 0
-            : this.firstPublishedIndex;
-        this.updatePublishedIndexes(first, index - 1);
-      }
-    }
-  }
-
-  publishContentUpTo(index: number, publish: boolean) {
-    if (publish) {
-      const first =
-        this.firstPublishedIndex === -1 || this.firstPublishedIndex > index
-          ? 0
-          : this.firstPublishedIndex;
-      this.updatePublishedIndexes(first, index);
-    } else {
-      if (index === this.lastPublishedIndex) {
-        this.resetPublishing();
-      } else {
-        const last =
-          this.lastPublishedIndex === -1 || this.lastPublishedIndex < index
-            ? this.contents.length - 1
-            : this.lastPublishedIndex;
-        this.updatePublishedIndexes(index + 1, last);
-      }
-    }
-  }
-
-  resetPublishing() {
-    this.updatePublishedIndexes(-1, -1);
-  }
-
   deleteAnswers(content: Content) {
     const multipleRoundsHint =
       content.state.round > 1
@@ -294,44 +233,31 @@ export class ContentListComponent implements OnInit, OnDestroy {
       .subscribe((updatedContent) => (content = updatedContent));
   }
 
-  updatePublishedIndexes(first: number, last: number) {
-    const changes: { firstPublishedIndex: number; lastPublishedIndex: number } =
-      { firstPublishedIndex: first, lastPublishedIndex: last };
+  updatePublishingIndex(index: number) {
+    const changes: { publishingIndex: number } = { publishingIndex: index };
     this.contentGroupService
       .patchContentGroup(this.contentGroup, changes)
       .subscribe((updatedContentGroup) => {
         this.contentGroup = updatedContentGroup;
-        this.setRange();
       });
   }
 
-  setRange() {
-    this.firstPublishedIndex = this.contentGroup.firstPublishedIndex;
-    this.lastPublishedIndex = this.contentGroup.lastPublishedIndex;
-    const key =
-      this.firstPublishedIndex === -1
-        ? 'no'
-        : this.lastPublishedIndex === -1
-          ? 'all'
-          : this.firstPublishedIndex === this.lastPublishedIndex
-            ? 'single'
-            : 'range';
-    const msg = this.translateService.translate(
-      'creator.content.a11y-' + key + '-published',
-      { first: this.firstPublishedIndex + 1, last: this.lastPublishedIndex + 1 }
+  lockContentGroup(): Observable<ContentGroup> {
+    const changes: { publishingMode: PublishingMode } = {
+      publishingMode: PublishingMode.NONE,
+    };
+    return this.contentGroupService.patchContentGroup(
+      this.contentGroup,
+      changes
     );
-    this.announceService.announce(msg);
   }
 
-  isStart(index: number): boolean {
-    return index === this.firstPublishedIndex;
+  hasSpecificPublishing(): boolean {
+    return this.contentPublishService.hasSpecificPublishing(this.contentGroup);
   }
 
-  isEnd(index: number): boolean {
-    return (
-      index === this.lastPublishedIndex ||
-      (this.lastPublishedIndex === -1 && index === this.contents.length - 1)
-    );
+  isSinglePublished(): boolean {
+    return this.contentPublishService.isSinglePublished(this.contentGroup);
   }
 
   isPublished(index: number): boolean {

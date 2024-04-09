@@ -41,6 +41,7 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Injectable()
 class MockContentService {
@@ -146,7 +147,7 @@ describe('ContentGroupPageComponent', () => {
         A11yIntroPipe,
         A11yRenderedBodyPipe,
       ],
-      imports: [CoreModule, getTranslocoModule()],
+      imports: [CoreModule, getTranslocoModule(), BrowserAnimationsModule],
       providers: [
         {
           provide: ContentService,

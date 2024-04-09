@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService } from '@ngneat/transloco';
 import { Content } from '@app/core/models/content';
 import {
   GlobalStorageService,
@@ -16,21 +15,17 @@ import {
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { Location } from '@angular/common';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup } from '@app/core/models/content-group';
-import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { UserSettings } from '@app/core/models/user-settings';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
-import { ContentPublishActionType } from '@app/core/models/content-publish-action.enum';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
-import { PublishContentComponent } from '@app/presentation/contents/_dialogs/publish-content/publish-content.component';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 @Component({
   selector: 'app-contents-page',
@@ -59,22 +54,17 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   attributions: ContentLicenseAttribution[] = [];
   stepCount = 0;
 
-  private hotkeyRefs: symbol[] = [];
-
   constructor(
     private route: ActivatedRoute,
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
-    private translateService: TranslocoService,
     private globalStorageService: GlobalStorageService,
     private location: Location,
     private router: Router,
-    private dialogService: DialogService,
-    private hotkeyService: HotkeyService,
     private presentationService: PresentationService,
     private userService: UserService,
-    private contentPublishService: ContentPublishService,
-    private focusModeService: FocusModeService
+    private focusModeService: FocusModeService,
+    private contentPublishService: ContentPublishService
   ) {
     const routeSeriesName = this.route.snapshot.params['seriesName'];
     // Use index from route if available. Otherwise use the stored index or 0 as fallback.
@@ -107,7 +97,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
     this.destroyed$.next();
     this.destroyed$.complete();
   }
@@ -180,19 +169,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
           this.contentGroupName = group;
           this.initGroup();
         });
-      this.translateService
-        .selectTranslate('creator.control-bar.publish-or-lock-content')
-        .pipe(take(1))
-        .subscribe((t) =>
-          this.hotkeyService.registerHotkey(
-            {
-              key: 'l',
-              action: () => this.updatePublishedState(),
-              actionTitle: t,
-            },
-            this.hotkeyRefs
-          )
-        );
     }
   }
 
@@ -221,7 +197,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     ) {
       return;
     }
-    if (this.contentGroup.published) {
+    if (this.contentGroup.publishingMode !== PublishingMode.NONE) {
       this.updateStateChange();
     }
     this.canAnswerContent = ![
@@ -270,133 +246,10 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  lockContent() {
-    // Check if current content is the only one which is published
-    if (
-      this.contentPublishService.isSingleContentPublished(this.contentGroup)
-    ) {
-      // Lock all contents
-      this.updateContentGroup(-1, -1);
-      return;
-    }
-    let firstIndex = this.contentGroup.firstPublishedIndex;
-    let lastIndex = this.contentGroup.lastPublishedIndex;
-    // Check if current content is first one of range
-    if (
-      this.contentPublishService.isFirstPublished(
-        this.contentGroup,
-        this.currentStep
-      )
-    ) {
-      // Reduce the range to the next content
-      firstIndex = this.currentStep + 1;
-      this.updateContentGroup(firstIndex, lastIndex);
-      return;
-    }
-    // Check if current content is last one of range
-    if (
-      this.contentPublishService.isLastPublished(
-        this.contentGroup,
-        this.currentStep
-      )
-    ) {
-      // Reduce the range to the previous content
-      lastIndex = this.currentStep - 1;
-      this.updateContentGroup(firstIndex, lastIndex);
-      return;
-    }
-    // If current content is in the middle of the range, open dialog to choose new range
-    const dialogRef = this.dialogService.openDialog(PublishContentComponent, {
-      data: 'lock',
-    });
-    dialogRef.afterClosed().subscribe((action) => {
-      if (action === ContentPublishActionType.UP_TO_HERE) {
-        firstIndex = this.currentStep + 1;
-        if (lastIndex === -1 && this.contentGroup.contentIds) {
-          lastIndex = this.contentGroup.contentIds.length - 1;
-        }
-      } else if (action === ContentPublishActionType.FROM_HERE) {
-        lastIndex = this.currentStep - 1;
-      }
-      this.updateContentGroup(firstIndex, lastIndex);
-    });
-  }
-
-  publishContent() {
-    let firstIndex = this.contentGroup.firstPublishedIndex;
-    let lastIndex = this.contentGroup.lastPublishedIndex;
-    // Check if current content is not before range
-    if (
-      !this.contentPublishService.isBeforeRange(
-        this.contentGroup,
-        this.currentStep
-      ) &&
-      !this.contentPublishService.isDirectlyAfterRange(
-        this.contentGroup,
-        this.currentStep
-      )
-    ) {
-      // Open dialog to choose new range
-      const dialogRef = this.dialogService.openDialog(PublishContentComponent, {
-        data: 'publish',
-      });
-      dialogRef.afterClosed().subscribe((action) => {
-        if (action === ContentPublishActionType.SINGLE) {
-          this.updateContentGroup(this.currentStep, this.currentStep);
-        } else if (action === ContentPublishActionType.UP_TO_HERE) {
-          this.updateContentGroup(firstIndex, this.currentStep);
-        }
-      });
-      return;
-    }
-    // Check if current content is directly after range
-    if (
-      this.contentPublishService.isDirectlyAfterRange(
-        this.contentGroup,
-        this.currentStep
-      )
-    ) {
-      // Increase range upwards to current content
-      lastIndex = this.currentStep;
-    }
-    // Check if current content is before range no matter if directly next to range
-    if (
-      this.contentPublishService.isBeforeRange(
-        this.contentGroup,
-        this.currentStep
-      )
-    ) {
-      // Increase range downwards to current content
-      firstIndex = this.currentStep;
-    }
-    this.updateContentGroup(firstIndex, lastIndex);
-  }
-
-  updatePublishedState() {
-    if (!this.contentPublishService.areContentsPublished(this.contentGroup)) {
-      this.updateContentGroup(this.currentStep, this.currentStep);
-      return;
-    }
-    if (
-      this.contentPublishService.isIndexPublished(
-        this.contentGroup,
-        this.currentStep
-      )
-    ) {
-      this.lockContent();
-    } else {
-      this.publishContent();
-    }
-  }
-
-  updateContentGroup(firstIndex: number, lastIndex: number) {
-    const changes: { firstPublishedIndex: number; lastPublishedIndex: number } =
-      { firstPublishedIndex: firstIndex, lastPublishedIndex: lastIndex };
-    this.contentGroupService
-      .patchContentGroup(this.contentGroup, changes)
-      .subscribe((updatedContentGroup) => {
-        this.contentGroup = updatedContentGroup;
-        this.presentationService.updateContentGroup(this.contentGroup);
-      });
+  isLocked(index: number): boolean {
+    return this.contentPublishService.isIndexPublished(
+      this.contentGroup,
+      index
+    );
   }
 }

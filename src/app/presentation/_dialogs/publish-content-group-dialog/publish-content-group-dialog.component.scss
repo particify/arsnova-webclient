@@ -1,0 +1,26 @@
+@import '../../../../variables';
+
+.mode-item {
+  user-select: none;
+  padding: 0.5em;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+
+  &:not(.primary-border-color) {
+    border-color: var(--grey-light);
+  }
+
+  &:not(:first-of-type) {
+    margin-top: 0.75em;
+  }
+}
+
+.mode-name {
+  font-weight: $font-weight-bold;
+  font-size: $m-font-size;
+}
+
+.mode-description {
+  font-size: $xs-font-size;
+}

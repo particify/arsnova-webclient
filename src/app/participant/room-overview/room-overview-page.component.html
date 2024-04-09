@@ -73,8 +73,7 @@
     <div *ngIf="room && contentGroups && !focusModeEnabled">
       <app-content-groups
         *ngFor="let contentGroup of contentGroups"
-        [contentGroupName]="contentGroup.name"
-        [length]="calcContentsInGroup(contentGroup)"
+        [contentGroup]="contentGroup"
         [role]="role"
         [shortId]="room.shortId"
       ></app-content-groups>

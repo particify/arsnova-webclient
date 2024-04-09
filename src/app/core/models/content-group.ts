@@ -5,29 +5,46 @@ export class ContentGroup {
   roomId: string;
   name: string;
   contentIds: string[];
-  published: boolean;
-  firstPublishedIndex: number;
-  lastPublishedIndex: number;
   statisticsPublished: boolean;
   correctOptionsPublished: boolean;
+  publishingMode: PublishingMode;
+  publishingIndex: number;
 
   constructor(
     roomId = '',
     name = '',
     contentIds: string[] = [],
-    published = false,
-    firstPublishedIndex = 0,
-    lastPublishedIndex = -1,
     statisticsPublished = true,
-    correctOptionsPublished = true
+    correctOptionsPublished = true,
+    publishingMode = PublishingMode.NONE,
+    publishingIndex = 0
   ) {
     this.roomId = roomId;
     this.name = name;
     this.contentIds = contentIds;
-    this.published = published;
-    this.firstPublishedIndex = firstPublishedIndex;
-    this.lastPublishedIndex = lastPublishedIndex;
     this.statisticsPublished = statisticsPublished;
     this.correctOptionsPublished = correctOptionsPublished;
+    this.publishingMode = publishingMode;
+    this.publishingIndex = publishingIndex;
   }
 }
+
+export enum PublishingMode {
+  NONE = 'NONE',
+  ALL = 'ALL',
+  UP_TO = 'UP_TO',
+  SINGLE = 'SINGLE',
+}
+
+export interface PublishingModeItem {
+  type: PublishingMode;
+  name: string;
+  icon: string;
+}
+
+export const PUBLISHING_MODE_ITEMS: PublishingModeItem[] = [
+  { type: PublishingMode.NONE, name: 'none', icon: 'lock' },
+  { type: PublishingMode.ALL, name: 'all', icon: 'lock_open' },
+  { type: PublishingMode.UP_TO, name: 'up-to', icon: 'expand_all' },
+  { type: PublishingMode.SINGLE, name: 'single', icon: 'play_circle' },
+];
