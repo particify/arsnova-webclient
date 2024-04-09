@@ -1,0 +1,51 @@
+@import '../../../variables';
+
+$bottom-space: 20px;
+
+.button-container {
+  background-color: transparent;
+  z-index: 3;
+  position: fixed;
+  left: 50vw;
+  transform: translateX(-50%);
+  transition: bottom 300ms;
+  bottom: $bottom-space;
+
+  &.nav-bar-below {
+    bottom: calc($bottom-space + $navigation-rail-width);
+  }
+}
+
+.info-container {
+  opacity: 0.7;
+}
+
+.info-label {
+  font-size: $s-font-size;
+}
+
+.info-icon {
+  font-size: $m-font-size;
+  height: $m-font-size;
+  width: $m-font-size;
+}
+
+.hotkey-button {
+  padding: 0.75em 1em;
+  background-color: var(--grey-light);
+  border-radius: 8px;
+  opacity: 0.8;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+}
+
+.hotkey-symbol {
+  text-transform: uppercase;
+  background-color: var(--on-surface);
+  color: var(--surface);
+  border-radius: 4px;
+  padding: 4px;
+}

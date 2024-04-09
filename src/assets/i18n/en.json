@@ -286,7 +286,9 @@
     "display-overview": "Display keyboard shortcuts",
     "action": "Action",
     "keys": "Keyboard shortcut",
-    "input-field": "input field"
+    "input-field": "input field",
+    "press": "Press",
+    "to-do-action": "to {{ action }}"
   },
   "keys": {
     "ctrl": "Ctrl",

@@ -286,7 +286,9 @@
     "display-overview": "Tastaturbefehle anzeigen",
     "action": "Aktion",
     "keys": "Tastenkürzel",
-    "input-field": "Eingabefeld"
+    "input-field": "Eingabefeld",
+    "press": "Drücke",
+    "to-do-action": " zum {{ action }}"
   },
   "keys": {
     "ctrl": "Strg",

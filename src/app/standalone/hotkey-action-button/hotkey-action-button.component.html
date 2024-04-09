@@ -1,0 +1,28 @@
+<div class="button-container" [ngClass]="{ 'nav-bar-below': isNavBarVisible }">
+  <div fxLayout="column" fxLayoutGap="0.75em">
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxLayoutGap="0.25em"
+      class="info-container"
+    >
+      <span *ngIf="infoLabel" class="info-label">{{ infoLabel }}</span>
+      <mat-icon *ngIf="infoIcon" class="info-icon">{{ infoIcon }}</mat-icon>
+    </div>
+    <div
+      matRipple
+      role="button"
+      class="hotkey-button"
+      (click)="buttonClicked.emit()"
+      [appHotkey]="hotkey"
+      [appHotkeyTitle]="hotkeyTitle"
+      [appHotkeyAction]="hotkeyAction"
+    >
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px">
+        <span>{{ 'hotkeys.press' | transloco }}</span>
+        <kbd class="hotkey-symbol">{{ hotkey }}</kbd>
+        <span>{{ action }}</span>
+      </div>
+    </div>
+  </div>
+</div>
