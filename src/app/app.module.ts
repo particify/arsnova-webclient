@@ -104,6 +104,7 @@ import { LoadingButtonComponent } from './standalone/loading-button/loading-butt
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.component';
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
+import { ServerTimeInterceptor } from '@app/core/interceptors/server-time.interceptor';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -192,6 +193,11 @@ export function initializeApp(appConfig: AppConfig) {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ServerTimeInterceptor,
       multi: true,
     },
     UpdateService,
