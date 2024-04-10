@@ -38,6 +38,11 @@
     "show-back": "Retourner",
     "next-content": "Suivant",
     "a11y-current-text": "{{index}}. C'est une question ouverte. Pour aller vers le contenu et le champ de réponse, appuyez sur la touche tab.",
-    "a11y-current-slide": "{{index}}. Il s'agit d'une dia. Naviguez avec tab vers le contenu"
+    "a11y-current-slide": "{{index}}. Il s'agit d'une dia. Naviguez avec tab vers le contenu.",
+    "group-not-available": "Cette série de questions n'est pas disponible",
+    "state-changed": "Le contenu a été mis à jour.",
+    "load": "Charger",
+    "please-assign-points-correctly": "Veuillez assigner exactement {{points}} points.",
+    "please-assign-valid-points": "Veuillez assignez entre 0 et {{points}} points par réponse"
   }
 }
