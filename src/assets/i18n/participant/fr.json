@@ -27,6 +27,10 @@
     "please-answer": "Veuillez entrer une réponse.",
     "please-one": "Veuillez sélectionner une réponse.",
     "submit": "Soumettre",
-    "sent": "Votre réponse a été soumise"
+    "sent": "Votre réponse a été soumise.",
+    "has-abstained": "Vous vous êtes abstenu.",
+    "has-voted": "Vous avez répondu.",
+    "has-answered": "Vous avez répondu au contenu.",
+    "no-contents-published": "Pas de contenu disponible"
   }
 }
