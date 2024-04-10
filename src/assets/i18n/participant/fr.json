@@ -51,6 +51,50 @@
     "thanks-for-participation": "Merci pour votre participation !",
     "all-contents-answered": "Vous avez répondu à tout le contenu de cette série. Consultez vos réponses ou retourner à l'aperçu de la pièce.",
     "continue-where-you-stopped": "Reprendre là où vous vous étiez arrêté",
-    "some-contents-answered": "Vérifiez vos réponses, passez au prochain contenu ou retournez à l'aperçu de la pièce"
+    "some-contents-answered": "Vérifiez vos réponses, passez au prochain contenu ou retournez à l'aperçu de la pièce.",
+    "there-is-one-locked-content": "Il y a encore {{count}} disponible, qui ne sont pas encore libérés",
+    "pure-info-contents": "Passez à n'importe quel contenu ou retournez à l'aperçu de la pièce.",
+    "answer-state-unanswered": "Non répondu",
+    "answer-state-abstained": "Abstenu",
+    "answer-state-correct": "Correct",
+    "answer-state-wrong": "Erroné",
+    "answer-state-neutral": "Répondu",
+    "continue-answering": "Continuer",
+    "there-are-locked-contents": "Il y a encore {{count}} contenus disponibles, qui ne sont pas encore libérés.",
+    "attribution-info": "Ce contenu est basé sur un modèle réalisé par {{attribution}} sous license {{license}}."
+  },
+  "room-page": {
+    "a11y-statistics": "Ouvre les statistiques pour la série de questions.",
+    "focus-mode-enabled": "Le mode focus est activé dans cette pièce. Votre vue va être synchronisée avec la présentation.",
+    "a11y-live-feedback-disabled": "Le feedback en direct est actuellement inactif.",
+    "no-contents": "Il n'y a pas encore de contenu."
+  },
+  "comment-page": {
+    "search-box-input-description": "Ici vous pouvez chercher des posts.",
+    "a11y-comment-answered": "Aller aux réponses de ce post",
+    "vote-down": "Vote négatif",
+    "vote-up": "Vote positif",
+    "withdraw-downvote": "Effacer le vote négatif",
+    "withdraw-upvote": "Effacer le vote positif"
+  },
+  "survey": {
+    "a11y-feeling-not-so-good": "Signale que vous pensez que ce n'est pas si bien.",
+    "a11y-feeling-very-good": "Signaler que vous pensez que c'est chouette ...",
+    "a11y-feeling-good": "Signale que vous pensez que c'est bien.",
+    "a11y-feeling-bad": "Signale que vous pensez que ce n'est pas bien.",
+    "a11y-A": "Sélectionne la réponse A.",
+    "a11y-B": "Sélectionne la réponse B.",
+    "a11y-C": "Sélectionne la réponse C.",
+    "a11y-D": "Sélectionne la réponse D.",
+    "a11y-selected-answer": "Vous avez sélectionné la réponse {{answer}}."
+  },
+  "comment-list": {
+    "a11y-search-list": "Chercher des posts",
+    "a11y-filter-list": "Filtrer des posts",
+    "a11y-select-time": "Définissez la période des posts à afficher",
+    "comment-got-favorited": "L'un de vos post a été défini comme favori."
+  },
+  "statistic": {
+    "a11y-answer-indicator": "Indique avec la couleur verte les réponses correctes"
   }
 }
