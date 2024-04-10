@@ -95,6 +95,15 @@
     "comment-got-favorited": "L'un de vos post a été défini comme favori."
   },
   "statistic": {
-    "a11y-answer-indicator": "Indique avec la couleur verte les réponses correctes"
+    "a11y-answer-indicator": "Indique avec la couleur verte les réponses correctes.",
+    "a11y-show-chart": "Montre un graphique en barres des évaluations des réponses.",
+    "percentage": "Pourcentage",
+    "answer-indicator": "Montrer les réponses correctes",
+    "show-chart": "Montre les statistiques à l'aide d'un graphique",
+    "show-answers": "Montrer les réponses",
+    "hide-chart": "Masquer le graphique"
+  },
+  "focus-mode": {
+    "stopped": "Vous pouvez circuler librement dans la pièce"
   }
 }
