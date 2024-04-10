@@ -35,6 +35,9 @@
     "go-to-stats": "Vers les résultats",
     "go-to-content": "Retour au contenu",
     "show-front": "Retourner",
-    "show-back": "retourner"
+    "show-back": "Retourner",
+    "next-content": "Suivant",
+    "a11y-current-text": "{{index}}. C'est une question ouverte. Pour aller vers le contenu et le champ de réponse, appuyez sur la touche tab.",
+    "a11y-current-slide": "{{index}}. Il s'agit d'une dia. Naviguez avec tab vers le contenu"
   }
 }
