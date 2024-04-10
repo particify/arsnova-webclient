@@ -23,6 +23,7 @@
     "a11y-next-content": "Naviguer au prochain contenu.",
     "a11y-sort-item": "Position {{index}} sur {{length}}:{{answer}}.",
     "abstain": "S'abstenir",
-    "at-least-one": "Veuillez sélectionner au moins une réponse"
+    "at-least-one": "Veuillez sélectionner au moins une réponse.",
+    "please-answer": "Veuillez répondre"
   }
 }
