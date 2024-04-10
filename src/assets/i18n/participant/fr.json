@@ -24,6 +24,7 @@
     "a11y-sort-item": "Position {{index}} sur {{length}}:{{answer}}.",
     "abstain": "S'abstenir",
     "at-least-one": "Veuillez sélectionner au moins une réponse.",
-    "please-answer": "Veuillez répondre"
+    "please-answer": "Veuillez répondre.",
+    "please-one": "Veuillez sélectionner une réponse"
   }
 }
