@@ -43,6 +43,7 @@
     "state-changed": "Le contenu a été mis à jour.",
     "load": "Charger",
     "please-assign-points-correctly": "Veuillez assigner exactement {{points}} points.",
-    "please-assign-valid-points": "Veuillez assignez entre 0 et {{points}} points par réponse"
+    "please-assign-valid-points": "Veuillez assignez entre 0 et {{points}} points par réponse.",
+    "please-select-number-from-range": "Veuillez sélectionnée un nombre compris dans les seuils"
   }
 }
