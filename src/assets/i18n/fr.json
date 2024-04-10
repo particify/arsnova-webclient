@@ -2,6 +2,8 @@
   "cookies": {
     "a11y-accept": "Accepter l'usage de tous les cookies.",
     "accept": "Tout accepter",
-    "title": "Paramètres des cookies"
+    "title": "Paramètres des cookies",
+    "intro-privacy1": "Vous trouverez d'avantage d'informations dans notre ",
+    "intro-privacy2": "."
   }
 }
