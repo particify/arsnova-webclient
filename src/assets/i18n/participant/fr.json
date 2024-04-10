@@ -6,6 +6,7 @@
     "a11y-current-sort": "{{index}}. C'est une question de tri. Pour aller vers le contenu et les réponses appuyez sur la touche tab et déplacez vers le haut/bas avec les touches fléchées.",
     "a11y-current-prioritization": "{{index}}. Il s'agit d'une question de priorité. Pour aller vers le contenu et les options de réponse appuyez sur la touche tab.",
     "a11y-current-binary": "{{index}}. C'est une question oui/non. Pour aller vers le contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse à l'aide des touches fléchées",
-    "a11y-current-scale": "{{index}}. C'est une question d'appréciation. Pour aller vers le contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse à l'aide des touches fléchées"
+    "a11y-current-scale": "{{index}}. C'est une question d'appréciation. Pour aller vers le contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse à l'aide des touches fléchées.",
+    "a11y-current-wordcloud": "{{index}}. C'est un nuage d'idées. Pour aller vers le contenu et les champs de réponses, appuyez sur la touche tab."
   }
 }
