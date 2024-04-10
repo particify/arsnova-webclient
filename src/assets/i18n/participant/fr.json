@@ -21,6 +21,8 @@
     "a11y-back": "Montrer le recto de la carte flash.",
     "a11y-show-back": "Montrer le verso de la carte flash.",
     "a11y-next-content": "Naviguer au prochain contenu.",
-    "a11y-sort-item": "Position {{index}} sur {{length}}:{{answer}}"
+    "a11y-sort-item": "Position {{index}} sur {{length}}:{{answer}}.",
+    "abstain": "S'abstenir",
+    "at-least-one": "Veuillez sélectionner au moins une réponse"
   }
 }
