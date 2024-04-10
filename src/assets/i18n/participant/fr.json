@@ -61,7 +61,8 @@
     "answer-state-neutral": "Répondu",
     "continue-answering": "Continuer",
     "there-are-locked-contents": "Il y a encore {{count}} contenus disponibles, qui ne sont pas encore libérés.",
-    "attribution-info": "Ce contenu est basé sur un modèle réalisé par {{attribution}} sous license {{license}}."
+    "attribution-info": "Ce contenu est basé sur un modèle réalisé par {{attribution}} sous license {{license}}.",
+    "answers-reset": "Les réponses ont été ré-initialisées."
   },
   "room-page": {
     "a11y-statistics": "Ouvre les statistiques pour la série de questions.",
@@ -104,6 +105,6 @@
     "hide-chart": "Masquer le graphique"
   },
   "focus-mode": {
-    "stopped": "Vous pouvez circuler librement dans la pièce"
+    "stopped": "Vous pouvez circuler librement dans la pièce."
   }
 }
