@@ -8,6 +8,8 @@
     "a11y-current-binary": "{{index}}. C'est une question oui/non. Pour aller vers le contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse à l'aide des touches fléchées",
     "a11y-current-scale": "{{index}}. C'est une question d'appréciation. Pour aller vers le contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse à l'aide des touches fléchées.",
     "a11y-current-wordcloud": "{{index}}. C'est un nuage de mots. Pour aller vers le contenu et les champs de réponses, appuyez sur la touche tab.",
-    "a11y-already-answered": "Vous avez déjà répondu au  contenu de {{index}}. Naviguez à l'aide de la touche tab vers le contenu et votre réponse ou vos réponses ou appuyez sur la touche espace pour voir les résultats."
+    "a11y-already-answered": "Vous avez déjà répondu au contenu de {{index}}. Naviguez à l'aide de la touche tab vers le contenu et votre réponse ou vos réponses ou appuyez sur la touche espace pour voir les résultats.",
+    "a11y-already-answered-single": "Vous avez répondu à cette question avec la réponse {{answers}}.",
+    "a11y-already-answered-multiple": "Vous aveé répondu à la  question avec les réponses {{answers}}."
   }
 }
