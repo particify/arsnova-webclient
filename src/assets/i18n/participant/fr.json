@@ -18,6 +18,7 @@
     "a11y-abstain": "S'abstenir et aller à la suivante.",
     "a11y-go-to-stats": "Retourner la carte et montrer les statistique de cette question.",
     "a11y-go-to-content": "Retourner la carte et montrer le contenu.",
-    "a11y-back": "Montrer le recto de la carte flash"
+    "a11y-back": "Montrer le recto de la carte flash.",
+    "a11y-show-back": "montrer le verso de la carte flash"
   }
 }
