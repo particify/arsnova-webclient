@@ -49,6 +49,8 @@
   "content": {
     "description": "Description du contenu",
     "thanks-for-participation": "Merci pour votre participation !",
-    "all-contents-answered": "Vous avez répondu à tout le contenu de cette série. Consultez vos réponses ou retourner à l'aperçu de la pièce"
+    "all-contents-answered": "Vous avez répondu à tout le contenu de cette série. Consultez vos réponses ou retourner à l'aperçu de la pièce.",
+    "continue-where-you-stopped": "Reprendre là où vous vous étiez arrêté",
+    "some-contents-answered": "Vérifiez vos réponses, passez au prochain contenu ou retournez à l'aperçu de la pièce"
   }
 }
