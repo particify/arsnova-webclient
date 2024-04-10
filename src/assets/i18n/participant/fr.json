@@ -44,6 +44,11 @@
     "load": "Charger",
     "please-assign-points-correctly": "Veuillez assigner exactement {{points}} points.",
     "please-assign-valid-points": "Veuillez assignez entre 0 et {{points}} points par réponse.",
-    "please-select-number-from-range": "Veuillez sélectionnée un nombre compris dans les seuils"
+    "please-select-number-from-range": "Veuillez sélectionnée un nombre compris dans les seuils."
+  },
+  "content": {
+    "description": "Description du contenu",
+    "thanks-for-participation": "Merci pour votre participation !",
+    "all-contents-answered": "Vous avez répondu à tout le contenu de cette série. Consultez vos réponses ou retourner à l'aperçu de la pièce"
   }
 }
