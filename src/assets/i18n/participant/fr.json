@@ -31,6 +31,10 @@
     "has-abstained": "Vous vous êtes abstenu.",
     "has-voted": "Vous avez répondu.",
     "has-answered": "Vous avez répondu au contenu.",
-    "no-contents-published": "Pas de contenu disponible"
+    "no-contents-published": "Pas de contenu disponible.",
+    "go-to-stats": "Vers les résultats",
+    "go-to-content": "Retour au contenu",
+    "show-front": "Retourner",
+    "show-back": "retourner"
   }
 }
