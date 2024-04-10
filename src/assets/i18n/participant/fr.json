@@ -14,6 +14,7 @@
     "a11y-already-answered-text": "Vous avez répondu à ce contenu par {{answer}}",
     "a11y-has-abstained": "Vous vous êtes abstenu sur ce contenu. Appuyez sur la touche tab pour entendre le contenu à nouveau.",
     "a11y-last-content": "Il s'agit du dernier contenu de cette série de questions. Appuyez sur la touche 0 pour revenir à l'aperçu de la pièce.",
-    "a11y-submit": "Envoyez la réponse et passez à la question suivante"
+    "a11y-submit": "Envoyez la réponse et passez à la question suivante.",
+    "a11y-abstain": "S'abstenir et aller à la suivante"
   }
 }
