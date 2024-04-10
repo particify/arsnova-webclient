@@ -2,6 +2,7 @@
   "answer": {
     "a11y-message": "Vous pouvez maintenant répondre aux questions de la série {{group}}",
     "a11y-current-multiple": "{{index}}. Il s'agit d'une question à choix multiple. Pour aller vers son contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse avec la touche espace.",
-    "a11y-current-single": "{{index}}. C'est une question à réponse unique. Pour aller vers le contenu et les réponses appuyez sur la touche tab et sélectionnez une réponse en appuyant sur les touches flêchées"
+    "a11y-current-single": "{{index}}. C'est une question à réponse unique. Pour aller vers le contenu et les réponses appuyez sur la touche tab et sélectionnez une réponse en appuyant sur les touches flêchées.",
+    "a11y-current-sort": "C'est une question de tri. Pour aller vers le contenu et les réponses appuyez sur la touche tab et déplacez vers le haut/bas avec les touches fléchées."
   }
 }

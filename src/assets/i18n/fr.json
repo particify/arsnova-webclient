@@ -1,5 +1,7 @@
 {
   "cookies": {
-    "a11y-accept": "Accepter l'usage de tous les cookies."
+    "a11y-accept": "Accepter l'usage de tous les cookies.",
+    "accept": "Tout accepter",
+    "title": "Paramètres des cookies"
   }
 }
