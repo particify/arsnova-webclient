@@ -10,6 +10,10 @@
     "a11y-current-wordcloud": "{{index}}. C'est un nuage de mots. Pour aller vers le contenu et les champs de réponses, appuyez sur la touche tab.",
     "a11y-already-answered": "Vous avez déjà répondu au contenu de {{index}}. Naviguez à l'aide de la touche tab vers le contenu et votre réponse ou vos réponses ou appuyez sur la touche espace pour voir les résultats.",
     "a11y-already-answered-single": "Vous avez répondu à cette question avec la réponse {{answers}}.",
-    "a11y-already-answered-multiple": "Vous aveé répondu à la  question avec les réponses {{answers}}."
+    "a11y-already-answered-multiple": "Vous aveé répondu à la question avec les réponses {{answers}}.",
+    "a11y-already-answered-text": "Vous avez répondu à ce contenu par {{answer}}",
+    "a11y-has-abstained": "Vous vous êtes abstenu sur ce contenu. Appuyez sur la touche tab pour entendre le contenu à nouveau.",
+    "a11y-last-content": "Il s'agit du dernier contenu de cette série de questions. Appuyez sur la touche 0 pour revenir à l'aperçu de la pièce.",
+    "a11y-submit": "Envoyez la réponse et passez à la question suivante"
   }
 }
