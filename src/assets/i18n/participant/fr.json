@@ -62,7 +62,7 @@
     "continue-answering": "Continuer",
     "there-are-locked-contents": "Il y a encore {{count}} contenus disponibles, qui ne sont pas encore libérés.",
     "attribution-info": "Ce contenu est basé sur un modèle réalisé par {{attribution}} sous license {{license}}.",
-    "answers-reset": "Les réponses ont été ré-initialisées."
+    "answers-reset": "Les réponses ont été réinitialisées."
   },
   "room-page": {
     "a11y-statistics": "Ouvre les statistiques pour la série de questions.",
