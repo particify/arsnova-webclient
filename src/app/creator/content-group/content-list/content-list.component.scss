@@ -29,7 +29,7 @@
   @include show-button-bar;
 }
 
-.button-bar {
+.button-bar:not(.show-bar) {
   pointer-events: none;
   opacity: 0;
   max-width: 0;
@@ -61,10 +61,6 @@
 .mat-mdc-slide-toggle {
   font-size: 16px;
   margin: 12px;
-}
-
-.lock-icon {
-  transition: 1s;
 }
 
 .unlocked {

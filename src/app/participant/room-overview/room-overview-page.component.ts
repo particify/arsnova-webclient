@@ -13,7 +13,6 @@ import {
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup } from '@app/core/models/content-group';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -127,9 +126,5 @@ export class RoomOverviewPageComponent
     } else if (msg.type === FeedbackMessageType.STOPPED) {
       this.surveyEnabled = false;
     }
-  }
-
-  calcContentsInGroup(group: ContentGroup): number {
-    return this.contentPublishService.filterPublishedIds(group).length;
   }
 }

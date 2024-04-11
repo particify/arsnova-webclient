@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 .action-container {
   margin: 0 0 10px;
 }
@@ -66,4 +68,21 @@
   .mobile-add {
     display: none;
   }
+}
+
+.trigger-text {
+  margin-top: 2px;
+}
+
+.state-option {
+  padding: 0.25em 1em;
+}
+
+.state-name {
+  font-weight: $font-weight-bold;
+  font-size: $m-font-size;
+}
+
+.state-description {
+  font-size: $s-font-size;
 }

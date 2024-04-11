@@ -10,7 +10,7 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
 import { EventService } from '@app/core/services/util/event.service';
 import { Observable, Subject, Subscription, map, takeUntil } from 'rxjs';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
@@ -47,22 +47,6 @@ export class NavBarItem {
   }
 }
 
-export class PublishedContentsState {
-  groupName: string;
-  firstContentPublished: number;
-  lastContentPublished: number;
-
-  constructor(
-    groupName: string,
-    firstContentPublished: number,
-    lastContentPublished: number
-  ) {
-    this.groupName = groupName;
-    this.firstContentPublished = firstContentPublished;
-    this.lastContentPublished = lastContentPublished;
-  }
-}
-
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -92,7 +76,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private feedbackSubscription?: Subscription;
   private commentSettingsSubscription?: Subscription;
   contentGroups: ContentGroup[] = [];
-  publishedStates: PublishedContentsState[] = [];
   private focusStateSubscription?: Subscription;
   isLoading = true;
 
@@ -423,13 +406,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         .subscribe((groups) => {
           for (const group of groups) {
             this.contentGroups.push(group);
-            this.publishedStates.push(
-              new PublishedContentsState(
-                group.name,
-                group.firstPublishedIndex,
-                group.lastPublishedIndex
-              )
-            );
             if (this.contentGroups.length === groupCount) {
               this.contentGroups =
                 this.contentGroupService.sortContentGroupsByName(
@@ -513,17 +489,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
   getFirstGroupWithPublishedContents(): ContentGroup {
     return (
       this.contentGroups.filter(
-        (cg) =>
-          !this.noContentsPublished(
-            cg.firstPublishedIndex,
-            cg.lastPublishedIndex
-          )
+        (cg) => cg.publishingMode !== PublishingMode.NONE
       )[0] || this.contentGroups[0]
     );
   }
 
   filterPublishedGroups(): boolean {
-    this.contentGroups = this.contentGroups.filter((cg) => cg.published);
+    this.contentGroups = this.contentGroups.filter(
+      (cg) => cg.publishingMode !== PublishingMode.NONE
+    );
     if (this.contentGroups.length === 0) {
       this.removeContentFeatureItem();
       return false;
@@ -535,17 +509,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   setGroupProperties() {
     if (this.group) {
       this.groupName = this.group.name;
-      this.setPublishedState(
-        this.group.firstPublishedIndex,
-        this.group.lastPublishedIndex
-      );
     }
-  }
-
-  setPublishedState(first: number, last: number) {
-    const currentPublished = this.getCurrentPublishedState();
-    currentPublished.firstContentPublished = first;
-    currentPublished.lastContentPublished = last;
   }
 
   getBarIndexOfFeature(name: string): number {
@@ -563,41 +527,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.setGroupInSessionStorage(this.groupName);
   }
 
-  isAlreadyPublished(first: number, last: number) {
-    const currentPublished = this.getCurrentPublishedState();
-    const currentFirst = currentPublished.firstContentPublished;
-    const currentLast = currentPublished.lastContentPublished;
-    const rangeInRange = currentFirst <= first && currentLast >= last;
-    const singleInRange =
-      first === last && first <= currentLast && first >= currentFirst;
-    return rangeInRange || singleInRange;
-  }
-
-  getCurrentPublishedState(): PublishedContentsState {
-    return this.publishedStates.filter(
-      (p) => p.groupName === this.groupName
-    )[0];
-  }
-
   noContentsPublished(first: number, last: number) {
     return first === -1 && last === -1;
-  }
-
-  checkContentPublishing(first: number, last: number, setNewState: boolean) {
-    const currentPublished = this.getCurrentPublishedState();
-    if (
-      this.noContentsPublished(
-        currentPublished.firstContentPublished,
-        currentPublished.lastContentPublished
-      ) ||
-      (!this.noContentsPublished(first, last) &&
-        !this.isAlreadyPublished(first, last))
-    ) {
-      this.toggleNews(RoutingFeature.CONTENTS);
-    }
-    if (setNewState) {
-      this.setPublishedState(first, last);
-    }
   }
 
   toggleNews(feature: string) {
@@ -616,13 +547,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.contentGroups[index] = changes.entity;
       }
       if (this.groupName !== changes.entity.name) {
-        if (
-          changes.entity.published &&
-          !this.noContentsPublished(
-            changes.entity.firstPublishedIndex,
-            changes.entity.lastPublishedIndex
-          )
-        ) {
+        if (changes.entity.publishingMode !== PublishingMode.NONE) {
           this.group = changes.entity;
           this.updateGroupName(changes.entity.name);
           this.checkChanges(changes);
@@ -639,21 +564,14 @@ export class NavBarComponent implements OnInit, OnDestroy {
       changes.entity,
       changes.changedProperties
     );
-    if (
-      changedEvent.hasPropertyChanged('firstPublishedIndex') ||
-      changedEvent.hasPropertyChanged('lastPublishedIndex')
-    ) {
-      this.checkContentPublishing(
-        changedEvent.payload.entity.firstPublishedIndex,
-        changedEvent.payload.entity.lastPublishedIndex,
-        true
-      );
+    if (changedEvent.hasPropertyChanged('publishingIndex')) {
+      this.toggleNews(RoutingFeature.CONTENTS);
     }
     if (changedEvent.hasPropertyChanged('name')) {
       this.updateGroupName(changes.entity.name);
     }
-    if (changedEvent.hasPropertyChanged('published')) {
-      if (!changes.entity.published) {
+    if (changedEvent.hasPropertyChanged('publishingMode')) {
+      if (changes.entity.publishingMode === PublishingMode.NONE) {
         if (this.filterPublishedGroups()) {
           this.setGroup();
         }

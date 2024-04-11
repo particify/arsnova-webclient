@@ -20,7 +20,7 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { Subject, of } from 'rxjs';
@@ -47,6 +47,7 @@ import { PresentationStepPosition } from '@app/core/models/events/presentation-s
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { RoundState } from '@app/core/models/events/round-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { hotkeyEnterLeaveAnimation } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -74,6 +75,7 @@ export class KeyNavBarItem extends NavBarItem {
   selector: 'app-control-bar',
   templateUrl: './control-bar.component.html',
   styleUrls: ['./control-bar.component.scss'],
+  animations: [hotkeyEnterLeaveAnimation],
 })
 export class ControlBarComponent
   extends NavBarComponent
@@ -96,12 +98,8 @@ export class ControlBarComponent
   currentCommentZoom = 100;
   currentCommentSort?: CommentSort;
   commentSortTypes = [CommentSort.TIME, CommentSort.VOTEDESC];
-  isCurrentContentPublished = false;
   contentIndex = 0;
   content?: Content;
-  notificationMessage = '';
-  notificationIcon = '';
-  showNotification = false;
 
   features: NavBarItem[] = [
     new NavBarItem(RoutingFeature.COMMENTS, 'question_answer'),
@@ -111,7 +109,6 @@ export class ControlBarComponent
   groupItems: KeyNavBarItem[] = [
     new KeyNavBarItem('results', 'insert_chart', '', ' '),
     new KeyNavBarItem('correct', 'check_circle', '', 'c'),
-    new KeyNavBarItem('lock', 'lock', '', 'l'),
   ];
   surveyItems: KeyNavBarItem[] = [
     new KeyNavBarItem('start', 'play_arrow', '', ' '),
@@ -222,11 +219,10 @@ export class ControlBarComponent
         if (group) {
           this.group = group;
         }
-        this.checkIfContentLocked();
         if (
           this.isActiveFeature(RoutingFeature.CONTENTS) &&
           this.group &&
-          !this.group.published
+          this.isGroupLocked(this.group)
         ) {
           this.publishContentGroup(this.group);
         }
@@ -323,7 +319,6 @@ export class ControlBarComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((group) => {
         this.group = group;
-        this.checkIfContentLocked();
       });
     this.contentService
       .getAnswersDeleted()
@@ -358,7 +353,6 @@ export class ControlBarComponent
         this.contentIndex
       );
       this.setArrowsState(this.contentStepState);
-      this.checkIfContentLocked();
     }
   }
 
@@ -371,31 +365,14 @@ export class ControlBarComponent
     }
   }
 
-  checkIfContentLocked() {
-    if (this.contentIndex !== undefined && this.group) {
-      this.isCurrentContentPublished =
-        this.contentPublishService.isIndexPublished(
-          this.group,
-          this.contentIndex
-        );
-      this.groupItems[2].icon = this.isCurrentContentPublished
-        ? 'lock'
-        : 'lock_open';
-      this.groupItems[2].name = this.isCurrentContentPublished
-        ? 'lock'
-        : 'publish';
-      if (!this.isCurrentContentPublished) {
-        if (!this.showNotification) {
-          this.notificationMessage = 'creator.control-bar.content-locked';
-          this.notificationIcon = 'lock';
-          this.showNotification = true;
-          this.announceService.announce('creator.control-bar.content-locked');
-        }
-      } else if (this.showNotification) {
-        this.showNotification = false;
-        this.announceService.announce('creator.control-bar.content-published');
-      }
-    }
+  isContentLocked(): boolean {
+    return (
+      !!this.group &&
+      !this.contentPublishService.isIndexPublished(
+        this.group,
+        this.contentIndex
+      )
+    );
   }
 
   removeProtocolFromString(url: string): string {
@@ -440,7 +417,7 @@ export class ControlBarComponent
       this.activeFeature.emit(feature);
       if (feature === RoutingFeature.CONTENTS) {
         this.setArrowsState(this.contentStepState);
-        if (this.group && !this.group.published) {
+        if (this.group && this.isGroupLocked(this.group)) {
           this.publishContentGroup(this.group);
         }
       } else if (feature === RoutingFeature.COMMENTS) {
@@ -522,9 +499,13 @@ export class ControlBarComponent
     }
   }
 
+  isGroupLocked(group: ContentGroup): boolean {
+    return group.publishingMode === PublishingMode.NONE;
+  }
+
   changeGroup(contentGroup: ContentGroup) {
     if (this.group?.id !== contentGroup.id) {
-      if (contentGroup.published) {
+      if (!this.isGroupLocked(contentGroup)) {
         this.updateGroup(contentGroup);
       } else {
         this.publishContentGroup(contentGroup);
@@ -538,11 +519,7 @@ export class ControlBarComponent
   }
 
   publishContentGroup(contentGroup: ContentGroup) {
-    const changes = { published: true };
-    const dialogRef = this.dialogService.openPublishGroupDialog(
-      contentGroup.name,
-      () => this.contentGroupService.patchContentGroup(contentGroup, changes)
-    );
+    const dialogRef = this.dialogService.openPublishGroupDialog(contentGroup);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const msg = this.translateService.translate(
@@ -552,10 +529,23 @@ export class ControlBarComponent
           msg,
           AdvancedSnackBarTypes.SUCCESS
         );
-        contentGroup.published = true;
+        contentGroup.publishingMode = result;
         this.updateGroup(contentGroup);
       }
     });
+  }
+
+  publishCurrentContent(): void {
+    if (this.group) {
+      const changes = { publishingIndex: this.contentIndex };
+      this.contentGroupService
+        .patchContentGroup(this.group, changes)
+        .subscribe(() => {
+          if (this.group) {
+            this.group.publishingIndex = this.contentIndex;
+          }
+        });
+    }
   }
 
   toggleBarVisibility(visible: boolean) {

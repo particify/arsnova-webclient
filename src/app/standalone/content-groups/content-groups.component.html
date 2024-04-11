@@ -3,7 +3,7 @@
   tabindex="0"
   role="button"
   id="content-group"
-  #contentGroup
+  #contentGroupCard
   class="primary-shadow-hover"
   fxLayoutAlign="start center"
   (click)="viewContents()"
@@ -11,10 +11,7 @@
     'room-page.a11y-enter-content-group'
       | transloco
         : {
-            name: contentGroupName,
-            locked:
-              'creator.room-page.' + (isLocked ? 'locked' : 'unlocked')
-              | transloco
+            name: contentGroup.name
           }
   }}"
   (keyup.enter)="viewContents()"
@@ -33,12 +30,15 @@
     >
       <app-text-overflow-clip
         class="ellipsis"
-        [text]="contentGroupName"
+        [text]="contentGroup.name"
       ></app-text-overflow-clip>
-      <app-list-badge *ngIf="length > 0" [count]="length"></app-list-badge>
+      <app-list-badge
+        *ngIf="getLength()"
+        [count]="getLength()"
+      ></app-list-badge>
     </div>
     <mat-icon
-      *ngIf="isLocked"
+      *ngIf="isLocked()"
       class="locked"
       [matTooltip]="'creator.room-page.group-locked' | transloco"
       >locked</mat-icon

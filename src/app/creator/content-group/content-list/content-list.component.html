@@ -57,10 +57,12 @@
         <div
           fxLayout="row"
           fxLayoutAlign="center center"
+          class="button-bar"
           [ngClass]="{
-            'show-bar': i === activeMenuIndex || content.id === activeContentId,
-            'button-bar':
-              i !== activeMenuIndex && content.id !== activeContentId
+            'show-bar':
+              i === activeMenuIndex ||
+              content.id === activeContentId ||
+              (i === contentGroup.publishingIndex && hasSpecificPublishing())
           }"
         >
           <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
@@ -93,7 +95,7 @@
               appTrackInteraction="Content publish text answers toggled"
               appTrackName="off"
             >
-              <mat-icon class="lock-icon unlocked">visibility</mat-icon>
+              <mat-icon class="unlocked">visibility</mat-icon>
             </button>
             <button
               mat-icon-button
@@ -113,104 +115,25 @@
               appTrackInteraction="Content publish text answers toggled"
               appTrackName="on"
             >
-              <mat-icon class="lock-icon">visibility_off</mat-icon>
+              <mat-icon>visibility_off</mat-icon>
             </button>
             <button
-              *ngIf="!isModerator"
-              mat-icon-button
+              *ngIf="
+                !isModerator &&
+                hasSpecificPublishing() &&
+                i !== contentGroup.publishingIndex
+              "
               color="primary"
-              (click)="$event.stopPropagation()"
-              #publishTrigger="matMenuTrigger"
-              [matMenuTriggerFor]="publishActions"
-              (menuOpened)="openedMenu(i)"
-              [matTooltip]="'creator.content.unlock' | transloco"
-              #lockMenu
+              mat-icon-button
+              (click)="updatePublishingIndex(i); $event.stopPropagation()"
+              [matTooltip]="
+                'creator.content.' +
+                  (isSinglePublished() ? 'publish' : 'publish-up-to')
+                  | transloco
+              "
             >
-              <mat-icon class="lock-icon">lock_open</mat-icon>
+              <mat-icon class="publish-icon">lock_open</mat-icon>
             </button>
-            <mat-menu
-              #publishActions="matMenu"
-              xPosition="before"
-              (closed)="closedMenu()"
-            >
-              <div class="menu-unlock">
-                <button
-                  mat-menu-item
-                  *ngIf="
-                    firstPublishedIndex !== lastPublishedIndex ||
-                    (firstPublishedIndex === lastPublishedIndex &&
-                      i !== firstPublishedIndex) ||
-                    !isPublished(i)
-                  "
-                  (click)="publishContent(i, true)"
-                  appTrackInteraction="Content group publish range changed"
-                  appTrackName="publish-single"
-                >
-                  <mat-icon class="icon-important"
-                    >vertical_align_center</mat-icon
-                  >
-                  {{ 'creator.content.unlock-this-content' | transloco }}
-                </button>
-                <button
-                  mat-menu-item
-                  *ngIf="i !== contents.length - 1 && !isPublished(i)"
-                  (click)="publishContentFrom(i, true)"
-                  appTrackInteraction="Content group publish range changed"
-                  appTrackName="publish-multiple"
-                >
-                  <mat-icon class="icon-important">vertical_align_top</mat-icon>
-                  {{ 'creator.content.unlock-contents-from' | transloco }}
-                </button>
-                <button
-                  mat-menu-item
-                  *ngIf="!isPublished(i) && i > 0"
-                  (click)="publishContentUpTo(i, true)"
-                  appTrackInteraction="Content group publish range changed"
-                  appTrackName="publish-multiple"
-                >
-                  <mat-icon class="icon-important"
-                    >vertical_align_bottom</mat-icon
-                  >
-                  {{ 'creator.content.unlock-contents-up-to' | transloco }}
-                </button>
-              </div>
-              <div *ngIf="isPublished(i)" class="menu-lock">
-                <button
-                  mat-menu-item
-                  *ngIf="isStart(i) || isEnd(i)"
-                  (click)="publishContent(i, false)"
-                  appTrackInteraction="Content group publish range changed"
-                  appTrackName="lock-single"
-                >
-                  <mat-icon class="icon-important"
-                    >vertical_align_center</mat-icon
-                  >
-                  {{ 'creator.content.lock-this-content' | transloco }}
-                </button>
-                <button
-                  mat-menu-item
-                  *ngIf="!isStart(i)"
-                  (click)="publishContentUpTo(i, false)"
-                  appTrackInteraction="Content group publish range changed"
-                  appTrackName="lock-multiple"
-                >
-                  <mat-icon class="icon-important">vertical_align_top</mat-icon>
-                  {{ 'creator.content.lock-contents-up-to' | transloco }}
-                </button>
-                <button
-                  mat-menu-item
-                  *ngIf="!isEnd(i)"
-                  (click)="publishContentFrom(i, false)"
-                  appTrackInteraction="Content group publish range changed"
-                  appTrackName="lock-multiple"
-                >
-                  <mat-icon class="icon-important"
-                    >vertical_align_bottom</mat-icon
-                  >
-                  {{ 'creator.content.lock-contents-from' | transloco }}
-                </button>
-              </div>
-            </mat-menu>
             <button
               *ngIf="!isModerator"
               mat-icon-button

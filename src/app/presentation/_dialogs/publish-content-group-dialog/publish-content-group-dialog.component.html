@@ -1,0 +1,62 @@
+<form fxLayout="column">
+  <div mat-dialog-content>
+    <h3>{{ 'creator.dialog.how-to-publish-group' | transloco }}</h3>
+    <mat-radio-group
+      [(ngModel)]="selectedMode"
+      [ngModelOptions]="{ standalone: true }"
+      fxLayout="column"
+      fxLayoutGap="8px"
+    >
+      <mat-list>
+        <div
+          *ngFor="let mode of publishingModes"
+          class="mode-item unselected"
+          [ngClass]="{
+            'primary-border-color': selectedMode?.type === mode.type
+          }"
+        >
+          <mat-radio-button
+            labelPosition="before"
+            color="primary"
+            [value]="mode"
+            fxLayout="row"
+            class="answer-radio-button choice-answer"
+          >
+            <div
+              fxLayout="row"
+              fxLayoutGap="0.75em"
+              fxLayoutAlign="start center"
+              [ngClass]="{ primary: selectedMode?.type === mode.type }"
+            >
+              <mat-icon>{{ mode.icon }}</mat-icon>
+              <div fxLayout="column" fxLayoutGap="0.25em">
+                <span class="mode-name">
+                  {{
+                    'creator.content.publishing-mode-' + mode.name | transloco
+                  }}
+                </span>
+                <span class="mode-description">
+                  {{
+                    'creator.content.publishing-mode-description-' + mode.name
+                      | transloco
+                  }}
+                </span>
+              </div>
+            </div>
+          </mat-radio-button>
+        </div>
+      </mat-list>
+    </mat-radio-group>
+  </div>
+  <div mat-dialog-actions fxLayout="row-reverse" fxLayoutAlign="start">
+    <app-loading-button
+      name="creator.dialog.publish"
+      color="primary"
+      [isDialog]="true"
+      (clicked)="updatePublishingMode()"
+    ></app-loading-button>
+    <button mat-button type="button" (click)="close()">
+      {{ 'dialog.cancel' | transloco }}
+    </button>
+  </div>
+</form>
