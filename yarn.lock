@@ -6735,7 +6735,7 @@ __metadata:
     backoff-rxjs: "npm:7.0.0"
     chart.js: "npm:4.4.2"
     chartjs-plugin-datalabels: "npm:2.2.0"
-    css-loader: "npm:7.0.0"
+    css-loader: "npm:7.1.1"
     d3-cloud: "npm:1.2.7"
     dayjs: "npm:1.11.10"
     eslint: "npm:8.57.0"
@@ -7925,9 +7925,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:7.0.0":
-  version: 7.0.0
-  resolution: "css-loader@npm:7.0.0"
+"css-loader@npm:7.1.1":
+  version: 7.1.1
+  resolution: "css-loader@npm:7.1.1"
   dependencies:
     icss-utils: "npm:^5.1.0"
     postcss: "npm:^8.4.33"
@@ -7945,7 +7945,7 @@ __metadata:
       optional: true
     webpack:
       optional: true
-  checksum: 10c0/7264eaeda77e1312b15510dc5aa82e4c46ccb82c3b34fb6ecb5c5bd0a3f53b0ec0d04839e65ad34c73297075bfdd072b62d2dae6f7d8d97ec2c630d7c1909e9a
+  checksum: 10c0/ebb4ffe68e9df0036fcce66ae182648d4d16b2fdfdc04a5bf7d7783776d389a23be161bb7139a3f842dc75466882544f46d2183bc9399d0bacf83b66a1802b41
   languageName: node
   linkType: hard
 
