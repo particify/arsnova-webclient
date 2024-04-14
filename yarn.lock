@@ -2261,9 +2261,9 @@ __metadata:
   linkType: hard
 
 "@ctrl/tinycolor@npm:^4.0.0":
-  version: 4.0.4
-  resolution: "@ctrl/tinycolor@npm:4.0.4"
-  checksum: 10c0/5177bc264a615bd6101902602d4f56c63cc0ffa879ba8fc9419d79ace6fee76ef50fc193df78c0438e8074aaa8eb2aa2f6b75e238c66954fe70c620066c9dffa
+  version: 4.1.0
+  resolution: "@ctrl/tinycolor@npm:4.1.0"
+  checksum: 10c0/813dd960366df057006a1b93d7403ec7a48db1e79bec846d38fab15a1e0f37efd3ab96b0c780a14867ddc1f4c5a473e403c5c88e96d212c544ad934411e5307f
   languageName: node
   linkType: hard
 
@@ -5630,12 +5630,12 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:^16.8.0 || ^17.0.0 || ^18.0.0, @types/react@npm:^18.0.37":
-  version: 18.2.77
-  resolution: "@types/react@npm:18.2.77"
+  version: 18.2.78
+  resolution: "@types/react@npm:18.2.78"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/9114149933dbee3fdf5900786e660afe3146e8e277424aaf94dca50e29f1de56802b38a83bb65166ff53da086062bb8d001af563a6c906fe3540bdc46554d05a
+  checksum: 10c0/5eb8e1dd98c29aeddf40b90f466d1a9ce83b113d42a096633d632b834e7ae9821f24ba7999928de9d98cca37764532a7ea35355a8103a377d8baa750f1841b5c
   languageName: node
   linkType: hard
 
