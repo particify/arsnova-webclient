@@ -181,12 +181,19 @@ export class RoomService extends AbstractEntityService<Room> {
     temporary = false,
     name?: string
   ): Observable<Room> {
-    const connectionUrl =
-      this.buildForeignUri(this.serviceApiUrl.duplicate, roomId) +
-      (temporary ? '?temporary=true' : '') +
-      (name ? `?name=${name}` : '');
+    const connectionUrl = this.buildForeignUri(
+      this.serviceApiUrl.duplicate,
+      roomId
+    );
+    const params: { [param: string]: string } = {};
+    if (temporary) {
+      params.temporary = 'true';
+    }
+    if (name) {
+      params.name = name;
+    }
     return this.http
-      .post<Room>(connectionUrl, null)
+      .post<Room>(connectionUrl, null, { params })
       .pipe(catchError(this.handleError<Room>(`duplicateRoom`)));
   }
 
