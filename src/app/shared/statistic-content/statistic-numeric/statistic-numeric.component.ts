@@ -424,7 +424,10 @@ export class StatisticNumericComponent
   }
 
   private getAnswerCountForRound(round: number): number {
-    return this.roundStats[round]?.answerCount || 0;
+    return (
+      this.roundStats[round]?.answerCount +
+        this.roundStats[round]?.abstentionCount || 0
+    );
   }
 
   private prepareChartForRoundCompare(resetChart: boolean) {
