@@ -8,6 +8,7 @@ export class Answer {
   contentId: string;
   round: number;
   format: ContentType;
+  durationMs?: number;
 
   constructor(contentId: string, round: number, format: ContentType) {
     this.contentId = contentId;
