@@ -7,14 +7,10 @@ import {
   Output,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { takeUntil, timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 import * as dayjs from 'dayjs';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
-import { TranslocoService } from '@ngneat/transloco';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 
 const TIMER_UPDATE_INTERVAL = 1000;
 
@@ -22,25 +18,29 @@ const TIMER_UPDATE_INTERVAL = 1000;
   selector: 'app-countdown-timer',
   standalone: true,
   imports: [CoreModule],
+  styleUrl: './countdown-timer.component.scss',
   templateUrl: './countdown-timer.component.html',
 })
-export class CountdownTimerComponent implements OnDestroy, OnInit {
-  @Input() endDate = new Date();
+export class CountdownTimerComponent implements OnInit, OnDestroy {
+  @Input({ required: true }) endDate!: Date;
   @Input() showIcon = false;
-  @Input() showNotification = false;
+  @Input() layout = 'row';
+  @Input() borderRadius = 0;
+  @Input() fontSize?: string;
   @Output() finished = new EventEmitter<void>();
-  timeLeft?: string;
+  totalTime = 0;
+  timeLeft = 0;
 
-  constructor(
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {}
+  protected timerFinished$ = new Subject<void>();
+
+  constructor(private serverTimeService: ServerTimeService) {}
 
   ngOnInit(): void {
-    this.setTimeLeft();
-    timer(TIMER_UPDATE_INTERVAL, TIMER_UPDATE_INTERVAL)
-      .pipe(takeUntil(this.finished))
-      .subscribe(() => this.setTimeLeft());
+    timer(0, TIMER_UPDATE_INTERVAL)
+      .pipe(takeUntil(this.timerFinished$))
+      .subscribe(() => {
+        this.setTimeLeft();
+      });
   }
 
   ngOnDestroy(): void {
@@ -49,28 +49,29 @@ export class CountdownTimerComponent implements OnDestroy, OnInit {
 
   private finishTimer(): void {
     this.finished.emit();
-  }
-
-  private getSeconds(date: Date): number {
-    return Math.floor(date.getTime() / 1000);
+    this.timerFinished$.next();
   }
 
   private setTimeLeft(): void {
     const now = new Date();
-    if (this.getSeconds(now) === this.getSeconds(this.endDate)) {
-      this.timeLeft = undefined;
+    dayjs.extend(relativeTime);
+    this.timeLeft =
+      Math.round(
+        dayjs(this.endDate).diff(now) / 1000 -
+          this.serverTimeService.averageOffset / 1000
+      ) * 1000;
+    if (!this.timeLeft) {
       this.finishTimer();
-      if (this.showNotification) {
-        const msg = this.translateService.translate('timer.time-is-up');
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      }
       return;
     }
-    dayjs.extend(relativeTime);
-    const timeLeft = dayjs(this.endDate).diff(now);
-    this.timeLeft = dayjs(timeLeft).format('mm:ss');
+    if (!this.totalTime) {
+      this.totalTime = this.timeLeft;
+    }
+  }
+
+  getTime() {
+    if (this.timeLeft) {
+      return dayjs(this.timeLeft).format('mm:ss');
+    }
   }
 }
