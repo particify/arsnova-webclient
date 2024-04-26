@@ -148,10 +148,14 @@
     "dont-publish-answers": "Hide answers",
     "publish-correct-options": "Publish correct answers",
     "dont-publish-correct-options": "Lock correct answers",
+    "enable-quiz-mode": "Enable quiz mode",
+    "disable-quiz-mode": "Disable quiz mode",
     "statistics-are-published": "Statistics are published",
     "statistics-are-not-published": "Statistics are locked",
     "correct-options-are-published": "Correct answers are published",
     "correct-options-are-not-published": "Correct answers are locked",
+    "quiz-mode-enabled": "Quiz mode enabled",
+    "quiz-mode-disabled": "Quiz mode disabled",
     "edit-content": "Edit",
     "copy-content-to-group": "Copy",
     "move-content-to-group": "Move",
@@ -243,7 +247,9 @@
     "publishing-mode-description-single": "Only selected content is published.",
     "content-is-locked": "Content is locked",
     "to-publish-content": "to publish content",
-    "publish-current-content": "Publish current content"
+    "publish-current-content": "Publish current content",
+    "seconds-to-answer": "Seconds to answer",
+    "use-quiz-mode-to-use-timer": "Use Quiz-Mode for this question series to define a timer."
   },
   "survey": {
     "a11y-stop-survey": "Stops the live feedback.",

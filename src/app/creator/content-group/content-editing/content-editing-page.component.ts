@@ -21,6 +21,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 
 interface ContentFormat {
   type: ContentType;
@@ -55,10 +56,13 @@ export class ContentEditingPageComponent
   textContainsImage = false;
   HintType = HintType;
   abstentionsAllowed = true;
+  duration?: number;
   isEditMode = false;
   isLoading = true;
   created = false;
   isAnswered = false;
+  contentGroup?: ContentGroup;
+  GroupType = GroupType;
 
   constructor(
     private translateService: TranslocoService,
@@ -99,6 +103,7 @@ export class ContentEditingPageComponent
           this.content = content;
           this.question = content.body;
           this.abstentionsAllowed = !!this.content?.abstentionsAllowed;
+          this.duration = this.content.duration;
           this.isEditMode = true;
           const format = this.formats.find(
             (c) => c.name === this.content?.format.toLowerCase()
@@ -128,6 +133,11 @@ export class ContentEditingPageComponent
       this.prepareAttachmentData();
       this.isLoading = false;
     }
+    this.contentGroupService
+      .getByRoomIdAndName(this.roomId, this.seriesName)
+      .subscribe((group) => {
+        this.contentGroup = group;
+      });
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
@@ -147,6 +157,7 @@ export class ContentEditingPageComponent
     this.content.roomId = this.roomId;
     this.content.body = this.question;
     this.content.abstentionsAllowed = this.abstentionsAllowed;
+    this.content.duration = this.duration;
     return true;
   }
 

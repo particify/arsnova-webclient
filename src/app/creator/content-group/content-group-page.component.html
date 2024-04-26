@@ -58,6 +58,21 @@
       >
         done_all
       </mat-icon>
+      <mat-icon
+        class="status-icon"
+        [ngClass]="{
+          active: contentGroup.groupType === GroupType.QUIZ,
+          inactive: contentGroup.groupType !== GroupType.QUIZ
+        }"
+        [matTooltip]="
+          (contentGroup.groupType === GroupType.QUIZ
+            ? 'creator.content.quiz-mode-enabled'
+            : 'creator.content.quiz-mode-disabled'
+          ) | transloco
+        "
+      >
+        sports_esports
+      </mat-icon>
     </div>
   </div>
   <div
@@ -149,6 +164,22 @@
             (correctOptionsPublished
               ? 'creator.content.dont-publish-correct-options'
               : 'creator.content.publish-correct-options'
+            ) | transloco
+          }}
+        </button>
+        <button
+          mat-menu-item
+          (click)="toggleQuizMode()"
+          appTrackInteraction="Quiz mode toggled toggled"
+          [appTrackName]="
+            contentGroup.groupType === GroupType.QUIZ ? 'off' : 'on'
+          "
+        >
+          <mat-icon>sports_esports</mat-icon>
+          {{
+            (contentGroup.groupType === GroupType.QUIZ
+              ? 'creator.content.disable-quiz-mode'
+              : 'creator.content.enable-quiz-mode'
             ) | transloco
           }}
         </button>

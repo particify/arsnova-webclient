@@ -4,6 +4,7 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
 import {
   ContentGroup,
+  GroupType,
   PUBLISHING_MODE_ITEMS,
   PublishingMode,
 } from '@app/core/models/content-group';
@@ -60,6 +61,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   publishingModeItems = PUBLISHING_MODE_ITEMS;
   selectedPublishingMode = this.publishingModeItems[0];
+  GroupType = GroupType;
 
   constructor(
     private route: ActivatedRoute,
@@ -269,6 +271,18 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
       this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
+    });
+  }
+
+  toggleQuizMode() {
+    const changes: { groupType: GroupType } = {
+      groupType:
+        this.contentGroup.groupType === GroupType.MIXED
+          ? GroupType.QUIZ
+          : GroupType.MIXED,
+    };
+    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
+      this.contentGroup = updatedContentGroup;
     });
   }
 
