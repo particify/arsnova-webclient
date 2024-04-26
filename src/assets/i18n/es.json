@@ -518,8 +518,7 @@
     "pace-positive-2": "Muy rápido"
   },
   "timer": {
-    "time-is-up": "Se acabó el tiempo.",
-    "finished": "Terminado"
+    "time-is-up": "Se acabó el tiempo"
   },
   "templates": {
     "description": "Descripción",

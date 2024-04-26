@@ -388,7 +388,14 @@
     "previous": "Vorheriger Inhalt",
     "round": "Runde",
     "round-displayed": "Die Runde {{rounds}} wird zurzeit angezeigt",
-    "rounds-displayed": "Die Runden {{rounds}} werden zurzeit angezeigt"
+    "rounds-displayed": "Die Runden {{rounds}} werden zurzeit angezeigt",
+    "content": "Inhalt",
+    "of": "von",
+    "enter-name-for-room": "Gib deinen Namen für diesen Raum ein",
+    "your-name": "Dein Name",
+    "join-quiz": "Quiz beitreten",
+    "get-ready": "Mach dich bereit!",
+    "get-ready-alias": "Mach dich bereit, {{alias}}!"
   },
   "answer": {
     "word": "Schlagwort",
@@ -588,8 +595,7 @@
     "room": "Raum"
   },
   "timer": {
-    "finished": "Beendet",
-    "time-is-up": "Die Zeit ist abgelaufen."
+    "time-is-up": "Die Zeit ist abgelaufen"
   },
   "general": {
     "a11y-remove-filter": "Filter entfernen"
