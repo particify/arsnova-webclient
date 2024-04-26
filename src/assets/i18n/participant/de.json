@@ -37,7 +37,9 @@
     "load": "Laden",
     "please-assign-points-correctly": "Bitte vergib genau {{points}} Punkte.",
     "please-assign-valid-points": "Bitte vergib zwischen 0 und {{points}} Punkten pro Antwort.",
-    "please-select-number-from-range": "Bitte gib eine Zahl aus dem Bereich ein."
+    "please-select-number-from-range": "Bitte gib eine Zahl aus dem Bereich ein.",
+    "not-answered-in-time": "Du hast nicht rechtzeitig geantwortet.",
+    "answered-in-time": "Du hast in {{duration}} Sekunden geantwortet."
   },
   "content": {
     "thanks-for-participation": "Danke für deine Teilnahme!",

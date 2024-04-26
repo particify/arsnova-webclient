@@ -33,8 +33,10 @@
           <app-content-participant
             *ngIf="!isReloadingCurrentContent"
             (answerChanged)="receiveSentStatus($event, i)"
+            (answerReset)="resetAnswer($event, i)"
             (next)="nextContent()"
             [content]="content"
+            [contentGroupContentIds]="contentGroup.contentIds"
             [answer]="answers[i]"
             [lastContent]="i === contents.length - 1"
             [active]="currentStep === i"
@@ -42,6 +44,8 @@
             [statsPublished]="contentGroup.statisticsPublished"
             [correctOptionsPublished]="contentGroup.correctOptionsPublished"
             [attribution]="getAttribution()"
+            [quizMode]="contentGroup.groupType === GroupType.QUIZ"
+            [alias]="alias"
           >
           </app-content-participant>
         </div>
@@ -53,6 +57,7 @@
       [contents]="contents"
       [finished]="isFinished"
       [isPureInfoSeries]="isPureInfoSeries"
+      [alias]="alias"
     >
     </app-series-overview>
     <span

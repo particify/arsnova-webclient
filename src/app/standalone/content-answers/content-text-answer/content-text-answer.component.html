@@ -3,6 +3,7 @@
   <textarea
     #answer
     matInput
+    [disabled]="disabled"
     (input)="inputEvent.emit(answer.value)"
     name="answer"
     cdkTextareaAutosize

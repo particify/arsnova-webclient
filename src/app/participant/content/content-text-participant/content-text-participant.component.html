@@ -2,6 +2,7 @@
   <form *ngIf="!givenAnswer">
     <app-content-text-answer
       (inputEvent)="textAnswer = $event"
+      [disabled]="isDisabled"
     ></app-content-text-answer>
   </form>
   <div *ngIf="givenAnswer">

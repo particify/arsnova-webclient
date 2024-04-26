@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 
 @Component({
@@ -10,4 +10,5 @@ import { CoreModule } from '@app/core/core.module';
 })
 export class ContentTextAnswerComponent {
   @Output() inputEvent: EventEmitter<string> = new EventEmitter();
+  @Input() disabled = false;
 }

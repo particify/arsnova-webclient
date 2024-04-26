@@ -123,7 +123,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
         if (
           this.settings.showContentResultsDirectly &&
           this.active &&
-          !this.answersVisible
+          !this.answersVisible &&
+          !this.content.duration
         ) {
           this.toggleAnswers();
         }
