@@ -56,7 +56,11 @@ class MockRoomService {}
 class MockDialogService {}
 
 @Injectable()
-class MockContentGroupService {}
+class MockContentGroupService {
+  getByRoomIdAndName() {
+    return of({});
+  }
+}
 
 @Injectable()
 class MockRoomStatsService {}

@@ -8,7 +8,11 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { ActivatedRouteStub, MockRouter } from '@testing/test-helpers';
+import {
+  ActivatedRouteStub,
+  MockEventService,
+  MockRouter,
+} from '@testing/test-helpers';
 import { SpyLocation } from '@angular/common/testing';
 import {
   GlobalStorageService,
@@ -31,12 +35,11 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { EventService } from '@app/core/services/util/event.service';
 
 class MockContentService {
   getContentsByIds() {
-    return of([
-      new Content('1', 'subject', 'body', [], ContentType.CHOICE, {}),
-    ]);
+    return of([new Content('1', 'subject', 'body', [], ContentType.CHOICE)]);
   }
 
   getSupportedContents(): Content[] {
@@ -164,6 +167,10 @@ describe('ContentsPageComponent', () => {
         {
           provide: FocusModeService,
           useValue: mockFocusModeService,
+        },
+        {
+          provide: EventService,
+          useClass: MockEventService,
         },
         ContentPublishService,
       ],

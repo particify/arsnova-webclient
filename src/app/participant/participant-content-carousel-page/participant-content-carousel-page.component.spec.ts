@@ -37,6 +37,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
+import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -120,6 +121,11 @@ describe('ParticipantContentCarouselPageComponent', () => {
     'setLastContentAnswered',
   ]);
 
+  const mockRoomUserAliasService = jasmine.createSpyObj(
+    'RoomUserAliasService',
+    ['generateAlias']
+  );
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ParticipantContentCarouselPageComponent, A11yIntroPipe],
@@ -188,6 +194,10 @@ describe('ParticipantContentCarouselPageComponent', () => {
         {
           provide: ContentPublishService,
           useClass: ContentPublishService,
+        },
+        {
+          provide: RoomUserAliasService,
+          useValue: mockRoomUserAliasService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

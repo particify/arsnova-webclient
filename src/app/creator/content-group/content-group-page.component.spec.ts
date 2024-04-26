@@ -46,14 +46,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Injectable()
 class MockContentService {
   getContentsByIds() {
-    const content = new Content(
-      '1',
-      'subject',
-      'body',
-      [],
-      ContentType.CHOICE,
-      {}
-    );
+    const content = new Content('1', 'subject', 'body', [], ContentType.CHOICE);
     content.state = new ContentState(1, new Date(), true);
     return of([content]);
   }

@@ -86,8 +86,7 @@ describe('ContentTextParticipantComponent', () => {
       'subject',
       'body',
       [],
-      ContentType.TEXT,
-      {}
+      ContentType.TEXT
     );
     component.sendEvent = new EventEmitter<string>();
     fixture.detectChanges();
