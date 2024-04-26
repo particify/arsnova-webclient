@@ -38,6 +38,8 @@ import { PublishContentGroupTemplateComponent } from '@app/creator/content-group
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
 import { NumericContentFormComponent } from '@app/creator/content-group/content-editing/numeric-content-form/numeric-content-form.component';
+import { LeaderboardPageComponent } from '@app/creator/content-group/leaderboard-page/leaderboard-page.component';
+import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,7 @@ import { NumericContentFormComponent } from '@app/creator/content-group/content-
     AnswerOptionListComponent,
     PublishContentGroupTemplateComponent,
     NumericContentFormComponent,
+    LeaderboardPageComponent,
   ],
   imports: [
     ContentGroupRoutingModule,
@@ -82,6 +85,7 @@ import { NumericContentFormComponent } from '@app/creator/content-group/content-
     ContentGroupTemplateEditingComponent,
     ContentPreviewComponent,
     AttributionsInfoComponent,
+    LeaderboardComponent,
   ],
 })
 export class ContentGroupModule {}

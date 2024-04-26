@@ -113,11 +113,10 @@
       >
         <mat-icon>add</mat-icon>
       </button>
-      <div class="settings-buttons">
+      <div fxLayout="row" fxLayoutGap="10px" class="settings-buttons">
         <button
           mat-button
           id="statistic-button"
-          class="settings-button"
           [routerLink]="'statistics'"
           [disabled]="contents.length === 0"
           appHotkey="2"
@@ -128,8 +127,20 @@
         </button>
         <button
           mat-button
+          id="leaderboard-button"
+          [routerLink]="'leaderboard'"
+          [disabled]="
+            contents.length === 0 || contentGroup.groupType !== GroupType.QUIZ
+          "
+          appHotkey="7"
+          [appHotkeyTitle]="'content.leaderboard' | transloco"
+        >
+          <mat-icon>emoji_events</mat-icon>
+          {{ 'content.leaderboard' | transloco }}
+        </button>
+        <button
+          mat-button
           id="settings-button"
-          class="settings-button"
           [matMenuTriggerFor]="groupSettings"
           appHotkey="3"
           [appHotkeyTitle]="'creator.content.group-settings' | transloco"
