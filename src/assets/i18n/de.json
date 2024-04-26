@@ -395,7 +395,10 @@
     "your-name": "Dein Name",
     "join-quiz": "Quiz beitreten",
     "get-ready": "Mach dich bereit!",
-    "get-ready-alias": "Mach dich bereit, {{alias}}!"
+    "get-ready-alias": "Mach dich bereit, {{alias}}!",
+    "leaderboard": "Rangliste",
+    "no-leaderboard-entries": "Noch keine Ergebnisse.",
+    "points": "Punkte"
   },
   "answer": {
     "word": "Schlagwort",

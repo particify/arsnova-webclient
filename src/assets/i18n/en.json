@@ -395,7 +395,10 @@
     "your-name": "Your name",
     "join-quiz": "Join quiz",
     "get-ready": "Get ready!",
-    "get-ready-alias": "Get ready, {{alias}}!"
+    "get-ready-alias": "Get ready, {{alias}}!",
+    "leaderboard": "Leaderboard",
+    "no-leaderboard-entries": "No results yet.",
+    "points": "Points"
   },
   "answer": {
     "word": "Keyword",

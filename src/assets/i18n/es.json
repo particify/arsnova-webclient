@@ -386,7 +386,9 @@
     "previous": "Contenido anterior",
     "round": "Ronda",
     "round-displayed": "Se muestra la ronda {{rounds}}",
-    "rounds-displayed": "Se muestran las rondas {{rounds}}"
+    "rounds-displayed": "Se muestran las rondas {{rounds}}",
+    "leaderboard": "Clasificación",
+    "points": "Puntos"
   },
   "answer": {
     "word": "Palabra clave",
