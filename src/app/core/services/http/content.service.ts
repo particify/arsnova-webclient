@@ -444,4 +444,17 @@ export class ContentService extends AbstractEntityService<Content> {
     });
     return answers;
   }
+
+  startCountdown(roomId: string, contentId: string): Observable<void> {
+    const connectionUrl = this.buildUri(`/${contentId}/start`, roomId);
+    return this.http
+      .post<void>(connectionUrl, httpOptions)
+      .pipe(
+        catchError(
+          this.handleError<void>(
+            `Start countdown for content, room: ${roomId}, content: ${contentId}`
+          )
+        )
+      );
+  }
 }

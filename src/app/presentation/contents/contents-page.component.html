@@ -1,5 +1,5 @@
 <div
-  *ngIf="!isLoading && contents"
+  *ngIf="!isLoading && !isGroupLocked() && contents"
   class="step-info-container"
   fxLayout="column"
   fxLayoutAlign="center center"
@@ -9,13 +9,24 @@
   </p>
 </div>
 <app-answer-count
-  *ngIf="!isLoading && canAnswerContent"
+  *ngIf="
+    !isLoading &&
+    !isGroupLocked() &&
+    canAnswerContent &&
+    content &&
+    (content.state.answeringEndTime || !content.duration)
+  "
   [count]="answerCount"
   [size]="'presentation'"
 ></app-answer-count>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div fxLayoutAlign="center center" *ngIf="!isLoading && !contents">
-  <p class="hint">{{ 'creator.content.no-contents-yet' | transloco }}</p>
+<div fxLayoutAlign="center center" *ngIf="!isLoading">
+  <p *ngIf="!contents" class="hint">
+    {{ 'creator.content.no-contents-yet' | transloco }}
+  </p>
+  <p *ngIf="isGroupLocked()" class="hint">
+    {{ 'creator.content.group-not-published' | transloco }}
+  </p>
 </div>
 <div>
   <div *ngIf="!isLoading" tabindex="-1" [appAutofocus] class="visually-hidden">
@@ -31,18 +42,24 @@
     class="scalable"
   >
     <app-stepper
-      *ngIf="contents && contents.length > 0 && !isLoading"
+      *ngIf="contents && contents.length > 0 && !isLoading && !isGroupLocked()"
       (newIndex)="updateURL($event)"
       [listLength]="stepCount"
       [showSteps]="false"
     >
       <cdk-step *ngFor="let content of contents; let i = index">
         <div fxLayoutAlign="center" id="step">
-          <mat-card class="presentation-card">
+          <mat-card
+            class="presentation-card"
+            [hidden]="content.duration && !content.state.answeringEndTime"
+          >
             <app-content-results
+              *ngIf="!showLeaderboard"
               [content]="content"
               [directShow]="
-                contentIndex === i && settings.showContentResultsDirectly
+                contentIndex === i &&
+                settings.showContentResultsDirectly &&
+                !content.duration
               "
               [active]="currentStep === i"
               [index]="i"
@@ -53,7 +70,24 @@
               [settings]="settings"
             >
             </app-content-results>
+            <app-leaderboard-page
+              fxFill
+              *ngIf="showLeaderboard"
+            ></app-leaderboard-page>
           </mat-card>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="center center"
+            fxLayoutGap="3em"
+            class="waiting-container"
+            [hidden]="!(content.duration && !content.state.answeringEndTime)"
+          >
+            <app-content-step-info
+              [current]="currentStep + 1"
+              [totalCount]="stepCount"
+            ></app-content-step-info>
+            <span>{{ 'content.get-ready' | transloco }}</span>
+          </div>
         </div>
         <div tabindex="0" class="visually-hidden">
           {{ 'statistic.a11y-no-more-answers' | transloco }}
@@ -72,3 +106,42 @@
     </app-stepper>
   </div>
 </div>
+<div *ngIf="!isLoading && !isGroupLocked()" fxFill>
+  <app-hotkey-action-button
+    @hotkeyEnterLeaveAnimation
+    *ngIf="
+      content &&
+      content.duration &&
+      !content.state.answeringEndTime &&
+      isPublished()
+    "
+    hotkey="s"
+    [hotkeyTitle]="'creator.content.start-quiz' | transloco"
+    [action]="'creator.content.to-start-quiz' | transloco"
+    [isNavBarVisible]="controlBarVisible"
+    (buttonClicked)="startCountdown()"
+  ></app-hotkey-action-button>
+</div>
+<div
+  class="countdown-container"
+  [ngClass]="{ 'over-control-bar': controlBarVisible }"
+>
+  <app-countdown-timer
+    *ngIf="endDate"
+    [endDate]="endDate"
+    [showIcon]="true"
+    [layout]="'column-reverse'"
+    [fontSize]="'24px'"
+  ></app-countdown-timer>
+</div>
+<app-hotkey-action-button
+  @hotkeyEnterLeaveAnimation
+  *ngIf="!isLoading && !isGroupLocked() && content && !isPublished()"
+  hotkey="p"
+  [hotkeyTitle]="'creator.content.publish-current-content' | transloco"
+  [action]="'creator.content.to-publish-content' | transloco"
+  [isNavBarVisible]="controlBarVisible"
+  infoIcon="locked"
+  [infoLabel]="'creator.content.content-is-locked' | transloco"
+  (buttonClicked)="publishCurrentContent()"
+></app-hotkey-action-button>

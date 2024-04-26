@@ -12,17 +12,6 @@
     <p class="code">{{ joinUrl || (shortId | splitShortId) }}</p>
   </div>
 </div>
-<app-hotkey-action-button
-  @hotkeyEnterLeaveAnimation
-  *ngIf="!isLoading && isActiveFeature('series') && isContentLocked()"
-  hotkey="p"
-  [hotkeyTitle]="'creator.content.publish-current-content' | transloco"
-  [action]="'creator.content.to-publish-content' | transloco"
-  [isNavBarVisible]="barVisible"
-  infoIcon="locked"
-  [infoLabel]="'creator.content.content-is-locked' | transloco"
-  (buttonClicked)="publishCurrentContent()"
-></app-hotkey-action-button>
 <div
   class="bar-container"
   (mouseenter)="toggleBarVisibility(true)"

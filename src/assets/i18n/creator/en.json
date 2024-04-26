@@ -249,7 +249,10 @@
     "to-publish-content": "to publish content",
     "publish-current-content": "Publish current content",
     "seconds-to-answer": "Seconds to answer",
-    "use-quiz-mode-to-use-timer": "Use Quiz-Mode for this question series to define a timer."
+    "use-quiz-mode-to-use-timer": "Use Quiz-Mode for this question series to define a timer.",
+    "group-not-published": "Group is not published.",
+    "to-start-quiz": "to start the quiz",
+    "start-quiz": "Start quiz"
   },
   "survey": {
     "a11y-stop-survey": "Stops the live feedback.",
@@ -460,7 +463,8 @@
     "zoom-out": "Zoom out",
     "key": "Key",
     "space": "Space",
-    "escape": "ESC"
+    "escape": "ESC",
+    "leaderboard": "Leaderboard"
   },
   "presentation": {
     "a11y-welcome": "You are now in presentation mode. Information for joining the room are displayed.",

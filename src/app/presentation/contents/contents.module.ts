@@ -10,9 +10,14 @@ import { ContentsRoutingModule } from '@app/presentation/contents/contents-routi
 import { ContentsPageComponent } from '@app/presentation/contents/contents-page.component';
 import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
 import { HotkeyActionButtonComponent } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
+import { LeaderboardPageComponent } from '@app/presentation/contents/leaderboard-page/leaderboard-page.component';
+import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
+import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 
 @NgModule({
-  declarations: [ContentsPageComponent],
+  declarations: [ContentsPageComponent, LeaderboardPageComponent],
   imports: [
     CoreModule,
     ContentsRoutingModule,
@@ -23,6 +28,10 @@ import { HotkeyActionButtonComponent } from '@app/standalone/hotkey-action-butto
     CdkStepperModule,
     AttributionsInfoComponent,
     HotkeyActionButtonComponent,
+    CountdownTimerComponent,
+    ContentWaitingComponent,
+    LeaderboardComponent,
+    ContentStepInfoComponent,
   ],
 })
 export class ContentModule {}

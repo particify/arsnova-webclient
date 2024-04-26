@@ -31,3 +31,20 @@
   margin: 10px;
   padding: 4px;
 }
+
+.countdown-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  width: 100%;
+  transition: bottom 300ms;
+}
+
+.over-control-bar {
+  bottom: 70px;
+}
+
+.waiting-container {
+  margin: 5em 0;
+}
