@@ -57,7 +57,10 @@
     "there-is-one-locked-content": "There is {{count}} more content available, which is currently not released.",
     "new-round-started": "A new round has been started.",
     "answers-reset": "Answers have been reset.",
-    "attribution-info": "This content is based on a template by {{attribution}} which is licensed under {{license}}."
+    "attribution-info": "This content is based on a template by {{attribution}} which is licensed under {{license}}.",
+    "you-are-at-position": "You are in {{ position }}. place!",
+    "show-contents": "Show contents",
+    "hide-contents": "Hide contents"
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",

@@ -33,6 +33,7 @@ import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/c
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
 import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
 import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
+import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 import { ContentLeaderboardComponent } from '@app/standalone/content-leaderboard/content-leaderboard.component';
 
 @NgModule({
@@ -57,6 +58,7 @@ import { ContentLeaderboardComponent } from '@app/standalone/content-leaderboard
     ContentNumericAnswerComponent,
     CountdownTimerComponent,
     ContentWaitingComponent,
+    LeaderboardComponent,
     ContentLeaderboardComponent,
   ],
   declarations: [
