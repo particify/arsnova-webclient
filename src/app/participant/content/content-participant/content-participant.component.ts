@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Answer } from '@app/core/models/answer';
 import { Content } from '@app/core/models/content';
@@ -17,6 +25,15 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+
+interface ContentActionTab {
+  route: string;
+  label: string;
+  hotkey: string;
+  icon: string;
+}
 
 @Component({
   selector: 'app-content-participant',
@@ -25,7 +42,7 @@ import { NumericAnswer } from '@app/core/models/numeric-answer';
 })
 export class ContentParticipantComponent
   extends FormComponent
-  implements OnInit
+  implements OnInit, OnChanges
 {
   @Input({ required: true }) content!: Content;
   @Input() answer?: Answer;
@@ -65,11 +82,36 @@ export class ContentParticipantComponent
   textAnswer!: TextAnswer;
   numericAnswer!: NumericAnswer;
 
-  constructor(protected formService: FormService) {
+  selectedRoute = '';
+
+  tabs: ContentActionTab[] = [
+    {
+      route: '',
+      label: 'participant.answer.answering',
+      hotkey: '1',
+      icon: 'edit',
+    },
+    {
+      route: 'results',
+      label: 'participant.answer.results',
+      hotkey: '2',
+      icon: 'insert_chart',
+    },
+  ];
+
+  constructor(
+    protected formService: FormService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
+  ) {
     super(formService);
   }
 
   ngOnInit(): void {
+    if (this.active) {
+      this.selectedRoute = this.route.snapshot.params['action'] || '';
+    }
     this.setExtensionData(this.content.roomId, this.content.id);
     if (this.answer) {
       this.alreadySent = true;
@@ -80,6 +122,17 @@ export class ContentParticipantComponent
     this.isMultiple = (this.content as ContentChoice).multiple;
     this.a11yMsg = this.getA11yMessage();
     this.isLoading = false;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.active &&
+      changes.active.previousValue !== undefined &&
+      changes.active.currentValue &&
+      !changes.active.previousValue
+    ) {
+      this.updateTab(this.selectedRoute);
+    }
   }
 
   initAnswerData() {
@@ -177,12 +230,35 @@ export class ContentParticipantComponent
     }, 100);
   }
 
-  goToStats() {
-    this.flipped = !this.flipped;
+  showTab(route: string): boolean {
+    switch (route) {
+      case '':
+        return (
+          this.statsPublished || this.content.format === ContentType.FLASHCARD
+        );
+      case 'results':
+        return (
+          this.statsPublished || this.content.format === ContentType.FLASHCARD
+        );
+      default:
+        return false;
+    }
   }
 
-  goToNextContent() {
-    this.next.emit();
+  updateTab(route: string): void {
+    this.selectedRoute = route;
+    const urlList = [
+      'p',
+      this.route.snapshot.params['shortId'],
+      'series',
+      this.route.snapshot.params['seriesName'],
+      this.index + 1,
+    ];
+    if (this.selectedRoute) {
+      urlList.push(this.selectedRoute);
+    }
+    const urlTree = this.router.createUrlTree(urlList);
+    this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
   getA11yMessage(): string {

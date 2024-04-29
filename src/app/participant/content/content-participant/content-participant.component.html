@@ -4,279 +4,227 @@
   attr.aria-label="{{ a11yMsg | transloco: { index: index + 1 } }}"
 >
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <section class="card-container with-margin" *ngIf="!isLoading">
-    <div class="card" [ngClass]="{ flipped: flipped }">
-      <mat-card>
-        <div class="side" [ngClass]="{ 'invisible-card-content': flipped }">
-          <div fxLayout="row">
-            <app-rendered-text
-              tabindex="0"
-              [rawText]="content.body"
-              [renderedText]="content.renderedBody"
-            ></app-rendered-text>
-            <div tabindex="0" class="visually-hidden" *ngIf="alreadySent">
-              {{
-                hasAbstained
-                  ? ('participant.answer.a11y-has-abstained' | transloco)
-                  : content.format !== ContentType.TEXT
-                    ? ('participant.answer.a11y-already-answered-' +
-                        (isMultiple ? 'multiple' : 'single')
-                      | transloco
-                        : {
-                            answers: answersString
-                          })
-                    : ('participant.answer.a11y-already-answered-text'
-                      | transloco: { answer: answersString })
-              }}
-            </div>
-            <span class="fill-remaining-space"></span>
-            <button
-              id="go-to-stats"
-              *ngIf="
-                !flipped &&
-                alreadySent &&
-                (statsPublished || content.format === ContentType.TEXT) &&
-                [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
-                  content.format
-                ) === -1
-              "
-              mat-icon-button
-              color="primary"
-              (click)="goToStats()"
-              matTooltip="{{ 'participant.answer.go-to-stats' | transloco }}"
-              aria-labelledby="flip-to-stats"
-              appHotkey=" "
-              [appHotkeyAction]="HotkeyAction.CLICK"
-              [appHotkeyDisabled]="!active"
-            >
-              <mat-icon> insert_chart </mat-icon>
-            </button>
-          </div>
-          <lib-extension-point
-            extensionId="attachment-list"
-            [extensionData]="extensionData"
-          ></lib-extension-point>
-          <form
-            (ngSubmit)="submitAnswerEvent($event, 'answer')"
-            id="answerForm"
+  <mat-card *ngIf="!isLoading">
+    <div
+      fxLayout.gt-xs="row"
+      fxLayout.xs="column"
+      fxLayoutAlign="space-between"
+      fxLayoutAlign.xs="center center"
+      fxLayoutGap="0.5em"
+    >
+      <div>
+        <app-rendered-text
+          tabindex="0"
+          [rawText]="content.body"
+          [renderedText]="content.renderedBody"
+        ></app-rendered-text>
+        <lib-extension-point
+          extensionId="attachment-list"
+          [extensionData]="extensionData"
+        ></lib-extension-point>
+      </div>
+      <div tabindex="0" class="visually-hidden" *ngIf="alreadySent">
+        {{
+          hasAbstained
+            ? ('participant.answer.a11y-has-abstained' | transloco)
+            : content.format !== ContentType.TEXT
+              ? ('participant.answer.a11y-already-answered-' +
+                  (isMultiple ? 'multiple' : 'single')
+                | transloco
+                  : {
+                      answers: answersString
+                    })
+              : ('participant.answer.a11y-already-answered-text'
+                | transloco: { answer: answersString })
+        }}
+      </div>
+
+      <nav
+        mat-tab-nav-bar
+        [tabPanel]="tabPanel"
+        *ngIf="
+          !isLoading &&
+          (alreadySent || content.format === ContentType.FLASHCARD) &&
+          content.format !== ContentType.SLIDE &&
+          statsPublished
+        "
+      >
+        <div *ngFor="let tab of tabs">
+          <a
+            *ngIf="showTab(tab.route)"
+            mat-tab-link
+            class="tab-icon-link"
+            (click)="updateTab(tab.route)"
+            [active]="selectedRoute === tab.route"
+            [appHotkey]="tab.hotkey"
+            [appHotkeyTitle]="tab.label | transloco"
+            [appHotkeyAction]="HotkeyAction.CLICK"
+            [appHotkeyDisabled]="!active"
           >
-            <div *ngIf="!flipped">
-              <app-content-choice-participant
-                *ngIf="
-                  content.format === ContentType.CHOICE ||
-                  content.format === ContentType.BINARY
-                "
-                [answer]="choiceAnswer"
-                [content]="choiceContent"
-                [isDisabled]="formDisabled || alreadySent"
-                (answerChanged)="forwardAnswerMessage($event)"
-                [sendEvent]="sendEvent"
-                [statsPublished]="statsPublished"
-                [correctOptionsPublished]="correctOptionsPublished"
-              >
-              </app-content-choice-participant>
-              <app-content-scale-participant
-                *ngIf="content.format === ContentType.SCALE"
-                [answer]="choiceAnswer"
-                [content]="scaleContent"
-                [isDisabled]="formDisabled || alreadySent"
-                (answerChanged)="forwardAnswerMessage($event)"
-                [sendEvent]="sendEvent"
-                [statsPublished]="statsPublished"
-              >
-              </app-content-scale-participant>
-              <app-content-text-participant
-                *ngIf="content.format === ContentType.TEXT"
-                [answer]="textAnswer"
-                [content]="content"
-                [isDisabled]="formDisabled || alreadySent"
-                [sendEvent]="sendEvent"
-                (answerChanged)="forwardAnswerMessage($event)"
-              ></app-content-text-participant>
-              <app-content-sort-participant
-                *ngIf="content.format === ContentType.SORT"
-                [answer]="choiceAnswer"
-                [content]="choiceContent"
-                [isDisabled]="formDisabled || alreadySent"
-                [sendEvent]="sendEvent"
-                (answerChanged)="forwardAnswerMessage($event)"
-                [statsPublished]="statsPublished"
-                [correctOptionsPublished]="correctOptionsPublished"
-              >
-              </app-content-sort-participant>
-              <app-content-wordcloud-participant
-                *ngIf="content.format === ContentType.WORDCLOUD"
-                [answer]="wordcloudAnswer"
-                [content]="wordloudContent"
-                [isDisabled]="formDisabled || alreadySent"
-                [sendEvent]="sendEvent"
-                (answerChanged)="forwardAnswerMessage($event)"
-              >
-              </app-content-wordcloud-participant>
-              <app-content-prioritization-participant
-                *ngIf="content.format === ContentType.PRIORITIZATION"
-                [answer]="prioritizationAnswer"
-                [content]="prioritizationContent"
-                [isDisabled]="formDisabled || alreadySent"
-                [sendEvent]="sendEvent"
-                (answerChanged)="forwardAnswerMessage($event)"
-              >
-              </app-content-prioritization-participant>
-              <app-content-numeric-participant
-                *ngIf="content.format === ContentType.NUMERIC"
-                [answer]="numericAnswer"
-                [content]="numericContent"
-                [isDisabled]="formDisabled || alreadySent"
-                [sendEvent]="sendEvent"
-                (answerChanged)="forwardAnswerMessage($event)"
-                [correctOptionsPublished]="correctOptionsPublished"
-              >
-              </app-content-numeric-participant>
-            </div>
-            <div fxLayout="row-reverse" fxLayoutAlign="end">
-              <div
-                fxFill
-                *ngIf="
-                  [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
-                    content.format
-                  ) === -1
-                "
-              >
-                <div
-                  fxLayout="row"
-                  fxLayoutAlign="center center"
-                  fxLayoutGap="1em"
-                  [ngClass]="{ visible: alreadySent, invisible: !alreadySent }"
-                  class="text"
-                >
-                  <p class="primary" *ngIf="!hasAbstained">
-                    {{ 'participant.answer.has-voted' | transloco }}
-                  </p>
-                  <p class="primary" *ngIf="hasAbstained">
-                    {{ 'participant.answer.has-abstained' | transloco }}
-                  </p>
-                </div>
-                <div [ngClass]="{ invisible: alreadySent }">
-                  <div fxLayoutAlign="center" fxLayoutGap="10px">
-                    <button
-                      tabindex="{{ alreadySent ? '-1' : '0' }}"
-                      mat-button
-                      *ngIf="content.abstentionsAllowed"
-                      class="abstain"
-                      [ngClass]="{ disabled: alreadySent }"
-                      type="button"
-                      (click)="submitAnswerEvent($event, 'abstention')"
-                      aria-labelledby="abstain"
-                    >
-                      {{ 'participant.answer.abstain' | transloco }}
-                    </button>
-                    <app-loading-button
-                      name="participant.answer.submit"
-                    ></app-loading-button>
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                class="attribution-button"
-                [ngClass]="{
-                  'absolute-position': content.format !== ContentType.SLIDE
-                }"
-                *ngIf="attribution"
-                mat-icon-button
-                (click)="tooltip.toggle()"
-                (mouseover)="tooltip.show()"
-              >
-                <mat-icon #tooltip="matTooltip" [matTooltip]="attribution"
-                  >attribution</mat-icon
-                >
-              </button>
-              <div
-                fxFill
-                *ngIf="content.format === ContentType.FLASHCARD"
-                fxLayoutAlign="center"
-              >
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="goToStats()"
-                  aria-labelledby="show-front"
-                  appHotkey=" "
-                  [appHotkeyAction]="HotkeyAction.CLICK"
-                  [appHotkeyDisabled]="!active"
-                >
-                  {{ 'participant.answer.show-back' | transloco }}
-                </button>
-              </div>
-            </div>
-          </form>
+            <mat-icon color="primary">{{ tab.icon }}</mat-icon>
+          </a>
         </div>
-        <div
-          class="back side"
-          [ngClass]="{ 'invisible-card-content': !flipped }"
+      </nav>
+    </div>
+    <mat-tab-nav-panel #tabPanel>
+      <form
+        *ngIf="selectedRoute === ''"
+        (ngSubmit)="submitAnswerEvent($event, 'answer')"
+        id="answerForm"
+      >
+        <app-content-choice-participant
+          *ngIf="
+            content.format === ContentType.CHOICE ||
+            content.format === ContentType.BINARY
+          "
+          [answer]="choiceAnswer"
+          [content]="choiceContent"
+          [isDisabled]="formDisabled || alreadySent"
+          (answerChanged)="forwardAnswerMessage($event)"
+          [sendEvent]="sendEvent"
+          [statsPublished]="statsPublished"
+          [correctOptionsPublished]="correctOptionsPublished"
         >
-          <div *ngIf="flipped" class="back-container">
-            <app-content-results
-              *ngIf="content.format !== ContentType.FLASHCARD && flipped"
-              [content]="content"
-              [active]="true"
-              [directShow]="true"
-              [correctOptionsPublished]="correctOptionsPublished"
-              [useCustomFlipAction]="true"
-              (customFlipEvent)="goToStats()"
-            ></app-content-results>
-            <div *ngIf="content.format === ContentType.FLASHCARD && flipped">
-              <app-rendered-text
-                [rawText]="flashcardContent.additionalText"
-                [renderedText]="flashcardContent.renderedAdditionalText"
-                [markdownFeatureset]="flashcardMarkdownFeatures"
-                (rendered)="isLoading = false"
-              ></app-rendered-text>
+        </app-content-choice-participant>
+        <app-content-scale-participant
+          *ngIf="content.format === ContentType.SCALE"
+          [answer]="choiceAnswer"
+          [content]="scaleContent"
+          [isDisabled]="formDisabled || alreadySent"
+          (answerChanged)="forwardAnswerMessage($event)"
+          [sendEvent]="sendEvent"
+          [statsPublished]="statsPublished"
+        >
+        </app-content-scale-participant>
+        <app-content-text-participant
+          *ngIf="content.format === ContentType.TEXT"
+          [answer]="textAnswer"
+          [content]="content"
+          [isDisabled]="formDisabled || alreadySent"
+          [sendEvent]="sendEvent"
+          (answerChanged)="forwardAnswerMessage($event)"
+        ></app-content-text-participant>
+        <app-content-sort-participant
+          *ngIf="content.format === ContentType.SORT"
+          [answer]="choiceAnswer"
+          [content]="choiceContent"
+          [isDisabled]="formDisabled || alreadySent"
+          [sendEvent]="sendEvent"
+          (answerChanged)="forwardAnswerMessage($event)"
+          [statsPublished]="statsPublished"
+          [correctOptionsPublished]="correctOptionsPublished"
+        >
+        </app-content-sort-participant>
+        <app-content-wordcloud-participant
+          *ngIf="content.format === ContentType.WORDCLOUD"
+          [answer]="wordcloudAnswer"
+          [content]="wordloudContent"
+          [isDisabled]="formDisabled || alreadySent"
+          [sendEvent]="sendEvent"
+          (answerChanged)="forwardAnswerMessage($event)"
+        >
+        </app-content-wordcloud-participant>
+        <app-content-prioritization-participant
+          *ngIf="content.format === ContentType.PRIORITIZATION"
+          [answer]="prioritizationAnswer"
+          [content]="prioritizationContent"
+          [isDisabled]="formDisabled || alreadySent"
+          [sendEvent]="sendEvent"
+          (answerChanged)="forwardAnswerMessage($event)"
+        >
+        </app-content-prioritization-participant>
+        <app-content-numeric-participant
+          *ngIf="content.format === ContentType.NUMERIC"
+          [answer]="numericAnswer"
+          [content]="numericContent"
+          [isDisabled]="formDisabled || alreadySent"
+          [sendEvent]="sendEvent"
+          (answerChanged)="forwardAnswerMessage($event)"
+          [correctOptionsPublished]="correctOptionsPublished"
+        >
+        </app-content-numeric-participant>
+        <div fxLayout="row-reverse" fxLayoutAlign="end">
+          <div
+            fxFill
+            *ngIf="
+              [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
+                content.format
+              ) === -1
+            "
+          >
+            <div
+              fxLayout="row"
+              fxLayoutAlign="center center"
+              fxLayoutGap="1em"
+              [ngClass]="{ visible: alreadySent, invisible: !alreadySent }"
+              class="text"
+            >
+              <p class="primary" *ngIf="!hasAbstained">
+                {{ 'participant.answer.has-voted' | transloco }}
+              </p>
+              <p class="primary" *ngIf="hasAbstained">
+                {{ 'participant.answer.has-abstained' | transloco }}
+              </p>
+            </div>
+            <div [ngClass]="{ invisible: alreadySent }">
               <div fxLayoutAlign="center" fxLayoutGap="10px">
                 <button
-                  mat-stroked-button
-                  (click)="goToStats()"
-                  aria-labelledby="show-front"
-                  appHotkey=" "
-                  [appHotkeyAction]="HotkeyAction.CLICK"
-                  [appHotkeyDisabled]="!active"
+                  tabindex="{{ alreadySent ? '-1' : '0' }}"
+                  mat-button
+                  *ngIf="content.abstentionsAllowed"
+                  class="abstain"
+                  [ngClass]="{ disabled: alreadySent }"
+                  type="button"
+                  (click)="submitAnswerEvent($event, 'abstention')"
+                  aria-labelledby="abstain"
                 >
-                  {{ 'participant.answer.show-front' | transloco }}
+                  {{ 'participant.answer.abstain' | transloco }}
                 </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="goToNextContent()"
-                  aria-labelledby="next-content"
-                >
-                  {{
-                    (lastContent
-                      ? 'participant.answer.first-content'
-                      : 'participant.answer.next-content'
-                    ) | transloco
-                  }}
-                </button>
+                <app-loading-button
+                  name="participant.answer.submit"
+                ></app-loading-button>
               </div>
             </div>
           </div>
+          <button
+            type="button"
+            class="attribution-button"
+            [ngClass]="{
+              'absolute-position': content.format !== ContentType.SLIDE
+            }"
+            *ngIf="attribution"
+            mat-icon-button
+            (click)="tooltip.toggle()"
+            (mouseover)="tooltip.show()"
+          >
+            <mat-icon #tooltip="matTooltip" [matTooltip]="attribution"
+              >attribution</mat-icon
+            >
+          </button>
         </div>
-      </mat-card>
-    </div>
-  </section>
+      </form>
+      <div *ngIf="selectedRoute === 'results'">
+        <app-content-results
+          *ngIf="content.format !== ContentType.FLASHCARD"
+          [content]="content"
+          [active]="true"
+          [directShow]="true"
+          [correctOptionsPublished]="correctOptionsPublished"
+          [isStandalone]="false"
+        ></app-content-results>
+        <div *ngIf="content.format === ContentType.FLASHCARD">
+          <app-rendered-text
+            [rawText]="flashcardContent.additionalText"
+            [renderedText]="flashcardContent.renderedAdditionalText"
+            [markdownFeatureset]="flashcardMarkdownFeatures"
+            (rendered)="isLoading = false"
+          ></app-rendered-text>
+        </div>
+      </div>
+    </mat-tab-nav-panel>
+  </mat-card>
   <div tabindex="-1" class="visually-hidden">
     <div id="submit">{{ 'participant.answer.a11y-submit' | transloco }}</div>
     <div id="abstain">{{ 'participant.answer.a11y-abstain' | transloco }}</div>
-    <div id="flip-to-stats">
-      {{ 'participant.answer.a11y-go-to-stats' | transloco }}
-    </div>
-    <div id="show-back">
-      {{ 'participant.answer.a11y-show-back' | transloco }}
-    </div>
-    <div id="show-front">
-      {{ 'participant.answer.a11y-show-front' | transloco }}
-    </div>
-    <div id="next-content">
-      {{ 'participant.answer.a11y-next-content' | transloco }}
-    </div>
   </div>
 </div>

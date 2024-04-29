@@ -75,6 +75,14 @@ const routes: Routes = [
     },
     title: 'series',
   },
+  {
+    path: 'series/:seriesName/:contentIndex/:action',
+    component: ParticipantContentCarouselPageComponent,
+    data: {
+      feature: RoutingFeature.CONTENTS,
+    },
+    title: 'series',
+  },
 ];
 
 @NgModule({

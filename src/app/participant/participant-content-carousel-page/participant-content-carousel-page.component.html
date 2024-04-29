@@ -26,9 +26,6 @@
           [appAutofocus]
           id="step"
           *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
-          appHotkey="1"
-          [appHotkeyDisabled]="currentStep !== i"
-          [appHotkeyTitle]="'participant.content.description' | transloco"
         >
           <app-loading-indicator
             *ngIf="isReloadingCurrentContent"
