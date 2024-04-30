@@ -1,10 +1,13 @@
+@import '../../../variables';
+
 .container {
   overflow: hidden;
+  padding: 8px;
 }
 
 .fixed-width-container {
-  width: calc(92vw + 10px);
-  max-width: calc(810px + 2em);
+  width: 92vw;
+  max-width: $card-width;
 }
 
 .inner-container {

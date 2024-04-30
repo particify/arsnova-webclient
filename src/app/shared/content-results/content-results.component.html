@@ -29,7 +29,7 @@
     >
       <app-answer-count
         tabindex="-1"
-        *ngIf="!isLoading"
+        *ngIf="!isLoading && isStandalone"
         [count]="answerCount"
       ></app-answer-count>
       <div fxLayout="row">
@@ -43,7 +43,7 @@
           <button
             mat-icon-button
             color="primary"
-            *ngIf="answersVisible && allowingUnitChange"
+            *ngIf="answersVisible && allowingUnitChange && isStandalone"
             (click)="toggleVisualizationUnit()"
             [matTooltip]="
               'statistic.' +
@@ -64,7 +64,12 @@
           <button
             mat-icon-button
             color="primary"
-            *ngIf="answersVisible && !survey && correctOptionsPublished"
+            *ngIf="
+              answersVisible &&
+              !survey &&
+              correctOptionsPublished &&
+              isStandalone
+            "
             disableRipple
             (click)="toggleCorrect()"
             matTooltip="{{ 'statistic.show-correct' | transloco }}"
@@ -95,7 +100,7 @@
             <mat-icon>toc</mat-icon>
           </button>
           <button
-            *ngIf="!useCustomFlipAction"
+            *ngIf="isStandalone"
             id="show-chart-btn"
             mat-icon-button
             color="primary"
@@ -114,26 +119,12 @@
           >
             <mat-icon>insert_chart</mat-icon>
           </button>
-          <button
-            *ngIf="
-              content.format !== ContentType.FLASHCARD && useCustomFlipAction
-            "
-            mat-icon-button
-            color="primary"
-            matTooltip="{{ 'participant.answer.go-to-content' | transloco }}"
-            (click)="customFlipEvent.emit()"
-            aria-labelledby="flip-back"
-            appHotkey=" "
-            [appHotkeyAction]="HotkeyAction.CLICK"
-            [appHotkeyDisabled]="!active"
-          >
-            <mat-icon> cached </mat-icon>
-          </button>
         </div>
       </div>
     </div>
   </div>
   <app-rendered-text
+    *ngIf="isStandalone"
     tabindex="0"
     [rawText]="content.body"
     [renderedText]="content.renderedBody"

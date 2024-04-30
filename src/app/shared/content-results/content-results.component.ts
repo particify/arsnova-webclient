@@ -59,9 +59,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   @Input() correctOptionsPublished = false;
   @Input() isPresentation = false;
   @Input() indexChanged?: EventEmitter<void>;
-  @Input() useCustomFlipAction = false;
+  @Input() isStandalone = true;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
-  @Output() customFlipEvent = new EventEmitter();
   @Input() settings = new UserSettings();
 
   attachmentData: any;

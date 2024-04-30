@@ -411,6 +411,21 @@ div {
   flex-grow: initial !important;
 }
 
+.tab-icon-link.mat-mdc-tab-link.mdc-tab {
+  min-width: unset;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 4px;
+
+  &.mdc-tab--active {
+    @extend %primary-variant;
+  }
+}
+
+.tab-icon-link .mdc-tab-indicator {
+  display: none;
+}
+
 // Mat Form Field
 
 .mat-mdc-text-field-wrapper.mdc-text-field--outlined
