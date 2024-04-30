@@ -11,9 +11,9 @@ export class Content {
   renderedBody!: string;
   groups: string[];
   format: ContentType;
-  formatAttributes: { [key: string]: string };
   abstentionsAllowed = true;
   state!: ContentState;
+  duration?: number;
 
   constructor(
     roomId: string = '',
@@ -21,13 +21,13 @@ export class Content {
     body: string = '',
     groups: string[] = [],
     format: ContentType = ContentType.TEXT,
-    formatAttributes: { [key: string]: string } = {}
+    duration?: number
   ) {
     this.roomId = roomId;
     this.subject = subject;
     this.body = body;
     this.groups = groups;
     this.format = format;
-    this.formatAttributes = formatAttributes;
+    this.duration = duration;
   }
 }

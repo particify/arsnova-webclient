@@ -28,14 +28,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 @Injectable()
 class MockContentService {
   getContentsByIds() {
-    const content = new Content(
-      '1',
-      'subject',
-      'body',
-      [],
-      ContentType.CHOICE,
-      {}
-    );
+    const content = new Content('1', 'subject', 'body', [], ContentType.CHOICE);
     content.state = new ContentState(1, new Date(), true);
     return of([content]);
   }

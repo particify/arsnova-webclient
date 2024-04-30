@@ -148,10 +148,14 @@
     "dont-publish-answers": "Antworten nicht freigeben",
     "publish-correct-options": "Richtige Antworten freigeben",
     "dont-publish-correct-options": "Richtige Antworten sperren",
+    "enable-quiz-mode": "Quiz-Mode aktivieren",
+    "disable-quiz-mode": "Quiz-Mode deaktivieren",
     "statistics-are-published": "Statistiken sind freigegeben",
     "statistics-are-not-published": "Statistiken sind gesperrt",
     "correct-options-are-published": "Richtige Antworten sind freigegeben",
     "correct-options-are-not-published": "Richtige Antworten sind gesperrt",
+    "quiz-mode-enabled": "Quiz-Mode aktiviert",
+    "quiz-mode-disabled": "Quiz-Mode deaktiviert",
     "edit-content": "Bearbeiten",
     "copy-content-to-group": "Kopieren",
     "move-content-to-group": "Verschieben",
@@ -243,7 +247,12 @@
     "publishing-mode-description-single": "Nur ausgewählter Inhalt ist freigeschaltet.",
     "content-is-locked": "Inhalt ist gesperrt",
     "to-publish-content": "zum Freischalten des Inhalts",
-    "publish-current-content": "Aktuellen Inhalt freischalten"
+    "publish-current-content": "Aktuellen Inhalt freischalten",
+    "seconds-to-answer": "Sekunden zum Antworten",
+    "use-quiz-mode-to-use-timer": "Nutze den Quiz-Modus für diese Fragenserie, um einen Timer festzulegen.",
+    "group-not-published": "Fragenserie ist gesperrt.",
+    "to-start-quiz": "zum Starten des Quizzes",
+    "start-quiz": "Quiz starten"
   },
   "survey": {
     "a11y-stop-survey": "Stoppt das Live Feedback.",
@@ -454,7 +463,8 @@
     "zoom-out": "Verkleinern",
     "key": "Taste",
     "space": "Leertaste",
-    "escape": "ESC"
+    "escape": "ESC",
+    "leaderboard": "Rangliste"
   },
   "presentation": {
     "a11y-welcome": "Du befindest dich jetzt im Präsentationsmodus. Es werden Informationen für das Beitreten des Raums angezeigt.",

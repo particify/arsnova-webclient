@@ -16,9 +16,10 @@ export class ContentNumeric extends Content {
     minNumber: number = 0,
     maxNumber: number = 100,
     tolerance: number = 0,
-    correctNumber?: number
+    correctNumber?: number,
+    duration?: number
   ) {
-    super(roomId, subject, body, groups, format, {});
+    super(roomId, subject, body, groups, format, duration);
     this.minNumber = minNumber;
     this.maxNumber = maxNumber;
     this.tolerance = tolerance;

@@ -62,8 +62,7 @@ describe('ContentPreviewComponent', () => {
           'subject',
           'body',
           [],
-          ContentType.CHOICE,
-          {}
+          ContentType.CHOICE
         );
         fixture.detectChanges();
       });

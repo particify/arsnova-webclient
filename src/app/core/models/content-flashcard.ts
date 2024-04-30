@@ -14,7 +14,7 @@ export class ContentFlashcard extends Content {
     groups: string[] = [],
     format: ContentType = ContentType.FLASHCARD
   ) {
-    super(roomId, subject, body, groups, format, {});
+    super(roomId, subject, body, groups, format);
     this.additionalText = additionalText;
   }
 }

@@ -1,3 +1,5 @@
+@import '../../../../variables';
+
 $chart-size: 100px;
 
 .canvas-container {
@@ -15,18 +17,28 @@ $chart-size: 100px;
 
 @mixin text-base {
   opacity: 0.8;
-  font-weight: bold;
 }
 
 .data-text {
   @include text-base;
 
-  font-size: 18px;
+  font-weight: $font-weight-bold;
+  font-size: $l-font-size;
 }
 
 .info-text {
   @include text-base;
 
-  font-size: 14px;
-  font-weight: normal;
+  font-size: $s-font-size;
+}
+
+@include xs {
+  .canvas-container {
+    width: calc($chart-size * 0.8);
+    height: calc($chart-size * 0.8 / 2);
+  }
+
+  .data-text {
+    font-size: $s-font-size;
+  }
 }

@@ -82,8 +82,7 @@ describe('SeriesOverviewComponent', () => {
       'subject',
       'body',
       [],
-      ContentType.CHOICE,
-      {}
+      ContentType.CHOICE
     );
     content1.id = '1111';
     const content2 = new Content(
@@ -91,8 +90,7 @@ describe('SeriesOverviewComponent', () => {
       'subject',
       'body',
       [],
-      ContentType.CHOICE,
-      {}
+      ContentType.CHOICE
     );
     content2.id = '2222';
     const content3 = new Content(
@@ -100,8 +98,7 @@ describe('SeriesOverviewComponent', () => {
       'subject',
       'body',
       [],
-      ContentType.CHOICE,
-      {}
+      ContentType.CHOICE
     );
     content3.id = '3333';
     component.contents = [content1, content2, content3];

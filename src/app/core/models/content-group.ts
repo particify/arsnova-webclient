@@ -9,6 +9,7 @@ export class ContentGroup {
   correctOptionsPublished: boolean;
   publishingMode: PublishingMode;
   publishingIndex: number;
+  groupType: GroupType;
 
   constructor(
     roomId = '',
@@ -17,7 +18,8 @@ export class ContentGroup {
     statisticsPublished = true,
     correctOptionsPublished = true,
     publishingMode = PublishingMode.NONE,
-    publishingIndex = 0
+    publishingIndex = 0,
+    groupType = GroupType.MIXED
   ) {
     this.roomId = roomId;
     this.name = name;
@@ -26,6 +28,7 @@ export class ContentGroup {
     this.correctOptionsPublished = correctOptionsPublished;
     this.publishingMode = publishingMode;
     this.publishingIndex = publishingIndex;
+    this.groupType = groupType;
   }
 }
 
@@ -48,3 +51,8 @@ export const PUBLISHING_MODE_ITEMS: PublishingModeItem[] = [
   { type: PublishingMode.UP_TO, name: 'up-to', icon: 'expand_all' },
   { type: PublishingMode.SINGLE, name: 'single', icon: 'play_circle' },
 ];
+
+export enum GroupType {
+  MIXED = 'MIXED',
+  QUIZ = 'QUIZ',
+}

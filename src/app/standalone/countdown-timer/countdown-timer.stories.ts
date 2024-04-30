@@ -8,9 +8,6 @@ import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdo
 import { HttpClientModule } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import { TranslocoRootModule } from '@app/transloco-root.module';
-import { NotificationService } from '@app/core/services/util/notification.service';
-
-class MockClass {}
 
 export default {
   component: CountdownTimerComponent,
@@ -19,12 +16,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [CountdownTimerComponent],
-      providers: [
-        {
-          provide: NotificationService,
-          useClass: MockClass,
-        },
-      ],
     }),
     applicationConfig({
       providers: [

@@ -1,0 +1,7 @@
+@import '../../../variables';
+
+@include xs {
+  .leaderboard-item {
+    font-size: $s-font-size;
+  }
+}

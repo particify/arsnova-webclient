@@ -135,14 +135,49 @@
               ></lib-extension-point>
               <div class="form-spacer"></div>
             </form>
-            <div>
+            <div
+              *ngIf="!['slide', 'flashcard'].includes(selectedFormat.name)"
+              fxLayout="row"
+              fxLayoutAlign="space-between center"
+              fxLayoutGap="1em"
+            >
               <mat-checkbox
                 [disabled]="formDisabled"
-                *ngIf="!['slide', 'flashcard'].includes(selectedFormat.name)"
                 [(ngModel)]="abstentionsAllowed"
               >
                 {{ 'creator.content.abstentions-allowed' | transloco }}
               </mat-checkbox>
+              <div
+                fxLayout="row"
+                fxLayoutGap="1em"
+                fxLayoutAlign="start center"
+                [matTooltip]="
+                  'creator.content.use-quiz-mode-to-use-timer' | transloco
+                "
+                [matTooltipDisabled]="
+                  contentGroup?.groupType === GroupType.QUIZ
+                "
+              >
+                <span
+                  [ngClass]="{
+                    'disabled-label': contentGroup?.groupType !== GroupType.QUIZ
+                  }"
+                  >{{ 'creator.content.seconds-to-answer' | transloco }}</span
+                >
+                <mat-form-field
+                  appearance="outline"
+                  class="no-field-hint initial-width minimal-number-input smaller-select-input"
+                >
+                  <input
+                    [disabled]="contentGroup?.groupType !== GroupType.QUIZ"
+                    [(ngModel)]="duration"
+                    matInput
+                    type="number"
+                    max="600"
+                    placeholder="30"
+                  />
+                </mat-form-field>
+              </div>
             </div>
             <div *ngIf="!isLoading" [ngSwitch]="selectedFormat.type">
               <app-choice-content-form

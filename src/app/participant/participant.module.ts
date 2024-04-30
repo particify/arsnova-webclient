@@ -30,6 +30,11 @@ import { ContentSortAnswerComponent } from '@app/standalone/content-answers/cont
 import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
 import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
 import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
+import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
+import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
+import { ContentLeaderboardComponent } from '@app/standalone/content-leaderboard/content-leaderboard.component';
 
 @NgModule({
   imports: [
@@ -51,6 +56,10 @@ import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/c
     ContentTextAnswerComponent,
     ContentWordcloudAnswerComponent,
     ContentNumericAnswerComponent,
+    CountdownTimerComponent,
+    ContentWaitingComponent,
+    LeaderboardComponent,
+    ContentLeaderboardComponent,
   ],
   declarations: [
     ContentChoiceParticipantComponent,
@@ -65,6 +74,7 @@ import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/c
     ParticipantPageComponent,
     InfoChartComponent,
     ContentNumericParticipantComponent,
+    LeaderboardPageComponent,
   ],
   providers: [provideTranslocoScope('participant'), ContentCarouselService],
 })

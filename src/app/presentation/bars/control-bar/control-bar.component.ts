@@ -20,7 +20,11 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import {
+  ContentGroup,
+  GroupType,
+  PublishingMode,
+} from '@app/core/models/content-group';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { Subject, of } from 'rxjs';
@@ -39,7 +43,6 @@ import {
 } from '@app/core/services/util/notification.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
@@ -47,7 +50,6 @@ import { PresentationStepPosition } from '@app/core/models/events/presentation-s
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { RoundState } from '@app/core/models/events/round-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
-import { hotkeyEnterLeaveAnimation } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -75,7 +77,6 @@ export class KeyNavBarItem extends NavBarItem {
   selector: 'app-control-bar',
   templateUrl: './control-bar.component.html',
   styleUrls: ['./control-bar.component.scss'],
-  animations: [hotkeyEnterLeaveAnimation],
 })
 export class ControlBarComponent
   extends NavBarComponent
@@ -161,7 +162,6 @@ export class ControlBarComponent
     private contentService: ContentService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
-    private contentPublishService: ContentPublishService,
     private presentationService: PresentationService
   ) {
     super(
@@ -218,6 +218,7 @@ export class ControlBarComponent
         const group = this.contentGroups.find((g) => g.name === this.groupName);
         if (group) {
           this.group = group;
+          this.checkForQuizMode();
         }
         if (
           this.isActiveFeature(RoutingFeature.CONTENTS) &&
@@ -365,16 +366,6 @@ export class ControlBarComponent
     }
   }
 
-  isContentLocked(): boolean {
-    return (
-      !!this.group &&
-      !this.contentPublishService.isIndexPublished(
-        this.group,
-        this.contentIndex
-      )
-    );
-  }
-
   removeProtocolFromString(url: string): string {
     return url.replace(/^https?:\/\//, '');
   }
@@ -503,6 +494,20 @@ export class ControlBarComponent
     return group.publishingMode === PublishingMode.NONE;
   }
 
+  private checkForQuizMode(): void {
+    if (this.group?.groupType === GroupType.QUIZ) {
+      if (!this.groupItems.map((i) => i.name).includes('leaderboard')) {
+        this.groupItems.push(
+          new KeyNavBarItem('leaderboard', 'emoji_events', '', 'l')
+        );
+      }
+    } else {
+      if (this.groupItems.map((i) => i.name).includes('leaderboard')) {
+        this.groupItems.splice(-1, 1);
+      }
+    }
+  }
+
   changeGroup(contentGroup: ContentGroup) {
     if (this.group?.id !== contentGroup.id) {
       if (!this.isGroupLocked(contentGroup)) {
@@ -515,6 +520,7 @@ export class ControlBarComponent
 
   updateGroup(contentGroup: ContentGroup) {
     this.setGroup(contentGroup);
+    this.checkForQuizMode();
     this.activeGroup.emit(this.groupName);
   }
 
@@ -533,19 +539,6 @@ export class ControlBarComponent
         this.updateGroup(contentGroup);
       }
     });
-  }
-
-  publishCurrentContent(): void {
-    if (this.group) {
-      const changes = { publishingIndex: this.contentIndex };
-      this.contentGroupService
-        .patchContentGroup(this.group, changes)
-        .subscribe(() => {
-          if (this.group) {
-            this.group.publishingIndex = this.contentIndex;
-          }
-        });
-    }
   }
 
   toggleBarVisibility(visible: boolean) {

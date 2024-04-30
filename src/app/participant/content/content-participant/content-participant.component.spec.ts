@@ -5,6 +5,13 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { Content } from '@app/core/models/content';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { EventService } from '@app/core/services/util/event.service';
+import {
+  MockEventService,
+  MockNotificationService,
+} from '@testing/test-helpers';
+import { ContentService } from '@app/core/services/http/content.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ActivatedRouteStub } from '@testing/test-helpers';
 import { of } from 'rxjs';
@@ -15,6 +22,10 @@ describe('ContentParticipantComponent', () => {
   let fixture: ComponentFixture<ContentParticipantComponent>;
 
   const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
+
+  const mockContentService = jasmine.createSpyObj('ContentService', [
+    'getContent',
+  ]);
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = of([{ seriesName: 'SERIES' }]);
@@ -38,6 +49,18 @@ describe('ContentParticipantComponent', () => {
         },
 
         {
+          provide: EventService,
+          useClass: MockEventService,
+        },
+        {
+          provide: ContentService,
+          useValue: mockContentService,
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService,
+        },
+        {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
         },
@@ -54,8 +77,7 @@ describe('ContentParticipantComponent', () => {
       'subject',
       'body',
       [],
-      ContentType.CHOICE,
-      {}
+      ContentType.CHOICE
     );
     fixture.detectChanges();
   });

@@ -116,6 +116,10 @@ b {
   font-weight: $font-weight-bold;
 }
 
+.bold-text {
+  font-weight: $font-weight-bold;
+}
+
 ul {
   color: var(--on-surface);
 }
@@ -440,6 +444,10 @@ div {
 
 .no-field-hint .mat-mdc-form-field-subscript-wrapper {
   height: 0;
+}
+
+.minimal-number-input .mat-mdc-form-field-infix {
+  width: 48px;
 }
 
 .number-input-small .mat-mdc-form-field-infix {

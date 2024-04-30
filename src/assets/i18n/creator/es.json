@@ -438,7 +438,8 @@
     "zoom-out": "Alejar",
     "key": "Tecla",
     "space": "Espacio",
-    "escape": "ESC"
+    "escape": "ESC",
+    "leaderboard": "Clasificación"
   },
   "presentation": {
     "a11y-welcome": "Ahora estás en modo de presentación. Se muestran las instrucciones para unirse a la sala.",

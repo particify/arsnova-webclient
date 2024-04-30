@@ -19,6 +19,8 @@ import { AnswerResultOverview } from '@app/core/models/answer-result';
 import { SeriesCreated } from '@app/core/models/events/series-created';
 import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
+import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
+import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -238,5 +240,36 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   ): Observable<ContentLicenseAttribution[]> {
     const connectionUrl = this.buildUri(`/${groupId}/attributions`, roomId);
     return this.http.get<ContentLicenseAttribution[]>(connectionUrl);
+  }
+
+  getLeaderboard(
+    roomId: string,
+    groupId: string
+  ): Observable<LeaderboardItem[]> {
+    const connectionUrl = this.buildUri(`/${groupId}/leaderboard`, roomId);
+    return this.http
+      .get<LeaderboardItem[]>(connectionUrl)
+      .pipe(map((items) => items.sort((a, b) => b.score - a.score)));
+  }
+
+  getCurrentLeaderboard(
+    roomId: string,
+    groupId: string,
+    contentId?: string
+  ): Observable<CurrentLeaderboardItem[]> {
+    const connectionUrl = this.buildUri(
+      `/${groupId}/leaderboard?contentId=${contentId}`,
+      roomId
+    );
+    return this.http
+      .get<CurrentLeaderboardItem[]>(connectionUrl)
+      .pipe(
+        map((items) =>
+          items.sort(
+            (a, b) =>
+              (b.currentResult?.points || 0) - (a.currentResult?.points || 0)
+          )
+        )
+      );
   }
 }

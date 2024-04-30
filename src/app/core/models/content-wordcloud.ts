@@ -10,9 +10,10 @@ export class ContentWordcloud extends Content {
     body: string = '',
     groups: string[] = [],
     format: ContentType = ContentType.WORDCLOUD,
-    maxAnswers: number = 1
+    maxAnswers: number = 1,
+    duration?: number
   ) {
-    super(roomId, subject, body, groups, format, {});
+    super(roomId, subject, body, groups, format, duration);
     this.maxAnswers = maxAnswers;
   }
 }

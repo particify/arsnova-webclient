@@ -15,9 +15,10 @@ export class ContentChoice extends Content {
     options: AnswerOption[] = [],
     correctOptionIndexes: number[] = [],
     multiple: boolean = false,
-    format: ContentType = ContentType.CHOICE
+    format: ContentType = ContentType.CHOICE,
+    duration?: number
   ) {
-    super(roomId, subject, body, groups, format, {});
+    super(roomId, subject, body, groups, format, duration);
     this.options = options;
     this.correctOptionIndexes = correctOptionIndexes;
     this.multiple = multiple;

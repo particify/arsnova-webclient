@@ -1,21 +1,47 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <mat-card fxLayout="column" fxLayoutGap="16px">
-    <span class="header-text">
+    <span
+      *ngIf="!isLoading && group.groupType !== GroupType.QUIZ"
+      class="header-text"
+    >
       {{ getHeaderText() | transloco }}
     </span>
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-    <div fxLayout="column">
+    <div fxLayout="column" fxLayoutGap="24px">
+      <div
+        *ngIf="
+          !isLoading &&
+          group.groupType === GroupType.QUIZ &&
+          userLeaderboardItem
+        "
+        fxLayout="column"
+        fxLayoutAlign="start center"
+        fxLayoutGap="24px"
+      >
+        <mat-icon class="leaderboard-icon">emoji_events</mat-icon>
+        <span class="position-text">
+          {{
+            'participant.content.you-are-at-position'
+              | transloco: { position: getPosition() }
+          }}
+        </span>
+      </div>
       <div
         *ngIf="!isLoading && !isPureInfoSeries"
-        fxLayout="row"
+        fxLayout="row wrap"
         fxLayoutAlign="space-around"
         class="info-chart-container"
       >
         <app-info-chart
-          id="progress-info-chart"
-          chartId="progress-chart"
-          [dataText]="getProgressDataText()"
-          [infoText]="'participant.content.answer-state-neutral' | transloco"
+          *ngIf="
+            group.groupType === GroupType.QUIZ &&
+            leaderboard &&
+            userLeaderboardItem
+          "
+          id="points-info-chart"
+          chartId="points-chart"
+          [dataText]="userLeaderboardItem.score.toString()"
+          [infoText]="'content.points' | transloco"
         ></app-info-chart>
         <app-info-chart
           *ngIf="hasScore"
@@ -24,12 +50,24 @@
           [dataText]="score + '%'"
           [infoText]="'participant.content.answer-state-correct' | transloco"
         ></app-info-chart>
+        <app-info-chart
+          id="progress-info-chart"
+          chartId="progress-chart"
+          [dataText]="getProgressDataText()"
+          [infoText]="'participant.content.answer-state-neutral' | transloco"
+        ></app-info-chart>
       </div>
+      <app-leaderboard
+        *ngIf="!isLoading && group.groupType === GroupType.QUIZ && leaderboard"
+        fxFill
+        [leaderboardItems]="leaderboard"
+        [aliasId]="alias?.id"
+      ></app-leaderboard>
       <app-hint
+        *ngIf="!isLoading && !leaderboard && getLockedContentCount() > 0"
         [ngStyle]="{ 'margin-top': isPureInfoSeries ? '0' : '-1em' }"
         fxLayout="row"
         [fxLayoutAlign]="isPureInfoSeries ? 'start' : 'center'"
-        *ngIf="!isLoading && getLockedContentCount() > 0"
         [type]="HintType.INFO"
         [text]="
           (getLockedContentCount() === 1
@@ -39,6 +77,24 @@
         "
       ></app-hint>
       <div
+        *ngIf="group.groupType === GroupType.QUIZ"
+        fxLayout="row"
+        fxLayoutAlign="center"
+      >
+        <button mat-stroked-button (click)="showContents = !showContents">
+          {{
+            (showContents
+              ? 'participant.content.hide-contents'
+              : 'participant.content.show-contents'
+            ) | transloco
+          }}
+          <mat-icon>{{
+            showContents ? 'expand_less' : 'expand_more'
+          }}</mat-icon>
+        </button>
+      </div>
+      <div
+        *ngIf="group.groupType !== GroupType.QUIZ"
         fxLayout.gt-xs="row"
         fxLayout.lt-sm="column"
         fxLayoutGap="1em"
@@ -59,63 +115,78 @@
           }}</span>
         </button>
       </div>
-    </div>
-    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-    <mat-list *ngIf="!isLoading">
-      <mat-list-item
-        *ngFor="let content of contentsWithResults; let i = index"
-        class="full-border"
-        (click)="goToContent(i)"
+      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+      <mat-list
+        *ngIf="
+          !isLoading && (group.groupType !== GroupType.QUIZ || showContents)
+        "
       >
-        <div
-          fxLayout="row"
-          fxLayoutAlign="start center"
-          fxLayoutGap="16px"
-          fxFill
+        <mat-list-item
+          *ngFor="let content of contentsWithResults; let i = index"
+          class="full-border"
+          (click)="goToContent(i)"
         >
-          <div fxLayoutAlign="center center" class="icon-container">
-            <mat-icon
+          <div
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="16px"
+            fxFill
+          >
+            <div fxLayoutAlign="center center" class="icon-container">
+              <mat-icon
+                *ngIf="
+                  !(
+                    isLoadingLastContent && i === contentsWithResults.length - 1
+                  )
+                "
+                [ngClass]="{
+                  correct: content.state === resultTypes.CORRECT,
+                  wrong: content.state === resultTypes.WRONG,
+                  answered:
+                    ![resultTypes.CORRECT, resultTypes.WRONG].includes(
+                      content.state
+                    ) || !group.correctOptionsPublished,
+                  primary: hasAnsweredState(content.state)
+                }"
+                [matTooltip]="
+                  (![ContentType.FLASHCARD, ContentType.SLIDE].includes(
+                    contents[i].format
+                  )
+                    ? 'participant.content.answer-state-' +
+                      content.state.toLowerCase()
+                    : ''
+                  ) | transloco
+                "
+              >
+                {{ getIcon(content.state) }}
+              </mat-icon>
+              <app-loading-indicator
+                *ngIf="
+                  isLoadingLastContent && i === contentsWithResults.length - 1
+                "
+                [size]="20"
+              ></app-loading-indicator>
+            </div>
+            <app-rendered-text
+              class="ellipsis body rendered-list-preview-container"
+              [renderedText]="content.body"
+              [listPreview]="true"
+              tabindex="0"
+              role="button"
+              (keyup.enter)="goToContent(i)"
+            ></app-rendered-text>
+            <span class="fill-remaining-space"></span>
+            <span
               *ngIf="
-                !(isLoadingLastContent && i === contentsWithResults.length - 1)
+                content.duration !== undefined &&
+                group.groupType === GroupType.QUIZ
               "
-              [ngClass]="{
-                correct: content.state === resultTypes.CORRECT,
-                wrong: content.state === resultTypes.WRONG,
-                answered:
-                  ![resultTypes.CORRECT, resultTypes.WRONG].includes(
-                    content.state
-                  ) || !group.correctOptionsPublished,
-                primary: hasAnsweredState(content.state)
-              }"
-              [matTooltip]="
-                (![ContentType.FLASHCARD, ContentType.SLIDE].includes(
-                  contents[i].format
-                )
-                  ? 'participant.content.answer-state-' +
-                    content.state.toLowerCase()
-                  : ''
-                ) | transloco
-              "
+              class="duration"
+              >{{ content.duration || 0 | duration }}</span
             >
-              {{ getIcon(content.state) }}
-            </mat-icon>
-            <app-loading-indicator
-              *ngIf="
-                isLoadingLastContent && i === contentsWithResults.length - 1
-              "
-              [size]="20"
-            ></app-loading-indicator>
           </div>
-          <app-rendered-text
-            class="ellipsis body rendered-list-preview-container"
-            [renderedText]="content.body"
-            [listPreview]="true"
-            tabindex="0"
-            role="button"
-            (keyup.enter)="goToContent(i)"
-          ></app-rendered-text>
-        </div>
-      </mat-list-item>
-    </mat-list>
+        </mat-list-item>
+      </mat-list>
+    </div>
   </mat-card>
 </div>

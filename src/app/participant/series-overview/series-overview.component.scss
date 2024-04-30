@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 $icon-container-size: 40px;
 
 .header-text {
@@ -68,4 +70,27 @@ $icon-container-size: 40px;
 
 app-hint {
   margin-bottom: 1em;
+}
+
+.leaderboard-icon {
+  color: var(--gold);
+  width: 64px;
+  height: 64px;
+  font-size: 64px;
+}
+
+.position-text {
+  font-weight: $font-weight-bold;
+  opacity: 0.8;
+  font-size: $xl-font-size;
+}
+
+.duration {
+  opacity: 0.7;
+}
+
+@include xs {
+  .duration {
+    font-size: $s-font-size;
+  }
 }

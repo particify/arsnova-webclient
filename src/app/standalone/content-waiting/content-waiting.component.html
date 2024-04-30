@@ -1,0 +1,36 @@
+<div
+  fxFill
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxLayoutGap="3em"
+  class="waiting-container"
+>
+  <app-content-step-info
+    [current]="current"
+    [totalCount]="totalCount"
+  ></app-content-step-info>
+  <form
+    *ngIf="!alias.id"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="0.75em"
+  >
+    <span>{{ 'content.enter-name-for-room' | transloco }}</span>
+    <mat-form-field class="no-field-hint">
+      <input
+        name="alias-input"
+        [disabled]="formDisabled"
+        matInput
+        [(ngModel)]="enteredAlias"
+        [placeholder]="alias.alias"
+      />
+    </mat-form-field>
+    <app-loading-button
+      [name]="'content.join-quiz' | transloco"
+      (clicked)="setAlias()"
+    ></app-loading-button>
+  </form>
+  <span *ngIf="alias.id">{{
+    'content.get-ready-alias' | transloco: { alias: alias.alias }
+  }}</span>
+</div>

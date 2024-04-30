@@ -37,7 +37,9 @@
     "load": "Cargar",
     "please-assign-points-correctly": "Por favor, asigna exactamente {{points}} puntos.",
     "please-assign-valid-points": "Por favor, asigna entre 0 y {{points}} puntos por respuesta.",
-    "please-select-number-from-range": "Seleccione un número de la gama."
+    "please-select-number-from-range": "Seleccione un número de la gama.",
+    "not-answered-in-time": "No ha contestado a tiempo.",
+    "answered-in-time": "Has contestado en {{duration}} segundos."
   },
   "content": {
     "thanks-for-participation": "¡Gracias por tu participación!",

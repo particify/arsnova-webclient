@@ -37,7 +37,9 @@
     "load": "Laden",
     "please-assign-points-correctly": "Bitte vergib genau {{points}} Punkte.",
     "please-assign-valid-points": "Bitte vergib zwischen 0 und {{points}} Punkten pro Antwort.",
-    "please-select-number-from-range": "Bitte gib eine Zahl aus dem Bereich ein."
+    "please-select-number-from-range": "Bitte gib eine Zahl aus dem Bereich ein.",
+    "not-answered-in-time": "Du hast nicht rechtzeitig geantwortet.",
+    "answered-in-time": "Du hast in {{duration}} Sekunden geantwortet."
   },
   "content": {
     "thanks-for-participation": "Danke für deine Teilnahme!",
@@ -55,7 +57,10 @@
     "there-is-one-locked-content": "Es ist {{count}} weiterer Inhalt verfügbar, welcher derzeit nicht freigegeben ist.",
     "new-round-started": "Es wurde eine neue Runde gestartet.",
     "answers-reset": "Die Antworten wurden zurückgesetzt.",
-    "attribution-info": "Dieser Inhalt basiert auf einer Vorlage von {{attribution}}, welche unter {{license}} lizenziert wurde."
+    "attribution-info": "Dieser Inhalt basiert auf einer Vorlage von {{attribution}}, welche unter {{license}} lizenziert wurde.",
+    "you-are-at-position": "Du bist auf dem {{ position }}. Platz!",
+    "show-contents": "Inhalte anzeigen",
+    "hide-contents": "Inhalte ausblenden"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",

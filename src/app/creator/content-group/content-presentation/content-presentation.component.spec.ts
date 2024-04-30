@@ -31,9 +31,7 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 @Injectable()
 class MockContentService {
   getContentsByIds() {
-    return of([
-      new Content('1', 'subject', 'body', [], ContentType.CHOICE, {}),
-    ]);
+    return of([new Content('1', 'subject', 'body', [], ContentType.CHOICE)]);
   }
 
   getSupportedContents(): Content[] {

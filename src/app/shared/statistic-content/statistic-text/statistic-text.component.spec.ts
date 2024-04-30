@@ -96,8 +96,7 @@ describe('StatisticTextComponent', () => {
       'subject',
       'body',
       [],
-      ContentType.TEXT,
-      {}
+      ContentType.TEXT
     );
     fixture.detectChanges();
   });
