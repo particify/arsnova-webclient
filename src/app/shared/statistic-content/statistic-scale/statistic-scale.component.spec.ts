@@ -54,8 +54,7 @@ describe('StatisticScaleComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [StatisticScaleComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), StatisticScaleComponent],
       providers: [
         {
           provide: EventService,

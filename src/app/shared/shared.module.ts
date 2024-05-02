@@ -45,8 +45,6 @@ import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/te
     LoadingButtonComponent,
     StatisticInfoComponent,
     TextOverflowClipComponent,
-  ],
-  declarations: [
     StatisticChoiceComponent,
     StatisticScaleComponent,
     StatisticTextComponent,

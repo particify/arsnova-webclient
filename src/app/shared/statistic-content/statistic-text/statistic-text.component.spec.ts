@@ -56,8 +56,7 @@ describe('StatisticTextComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [StatisticTextComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), StatisticTextComponent],
       providers: [
         {
           provide: EventService,

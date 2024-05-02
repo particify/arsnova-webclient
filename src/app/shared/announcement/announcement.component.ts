@@ -2,11 +2,37 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Announcement } from '@app/core/models/announcement';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
+import { TranslocoPipe } from '@ngneat/transloco';
+import { RenderedTextComponent } from '../../standalone/rendered-text/rendered-text.component';
+import { DateComponent } from '../../standalone/date/date.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatIconButton } from '@angular/material/button';
+import { FlexModule } from '@angular/flex-layout';
+import { NgClass, NgIf } from '@angular/common';
+import { MatCard } from '@angular/material/card';
 
 @Component({
   selector: 'app-announcement',
   templateUrl: './announcement.component.html',
   styleUrls: ['./announcement.component.scss'],
+  standalone: true,
+  imports: [
+    MatCard,
+    NgClass,
+    FlexModule,
+    NgIf,
+    MatIconButton,
+    MatMenuTrigger,
+    MatTooltip,
+    MatIcon,
+    MatMenu,
+    MatMenuItem,
+    DateComponent,
+    RenderedTextComponent,
+    TranslocoPipe,
+  ],
 })
 export class AnnouncementComponent {
   @Input({ required: true }) announcement!: Announcement;

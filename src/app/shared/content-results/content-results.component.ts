@@ -30,11 +30,53 @@ import { Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { StatisticNumericComponent } from '@app/shared/statistic-content/statistic-numeric/statistic-numeric.component';
+import { TranslocoPipe } from '@ngneat/transloco';
+import { MatDivider } from '@angular/material/divider';
+import { StatisticNumericComponent as StatisticNumericComponent_1 } from '../statistic-content/statistic-numeric/statistic-numeric.component';
+import { StatisticPrioritizationComponent as StatisticPrioritizationComponent_1 } from '../statistic-content/statistic-prioritization/statistic-prioritization.component';
+import { StatisticWordcloudComponent as StatisticWordcloudComponent_1 } from '../statistic-content/statistic-wordcloud/statistic-wordcloud.component';
+import { StatisticSortComponent as StatisticSortComponent_1 } from '../statistic-content/statistic-sort/statistic-sort.component';
+import { StatisticTextComponent as StatisticTextComponent_1 } from '../statistic-content/statistic-text/statistic-text.component';
+import { StatisticScaleComponent as StatisticScaleComponent_1 } from '../statistic-content/statistic-scale/statistic-scale.component';
+import { StatisticChoiceComponent as StatisticChoiceComponent_1 } from '../statistic-content/statistic-choice/statistic-choice.component';
+import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
+import { RenderedTextComponent } from '../../standalone/rendered-text/rendered-text.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconButton } from '@angular/material/button';
+import { MultipleRoundSelectionComponent } from '../multiple-round-selection/multiple-round-selection.component';
+import { AnswerCountComponent } from '../../standalone/answer-count/answer-count.component';
+import { CoreModule } from '../../core/core.module';
+import { NgClass, NgIf } from '@angular/common';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-content-results',
   templateUrl: './content-results.component.html',
   styleUrls: ['./content-results.component.scss'],
+  standalone: true,
+  imports: [
+    FlexModule,
+    NgClass,
+    NgIf,
+    CoreModule,
+    AnswerCountComponent,
+    MultipleRoundSelectionComponent,
+    MatIconButton,
+    MatTooltip,
+    MatIcon,
+    RenderedTextComponent,
+    ExtensionPointModule,
+    StatisticChoiceComponent_1,
+    StatisticScaleComponent_1,
+    StatisticTextComponent_1,
+    StatisticSortComponent_1,
+    StatisticWordcloudComponent_1,
+    StatisticPrioritizationComponent_1,
+    StatisticNumericComponent_1,
+    MatDivider,
+    TranslocoPipe,
+  ],
 })
 export class ContentResultsComponent implements OnInit, OnDestroy {
   // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.

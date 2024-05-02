@@ -132,13 +132,13 @@ describe('NavBarComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [NavBarComponent],
       imports: [
         getTranslocoModule(),
         BrowserAnimationsModule,
         ReactiveFormsModule,
         MatMenuModule,
         RouterTestingModule.withRoutes([]),
+        NavBarComponent,
       ],
       providers: [
         RoutingService,

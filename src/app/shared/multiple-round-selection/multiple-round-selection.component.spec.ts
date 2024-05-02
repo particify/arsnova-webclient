@@ -10,8 +10,7 @@ describe('MultipleRoundSelectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MultipleRoundSelectionComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), MultipleRoundSelectionComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

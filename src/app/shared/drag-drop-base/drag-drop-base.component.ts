@@ -4,6 +4,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-drag-drop-base',
   template: '',
+  standalone: true,
 })
 export class DragDropBaseComponent {
   @ViewChildren('sortListItem') listItems!: QueryList<ElementRef>;

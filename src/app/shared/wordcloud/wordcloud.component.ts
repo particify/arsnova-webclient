@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import * as Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
+import { TranslocoPipe } from '@ngneat/transloco';
+import { NgFor } from '@angular/common';
 
 // Font size was reduced from 60 to avoid dropped words
 const TARGET_FONT_SIZE = 50;
@@ -35,6 +37,8 @@ export class WordCloudItem {
       }
     `,
   ],
+  standalone: true,
+  imports: [NgFor, TranslocoPipe],
 })
 export class WordcloudComponent implements OnChanges {
   @Input({ required: true }) wordWeights!: WordCloudItem[];

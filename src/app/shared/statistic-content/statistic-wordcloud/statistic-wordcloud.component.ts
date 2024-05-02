@@ -7,17 +7,30 @@ import { StatisticContentBaseComponent } from '@app/shared/statistic-content/sta
 import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import { WordCloudItem } from '@app/shared/wordcloud/wordcloud.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { AnswerListComponent } from '../../answer-list/answer-list.component';
+import { WordcloudComponent } from '../../wordcloud/wordcloud.component';
+import { FlexModule } from '@angular/flex-layout';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-statistic-wordcloud',
   templateUrl: './statistic-wordcloud.component.html',
   styleUrls: ['../text-statistic-content.scss'],
+  standalone: true,
+  imports: [
+    NgClass,
+    FlexModule,
+    NgIf,
+    WordcloudComponent,
+    AnswerListComponent,
+    TranslocoPipe,
+  ],
 })
 export class StatisticWordcloudComponent
   extends StatisticContentBaseComponent

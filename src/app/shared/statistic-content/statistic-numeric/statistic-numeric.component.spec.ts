@@ -72,8 +72,7 @@ describe('StatisticNumericComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [StatisticNumericComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), StatisticNumericComponent],
       providers: [
         {
           provide: EventService,

@@ -46,8 +46,7 @@ describe('StatisticSortComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [StatisticSortComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), StatisticSortComponent],
       providers: [
         {
           provide: EventService,

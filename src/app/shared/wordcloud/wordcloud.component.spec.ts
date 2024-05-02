@@ -9,8 +9,7 @@ describe('WordcloudComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WordcloudComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), WordcloudComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

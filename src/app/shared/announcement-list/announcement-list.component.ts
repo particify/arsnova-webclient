@@ -1,14 +1,49 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { UserAnnouncement } from '@app/core/models/user-announcement';
 import { take } from 'rxjs';
+import { TranslocoPipe } from '@ngneat/transloco';
+import { MatButton } from '@angular/material/button';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { AnnouncementComponent } from '../announcement/announcement.component';
+import { NgFor, NgIf, KeyValuePipe } from '@angular/common';
+import { MatDivider } from '@angular/material/divider';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-announcement-list',
   templateUrl: './announcement-list.component.html',
   styleUrls: ['./announcement-list.component.scss'],
+  standalone: true,
+  imports: [
+    FlexModule,
+    MatDialogTitle,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatDivider,
+    NgFor,
+    NgIf,
+    MatDialogContent,
+    AnnouncementComponent,
+    LoadingIndicatorComponent,
+    MatDialogActions,
+    MatButton,
+    KeyValuePipe,
+    TranslocoPipe,
+  ],
 })
 export class AnnouncementListComponent implements OnInit {
   announcements: UserAnnouncement[] = [];

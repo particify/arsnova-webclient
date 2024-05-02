@@ -28,7 +28,6 @@ describe('AnnouncementListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AnnouncementListComponent],
       providers: [
         {
           provide: MAT_DIALOG_DATA,
@@ -47,7 +46,7 @@ describe('AnnouncementListComponent', () => {
           useValue: announcementService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), AnnouncementListComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

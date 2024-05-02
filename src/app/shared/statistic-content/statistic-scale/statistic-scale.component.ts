@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { forkJoin, Observable, take } from 'rxjs';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ContentScale } from '@app/core/models/content-scale';
@@ -9,11 +9,27 @@ import { StatisticChoiceComponent } from '@app/shared/statistic-content/statisti
 import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { MatIcon } from '@angular/material/icon';
+import { RenderedTextComponent } from '../../../standalone/rendered-text/rendered-text.component';
+import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { NgIf, NgClass, NgFor } from '@angular/common';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-statistic-scale',
   templateUrl: '../statistic-choice/statistic-choice.component.html',
   styleUrls: ['../statistic-choice/statistic-choice.component.scss'],
+  standalone: true,
+  imports: [
+    FlexModule,
+    NgIf,
+    LoadingIndicatorComponent,
+    NgClass,
+    NgFor,
+    RenderedTextComponent,
+    MatIcon,
+    TranslocoPipe,
+  ],
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {
   constructor(

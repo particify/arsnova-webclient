@@ -19,7 +19,7 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { EventService } from '@app/core/services/util/event.service';
@@ -28,6 +28,12 @@ import { takeUntil } from 'rxjs';
 import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericRoundStatistics } from '@app/core/models/round-statistics';
+import { MatDivider } from '@angular/material/divider';
+import { MatIcon } from '@angular/material/icon';
+import { StatisticInfoComponent } from '../../../standalone/statistic-info/statistic-info.component';
+import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { NgIf, NgClass, NgFor } from '@angular/common';
+import { FlexModule } from '@angular/flex-layout';
 
 const MAX_BARS = 15;
 const LEGEND_LOCALIZATION_START = 10_000;
@@ -42,6 +48,18 @@ interface AnswerGroup {
   selector: 'app-statistic-numeric',
   templateUrl: './statistic-numeric.component.html',
   styleUrls: ['./statistic-numeric.component.scss'],
+  standalone: true,
+  imports: [
+    FlexModule,
+    NgIf,
+    LoadingIndicatorComponent,
+    NgClass,
+    NgFor,
+    StatisticInfoComponent,
+    MatIcon,
+    MatDivider,
+    TranslocoPipe,
+  ],
 })
 export class StatisticNumericComponent
   extends StatisticContentBaseComponent

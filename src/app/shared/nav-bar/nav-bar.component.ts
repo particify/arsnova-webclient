@@ -20,13 +20,20 @@ import { RoomStats } from '@app/core/models/room-stats';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { SeriesCreated } from '@app/core/models/events/series-created';
 import { SeriesDeleted } from '@app/core/models/events/series-deleted';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { RoomService } from '@app/core/services/http/room.service';
 import { IMessage } from '@stomp/stompjs';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
 import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
+import { TranslocoPipe } from '@ngneat/transloco';
+import { TextOverflowClipComponent } from '../../standalone/text-overflow-clip/text-overflow-clip.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatButton } from '@angular/material/button';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { FlexModule } from '@angular/flex-layout';
 
 export class NavBarItem {
   name: string;
@@ -52,6 +59,21 @@ export class NavBarItem {
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss'],
   providers: [FocusModeService],
+  standalone: true,
+  imports: [
+    FlexModule,
+    NgFor,
+    MatButton,
+    NgClass,
+    MatTooltip,
+    MatMenuTrigger,
+    MatIcon,
+    NgIf,
+    MatMenu,
+    MatMenuItem,
+    TextOverflowClipComponent,
+    TranslocoPipe,
+  ],
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<void>();

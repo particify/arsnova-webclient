@@ -24,8 +24,7 @@ describe('AnswerListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AnswerListComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), AnswerListComponent],
       providers: [
         {
           provide: ActivatedRoute,

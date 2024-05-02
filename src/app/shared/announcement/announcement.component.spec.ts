@@ -12,8 +12,8 @@ describe('AnnouncementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AnnouncementComponent, DateFormatPipe],
-      imports: [getTranslocoModule()],
+      declarations: [DateFormatPipe],
+      imports: [getTranslocoModule(), AnnouncementComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

@@ -49,8 +49,7 @@ describe('StatisticWordcloudComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [StatisticWordcloudComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), StatisticWordcloudComponent],
       providers: [
         {
           provide: EventService,

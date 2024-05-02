@@ -50,8 +50,7 @@ describe('StatisticChoiceComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [StatisticChoiceComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), StatisticChoiceComponent],
       providers: [
         {
           provide: EventService,

@@ -62,8 +62,7 @@ describe('StatisticPrioritizationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StatisticPrioritizationComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), StatisticPrioritizationComponent],
       providers: [
         {
           provide: EventService,

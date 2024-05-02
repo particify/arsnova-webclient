@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { Content } from '@app/core/models/content';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { TextAnswer } from '@app/core/models/text-answer';
@@ -13,11 +13,24 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { FlexModule } from '@angular/flex-layout';
+import { AnswerListComponent } from '../../answer-list/answer-list.component';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-statistic-text',
   templateUrl: './statistic-text.component.html',
   styleUrls: ['../text-statistic-content.scss'],
+  standalone: true,
+  imports: [
+    NgClass,
+    NgIf,
+    AnswerListComponent,
+    FlexModule,
+    LoadingIndicatorComponent,
+    TranslocoPipe,
+  ],
 })
 export class StatisticTextComponent
   extends StatisticContentBaseComponent
