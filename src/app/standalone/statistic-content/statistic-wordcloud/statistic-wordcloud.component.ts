@@ -3,20 +3,22 @@ import { takeUntil } from 'rxjs/operators';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
 import { ContentService } from '@app/core/services/http/content.service';
-import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
+import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
-import { WordCloudItem } from '@app/shared/wordcloud/wordcloud.component';
+import {
+  WordCloudItem,
+  WordcloudComponent,
+} from '@app/standalone/wordcloud/wordcloud.component';
 import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { AnswerListComponent } from '../../answer-list/answer-list.component';
-import { WordcloudComponent } from '../../wordcloud/wordcloud.component';
 import { FlexModule } from '@angular/flex-layout';
 import { NgClass, NgIf } from '@angular/common';
+import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 
 @Component({
   selector: 'app-statistic-wordcloud',

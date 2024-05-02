@@ -5,15 +5,26 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { AnnouncementComponent } from './announcement.component';
 import { UserAnnouncement } from '@app/core/models/user-announcement';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { of } from 'rxjs';
 
 describe('AnnouncementComponent', () => {
   let component: AnnouncementComponent;
   let fixture: ComponentFixture<AnnouncementComponent>;
 
+  const mockFormattingService = jasmine.createSpyObj(['postString']);
+  mockFormattingService.postString.and.returnValue(of('rendered'));
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DateFormatPipe],
       imports: [getTranslocoModule(), AnnouncementComponent],
+      providers: [
+        {
+          provide: FormattingService,
+          useValue: mockFormattingService,
+        },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

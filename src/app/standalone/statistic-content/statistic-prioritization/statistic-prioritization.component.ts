@@ -23,9 +23,9 @@ import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
-import { StatisticChoiceComponent } from '@app/shared/statistic-content/statistic-choice/statistic-choice.component';
+import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
 import { takeUntil } from 'rxjs';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgIf, NgStyle } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 

@@ -26,15 +26,15 @@ import { takeUntil } from 'rxjs/operators';
 import {
   ABSTENTION_SIGN,
   StatisticContentBaseComponent,
-} from '@app/shared/statistic-content/statistic-content-base';
+} from '@app/standalone/statistic-content/statistic-content-base';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentScale } from '@app/core/models/content-scale';
 import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { MatIcon } from '@angular/material/icon';
-import { RenderedTextComponent } from '../../../standalone/rendered-text/rendered-text.component';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgIf, NgClass, NgFor } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 

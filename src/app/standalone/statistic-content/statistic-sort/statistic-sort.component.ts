@@ -22,7 +22,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {
   ABSTENTION_SIGN,
   StatisticContentBaseComponent,
-} from '@app/shared/statistic-content/statistic-content-base';
+} from '@app/standalone/statistic-content/statistic-content-base';
 import { takeUntil } from 'rxjs/operators';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { TranslocoService } from '@ngneat/transloco';
@@ -31,8 +31,8 @@ import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { RenderedTextComponent } from '../../../standalone/rendered-text/rendered-text.component';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgIf, NgClass, NgFor } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 

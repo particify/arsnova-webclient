@@ -5,7 +5,7 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { DragDropBaseComponent } from '@app/shared/drag-drop-base/drag-drop-base.component';
+import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-base.component';
 
 @Component({
   selector: 'app-content-list-sort',

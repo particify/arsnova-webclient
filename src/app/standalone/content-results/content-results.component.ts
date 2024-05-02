@@ -7,20 +7,20 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { StatisticChoiceComponent } from '@app/shared/statistic-content/statistic-choice/statistic-choice.component';
-import { StatisticTextComponent } from '@app/shared/statistic-content/statistic-text/statistic-text.component';
+import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
+import { StatisticTextComponent } from '@app/standalone/statistic-content/statistic-text/statistic-text.component';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { StatisticSortComponent } from '@app/shared/statistic-content/statistic-sort/statistic-sort.component';
+import { StatisticSortComponent } from '@app/standalone/statistic-content/statistic-sort/statistic-sort.component';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { StatisticWordcloudComponent } from '@app/shared/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
-import { StatisticScaleComponent } from '@app/shared/statistic-content/statistic-scale/statistic-scale.component';
+import { StatisticWordcloudComponent } from '@app/standalone/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
+import { StatisticScaleComponent } from '@app/standalone/statistic-content/statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { ActivatedRoute } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { UserSettings } from '@app/core/models/user-settings';
-import { StatisticPrioritizationComponent } from '@app/shared/statistic-content/statistic-prioritization/statistic-prioritization.component';
+import { StatisticPrioritizationComponent } from '@app/standalone/statistic-content/statistic-prioritization/statistic-prioritization.component';
 import { RemoteService } from '@app/core/services/util/remote.service';
 import { Content } from '@app/core/models/content';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
@@ -29,26 +29,19 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 import { Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentNumeric } from '@app/core/models/content-numeric';
-import { StatisticNumericComponent } from '@app/shared/statistic-content/statistic-numeric/statistic-numeric.component';
+import { StatisticNumericComponent } from '@app/standalone/statistic-content/statistic-numeric/statistic-numeric.component';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { MatDivider } from '@angular/material/divider';
-import { StatisticNumericComponent as StatisticNumericComponent_1 } from '../statistic-content/statistic-numeric/statistic-numeric.component';
-import { StatisticPrioritizationComponent as StatisticPrioritizationComponent_1 } from '../statistic-content/statistic-prioritization/statistic-prioritization.component';
-import { StatisticWordcloudComponent as StatisticWordcloudComponent_1 } from '../statistic-content/statistic-wordcloud/statistic-wordcloud.component';
-import { StatisticSortComponent as StatisticSortComponent_1 } from '../statistic-content/statistic-sort/statistic-sort.component';
-import { StatisticTextComponent as StatisticTextComponent_1 } from '../statistic-content/statistic-text/statistic-text.component';
-import { StatisticScaleComponent as StatisticScaleComponent_1 } from '../statistic-content/statistic-scale/statistic-scale.component';
-import { StatisticChoiceComponent as StatisticChoiceComponent_1 } from '../statistic-content/statistic-choice/statistic-choice.component';
-import { ExtensionPointModule } from '../../../../projects/extension-point/src/lib/extension-point.module';
-import { RenderedTextComponent } from '../../standalone/rendered-text/rendered-text.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIconButton } from '@angular/material/button';
-import { MultipleRoundSelectionComponent } from '../multiple-round-selection/multiple-round-selection.component';
-import { AnswerCountComponent } from '../../standalone/answer-count/answer-count.component';
-import { CoreModule } from '../../core/core.module';
+import { CoreModule } from '@app/core/core.module';
 import { NgClass, NgIf } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
+import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
+import { MultipleRoundSelectionComponent } from '@app/standalone/multiple-round-selection/multiple-round-selection.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 
 @Component({
   selector: 'app-content-results',
@@ -67,13 +60,13 @@ import { FlexModule } from '@angular/flex-layout';
     MatIcon,
     RenderedTextComponent,
     ExtensionPointModule,
-    StatisticChoiceComponent_1,
-    StatisticScaleComponent_1,
-    StatisticTextComponent_1,
-    StatisticSortComponent_1,
-    StatisticWordcloudComponent_1,
-    StatisticPrioritizationComponent_1,
-    StatisticNumericComponent_1,
+    StatisticChoiceComponent,
+    StatisticScaleComponent,
+    StatisticTextComponent,
+    StatisticSortComponent,
+    StatisticWordcloudComponent,
+    StatisticPrioritizationComponent,
+    StatisticNumericComponent,
     MatDivider,
     TranslocoPipe,
   ],

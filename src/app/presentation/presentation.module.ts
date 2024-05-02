@@ -4,7 +4,6 @@ import { extensions } from './presentation.extensions';
 import { ControlBarComponent } from './bars/control-bar/control-bar.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { PresentationComponent } from './presentation/presentation.component';
-import { SharedModule } from '@app/shared/shared.module';
 import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 import { QrCodeModule } from 'ng-qrcode';
 import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
@@ -29,7 +28,6 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     PresentationRoutingModule,
     CoreModule,
     ExtensionPointModule,
-    SharedModule,
     TranslocoModule,
     QrCodeModule,
     CopyUrlComponent,

@@ -3,7 +3,6 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { extensions } from './admin.extensions';
 import { SharedAdminModule } from './shared-admin.module';
 import { CoreModule } from '@app/core/core.module';
-import { SharedModule } from '@app/shared/shared.module';
 import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { SummaryBarComponent } from './summary-bar/summary-bar.component';
@@ -25,19 +24,20 @@ import { TemplateService } from '@app/admin/template-management/template.service
 import { NavigationDrawerComponent } from '@app/standalone/navigation-drawer/navigation-drawer.component';
 import { ReportManagementComponent } from '@app/admin/report-management/report-management.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @NgModule({
   imports: [
     extensions,
     AdminRoutingModule,
     CoreModule,
-    SharedModule,
     SharedAdminModule,
     TranslocoModule,
     ExtensionPointModule,
     LoadingButtonComponent,
     TemplateLanguageSelectionComponent,
     NavigationDrawerComponent,
+    LoadingIndicatorComponent,
   ],
   declarations: [
     AdminHomeComponent,

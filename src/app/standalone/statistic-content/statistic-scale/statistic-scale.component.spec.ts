@@ -16,6 +16,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { MockGlobalStorageService } from '@testing/test-helpers';
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { UserSettings } from '@app/core/models/user-settings';
+import { FormattingService } from '@app/core/services/http/formatting.service';
 
 describe('StatisticScaleComponent', () => {
   let component: StatisticScaleComponent;
@@ -52,6 +53,9 @@ describe('StatisticScaleComponent', () => {
 
   const mockPresentationService = jasmine.createSpyObj(['getScale']);
 
+  const mockFormattingService = jasmine.createSpyObj(['postString']);
+  mockFormattingService.postString.and.returnValue(of('rendered'));
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticScaleComponent],
@@ -79,6 +83,10 @@ describe('StatisticScaleComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
+        },
+        {
+          provide: FormattingService,
+          useValue: mockFormattingService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

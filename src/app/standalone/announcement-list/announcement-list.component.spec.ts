@@ -9,6 +9,7 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of } from 'rxjs';
 
 import { AnnouncementListComponent } from './announcement-list.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AnnouncementListComponent', () => {
   let component: AnnouncementListComponent;
@@ -46,7 +47,11 @@ describe('AnnouncementListComponent', () => {
           useValue: announcementService,
         },
       ],
-      imports: [getTranslocoModule(), AnnouncementListComponent],
+      imports: [
+        getTranslocoModule(),
+        AnnouncementListComponent,
+        BrowserAnimationsModule,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

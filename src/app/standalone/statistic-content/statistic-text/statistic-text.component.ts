@@ -4,7 +4,7 @@ import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { Content } from '@app/core/models/content';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { TextAnswer } from '@app/core/models/text-answer';
-import { StatisticContentBaseComponent } from '@app/shared/statistic-content/statistic-content-base';
+import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { Observable, takeUntil } from 'rxjs';
 import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
@@ -13,10 +13,10 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { FlexModule } from '@angular/flex-layout';
-import { AnswerListComponent } from '../../answer-list/answer-list.component';
 import { NgClass, NgIf } from '@angular/common';
+import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 
 @Component({
   selector: 'app-statistic-text',
