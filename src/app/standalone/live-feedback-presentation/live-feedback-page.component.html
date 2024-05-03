@@ -17,6 +17,7 @@
     [type]="type"
   ></app-live-feedback>
   <app-answer-count
+    *ngIf="showAnswerCount"
     id="answer-count"
     tabindex="{{ !isClosed ? '0' : '-1' }}"
     [count]="answerCount"

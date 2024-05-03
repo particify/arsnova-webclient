@@ -1,16 +1,27 @@
 <div fxLayout="column" fxFill>
-  <div fxLayout="row" fxLayoutAlign="end">
-    <app-copy-url *ngIf="url" class="copy-url" [url]="url"></app-copy-url>
+  <div *ngIf="showCopyUrlButton && url" fxLayout="row" fxLayoutAlign="end">
+    <app-copy-url class="copy-url" [url]="url"></app-copy-url>
   </div>
-  <div fxFill fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8vw">
+  <div
+    fxFill
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap.gt-xs="8vw"
+  >
     <div
       class="qr-container"
+      fxLayout.lt-sm="column"
       fxLayout="row"
       fxLayoutAlign="center center"
-      fxLayoutGap="8vw"
+      fxLayoutGap.gt-xs="8vw"
+      fxLayoutGap.xs="1em"
     >
-      <div fxLayout="column" fxLayoutAlign="center center">
-        <lib-extension-point extensionId="branding-logo">
+      <div
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        fxLayoutGap.xs="0.25em"
+      >
+        <lib-extension-point *ngIf="showIcon" extensionId="branding-logo">
           <mat-icon color="primary" class="web-icon disabled"
             >language</mat-icon
           >
@@ -36,7 +47,7 @@
       ></qr-code>
     </div>
     <div
-      *ngIf="!!userCount"
+      *ngIf="!!userCount && showUserCount"
       class="disabled"
       fxLayoutAlign="center center"
       fxLayoutGap="12px"

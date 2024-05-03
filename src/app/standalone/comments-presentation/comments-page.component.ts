@@ -1,4 +1,4 @@
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -30,11 +30,26 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { take, takeUntil } from 'rxjs';
+import { CoreModule } from '@app/core/core.module';
+import { PresentCommentComponent } from '@app/standalone/present-comment/present-comment.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-hint/comment-settings-hint.component';
+import { CommentListHintComponent } from '@app/standalone/comment-list-hint/comment-list-hint.component';
+import { CommentComponent } from '@app/standalone/comment/comment.component';
 
 @Component({
-  selector: 'app-comments-page',
+  selector: 'app-comments-presentation',
   templateUrl: './comments-page.component.html',
   styleUrls: ['./comments-page.component.scss'],
+  standalone: true,
+  imports: [
+    CoreModule,
+    PresentCommentComponent,
+    LoadingIndicatorComponent,
+    CommentSettingsHintComponent,
+    CommentListHintComponent,
+    CommentComponent,
+  ],
 })
 export class CommentsPageComponent
   extends AbstractCommentsPageComponent
@@ -43,6 +58,8 @@ export class CommentsPageComponent
   @ViewChild('commentList') commentListRef!: ElementRef;
 
   protected hotkeyRefs: symbol[] = [];
+
+  showCommentPreview = false;
 
   constructor(
     protected commentService: CommentService,
@@ -76,6 +93,7 @@ export class CommentsPageComponent
       commentSettingsService,
       authenticationService
     );
+    this.showCommentPreview = this.route.snapshot.data.showCommentPreview;
   }
 
   ngOnInit(): void {

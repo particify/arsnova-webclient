@@ -60,6 +60,11 @@ export class LoginComponent
 
   matcher = new FormErrorStateMatcher();
 
+  isStandalone: boolean;
+  allowPwReset: boolean;
+  allowRegister: boolean;
+  navigateIfAlreadyLoggedIn: boolean;
+
   constructor(
     public authenticationService: AuthenticationService,
     public router: Router,
@@ -73,6 +78,11 @@ export class LoginComponent
     protected formService: FormService
   ) {
     super(formService);
+    this.isStandalone = !!this.route.snapshot.data.isStandalone;
+    this.allowPwReset = this.route.snapshot.data.allowPwReset ?? true;
+    this.allowRegister = this.route.snapshot.data.allowRegister ?? true;
+    this.navigateIfAlreadyLoggedIn =
+      this.route.snapshot.data.navigateIfAlreadyLoggedIn ?? true;
   }
 
   ngOnInit() {
@@ -87,7 +97,8 @@ export class LoginComponent
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
       if (
         this.authenticationService.isLoggedIn() &&
-        auth?.authProvider !== AuthProvider.ARSNOVA_GUEST
+        auth?.authProvider !== AuthProvider.ARSNOVA_GUEST &&
+        this.navigateIfAlreadyLoggedIn
       ) {
         this.router.navigateByUrl('user');
       } else {
@@ -205,7 +216,13 @@ export class LoginComponent
       this.dialog.closeAll();
       if (this.isStandard) {
         if (!this.routingService.redirect()) {
-          this.router.navigateByUrl('user');
+          if (this.route.snapshot.data.externalRouteAfterLogin) {
+            window.location.replace(
+              this.route.snapshot.data.externalRouteAfterLogin
+            );
+          } else {
+            this.router.navigateByUrl('user');
+          }
         }
       }
     } else if (result.status === AuthenticationStatus.ACTIVATION_PENDING) {

@@ -1,5 +1,10 @@
 <div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
+  <mat-card
+    [appearance]="isStandalone ? 'outlined' : 'raised'"
+    class="login-card"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
     <app-form-header [text]="'login.welcome' | transloco"></app-form-header>
     <div *ngIf="ssoProviders.length > 0" fxLayout="column" fxLayoutGap="10px">
       <button
@@ -66,7 +71,7 @@
           </mat-form-field>
         </ng-template>
         <app-password-entry [preFill]="password"></app-password-entry>
-        <div *ngIf="dbLoginEnabled" fxLayout="row">
+        <div *ngIf="dbLoginEnabled && allowPwReset" fxLayout="row">
           <a
             class="action-link forgot-pw"
             [routerLink]="[]"
@@ -97,7 +102,11 @@
             ></app-loading-button>
           </div>
         </div>
-        <div *ngIf="dbLoginEnabled" fxLayout="row" fxLayoutAlign="center">
+        <div
+          *ngIf="dbLoginEnabled && allowRegister"
+          fxLayout="row"
+          fxLayoutAlign="center"
+        >
           <p class="smaller-text">{{ 'login.not-registered' | transloco }}</p>
           <a
             class="action-link after-text-link"

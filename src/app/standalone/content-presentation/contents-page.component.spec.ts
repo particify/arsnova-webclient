@@ -117,8 +117,7 @@ describe('ContentsPageComponent', () => {
     );
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentsPageComponent],
-      imports: [getTranslocoModule()],
+      imports: [ContentsPageComponent, getTranslocoModule()],
       providers: [
         {
           provide: ContentService,

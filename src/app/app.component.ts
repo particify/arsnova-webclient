@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('mainDrawer') drawer!: MatDrawer;
 
   title = 'ARSnova';
-  isPresentation = false;
+  isStandalone = false;
   isAdmin = false;
   isRoom = false;
   auth?: ClientAuthentication;
@@ -105,7 +105,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   checkRoute(url: string) {
-    this.isPresentation = this.routingService.isPresentation(url);
+    this.isStandalone =
+      this.routingService.isPresentation(url) ||
+      url.slice(1, 6).includes('embed');
     this.isAdmin = this.routingService.isAdminView(url);
   }
 

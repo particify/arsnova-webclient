@@ -159,12 +159,12 @@
       </div>
     </mat-drawer>
     <mat-drawer-content fxLayout="column">
-      <router-outlet *ngIf="!isPresentation" name="header"></router-outlet>
+      <router-outlet *ngIf="!isStandalone" name="header"></router-outlet>
       <div
         fxFlex
         class="app-component"
         id="scroll_container"
-        [ngClass]="{ 'presentation-mode': isPresentation || isAdmin }"
+        [ngClass]="{ 'standalone-container': isStandalone || isAdmin }"
       >
         <router-outlet></router-outlet>
       </div>

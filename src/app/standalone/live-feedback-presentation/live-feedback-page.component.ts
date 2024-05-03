@@ -18,17 +18,30 @@ import { Message } from '@stomp/stompjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { take, takeUntil } from 'rxjs';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
+import { CoreModule } from '@app/core/core.module';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
+import { LiveFeedbackComponent } from '@app/standalone/live-feedback/live-feedback.component';
 
 @Component({
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
   styleUrls: ['./live-feedback-page.component.scss'],
+  standalone: true,
+  imports: [
+    CoreModule,
+    LoadingIndicatorComponent,
+    LiveFeedbackComponent,
+    AnswerCountComponent,
+  ],
 })
 export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPage
   implements OnInit, OnDestroy
 {
   private hotkeyRefs: symbol[] = [];
+
+  showAnswerCount = false;
 
   constructor(
     protected notificationService: NotificationService,
@@ -52,6 +65,7 @@ export class LiveFeedbackPageComponent
       globalStorageService,
       route
     );
+    this.showAnswerCount = this.route.snapshot.data.showAnswerCount;
   }
 
   ngOnInit() {

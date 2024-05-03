@@ -1,9 +1,8 @@
-@import '../bars/control-bar/control-bar.component';
+@import '../../presentation/bars/control-bar/control-bar.component';
 
 app-content-stepper,
 app-leaderboard-page {
   width: 640px;
-  margin-bottom: $bar-height;
 }
 
 .scalable {

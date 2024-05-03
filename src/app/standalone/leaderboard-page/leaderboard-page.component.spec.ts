@@ -36,8 +36,7 @@ describe('LeaderboardPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LeaderboardPageComponent],
-      imports: [getTranslocoModule()],
+      imports: [LeaderboardPageComponent, getTranslocoModule()],
       providers: [
         {
           provide: ContentGroupService,

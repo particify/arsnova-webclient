@@ -20,12 +20,43 @@ import { Room } from '@app/core/models/room';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { hotkeyEnterLeaveAnimation } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
+import {
+  HotkeyActionButtonComponent,
+  hotkeyEnterLeaveAnimation,
+} from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
 import { TranslocoService } from '@ngneat/transloco';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { CoreModule } from '@app/core/core.module';
+import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
+import { StepperComponent } from '@app/standalone/stepper/stepper.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
+import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
+import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
+import { LeaderboardPageComponent } from '@app/standalone/leaderboard-page/leaderboard-page.component';
 
 @Component({
   selector: 'app-contents-page',
+  standalone: true,
+  imports: [
+    CoreModule,
+    ContentResultsComponent,
+    LoadingIndicatorComponent,
+    AnswerCountComponent,
+    StepperComponent,
+    CdkStepperModule,
+    AttributionsInfoComponent,
+    HotkeyActionButtonComponent,
+    CountdownTimerComponent,
+    ContentWaitingComponent,
+    ContentStepInfoComponent,
+    ContentStepperComponent,
+    LeaderboardPageComponent,
+  ],
   templateUrl: './contents-page.component.html',
   styleUrls: ['./contents-page.component.scss'],
   animations: [hotkeyEnterLeaveAnimation],
@@ -51,6 +82,9 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   endDate?: Date;
   controlBarVisible = true;
   showLeaderboard = false;
+  showStepInfo: boolean;
+  showAnswerCount: boolean;
+  showHotkeyActionButtons: boolean;
 
   private hotkeyRefs: symbol[] = [];
 
@@ -84,6 +118,11 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       this.contentGroupName
     );
     this.room = this.route.snapshot.data.room;
+    this.showStepInfo = !!this.route.snapshot.data.showStepInfo;
+    this.showAnswerCount = !!this.route.snapshot.data.showAnswerCount;
+    this.showHotkeyActionButtons =
+      !!this.route.snapshot.data.showHotkeyActionButtons;
+    this.controlBarVisible = !this.route.snapshot.data.noControlBar;
   }
 
   ngOnInit() {
@@ -114,6 +153,11 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
           this.hotkeyRefs
         )
       );
+    this.presentationService.getCountdownStarted().subscribe((content) => {
+      this.initScale();
+      this.content.state = content.state;
+      this.endDate = new Date(this.content.state.answeringEndTime);
+    });
   }
 
   private toggleLeaderboard() {
@@ -190,14 +234,11 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateRoute(rolePrefix: string, index: number) {
-    const urlTree = this.router.createUrlTree([
-      rolePrefix,
-      this.shortId,
-      'series',
-      this.contentGroupName,
-      index,
-    ]);
+  updateRoute(index: number) {
+    const currentPath = this.route.snapshot.params.contentIndex ? '..' : '.';
+    const urlTree = this.router.createUrlTree([currentPath, index], {
+      relativeTo: this.route,
+    });
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
@@ -207,7 +248,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     }
     this.setCurrentContent(index);
     const urlIndex = index + 1;
-    this.updateRoute('present', urlIndex);
+    this.updateRoute(urlIndex);
     this.sendContentStepState();
     this.showLeaderboard = false;
     if (
@@ -237,19 +278,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   }
 
   startCountdown(): void {
-    if (this.content.duration) {
-      this.contentService
-        .startCountdown(this.room.id, this.content.id)
-        .subscribe(() => {
-          this.contentService
-            .getContent(this.room.id, this.content.id)
-            .subscribe((content) => {
-              this.initScale();
-              this.content.state = content.state;
-              this.endDate = new Date(this.content.state.answeringEndTime);
-            });
-        });
-    }
+    this.presentationService.startCountdown();
   }
 
   updateCounter(count: number) {

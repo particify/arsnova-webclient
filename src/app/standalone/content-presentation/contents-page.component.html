@@ -1,5 +1,5 @@
 <div
-  *ngIf="!isLoading && !isGroupLocked() && contents"
+  *ngIf="showStepInfo && !isLoading && !isGroupLocked() && contents"
   class="step-info-container"
   fxLayout="column"
   fxLayoutAlign="center center"
@@ -10,6 +10,7 @@
 </div>
 <app-answer-count
   *ngIf="
+    showAnswerCount &&
     !isLoading &&
     !isGroupLocked() &&
     canAnswerContent &&
@@ -53,18 +54,26 @@
       (answerCountUpdated)="updateCounter($event)"
     >
     </app-content-stepper>
-    <app-leaderboard-page *ngIf="showLeaderboard"></app-leaderboard-page>
+    <app-leaderboard-page
+      [ngClass]="{ 'over-control-bar': controlBarVisible }"
+      *ngIf="showLeaderboard"
+    ></app-leaderboard-page>
   </div>
 </div>
-<div *ngIf="!isLoading && !isGroupLocked()" fxFill>
+<div
+  *ngIf="
+    showHotkeyActionButtons &&
+    !isLoading &&
+    !isGroupLocked() &&
+    content &&
+    content.duration &&
+    !content.state.answeringEndTime &&
+    isPublished()
+  "
+  @hotkeyEnterLeaveAnimation
+  fxFill
+>
   <app-hotkey-action-button
-    @hotkeyEnterLeaveAnimation
-    *ngIf="
-      content &&
-      content.duration &&
-      !content.state.answeringEndTime &&
-      isPublished()
-    "
     hotkey="s"
     [hotkeyTitle]="'creator.content.start-quiz' | transloco"
     [action]="'creator.content.to-start-quiz' | transloco"
@@ -86,7 +95,13 @@
 </div>
 <app-hotkey-action-button
   @hotkeyEnterLeaveAnimation
-  *ngIf="!isLoading && !isGroupLocked() && content && !isPublished()"
+  *ngIf="
+    showHotkeyActionButtons &&
+    !isLoading &&
+    !isGroupLocked() &&
+    content &&
+    !isPublished()
+  "
   hotkey="p"
   [hotkeyTitle]="'creator.content.publish-current-content' | transloco"
   [action]="'creator.content.to-publish-content' | transloco"

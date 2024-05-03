@@ -9,13 +9,18 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { PresentationComponent } from './presentation/presentation.component';
-import { QrCodeComponent } from './qr-code/qr-code.component';
+import { QrCodeComponent } from '@app/standalone/qr-code/qr-code.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: QrCodeComponent,
+    data: {
+      showCopyUrlButton: true,
+      showUserCount: true,
+      showIcon: true,
+    },
   },
   {
     path: 'comments/moderation',
@@ -23,20 +28,34 @@ const routes: Routes = [
   },
   {
     path: 'comments',
-    loadChildren: () =>
-      import('./comments/comments.module').then((m) => m.CommentsModule),
+    data: {
+      showCommentPreview: true,
+    },
+    loadComponent: () =>
+      import(
+        '@app/standalone/comments-presentation/comments-page.component'
+      ).then((m) => m.CommentsPageComponent),
   },
   {
     path: 'feedback',
-    loadChildren: () =>
-      import('./live-feedback/live-feedback.module').then(
-        (m) => m.LiveFeedbackModule
-      ),
+    loadComponent: () =>
+      import(
+        '@app/standalone/live-feedback-presentation/live-feedback-page.component'
+      ).then((m) => m.LiveFeedbackPageComponent),
   },
   {
     path: 'series/:seriesName',
-    loadChildren: () =>
-      import('./contents/contents.module').then((m) => m.ContentModule),
+    loadComponent: () =>
+      import(
+        '@app/standalone/content-presentation/contents-page.component'
+      ).then((m) => m.ContentsPageComponent),
+  },
+  {
+    path: 'series/:seriesName/:contentIndex',
+    loadComponent: () =>
+      import(
+        '@app/standalone/content-presentation/contents-page.component'
+      ).then((m) => m.ContentsPageComponent),
   },
 ];
 
@@ -54,6 +73,9 @@ const routes: Routes = [
           data: {
             requiredRole: UserRole.EDITOR,
             isPresentation: true,
+            showStepInfo: true,
+            showAnswerCount: true,
+            showHotkeyActionButtons: true,
           },
           resolve: {
             room: RoomResolver,

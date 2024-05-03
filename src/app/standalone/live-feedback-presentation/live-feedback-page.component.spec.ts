@@ -72,8 +72,12 @@ describe('LiveFeedbackPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LiveFeedbackPageComponent],
-      imports: [CoreModule, LoadingIndicatorComponent, getTranslocoModule()],
+      imports: [
+        CoreModule,
+        LoadingIndicatorComponent,
+        getTranslocoModule(),
+        LiveFeedbackPageComponent,
+      ],
       providers: [
         {
           provide: NotificationService,
@@ -83,7 +87,6 @@ describe('LiveFeedbackPageComponent', () => {
           provide: HotkeyService,
           useValue: mockHotkeyService,
         },
-
         {
           provide: RoomService,
           useValue: mockRoomService,

@@ -1,10 +1,18 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { PresentationService } from './presentation.service';
+import { ContentService } from '@app/core/services/http/content.service';
 
 describe('PresentationService', () => {
+  const contentService = jasmine.createSpyObj(ContentService, [
+    'startCountdown',
+    'getContent',
+  ]);
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [PresentationService],
+      providers: [
+        PresentationService,
+        { provide: ContentService, useValue: contentService },
+      ],
     });
   });
 

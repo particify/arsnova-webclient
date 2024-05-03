@@ -2,11 +2,6 @@
 
 .url {
   font-weight: $font-weight-bold;
-  margin: 16px 0;
-
-  &:first-of-type {
-    margin: 32px 0;
-  }
 
   &:only-of-type {
     margin-bottom: 16px;
@@ -31,15 +26,31 @@
   font-size: $size;
 }
 
-@media (max-width: 1279px) {
-  $size: calc(32px + 1vw);
-
+@include xs {
   .text {
-    font-size: $size;
+    font-size: $xl-font-size;
+  }
+}
+
+@include gt-xs {
+  .url {
+    margin: 16px 0;
   }
 
-  .user-icon {
-    @include user-icon-size(get-icon-size($size));
+  @media (max-width: 1279px) {
+    $size: calc(32px + 1vw);
+
+    .url:first-of-type {
+      margin: 32px 0;
+    }
+
+    .text {
+      font-size: $size;
+    }
+
+    .user-icon {
+      @include user-icon-size(get-icon-size($size));
+    }
   }
 }
 

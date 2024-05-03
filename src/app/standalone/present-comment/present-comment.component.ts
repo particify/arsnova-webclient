@@ -1,14 +1,17 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { Comment } from '@app/core/models/comment';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { take } from 'rxjs';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-present-comment',
   templateUrl: './present-comment.component.html',
   styleUrls: ['./present-comment.component.scss'],
+  standalone: true,
+  imports: [FlexModule, TranslocoPipe],
 })
 export class PresentCommentComponent implements OnInit, OnDestroy {
   @Input() isPresentation = false;

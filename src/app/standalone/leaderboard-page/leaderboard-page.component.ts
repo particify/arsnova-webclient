@@ -1,10 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CoreModule } from '@app/core/core.module';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-leaderboard-page',
+  standalone: true,
+  imports: [
+    CoreModule,
+    TranslocoPipe,
+    LeaderboardComponent,
+    LoadingIndicatorComponent,
+  ],
   templateUrl: './leaderboard-page.component.html',
   styleUrl: './leaderboard-page.component.scss',
 })

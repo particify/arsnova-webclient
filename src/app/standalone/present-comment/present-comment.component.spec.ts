@@ -20,8 +20,7 @@ describe('PresentCommentComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PresentCommentComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), PresentCommentComponent],
       providers: [
         {
           provide: PresentationService,
