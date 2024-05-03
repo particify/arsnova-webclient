@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
@@ -12,7 +6,6 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { Location } from '@angular/common';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
@@ -38,20 +31,16 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
   animations: [hotkeyEnterLeaveAnimation],
 })
 export class ContentsPageComponent implements OnInit, OnDestroy {
-  @ViewChild(StepperComponent) stepper!: StepperComponent;
-
   destroyed$ = new Subject<void>();
 
   contents: Content[] = [];
   isLoading = true;
   entryIndex = 0;
   contentIndex = 0;
-  shortId: string;
   room: Room;
   contentGroupName: string;
   currentStep = 0;
   answerCount = 0;
-  indexChanged: EventEmitter<void> = new EventEmitter<void>();
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   content!: Content;
   contentGroup!: ContentGroup;
@@ -95,7 +84,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       this.contentGroupName
     );
     this.room = this.route.snapshot.data.room;
-    this.shortId = this.route.snapshot.data.room.shortId;
   }
 
   ngOnInit() {
@@ -163,27 +151,20 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
             .subscribe((contents) => {
               this.contents =
                 this.contentService.getSupportedContents(contents);
-              this.finishInit(initial);
+              this.stepCount = this.contents.length;
+              this.contentGroupService
+                .getAttributions(this.room.id, this.contentGroup.id)
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe((attributions) => {
+                  if (attributions.length > 0) {
+                    this.attributions = attributions;
+                    this.stepCount++;
+                  }
+                  this.finishInit(initial);
+                });
               if (this.entryIndex > -1) {
                 this.contentIndex = initial ? this.entryIndex : 0;
                 this.setCurrentContent(this.contentIndex);
-                this.stepCount = this.contents.length;
-                this.contentGroupService
-                  .getAttributions(this.room.id, this.contentGroup.id)
-                  .pipe(takeUntil(this.destroyed$))
-                  .subscribe((attributions) => {
-                    if (attributions.length > 0) {
-                      this.attributions = attributions;
-                      this.stepCount++;
-                    }
-                    setTimeout(() => {
-                      this.stepper?.init(this.contentIndex, this.stepCount);
-                      this.updateURL(this.contentIndex, true);
-                      if (!initial) {
-                        this.updateStateChange();
-                      }
-                    }, 0);
-                  });
               }
               this.sendContentStepState();
             });
@@ -220,8 +201,8 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
-  updateURL(index: number, initial = false) {
-    if (this.currentStep === index && !initial) {
+  updateURL(index: number) {
+    if (this.currentStep === index && !this.content) {
       return;
     }
     this.setCurrentContent(index);
@@ -248,9 +229,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     if (this.content.duration) {
       this.endDate = undefined;
     }
-    setTimeout(() => {
-      this.indexChanged.emit();
-    }, 300);
   }
 
   private setCurrentContent(index: number): void {
@@ -274,10 +252,8 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateCounter(count: number, isActive: boolean) {
-    if (isActive) {
-      this.answerCount = count;
-    }
+  updateCounter(count: number) {
+    this.answerCount = count;
   }
 
   updateStateChange() {

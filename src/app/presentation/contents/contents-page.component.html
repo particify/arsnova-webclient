@@ -41,69 +41,19 @@
     fxLayoutAlign="start center"
     class="scalable"
   >
-    <app-stepper
+    <app-content-stepper
+      [hidden]="showLeaderboard"
       *ngIf="contents && contents.length > 0 && !isLoading && !isGroupLocked()"
-      (newIndex)="updateURL($event)"
-      [listLength]="stepCount"
-      [showSteps]="false"
+      [contents]="contents"
+      [settings]="settings"
+      [startIndex]="contentIndex"
+      [hideControls]="true"
+      [attributions]="attributions"
+      (indexChanged)="updateURL($event)"
+      (answerCountUpdated)="updateCounter($event)"
     >
-      <cdk-step *ngFor="let content of contents; let i = index">
-        <div fxLayoutAlign="center" id="step">
-          <mat-card
-            class="presentation-card"
-            [hidden]="content.duration && !content.state.answeringEndTime"
-          >
-            <app-content-results
-              *ngIf="!showLeaderboard"
-              [content]="content"
-              [directShow]="
-                contentIndex === i &&
-                settings.showContentResultsDirectly &&
-                !content.duration
-              "
-              [active]="currentStep === i"
-              [index]="i"
-              [correctOptionsPublished]="true"
-              [isPresentation]="true"
-              (updatedCounter)="updateCounter($event, currentStep === i)"
-              [indexChanged]="indexChanged"
-              [settings]="settings"
-            >
-            </app-content-results>
-            <app-leaderboard-page
-              fxFill
-              *ngIf="showLeaderboard"
-            ></app-leaderboard-page>
-          </mat-card>
-          <div
-            fxLayout="column"
-            fxLayoutAlign="center center"
-            fxLayoutGap="3em"
-            class="waiting-container"
-            [hidden]="!(content.duration && !content.state.answeringEndTime)"
-          >
-            <app-content-step-info
-              [current]="currentStep + 1"
-              [totalCount]="stepCount"
-            ></app-content-step-info>
-            <span>{{ 'content.get-ready' | transloco }}</span>
-          </div>
-        </div>
-        <div tabindex="0" class="visually-hidden">
-          {{ 'statistic.a11y-no-more-answers' | transloco }}
-        </div>
-      </cdk-step>
-      <cdk-step *ngIf="attributions.length > 0">
-        <div fxLayoutAlign="center" id="step">
-          <mat-card class="presentation-card">
-            <app-attributions-info
-              [attributions]="attributions"
-              [contents]="contents"
-            ></app-attributions-info>
-          </mat-card>
-        </div>
-      </cdk-step>
-    </app-stepper>
+    </app-content-stepper>
+    <app-leaderboard-page *ngIf="showLeaderboard"></app-leaderboard-page>
   </div>
 </div>
 <div *ngIf="!isLoading && !isGroupLocked()" fxFill>

@@ -93,7 +93,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   @Input() index = 0;
   @Input() correctOptionsPublished = false;
   @Input() isPresentation = false;
-  @Input() indexChanged?: EventEmitter<void>;
+  @Input() indexChanged?: EventEmitter<number>;
   @Input() isStandalone = true;
   @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
   @Input() settings = new UserSettings();

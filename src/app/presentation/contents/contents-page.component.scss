@@ -1,7 +1,8 @@
 @import '../bars/control-bar/control-bar.component';
 
-.presentation-card {
-  max-width: 640px;
+app-content-stepper,
+app-leaderboard-page {
+  width: 640px;
   margin-bottom: $bar-height;
 }
 
@@ -43,8 +44,4 @@
 
 .over-control-bar {
   bottom: 70px;
-}
-
-.waiting-container {
-  margin: 5em 0;
 }

@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
@@ -12,7 +6,6 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { Location } from '@angular/common';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -28,8 +21,6 @@ import { ContentLicenseAttribution } from '@app/core/models/content-license-attr
   styleUrls: ['./content-presentation.component.scss'],
 })
 export class ContentPresentationComponent implements OnInit, OnDestroy {
-  @ViewChild(StepperComponent) stepper!: StepperComponent;
-
   destroyed$ = new Subject<void>();
 
   contents: Content[] = [];
@@ -38,7 +29,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   room: Room;
   contentGroupName: string;
   currentStep = 0;
-  indexChanged: EventEmitter<void> = new EventEmitter<void>();
+  indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup?: ContentGroup;
   settings = new UserSettings();
   attributions: ContentLicenseAttribution[] = [];
@@ -112,9 +103,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
                     this.stepCount++;
                   }
                   this.isLoading = false;
-                  setTimeout(() => {
-                    this.stepper.init(this.currentStep, this.stepCount);
-                  }, 0);
                 });
             });
         } else {

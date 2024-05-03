@@ -1,0 +1,61 @@
+<app-stepper
+  fxFill
+  (newIndex)="updateIndex($event)"
+  [listLength]="stepCount"
+  [showSteps]="!hideControls"
+  [fixedWitdth]="false"
+  [additionalStepIcon]="attributions.length > 0 ? 'attribution' : undefined"
+>
+  <cdk-step *ngFor="let content of contents; let i = index">
+    <div fxLayoutAlign="center" id="step">
+      <mat-card
+        [ngClass]="{ 'no-card-appearance': hideControls }"
+        [hidden]="content.duration && !content.state.answeringEndTime"
+      >
+        <app-content-results
+          [content]="content"
+          [directShow]="
+            currentStep === i &&
+            settings.showContentResultsDirectly &&
+            !content.duration
+          "
+          [active]="currentStep === i"
+          [index]="i"
+          [correctOptionsPublished]="true"
+          [isPresentation]="hideControls"
+          (updatedCounter)="updateCounter($event, currentStep === i)"
+          [indexChanged]="indexChanged"
+          [settings]="settings"
+        >
+        </app-content-results>
+      </mat-card>
+      <div
+        fxFill
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        fxLayoutGap="3em"
+        class="waiting-container"
+        [hidden]="!(content.duration && !content.state.answeringEndTime)"
+      >
+        <app-content-step-info
+          [current]="currentStep + 1"
+          [totalCount]="stepCount"
+        ></app-content-step-info>
+        <span>{{ 'content.get-ready' | transloco }}</span>
+      </div>
+    </div>
+    <div tabindex="0" class="visually-hidden">
+      {{ 'statistic.a11y-no-more-answers' | transloco }}
+    </div>
+  </cdk-step>
+  <cdk-step *ngIf="attributions.length > 0">
+    <div fxLayoutAlign="center" id="step">
+      <mat-card [ngClass]="{ 'no-card-appearance': hideControls }">
+        <app-attributions-info
+          [attributions]="attributions"
+          [contents]="contents"
+        ></app-attributions-info>
+      </mat-card>
+    </div>
+  </cdk-step>
+</app-stepper>

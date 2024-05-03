@@ -15,6 +15,7 @@ import { LeaderboardPageComponent } from '@app/presentation/contents/leaderboard
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
+import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
 
 @NgModule({
   declarations: [ContentsPageComponent, LeaderboardPageComponent],
@@ -32,6 +33,7 @@ import { ContentResultsComponent } from '@app/standalone/content-results/content
     ContentWaitingComponent,
     LeaderboardComponent,
     ContentStepInfoComponent,
+    ContentStepperComponent,
   ],
 })
 export class ContentModule {}
