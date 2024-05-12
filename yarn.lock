@@ -2255,11 +2255,11 @@ __metadata:
   linkType: hard
 
 "@csstools/selector-specificity@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "@csstools/selector-specificity@npm:3.0.3"
+  version: 3.1.0
+  resolution: "@csstools/selector-specificity@npm:3.1.0"
   peerDependencies:
     postcss-selector-parser: ^6.0.13
-  checksum: 10c0/e4f0355165882ddde8bd4a2f0252868150e67b9fae927fd2d94a91cee31e438e7041059f20b9c755a93b0bd8e527a9f78b01168fe67b3539be32091240aa63bf
+  checksum: 10c0/7f77f8377b637dcca7f7a9d6ace3329cf60f02cbd75f14241de30b1f5d00c961ec167572bc93517cdb2f106405a91119f026389a0f96dabae8dd67d1c7710e60
   languageName: node
   linkType: hard
 
@@ -5642,12 +5642,12 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:^16.8.0 || ^17.0.0 || ^18.0.0, @types/react@npm:^18.0.37":
-  version: 18.3.1
-  resolution: "@types/react@npm:18.3.1"
+  version: 18.3.2
+  resolution: "@types/react@npm:18.3.2"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/18d856c12a4ec93f3cda2d58ef3d77a9480818afd3af895f812896fb82cfca1f35a692ab1add4ce826a4eb58a071624c7d1c8c6c4ccfb81c100d2916dc607614
+  checksum: 10c0/9fb2f1fcf7e889ee4ea7c3c5978df595c66e770e5fd3a245dbdd2589b9b911524c11dab25a6275d8af4e336e4cb5fa850d447884b84c335a187a338c89df99ba
   languageName: node
   linkType: hard
 
@@ -14197,15 +14197,15 @@ __metadata:
   linkType: hard
 
 "recast@npm:^0.23.3, recast@npm:^0.23.5":
-  version: 0.23.6
-  resolution: "recast@npm:0.23.6"
+  version: 0.23.7
+  resolution: "recast@npm:0.23.7"
   dependencies:
     ast-types: "npm:^0.16.1"
     esprima: "npm:~4.0.0"
     source-map: "npm:~0.6.1"
     tiny-invariant: "npm:^1.3.3"
     tslib: "npm:^2.0.1"
-  checksum: 10c0/589c1a96aea7656a844f56278ffe99e3360717991955e9409221f2c1582a922f8179c803c8d35ca61743facfa0ad895acfe73dcc76076e0717db04c508166d44
+  checksum: 10c0/5a807e3596b699a8fd076c76aed1f258d35a471671f0354b783a318d110418493a5d93a7dea427ebc0ebbad80cf79c93a925d525ccaf35ca208311735461af5f
   languageName: node
   linkType: hard
 
