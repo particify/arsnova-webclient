@@ -396,7 +396,13 @@ export class ContentService extends AbstractEntityService<Content> {
   }
 
   startNewRound(content: Content) {
-    const changes = { state: content.state };
+    const changes = {
+      state: new ContentState(
+        content.state.round,
+        content.state.answeringEndTime,
+        content.state.answersPublished
+      ),
+    };
     changes.state.round = 2;
     const dialogRef = this.dialog.open(BaseDialogComponent, {
       data: {

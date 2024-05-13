@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import {
   NavBarComponent,
@@ -27,16 +28,14 @@ import {
 } from '@app/core/models/content-group';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { Subject, of } from 'rxjs';
+import { Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { TranslocoService } from '@ngneat/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { ContentType } from '@app/core/models/content-type.enum';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -48,8 +47,8 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
-import { RoundState } from '@app/core/models/events/round-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -82,6 +81,8 @@ export class ControlBarComponent
   extends NavBarComponent
   implements OnInit, OnDestroy
 {
+  @ViewChild(ContentPresentationMenuComponent)
+  moreMenuComponent!: ContentPresentationMenuComponent;
   @Input({ required: true }) shortId!: string;
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
   @Output() activeGroup: EventEmitter<string> = new EventEmitter<string>();
@@ -138,11 +139,6 @@ export class ControlBarComponent
 
   private hotkeyRefs: symbol[] = [];
 
-  multipleRounds = false;
-  contentRounds = new Map<string, number>();
-  rounds = ['1', '2', '1 & 2'];
-  ContentType: typeof ContentType = ContentType;
-
   constructor(
     protected router: Router,
     protected routingService: RoutingService,
@@ -159,7 +155,6 @@ export class ControlBarComponent
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
     private translateService: TranslocoService,
-    private contentService: ContentService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private presentationService: PresentationService
@@ -288,12 +283,6 @@ export class ControlBarComponent
       .subscribe((state) => {
         this.evaluateCommentState(state);
       });
-    this.presentationService
-      .getMultipleRoundState()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(
-        (multipleRounds) => (this.multipleRounds = multipleRounds || false)
-      );
   }
 
   subscribeToEvents() {
@@ -321,24 +310,6 @@ export class ControlBarComponent
       .subscribe((group) => {
         this.group = group;
       });
-    this.contentService
-      .getAnswersDeleted()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((contentId) => {
-        if (this.content && contentId === this.content?.id) {
-          this.content.state.round = 1;
-          this.changeRound(0);
-          this.multipleRounds = false;
-        }
-      });
-    this.contentService
-      .getRoundStarted()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((content) => {
-        if (content) {
-          this.afterRoundStarted(content);
-        }
-      });
   }
 
   evaluateContentState(state?: ContentPresentationState) {
@@ -346,9 +317,6 @@ export class ControlBarComponent
       this.contentStepState = state.position;
       this.contentIndex = state.index;
       this.content = state.content;
-      if (this.content) {
-        this.contentRounds.set(this.content.id, this.content.state.round - 1);
-      }
       this.globalStorageService.setItem(
         STORAGE_KEYS.LAST_INDEX,
         this.contentIndex
@@ -606,62 +574,5 @@ export class ControlBarComponent
           this.hotkeyService.registerHotkey(h, this.hotkeyRefs)
         )
     );
-  }
-
-  hasFormatAnswer(format: ContentType): boolean {
-    return ![ContentType.SLIDE, ContentType.FLASHCARD].includes(format);
-  }
-
-  hasFormatRounds(format: ContentType): boolean {
-    return this.contentService.hasFormatRounds(format);
-  }
-
-  editContent() {
-    if (!this.content || !this.group) {
-      return;
-    }
-    this.contentService.goToEdit(
-      this.content.id,
-      this.shortId,
-      this.group.name
-    );
-  }
-
-  deleteContentAnswers() {
-    this.dialogService.openDeleteDialog(
-      'content-answers',
-      'creator.dialog.really-delete-answers',
-      undefined,
-      undefined,
-      () =>
-        this.content
-          ? this.contentService.deleteAnswersOfContent(
-              this.content.id,
-              this.roomId
-            )
-          : of()
-    );
-  }
-
-  changeRound(round: number) {
-    if (!this.content) {
-      return;
-    }
-    this.contentRounds.set(this.content.id, round);
-    const roundState = new RoundState(this.contentIndex, round);
-    this.presentationService.updateRoundState(roundState);
-  }
-
-  afterRoundStarted(content: Content) {
-    this.content = content;
-    this.changeRound(this.content.state.round - 1);
-    this.multipleRounds = true;
-  }
-
-  startNewRound() {
-    if (!this.content) {
-      return;
-    }
-    this.contentService.startNewRound(this.content);
   }
 }

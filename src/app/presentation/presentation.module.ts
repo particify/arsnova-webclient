@@ -13,6 +13,7 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { HotkeyActionButtonComponent } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
 import { PublishContentGroupDialogComponent } from '@app/presentation/_dialogs/publish-content-group-dialog/publish-content-group-dialog.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     CopyUrlComponent,
     HotkeyActionButtonComponent,
     LoadingButtonComponent,
+    ContentPresentationMenuComponent,
   ],
   providers: [provideTranslocoScope('creator'), FocusModeService],
 })
