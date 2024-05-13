@@ -47,6 +47,8 @@ export class AnswerOptionListComponent
     let msg: string | undefined;
     if (!this.hasMinimumOptionCount()) {
       msg = this.translateService.translate('creator.content.need-answers');
+    } else if (!this.areLabelsValid()) {
+      return false;
     } else if (hasCorrectOptions) {
       if (hasMultipleCorrectOptions && !this.hasMoreCorrectOptions(0)) {
         msg = this.translateService.translate('creator.content.at-least-one');
@@ -84,7 +86,6 @@ export class AnswerOptionListComponent
   }
 
   leaveEditMode(): void {
-    this.saveAnswerLabels();
     this.isAnswerEdit = -1;
   }
 
@@ -101,34 +102,21 @@ export class AnswerOptionListComponent
     this.dragDroplist = this.answers;
   }
 
-  private saveAnswerLabels(checkForEmpty = false) {
-    const answerLabels = this.answers.map(
-      (a) => new AnswerOption(a.answerOption.label)
-    );
-    if (checkForEmpty) {
-      let valid = true;
-      const labels = answerLabels.map((a) => a.label);
-      if (labels.includes('')) {
-        const msg = this.translateService.translate(
-          'creator.content.no-empty-fields-allowed'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.FAILED
-        );
-        valid = false;
-      } else if (this.checkForDuplicates(labels)) {
-        const msg = this.translateService.translate(
-          'creator.content.same-answer'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-        valid = false;
-      }
-      return valid;
+  private areLabelsValid(): boolean {
+    let msg: string | undefined;
+    const labels = this.answers.map((a) => a.answerOption.label);
+    if (labels.includes('')) {
+      msg = this.translateService.translate(
+        'creator.content.no-empty-fields-allowed'
+      );
+    } else if (this.checkForDuplicates(labels)) {
+      msg = this.translateService.translate('creator.content.same-answer');
     }
+    if (msg) {
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return false;
+    }
+    return true;
   }
 
   private checkForDuplicates(labels: string[]) {
