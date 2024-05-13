@@ -59,6 +59,9 @@ export class ScaleContentFormComponent
         this.selectedTemplate,
         this.determineOptionCount()
       );
+    } else {
+      (this.content as ContentScale).optionTemplate = this.selectedTemplate;
+      (this.content as ContentScale).optionCount = this.determineOptionCount();
     }
     return this.content as ContentScale;
   }
