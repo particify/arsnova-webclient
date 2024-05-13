@@ -64,7 +64,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "arsnova-webclient:build"
+            "buildTarget": "arsnova-webclient:build",
+            "host": "127.0.0.1"
           },
           "configurations": {
             "production": {
