@@ -2,12 +2,16 @@ import { UserRole } from './user-roles.enum';
 
 export class Moderator {
   userId: string;
-  loginId: string;
+  displayId: string;
   role: UserRole;
 
-  constructor(userId = '', loginId = '', role: UserRole = UserRole.MODERATOR) {
+  constructor(
+    userId = '',
+    displayId = '',
+    role: UserRole = UserRole.MODERATOR
+  ) {
     this.userId = userId;
-    this.loginId = loginId;
+    this.displayId = displayId;
     this.role = role;
   }
 }

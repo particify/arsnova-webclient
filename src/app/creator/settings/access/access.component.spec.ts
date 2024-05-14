@@ -44,7 +44,7 @@ describe('AccessComponent', () => {
 
   const mockUserService = jasmine.createSpyObj('UserService', [
     'getUserData',
-    'getUserByLoginId',
+    'getUserByDisplayId',
   ]);
   mockUserService.getUserData.and.returnValue(
     of([new User('1111', 'a@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
@@ -149,7 +149,7 @@ describe('AccessComponent', () => {
 
   it('should add moderator to room if user was found with entered login id', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
-    mockUserService.getUserByLoginId.and.returnValue(
+    mockUserService.getUserByDisplayId.and.returnValue(
       of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
     );
     fixture = TestBed.createComponent(AccessComponent);
@@ -174,7 +174,7 @@ describe('AccessComponent', () => {
 
   it('should invite moderator to room if user was not found with entered login id', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
-    mockUserService.getUserByLoginId.and.returnValue(of([]));
+    mockUserService.getUserByDisplayId.and.returnValue(of([]));
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
     component.room = new Room(
@@ -197,7 +197,7 @@ describe('AccessComponent', () => {
 
   it('should invite moderator to room if user was not found with entered login id after another user was added', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
-    mockUserService.getUserByLoginId.and.returnValue(
+    mockUserService.getUserByDisplayId.and.returnValue(
       of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
     );
     fixture = TestBed.createComponent(AccessComponent);
@@ -219,7 +219,7 @@ describe('AccessComponent', () => {
     await inviteButton.click();
     expect(mockModeratorService.add).toHaveBeenCalled();
     component.newModeratorId = '';
-    mockUserService.getUserByLoginId.and.returnValue(of([]));
+    mockUserService.getUserByDisplayId.and.returnValue(of([]));
     fixture.detectChanges();
     component.loginId = 'c@d.cd';
     fixture.detectChanges();
@@ -231,7 +231,7 @@ describe('AccessComponent', () => {
 
   it('should show error notification if SSO is used and user was not found with entered login id after another user was added', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(false));
-    mockUserService.getUserByLoginId.and.returnValue(
+    mockUserService.getUserByDisplayId.and.returnValue(
       of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
     );
     fixture = TestBed.createComponent(AccessComponent);
@@ -253,7 +253,7 @@ describe('AccessComponent', () => {
     await addButton.click();
     expect(mockModeratorService.add).toHaveBeenCalled();
     component.newModeratorId = '';
-    mockUserService.getUserByLoginId.and.returnValue(of([]));
+    mockUserService.getUserByDisplayId.and.returnValue(of([]));
     fixture.detectChanges();
     component.loginId = 'c@d.cd';
     fixture.detectChanges();
@@ -267,7 +267,7 @@ describe('AccessComponent', () => {
 
   it('should add moderator to room if SSO is used and user was found with entered username', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(false));
-    mockUserService.getUserByLoginId.and.returnValue(
+    mockUserService.getUserByDisplayId.and.returnValue(
       of([
         new User('3333', 'username', AuthProvider.ARSNOVA, '0', new Person()),
       ])
@@ -294,7 +294,7 @@ describe('AccessComponent', () => {
 
   it('should show error notification if SSO is used and user was not found with entered username', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(false));
-    mockUserService.getUserByLoginId.and.returnValue(of([]));
+    mockUserService.getUserByDisplayId.and.returnValue(of([]));
     fixture = TestBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
     component.room = new Room(
