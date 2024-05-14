@@ -17,7 +17,11 @@ import {
 import { TranslocoService } from '@ngneat/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import {
+  ContentGroup,
+  GroupType,
+  PublishingMode,
+} from '@app/core/models/content-group';
 import { take } from 'rxjs/operators';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
@@ -55,6 +59,7 @@ export class ContentListComponent implements OnInit, OnDestroy {
   private hotkeyRefs: symbol[] = [];
 
   ContentType: typeof ContentType = ContentType;
+  GroupType = GroupType;
 
   iconList: Map<ContentType, string>;
 

@@ -40,6 +40,8 @@ export class ChoiceContentFormComponent
   @Input() content?: Content;
   @Input() isAnswered = false;
   @Input() isEditMode = false;
+  @Input() correctAnswerSelection = false;
+  @Input() isQuiz = false;
 
   displayAnswers: DisplayAnswer[] = [];
   multipleCorrectAnswers = false;
@@ -55,11 +57,15 @@ export class ChoiceContentFormComponent
   ngOnInit(): void {
     if (this.isEditMode) {
       this.initContentForEditing();
+    } else {
+      if (!this.correctAnswerSelection) {
+        this.noCorrectAnswers = !this.isQuiz;
+      }
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes.content.currentValue) {
+    if (!changes.content?.currentValue) {
       this.displayAnswers = [];
     }
   }

@@ -31,6 +31,8 @@ export class BinaryContentFormComponent
 {
   @Input() content?: Content;
   @Input() isEditMode = false;
+  @Input() answerSelection = false;
+  @Input() isQuiz = false;
   options: BINARY_OPTION[] = Object.values(BINARY_OPTION);
   currentOption = BINARY_OPTION.NEITHER;
 
@@ -49,6 +51,13 @@ export class BinaryContentFormComponent
         this.currentOption =
           correctOptions[0] === 0 ? BINARY_OPTION.YES : BINARY_OPTION.NO;
       }
+    } else {
+      this.currentOption = this.isQuiz
+        ? BINARY_OPTION.YES
+        : BINARY_OPTION.NEITHER;
+    }
+    if (this.answerSelection && this.isQuiz) {
+      this.options.splice(0, 1);
     }
   }
 

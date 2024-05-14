@@ -19,17 +19,13 @@ export class LeaderboardPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.contentGroupService
-      .getByRoomIdAndName(
+      .getLeaderboard(
         this.route.snapshot.data.room.id,
-        this.route.snapshot.params['seriesName']
+        this.route.snapshot.data.contentGroup.id
       )
-      .subscribe((group) => {
-        this.contentGroupService
-          .getLeaderboard(this.route.snapshot.data.room.id, group.id)
-          .subscribe((items) => {
-            this.leaderboardItems = items;
-            this.isLoading = false;
-          });
+      .subscribe((items) => {
+        this.leaderboardItems = items;
+        this.isLoading = false;
       });
   }
 }

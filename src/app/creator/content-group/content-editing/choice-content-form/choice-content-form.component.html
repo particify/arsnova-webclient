@@ -9,6 +9,7 @@
       <span>{{ 'creator.content.multiple-answers-allowed' | transloco }}</span>
     </mat-checkbox>
     <mat-checkbox
+      *ngIf="correctAnswerSelection"
       [disabled]="formDisabled"
       [checked]="noCorrectAnswers"
       (change)="changeNoCorrect($event)"

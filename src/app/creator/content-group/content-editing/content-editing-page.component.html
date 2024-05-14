@@ -148,28 +148,19 @@
                 {{ 'creator.content.abstentions-allowed' | transloco }}
               </mat-checkbox>
               <div
+                *ngIf="!isLoading && contentGroup?.groupType === GroupType.QUIZ"
                 fxLayout="row"
                 fxLayoutGap="1em"
                 fxLayoutAlign="start center"
-                [matTooltip]="
-                  'creator.content.use-quiz-mode-to-use-timer' | transloco
-                "
-                [matTooltipDisabled]="
-                  contentGroup?.groupType === GroupType.QUIZ
-                "
               >
-                <span
-                  [ngClass]="{
-                    'disabled-label': contentGroup?.groupType !== GroupType.QUIZ
-                  }"
-                  >{{ 'creator.content.seconds-to-answer' | transloco }}</span
-                >
+                <span>{{
+                  'creator.content.seconds-to-answer' | transloco
+                }}</span>
                 <mat-form-field
                   appearance="outline"
                   class="no-field-hint initial-width minimal-number-input smaller-select-input"
                 >
                   <input
-                    [disabled]="contentGroup?.groupType !== GroupType.QUIZ"
                     [(ngModel)]="duration"
                     matInput
                     type="number"
@@ -185,6 +176,10 @@
                 [content]="content"
                 [isAnswered]="isAnswered"
                 [isEditMode]="isEditMode"
+                [correctAnswerSelection]="
+                  contentGroup.groupType === GroupType.MIXED
+                "
+                [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
               >
               </app-choice-content-form>
               <app-scale-content-form
@@ -198,6 +193,8 @@
                 *ngSwitchCase="ContentType.BINARY"
                 [isEditMode]="isEditMode"
                 [content]="content"
+                [answerSelection]="contentGroup.groupType !== GroupType.SURVEY"
+                [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
               >
               </app-binary-content-form>
               <app-flashcard-content-form
@@ -230,6 +227,10 @@
                 *ngSwitchCase="ContentType.NUMERIC"
                 [content]="content"
                 [isEditMode]="isEditMode"
+                [correctAnswerSelection]="
+                  contentGroup.groupType === GroupType.MIXED
+                "
+                [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
               >
               </app-numeric-content-form>
             </div>

@@ -15,18 +15,15 @@ describe('LeaderboardPageComponent', () => {
   let fixture: ComponentFixture<LeaderboardPageComponent>;
 
   const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', [
-    'getByRoomIdAndName',
     'getLeaderboard',
   ]);
-  mockContentGroupService.getByRoomIdAndName.and.returnValue(
-    of(new ContentGroup())
-  );
   mockContentGroupService.getLeaderboard.and.returnValue(of([]));
 
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.params = of([{ seriesName: 'SERIES' }]);
   snapshot.data = {
     room: new Room(),
+    contentGroup: new ContentGroup(),
   };
   const activatedRouteStub = new ActivatedRouteStub(
     undefined,

@@ -29,6 +29,8 @@ export class NumericContentFormComponent
 {
   @Input() content?: Content;
   @Input() isEditMode = false;
+  @Input() correctAnswerSelection = false;
+  @Input() isQuiz = false;
 
   noCorrect = false;
   minimum = 1;
@@ -51,6 +53,9 @@ export class NumericContentFormComponent
       this.correctNumber = content.correctNumber;
       this.tolerance = content.tolerance || undefined;
       this.noCorrect = content.correctNumber === undefined;
+    }
+    if (!this.correctAnswerSelection) {
+      this.noCorrect = !this.isQuiz;
     }
   }
 

@@ -21,6 +21,7 @@ import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -282,5 +283,34 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
 
   getTypeIcons(): Map<GroupType, string> {
     return this.typeIcons;
+  }
+
+  getContentFormatsOfGroupType(groupType: GroupType): ContentType[] {
+    switch (groupType) {
+      case GroupType.MIXED:
+        return Object.values(ContentType);
+      case GroupType.QUIZ:
+        return [
+          ContentType.CHOICE,
+          ContentType.BINARY,
+          ContentType.TEXT,
+          ContentType.SORT,
+          ContentType.NUMERIC,
+          ContentType.SLIDE,
+        ];
+      case GroupType.SURVEY:
+        return [
+          ContentType.CHOICE,
+          ContentType.SCALE,
+          ContentType.BINARY,
+          ContentType.TEXT,
+          ContentType.WORDCLOUD,
+          ContentType.PRIORITIZATION,
+          ContentType.NUMERIC,
+          ContentType.SLIDE,
+        ];
+      default:
+        return [ContentType.FLASHCARD, ContentType.SLIDE];
+    }
   }
 }
