@@ -66,7 +66,10 @@ export abstract class AbstractEntityService<
    * @param idOrAlias ID or alias of the entity
    * @param params Optional request parameters
    */
-  getById(idOrAlias: string, params: { roomId?: string } = {}): Observable<T> {
+  getById(
+    idOrAlias: string,
+    params: Record<string, string> = {}
+  ): Observable<T> {
     const id = this.resolveAlias(idOrAlias);
     const { roomId, ...queryParams } = params;
     const cachable = Object.keys(queryParams).length === 0;
@@ -89,7 +92,10 @@ export abstract class AbstractEntityService<
    * @param ids List of IDs of the entities
    * @param params Optional request parameters
    */
-  getByIds(ids: string[], params: { roomId?: string } = {}): Observable<T[]> {
+  getByIds(
+    ids: string[],
+    params: Record<string, string> = {}
+  ): Observable<T[]> {
     const { roomId, ...queryParams } = params;
     const cachable = Object.keys(queryParams).length === 0;
     const entities: T[] = [];
