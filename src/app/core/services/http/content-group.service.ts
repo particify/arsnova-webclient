@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
@@ -28,6 +28,13 @@ const httpOptions = {
 
 @Injectable()
 export class ContentGroupService extends AbstractEntityService<ContentGroup> {
+  typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
+    [GroupType.MIXED, 'dashboard'],
+    [GroupType.QUIZ, 'emoji_events'],
+    [GroupType.SURVEY, 'bar_chart'],
+    [GroupType.FLASHCARDS, 'school'],
+  ]);
+
   constructor(
     private http: HttpClient,
     protected ws: WsConnectorService,
@@ -271,5 +278,9 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
           )
         )
       );
+  }
+
+  getTypeIcons(): Map<GroupType, string> {
+    return this.typeIcons;
   }
 }

@@ -1,10 +1,5 @@
-<form (ngSubmit)="addContentGroup()">
-  <div
-    mat-dialog-content
-    fxLayout="column"
-    fxLayoutAlign="center"
-    fxLayoutGap="10px"
-  >
+<form mat-dialog-content (ngSubmit)="addContentGroup()">
+  <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="1em">
     <mat-form-field appearance="outline">
       <mat-label>{{
         'creator.dialog.content-group-name' | transloco
@@ -27,22 +22,27 @@
         ></mat-hint
       >
     </mat-form-field>
-  </div>
-  <div fxLayoutAlign="end">
-    <div mat-dialog-actions fxLayout="row-reverse" fxLayoutAling="end">
-      <app-loading-button
-        name="creator.dialog.create-content-group"
-        [isDialog]="true"
-      >
-      </app-loading-button>
-      <button
-        (click)="closeDialog()"
-        aria-labelledby="cancel"
-        mat-button
-        type="button"
-      >
-        {{ 'dialog.cancel' | transloco }}
-      </button>
-    </div>
+    <app-detail-radio-group
+      [items]="radioItems"
+      (itemValueChanged)="changeType($event)"
+    ></app-detail-radio-group>
   </div>
 </form>
+<div fxLayoutAlign="end">
+  <mat-dialog-actions fxLayout="row-reverse">
+    <app-loading-button
+      name="creator.dialog.create-content-group"
+      [isDialog]="true"
+      (clicked)="addContentGroup()"
+    >
+    </app-loading-button>
+    <button
+      (click)="closeDialog()"
+      aria-labelledby="cancel"
+      mat-button
+      type="button"
+    >
+      {{ 'dialog.cancel' | transloco }}
+    </button>
+  </mat-dialog-actions>
+</div>
