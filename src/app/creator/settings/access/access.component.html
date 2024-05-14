@@ -120,12 +120,12 @@
             }"
           >
             <p class="user-character">
-              {{ moderator.loginId.toLocaleUpperCase().slice(0, 1) }}
+              {{ moderator.displayId.toLocaleUpperCase().slice(0, 1) }}
             </p>
           </div>
           <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
             <p class="login-id" tabindex="0">
-              {{ moderator.loginId }}
+              {{ moderator.displayId }}
             </p>
             <mat-chip-listbox class="role-chip">
               <mat-chip-option selectable="false">{{
@@ -146,7 +146,7 @@
             fxFlex
             attr.aria-label="{{
               'creator.settings.a11y-delete-moderator'
-                | transloco: { loginId: moderator.loginId }
+                | transloco: { loginId: moderator.displayId }
             }}"
           >
             <mat-icon>close</mat-icon>

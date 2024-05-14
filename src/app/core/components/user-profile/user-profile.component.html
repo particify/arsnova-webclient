@@ -24,7 +24,11 @@
         ></lib-extension-point>
         <ng-container *ngIf="!isGuest; else guestHint">
           <p class="username">
-            {{ ('user-profile.username' | transloco) + ': ' + auth.loginId }}
+            {{
+              ('user-profile.username' | transloco) +
+                ': ' +
+                user.person.displayId
+            }}
           </p>
         </ng-container>
         <ng-template #guestHint>

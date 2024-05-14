@@ -128,12 +128,12 @@ export class UserService extends AbstractEntityService<User> {
     );
   }
 
-  getUserByLoginId(loginId: string, extended = false): Observable<User[]> {
+  getUserByDisplayId(displayId: string, extended = false): Observable<User[]> {
     const url =
       this.buildUri(this.apiUrl.find) + (extended ? '?view=owner' : '');
     return this.http
       .post<User[]>(url, {
-        properties: { loginId: loginId },
+        properties: { person: { displayId: displayId } },
         externalFilters: {},
       })
       .pipe(catchError(this.handleError('getUserId', [])));

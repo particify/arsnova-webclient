@@ -126,7 +126,7 @@ export class AccessComponent
             this.moderators.push(
               new Moderator(
                 user.id,
-                user.loginId,
+                user.person.displayId,
                 moderators.find((m) => m.userId === user.id)?.role
               )
             );
@@ -136,7 +136,7 @@ export class AccessComponent
               .selectTranslate('creator.settings.you')
               .pipe(take(1))
               .subscribe((msg) => {
-                this.moderators[0].loginId = msg;
+                this.moderators[0].displayId = msg;
               });
           }
           this.moderators = this.moderators.sort((a) => {
@@ -149,7 +149,7 @@ export class AccessComponent
   }
 
   getUser() {
-    this.userService.getUserByLoginId(this.loginId).subscribe((list) => {
+    this.userService.getUserByDisplayId(this.loginId).subscribe((list) => {
       const userFound = list.length > 0;
       this.currentInputIsChecked = true;
       if (userFound) {
@@ -217,7 +217,7 @@ export class AccessComponent
     const dialogRef = this.dialogService.openDeleteDialog(
       'room-moderator',
       'creator.dialog.really-delete-user-rights',
-      moderator.loginId,
+      moderator.displayId,
       'dialog.remove',
       () => this.moderatorService.delete(this.room.id, moderator.userId)
     );

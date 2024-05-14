@@ -26,7 +26,7 @@
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center" class="user-info">
                   <span *ngIf="auth && !isGuest()" class="ellipsis user-id">{{
-                    auth.loginId
+                    auth.displayId
                   }}</span>
                   <span *ngIf="isGuest()">{{
                     'header.guest-account' | transloco
