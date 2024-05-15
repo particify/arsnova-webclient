@@ -65,9 +65,9 @@ export class UserProfileComponent implements OnInit {
       this.auth = auth;
       this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
       this.userService
-        .getUserByLoginId(this.auth.loginId, true)
+        .getById(this.auth.userId, { view: 'owner' })
         .subscribe((user) => {
-          this.user = user[0];
+          this.user = user;
           if (this.user.settings) {
             this.settings = this.user.settings;
           }

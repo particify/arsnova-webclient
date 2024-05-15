@@ -89,7 +89,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
     this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
       this.auth = auth;
-      this.userCharacter = this.auth?.loginId.slice(0, 1).toLocaleUpperCase();
+      this.userCharacter = this.auth?.displayId
+        ?.slice(0, 1)
+        .toLocaleUpperCase();
     });
     this.currentLang = this.translationService.getActiveLang();
     this.contentGroupTemplatesActive = this.featureFlagService.isEnabled(

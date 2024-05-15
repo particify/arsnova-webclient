@@ -33,7 +33,7 @@ export class UserSearchComponent {
         this.setUserData([user]);
       },
       error: () => {
-        this.userService.getUserByLoginId(input).subscribe((users) => {
+        this.userService.getUserByDisplayId(input).subscribe((users) => {
           this.setUserData(users);
         });
       },
@@ -44,7 +44,9 @@ export class UserSearchComponent {
     this.users = users;
     if (users.length > 0) {
       users.forEach((user) => {
-        this.searchResults.push(`${user.loginId} (${user.authProvider})`);
+        this.searchResults.push(
+          `${user.person.displayId} (${user.authProvider})`
+        );
       });
     }
   }

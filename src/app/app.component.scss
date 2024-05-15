@@ -45,6 +45,13 @@
 
 .user-id {
   max-width: 160px;
+  font-size: $s-font-size;
+  color: var(--on-surface);
+
+  &:nth-child(2) {
+    opacity: 0.7;
+    font-size: $xs-font-size;
+  }
 }
 
 .user-symbol {
@@ -62,5 +69,5 @@
 }
 
 .user-info {
-  opacity: 0.7;
+  line-height: 1.5;
 }
