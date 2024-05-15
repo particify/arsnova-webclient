@@ -25,9 +25,12 @@
                   <mat-icon *ngIf="!auth || isGuest()">person_outline</mat-icon>
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center" class="user-info">
-                  <span *ngIf="auth && !isGuest()" class="ellipsis user-id">{{
-                    auth.displayId
-                  }}</span>
+                  <ng-container *ngIf="auth && !isGuest()">
+                    <span *ngIf="auth.displayName" class="ellipsis user-id">{{
+                      auth.displayName
+                    }}</span>
+                    <span class="ellipsis user-id">{{ auth.displayId }}</span>
+                  </ng-container>
                   <span *ngIf="isGuest()">{{
                     'header.guest-account' | transloco
                   }}</span>

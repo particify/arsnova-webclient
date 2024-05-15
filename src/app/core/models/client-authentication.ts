@@ -3,6 +3,7 @@ import { AuthProvider } from './auth-provider';
 export class ClientAuthentication {
   userId: string;
   displayId?: string;
+  displayName?: string;
   loginId: string;
   authProvider: AuthProvider;
   token: string;
