@@ -41,6 +41,7 @@ import { LeaderboardPageComponent } from '@app/creator/content-group/leaderboard
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
     AttributionsInfoComponent,
     LeaderboardComponent,
     LoadingIndicatorComponent,
+    ContentStepperComponent,
   ],
 })
 export class ContentGroupModule {}

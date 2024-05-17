@@ -3,6 +3,7 @@
   fxLayout="row"
   fxLayoutAlign="space-between"
   id="comment-card"
+  [appearance]="outlinedCard ? 'outlined' : 'raised'"
   [ngClass]="{
     'highlighted secondary-background on-secondary':
       comment.highlighted && !isSimpleView,

@@ -1,0 +1,59 @@
+<div fxLayout="column" fxFill>
+  <div *ngIf="showCopyUrlButton && url" fxLayout="row" fxLayoutAlign="end">
+    <app-copy-url class="copy-url" [url]="url"></app-copy-url>
+  </div>
+  <div
+    fxFill
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap.gt-xs="8vw"
+  >
+    <div
+      class="qr-container"
+      fxLayout.lt-sm="column"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxLayoutGap.gt-xs="8vw"
+      fxLayoutGap.xs="1em"
+    >
+      <div
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        fxLayoutGap.xs="0.25em"
+      >
+        <lib-extension-point *ngIf="showIcon" extensionId="branding-logo">
+          <mat-icon color="primary" class="web-icon disabled"
+            >language</mat-icon
+          >
+        </lib-extension-point>
+        <span *ngIf="!useJoinUrl" class="url text">{{ displayUrl }}</span>
+        <span class="url text">{{
+          useJoinUrl ? displayUrl : (shortId | splitShortId: false)
+        }}</span>
+        <lib-extension-point
+          *ngIf="passwordProtected"
+          extensionId="share-room-password"
+        ></lib-extension-point>
+      </div>
+      <qr-code
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        [value]="qrUrl"
+        [size]="qrSize"
+        [lightColor]="bgColor"
+        [darkColor]="fgColor"
+        [errorCorrectionLevel]="'M'"
+        [margin]="0"
+      ></qr-code>
+    </div>
+    <div
+      *ngIf="!!userCount && showUserCount"
+      class="disabled"
+      fxLayoutAlign="center center"
+      fxLayoutGap="12px"
+    >
+      <span class="text">{{ userCount }}</span>
+      <mat-icon class="user-icon">people</mat-icon>
+    </div>
+  </div>
+</div>

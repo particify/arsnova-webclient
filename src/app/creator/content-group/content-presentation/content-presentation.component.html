@@ -4,43 +4,13 @@
     {{ 'creator.statistic.a11y-message-presentation' | transloco }}
   </div>
   <div id="stepper-container" fxLayout="column" fxLayoutAlign="start center">
-    <app-stepper
+    <app-content-stepper
       *ngIf="!isLoading"
-      (newIndex)="updateURL($event)"
-      [listLength]="stepCount"
-      [additionalStepIcon]="attributions.length > 0 ? 'attribution' : undefined"
-    >
-      <cdk-step *ngFor="let content of contents; let i = index">
-        <div id="step" *ngIf="currentStep >= i - 1 && currentStep <= i + 1">
-          <mat-card>
-            <app-content-results
-              [content]="content"
-              [directShow]="
-                currentStep === i && settings.showContentResultsDirectly
-              "
-              [active]="currentStep === i"
-              [index]="i"
-              [correctOptionsPublished]="true"
-              [indexChanged]="indexChanged"
-              [settings]="settings"
-            >
-            </app-content-results>
-          </mat-card>
-        </div>
-        <div tabindex="0" class="visually-hidden">
-          {{ 'statistic.a11y-no-more-answers' | transloco }}
-        </div>
-      </cdk-step>
-      <cdk-step *ngIf="attributions.length > 0">
-        <div id="step">
-          <mat-card>
-            <app-attributions-info
-              [attributions]="attributions"
-              [contents]="contents"
-            ></app-attributions-info>
-          </mat-card>
-        </div>
-      </cdk-step>
-    </app-stepper>
+      [contents]="contents"
+      [settings]="settings"
+      [startIndex]="currentStep"
+      [attributions]="attributions"
+      (indexChanged)="updateURL($event)"
+    ></app-content-stepper>
   </div>
 </div>

@@ -1,0 +1,26 @@
+<div class="visually-hidden" [appAutofocus] tabIndex="-1">
+  {{ 'survey.a11y-message' | a11yIntro | async }}
+</div>
+<div
+  id="feedback-container"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxFill
+>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <app-live-feedback
+    *ngIf="!isLoading"
+    id="live-feedback"
+    [data]="data"
+    [dataChanged]="dataChanged"
+    [isClosed]="isClosed"
+    [type]="type"
+  ></app-live-feedback>
+  <app-answer-count
+    *ngIf="showAnswerCount"
+    id="answer-count"
+    tabindex="{{ !isClosed ? '0' : '-1' }}"
+    [count]="answerCount"
+    size="presentation"
+  ></app-answer-count>
+</div>

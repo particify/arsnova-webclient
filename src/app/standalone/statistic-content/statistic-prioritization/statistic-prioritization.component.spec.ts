@@ -100,7 +100,7 @@ describe('StatisticPrioritizationComponent', () => {
       0
     );
     component.visualizationUnitChanged = new EventEmitter<boolean>();
-    component.indexChanged = new EventEmitter<void>();
+    component.indexChanged = new EventEmitter<number>();
     fixture.detectChanges();
   });
 

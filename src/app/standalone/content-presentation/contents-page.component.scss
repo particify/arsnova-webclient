@@ -1,0 +1,46 @@
+@import '../../presentation/bars/control-bar/control-bar.component';
+
+app-content-stepper,
+app-leaderboard-page {
+  width: 640px;
+}
+
+.scalable {
+  transform-origin: 0 0;
+  max-width: 610px;
+  transition: transform 300ms;
+  transform: scale(1);
+  position: absolute;
+}
+
+.step-info-container {
+  position: fixed;
+  right: 0;
+  top: $app-padding;
+  border: 2px solid var(--grey);
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  border-right: none;
+}
+
+.step-info {
+  opacity: 0.8;
+  min-width: 30px;
+  text-align: center;
+  font-size: 24px;
+  margin: 10px;
+  padding: 4px;
+}
+
+.countdown-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  width: 100%;
+  transition: bottom 300ms;
+}
+
+.over-control-bar {
+  bottom: 70px;
+}

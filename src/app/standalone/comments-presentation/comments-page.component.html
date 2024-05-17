@@ -1,0 +1,52 @@
+<div fxLayout="row" [fxLayoutAlign]="showCommentPreview ? 'start' : 'center'">
+  <div id="presentation-button" tabIndex="-1" class="visually-hidden">
+    {{ 'creator.presentation.a11y-comment-message' | transloco }}
+  </div>
+  <div *ngIf="showCommentPreview" class="presentation-container">
+    <app-present-comment
+      fxFill
+      [isPresentation]="true"
+      [comment]="activeComment"
+    ></app-present-comment>
+  </div>
+  <div
+    #commentList
+    (scroll)="onScroll()"
+    class="list-container"
+    [ngClass]="{ 'fixed-list': showCommentPreview }"
+  >
+    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+    <app-comment-settings-hint
+      [disabled]="disabled"
+      [readonly]="readonly"
+      [showToggleButton]="true"
+      (toggleButtonClicked)="disabled ? activateComments() : toggleReadonly()"
+    ></app-comment-settings-hint>
+    <app-comment-list-hint
+      *ngIf="!isLoading && !disabled"
+      [isListEmpty]="comments.length < 1"
+      [noPostsFound]="
+        (hideCommentsList && filteredComments.length < 1) ||
+        (!hideCommentsList && commentsFilteredByTime.length < 1)
+      "
+    ></app-comment-list-hint>
+    <div
+      *ngIf="!isLoading"
+      tabindex="-1"
+      appHotkey="7"
+      [appHotkeyTitle]="'comment-list.list' | transloco"
+      [attr.aria-label]="'comment-list.list' | transloco"
+    >
+      <app-comment
+        *ngFor="let comment of displayComments"
+        [comment]="comment"
+        [isEditor]="true"
+        [isSimpleView]="true"
+        [outlinedCard]="!showCommentPreview"
+        [isNew]="comment.id === newestComment.id"
+        (activeComment)="updateCurrentComment($event)"
+      >
+      </app-comment>
+    </div>
+  </div>
+</div>

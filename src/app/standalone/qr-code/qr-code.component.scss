@@ -1,0 +1,94 @@
+@import '../../../variables';
+
+.url {
+  font-weight: $font-weight-bold;
+
+  &:only-of-type {
+    margin-bottom: 16px;
+  }
+}
+
+.text {
+  color: var(--on-surface);
+}
+
+.user-icon {
+  color: var(--on-background);
+}
+
+@function get-icon-size($font-size) {
+  @return calc($font-size * 1.5);
+}
+
+@mixin user-icon-size($size) {
+  width: $size;
+  height: $size;
+  font-size: $size;
+}
+
+@include xs {
+  .text {
+    font-size: $xl-font-size;
+  }
+}
+
+@include gt-xs {
+  .url {
+    margin: 16px 0;
+  }
+
+  @media (max-width: 1279px) {
+    $size: calc(32px + 1vw);
+
+    .url:first-of-type {
+      margin: 32px 0;
+    }
+
+    .text {
+      font-size: $size;
+    }
+
+    .user-icon {
+      @include user-icon-size(get-icon-size($size));
+    }
+  }
+}
+
+@media (min-width: 1280px) {
+  $size: calc(32px + 1.3vw);
+
+  .text {
+    font-size: $size;
+  }
+
+  .user-icon {
+    @include user-icon-size(get-icon-size($size));
+  }
+}
+
+@media (min-width: 1920px) {
+  $size: calc(32px + 1.8vw);
+
+  .text {
+    font-size: $size;
+  }
+
+  .user-icon {
+    @include user-icon-size(get-icon-size($size));
+  }
+}
+
+$icon-size: calc(32px + 6vw);
+
+.web-icon {
+  width: $icon-size;
+  height: $icon-size;
+  font-size: $icon-size;
+  margin: 16px;
+}
+
+.copy-url {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
