@@ -30,6 +30,7 @@ import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-gr
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AnnouncementComponent } from '@app/standalone/announcement/announcement.component';
 import { NavBarComponent } from '@app/standalone/nav-bar/nav-bar.component';
+import { DetailRadioGroupComponent } from '@app/standalone/detail-radio-group/detail-radio-group.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { NavBarComponent } from '@app/standalone/nav-bar/nav-bar.component';
     LoadingIndicatorComponent,
     AnnouncementComponent,
     NavBarComponent,
+    DetailRadioGroupComponent,
   ],
   declarations: [
     RoomComponent,

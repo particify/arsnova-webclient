@@ -17,7 +17,12 @@
       [contentGroupStats]="contentGroupStats"
       (seriesNameChanged)="updateName($event)"
     ></app-content-group-title>
-    <div fxLayoutAlign="center center" fxLayoutGap="8px" class="status-bar">
+    <div
+      *ngIf="contentGroup.groupType !== GroupType.FLASHCARDS"
+      fxLayoutAlign="center center"
+      fxLayoutGap="8px"
+      class="status-bar"
+    >
       <mat-icon
         class="status-icon"
         [ngClass]="{
@@ -39,6 +44,7 @@
         bar_chart
       </mat-icon>
       <mat-icon
+        *ngIf="contentGroup.groupType !== GroupType.SURVEY"
         class="status-icon"
         [ngClass]="{
           active: correctOptionsPublished,
@@ -57,21 +63,6 @@
         "
       >
         done_all
-      </mat-icon>
-      <mat-icon
-        class="status-icon"
-        [ngClass]="{
-          active: contentGroup.groupType === GroupType.QUIZ,
-          inactive: contentGroup.groupType !== GroupType.QUIZ
-        }"
-        [matTooltip]="
-          (contentGroup.groupType === GroupType.QUIZ
-            ? 'creator.content.quiz-mode-enabled'
-            : 'creator.content.quiz-mode-disabled'
-          ) | transloco
-        "
-      >
-        sports_esports
       </mat-icon>
     </div>
   </div>
@@ -115,6 +106,7 @@
       </button>
       <div fxLayout="row" fxLayoutGap="10px" class="settings-buttons">
         <button
+          *ngIf="contentGroup.groupType !== GroupType.FLASHCARDS"
           mat-button
           id="statistic-button"
           [routerLink]="'statistics'"
@@ -126,12 +118,11 @@
           {{ 'room-page.answer-statistics' | transloco }}
         </button>
         <button
+          *ngIf="contentGroup.groupType === GroupType.QUIZ"
           mat-button
           id="leaderboard-button"
           [routerLink]="'leaderboard'"
-          [disabled]="
-            contents.length === 0 || contentGroup.groupType !== GroupType.QUIZ
-          "
+          [disabled]="contents.length === 0"
           appHotkey="7"
           [appHotkeyTitle]="'content.leaderboard' | transloco"
         >
@@ -150,51 +141,38 @@
         </button>
       </div>
       <mat-menu #groupSettings="matMenu">
-        <button
-          mat-menu-item
-          (click)="toggleStatisticsPublished()"
-          appTrackInteraction="Content group publish stats toggled"
-          [appTrackName]="statisticsPublished ? 'off' : 'on'"
-        >
-          <mat-icon>bar_chart</mat-icon>
-          {{
-            (statisticsPublished
-              ? 'creator.content.dont-publish-statistics'
-              : 'creator.content.publish-statistics'
-            ) | transloco
-          }}
-        </button>
-        <button
-          mat-menu-item
-          (click)="toggleCorrectOptionsPublished()"
-          appTrackInteraction="Content group publish correct options toggled"
-          [appTrackName]="correctOptionsPublished ? 'off' : 'on'"
-        >
-          <mat-icon>done_all</mat-icon>
-          {{
-            (correctOptionsPublished
-              ? 'creator.content.dont-publish-correct-options'
-              : 'creator.content.publish-correct-options'
-            ) | transloco
-          }}
-        </button>
-        <button
-          mat-menu-item
-          (click)="toggleQuizMode()"
-          appTrackInteraction="Quiz mode toggled toggled"
-          [appTrackName]="
-            contentGroup.groupType === GroupType.QUIZ ? 'off' : 'on'
-          "
-        >
-          <mat-icon>sports_esports</mat-icon>
-          {{
-            (contentGroup.groupType === GroupType.QUIZ
-              ? 'creator.content.disable-quiz-mode'
-              : 'creator.content.enable-quiz-mode'
-            ) | transloco
-          }}
-        </button>
-        <mat-divider></mat-divider>
+        <ng-container *ngIf="contentGroup.groupType !== GroupType.FLASHCARDS">
+          <button
+            mat-menu-item
+            (click)="toggleStatisticsPublished()"
+            appTrackInteraction="Content group publish stats toggled"
+            [appTrackName]="statisticsPublished ? 'off' : 'on'"
+          >
+            <mat-icon>bar_chart</mat-icon>
+            {{
+              (statisticsPublished
+                ? 'creator.content.dont-publish-statistics'
+                : 'creator.content.publish-statistics'
+              ) | transloco
+            }}
+          </button>
+          <button
+            *ngIf="contentGroup.groupType !== GroupType.SURVEY"
+            mat-menu-item
+            (click)="toggleCorrectOptionsPublished()"
+            appTrackInteraction="Content group publish correct options toggled"
+            [appTrackName]="correctOptionsPublished ? 'off' : 'on'"
+          >
+            <mat-icon>done_all</mat-icon>
+            {{
+              (correctOptionsPublished
+                ? 'creator.content.dont-publish-correct-options'
+                : 'creator.content.publish-correct-options'
+              ) | transloco
+            }}
+          </button>
+          <mat-divider></mat-divider>
+        </ng-container>
         <button
           mat-menu-item
           id="edit-group-sort"
@@ -254,6 +232,7 @@
         </div>
         <mat-divider></mat-divider>
         <button
+          *ngIf="contentGroup.groupType !== GroupType.FLASHCARDS"
           mat-menu-item
           (click)="deleteAllAnswers()"
           [disabled]="contents.length === 0"

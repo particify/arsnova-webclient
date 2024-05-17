@@ -193,7 +193,11 @@
                   'creator.content.reset-banned-answers' | transloco
                 }}</span>
               </button>
-              <button mat-menu-item (click)="deleteAnswers(content)">
+              <button
+                *ngIf="contentGroup.groupType !== GroupType.FLASHCARDS"
+                mat-menu-item
+                (click)="deleteAnswers(content)"
+              >
                 <mat-icon>clear_all</mat-icon>
                 <span>{{ 'creator.content.delete-answers' | transloco }}</span>
               </button>

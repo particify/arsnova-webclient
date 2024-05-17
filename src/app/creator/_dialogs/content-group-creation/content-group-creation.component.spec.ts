@@ -15,9 +15,14 @@ import {
   MockMatDialog,
   MockMatDialogRef,
 } from '@testing/test-helpers';
+import { GroupType } from '@app/core/models/content-group';
 
 @Injectable()
-class MockContentGroupService {}
+class MockContentGroupService {
+  getTypeIcons() {
+    return new Map<GroupType, string>();
+  }
+}
 
 describe('ContentGroupCreationComponent', () => {
   let component: ContentGroupCreationComponent;

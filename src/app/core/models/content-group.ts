@@ -55,4 +55,6 @@ export const PUBLISHING_MODE_ITEMS: PublishingModeItem[] = [
 export enum GroupType {
   MIXED = 'MIXED',
   QUIZ = 'QUIZ',
+  SURVEY = 'SURVEY',
+  FLASHCARDS = 'FLASHCARDS',
 }

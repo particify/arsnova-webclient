@@ -94,7 +94,8 @@ export class DialogService {
     roomId?: string
   ): MatDialogRef<ContentGroupCreationComponent> {
     return this.openDialog(ContentGroupCreationComponent, {
-      width: this.size.small,
+      width: this.size.medium,
+      maxWidth: '90vw',
       data: {
         roomId: roomId,
       },

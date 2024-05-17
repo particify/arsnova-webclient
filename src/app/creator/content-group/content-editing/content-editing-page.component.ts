@@ -61,7 +61,7 @@ export class ContentEditingPageComponent
   isLoading = true;
   created = false;
   isAnswered = false;
-  contentGroup?: ContentGroup;
+  contentGroup: ContentGroup;
   GroupType = GroupType;
 
   constructor(
@@ -76,8 +76,15 @@ export class ContentEditingPageComponent
     protected formService: FormService
   ) {
     super(formService);
+    this.seriesName = this.route.snapshot.params['seriesName'];
+    this.roomId = this.route.snapshot.data.room.id;
+    this.contentGroup = this.route.snapshot.data.contentGroup;
     const iconList = this.contentService.getTypeIcons();
-    for (const type of Object.values(ContentType)) {
+    const supportedTypes =
+      this.contentGroupService.getContentFormatsOfGroupType(
+        this.contentGroup.groupType
+      );
+    for (const type of supportedTypes) {
       const icon = iconList.get(type);
       if (icon) {
         this.formats.push({
@@ -88,8 +95,6 @@ export class ContentEditingPageComponent
       }
     }
     this.selectedFormat = this.formats[0];
-    this.seriesName = this.route.snapshot.params['seriesName'];
-    this.roomId = this.route.snapshot.data.room.id;
   }
 
   ngOnInit() {
@@ -133,11 +138,7 @@ export class ContentEditingPageComponent
       this.prepareAttachmentData();
       this.isLoading = false;
     }
-    this.contentGroupService
-      .getByRoomIdAndName(this.roomId, this.seriesName)
-      .subscribe((group) => {
-        this.contentGroup = group;
-      });
+
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );

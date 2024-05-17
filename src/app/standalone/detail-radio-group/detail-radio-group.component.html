@@ -1,0 +1,42 @@
+<mat-radio-group
+  [(ngModel)]="selectedItemValue"
+  (change)="itemValueChanged.emit($event.value)"
+  [ngModelOptions]="{ standalone: true }"
+  fxLayout="column"
+  fxLayoutGap="8px"
+>
+  <mat-list>
+    <div
+      *ngFor="let item of items"
+      class="radio-item unselected"
+      [ngClass]="{
+        'primary-border-color': selectedItemValue === item.value
+      }"
+    >
+      <mat-radio-button
+        labelPosition="before"
+        color="primary"
+        [value]="item.value"
+        fxLayout="row"
+        class="answer-radio-button choice-answer"
+      >
+        <div
+          fxLayout="row"
+          fxLayoutGap="0.75em"
+          fxLayoutAlign="start center"
+          [ngClass]="{ primary: selectedItemValue === item.value }"
+        >
+          <mat-icon fxHide.lt-sm *ngIf="item.icon">{{ item.icon }}</mat-icon>
+          <div fxLayout="column" fxLayoutGap="2px">
+            <span class="radio-name">
+              {{ item.title }}
+            </span>
+            <span class="radio-description">
+              {{ item.description }}
+            </span>
+          </div>
+        </div>
+      </mat-radio-button>
+    </div>
+  </mat-list>
+</mat-radio-group>

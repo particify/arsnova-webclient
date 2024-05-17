@@ -274,18 +274,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleQuizMode() {
-    const changes: { groupType: GroupType } = {
-      groupType:
-        this.contentGroup.groupType === GroupType.MIXED
-          ? GroupType.QUIZ
-          : GroupType.MIXED,
-    };
-    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
-      this.contentGroup = updatedContentGroup;
-    });
-  }
-
   generateExportFilename(extension: string): string {
     const name = this.localFileService.generateFilename(
       [this.contentGroup.name, this.room.shortId],

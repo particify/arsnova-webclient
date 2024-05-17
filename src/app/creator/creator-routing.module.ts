@@ -16,6 +16,7 @@ import { CreatorPageComponent } from '@app/creator/creator-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
+import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 
 const routes: Routes = [
   {
@@ -57,6 +58,9 @@ const routes: Routes = [
         (m) => m.ContentGroupModule
       ),
     title: 'series',
+    resolve: {
+      contentGroup: ContentGroupResolver,
+    },
   },
   {
     path: 'comments',
