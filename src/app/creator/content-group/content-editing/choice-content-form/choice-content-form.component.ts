@@ -94,9 +94,9 @@ export class ChoiceContentFormComponent
     }
     (this.content as ContentChoice).multiple = this.multipleCorrectAnswers;
     this.setAnswerOptions();
-    if (!this.noCorrectAnswers) {
-      this.setCorrectOptionIndexes();
-    }
+    (this.content as ContentChoice).correctOptionIndexes = this.noCorrectAnswers
+      ? []
+      : this.getCorrectOptionIndexes();
   }
 
   private setAnswerOptions(): void {
@@ -105,14 +105,14 @@ export class ChoiceContentFormComponent
     );
   }
 
-  private setCorrectOptionIndexes(): void {
+  private getCorrectOptionIndexes(): number[] {
     const correctOptionIndexes: number[] = [];
     this.displayAnswers.forEach((val, index) => {
       if (val.correct) {
         correctOptionIndexes.push(index);
       }
     });
-    (this.content as ContentChoice).correctOptionIndexes = correctOptionIndexes;
+    return correctOptionIndexes;
   }
 
   private initContentForEditing() {
