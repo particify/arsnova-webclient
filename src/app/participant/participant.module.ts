@@ -4,7 +4,6 @@ import { extensions } from './participant.extensions';
 import { CoreModule } from '@app/core/core.module';
 import { ContentChoiceParticipantComponent } from './content/content-choice-participant/content-choice-participant.component';
 import { ContentTextParticipantComponent } from './content/content-text-participant/content-text-participant.component';
-import { SharedModule } from '@app/shared/shared.module';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 import { CdkStepperModule } from '@angular/cdk/stepper';
@@ -35,13 +34,17 @@ import { ContentWaitingComponent } from '@app/standalone/content-waiting/content
 import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 import { ContentLeaderboardComponent } from '@app/standalone/content-leaderboard/content-leaderboard.component';
+import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { NavBarComponent } from '@app/standalone/nav-bar/nav-bar.component';
+import { DividerComponent } from '@app/standalone/divider/divider.component';
 
 @NgModule({
   imports: [
     extensions,
     ParticipantRoutingModule,
     CoreModule,
-    SharedModule,
+    ContentResultsComponent,
     TranslocoModule,
     StepperComponent,
     CdkStepperModule,
@@ -60,6 +63,9 @@ import { ContentLeaderboardComponent } from '@app/standalone/content-leaderboard
     ContentWaitingComponent,
     LeaderboardComponent,
     ContentLeaderboardComponent,
+    LoadingIndicatorComponent,
+    NavBarComponent,
+    DividerComponent,
   ],
   declarations: [
     ContentChoiceParticipantComponent,

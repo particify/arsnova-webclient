@@ -9,7 +9,7 @@ import {
 import {
   NavBarComponent,
   NavBarItem,
-} from '@app/shared/nav-bar/nav-bar.component';
+} from '@app/standalone/nav-bar/nav-bar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {

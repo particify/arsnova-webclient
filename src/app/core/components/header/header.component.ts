@@ -9,7 +9,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ExtensionFactory } from '@projects/extension-point/src/public-api';
 import { MatDialog } from '@angular/material/dialog';
-import { AnnouncementListComponent } from '@app/shared/announcement-list/announcement-list.component';
+import { AnnouncementListComponent } from '@app/standalone/announcement-list/announcement-list.component';
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
 import { AnnouncementState } from '@app/core/models/announcement-state';
 import {

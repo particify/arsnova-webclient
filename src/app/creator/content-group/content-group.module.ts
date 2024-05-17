@@ -18,7 +18,6 @@ import { ContentEditingPageComponent } from './content-editing/content-editing-p
 import { ScaleContentFormComponent } from './content-editing/scale-content-form/scale-content-form.component';
 import { BinaryContentFormComponent } from './content-editing/binary-content-form/binary-content-form.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
-import { SharedModule } from '@app/shared/shared.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TranslocoModule } from '@ngneat/transloco';
 import { HintComponent } from '@app/standalone/hint/hint.component';
@@ -40,6 +39,8 @@ import { AttributionsInfoComponent } from '@app/standalone/attributions-info/att
 import { NumericContentFormComponent } from '@app/creator/content-group/content-editing/numeric-content-form/numeric-content-form.component';
 import { LeaderboardPageComponent } from '@app/creator/content-group/leaderboard-page/leaderboard-page.component';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
+import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,7 @@ import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.co
     ContentGroupRoutingModule,
     ExtensionPointModule,
     CoreModule,
-    SharedModule,
+    ContentResultsComponent,
     DragDropModule,
     TranslocoModule,
     CdkStepperModule,
@@ -86,6 +87,7 @@ import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.co
     ContentPreviewComponent,
     AttributionsInfoComponent,
     LeaderboardComponent,
+    LoadingIndicatorComponent,
   ],
 })
 export class ContentGroupModule {}

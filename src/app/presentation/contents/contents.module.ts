@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
-import { SharedModule } from '@app/shared/shared.module';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { ContentsRoutingModule } from '@app/presentation/contents/contents-routing.module';
@@ -15,13 +14,14 @@ import { ContentWaitingComponent } from '@app/standalone/content-waiting/content
 import { LeaderboardPageComponent } from '@app/presentation/contents/leaderboard-page/leaderboard-page.component';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
+import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 
 @NgModule({
   declarations: [ContentsPageComponent, LeaderboardPageComponent],
   imports: [
     CoreModule,
     ContentsRoutingModule,
-    SharedModule,
+    ContentResultsComponent,
     LoadingIndicatorComponent,
     AnswerCountComponent,
     StepperComponent,
