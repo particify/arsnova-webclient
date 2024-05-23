@@ -14,10 +14,13 @@ import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 
 @Component({
   selector: 'app-content-wordcloud-participant',
   templateUrl: './content-wordcloud-participant.component.html',
+  standalone: true,
+  imports: [ContentWordcloudAnswerComponent],
 })
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentWordcloud;

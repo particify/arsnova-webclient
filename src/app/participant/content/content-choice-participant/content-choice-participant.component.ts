@@ -15,10 +15,15 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-content-choice-participant',
   templateUrl: './content-choice-participant.component.html',
+  standalone: true,
+  imports: [NgIf, LoadingIndicatorComponent, ContentChoiceAnswerComponent],
 })
 export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentChoice;

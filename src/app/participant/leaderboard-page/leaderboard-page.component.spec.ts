@@ -35,7 +35,7 @@ describe('LeaderboardPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LeaderboardPageComponent],
+      imports: [LeaderboardPageComponent],
       providers: [
         {
           provide: ContentGroupService,

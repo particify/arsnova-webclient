@@ -47,8 +47,7 @@ describe('ContentChoiceParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentChoiceParticipantComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), ContentChoiceParticipantComponent],
       providers: [
         {
           provide: ContentAnswerService,

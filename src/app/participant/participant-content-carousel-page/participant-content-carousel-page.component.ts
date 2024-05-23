@@ -7,7 +7,7 @@ import {
   GroupType,
   PublishingMode,
 } from '@app/core/models/content-group';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -15,7 +15,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor, AsyncPipe } from '@angular/common';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Answer } from '@app/core/models/answer';
@@ -37,10 +37,31 @@ import { ContentLicenseAttribution } from '@app/core/models/content-license-attr
 import { LICENSES } from '@app/core/models/licenses';
 import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
+import { SeriesOverviewComponent } from '@app/participant/series-overview/series-overview.component';
+import { ContentParticipantComponent } from '@app/participant/content/content-participant/content-participant.component';
+import { CdkStep } from '@angular/cdk/stepper';
+import { FlexModule } from '@angular/flex-layout';
+import { CoreModule } from '@app/core/core.module';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
   templateUrl: './participant-content-carousel-page.component.html',
+  standalone: true,
+  imports: [
+    NgIf,
+    LoadingIndicatorComponent,
+    CoreModule,
+    FlexModule,
+    StepperComponent,
+    NgFor,
+    CdkStep,
+    ContentParticipantComponent,
+    SeriesOverviewComponent,
+    AsyncPipe,
+    TranslocoPipe,
+  ],
+  providers: [FocusModeService],
 })
 export class ParticipantContentCarouselPageComponent
   implements OnInit, OnDestroy

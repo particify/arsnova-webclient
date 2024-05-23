@@ -26,6 +26,20 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
+import { TranslocoPipe } from '@ngneat/transloco';
+import { CoreModule } from '@app/core/core.module';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatList, MatListItem } from '@angular/material/list';
+import { MatButton } from '@angular/material/button';
+import { HintComponent } from '@app/standalone/hint/hint.component';
+import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
+import { InfoChartComponent } from './info-chart/info-chart.component';
+import { MatIcon } from '@angular/material/icon';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { NgIf, NgStyle, NgFor, NgClass } from '@angular/common';
+import { MatCard } from '@angular/material/card';
+import { FlexModule } from '@angular/flex-layout';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -41,6 +55,27 @@ interface ContentResultView {
   selector: 'app-series-overview',
   templateUrl: './series-overview.component.html',
   styleUrls: ['./series-overview.component.scss'],
+  standalone: true,
+  imports: [
+    FlexModule,
+    MatCard,
+    NgIf,
+    LoadingIndicatorComponent,
+    MatIcon,
+    InfoChartComponent,
+    LeaderboardComponent,
+    HintComponent,
+    NgStyle,
+    MatButton,
+    MatList,
+    NgFor,
+    MatListItem,
+    NgClass,
+    MatTooltip,
+    RenderedTextComponent,
+    CoreModule,
+    TranslocoPipe,
+  ],
 })
 export class SeriesOverviewComponent implements OnInit, OnDestroy {
   @Input({ required: true }) group!: ContentGroup;

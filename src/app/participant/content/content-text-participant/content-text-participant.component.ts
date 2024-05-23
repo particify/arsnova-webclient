@@ -13,11 +13,17 @@ import { ContentParticipantBaseComponent } from '@app/participant/content/conten
 import { Content } from '@app/core/models/content';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-content-text-participant',
   templateUrl: './content-text-participant.component.html',
   styleUrls: ['./content-text-participant.component.scss'],
+  standalone: true,
+  imports: [FlexModule, NgIf, FormsModule, ContentTextAnswerComponent],
 })
 export class ContentTextParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: Content;

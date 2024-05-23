@@ -35,6 +35,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { TrackingService } from '@app/core/services/util/tracking.service';
 
 describe('CommentsPageComponent', () => {
   let component: CommentsPageComponent;
@@ -91,10 +93,20 @@ describe('CommentsPageComponent', () => {
     of(new CommentFocusState('commentId'))
   );
 
+  const hotkeyService = jasmine.createSpyObj('HotkeyService', [
+    'registerHotkey',
+    'unregisterHotkey',
+  ]);
+
+  const trackingService = jasmine.createSpyObj('TrackingService', ['init']);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CommentsPageComponent],
-      imports: [getTranslocoModule(), BrowserAnimationsModule],
+      imports: [
+        getTranslocoModule(),
+        BrowserAnimationsModule,
+        CommentsPageComponent,
+      ],
       providers: [
         {
           provide: CommentService,
@@ -151,6 +163,14 @@ describe('CommentsPageComponent', () => {
         {
           provide: FocusModeService,
           useValue: mockFocusModeService,
+        },
+        {
+          provide: HotkeyService,
+          useValue: hotkeyService,
+        },
+        {
+          provide: TrackingService,
+          useValue: trackingService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

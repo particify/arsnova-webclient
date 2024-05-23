@@ -10,7 +10,6 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
 import { LiveFeedbackPageComponent } from '@app/participant/live-feedback/live-feedback-page.component';
 
 @NgModule({
-  declarations: [LiveFeedbackPageComponent],
   imports: [
     CommonModule,
     CoreModule,
@@ -19,6 +18,7 @@ import { LiveFeedbackPageComponent } from '@app/participant/live-feedback/live-f
     LiveFeedbackComponent,
     LoadingIndicatorComponent,
     AnswerCountComponent,
+    LiveFeedbackPageComponent,
   ],
 })
 export class LiveFeedbackModule {}

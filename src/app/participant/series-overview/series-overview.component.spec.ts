@@ -15,6 +15,8 @@ import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
@@ -43,10 +45,16 @@ describe('SeriesOverviewComponent', () => {
 
   mockContentCarouselService.isLastContentAnswered.and.returnValue(false);
 
+  const formattingService = jasmine.createSpyObj(['postString']);
+  formattingService.postString.and.returnValue(of('rendered'));
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SeriesOverviewComponent],
-      imports: [getTranslocoModule()],
+      imports: [
+        getTranslocoModule(),
+        SeriesOverviewComponent,
+        RenderedTextComponent,
+      ],
       providers: [
         {
           provide: ThemeService,
@@ -67,6 +75,10 @@ describe('SeriesOverviewComponent', () => {
         {
           provide: ContentCarouselService,
           useValue: mockContentCarouselService,
+        },
+        {
+          provide: FormattingService,
+          useValue: formattingService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -12,10 +12,13 @@ import { ContentParticipantBaseComponent } from '@app/participant/content/conten
 import { FormService } from '@app/core/services/util/form.service';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
+import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
 
 @Component({
   selector: 'app-content-numeric-participant',
   templateUrl: './content-numeric-participant.component.html',
+  standalone: true,
+  imports: [ContentNumericAnswerComponent],
 })
 export class ContentNumericParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentNumeric;

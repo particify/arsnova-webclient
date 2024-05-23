@@ -50,8 +50,7 @@ describe('ContentScaleParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentScaleParticipantComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), ContentScaleParticipantComponent],
       providers: [
         {
           provide: ContentAnswerService,

@@ -1,4 +1,4 @@
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,13 +15,37 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { takeUntil } from 'rxjs';
+import { CommentListFloatingButtonsComponent } from '@app/standalone/comment-list-floating-buttons/comment-list-floating-buttons.component';
+import { CommentListAddButtonComponent } from '@app/standalone/comment-list-add-button/comment-list-add-button.component';
+import { CommentComponent } from '@app/standalone/comment/comment.component';
+import { CoreModule } from '@app/core/core.module';
+import { CommentListHintComponent } from '@app/standalone/comment-list-hint/comment-list-hint.component';
+import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-hint/comment-settings-hint.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { CommentListBarComponent } from '@app/standalone/comment-list-bar/comment-list-bar.component';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-comments-page',
   templateUrl: './comments-page.component.html',
   styleUrls: ['../../common/styles/comments-page.scss'],
+  standalone: true,
+  imports: [
+    FlexModule,
+    NgIf,
+    CommentListBarComponent,
+    LoadingIndicatorComponent,
+    CommentSettingsHintComponent,
+    CommentListHintComponent,
+    CoreModule,
+    NgFor,
+    CommentComponent,
+    CommentListAddButtonComponent,
+    CommentListFloatingButtonsComponent,
+    TranslocoPipe,
+  ],
 })
 export class CommentsPageComponent
   extends AbstractCommentsPageComponent

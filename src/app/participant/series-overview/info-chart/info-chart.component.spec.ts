@@ -8,7 +8,7 @@ describe('InfoChartComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [InfoChartComponent],
+      imports: [InfoChartComponent],
     });
     fixture = TestBed.createComponent(InfoChartComponent);
     component = fixture.componentInstance;

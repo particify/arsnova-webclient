@@ -12,7 +12,6 @@ import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 
 @NgModule({
-  declarations: [RoomOverviewPageComponent],
   imports: [
     CommonModule,
     RoomOverviewRoutingModule,
@@ -23,6 +22,7 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
     LoadingIndicatorComponent,
     ExtensionPointModule,
     HintComponent,
+    RoomOverviewPageComponent,
   ],
 })
 export class RoomOverviewModule {}
