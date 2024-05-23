@@ -67,43 +67,43 @@ interface ContentActionTab {
 }
 
 @Component({
-    selector: 'app-content-participant',
-    templateUrl: './content-participant.component.html',
-    styleUrls: ['./content-participant.component.scss'],
-    standalone: true,
-    imports: [
-        CoreModule,
-        NgIf,
-        LoadingIndicatorComponent,
-        MatCard,
-        FlexModule,
-        ContentWaitingComponent,
-        RenderedTextComponent,
-        MatTabNav,
-        NgFor,
-        MatTabLink,
-        MatIcon,
-        ExtensionPointModule,
-        CountdownTimerComponent,
-        MatTabNavPanel,
-        FormsModule,
-        ContentChoiceParticipantComponent,
-        ContentScaleParticipantComponent,
-        ContentTextParticipantComponent,
-        ContentSortParticipantComponent,
-        ContentWordcloudParticipantComponent,
-        ContentPrioritizationParticipantComponent,
-        ContentNumericParticipantComponent,
-        NgClass,
-        MatButton,
-        LoadingButtonComponent,
-        MatIconButton,
-        MatTooltip,
-        ContentResultsComponent,
-        DividerComponent,
-        LeaderboardPageComponent,
-        TranslocoPipe,
-    ],
+  selector: 'app-content-participant',
+  templateUrl: './content-participant.component.html',
+  styleUrls: ['./content-participant.component.scss'],
+  standalone: true,
+  imports: [
+    CoreModule,
+    NgIf,
+    LoadingIndicatorComponent,
+    MatCard,
+    FlexModule,
+    ContentWaitingComponent,
+    RenderedTextComponent,
+    MatTabNav,
+    NgFor,
+    MatTabLink,
+    MatIcon,
+    ExtensionPointModule,
+    CountdownTimerComponent,
+    MatTabNavPanel,
+    FormsModule,
+    ContentChoiceParticipantComponent,
+    ContentScaleParticipantComponent,
+    ContentTextParticipantComponent,
+    ContentSortParticipantComponent,
+    ContentWordcloudParticipantComponent,
+    ContentPrioritizationParticipantComponent,
+    ContentNumericParticipantComponent,
+    NgClass,
+    MatButton,
+    LoadingButtonComponent,
+    MatIconButton,
+    MatTooltip,
+    ContentResultsComponent,
+    DividerComponent,
+    LeaderboardPageComponent,
+    TranslocoPipe,
+  ],
 })
 export class ContentParticipantComponent
   extends FormComponent
@@ -120,6 +120,7 @@ export class ContentParticipantComponent
   @Input() attribution?: string;
   @Input() quizMode = false;
   @Input() alias?: RoomUserAlias;
+  @Input() showCard = true;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<void>();
   @Output() answerReset = new EventEmitter<string>();

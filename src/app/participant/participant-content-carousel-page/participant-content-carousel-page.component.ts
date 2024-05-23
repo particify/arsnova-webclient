@@ -98,6 +98,8 @@ export class ParticipantContentCarouselPageComponent
   attributions: ContentLicenseAttribution[] = [];
   GroupType = GroupType;
   alias?: RoomUserAlias;
+  showStepper: boolean;
+  showCard: boolean;
 
   constructor(
     private contentService: ContentService,
@@ -120,6 +122,8 @@ export class ParticipantContentCarouselPageComponent
   ) {
     this.contentGroupName = route.snapshot.params['seriesName'];
     this.shortId = route.snapshot.data.room.shortId;
+    this.showStepper = route.snapshot.data.showStepper ?? true;
+    this.showCard = route.snapshot.data.showCard ?? true;
   }
 
   ngOnDestroy(): void {

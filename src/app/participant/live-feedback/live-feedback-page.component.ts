@@ -14,35 +14,35 @@ import { Message } from '@stomp/stompjs';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
-import { AnswerCountComponent } from '../../standalone/answer-count/answer-count.component';
+import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 import { FlexModule } from '@angular/flex-layout';
-import { LiveFeedbackComponent } from '../../standalone/live-feedback/live-feedback.component';
-import { BaseCardComponent } from '../../standalone/base-card/base-card.component';
-import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { LiveFeedbackComponent } from '@app/standalone/live-feedback/live-feedback.component';
+import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
-import { CoreModule } from '../../core/core.module';
+import { CoreModule } from '@app/core/core.module';
 
 @Component({
-    selector: 'app-live-feedback-page',
-    templateUrl: './live-feedback-page.component.html',
-    styleUrls: ['./live-feedback-page.component.scss'],
-    standalone: true,
-    imports: [
-        CoreModule,
-        NgIf,
-        LoadingIndicatorComponent,
-        BaseCardComponent,
-        LiveFeedbackComponent,
-        FlexModule,
-        AnswerCountComponent,
-        NgClass,
-        NgFor,
-        MatButton,
-        MatIcon,
-        MatTooltip,
-        AsyncPipe,
-        TranslocoPipe,
-    ],
+  selector: 'app-live-feedback-page',
+  templateUrl: './live-feedback-page.component.html',
+  styleUrls: ['./live-feedback-page.component.scss'],
+  standalone: true,
+  imports: [
+    CoreModule,
+    NgIf,
+    LoadingIndicatorComponent,
+    BaseCardComponent,
+    LiveFeedbackComponent,
+    FlexModule,
+    AnswerCountComponent,
+    NgClass,
+    NgFor,
+    MatButton,
+    MatIcon,
+    MatTooltip,
+    AsyncPipe,
+    TranslocoPipe,
+  ],
 })
 export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPage
@@ -51,6 +51,7 @@ export class LiveFeedbackPageComponent
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   userId!: string;
   voteKeys = ['1', '2', '3', '4'];
+  showCard: boolean;
 
   constructor(
     protected wsFeedbackService: WsFeedbackService,
@@ -71,6 +72,7 @@ export class LiveFeedbackPageComponent
       globalStorageService,
       route
     );
+    this.showCard = route.snapshot.data.showCard ?? true;
   }
 
   ngOnInit() {

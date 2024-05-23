@@ -17,7 +17,7 @@
       (newIndex)="updateContentIndexUrl($event)"
       [listLength]="contents.length"
       [completed]="alreadySent"
-      [showSteps]="!focusModeEnabled"
+      [showSteps]="showStepper && !focusModeEnabled"
       [allowNavigation]="!focusModeEnabled"
     >
       <cdk-step *ngFor="let content of contents; let i = index">
@@ -46,6 +46,7 @@
             [attribution]="getAttribution()"
             [quizMode]="contentGroup.groupType === GroupType.QUIZ"
             [alias]="alias"
+            [showCard]="showCard"
           >
           </app-content-participant>
         </div>

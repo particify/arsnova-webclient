@@ -2,7 +2,7 @@
   {{ 'survey.a11y-message' | a11yIntro | async }}
 </div>
 <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<app-base-card *ngIf="!isLoading">
+<app-base-card *ngIf="!isLoading" [showShadow]="showCard">
   <app-live-feedback
     [data]="data"
     [dataChanged]="dataChanged"
