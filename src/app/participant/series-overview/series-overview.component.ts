@@ -113,7 +113,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   HintType = HintType;
   leaderboard?: LeaderboardItem[];
   userLeaderboardItem?: LeaderboardItem;
-  showContents = true;
+  selectedTabIndex = 0;
   GroupType = GroupType;
 
   constructor(
@@ -149,7 +149,6 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
           this.setViewData();
           this.checkIfLastContentIsLoaded();
           if (this.group.groupType === GroupType.QUIZ) {
-            this.showContents = false;
             this.contentGroupService
               .getLeaderboard(this.group.roomId, this.group.id)
               .subscribe((leaderboard) => {

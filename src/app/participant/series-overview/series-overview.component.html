@@ -57,12 +57,6 @@
           [infoText]="'participant.content.answer-state-neutral' | transloco"
         ></app-info-chart>
       </div>
-      <app-leaderboard
-        *ngIf="!isLoading && group.groupType === GroupType.QUIZ && leaderboard"
-        fxFill
-        [leaderboardItems]="leaderboard"
-        [aliasId]="alias?.id"
-      ></app-leaderboard>
       <app-hint
         *ngIf="!isLoading && !leaderboard && getLockedContentCount() > 0"
         [ngStyle]="{ 'margin-top': isPureInfoSeries ? '0' : '-1em' }"
@@ -76,22 +70,17 @@
           ) | transloco: { count: getLockedContentCount() }
         "
       ></app-hint>
-      <div
-        *ngIf="group.groupType === GroupType.QUIZ"
-        fxLayout="row"
-        fxLayoutAlign="center"
-      >
-        <button mat-stroked-button (click)="showContents = !showContents">
-          {{
-            (showContents
-              ? 'participant.content.hide-contents'
-              : 'participant.content.show-contents'
-            ) | transloco
-          }}
-          <mat-icon>{{
-            showContents ? 'expand_less' : 'expand_more'
-          }}</mat-icon>
-        </button>
+      <div *ngIf="group.groupType === GroupType.QUIZ" fxLayout="row">
+        <mat-tab-group
+          (selectedTabChange)="selectedTabIndex = $event.index"
+          [selectedIndex]="selectedTabIndex"
+          [animationDuration]="0"
+        >
+          <mat-tab [label]="'content.leaderboard' | transloco"> </mat-tab>
+          <mat-tab
+            [label]="'participant.content.contents' | transloco"
+          ></mat-tab>
+        </mat-tab-group>
       </div>
       <div
         *ngIf="group.groupType !== GroupType.QUIZ"
@@ -116,9 +105,21 @@
         </button>
       </div>
       <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+      <app-leaderboard
+        *ngIf="
+          !isLoading &&
+          group.groupType === GroupType.QUIZ &&
+          leaderboard &&
+          selectedTabIndex === 0
+        "
+        fxFill
+        [leaderboardItems]="leaderboard"
+        [aliasId]="alias?.id"
+      ></app-leaderboard>
       <mat-list
         *ngIf="
-          !isLoading && (group.groupType !== GroupType.QUIZ || showContents)
+          !isLoading &&
+          (group.groupType !== GroupType.QUIZ || selectedTabIndex === 1)
         "
       >
         <mat-list-item
