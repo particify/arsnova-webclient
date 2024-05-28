@@ -251,8 +251,19 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
           .subscribe((resultOverview) => {
             this.setResultOverview(resultOverview);
             this.checkIfLastContentIsLoaded();
-            this.retryCount++;
           });
+        if (this.group.groupType === GroupType.QUIZ) {
+          this.contentGroupService
+            .getLeaderboard(this.group.roomId, this.group.id)
+            .subscribe((leaderboard) => {
+              this.leaderboard = leaderboard;
+              this.userLeaderboardItem = this.leaderboard.find(
+                (l) => l.userAlias.id === this.alias?.id
+              );
+              this.updatePointsChart();
+            });
+        }
+        this.retryCount++;
       }, RELOAD_INTERVAL);
     } else if (!this.isLoading) {
       this.setViewData();
