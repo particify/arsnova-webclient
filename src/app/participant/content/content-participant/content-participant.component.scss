@@ -46,3 +46,9 @@ p {
   padding: 1em 0;
   box-shadow: none;
 }
+
+:host-context(.theme-dark)
+  .tab-icon-link.mat-mdc-tab-link.mdc-tab.mdc-tab--active
+  .mat-icon {
+  color: var(--palette-primary-contrast-200);
+}
