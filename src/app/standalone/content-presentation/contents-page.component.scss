@@ -44,3 +44,18 @@ app-leaderboard-page {
 .over-control-bar {
   bottom: 70px;
 }
+
+.locked-hint {
+  position: fixed;
+  left: 50vw;
+  transform: translateX(-50%);
+  transition: bottom 300ms;
+  background-color: var(--grey-light);
+  padding: $spacing-1 $spacing-2;
+  border-radius: $border-radius * 2;
+  margin-bottom: 20px;
+
+  &:not(.over-control-bar) {
+    bottom: 0;
+  }
+}

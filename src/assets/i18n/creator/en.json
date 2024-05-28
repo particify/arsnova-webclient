@@ -255,7 +255,10 @@
     "seconds-to-answer": "Seconds to answer",
     "group-not-published": "Group is not published.",
     "to-start-quiz": "to start the quiz",
-    "start-quiz": "Start quiz"
+    "start-quiz": "Start quiz",
+    "to-stop-quiz": "to stop the quiz",
+    "stop-quiz": "Stop quiz",
+    "answering-is-locked": "Answering is locked"
   },
   "survey": {
     "a11y-stop-survey": "Stops the live feedback.",

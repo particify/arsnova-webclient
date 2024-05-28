@@ -85,6 +85,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   showStepInfo: boolean;
   showAnswerCount: boolean;
   showHotkeyActionButtons: boolean;
+  answeringLocked = false;
 
   private hotkeyRefs: symbol[] = [];
 
@@ -156,10 +157,11 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
           this.hotkeyRefs
         )
       );
-    this.presentationService.getCountdownStarted().subscribe((content) => {
+    this.presentationService.getCountdownChanged().subscribe((content) => {
       this.initScale();
       this.content.state = content.state;
       this.endDate = new Date(this.content.state.answeringEndTime);
+      this.answeringLocked = new Date() > this.endDate;
     });
   }
 
@@ -271,18 +273,30 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     if (index !== this.entryIndex) {
       this.contentIndex = -1;
     }
-    if (this.content.duration) {
-      this.endDate = undefined;
-    }
   }
 
   private setCurrentContent(index: number): void {
     this.currentStep = index;
     this.content = this.contents[index];
+    if (this.content.duration) {
+      if (this.content.state.answeringEndTime) {
+        this.endDate = new Date(this.content.state.answeringEndTime);
+        this.answeringLocked = new Date() > this.endDate;
+      } else {
+        this.endDate = undefined;
+      }
+    } else {
+      this.endDate = undefined;
+      this.answeringLocked = false;
+    }
   }
 
   startCountdown(): void {
     this.presentationService.startCountdown();
+  }
+
+  stopCountdown(): void {
+    this.presentationService.stopCountdown();
   }
 
   updateCounter(count: number) {

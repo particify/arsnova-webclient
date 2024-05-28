@@ -82,15 +82,38 @@
   ></app-hotkey-action-button>
 </div>
 <div
+  *ngIf="
+    showHotkeyActionButtons &&
+    !isLoading &&
+    !isGroupLocked() &&
+    content &&
+    endDate &&
+    !answeringLocked &&
+    isPublished()
+  "
+  @hotkeyEnterLeaveAnimation
+  fxFill
+>
+  <app-hotkey-action-button
+    hotkey="s"
+    [hotkeyTitle]="'creator.content.stop-quiz' | transloco"
+    [action]="'creator.content.to-stop-quiz' | transloco"
+    [isNavBarVisible]="controlBarVisible"
+    [additionalBottomSpace]="!answeringLocked"
+    (buttonClicked)="stopCountdown()"
+  ></app-hotkey-action-button>
+</div>
+<div
   class="countdown-container"
   [ngClass]="{ 'over-control-bar': controlBarVisible }"
 >
   <app-countdown-timer
-    *ngIf="endDate"
+    *ngIf="endDate && !answeringLocked"
     [endDate]="endDate"
     [showIcon]="true"
     [layout]="'column-reverse'"
     [fontSize]="'24px'"
+    (finished)="answeringLocked = true"
   ></app-countdown-timer>
 </div>
 <app-hotkey-action-button
@@ -110,3 +133,14 @@
   [infoLabel]="'creator.content.content-is-locked' | transloco"
   (buttonClicked)="publishCurrentContent()"
 ></app-hotkey-action-button>
+<div
+  *ngIf="!isLoading && isPublished() && answeringLocked && endDate"
+  class="locked-hint"
+  [ngClass]="{ 'over-control-bar': controlBarVisible }"
+  fxLayout="row"
+  fxLayoutAlign="start center"
+  fxLayoutGap="8px"
+>
+  <mat-icon>lock</mat-icon>
+  <span>{{ 'creator.content.answering-is-locked' | transloco }}</span>
+</div>
