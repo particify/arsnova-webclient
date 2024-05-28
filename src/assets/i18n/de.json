@@ -602,5 +602,11 @@
   },
   "general": {
     "a11y-remove-filter": "Filter entfernen"
+  },
+  "ordinal": {
+    "one": "",
+    "two": "",
+    "few": "",
+    "other": "."
   }
 }

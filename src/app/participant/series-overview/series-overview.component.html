@@ -22,7 +22,7 @@
         <span class="position-text">
           {{
             'participant.content.you-are-at-position'
-              | transloco: { position: getPosition() }
+              | transloco: { position: getPosition() | ordinal }
           }}
         </span>
       </div>

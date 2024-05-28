@@ -40,6 +40,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { NgIf, NgStyle, NgFor, NgClass } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
+import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -75,6 +76,7 @@ interface ContentResultView {
     RenderedTextComponent,
     CoreModule,
     TranslocoPipe,
+    OrdinalPipe,
   ],
 })
 export class SeriesOverviewComponent implements OnInit, OnDestroy {
@@ -449,7 +451,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     return this.totalContentCount - this.contents.length;
   }
 
-  getPosition() {
+  getPosition(): number {
     if (this.userLeaderboardItem) {
       const position = this.leaderboard
         ?.map((l) => l.userAlias.id)
@@ -458,5 +460,6 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
         return position + 1;
       }
     }
+    return -1;
   }
 }
