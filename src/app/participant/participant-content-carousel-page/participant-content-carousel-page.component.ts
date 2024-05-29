@@ -414,10 +414,17 @@ export class ParticipantContentCarouselPageComponent
       if (this.started) {
         setTimeout(() => {
           if (index < this.contents.length - 1) {
-            this.nextContent();
-            setTimeout(() => {
-              document.getElementById('step')?.focus();
-            }, 200);
+            if (
+              this.contentGroup.groupType !== GroupType.QUIZ ||
+              (this.contentGroup.groupType === GroupType.QUIZ &&
+                this.contents[this.currentStep].state.answeringEndTime <
+                  new Date())
+            ) {
+              this.nextContent();
+              setTimeout(() => {
+                document.getElementById('step')?.focus();
+              }, 200);
+            }
           } else if (
             this.contentGroup.groupType !== GroupType.QUIZ ||
             (this.contentGroup.groupType === GroupType.QUIZ &&
