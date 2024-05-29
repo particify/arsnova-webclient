@@ -59,7 +59,11 @@
     "answers-reset": "Answers have been reset.",
     "attribution-info": "This content is based on a template by {{attribution}} which is licensed under {{license}}.",
     "you-are-at-position": "You are in {{ position }} place!",
-    "contents": "Contents"
+    "contents": "Contents",
+    "leaderboard-position": "Pos.",
+    "leaderboard-name": "Name",
+    "leaderboard-points": "Points",
+    "leaderboard-duration": "Time"
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",
