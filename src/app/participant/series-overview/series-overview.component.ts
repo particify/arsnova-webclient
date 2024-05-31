@@ -150,7 +150,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
           this.setResultOverview(resultOverview);
           this.setViewData();
           this.checkIfLastContentIsLoaded();
-          if (this.group.groupType === GroupType.QUIZ) {
+          if (this.group.leaderboardEnabled) {
             this.contentGroupService
               .getLeaderboard(this.group.roomId, this.group.id)
               .subscribe((leaderboard) => {
@@ -252,7 +252,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
             this.setResultOverview(resultOverview);
             this.checkIfLastContentIsLoaded();
           });
-        if (this.group.groupType === GroupType.QUIZ) {
+        if (this.group.leaderboardEnabled) {
           this.contentGroupService
             .getLeaderboard(this.group.roomId, this.group.id)
             .subscribe((leaderboard) => {

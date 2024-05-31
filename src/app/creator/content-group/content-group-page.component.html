@@ -122,7 +122,7 @@
           mat-button
           id="leaderboard-button"
           [routerLink]="'leaderboard'"
-          [disabled]="contents.length === 0"
+          [disabled]="!leaderboardEnabled"
           appHotkey="7"
           [appHotkeyTitle]="'content.leaderboard' | transloco"
         >
@@ -168,6 +168,21 @@
               (correctOptionsPublished
                 ? 'creator.content.dont-publish-correct-options'
                 : 'creator.content.publish-correct-options'
+              ) | transloco
+            }}
+          </button>
+          <button
+            *ngIf="contentGroup.groupType === GroupType.QUIZ"
+            mat-menu-item
+            (click)="toggleLeaderboardEnabled()"
+            appTrackInteraction="Content group leaderboard enabled toggled"
+            [appTrackName]="leaderboardEnabled ? 'off' : 'on'"
+          >
+            <mat-icon>emoji_events</mat-icon>
+            {{
+              (leaderboardEnabled
+                ? 'creator.content.disable-leaderboard'
+                : 'creator.content.enable-leaderboard'
               ) | transloco
             }}
           </button>

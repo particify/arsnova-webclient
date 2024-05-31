@@ -18,7 +18,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 export class ContentWaitingComponent extends FormComponent {
   @Input({ required: true }) current!: number;
   @Input({ required: true }) totalCount!: number;
-  @Input({ required: true }) alias!: RoomUserAlias;
+  @Input({ required: true }) alias?: RoomUserAlias;
   @Input({ required: true }) roomId!: string;
 
   enteredAlias = '';
@@ -35,14 +35,16 @@ export class ContentWaitingComponent extends FormComponent {
     this.disableForm();
     const changes = this.enteredAlias
       ? { alias: this.enteredAlias }
-      : { seed: this.alias.seed };
+      : { seed: this.alias?.seed };
     this.authService.getCurrentAuthentication().subscribe((auth) => {
       this.roomUserAliasService
         .updateAlias(this.roomId, auth.userId, changes)
         .subscribe((alias) => {
-          this.alias.id = alias.id;
-          if (this.enteredAlias) {
-            this.alias.alias = this.enteredAlias;
+          if (this.alias) {
+            this.alias.id = alias.id;
+            if (this.enteredAlias) {
+              this.alias.alias = this.enteredAlias;
+            }
           }
         });
     });

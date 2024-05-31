@@ -9,11 +9,7 @@
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <div fxLayout="column" fxLayoutGap="24px">
       <div
-        *ngIf="
-          !isLoading &&
-          group.groupType === GroupType.QUIZ &&
-          userLeaderboardItem
-        "
+        *ngIf="!isLoading && group.leaderboardEnabled && userLeaderboardItem"
         fxLayout="column"
         fxLayoutAlign="start center"
         fxLayoutGap="24px"
@@ -33,11 +29,7 @@
         class="info-chart-container"
       >
         <app-info-chart
-          *ngIf="
-            group.groupType === GroupType.QUIZ &&
-            leaderboard &&
-            userLeaderboardItem
-          "
+          *ngIf="group.leaderboardEnabled && leaderboard && userLeaderboardItem"
           id="points-info-chart"
           chartId="points-chart"
           [dataText]="userLeaderboardItem.score.toString()"
@@ -70,7 +62,7 @@
           ) | transloco: { count: getLockedContentCount() }
         "
       ></app-hint>
-      <div *ngIf="group.groupType === GroupType.QUIZ" fxLayout="row">
+      <div *ngIf="group.leaderboardEnabled" fxLayout="row">
         <mat-tab-group
           (selectedTabChange)="selectedTabIndex = $event.index"
           [selectedIndex]="selectedTabIndex"
@@ -108,7 +100,7 @@
       <app-leaderboard
         *ngIf="
           !isLoading &&
-          group.groupType === GroupType.QUIZ &&
+          group.leaderboardEnabled &&
           leaderboard &&
           selectedTabIndex === 0
         "

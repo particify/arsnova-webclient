@@ -159,7 +159,7 @@ export class ParticipantContentCarouselPageComponent
       .subscribe(
         (contentGroup) => {
           this.contentGroup = contentGroup;
-          if (this.contentGroup.groupType === GroupType.QUIZ) {
+          if (this.contentGroup.leaderboardEnabled) {
             this.roomUserAliasService
               .generateAlias(this.contentGroup.roomId)
               .subscribe((alias) => {

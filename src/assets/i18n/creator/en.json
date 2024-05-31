@@ -152,6 +152,8 @@
     "statistics-are-not-published": "Statistics are locked",
     "correct-options-are-published": "Correct answers are published",
     "correct-options-are-not-published": "Correct answers are locked",
+    "disable-leaderboard": "Disable leaderboard",
+    "enable-leaderboard": "Enable leaderboard",
     "edit-content": "Edit",
     "copy-content-to-group": "Copy",
     "move-content-to-group": "Move",

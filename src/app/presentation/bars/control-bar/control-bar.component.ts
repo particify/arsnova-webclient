@@ -21,11 +21,7 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
+import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { Subject } from 'rxjs';
@@ -463,7 +459,7 @@ export class ControlBarComponent
   }
 
   private checkForQuizMode(): void {
-    if (this.group?.groupType === GroupType.QUIZ) {
+    if (this.group?.leaderboardEnabled) {
       if (!this.groupItems.map((i) => i.name).includes('leaderboard')) {
         this.groupItems.push(
           new KeyNavBarItem('leaderboard', 'emoji_events', '', 'l')

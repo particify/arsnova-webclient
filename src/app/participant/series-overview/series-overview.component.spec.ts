@@ -7,7 +7,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { MockThemeService } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { By } from '@angular/platform-browser';
 import { Content } from '@app/core/models/content';
@@ -88,6 +88,8 @@ describe('SeriesOverviewComponent', () => {
     fixture = TestBed.createComponent(SeriesOverviewComponent);
     component = fixture.componentInstance;
     component.group = new ContentGroup();
+    component.group.groupType = GroupType.MIXED;
+    component.group.leaderboardEnabled = false;
     const content1 = new Content(
       '1',
       'subject',
@@ -223,6 +225,7 @@ describe('SeriesOverviewComponent', () => {
       ],
     };
     mockContentGroupService.getAnswerStats.and.returnValue(of(resultOverview));
+    component.group.groupType = GroupType.QUIZ;
     fixture.detectChanges();
 
     const correctInfoChart = fixture.debugElement.query(

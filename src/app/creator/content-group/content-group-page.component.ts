@@ -49,6 +49,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   groupName = '';
   statisticsPublished = true;
   correctOptionsPublished = true;
+  leaderboardEnabled = true;
   isModerator = false;
   isInSortingMode = false;
   copiedContents: Content[] = [];
@@ -161,6 +162,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   setSettings() {
     this.statisticsPublished = this.contentGroup.statisticsPublished;
     this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
+    this.leaderboardEnabled = this.contentGroup.leaderboardEnabled;
   }
 
   getGroups(): void {
@@ -271,6 +273,16 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
       this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
+    });
+  }
+
+  toggleLeaderboardEnabled() {
+    const changes: { leaderboardEnabled: boolean } = {
+      leaderboardEnabled: !this.contentGroup.leaderboardEnabled,
+    };
+    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
+      this.contentGroup = updatedContentGroup;
+      this.leaderboardEnabled = this.contentGroup.leaderboardEnabled;
     });
   }
 

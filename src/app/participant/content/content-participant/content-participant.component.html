@@ -10,10 +10,13 @@
       'no-shadow': !showCard,
     }"
   >
-    <div *ngIf="quizMode && showWaitingArea() && alias" fxFill>
+    <div
+      *ngIf="contentGroup.groupType === GroupType.QUIZ && showWaitingArea()"
+      fxFill
+    >
       <app-content-waiting
         [current]="getIndexInContentGroup() + 1"
-        [totalCount]="contentGroupContentIds.length"
+        [totalCount]="contentGroup.contentIds.length"
         [alias]="alias"
         [roomId]="content.roomId"
       ></app-content-waiting>
@@ -21,7 +24,7 @@
     <div
       *ngIf="
         !isLoading &&
-        (!quizMode ||
+        (contentGroup.groupType !== GroupType.QUIZ ||
           !content.duration ||
           (content.duration && (endDate || content.state.answeringEndTime)))
       "
@@ -62,7 +65,7 @@
             !isLoading &&
             (alreadySent || content.format === ContentType.FLASHCARD) &&
             content.format !== ContentType.SLIDE &&
-            (statsPublished || quizMode)
+            (statsPublished || contentGroup.leaderboardEnabled)
           "
         >
           <div *ngFor="let tab of tabs">

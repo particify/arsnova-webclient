@@ -36,7 +36,7 @@
             (answerReset)="resetAnswer($event, i)"
             (next)="nextContent()"
             [content]="content"
-            [contentGroupContentIds]="contentGroup.contentIds"
+            [contentGroup]="contentGroup"
             [answer]="answers[i]"
             [lastContent]="i === contents.length - 1"
             [active]="currentStep === i"
@@ -44,7 +44,6 @@
             [statsPublished]="contentGroup.statisticsPublished"
             [correctOptionsPublished]="contentGroup.correctOptionsPublished"
             [attribution]="getAttribution()"
-            [quizMode]="contentGroup.groupType === GroupType.QUIZ"
             [alias]="alias"
             [showCard]="showCard"
           >
