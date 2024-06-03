@@ -8,7 +8,7 @@ export class DurationPipe implements PipeTransform {
     dayjs.extend(duration);
     return dayjs!
       .duration(milliseconds, 'milliseconds')
-      .format('mm:ss:SSS')
-      .slice(0, -1);
+      .format('mm:ss.SSS')
+      .slice(0, -2);
   }
 }
