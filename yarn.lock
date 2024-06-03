@@ -430,20 +430,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cdk@npm:17.3.10":
-  version: 17.3.10
-  resolution: "@angular/cdk@npm:17.3.10"
+"@angular/cdk@npm:18.0.1":
+  version: 18.0.1
+  resolution: "@angular/cdk@npm:18.0.1"
   dependencies:
     parse5: "npm:^7.1.2"
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/common": ^17.0.0 || ^18.0.0
-    "@angular/core": ^17.0.0 || ^18.0.0
+    "@angular/common": ^18.0.0 || ^19.0.0
+    "@angular/core": ^18.0.0 || ^19.0.0
     rxjs: ^6.5.3 || ^7.4.0
   dependenciesMeta:
     parse5:
       optional: true
-  checksum: 10c0/96c57b39007346ce2d1f6ad369bca3b9017354965e5a212561f25e59b82fccf5e6791d995a043f2d55e6840c9c5996205bdd0713eb448c2f3702a35d270d6b0c
+  checksum: 10c0/e85106868ec2feffc618f7b6b4fbaeccad3ef8dc5c9c125a78aae79d24f02a746152022c265eaeab7158be1fd785335a38185bbe98888ec7d0e86a5302d905d2
   languageName: node
   linkType: hard
 
@@ -571,9 +571,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/material@npm:17.3.10":
-  version: 17.3.10
-  resolution: "@angular/material@npm:17.3.10"
+"@angular/material@npm:18.0.1":
+  version: 18.0.1
+  resolution: "@angular/material@npm:18.0.1"
   dependencies:
     "@material/animation": "npm:15.0.0-canary.7f224ddd4.0"
     "@material/auto-init": "npm:15.0.0-canary.7f224ddd4.0"
@@ -618,20 +618,21 @@ __metadata:
     "@material/tab-scroller": "npm:15.0.0-canary.7f224ddd4.0"
     "@material/textfield": "npm:15.0.0-canary.7f224ddd4.0"
     "@material/theme": "npm:15.0.0-canary.7f224ddd4.0"
+    "@material/tokens": "npm:15.0.0-canary.7f224ddd4.0"
     "@material/tooltip": "npm:15.0.0-canary.7f224ddd4.0"
     "@material/top-app-bar": "npm:15.0.0-canary.7f224ddd4.0"
     "@material/touch-target": "npm:15.0.0-canary.7f224ddd4.0"
     "@material/typography": "npm:15.0.0-canary.7f224ddd4.0"
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/animations": ^17.0.0 || ^18.0.0
-    "@angular/cdk": 17.3.10
-    "@angular/common": ^17.0.0 || ^18.0.0
-    "@angular/core": ^17.0.0 || ^18.0.0
-    "@angular/forms": ^17.0.0 || ^18.0.0
-    "@angular/platform-browser": ^17.0.0 || ^18.0.0
+    "@angular/animations": ^18.0.0 || ^19.0.0
+    "@angular/cdk": 18.0.1
+    "@angular/common": ^18.0.0 || ^19.0.0
+    "@angular/core": ^18.0.0 || ^19.0.0
+    "@angular/forms": ^18.0.0 || ^19.0.0
+    "@angular/platform-browser": ^18.0.0 || ^19.0.0
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10c0/4d2a1198451e3c82a722fb486dcb812f5cd758926c61191cfa398c6a7e0a6fef8dfe80f59049f46bae16c9bbd380fb124657a4c9f306efee8b08f679203aafc7
+  checksum: 10c0/3cad203eb04b35b987f56850faafa8b8b789590f034eb8026451059eeb915e374318911672bbf1a05836619e7822a0baf2cca38ac9aba0aba9bd7350399824b4
   languageName: node
   linkType: hard
 
@@ -7245,7 +7246,7 @@ __metadata:
     "@angular-eslint/schematics": "npm:18.0.1"
     "@angular-eslint/template-parser": "npm:17.5.2"
     "@angular/animations": "npm:18.0.1"
-    "@angular/cdk": "npm:17.3.10"
+    "@angular/cdk": "npm:18.0.1"
     "@angular/cli": "npm:18.0.2"
     "@angular/common": "npm:18.0.1"
     "@angular/compiler": "npm:18.0.1"
@@ -7254,7 +7255,7 @@ __metadata:
     "@angular/flex-layout": "npm:15.0.0-beta.42"
     "@angular/forms": "npm:18.0.1"
     "@angular/language-service": "npm:18.0.1"
-    "@angular/material": "npm:17.3.10"
+    "@angular/material": "npm:18.0.1"
     "@angular/platform-browser": "npm:18.0.1"
     "@angular/platform-browser-dynamic": "npm:18.0.1"
     "@angular/router": "npm:18.0.1"
