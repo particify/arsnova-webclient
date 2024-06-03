@@ -330,10 +330,15 @@ export class ParticipantContentCarouselPageComponent
     }
   }
 
+  isContentTimerActive(content: Content): boolean {
+    return new Date(content.state.answeringEndTime) > new Date();
+  }
+
   getInitialStep() {
     const firstIndex = this.getFirstUnansweredContentIndex();
     if (
-      firstIndex === 0 &&
+      (firstIndex === 0 ||
+        (firstIndex && this.isContentTimerActive(this.contents[firstIndex]))) &&
       !this.isPureInfoSeries &&
       !this.contentCarouselService.isLastContentAnswered()
     ) {
@@ -355,10 +360,12 @@ export class ParticipantContentCarouselPageComponent
 
   getFirstUnansweredContentIndex(): number | undefined {
     for (let i = 0; i < this.contents.length; i++) {
+      const content = this.contents[i];
       if (
         this.alreadySent.get(i) === false &&
-        !this.contents[i].state.answeringEndTime &&
-        !this.isInfoContent(this.contents[i])
+        (!content.state.answeringEndTime ||
+          this.isContentTimerActive(content)) &&
+        !this.isInfoContent(content)
       ) {
         return i;
       }
@@ -417,8 +424,7 @@ export class ParticipantContentCarouselPageComponent
             if (
               this.contentGroup.groupType !== GroupType.QUIZ ||
               (this.contentGroup.groupType === GroupType.QUIZ &&
-                this.contents[this.currentStep].state.answeringEndTime <
-                  new Date())
+                !this.isContentTimerActive(this.contents[this.currentStep]))
             ) {
               this.nextContent();
               setTimeout(() => {
