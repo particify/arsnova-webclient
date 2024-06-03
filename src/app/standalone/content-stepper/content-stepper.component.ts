@@ -38,6 +38,7 @@ export class ContentStepperComponent implements AfterViewInit {
   @Input({ required: true }) startIndex!: number;
   @Input() attributions: ContentLicenseAttribution[] = [];
   @Input() hideControls = false;
+  @Input() showStepInfo = true;
   @Output() indexChanged: EventEmitter<number> = new EventEmitter<number>();
   @Output() answerCountUpdated: EventEmitter<number> =
     new EventEmitter<number>();
