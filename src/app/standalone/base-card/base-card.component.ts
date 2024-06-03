@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 
@@ -10,4 +10,6 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './base-card.component.html',
   styleUrls: ['./base-card.component.scss'],
 })
-export class BaseCardComponent {}
+export class BaseCardComponent {
+  @Input() showShadow = true;
+}

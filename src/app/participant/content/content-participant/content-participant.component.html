@@ -4,7 +4,12 @@
   attr.aria-label="{{ a11yMsg | transloco: { index: index + 1 } }}"
 >
   <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <mat-card *ngIf="!isLoading">
+  <mat-card
+    *ngIf="!isLoading"
+    [ngClass]="{
+      'no-shadow': !showCard
+    }"
+  >
     <div *ngIf="quizMode && showWaitingArea() && alias" fxFill>
       <app-content-waiting
         [current]="getIndexInContentGroup() + 1"

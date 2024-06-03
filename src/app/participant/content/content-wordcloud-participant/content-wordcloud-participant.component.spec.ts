@@ -20,8 +20,8 @@ import { ContentAnswerService } from '@app/core/services/http/content-answer.ser
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentState } from '@app/core/models/content-state';
 import { EventService } from '@app/core/services/util/event.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ContentWordcloudParticipantComponent', () => {
   let component: ContentWordcloudParticipantComponent;
@@ -46,8 +46,11 @@ describe('ContentWordcloudParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentWordcloudParticipantComponent],
-      imports: [getTranslocoModule()],
+      imports: [
+        getTranslocoModule(),
+        ContentWordcloudParticipantComponent,
+        BrowserAnimationsModule,
+      ],
       providers: [
         {
           provide: ContentAnswerService,

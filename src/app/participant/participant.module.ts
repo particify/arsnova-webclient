@@ -66,8 +66,6 @@ import { DividerComponent } from '@app/standalone/divider/divider.component';
     LoadingIndicatorComponent,
     NavBarComponent,
     DividerComponent,
-  ],
-  declarations: [
     ContentChoiceParticipantComponent,
     ContentScaleParticipantComponent,
     ContentTextParticipantComponent,

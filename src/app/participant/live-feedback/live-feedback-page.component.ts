@@ -9,13 +9,40 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { Message } from '@stomp/stompjs';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
+import { FlexModule } from '@angular/flex-layout';
+import { LiveFeedbackComponent } from '@app/standalone/live-feedback/live-feedback.component';
+import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
+import { CoreModule } from '@app/core/core.module';
 
 @Component({
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
   styleUrls: ['./live-feedback-page.component.scss'],
+  standalone: true,
+  imports: [
+    CoreModule,
+    NgIf,
+    LoadingIndicatorComponent,
+    BaseCardComponent,
+    LiveFeedbackComponent,
+    FlexModule,
+    AnswerCountComponent,
+    NgClass,
+    NgFor,
+    MatButton,
+    MatIcon,
+    MatTooltip,
+    AsyncPipe,
+    TranslocoPipe,
+  ],
 })
 export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPage
@@ -24,6 +51,7 @@ export class LiveFeedbackPageComponent
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   userId!: string;
   voteKeys = ['1', '2', '3', '4'];
+  showCard: boolean;
 
   constructor(
     protected wsFeedbackService: WsFeedbackService,
@@ -44,6 +72,7 @@ export class LiveFeedbackPageComponent
       globalStorageService,
       route
     );
+    this.showCard = route.snapshot.data.showCard ?? true;
   }
 
   ngOnInit() {

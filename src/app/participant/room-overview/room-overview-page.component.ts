@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -21,11 +21,37 @@ import { FocusModeService } from '@app/participant/_services/focus-mode.service'
 import { HintType } from '@app/core/models/hint-type.enum';
 import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
+import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
+import { HintComponent } from '@app/standalone/hint/hint.component';
+import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
+import { RoomActionButtonComponent } from '@app/standalone/room-action-button/room-action-button.component';
+import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-header/room-overview-header.component';
+import { MatCard } from '@angular/material/card';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { CoreModule } from '@app/core/core.module';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-participant-overview',
   templateUrl: './room-overview-page.component.html',
   styleUrls: ['../../common/styles/room-overview.scss'],
+  standalone: true,
+  imports: [
+    FlexModule,
+    CoreModule,
+    NgIf,
+    LoadingIndicatorComponent,
+    MatCard,
+    RoomOverviewHeaderComponent,
+    RoomActionButtonComponent,
+    NgFor,
+    ContentGroupsComponent,
+    HintComponent,
+    ExtensionPointModule,
+    AsyncPipe,
+    TranslocoPipe,
+  ],
 })
 export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPage

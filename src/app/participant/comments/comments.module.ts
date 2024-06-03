@@ -13,7 +13,6 @@ import { VotingComponent } from '@app/standalone/voting/voting.component';
 import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-hint/comment-settings-hint.component';
 
 @NgModule({
-  declarations: [CommentsPageComponent],
   imports: [
     CommentsRoutingModule,
     CoreModule,
@@ -25,6 +24,7 @@ import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-h
     LoadingIndicatorComponent,
     VotingComponent,
     CommentSettingsHintComponent,
+    CommentsPageComponent,
   ],
 })
 export class CommentsModule {}

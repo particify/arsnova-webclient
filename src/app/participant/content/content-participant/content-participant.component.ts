@@ -29,11 +29,35 @@ import { EventService } from '@app/core/services/util/event.service';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
 import { takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor, NgClass } from '@angular/common';
+import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
+import { DividerComponent } from '@app/standalone/divider/divider.component';
+import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
+import { ContentPrioritizationParticipantComponent } from '@app/participant/content/content-prioritization-participant/content-prioritization-participant.component';
+import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
+import { ContentSortParticipantComponent } from '@app/participant/content/content-sort-participant/content-sort-participant.component';
+import { ContentTextParticipantComponent } from '@app/participant/content/content-text-participant/content-text-participant.component';
+import { ContentScaleParticipantComponent } from '@app/participant/content/content-scale-participant/content-scale-participant.component';
+import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
+import { FormsModule } from '@angular/forms';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
+import { MatIcon } from '@angular/material/icon';
+import { MatTabNav, MatTabLink, MatTabNavPanel } from '@angular/material/tabs';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
+import { FlexModule } from '@angular/flex-layout';
+import { MatCard } from '@angular/material/card';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { CoreModule } from '@app/core/core.module';
 
 interface ContentActionTab {
   route: string;
@@ -46,6 +70,40 @@ interface ContentActionTab {
   selector: 'app-content-participant',
   templateUrl: './content-participant.component.html',
   styleUrls: ['./content-participant.component.scss'],
+  standalone: true,
+  imports: [
+    CoreModule,
+    NgIf,
+    LoadingIndicatorComponent,
+    MatCard,
+    FlexModule,
+    ContentWaitingComponent,
+    RenderedTextComponent,
+    MatTabNav,
+    NgFor,
+    MatTabLink,
+    MatIcon,
+    ExtensionPointModule,
+    CountdownTimerComponent,
+    MatTabNavPanel,
+    FormsModule,
+    ContentChoiceParticipantComponent,
+    ContentScaleParticipantComponent,
+    ContentTextParticipantComponent,
+    ContentSortParticipantComponent,
+    ContentWordcloudParticipantComponent,
+    ContentPrioritizationParticipantComponent,
+    ContentNumericParticipantComponent,
+    NgClass,
+    MatButton,
+    LoadingButtonComponent,
+    MatIconButton,
+    MatTooltip,
+    ContentResultsComponent,
+    DividerComponent,
+    LeaderboardPageComponent,
+    TranslocoPipe,
+  ],
 })
 export class ContentParticipantComponent
   extends FormComponent
@@ -62,6 +120,7 @@ export class ContentParticipantComponent
   @Input() attribution?: string;
   @Input() quizMode = false;
   @Input() alias?: RoomUserAlias;
+  @Input() showCard = true;
   @Output() answerChanged = new EventEmitter<Answer>();
   @Output() next = new EventEmitter<void>();
   @Output() answerReset = new EventEmitter<string>();

@@ -50,8 +50,7 @@ describe('ContentSortParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentSortParticipantComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), ContentSortParticipantComponent],
       providers: [
         {
           provide: ContentAnswerService,

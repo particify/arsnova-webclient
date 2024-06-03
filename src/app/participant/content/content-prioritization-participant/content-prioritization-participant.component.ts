@@ -14,10 +14,14 @@ import { TranslocoService } from '@ngneat/transloco';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-answers/content-prioritization-answer/content-prioritization-answer.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-content-prioritization-participant',
   templateUrl: './content-prioritization-participant.component.html',
+  standalone: true,
+  imports: [NgIf, ContentPrioritizationAnswerComponent],
 })
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentPrioritization;

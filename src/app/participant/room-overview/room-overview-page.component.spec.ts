@@ -11,6 +11,8 @@ import {
   MockGlobalStorageService,
   MockRouter,
   MockEventService,
+  MockFeatureFlagService,
+  MockNotificationService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -32,6 +34,11 @@ import { ContentGroupStatistics } from '@app/core/models/content-group-statistic
 import { RoomStats } from '@app/core/models/room-stats';
 import { ContentGroup } from '@app/core/models/content-group';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
+import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-header/room-overview-header.component';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -90,6 +97,11 @@ describe('RoomOverviewPageComponent', () => {
     commentSettings: {
       disabled: true,
     },
+    apiConfig: {
+      ui: {
+        links: [],
+      },
+    },
   };
 
   const activatedRouteStub = new ActivatedRouteStub(
@@ -109,14 +121,22 @@ describe('RoomOverviewPageComponent', () => {
   const mockFocusModeService = jasmine.createSpyObj(['getFocusModeEnabled']);
   mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
 
+  const mockHotkeyService = jasmine.createSpyObj([
+    'registerHotkey',
+    'unregisterHotkey',
+  ]);
+
+  const formattingService = jasmine.createSpyObj(['postString']);
+  formattingService.postString.and.returnValue(of('rendered'));
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+      declarations: [A11yIntroPipe, SplitShortIdPipe],
+      imports: [
+        getTranslocoModule(),
         RoomOverviewPageComponent,
-        A11yIntroPipe,
-        SplitShortIdPipe,
+        RoomOverviewHeaderComponent,
       ],
-      imports: [getTranslocoModule()],
       providers: [
         {
           provide: RoomStatsService,
@@ -169,6 +189,22 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: FocusModeService,
           useValue: mockFocusModeService,
+        },
+        {
+          provide: FeatureFlagService,
+          useClass: MockFeatureFlagService,
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService,
+        },
+        {
+          provide: HotkeyService,
+          useValue: mockHotkeyService,
+        },
+        {
+          provide: FormattingService,
+          useValue: formattingService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

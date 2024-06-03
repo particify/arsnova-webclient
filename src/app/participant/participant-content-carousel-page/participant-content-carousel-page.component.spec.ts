@@ -13,6 +13,7 @@ import {
   MockRouter,
   MockEventService,
   MockAnnounceService,
+  MockFeatureFlagService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import {
@@ -38,6 +39,8 @@ import { ContentCarouselService } from '@app/core/services/util/content-carousel
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -63,7 +66,9 @@ describe('ParticipantContentCarouselPageComponent', () => {
 
   const mockAuthenticationService = jasmine.createSpyObj([
     'getCurrentAuthentication',
+    'getAuthenticationChanges',
   ]);
+  mockAuthenticationService.getAuthenticationChanges.and.returnValue(of({}));
 
   const mockUserService = jasmine.createSpyObj('UserService', [
     'getUserSettingsByLoginId',
@@ -128,8 +133,12 @@ describe('ParticipantContentCarouselPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ParticipantContentCarouselPageComponent, A11yIntroPipe],
-      imports: [getTranslocoModule()],
+      declarations: [A11yIntroPipe],
+      imports: [
+        getTranslocoModule(),
+        ParticipantContentCarouselPageComponent,
+        HttpClientTestingModule,
+      ],
       providers: [
         {
           provide: ContentService,
@@ -198,6 +207,10 @@ describe('ParticipantContentCarouselPageComponent', () => {
         {
           provide: RoomUserAliasService,
           useValue: mockRoomUserAliasService,
+        },
+        {
+          provide: FeatureFlagService,
+          useClass: MockFeatureFlagService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

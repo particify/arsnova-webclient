@@ -15,11 +15,23 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { ContentService } from '@app/core/services/http/content.service';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
+import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-content-sort-participant',
   templateUrl: './content-sort-participant.component.html',
   styleUrls: ['./content-sort-participant.component.scss'],
+  standalone: true,
+  imports: [
+    NgIf,
+    LoadingIndicatorComponent,
+    ContentSortAnswerComponent,
+    NgClass,
+    MatIcon,
+  ],
 })
 export class ContentSortParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentChoice;

@@ -1,14 +1,37 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslocoService } from '@ngneat/transloco';
+import { FooterComponent } from '@app/standalone/footer/footer.component';
+import { NavBarComponent } from '@app/standalone/nav-bar/nav-bar.component';
+import { NgIf, NgClass } from '@angular/common';
+import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
+import {
+  MatDrawerContainer,
+  MatDrawer,
+  MatDrawerContent,
+} from '@angular/material/sidenav';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-participant-page',
   templateUrl: './participant-page.component.html',
   styleUrls: ['../common/styles/room-page.scss'],
   providers: [FocusModeService],
+  standalone: true,
+  imports: [
+    FlexModule,
+    MatDrawerContainer,
+    ExtensionPointModule,
+    NgIf,
+    MatDrawer,
+    NavBarComponent,
+    MatDrawerContent,
+    NgClass,
+    RouterOutlet,
+    FooterComponent,
+  ],
 })
 export class ParticipantPageComponent implements OnInit {
   focusModeEnabled = false;

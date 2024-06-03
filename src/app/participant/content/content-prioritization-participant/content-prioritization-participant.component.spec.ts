@@ -45,8 +45,10 @@ describe('ContentPrioritizationParticipantComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContentPrioritizationParticipantComponent],
-      imports: [getTranslocoModule()],
+      imports: [
+        getTranslocoModule(),
+        ContentPrioritizationParticipantComponent,
+      ],
       providers: [
         {
           provide: ContentAnswerService,

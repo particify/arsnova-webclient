@@ -132,6 +132,9 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.userService.getUserSettingsByLoginId(loginId).subscribe((settings) => {
       if (settings) {
         this.settings = settings;
+        if (this.route.snapshot.queryParams.showResults === 'true') {
+          this.settings.showContentResultsDirectly = true;
+        }
       }
       this.initGroup(true);
     });
@@ -238,6 +241,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     const currentPath = this.route.snapshot.params.contentIndex ? '..' : '.';
     const urlTree = this.router.createUrlTree([currentPath, index], {
       relativeTo: this.route,
+      queryParams: this.route.snapshot.queryParams,
     });
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
