@@ -56,7 +56,9 @@ export class ContentStepperComponent implements AfterViewInit {
 
   updateIndex(index: number) {
     this.currentStep = index;
-    this.indexChanged.emit(index);
+    setTimeout(() => {
+      this.indexChanged.emit(index);
+    }, 300);
   }
 
   updateCounter(count: number, isActive: boolean) {
