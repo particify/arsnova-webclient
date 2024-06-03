@@ -16,8 +16,8 @@
 
   // Fix secondary colors for testing which are broken because material-css-vars lib cannot be used here
   $secondary-palette: map.get($light-theme, accent);
-  $secondary: mat.get-color-from-palette($secondary-palette, 800);
-  $on-secondary: mat.get-color-from-palette(
+  $secondary: mat.m2-get-color-from-palette($secondary-palette, 800);
+  $on-secondary: mat.m2-get-color-from-palette(
     $secondary-palette,
     default-contrast
   );

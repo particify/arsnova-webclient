@@ -2,17 +2,23 @@
 @use 'sass:color';
 @import '../../../../variables';
 
-$light-primary: mat.define-palette(mat.$deep-purple-palette, 600);
-$light-accent: mat.define-palette(mat.$green-palette, 800);
-$light-warn: mat.define-palette(mat.$red-palette, 800);
-$custom-typography: mat.define-typography-config(
+$light-primary: mat.m2-define-palette(mat.$m2-deep-purple-palette, 600);
+$light-accent: mat.m2-define-palette(mat.$m2-green-palette, 800);
+$light-warn: mat.m2-define-palette(mat.$m2-red-palette, 800);
+$custom-typography: mat.m2-define-typography-config(
   $font-family: $font-family,
   $button:
-    mat.define-typography-level(14px, 120%, $font-weight-bold, $font-family, 0),
-  $body-1: mat.define-typography-level(16px, 120%, normal, $font-family, 0),
-  $body-2: mat.define-typography-level(16px, 120%, normal, $font-family, 0),
+    mat.m2-define-typography-level(
+      14px,
+      120%,
+      $font-weight-bold,
+      $font-family,
+      0
+    ),
+  $body-1: mat.m2-define-typography-level(16px, 120%, normal, $font-family, 0),
+  $body-2: mat.m2-define-typography-level(16px, 120%, normal, $font-family, 0),
 );
-$light-theme: mat.define-light-theme(
+$light-theme: mat.m2-define-light-theme(
   (
     color: (
       primary: $light-primary,

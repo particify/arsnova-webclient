@@ -5,20 +5,23 @@
 @mixin theme($theme, $isLight: true) {
   $primary-palette: map.get($theme, primary);
   $secondary-palette: map.get($theme, accent);
-  $primary: mat.get-color-from-palette(
+  $primary: mat.m2-get-color-from-palette(
     $primary-palette,
     if($isLight == true, 500, A100)
   );
-  $primary-variant: mat.get-color-from-palette(
+  $primary-variant: mat.m2-get-color-from-palette(
     $primary-palette,
     if($isLight == true, 50, 200)
   );
-  $on-primary: mat.get-color-from-palette($primary-palette, default-contrast);
-  $secondary: mat.get-color-from-palette(
+  $on-primary: mat.m2-get-color-from-palette(
+    $primary-palette,
+    default-contrast
+  );
+  $secondary: mat.m2-get-color-from-palette(
     $secondary-palette,
     if($isLight == true, 500, A100)
   );
-  $on-secondary: mat.get-color-from-palette(
+  $on-secondary: mat.m2-get-color-from-palette(
     $secondary-palette,
     default-contrast
   );
@@ -57,7 +60,7 @@
   }
 
   %secondary-variant {
-    background-color: mat.get-color-from-palette($secondary-palette, 100);
+    background-color: mat.m2-get-color-from-palette($secondary-palette, 100);
   }
 
   %secondary-background {
