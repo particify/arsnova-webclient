@@ -193,6 +193,7 @@ export class ContentParticipantComponent
   ngOnInit(): void {
     if (this.active) {
       this.selectedRoute = this.route.snapshot.params['action'] || '';
+      this.checkForCountdown();
     }
     this.setExtensionData(this.content.roomId, this.content.id);
     if (this.answer) {
@@ -203,19 +204,6 @@ export class ContentParticipantComponent
     this.initContentData();
     this.isMultiple = (this.content as ContentChoice).multiple;
     this.a11yMsg = this.getA11yMessage();
-    if (this.contentGroup.groupType === GroupType.QUIZ) {
-      if (this.content.state.answeringEndTime) {
-        const now = new Date();
-        if (
-          now.getTime() >
-          new Date(this.content.state.answeringEndTime).getTime()
-        ) {
-          this.answeringLocked = true;
-        } else {
-          this.startCountdown(this.content.state.answeringEndTime);
-        }
-      }
-    }
     this.isLoading = false;
     this.eventService
       .on<EntityChangeNotification>('EntityChangeNotification')
@@ -257,6 +245,7 @@ export class ContentParticipantComponent
 
   private startCountdown(endDate: Date): void {
     if (this.active) {
+      this.answeringLocked = false;
       this.endDate = new Date(endDate);
     }
   }
@@ -269,6 +258,25 @@ export class ContentParticipantComponent
       !changes.active.previousValue
     ) {
       this.updateTab(this.selectedRoute);
+    }
+    if (changes.active && !!changes.active.currentValue) {
+      this.checkForCountdown();
+    }
+  }
+
+  checkForCountdown(): void {
+    if (this.contentGroup.groupType === GroupType.QUIZ) {
+      if (this.content.state.answeringEndTime) {
+        const now = new Date();
+        if (
+          now.getTime() >
+          new Date(this.content.state.answeringEndTime).getTime()
+        ) {
+          this.answeringLocked = true;
+        } else {
+          this.startCountdown(this.content.state.answeringEndTime);
+        }
+      }
     }
   }
 
