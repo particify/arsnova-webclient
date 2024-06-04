@@ -5,7 +5,7 @@ import {
   OnChanges,
   ViewChild,
 } from '@angular/core';
-import * as Wordcloud from 'd3-cloud';
+import Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { NgFor } from '@angular/common';

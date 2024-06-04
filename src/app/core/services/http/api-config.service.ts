@@ -8,7 +8,7 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { EventService } from '@app/core/services/util/event.service';
 import { retryBackoff } from 'backoff-rxjs';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class ApiConfigService extends AbstractHttpService<ApiConfig> {
