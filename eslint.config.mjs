@@ -19,7 +19,9 @@ export default eslintTypescript.config(
     languageOptions: {
       parser: eslintTypescript.parser,
       parserOptions: {
+        ecmaVersion: 'latest',
         project: true,
+        sourceType: 'module',
       },
     },
     rules: {
@@ -54,6 +56,9 @@ export default eslintTypescript.config(
       ],
     },
     settings: {
+      'import/parsers': {
+        espree: ['.js', '.cjs', '.mjs'],
+      },
       'import/resolver': {
         typescript: true,
       },
