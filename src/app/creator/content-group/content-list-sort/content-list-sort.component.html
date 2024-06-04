@@ -13,7 +13,7 @@
       [cdkDragStartDelay]="50"
       [ngClass]="{
         'locked-content': !isPublished(i),
-        'unlocked-content': isPublished(i)
+        'unlocked-content': isPublished(i),
       }"
       [attr.aria-label]="
         'creator.content.a11y-sort-content'
@@ -21,7 +21,7 @@
             : {
                 content: content.renderedBody | a11yRenderedBody,
                 index: i + 1,
-                length: contents.length
+                length: contents.length,
               }
       "
       tabindex="0"

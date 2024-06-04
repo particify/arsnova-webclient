@@ -27,7 +27,7 @@
         class="status-icon"
         [ngClass]="{
           active: statisticsPublished,
-          inactive: !statisticsPublished
+          inactive: !statisticsPublished,
         }"
         [matTooltip]="
           'creator.content.statistics-are' +
@@ -48,7 +48,7 @@
         class="status-icon"
         [ngClass]="{
           active: correctOptionsPublished,
-          inactive: !correctOptionsPublished
+          inactive: !correctOptionsPublished,
         }"
         [matTooltip]="
           'creator.content.correct-options-are' +
@@ -97,7 +97,7 @@
         class="mobile-add"
         [ngClass]="{
           'mobile-add-above-nav': true,
-          'mobile-add-hide': !onInit
+          'mobile-add-hide': !onInit,
         }"
         [routerLink]="'create'"
         [matTooltip]="'creator.room-page.create-content' | transloco"
@@ -207,7 +207,7 @@
             extensionId="series-results-export"
             [extensionData]="{
               series: contentGroup,
-              shortId: room.shortId
+              shortId: room.shortId,
             }"
           ></lib-extension-point>
         </mat-menu>

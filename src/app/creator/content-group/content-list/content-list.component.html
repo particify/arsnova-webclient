@@ -25,7 +25,7 @@
             : {
                 index: i + 1,
                 length: contents.length,
-                body: content.renderedBody | a11yRenderedBody
+                body: content.renderedBody | a11yRenderedBody,
               }
       }}"
       class="bottom-border list-item"
@@ -33,7 +33,7 @@
       [ngClass]="{
         'not-supported': contentTypes.indexOf(content.format) === -1,
         'locked-content': !isPublished(i),
-        'unlocked-content': isPublished(i)
+        'unlocked-content': isPublished(i),
       }"
     >
       <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
@@ -62,7 +62,7 @@
             'show-bar':
               i === activeMenuIndex ||
               content.id === activeContentId ||
-              (i === contentGroup.publishingIndex && hasSpecificPublishing())
+              (i === contentGroup.publishingIndex && hasSpecificPublishing()),
           }"
         >
           <div fxLayout="row" *ngIf="contentTypes.indexOf(content.format) > -1">
@@ -72,7 +72,7 @@
               [extensionData]="{
                 contentId: content.id,
                 contentGroup: contentGroup,
-                contents: contents
+                contents: contents,
               }"
               (extensionEvent)="updateActive($event)"
             ></lib-extension-point>
@@ -214,7 +214,7 @@
                       ContentType.CHOICE,
                       ContentType.BINARY,
                       ContentType.SCALE,
-                      ContentType.NUMERIC
+                      ContentType.NUMERIC,
                     ].includes(content.format)
                   "
                   mat-menu-item

@@ -4,7 +4,7 @@
     *ngIf="!isLoading"
     class="results-container"
     [ngClass]="{
-      invisible: !answersVisible
+      invisible: !answersVisible,
     }"
   >
     <div
@@ -12,7 +12,7 @@
       [ngClass]="{
         invisible: !answersVisible,
         'normal-chart': !isPresentation && answersVisible,
-        'presentation-chart': isPresentation && answersVisible
+        'presentation-chart': isPresentation && answersVisible,
       }"
     >
       <canvas class="chart" id="{{ chartId }}"></canvas>
@@ -21,7 +21,7 @@
       *ngIf="answersVisible && !colorLabel"
       class="border-container"
       [ngClass]="{
-        'presentation-container-padding': isPresentation
+        'presentation-container-padding': isPresentation,
       }"
     >
       <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="1em">
@@ -39,7 +39,7 @@
     *ngIf="!isLoading"
     class="results-container"
     [ngClass]="{
-      invisible: !answersVisible || !colorLabel
+      invisible: !answersVisible || !colorLabel,
     }"
     fxLayout="column"
     fxLayoutAlign="start center"
@@ -48,7 +48,7 @@
       class="correct-container"
       [ngClass]="{
         'border-container': !isPresentation,
-        'column-container': isPresentation
+        'column-container': isPresentation,
       }"
     >
       <mat-icon *ngIf="isPresentation" class="correct-icon"

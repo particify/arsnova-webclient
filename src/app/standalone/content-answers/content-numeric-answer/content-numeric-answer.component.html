@@ -5,7 +5,7 @@
       class="no-field-hint form-field-indication"
       [ngClass]="{
         correct: showAnswerIndicator() && isCorrect(),
-        wrong: showAnswerIndicator() && !isCorrect()
+        wrong: showAnswerIndicator() && !isCorrect(),
       }"
     >
       <mat-label>{{ 'answer.your-answer' | transloco }}</mat-label>
@@ -34,7 +34,7 @@
           | transloco
             : {
                 min: content.minNumber | localizeDecimalSeperator,
-                max: content.maxNumber | localizeDecimalSeperator
+                max: content.maxNumber | localizeDecimalSeperator,
               }
       }}
     </span>

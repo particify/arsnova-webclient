@@ -146,7 +146,7 @@
                     ![resultTypes.CORRECT, resultTypes.WRONG].includes(
                       content.state
                     ) || !group.correctOptionsPublished,
-                  primary: hasAnsweredState(content.state)
+                  primary: hasAnsweredState(content.state),
                 }"
                 [matTooltip]="
                   (![ContentType.FLASHCARD, ContentType.SLIDE].includes(

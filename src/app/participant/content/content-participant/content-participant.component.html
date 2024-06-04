@@ -7,7 +7,7 @@
   <mat-card
     *ngIf="!isLoading"
     [ngClass]="{
-      'no-shadow': !showCard
+      'no-shadow': !showCard,
     }"
   >
     <div *ngIf="quizMode && showWaitingArea() && alias" fxFill>
@@ -49,7 +49,7 @@
                     (isMultiple ? 'multiple' : 'single')
                   | transloco
                     : {
-                        answers: answersString
+                        answers: answersString,
                       })
                 : ('participant.answer.a11y-already-answered-text'
                   | transloco: { answer: answersString })
@@ -187,7 +187,7 @@
                 fxLayoutGap="1em"
                 [ngClass]="{
                   visible: alreadySent || answeringLocked,
-                  invisible: !alreadySent && !answeringLocked
+                  invisible: !alreadySent && !answeringLocked,
                 }"
                 class="text primary"
               >
@@ -211,7 +211,7 @@
                       'participant.answer.answered-in-time'
                         | transloco
                           : {
-                              duration: (answer.durationMs / 1000).toFixed(2)
+                              duration: (answer.durationMs / 1000).toFixed(2),
                             }
                     }}
                   </p>
@@ -253,7 +253,7 @@
               type="button"
               class="attribution-button"
               [ngClass]="{
-                'absolute-position': content.format !== ContentType.SLIDE
+                'absolute-position': content.format !== ContentType.SLIDE,
               }"
               *ngIf="attribution"
               mat-icon-button

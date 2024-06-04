@@ -6,7 +6,7 @@
     [ngClass]="{
       invisible: !answersVisible,
       'normal-chart': !isPresentation && answersVisible,
-      'presentation-chart': isPresentation && answersVisible
+      'presentation-chart': isPresentation && answersVisible,
     }"
   >
     <canvas class="chart" id="{{ chartId }}"></canvas>
@@ -19,7 +19,7 @@
       [ngClass]="{
         correct: showCorrect,
         'no-background answer-text': isPresentation,
-        'all-animations': !isPresentation
+        'all-animations': !isPresentation,
       }"
     >
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">

@@ -40,7 +40,7 @@
             'displayed'
             | transloco
               : {
-                  rounds: rounds[this.contentRounds.get(content.id) || 0]
+                  rounds: rounds[this.contentRounds.get(content.id) || 0],
                 }
         "
       >
@@ -57,7 +57,7 @@
         >
           <span
             [ngClass]="{
-              'selected-menu-item': this.contentRounds.get(content.id) === i
+              'selected-menu-item': this.contentRounds.get(content.id) === i,
             }"
           >
             {{ 'content.round' | transloco }}&nbsp;{{ roundItem }}

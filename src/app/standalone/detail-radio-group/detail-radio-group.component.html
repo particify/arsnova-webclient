@@ -10,7 +10,7 @@
       *ngFor="let item of items"
       class="radio-item unselected"
       [ngClass]="{
-        'primary-border-color': selectedItemValue === item.value
+        'primary-border-color': selectedItemValue === item.value,
       }"
     >
       <mat-radio-button

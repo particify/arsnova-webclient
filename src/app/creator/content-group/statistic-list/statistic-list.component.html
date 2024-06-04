@@ -15,7 +15,7 @@
     [ngClass]="{
       'statistic-status-good': total >= status.good,
       'statistic-status-okay': total < status.good && total >= status.okay,
-      'statistic-status-bad': total < status.okay && total !== status.empty
+      'statistic-status-bad': total < status.okay && total !== status.empty,
     }"
   ></mat-progress-bar>
   <span class="fill-remaining-space"></span>
@@ -42,7 +42,7 @@
             : {
                 content: cp.content.renderedBody | a11yRenderedBody,
                 count: cp.counts > -1 ? cp.counts : 0,
-                abstentions: cp.abstentions > -1 ? cp.abstentions : 0
+                abstentions: cp.abstentions > -1 ? cp.abstentions : 0,
               }) +
           (cp.percent >= status.zero
             ? ('statistic.a11y-choice-result'

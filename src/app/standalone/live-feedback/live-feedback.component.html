@@ -10,7 +10,7 @@
       *ngIf="type === LiveFeedbackType.FEEDBACK"
       [ngClass]="{
         'label-icon': !fixedSize,
-        'icon-fixed-size': fixedSize
+        'icon-fixed-size': fixedSize,
       }"
       [matTooltip]="'survey.' + feedbackLabels[i] | transloco"
     >
@@ -23,7 +23,7 @@
       class="survey-progress custom-height"
       [ngClass]="{
         bar: !fixedSize,
-        'bar-fixed-size': fixedSize
+        'bar-fixed-size': fixedSize,
       }"
       [value]="data.count"
     ></mat-progress-bar>

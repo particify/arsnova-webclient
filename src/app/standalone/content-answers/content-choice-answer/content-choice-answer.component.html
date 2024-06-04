@@ -7,7 +7,7 @@
     [ngClass]="{
       'correct-answer': checkOption(i, true),
       'wrong-answer': checkOption(i, false),
-      'primary-border-color': checkedAnswer.checked && !isDisabled
+      'primary-border-color': checkedAnswer.checked && !isDisabled,
     }"
   >
     <mat-checkbox
@@ -62,7 +62,7 @@
       [ngClass]="{
         'correct-answer': checkOption(i, true),
         'wrong-answer': checkOption(i, false),
-        'primary-border-color': selectedAnswerIndex === i && !isDisabled
+        'primary-border-color': selectedAnswerIndex === i && !isDisabled,
       }"
     >
       <mat-radio-button
