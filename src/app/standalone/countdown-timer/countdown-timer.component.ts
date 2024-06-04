@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Subject, takeUntil, timer } from 'rxjs';
-import * as dayjs from 'dayjs';
-import * as relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 
 const TIMER_UPDATE_INTERVAL = 1000;
