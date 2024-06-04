@@ -40,7 +40,7 @@
       fxLayoutAlign.xs="start center"
       [ngClass]="{
         'group-container': contentGroups.length > 0,
-        'empty-group-container': contentGroups.length === 0
+        'empty-group-container': contentGroups.length === 0,
       }"
     >
       <ng-container *ngIf="contentGroups?.length === 0">
@@ -61,7 +61,7 @@
         *ngIf="!isModerator"
         class="button-container"
         [ngClass]="{
-          empty: contentGroups.length === 0
+          empty: contentGroups.length === 0,
         }"
       >
         <button

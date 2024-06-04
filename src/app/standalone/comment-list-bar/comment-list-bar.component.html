@@ -3,7 +3,7 @@
   <div
     class="bar-container"
     [ngClass]="{
-      'bar-container-fixed': showFixedBar
+      'bar-container-fixed': showFixedBar,
     }"
     fxLayout="column"
     fxLayoutAlign="start center"
@@ -164,13 +164,13 @@
       >
         <mat-icon
           [ngClass]="{
-            'yellow icon-important': currentFilter === CommentFilter.FAVORITE
+            'yellow icon-important': currentFilter === CommentFilter.FAVORITE,
           }"
           >grade</mat-icon
         >
         <span
           [ngClass]="{
-            'selected-menu-item': currentFilter === CommentFilter.FAVORITE
+            'selected-menu-item': currentFilter === CommentFilter.FAVORITE,
           }"
           >{{ 'comment-list.filter-favorite' | transloco }}</span
         >
@@ -185,13 +185,13 @@
       >
         <mat-icon
           [ngClass]="{
-            'blue icon-important': currentFilter === CommentFilter.ANSWERED
+            'blue icon-important': currentFilter === CommentFilter.ANSWERED,
           }"
           >comment</mat-icon
         >
         <span
           [ngClass]="{
-            'selected-menu-item': currentFilter === CommentFilter.ANSWERED
+            'selected-menu-item': currentFilter === CommentFilter.ANSWERED,
           }"
           >{{ 'comment-list.filter-answered' | transloco }}</span
         >
@@ -206,13 +206,13 @@
       >
         <mat-icon
           [ngClass]="{
-            'green icon-important': currentFilter === CommentFilter.CORRECT
+            'green icon-important': currentFilter === CommentFilter.CORRECT,
           }"
           >check_circle</mat-icon
         >
         <span
           [ngClass]="{
-            'selected-menu-item': currentFilter === CommentFilter.CORRECT
+            'selected-menu-item': currentFilter === CommentFilter.CORRECT,
           }"
           >{{ 'comment-list.filter-correct' | transloco }}</span
         >
@@ -227,13 +227,13 @@
       >
         <mat-icon
           [ngClass]="{
-            'red icon-important': currentFilter === CommentFilter.WRONG
+            'red icon-important': currentFilter === CommentFilter.WRONG,
           }"
           >cancel</mat-icon
         >
         <span
           [ngClass]="{
-            'selected-menu-item': currentFilter === CommentFilter.WRONG
+            'selected-menu-item': currentFilter === CommentFilter.WRONG,
           }"
           >{{ 'comment-list.filter-wrong' | transloco }}</span
         >
@@ -243,7 +243,7 @@
         <mat-icon>access_time</mat-icon>
         <span
           [ngClass]="{
-            'selected-menu-item': period !== CommentPeriod.ALL
+            'selected-menu-item': period !== CommentPeriod.ALL,
           }"
           >{{ 'comment-list.filter-time' | transloco }}</span
         >
@@ -261,7 +261,7 @@
           <mat-icon>sell</mat-icon>
           <span
             [ngClass]="{
-              'selected-menu-item': selectedCategory
+              'selected-menu-item': selectedCategory,
             }"
             >{{ 'comment-list.filter-categories' | transloco }}</span
           >
@@ -297,7 +297,7 @@
         >
           <span
             [ngClass]="{
-              'selected-menu-item': selectedCategory === category
+              'selected-menu-item': selectedCategory === category,
             }"
             >{{ category }}</span
           >

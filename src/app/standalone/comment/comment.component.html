@@ -8,7 +8,7 @@
     'highlighted secondary-background on-secondary':
       comment.highlighted && !isSimpleView,
     'presentation-comment': isSimpleView,
-    'primary-shadow-always': comment.highlighted && isSimpleView
+    'primary-shadow-always': comment.highlighted && isSimpleView,
   }"
   [@slide]="isNew ? slideAnimationState : null"
   (@slide.done)="changeSlideState()"
@@ -46,7 +46,7 @@
                 : '',
               answer: comment.answer
                 ? ('comment-page.a11y-text-answer' | transloco)
-                : ''
+                : '',
             }
     }}"
   >

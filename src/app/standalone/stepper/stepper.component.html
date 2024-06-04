@@ -21,7 +21,7 @@
     <div
       [ngClass]="{
         'fixed-width-container container': listLength <= 5,
-        'stepper-container': listLength > 5
+        'stepper-container': listLength > 5,
       }"
     >
       <div
@@ -29,7 +29,7 @@
         fxLayoutAlign="start"
         [@slideHeader]="{
           value: headerAnimationState,
-          params: { position: headerPos * -20 }
+          params: { position: headerPos * -20 },
         }"
         (@slideHeader.done)="headerAnimationDone()"
       >
@@ -45,7 +45,7 @@
             [ngClass]="{
               'primary-background primary-border': selectedIndex === i,
               'primary primary-border': completed.get(i) && selectedIndex !== i,
-              last: i === listLength - 1
+              last: i === listLength - 1,
             }"
           >
             <span *ngIf="!additionalStepIcon || i < listLength - 1">{{

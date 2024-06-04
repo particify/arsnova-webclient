@@ -12,7 +12,7 @@
           *ngFor="let mode of publishingModes"
           class="mode-item unselected"
           [ngClass]="{
-            'primary-border-color': selectedMode?.type === mode.type
+            'primary-border-color': selectedMode?.type === mode.type,
           }"
         >
           <mat-radio-button

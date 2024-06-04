@@ -9,7 +9,7 @@
       [ngClass]="{
         current: i === currentRouteIndex,
         'reduce-bottom-padding':
-          focusModeEnabled && barItem.name === focusFeature
+          focusModeEnabled && barItem.name === focusFeature,
       }"
       (click)="navToUrl(i)"
       [matTooltip]="
@@ -55,7 +55,7 @@
             <div
               [ngClass]="{
                 'selected-menu-item':
-                  group.name === groupName && i === currentRouteIndex
+                  group.name === groupName && i === currentRouteIndex,
               }"
             >
               <app-text-overflow-clip

@@ -20,7 +20,7 @@
   <div
     class="bar bar-hidden"
     [ngClass]="{
-      'bar-expanded': barVisible
+      'bar-expanded': barVisible,
     }"
     fxLayout="row"
     fxLayoutAlign="start center"
@@ -92,12 +92,12 @@
             "
             (click)="changeGroup(contentGroup)"
             [ngClass]="{
-              'locked-group': isGroupLocked(contentGroup)
+              'locked-group': isGroupLocked(contentGroup),
             }"
           >
             <span
               [ngClass]="{
-                'selected-menu-item': contentGroup.name === groupName
+                'selected-menu-item': contentGroup.name === groupName,
               }"
               >{{ contentGroup.name }}</span
             >

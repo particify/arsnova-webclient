@@ -3,7 +3,7 @@
     *ngFor="let item of leaderboardItems; index as i"
     class="bottom-border"
     [ngClass]="{
-      'primary-variant': item.userAlias.id === aliasId
+      'primary-variant': item.userAlias.id === aliasId,
     }"
   >
     <div
@@ -11,7 +11,7 @@
       fxLayoutAlign="space-between center"
       class="leaderboard-item"
       [ngClass]="{
-        'bold-text': item.userAlias.id === aliasId
+        'bold-text': item.userAlias.id === aliasId,
       }"
     >
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="1em">

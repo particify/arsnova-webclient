@@ -6,7 +6,7 @@
   [ngClass]="{
     visible: showScrollButton,
     'above-add': showAddButton,
-    'no-nav-bar': !navBarExists
+    'no-nav-bar': !navBarExists,
   }"
 >
   <mat-icon>arrow_upward</mat-icon>
@@ -19,7 +19,7 @@
   (click)="loadAndScroll()"
   [ngClass]="{
     'scroll-to-new-posts-visible': showScrollToNewPostsButton,
-    'above-bar': navBarExists
+    'above-bar': navBarExists,
   }"
 >
   <mat-icon>arrow_upward</mat-icon>
@@ -34,7 +34,7 @@
   (click)="create()"
   [ngClass]="{
     'mobile-add-above-nav': navBarExists,
-    'mobile-add-hide': !onInit
+    'mobile-add-hide': !onInit,
   }"
   [disabled]="addButtonDisabled"
   matTooltip="{{ 'comment-list.add-comment' | transloco }}"
