@@ -1,6 +1,6 @@
 variables:
   BUILD_DIR: dist
-  CHROME_IMAGE_TAG: 118.0.5993.117-1-nodejs-20.9.0
+  CHROME_IMAGE_TAG: 125.0.6422.141-1-nodejs-20.14.0
   DEPENDENCY_CACHE_IMAGE: $CI_REGISTRY/particify/dev/foss/arsnova-webclient/dependency-cache-chromebrowser-nodejs
 
 workflow:
