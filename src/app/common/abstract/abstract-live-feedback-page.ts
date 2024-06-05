@@ -77,6 +77,7 @@ export class AbstractLiveFeedbackPage {
     this.dataChanged.emit(this.data);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected parseIncomingMessage(message: Message) {
     // Implemented by extended classes
   }

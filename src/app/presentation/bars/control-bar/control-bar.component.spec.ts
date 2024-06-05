@@ -40,7 +40,6 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { MatMenuModule } from '@angular/material/menu';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ControlBarComponent', () => {
   let component: ControlBarComponent;

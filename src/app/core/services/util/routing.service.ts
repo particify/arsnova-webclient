@@ -6,7 +6,7 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ApiConfig } from '@app/core/models/api-config';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 enum RoutePrefix {
   CREATOR = 'edit',

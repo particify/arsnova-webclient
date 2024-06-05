@@ -20,7 +20,6 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentState } from '@app/core/models/content-state';
 
 describe('ContentSortParticipantComponent', () => {
   let component: ContentSortParticipantComponent;

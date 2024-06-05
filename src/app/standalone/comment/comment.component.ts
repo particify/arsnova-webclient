@@ -36,7 +36,6 @@ import { CommentAnswerComponent } from '@app/standalone/_dialogs/comment-answer/
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { VotingComponent } from '@app/standalone/voting/voting.component';
 import { Vote } from '@app/core/models/vote';
-import { MatCardAppearance } from '@angular/material/card';
 
 @Component({
   standalone: true,

@@ -8,6 +8,7 @@ import {
   MockGlobalStorageService,
   MockEventService,
   MockRouter,
+  MockMatDialogData,
 } from '@testing/test-helpers';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -17,7 +18,6 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { EventService } from '@app/core/services/util/event.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { of } from 'rxjs';
-import { MockMatDialogData } from '@testing/test-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AuthProvider } from '@app/core/models/auth-provider';
 

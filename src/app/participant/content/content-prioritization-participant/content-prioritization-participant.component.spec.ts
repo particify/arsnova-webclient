@@ -20,7 +20,6 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of } from 'rxjs';
 
 import { ContentPrioritizationParticipantComponent } from './content-prioritization-participant.component';
-import { ContentState } from '@app/core/models/content-state';
 
 describe('ContentPrioritizationParticipantComponent', () => {
   let component: ContentPrioritizationParticipantComponent;

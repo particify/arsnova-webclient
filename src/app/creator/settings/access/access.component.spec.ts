@@ -2,7 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessComponent } from './access.component';
 import { MockEventService } from '@testing/test-helpers';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -21,7 +24,6 @@ import { AccessTokenService } from '@app/core/services/http/access-token.service
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AccessComponent', () => {

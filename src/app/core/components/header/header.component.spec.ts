@@ -16,7 +16,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -57,10 +57,6 @@ describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
-  let routerSpy = jasmine.createSpyObj('MockRouter', [
-    'navigate',
-    'navigateByUrl',
-  ]);
   const dialogService = jasmine.createSpyObj('DialogService', [
     'openUpdateInfoDialog',
     'openDeleteDialog',
@@ -134,7 +130,6 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
-    routerSpy = TestBed.inject(Router);
     fixture.detectChanges();
   });
 

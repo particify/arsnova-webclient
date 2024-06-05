@@ -7,7 +7,6 @@ import {
   Event,
   ParamMap,
   Params,
-  UrlTree,
 } from '@angular/router';
 import { Theme } from '@app/core/theme/theme.service';
 
@@ -51,19 +50,19 @@ export class MockEventService {
 // AnnounceService
 
 export class MockAnnounceService {
-  announce(key: string, args?: any) {}
+  announce() {}
 }
 
 // GlobalStorageService
 
 export class MockGlobalStorageService {
-  getItem(key: symbol): any {
+  getItem(): any {
     return undefined;
   }
 
-  setItem(key: symbol, value: any) {}
+  setItem() {}
 
-  removeItem(key: symbol) {}
+  removeItem() {}
 
   handleConsentChange() {}
 }
@@ -129,9 +128,9 @@ export class MockRouter {
     this.currentUrl = url;
   }
 
-  createUrlTree(params: string[]) {}
+  createUrlTree() {}
 
-  serializeUrl(urlTree: UrlTree) {}
+  serializeUrl() {}
 }
 
 // NotificationService
@@ -160,7 +159,7 @@ export class MockThemeService {
     this.currentTheme$.next(theme);
   }
 
-  getColor(name: string) {
+  getColor() {
     return '#FFFFFF';
   }
 
@@ -200,7 +199,7 @@ export class MockMatDialogData {}
 // FeatureFlagService
 
 export class MockFeatureFlagService {
-  isEnabled(feature: string) {
+  isEnabled() {
     return true;
   }
 }

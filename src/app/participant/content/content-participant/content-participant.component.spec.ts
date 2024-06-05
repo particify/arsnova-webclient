@@ -1,12 +1,11 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentParticipantComponent } from './content-participant.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { ContentType } from '@app/core/models/content-type.enum';
-import { Content } from '@app/core/models/content';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EventService } from '@app/core/services/util/event.service';
 import {
+  ActivatedRouteStub,
   MockEventService,
   MockFeatureFlagService,
   MockGlobalStorageService,
@@ -15,7 +14,6 @@ import {
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ActivatedRouteStub } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { Room } from '@app/core/models/room';
 import { FormattingService } from '@app/core/services/http/formatting.service';

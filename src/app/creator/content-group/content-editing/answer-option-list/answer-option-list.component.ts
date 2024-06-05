@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AnswerOption } from '@app/core/models/answer-option';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import {
   AdvancedSnackBarTypes,

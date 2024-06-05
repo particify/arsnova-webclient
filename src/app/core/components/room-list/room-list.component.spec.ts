@@ -7,12 +7,13 @@ import {
   MockNotificationService,
   MockGlobalStorageService,
   MockFeatureFlagService,
+  MockEventService,
+  MockRouter,
 } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { MockEventService, MockRouter } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
