@@ -238,7 +238,7 @@ export class ContentParticipantComponent
           this.startCountdown(newState.answeringEndTime);
         }
         this.content.state = newState;
-        this.showTab('');
+        this.updateTab('');
         this.isLoading = false;
       });
   }
