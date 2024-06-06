@@ -27,7 +27,7 @@ lint:
     - if: $CI_PIPELINE_SOURCE != "schedule"
   allow_failure: false
   script:
-    - yarn lint
+    - yarn eslint src projects
 
 prettier:
   stage: test
