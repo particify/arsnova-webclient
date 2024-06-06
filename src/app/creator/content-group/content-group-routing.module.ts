@@ -36,7 +36,7 @@ const routes: Routes = [
   {
     path: 'leaderboard',
     component: LeaderboardPageComponent,
-    title: 'leaderboard',
+    title: 'series',
   },
   {
     path: ':contentIndex',
