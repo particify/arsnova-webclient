@@ -14,7 +14,7 @@ class MockEventService {}
 
 @Injectable()
 class MockGlobalStorageService {
-  getItem(key: string) {
+  getItem() {
     return 0;
   }
 }

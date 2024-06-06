@@ -18,7 +18,6 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { of } from 'rxjs';
 import { UserService } from '@app/core/services/http/user.service';
-import { TranslocoService } from '@ngneat/transloco';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';

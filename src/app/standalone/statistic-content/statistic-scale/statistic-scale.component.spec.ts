@@ -3,7 +3,11 @@ import { StatisticScaleComponent } from './statistic-scale.component';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
-import { MockEventService, MockThemeService } from '@testing/test-helpers';
+import {
+  MockEventService,
+  MockGlobalStorageService,
+  MockThemeService,
+} from '@testing/test-helpers';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -13,7 +17,6 @@ import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { MockGlobalStorageService } from '@testing/test-helpers';
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { UserSettings } from '@app/core/models/user-settings';
 import { FormattingService } from '@app/core/services/http/formatting.service';

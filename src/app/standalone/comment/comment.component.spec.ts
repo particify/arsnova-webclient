@@ -23,7 +23,6 @@ import {
   BROWSER_LANG,
   LanguageService,
 } from '@app/core/services/util/language.service';
-import { of } from 'rxjs';
 
 class MockLanguageService {
   langEmitter = new EventEmitter<string>();

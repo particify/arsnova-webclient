@@ -231,7 +231,9 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   }
 
   sendUiState(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     answersVisible = this.answersVisible,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     correctVisible = this.correctVisible
   ) {
     // TODO: Send UI state for remote

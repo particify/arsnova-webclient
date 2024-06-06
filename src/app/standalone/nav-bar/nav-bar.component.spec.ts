@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NavBarComponent } from './nav-bar.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
@@ -33,16 +37,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
-import { ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable()
 class MockContentGroupService {
-  getById(id: string) {
+  getById() {
     return of(new ContentGroup('roomId', 'Test'));
   }
 
   getByIds(ids: string[]) {
-    return of(ids.map((id) => new ContentGroup('roomId', 'Test')));
+    return of(ids.map(() => new ContentGroup('roomId', 'Test')));
   }
 
   sortContentGroupsByName(groups: ContentGroup[]) {
@@ -53,7 +56,6 @@ class MockContentGroupService {
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
   let fixture: ComponentFixture<NavBarComponent>;
-  let route: ActivatedRoute;
   let router: Router;
   let eventService: EventService;
 
@@ -184,7 +186,6 @@ describe('NavBarComponent', () => {
     fixture = TestBed.createComponent(NavBarComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
-    route = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
     eventService = TestBed.inject(EventService);
   });
@@ -313,7 +314,6 @@ describe('NavBarComponent', () => {
     fixture = TestBed.createComponent(NavBarComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
-    route = TestBed.inject(ActivatedRoute);
     const room = new Room();
     room.settings = {
       feedbackLocked: true,

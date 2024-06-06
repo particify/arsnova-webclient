@@ -27,7 +27,7 @@ lint:
     - if: $CI_PIPELINE_SOURCE != "schedule"
   allow_failure: false
   script:
-    - yarn eslint src projects
+    - yarn eslint --config=eslint.config.ci.mjs --max-warnings=0 src projects
 
 prettier:
   stage: test

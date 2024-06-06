@@ -7,7 +7,6 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { MockThemeService } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroup } from '@app/core/models/content-group';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { By } from '@angular/platform-browser';
@@ -27,9 +26,9 @@ class MockAuthenticationService {
 class MockRoutingService {
   getShortId() {}
 
-  getRoleString(userRole: UserRole) {}
+  getRoleString() {}
 
-  navigate(url: string) {}
+  navigate() {}
 }
 
 describe('SeriesOverviewComponent', () => {

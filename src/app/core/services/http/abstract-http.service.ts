@@ -95,8 +95,8 @@ export abstract class AbstractHttpService<T> {
       : request$;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public handleError<T>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     operation = 'operation',
     result?: T,
     badRequestMessage?: string

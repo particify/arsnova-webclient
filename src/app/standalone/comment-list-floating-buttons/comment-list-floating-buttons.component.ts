@@ -4,7 +4,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({

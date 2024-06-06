@@ -19,7 +19,7 @@ import { ApiConfig, Feature } from '@app/core/models/api-config';
 import { ConsentChangedEvent } from '@app/core/models/events/consent-changed';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { ActivationEnd, Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export const CONSENT_VERSION = 1;
 

@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { MockGlobalStorageService } from '@testing/test-helpers';
-import { ActivatedRouteSnapshot, Router, UrlSegment } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
