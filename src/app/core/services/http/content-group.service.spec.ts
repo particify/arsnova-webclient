@@ -18,6 +18,8 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentService } from '@app/core/services/http/content.service';
 
 @Injectable()
 class MockWsConnectorService {}
@@ -39,6 +41,10 @@ class MockCachingService {
     return new Cache();
   }
 }
+
+class MockContentAnswerService {}
+
+class MockContentService {}
 
 describe('ContentGroupService', () => {
   beforeEach(() => {
@@ -80,6 +86,14 @@ describe('ContentGroupService', () => {
         {
           provide: CachingService,
           useClass: MockCachingService,
+        },
+        {
+          provide: ContentAnswerService,
+          useClass: MockContentAnswerService,
+        },
+        {
+          provide: ContentService,
+          useClass: MockContentService,
         },
       ],
       imports: [HttpClientTestingModule],

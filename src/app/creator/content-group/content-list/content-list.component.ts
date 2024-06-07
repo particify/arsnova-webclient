@@ -1,10 +1,9 @@
 import {
+  ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -17,11 +16,7 @@ import {
 import { TranslocoService } from '@ngneat/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { take } from 'rxjs/operators';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { MatButton } from '@angular/material/button';
@@ -29,16 +24,23 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { Room } from '@app/core/models/room';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
-import { Observable } from 'rxjs';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-base.component';
+import { CdkDragDrop, CdkDragSortEvent } from '@angular/cdk/drag-drop';
+import { MatListItem } from '@angular/material/list';
+import { ContentStats } from '@app/creator/content-group/content-group-page.component';
 
 @Component({
   selector: 'app-content-list',
   templateUrl: './content-list.component.html',
   styleUrls: ['./content-list.component.scss'],
 })
-export class ContentListComponent implements OnInit, OnDestroy {
+export class ContentListComponent
+  extends DragDropBaseComponent
+  implements OnInit, OnDestroy
+{
   @ViewChildren('lockMenu') lockMenus!: QueryList<MatButton>;
+  @ViewChildren('sortListItem') sortItems!: QueryList<MatListItem>;
 
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) contentGroup!: ContentGroup;
@@ -46,7 +48,7 @@ export class ContentListComponent implements OnInit, OnDestroy {
   @Input({ required: true }) contentGroupStats!: ContentGroupStatistics[];
   @Input() isModerator = false;
   @Input() attributionsExist = false;
-  @Output() contentGroupUpdated = new EventEmitter<ContentGroup>();
+  @Input() contentStats = new Map<string, ContentStats>();
 
   currentGroupIndex?: number;
   contentTypes: string[] = Object.values(ContentType);
@@ -63,6 +65,9 @@ export class ContentListComponent implements OnInit, OnDestroy {
 
   iconList: Map<ContentType, string>;
 
+  publishingChangeActive = false;
+  publishingChangePosition?: number;
+
   constructor(
     private contentService: ContentService,
     private notificationService: NotificationService,
@@ -70,12 +75,15 @@ export class ContentListComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private contentGroupService: ContentGroupService,
     private contentPublishService: ContentPublishService,
-    private hotkeyService: HotkeyService
+    private hotkeyService: HotkeyService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
+    super();
     this.iconList = this.contentService.getTypeIcons();
   }
 
   ngOnInit() {
+    this.dragDroplist = this.contents;
     this.getCurrentGroupIndex();
     this.contentService.getAnswersDeleted().subscribe((contentId) => {
       if (contentId) {
@@ -247,18 +255,12 @@ export class ContentListComponent implements OnInit, OnDestroy {
       });
   }
 
-  lockContentGroup(): Observable<ContentGroup> {
-    const changes: { publishingMode: PublishingMode } = {
-      publishingMode: PublishingMode.NONE,
-    };
-    return this.contentGroupService.patchContentGroup(
-      this.contentGroup,
-      changes
-    );
-  }
-
   hasSpecificPublishing(): boolean {
     return this.contentPublishService.hasSpecificPublishing(this.contentGroup);
+  }
+
+  isRangePublished(): boolean {
+    return this.contentPublishService.isRangePublished(this.contentGroup);
   }
 
   isSinglePublished(): boolean {
@@ -327,5 +329,100 @@ export class ContentListComponent implements OnInit, OnDestroy {
 
   startNewRound(content: Content) {
     this.contentService.startNewRound(content);
+  }
+
+  private getSortIndex(
+    index: number,
+    indexIsNotPublishingIndex = true
+  ): number {
+    return (
+      index -
+      (this.isRangePublished() &&
+      index > this.contentGroup.publishingIndex &&
+      indexIsNotPublishingIndex
+        ? 1
+        : 0)
+    );
+  }
+
+  dropContent(prev: number, current: number) {
+    if (prev === current) {
+      return;
+    }
+    const oldPublishingIndex = this.contentGroup.publishingIndex;
+    this.updatePublishingIndexOnSorting(prev, current);
+    const prevContentIndex = this.getSortIndex(
+      prev,
+      prev !== oldPublishingIndex
+    );
+    const currentContentIndex = this.getSortIndex(current);
+    this.moveItem(prevContentIndex, currentContentIndex);
+    const changes: {
+      contentIds: string[];
+      publishingIndex: number;
+    } = {
+      contentIds: this.contents.map((c) => c.id),
+      publishingIndex: this.contentGroup.publishingIndex,
+    };
+    this.contentGroupService
+      .patchContentGroup(this.contentGroup, changes)
+      .subscribe((updatedContentGroup) => {
+        this.contentGroup = updatedContentGroup;
+      });
+  }
+
+  private updatePublishingIndexOnSorting(prev: number, current: number): void {
+    if (
+      this.isSinglePublished() &&
+      prev === this.contentGroup.publishingIndex
+    ) {
+      this.contentGroup.publishingIndex = current;
+    } else if (this.isRangePublished()) {
+      if (this.isMovedIntoLocked(prev, current)) {
+        this.contentGroup.publishingIndex--;
+      } else if (this.isMovedIntoPublished(prev, current)) {
+        this.contentGroup.publishingIndex++;
+      }
+    }
+  }
+
+  private isMovedIntoPublished(prev: number, current: number): boolean {
+    return (
+      prev > this.contentGroup.publishingIndex &&
+      current - 1 <= this.contentGroup.publishingIndex
+    );
+  }
+
+  private isMovedIntoLocked(prev: number, current: number): boolean {
+    return (
+      (prev > 0 || this.contentGroup.publishingIndex > 0) &&
+      prev <= this.contentGroup.publishingIndex &&
+      current > this.contentGroup.publishingIndex
+    );
+  }
+
+  dropPublishingDivider(event: CdkDragDrop<Content[]>) {
+    this.publishingChangeActive = false;
+    this.publishingChangePosition = undefined;
+    const newPublishingIndex = event.currentIndex - 1;
+    if (this.contentGroup.publishingIndex !== newPublishingIndex) {
+      this.contentGroup.publishingIndex = newPublishingIndex;
+      this.updatePublishingIndex(newPublishingIndex);
+    }
+  }
+
+  onSortChanged(event: CdkDragSortEvent) {
+    if (this.publishingChangeActive) {
+      this.publishingChangePosition = event.currentIndex;
+    }
+    this.changeDetectorRef.detectChanges();
+  }
+
+  showAsLocked(index: number): boolean {
+    return !this.publishingChangeActive && !this.isPublished(index);
+  }
+
+  getPercentageString(value?: number): string {
+    return value?.toFixed() + '\u202F%';
   }
 }

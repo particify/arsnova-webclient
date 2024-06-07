@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>
+  {{ 'creator.content.content-group-settings' | transloco }}
+</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="name-input">
+    <mat-label>{{
+      'creator.content.content-group-name' | transloco
+    }}</mat-label>
+    <input
+      #groupName
+      [formControl]="nameFormControl"
+      matInput
+      name="group-name"
+      maxlength="50"
+      (input)="(nameFormControl.valid)"
+    />
+    <mat-hint align="end" aria-hidden="true"
+      >{{ groupName.value.length }} / 50</mat-hint
+    >
+    @if (nameFormControl.hasError('validateUniqueName')) {
+      <mat-error>
+        {{ 'creator.content.duplicate-series-name' | transloco }}
+      </mat-error>
+    }
+  </mat-form-field>
+  @if (data.contentGroup.groupType !== GroupType.FLASHCARDS) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.publish-statistics'"
+      [disabled]="formDisabled"
+      [isChecked]="data.contentGroup.statisticsPublished"
+      (toggleEvent)="data.contentGroup.statisticsPublished = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if (
+    [GroupType.QUIZ, GroupType.MIXED].includes(data.contentGroup.groupType)
+  ) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.publish-correct-answers'"
+      [disabled]="formDisabled"
+      [isChecked]="data.contentGroup.correctOptionsPublished"
+      (toggleEvent)="data.contentGroup.correctOptionsPublished = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if (data.contentGroup.groupType === GroupType.QUIZ) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.enable-leaderboard'"
+      [disabled]="formDisabled"
+      [isChecked]="data.contentGroup.leaderboardEnabled"
+      (toggleEvent)="data.contentGroup.leaderboardEnabled = $event"
+    ></app-settings-slide-toggle>
+  }
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button matDialogClose>
+    {{ 'dialog.cancel' | transloco }}
+  </button>
+  <app-loading-button
+    [isDialog]="true"
+    (clicked)="saveGroup()"
+    name="creator.content.save"
+  ></app-loading-button>
+</mat-dialog-actions>

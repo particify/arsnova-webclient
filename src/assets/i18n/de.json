@@ -443,7 +443,6 @@
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",
     "a11y-message-evaluation-answers": "Du befindest dich jetzt bei den Ergebnissen. {{answers}} Teilnehmende haben den Inhalt beantwortet. Navigiere mit der Tab-Taste durch die Antworten.",
-    "a11y-group-progress": "{{percent}} Prozent der Inhalte in der Fragenserie {{group}} wurden richtig beantwortet.",
     "a11y-content-result": "Der Inhalt {{content}} wurde bisher von {{count}} Personen beantwortet, {{abstentions}} Personen haben sich enthalten.",
     "a11y-choice-result": "Der Inhalt wurde von {{percent}} Prozent richtig beantwortet.",
     "a11y-go-to-statistic": "Drücke die Enter-Taste, um zur Auswertung des Inhalts zu gelangen.",

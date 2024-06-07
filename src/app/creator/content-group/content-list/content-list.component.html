@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutAlign="start center">
+<div fxLayout="column" fxLayoutAlign="start center" class="list-container">
   <div
     tabindex="-1"
     id="content-list"
@@ -17,304 +17,406 @@
     </p>
   }
   @if (contents.length > 0) {
-    <mat-action-list fxFill>
+    <mat-action-list
+      cdkDropList
+      (cdkDropListSorted)="onSortChanged($event)"
+      [cdkDropListData]="contents"
+      fxFill
+      fxLayout="column"
+      class="content-list"
+    >
       @for (content of contents; track content; let i = $index) {
-        <button
-          disableRipple
-          mat-list-item
-          attr.aria-label="{{
-            'creator.content.a11y-content-item-selected'
-              | transloco
-                : {
-                    index: i + 1,
-                    length: contents.length,
-                    body: content.renderedBody | a11yRenderedBody,
-                  }
-          }}"
-          class="bottom-border list-item"
-          [routerLink]="(i + 1).toString()"
+        <div
           [ngClass]="{
-            'not-supported': contentTypes.indexOf(content.format) === -1,
-            'locked-content': !isPublished(i),
-            'unlocked-content': isPublished(i),
+            'item-with-top-space': i === 0,
           }"
         >
-          <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
-            <div
-              class="ellipsis"
-              fxLayout="row"
-              fxLayoutAlign="start center"
-              fxLayoutGap="12px"
-            >
-              <mat-icon fxFlex="noshrink" class="type-icon">{{
-                iconList.get(content.format)
-              }}</mat-icon>
-              <app-rendered-text
-                class="ellipsis rendered-list-preview-container"
-                [ngClass]="{ 'bg-unlocked': isPublished(i) }"
-                [renderedText]="content.renderedBody"
-                [markdownFeatureset]="markdownFeatureset"
-                [listPreview]="true"
-              ></app-rendered-text>
-            </div>
-            <div
-              fxLayout="row"
-              fxLayoutAlign="center center"
-              class="button-bar"
-              [ngClass]="{
-                'show-bar':
-                  i === activeMenuIndex ||
-                  content.id === activeContentId ||
-                  (i === contentGroup.publishingIndex &&
-                    hasSpecificPublishing()),
-              }"
-            >
-              @if (contentTypes.indexOf(content.format) > -1) {
-                <div fxLayout="row">
-                  @if (isPublished(i)) {
-                    <lib-extension-point
-                      extensionId="content-focus"
-                      [extensionData]="{
-                        contentId: content.id,
-                        contentGroup: contentGroup,
-                        contents: contents,
+          <button
+            disableRipple
+            cdkDrag
+            cdkDragBoundary=".list-container"
+            [cdkDragStartDelay]="50"
+            (cdkDragDropped)="
+              dropContent($event.previousIndex, $event.currentIndex)
+            "
+            (keyup)="moveAnswer($event, i)"
+            #sortListItem
+            mat-list-item
+            attr.aria-label="{{
+              'creator.content.a11y-content-item-selected'
+                | transloco
+                  : {
+                      index: i + 1,
+                      length: contents.length,
+                      body: content.renderedBody | a11yRenderedBody,
+                    }
+            }}"
+            class="content-box primary-border-color"
+            [routerLink]="(i + 1).toString()"
+            [ngClass]="{
+              'not-supported': contentTypes.indexOf(content.format) === -1,
+              'locked-item': showAsLocked(i),
+              'single-published-item': isSinglePublished() && isPublished(i),
+              'no-pointer-events': publishingChangeActive,
+            }"
+            [ngStyle]="{
+              'border-color': publishingChangeActive ? 'transparent' : null,
+            }"
+          >
+            <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
+              <div fxLayout="column" class="ellipsis" fxLayoutGap="8px">
+                <div
+                  class="ellipsis"
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  fxLayoutGap="12px"
+                >
+                  <app-rendered-text
+                    class="ellipsis rendered-list-preview-container"
+                    [renderedText]="content.renderedBody"
+                    [markdownFeatureset]="markdownFeatureset"
+                    [listPreview]="true"
+                  ></app-rendered-text>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                  <div fxLayout="row" fxLayoutGap="12px">
+                    <mat-icon
+                      class="type-icon"
+                      [ngClass]="{
+                        'locked-content': showAsLocked(i),
                       }"
-                      (extensionEvent)="updateActive($event)"
-                    ></lib-extension-point>
-                  }
-                  @if (
-                    content.format === 'TEXT' &&
-                    content.state.answersPublished &&
-                    !isModerator
-                  ) {
-                    <button
-                      mat-icon-button
-                      (click)="
-                        toggleAnswersPublished(content);
-                        $event.stopPropagation()
-                      "
-                      [attr.aria-label]="
-                        'creator.content.a11y-dont-publish-answers' | transloco
-                      "
-                      matTooltip="{{
-                        'creator.content.dont-publish-answers' | transloco
-                      }}"
-                      appTrackInteraction="Content publish text answers toggled"
-                      appTrackName="off"
+                      >{{ iconList.get(content.format) }}</mat-icon
                     >
-                      <mat-icon class="unlocked">visibility</mat-icon>
-                    </button>
-                  }
-                  @if (
-                    content.format === 'TEXT' &&
-                    !content.state.answersPublished &&
-                    !isModerator
-                  ) {
-                    <button
-                      mat-icon-button
-                      color="primary"
-                      (click)="
-                        toggleAnswersPublished(content);
-                        $event.stopPropagation()
-                      "
-                      [attr.aria-label]="
-                        'creator.content.a11y-publish-answers' | transloco
-                      "
-                      matTooltip="{{
-                        'creator.content.publish-answers' | transloco
-                      }}"
-                      appTrackInteraction="Content publish text answers toggled"
-                      appTrackName="on"
-                    >
-                      <mat-icon>visibility_off</mat-icon>
-                    </button>
-                  }
-                  @if (
-                    !isModerator &&
-                    hasSpecificPublishing() &&
-                    i !== contentGroup.publishingIndex
-                  ) {
-                    <button
-                      color="primary"
-                      mat-icon-button
-                      (click)="
-                        updatePublishingIndex(i); $event.stopPropagation()
-                      "
-                      [matTooltip]="
-                        'creator.content.' +
-                          (isSinglePublished() ? 'publish' : 'publish-up-to')
-                          | transloco
-                      "
-                    >
-                      <mat-icon class="publish-icon">lock_open</mat-icon>
-                    </button>
-                  }
-                  @if (!isModerator) {
-                    <button
-                      mat-icon-button
-                      color="primary"
-                      #menuTrigger="matMenuTrigger"
-                      [matMenuTriggerFor]="moreActions"
-                      (click)="$event.stopPropagation()"
-                      (menuOpened)="openedMenu(i)"
-                      matTooltip="{{
-                        'creator.content.more-options' | transloco
-                      }}"
-                    >
-                      <mat-icon>more_vert</mat-icon>
-                    </button>
-                  }
-                  <mat-menu
-                    #moreActions="matMenu"
-                    xPosition="before"
-                    (closed)="closedMenu()"
-                  >
-                    <button mat-menu-item [routerLink]="['edit', content.id]">
-                      <mat-icon>edit</mat-icon>
-                      <span>
-                        {{ 'creator.content.edit-content' | transloco }}</span
+                    @if (contentStats.get(content.id)) {
+                      <div
+                        fxLayout="row"
+                        fxLayoutGap="8px"
+                        class="content-stats-info"
                       >
-                    </button>
-                    <mat-divider></mat-divider>
-                    <button
-                      mat-menu-item
-                      [matMenuTriggerFor]="chooseGroups"
-                      [matMenuTriggerData]="{ action: 'copy' }"
-                    >
-                      <mat-icon>library_add</mat-icon>
-                      <span>{{
-                        'creator.content.copy-content-to-group' | transloco
-                      }}</span>
-                    </button>
-                    <button
-                      mat-menu-item
-                      [matMenuTriggerFor]="chooseGroups"
-                      [matMenuTriggerData]="{ action: 'move' }"
-                    >
-                      <mat-icon>drive_file_move_outline</mat-icon>
-                      <span>{{
-                        'creator.content.move-content-to-group' | transloco
-                      }}</span>
-                    </button>
-                    <button mat-menu-item (click)="duplicate(content.id)">
-                      <mat-icon>dynamic_feed</mat-icon>
-                      <span>{{
-                        'creator.content.duplicate-content' | transloco
-                      }}</span>
-                    </button>
-                    <mat-divider></mat-divider>
-                    @if (content.format === ContentType.WORDCLOUD) {
-                      <button
-                        mat-menu-item
-                        (click)="resetBannedAnswers(content.id)"
-                      >
-                        <mat-icon>lock_reset</mat-icon>
-                        <span>{{
-                          'creator.content.reset-banned-answers' | transloco
-                        }}</span>
-                      </button>
-                    }
-                    @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
-                      <button mat-menu-item (click)="deleteAnswers(content)">
-                        <mat-icon>clear_all</mat-icon>
-                        <span>{{
-                          'creator.content.delete-answers' | transloco
-                        }}</span>
-                      </button>
-                    }
-                    <div
-                      [matTooltip]="
-                        'creator.content.starting-new-round-not-possible'
-                          | transloco
-                      "
-                      [matTooltipDisabled]="content.state.round === 1"
-                      matTooltipPosition="before"
-                    >
-                      @if (
-                        [
-                          ContentType.CHOICE,
-                          ContentType.BINARY,
-                          ContentType.SCALE,
-                          ContentType.NUMERIC,
-                        ].includes(content.format)
-                      ) {
-                        <button
-                          mat-menu-item
-                          (click)="startNewRound(content)"
-                          [disabled]="content.state.round > 1"
-                        >
-                          <mat-icon>replay</mat-icon>
-                          {{ 'creator.content.start-new-round' | transloco }}
-                        </button>
-                      }
-                    </div>
-                    <button mat-menu-item (click)="deleteContent(i)">
-                      <mat-icon color="warn">delete_forever</mat-icon>
-                      <span>{{
-                        'creator.content.delete-content' | transloco
-                      }}</span>
-                    </button>
-                  </mat-menu>
-                  <mat-menu #chooseGroups="matMenu" xPosition="before">
-                    <ng-template matMenuContent let-action="action">
-                      @for (
-                        groupStats of contentGroupStats;
-                        track groupStats;
-                        let i = $index
-                      ) {
-                        <button
-                          mat-menu-item
-                          [disabled]="i === currentGroupIndex"
-                          (click)="
-                            useContentInOtherGroup(
-                              content.id,
-                              groupStats,
-                              action
+                        @if (
+                          contentStats.get(content.id)?.count !== undefined
+                        ) {
+                          <span>{{
+                            (contentStats.get(content.id)?.count === 1
+                              ? 'creator.content.answer-count'
+                              : 'creator.content.answers-count'
                             )
-                          "
-                          [attr.aria-label]="
-                            'creator.content.a11y-add-to-this-content-group'
-                              | transloco: { name: groupStats.groupName }
-                          "
-                        >
-                          <span>{{ groupStats.groupName }}</span>
-                        </button>
-                      }
-                      <mat-divider></mat-divider>
+                              | transloco
+                                : {
+                                    count: contentStats.get(content.id)?.count,
+                                  }
+                          }}</span>
+                        }
+                        @if (
+                          contentStats.get(content.id)?.correct !== undefined
+                        ) {
+                          <span>{{
+                            'creator.content.answer-correct'
+                              | transloco
+                                : {
+                                    percentage: getPercentageString(
+                                      contentStats.get(content.id)?.correct
+                                    ),
+                                  }
+                          }}</span>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                class="button-bar"
+                [ngClass]="{
+                  'show-bar':
+                    i === activeMenuIndex || content.id === activeContentId,
+                }"
+              >
+                @if (contentTypes.indexOf(content.format) > -1) {
+                  <div fxLayout="row">
+                    @if (isPublished(i)) {
+                      <lib-extension-point
+                        extensionId="content-focus"
+                        [extensionData]="{
+                          contentId: content.id,
+                          contentGroup: contentGroup,
+                          contents: contents,
+                        }"
+                        (extensionEvent)="updateActive($event)"
+                      ></lib-extension-point>
+                    }
+                    @if (
+                      content.format === 'TEXT' &&
+                      content.state.answersPublished &&
+                      !isModerator
+                    ) {
                       <button
-                        mat-menu-item
+                        mat-icon-button
                         (click)="
-                          showContentGroupCreationDialog(content.id, action)
+                          toggleAnswersPublished(content);
+                          $event.stopPropagation()
                         "
                         [attr.aria-label]="
-                          'creator.content.a11y-new-content-group' | transloco
+                          'creator.content.a11y-dont-publish-answers'
+                            | transloco
+                        "
+                        matTooltip="{{
+                          'creator.content.dont-publish-answers' | transloco
+                        }}"
+                        appTrackInteraction="Content publish text answers toggled"
+                        appTrackName="off"
+                      >
+                        <mat-icon class="unlocked">visibility</mat-icon>
+                      </button>
+                    }
+                    @if (
+                      content.format === 'TEXT' &&
+                      !content.state.answersPublished &&
+                      !isModerator
+                    ) {
+                      <button
+                        mat-icon-button
+                        color="primary"
+                        (click)="
+                          toggleAnswersPublished(content);
+                          $event.stopPropagation()
+                        "
+                        [attr.aria-label]="
+                          'creator.content.a11y-publish-answers' | transloco
+                        "
+                        matTooltip="{{
+                          'creator.content.publish-answers' | transloco
+                        }}"
+                        appTrackInteraction="Content publish text answers toggled"
+                        appTrackName="on"
+                      >
+                        <mat-icon>visibility_off</mat-icon>
+                      </button>
+                    }
+                    @if (
+                      !isModerator &&
+                      hasSpecificPublishing() &&
+                      i !== contentGroup.publishingIndex
+                    ) {
+                      <button
+                        color="primary"
+                        mat-icon-button
+                        (click)="
+                          updatePublishingIndex(i); $event.stopPropagation()
+                        "
+                        [matTooltip]="
+                          'creator.content.' +
+                            (isSinglePublished() ? 'publish' : 'publish-up-to')
+                            | transloco
                         "
                       >
-                        <mat-icon>add</mat-icon>
+                        <mat-icon>lock_open</mat-icon>
+                      </button>
+                    }
+                    @if (!isModerator) {
+                      <button
+                        fxHide.xs
+                        mat-icon-button
+                        color="primary"
+                        (click)="$event.stopPropagation()"
+                        [routerLink]="['edit', content.id]"
+                        [matTooltip]="
+                          'creator.content.edit-content' | transloco
+                        "
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        color="primary"
+                        #menuTrigger="matMenuTrigger"
+                        [matMenuTriggerFor]="moreActions"
+                        (click)="$event.stopPropagation()"
+                        (menuOpened)="openedMenu(i)"
+                        matTooltip="{{
+                          'creator.content.more-options' | transloco
+                        }}"
+                      >
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                    }
+                    <mat-menu
+                      #moreActions="matMenu"
+                      xPosition="before"
+                      (closed)="closedMenu()"
+                    >
+                      <button
+                        fxHide.gt-xs
+                        mat-menu-item
+                        [routerLink]="['edit', content.id]"
+                      >
+                        <mat-icon>edit</mat-icon>
+                        {{ 'creator.content.edit-content' | transloco }}
+                      </button>
+                      <button
+                        mat-menu-item
+                        [matMenuTriggerFor]="chooseGroups"
+                        [matMenuTriggerData]="{ action: 'copy' }"
+                      >
+                        <mat-icon>library_add</mat-icon>
                         <span>{{
-                          'creator.content.new-content-group' | transloco
+                          'creator.content.copy-content-to-group' | transloco
                         }}</span>
                       </button>
-                    </ng-template>
-                  </mat-menu>
-                </div>
-              }
-              @if (contentTypes.indexOf(content.format) === -1) {
-                <button
-                  class="not-supported"
-                  mat-icon-button
-                  #warning="matTooltip"
-                  matTooltip="{{
-                    'creator.content.format-not-supported' | transloco
-                  }}"
-                  (click)="warning.toggle(); $event.stopPropagation()"
-                >
-                  <mat-icon class="icon-warn-soft">warning</mat-icon>
-                </button>
-              }
+                      <button
+                        mat-menu-item
+                        [matMenuTriggerFor]="chooseGroups"
+                        [matMenuTriggerData]="{ action: 'move' }"
+                      >
+                        <mat-icon>drive_file_move_outline</mat-icon>
+                        <span>{{
+                          'creator.content.move-content-to-group' | transloco
+                        }}</span>
+                      </button>
+                      <button mat-menu-item (click)="duplicate(content.id)">
+                        <mat-icon>dynamic_feed</mat-icon>
+                        <span>{{
+                          'creator.content.duplicate-content' | transloco
+                        }}</span>
+                      </button>
+                      <mat-divider></mat-divider>
+                      @if (content.format === ContentType.WORDCLOUD) {
+                        <button
+                          mat-menu-item
+                          (click)="resetBannedAnswers(content.id)"
+                        >
+                          <mat-icon>lock_reset</mat-icon>
+                          <span>{{
+                            'creator.content.reset-banned-answers' | transloco
+                          }}</span>
+                        </button>
+                      }
+                      @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
+                        <button mat-menu-item (click)="deleteAnswers(content)">
+                          <mat-icon>clear_all</mat-icon>
+                          <span>{{
+                            'creator.content.delete-answers' | transloco
+                          }}</span>
+                        </button>
+                      }
+                      <div
+                        [matTooltip]="
+                          'creator.content.starting-new-round-not-possible'
+                            | transloco
+                        "
+                        [matTooltipDisabled]="content.state.round === 1"
+                        matTooltipPosition="before"
+                      >
+                        @if (
+                          [
+                            ContentType.CHOICE,
+                            ContentType.BINARY,
+                            ContentType.SCALE,
+                            ContentType.NUMERIC,
+                          ].includes(content.format)
+                        ) {
+                          <button
+                            mat-menu-item
+                            (click)="startNewRound(content)"
+                            [disabled]="content.state.round > 1"
+                          >
+                            <mat-icon>replay</mat-icon>
+                            {{ 'creator.content.start-new-round' | transloco }}
+                          </button>
+                        }
+                      </div>
+                      <button mat-menu-item (click)="deleteContent(i)">
+                        <mat-icon color="warn">delete_forever</mat-icon>
+                        <span>{{
+                          'creator.content.delete-content' | transloco
+                        }}</span>
+                      </button>
+                    </mat-menu>
+                    <mat-menu #chooseGroups="matMenu" xPosition="before">
+                      <ng-template matMenuContent let-action="action">
+                        @for (
+                          groupStats of contentGroupStats;
+                          track groupStats;
+                          let i = $index
+                        ) {
+                          <button
+                            mat-menu-item
+                            [disabled]="i === currentGroupIndex"
+                            (click)="
+                              useContentInOtherGroup(
+                                content.id,
+                                groupStats,
+                                action
+                              )
+                            "
+                            [attr.aria-label]="
+                              'creator.content.a11y-add-to-this-content-group'
+                                | transloco: { name: groupStats.groupName }
+                            "
+                          >
+                            <span>{{ groupStats.groupName }}</span>
+                          </button>
+                        }
+                        <mat-divider></mat-divider>
+                        <button
+                          mat-menu-item
+                          (click)="
+                            showContentGroupCreationDialog(content.id, action)
+                          "
+                          [attr.aria-label]="
+                            'creator.content.a11y-new-content-group' | transloco
+                          "
+                        >
+                          <mat-icon>add</mat-icon>
+                          <span>{{
+                            'creator.content.new-content-group' | transloco
+                          }}</span>
+                        </button>
+                      </ng-template>
+                    </mat-menu>
+                  </div>
+                }
+                @if (contentTypes.indexOf(content.format) === -1) {
+                  <button
+                    class="not-supported"
+                    mat-icon-button
+                    #warning="matTooltip"
+                    matTooltip="{{
+                      'creator.content.format-not-supported' | transloco
+                    }}"
+                    (click)="warning.toggle(); $event.stopPropagation()"
+                  >
+                    <mat-icon class="icon-warn-soft">warning</mat-icon>
+                  </button>
+                }
+              </div>
             </div>
-          </div>
-        </button>
+          </button>
+          @if (isRangePublished() && contentGroup.publishingIndex === i) {
+            <div
+              cdkDrag
+              (cdkDragStarted)="publishingChangeActive = true"
+              (cdkDragDropped)="dropPublishingDivider($event)"
+              cdkDragBoundary=".content-list"
+              class="locked-divider-container"
+            >
+              <div class="locked-divider primary-background"></div>
+              <div
+                class="locked-drag primary-border primary"
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxLayoutGap="4px"
+              >
+                <mat-icon>lock_open</mat-icon>
+                <span>{{
+                  'creator.content.published-up-to-here' | transloco
+                }}</span>
+              </div>
+            </div>
+          }
+        </div>
       }
       @if (attributionsExist) {
         <button
