@@ -592,5 +592,11 @@
   },
   "general": {
     "a11y-remove-filter": "Quitar filtro"
+  },
+  "ordinal": {
+    "one": "",
+    "two": "",
+    "few": "",
+    "other": "°"
   }
 }

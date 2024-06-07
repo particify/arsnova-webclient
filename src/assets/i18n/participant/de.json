@@ -58,9 +58,12 @@
     "new-round-started": "Es wurde eine neue Runde gestartet.",
     "answers-reset": "Die Antworten wurden zurückgesetzt.",
     "attribution-info": "Dieser Inhalt basiert auf einer Vorlage von {{attribution}}, welche unter {{license}} lizenziert wurde.",
-    "you-are-at-position": "Du bist auf dem {{ position }}. Platz!",
-    "show-contents": "Inhalte anzeigen",
-    "hide-contents": "Inhalte ausblenden"
+    "you-are-at-position": "Du bist auf dem {{ position }} Platz!",
+    "contents": "Inhalte",
+    "leaderboard-position": "Pos.",
+    "leaderboard-name": "Name",
+    "leaderboard-points": "Punkte",
+    "leaderboard-duration": "Zeit"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",

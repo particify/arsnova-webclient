@@ -9,11 +9,7 @@
     <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
     <div fxLayout="column" fxLayoutGap="24px">
       <div
-        *ngIf="
-          !isLoading &&
-          group.groupType === GroupType.QUIZ &&
-          userLeaderboardItem
-        "
+        *ngIf="!isLoading && group.leaderboardEnabled && userLeaderboardItem"
         fxLayout="column"
         fxLayoutAlign="start center"
         fxLayoutGap="24px"
@@ -22,7 +18,7 @@
         <span class="position-text">
           {{
             'participant.content.you-are-at-position'
-              | transloco: { position: getPosition() }
+              | transloco: { position: getPosition() | ordinal }
           }}
         </span>
       </div>
@@ -33,11 +29,7 @@
         class="info-chart-container"
       >
         <app-info-chart
-          *ngIf="
-            group.groupType === GroupType.QUIZ &&
-            leaderboard &&
-            userLeaderboardItem
-          "
+          *ngIf="group.leaderboardEnabled && leaderboard && userLeaderboardItem"
           id="points-info-chart"
           chartId="points-chart"
           [dataText]="userLeaderboardItem.score.toString()"
@@ -57,12 +49,6 @@
           [infoText]="'participant.content.answer-state-neutral' | transloco"
         ></app-info-chart>
       </div>
-      <app-leaderboard
-        *ngIf="!isLoading && group.groupType === GroupType.QUIZ && leaderboard"
-        fxFill
-        [leaderboardItems]="leaderboard"
-        [aliasId]="alias?.id"
-      ></app-leaderboard>
       <app-hint
         *ngIf="!isLoading && !leaderboard && getLockedContentCount() > 0"
         [ngStyle]="{ 'margin-top': isPureInfoSeries ? '0' : '-1em' }"
@@ -76,22 +62,17 @@
           ) | transloco: { count: getLockedContentCount() }
         "
       ></app-hint>
-      <div
-        *ngIf="group.groupType === GroupType.QUIZ"
-        fxLayout="row"
-        fxLayoutAlign="center"
-      >
-        <button mat-stroked-button (click)="showContents = !showContents">
-          {{
-            (showContents
-              ? 'participant.content.hide-contents'
-              : 'participant.content.show-contents'
-            ) | transloco
-          }}
-          <mat-icon>{{
-            showContents ? 'expand_less' : 'expand_more'
-          }}</mat-icon>
-        </button>
+      <div *ngIf="group.leaderboardEnabled" fxLayout="row">
+        <mat-tab-group
+          (selectedTabChange)="selectedTabIndex = $event.index"
+          [selectedIndex]="selectedTabIndex"
+          [animationDuration]="0"
+        >
+          <mat-tab [label]="'content.leaderboard' | transloco"> </mat-tab>
+          <mat-tab
+            [label]="'participant.content.contents' | transloco"
+          ></mat-tab>
+        </mat-tab-group>
       </div>
       <div
         *ngIf="group.groupType !== GroupType.QUIZ"
@@ -116,9 +97,21 @@
         </button>
       </div>
       <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+      <app-leaderboard
+        *ngIf="
+          !isLoading &&
+          group.leaderboardEnabled &&
+          leaderboard &&
+          selectedTabIndex === 0
+        "
+        fxFill
+        [leaderboardItems]="leaderboard"
+        [aliasId]="alias?.id"
+      ></app-leaderboard>
       <mat-list
         *ngIf="
-          !isLoading && (group.groupType !== GroupType.QUIZ || showContents)
+          !isLoading &&
+          (group.groupType !== GroupType.QUIZ || selectedTabIndex === 1)
         "
       >
         <mat-list-item

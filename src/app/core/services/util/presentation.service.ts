@@ -31,7 +31,7 @@ export class PresentationService {
   private commentZoomChanged = new Subject<number>();
   private contentGroupUpdated = new Subject<ContentGroup>();
   private roundStateChanged = new Subject<RoundState>();
-  private countdownStarted = new Subject<Content>();
+  private countdownChanged = new Subject<Content>();
 
   private currentContent?: Content;
 
@@ -64,14 +64,28 @@ export class PresentationService {
       this.contentService
         .startCountdown(this.currentContent.roomId, this.currentContent.id)
         .subscribe(() => {
-          if (this.currentContent) {
-            this.contentService
-              .getContent(this.currentContent.roomId, this.currentContent.id)
-              .subscribe((content) => {
-                this.currentContent = content;
-                this.countdownStarted.next(content);
-              });
-          }
+          this.reloadCurrentContent();
+        });
+    }
+  }
+
+  stopCountdown(): void {
+    if (this.currentContent?.duration) {
+      this.contentService
+        .stopCountdown(this.currentContent.roomId, this.currentContent.id)
+        .subscribe(() => {
+          this.reloadCurrentContent();
+        });
+    }
+  }
+
+  reloadCurrentContent(): void {
+    if (this.currentContent) {
+      this.contentService
+        .getContent(this.currentContent.roomId, this.currentContent.id)
+        .subscribe((content) => {
+          this.currentContent = content;
+          this.countdownChanged.next(content);
         });
     }
   }
@@ -145,7 +159,7 @@ export class PresentationService {
     this.feedbackStarted$.next(started);
   }
 
-  getCountdownStarted(): Observable<Content> {
-    return this.countdownStarted;
+  getCountdownChanged(): Observable<Content> {
+    return this.countdownChanged;
   }
 }

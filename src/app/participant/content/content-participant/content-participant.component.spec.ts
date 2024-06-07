@@ -22,6 +22,7 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentGroup } from '@app/core/models/content-group';
 
 describe('ContentParticipantComponent', () => {
   let component: ContentParticipantComponent;
@@ -103,6 +104,7 @@ describe('ContentParticipantComponent', () => {
     fixture = TestBed.createComponent(ContentParticipantComponent);
     component = fixture.componentInstance;
     component.content = new ContentChoice('1234', 'subject', 'body', []);
+    component.contentGroup = new ContentGroup();
     fixture.detectChanges();
   });
 

@@ -152,6 +152,8 @@
     "statistics-are-not-published": "Statistiken sind gesperrt",
     "correct-options-are-published": "Richtige Antworten sind freigegeben",
     "correct-options-are-not-published": "Richtige Antworten sind gesperrt",
+    "disable-leaderboard": "Rangliste deaktivieren",
+    "enable-leaderboard": "Rangliste aktivieren",
     "edit-content": "Bearbeiten",
     "copy-content-to-group": "Kopieren",
     "move-content-to-group": "Verschieben",
@@ -255,7 +257,10 @@
     "seconds-to-answer": "Sekunden zum Antworten",
     "group-not-published": "Fragenserie ist gesperrt.",
     "to-start-quiz": "zum Starten des Quizzes",
-    "start-quiz": "Quiz starten"
+    "start-quiz": "Quiz starten",
+    "to-stop-quiz": "zum Stoppen des Quizzes",
+    "stop-quiz": "Quiz stoppen",
+    "answering-is-locked": "Beantwortung ist gesperrt"
   },
   "survey": {
     "a11y-stop-survey": "Stoppt das Live Feedback.",

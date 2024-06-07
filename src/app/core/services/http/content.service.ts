@@ -463,4 +463,17 @@ export class ContentService extends AbstractEntityService<Content> {
         )
       );
   }
+
+  stopCountdown(roomId: string, contentId: string): Observable<void> {
+    const connectionUrl = this.buildUri(`/${contentId}/stop`, roomId);
+    return this.http
+      .post<void>(connectionUrl, httpOptions)
+      .pipe(
+        catchError(
+          this.handleError<void>(
+            `Stop countdown for content, room: ${roomId}, content: ${contentId}`
+          )
+        )
+      );
+  }
 }

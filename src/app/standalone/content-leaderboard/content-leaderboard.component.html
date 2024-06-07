@@ -1,41 +1,73 @@
-<mat-list>
-  <mat-list-item
-    *ngFor="let item of leaderboardItems; index as i"
-    class="bottom-border"
-    [ngClass]="{
-      'primary-variant': item.userAlias.id === aliasId,
-    }"
-  >
-    <div
-      fxLayout="row wrap"
-      fxLayoutAlign="space-between center"
-      class="leaderboard-item"
+<table *ngIf="dataSource" mat-table [dataSource]="dataSource" matSort>
+  <ng-container matColumnDef="position">
+    <th style="width: 40px" mat-header-cell *matHeaderCellDef>
+      {{ 'participant.content.leaderboard-position' | transloco }}
+    </th>
+    <td
       [ngClass]="{
-        'bold-text': item.userAlias.id === aliasId,
+        'bold-text primary bg-dark': element.alias.id === aliasId,
       }"
+      mat-cell
+      *matCellDef="let element"
     >
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="1em">
-        <span>{{ i + 1 }}</span>
-        <span>{{ item.userAlias.alias }}</span>
-      </div>
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="1em">
-        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0.25em">
-          <span>{{ item.score || 0 }}</span>
-          <span>{{ 'content.points' | transloco }}</span>
-          <span class="current-result">{{
-            '(+' + (item.currentResult.points || 0) + ')'
-          }}</span>
-        </div>
-        <div
-          *ngIf="showDuration"
-          fxLayout="row"
-          fxLayoutAlign="end center"
-          fxLayoutGap="0.5em"
-          class="current-result"
-        >
-          <span>{{ item.currentResult.durationMs || 0 | duration }}</span>
-        </div>
-      </div>
-    </div>
-  </mat-list-item>
-</mat-list>
+      {{ element.position | ordinal }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>
+      {{ 'participant.content.leaderboard-name' | transloco }}
+    </th>
+    <td
+      mat-cell
+      [ngClass]="{
+        'bold-text primary bg-dark': element.alias.id === aliasId,
+      }"
+      *matCellDef="let element"
+    >
+      {{ element.alias.alias }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="score">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      start="desc"
+      style="width: 100px"
+    >
+      {{ 'participant.content.leaderboard-points' | transloco }}
+    </th>
+    <td
+      mat-cell
+      [ngClass]="{
+        'bold-text primary bg-dark': element.alias.id === aliasId,
+      }"
+      *matCellDef="let element"
+    >
+      <span>
+        {{ element.score }}
+      </span>
+      <span class="less-visible">{{ '(+' + element.currentPoints + ')' }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="currentDuration">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 100px">
+      {{ 'participant.content.leaderboard-duration' | transloco }}
+    </th>
+    <td
+      mat-cell
+      [ngClass]="{
+        'bold-text primary bg-dark': element.alias.id === aliasId,
+      }"
+      *matCellDef="let element"
+    >
+      <span class="less-visible">{{ element.currentDuration | duration }}</span>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

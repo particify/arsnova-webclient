@@ -13,10 +13,9 @@
       [ngClass]="{
         'bold-text': item.userAlias.id === aliasId,
       }"
-      style="color: var(--black)"
     >
       <div fxLayout="row" fxLayoutGap="1em">
-        <span>{{ i + 1 }}</span>
+        <span>{{ i + 1 | ordinal }}</span>
         <span>{{ item.userAlias.alias }}</span>
       </div>
       <div fxLayout="row" fxLayoutGap="1.5em">

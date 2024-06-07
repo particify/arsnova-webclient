@@ -10,7 +10,7 @@
     [totalCount]="totalCount"
   ></app-content-step-info>
   <form
-    *ngIf="!alias.id"
+    *ngIf="alias && !alias.id"
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="0.75em"
@@ -23,6 +23,7 @@
         matInput
         [(ngModel)]="enteredAlias"
         [placeholder]="alias.alias"
+        [maxLength]="30"
       />
     </mat-form-field>
     <app-loading-button
@@ -30,7 +31,10 @@
       (clicked)="setAlias()"
     ></app-loading-button>
   </form>
-  <span *ngIf="alias.id">{{
-    'content.get-ready-alias' | transloco: { alias: alias.alias }
+  <span *ngIf="alias?.id">{{
+    'content.get-ready-alias' | transloco: { alias: alias?.alias }
   }}</span>
+  <span *ngIf="!alias">
+    {{ 'content.get-ready' | transloco }}
+  </span>
 </div>

@@ -5,3 +5,10 @@
     font-size: $s-font-size;
   }
 }
+
+:host-context(.theme-dark) .mat-mdc-list-item.primary-variant {
+  --mdc-list-list-item-label-text-color: var(--palette-primary-contrast-200);
+  --mdc-list-list-item-hover-label-text-color: var(
+    --palette-primary-contrast-200
+  );
+}

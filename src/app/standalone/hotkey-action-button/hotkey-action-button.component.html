@@ -1,4 +1,10 @@
-<div class="button-container" [ngClass]="{ 'nav-bar-below': isNavBarVisible }">
+<div
+  class="button-container"
+  [ngClass]="{
+    'nav-bar-below': isNavBarVisible,
+    'bottom-space': additionalBottomSpace,
+  }"
+>
   <div fxLayout="column" fxLayoutGap="0.75em">
     <div
       fxLayout="row"

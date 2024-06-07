@@ -58,6 +58,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CoreModule } from '@app/core/core.module';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 
 interface ContentActionTab {
   route: string;
@@ -110,7 +111,7 @@ export class ContentParticipantComponent
   implements OnInit, OnChanges
 {
   @Input({ required: true }) content!: Content;
-  @Input({ required: true }) contentGroupContentIds!: string[];
+  @Input({ required: true }) contentGroup!: ContentGroup;
   @Input() answer?: Answer;
   @Input() lastContent = false;
   @Input() active = false;
@@ -118,7 +119,6 @@ export class ContentParticipantComponent
   @Input() statsPublished = false;
   @Input() correctOptionsPublished = false;
   @Input() attribution?: string;
-  @Input() quizMode = false;
   @Input() alias?: RoomUserAlias;
   @Input() showCard = true;
   @Output() answerChanged = new EventEmitter<Answer>();
@@ -154,6 +154,7 @@ export class ContentParticipantComponent
   selectedRoute = '';
   endDate?: Date;
   answeringLocked = false;
+  GroupType = GroupType;
 
   tabs: ContentActionTab[] = [
     {
@@ -192,6 +193,7 @@ export class ContentParticipantComponent
   ngOnInit(): void {
     if (this.active) {
       this.selectedRoute = this.route.snapshot.params['action'] || '';
+      this.checkForCountdown();
     }
     this.setExtensionData(this.content.roomId, this.content.id);
     if (this.answer) {
@@ -202,19 +204,6 @@ export class ContentParticipantComponent
     this.initContentData();
     this.isMultiple = (this.content as ContentChoice).multiple;
     this.a11yMsg = this.getA11yMessage();
-    if (this.quizMode) {
-      if (this.content.state.answeringEndTime) {
-        const now = new Date();
-        if (
-          now.getTime() >
-          new Date(this.content.state.answeringEndTime).getTime()
-        ) {
-          this.answeringLocked = true;
-        } else {
-          this.startCountdown(this.content.state.answeringEndTime);
-        }
-      }
-    }
     this.isLoading = false;
     this.eventService
       .on<EntityChangeNotification>('EntityChangeNotification')
@@ -249,13 +238,14 @@ export class ContentParticipantComponent
           this.startCountdown(newState.answeringEndTime);
         }
         this.content.state = newState;
-        this.showTab('');
+        this.updateTab('');
         this.isLoading = false;
       });
   }
 
   private startCountdown(endDate: Date): void {
     if (this.active) {
+      this.answeringLocked = false;
       this.endDate = new Date(endDate);
     }
   }
@@ -268,6 +258,25 @@ export class ContentParticipantComponent
       !changes.active.previousValue
     ) {
       this.updateTab(this.selectedRoute);
+    }
+    if (changes.active && !!changes.active.currentValue) {
+      this.checkForCountdown();
+    }
+  }
+
+  checkForCountdown(): void {
+    if (this.contentGroup.groupType === GroupType.QUIZ) {
+      if (this.content.state.answeringEndTime) {
+        const now = new Date();
+        if (
+          now.getTime() >
+          new Date(this.content.state.answeringEndTime).getTime()
+        ) {
+          this.answeringLocked = true;
+        } else {
+          this.startCountdown(this.content.state.answeringEndTime);
+        }
+      }
     }
   }
 
@@ -374,16 +383,19 @@ export class ContentParticipantComponent
         return (
           this.statsPublished ||
           this.content.format === ContentType.FLASHCARD ||
-          this.quizMode
+          this.contentGroup.leaderboardEnabled
         );
       case 'results':
         return (
           this.statsPublished ||
           this.content.format === ContentType.FLASHCARD ||
-          this.quizMode
+          this.contentGroup.leaderboardEnabled
         );
       case 'leaderboard':
-        return this.quizMode && this.content.format !== ContentType.FLASHCARD;
+        return (
+          this.contentGroup.leaderboardEnabled &&
+          this.content.format !== ContentType.FLASHCARD
+        );
       default:
         return false;
     }
@@ -435,6 +447,6 @@ export class ContentParticipantComponent
   }
 
   getIndexInContentGroup(): number {
-    return this.contentGroupContentIds.indexOf(this.content.id);
+    return this.contentGroup.contentIds.indexOf(this.content.id);
   }
 }

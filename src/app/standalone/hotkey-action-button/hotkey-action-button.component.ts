@@ -25,6 +25,7 @@ export class HotkeyActionButtonComponent {
   @Input() infoLabel?: string;
   @Input() infoIcon?: string;
   @Input() isNavBarVisible = true;
+  @Input() additionalBottomSpace = false;
   @Output() buttonClicked = new EventEmitter<void>();
 
   hotkeyAction = HotkeyAction.CLICK;

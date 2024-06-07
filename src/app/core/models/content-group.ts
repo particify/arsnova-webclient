@@ -10,6 +10,7 @@ export class ContentGroup {
   publishingMode: PublishingMode;
   publishingIndex: number;
   groupType: GroupType;
+  leaderboardEnabled: boolean;
 
   constructor(
     roomId = '',
@@ -19,7 +20,8 @@ export class ContentGroup {
     correctOptionsPublished = true,
     publishingMode = PublishingMode.NONE,
     publishingIndex = 0,
-    groupType = GroupType.MIXED
+    groupType = GroupType.MIXED,
+    leaderboardEnabled = true
   ) {
     this.roomId = roomId;
     this.name = name;
@@ -29,6 +31,7 @@ export class ContentGroup {
     this.publishingMode = publishingMode;
     this.publishingIndex = publishingIndex;
     this.groupType = groupType;
+    this.leaderboardEnabled = leaderboardEnabled;
   }
 }
 
