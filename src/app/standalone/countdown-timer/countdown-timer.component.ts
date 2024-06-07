@@ -24,6 +24,7 @@ const DELAY_BUFFER = 250;
 })
 export class CountdownTimerComponent implements OnInit, OnDestroy {
   @Input({ required: true }) endDate!: Date;
+  @Input({ required: true }) duration!: number;
   @Input() showIcon = false;
   @Input() layout = 'row';
   @Input() borderRadius = 0;

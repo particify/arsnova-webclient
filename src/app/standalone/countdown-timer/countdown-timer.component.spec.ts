@@ -14,6 +14,7 @@ describe('CountdownTimerComponent', () => {
 
     fixture = TestBed.createComponent(CountdownTimerComponent);
     component = fixture.componentInstance;
+    component.endDate = new Date();
     fixture.detectChanges();
   });
 
