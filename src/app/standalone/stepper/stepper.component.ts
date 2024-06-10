@@ -289,29 +289,27 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
     }
   }
 
-  containerAnimationDone() {
-    setTimeout(() => {
-      switch (this.stepAnimationState) {
-        case STEP_ANIMATION_STATE.NEXT_IN:
-          this.stepAnimationState = STEP_ANIMATION_STATE.NEXT_OUT;
-          return;
-        case STEP_ANIMATION_STATE.NEXT_OUT:
-          this.stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
-          if (this.nextIndex > this.headerPos + 2) {
-            this.moveHeaderLeft();
-          }
-          break;
-        case STEP_ANIMATION_STATE.PREV_IN:
-          this.stepAnimationState = STEP_ANIMATION_STATE.PREV_OUT;
-          return;
-        case STEP_ANIMATION_STATE.PREV_OUT:
-          this.stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
-          if (this.nextIndex < this.headerPos + 2) {
-            this.moveHeaderRight();
-          }
-          break;
-      }
-      this.selectedIndex = this.nextIndex;
-    });
+  stepAnimationDone() {
+    switch (this.stepAnimationState) {
+      case STEP_ANIMATION_STATE.NEXT_IN:
+        this.stepAnimationState = STEP_ANIMATION_STATE.NEXT_OUT;
+        return;
+      case STEP_ANIMATION_STATE.NEXT_OUT:
+        this.stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
+        if (this.nextIndex > this.headerPos + 2) {
+          this.moveHeaderLeft();
+        }
+        break;
+      case STEP_ANIMATION_STATE.PREV_IN:
+        this.stepAnimationState = STEP_ANIMATION_STATE.PREV_OUT;
+        return;
+      case STEP_ANIMATION_STATE.PREV_OUT:
+        this.stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
+        if (this.nextIndex < this.headerPos + 2) {
+          this.moveHeaderRight();
+        }
+        break;
+    }
+    this.selectedIndex = this.nextIndex;
   }
 }
