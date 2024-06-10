@@ -23,6 +23,22 @@ import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
 
+export const STEPPER_ANIMATION_DURATION = 300;
+
+enum STEP_ANIMATION_STATE {
+  CURRENT = 'CURRENT',
+  NEXT_IN = 'NEXT_IN',
+  NEXT_OUT = 'NEXT_OUT',
+  PREV_IN = 'PREV_IN',
+  PREV_OUT = 'PREV_OUT',
+}
+
+enum HEADER_ANIMATION_STATE {
+  LEFT = 'LEFT',
+  INIT = 'INIT',
+  RIGHT = 'RIGHT',
+}
+
 @Component({
   standalone: true,
   imports: [CoreModule, TranslocoModule, CdkStepperModule],
@@ -32,25 +48,58 @@ import { CoreModule } from '@app/core/core.module';
   providers: [{ provide: CdkStepper, useExisting: StepperComponent }],
   animations: [
     trigger('slideContainer', [
-      state('next', style({ opacity: 0, transform: 'translateX(-50%)' })),
-      state('next-2', style({ opacity: 0, transform: 'translateX(50%)' })),
-      state('current', style({ opacity: 1, transform: 'translateX(0)' })),
-      state('prev', style({ opacity: 0, transform: 'translateX(50%)' })),
-      state('prev-2', style({ opacity: 0, transform: 'translateX(-50%)' })),
-      transition('current => *', animate('150ms ease-in')),
-      transition('* => current', animate('150ms ease-out')),
+      state(
+        STEP_ANIMATION_STATE.NEXT_IN,
+        style({ opacity: 0, transform: 'translateX(-50%)' })
+      ),
+      state(
+        STEP_ANIMATION_STATE.NEXT_OUT,
+        style({ opacity: 0, transform: 'translateX(50%)' })
+      ),
+      state(
+        STEP_ANIMATION_STATE.CURRENT,
+        style({ opacity: 1, transform: 'translateX(0)' })
+      ),
+      state(
+        STEP_ANIMATION_STATE.PREV_IN,
+        style({ opacity: 0, transform: 'translateX(50%)' })
+      ),
+      state(
+        STEP_ANIMATION_STATE.PREV_OUT,
+        style({ opacity: 0, transform: 'translateX(-50%)' })
+      ),
+      transition(
+        `${STEP_ANIMATION_STATE.CURRENT} => *`,
+        animate(`${STEPPER_ANIMATION_DURATION / 2}ms ease-in`)
+      ),
+      transition(
+        `* => ${STEP_ANIMATION_STATE.CURRENT}`,
+        animate(`${STEPPER_ANIMATION_DURATION / 2}ms ease-out`)
+      ),
     ]),
     trigger('slideHeader', [
-      state('left', style({ transform: `translateX({{position}}%)` }), {
-        params: { position: '0' },
-      }),
-      state('init', style({ transform: `translateX({{position}}%)` }), {
-        params: { position: '0' },
-      }),
-      state('right', style({ transform: `translateX({{position}}%)` }), {
-        params: { position: '0' },
-      }),
-      transition('* => *', animate('400ms ease-out')),
+      state(
+        HEADER_ANIMATION_STATE.LEFT,
+        style({ transform: `translateX({{position}}%)` }),
+        {
+          params: { position: '0' },
+        }
+      ),
+      state(
+        HEADER_ANIMATION_STATE.INIT,
+        style({ transform: `translateX({{position}}%)` }),
+        {
+          params: { position: '0' },
+        }
+      ),
+      state(
+        HEADER_ANIMATION_STATE.RIGHT,
+        style({ transform: `translateX({{position}}%)` }),
+        {
+          params: { position: '0' },
+        }
+      ),
+      transition('* => *', animate(`${STEPPER_ANIMATION_DURATION}ms ease-out`)),
     ]),
   ],
 })
@@ -63,8 +112,8 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() fixedWitdth = true;
   @Input() additionalStepIcon?: string;
   headerPos = 0;
-  containerAnimationState = 'current';
-  headerAnimationState = 'init';
+  stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
+  headerAnimationState = HEADER_ANIMATION_STATE.INIT;
   private nextIndex = 0;
   private swipeXLocation = 0;
   private swipeTime = 0;
@@ -184,9 +233,9 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   onClick(index: number) {
     if (index > this.selectedIndex) {
-      this.containerAnimationState = 'next';
+      this.stepAnimationState = STEP_ANIMATION_STATE.NEXT_IN;
     } else if (index < this.selectedIndex) {
-      this.containerAnimationState = 'prev';
+      this.stepAnimationState = STEP_ANIMATION_STATE.PREV_IN;
     } else {
       return;
     }
@@ -200,7 +249,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   headerAnimationDone() {
     setTimeout(() => {
-      this.headerAnimationState = 'init';
+      this.headerAnimationState = HEADER_ANIMATION_STATE.INIT;
     });
   }
 
@@ -218,7 +267,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
       } else {
         this.headerPos--;
       }
-      this.headerAnimationState = 'right';
+      this.headerAnimationState = HEADER_ANIMATION_STATE.RIGHT;
     }
   }
 
@@ -236,27 +285,27 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
       } else {
         this.headerPos++;
       }
-      this.headerAnimationState = 'left';
+      this.headerAnimationState = HEADER_ANIMATION_STATE.LEFT;
     }
   }
 
   containerAnimationDone() {
     setTimeout(() => {
-      switch (this.containerAnimationState) {
-        case 'next':
-          this.containerAnimationState = 'next-2';
+      switch (this.stepAnimationState) {
+        case STEP_ANIMATION_STATE.NEXT_IN:
+          this.stepAnimationState = STEP_ANIMATION_STATE.NEXT_OUT;
           return;
-        case 'next-2':
-          this.containerAnimationState = 'current';
+        case STEP_ANIMATION_STATE.NEXT_OUT:
+          this.stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
           if (this.nextIndex > this.headerPos + 2) {
             this.moveHeaderLeft();
           }
           break;
-        case 'prev':
-          this.containerAnimationState = 'prev-2';
+        case STEP_ANIMATION_STATE.PREV_IN:
+          this.stepAnimationState = STEP_ANIMATION_STATE.PREV_OUT;
           return;
-        case 'prev-2':
-          this.containerAnimationState = 'current';
+        case STEP_ANIMATION_STATE.PREV_OUT:
+          this.stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
           if (this.nextIndex < this.headerPos + 2) {
             this.moveHeaderRight();
           }
