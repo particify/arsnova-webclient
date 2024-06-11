@@ -162,6 +162,7 @@
                 >
                   <input
                     [(ngModel)]="duration"
+                    [disabled]="isAnswered"
                     matInput
                     type="number"
                     max="600"
