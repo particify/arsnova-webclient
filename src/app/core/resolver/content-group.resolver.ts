@@ -12,7 +12,7 @@ export class ContentGroupResolver implements Resolve<ContentGroup> {
     return this.contentGroupService.getByRoomIdAndName(
       route.parent?.data.room.id,
       route.params['seriesName'],
-      true
+      !!route.data.extendedView
     );
   }
 }
