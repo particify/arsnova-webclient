@@ -76,8 +76,8 @@
   </div>
   <div
     fxFill
-    [@slideContainer]="containerAnimationState"
-    (@slideContainer.done)="containerAnimationDone()"
+    [@slideContainer]="stepAnimationState"
+    (@slideContainer.done)="stepAnimationDone()"
   >
     <ng-container [ngTemplateOutlet]="selected?.content || null"></ng-container>
   </div>

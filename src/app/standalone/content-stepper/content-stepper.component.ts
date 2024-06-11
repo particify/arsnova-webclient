@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -30,7 +31,7 @@ import { StepperComponent } from '@app/standalone/stepper/stepper.component';
   templateUrl: './content-stepper.component.html',
   styleUrl: './content-stepper.component.scss',
 })
-export class ContentStepperComponent implements AfterViewInit {
+export class ContentStepperComponent implements AfterViewInit, OnInit {
   @ViewChild(StepperComponent) stepper!: StepperComponent;
 
   @Input({ required: true }) contents!: Content[];
@@ -46,13 +47,15 @@ export class ContentStepperComponent implements AfterViewInit {
   stepCount = 0;
   currentStep = 0;
 
+  ngOnInit(): void {
+    this.stepCount = this.contents.length + (this.attributions.length ? 1 : 0);
+  }
+
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.stepCount =
-        this.contents.length + (this.attributions.length ? 1 : 0);
       this.stepper?.init(this.startIndex, this.stepCount);
       this.updateIndex(this.startIndex);
-    }, 0);
+    });
   }
 
   updateIndex(index: number) {
