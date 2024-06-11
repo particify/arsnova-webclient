@@ -58,6 +58,7 @@ const routes: Routes = [
         (m) => m.ContentGroupModule
       ),
     title: 'series',
+    data: { extendedView: true },
     resolve: {
       contentGroup: ContentGroupResolver,
     },
