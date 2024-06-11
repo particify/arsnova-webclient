@@ -13,6 +13,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 
 const TIMER_UPDATE_INTERVAL = 1000;
+const DELAY_BUFFER = 250;
 
 @Component({
   selector: 'app-countdown-timer',
@@ -23,6 +24,7 @@ const TIMER_UPDATE_INTERVAL = 1000;
 })
 export class CountdownTimerComponent implements OnInit, OnDestroy {
   @Input({ required: true }) endDate!: Date;
+  @Input({ required: true }) duration!: number;
   @Input() showIcon = false;
   @Input() layout = 'row';
   @Input() borderRadius = 0;
@@ -36,6 +38,7 @@ export class CountdownTimerComponent implements OnInit, OnDestroy {
   constructor(private serverTimeService: ServerTimeService) {}
 
   ngOnInit(): void {
+    this.endDate.setTime(this.endDate.getTime() - DELAY_BUFFER);
     timer(0, TIMER_UPDATE_INTERVAL)
       .pipe(takeUntil(this.timerFinished$))
       .subscribe(() => {

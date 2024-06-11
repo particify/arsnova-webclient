@@ -108,8 +108,9 @@
   [ngClass]="{ 'over-control-bar': controlBarVisible }"
 >
   <app-countdown-timer
-    *ngIf="endDate && !answeringLocked"
+    *ngIf="content && content.duration && endDate && !answeringLocked"
     [endDate]="endDate"
+    [duration]="content.duration"
     [showIcon]="true"
     [layout]="'column-reverse'"
     [fontSize]="'24px'"

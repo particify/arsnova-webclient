@@ -8,7 +8,10 @@ import {
   PublishingMode,
 } from '@app/core/models/content-group';
 import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
-import { StepperComponent } from '@app/standalone/stepper/stepper.component';
+import {
+  STEPPER_ANIMATION_DURATION,
+  StepperComponent,
+} from '@app/standalone/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
@@ -213,7 +216,7 @@ export class ParticipantContentCarouselPageComponent
           if (this.started) {
             this.stepper.onClick(newIndex);
           } else {
-            this.initStepper(newIndex, 300);
+            this.initStepper(newIndex, STEPPER_ANIMATION_DURATION);
           }
         } else {
           this.lockedContentId = state.contentId;
@@ -318,16 +321,18 @@ export class ParticipantContentCarouselPageComponent
   }
 
   updateContentIndexUrl(index: number = 0) {
-    if ((!!index && this.currentStep !== index) || !this.isReloading) {
-      this.currentStep = index || 0;
-      this.replaceUrl([
-        'p',
-        this.shortId,
-        'series',
-        this.contentGroupName,
-        index + 1,
-      ]);
-    }
+    setTimeout(() => {
+      if ((!!index && this.currentStep !== index) || !this.isReloading) {
+        this.currentStep = index || 0;
+        this.replaceUrl([
+          'p',
+          this.shortId,
+          'series',
+          this.contentGroupName,
+          index + 1,
+        ]);
+      }
+    }, STEPPER_ANIMATION_DURATION);
   }
 
   isContentTimerActive(content: Content): boolean {

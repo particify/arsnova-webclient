@@ -6,9 +6,9 @@
 >
   <div class="progress-container" [style.border-radius]="borderRadius + 'px'">
     <div
-      fxFill
-      class="primary-background"
+      class="primary-background progress"
       [style.border-radius]="borderRadius + 'px'"
+      [style.width]="totalTime / duration / 10 + '%'"
       [style.transform]="'translateX(-100%)'"
       [style.transition]="'transform ' + totalTime + 'ms' + ' linear'"
     ></div>
