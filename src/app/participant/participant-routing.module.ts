@@ -14,6 +14,7 @@ import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ParticipantPageComponent } from '@app/participant/participant-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
+import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 
 const routes: Routes = [
   {
@@ -65,6 +66,9 @@ const routes: Routes = [
     data: {
       feature: RoutingFeature.CONTENTS,
     },
+    resolve: {
+      contentGroup: ContentGroupResolver,
+    },
     title: 'series',
   },
   {
@@ -73,6 +77,9 @@ const routes: Routes = [
     data: {
       feature: RoutingFeature.CONTENTS,
     },
+    resolve: {
+      contentGroup: ContentGroupResolver,
+    },
     title: 'series',
   },
   {
@@ -80,6 +87,9 @@ const routes: Routes = [
     component: ParticipantContentCarouselPageComponent,
     data: {
       feature: RoutingFeature.CONTENTS,
+    },
+    resolve: {
+      contentGroup: ContentGroupResolver,
     },
     title: 'series',
   },

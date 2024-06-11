@@ -50,6 +50,7 @@ const routes: Routes = [
       import(
         '@app/standalone/content-presentation/contents-page.component'
       ).then((m) => m.ContentsPageComponent),
+    data: { extendedView: true },
     resolve: {
       contentGroup: ContentGroupResolver,
     },
@@ -60,6 +61,7 @@ const routes: Routes = [
       import(
         '@app/standalone/content-presentation/contents-page.component'
       ).then((m) => m.ContentsPageComponent),
+    data: { extendedView: true },
     resolve: {
       contentGroup: ContentGroupResolver,
     },
