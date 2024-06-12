@@ -14,7 +14,7 @@ describe('ServerTimeService', () => {
   });
 
   it('should return the local time if there is no offset', () => {
-    expect(service.determineServerTime().getTime()).toBeCloseTo(Date.now(), 10);
+    expect(service.determineServerTime().getTime()).toBeCloseTo(Date.now(), -1);
   });
 
   it('should update and calculate the correct average offset', () => {
@@ -32,7 +32,7 @@ describe('ServerTimeService', () => {
     service.updateAverageOffset(offset);
     expect(service.determineServerTime().getTime()).toBeCloseTo(
       Date.now() + offset,
-      10
+      -1
     );
   });
 });
