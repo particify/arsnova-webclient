@@ -160,9 +160,21 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.presentationService.getCountdownChanged().subscribe((content) => {
       this.initScale();
       this.content.state = content.state;
-      this.endDate = new Date(this.content.state.answeringEndTime);
-      this.answeringLocked = new Date() > this.endDate;
+      if (this.content.state.answeringEndTime) {
+        this.endDate = new Date(this.content.state.answeringEndTime);
+        this.answeringLocked = new Date() > this.endDate;
+      } else {
+        this.endDate = undefined;
+      }
     });
+    this.contentService
+      .getAnswersDeleted()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((contentId) => {
+        if (contentId === this.content.id && this.content.duration) {
+          this.presentationService.reloadCurrentContent();
+        }
+      });
   }
 
   private toggleLeaderboard() {

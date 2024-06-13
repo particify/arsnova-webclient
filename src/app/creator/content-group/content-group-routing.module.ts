@@ -5,7 +5,7 @@ import { ContentEditingPageComponent } from './content-editing/content-editing-p
 import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { ParentRoute } from '@app/core/models/parent-route';
-import { LeaderboardPageComponent } from '@app/creator/content-group/leaderboard-page/leaderboard-page.component';
+import { LeaderboardPageComponent } from '@app/standalone/leaderboard-page/leaderboard-page.component';
 
 const routes: Routes = [
   {

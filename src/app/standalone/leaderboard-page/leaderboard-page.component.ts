@@ -1,20 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Component, DestroyRef, OnInit } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout';
+import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
-import { CoreModule } from '@app/core/core.module';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { TranslocoPipe } from '@ngneat/transloco';
+import { take, timer } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+const REFRESH_INTERVAL = 5000;
+const REFRESH_LIMIT = 100;
 
 @Component({
   selector: 'app-leaderboard-page',
   standalone: true,
   imports: [
-    CoreModule,
+    NgIf,
+    FlexModule,
+    MatIconModule,
     TranslocoPipe,
     LeaderboardComponent,
     LoadingIndicatorComponent,
+    BaseCardComponent,
   ],
   templateUrl: './leaderboard-page.component.html',
   styleUrl: './leaderboard-page.component.scss',
@@ -22,21 +33,25 @@ import { TranslocoPipe } from '@ngneat/transloco';
 export class LeaderboardPageComponent implements OnInit {
   leaderboardItems: LeaderboardItem[] = [];
   isLoading = true;
+  showCard: boolean;
 
   constructor(
     private contentGroupService: ContentGroupService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private destroyRef: DestroyRef
+  ) {
+    this.showCard = this.route.snapshot.data.showCard ?? true;
+  }
 
   ngOnInit(): void {
-    this.contentGroupService
-      .getByRoomIdAndName(
-        this.route.snapshot.data.room.id,
-        this.route.snapshot.params['seriesName']
-      )
-      .subscribe((group) => {
+    timer(0, REFRESH_INTERVAL)
+      .pipe(take(REFRESH_LIMIT), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
         this.contentGroupService
-          .getLeaderboard(this.route.snapshot.data.room.id, group.id)
+          .getLeaderboard(
+            this.route.snapshot.data.room.id,
+            this.route.snapshot.data.contentGroup.id
+          )
           .subscribe((items) => {
             this.leaderboardItems = items;
             this.isLoading = false;

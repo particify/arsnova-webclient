@@ -41,6 +41,7 @@ import { FocusModeService } from '@app/participant/_services/focus-mode.service'
 import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { ContentGroup } from '@app/core/models/content-group';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -57,12 +58,12 @@ describe('ParticipantContentCarouselPageComponent', () => {
   ]);
 
   const mockContentGroupService = jasmine.createSpyObj([
-    'getByRoomIdAndName',
     'getById',
     'filterPublishedIds',
+    'getAttributions',
   ]);
-  mockContentGroupService.getByRoomIdAndName.and.returnValue(of({}));
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
+  mockContentGroupService.getAttributions.and.returnValue(of([]));
 
   const mockAuthenticationService = jasmine.createSpyObj([
     'getCurrentAuthentication',
@@ -103,6 +104,7 @@ describe('ParticipantContentCarouselPageComponent', () => {
   snapshot.params = of([params]);
   snapshot.data = {
     room: new Room(),
+    contentGroup: new ContentGroup(),
   };
 
   const activatedRouteStub = new ActivatedRouteStub(
@@ -129,6 +131,9 @@ describe('ParticipantContentCarouselPageComponent', () => {
   const mockRoomUserAliasService = jasmine.createSpyObj(
     'RoomUserAliasService',
     ['generateAlias']
+  );
+  mockRoomUserAliasService.generateAlias.and.returnValue(
+    of({ id: 'id', alias: 'alias', seed: 'seed' })
   );
 
   beforeEach(waitForAsync(() => {

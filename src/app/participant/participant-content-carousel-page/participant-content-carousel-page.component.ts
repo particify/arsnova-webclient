@@ -76,9 +76,7 @@ export class ParticipantContentCarouselPageComponent
   ContentType: typeof ContentType = ContentType;
 
   contents: Content[] = [];
-  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  contentGroup!: ContentGroup;
-  contentGroupName: string;
+  contentGroup: ContentGroup;
   shortId: string;
   isLoading = true;
   alreadySent: Map<number, boolean> = new Map<number, boolean>();
@@ -123,10 +121,10 @@ export class ParticipantContentCarouselPageComponent
     private focusModeService: FocusModeService,
     private roomUserAliasService: RoomUserAliasService
   ) {
-    this.contentGroupName = route.snapshot.params['seriesName'];
     this.shortId = route.snapshot.data.room.shortId;
     this.showStepper = route.snapshot.data.showStepper ?? true;
     this.showCard = route.snapshot.data.showCard ?? true;
+    this.contentGroup = route.snapshot.data.contentGroup;
   }
 
   ngOnDestroy(): void {
@@ -154,28 +152,15 @@ export class ParticipantContentCarouselPageComponent
     );
     const params = this.route.snapshot.params;
     const lastContentIndex = params['contentIndex'] - 1;
-    this.contentgroupService
-      .getByRoomIdAndName(
-        this.route.snapshot.data.room.id,
-        this.contentGroupName
-      )
-      .subscribe(
-        (contentGroup) => {
-          this.contentGroup = contentGroup;
-          if (this.contentGroup.leaderboardEnabled) {
-            this.roomUserAliasService
-              .generateAlias(this.contentGroup.roomId)
-              .subscribe((alias) => {
-                this.alias = alias;
-              });
-          }
-          this.getContents(lastContentIndex);
-          this.loadAttributions();
-        },
-        () => {
-          this.finishLoading();
-        }
-      );
+    if (this.contentGroup.leaderboardEnabled) {
+      this.roomUserAliasService
+        .generateAlias(this.contentGroup.roomId)
+        .subscribe((alias) => {
+          this.alias = alias;
+        });
+    }
+    this.getContents(lastContentIndex);
+    this.loadAttributions();
     this.changesSubscription = this.eventService
       .on('EntityChanged')
       .subscribe((changes) => {
@@ -191,11 +176,10 @@ export class ParticipantContentCarouselPageComponent
       .getRouteChanges()
       .subscribe((route) => {
         const newGroup = route.params['seriesName'];
-        if (newGroup && newGroup !== this.contentGroupName) {
+        if (newGroup && newGroup !== this.contentGroup.name) {
           this.contentgroupService
             .getByRoomIdAndName(this.contentGroup.roomId, newGroup)
             .subscribe((group) => {
-              this.contentGroupName = group.name;
               this.contentGroup = group;
               this.isReloading = true;
               this.getContents();
@@ -328,7 +312,7 @@ export class ParticipantContentCarouselPageComponent
           'p',
           this.shortId,
           'series',
-          this.contentGroupName,
+          this.contentGroup.name,
           index + 1,
         ]);
       }
@@ -397,9 +381,12 @@ export class ParticipantContentCarouselPageComponent
   goToOverview() {
     this.showOverview = true;
     // Using `onSameUrlNavigation` reload strategy to reload components on routing if only params have been removed
-    this.router.navigate(['p', this.shortId, 'series', this.contentGroupName], {
-      onSameUrlNavigation: 'reload',
-    });
+    this.router.navigate(
+      ['p', this.shortId, 'series', this.contentGroup.name],
+      {
+        onSameUrlNavigation: 'reload',
+      }
+    );
   }
 
   replaceUrl(url: any[]) {

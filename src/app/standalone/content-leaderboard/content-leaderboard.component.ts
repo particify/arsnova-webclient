@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   Component,
   Input,
-  OnInit,
+  OnChanges,
   ViewChild,
 } from '@angular/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -27,7 +27,7 @@ interface LeaderboardTableItem {
   templateUrl: './content-leaderboard.component.html',
   styleUrl: './content-leaderboard.component.scss',
 })
-export class ContentLeaderboardComponent implements AfterViewInit, OnInit {
+export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
   @ViewChild(MatSort) sort!: MatSort;
 
   @Input({ required: true }) leaderboardItems: CurrentLeaderboardItem[] = [];
@@ -37,7 +37,7 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnInit {
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
   displayedColumns = ['position', 'name', 'score', 'currentDuration'];
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     const tableItems: LeaderboardTableItem[] = [];
     this.leaderboardItems.forEach((item, index) => {
       tableItems.push({

@@ -3,7 +3,7 @@
   <div [appAutofocus] class="visually-hidden" tabindex="-1">
     {{
       'participant.answer.a11y-message'
-        | a11yIntro: { group: contentGroupName }
+        | a11yIntro: { group: contentGroup.name }
         | async
     }}
   </div>

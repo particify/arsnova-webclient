@@ -11,6 +11,7 @@ import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role
 import { PresentationComponent } from './presentation/presentation.component';
 import { QrCodeComponent } from '@app/standalone/qr-code/qr-code.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
+import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
       import(
         '@app/standalone/content-presentation/contents-page.component'
       ).then((m) => m.ContentsPageComponent),
+    data: { extendedView: true },
+    resolve: {
+      contentGroup: ContentGroupResolver,
+    },
   },
   {
     path: 'series/:seriesName/:contentIndex',
@@ -56,6 +61,10 @@ const routes: Routes = [
       import(
         '@app/standalone/content-presentation/contents-page.component'
       ).then((m) => m.ContentsPageComponent),
+    data: { extendedView: true },
+    resolve: {
+      contentGroup: ContentGroupResolver,
+    },
   },
 ];
 
@@ -76,6 +85,7 @@ const routes: Routes = [
             showStepInfo: true,
             showAnswerCount: true,
             showHotkeyActionButtons: true,
+            showCard: false,
           },
           resolve: {
             room: RoomResolver,

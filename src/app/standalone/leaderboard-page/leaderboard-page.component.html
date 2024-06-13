@@ -1,9 +1,11 @@
-<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-  <mat-icon class="title-icon">emoji_events</mat-icon>
-  <h1>{{ 'content.leaderboard' | transloco }}</h1>
-</div>
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<app-leaderboard
-  *ngIf="!isLoading && leaderboardItems"
-  [leaderboardItems]="leaderboardItems"
-></app-leaderboard>
+<app-base-card [showShadow]="showCard">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+    <mat-icon class="title-icon">emoji_events</mat-icon>
+    <h1>{{ 'content.leaderboard' | transloco }}</h1>
+  </div>
+  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  <app-leaderboard
+    *ngIf="!isLoading"
+    [leaderboardItems]="leaderboardItems"
+  ></app-leaderboard>
+</app-base-card>
