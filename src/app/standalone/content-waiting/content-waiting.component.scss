@@ -1,3 +1,15 @@
+@import '../../../variables';
+
 .waiting-container {
   margin: 5em 0;
+}
+
+.generate-icon {
+  opacity: 0.5;
+}
+
+@include xs {
+  .alias-hint {
+    font-size: $s-font-size;
+  }
 }

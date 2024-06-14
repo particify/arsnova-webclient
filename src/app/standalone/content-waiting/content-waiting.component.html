@@ -11,7 +11,9 @@
   ></app-content-step-info>
   @if (alias && !alias.id) {
     <form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="0.75em">
-      <span>{{ 'content.enter-name-for-room' | transloco }}</span>
+      <span class="alias-hint">{{
+        'content.enter-alias-for-participation' | transloco
+      }}</span>
       <mat-form-field class="no-field-hint">
         <input
           name="alias-input"
@@ -21,6 +23,14 @@
           [placeholder]="alias.alias"
           [maxLength]="30"
         />
+        <button mat-icon-button matSuffix (click)="generateAlias()">
+          <mat-icon
+            attr.aria-label="{{ 'content.generate-new-alias' | transloco }}"
+            *ngIf="!alias.id"
+            class="generate-icon"
+            >autorenew</mat-icon
+          >
+        </button>
       </mat-form-field>
       <app-loading-button
         [name]="'content.join-quiz' | transloco"

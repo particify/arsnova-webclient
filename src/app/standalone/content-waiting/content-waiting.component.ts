@@ -49,4 +49,10 @@ export class ContentWaitingComponent extends FormComponent {
         });
     });
   }
+
+  generateAlias(): void {
+    this.roomUserAliasService.generateAlias(this.roomId).subscribe((alias) => {
+      this.alias = alias;
+    });
+  }
 }
