@@ -1,15 +1,15 @@
 {
   "answer": {
-    "a11y-message": "Vous pouvez maintenant répondre aux questions de la série {{group}}",
+    "a11y-message": "Vous pouvez maintenant répondre aux questions de la série {{group}}.",
     "a11y-current-multiple": "{{index}}. Il s'agit d'une question à choix multiple. Pour aller vers son contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse avec la touche espace.",
     "a11y-current-single": "{{index}}. C'est une question à réponse unique. Pour aller vers le contenu et les réponses appuyez sur la touche tab et sélectionnez une réponse en appuyant sur les touches flêchées.",
     "a11y-current-sort": "{{index}}. C'est une question de tri. Pour aller vers le contenu et les réponses appuyez sur la touche tab et déplacez vers le haut/bas avec les touches fléchées.",
     "a11y-current-prioritization": "{{index}}. Il s'agit d'une question de priorité. Pour aller vers le contenu et les options de réponse appuyez sur la touche tab.",
-    "a11y-current-binary": "{{index}}. C'est une question oui/non. Pour aller vers le contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse à l'aide des touches fléchées",
+    "a11y-current-binary": "{{index}}. C'est une question oui/non. Pour aller vers le contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse à l'aide des touches fléchées.",
     "a11y-current-scale": "{{index}}. C'est une question d'appréciation. Pour aller vers le contenu et les réponses, appuyez sur la touche tab et sélectionnez une réponse à l'aide des touches fléchées.",
     "a11y-current-wordcloud": "{{index}}. C'est un nuage de mots. Pour aller vers le contenu et les champs de réponses, appuyez sur la touche tab.",
     "a11y-already-answered": "Vous avez déjà répondu au contenu de {{index}}. Naviguez à l'aide de la touche tab vers le contenu et votre réponse ou vos réponses ou appuyez sur la touche espace pour voir les résultats.",
-    "a11y-already-answered-single": "Vous avez répondu à cette question avec la réponse {{answers}}.",
+    "a11y-already-answered-single": "Vous avez répondu à ce contenu avec la réponse {{answers}}",
     "a11y-already-answered-multiple": "Vous aveé répondu à la question avec les réponses {{answers}}.",
     "a11y-already-answered-text": "Vous avez répondu à ce contenu par {{answer}}",
     "a11y-has-abstained": "Vous vous êtes abstenu sur ce contenu. Appuyez sur la touche tab pour entendre le contenu à nouveau.",
@@ -30,13 +30,16 @@
     "results": "Résultats",
     "answering": "Réponse",
     "a11y-current-text": "{{index}}. C'est une question ouverte. Pour aller vers le contenu et le champ de réponse, appuyez sur la touche tab.",
-    "a11y-current-slide": "{{index}}. Il s'agit d'une dia. Naviguez avec tab vers le contenu.",
+    "a11y-current-slide": "{{index}}. Il s'agit d'une diapo. Naviguez avec la touche tab pour accéder au contenu.",
     "group-not-available": "Cette série de questions n'est pas disponible",
     "state-changed": "Le contenu a été mis à jour.",
     "load": "Charger",
     "please-assign-points-correctly": "Veuillez assigner exactement {{points}} points.",
     "please-assign-valid-points": "Veuillez assignez entre 0 et {{points}} points par réponse.",
-    "please-select-number-from-range": "Veuillez sélectionnée un nombre compris dans les seuils."
+    "please-select-number-from-range": "Veuillez sélectionnée un nombre compris dans les seuils.",
+    "not-answered-in-time": "Vous n'avez pas répondu à temps.",
+    "answered-in-time": "Vous avez répondu en {{duration}} secondes.",
+    "a11y-current-flashcard": "{{index}}. C'est une carte mémoire. Naviguez à l'aide de la touche tab et appuyez sur la touche espace pour la retourner."
   },
   "content": {
     "thanks-for-participation": "Merci pour votre participation !",
@@ -53,7 +56,9 @@
     "continue-answering": "Continuer",
     "there-are-locked-contents": "Il y a encore {{count}} contenus disponibles, qui ne sont pas encore libérés.",
     "attribution-info": "Ce contenu est basé sur un modèle réalisé par {{attribution}} sous license {{license}}.",
-    "answers-reset": "Les réponses ont été réinitialisées."
+    "answers-reset": "Les réponses ont été réinitialisées.",
+    "you-are-at-position": "Vous êtes en {{ position }} position !",
+    "new-round-started": "Un nouvelle partie a commencée."
   },
   "room-page": {
     "a11y-statistics": "Ouvre les statistiques pour la série de questions.",
@@ -93,7 +98,8 @@
     "answer-indicator": "Montrer les réponses correctes",
     "show-chart": "Montre les statistiques à l'aide d'un graphique",
     "show-answers": "Montrer les réponses",
-    "hide-chart": "Masquer le graphique"
+    "hide-chart": "Masquer le graphique",
+    "answer-statistic": "Statistiques des réponses"
   },
   "focus-mode": {
     "stopped": "Vous pouvez circuler librement dans la pièce."

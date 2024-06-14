@@ -6,6 +6,8 @@
     "intro-privacy1": "Vous trouverez d'avantage d'informations dans notre ",
     "intro-privacy2": ".",
     "privacy-policy": "politique de confidentialité",
-    "cancel": "Accepter la sélection"
+    "cancel": "Accepter la sélection",
+    "a11y-accept-selected": "Accepter l'utilisation des cookies sélectionnés. Vous avez accepté les cookies fonctionnels {{functional}}. Vous avez accepté les cookies statistiques {{statistic}}.",
+    "a11y-functional": "Accepter l'utilisation des cookies fonctionnels."
   }
 }
