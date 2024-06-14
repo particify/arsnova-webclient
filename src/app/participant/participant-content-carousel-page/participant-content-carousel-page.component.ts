@@ -156,6 +156,18 @@ export class ParticipantContentCarouselPageComponent
         .subscribe((alias) => {
           this.alias = alias;
         });
+      this.roomUserAliasService.getCurrentAlias().subscribe((alias) => {
+        if (this.alias) {
+          if (alias) {
+            this.alias.id = alias.id;
+            if (alias.alias) {
+              this.alias.alias = alias.alias;
+            }
+          }
+        } else {
+          this.alias = alias;
+        }
+      });
     }
     this.getContents(lastContentIndex);
     this.loadAttributions();

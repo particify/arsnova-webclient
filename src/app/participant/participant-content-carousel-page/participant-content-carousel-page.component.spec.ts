@@ -130,9 +130,12 @@ describe('ParticipantContentCarouselPageComponent', () => {
 
   const mockRoomUserAliasService = jasmine.createSpyObj(
     'RoomUserAliasService',
-    ['generateAlias']
+    ['generateAlias', 'getCurrentAlias']
   );
   mockRoomUserAliasService.generateAlias.and.returnValue(
+    of({ id: 'id', alias: 'alias', seed: 'seed' })
+  );
+  mockRoomUserAliasService.getCurrentAlias.and.returnValue(
     of({ id: 'id', alias: 'alias', seed: 'seed' })
   );
 

@@ -439,8 +439,8 @@ export class ContentParticipantComponent
       !this.isLoading &&
       !this.answer &&
       !!this.content.duration &&
-      !this.endDate &&
-      !this.content.state.answeringEndTime
+      ((!this.endDate && !this.content.state.answeringEndTime) ||
+        !this.alias?.id)
     );
   }
 

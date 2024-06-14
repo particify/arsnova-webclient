@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { TranslocoService } from '@ngneat/transloco';
@@ -16,6 +16,8 @@ export class RoomUserAliasService extends AbstractEntityService<RoomUserAlias> {
   serviceApiUrl = {
     generate: '/-/generate',
   };
+
+  currentAlias$ = new BehaviorSubject<RoomUserAlias | undefined>(undefined);
 
   constructor(
     private http: HttpClient,
@@ -44,7 +46,13 @@ export class RoomUserAliasService extends AbstractEntityService<RoomUserAlias> {
   ): Observable<RoomUserAlias> {
     const connectionUrl = this.buildUri('/', roomId);
     const body = { ...changes, roomId: roomId, userId: userId };
-    return this.http.post<RoomUserAlias>(connectionUrl, body);
+    return this.http
+      .post<RoomUserAlias>(connectionUrl, body)
+      .pipe(tap((alias) => this.currentAlias$.next(alias)));
+  }
+
+  getCurrentAlias(): Observable<RoomUserAlias | undefined> {
+    return this.currentAlias$;
   }
 
   generateAlias(roomId: string): Observable<RoomUserAlias> {
