@@ -26,7 +26,9 @@
         !isLoading &&
         (contentGroup.groupType !== GroupType.QUIZ ||
           !content.duration ||
-          (content.duration && (endDate || content.state.answeringEndTime)))
+          (content.duration &&
+            (endDate || content.state.answeringEndTime) &&
+            alias?.id))
       ) {
         <div fxLayout="column" fxLayoutGap="0.5em">
           <div
