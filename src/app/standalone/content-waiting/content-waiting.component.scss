@@ -8,8 +8,16 @@
   opacity: 0.5;
 }
 
+.alias-form {
+  min-width: 280px;
+}
+
 @include xs {
   .alias-hint {
     font-size: $s-font-size;
+  }
+
+  .alias-form {
+    width: 100%;
   }
 }

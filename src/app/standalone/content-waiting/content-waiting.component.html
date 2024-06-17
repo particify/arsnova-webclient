@@ -10,7 +10,12 @@
     [totalCount]="totalCount"
   ></app-content-step-info>
   @if (alias && !alias.id) {
-    <form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="0.75em">
+    <form
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      fxLayoutGap="0.75em"
+      class="alias-form"
+    >
       <span class="alias-hint">{{
         'content.enter-alias-for-participation' | transloco
       }}</span>
