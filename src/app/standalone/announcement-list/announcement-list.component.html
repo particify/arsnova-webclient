@@ -14,27 +14,32 @@
           'announcement.all-rooms' | transloco
         }}</mat-option>
         <mat-divider></mat-divider>
-        <mat-option
-          *ngFor="let room of announcementRooms | keyvalue"
-          value="{{ room.key }}"
-          >{{ room.value }}</mat-option
-        >
+        @for (room of announcementRooms | keyvalue; track room) {
+          <mat-option value="{{ room.key }}">{{ room.value }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
-  <mat-dialog-content *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
-    <p *ngIf="announcements.length === 0" class="hint-sm">
-      {{ 'announcement.no-announcements' | transloco }}
-    </p>
-    <app-announcement
-      *ngFor="let announcement of displayAnnouncements"
-      [announcement]="announcement"
-      [roomName]="announcement.roomName"
-      [label]="getLabel(announcement)"
-      tabindex="0"
-    ></app-announcement>
-  </mat-dialog-content>
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  @if (!isLoading) {
+    <mat-dialog-content fxLayout="column" fxLayoutGap="10px">
+      @if (announcements.length === 0) {
+        <p class="hint-sm">
+          {{ 'announcement.no-announcements' | transloco }}
+        </p>
+      }
+      @for (announcement of displayAnnouncements; track announcement) {
+        <app-announcement
+          [announcement]="announcement"
+          [roomName]="announcement.roomName"
+          [label]="getLabel(announcement)"
+          tabindex="0"
+        ></app-announcement>
+      }
+    </mat-dialog-content>
+  }
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
   <div
     mat-dialog-actions
     fxLayout="row"

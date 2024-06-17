@@ -1,34 +1,40 @@
 <div fxLayout="column" fxLayoutGap="8px">
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <div
-    class="chart-container"
-    *ngIf="!isLoading"
-    [ngClass]="{
-      invisible: !answersVisible,
-      'normal-chart': !isPresentation && answersVisible,
-      'presentation-chart': isPresentation && answersVisible,
-    }"
-  >
-    <canvas class="chart" id="{{ chartId }}"></canvas>
-  </div>
-  <div role="list" *ngIf="!isLoading">
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading) {
     <div
-      class="answer-item"
-      role="listitem"
-      *ngFor="let answer of answerOptions; let i = index"
+      class="chart-container"
       [ngClass]="{
-        correct: showCorrect,
-        'no-background answer-text': isPresentation,
-        'all-animations': !isPresentation,
+        invisible: !answersVisible,
+        'normal-chart': !isPresentation && answersVisible,
+        'presentation-chart': isPresentation && answersVisible,
       }"
     >
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-        <p class="answer-label">{{ i + 1 }}</p>
-        <app-rendered-text
-          [rawText]="answer.label"
-          [renderedText]="answer.renderedLabel"
-        ></app-rendered-text>
-      </div>
+      <canvas class="chart" id="{{ chartId }}"></canvas>
     </div>
-  </div>
+  }
+  @if (!isLoading) {
+    <div role="list">
+      @for (answer of answerOptions; track answer; let i = $index) {
+        <div
+          class="answer-item"
+          role="listitem"
+          [ngClass]="{
+            correct: showCorrect,
+            'no-background answer-text': isPresentation,
+            'all-animations': !isPresentation,
+          }"
+        >
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <p class="answer-label">{{ i + 1 }}</p>
+            <app-rendered-text
+              [rawText]="answer.label"
+              [renderedText]="answer.renderedLabel"
+            ></app-rendered-text>
+          </div>
+        </div>
+      }
+    </div>
+  }
 </div>

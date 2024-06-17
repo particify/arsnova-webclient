@@ -36,7 +36,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIconButton } from '@angular/material/button';
 import { CoreModule } from '@app/core/core.module';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 import { MultipleRoundSelectionComponent } from '@app/standalone/multiple-round-selection/multiple-round-selection.component';
@@ -51,7 +51,6 @@ import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
   imports: [
     FlexModule,
     NgClass,
-    NgIf,
     CoreModule,
     AnswerCountComponent,
     MultipleRoundSelectionComponent,

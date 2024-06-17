@@ -2,94 +2,108 @@
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{ 'room-page.a11y-room-message' | a11yIntro: { name: room.name } | async }}
   </div>
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <mat-card *ngIf="!isLoading && room">
-    <app-room-overview-header
-      [name]="room.name"
-      [shortId]="room.shortId"
-      [description]="room.description"
-      [renderedDescription]="room.renderedDescription"
-    ></app-room-overview-header>
-    <div fxLayout="column" fxLayoutAlign="center">
-      <div
-        *ngIf="(commentsEnabled || surveyEnabled) && !focusModeEnabled"
-        class="action-button-container"
-        fxLayout="row"
-        fxLayoutAlign="center"
-      >
-        <app-room-action-button
-          *ngIf="commentsEnabled"
-          fxFlex
-          feature="comments"
-          icon="question_answer"
-          hotkey="1"
-          [badgeCounter]="commentCounter"
-        ></app-room-action-button>
-        <app-room-action-button
-          *ngIf="surveyEnabled"
-          fxFlex
-          feature="live-feedback"
-          url="feedback"
-          icon="thumbs_up_down"
-          hotkey="2"
-        ></app-room-action-button>
-        <p
-          *ngIf="!surveyEnabled"
-          tabindex="-1"
-          id="live-feedback-disabled"
-          class="visually-hidden"
-          appHotkey="2"
-          [appHotkeyTitle]="'room-page.live-feedback' | transloco"
-        >
-          {{ 'participant.room-page.a11y-live-feedback-disabled' | transloco }}
-        </p>
-      </div>
-    </div>
-    <ng-container *ngIf="contentGroups.length > 0; else noContents">
-      <p
-        tabindex="-1"
-        id="content-groups"
-        class="visually-hidden"
-        appHotkey="3"
-        [appHotkeyTitle]="'content.groups' | transloco"
-      >
-        {{
-          'room-page.a11y-content-groups'
-            | transloco: { count: contentGroups.length }
-        }}
-      </p>
-    </ng-container>
-    <ng-template #noContents>
-      <p
-        tabindex="-1"
-        id="no-content-groups"
-        class="visually-hidden"
-        appHotkey="3"
-        [appHotkeyTitle]="'content.groups' | transloco"
-      >
-        {{ 'room-page.a11y-no-content-groups' | transloco }}
-      </p>
-    </ng-template>
-    <div *ngIf="room && contentGroups && !focusModeEnabled">
-      <app-content-groups
-        *ngFor="let contentGroup of contentGroups"
-        [contentGroup]="contentGroup"
-        [role]="role"
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading && room) {
+    <mat-card>
+      <app-room-overview-header
+        [name]="room.name"
         [shortId]="room.shortId"
-      ></app-content-groups>
-    </div>
-    <div fxLayout="column" *ngIf="focusModeEnabled">
-      <app-hint
-        style="margin-top: 1em"
-        text="participant.room-page.focus-mode-enabled"
-        [type]="HintType.INFO"
-      ></app-hint>
-    </div>
-
-    <lib-extension-point
-      extensionId="attachment-list"
-      [extensionData]="attachmentData"
-    >
-    </lib-extension-point>
-  </mat-card>
+        [description]="room.description"
+        [renderedDescription]="room.renderedDescription"
+      ></app-room-overview-header>
+      <div fxLayout="column" fxLayoutAlign="center">
+        @if ((commentsEnabled || surveyEnabled) && !focusModeEnabled) {
+          <div
+            class="action-button-container"
+            fxLayout="row"
+            fxLayoutAlign="center"
+          >
+            @if (commentsEnabled) {
+              <app-room-action-button
+                fxFlex
+                feature="comments"
+                icon="question_answer"
+                hotkey="1"
+                [badgeCounter]="commentCounter"
+              ></app-room-action-button>
+            }
+            @if (surveyEnabled) {
+              <app-room-action-button
+                fxFlex
+                feature="live-feedback"
+                url="feedback"
+                icon="thumbs_up_down"
+                hotkey="2"
+              ></app-room-action-button>
+            }
+            @if (!surveyEnabled) {
+              <p
+                tabindex="-1"
+                id="live-feedback-disabled"
+                class="visually-hidden"
+                appHotkey="2"
+                [appHotkeyTitle]="'room-page.live-feedback' | transloco"
+              >
+                {{
+                  'participant.room-page.a11y-live-feedback-disabled'
+                    | transloco
+                }}
+              </p>
+            }
+          </div>
+        }
+      </div>
+      @if (contentGroups.length > 0) {
+        <p
+          tabindex="-1"
+          id="content-groups"
+          class="visually-hidden"
+          appHotkey="3"
+          [appHotkeyTitle]="'content.groups' | transloco"
+        >
+          {{
+            'room-page.a11y-content-groups'
+              | transloco: { count: contentGroups.length }
+          }}
+        </p>
+      } @else {
+        <p
+          tabindex="-1"
+          id="no-content-groups"
+          class="visually-hidden"
+          appHotkey="3"
+          [appHotkeyTitle]="'content.groups' | transloco"
+        >
+          {{ 'room-page.a11y-no-content-groups' | transloco }}
+        </p>
+      }
+      @if (room && contentGroups && !focusModeEnabled) {
+        <div>
+          @for (contentGroup of contentGroups; track contentGroup) {
+            <app-content-groups
+              [contentGroup]="contentGroup"
+              [role]="role"
+              [shortId]="room.shortId"
+            ></app-content-groups>
+          }
+        </div>
+      }
+      @if (focusModeEnabled) {
+        <div fxLayout="column">
+          <app-hint
+            style="margin-top: 1em"
+            text="participant.room-page.focus-mode-enabled"
+            [type]="HintType.INFO"
+          ></app-hint>
+        </div>
+      }
+      <lib-extension-point
+        extensionId="attachment-list"
+        [extensionData]="attachmentData"
+      >
+      </lib-extension-point>
+    </mat-card>
+  }
 </div>

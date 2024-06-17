@@ -12,111 +12,123 @@
       <p class="comment">{{ comment.body }}</p>
     </mat-card>
     <div fxLayout="row" fxLayoutAlign="center">
-      <mat-card appearance="outlined" class="answer" *ngIf="isEditor || answer">
-        <div *ngIf="(!isEditor || !edit) && answer">
-          <app-rendered-text
-            [rawText]="answer"
-            [dynamic]="true"
-            [markdownFeatureset]="MarkdownFeatureset.SIMPLE"
-            [attr.aria-label]="
-              'comment-page.a11y-entered-answer' | transloco: { answer: answer }
-            "
-          >
-          </app-rendered-text>
-          <div fxLayout="row" fxLayoutAlign="end">
-            <button
-              mat-flat-button
-              *ngIf="isEditor && !edit"
-              color="primary"
-              (click)="editAnswer()"
-              aria-labelledby="edit"
-            >
-              <mat-icon>edit</mat-icon>
-              {{ 'creator.comment-page.edit-answer' | transloco }}
-            </button>
-          </div>
-        </div>
-        <div class="relative" *ngIf="isEditor && (edit || !answer)">
-          <mat-tab-group
-            animationDuration="0"
-            [dynamicHeight]="true"
-            (selectedTabChange)="tabChanged($event)"
-          >
-            <mat-tab
-              label="{{ 'creator.comment-page.your-answer' | transloco }}"
-            >
-              <app-formatting-toolbar
-                *ngIf="!renderPreview"
-                class="tab-group-formatting-bar-mobile"
-                [inputElement]="answerInput"
-                [disabled]="formDisabled"
-                (valueChanged)="answer = $event"
-              ></app-formatting-toolbar>
-              <mat-form-field class="input-block" appearance="outline">
-                <textarea
-                  #answerInput
-                  [disabled]="formDisabled"
-                  [(ngModel)]="answer"
-                  (focus)="edit = true"
-                  matInput
-                  cdkTextareaAutosize
-                  cdkAutosizeMinRows="3"
-                  cdkAutosizeMaxRows="8"
-                  maxlength="1000"
-                  name="answer"
-                  aria-labelledby="answer"
-                  [placeholder]="
-                    'creator.comment-page.enter-answer' | transloco
-                  "
-                  appHotkey="1"
-                >
-                </textarea>
-                <mat-hint align="end">
-                  <span aria-hidden="true">
-                    {{ answer ? answer.length : 0 }} / 1000
-                  </span>
-                </mat-hint>
-              </mat-form-field>
-            </mat-tab>
-            <mat-tab
-              label="{{ 'creator.room.preview' | transloco }}"
-              [disabled]="!answer"
-            >
-              <div class="preview-container">
-                <app-rendered-text
-                  [rawText]="answer"
-                  [dynamic]="renderPreview"
-                  [markdownFeatureset]="MarkdownFeatureset.SIMPLE"
-                >
-                </app-rendered-text>
+      @if (isEditor || answer) {
+        <mat-card appearance="outlined" class="answer">
+          @if ((!isEditor || !edit) && answer) {
+            <div>
+              <app-rendered-text
+                [rawText]="answer"
+                [dynamic]="true"
+                [markdownFeatureset]="MarkdownFeatureset.SIMPLE"
+                [attr.aria-label]="
+                  'comment-page.a11y-entered-answer'
+                    | transloco: { answer: answer }
+                "
+              >
+              </app-rendered-text>
+              <div fxLayout="row" fxLayoutAlign="end">
+                @if (isEditor && !edit) {
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    (click)="editAnswer()"
+                    aria-labelledby="edit"
+                  >
+                    <mat-icon>edit</mat-icon>
+                    {{ 'creator.comment-page.edit-answer' | transloco }}
+                  </button>
+                }
               </div>
-            </mat-tab>
-          </mat-tab-group>
-          <app-formatting-toolbar
-            *ngIf="!renderPreview"
-            class="tab-group-formatting-bar"
-            [inputElement]="answerInput"
-            [disabled]="formDisabled"
-            (valueChanged)="answer = $event"
-          ></app-formatting-toolbar>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-          <button
-            mat-stroked-button
-            *ngIf="isEditor && answer && edit"
-            color="warn"
-            aria-labelledby="delete"
-            (click)="deleteAnswer()"
-          >
-            {{ 'creator.comment-page.delete-answer' | transloco }}
-          </button>
-          <app-loading-button
-            *ngIf="isEditor && (edit || !answer)"
-            name="creator.comment-page.save-answer"
-            (clicked)="saveAnswer()"
-          ></app-loading-button>
-        </div>
-      </mat-card>
+            </div>
+          }
+          @if (isEditor && (edit || !answer)) {
+            <div class="relative">
+              <mat-tab-group
+                animationDuration="0"
+                [dynamicHeight]="true"
+                (selectedTabChange)="tabChanged($event)"
+              >
+                <mat-tab
+                  label="{{ 'creator.comment-page.your-answer' | transloco }}"
+                >
+                  @if (!renderPreview) {
+                    <app-formatting-toolbar
+                      class="tab-group-formatting-bar-mobile"
+                      [inputElement]="answerInput"
+                      [disabled]="formDisabled"
+                      (valueChanged)="answer = $event"
+                    ></app-formatting-toolbar>
+                  }
+                  <mat-form-field class="input-block" appearance="outline">
+                    <textarea
+                      #answerInput
+                      [disabled]="formDisabled"
+                      [(ngModel)]="answer"
+                      (focus)="edit = true"
+                      matInput
+                      cdkTextareaAutosize
+                      cdkAutosizeMinRows="3"
+                      cdkAutosizeMaxRows="8"
+                      maxlength="1000"
+                      name="answer"
+                      aria-labelledby="answer"
+                      [placeholder]="
+                        'creator.comment-page.enter-answer' | transloco
+                      "
+                      appHotkey="1"
+                    >
+                    </textarea>
+                    <mat-hint align="end">
+                      <span aria-hidden="true">
+                        {{ answer ? answer.length : 0 }} / 1000
+                      </span>
+                    </mat-hint>
+                  </mat-form-field>
+                </mat-tab>
+                <mat-tab
+                  label="{{ 'creator.room.preview' | transloco }}"
+                  [disabled]="!answer"
+                >
+                  <div class="preview-container">
+                    <app-rendered-text
+                      [rawText]="answer"
+                      [dynamic]="renderPreview"
+                      [markdownFeatureset]="MarkdownFeatureset.SIMPLE"
+                    >
+                    </app-rendered-text>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+              @if (!renderPreview) {
+                <app-formatting-toolbar
+                  class="tab-group-formatting-bar"
+                  [inputElement]="answerInput"
+                  [disabled]="formDisabled"
+                  (valueChanged)="answer = $event"
+                ></app-formatting-toolbar>
+              }
+            </div>
+          }
+          <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
+            @if (isEditor && answer && edit) {
+              <button
+                mat-stroked-button
+                color="warn"
+                aria-labelledby="delete"
+                (click)="deleteAnswer()"
+              >
+                {{ 'creator.comment-page.delete-answer' | transloco }}
+              </button>
+            }
+            @if (isEditor && (edit || !answer)) {
+              <app-loading-button
+                name="creator.comment-page.save-answer"
+                (clicked)="saveAnswer()"
+              ></app-loading-button>
+            }
+          </div>
+        </mat-card>
+      }
     </div>
   </div>
   <div>

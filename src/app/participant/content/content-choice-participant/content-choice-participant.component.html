@@ -1,16 +1,19 @@
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<app-content-choice-answer
-  *ngIf="!isLoading"
-  [answer]="answer"
-  [selectableAnswers]="selectableAnswers"
-  [isDisabled]="isDisabled"
-  [multipleAnswersAllowed]="content.multiple"
-  [hasAbstained]="hasAbstained"
-  [hasCorrectAnswer]="isChoice"
-  [isCorrectAnswerPublished]="correctOptionsPublished"
-  [contentId]="content.id"
-  [selectedAnswerIndex]="selectedAnswerIndex"
-  [correctOptionIndexes]="correctOptionIndexes"
-  (answerIndexSelected)="setAnswerIndex($event)"
->
-</app-content-choice-answer>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <app-content-choice-answer
+    [answer]="answer"
+    [selectableAnswers]="selectableAnswers"
+    [isDisabled]="isDisabled"
+    [multipleAnswersAllowed]="content.multiple"
+    [hasAbstained]="hasAbstained"
+    [hasCorrectAnswer]="isChoice"
+    [isCorrectAnswerPublished]="correctOptionsPublished"
+    [contentId]="content.id"
+    [selectedAnswerIndex]="selectedAnswerIndex"
+    [correctOptionIndexes]="correctOptionIndexes"
+    (answerIndexSelected)="setAnswerIndex($event)"
+  >
+  </app-content-choice-answer>
+}

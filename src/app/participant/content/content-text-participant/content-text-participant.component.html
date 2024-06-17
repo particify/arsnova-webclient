@@ -1,11 +1,15 @@
 <div fxLayout="column" fxLayoutAlign="space-between" class="answer-container">
-  <form *ngIf="!givenAnswer">
-    <app-content-text-answer
-      (inputEvent)="textAnswer = $event"
-      [disabled]="isDisabled"
-    ></app-content-text-answer>
-  </form>
-  <div *ngIf="givenAnswer">
-    <p class="answer">{{ givenAnswer.body }}</p>
-  </div>
+  @if (!givenAnswer) {
+    <form>
+      <app-content-text-answer
+        (inputEvent)="textAnswer = $event"
+        [disabled]="isDisabled"
+      ></app-content-text-answer>
+    </form>
+  }
+  @if (givenAnswer) {
+    <div>
+      <p class="answer">{{ givenAnswer.body }}</p>
+    </div>
+  }
 </div>

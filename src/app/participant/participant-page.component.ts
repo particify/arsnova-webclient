@@ -5,7 +5,7 @@ import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { NavBarComponent } from '@app/standalone/nav-bar/nav-bar.component';
-import { NgIf, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import {
   MatDrawerContainer,
@@ -24,7 +24,6 @@ import { FlexModule } from '@angular/flex-layout';
     FlexModule,
     MatDrawerContainer,
     ExtensionPointModule,
-    NgIf,
     MatDrawer,
     NavBarComponent,
     MatDrawerContent,

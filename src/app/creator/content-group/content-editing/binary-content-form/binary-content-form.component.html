@@ -1,17 +1,22 @@
-<form *ngIf="answerSelection" fxLayout="column" fxLayoutAlign="start">
-  <mat-radio-group
-    [disabled]="formDisabled"
-    [(ngModel)]="currentOption"
-    [ngModelOptions]="{ standalone: true }"
-    fxLayout="column"
-    fxLayoutAlign="center"
-  >
-    <mat-radio-button
-      *ngFor="let option of options"
-      [value]="option"
-      [attr.aria-label]="'creator.content.a11y-answer-' + option | transloco"
+@if (answerSelection) {
+  <form fxLayout="column" fxLayoutAlign="start">
+    <mat-radio-group
+      [disabled]="formDisabled"
+      [(ngModel)]="currentOption"
+      [ngModelOptions]="{ standalone: true }"
+      fxLayout="column"
+      fxLayoutAlign="center"
     >
-      {{ 'creator.content.answer-' + option | transloco }}
-    </mat-radio-button>
-  </mat-radio-group>
-</form>
+      @for (option of options; track option) {
+        <mat-radio-button
+          [value]="option"
+          [attr.aria-label]="
+            'creator.content.a11y-answer-' + option | transloco
+          "
+        >
+          {{ 'creator.content.answer-' + option | transloco }}
+        </mat-radio-button>
+      }
+    </mat-radio-group>
+  </form>
+}

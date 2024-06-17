@@ -5,16 +5,13 @@
         extensionId="remote"
         [extensionData]="{ isParticipant: true }"
       ></lib-extension-point>
-      <mat-drawer
-        *ngIf="!focusModeEnabled"
-        mode="side"
-        opened
-        [disableClose]="true"
-      >
-        <div fxLayout="column" fxLayoutAlign="space-between" fxFill>
-          <app-nav-bar></app-nav-bar>
-        </div>
-      </mat-drawer>
+      @if (!focusModeEnabled) {
+        <mat-drawer mode="side" opened [disableClose]="true">
+          <div fxLayout="column" fxLayoutAlign="space-between" fxFill>
+            <app-nav-bar></app-nav-bar>
+          </div>
+        </mat-drawer>
+      }
       <mat-drawer-content
         fxLayout="column"
         fxLayoutAlign="space-between"

@@ -32,7 +32,7 @@ import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { StatisticInfoComponent } from '@app/standalone/statistic-info/statistic-info.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgClass, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 
 const MAX_BARS = 15;
@@ -51,10 +51,8 @@ interface AnswerGroup {
   standalone: true,
   imports: [
     FlexModule,
-    NgIf,
     LoadingIndicatorComponent,
     NgClass,
-    NgFor,
     StatisticInfoComponent,
     MatIcon,
     MatDivider,

@@ -1,94 +1,98 @@
 <div fxLayout="column">
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <div
-    class="chart-container"
-    *ngIf="!isLoading"
-    [ngClass]="{
-      invisible: !answersVisible,
-      'normal-chart': !isPresentation && answersVisible,
-      'presentation-chart': isPresentation && answersVisible,
-      'no-bottom-margin':
-        settings.contentAnswersDirectlyBelowChart && isPresentation,
-    }"
-  >
-    <canvas class="chart" id="{{ chartId }}"></canvas>
-  </div>
-  <div
-    *ngIf="
-      !isLoading && isPresentation && settings.contentAnswersDirectlyBelowChart
-    "
-    fxLayout="row"
-    fxLayoutAlign="space-around"
-  >
-    <p
-      *ngFor="let a of options; let i = index"
-      class="chart-answer-label"
-      [ngClass]="{
-        'not-correct': colorLabel && !checkIfCorrect(i),
-        'no-margin': content.format !== ContentType.SCALE,
-      }"
-    >
-      <app-rendered-text
-        [rawText]="a.label"
-        [renderedText]="a.renderedLabel"
-      ></app-rendered-text>
-    </p>
-    <p
-      *ngIf="content.abstentionsAllowed"
-      class="chart-answer-label"
-      [ngClass]="{ 'not-correct': colorLabel }"
-    >
-      {{ 'statistic.abstentions' | transloco }}
-    </p>
-  </div>
-  <div
-    *ngIf="
-      (!isLoading && !settings.contentAnswersDirectlyBelowChart) ||
-      !isPresentation
-    "
-    role="list"
-  >
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading) {
     <div
-      class="answer-item"
-      role="listitem"
+      class="chart-container"
       [ngClass]="{
-        correct: colorLabel && checkIfCorrect(i),
-        'no-background answer-text': isPresentation,
-        'all-animations': !isPresentation,
+        invisible: !answersVisible,
+        'normal-chart': !isPresentation && answersVisible,
+        'presentation-chart': isPresentation && answersVisible,
+        'no-bottom-margin':
+          settings.contentAnswersDirectlyBelowChart && isPresentation,
       }"
-      tabindex="0"
-      [attr.aria-label]="
-        ('statistic.a11y-choice-evaluation'
-          | transloco: { label: labelLetters[i], answer: a.label }) +
-        (rounds > 1
-          ? ('statistic.a11y-multiple-round-counts'
-            | transloco: { countRoundA: data[0][i], countRoundB: data[1][i] })
-          : ('statistic.a11y-single-round-count'
-            | transloco: { count: data[0][i] })) +
-        (isSurvey
-          ? ''
-          : ((checkIfCorrect(i)
-              ? 'statistic.a11y-correct'
-              : 'statistic.a11y-wrong'
-            ) | transloco))
-      "
-      *ngFor="let a of options; let i = index"
     >
-      <div fxFill fxLayoutAlign="space-between center" fxLayoutGap="12px">
-        <p class="answer-label">{{ labelLetters[i] }}</p>
-        <app-rendered-text
-          [rawText]="a.label"
-          [renderedText]="a.renderedLabel"
-        ></app-rendered-text>
-        <mat-icon
-          *ngIf="!isSurvey"
-          [ngClass]="{ 'show-correct-icon': colorLabel && checkIfCorrect(i) }"
-          class="correct-icon"
-          >check</mat-icon
-        >
-      </div>
+      <canvas class="chart" id="{{ chartId }}"></canvas>
     </div>
-  </div>
+  }
+  @if (
+    !isLoading && isPresentation && settings.contentAnswersDirectlyBelowChart
+  ) {
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      @for (a of options; track a; let i = $index) {
+        <p
+          class="chart-answer-label"
+          [ngClass]="{
+            'not-correct': colorLabel && !checkIfCorrect(i),
+            'no-margin': content.format !== ContentType.SCALE,
+          }"
+        >
+          <app-rendered-text
+            [rawText]="a.label"
+            [renderedText]="a.renderedLabel"
+          ></app-rendered-text>
+        </p>
+      }
+      @if (content.abstentionsAllowed) {
+        <p class="chart-answer-label" [ngClass]="{ 'not-correct': colorLabel }">
+          {{ 'statistic.abstentions' | transloco }}
+        </p>
+      }
+    </div>
+  }
+  @if (
+    (!isLoading && !settings.contentAnswersDirectlyBelowChart) ||
+    !isPresentation
+  ) {
+    <div role="list">
+      @for (a of options; track a; let i = $index) {
+        <div
+          class="answer-item"
+          role="listitem"
+          [ngClass]="{
+            correct: colorLabel && checkIfCorrect(i),
+            'no-background answer-text': isPresentation,
+            'all-animations': !isPresentation,
+          }"
+          tabindex="0"
+          [attr.aria-label]="
+            ('statistic.a11y-choice-evaluation'
+              | transloco: { label: labelLetters[i], answer: a.label }) +
+            (rounds > 1
+              ? ('statistic.a11y-multiple-round-counts'
+                | transloco
+                  : { countRoundA: data[0][i], countRoundB: data[1][i] })
+              : ('statistic.a11y-single-round-count'
+                | transloco: { count: data[0][i] })) +
+            (isSurvey
+              ? ''
+              : ((checkIfCorrect(i)
+                  ? 'statistic.a11y-correct'
+                  : 'statistic.a11y-wrong'
+                ) | transloco))
+          "
+        >
+          <div fxFill fxLayoutAlign="space-between center" fxLayoutGap="12px">
+            <p class="answer-label">{{ labelLetters[i] }}</p>
+            <app-rendered-text
+              [rawText]="a.label"
+              [renderedText]="a.renderedLabel"
+            ></app-rendered-text>
+            @if (!isSurvey) {
+              <mat-icon
+                [ngClass]="{
+                  'show-correct-icon': colorLabel && checkIfCorrect(i),
+                }"
+                class="correct-icon"
+                >check</mat-icon
+              >
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
 </div>
 <div class="visually-hidden">
   <div id="show-correct">

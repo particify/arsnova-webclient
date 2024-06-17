@@ -3,305 +3,352 @@
   tabindex="-1"
   attr.aria-label="{{ a11yMsg | transloco: { index: index + 1 } }}"
 >
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <mat-card
-    *ngIf="!isLoading"
-    [ngClass]="{
-      'no-shadow': !showCard,
-    }"
-  >
-    <div
-      *ngIf="contentGroup.groupType === GroupType.QUIZ && showWaitingArea()"
-      fxFill
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading) {
+    <mat-card
+      [ngClass]="{
+        'no-shadow': !showCard,
+      }"
     >
-      <app-content-waiting
-        [current]="getIndexInContentGroup() + 1"
-        [totalCount]="contentGroup.contentIds.length"
-        [alias]="alias"
-        [roomId]="content.roomId"
-      ></app-content-waiting>
-    </div>
-    <div
-      *ngIf="
+      @if (contentGroup.groupType === GroupType.QUIZ && showWaitingArea()) {
+        <div fxFill>
+          <app-content-waiting
+            [current]="getIndexInContentGroup() + 1"
+            [totalCount]="contentGroup.contentIds.length"
+            [alias]="alias"
+            [roomId]="content.roomId"
+          ></app-content-waiting>
+        </div>
+      }
+      @if (
         !isLoading &&
         (contentGroup.groupType !== GroupType.QUIZ ||
           !content.duration ||
           (content.duration && (endDate || content.state.answeringEndTime)))
-      "
-      fxLayout="column"
-      fxLayoutGap="0.5em"
-    >
-      <div
-        fxLayout.gt-xs="row"
-        fxLayout.xs="column"
-        fxLayoutAlign="space-between"
-        fxLayoutAlign.xs="center center"
-        fxLayoutGap="0.5em"
-      >
-        <app-rendered-text
-          tabindex="0"
-          [rawText]="content.body"
-          [renderedText]="content.renderedBody"
-        ></app-rendered-text>
-        <div tabindex="0" class="visually-hidden" *ngIf="alreadySent">
-          {{
-            hasAbstained
-              ? ('participant.answer.a11y-has-abstained' | transloco)
-              : content.format !== ContentType.TEXT
-                ? ('participant.answer.a11y-already-answered-' +
-                    (isMultiple ? 'multiple' : 'single')
-                  | transloco
-                    : {
-                        answers: answersString,
-                      })
-                : ('participant.answer.a11y-already-answered-text'
-                  | transloco: { answer: answersString })
-          }}
-        </div>
-        <nav
-          mat-tab-nav-bar
-          [tabPanel]="tabPanel"
-          *ngIf="
-            !isLoading &&
-            (alreadySent || content.format === ContentType.FLASHCARD) &&
-            content.format !== ContentType.SLIDE &&
-            (statsPublished || contentGroup.leaderboardEnabled)
-          "
-        >
-          <div *ngFor="let tab of tabs">
-            <a
-              *ngIf="showTab(tab.route)"
-              mat-tab-link
-              class="tab-icon-link"
-              (click)="updateTab(tab.route)"
-              [active]="selectedRoute === tab.route"
-              [appHotkey]="tab.hotkey"
-              [appHotkeyTitle]="tab.label | transloco"
-              [appHotkeyAction]="HotkeyAction.CLICK"
-              [appHotkeyDisabled]="!active"
-            >
-              <mat-icon color="primary">{{ tab.icon }}</mat-icon>
-            </a>
-          </div>
-        </nav>
-      </div>
-      <lib-extension-point
-        extensionId="attachment-list"
-        [extensionData]="extensionData"
-      ></lib-extension-point>
-
-      <app-countdown-timer
-        *ngIf="active && content.duration && endDate && !answeringLocked"
-        [endDate]="endDate"
-        [duration]="content.duration"
-        (finished)="answeringLocked = true"
-        [borderRadius]="3"
-      ></app-countdown-timer>
-      <mat-tab-nav-panel #tabPanel>
-        <form
-          *ngIf="selectedRoute === ''"
-          (ngSubmit)="submitAnswerEvent($event, 'answer')"
-          id="answerForm"
-        >
-          <div>
-            <app-content-choice-participant
-              *ngIf="
-                content.format === ContentType.CHOICE ||
-                content.format === ContentType.BINARY
-              "
-              [answer]="choiceAnswer"
-              [content]="choiceContent"
-              [isDisabled]="formDisabled || alreadySent || answeringLocked"
-              (answerChanged)="forwardAnswerMessage($event)"
-              [sendEvent]="sendEvent"
-              [statsPublished]="statsPublished"
-              [correctOptionsPublished]="correctOptionsPublished"
-            >
-            </app-content-choice-participant>
-            <app-content-scale-participant
-              *ngIf="content.format === ContentType.SCALE"
-              [answer]="choiceAnswer"
-              [content]="scaleContent"
-              [isDisabled]="formDisabled || alreadySent || answeringLocked"
-              (answerChanged)="forwardAnswerMessage($event)"
-              [sendEvent]="sendEvent"
-              [statsPublished]="statsPublished"
-            >
-            </app-content-scale-participant>
-            <app-content-text-participant
-              *ngIf="content.format === ContentType.TEXT"
-              [answer]="textAnswer"
-              [content]="content"
-              [isDisabled]="formDisabled || alreadySent || answeringLocked"
-              [sendEvent]="sendEvent"
-              (answerChanged)="forwardAnswerMessage($event)"
-            ></app-content-text-participant>
-            <app-content-sort-participant
-              *ngIf="content.format === ContentType.SORT"
-              [answer]="choiceAnswer"
-              [content]="choiceContent"
-              [isDisabled]="formDisabled || alreadySent || answeringLocked"
-              [sendEvent]="sendEvent"
-              (answerChanged)="forwardAnswerMessage($event)"
-              [statsPublished]="statsPublished"
-              [correctOptionsPublished]="correctOptionsPublished"
-            >
-            </app-content-sort-participant>
-            <app-content-wordcloud-participant
-              *ngIf="content.format === ContentType.WORDCLOUD"
-              [answer]="wordcloudAnswer"
-              [content]="wordloudContent"
-              [isDisabled]="formDisabled || alreadySent || answeringLocked"
-              [sendEvent]="sendEvent"
-              (answerChanged)="forwardAnswerMessage($event)"
-            >
-            </app-content-wordcloud-participant>
-            <app-content-prioritization-participant
-              *ngIf="content.format === ContentType.PRIORITIZATION"
-              [answer]="prioritizationAnswer"
-              [content]="prioritizationContent"
-              [isDisabled]="formDisabled || alreadySent || answeringLocked"
-              [sendEvent]="sendEvent"
-              (answerChanged)="forwardAnswerMessage($event)"
-            >
-            </app-content-prioritization-participant>
-            <app-content-numeric-participant
-              *ngIf="content.format === ContentType.NUMERIC"
-              [answer]="numericAnswer"
-              [content]="numericContent"
-              [isDisabled]="formDisabled || alreadySent || answeringLocked"
-              [sendEvent]="sendEvent"
-              (answerChanged)="forwardAnswerMessage($event)"
-              [correctOptionsPublished]="correctOptionsPublished"
-            >
-            </app-content-numeric-participant>
-          </div>
-          <div fxLayout="row-reverse" fxLayoutAlign="end">
-            <div
-              fxFill
-              *ngIf="
-                [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
-                  content.format
-                ) === -1
-              "
-            >
-              <div
-                fxLayout="row"
-                fxLayoutAlign="center center"
-                fxLayoutGap="1em"
-                [ngClass]="{
-                  visible: alreadySent || answeringLocked,
-                  invisible: !alreadySent && !answeringLocked,
-                }"
-                class="text primary"
-              >
-                <div *ngIf="alreadySent">
-                  <p
-                    class="primary"
-                    *ngIf="!hasAbstained && !content.state.answeringEndTime"
-                  >
-                    {{ 'participant.answer.has-voted' | transloco }}
-                  </p>
-                  <p
-                    class="primary"
-                    *ngIf="
-                      !hasAbstained &&
-                      answer &&
-                      answer.durationMs &&
-                      content.state.answeringEndTime
-                    "
-                  >
-                    {{
-                      'participant.answer.answered-in-time'
+      ) {
+        <div fxLayout="column" fxLayoutGap="0.5em">
+          <div
+            fxLayout.gt-xs="row"
+            fxLayout.xs="column"
+            fxLayoutAlign="space-between"
+            fxLayoutAlign.xs="center center"
+            fxLayoutGap="0.5em"
+          >
+            <app-rendered-text
+              tabindex="0"
+              [rawText]="content.body"
+              [renderedText]="content.renderedBody"
+            ></app-rendered-text>
+            @if (alreadySent) {
+              <div tabindex="0" class="visually-hidden">
+                {{
+                  hasAbstained
+                    ? ('participant.answer.a11y-has-abstained' | transloco)
+                    : content.format !== ContentType.TEXT
+                      ? ('participant.answer.a11y-already-answered-' +
+                          (isMultiple ? 'multiple' : 'single')
                         | transloco
                           : {
-                              duration: (answer.durationMs / 1000).toFixed(2),
-                            }
-                    }}
-                  </p>
-                  <p class="primary" *ngIf="hasAbstained">
-                    {{ 'participant.answer.has-abstained' | transloco }}
-                  </p>
-                </div>
-                <div *ngIf="!alreadySent && answeringLocked">
-                  <p>
-                    {{ 'participant.answer.not-answered-in-time' | transloco }}
-                  </p>
-                </div>
+                              answers: answersString,
+                            })
+                      : ('participant.answer.a11y-already-answered-text'
+                        | transloco: { answer: answersString })
+                }}
               </div>
-              <div [ngClass]="{ invisible: alreadySent }">
-                <div
-                  *ngIf="!answeringLocked"
-                  fxLayoutAlign="center"
-                  fxLayoutGap="10px"
-                >
-                  <button
-                    tabindex="{{ alreadySent ? '-1' : '0' }}"
-                    mat-button
-                    *ngIf="content.abstentionsAllowed"
-                    class="abstain"
-                    [ngClass]="{ disabled: alreadySent }"
-                    type="button"
-                    (click)="submitAnswerEvent($event, 'abstention')"
-                    aria-labelledby="abstain"
-                  >
-                    {{ 'participant.answer.abstain' | transloco }}
-                  </button>
-                  <app-loading-button
-                    name="participant.answer.submit"
-                  ></app-loading-button>
-                </div>
-              </div>
-            </div>
-            <button
-              type="button"
-              class="attribution-button"
-              [ngClass]="{
-                'absolute-position': content.format !== ContentType.SLIDE,
-              }"
-              *ngIf="attribution"
-              mat-icon-button
-              (click)="tooltip.toggle()"
-              (mouseover)="tooltip.show()"
-            >
-              <mat-icon #tooltip="matTooltip" [matTooltip]="attribution"
-                >attribution</mat-icon
+            }
+            @if (
+              !isLoading &&
+              (alreadySent || content.format === ContentType.FLASHCARD) &&
+              content.format !== ContentType.SLIDE &&
+              (statsPublished || contentGroup.leaderboardEnabled)
+            ) {
+              <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+                @for (tab of tabs; track tab) {
+                  <div>
+                    @if (showTab(tab.route)) {
+                      <a
+                        mat-tab-link
+                        class="tab-icon-link"
+                        (click)="updateTab(tab.route)"
+                        [active]="selectedRoute === tab.route"
+                        [appHotkey]="tab.hotkey"
+                        [appHotkeyTitle]="tab.label | transloco"
+                        [appHotkeyAction]="HotkeyAction.CLICK"
+                        [appHotkeyDisabled]="!active"
+                      >
+                        <mat-icon color="primary">{{ tab.icon }}</mat-icon>
+                      </a>
+                    }
+                  </div>
+                }
+              </nav>
+            }
+          </div>
+          <lib-extension-point
+            extensionId="attachment-list"
+            [extensionData]="extensionData"
+          ></lib-extension-point>
+          @if (active && content.duration && endDate && !answeringLocked) {
+            <app-countdown-timer
+              [endDate]="endDate"
+              [duration]="content.duration"
+              (finished)="answeringLocked = true"
+              [borderRadius]="3"
+            ></app-countdown-timer>
+          }
+          <mat-tab-nav-panel #tabPanel>
+            @if (selectedRoute === '') {
+              <form
+                (ngSubmit)="submitAnswerEvent($event, 'answer')"
+                id="answerForm"
               >
-            </button>
-          </div>
-        </form>
-        <div *ngIf="selectedRoute === 'results'">
-          <app-content-results
-            *ngIf="content.format !== ContentType.FLASHCARD"
-            [content]="content"
-            [active]="true"
-            [directShow]="true"
-            [correctOptionsPublished]="correctOptionsPublished"
-            [isStandalone]="false"
-          >
-          </app-content-results>
-          <div *ngIf="content.format === ContentType.FLASHCARD">
-            <app-divider></app-divider>
-            <app-rendered-text
-              [rawText]="flashcardContent.additionalText"
-              [renderedText]="flashcardContent.renderedAdditionalText"
-              [markdownFeatureset]="flashcardMarkdownFeatures"
-              (rendered)="isLoading = false"
-            ></app-rendered-text>
-          </div>
+                <div>
+                  @if (
+                    content.format === ContentType.CHOICE ||
+                    content.format === ContentType.BINARY
+                  ) {
+                    <app-content-choice-participant
+                      [answer]="choiceAnswer"
+                      [content]="choiceContent"
+                      [isDisabled]="
+                        formDisabled || alreadySent || answeringLocked
+                      "
+                      (answerChanged)="forwardAnswerMessage($event)"
+                      [sendEvent]="sendEvent"
+                      [statsPublished]="statsPublished"
+                      [correctOptionsPublished]="correctOptionsPublished"
+                    >
+                    </app-content-choice-participant>
+                  }
+                  @if (content.format === ContentType.SCALE) {
+                    <app-content-scale-participant
+                      [answer]="choiceAnswer"
+                      [content]="scaleContent"
+                      [isDisabled]="
+                        formDisabled || alreadySent || answeringLocked
+                      "
+                      (answerChanged)="forwardAnswerMessage($event)"
+                      [sendEvent]="sendEvent"
+                      [statsPublished]="statsPublished"
+                    >
+                    </app-content-scale-participant>
+                  }
+                  @if (content.format === ContentType.TEXT) {
+                    <app-content-text-participant
+                      [answer]="textAnswer"
+                      [content]="content"
+                      [isDisabled]="
+                        formDisabled || alreadySent || answeringLocked
+                      "
+                      [sendEvent]="sendEvent"
+                      (answerChanged)="forwardAnswerMessage($event)"
+                    ></app-content-text-participant>
+                  }
+                  @if (content.format === ContentType.SORT) {
+                    <app-content-sort-participant
+                      [answer]="choiceAnswer"
+                      [content]="choiceContent"
+                      [isDisabled]="
+                        formDisabled || alreadySent || answeringLocked
+                      "
+                      [sendEvent]="sendEvent"
+                      (answerChanged)="forwardAnswerMessage($event)"
+                      [statsPublished]="statsPublished"
+                      [correctOptionsPublished]="correctOptionsPublished"
+                    >
+                    </app-content-sort-participant>
+                  }
+                  @if (content.format === ContentType.WORDCLOUD) {
+                    <app-content-wordcloud-participant
+                      [answer]="wordcloudAnswer"
+                      [content]="wordloudContent"
+                      [isDisabled]="
+                        formDisabled || alreadySent || answeringLocked
+                      "
+                      [sendEvent]="sendEvent"
+                      (answerChanged)="forwardAnswerMessage($event)"
+                    >
+                    </app-content-wordcloud-participant>
+                  }
+                  @if (content.format === ContentType.PRIORITIZATION) {
+                    <app-content-prioritization-participant
+                      [answer]="prioritizationAnswer"
+                      [content]="prioritizationContent"
+                      [isDisabled]="
+                        formDisabled || alreadySent || answeringLocked
+                      "
+                      [sendEvent]="sendEvent"
+                      (answerChanged)="forwardAnswerMessage($event)"
+                    >
+                    </app-content-prioritization-participant>
+                  }
+                  @if (content.format === ContentType.NUMERIC) {
+                    <app-content-numeric-participant
+                      [answer]="numericAnswer"
+                      [content]="numericContent"
+                      [isDisabled]="
+                        formDisabled || alreadySent || answeringLocked
+                      "
+                      [sendEvent]="sendEvent"
+                      (answerChanged)="forwardAnswerMessage($event)"
+                      [correctOptionsPublished]="correctOptionsPublished"
+                    >
+                    </app-content-numeric-participant>
+                  }
+                </div>
+                <div fxLayout="row-reverse" fxLayoutAlign="end">
+                  @if (
+                    [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
+                      content.format
+                    ) === -1
+                  ) {
+                    <div fxFill>
+                      <div
+                        fxLayout="row"
+                        fxLayoutAlign="center center"
+                        fxLayoutGap="1em"
+                        [ngClass]="{
+                          visible: alreadySent || answeringLocked,
+                          invisible: !alreadySent && !answeringLocked,
+                        }"
+                        class="text primary"
+                      >
+                        @if (alreadySent) {
+                          <div>
+                            @if (
+                              !hasAbstained && !content.state.answeringEndTime
+                            ) {
+                              <p class="primary">
+                                {{ 'participant.answer.has-voted' | transloco }}
+                              </p>
+                            }
+                            @if (
+                              !hasAbstained &&
+                              answer &&
+                              answer.durationMs &&
+                              content.state.answeringEndTime
+                            ) {
+                              <p class="primary">
+                                {{
+                                  'participant.answer.answered-in-time'
+                                    | transloco
+                                      : {
+                                          duration: (
+                                            answer.durationMs / 1000
+                                          ).toFixed(2),
+                                        }
+                                }}
+                              </p>
+                            }
+                            @if (hasAbstained) {
+                              <p class="primary">
+                                {{
+                                  'participant.answer.has-abstained' | transloco
+                                }}
+                              </p>
+                            }
+                          </div>
+                        }
+                        @if (!alreadySent && answeringLocked) {
+                          <div>
+                            <p>
+                              {{
+                                'participant.answer.not-answered-in-time'
+                                  | transloco
+                              }}
+                            </p>
+                          </div>
+                        }
+                      </div>
+                      <div [ngClass]="{ invisible: alreadySent }">
+                        @if (!answeringLocked) {
+                          <div fxLayoutAlign="center" fxLayoutGap="10px">
+                            @if (content.abstentionsAllowed) {
+                              <button
+                                tabindex="{{ alreadySent ? '-1' : '0' }}"
+                                mat-button
+                                class="abstain"
+                                [ngClass]="{ disabled: alreadySent }"
+                                type="button"
+                                (click)="
+                                  submitAnswerEvent($event, 'abstention')
+                                "
+                                aria-labelledby="abstain"
+                              >
+                                {{ 'participant.answer.abstain' | transloco }}
+                              </button>
+                            }
+                            <app-loading-button
+                              name="participant.answer.submit"
+                            ></app-loading-button>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                  @if (attribution) {
+                    <button
+                      type="button"
+                      class="attribution-button"
+                      [ngClass]="{
+                        'absolute-position':
+                          content.format !== ContentType.SLIDE,
+                      }"
+                      mat-icon-button
+                      (click)="tooltip.toggle()"
+                      (mouseover)="tooltip.show()"
+                    >
+                      <mat-icon #tooltip="matTooltip" [matTooltip]="attribution"
+                        >attribution</mat-icon
+                      >
+                    </button>
+                  }
+                </div>
+              </form>
+            }
+            @if (selectedRoute === 'results') {
+              <div>
+                @if (content.format !== ContentType.FLASHCARD) {
+                  <app-content-results
+                    [content]="content"
+                    [active]="true"
+                    [directShow]="true"
+                    [correctOptionsPublished]="correctOptionsPublished"
+                    [isStandalone]="false"
+                  >
+                  </app-content-results>
+                }
+                @if (content.format === ContentType.FLASHCARD) {
+                  <div>
+                    <app-divider></app-divider>
+                    <app-rendered-text
+                      [rawText]="flashcardContent.additionalText"
+                      [renderedText]="flashcardContent.renderedAdditionalText"
+                      [markdownFeatureset]="flashcardMarkdownFeatures"
+                      (rendered)="isLoading = false"
+                    ></app-rendered-text>
+                  </div>
+                }
+              </div>
+            }
+            @if (selectedRoute === 'leaderboard' && alias) {
+              <div>
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                  <app-leaderboard-page
+                    fxFill
+                    [content]="content"
+                    [aliasId]="alias.id"
+                  ></app-leaderboard-page>
+                </div>
+              </div>
+            }
+          </mat-tab-nav-panel>
         </div>
-        <div *ngIf="selectedRoute === 'leaderboard' && alias">
-          <div fxLayout="row" fxLayoutAlign="space-between">
-            <app-leaderboard-page
-              fxFill
-              [content]="content"
-              [aliasId]="alias.id"
-            ></app-leaderboard-page>
-          </div>
-        </div>
-      </mat-tab-nav-panel>
-    </div>
-  </mat-card>
+      }
+    </mat-card>
+  }
   <div tabindex="-1" class="visually-hidden">
     <div id="submit">{{ 'participant.answer.a11y-submit' | transloco }}</div>
     <div id="abstain">{{ 'participant.answer.a11y-abstain' | transloco }}</div>

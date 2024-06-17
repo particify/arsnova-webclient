@@ -1,20 +1,28 @@
 <div mat-dialog-content tabindex="0">
   <h3>{{ data.headerLabel | transloco }}</h3>
   <p>{{ data.body | transloco }}</p>
-  <p *ngIf="data.additionalBody">
-    {{ data.additionalBody | transloco }}
-  </p>
-  <a *ngIf="data.link" target="_blank" [href]="data.link">{{
-    data.linkText ? (data.linkText | transloco) : data.link
-  }}</a>
-  <p *ngIf="data.bodyElement">
-    <strong>{{ data.bodyElement }}</strong>
-  </p>
+  @if (data.additionalBody) {
+    <p>
+      {{ data.additionalBody | transloco }}
+    </p>
+  }
+  @if (data.link) {
+    <a target="_blank" [href]="data.link">{{
+      data.linkText ? (data.linkText | transloco) : data.link
+    }}</a>
+  }
+  @if (data.bodyElement) {
+    <p>
+      <strong>{{ data.bodyElement }}</strong>
+    </p>
+  }
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end">
-  <button *ngIf="data.abortLabel" mat-button (click)="dialogRef.close()">
-    {{ data.abortLabel | transloco }}
-  </button>
+  @if (data.abortLabel) {
+    <button mat-button (click)="dialogRef.close()">
+      {{ data.abortLabel | transloco }}
+    </button>
+  }
   <app-loading-button
     [name]="data.confirmLabel"
     [color]="data.type === 'button-primary' ? 'primary' : 'warn'"

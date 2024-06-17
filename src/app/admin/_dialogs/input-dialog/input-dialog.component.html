@@ -1,15 +1,15 @@
 <form>
   <div mat-dialog-content>
-    <app-search-bar
-      *ngIf="useUserSearch; else standardSearch"
-      label="{{ 'admin.admin-area.' + inputName | transloco }}"
-      [results]="searchResults"
-      [showSuccessIndicator]="!!user"
-      (inputChanged)="search($event)"
-      (inputCleared)="clear()"
-      (itemSelected)="selectUser($event)"
-    ></app-search-bar>
-    <ng-template #standardSearch>
+    @if (useUserSearch) {
+      <app-search-bar
+        label="{{ 'admin.admin-area.' + inputName | transloco }}"
+        [results]="searchResults"
+        [showSuccessIndicator]="!!user"
+        (inputChanged)="search($event)"
+        (inputCleared)="clear()"
+        (itemSelected)="selectUser($event)"
+      ></app-search-bar>
+    } @else {
       <mat-form-field appearance="outline">
         <mat-label>{{ 'admin.admin-area.' + inputName | transloco }}</mat-label>
         <input
@@ -19,7 +19,7 @@
           autocomplete="off"
         />
       </mat-form-field>
-    </ng-template>
+    }
   </div>
   <div fxLayoutAlign="end">
     <div mat-dialog-actions fxLayout="row-reverse" fxLayoutAling="end">

@@ -17,7 +17,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { FlexModule } from '@angular/flex-layout';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 
 @Component({
@@ -28,7 +28,6 @@ import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.com
   imports: [
     NgClass,
     FlexModule,
-    NgIf,
     WordcloudComponent,
     AnswerListComponent,
     TranslocoPipe,

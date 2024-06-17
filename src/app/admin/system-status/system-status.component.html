@@ -1,31 +1,43 @@
 <app-admin-page-header headerText="status-details"> </app-admin-page-header>
 
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<mat-card appearance="outlined" *ngIf="!isLoading">
-  <table mat-table [dataSource]="dataSource | keyvalue">
-    <ng-container matColumnDef="statusKey">
-      <td mat-cell *matCellDef="let element">
-        {{ 'admin.admin-area.status-' + (element.key | lowercase) | transloco }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="statusValue">
-      <td mat-cell class="icon-column" *matCellDef="let element">
-        <app-health-status [status]="element.value.status"></app-health-status>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="statusHint">
-      <td mat-cell class="icon-column" *matCellDef="let element">
-        <mat-icon
-          *ngIf="element.value.details"
-          matTooltip="{{ element.value.details | json }}"
-          class="system-health-details"
-          >info</mat-icon
-        >
-      </td>
-    </ng-container>
-    <tr
-      mat-row
-      *matRowDef="let row; columns: ['statusKey', 'statusValue', 'statusHint']"
-    ></tr>
-  </table>
-</mat-card>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <mat-card appearance="outlined">
+    <table mat-table [dataSource]="dataSource | keyvalue">
+      <ng-container matColumnDef="statusKey">
+        <td mat-cell *matCellDef="let element">
+          {{
+            'admin.admin-area.status-' + (element.key | lowercase) | transloco
+          }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="statusValue">
+        <td mat-cell class="icon-column" *matCellDef="let element">
+          <app-health-status
+            [status]="element.value.status"
+          ></app-health-status>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="statusHint">
+        <td mat-cell class="icon-column" *matCellDef="let element">
+          @if (element.value.details) {
+            <mat-icon
+              matTooltip="{{ element.value.details | json }}"
+              class="system-health-details"
+              >info</mat-icon
+            >
+          }
+        </td>
+      </ng-container>
+      <tr
+        mat-row
+        *matRowDef="
+          let row;
+          columns: ['statusKey', 'statusValue', 'statusHint']
+        "
+      ></tr>
+    </table>
+  </mat-card>
+}

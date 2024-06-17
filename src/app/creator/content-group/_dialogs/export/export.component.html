@@ -2,17 +2,19 @@
   <mat-form-field appearance="outline">
     <mat-label>{{ 'creator.export.file-type' | transloco }}</mat-label>
     <mat-select required [(ngModel)]="selectedExportType">
-      <mat-option *ngFor="let exportType of exportTypes" [value]="exportType">{{
-        exportType.label | transloco
-      }}</mat-option>
+      @for (exportType of exportTypes; track exportType) {
+        <mat-option [value]="exportType">{{
+          exportType.label | transloco
+        }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>{{ 'creator.export.charset' | transloco }}</mat-label>
     <mat-select required [(ngModel)]="selectedCharset">
-      <mat-option *ngFor="let charset of charsets" [value]="charset">{{
-        charset
-      }}</mat-option>
+      @for (charset of charsets; track charset) {
+        <mat-option [value]="charset">{{ charset }}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </mat-dialog-content>

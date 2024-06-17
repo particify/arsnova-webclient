@@ -8,8 +8,7 @@
       </a>
     </div>
   </lib-extension-point>
-  <app-footer-links
-    *ngIf="showFooterLinks && uiConfig"
-    [uiConfig]="uiConfig"
-  ></app-footer-links>
+  @if (showFooterLinks && uiConfig) {
+    <app-footer-links [uiConfig]="uiConfig"></app-footer-links>
+  }
 </div>

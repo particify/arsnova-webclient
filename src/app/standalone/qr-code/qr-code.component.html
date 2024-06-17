@@ -1,7 +1,9 @@
 <div fxLayout="column" fxFill>
-  <div *ngIf="showCopyUrlButton && url" fxLayout="row" fxLayoutAlign="end">
-    <app-copy-url class="copy-url" [url]="url"></app-copy-url>
-  </div>
+  @if (showCopyUrlButton && url) {
+    <div fxLayout="row" fxLayoutAlign="end">
+      <app-copy-url class="copy-url" [url]="url"></app-copy-url>
+    </div>
+  }
   <div
     fxFill
     fxLayout="column"
@@ -21,19 +23,24 @@
         fxLayoutAlign="center center"
         fxLayoutGap.xs="0.25em"
       >
-        <lib-extension-point *ngIf="showIcon" extensionId="branding-logo">
-          <mat-icon color="primary" class="web-icon disabled"
-            >language</mat-icon
-          >
-        </lib-extension-point>
-        <span *ngIf="!useJoinUrl" class="url text">{{ displayUrl }}</span>
+        @if (showIcon) {
+          <lib-extension-point extensionId="branding-logo">
+            <mat-icon color="primary" class="web-icon disabled"
+              >language</mat-icon
+            >
+          </lib-extension-point>
+        }
+        @if (!useJoinUrl) {
+          <span class="url text">{{ displayUrl }}</span>
+        }
         <span class="url text">{{
           useJoinUrl ? displayUrl : (shortId | splitShortId: false)
         }}</span>
-        <lib-extension-point
-          *ngIf="passwordProtected"
-          extensionId="share-room-password"
-        ></lib-extension-point>
+        @if (passwordProtected) {
+          <lib-extension-point
+            extensionId="share-room-password"
+          ></lib-extension-point>
+        }
       </div>
       <qr-code
         fxLayout="column"
@@ -46,14 +53,11 @@
         [margin]="0"
       ></qr-code>
     </div>
-    <div
-      *ngIf="!!userCount && showUserCount"
-      class="disabled"
-      fxLayoutAlign="center center"
-      fxLayoutGap="12px"
-    >
-      <span class="text">{{ userCount }}</span>
-      <mat-icon class="user-icon">people</mat-icon>
-    </div>
+    @if (!!userCount && showUserCount) {
+      <div class="disabled" fxLayoutAlign="center center" fxLayoutGap="12px">
+        <span class="text">{{ userCount }}</span>
+        <mat-icon class="user-icon">people</mat-icon>
+      </div>
+    }
   </div>
 </div>

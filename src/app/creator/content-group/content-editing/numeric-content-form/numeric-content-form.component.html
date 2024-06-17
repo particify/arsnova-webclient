@@ -1,12 +1,10 @@
 <div fxLayout="column" fxLayoutGap="1em">
   <div>
-    <mat-checkbox
-      *ngIf="correctAnswerSelection"
-      [disabled]="formDisabled"
-      [(ngModel)]="noCorrect"
-    >
-      {{ 'creator.content.no-correct-answer' | transloco }}
-    </mat-checkbox>
+    @if (correctAnswerSelection) {
+      <mat-checkbox [disabled]="formDisabled" [(ngModel)]="noCorrect">
+        {{ 'creator.content.no-correct-answer' | transloco }}
+      </mat-checkbox>
+    }
   </div>
   <div>
     <span>{{ 'creator.content.range' | transloco }}</span>
@@ -31,52 +29,52 @@
       </mat-form-field>
     </div>
   </div>
-  <div *ngIf="isQuiz || correctAnswerSelection" fxLayout="column">
-    <span>{{ 'creator.content.correct-answer' | transloco }}</span>
-    <div fxLayout="column" fxLayoutGap="0.5em">
-      <div fxLayout="row" fxLayoutGap="1em">
-        <mat-form-field
-          appearance="outline"
-          class="no-field-hint initial-width"
-        >
-          <mat-label>{{
-            'creator.content.correct-answer' | transloco
-          }}</mat-label>
-          <input
-            matInput
-            [disabled]="formDisabled || noCorrect"
-            type="number"
-            [(ngModel)]="correctNumber"
-          />
-        </mat-form-field>
-        <mat-form-field
-          appearance="outline"
-          class="no-field-hint initial-width"
-        >
-          <mat-label>{{
-            'creator.content.optional-tolerance' | transloco
-          }}</mat-label>
-          <input
-            matInput
-            [disabled]="formDisabled || noCorrect"
-            type="number"
-            [(ngModel)]="tolerance"
-          />
-        </mat-form-field>
+  @if (isQuiz || correctAnswerSelection) {
+    <div fxLayout="column">
+      <span>{{ 'creator.content.correct-answer' | transloco }}</span>
+      <div fxLayout="column" fxLayoutGap="0.5em">
+        <div fxLayout="row" fxLayoutGap="1em">
+          <mat-form-field
+            appearance="outline"
+            class="no-field-hint initial-width"
+          >
+            <mat-label>{{
+              'creator.content.correct-answer' | transloco
+            }}</mat-label>
+            <input
+              matInput
+              [disabled]="formDisabled || noCorrect"
+              type="number"
+              [(ngModel)]="correctNumber"
+            />
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            class="no-field-hint initial-width"
+          >
+            <mat-label>{{
+              'creator.content.optional-tolerance' | transloco
+            }}</mat-label>
+            <input
+              matInput
+              [disabled]="formDisabled || noCorrect"
+              type="number"
+              [(ngModel)]="tolerance"
+            />
+          </mat-form-field>
+        </div>
+        @if (!noCorrect && !!tolerance && !!correctNumber) {
+          <span class="range-hint">{{
+            'creator.content.all-answers-between-are-correct'
+              | transloco
+                : {
+                    min: correctNumber - tolerance | localizeDecimalSeperator,
+                    max: correctNumber + tolerance | localizeDecimalSeperator,
+                  }
+          }}</span>
+        }
       </div>
-      <span
-        *ngIf="!noCorrect && !!tolerance && !!correctNumber"
-        class="range-hint"
-        >{{
-          'creator.content.all-answers-between-are-correct'
-            | transloco
-              : {
-                  min: correctNumber - tolerance | localizeDecimalSeperator,
-                  max: correctNumber + tolerance | localizeDecimalSeperator,
-                }
-        }}</span
-      >
     </div>
-  </div>
+  }
   <div></div>
 </div>

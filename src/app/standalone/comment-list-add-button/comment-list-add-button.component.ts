@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +8,6 @@ import { ExtensionPointModule } from '@projects/extension-point/src/lib/extensio
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
     FlexModule,
     TranslocoModule,
     MatButtonModule,

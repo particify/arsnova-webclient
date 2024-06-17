@@ -1,131 +1,143 @@
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutAlign="center center" fxFill>
-  <mat-card
-    [appearance]="isStandalone ? 'outlined' : 'raised'"
-    class="login-card"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-  >
-    <app-form-header [text]="'login.welcome' | transloco"></app-form-header>
-    <div *ngIf="ssoProviders.length > 0" fxLayout="column" fxLayoutGap="10px">
-      <button
-        *ngFor="let provider of ssoProviders; let i = index"
-        [appAutofocus]="i === 0"
-        (click)="loginViaSso(provider.id)"
-        color="primary"
-        id="{{ provider.title }}-button"
-        mat-raised-button
-        type="button"
-        attr.aria-label="{{
-          'login.a11y-sso-login' | transloco: { provider: provider.title }
-        }}"
-      >
-        {{ 'login.login-with' | transloco }} {{ provider.title }}
-      </button>
-    </div>
-    <ng-container *ngIf="passwordLoginEnabled">
-      <ng-container *ngIf="ssoProviders.length > 0">
-        <p>{{ 'login.or' | transloco }}</p>
-        <mat-divider></mat-divider>
-      </ng-container>
-      <form class="full-width" fxLayout="column" fxLayoutGap="10px">
-        <mat-form-field
-          *ngIf="loginIdIsEmail; else loginIdIsUsername"
-          class="input-block"
-          appearance="outline"
-        >
-          <mat-label>{{ 'login.email' | transloco }}</mat-label>
-          <input
-            [appAutofocus]
-            [(ngModel)]="username"
-            [errorStateMatcher]="matcher"
-            [formControl]="loginIdFormControl"
-            matInput
-            type="email"
-            id="loginid-input"
-            name="loginid"
-            (blur)="activateValidators()"
-          />
-          <mat-error
-            *ngIf="
-              loginIdFormControl.hasError('email') &&
-              !loginIdFormControl.hasError('required')
-            "
-          >
-            {{ 'login.email-invalid' | transloco }}
-          </mat-error>
-          <mat-error *ngIf="loginIdFormControl.hasError('required')">
-            {{ 'login.email-required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-        <ng-template #loginIdIsUsername>
-          <mat-form-field class="input-block" appearance="outline">
-            <mat-label>{{ 'login.username' | transloco }}</mat-label>
-            <input
-              [(ngModel)]="username"
-              [errorStateMatcher]="matcher"
-              [formControl]="loginIdFormControl"
-              matInput
-              id="loginid-input"
-              name="loginid"
-            />
-          </mat-form-field>
-        </ng-template>
-        <app-password-entry [preFill]="password"></app-password-entry>
-        <div *ngIf="dbLoginEnabled && allowPwReset" fxLayout="row">
-          <a
-            class="action-link forgot-pw"
-            [routerLink]="[]"
-            (click)="
-              navToPasswordReset();
-              $event.preventDefault();
-              $event.stopPropagation()
-            "
-            aria-labelledby="forgot-pw"
-          >
-            {{ 'login.password-reset' | transloco }}
-          </a>
+@if (!isLoading) {
+  <div fxLayout="column" fxLayoutAlign="center center" fxFill>
+    <mat-card
+      [appearance]="isStandalone ? 'outlined' : 'raised'"
+      class="login-card"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <app-form-header [text]="'login.welcome' | transloco"></app-form-header>
+      @if (ssoProviders.length > 0) {
+        <div fxLayout="column" fxLayoutGap="10px">
+          @for (provider of ssoProviders; track provider; let i = $index) {
+            <button
+              [appAutofocus]="i === 0"
+              (click)="loginViaSso(provider.id)"
+              color="primary"
+              id="{{ provider.title }}-button"
+              mat-raised-button
+              type="button"
+              attr.aria-label="{{
+                'login.a11y-sso-login' | transloco: { provider: provider.title }
+              }}"
+            >
+              {{ 'login.login-with' | transloco }} {{ provider.title }}
+            </button>
+          }
         </div>
-        <div fxLayout="column" fxLayoutGap="5px">
-          <div *ngFor="let provider of usernamePasswordProviders">
-            <app-loading-button
-              *ngIf="usernamePasswordProviders.length === 1"
-              name="login.login"
-              [fullWidth]="true"
-              (clicked)="loginWithUsernamePassword(provider.id)"
-            ></app-loading-button>
-            <app-loading-button
-              *ngIf="usernamePasswordProviders.length > 1"
-              name="{{ 'login.login-with' | transloco }}
+      }
+      @if (passwordLoginEnabled) {
+        @if (ssoProviders.length > 0) {
+          <p>{{ 'login.or' | transloco }}</p>
+          <mat-divider></mat-divider>
+        }
+        <form class="full-width" fxLayout="column" fxLayoutGap="10px">
+          @if (loginIdIsEmail) {
+            <mat-form-field class="input-block" appearance="outline">
+              <mat-label>{{ 'login.email' | transloco }}</mat-label>
+              <input
+                [appAutofocus]
+                [(ngModel)]="username"
+                [errorStateMatcher]="matcher"
+                [formControl]="loginIdFormControl"
+                matInput
+                type="email"
+                id="loginid-input"
+                name="loginid"
+                (blur)="activateValidators()"
+              />
+              @if (
+                loginIdFormControl.hasError('email') &&
+                !loginIdFormControl.hasError('required')
+              ) {
+                <mat-error>
+                  {{ 'login.email-invalid' | transloco }}
+                </mat-error>
+              }
+              @if (loginIdFormControl.hasError('required')) {
+                <mat-error>
+                  {{ 'login.email-required' | transloco }}
+                </mat-error>
+              }
+            </mat-form-field>
+          } @else {
+            <mat-form-field class="input-block" appearance="outline">
+              <mat-label>{{ 'login.username' | transloco }}</mat-label>
+              <input
+                [(ngModel)]="username"
+                [errorStateMatcher]="matcher"
+                [formControl]="loginIdFormControl"
+                matInput
+                id="loginid-input"
+                name="loginid"
+              />
+            </mat-form-field>
+          }
+          <app-password-entry [preFill]="password"></app-password-entry>
+          @if (dbLoginEnabled && allowPwReset) {
+            <div fxLayout="row">
+              <a
+                class="action-link forgot-pw"
+                [routerLink]="[]"
+                (click)="
+                  navToPasswordReset();
+                  $event.preventDefault();
+                  $event.stopPropagation()
+                "
+                aria-labelledby="forgot-pw"
+              >
+                {{ 'login.password-reset' | transloco }}
+              </a>
+            </div>
+          }
+          <div fxLayout="column" fxLayoutGap="5px">
+            @for (provider of usernamePasswordProviders; track provider) {
+              <div>
+                @if (usernamePasswordProviders.length === 1) {
+                  <app-loading-button
+                    name="login.login"
+                    [fullWidth]="true"
+                    (clicked)="loginWithUsernamePassword(provider.id)"
+                  ></app-loading-button>
+                }
+                @if (usernamePasswordProviders.length > 1) {
+                  <app-loading-button
+                    name="{{ 'login.login-with' | transloco }}
               {{ provider.title }}"
-              [fullWidth]="true"
-              (clicked)="loginWithUsernamePassword(provider.id)"
-            ></app-loading-button>
+                    [fullWidth]="true"
+                    (clicked)="loginWithUsernamePassword(provider.id)"
+                  ></app-loading-button>
+                }
+              </div>
+            }
           </div>
-        </div>
-        <div
-          *ngIf="dbLoginEnabled && allowRegister"
-          fxLayout="row"
-          fxLayoutAlign="center"
-        >
-          <p class="smaller-text">{{ 'login.not-registered' | transloco }}</p>
-          <a
-            class="action-link after-text-link"
-            [routerLink]="'/register'"
-            aria-labelledby="register"
-          >
-            {{ 'login.register' | transloco }}</a
-          >
-        </div>
-      </form>
-    </ng-container>
-  </mat-card>
-</div>
+          @if (dbLoginEnabled && allowRegister) {
+            <div fxLayout="row" fxLayoutAlign="center">
+              <p class="smaller-text">
+                {{ 'login.not-registered' | transloco }}
+              </p>
+              <a
+                class="action-link after-text-link"
+                [routerLink]="'/register'"
+                aria-labelledby="register"
+              >
+                {{ 'login.register' | transloco }}</a
+              >
+            </div>
+          }
+        </form>
+      }
+    </mat-card>
+  </div>
+}
 
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
 
 <div class="visually-hidden">
-  <ng-container *ngIf="passwordLoginEnabled">
+  @if (passwordLoginEnabled) {
     <div id="forgot-pw">{{ 'login.a11y-reset-pw' | transloco }}</div>
     <div id="register">{{ 'login.a11y-register' | transloco }}</div>
-  </ng-container>
+  }
 </div>

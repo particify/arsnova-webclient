@@ -3,30 +3,35 @@
   (cdkDropListDropped)="drop($event.previousIndex, $event.currentIndex)"
   [cdkDropListDisabled]="disabled"
 >
-  <div
-    class="answer primary-shadow-focus"
-    *ngFor="let answer of answerOptions; let i = index"
-    cdkDrag
-    [cdkDragStartDelay]="50"
-    [cdkDragPreviewClass]="'primary-shadow-always'"
-    [ngClass]="{ 'no-grab': disabled }"
-    tabindex="0"
-    [attr.aria-label]="
-      'answer.a11y-sort-item'
-        | transloco
-          : { answer: answer.label, index: i + 1, length: answerOptions.length }
-    "
-    (keyup)="moveAnswer($event, i)"
-    #sortListItem
-  >
-    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
-      <mat-icon>drag_handle</mat-icon>
-      <app-rendered-text
-        [rawText]="answer.label"
-        [renderedText]="answer.renderedLabel"
-        [dynamic]="dynamicRendering"
-        [markdown]="false"
-      ></app-rendered-text>
+  @for (answer of answerOptions; track answer; let i = $index) {
+    <div
+      class="answer primary-shadow-focus"
+      cdkDrag
+      [cdkDragStartDelay]="50"
+      [cdkDragPreviewClass]="'primary-shadow-always'"
+      [ngClass]="{ 'no-grab': disabled }"
+      tabindex="0"
+      [attr.aria-label]="
+        'answer.a11y-sort-item'
+          | transloco
+            : {
+                answer: answer.label,
+                index: i + 1,
+                length: answerOptions.length,
+              }
+      "
+      (keyup)="moveAnswer($event, i)"
+      #sortListItem
+    >
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+        <mat-icon>drag_handle</mat-icon>
+        <app-rendered-text
+          [rawText]="answer.label"
+          [renderedText]="answer.renderedLabel"
+          [dynamic]="dynamicRendering"
+          [markdown]="false"
+        ></app-rendered-text>
+      </div>
     </div>
-  </div>
+  }
 </div>

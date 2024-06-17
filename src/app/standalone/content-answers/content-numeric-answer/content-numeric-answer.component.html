@@ -19,29 +19,36 @@
         [max]="content.maxNumber"
         name="'answer'"
       />
-      <mat-icon
-        matSuffix
-        *ngIf="showAnswerIndicator()"
-        class="icon-indicator"
-        [ngClass]="isCorrect() ? 'correct' : 'wrong'"
-      >
-        {{ isCorrect() ? 'check' : 'close' }}</mat-icon
-      >
+      @if (showAnswerIndicator()) {
+        <mat-icon
+          matSuffix
+          class="icon-indicator"
+          [ngClass]="isCorrect() ? 'correct' : 'wrong'"
+        >
+          {{ isCorrect() ? 'check' : 'close' }}</mat-icon
+        >
+      }
     </mat-form-field>
-    <span *ngIf="!answer" class="answer-hint"
-      >{{
-        'answer.select-a-number-between'
-          | transloco
-            : {
-                min: content.minNumber | localizeDecimalSeperator,
-                max: content.maxNumber | localizeDecimalSeperator,
-              }
-      }}
-    </span>
-    <span *ngIf="showAnswerIndicator()" class="answer-hint"
-      >{{ 'answer.correct-answer-is' | transloco }}
-      <b>{{ content.correctNumber }}</b>
-      <span *ngIf="content.tolerance"> &plusmn; {{ content.tolerance }}</span>
-    </span>
+    @if (!answer) {
+      <span class="answer-hint"
+        >{{
+          'answer.select-a-number-between'
+            | transloco
+              : {
+                  min: content.minNumber | localizeDecimalSeperator,
+                  max: content.maxNumber | localizeDecimalSeperator,
+                }
+        }}
+      </span>
+    }
+    @if (showAnswerIndicator()) {
+      <span class="answer-hint"
+        >{{ 'answer.correct-answer-is' | transloco }}
+        <b>{{ content.correctNumber }}</b>
+        @if (content.tolerance) {
+          <span> &plusmn; {{ content.tolerance }}</span>
+        }
+      </span>
+    }
   </div>
 </div>

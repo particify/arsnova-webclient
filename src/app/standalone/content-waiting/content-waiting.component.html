@@ -9,32 +9,33 @@
     [current]="current"
     [totalCount]="totalCount"
   ></app-content-step-info>
-  <form
-    *ngIf="alias && !alias.id"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    fxLayoutGap="0.75em"
-  >
-    <span>{{ 'content.enter-name-for-room' | transloco }}</span>
-    <mat-form-field class="no-field-hint">
-      <input
-        name="alias-input"
-        [disabled]="formDisabled"
-        matInput
-        [(ngModel)]="enteredAlias"
-        [placeholder]="alias.alias"
-        [maxLength]="30"
-      />
-    </mat-form-field>
-    <app-loading-button
-      [name]="'content.join-quiz' | transloco"
-      (clicked)="setAlias()"
-    ></app-loading-button>
-  </form>
-  <span *ngIf="alias?.id">{{
-    'content.get-ready-alias' | transloco: { alias: alias?.alias }
-  }}</span>
-  <span *ngIf="!alias">
-    {{ 'content.get-ready' | transloco }}
-  </span>
+  @if (alias && !alias.id) {
+    <form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="0.75em">
+      <span>{{ 'content.enter-name-for-room' | transloco }}</span>
+      <mat-form-field class="no-field-hint">
+        <input
+          name="alias-input"
+          [disabled]="formDisabled"
+          matInput
+          [(ngModel)]="enteredAlias"
+          [placeholder]="alias.alias"
+          [maxLength]="30"
+        />
+      </mat-form-field>
+      <app-loading-button
+        [name]="'content.join-quiz' | transloco"
+        (clicked)="setAlias()"
+      ></app-loading-button>
+    </form>
+  }
+  @if (alias?.id) {
+    <span>{{
+      'content.get-ready-alias' | transloco: { alias: alias?.alias }
+    }}</span>
+  }
+  @if (!alias) {
+    <span>
+      {{ 'content.get-ready' | transloco }}
+    </span>
+  }
 </div>

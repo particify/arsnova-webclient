@@ -3,9 +3,10 @@
     <mat-icon class="title-icon">emoji_events</mat-icon>
     <h1>{{ 'content.leaderboard' | transloco }}</h1>
   </div>
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <app-leaderboard
-    *ngIf="!isLoading"
-    [leaderboardItems]="leaderboardItems"
-  ></app-leaderboard>
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading) {
+    <app-leaderboard [leaderboardItems]="leaderboardItems"></app-leaderboard>
+  }
 </app-base-card>

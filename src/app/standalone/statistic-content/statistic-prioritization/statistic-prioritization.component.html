@@ -1,13 +1,16 @@
 <div fxLayout="column">
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <div
-    tabindex="0"
-    class="chart-container"
-    id="container-{{ chartId }}"
-    *ngIf="!isLoading"
-    [ngStyle]="{ 'height.px': chartHeight }"
-    [attr.aria-label]="getA11yMessage()"
-  >
-    <canvas class="chart" id="{{ chartId }}"></canvas>
-  </div>
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading) {
+    <div
+      tabindex="0"
+      class="chart-container"
+      id="container-{{ chartId }}"
+      [ngStyle]="{ 'height.px': chartHeight }"
+      [attr.aria-label]="getA11yMessage()"
+    >
+      <canvas class="chart" id="{{ chartId }}"></canvas>
+    </div>
+  }
 </div>

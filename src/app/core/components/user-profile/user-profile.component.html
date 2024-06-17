@@ -14,46 +14,51 @@
           [icon]="'manage_accounts'"
         ></app-settings-panel-header>
       </mat-expansion-panel-header>
-      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-      <div *ngIf="!isLoading">
-        <lib-extension-point
-          extensionId="profile-subscription"
-        ></lib-extension-point>
-        <lib-extension-point
-          extensionId="external-instance-hint"
-        ></lib-extension-point>
-        <ng-container *ngIf="!isGuest; else guestHint">
-          <p class="username">
-            {{
-              ('user-profile.username' | transloco) +
-                ': ' +
-                user.person.displayId
-            }}
-          </p>
-        </ng-container>
-        <ng-template #guestHint>
-          <app-hint
-            [text]="'user-profile.guest-hint'"
-            [type]="HintType.INFO"
-          ></app-hint>
-        </ng-template>
+      @if (isLoading) {
+        <app-loading-indicator></app-loading-indicator>
+      }
+      @if (!isLoading) {
         <div>
-          <div
-            fxLayout="row wrap"
-            class="delete-container"
-            fxLayoutAlign="space-between center"
-            fxLayoutGap="16px"
-          >
-            <div>
-              <span>{{ 'user-profile.delete-account-info' | transloco }}</span>
+          <lib-extension-point
+            extensionId="profile-subscription"
+          ></lib-extension-point>
+          <lib-extension-point
+            extensionId="external-instance-hint"
+          ></lib-extension-point>
+          @if (!isGuest) {
+            <p class="username">
+              {{
+                ('user-profile.username' | transloco) +
+                  ': ' +
+                  user.person.displayId
+              }}
+            </p>
+          } @else {
+            <app-hint
+              [text]="'user-profile.guest-hint'"
+              [type]="HintType.INFO"
+            ></app-hint>
+          }
+          <div>
+            <div
+              fxLayout="row wrap"
+              class="delete-container"
+              fxLayoutAlign="space-between center"
+              fxLayoutGap="16px"
+            >
+              <div>
+                <span>{{
+                  'user-profile.delete-account-info' | transloco
+                }}</span>
+              </div>
+              <button mat-stroked-button color="warn" (click)="deleteAccount()">
+                <mat-icon>delete</mat-icon>
+                {{ 'user-profile.delete-account' | transloco }}
+              </button>
             </div>
-            <button mat-stroked-button color="warn" (click)="deleteAccount()">
-              <mat-icon>delete</mat-icon>
-              {{ 'user-profile.delete-account' | transloco }}
-            </button>
           </div>
         </div>
-      </div>
+      }
     </mat-expansion-panel>
     <mat-expansion-panel
       class="settings-panel"
@@ -66,30 +71,34 @@
           [icon]="'settings_suggest'"
         ></app-settings-panel-header>
       </mat-expansion-panel-header>
-      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-      <div *ngIf="!isLoading">
-        <span>{{ 'user-profile.preferences-description' | transloco }}</span>
-        <app-settings-slide-toggle
-          label="user-profile.visualization-unit-percent"
-          [isChecked]="settings.contentVisualizationUnitPercent"
-          (toggleEvent)="
-            updateSettings($event, 'contentVisualizationUnitPercent')
-          "
-        ></app-settings-slide-toggle>
-        <app-settings-slide-toggle
-          label="user-profile.answers-below-chart"
-          [isChecked]="settings.contentAnswersDirectlyBelowChart"
-          (toggleEvent)="
-            updateSettings($event, 'contentAnswersDirectlyBelowChart')
-          "
-        ></app-settings-slide-toggle>
-        <app-settings-slide-toggle
-          label="user-profile.show-results-directly"
-          [isChecked]="settings.showContentResultsDirectly"
-          (toggleEvent)="updateSettings($event, 'showContentResultsDirectly')"
-        ></app-settings-slide-toggle>
-        <lib-extension-point extensionId="user-quota"></lib-extension-point>
-      </div>
+      @if (isLoading) {
+        <app-loading-indicator></app-loading-indicator>
+      }
+      @if (!isLoading) {
+        <div>
+          <span>{{ 'user-profile.preferences-description' | transloco }}</span>
+          <app-settings-slide-toggle
+            label="user-profile.visualization-unit-percent"
+            [isChecked]="settings.contentVisualizationUnitPercent"
+            (toggleEvent)="
+              updateSettings($event, 'contentVisualizationUnitPercent')
+            "
+          ></app-settings-slide-toggle>
+          <app-settings-slide-toggle
+            label="user-profile.answers-below-chart"
+            [isChecked]="settings.contentAnswersDirectlyBelowChart"
+            (toggleEvent)="
+              updateSettings($event, 'contentAnswersDirectlyBelowChart')
+            "
+          ></app-settings-slide-toggle>
+          <app-settings-slide-toggle
+            label="user-profile.show-results-directly"
+            [isChecked]="settings.showContentResultsDirectly"
+            (toggleEvent)="updateSettings($event, 'showContentResultsDirectly')"
+          ></app-settings-slide-toggle>
+          <lib-extension-point extensionId="user-quota"></lib-extension-point>
+        </div>
+      }
     </mat-expansion-panel>
   </mat-accordion>
 </div>

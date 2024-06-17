@@ -52,36 +52,34 @@
                         }}</span>
                       </div>
                     </mat-select-trigger>
-                    <mat-option
-                      *ngFor="let format of formats"
-                      [value]="format"
-                      class="higher-option"
-                    >
-                      <div fxLayout="row">
-                        <mat-icon class="format-icon">{{
-                          format.icon
-                        }}</mat-icon>
-                        <div fxLayout="column" fxLayoutAlign="center">
-                          <span
-                            [attr.aria-label]="
-                              'creator.content.a11y-format-' + format.name
-                                | transloco
-                            "
-                            class="format-name"
-                          >
-                            {{
-                              'creator.content.format-' + format.name
-                                | transloco
-                            }}</span
-                          >
-                          <span class="format-description">{{
-                            'creator.content.format-' +
-                              format.name +
-                              '-description' | transloco
-                          }}</span>
+                    @for (format of formats; track format) {
+                      <mat-option [value]="format" class="higher-option">
+                        <div fxLayout="row">
+                          <mat-icon class="format-icon">{{
+                            format.icon
+                          }}</mat-icon>
+                          <div fxLayout="column" fxLayoutAlign="center">
+                            <span
+                              [attr.aria-label]="
+                                'creator.content.a11y-format-' + format.name
+                                  | transloco
+                              "
+                              class="format-name"
+                            >
+                              {{
+                                'creator.content.format-' + format.name
+                                  | transloco
+                              }}</span
+                            >
+                            <span class="format-description">{{
+                              'creator.content.format-' +
+                                format.name +
+                                '-description' | transloco
+                            }}</span>
+                          </div>
                         </div>
-                      </div>
-                    </mat-option>
+                      </mat-option>
+                    }
                   </mat-select>
                 </mat-form-field>
                 <app-formatting-toolbar
@@ -123,127 +121,144 @@
                   [appHotkeyTitle]="'creator.content.body' | transloco"
                 ></textarea>
               </mat-form-field>
-              <app-hint
-                *ngIf="textContainsImage"
-                text="creator.utils.formatting-image-hint"
-                [type]="HintType.WARNING"
-              ></app-hint>
-              <lib-extension-point
-                *ngIf="!isLoading"
-                extensionId="attachment-list"
-                [extensionData]="attachmentData"
-              ></lib-extension-point>
+              @if (textContainsImage) {
+                <app-hint
+                  text="creator.utils.formatting-image-hint"
+                  [type]="HintType.WARNING"
+                ></app-hint>
+              }
+              @if (!isLoading) {
+                <lib-extension-point
+                  extensionId="attachment-list"
+                  [extensionData]="attachmentData"
+                ></lib-extension-point>
+              }
               <div class="form-spacer"></div>
             </form>
-            <div
-              *ngIf="!['slide', 'flashcard'].includes(selectedFormat.name)"
-              fxLayout="row"
-              fxLayoutAlign="space-between center"
-              fxLayoutGap="1em"
-            >
-              <mat-checkbox
-                [disabled]="formDisabled"
-                [(ngModel)]="abstentionsAllowed"
-              >
-                {{ 'creator.content.abstentions-allowed' | transloco }}
-              </mat-checkbox>
+            @if (!['slide', 'flashcard'].includes(selectedFormat.name)) {
               <div
-                *ngIf="!isLoading && contentGroup?.groupType === GroupType.QUIZ"
                 fxLayout="row"
+                fxLayoutAlign="space-between center"
                 fxLayoutGap="1em"
-                fxLayoutAlign="start center"
               >
-                <span>{{
-                  'creator.content.seconds-to-answer' | transloco
-                }}</span>
-                <mat-form-field
-                  appearance="outline"
-                  class="no-field-hint initial-width minimal-number-input smaller-select-input"
+                <mat-checkbox
+                  [disabled]="formDisabled"
+                  [(ngModel)]="abstentionsAllowed"
                 >
-                  <input
-                    [(ngModel)]="duration"
-                    [disabled]="isAnswered"
-                    matInput
-                    type="number"
-                    max="600"
-                  />
-                </mat-form-field>
+                  {{ 'creator.content.abstentions-allowed' | transloco }}
+                </mat-checkbox>
+                @if (!isLoading && contentGroup.groupType === GroupType.QUIZ) {
+                  <div
+                    fxLayout="row"
+                    fxLayoutGap="1em"
+                    fxLayoutAlign="start center"
+                  >
+                    <span>{{
+                      'creator.content.seconds-to-answer' | transloco
+                    }}</span>
+                    <mat-form-field
+                      appearance="outline"
+                      class="no-field-hint initial-width minimal-number-input smaller-select-input"
+                    >
+                      <input
+                        [(ngModel)]="duration"
+                        [disabled]="isAnswered"
+                        matInput
+                        type="number"
+                        max="600"
+                      />
+                    </mat-form-field>
+                  </div>
+                }
               </div>
-            </div>
-            <div *ngIf="!isLoading" [ngSwitch]="selectedFormat.type">
-              <app-choice-content-form
-                *ngSwitchCase="ContentType.CHOICE"
-                [content]="content"
-                [isAnswered]="isAnswered"
-                [isEditMode]="isEditMode"
-                [correctAnswerSelection]="
-                  contentGroup.groupType === GroupType.MIXED
-                "
-                [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
-              >
-              </app-choice-content-form>
-              <app-scale-content-form
-                *ngSwitchCase="ContentType.SCALE"
-                [content]="content"
-                [isAnswered]="isAnswered"
-                [isEditMode]="isEditMode"
-              >
-              </app-scale-content-form>
-              <app-binary-content-form
-                *ngSwitchCase="ContentType.BINARY"
-                [isEditMode]="isEditMode"
-                [content]="content"
-                [answerSelection]="contentGroup.groupType !== GroupType.SURVEY"
-                [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
-              >
-              </app-binary-content-form>
-              <app-flashcard-content-form
-                *ngSwitchCase="ContentType.FLASHCARD"
-                [content]="content"
-                [isEditMode]="isEditMode"
-              >
-              </app-flashcard-content-form>
-              <app-sort-content-form
-                *ngSwitchCase="ContentType.SORT"
-                [content]="content"
-                [isEditMode]="isEditMode"
-                [isAnswered]="isAnswered"
-              >
-              </app-sort-content-form>
-              <app-wordcloud-content-form
-                *ngSwitchCase="ContentType.WORDCLOUD"
-                [content]="content"
-                [isEditMode]="isEditMode"
-              >
-              </app-wordcloud-content-form>
-              <app-prioritization-content-form
-                *ngSwitchCase="ContentType.PRIORITIZATION"
-                [content]="content"
-                [isEditMode]="isEditMode"
-                [isAnswered]="isAnswered"
-              >
-              </app-prioritization-content-form>
-              <app-numeric-content-form
-                *ngSwitchCase="ContentType.NUMERIC"
-                [content]="content"
-                [isEditMode]="isEditMode"
-                [correctAnswerSelection]="
-                  contentGroup.groupType === GroupType.MIXED
-                "
-                [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
-              >
-              </app-numeric-content-form>
-            </div>
+            }
+            @if (!isLoading) {
+              <div>
+                @switch (selectedFormat.type) {
+                  @case (ContentType.CHOICE) {
+                    <app-choice-content-form
+                      [content]="content"
+                      [isAnswered]="isAnswered"
+                      [isEditMode]="isEditMode"
+                      [correctAnswerSelection]="
+                        contentGroup.groupType === GroupType.MIXED
+                      "
+                      [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                    >
+                    </app-choice-content-form>
+                  }
+                  @case (ContentType.SCALE) {
+                    <app-scale-content-form
+                      [content]="content"
+                      [isAnswered]="isAnswered"
+                      [isEditMode]="isEditMode"
+                    >
+                    </app-scale-content-form>
+                  }
+                  @case (ContentType.BINARY) {
+                    <app-binary-content-form
+                      [isEditMode]="isEditMode"
+                      [content]="content"
+                      [answerSelection]="
+                        contentGroup.groupType !== GroupType.SURVEY
+                      "
+                      [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                    >
+                    </app-binary-content-form>
+                  }
+                  @case (ContentType.FLASHCARD) {
+                    <app-flashcard-content-form
+                      [content]="content"
+                      [isEditMode]="isEditMode"
+                    >
+                    </app-flashcard-content-form>
+                  }
+                  @case (ContentType.SORT) {
+                    <app-sort-content-form
+                      [content]="content"
+                      [isEditMode]="isEditMode"
+                      [isAnswered]="isAnswered"
+                    >
+                    </app-sort-content-form>
+                  }
+                  @case (ContentType.WORDCLOUD) {
+                    <app-wordcloud-content-form
+                      [content]="content"
+                      [isEditMode]="isEditMode"
+                    >
+                    </app-wordcloud-content-form>
+                  }
+                  @case (ContentType.PRIORITIZATION) {
+                    <app-prioritization-content-form
+                      [content]="content"
+                      [isEditMode]="isEditMode"
+                      [isAnswered]="isAnswered"
+                    >
+                    </app-prioritization-content-form>
+                  }
+                  @case (ContentType.NUMERIC) {
+                    <app-numeric-content-form
+                      [content]="content"
+                      [isEditMode]="isEditMode"
+                      [correctAnswerSelection]="
+                        contentGroup.groupType === GroupType.MIXED
+                      "
+                      [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                    >
+                    </app-numeric-content-form>
+                  }
+                }
+              </div>
+            }
           </div>
 
           <div
             [ngClass]="{ 'invisible-card-content': !flipped }"
             class="back side"
           >
-            <app-content-preview
-              *ngIf="flipped && content"
-              [content]="content"
-            ></app-content-preview>
+            @if (flipped && content) {
+              <app-content-preview [content]="content"></app-content-preview>
+            }
           </div>
           <div
             [ngStyle]="{ transform: flipped ? 'rotateY(180deg)' : '' }"

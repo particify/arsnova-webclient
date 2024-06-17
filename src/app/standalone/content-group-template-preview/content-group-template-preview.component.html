@@ -1,92 +1,108 @@
 <div fxLayout="column" fxLayoutAlign="start center">
-  <app-loading-indicator *ngIf="isLoadingContentGroup"></app-loading-indicator>
-  <mat-card *ngIf="!isLoadingContentGroup" class="template-card">
-    <div
-      fxLayout="row-wrap"
-      fxLayoutAlign="space-between center"
-      fxLayoutGap="1em"
-    >
-      <span class="template-name">{{ template.name }}</span>
-      <div fxLayout="row" fxLayoutGap="10px">
-        <button mat-icon-button [matMenuTriggerFor]="moreMenu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #moreMenu="matMenu">
-          <button
-            mat-menu-item
-            [cdkCopyToClipboard]="url"
-            (cdkCopyToClipboardCopied)="showNotificationAfterCopiedUrl()"
-          >
-            <mat-icon>link</mat-icon>
-            <span>{{ 'templates.copy-template-link' | transloco }}</span>
+  @if (isLoadingContentGroup) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoadingContentGroup) {
+    <mat-card class="template-card">
+      <div
+        fxLayout="row-wrap"
+        fxLayoutAlign="space-between center"
+        fxLayoutGap="1em"
+      >
+        <span class="template-name">{{ template.name }}</span>
+        <div fxLayout="row" fxLayoutGap="10px">
+          <button mat-icon-button [matMenuTriggerFor]="moreMenu">
+            <mat-icon>more_vert</mat-icon>
           </button>
-          <div
-            [matTooltip]="'templates.login-to-report-template' | transloco"
-            [matTooltipDisabled]="!isGuest"
-          >
+          <mat-menu #moreMenu="matMenu">
             <button
-              *ngIf="!isCreator"
-              [disabled]="isGuest"
               mat-menu-item
-              (click)="reportTemplate()"
+              [cdkCopyToClipboard]="url"
+              (cdkCopyToClipboardCopied)="showNotificationAfterCopiedUrl()"
             >
-              <mat-icon>flag</mat-icon>
-              <span>{{ 'templates.report-template' | transloco }}</span>
+              <mat-icon>link</mat-icon>
+              <span>{{ 'templates.copy-template-link' | transloco }}</span>
             </button>
-          </div>
-          <button *ngIf="isCreator" mat-menu-item (click)="editTemplate()">
-            <mat-icon>edit</mat-icon>
-            <span>{{ 'templates.edit-template' | transloco }}</span>
-          </button>
-          <button *ngIf="isCreator" mat-menu-item (click)="deleteTemplate()">
-            <mat-icon color="warn">delete</mat-icon>
-            <span>{{ 'templates.delete-template' | transloco }}</span>
-          </button>
-        </mat-menu>
-        <app-add-template-button
-          [templateId]="template.id"
-          [templateName]="template.name"
-          [room]="room"
-        ></app-add-template-button>
-      </div>
-    </div>
-    <p class="template-description">{{ template.description }}</p>
-    <div fxLayout="column" fxLayoutGap="1em">
-      <app-template-license
-        [ownerName]="template.attribution"
-        [license]="template.license"
-        [showLink]="true"
-        [aiGenerated]="template.aiGenerated"
-      ></app-template-license>
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <mat-chip-set>
-          <mat-chip *ngFor="let tag of template.tags">
-            {{ tag.name }}
-          </mat-chip>
-        </mat-chip-set>
-      </div>
-      <app-loading-indicator *ngIf="isLoadingContents"></app-loading-indicator>
-      <mat-action-list *ngIf="!isLoadingContents">
-        <mat-list-item
-          *ngFor="let content of contents"
-          class="bottom-border"
-          (click)="openPreview(content)"
-        >
-          <div
-            fxFill
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            fxLayoutGap="12px"
-          >
-            <div fxLayoutAlign="center">
-              <mat-icon class="format-icon">{{
-                getIcon(content.format)
-              }}</mat-icon>
+            <div
+              [matTooltip]="'templates.login-to-report-template' | transloco"
+              [matTooltipDisabled]="!isGuest"
+            >
+              @if (!isCreator) {
+                <button
+                  [disabled]="isGuest"
+                  mat-menu-item
+                  (click)="reportTemplate()"
+                >
+                  <mat-icon>flag</mat-icon>
+                  <span>{{ 'templates.report-template' | transloco }}</span>
+                </button>
+              }
             </div>
-            <p class="ellipsis">{{ content.body }}</p>
-          </div>
-        </mat-list-item>
-      </mat-action-list>
-    </div>
-  </mat-card>
+            @if (isCreator) {
+              <button mat-menu-item (click)="editTemplate()">
+                <mat-icon>edit</mat-icon>
+                <span>{{ 'templates.edit-template' | transloco }}</span>
+              </button>
+            }
+            @if (isCreator) {
+              <button mat-menu-item (click)="deleteTemplate()">
+                <mat-icon color="warn">delete</mat-icon>
+                <span>{{ 'templates.delete-template' | transloco }}</span>
+              </button>
+            }
+          </mat-menu>
+          <app-add-template-button
+            [templateId]="template.id"
+            [templateName]="template.name"
+            [room]="room"
+          ></app-add-template-button>
+        </div>
+      </div>
+      <p class="template-description">{{ template.description }}</p>
+      <div fxLayout="column" fxLayoutGap="1em">
+        <app-template-license
+          [ownerName]="template.attribution"
+          [license]="template.license"
+          [showLink]="true"
+          [aiGenerated]="template.aiGenerated"
+        ></app-template-license>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <mat-chip-set>
+            @for (tag of template.tags; track tag) {
+              <mat-chip>
+                {{ tag.name }}
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+        @if (isLoadingContents) {
+          <app-loading-indicator></app-loading-indicator>
+        }
+        @if (!isLoadingContents) {
+          <mat-action-list>
+            @for (content of contents; track content) {
+              <mat-list-item
+                class="bottom-border"
+                (click)="openPreview(content)"
+              >
+                <div
+                  fxFill
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  fxLayoutGap="12px"
+                >
+                  <div fxLayoutAlign="center">
+                    <mat-icon class="format-icon">{{
+                      getIcon(content.format)
+                    }}</mat-icon>
+                  </div>
+                  <p class="ellipsis">{{ content.body }}</p>
+                </div>
+              </mat-list-item>
+            }
+          </mat-action-list>
+        }
+      </div>
+    </mat-card>
+  }
 </div>

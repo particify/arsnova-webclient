@@ -10,7 +10,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatIconButton } from '@angular/material/button';
 import { FlexModule } from '@angular/flex-layout';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 
 @Component({
@@ -22,7 +22,6 @@ import { MatCard } from '@angular/material/card';
     MatCard,
     NgClass,
     FlexModule,
-    NgIf,
     MatIconButton,
     MatMenuTrigger,
     MatTooltip,

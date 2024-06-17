@@ -1,87 +1,89 @@
 <div class="list nav" fxLayout="column" fxLayoutAlign="space-between center">
   <div class="icon-container">
-    <button
-      *ngFor="let barItem of barItems; let i = index"
-      class="item nav-button"
-      mat-button
-      color="{{ i === currentRouteIndex ? 'primary' : '' }}"
-      [id]="barItem.name + '-button'"
-      [ngClass]="{
-        current: i === currentRouteIndex,
-        'reduce-bottom-padding':
-          focusModeEnabled && barItem.name === focusFeature,
-      }"
-      (click)="navToUrl(i)"
-      [matTooltip]="
-        (getFeatureText(barItem.name) | transloco) +
-        ' ' +
-        (getFocusInfo(barItem.name) | transloco)
-      "
-      #menuTrigger="matMenuTrigger"
-      matTooltipPosition="right"
-      matTooltipClass="hide-lg"
-      [matMenuTriggerFor]="isMenuActive(barItem.name) ? groupMenu : hideMenu"
-      (menuOpened)="checkMenu(barItem.name, menuTrigger)"
-      [attr.aria-label]="
-        'sidebar.a11y-switch-to-feature'
-          | transloco: { feature: ('sidebar.' + barItem.name | transloco) }
-      "
+    @for (barItem of barItems; track barItem; let i = $index) {
+      <button
+        class="item nav-button"
+        mat-button
+        color="{{ i === currentRouteIndex ? 'primary' : '' }}"
+        [id]="barItem.name + '-button'"
+        [ngClass]="{
+          current: i === currentRouteIndex,
+          'reduce-bottom-padding':
+            focusModeEnabled && barItem.name === focusFeature,
+        }"
+        (click)="navToUrl(i)"
+        [matTooltip]="
+          (getFeatureText(barItem.name) | transloco) +
+          ' ' +
+          (getFocusInfo(barItem.name) | transloco)
+        "
+        #menuTrigger="matMenuTrigger"
+        matTooltipPosition="right"
+        matTooltipClass="hide-lg"
+        [matMenuTriggerFor]="isMenuActive(barItem.name) ? groupMenu : hideMenu"
+        (menuOpened)="checkMenu(barItem.name, menuTrigger)"
+        [attr.aria-label]="
+          'sidebar.a11y-switch-to-feature'
+            | transloco: { feature: ('sidebar.' + barItem.name | transloco) }
+        "
+      >
+        <mat-icon class="button-icon">
+          {{ barItem.icon }}
+          <div
+            [id]="barItem.name + '-badge'"
+            [ngClass]="{ 'show-news': barItem.changeIndicator }"
+            class="badge"
+          ></div>
+        </mat-icon>
+        @if (focusModeEnabled && barItem.name === focusFeature) {
+          <div class="focus-indicator"></div>
+        }
+        <div class="ellipsis">
+          <span class="text ellipsis">{{
+            getFeatureText(barItem.name) | transloco
+          }}</span>
+        </div>
+        <div class="menu-container">
+          <mat-menu #groupMenu="matMenu" class="series-menu">
+            @for (group of contentGroups; track group) {
+              <button
+                mat-menu-item
+                [id]="group.name + '-series-button'"
+                (click)="navToUrl(i, group)"
+              >
+                <div
+                  [ngClass]="{
+                    'selected-menu-item':
+                      group.name === groupName && i === currentRouteIndex,
+                  }"
+                >
+                  <app-text-overflow-clip
+                    class="ellipsis"
+                    [text]="group.name"
+                  ></app-text-overflow-clip>
+                </div>
+              </button>
+            }
+          </mat-menu>
+          <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
+        </div>
+      </button>
+    }
+  </div>
+  @if (viewRole === 'OWNER') {
+    <div
+      style="color: var(--on-surface)"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxLayoutGap="4px"
+      id="user-count-container"
+      [matTooltip]="'creator.sidebar.user-counter' | transloco"
+      attr.aria-label="{{
+        'creator.sidebar.a11y-user-counter' | transloco: { count: userCount }
+      }}"
     >
-      <mat-icon class="button-icon">
-        {{ barItem.icon }}
-        <div
-          [id]="barItem.name + '-badge'"
-          [ngClass]="{ 'show-news': barItem.changeIndicator }"
-          class="badge"
-        ></div>
-      </mat-icon>
-      <div
-        *ngIf="focusModeEnabled && barItem.name === focusFeature"
-        class="focus-indicator"
-      ></div>
-      <div class="ellipsis">
-        <span class="text ellipsis">{{
-          getFeatureText(barItem.name) | transloco
-        }}</span>
-      </div>
-      <div class="menu-container">
-        <mat-menu #groupMenu="matMenu" class="series-menu">
-          <button
-            mat-menu-item
-            *ngFor="let group of contentGroups"
-            [id]="group.name + '-series-button'"
-            (click)="navToUrl(i, group)"
-          >
-            <div
-              [ngClass]="{
-                'selected-menu-item':
-                  group.name === groupName && i === currentRouteIndex,
-              }"
-            >
-              <app-text-overflow-clip
-                class="ellipsis"
-                [text]="group.name"
-              ></app-text-overflow-clip>
-            </div>
-          </button>
-        </mat-menu>
-        <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
-      </div>
-    </button>
-  </div>
-  <div
-    style="color: var(--on-surface)"
-    *ngIf="viewRole === 'OWNER'"
-    fxLayout="row"
-    fxLayoutAlign="center center"
-    fxLayoutGap="4px"
-    id="user-count-container"
-    [matTooltip]="'creator.sidebar.user-counter' | transloco"
-    attr.aria-label="{{
-      'creator.sidebar.a11y-user-counter' | transloco: { count: userCount }
-    }}"
-  >
-    <mat-icon>people</mat-icon>
-    <span>{{ userCount }}</span>
-  </div>
+      <mat-icon>people</mat-icon>
+      <span>{{ userCount }}</span>
+    </div>
+  }
 </div>

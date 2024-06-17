@@ -1,19 +1,24 @@
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div *ngIf="!isLoading" class="answer-container">
-  <app-content-sort-answer
-    [answerOptions]="answerOptions"
-    [disabled]="isDisabled"
-  ></app-content-sort-answer>
-  <div
-    *ngIf="!hasAbstained && statsPublished && correctOptionsPublished"
-    class="solution invisible"
-    [ngClass]="{ visible: isDisabled && isCorrect !== undefined }"
-  >
-    <mat-icon
-      class="icon-indicator"
-      [ngClass]="isCorrect ? 'correct' : 'wrong'"
-    >
-      {{ isCorrect ? 'check' : 'close' }}</mat-icon
-    >
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <div class="answer-container">
+    <app-content-sort-answer
+      [answerOptions]="answerOptions"
+      [disabled]="isDisabled"
+    ></app-content-sort-answer>
+    @if (!hasAbstained && statsPublished && correctOptionsPublished) {
+      <div
+        class="solution invisible"
+        [ngClass]="{ visible: isDisabled && isCorrect !== undefined }"
+      >
+        <mat-icon
+          class="icon-indicator"
+          [ngClass]="isCorrect ? 'correct' : 'wrong'"
+        >
+          {{ isCorrect ? 'check' : 'close' }}</mat-icon
+        >
+      </div>
+    }
   </div>
-</div>
+}

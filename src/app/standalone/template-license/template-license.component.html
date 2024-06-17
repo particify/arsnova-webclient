@@ -1,14 +1,18 @@
 <div class="license">
   <span> {{ 'templates.licensed-under' | transloco }} </span>
-  <a *ngIf="showLink" [href]="LICENSES.get(license)?.url" class="primary">{{
-    LICENSES.get(license)?.name
-  }}</a>
-  <span *ngIf="!showLink">{{ LICENSES.get(license)?.name }}</span>
+  @if (showLink) {
+    <a [href]="LICENSES.get(license)?.url" class="primary">{{
+      LICENSES.get(license)?.name
+    }}</a>
+  }
+  @if (!showLink) {
+    <span>{{ LICENSES.get(license)?.name }}</span>
+  }
   <span>
     {{ 'templates.by' | transloco }}
     {{ ownerName || ('templates.anonymous' | transloco) }}
   </span>
-  <span *ngIf="!!aiGenerated"
-    >&bull; {{ 'templates.ai-generated-hint' | transloco }}</span
-  >
+  @if (!!aiGenerated) {
+    <span>&bull; {{ 'templates.ai-generated-hint' | transloco }}</span>
+  }
 </div>

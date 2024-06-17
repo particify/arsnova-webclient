@@ -7,20 +7,24 @@
   fxLayoutAlign="center center"
   fxFill
 >
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <app-live-feedback
-    *ngIf="!isLoading"
-    id="live-feedback"
-    [data]="data"
-    [dataChanged]="dataChanged"
-    [isClosed]="isClosed"
-    [type]="type"
-  ></app-live-feedback>
-  <app-answer-count
-    *ngIf="showAnswerCount"
-    id="answer-count"
-    tabindex="{{ !isClosed ? '0' : '-1' }}"
-    [count]="answerCount"
-    size="presentation"
-  ></app-answer-count>
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading) {
+    <app-live-feedback
+      id="live-feedback"
+      [data]="data"
+      [dataChanged]="dataChanged"
+      [isClosed]="isClosed"
+      [type]="type"
+    ></app-live-feedback>
+  }
+  @if (showAnswerCount) {
+    <app-answer-count
+      id="answer-count"
+      tabindex="{{ !isClosed ? '0' : '-1' }}"
+      [count]="answerCount"
+      size="presentation"
+    ></app-answer-count>
+  }
 </div>

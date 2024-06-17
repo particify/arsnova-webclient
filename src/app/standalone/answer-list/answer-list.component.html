@@ -1,34 +1,36 @@
 <div>
-  <div
-    *ngFor="let answer of answers; let i = index"
-    tabindex="0"
-    class="list-item"
-    [ngClass]="{ moderation: isModerator && !isPresentation }"
-    attr.aria-label="{{
-      'statistic.a11y-text-evaluation'
-        | transloco: { count: answer.count, answer: answer.answer }
-    }}"
-  >
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-      <span fxFlex class="answer">{{ answer.answer }}</span>
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <span fxFlex="noshrink" *ngIf="answer.count > 1" class="count"
-          >x {{ answer.count }}</span
-        >
-        <button
-          *ngIf="isModerator && (answer.id || banMode) && !isPresentation"
-          mat-icon-button
-          color="warn"
-          class="delete-button"
-          (click)="deleteAnswer(answer)"
-          [matTooltip]="
-            'creator.statistic.' + (banMode ? 'ban' : 'delete') + '-answer'
-              | transloco
-          "
-        >
-          <mat-icon>close</mat-icon>
-        </button>
+  @for (answer of answers; track answer; let i = $index) {
+    <div
+      tabindex="0"
+      class="list-item"
+      [ngClass]="{ moderation: isModerator && !isPresentation }"
+      attr.aria-label="{{
+        'statistic.a11y-text-evaluation'
+          | transloco: { count: answer.count, answer: answer.answer }
+      }}"
+    >
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <span fxFlex class="answer">{{ answer.answer }}</span>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          @if (answer.count > 1) {
+            <span fxFlex="noshrink" class="count">x {{ answer.count }}</span>
+          }
+          @if (isModerator && (answer.id || banMode) && !isPresentation) {
+            <button
+              mat-icon-button
+              color="warn"
+              class="delete-button"
+              (click)="deleteAnswer(answer)"
+              [matTooltip]="
+                'creator.statistic.' + (banMode ? 'ban' : 'delete') + '-answer'
+                  | transloco
+              "
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>

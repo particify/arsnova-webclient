@@ -5,75 +5,78 @@
   (touchstart)="swipe($event, 'start')"
   (touchend)="swipe($event, 'end')"
 >
-  <div fxLayout="row" class="inner-container" *ngIf="showSteps">
-    <button
-      tabindex="-1"
-      mat-icon-button
-      *ngIf="listLength > 5"
-      disableRipple
-      [disabled]="headerPos < 1"
-      (click)="moveHeaderRight(true)"
-    >
-      <mat-icon color="primary" [ngClass]="{ disabled: headerPos < 1 }"
-        >keyboard_arrow_left</mat-icon
-      >
-    </button>
-    <div
-      [ngClass]="{
-        'fixed-width-container container': listLength <= 5,
-        'stepper-container': listLength > 5,
-      }"
-    >
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start"
-        [@slideHeader]="{
-          value: headerAnimationState,
-          params: { position: headerPos * -20 },
-        }"
-        (@slideHeader.done)="headerAnimationDone()"
-      >
-        <span class="fill-remaining-space"></span>
-        <div
-          class="step-container"
-          *ngFor="let step of steps; let i = index"
-          (click)="onClick(i)"
+  @if (showSteps) {
+    <div fxLayout="row" class="inner-container">
+      @if (listLength > 5) {
+        <button
+          tabindex="-1"
+          mat-icon-button
+          disableRipple
+          [disabled]="headerPos < 1"
+          (click)="moveHeaderRight(true)"
         >
-          <button
-            class="step"
-            tabindex="-1"
-            [ngClass]="{
-              'primary-background primary-border': selectedIndex === i,
-              'primary primary-border': completed.get(i) && selectedIndex !== i,
-              last: i === listLength - 1,
-            }"
+          <mat-icon color="primary" [ngClass]="{ disabled: headerPos < 1 }"
+            >keyboard_arrow_left</mat-icon
           >
-            <span *ngIf="!additionalStepIcon || i < listLength - 1">{{
-              i + 1
-            }}</span>
-            <mat-icon *ngIf="additionalStepIcon && i === listLength - 1">{{
-              additionalStepIcon
-            }}</mat-icon>
-          </button>
-        </div>
-        <span class="fill-remaining-space"></span>
-      </div>
-    </div>
-    <button
-      mat-icon-button
-      tabindex="-1"
-      *ngIf="listLength > 5"
-      disableRipple
-      [disabled]="headerPos >= listLength"
-      (click)="moveHeaderLeft(true)"
-    >
-      <mat-icon
-        color="primary"
-        [ngClass]="{ disabled: headerPos >= listLength - 5 }"
-        >keyboard_arrow_right</mat-icon
+        </button>
+      }
+      <div
+        [ngClass]="{
+          'fixed-width-container container': listLength <= 5,
+          'stepper-container': listLength > 5,
+        }"
       >
-    </button>
-  </div>
+        <div
+          fxLayout="row"
+          fxLayoutAlign="start"
+          [@slideHeader]="{
+            value: headerAnimationState,
+            params: { position: headerPos * -20 },
+          }"
+          (@slideHeader.done)="headerAnimationDone()"
+        >
+          <span class="fill-remaining-space"></span>
+          @for (step of steps; track step; let i = $index) {
+            <div class="step-container" (click)="onClick(i)">
+              <button
+                class="step"
+                tabindex="-1"
+                [ngClass]="{
+                  'primary-background primary-border': selectedIndex === i,
+                  'primary primary-border':
+                    completed.get(i) && selectedIndex !== i,
+                  last: i === listLength - 1,
+                }"
+              >
+                @if (!additionalStepIcon || i < listLength - 1) {
+                  <span>{{ i + 1 }}</span>
+                }
+                @if (additionalStepIcon && i === listLength - 1) {
+                  <mat-icon>{{ additionalStepIcon }}</mat-icon>
+                }
+              </button>
+            </div>
+          }
+          <span class="fill-remaining-space"></span>
+        </div>
+      </div>
+      @if (listLength > 5) {
+        <button
+          mat-icon-button
+          tabindex="-1"
+          disableRipple
+          [disabled]="headerPos >= listLength"
+          (click)="moveHeaderLeft(true)"
+        >
+          <mat-icon
+            color="primary"
+            [ngClass]="{ disabled: headerPos >= listLength - 5 }"
+            >keyboard_arrow_right</mat-icon
+          >
+        </button>
+      }
+    </div>
+  }
   <div
     fxFill
     [@slideContainer]="stepAnimationState"

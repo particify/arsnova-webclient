@@ -35,7 +35,7 @@ import { AnswerOption } from '@app/core/models/answer-option';
 import { MatIcon } from '@angular/material/icon';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgClass, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 
 @Component({
@@ -45,10 +45,8 @@ import { FlexModule } from '@angular/flex-layout';
   standalone: true,
   imports: [
     FlexModule,
-    NgIf,
     LoadingIndicatorComponent,
     NgClass,
-    NgFor,
     RenderedTextComponent,
     MatIcon,
     TranslocoPipe,

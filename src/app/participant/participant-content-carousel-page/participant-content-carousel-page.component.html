@@ -1,4 +1,6 @@
-<app-loading-indicator *ngIf="isLoading || isReloading"></app-loading-indicator>
+@if (isLoading || isReloading) {
+  <app-loading-indicator></app-loading-indicator>
+}
 <div>
   <div [appAutofocus] class="visually-hidden" tabindex="-1">
     {{
@@ -7,63 +9,65 @@
         | async
     }}
   </div>
-  <div
-    *ngIf="!isLoading && !isReloading"
-    fxLayout="column"
-    fxLayoutAlign="start center"
-  >
-    <app-stepper
-      *ngIf="contents.length > 0 && !this.showOverview"
-      (newIndex)="updateContentIndexUrl($event)"
-      [listLength]="contents.length"
-      [completed]="alreadySent"
-      [showSteps]="showStepper && !focusModeEnabled"
-      [allowNavigation]="!focusModeEnabled"
-    >
-      <cdk-step *ngFor="let content of contents; let i = index">
-        <div
-          tabindex="0"
-          [appAutofocus]
-          id="step"
-          *ngIf="currentStep >= i - 1 && currentStep <= i + 1"
+  @if (!isLoading && !isReloading) {
+    <div fxLayout="column" fxLayoutAlign="start center">
+      @if (contents.length > 0 && !this.showOverview) {
+        <app-stepper
+          (newIndex)="updateContentIndexUrl($event)"
+          [listLength]="contents.length"
+          [completed]="alreadySent"
+          [showSteps]="showStepper && !focusModeEnabled"
+          [allowNavigation]="!focusModeEnabled"
         >
-          <app-loading-indicator
-            *ngIf="isReloadingCurrentContent"
-          ></app-loading-indicator>
-          <app-content-participant
-            *ngIf="!isReloadingCurrentContent"
-            (answerChanged)="receiveSentStatus($event, i)"
-            (answerReset)="resetAnswer($event, i)"
-            (next)="nextContent()"
-            [content]="content"
-            [contentGroup]="contentGroup"
-            [answer]="answers[i]"
-            [lastContent]="i === contents.length - 1"
-            [active]="currentStep === i"
-            [index]="i"
-            [statsPublished]="contentGroup.statisticsPublished"
-            [correctOptionsPublished]="contentGroup.correctOptionsPublished"
-            [attribution]="getAttribution()"
-            [alias]="alias"
-            [showCard]="showCard"
-          >
-          </app-content-participant>
-        </div>
-      </cdk-step>
-    </app-stepper>
-    <app-series-overview
-      *ngIf="contents.length > 0 && showOverview"
-      [group]="contentGroup"
-      [contents]="contents"
-      [finished]="isFinished"
-      [isPureInfoSeries]="isPureInfoSeries"
-      [alias]="alias"
-    >
-    </app-series-overview>
-    <span
-      *ngIf="!isLoading && !isReloading && contents.length === 0"
-      class="hint"
-      >{{ 'participant.answer.no-contents-published' | transloco }}</span
-    >
-  </div>
+          @for (content of contents; track content; let i = $index) {
+            <cdk-step>
+              @if (currentStep >= i - 1 && currentStep <= i + 1) {
+                <div tabindex="0" [appAutofocus] id="step">
+                  @if (isReloadingCurrentContent) {
+                    <app-loading-indicator></app-loading-indicator>
+                  }
+                  @if (!isReloadingCurrentContent) {
+                    <app-content-participant
+                      (answerChanged)="receiveSentStatus($event, i)"
+                      (answerReset)="resetAnswer($event, i)"
+                      (next)="nextContent()"
+                      [content]="content"
+                      [contentGroup]="contentGroup"
+                      [answer]="answers[i]"
+                      [lastContent]="i === contents.length - 1"
+                      [active]="currentStep === i"
+                      [index]="i"
+                      [statsPublished]="contentGroup.statisticsPublished"
+                      [correctOptionsPublished]="
+                        contentGroup.correctOptionsPublished
+                      "
+                      [attribution]="getAttribution()"
+                      [alias]="alias"
+                      [showCard]="showCard"
+                    >
+                    </app-content-participant>
+                  }
+                </div>
+              }
+            </cdk-step>
+          }
+        </app-stepper>
+      }
+      @if (contents.length > 0 && showOverview) {
+        <app-series-overview
+          [group]="contentGroup"
+          [contents]="contents"
+          [finished]="isFinished"
+          [isPureInfoSeries]="isPureInfoSeries"
+          [alias]="alias"
+        >
+        </app-series-overview>
+      }
+      @if (!isLoading && !isReloading && contents.length === 0) {
+        <span class="hint">{{
+          'participant.answer.no-contents-published' | transloco
+        }}</span>
+      }
+    </div>
+  }
 </div>

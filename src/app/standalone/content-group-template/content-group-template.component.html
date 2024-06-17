@@ -13,12 +13,12 @@
       >
         <span class="on-primary-variant content-count"
           >{{ template.templateIds.length }}
-          <span *ngIf="template.templateIds.length === 1">{{
-            'templates.content' | transloco
-          }}</span>
-          <span *ngIf="template.templateIds.length > 1">{{
-            'templates.contents' | transloco
-          }}</span>
+          @if (template.templateIds.length === 1) {
+            <span>{{ 'templates.content' | transloco }}</span>
+          }
+          @if (template.templateIds.length > 1) {
+            <span>{{ 'templates.contents' | transloco }}</span>
+          }
         </span>
       </div>
     </div>
@@ -34,9 +34,11 @@
     ></app-template-license>
     <div fxLayout="row" fxLayoutAlign="start center">
       <mat-chip-set class="chip-container no-flex-flow">
-        <mat-chip *ngFor="let tag of template.tags">
-          {{ tag.name }}
-        </mat-chip>
+        @for (tag of template.tags; track tag) {
+          <mat-chip>
+            {{ tag.name }}
+          </mat-chip>
+        }
       </mat-chip-set>
       <div fxLayout="row" fxLayoutAlign="end center" class="fade-container">
         <div class="button-fade"></div>

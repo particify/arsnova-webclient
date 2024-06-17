@@ -1,88 +1,89 @@
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="16px">
-  <div>
-    <div tabindex="0" id="comments-settings" class="visually-hidden">
-      {{ 'creator.settings.a11y-comments' | transloco }}
-    </div>
-    <div fxLayout="column">
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <div fxLayout="column" fxLayoutGap="16px">
+    <div>
+      <div tabindex="0" id="comments-settings" class="visually-hidden">
+        {{ 'creator.settings.a11y-comments' | transloco }}
+      </div>
+      <div fxLayout="column">
+        <app-settings-slide-toggle
+          label="creator.settings.enable-comments"
+          [isChecked]="!settings.disabled"
+          (toggleEvent)="updateCommentSettings({ disabled: !$event })"
+        ></app-settings-slide-toggle>
+        <app-settings-slide-toggle
+          label="creator.settings.threshold"
+          [isChecked]="enableThreshold"
+          (toggleEvent)="updateCommentExtensions($event)"
+          [disabled]="settings.disabled"
+        ></app-settings-slide-toggle>
+        @if (enableThreshold) {
+          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="1em">
+            <mat-slider id="comment-slider" min="-50" max="-5" step="5"
+              ><input
+                matSliderThumb
+                [(ngModel)]="threshold"
+                (change)="updateCommentExtensions(); announceThreshold()"
+                [disabled]="settings.disabled"
+            /></mat-slider>
+            <p class="threshold-value">&nbsp;{{ threshold }}</p>
+          </div>
+        }
+      </div>
       <app-settings-slide-toggle
-        label="creator.settings.enable-comments"
-        [isChecked]="!settings.disabled"
-        (toggleEvent)="updateCommentSettings({ disabled: !$event })"
-      ></app-settings-slide-toggle>
-      <app-settings-slide-toggle
-        label="creator.settings.threshold"
-        [isChecked]="enableThreshold"
-        (toggleEvent)="updateCommentExtensions($event)"
+        label="creator.settings.direct-send"
+        [isChecked]="settings.directSend"
+        (toggleEvent)="updateCommentSettings({ directSend: $event })"
         [disabled]="settings.disabled"
       ></app-settings-slide-toggle>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="center center"
-        fxLayoutGap="1em"
-        *ngIf="enableThreshold"
-      >
-        <mat-slider id="comment-slider" min="-50" max="-5" step="5"
-          ><input
-            matSliderThumb
-            [(ngModel)]="threshold"
-            (change)="updateCommentExtensions(); announceThreshold()"
-            [disabled]="settings.disabled"
-        /></mat-slider>
-        <p class="threshold-value">&nbsp;{{ threshold }}</p>
+      @if (!isLoading) {
+        <lib-extension-point
+          extensionId="comment-image-settings"
+          [extensionData]="{ fileUploadEnabled: settings.fileUploadEnabled }"
+          (extensionEvent)="updateFileUploadEnabled($event)"
+        ></lib-extension-point>
+      }
+    </div>
+    <div>
+      <div tabindex="0" id="tags-settings" class="visually-hidden">
+        {{ 'creator.settings.a11y-categories' | transloco }}
       </div>
+      <form>
+        <mat-form-field class="full-width no-field-hint" appearance="outline">
+          <mat-label>{{ 'creator.settings.tags' | transloco }}</mat-label>
+          <mat-chip-grid #tagList [disabled]="settings.disabled">
+            @for (tag of tags; track tag) {
+              <mat-chip-row [removable]="true" (removed)="deleteTag(tag)">
+                {{ tag }}
+                <mat-icon
+                  matChipRemove
+                  attr.aria-label="{{
+                    'creator.settings.a11y-remove-tag'
+                      | transloco: { name: tag }
+                  }}"
+                  >cancel</mat-icon
+                >
+              </mat-chip-row>
+            }
+            <input
+              [matChipInputFor]="tagList"
+              (matChipInputTokenEnd)="addTag()"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              type="text"
+              [(ngModel)]="tagName"
+              name="taginput"
+              maxlength="15"
+              placeholder="{{ 'creator.settings.new-tag' | transloco }}"
+              [disabled]="settings.disabled"
+            />
+          </mat-chip-grid>
+        </mat-form-field>
+      </form>
     </div>
-    <app-settings-slide-toggle
-      label="creator.settings.direct-send"
-      [isChecked]="settings.directSend"
-      (toggleEvent)="updateCommentSettings({ directSend: $event })"
-      [disabled]="settings.disabled"
-    ></app-settings-slide-toggle>
-    <lib-extension-point
-      *ngIf="!isLoading"
-      extensionId="comment-image-settings"
-      [extensionData]="{ fileUploadEnabled: settings.fileUploadEnabled }"
-      (extensionEvent)="updateFileUploadEnabled($event)"
-    ></lib-extension-point>
   </div>
-  <div>
-    <div tabindex="0" id="tags-settings" class="visually-hidden">
-      {{ 'creator.settings.a11y-categories' | transloco }}
-    </div>
-    <form>
-      <mat-form-field class="full-width no-field-hint" appearance="outline">
-        <mat-label>{{ 'creator.settings.tags' | transloco }}</mat-label>
-        <mat-chip-grid #tagList [disabled]="settings.disabled">
-          <mat-chip-row
-            *ngFor="let tag of tags"
-            [removable]="true"
-            (removed)="deleteTag(tag)"
-          >
-            {{ tag }}
-            <mat-icon
-              matChipRemove
-              attr.aria-label="{{
-                'creator.settings.a11y-remove-tag' | transloco: { name: tag }
-              }}"
-              >cancel</mat-icon
-            >
-          </mat-chip-row>
-          <input
-            [matChipInputFor]="tagList"
-            (matChipInputTokenEnd)="addTag()"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            type="text"
-            [(ngModel)]="tagName"
-            name="taginput"
-            maxlength="15"
-            placeholder="{{ 'creator.settings.new-tag' | transloco }}"
-            [disabled]="settings.disabled"
-          />
-        </mat-chip-grid>
-      </mat-form-field>
-    </form>
-  </div>
-</div>
+}
 
 <lib-extension-point
   extensionId="archive-list"

@@ -1,4 +1,4 @@
-import { Location, NgIf, NgFor } from '@angular/common';
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,13 +34,11 @@ import { FlexModule } from '@angular/flex-layout';
   standalone: true,
   imports: [
     FlexModule,
-    NgIf,
     CommentListBarComponent,
     LoadingIndicatorComponent,
     CommentSettingsHintComponent,
     CommentListHintComponent,
     CoreModule,
-    NgFor,
     CommentComponent,
     CommentListAddButtonComponent,
     CommentListFloatingButtonsComponent,

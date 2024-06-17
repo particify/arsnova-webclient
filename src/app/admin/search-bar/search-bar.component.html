@@ -12,22 +12,20 @@
     matIconPrefix
     >{{ showSuccessIndicator ? 'check' : 'search' }}</mat-icon
   >
-  <button
-    *ngIf="searchField.value"
-    matSuffix
-    mat-icon-button
-    class="clear-button"
-    (click)="clear()"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
+  @if (searchField.value) {
+    <button matSuffix mat-icon-button class="clear-button" (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
   <mat-autocomplete
     (optionSelected)="selectItem($event.option.value)"
     #auto="matAutocomplete"
     panelWidth="350px"
   >
-    <mat-option *ngFor="let result of results" [value]="result">
-      {{ result }}
-    </mat-option>
+    @for (result of results; track result) {
+      <mat-option [value]="result">
+        {{ result }}
+      </mat-option>
+    }
   </mat-autocomplete>
 </mat-form-field>

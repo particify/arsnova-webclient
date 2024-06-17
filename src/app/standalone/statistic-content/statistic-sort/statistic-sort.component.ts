@@ -33,7 +33,7 @@ import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgClass, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 
 export const MAX_COMBINATIONS = 4;
@@ -45,10 +45,8 @@ export const MAX_COMBINATIONS = 4;
   standalone: true,
   imports: [
     FlexModule,
-    NgIf,
     LoadingIndicatorComponent,
     NgClass,
-    NgFor,
     RenderedTextComponent,
   ],
 })

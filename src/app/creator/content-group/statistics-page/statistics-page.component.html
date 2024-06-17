@@ -4,34 +4,41 @@
       <div tabindex="-1" class="visually-hidden" [appAutofocus]>
         {{ 'statistic.a11y-message-overview' | a11yIntro | async }}
       </div>
-      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-      <div *ngIf="!isLoading">
-        <div fxLayout="row wrap" fxLayoutAlign="space-between">
-          <mat-form-field appearance="outline" class="no-field-hint">
-            <mat-label>{{
-              'creator.statistic.select-content-group' | transloco
-            }}</mat-label>
-            <mat-select [(ngModel)]="currentGroup">
-              <mat-option
-                *ngFor="let contentGroup of contentGroups"
-                (click)="updateCollection()"
-                [value]="contentGroup"
-              >
-                {{ contentGroup.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <button
-            mat-stroked-button
-            color="warn"
-            (click)="showDeleteDialog()"
-            aria-labelledby="delete-answers"
-          >
-            {{ 'creator.content.delete-answers' | transloco }}
-          </button>
+      @if (isLoading) {
+        <app-loading-indicator></app-loading-indicator>
+      }
+      @if (!isLoading) {
+        <div>
+          <div fxLayout="row wrap" fxLayoutAlign="space-between">
+            <mat-form-field appearance="outline" class="no-field-hint">
+              <mat-label>{{
+                'creator.statistic.select-content-group' | transloco
+              }}</mat-label>
+              <mat-select [(ngModel)]="currentGroup">
+                @for (contentGroup of contentGroups; track contentGroup) {
+                  <mat-option
+                    (click)="updateCollection()"
+                    [value]="contentGroup"
+                  >
+                    {{ contentGroup.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <button
+              mat-stroked-button
+              color="warn"
+              (click)="showDeleteDialog()"
+              aria-labelledby="delete-answers"
+            >
+              {{ 'creator.content.delete-answers' | transloco }}
+            </button>
+          </div>
+          <app-list-statistic
+            [contentGroup]="currentGroup"
+          ></app-list-statistic>
         </div>
-        <app-list-statistic [contentGroup]="currentGroup"></app-list-statistic>
-      </div>
+      }
     </mat-card>
   </div>
 </div>

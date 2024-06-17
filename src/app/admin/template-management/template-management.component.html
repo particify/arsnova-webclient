@@ -11,12 +11,11 @@
     <mat-form-field fxFlex appearance="outline" class="smaller no-field-hint">
       <mat-label>{{ 'admin.admin-area.filter' | transloco }}</mat-label>
       <mat-select [(value)]="currentFilter">
-        <mat-option
-          *ngFor="let option of filterOptions"
-          [value]="option"
-          (click)="filterTags(option)"
-          >{{ 'admin.admin-area.filter-' + option | transloco }}</mat-option
-        >
+        @for (option of filterOptions; track option) {
+          <mat-option [value]="option" (click)="filterTags(option)">{{
+            'admin.admin-area.filter-' + option | transloco
+          }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <app-template-language-selection
@@ -24,43 +23,43 @@
       (selectedLangChanged)="loadTags($event)"
     ></app-template-language-selection>
   </div>
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <div
-    *ngIf="!isLoading && this.filteredTags.length === 0"
-    fxLayout="row"
-    fxLayoutAlign="center"
-  >
-    <p class="hint">
-      {{ 'admin.admin-area.no-tags-found' | transloco }}
-    </p>
-  </div>
-  <mat-action-list fxFill *ngIf="!isLoading">
-    <mat-list-item
-      disableRipple
-      *ngFor="let tag of filteredTags"
-      class="bottom-border list-item"
-    >
-      <div fxLayout="row" fxLayoutAlign="space-between center">
-        {{ tag.name }}
-        <div>
-          <div class="hover-buttons">
-            <button mat-icon-button color="primary" (click)="edit(tag)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="delete(tag)">
-              <mat-icon>delete</mat-icon>
-            </button>
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading && this.filteredTags.length === 0) {
+    <div fxLayout="row" fxLayoutAlign="center">
+      <p class="hint">
+        {{ 'admin.admin-area.no-tags-found' | transloco }}
+      </p>
+    </div>
+  }
+  @if (!isLoading) {
+    <mat-action-list fxFill>
+      @for (tag of filteredTags; track tag) {
+        <mat-list-item disableRipple class="bottom-border list-item">
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            {{ tag.name }}
+            <div>
+              <div class="hover-buttons">
+                <button mat-icon-button color="primary" (click)="edit(tag)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="delete(tag)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              <button mat-icon-button (click)="toggleVerified(tag)">
+                <mat-icon
+                  [ngStyle]="{
+                    color: tag.verified ? 'var(--success)' : 'var(--grey)',
+                  }"
+                  >verified</mat-icon
+                >
+              </button>
+            </div>
           </div>
-          <button mat-icon-button (click)="toggleVerified(tag)">
-            <mat-icon
-              [ngStyle]="{
-                color: tag.verified ? 'var(--success)' : 'var(--grey)',
-              }"
-              >verified</mat-icon
-            >
-          </button>
-        </div>
-      </div>
-    </mat-list-item>
-  </mat-action-list>
+        </mat-list-item>
+      }
+    </mat-action-list>
+  }
 </div>

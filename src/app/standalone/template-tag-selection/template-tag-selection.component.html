@@ -1,15 +1,17 @@
 <mat-form-field fxFill appearance="outline" class="no-field-hint">
   <mat-label>{{ 'templates.tags' | transloco }}</mat-label>
   <mat-chip-grid #chipGrid [disabled]="formDisabled">
-    <mat-chip-row *ngFor="let tag of selectedTags" (removed)="remove(tag)">
-      {{ tag.name }}
-      <button
-        matChipRemove
-        [attr.aria-label]="'templates.remove-tag' | transloco: { tag: tag }"
-      >
-        <mat-icon>cancel</mat-icon>
-      </button>
-    </mat-chip-row>
+    @for (tag of selectedTags; track tag) {
+      <mat-chip-row (removed)="remove(tag)">
+        {{ tag.name }}
+        <button
+          matChipRemove
+          [attr.aria-label]="'templates.remove-tag' | transloco: { tag: tag }"
+        >
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    }
     <input
       matInput
       #tagInput
@@ -22,36 +24,30 @@
       [matChipInputFor]="chipGrid"
       [matAutocomplete]="auto"
     />
-    <mat-error
-      *ngIf="tagFormControl.invalid"
-      style="font-size: var(--mat-form-field-subscript-text-size)"
-    >
-      {{ 'templates.no-special-characters-allowed' | transloco }}
-    </mat-error>
+    @if (tagFormControl.invalid) {
+      <mat-error style="font-size: var(--mat-form-field-subscript-text-size)">
+        {{ 'templates.no-special-characters-allowed' | transloco }}
+      </mat-error>
+    }
     <mat-autocomplete
       #auto="matAutocomplete"
       [hideSingleSelectionIndicator]="true"
       [autoSelectActiveOption]="false"
       (optionSelected)="selected($event)"
     >
-      <mat-option
-        *ngFor="let tag of filteredTags"
-        [value]="tag.name"
-        [disabled]="isTagSelected(tag)"
-      >
-        {{ tag.name }}
-      </mat-option>
-      <mat-option
-        *ngIf="
-          filteredTags.length === 0 &&
-          tagInput.value.length > 0 &&
-          allowCreation
-        "
-        [disabled]="tagFormControl.invalid"
-      >
-        <mat-icon>add</mat-icon>
-        {{ 'templates.create-new-tag' | transloco }}
-      </mat-option>
+      @for (tag of filteredTags; track tag) {
+        <mat-option [value]="tag.name" [disabled]="isTagSelected(tag)">
+          {{ tag.name }}
+        </mat-option>
+      }
+      @if (
+        filteredTags.length === 0 && tagInput.value.length > 0 && allowCreation
+      ) {
+        <mat-option [disabled]="tagFormControl.invalid">
+          <mat-icon>add</mat-icon>
+          {{ 'templates.create-new-tag' | transloco }}
+        </mat-option>
+      }
     </mat-autocomplete>
   </mat-chip-grid>
 </mat-form-field>

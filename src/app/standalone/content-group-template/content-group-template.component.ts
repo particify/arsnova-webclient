@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { CoreModule } from '@app/core/core.module';
 import { LICENSES } from '@app/core/models/licenses';
@@ -9,12 +9,7 @@ import { Room } from '@app/core/models/room';
 
 @Component({
   standalone: true,
-  imports: [
-    CommonModule,
-    CoreModule,
-    TemplateLicenseComponent,
-    AddTemplateButtonComponent,
-  ],
+  imports: [CoreModule, TemplateLicenseComponent, AddTemplateButtonComponent],
   selector: 'app-content-group-template',
   templateUrl: './content-group-template.component.html',
   styleUrls: ['./content-group-template.component.scss'],

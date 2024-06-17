@@ -8,21 +8,18 @@
   (itemSelected)="showRoom($event)"
 ></app-search-bar>
 
-<mat-card
-  appearance="outlined"
-  *ngIf="room"
-  fxLayout="column"
-  fxLayoutGap="16px"
->
-  <app-entity-properties [entity]="room"></app-entity-properties>
-  <div fxLayoutAlign="space-between">
-    <button mat-stroked-button color="warn" (click)="deleteEntity()">
-      <mat-icon>delete</mat-icon>
-      {{ 'admin.admin-area.delete-room' | transloco }}
-    </button>
-    <button mat-raised-button color="primary" (click)="transferRoom()">
-      <mat-icon>forward</mat-icon>
-      {{ 'admin.admin-area.transfer-room' | transloco }}
-    </button>
-  </div>
-</mat-card>
+@if (room) {
+  <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
+    <app-entity-properties [entity]="room"></app-entity-properties>
+    <div fxLayoutAlign="space-between">
+      <button mat-stroked-button color="warn" (click)="deleteEntity()">
+        <mat-icon>delete</mat-icon>
+        {{ 'admin.admin-area.delete-room' | transloco }}
+      </button>
+      <button mat-raised-button color="primary" (click)="transferRoom()">
+        <mat-icon>forward</mat-icon>
+        {{ 'admin.admin-area.transfer-room' | transloco }}
+      </button>
+    </div>
+  </mat-card>
+}

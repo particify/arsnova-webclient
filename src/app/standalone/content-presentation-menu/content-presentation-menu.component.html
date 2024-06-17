@@ -1,35 +1,37 @@
 <mat-menu #moreMenu="matMenu">
   <ng-container>
-    <button
-      *ngIf="content && editingEnabled"
-      mat-menu-item
-      (click)="editContent()"
-      attr.aria-label="{{ 'creator.content.a11y-edit-content' | transloco }}"
-    >
-      <mat-icon>edit</mat-icon>
-      <span> {{ 'creator.content.edit-content' | transloco }}</span>
-    </button>
-    <mat-divider
-      *ngIf="content && hasFormatAnswer(content.format) && editingEnabled"
-    ></mat-divider>
-    <button
-      mat-menu-item
-      *ngIf="content && hasFormatAnswer(content.format)"
-      (click)="deleteContentAnswers()"
-      attr.aria-label="{{ 'creator.content.a11y-delete-answers' | transloco }}"
-    >
-      <mat-icon>clear_all</mat-icon>
-      <span>{{ 'creator.content.delete-answers' | transloco }}</span>
-    </button>
-    <button
-      *ngIf="settingsEnabled"
-      mat-menu-item
-      [routerLink]="'/account/preferences'"
-    >
-      <mat-icon>settings_suggest</mat-icon>
-      <span>{{ 'creator.content.preferences' | transloco }}</span>
-    </button>
-    <ng-container *ngIf="content && hasFormatRounds(content.format)">
+    @if (content && editingEnabled) {
+      <button
+        mat-menu-item
+        (click)="editContent()"
+        attr.aria-label="{{ 'creator.content.a11y-edit-content' | transloco }}"
+      >
+        <mat-icon>edit</mat-icon>
+        <span> {{ 'creator.content.edit-content' | transloco }}</span>
+      </button>
+    }
+    @if (content && hasFormatAnswer(content.format) && editingEnabled) {
+      <mat-divider></mat-divider>
+    }
+    @if (content && hasFormatAnswer(content.format)) {
+      <button
+        mat-menu-item
+        (click)="deleteContentAnswers()"
+        attr.aria-label="{{
+          'creator.content.a11y-delete-answers' | transloco
+        }}"
+      >
+        <mat-icon>clear_all</mat-icon>
+        <span>{{ 'creator.content.delete-answers' | transloco }}</span>
+      </button>
+    }
+    @if (settingsEnabled) {
+      <button mat-menu-item [routerLink]="'/account/preferences'">
+        <mat-icon>settings_suggest</mat-icon>
+        <span>{{ 'creator.content.preferences' | transloco }}</span>
+      </button>
+    }
+    @if (content && hasFormatRounds(content.format)) {
       <button
         [disabled]="!multipleRounds"
         mat-menu-item
@@ -50,19 +52,17 @@
         }}
       </button>
       <mat-menu #roundMenu>
-        <button
-          mat-menu-item
-          *ngFor="let roundItem of rounds; let i = index"
-          (click)="changeRound(i)"
-        >
-          <span
-            [ngClass]="{
-              'selected-menu-item': this.contentRounds.get(content.id) === i,
-            }"
-          >
-            {{ 'content.round' | transloco }}&nbsp;{{ roundItem }}
-          </span>
-        </button>
+        @for (roundItem of rounds; track roundItem; let i = $index) {
+          <button mat-menu-item (click)="changeRound(i)">
+            <span
+              [ngClass]="{
+                'selected-menu-item': this.contentRounds.get(content.id) === i,
+              }"
+            >
+              {{ 'content.round' | transloco }}&nbsp;{{ roundItem }}
+            </span>
+          </button>
+        }
       </mat-menu>
       <button
         mat-menu-item
@@ -72,6 +72,6 @@
         <mat-icon>replay</mat-icon>
         {{ 'creator.content.start-new-round' | transloco }}
       </button>
-    </ng-container>
+    }
   </ng-container>
 </mat-menu>

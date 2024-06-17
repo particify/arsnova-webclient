@@ -15,9 +15,11 @@
       formControlName="reason"
       [(ngModel)]="selectedReason"
     >
-      <mat-radio-button *ngFor="let reason of reasons" [value]="reason">
-        {{ 'violation-report.reason-' + getReasonString(reason) | transloco }}
-      </mat-radio-button>
+      @for (reason of reasons; track reason) {
+        <mat-radio-button [value]="reason">
+          {{ 'violation-report.reason-' + getReasonString(reason) | transloco }}
+        </mat-radio-button>
+      }
     </mat-radio-group>
     <mat-form-field appearance="outline">
       <mat-label>{{ 'violation-report.description' | transloco }}</mat-label>

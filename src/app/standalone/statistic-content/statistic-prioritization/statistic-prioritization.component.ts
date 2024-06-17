@@ -26,7 +26,7 @@ import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics
 import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
 import { takeUntil } from 'rxjs';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgStyle } from '@angular/common';
+import { NgStyle } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 
 @Component({
@@ -34,7 +34,7 @@ import { FlexModule } from '@angular/flex-layout';
   templateUrl: './statistic-prioritization.component.html',
   styleUrls: ['./statistic-prioritization.component.scss'],
   standalone: true,
-  imports: [FlexModule, NgIf, LoadingIndicatorComponent, NgStyle],
+  imports: [FlexModule, LoadingIndicatorComponent, NgStyle],
 })
 export class StatisticPrioritizationComponent
   extends StatisticChoiceComponent

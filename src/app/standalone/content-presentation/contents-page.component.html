@@ -1,147 +1,160 @@
-<div
-  *ngIf="showStepInfo && !isLoading && !isGroupLocked() && contents"
-  class="step-info-container"
-  fxLayout="column"
-  fxLayoutAlign="center center"
->
-  <p class="step-info">
-    {{ currentStep + 1 + ' / ' + stepCount }}
-  </p>
-</div>
-<app-answer-count
-  *ngIf="
-    showAnswerCount &&
-    !isLoading &&
-    !isGroupLocked() &&
-    canAnswerContent &&
-    content &&
-    (content.state.answeringEndTime || !content.duration)
-  "
-  [count]="answerCount"
-  [size]="'presentation'"
-></app-answer-count>
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div fxLayoutAlign="center center" *ngIf="!isLoading">
-  <p *ngIf="!contents" class="hint">
-    {{ 'creator.content.no-contents-yet' | transloco }}
-  </p>
-  <p *ngIf="isGroupLocked()" class="hint">
-    {{ 'creator.content.group-not-published' | transloco }}
-  </p>
-</div>
-<div>
-  <div *ngIf="!isLoading" tabindex="-1" [appAutofocus] class="visually-hidden">
-    {{
-      'creator.presentation.a11y-content-message'
-        | transloco: { group: contentGroup.name }
-    }}
+@if (showStepInfo && !isLoading && !isGroupLocked() && contents) {
+  <div
+    class="step-info-container"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <p class="step-info">
+      {{ currentStep + 1 + ' / ' + stepCount }}
+    </p>
   </div>
+}
+@if (
+  showAnswerCount &&
+  !isLoading &&
+  !isGroupLocked() &&
+  canAnswerContent &&
+  content &&
+  (content.state.answeringEndTime || !content.duration)
+) {
+  <app-answer-count
+    [count]="answerCount"
+    [size]="'presentation'"
+  ></app-answer-count>
+}
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <div fxLayoutAlign="center center">
+    @if (!contents) {
+      <p class="hint">
+        {{ 'creator.content.no-contents-yet' | transloco }}
+      </p>
+    }
+    @if (isGroupLocked()) {
+      <p class="hint">
+        {{ 'creator.content.group-not-published' | transloco }}
+      </p>
+    }
+  </div>
+}
+<div>
+  @if (!isLoading) {
+    <div tabindex="-1" [appAutofocus] class="visually-hidden">
+      {{
+        'creator.presentation.a11y-content-message'
+          | transloco: { group: contentGroup.name }
+      }}
+    </div>
+  }
   <div
     id="stepper-container"
     fxLayout="column"
     fxLayoutAlign="start center"
     class="scalable"
   >
-    <app-content-stepper
-      [hidden]="showLeaderboard"
-      *ngIf="contents && contents.length > 0 && !isLoading && !isGroupLocked()"
-      [contents]="contents"
-      [settings]="settings"
-      [startIndex]="contentIndex"
-      [hideControls]="true"
-      [attributions]="attributions"
-      (indexChanged)="updateURL($event)"
-      (answerCountUpdated)="updateCounter($event)"
-    >
-    </app-content-stepper>
-    <app-leaderboard-page
-      [ngClass]="{ 'over-control-bar': controlBarVisible }"
-      *ngIf="showLeaderboard"
-    ></app-leaderboard-page>
+    @if (contents && contents.length > 0 && !isLoading && !isGroupLocked()) {
+      <app-content-stepper
+        [hidden]="showLeaderboard"
+        [contents]="contents"
+        [settings]="settings"
+        [startIndex]="contentIndex"
+        [hideControls]="true"
+        [attributions]="attributions"
+        (indexChanged)="updateURL($event)"
+        (answerCountUpdated)="updateCounter($event)"
+      >
+      </app-content-stepper>
+    }
+    @if (showLeaderboard) {
+      <app-leaderboard-page
+        [ngClass]="{ 'over-control-bar': controlBarVisible }"
+      ></app-leaderboard-page>
+    }
   </div>
 </div>
-<div
-  *ngIf="
-    showHotkeyActionButtons &&
-    !isLoading &&
-    !isGroupLocked() &&
-    content &&
-    content.duration &&
-    !content.state.answeringEndTime &&
-    isPublished()
-  "
-  @hotkeyEnterLeaveAnimation
-  fxFill
->
-  <app-hotkey-action-button
-    hotkey="s"
-    [hotkeyTitle]="'creator.content.start-quiz' | transloco"
-    [action]="'creator.content.to-start-quiz' | transloco"
-    [isNavBarVisible]="controlBarVisible"
-    (buttonClicked)="startCountdown()"
-  ></app-hotkey-action-button>
-</div>
-<div
-  *ngIf="
-    showHotkeyActionButtons &&
-    !isLoading &&
-    !isGroupLocked() &&
-    content &&
-    endDate &&
-    !answeringLocked &&
-    isPublished()
-  "
-  @hotkeyEnterLeaveAnimation
-  fxFill
->
-  <app-hotkey-action-button
-    hotkey="s"
-    [hotkeyTitle]="'creator.content.stop-quiz' | transloco"
-    [action]="'creator.content.to-stop-quiz' | transloco"
-    [isNavBarVisible]="controlBarVisible"
-    [additionalBottomSpace]="!answeringLocked"
-    (buttonClicked)="stopCountdown()"
-  ></app-hotkey-action-button>
-</div>
+@if (
+  showHotkeyActionButtons &&
+  !isLoading &&
+  !isGroupLocked() &&
+  content &&
+  content.duration &&
+  !content.state.answeringEndTime &&
+  isPublished()
+) {
+  <div @hotkeyEnterLeaveAnimation fxFill>
+    <app-hotkey-action-button
+      hotkey="s"
+      [hotkeyTitle]="'creator.content.start-quiz' | transloco"
+      [action]="'creator.content.to-start-quiz' | transloco"
+      [isNavBarVisible]="controlBarVisible"
+      (buttonClicked)="startCountdown()"
+    ></app-hotkey-action-button>
+  </div>
+}
+@if (
+  showHotkeyActionButtons &&
+  !isLoading &&
+  !isGroupLocked() &&
+  content &&
+  endDate &&
+  !answeringLocked &&
+  isPublished()
+) {
+  <div @hotkeyEnterLeaveAnimation fxFill>
+    <app-hotkey-action-button
+      hotkey="s"
+      [hotkeyTitle]="'creator.content.stop-quiz' | transloco"
+      [action]="'creator.content.to-stop-quiz' | transloco"
+      [isNavBarVisible]="controlBarVisible"
+      [additionalBottomSpace]="!answeringLocked"
+      (buttonClicked)="stopCountdown()"
+    ></app-hotkey-action-button>
+  </div>
+}
 <div
   class="countdown-container"
   [ngClass]="{ 'over-control-bar': controlBarVisible }"
 >
-  <app-countdown-timer
-    *ngIf="content && content.duration && endDate && !answeringLocked"
-    [endDate]="endDate"
-    [duration]="content.duration"
-    [showIcon]="true"
-    [layout]="'column-reverse'"
-    [fontSize]="'24px'"
-    (finished)="answeringLocked = true"
-  ></app-countdown-timer>
+  @if (content && content.duration && endDate && !answeringLocked) {
+    <app-countdown-timer
+      [endDate]="endDate"
+      [duration]="content.duration"
+      [showIcon]="true"
+      [layout]="'column-reverse'"
+      [fontSize]="'24px'"
+      (finished)="answeringLocked = true"
+    ></app-countdown-timer>
+  }
 </div>
-<app-hotkey-action-button
-  @hotkeyEnterLeaveAnimation
-  *ngIf="
-    showHotkeyActionButtons &&
-    !isLoading &&
-    !isGroupLocked() &&
-    content &&
-    !isPublished()
-  "
-  hotkey="p"
-  [hotkeyTitle]="'creator.content.publish-current-content' | transloco"
-  [action]="'creator.content.to-publish-content' | transloco"
-  [isNavBarVisible]="controlBarVisible"
-  infoIcon="locked"
-  [infoLabel]="'creator.content.content-is-locked' | transloco"
-  (buttonClicked)="publishCurrentContent()"
-></app-hotkey-action-button>
-<div
-  *ngIf="!isLoading && isPublished() && answeringLocked && endDate"
-  class="locked-hint"
-  [ngClass]="{ 'over-control-bar': controlBarVisible }"
-  fxLayout="row"
-  fxLayoutAlign="start center"
-  fxLayoutGap="8px"
->
-  <mat-icon>lock</mat-icon>
-  <span>{{ 'creator.content.answering-is-locked' | transloco }}</span>
-</div>
+@if (
+  showHotkeyActionButtons &&
+  !isLoading &&
+  !isGroupLocked() &&
+  content &&
+  !isPublished()
+) {
+  <app-hotkey-action-button
+    @hotkeyEnterLeaveAnimation
+    hotkey="p"
+    [hotkeyTitle]="'creator.content.publish-current-content' | transloco"
+    [action]="'creator.content.to-publish-content' | transloco"
+    [isNavBarVisible]="controlBarVisible"
+    infoIcon="locked"
+    [infoLabel]="'creator.content.content-is-locked' | transloco"
+    (buttonClicked)="publishCurrentContent()"
+  ></app-hotkey-action-button>
+}
+@if (!isLoading && isPublished() && answeringLocked && endDate) {
+  <div
+    class="locked-hint"
+    [ngClass]="{ 'over-control-bar': controlBarVisible }"
+    fxLayout="row"
+    fxLayoutAlign="start center"
+    fxLayoutGap="8px"
+  >
+    <mat-icon>lock</mat-icon>
+    <span>{{ 'creator.content.answering-is-locked' | transloco }}</span>
+  </div>
+}

@@ -45,47 +45,53 @@
         ></app-comment-list-bar-extension>
       </app-comment-list-bar>
     </div>
-    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+    @if (isLoading) {
+      <app-loading-indicator></app-loading-indicator>
+    }
     <app-comment-settings-hint
       [disabled]="disabled"
       [readonly]="readonly"
       [showToggleButton]="true"
       (toggleButtonClicked)="disabled ? activateComments() : toggleReadonly()"
     ></app-comment-settings-hint>
-    <app-comment-list-hint
-      *ngIf="!isLoading && !disabled"
-      [isListEmpty]="comments.length < 1"
-      [noPostsFound]="
-        (hideCommentsList && filteredComments.length < 1) ||
-        (!hideCommentsList && commentsFilteredByTime.length < 1)
-      "
-    ></app-comment-list-hint>
-    <div
-      *ngIf="!isLoading"
-      class="comments-container"
-      tabindex="-1"
-      appHotkey="7"
-      [appHotkeyTitle]="'comment-list.list' | transloco"
-      [attr.aria-label]="'comment-list.list' | transloco"
-    >
-      <app-comment
-        *ngFor="let comment of displayComments"
-        [comment]="comment"
-        [isEditor]="true"
-        [isModeration]="isModeration"
-        [referenceEvent]="referenceEvent.asObservable()"
-        [isNew]="comment.id === newestComment.id"
-        [fileUploadEnabled]="fileUploadEnabled"
-        (activeComment)="updateCurrentComment($event)"
-        (clickedOnTag)="selectTag($event)"
+    @if (!isLoading && !disabled) {
+      <app-comment-list-hint
+        [isListEmpty]="comments.length < 1"
+        [noPostsFound]="
+          (hideCommentsList && filteredComments.length < 1) ||
+          (!hideCommentsList && commentsFilteredByTime.length < 1)
+        "
+      ></app-comment-list-hint>
+    }
+    @if (!isLoading) {
+      <div
+        class="comments-container"
+        tabindex="-1"
+        appHotkey="7"
+        [appHotkeyTitle]="'comment-list.list' | transloco"
+        [attr.aria-label]="'comment-list.list' | transloco"
       >
-      </app-comment>
-    </div>
-    <app-comment-list-add-button
-      *ngIf="comments.length < 3 && !isLoading && !disabled"
-      [disabled]="readonly"
-      (buttonClicked)="openCreateDialog()"
-    ></app-comment-list-add-button>
+        @for (comment of displayComments; track comment) {
+          <app-comment
+            [comment]="comment"
+            [isEditor]="true"
+            [isModeration]="isModeration"
+            [referenceEvent]="referenceEvent.asObservable()"
+            [isNew]="comment.id === newestComment.id"
+            [fileUploadEnabled]="fileUploadEnabled"
+            (activeComment)="updateCurrentComment($event)"
+            (clickedOnTag)="selectTag($event)"
+          >
+          </app-comment>
+        }
+      </div>
+    }
+    @if (comments.length < 3 && !isLoading && !disabled) {
+      <app-comment-list-add-button
+        [disabled]="readonly"
+        (buttonClicked)="openCreateDialog()"
+      ></app-comment-list-add-button>
+    }
     <app-comment-list-floating-buttons
       [showScrollButton]="scrollExtended && scrollActive"
       [showScrollToNewPostsButton]="scrollExtended && unreadCommentCount > 0"

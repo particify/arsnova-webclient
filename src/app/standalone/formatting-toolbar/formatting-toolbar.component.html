@@ -1,12 +1,13 @@
 <div fxLayout="row wrap" fxLayoutGap="4px">
-  <button
-    mat-icon-button
-    [disabled]="disabled"
-    *ngFor="let option of formattingOptions"
-    (click)="addFormatting(option)"
-    [matTooltip]="'creator.formatting.' + option.name | transloco"
-    tabindex="-1"
-  >
-    <mat-icon>{{ option.icon }}</mat-icon>
-  </button>
+  @for (option of formattingOptions; track option) {
+    <button
+      mat-icon-button
+      [disabled]="disabled"
+      (click)="addFormatting(option)"
+      [matTooltip]="'creator.formatting.' + option.name | transloco"
+      tabindex="-1"
+    >
+      <mat-icon>{{ option.icon }}</mat-icon>
+    </button>
+  }
 </div>

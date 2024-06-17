@@ -33,10 +33,12 @@
 
   <mat-divider></mat-divider>
 
-  <button mat-menu-item (click)="navToSettings()" *ngIf="viewRole === 'OWNER'">
-    <mat-icon class="settings-icon">settings</mat-icon>
-    <span>{{ 'creator.comment-list.settings' | transloco }}</span>
-  </button>
+  @if (viewRole === 'OWNER') {
+    <button mat-menu-item (click)="navToSettings()">
+      <mat-icon class="settings-icon">settings</mat-icon>
+      <span>{{ 'creator.comment-list.settings' | transloco }}</span>
+    </button>
+  }
 
   <lib-extension-point
     extensionId="add-archive"
@@ -53,17 +55,18 @@
     <span>{{ 'creator.comment-list.export-comments' | transloco }}</span>
   </button>
 
-  <button
-    *ngIf="viewRole === 'OWNER'"
-    [disabled]="comments.length === 0"
-    mat-menu-item
-    (click)="openDeleteCommentsDialog()"
-  >
-    <mat-icon color="warn">delete_outline</mat-icon>
-    <span>{{
-      'creator.comment-list.delete-' +
-        (isModeration ? 'banned' : 'all') +
-        '-comments' | transloco
-    }}</span>
-  </button>
+  @if (viewRole === 'OWNER') {
+    <button
+      [disabled]="comments.length === 0"
+      mat-menu-item
+      (click)="openDeleteCommentsDialog()"
+    >
+      <mat-icon color="warn">delete_outline</mat-icon>
+      <span>{{
+        'creator.comment-list.delete-' +
+          (isModeration ? 'banned' : 'all') +
+          '-comments' | transloco
+      }}</span>
+    </button>
+  }
 </mat-menu>

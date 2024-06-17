@@ -1,42 +1,43 @@
-<div
-  *ngIf="(healthInfo | async)?.details"
-  fxLayout="row"
-  fxLayoutAlign="space-around"
-  fxLayoutGap="10px"
-  class="summary-container"
->
-  <div fxLayout="column" fxLayoutAlign="center center">
-    <div fxLayout="column" fxLayoutAlign="center">
-      <app-health-status
-        [status]="(healthInfo | async)?.status"
-      ></app-health-status>
+@if ((healthInfo | async)?.details) {
+  <div
+    fxLayout="row"
+    fxLayoutAlign="space-around"
+    fxLayoutGap="10px"
+    class="summary-container"
+  >
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <div fxLayout="column" fxLayoutAlign="center">
+        <app-health-status
+          [status]="(healthInfo | async)?.status"
+        ></app-health-status>
+      </div>
+      <p>
+        {{ 'admin.admin-area.system-health' | transloco }}
+      </p>
     </div>
-    <p>
-      {{ 'admin.admin-area.system-health' | transloco }}
-    </p>
-  </div>
-  <div fxLayout="column" fxLayoutAlign="center center">
-    <div fxLayout="column" fxLayoutAlign="center">
-      <span>{{ (stats | async)?.connectedUsers }}</span>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <div fxLayout="column" fxLayoutAlign="center">
+        <span>{{ (stats | async)?.connectedUsers }}</span>
+      </div>
+      <p>
+        {{ 'admin.admin-area.connected-users' | transloco }}
+      </p>
     </div>
-    <p>
-      {{ 'admin.admin-area.connected-users' | transloco }}
-    </p>
-  </div>
-  <div fxLayout="column" fxLayoutAlign="center center">
-    <div fxLayout="column" fxLayoutAlign="center">
-      <span>{{ (stats | async)?.users }}</span>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <div fxLayout="column" fxLayoutAlign="center">
+        <span>{{ (stats | async)?.users }}</span>
+      </div>
+      <p>
+        {{ 'admin.admin-area.user-accounts' | transloco }}
+      </p>
     </div>
-    <p>
-      {{ 'admin.admin-area.user-accounts' | transloco }}
-    </p>
-  </div>
-  <div fxLayout="column" fxLayoutAlign="center center">
-    <div fxLayout="column" fxLayoutAlign="center">
-      <span>{{ (stats | async)?.rooms }}</span>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <div fxLayout="column" fxLayoutAlign="center">
+        <span>{{ (stats | async)?.rooms }}</span>
+      </div>
+      <p>
+        {{ 'admin.admin-area.rooms' | transloco }}
+      </p>
     </div>
-    <p>
-      {{ 'admin.admin-area.rooms' | transloco }}
-    </p>
   </div>
-</div>
+}

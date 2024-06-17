@@ -2,17 +2,22 @@
   class="text-answer-container"
   [ngClass]="{ 'answers-visible': answersVisible }"
 >
-  <app-answer-list
-    *ngIf="!isLoading && answersVisible"
-    [answers]="answerStats"
-    [banMode]="false"
-    [isPresentation]="isPresentation"
-    (deleteClicked)="deleteAnswer($event)"
-  ></app-answer-list>
+  @if (!isLoading && answersVisible) {
+    <app-answer-list
+      [answers]="answerStats"
+      [banMode]="false"
+      [isPresentation]="isPresentation"
+      (deleteClicked)="deleteAnswer($event)"
+    ></app-answer-list>
+  }
   <div fxLayoutAlign="center">
-    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-    <p *ngIf="!isLoading && answerStats.length === 0" class="hint">
-      {{ 'statistic.no-answers' | transloco }}
-    </p>
+    @if (isLoading) {
+      <app-loading-indicator></app-loading-indicator>
+    }
+    @if (!isLoading && answerStats.length === 0) {
+      <p class="hint">
+        {{ 'statistic.no-answers' | transloco }}
+      </p>
+    }
   </div>
 </div>

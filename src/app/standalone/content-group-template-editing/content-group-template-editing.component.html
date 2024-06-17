@@ -45,21 +45,19 @@
       <mat-select-trigger>
         {{ LICENSES.get(selectedLicense)?.name }}
       </mat-select-trigger>
-      <mat-option
-        *ngFor="let license of licenseKeys"
-        [value]="license"
-        (click)="updateLicense(license)"
-      >
-        <div class="license-option" fxLayout="column" fxLayoutGap="4px">
-          <span class="license-name"> {{ LICENSES.get(license)?.name }}</span>
-          <span class="license-description">
-            {{
-              'templates.license-description-' + replaceDots(license)
-                | transloco
-            }}
-          </span>
-        </div>
-      </mat-option>
+      @for (license of licenseKeys; track license) {
+        <mat-option [value]="license" (click)="updateLicense(license)">
+          <div class="license-option" fxLayout="column" fxLayoutGap="4px">
+            <span class="license-name"> {{ LICENSES.get(license)?.name }}</span>
+            <span class="license-description">
+              {{
+                'templates.license-description-' + replaceDots(license)
+                  | transloco
+              }}
+            </span>
+          </div>
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
   <mat-form-field

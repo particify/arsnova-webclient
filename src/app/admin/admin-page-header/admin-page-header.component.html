@@ -4,13 +4,10 @@
   class="header-container"
 >
   <h2 class="title">{{ 'admin.admin-area.' + headerText | transloco }}</h2>
-  <button
-    mat-raised-button
-    *ngIf="buttonText"
-    color="primary"
-    (click)="click()"
-  >
-    <mat-icon>{{ buttonIcon }}</mat-icon>
-    {{ 'admin.admin-area.' + buttonText | transloco }}
-  </button>
+  @if (buttonText) {
+    <button mat-raised-button color="primary" (click)="click()">
+      <mat-icon>{{ buttonIcon }}</mat-icon>
+      {{ 'admin.admin-area.' + buttonText | transloco }}
+    </button>
+  }
 </div>

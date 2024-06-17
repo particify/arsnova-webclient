@@ -12,8 +12,12 @@
       fxLayoutGap="0.25em"
       class="info-container"
     >
-      <span *ngIf="infoLabel" class="info-label">{{ infoLabel }}</span>
-      <mat-icon *ngIf="infoIcon" class="info-icon">{{ infoIcon }}</mat-icon>
+      @if (infoLabel) {
+        <span class="info-label">{{ infoLabel }}</span>
+      }
+      @if (infoIcon) {
+        <mat-icon class="info-icon">{{ infoIcon }}</mat-icon>
+      }
     </div>
     <div
       matRipple

@@ -1,9 +1,10 @@
 <div fxLayout="column" fxLayoutGap="16px">
-  <app-hint
-    *ngIf="isGuest"
-    [text]="'creator.settings.disabled-for-guests'"
-    [type]="HintType.WARNING"
-  ></app-hint>
+  @if (isGuest) {
+    <app-hint
+      [text]="'creator.settings.disabled-for-guests'"
+      [type]="HintType.WARNING"
+    ></app-hint>
+  }
   <div tabindex="0" id="access-settings" class="visually-hidden">
     {{ 'creator.settings.a11y-access' | transloco }}
   </div>
@@ -19,12 +20,11 @@
       fxFlex.gt-xs="50"
     >
       <mat-label>
-        <ng-container *ngIf="loginIdIsEmail; else loginIdLabel">{{
-          'creator.settings.email' | transloco
-        }}</ng-container>
-        <ng-template #loginIdLabel>{{
-          'creator.settings.login-id' | transloco
-        }}</ng-template>
+        @if (loginIdIsEmail) {
+          {{ 'creator.settings.email' | transloco }}
+        } @else {
+          {{ 'creator.settings.login-id' | transloco }}
+        }
       </mat-label>
       <input
         matInput
@@ -35,29 +35,31 @@
     </mat-form-field>
 
     <div fxFlex>
-      <lib-extension-point
-        *ngIf="!isLoading"
-        extensionId="role-selection"
-        [extensionData]="{ disabled: isGuest }"
-        (extensionEvent)="updateSelectedRole($event)"
-      >
-        <mat-form-field
-          class="role-select no-field-hint"
-          appearance="outline"
-          fxFill
+      @if (!isLoading) {
+        <lib-extension-point
+          extensionId="role-selection"
+          [extensionData]="{ disabled: isGuest }"
+          (extensionEvent)="updateSelectedRole($event)"
         >
-          <mat-label>{{ 'creator.settings.role' | transloco }}</mat-label>
-
-          <mat-select
-            [(ngModel)]="selectedRole"
-            [disabled]="isGuest || roles.length === 1"
+          <mat-form-field
+            class="role-select no-field-hint"
+            appearance="outline"
+            fxFill
           >
-            <mat-option *ngFor="let role of roles" [value]="role">
-              {{ 'creator.settings.' + role.toLowerCase() | transloco }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </lib-extension-point>
+            <mat-label>{{ 'creator.settings.role' | transloco }}</mat-label>
+            <mat-select
+              [(ngModel)]="selectedRole"
+              [disabled]="isGuest || roles.length === 1"
+            >
+              @for (role of roles; track role) {
+                <mat-option [value]="role">
+                  {{ 'creator.settings.' + role.toLowerCase() | transloco }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </lib-extension-point>
+      }
     </div>
 
     <button
@@ -99,62 +101,76 @@
       {{ 'creator.settings.add-user' | transloco }}
     </button>
   </div>
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <p *ngIf="!isLoading && moderators.length === 0">
-    {{ 'creator.settings.no-users' | transloco }}
-  </p>
-  <mat-list *ngIf="!isLoading && moderators.length > 0">
-    <mat-list-item
-      class="bottom-border"
-      *ngFor="let moderator of moderators; index as i"
-    >
-      <div fxFill fxLayout="row wrap" fxLayoutAlign="space-between">
-        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="center center">
-          <div
-            class="user-character-container"
-            fxLayoutAlign="center center"
-            [ngClass]="{
-              'role-moderator': moderator.role === UserRole.MODERATOR,
-              'primary-variant': moderator.role === UserRole.OWNER,
-              'secondary-variant': moderator.role === UserRole.EDITOR,
-            }"
-          >
-            <p class="user-character">
-              {{ moderator.displayId.toLocaleUpperCase().slice(0, 1) }}
-            </p>
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading && moderators.length === 0) {
+    <p>
+      {{ 'creator.settings.no-users' | transloco }}
+    </p>
+  }
+  @if (!isLoading && moderators.length > 0) {
+    <mat-list>
+      @for (moderator of moderators; track moderator; let i = $index) {
+        <mat-list-item class="bottom-border">
+          <div fxFill fxLayout="row wrap" fxLayoutAlign="space-between">
+            <div
+              fxLayout="row"
+              fxLayoutGap="16px"
+              fxLayoutAlign="center center"
+            >
+              <div
+                class="user-character-container"
+                fxLayoutAlign="center center"
+                [ngClass]="{
+                  'role-moderator': moderator.role === UserRole.MODERATOR,
+                  'primary-variant': moderator.role === UserRole.OWNER,
+                  'secondary-variant': moderator.role === UserRole.EDITOR,
+                }"
+              >
+                <p class="user-character">
+                  {{ moderator.displayId.toLocaleUpperCase().slice(0, 1) }}
+                </p>
+              </div>
+              <div
+                fxLayout="row"
+                fxLayoutGap="10px"
+                fxLayoutAlign="start center"
+              >
+                <p class="login-id" tabindex="0">
+                  {{ moderator.displayId }}
+                </p>
+                <mat-chip-listbox class="role-chip">
+                  <mat-chip-option selectable="false">{{
+                    'creator.settings.' +
+                      moderator.role.toLocaleString().toLocaleLowerCase()
+                      | transloco
+                  }}</mat-chip-option>
+                </mat-chip-listbox>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+              @if (moderator.role !== UserRole.OWNER) {
+                <button
+                  mat-icon-button
+                  color="warn"
+                  class="close"
+                  (click)="removeModerator(moderator)"
+                  fxFlex
+                  attr.aria-label="{{
+                    'creator.settings.a11y-delete-moderator'
+                      | transloco: { loginId: moderator.displayId }
+                  }}"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+            </div>
           </div>
-          <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-            <p class="login-id" tabindex="0">
-              {{ moderator.displayId }}
-            </p>
-            <mat-chip-listbox class="role-chip">
-              <mat-chip-option selectable="false">{{
-                'creator.settings.' +
-                  moderator.role.toLocaleString().toLocaleLowerCase()
-                  | transloco
-              }}</mat-chip-option>
-            </mat-chip-listbox>
-          </div>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
-          <button
-            mat-icon-button
-            color="warn"
-            *ngIf="moderator.role !== UserRole.OWNER"
-            class="close"
-            (click)="removeModerator(moderator)"
-            fxFlex
-            attr.aria-label="{{
-              'creator.settings.a11y-delete-moderator'
-                | transloco: { loginId: moderator.displayId }
-            }}"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-      </div>
-    </mat-list-item>
-  </mat-list>
+        </mat-list-item>
+      }
+    </mat-list>
+  }
 </div>
 <lib-extension-point
   extensionId="room-password-settings"

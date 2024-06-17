@@ -1,8 +1,13 @@
-<div
-  class="system-health system-health-{{ status | lowercase }}"
-  ngSwitch="{{ status }}"
->
-  <mat-icon *ngSwitchCase="HealthStatus.UP">check</mat-icon>
-  <mat-icon *ngSwitchCase="HealthStatus.DOWN">warning</mat-icon>
-  <b *ngSwitchDefault>?</b>
+<div class="system-health system-health-{{ status | lowercase }}">
+  @switch (status) {
+    @case (HealthStatus.UP) {
+      <mat-icon>check</mat-icon>
+    }
+    @case (HealthStatus.DOWN) {
+      <mat-icon>warning</mat-icon>
+    }
+    @default {
+      <b>?</b>
+    }
+  }
 </div>

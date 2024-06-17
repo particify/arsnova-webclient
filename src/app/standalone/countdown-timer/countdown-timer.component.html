@@ -1,22 +1,21 @@
-<div
-  *ngIf="totalTime"
-  [fxLayout]="layout"
-  fxLayoutAlign="start center"
-  fxLayoutGap="1em"
->
-  <div class="progress-container" [style.border-radius]="borderRadius + 'px'">
-    <div
-      class="primary-background progress"
-      [style.border-radius]="borderRadius + 'px'"
-      [style.width]="totalTime / duration / 10 + '%'"
-      [style.transform]="'translateX(-100%)'"
-      [style.transition]="'transform ' + totalTime + 'ms' + ' linear'"
-    ></div>
+@if (totalTime) {
+  <div [fxLayout]="layout" fxLayoutAlign="start center" fxLayoutGap="1em">
+    <div class="progress-container" [style.border-radius]="borderRadius + 'px'">
+      <div
+        class="primary-background progress"
+        [style.border-radius]="borderRadius + 'px'"
+        [style.width]="totalTime / duration / 10 + '%'"
+        [style.transform]="'translateX(-100%)'"
+        [style.transition]="'transform ' + totalTime + 'ms' + ' linear'"
+      ></div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0.5em">
+      @if (showIcon) {
+        <mat-icon class="timer-icon">timer</mat-icon>
+      }
+      <span [style.font-size]="fontSize">{{
+        getTime() || ('timer.time-is-up' | transloco)
+      }}</span>
+    </div>
   </div>
-  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0.5em">
-    <mat-icon class="timer-icon" *ngIf="showIcon">timer</mat-icon>
-    <span [style.font-size]="fontSize">{{
-      getTime() || ('timer.time-is-up' | transloco)
-    }}</span>
-  </div>
-</div>
+}

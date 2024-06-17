@@ -14,23 +14,22 @@
   (itemSelected)="getUser($event)"
 ></app-search-bar>
 
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<mat-card
-  appearance="outlined"
-  *ngIf="user && !isLoading"
-  fxLayout="column"
-  fxLayoutGap="16px"
->
-  <app-entity-properties [entity]="user"></app-entity-properties>
-  <div fxLayoutAlign="space-between">
-    <button mat-stroked-button color="warn" (click)="deleteEntity()">
-      <mat-icon>delete</mat-icon>
-      {{ 'admin.admin-area.delete-user' | transloco }}
-    </button>
-    <app-loading-button
-      name="admin.admin-area.activate-user"
-      (clicked)="activateUser()"
-      [disabled]="user.account.activated || false"
-    ></app-loading-button>
-  </div>
-</mat-card>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (user && !isLoading) {
+  <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
+    <app-entity-properties [entity]="user"></app-entity-properties>
+    <div fxLayoutAlign="space-between">
+      <button mat-stroked-button color="warn" (click)="deleteEntity()">
+        <mat-icon>delete</mat-icon>
+        {{ 'admin.admin-area.delete-user' | transloco }}
+      </button>
+      <app-loading-button
+        name="admin.admin-area.activate-user"
+        (clicked)="activateUser()"
+        [disabled]="user.account.activated || false"
+      ></app-loading-button>
+    </div>
+  </mat-card>
+}
