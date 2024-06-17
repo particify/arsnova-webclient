@@ -3,25 +3,28 @@
   fxLayoutAlign="center center"
   [ngClass]="{ 'icon-container': !withText, 'feature-container': withText }"
 >
-  <div
-    matRipple
-    role="button"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    class="action-button"
-    [ngClass]="{ disabled: item.disabled }"
-    *ngFor="let item of items"
-    (click)="sendKeyEvent(item.key)"
-    [matTooltip]="
-      ('creator.control-bar.' + item.name | transloco) +
-      ' (' +
-      (item.displayKey | transloco) +
-      ')'
-    "
-  >
-    <mat-icon [ngClass]="{ 'nav-icon': withText }">{{ item.icon }}</mat-icon>
-    <p *ngIf="withText" class="text">
-      {{ 'creator.control-bar.' + item.name | transloco }}
-    </p>
-  </div>
+  @for (item of items; track item) {
+    <div
+      matRipple
+      role="button"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      class="action-button"
+      [ngClass]="{ disabled: item.disabled }"
+      (click)="sendKeyEvent(item.key)"
+      [matTooltip]="
+        ('creator.control-bar.' + item.name | transloco) +
+        ' (' +
+        (item.displayKey | transloco) +
+        ')'
+      "
+    >
+      <mat-icon [ngClass]="{ 'nav-icon': withText }">{{ item.icon }}</mat-icon>
+      @if (withText) {
+        <p class="text">
+          {{ 'creator.control-bar.' + item.name | transloco }}
+        </p>
+      }
+    </div>
+  }
 </div>

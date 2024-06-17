@@ -9,13 +9,15 @@
       (newIndex)="data.index = $event"
       [fixedWitdth]="false"
     >
-      <cdk-step *ngFor="let content of data.contents; let i = index">
-        <app-content-preview
-          [content]="content"
-          [renderAnswersDynamically]="false"
-          [showTitle]="false"
-        ></app-content-preview>
-      </cdk-step>
+      @for (content of data.contents; track content; let i = $index) {
+        <cdk-step>
+          <app-content-preview
+            [content]="content"
+            [renderAnswersDynamically]="false"
+            [showTitle]="false"
+          ></app-content-preview>
+        </cdk-step>
+      }
     </app-stepper>
   </mat-dialog-content>
   <div class="desktop-buttons">

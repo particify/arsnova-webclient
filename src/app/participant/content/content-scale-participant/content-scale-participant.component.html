@@ -1,14 +1,15 @@
-<app-content-choice-answer
-  *ngIf="!isLoading"
-  [answer]="answer"
-  [selectableAnswers]="selectableAnswers"
-  [isDisabled]="isDisabled"
-  [multipleAnswersAllowed]="content.multiple"
-  [hasAbstained]="hasAbstained"
-  [hasCorrectAnswer]="false"
-  [isCorrectAnswerPublished]="false"
-  [contentId]="content.id"
-  [selectedAnswerIndex]="selectedAnswerIndex"
-  (answerIndexSelected)="setAnswer($event)"
->
-</app-content-choice-answer>
+@if (!isLoading) {
+  <app-content-choice-answer
+    [answer]="answer"
+    [selectableAnswers]="selectableAnswers"
+    [isDisabled]="isDisabled"
+    [multipleAnswersAllowed]="content.multiple"
+    [hasAbstained]="hasAbstained"
+    [hasCorrectAnswer]="false"
+    [isCorrectAnswerPublished]="false"
+    [contentId]="content.id"
+    [selectedAnswerIndex]="selectedAnswerIndex"
+    (answerIndexSelected)="setAnswer($event)"
+  >
+  </app-content-choice-answer>
+}

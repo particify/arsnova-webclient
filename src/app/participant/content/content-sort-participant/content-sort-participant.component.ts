@@ -18,7 +18,7 @@ import { take } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-content-sort-participant',
@@ -26,7 +26,6 @@ import { NgIf, NgClass } from '@angular/common';
   styleUrls: ['./content-sort-participant.component.scss'],
   standalone: true,
   imports: [
-    NgIf,
     LoadingIndicatorComponent,
     ContentSortAnswerComponent,
     NgClass,

@@ -3,15 +3,17 @@
   {{ 'creator.content.attributions-subheader' | transloco }}
 </p>
 <mat-list>
-  <mat-list-item *ngFor="let attribution of attributions" class="bottom-border">
-    <span>{{ 'creator.content.content' | transloco }}</span>
-    <span>
-      {{ getContentIndex(attribution.contentId) + 1 + ':' }}
-    </span>
-    <span>{{
-      (attribution.attribution || ('templates.anonymous' | transloco)) +
-        ', ' +
-        LICENSES.get(attribution.license)?.name
-    }}</span>
-  </mat-list-item>
+  @for (attribution of attributions; track attribution) {
+    <mat-list-item class="bottom-border">
+      <span>{{ 'creator.content.content' | transloco }}</span>
+      <span>
+        {{ getContentIndex(attribution.contentId) + 1 + ':' }}
+      </span>
+      <span>{{
+        (attribution.attribution || ('templates.anonymous' | transloco)) +
+          ', ' +
+          LICENSES.get(attribution.license)?.name
+      }}</span>
+    </mat-list-item>
+  }
 </mat-list>

@@ -1,5 +1,7 @@
 <div fxLayout="column" fxLayoutGap="0.75em" fxLayoutAlign="start center">
-  <div class="bar-placeholder" *ngIf="showFixedBar"></div>
+  @if (showFixedBar) {
+    <div class="bar-placeholder"></div>
+  }
   <div
     class="bar-container"
     [ngClass]="{
@@ -28,14 +30,11 @@
           appHotkey="2"
           [appHotkeyTitle]="'comment-list.search-comments' | transloco"
         />
-        <button
-          mat-icon-button
-          matSuffix
-          *ngIf="searchInput"
-          (click)="resetSearch()"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
+        @if (searchInput) {
+          <button mat-icon-button matSuffix (click)="resetSearch()">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
       </mat-form-field>
 
       <mat-form-field
@@ -57,28 +56,29 @@
               }}</span>
             </div>
           </mat-select-trigger>
-          <mat-option
-            *ngFor="let sortItem of sortItems"
-            [value]="sortItem.name"
-            (click)="sort(sortItem.name)"
-            [attr.aria-label]="
-              'comment-list.a11y-sort-' + sortItem.name | transloco
-            "
-            appTrackInteraction="Comments sorted"
-            [appTrackName]="sortItem.name"
-          >
-            <mat-icon
-              [ngClass]="
-                currentSort === sortItem.name
-                  ? sortItem.activeClass + ' icon-important'
-                  : ''
+          @for (sortItem of sortItems; track sortItem) {
+            <mat-option
+              [value]="sortItem.name"
+              (click)="sort(sortItem.name)"
+              [attr.aria-label]="
+                'comment-list.a11y-sort-' + sortItem.name | transloco
               "
-              >{{ sortItem.icon }}</mat-icon
+              appTrackInteraction="Comments sorted"
+              [appTrackName]="sortItem.name"
             >
-            <span class="sort-option">{{
-              'comment-list.sort-' + sortItem.name | transloco
-            }}</span>
-          </mat-option>
+              <mat-icon
+                [ngClass]="
+                  currentSort === sortItem.name
+                    ? sortItem.activeClass + ' icon-important'
+                    : ''
+                "
+                >{{ sortItem.icon }}</mat-icon
+              >
+              <span class="sort-option">{{
+                'comment-list.sort-' + sortItem.name | transloco
+              }}</span>
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
@@ -104,51 +104,55 @@
 
       <ng-content></ng-content>
 
-      <div *ngIf="showAddButton" class="add-button-divider">
-        <mat-divider [vertical]="true"></mat-divider>
-      </div>
-      <button
-        id="add-comment-button"
-        mat-raised-button
-        color="primary"
-        [disabled]="isAddButtonDisabled"
-        *ngIf="showAddButton"
-        (click)="create()"
-        appHotkey="1"
-        [appHotkeyTitle]="'comment-list.add-comment' | transloco"
-      >
-        <mat-icon>add</mat-icon>
-        {{ 'comment-list.add-comment' | transloco }}
-      </button>
+      @if (showAddButton) {
+        <div class="add-button-divider">
+          <mat-divider [vertical]="true"></mat-divider>
+        </div>
+      }
+      @if (showAddButton) {
+        <button
+          id="add-comment-button"
+          mat-raised-button
+          color="primary"
+          [disabled]="isAddButtonDisabled"
+          (click)="create()"
+          appHotkey="1"
+          [appHotkeyTitle]="'comment-list.add-comment' | transloco"
+        >
+          <mat-icon>add</mat-icon>
+          {{ 'comment-list.add-comment' | transloco }}
+        </button>
+      }
     </div>
 
     <mat-menu
       #sortMenu="matMenu"
       appTrackInteraction="Comment sort menu opened"
     >
-      <button
-        *ngFor="let sortItem of sortItems"
-        mat-menu-item
-        (click)="sort(sortItem.name)"
-        [attr.aria-label]="
-          'comment-list.a11y-sort-' + sortItem.name | transloco
-        "
-        appTrackInteraction="Comments sorted"
-        [appTrackName]="sortItem.name"
-      >
-        <mat-icon
-          [ngClass]="
-            currentSort === sortItem.name
-              ? sortItem.activeClass + ' icon-important'
-              : ''
+      @for (sortItem of sortItems; track sortItem) {
+        <button
+          mat-menu-item
+          (click)="sort(sortItem.name)"
+          [attr.aria-label]="
+            'comment-list.a11y-sort-' + sortItem.name | transloco
           "
-          >{{ sortItem.icon }}</mat-icon
+          appTrackInteraction="Comments sorted"
+          [appTrackName]="sortItem.name"
         >
-        <span
-          [ngClass]="{ 'selected-menu-item': currentSort === sortItem.name }"
-          >{{ 'comment-list.sort-' + sortItem.name | transloco }}</span
-        >
-      </button>
+          <mat-icon
+            [ngClass]="
+              currentSort === sortItem.name
+                ? sortItem.activeClass + ' icon-important'
+                : ''
+            "
+            >{{ sortItem.icon }}</mat-icon
+          >
+          <span
+            [ngClass]="{ 'selected-menu-item': currentSort === sortItem.name }"
+            >{{ 'comment-list.sort-' + sortItem.name | transloco }}</span
+          >
+        </button>
+      }
     </mat-menu>
 
     <mat-menu
@@ -270,59 +274,65 @@
     </mat-menu>
 
     <mat-menu #timeMenu="matMenu">
-      <div *ngFor="let periodItem of periodsList">
-        <button
-          mat-menu-item
-          (click)="setTimePeriod(periodItem)"
-          [attr.aria-label]="
-            'comment-list.a11y-select-' + periodItem | transloco
-          "
-          appTrackInteraction="Comments filtered (period)"
-          [appTrackName]="periodItem"
-        >
-          <span [ngClass]="{ 'selected-menu-item': periodItem === period }">{{
-            'comment-list.select-' + periodItem | transloco
-          }}</span>
-        </button>
-      </div>
+      @for (periodItem of periodsList; track periodItem) {
+        <div>
+          <button
+            mat-menu-item
+            (click)="setTimePeriod(periodItem)"
+            [attr.aria-label]="
+              'comment-list.a11y-select-' + periodItem | transloco
+            "
+            appTrackInteraction="Comments filtered (period)"
+            [appTrackName]="periodItem"
+          >
+            <span [ngClass]="{ 'selected-menu-item': periodItem === period }">{{
+              'comment-list.select-' + periodItem | transloco
+            }}</span>
+          </button>
+        </div>
+      }
     </mat-menu>
 
     <mat-menu #categoriesMenu="matMenu">
-      <div *ngFor="let category of categories">
-        <button
-          mat-menu-item
-          (click)="selectCategory(category)"
-          appTrackInteraction="Comments filtered (category)"
-          [appTrackName]="category"
-        >
-          <span
-            [ngClass]="{
-              'selected-menu-item': selectedCategory === category,
-            }"
-            >{{ category }}</span
+      @for (category of categories; track category) {
+        <div>
+          <button
+            mat-menu-item
+            (click)="selectCategory(category)"
+            appTrackInteraction="Comments filtered (category)"
+            [appTrackName]="category"
           >
-        </button>
-      </div>
+            <span
+              [ngClass]="{
+                'selected-menu-item': selectedCategory === category,
+              }"
+              >{{ category }}</span
+            >
+          </button>
+        </div>
+      }
     </mat-menu>
   </div>
-  <mat-chip-listbox
-    fxFill
-    *ngIf="currentFilter || period !== CommentPeriod.ALL || selectedCategory"
-  >
-    <app-filter-chip
-      *ngIf="period !== CommentPeriod.ALL"
-      [name]="'comment-list.select-' + period | transloco"
-      (removeClicked)="setTimePeriod(CommentPeriod.ALL)"
-    ></app-filter-chip>
-    <app-filter-chip
-      *ngIf="currentFilter && currentFilter !== CommentFilter.TAG"
-      [name]="'comment-list.filter-' + currentFilter | transloco"
-      (removeClicked)="filter(currentFilter)"
-    ></app-filter-chip>
-    <app-filter-chip
-      *ngIf="selectedCategory"
-      [name]="selectedCategory"
-      (removeClicked)="selectCategory()"
-    ></app-filter-chip>
-  </mat-chip-listbox>
+  @if (currentFilter || period !== CommentPeriod.ALL || selectedCategory) {
+    <mat-chip-listbox fxFill>
+      @if (period !== CommentPeriod.ALL) {
+        <app-filter-chip
+          [name]="'comment-list.select-' + period | transloco"
+          (removeClicked)="setTimePeriod(CommentPeriod.ALL)"
+        ></app-filter-chip>
+      }
+      @if (currentFilter && currentFilter !== CommentFilter.TAG) {
+        <app-filter-chip
+          [name]="'comment-list.filter-' + currentFilter | transloco"
+          (removeClicked)="filter(currentFilter)"
+        ></app-filter-chip>
+      }
+      @if (selectedCategory) {
+        <app-filter-chip
+          [name]="selectedCategory"
+          (removeClicked)="selectCategory()"
+        ></app-filter-chip>
+      }
+    </mat-chip-listbox>
+  }
 </div>

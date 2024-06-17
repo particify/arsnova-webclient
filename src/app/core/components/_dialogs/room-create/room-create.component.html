@@ -18,18 +18,21 @@
           [(ngModel)]="newRoom.name"
           name="roomName"
         />
-        <mat-hint align="end" *ngIf="!emptyInputs"
-          ><span aria-hidden="true"
-            >{{ roomName.value.length }} / 50</span
-          ></mat-hint
-        >
+        @if (!emptyInputs) {
+          <mat-hint align="end"
+            ><span aria-hidden="true"
+              >{{ roomName.value.length }} / 50</span
+            ></mat-hint
+          >
+        }
       </mat-form-field>
     </lib-extension-point>
-    <app-hint
-      *ngIf="!auth || auth.authProvider === 'ARSNOVA_GUEST'"
-      [type]="HintType.WARNING"
-      text="dialog.not-logged-in"
-    ></app-hint>
+    @if (!auth || auth.authProvider === 'ARSNOVA_GUEST') {
+      <app-hint
+        [type]="HintType.WARNING"
+        text="dialog.not-logged-in"
+      ></app-hint>
+    }
   </div>
 </form>
 <div fxLayoutAlign="end">

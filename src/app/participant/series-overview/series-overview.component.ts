@@ -37,7 +37,7 @@ import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.co
 import { InfoChartComponent } from './info-chart/info-chart.component';
 import { MatIcon } from '@angular/material/icon';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgStyle, NgFor, NgClass } from '@angular/common';
+import { NgStyle, NgClass } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
@@ -60,7 +60,6 @@ interface ContentResultView {
   imports: [
     FlexModule,
     MatCard,
-    NgIf,
     LoadingIndicatorComponent,
     MatIcon,
     InfoChartComponent,
@@ -69,7 +68,6 @@ interface ContentResultView {
     NgStyle,
     MatButton,
     MatList,
-    NgFor,
     MatListItem,
     NgClass,
     MatTooltip,

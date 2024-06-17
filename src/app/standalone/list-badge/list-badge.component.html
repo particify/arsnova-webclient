@@ -1,7 +1,5 @@
-<div
-  class="list-badge secondary-background"
-  fxLayoutAlign="center center"
-  *ngIf="count"
->
-  {{ count }}
-</div>
+@if (count) {
+  <div class="list-badge secondary-background" fxLayoutAlign="center center">
+    {{ count }}
+  </div>
+}

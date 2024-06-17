@@ -23,17 +23,19 @@
           [errorStateMatcher]="matcher"
           (blur)="activateValidators()"
         />
-        <mat-error
-          *ngIf="
-            usernameFormControl.hasError('email') &&
-            !usernameFormControl.hasError('required')
-          "
-        >
-          {{ 'login.email-invalid' | transloco }}
-        </mat-error>
-        <mat-error *ngIf="usernameFormControl.hasError('required')">
-          {{ 'login.email-required' | transloco }}
-        </mat-error>
+        @if (
+          usernameFormControl.hasError('email') &&
+          !usernameFormControl.hasError('required')
+        ) {
+          <mat-error>
+            {{ 'login.email-invalid' | transloco }}
+          </mat-error>
+        }
+        @if (usernameFormControl.hasError('required')) {
+          <mat-error>
+            {{ 'login.email-required' | transloco }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <app-password-entry

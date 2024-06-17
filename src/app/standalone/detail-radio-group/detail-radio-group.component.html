@@ -6,37 +6,40 @@
   fxLayoutGap="8px"
 >
   <mat-list>
-    <div
-      *ngFor="let item of items"
-      class="radio-item unselected"
-      [ngClass]="{
-        'primary-border-color': selectedItemValue === item.value,
-      }"
-    >
-      <mat-radio-button
-        labelPosition="before"
-        color="primary"
-        [value]="item.value"
-        fxLayout="row"
-        class="answer-radio-button choice-answer"
+    @for (item of items; track item) {
+      <div
+        class="radio-item unselected"
+        [ngClass]="{
+          'primary-border-color': selectedItemValue === item.value,
+        }"
       >
-        <div
+        <mat-radio-button
+          labelPosition="before"
+          color="primary"
+          [value]="item.value"
           fxLayout="row"
-          fxLayoutGap="0.75em"
-          fxLayoutAlign="start center"
-          [ngClass]="{ primary: selectedItemValue === item.value }"
+          class="answer-radio-button choice-answer"
         >
-          <mat-icon fxHide.lt-sm *ngIf="item.icon">{{ item.icon }}</mat-icon>
-          <div fxLayout="column" fxLayoutGap="2px">
-            <span class="radio-name">
-              {{ item.title }}
-            </span>
-            <span class="radio-description">
-              {{ item.description }}
-            </span>
+          <div
+            fxLayout="row"
+            fxLayoutGap="0.75em"
+            fxLayoutAlign="start center"
+            [ngClass]="{ primary: selectedItemValue === item.value }"
+          >
+            @if (item.icon) {
+              <mat-icon fxHide.lt-sm>{{ item.icon }}</mat-icon>
+            }
+            <div fxLayout="column" fxLayoutGap="2px">
+              <span class="radio-name">
+                {{ item.title }}
+              </span>
+              <span class="radio-description">
+                {{ item.description }}
+              </span>
+            </div>
           </div>
-        </div>
-      </mat-radio-button>
-    </div>
+        </mat-radio-button>
+      </div>
+    }
   </mat-list>
 </mat-radio-group>

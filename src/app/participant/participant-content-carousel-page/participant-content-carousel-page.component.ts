@@ -18,7 +18,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { Location, NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { Location, AsyncPipe } from '@angular/common';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Answer } from '@app/core/models/answer';
@@ -52,12 +52,10 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
   templateUrl: './participant-content-carousel-page.component.html',
   standalone: true,
   imports: [
-    NgIf,
     LoadingIndicatorComponent,
     CoreModule,
     FlexModule,
     StepperComponent,
-    NgFor,
     CdkStep,
     ContentParticipantComponent,
     SeriesOverviewComponent,

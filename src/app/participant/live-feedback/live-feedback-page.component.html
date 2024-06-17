@@ -1,19 +1,26 @@
 <div class="visually-hidden" [appAutofocus] tabIndex="-1">
   {{ 'survey.a11y-message' | a11yIntro | async }}
 </div>
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<app-base-card *ngIf="!isLoading" [showShadow]="showCard">
-  <app-live-feedback
-    [data]="data"
-    [dataChanged]="dataChanged"
-    [fixedSize]="false"
-    [isClosed]="isClosed"
-    [type]="type"
-  ></app-live-feedback>
-  <div fxLayout="row" fxLayoutAlign="center">
-    <app-answer-count [count]="answerCount" [size]="'small'"></app-answer-count>
-  </div>
-</app-base-card>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <app-base-card [showShadow]="showCard">
+    <app-live-feedback
+      [data]="data"
+      [dataChanged]="dataChanged"
+      [fixedSize]="false"
+      [isClosed]="isClosed"
+      [type]="type"
+    ></app-live-feedback>
+    <div fxLayout="row" fxLayoutAlign="center">
+      <app-answer-count
+        [count]="answerCount"
+        [size]="'small'"
+      ></app-answer-count>
+    </div>
+  </app-base-card>
+}
 <div
   [ngClass]="{ faded: isClosed }"
   fxLayout="column"
@@ -21,43 +28,44 @@
   class="answer-container"
 >
   <div fxLayout="row wrap" class="card-row">
-    <button
-      *ngFor="let key of voteKeys; let i = index"
-      mat-raised-button
-      id="survey-button-{{ i }}"
-      fxLayout="row"
-      fxLayoutAlign="center center"
-      color="primary"
-      class="answer-button"
-      [attr.aria-label]="
-        'participant.survey.a11y-' +
-          (type === LiveFeedbackType.SURVEY
-            ? surveyLabels[i]
-            : feedbackLabels[i]) | transloco
-      "
-      (click)="submitAnswer(i)"
-      tabIndex="0"
-      [appHotkey]="key"
-      [appHotkeyTitle]="
-        'participant.survey.a11y-' +
-          (type === LiveFeedbackType.SURVEY
-            ? surveyLabels[i]
-            : feedbackLabels[i]) | transloco
-      "
-    >
-      <span
-        *ngIf="type === LiveFeedbackType.SURVEY"
-        class="answer-button-label"
+    @for (key of voteKeys; track key; let i = $index) {
+      <button
+        mat-raised-button
+        id="survey-button-{{ i }}"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        color="primary"
+        class="answer-button"
+        [attr.aria-label]="
+          'participant.survey.a11y-' +
+            (type === LiveFeedbackType.SURVEY
+              ? surveyLabels[i]
+              : feedbackLabels[i]) | transloco
+        "
+        (click)="submitAnswer(i)"
+        tabIndex="0"
+        [appHotkey]="key"
+        [appHotkeyTitle]="
+          'participant.survey.a11y-' +
+            (type === LiveFeedbackType.SURVEY
+              ? surveyLabels[i]
+              : feedbackLabels[i]) | transloco
+        "
       >
-        {{ surveyLabels[i] }}
-      </span>
-      <mat-icon
-        *ngIf="type === LiveFeedbackType.FEEDBACK"
-        class="button-label-icon"
-        [matTooltip]="'participant.survey.' + feedbackLabels[i] | transloco"
-      >
-        {{ feedbackIcons[i] }}</mat-icon
-      >
-    </button>
+        @if (type === LiveFeedbackType.SURVEY) {
+          <span class="answer-button-label">
+            {{ surveyLabels[i] }}
+          </span>
+        }
+        @if (type === LiveFeedbackType.FEEDBACK) {
+          <mat-icon
+            class="button-label-icon"
+            [matTooltip]="'participant.survey.' + feedbackLabels[i] | transloco"
+          >
+            {{ feedbackIcons[i] }}</mat-icon
+          >
+        }
+      </button>
+    }
   </div>
 </div>

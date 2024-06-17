@@ -33,7 +33,7 @@ import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location, NgIf, NgFor, NgClass } from '@angular/common';
+import { Location, NgClass } from '@angular/common';
 import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
 import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
@@ -74,14 +74,12 @@ interface ContentActionTab {
   standalone: true,
   imports: [
     CoreModule,
-    NgIf,
     LoadingIndicatorComponent,
     MatCard,
     FlexModule,
     ContentWaitingComponent,
     RenderedTextComponent,
     MatTabNav,
-    NgFor,
     MatTabLink,
     MatIcon,
     ExtensionPointModule,

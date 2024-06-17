@@ -28,7 +28,7 @@ import { RoomActionButtonComponent } from '@app/standalone/room-action-button/ro
 import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-header/room-overview-header.component';
 import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { CoreModule } from '@app/core/core.module';
 import { FlexModule } from '@angular/flex-layout';
 
@@ -40,12 +40,10 @@ import { FlexModule } from '@angular/flex-layout';
   imports: [
     FlexModule,
     CoreModule,
-    NgIf,
     LoadingIndicatorComponent,
     MatCard,
     RoomOverviewHeaderComponent,
     RoomActionButtonComponent,
-    NgFor,
     ContentGroupsComponent,
     HintComponent,
     ExtensionPointModule,

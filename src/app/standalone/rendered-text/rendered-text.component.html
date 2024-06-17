@@ -1,7 +1,10 @@
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<div
-  class="rendered-text text-container"
-  [ngClass]="{ 'rendered-list-preview': listPreview }"
-  *ngIf="!isLoading"
-  [innerHTML]="displayedText"
-></div>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <div
+    class="rendered-text text-container"
+    [ngClass]="{ 'rendered-list-preview': listPreview }"
+    [innerHTML]="displayedText"
+  ></div>
+}

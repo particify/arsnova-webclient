@@ -5,27 +5,37 @@
   [ngClass]="{ 'container-padding': showHelp }"
 >
   <div fxLayout="row">
-    <a *ngIf="isAdminRole()" routerLink="admin" (click)="sendClickedEvent()">{{
-      'header.admin-area' | transloco
-    }}</a>
-    <a *ngIf="showHelp && helpUrl" [attr.href]="helpUrl" target="_blank">{{
-      'header.help' | transloco
-    }}</a>
-    <a *ngIf="accessibilityUrl" [attr.href]="accessibilityUrl" target="_blank">
-      {{ 'footer.accessibility' | transloco }}</a
-    >
+    @if (isAdminRole()) {
+      <a routerLink="admin" (click)="sendClickedEvent()">{{
+        'header.admin-area' | transloco
+      }}</a>
+    }
+    @if (showHelp && helpUrl) {
+      <a [attr.href]="helpUrl" target="_blank">{{
+        'header.help' | transloco
+      }}</a>
+    }
+    @if (accessibilityUrl) {
+      <a [attr.href]="accessibilityUrl" target="_blank">
+        {{ 'footer.accessibility' | transloco }}</a
+      >
+    }
   </div>
   <div fxLayout="row">
     <a [matMenuTriggerFor]="privacyMenu"> {{ 'footer.dsgvo' | transloco }}</a>
-    <a *ngIf="imprintUrl" [href]="imprintUrl" target="_blank">
-      {{ 'footer.imprint' | transloco }}</a
-    >
+    @if (imprintUrl) {
+      <a [href]="imprintUrl" target="_blank">
+        {{ 'footer.imprint' | transloco }}</a
+      >
+    }
   </div>
 </div>
 <mat-menu #privacyMenu="matMenu" [overlapTrigger]="false">
-  <a *ngIf="privacyUrl" [attr.href]="privacyUrl" target="_blank" mat-menu-item>
-    {{ 'footer.privacy-policy' | transloco }}</a
-  >
+  @if (privacyUrl) {
+    <a [attr.href]="privacyUrl" target="_blank" mat-menu-item>
+      {{ 'footer.privacy-policy' | transloco }}</a
+    >
+  }
   <button mat-menu-item (click)="showCookieSettings()">
     {{ 'footer.cookie-settings' | transloco }}
   </button>

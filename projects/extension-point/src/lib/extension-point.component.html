@@ -1,3 +1,5 @@
 <ng-container>
-  <ng-content *ngIf="extensionUnavailable"></ng-content>
+  @if (extensionUnavailable) {
+    <ng-content></ng-content>
+  }
 </ng-container>

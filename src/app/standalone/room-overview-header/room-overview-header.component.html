@@ -15,10 +15,12 @@
       </app-copy-url>
     </div>
   </div>
-  <div *ngIf="description">
-    <app-rendered-text
-      [rawText]="description.trim()"
-      [renderedText]="renderedDescription"
-    ></app-rendered-text>
-  </div>
+  @if (description) {
+    <div>
+      <app-rendered-text
+        [rawText]="description.trim()"
+        [renderedText]="renderedDescription"
+      ></app-rendered-text>
+    </div>
+  }
 </div>

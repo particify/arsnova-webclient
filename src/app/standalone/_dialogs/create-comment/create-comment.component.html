@@ -21,38 +21,36 @@
       ></mat-hint
     >
   </mat-form-field>
-  <mat-form-field
-    *ngIf="
-      data.tags !== null && data.tags !== undefined && data.tags.length > 0
-    "
-    appearance="outline"
-    class="no-field-hint"
-  >
-    <mat-label aria-labelledby="category">{{
-      'comment-page.tag' | transloco
-    }}</mat-label>
-    <mat-select class="comment-tag" [disabled]="formDisabled">
-      <mat-option
-        *ngFor="let tag of data.tags"
-        value="{{ tag }}"
-        (click)="updateTag(tag)"
-        attr.aria-label="{{
-          'comment-page.a11y-select-tag' | transloco: { tag: tag }
-        }}"
-        >{{ tag }}</mat-option
-      >
-      <mat-option (click)="updateTag('')">{{
-        'comment-page.none' | transloco
-      }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  @if (data.tags !== null && data.tags !== undefined && data.tags.length > 0) {
+    <mat-form-field appearance="outline" class="no-field-hint">
+      <mat-label aria-labelledby="category">{{
+        'comment-page.tag' | transloco
+      }}</mat-label>
+      <mat-select class="comment-tag" [disabled]="formDisabled">
+        @for (tag of data.tags; track tag) {
+          <mat-option
+            value="{{ tag }}"
+            (click)="updateTag(tag)"
+            attr.aria-label="{{
+              'comment-page.a11y-select-tag' | transloco: { tag: tag }
+            }}"
+            >{{ tag }}</mat-option
+          >
+        }
+        <mat-option (click)="updateTag('')">{{
+          'comment-page.none' | transloco
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  }
 </div>
 <div mat-dialog-actions fxLayoutAlign="end">
-  <lib-extension-point
-    *ngIf="data.fileUploadEnabled"
-    extensionId="image-upload"
-    [extensionData]="eventsWrapper"
-  ></lib-extension-point>
+  @if (data.fileUploadEnabled) {
+    <lib-extension-point
+      extensionId="image-upload"
+      [extensionData]="eventsWrapper"
+    ></lib-extension-point>
+  }
   <div fxLayoutAlign="end">
     <div fxLayout="row-reverse" fxLayoutAling="end" fxLayoutGap="10px">
       <app-loading-button

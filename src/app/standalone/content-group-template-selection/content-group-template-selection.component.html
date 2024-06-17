@@ -14,39 +14,43 @@
         <mat-tab [label]="'templates.public-templates' | transloco"> </mat-tab>
         <mat-tab [label]="'templates.my-templates' | transloco"> </mat-tab>
       </mat-tab-group>
-      <app-template-language-selection
-        *ngIf="showPublic"
-        fxFlex.xs="100"
-        [defaultLang]="selectedLang"
-        [smaller]="true"
-        (selectedLangChanged)="updateLanguage($event)"
-      ></app-template-language-selection>
+      @if (showPublic) {
+        <app-template-language-selection
+          fxFlex.xs="100"
+          [defaultLang]="selectedLang"
+          [smaller]="true"
+          (selectedLangChanged)="updateLanguage($event)"
+        ></app-template-language-selection>
+      }
     </div>
 
     <div class="selection-container" fxLayout="column" fxLayoutGap="1em">
-      <app-template-tag-selection
-        *ngIf="showPublic"
-        (selectedTagsChanged)="updateTags($event)"
-        [lang]="selectedLang"
-        [langChanged]="langChanged"
-        [selectedTags]="selectedTags"
-        [selectedTagIds]="tagIdsQueryParams"
-      ></app-template-tag-selection>
+      @if (showPublic) {
+        <app-template-tag-selection
+          (selectedTagsChanged)="updateTags($event)"
+          [lang]="selectedLang"
+          [langChanged]="langChanged"
+          [selectedTags]="selectedTags"
+          [selectedTagIds]="tagIdsQueryParams"
+        ></app-template-tag-selection>
+      }
       <div fxLayout="column" fxLayoutGap="1em">
-        <app-loading-indicator *ngIf="loadingTemplates"></app-loading-indicator>
-        <div
-          *ngIf="!loadingTemplates && templates.length === 0"
-          fxLayoutAlign="center"
-        >
-          <p class="hint">{{ 'templates.no-templates-found' | transloco }}</p>
-        </div>
+        @if (loadingTemplates) {
+          <app-loading-indicator></app-loading-indicator>
+        }
+        @if (!loadingTemplates && templates.length === 0) {
+          <div fxLayoutAlign="center">
+            <p class="hint">{{ 'templates.no-templates-found' | transloco }}</p>
+          </div>
+        }
         <div fxLayout="column" fxLayoutGap="10px">
-          <app-content-group-template
-            *ngFor="let template of templates"
-            [template]="template"
-            [room]="room"
-            (previewClicked)="showPreview($event)"
-          ></app-content-group-template>
+          @for (template of templates; track template) {
+            <app-content-group-template
+              [template]="template"
+              [room]="room"
+              (previewClicked)="showPreview($event)"
+            ></app-content-group-template>
+          }
         </div>
       </div>
     </div>

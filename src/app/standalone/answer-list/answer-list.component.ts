@@ -7,7 +7,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIconButton } from '@angular/material/button';
 import { FlexModule } from '@angular/flex-layout';
-import { NgFor, NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-answer-list',
@@ -15,10 +15,8 @@ import { NgFor, NgClass, NgIf } from '@angular/common';
   styleUrls: ['./answer-list.component.scss'],
   standalone: true,
   imports: [
-    NgFor,
     NgClass,
     FlexModule,
-    NgIf,
     MatIconButton,
     MatTooltip,
     MatIcon,

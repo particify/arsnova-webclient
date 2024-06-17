@@ -8,25 +8,24 @@
     "
   >
     <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="8px">
-      <div
-        *ngFor="let roundItem of [0, 1]; let i = index"
-        [ngClass]="{ disabled: round !== i && round !== 2 }"
-        class="round-legend primary-background"
-        fxLayoutAlign="center center"
-      >
-        <span class="round-number">{{ i + 1 }}</span>
-      </div>
+      @for (roundItem of [0, 1]; track roundItem; let i = $index) {
+        <div
+          [ngClass]="{ disabled: round !== i && round !== 2 }"
+          class="round-legend primary-background"
+          fxLayoutAlign="center center"
+        >
+          <span class="round-number">{{ i + 1 }}</span>
+        </div>
+      }
     </div>
   </button>
   <mat-menu #roundMenu>
-    <button
-      mat-menu-item
-      *ngFor="let roundItem of rounds; let i = index"
-      (click)="changeRound(i)"
-    >
-      <span [ngClass]="{ 'selected-menu-item': round === i }">
-        {{ 'content.round' | transloco }}&nbsp;{{ roundItem }}
-      </span>
-    </button>
+    @for (roundItem of rounds; track roundItem; let i = $index) {
+      <button mat-menu-item (click)="changeRound(i)">
+        <span [ngClass]="{ 'selected-menu-item': round === i }">
+          {{ 'content.round' | transloco }}&nbsp;{{ roundItem }}
+        </span>
+      </button>
+    }
   </mat-menu>
 </div>

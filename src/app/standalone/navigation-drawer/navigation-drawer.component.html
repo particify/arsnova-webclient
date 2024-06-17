@@ -7,26 +7,33 @@
             <ng-content select="[header]"></ng-content>
           </div>
           <mat-divider style="padding-bottom: 24px"></mat-divider>
-          <div *ngFor="let section of buttonSections" fxLayoutGap="1em">
-            <p *ngIf="section.subheader" class="subheader">
-              {{ section.subheader | transloco }}
-            </p>
-            <div class="button-container" fxLayout="column" fxLayoutGap="8px">
-              <ng-container *ngFor="let button of section.buttons">
-                <button
-                  *ngIf="button.display | async"
-                  mat-button
-                  class="nav-button"
-                  (click)="changePage(button.name)"
-                  color="{{ currentPage === button.name ? 'primary' : '' }}"
-                  [ngClass]="{ 'primary-variant': currentPage === button.name }"
-                >
-                  <mat-icon>{{ button.icon }}</mat-icon>
-                  {{ button.i18nName | transloco }}
-                </button>
-              </ng-container>
+          @for (section of buttonSections; track section) {
+            <div fxLayoutGap="1em">
+              @if (section.subheader) {
+                <p class="subheader">
+                  {{ section.subheader | transloco }}
+                </p>
+              }
+              <div class="button-container" fxLayout="column" fxLayoutGap="8px">
+                @for (button of section.buttons; track button) {
+                  @if (button.display | async) {
+                    <button
+                      mat-button
+                      class="nav-button"
+                      (click)="changePage(button.name)"
+                      color="{{ currentPage === button.name ? 'primary' : '' }}"
+                      [ngClass]="{
+                        'primary-variant': currentPage === button.name,
+                      }"
+                    >
+                      <mat-icon>{{ button.icon }}</mat-icon>
+                      {{ button.i18nName | transloco }}
+                    </button>
+                  }
+                }
+              </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     </mat-drawer>
@@ -40,7 +47,9 @@
       <div class="routing-container">
         <ng-content fxFill></ng-content>
       </div>
-      <app-footer *ngIf="showFooter"></app-footer>
+      @if (showFooter) {
+        <app-footer></app-footer>
+      }
     </mat-drawer-content>
   </mat-drawer-container>
 </div>

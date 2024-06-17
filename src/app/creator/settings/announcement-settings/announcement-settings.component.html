@@ -21,13 +21,14 @@
         (selectedTabChange)="tabChanged($event)"
       >
         <mat-tab label="{{ 'creator.announcement.body' | transloco }}">
-          <app-formatting-toolbar
-            *ngIf="!renderPreview"
-            class="tab-group-formatting-bar-mobile"
-            [inputElement]="bodyInput"
-            [disabled]="formDisabled"
-            (valueChanged)="body = $event"
-          ></app-formatting-toolbar>
+          @if (!renderPreview) {
+            <app-formatting-toolbar
+              class="tab-group-formatting-bar-mobile"
+              [inputElement]="bodyInput"
+              [disabled]="formDisabled"
+              (valueChanged)="body = $event"
+            ></app-formatting-toolbar>
+          }
           <mat-form-field
             id="body-input"
             class="input-block no-field-hint"
@@ -60,18 +61,21 @@
           </div>
         </mat-tab>
       </mat-tab-group>
-      <app-formatting-toolbar
-        *ngIf="!renderPreview"
-        class="tab-group-formatting-bar"
-        [inputElement]="bodyInput"
-        [disabled]="formDisabled"
-        (valueChanged)="body = $event"
-      ></app-formatting-toolbar>
+      @if (!renderPreview) {
+        <app-formatting-toolbar
+          class="tab-group-formatting-bar"
+          [inputElement]="bodyInput"
+          [disabled]="formDisabled"
+          (valueChanged)="body = $event"
+        ></app-formatting-toolbar>
+      }
     </div>
     <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-      <button mat-stroked-button *ngIf="editId" (click)="reset()">
-        {{ 'creator.announcement.cancel' | transloco }}
-      </button>
+      @if (editId) {
+        <button mat-stroked-button (click)="reset()">
+          {{ 'creator.announcement.cancel' | transloco }}
+        </button>
+      }
       <app-loading-button
         [name]="
           editId ? 'creator.announcement.save' : 'creator.announcement.create'
@@ -80,23 +84,27 @@
       ></app-loading-button>
     </div>
   </form>
-  <div
-    *ngIf="!isLoading"
-    fxLayout="column"
-    fxLayoutGap="1em"
-    class="announcement-list-container"
-  >
-    <app-announcement
-      *ngFor="let announcement of announcements"
-      [announcement]="announcement"
-      [role]="UserRole.OWNER"
-      [editMode]="editId === announcement.id"
-      (deleteEvent)="delete($event)"
-      (editEvent)="edit($event)"
-      tabindex="0"
-    ></app-announcement>
-  </div>
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+  @if (!isLoading) {
+    <div
+      fxLayout="column"
+      fxLayoutGap="1em"
+      class="announcement-list-container"
+    >
+      @for (announcement of announcements; track announcement) {
+        <app-announcement
+          [announcement]="announcement"
+          [role]="UserRole.OWNER"
+          [editMode]="editId === announcement.id"
+          (deleteEvent)="delete($event)"
+          (editEvent)="edit($event)"
+          tabindex="0"
+        ></app-announcement>
+      }
+    </div>
+  }
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
 </div>
 
 <div class="visually-hidden">

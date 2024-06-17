@@ -5,7 +5,7 @@ import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-ite
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentLeaderboardComponent } from '@app/standalone/content-leaderboard/content-leaderboard.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf } from '@angular/common';
+
 import { FlexModule } from '@angular/flex-layout';
 import { ContentService } from '@app/core/services/http/content.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,12 +15,7 @@ import { throttleTime } from 'rxjs';
   selector: 'app-leaderboard-page',
   templateUrl: './leaderboard-page.component.html',
   standalone: true,
-  imports: [
-    FlexModule,
-    NgIf,
-    LoadingIndicatorComponent,
-    ContentLeaderboardComponent,
-  ],
+  imports: [FlexModule, LoadingIndicatorComponent, ContentLeaderboardComponent],
 })
 export class LeaderboardPageComponent implements OnInit {
   @Input({ required: true }) content!: Content;

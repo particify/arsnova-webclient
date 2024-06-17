@@ -59,67 +59,74 @@
       </div>
       <span class="fill-remaining-space"></span>
 
-      <button
-        mat-icon-button
-        *ngIf="comment.correct === 1"
-        [disabled]="!isEditor"
-        (click)="markCorrect(1)"
-        [matTooltip]="'creator.comment-page.mark-not-correct' | transloco"
-      >
-        <mat-icon class="green">check_circle </mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        *ngIf="comment.correct === 2"
-        [disabled]="!isEditor"
-        (click)="markCorrect(2)"
-        [matTooltip]="'creator.comment-page.mark-not-wrong' | transloco"
-      >
-        <mat-icon class="red">cancel </mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        *ngIf="comment.favorite"
-        [disabled]="!isEditor"
-        (click)="setFavorite()"
-        [matTooltip]="'creator.comment-page.mark-not-favorite' | transloco"
-      >
-        <mat-icon class="yellow">grade </mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        *ngIf="comment.answer && !inAnswerView"
-        (click)="answerComment()"
-        [matTooltip]="'comment-page.go-to-answer' | transloco"
-      >
-        <mat-icon class="blue">comment </mat-icon>
-      </button>
-      <button
-        *ngIf="isModeration"
-        mat-icon-button
-        color="primary"
-        (click)="setAck()"
-        [matTooltip]="'creator.comment-page.reject' | transloco"
-      >
-        <mat-icon>lock_open</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        *ngIf="isEditor && !inAnswerView && !isSimpleView && !archived"
-        [matMenuTriggerFor]="actionsMenu"
-        [matTooltip]="'creator.comment-page.show-actions' | transloco"
-      >
-        <mat-icon>more_horiz </mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        color="warn"
-        *ngIf="isEditor && archived"
-        (click)="deleteComment()"
-        [matTooltip]="'creator.comment-page.delete' | transloco"
-      >
-        <mat-icon>delete </mat-icon>
-      </button>
+      @if (comment.correct === 1) {
+        <button
+          mat-icon-button
+          [disabled]="!isEditor"
+          (click)="markCorrect(1)"
+          [matTooltip]="'creator.comment-page.mark-not-correct' | transloco"
+        >
+          <mat-icon class="green">check_circle </mat-icon>
+        </button>
+      }
+      @if (comment.correct === 2) {
+        <button
+          mat-icon-button
+          [disabled]="!isEditor"
+          (click)="markCorrect(2)"
+          [matTooltip]="'creator.comment-page.mark-not-wrong' | transloco"
+        >
+          <mat-icon class="red">cancel </mat-icon>
+        </button>
+      }
+      @if (comment.favorite) {
+        <button
+          mat-icon-button
+          [disabled]="!isEditor"
+          (click)="setFavorite()"
+          [matTooltip]="'creator.comment-page.mark-not-favorite' | transloco"
+        >
+          <mat-icon class="yellow">grade </mat-icon>
+        </button>
+      }
+      @if (comment.answer && !inAnswerView) {
+        <button
+          mat-icon-button
+          (click)="answerComment()"
+          [matTooltip]="'comment-page.go-to-answer' | transloco"
+        >
+          <mat-icon class="blue">comment </mat-icon>
+        </button>
+      }
+      @if (isModeration) {
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="setAck()"
+          [matTooltip]="'creator.comment-page.reject' | transloco"
+        >
+          <mat-icon>lock_open</mat-icon>
+        </button>
+      }
+      @if (isEditor && !inAnswerView && !isSimpleView && !archived) {
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="actionsMenu"
+          [matTooltip]="'creator.comment-page.show-actions' | transloco"
+        >
+          <mat-icon>more_horiz </mat-icon>
+        </button>
+      }
+      @if (isEditor && archived) {
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteComment()"
+          [matTooltip]="'creator.comment-page.delete' | transloco"
+        >
+          <mat-icon>delete </mat-icon>
+        </button>
+      }
       <mat-menu #actionsMenu="matMenu" xPosition="before">
         <button mat-menu-item (click)="answerComment()">
           <mat-icon class="blue icon-important">comment</mat-icon>
@@ -159,21 +166,25 @@
             ) | transloco
           }}</span>
         </button>
-        <button *ngIf="isEditor" mat-menu-item (click)="deleteComment()">
-          <mat-icon color="warn">delete</mat-icon>
-          <span>{{ 'creator.comment-page.delete' | transloco }}</span>
-        </button>
-        <button *ngIf="!isModeration" mat-menu-item (click)="setAck()">
-          <mat-icon color="primary">{{
-            comment.ack ? 'gavel' : 'lock_open'
-          }}</mat-icon>
-          <span>{{
-            (comment.ack
-              ? 'creator.comment-page.banish'
-              : 'creator.comment-page.reject'
-            ) | transloco
-          }}</span>
-        </button>
+        @if (isEditor) {
+          <button mat-menu-item (click)="deleteComment()">
+            <mat-icon color="warn">delete</mat-icon>
+            <span>{{ 'creator.comment-page.delete' | transloco }}</span>
+          </button>
+        }
+        @if (!isModeration) {
+          <button mat-menu-item (click)="setAck()">
+            <mat-icon color="primary">{{
+              comment.ack ? 'gavel' : 'lock_open'
+            }}</mat-icon>
+            <span>{{
+              (comment.ack
+                ? 'creator.comment-page.banish'
+                : 'creator.comment-page.reject'
+              ) | transloco
+            }}</span>
+          </button>
+        }
       </mat-menu>
     </div>
     <div fxLayout="row" fxLayoutAlign="start">
@@ -186,47 +197,50 @@
         >
           <span aria-hidden="true">{{ comment.body.trim() }}</span>
         </div>
-        <div
-          *ngIf="comment.tag && comment.tag !== ''"
-          class="comment-tags light"
-        >
-          <mat-chip-listbox>
-            <mat-chip-option
-              (click)="this.clickedOnTag.emit(comment.tag)"
-              appTrackInteraction="Comments filtered"
-              appTrackName="toggle-category"
-              [selectable]="false"
-            >
-              {{ comment.tag }}
-            </mat-chip-option>
-          </mat-chip-listbox>
-        </div>
-        <lib-extension-point
-          *ngIf="fileUploadEnabled"
-          extensionId="attachment-list"
-          [extensionData]="extensionData"
-        ></lib-extension-point>
+        @if (comment.tag && comment.tag !== '') {
+          <div class="comment-tags light">
+            <mat-chip-listbox>
+              <mat-chip-option
+                (click)="this.clickedOnTag.emit(comment.tag)"
+                appTrackInteraction="Comments filtered"
+                appTrackName="toggle-category"
+                [selectable]="false"
+              >
+                {{ comment.tag }}
+              </mat-chip-option>
+            </mat-chip-listbox>
+          </div>
+        }
+        @if (fileUploadEnabled) {
+          <lib-extension-point
+            extensionId="attachment-list"
+            [extensionData]="extensionData"
+          ></lib-extension-point>
+        }
       </div>
       <span
         class="fill-remaining-space click"
         (click)="openPresentDialog()"
       ></span>
-      <div *ngIf="isEditor" fxLayout="row" fxLayoutAlign="start end">
-        <mat-icon class="vote-icon">thumb_up</mat-icon>
-        <span
-          class="score-creator"
-          [ngClass]="{ 'on-secondary': comment.highlighted }"
-          >{{ comment.score }}</span
-        >
-      </div>
+      @if (isEditor) {
+        <div fxLayout="row" fxLayoutAlign="start end">
+          <mat-icon class="vote-icon">thumb_up</mat-icon>
+          <span
+            class="score-creator"
+            [ngClass]="{ 'on-secondary': comment.highlighted }"
+            >{{ comment.score }}</span
+          >
+        </div>
+      }
     </div>
   </div>
-  <app-voting
-    *ngIf="!isEditor && userId && parseVote"
-    [userId]="userId"
-    [parseVote]="parseVote"
-    [score]="comment.score"
-    [roomId]="comment.roomId"
-    [commentId]="comment.id"
-  ></app-voting>
+  @if (!isEditor && userId && parseVote) {
+    <app-voting
+      [userId]="userId"
+      [parseVote]="parseVote"
+      [score]="comment.score"
+      [roomId]="comment.roomId"
+      [commentId]="comment.id"
+    ></app-voting>
+  }
 </mat-card>

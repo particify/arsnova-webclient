@@ -26,18 +26,19 @@
   {{ 'comment-list.there-are-new-posts' | transloco }}
 </button>
 
-<button
-  class="add-button mobile-add"
-  mat-fab
-  color="primary"
-  *ngIf="showAddButton"
-  (click)="create()"
-  [ngClass]="{
-    'mobile-add-above-nav': navBarExists,
-    'mobile-add-hide': !onInit,
-  }"
-  [disabled]="addButtonDisabled"
-  matTooltip="{{ 'comment-list.add-comment' | transloco }}"
->
-  <mat-icon>add</mat-icon>
-</button>
+@if (showAddButton) {
+  <button
+    class="add-button mobile-add"
+    mat-fab
+    color="primary"
+    (click)="create()"
+    [ngClass]="{
+      'mobile-add-above-nav': navBarExists,
+      'mobile-add-hide': !onInit,
+    }"
+    [disabled]="addButtonDisabled"
+    matTooltip="{{ 'comment-list.add-comment' | transloco }}"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+}

@@ -15,7 +15,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { FlexModule } from '@angular/flex-layout';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 
 @Component({
@@ -25,7 +25,6 @@ import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.com
   standalone: true,
   imports: [
     NgClass,
-    NgIf,
     AnswerListComponent,
     FlexModule,
     LoadingIndicatorComponent,

@@ -1,24 +1,26 @@
-<div
-  fxLayout="column"
-  fxLayoutAlign="start center"
-  [ngClass]="{ 'bottom-margin': showToggleButton }"
-  *ngIf="disabled || readonly"
->
-  <p class="hint">
-    {{
-      (disabled
-        ? 'comment-list.comments-are-not-enabled'
-        : 'comment-list.creation-currently-not-allowed'
-      ) | transloco
-    }}
-  </p>
-  <app-loading-button
-    *ngIf="(disabled || readonly) && showToggleButton"
-    [name]="
-      disabled
-        ? 'creator.comment-list.activate-q-and-a'
-        : 'creator.comment-list.unlock-creation'
-    "
-    (clicked)="toggleSettings()"
-  ></app-loading-button>
-</div>
+@if (disabled || readonly) {
+  <div
+    fxLayout="column"
+    fxLayoutAlign="start center"
+    [ngClass]="{ 'bottom-margin': showToggleButton }"
+  >
+    <p class="hint">
+      {{
+        (disabled
+          ? 'comment-list.comments-are-not-enabled'
+          : 'comment-list.creation-currently-not-allowed'
+        ) | transloco
+      }}
+    </p>
+    @if ((disabled || readonly) && showToggleButton) {
+      <app-loading-button
+        [name]="
+          disabled
+            ? 'creator.comment-list.activate-q-and-a'
+            : 'creator.comment-list.unlock-creation'
+        "
+        (clicked)="toggleSettings()"
+      ></app-loading-button>
+    }
+  </div>
+}

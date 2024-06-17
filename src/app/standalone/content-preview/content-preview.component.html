@@ -1,16 +1,17 @@
-<h3
-  *ngIf="showTitle"
-  tabindex="0"
-  [appAutofocus]
-  [attr.aria-label]="'creator.content.a11y-preview-header' | transloco"
->
-  {{
-    (content.format !== 'FLASHCARD'
-      ? 'creator.content.preview'
-      : 'creator.content.flashcard-front'
-    ) | transloco
-  }}
-</h3>
+@if (showTitle) {
+  <h3
+    tabindex="0"
+    [appAutofocus]
+    [attr.aria-label]="'creator.content.a11y-preview-header' | transloco"
+  >
+    {{
+      (content.format !== 'FLASHCARD'
+        ? 'creator.content.preview'
+        : 'creator.content.flashcard-front'
+      ) | transloco
+    }}
+  </h3>
+}
 <mat-card appearance="outlined">
   <app-rendered-text
     tabindex="0"
@@ -22,49 +23,59 @@
     extensionId="attachment-list"
     [extensionData]="attachmentData"
   ></lib-extension-point>
-  <app-content-choice-answer
-    *ngIf="
-      content.format === 'CHOICE' ||
-      content.format === 'SCALE' ||
-      content.format === 'BINARY'
-    "
-    [selectableAnswers]="selectableAnswers"
-    [multipleAnswersAllowed]="multipleAnswers"
-    [dynamicRendering]="content.format === 'CHOICE' && renderAnswersDynamically"
-  ></app-content-choice-answer>
-  <app-content-sort-answer
-    *ngIf="content.format === 'SORT'"
-    [answerOptions]="answerOptions"
-    [dynamicRendering]="renderAnswersDynamically"
-  ></app-content-sort-answer>
-  <app-content-wordcloud-answer
-    *ngIf="content.format === 'WORDCLOUD'"
-    [words]="words"
-  ></app-content-wordcloud-answer>
-  <app-content-prioritization-answer
-    *ngIf="content.format === 'PRIORITIZATION' && assignablePoints"
-    [answerOptions]="answerOptionsWithPoints"
-    [assignablePoints]="assignablePoints"
-  ></app-content-prioritization-answer>
-  <app-content-text-answer
-    *ngIf="content.format === 'TEXT'"
-  ></app-content-text-answer>
-  <app-content-numeric-answer
-    *ngIf="content.format === 'NUMERIC' && numericContent"
-    [content]="numericContent"
-  ></app-content-numeric-answer>
+  @if (
+    content.format === 'CHOICE' ||
+    content.format === 'SCALE' ||
+    content.format === 'BINARY'
+  ) {
+    <app-content-choice-answer
+      [selectableAnswers]="selectableAnswers"
+      [multipleAnswersAllowed]="multipleAnswers"
+      [dynamicRendering]="
+        content.format === 'CHOICE' && renderAnswersDynamically
+      "
+    ></app-content-choice-answer>
+  }
+  @if (content.format === 'SORT') {
+    <app-content-sort-answer
+      [answerOptions]="answerOptions"
+      [dynamicRendering]="renderAnswersDynamically"
+    ></app-content-sort-answer>
+  }
+  @if (content.format === 'WORDCLOUD') {
+    <app-content-wordcloud-answer
+      [words]="words"
+    ></app-content-wordcloud-answer>
+  }
+  @if (content.format === 'PRIORITIZATION' && assignablePoints) {
+    <app-content-prioritization-answer
+      [answerOptions]="answerOptionsWithPoints"
+      [assignablePoints]="assignablePoints"
+    ></app-content-prioritization-answer>
+  }
+  @if (content.format === 'TEXT') {
+    <app-content-text-answer></app-content-text-answer>
+  }
+  @if (content.format === 'NUMERIC' && numericContent) {
+    <app-content-numeric-answer
+      [content]="numericContent"
+    ></app-content-numeric-answer>
+  }
 </mat-card>
-<div *ngIf="content.format === 'FLASHCARD'">
-  <h3>
-    {{ 'creator.content.flashcard-back' | transloco }}
-  </h3>
-  <mat-card appearance="outlined">
-    <app-rendered-text
-      *ngIf="additionalText"
-      [rawText]="additionalText"
-      [dynamic]="true"
-      [markdownFeatureset]="markdownFeatureset"
-    >
-    </app-rendered-text>
-  </mat-card>
-</div>
+@if (content.format === 'FLASHCARD') {
+  <div>
+    <h3>
+      {{ 'creator.content.flashcard-back' | transloco }}
+    </h3>
+    <mat-card appearance="outlined">
+      @if (additionalText) {
+        <app-rendered-text
+          [rawText]="additionalText"
+          [dynamic]="true"
+          [markdownFeatureset]="markdownFeatureset"
+        >
+        </app-rendered-text>
+      }
+    </mat-card>
+  </div>
+}

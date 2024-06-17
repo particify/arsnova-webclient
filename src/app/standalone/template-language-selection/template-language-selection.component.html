@@ -7,12 +7,10 @@
   <mat-label>{{ 'templates.language' | transloco }}</mat-label>
 
   <mat-select [value]="selectedLang" [disabled]="formDisabled">
-    <mat-option
-      *ngFor="let lang of langs"
-      [value]="lang"
-      (click)="updateLang(lang)"
-    >
-      {{ lang.nativeName }}
-    </mat-option>
+    @for (lang of langs; track lang) {
+      <mat-option [value]="lang" (click)="updateLang(lang)">
+        {{ lang.nativeName }}
+      </mat-option>
+    }
   </mat-select>
 </mat-form-field>

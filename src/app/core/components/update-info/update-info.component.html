@@ -5,30 +5,40 @@
         | transloco
     }}
   </h3>
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <div *ngIf="!isLoading">
-    <div *ngIf="changes">
-      <p *ngIf="newsUrl" tabindex="0">
-        {{ 'home-page.see-news' | transloco
-        }}<a href="{{ newsUrl }}">{{ 'home-page.news' | transloco }}</a
-        >.
-      </p>
-      <p>{{ 'home-page.important-changes' | transloco }}</p>
-      <ul tabindex="0">
-        <li *ngFor="let change of changes">{{ change }}</li>
-      </ul>
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading) {
+    <div>
+      @if (changes) {
+        <div>
+          @if (newsUrl) {
+            <p tabindex="0">
+              {{ 'home-page.see-news' | transloco
+              }}<a href="{{ newsUrl }}">{{ 'home-page.news' | transloco }}</a
+              >.
+            </p>
+          }
+          <p>{{ 'home-page.important-changes' | transloco }}</p>
+          <ul tabindex="0">
+            @for (change of changes; track change) {
+              <li>{{ change }}</li>
+            }
+          </ul>
+        </div>
+      }
+      @if (!changes) {
+        <p class="hot-fix" tabindex="0">
+          {{ 'home-page.hot-fix-update' | transloco }}
+        </p>
+      }
     </div>
-    <p class="hot-fix" *ngIf="!changes" tabindex="0">
-      {{ 'home-page.hot-fix-update' | transloco }}
-    </p>
-  </div>
+  }
 </div>
 <div mat-dialog-actions fxLayoutAlign="end center">
-  <app-loading-indicator
-    *ngIf="!afterUpdate && !updateReady"
-    [size]="24"
-    height="auto"
-  ></app-loading-indicator>
+  @if (!afterUpdate && !updateReady) {
+    <app-loading-indicator [size]="24" height="auto"></app-loading-indicator>
+  }
   <button
     mat-flat-button
     color="primary"

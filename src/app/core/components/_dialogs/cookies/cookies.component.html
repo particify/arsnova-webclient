@@ -12,23 +12,25 @@
       {{ 'cookies.intro-privacy2' | transloco }}
     </p>
     <div>
-      <div class="cookie-cat" *ngFor="let category of categories">
-        <mat-slide-toggle
-          labelPosition="before"
-          [(ngModel)]="category.consent"
-          [disabled]="category.required || !!category.disabled"
-        >
-          <div
-            class="slide-label"
-            [attr.aria-label]="'cookies.a11y-' + category.id | transloco"
+      @for (category of categories; track category) {
+        <div class="cookie-cat">
+          <mat-slide-toggle
+            labelPosition="before"
+            [(ngModel)]="category.consent"
+            [disabled]="category.required || !!category.disabled"
           >
-            {{ 'cookies.category-' + category.id | transloco }}
+            <div
+              class="slide-label"
+              [attr.aria-label]="'cookies.a11y-' + category.id | transloco"
+            >
+              {{ 'cookies.category-' + category.id | transloco }}
+            </div>
+          </mat-slide-toggle>
+          <div class="cookie-cat-desc">
+            {{ 'cookies.category-' + category.id + '-desc' | transloco }}
           </div>
-        </mat-slide-toggle>
-        <div class="cookie-cat-desc">
-          {{ 'cookies.category-' + category.id + '-desc' | transloco }}
         </div>
-      </div>
+      }
     </div>
   </div>
   <p>

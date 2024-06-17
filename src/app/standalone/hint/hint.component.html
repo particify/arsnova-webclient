@@ -2,10 +2,11 @@
   <mat-icon fxFlex="noshrink" class="{{ hint.class }}">{{
     hint.icon
   }}</mat-icon>
-  <p *ngIf="text; else showContent" class="smaller-text">
-    {{ text | transloco }}
-  </p>
-  <ng-template #showContent>
+  @if (text) {
+    <p class="smaller-text">
+      {{ text | transloco }}
+    </p>
+  } @else {
     <ng-content></ng-content>
-  </ng-template>
+  }
 </div>

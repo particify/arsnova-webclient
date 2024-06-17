@@ -32,7 +32,7 @@ import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/te
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatButton } from '@angular/material/button';
-import { NgFor, NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 
 export class NavBarItem {
@@ -62,13 +62,11 @@ export class NavBarItem {
   standalone: true,
   imports: [
     FlexModule,
-    NgFor,
     MatButton,
     NgClass,
     MatTooltip,
     MatMenuTrigger,
     MatIcon,
-    NgIf,
     MatMenu,
     MatMenuItem,
     TextOverflowClipComponent,

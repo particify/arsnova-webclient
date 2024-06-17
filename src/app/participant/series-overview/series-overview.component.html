@@ -1,185 +1,195 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <mat-card fxLayout="column" fxLayoutGap="16px">
-    <span
-      *ngIf="!isLoading && group.groupType !== GroupType.QUIZ"
-      class="header-text"
-    >
-      {{ getHeaderText() | transloco }}
-    </span>
-    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+    @if (!isLoading && group.groupType !== GroupType.QUIZ) {
+      <span class="header-text">
+        {{ getHeaderText() | transloco }}
+      </span>
+    }
+    @if (isLoading) {
+      <app-loading-indicator></app-loading-indicator>
+    }
     <div fxLayout="column" fxLayoutGap="24px">
-      <div
-        *ngIf="!isLoading && group.leaderboardEnabled && userLeaderboardItem"
-        fxLayout="column"
-        fxLayoutAlign="start center"
-        fxLayoutGap="24px"
-      >
-        <mat-icon class="leaderboard-icon">emoji_events</mat-icon>
-        <span class="position-text">
-          {{
-            'participant.content.you-are-at-position'
-              | transloco: { position: getPosition() | ordinal }
-          }}
-        </span>
-      </div>
-      <div
-        *ngIf="!isLoading && !isPureInfoSeries"
-        fxLayout="row wrap"
-        fxLayoutAlign="space-around"
-        class="info-chart-container"
-      >
-        <app-info-chart
-          *ngIf="group.leaderboardEnabled && leaderboard && userLeaderboardItem"
-          id="points-info-chart"
-          chartId="points-chart"
-          [dataText]="userLeaderboardItem.score.toString()"
-          [infoText]="'content.points' | transloco"
-        ></app-info-chart>
-        <app-info-chart
-          *ngIf="hasScore"
-          id="correct-info-chart"
-          chartId="correct-chart"
-          [dataText]="score + '%'"
-          [infoText]="'participant.content.answer-state-correct' | transloco"
-        ></app-info-chart>
-        <app-info-chart
-          id="progress-info-chart"
-          chartId="progress-chart"
-          [dataText]="getProgressDataText()"
-          [infoText]="'participant.content.answer-state-neutral' | transloco"
-        ></app-info-chart>
-      </div>
-      <app-hint
-        *ngIf="!isLoading && !leaderboard && getLockedContentCount() > 0"
-        [ngStyle]="{ 'margin-top': isPureInfoSeries ? '0' : '-1em' }"
-        fxLayout="row"
-        [fxLayoutAlign]="isPureInfoSeries ? 'start' : 'center'"
-        [type]="HintType.INFO"
-        [text]="
-          (getLockedContentCount() === 1
-            ? 'participant.content.there-is-one-locked-content'
-            : 'participant.content.there-are-locked-contents'
-          ) | transloco: { count: getLockedContentCount() }
-        "
-      ></app-hint>
-      <div *ngIf="group.leaderboardEnabled" fxLayout="row">
-        <mat-tab-group
-          (selectedTabChange)="selectedTabIndex = $event.index"
-          [selectedIndex]="selectedTabIndex"
-          [animationDuration]="0"
+      @if (!isLoading && group.leaderboardEnabled && userLeaderboardItem) {
+        <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="24px">
+          <mat-icon class="leaderboard-icon">emoji_events</mat-icon>
+          <span class="position-text">
+            {{
+              'participant.content.you-are-at-position'
+                | transloco: { position: getPosition() | ordinal }
+            }}
+          </span>
+        </div>
+      }
+      @if (!isLoading && !isPureInfoSeries) {
+        <div
+          fxLayout="row wrap"
+          fxLayoutAlign="space-around"
+          class="info-chart-container"
         >
-          <mat-tab [label]="'content.leaderboard' | transloco"> </mat-tab>
-          <mat-tab
-            [label]="'participant.content.contents' | transloco"
-          ></mat-tab>
-        </mat-tab-group>
-      </div>
-      <div
-        *ngIf="group.groupType !== GroupType.QUIZ"
-        fxLayout.gt-xs="row"
-        fxLayout.lt-sm="column"
-        fxLayoutGap="1em"
-        fxLayoutAlign.gt-xs="space-between center"
-        fxLayoutAlign.lt-sm="center center"
-      >
-        <span>{{ getSubHeaderText() | transloco }}</span>
-        <button
-          fxFlex="none"
-          *ngIf="!isPureInfoSeries && !finished"
-          mat-raised-button
-          color="primary"
-          (click)="goToFirstUnanswered()"
-        >
-          <mat-icon>arrow_forward</mat-icon>
-          <span>{{
-            'participant.content.continue-answering' | transloco
-          }}</span>
-        </button>
-      </div>
-      <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-      <app-leaderboard
-        *ngIf="
-          !isLoading &&
-          group.leaderboardEnabled &&
-          leaderboard &&
-          selectedTabIndex === 0
-        "
-        fxFill
-        [leaderboardItems]="leaderboard"
-        [aliasId]="alias?.id"
-      ></app-leaderboard>
-      <mat-list
-        *ngIf="
-          !isLoading &&
-          (group.groupType !== GroupType.QUIZ || selectedTabIndex === 1)
-        "
-      >
-        <mat-list-item
-          *ngFor="let content of contentsWithResults; let i = index"
-          class="full-border"
-          (click)="goToContent(i)"
-        >
-          <div
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            fxLayoutGap="16px"
-            fxFill
-          >
-            <div fxLayoutAlign="center center" class="icon-container">
-              <mat-icon
-                *ngIf="
-                  !(
-                    isLoadingLastContent && i === contentsWithResults.length - 1
-                  )
-                "
-                [ngClass]="{
-                  correct: content.state === resultTypes.CORRECT,
-                  wrong: content.state === resultTypes.WRONG,
-                  answered:
-                    ![resultTypes.CORRECT, resultTypes.WRONG].includes(
-                      content.state
-                    ) || !group.correctOptionsPublished,
-                  primary: hasAnsweredState(content.state),
-                }"
-                [matTooltip]="
-                  (![ContentType.FLASHCARD, ContentType.SLIDE].includes(
-                    contents[i].format
-                  )
-                    ? 'participant.content.answer-state-' +
-                      content.state.toLowerCase()
-                    : ''
-                  ) | transloco
-                "
-              >
-                {{ getIcon(content.state) }}
-              </mat-icon>
-              <app-loading-indicator
-                *ngIf="
-                  isLoadingLastContent && i === contentsWithResults.length - 1
-                "
-                [size]="20"
-              ></app-loading-indicator>
-            </div>
-            <app-rendered-text
-              class="ellipsis body rendered-list-preview-container"
-              [renderedText]="content.body"
-              [listPreview]="true"
-              tabindex="0"
-              role="button"
-              (keyup.enter)="goToContent(i)"
-            ></app-rendered-text>
-            <span class="fill-remaining-space"></span>
-            <span
-              *ngIf="
-                content.duration !== undefined &&
-                group.groupType === GroupType.QUIZ
+          @if (group.leaderboardEnabled && leaderboard && userLeaderboardItem) {
+            <app-info-chart
+              id="points-info-chart"
+              chartId="points-chart"
+              [dataText]="userLeaderboardItem.score.toString()"
+              [infoText]="'content.points' | transloco"
+            ></app-info-chart>
+          }
+          @if (hasScore) {
+            <app-info-chart
+              id="correct-info-chart"
+              chartId="correct-chart"
+              [dataText]="score + '%'"
+              [infoText]="
+                'participant.content.answer-state-correct' | transloco
               "
-              class="duration"
-              >{{ content.duration || 0 | duration }}</span
+            ></app-info-chart>
+          }
+          <app-info-chart
+            id="progress-info-chart"
+            chartId="progress-chart"
+            [dataText]="getProgressDataText()"
+            [infoText]="'participant.content.answer-state-neutral' | transloco"
+          ></app-info-chart>
+        </div>
+      }
+      @if (!isLoading && !leaderboard && getLockedContentCount() > 0) {
+        <app-hint
+          [ngStyle]="{ 'margin-top': isPureInfoSeries ? '0' : '-1em' }"
+          fxLayout="row"
+          [fxLayoutAlign]="isPureInfoSeries ? 'start' : 'center'"
+          [type]="HintType.INFO"
+          [text]="
+            (getLockedContentCount() === 1
+              ? 'participant.content.there-is-one-locked-content'
+              : 'participant.content.there-are-locked-contents'
+            ) | transloco: { count: getLockedContentCount() }
+          "
+        ></app-hint>
+      }
+      @if (group.leaderboardEnabled) {
+        <div fxLayout="row">
+          <mat-tab-group
+            (selectedTabChange)="selectedTabIndex = $event.index"
+            [selectedIndex]="selectedTabIndex"
+            [animationDuration]="0"
+          >
+            <mat-tab [label]="'content.leaderboard' | transloco"> </mat-tab>
+            <mat-tab
+              [label]="'participant.content.contents' | transloco"
+            ></mat-tab>
+          </mat-tab-group>
+        </div>
+      }
+      @if (group.groupType !== GroupType.QUIZ) {
+        <div
+          fxLayout.gt-xs="row"
+          fxLayout.lt-sm="column"
+          fxLayoutGap="1em"
+          fxLayoutAlign.gt-xs="space-between center"
+          fxLayoutAlign.lt-sm="center center"
+        >
+          <span>{{ getSubHeaderText() | transloco }}</span>
+          @if (!isPureInfoSeries && !finished) {
+            <button
+              fxFlex="none"
+              mat-raised-button
+              color="primary"
+              (click)="goToFirstUnanswered()"
             >
-          </div>
-        </mat-list-item>
-      </mat-list>
+              <mat-icon>arrow_forward</mat-icon>
+              <span>{{
+                'participant.content.continue-answering' | transloco
+              }}</span>
+            </button>
+          }
+        </div>
+      }
+      @if (isLoading) {
+        <app-loading-indicator></app-loading-indicator>
+      }
+      @if (
+        !isLoading &&
+        group.leaderboardEnabled &&
+        leaderboard &&
+        selectedTabIndex === 0
+      ) {
+        <app-leaderboard
+          fxFill
+          [leaderboardItems]="leaderboard"
+          [aliasId]="alias?.id"
+        ></app-leaderboard>
+      }
+      @if (
+        !isLoading &&
+        (group.groupType !== GroupType.QUIZ || selectedTabIndex === 1)
+      ) {
+        <mat-list>
+          @for (content of contentsWithResults; track content; let i = $index) {
+            <mat-list-item class="full-border" (click)="goToContent(i)">
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxLayoutGap="16px"
+                fxFill
+              >
+                <div fxLayoutAlign="center center" class="icon-container">
+                  @if (
+                    !(
+                      isLoadingLastContent &&
+                      i === contentsWithResults.length - 1
+                    )
+                  ) {
+                    <mat-icon
+                      [ngClass]="{
+                        correct: content.state === resultTypes.CORRECT,
+                        wrong: content.state === resultTypes.WRONG,
+                        answered:
+                          ![resultTypes.CORRECT, resultTypes.WRONG].includes(
+                            content.state
+                          ) || !group.correctOptionsPublished,
+                        primary: hasAnsweredState(content.state),
+                      }"
+                      [matTooltip]="
+                        (![ContentType.FLASHCARD, ContentType.SLIDE].includes(
+                          contents[i].format
+                        )
+                          ? 'participant.content.answer-state-' +
+                            content.state.toLowerCase()
+                          : ''
+                        ) | transloco
+                      "
+                    >
+                      {{ getIcon(content.state) }}
+                    </mat-icon>
+                  }
+                  @if (
+                    isLoadingLastContent && i === contentsWithResults.length - 1
+                  ) {
+                    <app-loading-indicator [size]="20"></app-loading-indicator>
+                  }
+                </div>
+                <app-rendered-text
+                  class="ellipsis body rendered-list-preview-container"
+                  [renderedText]="content.body"
+                  [listPreview]="true"
+                  tabindex="0"
+                  role="button"
+                  (keyup.enter)="goToContent(i)"
+                ></app-rendered-text>
+                <span class="fill-remaining-space"></span>
+                @if (
+                  content.duration !== undefined &&
+                  group.groupType === GroupType.QUIZ
+                ) {
+                  <span class="duration">{{
+                    content.duration || 0 | duration
+                  }}</span>
+                }
+              </div>
+            </mat-list-item>
+          }
+        </mat-list>
+      }
     </div>
   </mat-card>
 </div>

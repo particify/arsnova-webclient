@@ -19,7 +19,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { LiveFeedbackComponent } from '@app/standalone/live-feedback/live-feedback.component';
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
+import { NgClass, AsyncPipe } from '@angular/common';
 import { CoreModule } from '@app/core/core.module';
 
 @Component({
@@ -29,14 +29,12 @@ import { CoreModule } from '@app/core/core.module';
   standalone: true,
   imports: [
     CoreModule,
-    NgIf,
     LoadingIndicatorComponent,
     BaseCardComponent,
     LiveFeedbackComponent,
     FlexModule,
     AnswerCountComponent,
     NgClass,
-    NgFor,
     MatButton,
     MatIcon,
     MatTooltip,

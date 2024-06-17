@@ -4,44 +4,45 @@
     [cdkDropListData]="contents"
     (cdkDropListDropped)="dropContent($event)"
   >
-    <div
-      class="content-box bottom-border"
-      fxLayout="column"
-      fxLayoutAlign="center"
-      *ngFor="let content of contents; index as i"
-      cdkDrag
-      [cdkDragStartDelay]="50"
-      [ngClass]="{
-        'locked-content': !isPublished(i),
-        'unlocked-content': isPublished(i),
-      }"
-      [attr.aria-label]="
-        'creator.content.a11y-sort-content'
-          | transloco
-            : {
-                content: content.renderedBody | a11yRenderedBody,
-                index: i + 1,
-                length: contents.length,
-              }
-      "
-      tabindex="0"
-      (keyup)="moveAnswer($event, i)"
-      #sortListItem
-    >
-      <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
-        <div
-          class="ellipsis"
-          fxLayout="row"
-          fxLayoutAlign="start center"
-          fxLayoutGap="12px"
-        >
-          <mat-icon class="type-icon">{{
-            iconList.get(content.format)
-          }}</mat-icon>
-          <p class="ellipsis">{{ content.body }}</p>
+    @for (content of contents; track content; let i = $index) {
+      <div
+        class="content-box bottom-border"
+        fxLayout="column"
+        fxLayoutAlign="center"
+        cdkDrag
+        [cdkDragStartDelay]="50"
+        [ngClass]="{
+          'locked-content': !isPublished(i),
+          'unlocked-content': isPublished(i),
+        }"
+        [attr.aria-label]="
+          'creator.content.a11y-sort-content'
+            | transloco
+              : {
+                  content: content.renderedBody | a11yRenderedBody,
+                  index: i + 1,
+                  length: contents.length,
+                }
+        "
+        tabindex="0"
+        (keyup)="moveAnswer($event, i)"
+        #sortListItem
+      >
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
+          <div
+            class="ellipsis"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="12px"
+          >
+            <mat-icon class="type-icon">{{
+              iconList.get(content.format)
+            }}</mat-icon>
+            <p class="ellipsis">{{ content.body }}</p>
+          </div>
+          <mat-icon class="sort-icon">drag_handle</mat-icon>
         </div>
-        <mat-icon class="sort-icon">drag_handle</mat-icon>
       </div>
-    </div>
+    }
   </mat-list>
 </div>

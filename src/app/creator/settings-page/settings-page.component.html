@@ -4,49 +4,62 @@
   </div>
 </div>
 <div fxLayout="column" fxLayoutAlign="start center">
-  <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-  <mat-accordion *ngIf="!isLoading">
-    <mat-expansion-panel
-      *ngFor="let setting of settings"
-      [disabled]="setting.name === 'access' && !isCreator"
-      class="settings-panel"
-      [expanded]="currentRoute === setting.name"
-      (afterExpand)="updateUrl(setting.name)"
-    >
-      <mat-expansion-panel-header
-        [appHotkey]="setting.hotkey"
-        [appHotkeyAction]="HotkeyAction.CLICK"
-        [appHotkeyTitle]="'creator.settings.hotkey-' + setting.name | transloco"
-      >
-        <app-settings-panel-header
-          [text]="'creator.settings.' + setting.name"
-          [icon]="setting.icon"
-        ></app-settings-panel-header>
-      </mat-expansion-panel-header>
-      <div [ngSwitch]="setting.name">
-        <app-room-edit
-          [editRoom]="room"
-          [name]="room.name"
-          [description]="room.description"
-          *ngSwitchCase="'general'"
-          (saveEvent)="saveRoom($event)"
-        ></app-room-edit>
-        <app-comment-settings
-          [room]="room"
-          [roomId]="room.id"
-          *ngSwitchCase="'comments'"
-          (saveEvent)="saveRoom($event)"
-        ></app-comment-settings>
-        <app-access
-          [room]="room"
-          *ngSwitchCase="'access'"
-          (saveEvent)="saveRoom($event)"
-        ></app-access>
-        <app-announcement-settings
-          *ngSwitchCase="'announcements'"
-          [room]="room"
-        ></app-announcement-settings>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+  @if (!isLoading) {
+    <mat-accordion>
+      @for (setting of settings; track setting) {
+        <mat-expansion-panel
+          [disabled]="setting.name === 'access' && !isCreator"
+          class="settings-panel"
+          [expanded]="currentRoute === setting.name"
+          (afterExpand)="updateUrl(setting.name)"
+        >
+          <mat-expansion-panel-header
+            [appHotkey]="setting.hotkey"
+            [appHotkeyAction]="HotkeyAction.CLICK"
+            [appHotkeyTitle]="
+              'creator.settings.hotkey-' + setting.name | transloco
+            "
+          >
+            <app-settings-panel-header
+              [text]="'creator.settings.' + setting.name"
+              [icon]="setting.icon"
+            ></app-settings-panel-header>
+          </mat-expansion-panel-header>
+          <div>
+            @switch (setting.name) {
+              @case ('general') {
+                <app-room-edit
+                  [editRoom]="room"
+                  [name]="room.name"
+                  [description]="room.description"
+                  (saveEvent)="saveRoom($event)"
+                ></app-room-edit>
+              }
+              @case ('comments') {
+                <app-comment-settings
+                  [room]="room"
+                  [roomId]="room.id"
+                  (saveEvent)="saveRoom($event)"
+                ></app-comment-settings>
+              }
+              @case ('access') {
+                <app-access
+                  [room]="room"
+                  (saveEvent)="saveRoom($event)"
+                ></app-access>
+              }
+              @case ('announcements') {
+                <app-announcement-settings
+                  [room]="room"
+                ></app-announcement-settings>
+              }
+            }
+          </div>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  }
 </div>

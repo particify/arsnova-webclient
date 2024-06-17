@@ -1,94 +1,111 @@
-<mat-list *ngIf="multipleAnswersAllowed">
-  <div
-    class="list-item"
-    *ngFor="let checkedAnswer of selectableAnswers; let i = index"
-    fxLayout="row"
-    fxLayoutAlign="space-between center"
-    [ngClass]="{
-      'correct-answer': checkOption(i, true),
-      'wrong-answer': checkOption(i, false),
-      'primary-border-color': checkedAnswer.checked && !isDisabled,
-    }"
-  >
-    <mat-checkbox
-      [disabled]="true"
-      *ngIf="isDisabled"
-      color="primary"
-      [checked]="checkedAnswer.checked"
-      name="answer"
-      class="answer-checkbox choice-answer"
-    >
-      <app-rendered-text
-        [rawText]="checkedAnswer.answerOption.label"
-        [renderedText]="checkedAnswer.answerOption.renderedLabel"
-      ></app-rendered-text>
-    </mat-checkbox>
-    <mat-checkbox
-      *ngIf="!isDisabled"
-      color="primary"
-      [(ngModel)]="checkedAnswer.checked"
-      name="answer"
-      class="answer-checkbox choice-answer"
-      aria-label="{{ checkedAnswer.answerOption.label | transloco }}"
-    >
-      <app-rendered-text
-        [rawText]="checkedAnswer.answerOption.label"
-        [renderedText]="checkedAnswer.answerOption.renderedLabel"
-        [dynamic]="dynamicRendering"
-        [markdown]="false"
-      ></app-rendered-text>
-    </mat-checkbox>
-    <mat-icon
-      *ngIf="isCorrectOptionVisible(i)"
-      class="answer-indicator"
-      [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'"
-    >
-      {{ isAnswerOptionCorrect(i) ? 'check' : 'close' }}</mat-icon
-    >
-  </div>
-</mat-list>
-<mat-radio-group
-  [disabled]="isDisabled"
-  *ngIf="!multipleAnswersAllowed"
-  [(ngModel)]="selectedAnswerIndex"
-  name="{{ 'answer' + contentId }}"
->
+@if (multipleAnswersAllowed) {
   <mat-list>
-    <div
-      class="list-item unanswered"
-      *ngFor="let checkedAnswer of selectableAnswers; let i = index"
-      fxLayout="row"
-      fxLayoutAlign="space-between center"
-      [ngClass]="{
-        'correct-answer': checkOption(i, true),
-        'wrong-answer': checkOption(i, false),
-        'primary-border-color': selectedAnswerIndex === i && !isDisabled,
-      }"
-    >
-      <mat-radio-button
-        (change)="selectSingleAnswer(i)"
-        color="primary"
-        class="answer-radio-button choice-answer"
-        [ngClass]="{ 'answer-radio-checked': selectedAnswerIndex === i }"
-        aria-label="{{ checkedAnswer.answerOption.label | transloco }}"
-        [checked]="checkedAnswer.checked"
-        [value]="i"
-        name="answer"
+    @for (
+      checkedAnswer of selectableAnswers;
+      track checkedAnswer;
+      let i = $index
+    ) {
+      <div
+        class="list-item"
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        [ngClass]="{
+          'correct-answer': checkOption(i, true),
+          'wrong-answer': checkOption(i, false),
+          'primary-border-color': checkedAnswer.checked && !isDisabled,
+        }"
       >
-        <app-rendered-text
-          [rawText]="checkedAnswer.answerOption.label | transloco"
-          [renderedText]="checkedAnswer.answerOption.renderedLabel"
-          [dynamic]="dynamicRendering"
-          [markdown]="false"
-        ></app-rendered-text>
-      </mat-radio-button>
-      <mat-icon
-        *ngIf="isCorrectOptionVisible(i)"
-        class="answer-indicator"
-        [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'"
-      >
-        {{ isAnswerOptionCorrect(i) ? 'check' : 'close' }}</mat-icon
-      >
-    </div>
+        @if (isDisabled) {
+          <mat-checkbox
+            [disabled]="true"
+            color="primary"
+            [checked]="checkedAnswer.checked"
+            name="answer"
+            class="answer-checkbox choice-answer"
+          >
+            <app-rendered-text
+              [rawText]="checkedAnswer.answerOption.label"
+              [renderedText]="checkedAnswer.answerOption.renderedLabel"
+            ></app-rendered-text>
+          </mat-checkbox>
+        }
+        @if (!isDisabled) {
+          <mat-checkbox
+            color="primary"
+            [(ngModel)]="checkedAnswer.checked"
+            name="answer"
+            class="answer-checkbox choice-answer"
+            aria-label="{{ checkedAnswer.answerOption.label | transloco }}"
+          >
+            <app-rendered-text
+              [rawText]="checkedAnswer.answerOption.label"
+              [renderedText]="checkedAnswer.answerOption.renderedLabel"
+              [dynamic]="dynamicRendering"
+              [markdown]="false"
+            ></app-rendered-text>
+          </mat-checkbox>
+        }
+        @if (isCorrectOptionVisible(i)) {
+          <mat-icon
+            class="answer-indicator"
+            [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'"
+          >
+            {{ isAnswerOptionCorrect(i) ? 'check' : 'close' }}</mat-icon
+          >
+        }
+      </div>
+    }
   </mat-list>
-</mat-radio-group>
+}
+@if (!multipleAnswersAllowed) {
+  <mat-radio-group
+    [disabled]="isDisabled"
+    [(ngModel)]="selectedAnswerIndex"
+    name="{{ 'answer' + contentId }}"
+  >
+    <mat-list>
+      @for (
+        checkedAnswer of selectableAnswers;
+        track checkedAnswer;
+        let i = $index
+      ) {
+        <div
+          class="list-item unanswered"
+          fxLayout="row"
+          fxLayoutAlign="space-between center"
+          [ngClass]="{
+            'correct-answer': checkOption(i, true),
+            'wrong-answer': checkOption(i, false),
+            'primary-border-color': selectedAnswerIndex === i && !isDisabled,
+          }"
+        >
+          <mat-radio-button
+            (change)="selectSingleAnswer(i)"
+            color="primary"
+            class="answer-radio-button choice-answer"
+            [ngClass]="{ 'answer-radio-checked': selectedAnswerIndex === i }"
+            aria-label="{{ checkedAnswer.answerOption.label | transloco }}"
+            [checked]="checkedAnswer.checked"
+            [value]="i"
+            name="answer"
+          >
+            <app-rendered-text
+              [rawText]="checkedAnswer.answerOption.label | transloco"
+              [renderedText]="checkedAnswer.answerOption.renderedLabel"
+              [dynamic]="dynamicRendering"
+              [markdown]="false"
+            ></app-rendered-text>
+          </mat-radio-button>
+          @if (isCorrectOptionVisible(i)) {
+            <mat-icon
+              class="answer-indicator"
+              [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'"
+            >
+              {{ isAnswerOptionCorrect(i) ? 'check' : 'close' }}</mat-icon
+            >
+          }
+        </div>
+      }
+    </mat-list>
+  </mat-radio-group>
+}

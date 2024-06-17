@@ -1,55 +1,57 @@
-<button
-  *ngIf="isDialog; else raisedButtons"
-  mat-flat-button
-  type="submit"
-  [color]="color"
-  [disabled]="(formDisabled && loading) || disabled"
-  [attr.aria-label]="aria ?? name | transloco"
-  (click)="click()"
->
-  <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
-</button>
-<ng-template #raisedButtons>
+@if (isDialog) {
   <button
-    *ngIf="!useDirectives; else withDirective"
-    mat-raised-button
+    mat-flat-button
     type="submit"
     [color]="color"
     [disabled]="(formDisabled && loading) || disabled"
-    [ngClass]="{ 'login-button': fullWidth }"
     [attr.aria-label]="aria ?? name | transloco"
     (click)="click()"
   >
     <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
   </button>
-  <ng-template #withDirective>
+} @else {
+  @if (!useDirectives) {
     <button
-      *ngIf="hotkey && trackInteraction"
       mat-raised-button
       type="submit"
       [color]="color"
       [disabled]="(formDisabled && loading) || disabled"
       [ngClass]="{ 'login-button': fullWidth }"
-      [appHotkey]="hotkey"
-      [appHotkeyTitle]="hotkeyTitle"
-      [appHotkeyAction]="hotkeyAction"
-      [appTrackInteraction]="trackInteraction"
-      [appTrackName]="trackName"
       [attr.aria-label]="aria ?? name | transloco"
       (click)="click()"
     >
       <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
     </button>
-  </ng-template>
-</ng-template>
+  } @else {
+    @if (hotkey && trackInteraction) {
+      <button
+        mat-raised-button
+        type="submit"
+        [color]="color"
+        [disabled]="(formDisabled && loading) || disabled"
+        [ngClass]="{ 'login-button': fullWidth }"
+        [appHotkey]="hotkey"
+        [appHotkeyTitle]="hotkeyTitle"
+        [appHotkeyAction]="hotkeyAction"
+        [appTrackInteraction]="trackInteraction"
+        [appTrackName]="trackName"
+        [attr.aria-label]="aria ?? name | transloco"
+        (click)="click()"
+      >
+        <ng-template [ngTemplateOutlet]="innerButton"></ng-template>
+      </button>
+    }
+  }
+}
 
 <ng-template #innerButton>
   <span [ngClass]="{ hidden: formDisabled && loading }">
     {{ name | transloco }}
   </span>
-  <app-loading-indicator
-    *ngIf="formDisabled && loading"
-    [size]="18"
-    [disabled]="true"
-  ></app-loading-indicator>
+  @if (formDisabled && loading) {
+    <app-loading-indicator
+      [size]="18"
+      [disabled]="true"
+    ></app-loading-indicator>
+  }
 </ng-template>

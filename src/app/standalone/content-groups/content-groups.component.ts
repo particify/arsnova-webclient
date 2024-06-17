@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
@@ -20,7 +19,6 @@ import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatTooltipModule,

@@ -20,24 +20,23 @@
           (selectionChange)="updateOptionLabels()"
           [disabled]="(isEditMode && isAnswered) || formDisabled"
         >
-          <mat-option
-            *ngFor="let template of templates; let i = index"
-            [value]="template"
-            >{{ templateLabels[i] | transloco }}</mat-option
-          >
+          @for (template of templates; track template; let i = $index) {
+            <mat-option [value]="template">{{
+              templateLabels[i] | transloco
+            }}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </div>
     <div>
       <mat-list>
-        <mat-list-item
-          class="bottom-border"
-          *ngFor="let answerLabel of answerLabels"
-        >
-          <div fxLayout="row">
-            <p>{{ answerLabel | transloco }}</p>
-          </div>
-        </mat-list-item>
+        @for (answerLabel of answerLabels; track answerLabel) {
+          <mat-list-item class="bottom-border">
+            <div fxLayout="row">
+              <p>{{ answerLabel | transloco }}</p>
+            </div>
+          </mat-list-item>
+        }
       </mat-list>
     </div>
   </div>

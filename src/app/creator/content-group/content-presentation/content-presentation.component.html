@@ -1,17 +1,20 @@
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
 <div>
   <div tabindex="-1" [appAutofocus] class="visually-hidden">
     {{ 'creator.statistic.a11y-message-presentation' | transloco }}
   </div>
   <div id="stepper-container" fxLayout="column" fxLayoutAlign="start center">
-    <app-content-stepper
-      *ngIf="!isLoading"
-      [contents]="contents"
-      [settings]="settings"
-      [startIndex]="currentStep"
-      [attributions]="attributions"
-      (indexChanged)="updateURL($event)"
-      [showStepInfo]="false"
-    ></app-content-stepper>
+    @if (!isLoading) {
+      <app-content-stepper
+        [contents]="contents"
+        [settings]="settings"
+        [startIndex]="currentStep"
+        [attributions]="attributions"
+        (indexChanged)="updateURL($event)"
+        [showStepInfo]="false"
+      ></app-content-stepper>
+    }
   </div>
 </div>

@@ -18,10 +18,11 @@
       name="questionInput"
     ></textarea>
   </mat-form-field>
-  <app-hint
-    *ngIf="textContainsImage"
-    text="creator.utils.formatting-image-hint"
-    [type]="HintType.WARNING"
-  ></app-hint>
+  @if (textContainsImage) {
+    <app-hint
+      text="creator.utils.formatting-image-hint"
+      [type]="HintType.WARNING"
+    ></app-hint>
+  }
   <div class="form-spacer"></div>
 </form>

@@ -14,7 +14,7 @@ import { TranslocoPipe } from '@ngneat/transloco';
 import { MatButton } from '@angular/material/button';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AnnouncementComponent } from '@app/standalone/announcement/announcement.component';
-import { NgFor, NgIf, KeyValuePipe } from '@angular/common';
+import { KeyValuePipe } from '@angular/common';
 import { MatDivider } from '@angular/material/divider';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
@@ -34,8 +34,6 @@ import { FlexModule } from '@angular/flex-layout';
     MatSelect,
     MatOption,
     MatDivider,
-    NgFor,
-    NgIf,
     MatDialogContent,
     AnnouncementComponent,
     LoadingIndicatorComponent,

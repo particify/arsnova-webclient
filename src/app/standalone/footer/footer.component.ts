@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { CommonModule } from '@angular/common';
+
 import { MatMenuModule } from '@angular/material/menu';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { FlexModule } from '@angular/flex-layout';
@@ -13,7 +13,6 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
     TranslocoModule,
     MatMenuModule,
     ExtensionPointModule,

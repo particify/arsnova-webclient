@@ -32,16 +32,16 @@
         class="ellipsis"
         [text]="contentGroup.name"
       ></app-text-overflow-clip>
-      <app-list-badge
-        *ngIf="getLength()"
-        [count]="getLength()"
-      ></app-list-badge>
+      @if (getLength()) {
+        <app-list-badge [count]="getLength()"></app-list-badge>
+      }
     </div>
-    <mat-icon
-      *ngIf="isLocked()"
-      class="locked"
-      [matTooltip]="'creator.room-page.group-locked' | transloco"
-      >locked</mat-icon
-    >
+    @if (isLocked()) {
+      <mat-icon
+        class="locked"
+        [matTooltip]="'creator.room-page.group-locked' | transloco"
+        >locked</mat-icon
+      >
+    }
   </div>
 </mat-card>

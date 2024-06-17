@@ -1,73 +1,80 @@
 <div class="visually-hidden" [appAutofocus] tabIndex="-1">
   {{ 'survey.a11y-message' | a11yIntro | async }}
 </div>
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-<app-base-card *ngIf="!isLoading">
-  <app-live-feedback
-    [data]="data"
-    [dataChanged]="dataChanged"
-    [fixedSize]="true"
-    [isClosed]="isClosed"
-    [type]="type"
-  ></app-live-feedback>
-  <div *ngIf="!isModerator" fxLayoutAlign="center center" fxLayoutGap="20px">
-    <div
-      class="invisible-button button-container"
-      [ngClass]="{ 'visible-button': isClosed }"
-    >
-      <button
-        *ngIf="isClosed; else noSwitching"
-        id="switch-button"
-        tabindex="{{ isClosed ? '0' : '-1' }}"
-        mat-stroked-button
-        class="bottom-button"
-        (click)="changeType()"
-        aria-labelledby="change-type"
-        [appHotkey]="changeKey"
-        [appHotkeyTitle]="'creator.survey.change-type' | transloco"
-        [appHotkeyAction]="HotkeyAction.FOCUS"
-        appTrackInteraction="Survey type toggled"
-        [appTrackName]="type.toLowerCase()"
-        appDisableForm
-      >
-        {{ 'creator.survey.change-type' | transloco }}
-      </button>
-      <ng-template #noSwitching>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <app-base-card>
+    <app-live-feedback
+      [data]="data"
+      [dataChanged]="dataChanged"
+      [fixedSize]="true"
+      [isClosed]="isClosed"
+      [type]="type"
+    ></app-live-feedback>
+    @if (!isModerator) {
+      <div fxLayoutAlign="center center" fxLayoutGap="20px">
         <div
-          tabindex="-1"
-          class="visually-hidden"
-          [appHotkey]="changeKey"
-          [appHotkeyTitle]="'creator.survey.change-type' | transloco"
+          class="invisible-button button-container"
+          [ngClass]="{ 'visible-button': isClosed }"
         >
-          {{ 'creator.survey.a11y-first-stop-survey' | transloco }}
+          @if (isClosed) {
+            <button
+              id="switch-button"
+              tabindex="{{ isClosed ? '0' : '-1' }}"
+              mat-stroked-button
+              class="bottom-button"
+              (click)="changeType()"
+              aria-labelledby="change-type"
+              [appHotkey]="changeKey"
+              [appHotkeyTitle]="'creator.survey.change-type' | transloco"
+              [appHotkeyAction]="HotkeyAction.FOCUS"
+              appTrackInteraction="Survey type toggled"
+              [appTrackName]="type.toLowerCase()"
+              appDisableForm
+            >
+              {{ 'creator.survey.change-type' | transloco }}
+            </button>
+          } @else {
+            <div
+              tabindex="-1"
+              class="visually-hidden"
+              [appHotkey]="changeKey"
+              [appHotkeyTitle]="'creator.survey.change-type' | transloco"
+            >
+              {{ 'creator.survey.a11y-first-stop-survey' | transloco }}
+            </div>
+          }
         </div>
-      </ng-template>
-    </div>
-    <div
-      class="invisible-button button-container"
-      [ngClass]="{ 'visible-button': !isClosed }"
-    >
-      <app-answer-count
-        id="answer-count"
-        tabindex="{{ !isClosed ? '0' : '-1' }}"
-        [count]="answerCount"
-        [size]="'medium'"
-      ></app-answer-count>
-    </div>
-    <app-loading-button
-      id="toggle-button"
-      class="bottom-button"
-      [name]="isClosed ? 'creator.survey.start' : 'creator.survey.stop'"
-      (clicked)="toggle()"
-      [useDirectives]="true"
-      [hotkey]="toggleKey"
-      [hotkeyTitle]="
-        (isClosed ? 'creator.survey.start' : 'creator.survey.stop') | transloco
-      "
-      [hotkeyAction]="HotkeyAction.FOCUS"
-      trackInteraction="Survey toggled"
-      [trackName]="isClosed ? 'on' : 'off'"
-    >
-    </app-loading-button>
-  </div>
-</app-base-card>
+        <div
+          class="invisible-button button-container"
+          [ngClass]="{ 'visible-button': !isClosed }"
+        >
+          <app-answer-count
+            id="answer-count"
+            tabindex="{{ !isClosed ? '0' : '-1' }}"
+            [count]="answerCount"
+            [size]="'medium'"
+          ></app-answer-count>
+        </div>
+        <app-loading-button
+          id="toggle-button"
+          class="bottom-button"
+          [name]="isClosed ? 'creator.survey.start' : 'creator.survey.stop'"
+          (clicked)="toggle()"
+          [useDirectives]="true"
+          [hotkey]="toggleKey"
+          [hotkeyTitle]="
+            (isClosed ? 'creator.survey.start' : 'creator.survey.stop')
+              | transloco
+          "
+          [hotkeyAction]="HotkeyAction.FOCUS"
+          trackInteraction="Survey toggled"
+          [trackName]="isClosed ? 'on' : 'off'"
+        >
+        </app-loading-button>
+      </div>
+    }
+  </app-base-card>
+}

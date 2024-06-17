@@ -1,31 +1,32 @@
 <mat-list>
-  <mat-list-item
-    *ngFor="let item of leaderboardItems; index as i"
-    class="bottom-border"
-    [ngClass]="{
-      'primary-variant': item.userAlias.id === aliasId,
-    }"
-  >
-    <div
-      fxLayout="row"
-      fxLayoutAlign="space-between"
-      class="leaderboard-item"
+  @for (item of leaderboardItems; track item; let i = $index) {
+    <mat-list-item
+      class="bottom-border"
       [ngClass]="{
-        'bold-text': item.userAlias.id === aliasId,
+        'primary-variant': item.userAlias.id === aliasId,
       }"
     >
-      <div fxLayout="row" fxLayoutGap="1em">
-        <span>{{ i + 1 | ordinal }}</span>
-        <span>{{ item.userAlias.alias }}</span>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between"
+        class="leaderboard-item"
+        [ngClass]="{
+          'bold-text': item.userAlias.id === aliasId,
+        }"
+      >
+        <div fxLayout="row" fxLayoutGap="1em">
+          <span>{{ i + 1 | ordinal }}</span>
+          <span>{{ item.userAlias.alias }}</span>
+        </div>
+        <div fxLayout="row" fxLayoutGap="1.5em">
+          <span>{{ item.score }} {{ 'content.points' | transloco }}</span>
+        </div>
       </div>
-      <div fxLayout="row" fxLayoutGap="1.5em">
-        <span>{{ item.score }} {{ 'content.points' | transloco }}</span>
-      </div>
-    </div>
-  </mat-list-item>
+    </mat-list-item>
+  }
 </mat-list>
 <div fxLayoutAlign="center center">
-  <span class="hint" *ngIf="leaderboardItems.length === 0">{{
-    'content.no-leaderboard-entries' | transloco
-  }}</span>
+  @if (leaderboardItems.length === 0) {
+    <span class="hint">{{ 'content.no-leaderboard-entries' | transloco }}</span>
+  }
 </div>

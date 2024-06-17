@@ -1,11 +1,14 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <div fxFill>
-    <app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
-    <app-content-leaderboard
-      *ngIf="!isLoading"
-      [leaderboardItems]="leaderboardItems"
-      [aliasId]="aliasId"
-      [showDuration]="!!content.duration"
-    ></app-content-leaderboard>
+    @if (isLoading) {
+      <app-loading-indicator></app-loading-indicator>
+    }
+    @if (!isLoading) {
+      <app-content-leaderboard
+        [leaderboardItems]="leaderboardItems"
+        [aliasId]="aliasId"
+        [showDuration]="!!content.duration"
+      ></app-content-leaderboard>
+    }
   </div>
 </div>

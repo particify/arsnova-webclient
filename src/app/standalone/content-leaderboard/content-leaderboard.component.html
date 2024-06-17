@@ -1,73 +1,80 @@
-<table *ngIf="dataSource" mat-table [dataSource]="dataSource" matSort>
-  <ng-container matColumnDef="position">
-    <th style="width: 40px" mat-header-cell *matHeaderCellDef>
-      {{ 'participant.content.leaderboard-position' | transloco }}
-    </th>
-    <td
-      [ngClass]="{
-        'bold-text primary bg-dark': element.alias.id === aliasId,
-      }"
-      mat-cell
-      *matCellDef="let element"
-    >
-      {{ element.position | ordinal }}
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>
-      {{ 'participant.content.leaderboard-name' | transloco }}
-    </th>
-    <td
-      mat-cell
-      [ngClass]="{
-        'bold-text primary bg-dark': element.alias.id === aliasId,
-      }"
-      *matCellDef="let element"
-    >
-      {{ element.alias.alias }}
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="score">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      start="desc"
-      style="width: 100px"
-    >
-      {{ 'participant.content.leaderboard-points' | transloco }}
-    </th>
-    <td
-      mat-cell
-      [ngClass]="{
-        'bold-text primary bg-dark': element.alias.id === aliasId,
-      }"
-      *matCellDef="let element"
-    >
-      <span>
-        {{ element.score }}
-      </span>
-      <span class="less-visible">{{ '(+' + element.currentPoints + ')' }}</span>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="currentDuration">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 100px">
-      {{ 'participant.content.leaderboard-duration' | transloco }}
-    </th>
-    <td
-      mat-cell
-      [ngClass]="{
-        'bold-text primary bg-dark': element.alias.id === aliasId,
-      }"
-      *matCellDef="let element"
-    >
-      <span class="less-visible">{{ element.currentDuration | duration }}</span>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+@if (dataSource) {
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="position">
+      <th style="width: 40px" mat-header-cell *matHeaderCellDef>
+        {{ 'participant.content.leaderboard-position' | transloco }}
+      </th>
+      <td
+        [ngClass]="{
+          'bold-text primary bg-dark': element.alias.id === aliasId,
+        }"
+        mat-cell
+        *matCellDef="let element"
+      >
+        {{ element.position | ordinal }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ 'participant.content.leaderboard-name' | transloco }}
+      </th>
+      <td
+        mat-cell
+        [ngClass]="{
+          'bold-text primary bg-dark': element.alias.id === aliasId,
+        }"
+        *matCellDef="let element"
+      >
+        {{ element.alias.alias }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="score">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        start="desc"
+        style="width: 100px"
+      >
+        {{ 'participant.content.leaderboard-points' | transloco }}
+      </th>
+      <td
+        mat-cell
+        [ngClass]="{
+          'bold-text primary bg-dark': element.alias.id === aliasId,
+        }"
+        *matCellDef="let element"
+      >
+        <span>
+          {{ element.score }}
+        </span>
+        <span class="less-visible">{{
+          '(+' + element.currentPoints + ')'
+        }}</span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="currentDuration">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        style="width: 100px"
+      >
+        {{ 'participant.content.leaderboard-duration' | transloco }}
+      </th>
+      <td
+        mat-cell
+        [ngClass]="{
+          'bold-text primary bg-dark': element.alias.id === aliasId,
+        }"
+        *matCellDef="let element"
+      >
+        <span class="less-visible">{{
+          element.currentDuration | duration
+        }}</span>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+}

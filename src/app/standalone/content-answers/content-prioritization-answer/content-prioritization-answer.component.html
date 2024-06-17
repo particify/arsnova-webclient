@@ -1,65 +1,64 @@
 <mat-list>
   <form (input)="getAssignedPoints()">
-    <div
-      class="list-item"
-      *ngFor="let answer of answerOptions; let i = index"
-      fxLayout="row wrap"
-    >
-      <app-rendered-text
-        class="answer-text"
-        [rawText]="answer.answerOption.label"
-        [renderedText]="answer.answerOption.renderedLabel"
-      ></app-rendered-text>
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-        <button
-          type="button"
-          mat-icon-button
-          tabindex="-1"
-          (click)="assignPoints(i, -1)"
-          [disabled]="answer.points <= 0 || isDisabled"
-          [matTooltip]="'answer.remove-points' | transloco"
-        >
-          <mat-icon>remove</mat-icon>
-        </button>
-        <mat-form-field
-          appearance="outline"
-          class="no-field-hint number-input-small"
-        >
-          <input
-            [disabled]="isDisabled"
-            matInput
-            type="number"
-            min="0"
-            max="100"
-            [name]="'answer-' + i"
-            [value]="answer.points"
-            [(ngModel)]="answer.points"
-          />
-        </mat-form-field>
-        <button
-          type="button"
-          mat-icon-button
-          tabindex="-1"
-          (click)="assignPoints(i, 1)"
-          [disabled]="pointsLeft < STEP_SIZE || isDisabled"
-          [matTooltip]="'answer.add-points' | transloco"
-        >
-          <mat-icon>add</mat-icon>
-        </button>
+    @for (answer of answerOptions; track answer; let i = $index) {
+      <div class="list-item" fxLayout="row wrap">
+        <app-rendered-text
+          class="answer-text"
+          [rawText]="answer.answerOption.label"
+          [renderedText]="answer.answerOption.renderedLabel"
+        ></app-rendered-text>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+          <button
+            type="button"
+            mat-icon-button
+            tabindex="-1"
+            (click)="assignPoints(i, -1)"
+            [disabled]="answer.points <= 0 || isDisabled"
+            [matTooltip]="'answer.remove-points' | transloco"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <mat-form-field
+            appearance="outline"
+            class="no-field-hint number-input-small"
+          >
+            <input
+              [disabled]="isDisabled"
+              matInput
+              type="number"
+              min="0"
+              max="100"
+              [name]="'answer-' + i"
+              [value]="answer.points"
+              [(ngModel)]="answer.points"
+            />
+          </mat-form-field>
+          <button
+            type="button"
+            mat-icon-button
+            tabindex="-1"
+            (click)="assignPoints(i, 1)"
+            [disabled]="pointsLeft < STEP_SIZE || isDisabled"
+            [matTooltip]="'answer.add-points' | transloco"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
       </div>
-    </div>
+    }
   </form>
 </mat-list>
-<div
-  *ngIf="!isDisabled"
-  tabindex="0"
-  fxLayoutAlign="center"
-  style="margin-bottom: 16px"
->
-  <p *ngIf="pointsLeft >= 0">
-    <b>{{ pointsLeft }}</b> {{ 'answer.points-left' | transloco }}
-  </p>
-  <p *ngIf="pointsLeft < 0">
-    <b>{{ -1 * pointsLeft }}</b> {{ 'answer.points-too-much' | transloco }}
-  </p>
-</div>
+@if (!isDisabled) {
+  <div tabindex="0" fxLayoutAlign="center" style="margin-bottom: 16px">
+    @if (pointsLeft >= 0) {
+      <p>
+        <b>{{ pointsLeft }}</b> {{ 'answer.points-left' | transloco }}
+      </p>
+    }
+    @if (pointsLeft < 0) {
+      <p>
+        <b>{{ -1 * pointsLeft }}</b> {{ 'answer.points-too-much' | transloco }}
+      </p>
+    }
+  </div>
+}

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -14,7 +13,6 @@ import { take } from 'rxjs';
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
     TranslocoModule,
     ClipboardModule,
     MatTooltipModule,

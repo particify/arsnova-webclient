@@ -1,5 +1,159 @@
 <mat-toolbar class="mat-elevation-z2" fxLayoutAlign="center">
-  <ng-template #focusModeHeader>
+  @if (!room?.focusModeEnabled || !hasRole(UserRole.PARTICIPANT)) {
+    <mat-toolbar-row>
+      @if (router.url !== '/') {
+        <button
+          id="back-button"
+          mat-icon-button
+          aria-labelledby="back-label"
+          (click)="goBack()"
+          appHotkey="0"
+          matTooltip="{{ 'header.back' | transloco }}"
+        >
+          <mat-icon class="header-icons">arrow_back</mat-icon>
+        </button>
+      }
+      @if (router.url === '/') {
+        <lib-extension-point
+          extensionId="branding-logo"
+          [extensionData]="{ headerPlacement: true }"
+        ></lib-extension-point>
+      }
+      <span class="fill-remaining-space"></span>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        @if (!!role && !hasRole(UserRole.PARTICIPANT)) {
+          <div>
+            <div
+              fxLayout="row"
+              fxLayoutGap="10px"
+              class="desktop-action-container"
+            >
+              <button
+                mat-button
+                color="{{ isPreview ? 'primary' : '' }}"
+                (click)="switchRole()"
+                aria-labelledby="switch-role"
+              >
+                <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
+                {{
+                  (isPreview ? 'header.editing-view' : 'header.preview')
+                    | transloco
+                }}
+              </button>
+              @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
+                <button
+                  [disabled]="isPreview"
+                  mat-button
+                  (click)="goToSettings()"
+                >
+                  <mat-icon>settings</mat-icon>
+                  {{ 'header.room-settings' | transloco }}
+                </button>
+              }
+              @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
+                <button
+                  [disabled]="isPreview"
+                  mat-raised-button
+                  color="primary"
+                  [matMenuTriggerFor]="
+                    openPresentationDirectly ? hideMenu : presentationMenu
+                  "
+                  (click)="presentCurrentView()"
+                >
+                  <mat-icon>present_to_all</mat-icon>
+                  {{ 'header.present' | transloco }}
+                </button>
+              }
+              <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
+            </div>
+            <div class="mobile-action-container">
+              @if (!isPreview) {
+                <button mat-icon-button [matMenuTriggerFor]="roomMenu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              }
+              @if (isPreview) {
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="switchRole()"
+                  aria-labelledby="switch-role"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+            </div>
+            <mat-menu #roomMenu="matMenu">
+              <button
+                mat-menu-item
+                tabindex="0"
+                (click)="switchRole()"
+                aria-labelledby="switch-role"
+              >
+                <mat-icon>preview</mat-icon>
+                {{ 'header.preview' | transloco }}
+              </button>
+              @if (hasRole(UserRole.OWNER)) {
+                <button mat-menu-item tabindex="0" (click)="goToSettings()">
+                  <mat-icon>settings</mat-icon>
+                  <span>{{ 'header.room-settings' | transloco }}</span>
+                </button>
+              }
+            </mat-menu>
+          </div>
+        }
+        <mat-menu #presentationMenu="matMenu">
+          <button mat-menu-item tabindex="0" (click)="presentCurrentView(true)">
+            <mat-icon class="menu-icon">personal_video</mat-icon>
+            <span>{{ 'header.presentation-mode' | transloco }}</span>
+          </button>
+          <lib-extension-point
+            extensionId="present-in-new-tab"
+            (extensionEvent)="checkIfOpenPresentationDirectly($event)"
+          ></lib-extension-point>
+        </mat-menu>
+        <div fxLayoutGap="16px" fxLayoutAlign="center center">
+          @if (announcementState) {
+            <button
+              mat-icon-button
+              (click)="showNews()"
+              class="icon-badge"
+              [matTooltip]="
+                (announcementState.new > 0
+                  ? 'announcement.new-announcements'
+                  : 'announcement.announcements'
+                ) | transloco
+              "
+              matBadge="{{ announcementState.new }}"
+              matBadgeColor="accent"
+              [matBadgeHidden]="announcementState.new === 0"
+              appHotkey="a"
+            >
+              <mat-icon> notifications </mat-icon>
+            </button>
+          }
+          <button
+            mat-icon-button
+            class="user-button primary-variant"
+            aria-labelledby="room-label"
+            id="menu-button"
+            appHotkey="9"
+            [appHotkeyTitle]="'header.menu' | transloco"
+            [ngClass]="{ guest: isGuest() }"
+            fxLayoutAlign="center center"
+            (click)="toggleDrawer()"
+          >
+            @if (isGuest()) {
+              <mat-icon>person_outline</mat-icon>
+            }
+            @if (!isGuest()) {
+              <span>{{ userCharacter }}</span>
+            }
+          </button>
+        </div>
+      </div>
+    </mat-toolbar-row>
+  } @else {
     <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
       <span class="focus-mode-hint">{{
         'focus-mode.presenter-controls-app' | transloco
@@ -12,154 +166,7 @@
         <mat-icon color="warn">exit_to_app</mat-icon>
       </button>
     </mat-toolbar-row>
-  </ng-template>
-  <mat-toolbar-row
-    *ngIf="
-      !room?.focusModeEnabled || !hasRole(UserRole.PARTICIPANT);
-      else focusModeHeader
-    "
-  >
-    <button
-      id="back-button"
-      mat-icon-button
-      aria-labelledby="back-label"
-      *ngIf="router.url !== '/'"
-      (click)="goBack()"
-      appHotkey="0"
-      matTooltip="{{ 'header.back' | transloco }}"
-    >
-      <mat-icon class="header-icons">arrow_back</mat-icon>
-    </button>
-    <lib-extension-point
-      extensionId="branding-logo"
-      [extensionData]="{ headerPlacement: true }"
-      *ngIf="router.url === '/'"
-    ></lib-extension-point>
-    <span class="fill-remaining-space"></span>
-
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <div *ngIf="!!role && !hasRole(UserRole.PARTICIPANT)">
-        <div fxLayout="row" fxLayoutGap="10px" class="desktop-action-container">
-          <button
-            mat-button
-            color="{{ isPreview ? 'primary' : '' }}"
-            (click)="switchRole()"
-            aria-labelledby="switch-role"
-          >
-            <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
-            {{
-              (isPreview ? 'header.editing-view' : 'header.preview') | transloco
-            }}
-          </button>
-          <button
-            *ngIf="hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)"
-            [disabled]="isPreview"
-            mat-button
-            (click)="goToSettings()"
-          >
-            <mat-icon>settings</mat-icon>
-            {{ 'header.room-settings' | transloco }}
-          </button>
-          <button
-            *ngIf="hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)"
-            [disabled]="isPreview"
-            mat-raised-button
-            color="primary"
-            [matMenuTriggerFor]="
-              openPresentationDirectly ? hideMenu : presentationMenu
-            "
-            (click)="presentCurrentView()"
-          >
-            <mat-icon>present_to_all</mat-icon>
-            {{ 'header.present' | transloco }}
-          </button>
-          <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
-        </div>
-        <div class="mobile-action-container">
-          <button
-            *ngIf="!isPreview"
-            mat-icon-button
-            [matMenuTriggerFor]="roomMenu"
-          >
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <button
-            *ngIf="isPreview"
-            mat-icon-button
-            color="primary"
-            (click)="switchRole()"
-            aria-labelledby="switch-role"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-        </div>
-        <mat-menu #roomMenu="matMenu">
-          <button
-            mat-menu-item
-            tabindex="0"
-            (click)="switchRole()"
-            aria-labelledby="switch-role"
-          >
-            <mat-icon>preview</mat-icon>
-            {{ 'header.preview' | transloco }}
-          </button>
-          <button
-            *ngIf="hasRole(UserRole.OWNER)"
-            mat-menu-item
-            tabindex="0"
-            (click)="goToSettings()"
-          >
-            <mat-icon>settings</mat-icon>
-            <span>{{ 'header.room-settings' | transloco }}</span>
-          </button>
-        </mat-menu>
-      </div>
-      <mat-menu #presentationMenu="matMenu">
-        <button mat-menu-item tabindex="0" (click)="presentCurrentView(true)">
-          <mat-icon class="menu-icon">personal_video</mat-icon>
-          <span>{{ 'header.presentation-mode' | transloco }}</span>
-        </button>
-        <lib-extension-point
-          extensionId="present-in-new-tab"
-          (extensionEvent)="checkIfOpenPresentationDirectly($event)"
-        ></lib-extension-point>
-      </mat-menu>
-      <div fxLayoutGap="16px" fxLayoutAlign="center center">
-        <button
-          *ngIf="announcementState"
-          mat-icon-button
-          (click)="showNews()"
-          class="icon-badge"
-          [matTooltip]="
-            (announcementState.new > 0
-              ? 'announcement.new-announcements'
-              : 'announcement.announcements'
-            ) | transloco
-          "
-          matBadge="{{ announcementState.new }}"
-          matBadgeColor="accent"
-          [matBadgeHidden]="announcementState.new === 0"
-          appHotkey="a"
-        >
-          <mat-icon> notifications </mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          class="user-button primary-variant"
-          aria-labelledby="room-label"
-          id="menu-button"
-          appHotkey="9"
-          [appHotkeyTitle]="'header.menu' | transloco"
-          [ngClass]="{ guest: isGuest() }"
-          fxLayoutAlign="center center"
-          (click)="toggleDrawer()"
-        >
-          <mat-icon *ngIf="isGuest()">person_outline</mat-icon>
-          <span *ngIf="!isGuest()">{{ userCharacter }}</span>
-        </button>
-      </div>
-    </div>
-  </mat-toolbar-row>
+  }
 </mat-toolbar>
 
 <div class="visually-hidden">

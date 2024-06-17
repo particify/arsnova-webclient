@@ -3,25 +3,27 @@
   <lib-extension-point extensionId="tenant-selection"></lib-extension-point>
 </div>
 
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
 
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="16px">
-  <mat-tab-group
-    (selectedTabChange)="selectedTab = $event.index"
-    [selectedIndex]="selectedTab"
-    [dynamicHeight]="true"
-  >
-    <mat-tab
-      *ngFor="let tab of tabs"
-      [label]="'admin.admin-area.' + tab | transloco"
-    ></mat-tab>
-  </mat-tab-group>
-
-  <mat-card appearance="outlined">
-    <app-entity-properties
-      [entity]="getStats(tabs[selectedTab])"
-      [translateKeys]="true"
-      [expandOnInit]="tabs[selectedTab] !== 'summary'"
-    ></app-entity-properties>
-  </mat-card>
-</div>
+@if (!isLoading) {
+  <div fxLayout="column" fxLayoutGap="16px">
+    <mat-tab-group
+      (selectedTabChange)="selectedTab = $event.index"
+      [selectedIndex]="selectedTab"
+      [dynamicHeight]="true"
+    >
+      @for (tab of tabs; track tab) {
+        <mat-tab [label]="'admin.admin-area.' + tab | transloco"></mat-tab>
+      }
+    </mat-tab-group>
+    <mat-card appearance="outlined">
+      <app-entity-properties
+        [entity]="getStats(tabs[selectedTab])"
+        [translateKeys]="true"
+        [expandOnInit]="tabs[selectedTab] !== 'summary'"
+      ></app-entity-properties>
+    </mat-card>
+  </div>
+}

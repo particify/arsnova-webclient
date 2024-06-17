@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +18,6 @@ const REFRESH_LIMIT = 100;
   selector: 'app-leaderboard-page',
   standalone: true,
   imports: [
-    NgIf,
     FlexModule,
     MatIconModule,
     TranslocoPipe,
