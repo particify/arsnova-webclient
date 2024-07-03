@@ -3,210 +3,33 @@
 }
 @if (!isLoading) {
   <app-base-card>
-    <div class="visually-hidden">
-      <div [appAutofocus] tabIndex="-1">
-        {{
-          'creator.content.a11y-content-list-message'
-            | a11yIntro: { name: contentGroup.name }
-            | async
-        }}
-      </div>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="0.5em">
-      <app-content-group-title
-        fxFlex="90"
-        [disabled]="isModerator"
-        [seriesName]="groupName"
-        [contentGroupStats]="contentGroupStats"
-        (seriesNameChanged)="updateName($event)"
-      ></app-content-group-title>
-      @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
-        <div fxLayoutAlign="center center" fxLayoutGap="8px" class="status-bar">
-          <mat-icon
-            class="status-icon"
-            [ngClass]="{
-              active: statisticsPublished,
-              inactive: !statisticsPublished,
-            }"
-            [matTooltip]="
-              'creator.content.statistics-are' +
-                (statisticsPublished ? '' : '-not') +
-                '-published' | transloco
-            "
-            [attr.aria-labelledby]="
-              ('creator.content.a11y-statistics-are' + statisticsPublished
-                ? ''
-                : '-not' + '-published'
-              ) | transloco
-            "
-          >
-            bar_chart
-          </mat-icon>
-          @if (contentGroup.groupType !== GroupType.SURVEY) {
-            <mat-icon
-              class="status-icon"
-              [ngClass]="{
-                active: correctOptionsPublished,
-                inactive: !correctOptionsPublished,
-              }"
-              [matTooltip]="
-                'creator.content.correct-options-are' +
-                  (correctOptionsPublished ? '' : '-not') +
-                  '-published' | transloco
-              "
-              [attr.aria-labelledby]="
-                ('creator.content.a11y-correct-options-are' +
-                correctOptionsPublished
-                  ? ''
-                  : '-not' + '-published'
-                ) | transloco
-              "
-            >
-              done_all
-            </mat-icon>
-          }
-        </div>
-      }
-    </div>
-    @if (!isLoading && !isModerator) {
-      <div
-        fxLayout="row wrap"
-        fxLayoutAlign="space-between center"
-        class="action-container"
-      >
-        @if (!isInSortingMode) {
-          <div
-            fxLayout="row wrap"
-            fxLayoutAlign="space-between center"
-            fxLayoutGap="10px"
-          >
-            <button
-              mat-raised-button
-              id="content-create-button"
-              color="primary"
-              class="add-desktop"
-              [routerLink]="'create'"
-              appHotkey="1"
-              [appHotkeyTitle]="'creator.room-page.create-content' | transloco"
-            >
-              <mat-icon>add</mat-icon>
-              {{ 'creator.room-page.create-content' | transloco }}
-            </button>
-            <button
-              mat-fab
-              color="primary"
-              id="content-create-button-mobile"
-              class="mobile-add"
-              [ngClass]="{
-                'mobile-add-above-nav': true,
-                'mobile-add-hide': !onInit,
-              }"
-              [routerLink]="'create'"
-              [matTooltip]="'creator.room-page.create-content' | transloco"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
-            <div fxLayout="row" fxLayoutGap="10px" class="settings-buttons">
-              @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
-                <button
-                  mat-button
-                  id="statistic-button"
-                  [routerLink]="'statistics'"
-                  [disabled]="contents.length === 0"
-                  appHotkey="2"
-                  [appHotkeyTitle]="'room-page.answer-statistics' | transloco"
-                >
-                  <mat-icon>insert_chart</mat-icon>
-                  {{ 'room-page.answer-statistics' | transloco }}
-                </button>
+    <div fxLayout="column" fxLayoutGap="12px" fxFill>
+      <div fxLayout="column" fxLayoutGap="16px">
+        <div
+          fxLayout="row wrap"
+          fxLayoutAlign="space-between"
+          fxLayoutGap="16px"
+        >
+          <div fxLayout="column" fxLayoutGap="8px">
+            <span>{{ contentGroup.name }}</span>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+              <div class="primary primary-border group-type">
+                {{
+                  'creator.content.group-type-' +
+                    contentGroup.groupType.toLowerCase() | transloco
+                }}
+              </div>
+              @if (contentGroup.contentIds) {
+                <span class="content-count">{{
+                  'creator.content.content-count'
+                    | transloco: { count: contentGroup.contentIds.length }
+                }}</span>
               }
-              @if (contentGroup.groupType === GroupType.QUIZ) {
-                <button
-                  mat-button
-                  id="leaderboard-button"
-                  [routerLink]="'leaderboard'"
-                  [disabled]="!leaderboardEnabled"
-                  appHotkey="7"
-                  [appHotkeyTitle]="'content.leaderboard' | transloco"
-                >
-                  <mat-icon>emoji_events</mat-icon>
-                  {{ 'content.leaderboard' | transloco }}
-                </button>
-              }
-              <button
-                mat-button
-                id="settings-button"
-                [matMenuTriggerFor]="groupSettings"
-                appHotkey="3"
-                [appHotkeyTitle]="'creator.content.group-settings' | transloco"
-              >
-                <mat-icon>settings</mat-icon>
-                {{ 'creator.content.group-settings' | transloco }}
-              </button>
             </div>
             <mat-menu #groupSettings="matMenu">
-              @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
-                <button
-                  mat-menu-item
-                  (click)="toggleStatisticsPublished()"
-                  appTrackInteraction="Content group publish stats toggled"
-                  [appTrackName]="statisticsPublished ? 'off' : 'on'"
-                >
-                  <mat-icon>bar_chart</mat-icon>
-                  {{
-                    (statisticsPublished
-                      ? 'creator.content.dont-publish-statistics'
-                      : 'creator.content.publish-statistics'
-                    ) | transloco
-                  }}
-                </button>
-                @if (contentGroup.groupType !== GroupType.SURVEY) {
-                  <button
-                    mat-menu-item
-                    (click)="toggleCorrectOptionsPublished()"
-                    appTrackInteraction="Content group publish correct options toggled"
-                    [appTrackName]="correctOptionsPublished ? 'off' : 'on'"
-                  >
-                    <mat-icon>done_all</mat-icon>
-                    {{
-                      (correctOptionsPublished
-                        ? 'creator.content.dont-publish-correct-options'
-                        : 'creator.content.publish-correct-options'
-                      ) | transloco
-                    }}
-                  </button>
-                }
-                @if (contentGroup.groupType === GroupType.QUIZ) {
-                  <button
-                    mat-menu-item
-                    (click)="toggleLeaderboardEnabled()"
-                    appTrackInteraction="Content group leaderboard enabled toggled"
-                    [appTrackName]="leaderboardEnabled ? 'off' : 'on'"
-                  >
-                    <mat-icon>emoji_events</mat-icon>
-                    {{
-                      (leaderboardEnabled
-                        ? 'creator.content.disable-leaderboard'
-                        : 'creator.content.enable-leaderboard'
-                      ) | transloco
-                    }}
-                  </button>
-                }
-                <mat-divider></mat-divider>
-              }
-              <button
-                mat-menu-item
-                id="edit-group-sort"
-                (click)="goInSortingMode()"
-                [disabled]="contents.length < 2"
-                appTrackInteraction="Content group sorting started"
-              >
-                <mat-icon>sort</mat-icon>
-                {{ 'creator.content.sort-content-group' | transloco }}
-              </button>
               <button mat-menu-item [matMenuTriggerFor]="importExportMenu">
-                <mat-icon>swap_vert</mat-icon>
-                {{ 'creator.content.import-export-content-group' | transloco }}
+                <mat-icon>download</mat-icon>
+                {{ 'creator.content.export-content-group' | transloco }}
               </button>
               <mat-menu #importExportMenu="matMenu">
                 <button
@@ -216,16 +39,6 @@
                 >
                   {{ 'creator.export.export-series' | transloco }}
                 </button>
-                <button
-                  mat-menu-item
-                  (click)="importFromCsv()"
-                  appTrackInteraction="File dialog for CSV import opened"
-                >
-                  {{ 'creator.import.import-series' | transloco }}
-                </button>
-                @if (hasSeriesExportExtension) {
-                  <mat-divider></mat-divider>
-                }
                 <lib-extension-point
                   extensionId="series-results-export"
                   [extensionData]="{
@@ -272,108 +85,247 @@
               </button>
             </mat-menu>
           </div>
-        }
-        <div fxLayoutGap="10px">
-          @if (isInSortingMode) {
-            <button
-              mat-button
-              class="abort"
-              (click)="leaveSortingMode()"
-              appTrackInteraction="Content group sorting finished"
-              appTrackName="reset"
-            >
-              {{ 'creator.content.abort' | transloco }}
-            </button>
-          }
-          @if (isInSortingMode) {
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="saveSorting()"
-              appTrackInteraction="Content group sorting finished"
-              appTrackName="save"
-            >
-              {{ 'creator.content.save' | transloco }}
-            </button>
-          }
-        </div>
-        @if (!isInSortingMode) {
-          <mat-form-field
-            appearance="outline"
-            class="no-field-hint smaller-select-input"
+          <div
+            fxLayout="row wrap"
+            fxLayoutAlign="start center"
+            fxLayoutAlign.xs="center"
+            fxLayoutGap="8px"
           >
-            <mat-label>{{
-              'creator.content.publishing-mode' | transloco
-            }}</mat-label>
-            <mat-select
-              panelClass="mid-size-panel"
-              (selectionChange)="publishContents()"
-              [(value)]="selectedPublishingMode"
-              [hideSingleSelectionIndicator]="true"
-              appHotkey="4"
-              [appHotkeyTitle]="'creator.content.edit-publishing' | transloco"
-              appTrackInteraction="Content group publishing mode changed"
-              [appTrackName]="contentGroup.publishingMode"
-            >
-              <mat-select-trigger
-                style="margin-top: 2px"
-                fxLayout="row"
-                fxLayoutAlign="start center"
-                fxLayoutGap="10px"
-                class="primary"
-              >
-                <mat-icon>{{ selectedPublishingMode.icon }}</mat-icon>
-                <span class="trigger-text">{{
-                  'creator.content.publishing-mode-' +
-                    selectedPublishingMode.name | transloco
-                }}</span>
-              </mat-select-trigger>
-              @for (state of publishingModeItems; track state) {
-                <mat-option [value]="state" class="state-option">
-                  <div fxLayout="row" fxLayoutAlign="start center">
-                    <mat-icon>{{ state.icon }}</mat-icon>
-                    <div fxLayout="column" fxLayoutAlign="center">
-                      <span
-                        [attr.aria-label]="
-                          'creator.content.a11y-publishing-mode-' + state.name
-                            | transloco
-                        "
-                        class="state-name"
-                      >
-                        {{
-                          'creator.content.publishing-mode-' + state.name
-                            | transloco
-                        }}</span
-                      >
-                      <span class="state-description">{{
-                        'creator.content.publishing-mode-description-' +
-                          state.name | transloco
-                      }}</span>
-                    </div>
-                  </div>
-                </mat-option>
+            <div fxLayout="row" fxLayoutGap="8px">
+              @if (contentGroup.groupType === GroupType.QUIZ) {
+                <button
+                  mat-icon-button
+                  [disabled]="!contentGroup.leaderboardEnabled"
+                  [matTooltip]="'content.leaderboard' | transloco"
+                  [routerLink]="'leaderboard'"
+                >
+                  <mat-icon class="action-icon">emoji_events</mat-icon>
+                </button>
               }
-            </mat-select>
-          </mat-form-field>
+              <button
+                mat-icon-button
+                (click)="openSettings()"
+                [matTooltip]="'creator.content.group-settings' | transloco"
+              >
+                <mat-icon class="action-icon">settings</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="groupSettings"
+                [matTooltip]="'creator.content.more-options' | transloco"
+              >
+                <mat-icon class="action-icon">more_vert</mat-icon>
+              </button>
+              <mat-menu #groupSettings="matMenu">
+                <button mat-menu-item [matMenuTriggerFor]="exportMenu">
+                  <mat-icon>download</mat-icon>
+                  {{ 'creator.content.export-content-group' | transloco }}
+                </button>
+                <mat-menu #exportMenu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="exportToCsv()"
+                    [disabled]="contents.length === 0"
+                  >
+                    {{ 'creator.export.export-series' | transloco }}
+                  </button>
+                  <lib-extension-point
+                    extensionId="series-results-export"
+                    [extensionData]="{
+                      series: contentGroup,
+                      shortId: room.shortId,
+                    }"
+                  ></lib-extension-point>
+                </mat-menu>
+                <div
+                  [matTooltip]="
+                    'creator.content.publishing-template-not-possible'
+                      | transloco
+                  "
+                  [matTooltipDisabled]="!isGuest"
+                  matTooltipPosition="before"
+                >
+                  <button
+                    *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
+                    mat-menu-item
+                    id="publish-as-template"
+                    (click)="publishAsTemplate()"
+                    [disabled]="contents.length < 1 || isGuest"
+                    appTrackInteraction="Publish as template dialog opened"
+                  >
+                    <mat-icon>public</mat-icon>
+                    {{ 'creator.content.publish-as-template' | transloco }}
+                  </button>
+                </div>
+                <mat-divider></mat-divider>
+                @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
+                  <button
+                    mat-menu-item
+                    (click)="deleteAllAnswers()"
+                    [disabled]="contents.length === 0"
+                  >
+                    <mat-icon>clear_all</mat-icon>
+                    <span>{{
+                      'creator.content.delete-answers' | transloco
+                    }}</span>
+                  </button>
+                }
+                <button mat-menu-item (click)="deleteGroup()">
+                  <mat-icon color="warn">delete_forever</mat-icon>
+                  {{ 'creator.content.delete-content-group' | transloco }}
+                </button>
+              </mat-menu>
+            </div>
+            <mat-form-field
+              appearance="outline"
+              class="no-field-hint smaller-select-input"
+            >
+              <mat-label>{{
+                'creator.content.publishing-mode' | transloco
+              }}</mat-label>
+              <mat-select
+                panelClass="mid-size-panel"
+                (selectionChange)="publishContents()"
+                [(value)]="selectedPublishingMode"
+                [hideSingleSelectionIndicator]="true"
+                appHotkey="4"
+                [appHotkeyTitle]="'creator.content.edit-publishing' | transloco"
+                appTrackInteraction="Content group publishing mode changed"
+                [appTrackName]="contentGroup.publishingMode"
+              >
+                <mat-select-trigger
+                  style="margin-top: 2px"
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  fxLayoutGap="10px"
+                >
+                  <mat-icon
+                    style="font-size: 16px; width: 16px; height: 16px"
+                    >{{ selectedPublishingMode.icon }}</mat-icon
+                  >
+                  <span class="trigger-text">{{
+                    'creator.content.publishing-mode-' +
+                      selectedPublishingMode.name | transloco
+                  }}</span>
+                </mat-select-trigger>
+                @for (state of publishingModeItems; track state) {
+                  <mat-option [value]="state" class="state-option">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                      <mat-icon>{{ state.icon }}</mat-icon>
+                      <div fxLayout="column" fxLayoutAlign="center">
+                        <span
+                          [attr.aria-label]="
+                            'creator.content.a11y-publishing-mode-' + state.name
+                              | transloco
+                          "
+                          class="state-name"
+                        >
+                          {{
+                            'creator.content.publishing-mode-' + state.name
+                              | transloco
+                          }}</span
+                        >
+                        <span class="state-description">{{
+                          'creator.content.publishing-mode-description-' +
+                            state.name | transloco
+                        }}</span>
+                      </div>
+                    </div>
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        @if (!isLoading && totalCorrect) {
+          <div
+            fxLayout="row"
+            fxLayoutGap="16px"
+            fxLayoutAlign="center center"
+            class="progress-container"
+            [matTooltip]="
+              'creator.content.group-progress-info'
+                | transloco
+                  : {
+                      percent: totalCorrect.toFixed(),
+                    }
+            "
+          >
+            <mat-progress-bar
+              mode="determinate"
+              value="{{ totalCorrect }}"
+              class="custom-height statistic-progress"
+              [ngClass]="{
+                'statistic-status-good': totalCorrect >= status.good,
+                'statistic-status-okay':
+                  totalCorrect < status.good && totalCorrect >= status.okay,
+                'statistic-status-bad':
+                  totalCorrect < status.okay && totalCorrect !== status.empty,
+              }"
+            ></mat-progress-bar>
+            <span class="percent">{{ totalCorrect.toFixed() + ' %' }}</span>
+          </div>
         }
+        <div fxLayout="column" fxLayoutGap="12px">
+          <div fxLayout="row" fxLayoutGap="10px">
+            <button
+              fxHide.xs
+              mat-raised-button
+              id="content-create-button"
+              color="primary"
+              [routerLink]="'create'"
+              appHotkey="1"
+              [appHotkeyTitle]="'creator.room-page.create-content' | transloco"
+            >
+              <mat-icon>add</mat-icon>
+              {{ 'creator.room-page.create-content' | transloco }}
+            </button>
+            <button
+              fxHide.gt-xs
+              mat-fab
+              color="primary"
+              id="content-create-button-mobile"
+              class="mobile-add"
+              [ngClass]="{
+                'mobile-add-above-nav': true,
+                'mobile-add-hide': !onInit,
+              }"
+              [routerLink]="'create'"
+              [matTooltip]="'creator.room-page.create-content' | transloco"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+            <button
+              fxHide.xs
+              mat-button
+              (click)="importFromCsv()"
+              appTrackInteraction="File dialog for CSV import opened"
+            >
+              <mat-icon>file_upload</mat-icon>
+              <span>{{ 'creator.import.import-contents' | transloco }}</span>
+            </button>
+            <button
+              fxHide.gt-xs
+              mat-fab
+              id="import-contents-button-mobile"
+              class="import-btn-mobile"
+              (click)="importFromCsv()"
+              [matTooltip]="'creator.import.import-contents' | transloco"
+            >
+              <mat-icon>file_upload</mat-icon>
+            </button>
+          </div>
+          <app-content-list
+            [room]="room"
+            [contentGroup]="contentGroup"
+            [contents]="contents"
+            [contentGroupStats]="contentGroupStats"
+            [isModerator]="isModerator"
+            [attributionsExist]="attributionsExist"
+            [contentStats]="contentStats"
+          ></app-content-list>
+        </div>
       </div>
-    }
-    @if (!isInSortingMode) {
-      <app-content-list
-        [room]="room"
-        [contentGroup]="contentGroup"
-        [contents]="contents"
-        [contentGroupStats]="contentGroupStats"
-        [isModerator]="isModerator"
-        [attributionsExist]="attributionsExist"
-        (contentGroupUpdated)="setContentGroupChanges($event)"
-      ></app-content-list>
-    }
-    @if (isInSortingMode) {
-      <app-content-list-sort
-        [contents]="copiedContents"
-        [contentGroup]="contentGroup"
-      ></app-content-list-sort>
-    }
+    </div>
   </app-base-card>
 }

@@ -479,38 +479,6 @@ div {
   max-height: 36px;
 }
 
-.active-input .mdc-text-field--outlined {
-  margin: 4px 0 6px;
-  transition: padding-left 0.5s;
-}
-
-.active-input .mat-mdc-form-field-infix {
-  min-height: unset;
-}
-
-.active-input
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
-  .mat-mdc-form-field-infix {
-  padding: 10px 0;
-  border: none;
-}
-
-.active-input
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
-  .mat-mdc-form-field-infix
-  input {
-  padding-top: 0;
-}
-
-.hide-editing .mdc-text-field--outlined {
-  padding-left: 0;
-}
-
-.hide-editing .mdc-notched-outline__leading,
-.hide-editing .mdc-notched-outline__trailing {
-  border: none !important;
-}
-
 .form-spacer {
   margin-bottom: 16px;
   margin-right: 16px;
@@ -965,6 +933,8 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
 }
 
 .rendered-list-preview {
+  height: 28px;
+
   h1,
   h2,
   h3,
@@ -1001,16 +971,10 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
   height: 16px;
 }
 
-.rendered-list-preview-container:not(.bg-unlocked)::after {
+.rendered-list-preview-container::after {
   @include bottom-fade-out;
 
   background-image: linear-gradient(to bottom, transparent, var(--surface));
-}
-
-.rendered-list-preview-container.bg-unlocked::after {
-  @include bottom-fade-out;
-
-  background-image: linear-gradient(to bottom, transparent, var(--unlocked));
 }
 
 @keyframes border-lightning {

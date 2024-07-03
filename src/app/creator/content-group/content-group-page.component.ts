@@ -27,9 +27,14 @@ import {
 } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
+import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
 import { TranslocoService } from '@ngneat/transloco';
-import { ExtensionFactory } from '@projects/extension-point/src/public-api';
 import { Observable, Subject, mergeMap, of, takeUntil } from 'rxjs';
+
+export interface ContentStats {
+  count: number;
+  correct?: number;
+}
 
 @Component({
   selector: 'app-content-group-page',
@@ -46,14 +51,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   contentGroup!: ContentGroup;
   contents: Content[] = [];
   contentGroupStats: ContentGroupStatistics[] = [];
-  groupName = '';
-  statisticsPublished = true;
-  correctOptionsPublished = true;
-  leaderboardEnabled = true;
   isModerator = false;
-  isInSortingMode = false;
-  copiedContents: Content[] = [];
-  hasSeriesExportExtension = false;
   isGuest = true;
 
   onInit = false;
@@ -63,6 +61,15 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   publishingModeItems = PUBLISHING_MODE_ITEMS;
   selectedPublishingMode = this.publishingModeItems[0];
   GroupType = GroupType;
+
+  contentStats = new Map<string, ContentStats>();
+  totalCorrect?: number;
+  status = {
+    good: 85,
+    okay: 50,
+    zero: 0,
+    empty: -1,
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -75,22 +82,20 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     private roomStatsService: RoomStatsService,
     private localFileService: LocalFileService,
     private dialogService: DialogService,
-    private extensionFactory: ExtensionFactory,
     private routingService: RoutingService,
     private authService: AuthenticationService
   ) {
     this.isModerator = route.snapshot.data.userRole === UserRole.MODERATOR;
     this.room = route.snapshot.data.room;
     route.params.subscribe((params) => {
-      this.setContentGroup(params['seriesName']);
+      const groupName = params['seriesName'];
+      if (this.contentGroup?.name !== groupName)
+        this.setContentGroup(groupName);
     });
   }
 
   ngOnInit(): void {
     this.onInit = true;
-    this.hasSeriesExportExtension = !!this.extensionFactory.getExtension(
-      'series-results-export'
-    );
     this.authService
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
@@ -105,24 +110,20 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   }
 
   setContentGroup(groupName: string) {
-    if (groupName !== this.groupName) {
-      this.groupName = groupName;
-      this.globalStorageService.setItem(
-        STORAGE_KEYS.LAST_GROUP,
-        this.groupName
-      );
-      this.reloadContentGroup();
+    if (!this.contentGroup || groupName !== this.contentGroup.name) {
+      this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, groupName);
+      this.reloadContentGroup(groupName);
     }
   }
 
-  reloadContentGroup(imported = false) {
+  reloadContentGroup(groupName: string, imported = false) {
     this.isLoading = true;
+    this.totalCorrect = undefined;
     this.contentGroupService
-      .getByRoomIdAndName(this.room.id, this.groupName, true)
+      .getByRoomIdAndName(this.room.id, groupName, true)
       .subscribe((group) => {
-        this.contentGroup = group;
+        this.contentGroup = { ...group };
         this.setSelectedPublishingMode();
-        this.setSettings();
         this.getGroups();
         if (this.contentGroup.contentIds) {
           this.contentService
@@ -143,6 +144,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
                 );
               }
               this.isLoading = false;
+              this.loadStats();
             });
           this.contentGroupService
             .getAttributions(this.room.id, this.contentGroup.id)
@@ -159,12 +161,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  setSettings() {
-    this.statisticsPublished = this.contentGroup.statisticsPublished;
-    this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
-    this.leaderboardEnabled = this.contentGroup.leaderboardEnabled;
-  }
-
   getGroups(): void {
     this.roomStatsService
       .getStats(this.room.id, true)
@@ -173,15 +169,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
           this.contentGroupStats = roomStats.groupStats;
         }
       });
-  }
-
-  updateURL(): void {
-    this.router.navigate([
-      this.routingService.getRoleRoute(UserRole.EDITOR),
-      this.room.shortId,
-      'series',
-      this.groupName,
-    ]);
   }
 
   private setSelectedPublishingMode(): void {
@@ -195,95 +182,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       this.contentGroup,
       changes
     );
-  }
-
-  setContentGroupChanges(contentGroup: ContentGroup): void {
-    this.contentGroup = contentGroup;
-    this.setSelectedPublishingMode();
-  }
-
-  updateName(name: string) {
-    const changes: { name: string } = { name: name };
-    this.updateContentGroup(changes).subscribe((updatedGroup) => {
-      this.contentGroup = updatedGroup;
-      this.contentGroupService.updateGroupInMemoryStorage(this.groupName, name);
-      this.groupName = this.contentGroup.name;
-      const groupStats = this.contentGroupStats.find(
-        (s) => s.id === this.contentGroup.id
-      );
-      if (groupStats) {
-        groupStats.groupName = this.groupName;
-      }
-      const msg = this.translateService.translate(
-        'creator.content.updated-content-group'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-      this.updateURL();
-    });
-  }
-
-  goInSortingMode(): void {
-    this.copiedContents = [...this.contents];
-    this.isInSortingMode = true;
-  }
-
-  saveSorting(): void {
-    const newContentIdOrder = this.copiedContents.map((c) => c.id);
-    if (this.contentGroup.contentIds !== newContentIdOrder) {
-      const changes: {
-        contentIds: string[];
-        publishingIndex: number;
-      } = {
-        contentIds: newContentIdOrder,
-        publishingIndex: this.contentGroup.publishingIndex,
-      };
-      this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
-        this.contentGroup = updatedContentGroup;
-        this.contents = this.copiedContents;
-        const msg = this.translateService.translate(
-          'creator.content.updated-sorting'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-        this.leaveSortingMode();
-      });
-    }
-  }
-
-  leaveSortingMode(): void {
-    this.isInSortingMode = false;
-  }
-
-  toggleStatisticsPublished() {
-    const changes: { statisticsPublished: boolean } = {
-      statisticsPublished: !this.contentGroup.statisticsPublished,
-    };
-    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
-      this.contentGroup = updatedContentGroup;
-      this.statisticsPublished = this.contentGroup.statisticsPublished;
-    });
-  }
-
-  toggleCorrectOptionsPublished() {
-    const changes: { correctOptionsPublished: boolean } = {
-      correctOptionsPublished: !this.contentGroup.correctOptionsPublished,
-    };
-    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
-      this.contentGroup = updatedContentGroup;
-      this.correctOptionsPublished = this.contentGroup.correctOptionsPublished;
-    });
-  }
-
-  toggleLeaderboardEnabled() {
-    const changes: { leaderboardEnabled: boolean } = {
-      leaderboardEnabled: !this.contentGroup.leaderboardEnabled,
-    };
-    this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
-      this.contentGroup = updatedContentGroup;
-      this.leaderboardEnabled = this.contentGroup.leaderboardEnabled;
-    });
   }
 
   generateExportFilename(extension: string): string {
@@ -334,7 +232,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(() => {
-        this.reloadContentGroup(true);
+        this.reloadContentGroup(this.contentGroup.name, true);
       });
   }
 
@@ -394,5 +292,64 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
         contentGroupId: this.contentGroup.id,
       },
     });
+  }
+
+  openSettings(): void {
+    const dialogRef = this.dialogService.openDialog(
+      ContentGroupSettingsComponent,
+      {
+        width: '600px',
+        data: {
+          contentGroup: { ...this.contentGroup },
+          groupNames: this.contentGroupStats.map((s) => s.groupName),
+        },
+      }
+    );
+    dialogRef.afterClosed().subscribe((contentGroup) => {
+      if (contentGroup) {
+        const msg = this.translateService.translate(
+          'creator.content.changes-made'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+        if (this.contentGroup.name !== contentGroup.name) {
+          this.contentGroupService.updateGroupInMemoryStorage(
+            this.contentGroup.name,
+            contentGroup.name
+          );
+          const groupStats = this.contentGroupStats.find(
+            (s) => s.id === this.contentGroup.id
+          );
+          if (groupStats) {
+            groupStats.groupName = contentGroup.name;
+          }
+          this.router.navigate(['..', contentGroup.name], {
+            relativeTo: this.route,
+          });
+        }
+        this.contentGroup = { ...contentGroup };
+      }
+    });
+  }
+
+  loadStats(): void {
+    this.contentGroupService
+      .getAnswerStatistics(this.contentGroup.roomId, this.contents)
+      .subscribe((stats) => {
+        this.contentStats = stats;
+        let correct = 0;
+        let total = 0;
+        Array.from(this.contentStats.values()).forEach((stats) => {
+          if (stats.correct !== undefined) {
+            correct += stats.correct;
+            total++;
+          }
+        });
+        if (correct) {
+          this.totalCorrect = correct / total;
+        }
+      });
   }
 }

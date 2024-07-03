@@ -7,8 +7,6 @@ import { ContentGroupPageComponent } from './content-group-page.component';
 import { ContentListComponent } from './content-list/content-list.component';
 import { CreateAnswerOptionComponent } from './content-editing/create-answer-option/create-answer-option.component';
 import { PrioritizationContentFormComponent } from './content-editing/prioritization-content-form/prioritization-content-form.component';
-import { StatisticListComponent } from './statistic-list/statistic-list.component';
-import { StatisticsPageComponent } from './statistics-page/statistics-page.component';
 import { ContentPreviewComponent } from '@app/standalone/content-preview/content-preview.component';
 import { SortContentFormComponent } from './content-editing/sort-content-form/sort-content-form.component';
 import { FlashcardContentFormComponent } from './content-editing/flashcard-content-form/flashcard-content-form.component';
@@ -27,8 +25,6 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
-import { ContentGroupTitleComponent } from './content-group-title/content-group-title.component';
-import { ContentListSortComponent } from './content-list-sort/content-list-sort.component';
 import { ExportComponent } from './_dialogs/export/export.component';
 import { AnswerOptionListComponent } from './content-editing/answer-option-list/answer-option-list.component';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
@@ -41,6 +37,7 @@ import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.co
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -48,8 +45,6 @@ import { ContentStepperComponent } from '@app/standalone/content-stepper/content
     ContentListComponent,
     CreateAnswerOptionComponent,
     PrioritizationContentFormComponent,
-    StatisticListComponent,
-    StatisticsPageComponent,
     SortContentFormComponent,
     FlashcardContentFormComponent,
     WordcloudContentFormComponent,
@@ -58,8 +53,6 @@ import { ContentStepperComponent } from '@app/standalone/content-stepper/content
     ScaleContentFormComponent,
     BinaryContentFormComponent,
     ContentPresentationComponent,
-    ContentGroupTitleComponent,
-    ContentListSortComponent,
     ExportComponent,
     AnswerOptionListComponent,
     PublishContentGroupTemplateComponent,
@@ -88,6 +81,7 @@ import { ContentStepperComponent } from '@app/standalone/content-stepper/content
     LeaderboardComponent,
     LoadingIndicatorComponent,
     ContentStepperComponent,
+    FlexLayoutModule,
   ],
 })
 export class ContentGroupModule {}

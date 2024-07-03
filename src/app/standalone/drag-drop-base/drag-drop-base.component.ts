@@ -1,5 +1,6 @@
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatListItem } from '@angular/material/list';
 
 @Component({
   selector: 'app-drag-drop-base',
@@ -7,7 +8,7 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
   standalone: true,
 })
 export class DragDropBaseComponent {
-  @ViewChildren('sortListItem') listItems!: QueryList<ElementRef>;
+  @ViewChildren('sortListItem') listItems!: QueryList<ElementRef | MatListItem>;
 
   dragDroplist: object[] = [];
   selectedSortItem?: number;
@@ -24,21 +25,33 @@ export class DragDropBaseComponent {
     if (event.key === 'ArrowUp' && nextIndex > 0) {
       nextIndex -= 1;
     }
-    this.moveItem(answerIndex, nextIndex);
-    setTimeout(() => {
-      this.setFocus();
-    }, 0);
+    if (answerIndex !== nextIndex) {
+      this.moveItem(answerIndex, nextIndex);
+      setTimeout(() => {
+        this.setFocus();
+      }, 0);
+    }
   }
 
   moveItem(currentIndex: number, nextIndex: number) {
-    this.listItems.toArray()[currentIndex].nativeElement.blur();
+    const currentItem = this.listItems.toArray()[currentIndex];
+    if (currentItem instanceof ElementRef) {
+      currentItem.nativeElement.focus();
+    } else if (currentItem instanceof MatListItem) {
+      currentItem._elementRef.nativeElement.focus();
+    }
     moveItemInArray(this.dragDroplist, currentIndex, nextIndex);
     this.selectedSortItem = nextIndex;
   }
 
   setFocus() {
     if (this.selectedSortItem) {
-      this.listItems.toArray()[this.selectedSortItem].nativeElement.focus();
+      const selectedItem = this.listItems.toArray()[this.selectedSortItem];
+      if (selectedItem instanceof ElementRef) {
+        selectedItem.nativeElement.focus();
+      } else if (selectedItem instanceof MatListItem) {
+        selectedItem._elementRef.nativeElement.focus();
+      }
     }
   }
 }
