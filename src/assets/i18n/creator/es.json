@@ -407,8 +407,7 @@
     "export-series": "Exportar la serie"
   },
   "import": {
-    "import": "Importar",
-    "import-series": "Importar contenidos"
+    "import": "Importar"
   },
   "control-bar": {
     "results": "Resultados",
