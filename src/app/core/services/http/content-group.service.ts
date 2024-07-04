@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -15,7 +15,10 @@ import { RoomStatsService } from './room-stats.service';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { CachingService } from '@app/core/services/util/caching.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
-import { AnswerResultOverview } from '@app/core/models/answer-result';
+import {
+  AnswerResultOverview,
+  AnswerResultType,
+} from '@app/core/models/answer-result';
 import { SeriesCreated } from '@app/core/models/events/series-created';
 import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
@@ -23,22 +26,20 @@ import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-ite
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentStats } from '@app/creator/content-group/content-group-page.component';
-import { TextAnswer } from '@app/core/models/text-answer';
 import { Content } from '@app/core/models/content';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentService } from '@app/core/services/http/content.service';
-import { AnswerStatistics } from '@app/core/models/answer-statistics';
-import { ContentChoice } from '@app/core/models/content-choice';
-import {
-  Combination,
-  NumericRoundStatistics,
-  RoundStatistics,
-} from '@app/core/models/round-statistics';
-import { ContentNumeric } from '@app/core/models/content-numeric';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
 };
+
+interface AnswerStatisticsSummary {
+  contentId: string;
+  round: number;
+  result: AnswerResultType;
+  count: number;
+}
 
 @Injectable()
 export class ContentGroupService extends AbstractEntityService<ContentGroup> {
@@ -329,214 +330,54 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     }
   }
 
-  private getSum(list: number[]): number {
-    if (list && list.length > 0) {
-      return list.reduce((a, b) => a + b);
-    } else {
-      return 0;
-    }
-  }
-
-  private getMultipleCount(combinatedCounts?: Combination[]): number {
-    if (!combinatedCounts) {
-      return 0;
-    } else {
-      return this.getSum(combinatedCounts.map((c) => c.count));
-    }
-  }
-
-  private getCorrectSingleCount(
-    independentCounts: number[],
-    correctIndexes: number[],
-    totalCount: number
-  ) {
-    if (!independentCounts || !totalCount) {
-      return 0;
-    }
-    return (independentCounts[correctIndexes[0]] / totalCount) * 100;
-  }
-
-  private getCorrectMultipleCount(
-    combinatedCounts: Combination[],
-    correctIndexes: number[],
-    totalCount: number
-  ) {
-    const correctCombinations = combinatedCounts?.filter(
-      (c) =>
-        c.selectedChoiceIndexes.sort().toString() ===
-        correctIndexes.sort().toString()
-    );
-    if (!combinatedCounts) {
-      return 0;
-    }
-    const count = correctCombinations[0]?.count ?? 0;
-    return (count / totalCount) * 100;
-  }
-
-  private prepareAnswerStatisticRequests(
+  getAnswerStatistics(
     roomId: string,
+    groupId: string,
     contents: Content[]
-  ): Map<string, Observable<TextAnswer[] | AnswerStatistics>> {
-    const requests = new Map<
-      string,
-      Observable<TextAnswer[] | AnswerStatistics>
-    >();
-    contents.forEach((content) => {
-      if (content.format === ContentType.TEXT) {
-        requests.set(
-          content.id,
-          this.contentAnswerService.getAnswers(roomId, content.id)
-        );
-      } else {
-        requests.set(
-          content.id,
-          this.contentService.getAnswer(roomId, content.id)
-        );
-      }
-    });
-    return requests;
+  ): Observable<Map<string, ContentStats>> {
+    const connectionUrl = this.buildUri(`/${groupId}/stats`, roomId);
+    return this.http
+      .get<AnswerStatisticsSummary[]>(connectionUrl)
+      .pipe(map((stats) => this.determineContentStatsMap(stats, contents)));
   }
 
-  private getChoiceContentStats(
-    content: ContentChoice,
-    roundStats: RoundStatistics
-  ): ContentStats {
-    const count = content.multiple
-      ? this.getMultipleCount(roundStats.combinatedCounts)
-      : this.getSum(roundStats.independentCounts);
-    let correct: number | undefined;
-    if (count && content.correctOptionIndexes) {
-      correct = content.multiple
-        ? this.getCorrectMultipleCount(
-            roundStats.combinatedCounts,
-            content.correctOptionIndexes,
-            count
-          )
-        : this.getCorrectSingleCount(
-            roundStats.independentCounts,
-            content.correctOptionIndexes,
-            count
-          );
-    }
-    return {
-      count: count,
-      correct: correct,
-    };
-  }
-
-  private getSortContentStats(
-    content: ContentChoice,
-    roundStats: RoundStatistics
-  ): ContentStats {
-    const count = this.getMultipleCount(roundStats.combinatedCounts);
-    let correct: number | undefined;
-    if (count && roundStats.combinatedCounts) {
-      correct = this.getCorrectMultipleCount(
-        roundStats.combinatedCounts,
-        (content as ContentChoice).correctOptionIndexes,
-        count
-      );
-    }
-    return {
-      count: count,
-      correct: correct,
-    };
-  }
-
-  private getBinaryContentStats(
-    content: ContentChoice,
-    roundStats: RoundStatistics
-  ): ContentStats {
-    const count = this.getSum(roundStats.independentCounts);
-    let correct: number | undefined;
-    if (count && content.correctOptionIndexes) {
-      correct = this.getCorrectSingleCount(
-        roundStats.independentCounts,
-        content.correctOptionIndexes,
-        count
-      );
-    }
-    return {
-      count: count,
-      correct: correct,
-    };
-  }
-
-  private getNumericContentStats(
-    content: ContentNumeric,
-    roundStats: NumericRoundStatistics
-  ): ContentStats {
-    const count = this.getSum(roundStats.independentCounts);
-    let correct: number | undefined;
-    if (count && content.correctNumber) {
-      correct = roundStats.correctAnswerFraction * 100;
-    }
-    return {
-      count: count,
-      correct: correct,
-    };
-  }
-
-  private getContentStatistics(
-    contents: Content[],
-    stats: Array<AnswerStatistics | TextAnswer[]>
+  private determineContentStatsMap(
+    stats: AnswerStatisticsSummary[],
+    contents: Content[]
   ): Map<string, ContentStats> {
+    contents = contents.filter(
+      (c) => ![ContentType.SLIDE, ContentType.FLASHCARD].includes(c.format)
+    );
     const result = new Map<string, ContentStats>();
-    contents.forEach((content, index) => {
-      const current = stats[index];
-      if (Array.isArray(current)) {
-        result.set(content.id, { count: current.length });
-      } else {
-        const roundStats = current.roundStatistics[content.state.round - 1];
-        switch (content.format) {
-          case ContentType.CHOICE:
-            result.set(
-              content.id,
-              this.getChoiceContentStats(content as ContentChoice, roundStats)
-            );
-            break;
-          case ContentType.SORT:
-            result.set(
-              content.id,
-              this.getSortContentStats(content as ContentChoice, roundStats)
-            );
-            break;
-          case ContentType.BINARY:
-            result.set(
-              content.id,
-              this.getBinaryContentStats(content as ContentChoice, roundStats)
-            );
-            break;
-          case ContentType.NUMERIC:
-            result.set(
-              content.id,
-              this.getNumericContentStats(
-                content as ContentNumeric,
-                roundStats as NumericRoundStatistics
-              )
-            );
-            break;
-          default:
-            result.set(content.id, { count: roundStats.answerCount });
-        }
+    contents.forEach((content) => {
+      let count = 0;
+      let correct: number | undefined;
+      const contentSummaries = stats.filter(
+        (stats) =>
+          stats.contentId === content.id &&
+          stats.round === content.state.round &&
+          stats.result !== AnswerResultType.ABSTAINED
+      );
+      if (contentSummaries.length > 0) {
+        count = this.calculateStatsCount(contentSummaries);
+        correct = this.calculateCorrectStats(contentSummaries);
       }
+      if (correct) {
+        correct = (correct / count) * 100;
+      }
+      result.set(content.id, { count: count, correct: correct });
     });
     return result;
   }
 
-  getAnswerStatistics(
-    roomId: string,
-    contents: Content[]
-  ): Observable<Map<string, ContentStats>> {
-    contents = contents.filter(
-      (c) => ![ContentType.SLIDE, ContentType.FLASHCARD].includes(c.format)
+  calculateCorrectStats(stats: AnswerStatisticsSummary[]): number {
+    return (
+      stats.filter((stats) => stats.result === AnswerResultType.CORRECT)[0]
+        ?.count || 0
     );
-    return forkJoin(
-      Array.from(this.prepareAnswerStatisticRequests(roomId, contents).values())
-    ).pipe(
-      map((stats) => {
-        return this.getContentStatistics(contents, stats);
-      })
-    );
+  }
+
+  calculateStatsCount(stats: AnswerStatisticsSummary[]): number {
+    return stats.map((stats) => stats.count).reduce((a, b) => a + b);
   }
 }
