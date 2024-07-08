@@ -5,6 +5,7 @@ import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { MatTableDataSource } from '@angular/material/table';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ThemeService } from '@app/core/theme/theme.service';
 
 interface LeaderboardTableItem {
   position: number;
@@ -24,6 +25,11 @@ export class LeaderboardComponent implements OnChanges {
   @Input() aliasId?: string;
 
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
+  colors: string[];
+
+  constructor(private themeService: ThemeService) {
+    this.colors = this.themeService.getTextColors();
+  }
 
   ngOnChanges(): void {
     const tableItems: LeaderboardTableItem[] = [];

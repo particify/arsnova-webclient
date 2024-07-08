@@ -3,11 +3,12 @@
     <ng-container matColumnDef="position">
       <td
         mat-cell
-        *matCellDef="let element"
+        *matCellDef="let element; index as i"
         class="position"
         [ngClass]="{
-          'bold-text primary bg-dark': element.userAlias.id === aliasId,
+          'bold-text bg-dark': element.userAlias.id === aliasId,
         }"
+        [ngStyle]="{ color: colors[i % colors.length] }"
       >
         {{ element.position | ordinal }}
       </td>
@@ -15,11 +16,12 @@
     <ng-container matColumnDef="name">
       <td
         mat-cell
-        *matCellDef="let element"
+        *matCellDef="let element; index as i"
         class="alias"
         [ngClass]="{
-          'bold-text primary bg-dark': element.userAlias.id === aliasId,
+          'bold-text bg-dark': element.userAlias.id === aliasId,
         }"
+        [ngStyle]="{ color: colors[i % colors.length] }"
       >
         {{ element.userAlias.alias }}
       </td>
@@ -27,11 +29,12 @@
     <ng-container matColumnDef="score">
       <td
         mat-cell
-        *matCellDef="let element"
+        *matCellDef="let element; index as i"
         class="score"
         [ngClass]="{
-          'bold-text primary bg-dark': element.userAlias.id === aliasId,
+          'bold-text bg-dark': element.userAlias.id === aliasId,
         }"
+        [ngStyle]="{ color: colors[i % colors.length] }"
       >
         <span
           >{{ element.score }}

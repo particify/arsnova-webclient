@@ -47,6 +47,16 @@ export class ThemeService {
     'disagree',
     'strongly-disagree',
   ];
+  private textColors = [
+    'blue',
+    'pink',
+    'teal',
+    'orange',
+    'purple',
+    'green',
+    'red',
+    'brown',
+  ];
   private binaryColors = ['strongly-agree', 'strongly-disagree'];
   private lightWarnColor = '#c62828';
   private lightColors = new Colors('#5e35b1', '#2e7d32');
@@ -124,6 +134,10 @@ export class ThemeService {
 
   getBinaryColors(): string[] {
     return this.getColorArray(this.binaryColors, 'likert');
+  }
+
+  getTextColors(): string[] {
+    return this.getColorArray(this.textColors, 'text');
   }
 
   getPrimaryColor() {

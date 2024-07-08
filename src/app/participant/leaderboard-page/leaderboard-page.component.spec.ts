@@ -14,6 +14,7 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ThemeService } from '@app/core/theme/theme.service';
 
 describe('LeaderboardPageComponent', () => {
   let component: LeaderboardPageComponent;
@@ -52,6 +53,9 @@ describe('LeaderboardPageComponent', () => {
     snapshot
   );
 
+  const themeService = jasmine.createSpyObj(ThemeService, ['getTextColors']);
+  themeService.getTextColors.and.returnValue([]);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -71,6 +75,10 @@ describe('LeaderboardPageComponent', () => {
         {
           provide: ContentService,
           useValue: mockContentService,
+        },
+        {
+          provide: ThemeService,
+          useValue: themeService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
