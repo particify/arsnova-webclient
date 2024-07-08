@@ -1,363 +1,420 @@
-<app-loading-indicator *ngIf="isLoading"></app-loading-indicator>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
 
-<lib-extension-point
-  *ngIf="!isLoading"
-  extensionId="external-instance-hint"
-></lib-extension-point>
-
-<div *ngIf="!isLoading" fxLayout="column" fxLayoutGap="10px">
+@if (!isLoading) {
   <lib-extension-point
-    extensionId="lms-course-room-list"
-    [extensionData]="{ userId: auth.userId, excludeRoomIds: roomIds }"
+    extensionId="external-instance-hint"
   ></lib-extension-point>
-  <div>
-    <mat-card class="account-memberships">
-      <div
-        fxFill
-        fxLayout="row wrap"
-        fxLayoutAlign="space-between center"
-        class="header-container"
-      >
-        <div fxLayout="row" fxLayoutGap="10px" class="button-container">
-          <button
-            mat-raised-button
-            color="primary"
-            class="desktop-buttons"
-            (click)="openCreateRoomDialog()"
-            id="create-room-button"
-            appHotkey="2"
-            [appHotkeyTitle]="'home-page.create-room' | transloco"
-          >
-            <mat-icon class="add-icon">add</mat-icon>
-            <span>{{ 'home-page.create-room' | transloco }}</span>
-          </button>
-          <button
-            *ngIf="showImportMenu"
-            mat-button
-            [matMenuTriggerFor]="more"
-            aria-labelledby="import-options"
-          >
-            <mat-icon class="add-icon">file_upload</mat-icon>
-            <span>{{ 'room-list.import' | transloco }}</span>
-          </button>
-        </div>
-        <div
-          class="search-container"
-          [ngClass]="{ 'full-width-container': !showImportMenu }"
-        >
-          <mat-icon matPrefix class="search-icon">search</mat-icon>
-          <input
-            [disabled]="rooms.length === 0"
-            matInput
-            class="search-input"
-            [ngClass]="{ 'full-width-search': !showImportMenu }"
-            #search
-            (keyup)="filterRooms(search.value)"
-            placeholder="{{ 'room-list.filter-message' | transloco }}"
-            aria-labelledby="filter-rooms"
-          />
-        </div>
-      </div>
-      <button
-        mat-fab
-        color="primary"
-        class="mobile-add mobile-buttons"
-        aria-labelledby="add-room"
-        (click)="openCreateRoomDialog()"
-      >
-        <mat-icon class="add-icon">add</mat-icon>
-      </button>
-      <mat-menu #more="matMenu" xPosition="before">
-        <button
-          *ngIf="showGuestAccountControls"
-          mat-menu-item
-          (click)="getGuestRooms()"
-        >
-          <mat-icon color="primary">swap_horiz</mat-icon>
-          <span>{{ 'room-list.rooms-from-guest' | transloco }}</span>
-        </button>
-        <lib-extension-point extensionId="import-token"></lib-extension-point>
-      </mat-menu>
-      <div
-        *ngIf="!isLoading"
-        fxFill
-        fxLayout="column"
-        fxLayoutAlign="center center"
-        tabindex="0"
-        id="room-list"
-        [ngClass]="{ 'visually-hidden': rooms.length > 0 }"
-      >
-        <h3 class="hint">
-          {{
-            rooms.length === 0
-              ? ('room-list.no-rooms' | transloco)
-              : ('room-list.a11y-list-summary'
-                | transloco: { count: rooms.length })
-          }}
-        </h3>
-      </div>
-      <div
-        *ngIf="displayRooms.length === 0 && rooms.length > 0"
-        fxLayout="column"
-        fxLayoutAlign="center center"
-      >
-        <h3 class="hint">{{ 'room-list.no-rooms-found' | transloco }}</h3>
-        <button
-          mat-stroked-button
-          color="primary"
-          class="alt-button"
-          routerLink=""
-        >
-          {{ 'room-list.join-room' | transloco }}
-        </button>
-      </div>
-      <mat-action-list *ngIf="rooms.length > 0">
-        <button
-          disableRipple
-          mat-list-item
-          (click)="
-            setCurrentRoom(room.summary.shortId, room.membership.primaryRole)
-          "
-          class="bottom-border full-width-list-item"
-          *ngFor="let room of displayRooms; let i = index"
-          [ngSwitch]="room.membership.primaryRole"
-        >
-          <div fxLayout="row" fxFill class="outer">
-            <div
-              fxLayout="row"
-              fxLayoutAlign="space-between center"
-              fxLayoutGap="0.5em"
-              class="inner container"
-              attr.aria-label="{{
-                'room-list.a11y-join-room'
-                  | transloco
-                    : {
-                        room: room.summary.name,
-                        id: room.summary.shortId,
-                        role: roles.get(room.membership.primaryRole),
-                      }
-              }}"
-            >
-              <app-text-overflow-clip
-                class="ellipsis"
-                [text]="room.summary.name"
-              ></app-text-overflow-clip>
-              <div
-                fxLayout="row"
-                fxLayoutAlign="center center"
-                fxLayoutGap="1em"
-              >
-                <div
-                  *ngIf="isRoomActive(room.summary.stats.roomUserCount)"
-                  fxLayoutAlign="center"
-                  class="active-label primary"
-                  [matTooltip]="
-                    'room-list.active-info'
-                      | transloco
-                        : { userCount: room.summary.stats.roomUserCount }
-                  "
-                >
-                  <span>{{ 'room-list.active' | transloco }}</span>
-                </div>
-                <app-list-badge
-                  *ngIf="room.summary.stats.ackCommentCount"
-                  [count]="room.summary.stats.ackCommentCount"
-                ></app-list-badge>
-                <p class="short-id">
-                  {{ room.summary.shortId | splitShortId }}
-                </p>
-                <mat-icon
-                  mat-list-icon
-                  *ngSwitchCase="creatorRole"
-                  matTooltip="{{ 'room-list.creator-role' | transloco }}"
-                  title="{{ 'room-list.creator-role' | transloco }}"
-                >
-                  record_voice_over
-                </mat-icon>
-                <mat-icon
-                  mat-list-icon
-                  *ngSwitchCase="participantRole"
-                  matTooltip="{{ 'room-list.participant-role' | transloco }}"
-                  title="{{ 'room-list.participant-role' | transloco }}"
-                >
-                  people
-                </mat-icon>
-                <mat-icon
-                  mat-list-icon
-                  *ngSwitchCase="executiveModeratorRole"
-                  matTooltip="{{
-                    'room-list.executive-moderator-role' | transloco
-                  }}"
-                  title="{{ 'room-list.executive-moderator-role' | transloco }}"
-                >
-                  gavel
-                </mat-icon>
-                <mat-icon
-                  mat-list-icon
-                  *ngSwitchCase="editorRole"
-                  matTooltip="{{ 'room-list.editor-role' | transloco }}"
-                  title="{{ 'room-list.editor-role' | transloco }}"
-                >
-                  edit
-                </mat-icon>
-              </div>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="center center">
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="$event.stopPropagation()"
-                [matMenuTriggerFor]="moreActions"
-                aria-labelledby="more-options"
-                matTooltip="{{ 'room-list.more-options' | transloco }}"
-              >
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #moreActions="matMenu" xPosition="before">
-                <button
-                  mat-menu-item
-                  *ngIf="
-                    [creatorRole, editorRole].includes(
-                      room.membership.primaryRole
-                    )
-                  "
-                  (click)="navToSettings(room.summary.shortId)"
-                >
-                  <mat-icon>settings</mat-icon>
-                  <span> {{ 'room-list.room-settings' | transloco }}</span>
-                </button>
-                <button
-                  mat-menu-item
-                  *ngIf="room.membership.primaryRole === creatorRole"
-                  (click)="duplicateRoom(room.summary.id, room.summary.name)"
-                >
-                  <mat-icon>dynamic_feed</mat-icon>
-                  <span> {{ 'room-list.duplicate-room' | transloco }}</span>
-                </button>
-                <button mat-menu-item (click)="openDeleteRoomDialog(room)">
-                  <mat-icon color="warn">delete_forever</mat-icon>
-                  <span>
-                    {{
-                      (room.membership.primaryRole !== creatorRole
-                        ? 'room-list.panel-remove-room'
-                        : 'room-list.panel-delete-room'
-                      ) | transloco
-                    }}</span
-                  >
-                </button>
-              </mat-menu>
-            </div>
-          </div>
-        </button>
-      </mat-action-list>
-    </mat-card>
-  </div>
+}
 
-  <mat-card
-    *ngIf="showRoomsFromGuest"
-    id="guest-rooms"
-    class="account-memberships"
-  >
-    <div fxLayout="row" fxLayoutAlign="space-between">
-      <h3>{{ 'room-list.rooms-from-guest' | transloco }}</h3>
-      <button mat-stroked-button (click)="showRoomsFromGuest = false">
-        {{ 'room-list.hide-guest-rooms' | transloco }}
-      </button>
-    </div>
-    <p>{{ 'room-list.transfer-rooms-from-guest' | transloco }}</p>
-    <mat-card-content>
-      <mat-list class="rooms-from-guest" *ngIf="roomsFromGuest">
-        <ng-container
-          *ngFor="let room of roomsFromGuest; let i = index"
-          [ngSwitch]="room.membership.primaryRole"
+@if (!isLoading) {
+  <div fxLayout="column" fxLayoutGap="10px">
+    <lib-extension-point
+      extensionId="lms-course-room-list"
+      [extensionData]="{ userId: auth.userId, excludeRoomIds: roomIds }"
+    ></lib-extension-point>
+    <div>
+      <mat-card class="account-memberships">
+        <div
+          fxFill
+          fxLayout="row wrap"
+          fxLayoutAlign="space-between center"
+          class="header-container"
         >
-          <mat-list-item
-            *ngIf="!room.transferred"
-            class="bottom-border full-width-list-item"
-          >
-            <div fxLayout="row" fxFill>
-              <div
-                tabindex="0"
-                role="button"
-                fxLayout="row"
-                fxLayoutAlign="center center"
-                class="container inner"
+          <div fxLayout="row" fxLayoutGap="10px" class="button-container">
+            <button
+              mat-raised-button
+              color="primary"
+              class="desktop-buttons"
+              (click)="openCreateRoomDialog()"
+              id="create-room-button"
+              appHotkey="2"
+              [appHotkeyTitle]="'home-page.create-room' | transloco"
+            >
+              <mat-icon class="add-icon">add</mat-icon>
+              <span>{{ 'home-page.create-room' | transloco }}</span>
+            </button>
+            @if (showImportMenu) {
+              <button
+                mat-button
+                [matMenuTriggerFor]="more"
+                aria-labelledby="import-options"
               >
-                <p
-                  matBadge="{{
-                    room.summary.stats.ackCommentCount > 0 &&
-                    deviceType === 'desktop'
-                      ? room.summary.stats.ackCommentCount
-                      : null
-                  }}"
-                  matBadgeOverlap="false"
-                  matBadgeColor="accent"
-                >
-                  {{ room.summary.name }}
-                </p>
-                <span class="fill-remaining-space"></span>
-                <p class="short-id">{{ room.summary.shortId }}</p>
-                <mat-icon
-                  mat-list-icon
-                  *ngSwitchCase="creatorRole"
-                  class="role"
-                  matTooltip="{{ 'room-list.creator-role' | transloco }}"
-                  title="{{ 'room-list.creator-role' | transloco }}"
-                >
-                  record_voice_over
-                </mat-icon>
-                <mat-icon
-                  mat-list-icon
-                  *ngSwitchCase="participantRole"
-                  class="role"
-                  matTooltip="{{ 'room-list.participant-role' | transloco }}"
-                  title="{{ 'room-list.participant-role' | transloco }}"
-                >
-                  people
-                </mat-icon>
-                <mat-icon
-                  mat-list-icon
-                  *ngSwitchCase="executiveModeratorRole"
-                  class="role"
-                  matTooltip="{{
-                    'room-list.executive-moderator-role' | transloco
-                  }}"
-                  title="{{ 'room-list.executive-moderator-role' | transloco }}"
-                >
-                  gavel
-                </mat-icon>
-              </div>
-              <div fxLayout="row" fxLayoutAlign="center center">
-                <button
-                  mat-button
-                  (click)="transferRoomFromGuest(room)"
-                  [hidden]=""
-                  *ngIf="room.membership.primaryRole === creatorRole"
-                  appTrackInteraction="Room transferred from guest"
-                  appTrackName="owner"
-                >
-                  <mat-icon>swap_horiz</mat-icon>
-                  {{ 'room-list.transfer' | transloco }}
-                </button>
-                <button
-                  mat-button
-                  (click)="addRoomFromGuest(room)"
-                  [hidden]="room.transferred"
-                  *ngIf="room.membership.primaryRole !== creatorRole"
-                  appTrackInteraction="Room transferred from guest"
-                  appTrackName="participant"
-                >
-                  <mat-icon>add</mat-icon>
-                  {{ 'room-list.add' | transloco }}
-                </button>
-              </div>
-            </div>
-          </mat-list-item>
-        </ng-container>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-</div>
+                <mat-icon class="add-icon">file_upload</mat-icon>
+                <span>{{ 'room-list.import' | transloco }}</span>
+              </button>
+            }
+          </div>
+          <div
+            class="search-container"
+            [ngClass]="{ 'full-width-container': !showImportMenu }"
+          >
+            <mat-icon matPrefix class="search-icon">search</mat-icon>
+            <input
+              [disabled]="rooms.length === 0"
+              matInput
+              class="search-input"
+              [ngClass]="{ 'full-width-search': !showImportMenu }"
+              #search
+              (keyup)="filterRooms(search.value)"
+              placeholder="{{ 'room-list.filter-message' | transloco }}"
+              aria-labelledby="filter-rooms"
+            />
+          </div>
+        </div>
+        <button
+          mat-fab
+          color="primary"
+          class="mobile-add mobile-buttons"
+          aria-labelledby="add-room"
+          (click)="openCreateRoomDialog()"
+        >
+          <mat-icon class="add-icon">add</mat-icon>
+        </button>
+        <mat-menu #more="matMenu" xPosition="before">
+          @if (showGuestAccountControls) {
+            <button mat-menu-item (click)="getGuestRooms()">
+              <mat-icon color="primary">swap_horiz</mat-icon>
+              <span>{{ 'room-list.rooms-from-guest' | transloco }}</span>
+            </button>
+          }
+          <lib-extension-point extensionId="import-token"></lib-extension-point>
+        </mat-menu>
+        @if (!isLoading) {
+          <div
+            fxFill
+            fxLayout="column"
+            fxLayoutAlign="center center"
+            tabindex="0"
+            id="room-list"
+            [ngClass]="{ 'visually-hidden': rooms.length > 0 }"
+          >
+            <h3 class="hint">
+              {{
+                rooms.length === 0
+                  ? ('room-list.no-rooms' | transloco)
+                  : ('room-list.a11y-list-summary'
+                    | transloco: { count: rooms.length })
+              }}
+            </h3>
+          </div>
+        }
+        @if (displayRooms.length === 0 && rooms.length > 0) {
+          <div fxLayout="column" fxLayoutAlign="center center">
+            <h3 class="hint">{{ 'room-list.no-rooms-found' | transloco }}</h3>
+            <button
+              mat-stroked-button
+              color="primary"
+              class="alt-button"
+              routerLink=""
+            >
+              {{ 'room-list.join-room' | transloco }}
+            </button>
+          </div>
+        }
+        @if (rooms.length > 0) {
+          <mat-action-list>
+            @for (room of displayRooms; track room; let i = $index) {
+              <button
+                disableRipple
+                mat-list-item
+                (click)="
+                  setCurrentRoom(
+                    room.summary.shortId,
+                    room.membership.primaryRole
+                  )
+                "
+                class="bottom-border full-width-list-item"
+              >
+                <div fxLayout="row" fxFill class="outer">
+                  <div
+                    fxLayout="row"
+                    fxLayoutAlign="space-between center"
+                    fxLayoutGap="0.5em"
+                    class="inner container"
+                    attr.aria-label="{{
+                      'room-list.a11y-join-room'
+                        | transloco
+                          : {
+                              room: room.summary.name,
+                              id: room.summary.shortId,
+                              role: roles.get(room.membership.primaryRole),
+                            }
+                    }}"
+                  >
+                    <app-text-overflow-clip
+                      class="ellipsis"
+                      [text]="room.summary.name"
+                    ></app-text-overflow-clip>
+                    <div
+                      fxLayout="row"
+                      fxLayoutAlign="center center"
+                      fxLayoutGap="1em"
+                    >
+                      @if (isRoomActive(room.summary.stats.roomUserCount)) {
+                        <div
+                          fxLayoutAlign="center"
+                          class="active-label primary"
+                          [matTooltip]="
+                            'room-list.active-info'
+                              | transloco
+                                : {
+                                    userCount: room.summary.stats.roomUserCount,
+                                  }
+                          "
+                        >
+                          <span>{{ 'room-list.active' | transloco }}</span>
+                        </div>
+                      }
+                      @if (room.summary.stats.ackCommentCount) {
+                        <app-list-badge
+                          [count]="room.summary.stats.ackCommentCount"
+                        ></app-list-badge>
+                      }
+                      <p class="short-id">
+                        {{ room.summary.shortId | splitShortId }}
+                      </p>
+                      <div>
+                        @switch (room.membership.primaryRole) {
+                          @case (creatorRole) {
+                            <mat-icon
+                              mat-list-icon
+                              matTooltip="{{
+                                'room-list.creator-role' | transloco
+                              }}"
+                              title="{{ 'room-list.creator-role' | transloco }}"
+                            >
+                              record_voice_over
+                            </mat-icon>
+                          }
+                          @case (participantRole) {
+                            <mat-icon
+                              mat-list-icon
+                              matTooltip="{{
+                                'room-list.participant-role' | transloco
+                              }}"
+                              title="{{
+                                'room-list.participant-role' | transloco
+                              }}"
+                            >
+                              people
+                            </mat-icon>
+                          }
+                          @case (executiveModeratorRole) {
+                            <mat-icon
+                              mat-list-icon
+                              matTooltip="{{
+                                'room-list.executive-moderator-role' | transloco
+                              }}"
+                              title="{{
+                                'room-list.executive-moderator-role' | transloco
+                              }}"
+                            >
+                              gavel
+                            </mat-icon>
+                          }
+                          @case (editorRole) {
+                            <mat-icon
+                              mat-list-icon
+                              matTooltip="{{
+                                'room-list.editor-role' | transloco
+                              }}"
+                              title="{{ 'room-list.editor-role' | transloco }}"
+                            >
+                              edit
+                            </mat-icon>
+                          }
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayoutAlign="center center">
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="$event.stopPropagation()"
+                      [matMenuTriggerFor]="moreActions"
+                      aria-labelledby="more-options"
+                      matTooltip="{{ 'room-list.more-options' | transloco }}"
+                    >
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #moreActions="matMenu" xPosition="before">
+                      @if (
+                        [creatorRole, editorRole].includes(
+                          room.membership.primaryRole
+                        )
+                      ) {
+                        <button
+                          mat-menu-item
+                          (click)="navToSettings(room.summary.shortId)"
+                        >
+                          <mat-icon>settings</mat-icon>
+                          <span>
+                            {{ 'room-list.room-settings' | transloco }}</span
+                          >
+                        </button>
+                      }
+                      @if (room.membership.primaryRole === creatorRole) {
+                        <button
+                          mat-menu-item
+                          (click)="
+                            duplicateRoom(room.summary.id, room.summary.name)
+                          "
+                        >
+                          <mat-icon>dynamic_feed</mat-icon>
+                          <span>
+                            {{ 'room-list.duplicate-room' | transloco }}</span
+                          >
+                        </button>
+                      }
+                      <button
+                        mat-menu-item
+                        (click)="openDeleteRoomDialog(room)"
+                      >
+                        <mat-icon color="warn">delete_forever</mat-icon>
+                        <span>
+                          {{
+                            (room.membership.primaryRole !== creatorRole
+                              ? 'room-list.panel-remove-room'
+                              : 'room-list.panel-delete-room'
+                            ) | transloco
+                          }}</span
+                        >
+                      </button>
+                    </mat-menu>
+                  </div>
+                </div>
+              </button>
+            }
+          </mat-action-list>
+        }
+      </mat-card>
+    </div>
+    @if (showRoomsFromGuest) {
+      <mat-card id="guest-rooms" class="account-memberships">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <h3>{{ 'room-list.rooms-from-guest' | transloco }}</h3>
+          <button mat-stroked-button (click)="showRoomsFromGuest = false">
+            {{ 'room-list.hide-guest-rooms' | transloco }}
+          </button>
+        </div>
+        <p>{{ 'room-list.transfer-rooms-from-guest' | transloco }}</p>
+        <mat-card-content>
+          @if (roomsFromGuest) {
+            <mat-list class="rooms-from-guest">
+              @for (room of roomsFromGuest; track room; let i = $index) {
+                @if (!room.transferred) {
+                  <mat-list-item class="bottom-border full-width-list-item">
+                    <div fxLayout="row" fxFill>
+                      <div
+                        tabindex="0"
+                        role="button"
+                        fxLayout="row"
+                        fxLayoutAlign="center center"
+                        class="container inner"
+                      >
+                        <p
+                          matBadge="{{
+                            room.summary.stats.ackCommentCount > 0 &&
+                            deviceType === 'desktop'
+                              ? room.summary.stats.ackCommentCount
+                              : null
+                          }}"
+                          matBadgeOverlap="false"
+                          matBadgeColor="accent"
+                        >
+                          {{ room.summary.name }}
+                        </p>
+                        <span class="fill-remaining-space"></span>
+                        <p class="short-id">{{ room.summary.shortId }}</p>
+                        <div>
+                          @switch (room.membership.primaryRole) {
+                            @case (creatorRole) {
+                              <mat-icon
+                                mat-list-icon
+                                class="role"
+                                matTooltip="{{
+                                  'room-list.creator-role' | transloco
+                                }}"
+                                title="{{
+                                  'room-list.creator-role' | transloco
+                                }}"
+                              >
+                                record_voice_over
+                              </mat-icon>
+                            }
+                            @case (participantRole) {
+                              <mat-icon
+                                mat-list-icon
+                                class="role"
+                                matTooltip="{{
+                                  'room-list.participant-role' | transloco
+                                }}"
+                                title="{{
+                                  'room-list.participant-role' | transloco
+                                }}"
+                              >
+                                people
+                              </mat-icon>
+                            }
+                            @case (executiveModeratorRole) {
+                              <mat-icon
+                                mat-list-icon
+                                class="role"
+                                matTooltip="{{
+                                  'room-list.executive-moderator-role'
+                                    | transloco
+                                }}"
+                                title="{{
+                                  'room-list.executive-moderator-role'
+                                    | transloco
+                                }}"
+                              >
+                                gavel
+                              </mat-icon>
+                            }
+                          }
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutAlign="center center">
+                        @if (room.membership.primaryRole === creatorRole) {
+                          <button
+                            mat-button
+                            (click)="transferRoomFromGuest(room)"
+                            [hidden]=""
+                            appTrackInteraction="Room transferred from guest"
+                            appTrackName="owner"
+                          >
+                            <mat-icon>swap_horiz</mat-icon>
+                            {{ 'room-list.transfer' | transloco }}
+                          </button>
+                        }
+                        @if (room.membership.primaryRole !== creatorRole) {
+                          <button
+                            mat-button
+                            (click)="addRoomFromGuest(room)"
+                            [hidden]="room.transferred"
+                            appTrackInteraction="Room transferred from guest"
+                            appTrackName="participant"
+                          >
+                            <mat-icon>add</mat-icon>
+                            {{ 'room-list.add' | transloco }}
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  </mat-list-item>
+                }
+              }
+            </mat-list>
+          }
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+}
 
 <div class="visually-hidden">
   <div id="filter-rooms">{{ 'room-list.filter' | transloco }}</div>
