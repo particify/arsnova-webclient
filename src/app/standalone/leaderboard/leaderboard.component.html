@@ -1,30 +1,50 @@
-<mat-list>
-  @for (item of leaderboardItems; track item; let i = $index) {
-    <mat-list-item
-      class="bottom-border"
-      [ngClass]="{
-        'primary-variant': item.userAlias.id === aliasId,
-      }"
-    >
-      <div
-        fxLayout="row"
-        fxLayoutAlign="space-between"
-        class="leaderboard-item"
+@if (dataSource) {
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="position">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="position"
         [ngClass]="{
-          'bold-text': item.userAlias.id === aliasId,
+          'bold-text primary bg-dark': element.userAlias.id === aliasId,
         }"
       >
-        <div fxLayout="row" fxLayoutGap="1em">
-          <span>{{ i + 1 | ordinal }}</span>
-          <span>{{ item.userAlias.alias }}</span>
-        </div>
-        <div fxLayout="row" fxLayoutGap="1.5em">
-          <span>{{ item.score }} {{ 'content.points' | transloco }}</span>
-        </div>
-      </div>
-    </mat-list-item>
-  }
-</mat-list>
+        {{ element.position | ordinal }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="alias"
+        [ngClass]="{
+          'bold-text primary bg-dark': element.userAlias.id === aliasId,
+        }"
+      >
+        {{ element.userAlias.alias }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="score">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="score"
+        [ngClass]="{
+          'bold-text primary bg-dark': element.userAlias.id === aliasId,
+        }"
+      >
+        <span
+          >{{ element.score }}
+          <span fxHide.xs>{{ 'content.points' | transloco }}</span></span
+        >
+      </td>
+    </ng-container>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['position', 'name', 'score']"
+    ></tr>
+  </table>
+}
 <div fxLayoutAlign="center center">
   @if (leaderboardItems.length === 0) {
     <span class="hint">{{ 'content.no-leaderboard-entries' | transloco }}</span>
