@@ -29,12 +29,13 @@
           [maxLength]="30"
         />
         <button mat-icon-button matSuffix (click)="generateAlias()">
-          <mat-icon
-            attr.aria-label="{{ 'content.generate-new-alias' | transloco }}"
-            *ngIf="!alias.id"
-            class="generate-icon"
-            >autorenew</mat-icon
-          >
+          @if (!alias.id) {
+            <mat-icon
+              attr.aria-label="{{ 'content.generate-new-alias' | transloco }}"
+              class="generate-icon"
+              >autorenew</mat-icon
+            >
+          }
         </button>
       </mat-form-field>
       <app-loading-button
