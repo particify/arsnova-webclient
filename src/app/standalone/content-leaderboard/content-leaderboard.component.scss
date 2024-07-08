@@ -1,13 +1,14 @@
 @import '../../../variables';
 
 @include xs {
-  .mat-mdc-cell {
-    font-size: $s-font-size;
-  }
-
   th,
   td {
-    padding-right: 0;
+    font-size: $s-font-size;
+    padding: 0 $spacing-1;
+
+    &:not(:last-of-type) {
+      padding-right: 0;
+    }
   }
 }
 
@@ -21,4 +22,24 @@ table {
 
 .bg-dark {
   background-color: var(--background);
+}
+
+th span {
+  opacity: 0.8;
+}
+
+.position {
+  text-align: center;
+}
+
+.alias {
+  hyphens: auto;
+  word-break: break-word;
+}
+
+.timer-icon {
+  opacity: 0.6;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
 }

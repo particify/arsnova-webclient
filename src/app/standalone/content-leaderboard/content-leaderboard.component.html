@@ -1,8 +1,8 @@
 @if (dataSource) {
   <table mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="position">
-      <th style="width: 40px" mat-header-cell *matHeaderCellDef>
-        {{ 'participant.content.leaderboard-position' | transloco }}
+      <th mat-header-cell *matHeaderCellDef class="position">
+        <span> # </span>
       </th>
       <td
         [ngClass]="{
@@ -10,16 +10,20 @@
         }"
         mat-cell
         *matCellDef="let element"
+        class="position"
       >
         {{ element.position | ordinal }}
       </td>
     </ng-container>
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'participant.content.leaderboard-name' | transloco }}
+        <span>
+          {{ 'participant.content.leaderboard-name' | transloco }}
+        </span>
       </th>
       <td
         mat-cell
+        class="alias"
         [ngClass]="{
           'bold-text primary bg-dark': element.alias.id === aliasId,
         }"
@@ -29,14 +33,10 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="score">
-      <th
-        mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header
-        start="desc"
-        style="width: 100px"
-      >
-        {{ 'participant.content.leaderboard-points' | transloco }}
+      <th mat-header-cell *matHeaderCellDef mat-sort-header start="desc">
+        <span>
+          {{ 'participant.content.leaderboard-points' | transloco }}
+        </span>
       </th>
       <td
         mat-cell
@@ -45,22 +45,33 @@
         }"
         *matCellDef="let element"
       >
-        <span>
-          {{ element.score }}
-        </span>
-        <span class="less-visible">{{
-          '(+' + element.currentPoints + ')'
-        }}</span>
+        <div fxLayout.xs="column">
+          <span>
+            {{ element.score }}
+          </span>
+          <span
+            class="less-visible"
+            [matTooltip]="
+              (element.currentPoints
+                ? element.correct
+                  ? 'participant.content.answered-correctly'
+                  : 'participant.content.partially-answered-correctly'
+                : 'participant.content.answered-incorrectly'
+              ) | transloco
+            "
+            >{{ '(+' + element.currentPoints + ')' }}</span
+          >
+        </div>
       </td>
     </ng-container>
-    <ng-container matColumnDef="currentDuration">
+    <ng-container matColumnDef="currentDuration" *ngIf="contentDuration">
       <th
         mat-header-cell
         *matHeaderCellDef
         mat-sort-header
-        style="width: 100px"
+        [matTooltip]="'participant.content.leaderboard-duration' | transloco"
       >
-        {{ 'participant.content.leaderboard-duration' | transloco }}
+        <mat-icon class="timer-icon">timer</mat-icon>
       </th>
       <td
         mat-cell

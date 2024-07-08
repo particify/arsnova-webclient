@@ -18,6 +18,7 @@ interface LeaderboardTableItem {
   score: number;
   currentPoints: number;
   currentDuration: number;
+  correct: boolean;
 }
 
 @Component({
@@ -32,21 +33,30 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
 
   @Input({ required: true }) leaderboardItems: CurrentLeaderboardItem[] = [];
   @Input({ required: true }) aliasId!: string;
-  @Input() showDuration = true;
+  @Input() contentDuration?: number;
 
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
-  displayedColumns = ['position', 'name', 'score', 'currentDuration'];
+  displayedColumns = ['position', 'name', 'score'];
 
   ngOnChanges(): void {
+    if (this.contentDuration) {
+      this.displayedColumns.push('currentDuration');
+    }
     const tableItems: LeaderboardTableItem[] = [];
     this.leaderboardItems.forEach((item, index) => {
-      tableItems.push({
-        position: index + 1,
-        alias: item.userAlias,
-        score: item.score,
-        currentPoints: item.currentResult?.points || 0,
-        currentDuration: item.currentResult?.durationMs || 0,
-      });
+      if (
+        index < 10 ||
+        (!this.isInTopTen() && item.userAlias.id === this.aliasId)
+      ) {
+        tableItems.push({
+          position: index + 1,
+          alias: item.userAlias,
+          score: item.score,
+          currentPoints: item.currentResult?.points || 0,
+          currentDuration: item.currentResult?.durationMs || 0,
+          correct: item.currentResult?.correct,
+        });
+      }
     });
     this.dataSource = new MatTableDataSource(tableItems);
   }
@@ -55,5 +65,12 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
     if (this.dataSource) {
       this.dataSource.sort = this.sort;
     }
+  }
+
+  private isInTopTen(): boolean {
+    return this.leaderboardItems
+      .slice(0, 10)
+      .map((l) => l.userAlias.id)
+      .includes(this.aliasId);
   }
 }

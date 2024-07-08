@@ -178,6 +178,7 @@
                 ></app-rendered-text>
                 <span class="fill-remaining-space"></span>
                 @if (
+                  contents[i].duration !== undefined &&
                   content.duration !== undefined &&
                   group.groupType === GroupType.QUIZ
                 ) {

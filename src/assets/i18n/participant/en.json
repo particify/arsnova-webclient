@@ -60,10 +60,12 @@
     "attribution-info": "This content is based on a template by {{attribution}} which is licensed under {{license}}.",
     "you-are-at-position": "You are in {{ position }} place!",
     "contents": "Contents",
-    "leaderboard-position": "Pos.",
     "leaderboard-name": "Name",
     "leaderboard-points": "Points",
-    "leaderboard-duration": "Time"
+    "leaderboard-duration": "Time",
+    "answered-correctly": "Answered correctly",
+    "partially-answered-correctly": "Partially answered correctly",
+    "answered-incorrectly": "Answered incorrectly"
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",
