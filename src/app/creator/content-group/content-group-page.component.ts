@@ -336,7 +336,11 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   loadStats(): void {
     this.contentGroupService
-      .getAnswerStatistics(this.contentGroup.roomId, this.contents)
+      .getAnswerStatistics(
+        this.contentGroup.roomId,
+        this.contentGroup.id,
+        this.contents
+      )
       .subscribe((stats) => {
         this.contentStats = stats;
         let correct = 0;
