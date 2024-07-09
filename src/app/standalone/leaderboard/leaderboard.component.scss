@@ -1,14 +1,40 @@
 @import '../../../variables';
 
+td:not(:last-of-type) {
+  padding-right: 0;
+}
+
+table {
+  background-color: var(--surface);
+}
+
+.bg-dark {
+  background-color: var(--background);
+}
+
+.position {
+  text-align: center;
+}
+
+.alias {
+  hyphens: auto;
+  word-break: break-word;
+}
+
+.score {
+  text-align: end;
+}
+
 @include xs {
-  .leaderboard-item {
+  td {
     font-size: $s-font-size;
+    padding: 0 $spacing-1;
   }
 }
 
-:host-context(.theme-dark) .mat-mdc-list-item.primary-variant {
-  --mdc-list-list-item-label-text-color: var(--palette-primary-contrast-200);
-  --mdc-list-list-item-hover-label-text-color: var(
-    --palette-primary-contrast-200
-  );
+@include gt-xs {
+  .position {
+    width: 72px;
+    padding: 0;
+  }
 }

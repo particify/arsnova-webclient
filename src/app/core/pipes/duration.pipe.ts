@@ -4,11 +4,14 @@ import duration from 'dayjs/plugin/duration';
 
 @Pipe({ name: 'duration' })
 export class DurationPipe implements PipeTransform {
-  transform(milliseconds: number): string {
+  transform(milliseconds: number, contentDuration?: number): string {
     dayjs.extend(duration);
     return dayjs!
       .duration(milliseconds, 'milliseconds')
       .format('mm:ss.SSS')
-      .slice(0, -2);
+      .slice(
+        contentDuration && contentDuration < 60 ? 3 : 0,
+        contentDuration && contentDuration > 59 ? -4 : -2
+      );
   }
 }

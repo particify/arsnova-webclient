@@ -60,10 +60,12 @@
     "attribution-info": "Dieser Inhalt basiert auf einer Vorlage von {{attribution}}, welche unter {{license}} lizenziert wurde.",
     "you-are-at-position": "Du bist auf dem {{ position }} Platz!",
     "contents": "Inhalte",
-    "leaderboard-position": "Pos.",
     "leaderboard-name": "Name",
     "leaderboard-points": "Punkte",
-    "leaderboard-duration": "Zeit"
+    "leaderboard-duration": "Zeit",
+    "answered-correctly": "Richtig beantwortet",
+    "partially-answered-correctly": "Teilweise richtig beantwortet",
+    "answered-incorrectly": "Falsch beantwortet"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",
