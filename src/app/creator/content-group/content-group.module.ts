@@ -38,6 +38,7 @@ import { ContentResultsComponent } from '@app/standalone/content-results/content
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     LoadingIndicatorComponent,
     ContentStepperComponent,
     FlexLayoutModule,
+    ContentGroupInfoComponent,
   ],
 })
 export class ContentGroupModule {}

@@ -1,0 +1,26 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+  <div class="primary primary-border group-type">
+    {{
+      'content.group-type-' + contentGroup.groupType.toLowerCase() | transloco
+    }}
+  </div>
+
+  <span class="content-count">{{
+    'content.content-count'
+      | transloco
+        : {
+            count: contentGroup.contentIds ? contentGroup.contentIds.length : 0,
+          }
+  }}</span>
+  <div
+    fxLayout="row"
+    fxLayoutGap="4px"
+    fxLayoutAlign="start center"
+    class="locked-info"
+  >
+    @if (contentGroup.publishingMode === 'NONE') {
+      <mat-icon>lock</mat-icon>
+      <span>{{ 'creator.content.locked' | transloco }}</span>
+    }
+  </div>
+</div>

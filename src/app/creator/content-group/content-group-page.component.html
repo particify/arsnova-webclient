@@ -13,18 +13,9 @@
           <div fxLayout="column" fxLayoutGap="8px">
             <span>{{ contentGroup.name }}</span>
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-              <div class="primary primary-border group-type">
-                {{
-                  'creator.content.group-type-' +
-                    contentGroup.groupType.toLowerCase() | transloco
-                }}
-              </div>
-              @if (contentGroup.contentIds) {
-                <span class="content-count">{{
-                  'creator.content.content-count'
-                    | transloco: { count: contentGroup.contentIds.length }
-                }}</span>
-              }
+              <app-content-group-info
+                [contentGroup]="contentGroup"
+              ></app-content-group-info>
             </div>
             <mat-menu #groupSettings="matMenu">
               <button mat-menu-item [matMenuTriggerFor]="importExportMenu">
