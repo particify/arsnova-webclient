@@ -206,6 +206,7 @@
     "content-group-deleted": "Deine Fragenserie wurde gelöscht.",
     "contents": "Inhalte",
     "group-published": "Die Fragenserie wurde freigegeben.",
+    "group-locked": "Die Fragenserie wurde gesperrt.",
     "preferences": "Anzeigeeinstellungen",
     "reset-banned-answers": "Gebannte Wörter zurücksetzen",
     "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt.",
