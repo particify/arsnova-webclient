@@ -16,11 +16,14 @@ $dark-theme: mat.m2-define-dark-theme(
 
 .theme-dark {
   --warn: #ef9a9a;
+  --warn-variant: #b71c1c;
   --warn-inverted: #c62828;
   --warn-soft: #ffcc80;
   --warn-soft-inverted: #fb8c00;
   --success: #81c784;
   --success-inverted: #43a047;
+  --play: #00c853;
+  --play-variant: #2e7d32;
   --background: #212121;
   --surface: #333;
   --dialog: #424242;

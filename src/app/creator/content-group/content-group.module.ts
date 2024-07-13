@@ -39,6 +39,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/co
     ContentStepperComponent,
     FlexLayoutModule,
     ContentGroupInfoComponent,
+    CountdownTimerComponent,
   ],
 })
 export class ContentGroupModule {}

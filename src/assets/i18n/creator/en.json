@@ -268,9 +268,10 @@
     "publishing-modes-not-available-in-live-mode": "This setting is not available in live mode.",
     "group-is-hidden-for-participants": "Question series is hidden for participants.",
     "live": "Live",
-    "stop-active-quiz-to-start": "Stop the current quiz to start this content.",
     "quiz-started": "Quiz has been started.",
-    "quiz-stopped": "Quiz has been stopped."
+    "quiz-stopped": "Quiz has been stopped.",
+    "stop-active-quiz-to-start": "Stop the current quiz to start this content.",
+    "answering-finished": "Answering is finished"
   },
   "survey": {
     "a11y-stop-survey": "Stops the live feedback.",

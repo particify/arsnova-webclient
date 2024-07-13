@@ -270,7 +270,8 @@
     "live": "Live",
     "quiz-started": "Das Quiz wurde gestartet.",
     "quiz-stopped": "Das Quiz wurde gestoppt.",
-    "stop-active-quiz-to-start": "Stoppe das aktuelle Quiz, um diesen Inhalt zu starten."
+    "stop-active-quiz-to-start": "Stoppe das aktuelle Quiz, um diesen Inhalt zu starten.",
+    "answering-finished": "Die Beantwortung wurde beendet"
   },
   "survey": {
     "a11y-stop-survey": "Stoppt das Live Feedback.",

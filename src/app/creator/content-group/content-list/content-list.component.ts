@@ -29,6 +29,7 @@ import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-
 import { CdkDragDrop, CdkDragSortEvent } from '@angular/cdk/drag-drop';
 import { MatListItem } from '@angular/material/list';
 import { ContentStats } from '@app/creator/content-group/content-group-page.component';
+import { Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-content-list',
@@ -68,6 +69,11 @@ export class ContentListComponent
   publishingChangeActive = false;
   publishingChangePosition?: number;
 
+  startedContentIndex?: number;
+  endDate?: Date;
+
+  finishedContents = new Map<string, boolean>();
+
   constructor(
     private contentService: ContentService,
     private notificationService: NotificationService,
@@ -89,8 +95,19 @@ export class ContentListComponent
       if (contentId) {
         const content = this.contents.find((c) => c.id === contentId);
         if (content) {
+          content.state.answeringEndTime = undefined;
           content.state.round = 1;
+          this.finishedContents.set(content.id, false);
         }
+      }
+    });
+    this.contents.forEach((c) => {
+      this.finishedContents.set(
+        c.id,
+        !!c.state.answeringEndTime && !this.isTimerRunning(c)
+      );
+      if (this.isTimerRunning(c)) {
+        this.setTimerData(c);
       }
     });
   }
@@ -248,15 +265,11 @@ export class ContentListComponent
 
   updatePublishingIndex(index: number) {
     const changes: { publishingIndex: number } = { publishingIndex: index };
-    this.contentGroupService
+    return this.contentGroupService
       .patchContentGroup(this.contentGroup, changes)
-      .subscribe((updatedContentGroup) => {
-        this.contentGroup = updatedContentGroup;
-      });
-  }
-
-  hasSpecificPublishing(): boolean {
-    return this.contentPublishService.hasSpecificPublishing(this.contentGroup);
+      .pipe(
+        tap((contentGroup: ContentGroup) => (this.contentGroup = contentGroup))
+      );
   }
 
   isRangePublished(): boolean {
@@ -402,7 +415,7 @@ export class ContentListComponent
     const newPublishingIndex = event.currentIndex - 1;
     if (this.contentGroup.publishingIndex !== newPublishingIndex) {
       this.contentGroup.publishingIndex = newPublishingIndex;
-      this.updatePublishingIndex(newPublishingIndex);
+      this.updatePublishingIndex(newPublishingIndex).subscribe();
     }
   }
 
@@ -413,11 +426,94 @@ export class ContentListComponent
     this.changeDetectorRef.detectChanges();
   }
 
-  showAsLocked(index: number): boolean {
-    return !this.publishingChangeActive && !this.isPublished(index);
-  }
-
   getPercentageString(value?: number): string {
     return value?.toFixed() + '\u202F%';
+  }
+
+  isStarted(index: number): boolean {
+    return (
+      this.startedContentIndex === index &&
+      this.isTimerRunning(this.contents[index])
+    );
+  }
+
+  private isTimerRunning(content: Content): boolean {
+    return (
+      !!content.state.answeringEndTime &&
+      new Date(content.state.answeringEndTime) > new Date()
+    );
+  }
+
+  startContent(index: number): void {
+    const contentId = this.contents[index].id;
+    this.contentGroupService
+      .startContent(this.room.id, this.contentGroup.id, contentId)
+      .subscribe(() => {
+        this.reloadContent(contentId).subscribe(() => {
+          if (this.contentGroup.publishingIndex < index) {
+            this.contentGroup.publishingIndex = index;
+          }
+          const msg = this.translateService.translate(
+            'creator.content.quiz-started'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        });
+      });
+  }
+
+  stopContent(index: number): void {
+    const contentId = this.contents[index].id;
+    this.contentService.stopContent(this.room.id, contentId).subscribe(() => {
+      this.reloadContent(contentId).subscribe(() => {
+        this.finishAnswering();
+        const msg = this.translateService.translate(
+          'creator.content.quiz-stopped'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      });
+    });
+  }
+
+  finishAnswering(): void {
+    if (this.startedContentIndex !== undefined) {
+      this.finishedContents.set(
+        this.contents[this.startedContentIndex].id,
+        true
+      );
+    }
+    this.endDate = undefined;
+    this.startedContentIndex = undefined;
+  }
+
+  private reloadContent(contentId: string): Observable<Content> {
+    return this.contentService.getContent(this.room.id, contentId).pipe(
+      tap((content: Content) => {
+        this.finishedContents.set(
+          content.id,
+          !!content.state.answeringEndTime && !this.isTimerRunning(content)
+        );
+        const index = this.contents.map((c) => c.id).indexOf(contentId);
+        this.contents[index] = content;
+        this.setTimerData(content);
+      })
+    );
+  }
+
+  private setTimerData(content: Content): void {
+    if (content.state.answeringEndTime) {
+      this.endDate = new Date(content.state.answeringEndTime);
+      this.startedContentIndex = this.contents
+        .map((c) => c.id)
+        .indexOf(content.id);
+    } else {
+      this.endDate = undefined;
+      this.startedContentIndex = undefined;
+    }
   }
 }

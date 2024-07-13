@@ -255,7 +255,9 @@ export class ContentService extends AbstractEntityService<Content> {
       return of();
     }
     for (const contentId of contentGroup.contentIds) {
-      observableBatch.push(this.deleteAnswers(contentGroup.roomId, contentId));
+      observableBatch.push(
+        this.deleteAnswersOfContent(contentId, contentGroup.roomId, false)
+      );
     }
     return forkJoin(observableBatch);
   }
@@ -360,20 +362,21 @@ export class ContentService extends AbstractEntityService<Content> {
 
   deleteAnswersOfContent(
     contentId: string,
-    roomId: string
+    roomId: string,
+    showNotification = true
   ): Observable<Content> {
     return this.deleteAnswers(roomId, contentId).pipe(
       tap(() => {
-        this.translateService
-          .selectTranslate('creator.dialog.answers-deleted')
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-            this.answersDeleted.next(contentId);
-          });
+        if (showNotification) {
+          const msg = this.translateService.translate(
+            'creator.dialog.answers-deleted'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        }
+        this.answersDeleted.next(contentId);
       })
     );
   }

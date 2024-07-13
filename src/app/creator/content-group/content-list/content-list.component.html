@@ -77,7 +77,7 @@
                     [listPreview]="true"
                   ></app-rendered-text>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="space-between">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
                   <div fxLayout="row" fxLayoutGap="12px">
                     <mat-icon
                       class="type-icon"
@@ -90,6 +90,7 @@
                       <div
                         fxLayout="row"
                         fxLayoutGap="8px"
+                        fxLayoutAlign="start center"
                         class="content-stats-info"
                       >
                         @if (
@@ -121,6 +122,48 @@
                         }
                       </div>
                     }
+                    @if (endDate && isStarted(i)) {
+                      <div
+                        fxLayout="row"
+                        fxLayoutGap="4px"
+                        fxLayoutAlign="start center"
+                        class="secondary live-info"
+                      >
+                        @if (content.duration) {
+                          <app-countdown-timer
+                            [endDate]="endDate"
+                            [duration]="content.duration"
+                            [showProgressBar]="false"
+                            fontSize="12px"
+                            (finished)="finishAnswering()"
+                          >
+                          </app-countdown-timer>
+                        } @else {
+                          <div
+                            fxLayout="row"
+                            fxLayoutGap="4px"
+                            fxLayoutAlign="start center"
+                          >
+                            <span>{{
+                              'creator.content.live' | transloco
+                            }}</span>
+                            <div class="live-circle"></div>
+                          </div>
+                        }
+                      </div>
+                    }
+                    @if (finishedContents.get(content.id)) {
+                      <div
+                        fxLayout="row"
+                        fxLayoutAlign="start center"
+                        class="content-stats-info live-info"
+                        [matTooltip]="
+                          'creator.content.answering-finished' | transloco
+                        "
+                      >
+                        <mat-icon>flag</mat-icon>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
@@ -130,7 +173,9 @@
                 class="button-bar"
                 [ngClass]="{
                   'show-bar':
-                    i === activeMenuIndex || content.id === activeContentId,
+                    i === activeMenuIndex ||
+                    content.id === activeContentId ||
+                    (isLiveMode() && isStarted(i)),
                 }"
               >
                 @if (contentTypes.indexOf(content.format) > -1) {
@@ -153,6 +198,7 @@
                     ) {
                       <button
                         mat-icon-button
+                        color="primary"
                         (click)="
                           toggleAnswersPublished(content);
                           $event.stopPropagation()
@@ -196,12 +242,13 @@
                     }
                     @if (
                       !isModerator &&
-                      hasSpecificPublishing() &&
+                      isRangePublished() &&
+                      !isLiveMode() &&
                       i !== contentGroup.publishingIndex
                     ) {
                       <button
-                        color="primary"
                         mat-icon-button
+                        color="primary"
                         (click)="
                           updatePublishingIndex(i); $event.stopPropagation()
                         "
@@ -211,6 +258,43 @@
                       >
                         <mat-icon>lock_open</mat-icon>
                       </button>
+                    }
+                    @if (!isModerator && isLiveMode()) {
+                      @if (isStarted(i)) {
+                        <button
+                          mat-icon-button
+                          style="margin-right: 8px"
+                          class="stop-button"
+                          (click)="stopContent(i); $event.stopPropagation()"
+                          [matTooltip]="'creator.content.stop-quiz' | transloco"
+                        >
+                          <mat-icon>stop</mat-icon>
+                        </button>
+                      } @else {
+                        <div
+                          (click)="$event.stopPropagation()"
+                          [matTooltip]="
+                            'creator.content.stop-active-quiz-to-start'
+                              | transloco
+                          "
+                          [matTooltipDisabled]="
+                            startedContentIndex == undefined
+                          "
+                        >
+                          <button
+                            mat-icon-button
+                            [disabled]="startedContentIndex !== undefined"
+                            style="margin-right: 8px"
+                            class="start-button"
+                            (click)="startContent(i); $event.stopPropagation()"
+                            [matTooltip]="
+                              'creator.content.start-quiz' | transloco
+                            "
+                          >
+                            <mat-icon>play_arrow</mat-icon>
+                          </button>
+                        </div>
+                      }
                     }
                     @if (!isModerator) {
                       <button

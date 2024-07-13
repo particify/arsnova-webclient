@@ -297,6 +297,26 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
       );
   }
 
+  startContent(
+    roomId: string,
+    contentGroupId: string,
+    contentId: string
+  ): Observable<void> {
+    const connectionUrl = this.buildUri(
+      `/${contentGroupId}/start-content?contentId=${contentId}`,
+      roomId
+    );
+    return this.http
+      .post<void>(connectionUrl, httpOptions)
+      .pipe(
+        catchError(
+          this.handleError<void>(
+            `Start content, room: ${roomId}, content group: ${contentGroupId}, content: ${contentId}`
+          )
+        )
+      );
+  }
+
   getTypeIcons(): Map<GroupType, string> {
     return this.typeIcons;
   }
