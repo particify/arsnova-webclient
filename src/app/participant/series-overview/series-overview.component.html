@@ -1,6 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <mat-card fxLayout="column" fxLayoutGap="16px">
-    @if (!isLoading && group.groupType !== GroupType.QUIZ) {
+    @if (!isLoading && !group.leaderboardEnabled) {
       <span class="header-text">
         {{ getHeaderText() | transloco }}
       </span>
@@ -120,8 +120,7 @@
         ></app-leaderboard>
       }
       @if (
-        !isLoading &&
-        (group.groupType !== GroupType.QUIZ || selectedTabIndex === 1)
+        !isLoading && (!group.leaderboardEnabled || selectedTabIndex === 1)
       ) {
         <mat-list>
           @for (content of contentsWithResults; track content; let i = $index) {
@@ -180,10 +179,10 @@
                 @if (
                   contents[i].duration !== undefined &&
                   content.duration !== undefined &&
-                  group.groupType === GroupType.QUIZ
+                  isLiveMode()
                 ) {
                   <span class="duration">{{
-                    content.duration || 0 | duration
+                    content.duration | duration
                   }}</span>
                 }
               </div>

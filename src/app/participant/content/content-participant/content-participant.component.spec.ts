@@ -23,6 +23,9 @@ import { ContentAnswerService } from '@app/core/services/http/content-answer.ser
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentGroup } from '@app/core/models/content-group';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
 describe('ContentParticipantComponent', () => {
   let component: ContentParticipantComponent;
@@ -49,6 +52,26 @@ describe('ContentParticipantComponent', () => {
   formattingService.postString.and.returnValue(of('rendered'));
 
   const mockContentAnswerService = jasmine.createSpyObj(['addAnswerChoice']);
+
+  const contentPublishService = jasmine.createSpyObj(ContentPublishService, [
+    'isGroupLive',
+  ]);
+
+  const mockAuthenticationService = jasmine.createSpyObj(
+    AuthenticationService,
+    ['getCurrentAuthentication']
+  );
+
+  const mockRoomUserAliasService = jasmine.createSpyObj(RoomUserAliasService, [
+    'generateAlias',
+    'updateAlias',
+  ]);
+  mockRoomUserAliasService.generateAlias.and.returnValue(
+    of({ id: 'id', alias: 'alias', seed: 1234 })
+  );
+  mockRoomUserAliasService.updateAlias.and.returnValue(
+    of({ id: 'aliasId', alias: 'alias', seed: 1234 })
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -94,6 +117,18 @@ describe('ContentParticipantComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
+        },
+        {
+          provide: ContentPublishService,
+          useValue: contentPublishService,
+        },
+        {
+          provide: RoomUserAliasService,
+          useValue: mockRoomUserAliasService,
+        },
+        {
+          provide: AuthenticationService,
+          useValue: mockAuthenticationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

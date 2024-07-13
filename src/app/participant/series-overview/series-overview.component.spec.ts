@@ -16,6 +16,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
@@ -46,6 +47,10 @@ describe('SeriesOverviewComponent', () => {
 
   const formattingService = jasmine.createSpyObj(['postString']);
   formattingService.postString.and.returnValue(of('rendered'));
+
+  const contentPublishService = jasmine.createSpyObj(ContentPublishService, [
+    'isGroupLive',
+  ]);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -78,6 +83,10 @@ describe('SeriesOverviewComponent', () => {
         {
           provide: FormattingService,
           useValue: formattingService,
+        },
+        {
+          provide: ContentPublishService,
+          useValue: contentPublishService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

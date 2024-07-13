@@ -323,7 +323,10 @@ export class ParticipantContentCarouselPageComponent
   }
 
   isContentTimerActive(content: Content): boolean {
-    return new Date(content.state.answeringEndTime) > new Date();
+    return (
+      !!content.state.answeringEndTime &&
+      new Date(content.state.answeringEndTime) > new Date()
+    );
   }
 
   getInitialStep() {

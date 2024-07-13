@@ -59,6 +59,7 @@ import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CoreModule } from '@app/core/core.module';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 interface ContentActionTab {
   route: string;
@@ -183,7 +184,8 @@ export class ContentParticipantComponent
     private eventService: EventService,
     private contentService: ContentService,
     private translateService: TranslocoService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private contentPublishService: ContentPublishService
   ) {
     super(formService);
   }
@@ -436,11 +438,11 @@ export class ContentParticipantComponent
 
   showWaitingArea(): boolean {
     return (
-      !this.isLoading &&
       !this.answer &&
-      !!this.content.duration &&
-      ((!this.endDate && !this.content.state.answeringEndTime) ||
-        !this.alias?.id)
+      ((this.contentPublishService.isGroupLive(this.contentGroup) &&
+        !this.endDate &&
+        !this.content.state.answeringEndTime) ||
+        (this.contentGroup.leaderboardEnabled && !this.alias?.id))
     );
   }
 
