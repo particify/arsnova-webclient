@@ -86,6 +86,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   showAnswerCount: boolean;
   showHotkeyActionButtons: boolean;
   answeringLocked = false;
+  isPublishing = false;
 
   private hotkeyRefs: symbol[] = [];
 
@@ -171,7 +172,11 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       .getAnswersDeleted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((contentId) => {
-        if (contentId === this.content.id && this.content.duration) {
+        if (
+          contentId &&
+          contentId === this.content.id &&
+          this.content.duration
+        ) {
           this.presentationService.reloadCurrentContent();
         }
       });
@@ -289,26 +294,31 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
 
   private setCurrentContent(index: number): void {
     this.currentStep = index;
+    const lastAnsweringEndTime = this.content?.state.answeringEndTime;
     this.content = this.contents[index];
-    if (this.content.duration) {
-      if (this.content.state.answeringEndTime) {
-        this.endDate = new Date(this.content.state.answeringEndTime);
-        this.answeringLocked = new Date() > this.endDate;
-      } else {
-        this.endDate = undefined;
-      }
+    if (
+      this.isLiveMode() &&
+      !this.isPublished() &&
+      index > this.contentGroup.publishingIndex &&
+      lastAnsweringEndTime &&
+      this.answeringLocked
+    ) {
+      this.publishCurrentContent();
+    }
+    if (this.content.state.answeringEndTime) {
+      this.endDate = new Date(this.content.state.answeringEndTime);
+      this.answeringLocked = new Date() > this.endDate;
     } else {
       this.endDate = undefined;
-      this.answeringLocked = false;
     }
   }
 
   startCountdown(): void {
-    this.presentationService.startCountdown();
+    this.presentationService.startContent();
   }
 
   stopCountdown(): void {
-    this.presentationService.stopCountdown();
+    this.presentationService.stopContent();
   }
 
   updateCounter(count: number) {
@@ -351,11 +361,17 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   }
 
   publishCurrentContent(): void {
+    this.isPublishing = true;
     const changes = { publishingIndex: this.currentStep };
     this.contentGroupService
       .patchContentGroup(this.contentGroup, changes)
       .subscribe(() => {
         this.contentGroup.publishingIndex = this.currentStep;
+        this.isPublishing = false;
       });
+  }
+
+  isLiveMode(): boolean {
+    return this.contentPublishService.isGroupLive(this.contentGroup);
   }
 }

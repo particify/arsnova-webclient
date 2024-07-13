@@ -12,7 +12,10 @@
         <mat-card
           [ngClass]="{ 'no-card-appearance': hideControls }"
           [hidden]="
-            showStepInfo && content.duration && !content.state.answeringEndTime
+            showStepInfo &&
+            isLiveMode &&
+            content.duration &&
+            !content.state.answeringEndTime
           "
         >
           <app-content-results
@@ -40,6 +43,7 @@
           class="waiting-container"
           [hidden]="
             !showStepInfo ||
+            !isLiveMode ||
             !(content.duration && !content.state.answeringEndTime)
           "
         >
