@@ -105,6 +105,7 @@ import { ContentGroupTemplateComponent } from '@app/standalone/content-group-tem
 import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.component';
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 import { ServerTimeInterceptor } from '@app/core/interceptors/server-time.interceptor';
+import { DefaultHeaderInterceptor } from '@app/core/interceptors/default-header.interceptor';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -198,6 +199,11 @@ export function initializeApp(appConfig: AppConfig) {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ServerTimeInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: DefaultHeaderInterceptor,
       multi: true,
     },
     UpdateService,
