@@ -2,12 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
-import {
-  ContentGroup,
-  GroupType,
-  PUBLISHING_MODE_ITEMS,
-  PublishingMode,
-} from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -58,8 +53,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   attributionsExist = false;
 
-  publishingModeItems = PUBLISHING_MODE_ITEMS;
-  selectedPublishingMode = this.publishingModeItems[0];
   GroupType = GroupType;
 
   contentStats = new Map<string, ContentStats>();
@@ -123,7 +116,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       .getByRoomIdAndName(this.room.id, groupName, true)
       .subscribe((group) => {
         this.contentGroup = { ...group };
-        this.setSelectedPublishingMode();
         this.getGroups();
         if (this.contentGroup.contentIds) {
           this.contentService
@@ -169,12 +161,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
           this.contentGroupStats = roomStats.groupStats;
         }
       });
-  }
-
-  private setSelectedPublishingMode(): void {
-    this.selectedPublishingMode = this.publishingModeItems.find(
-      (s) => s.type === this.contentGroup.publishingMode
-    )!;
   }
 
   updateContentGroup(changes: object): Observable<ContentGroup> {
@@ -275,12 +261,14 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  publishContents() {
-    const changes: { publishingMode: PublishingMode } = {
-      publishingMode: this.selectedPublishingMode.type,
-    };
+  publishContentGroup(): void {
+    const changes = { published: true };
     this.updateContentGroup(changes).subscribe((updatedContentGroup) => {
       this.contentGroup = updatedContentGroup;
+      const msg = this.translateService.translate(
+        'creator.content.group-published'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 

@@ -18,7 +18,7 @@
     fxLayoutAlign="start center"
     class="locked-info"
   >
-    @if (contentGroup.publishingMode === 'NONE') {
+    @if (!contentGroup.published) {
       <mat-icon>lock</mat-icon>
       <span>{{ 'creator.content.locked' | transloco }}</span>
     }

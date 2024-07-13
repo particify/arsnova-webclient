@@ -147,29 +147,37 @@
                 >
                   {{ 'creator.content.abstentions-allowed' | transloco }}
                 </mat-checkbox>
-                @if (!isLoading && contentGroup.groupType === GroupType.QUIZ) {
-                  <div
-                    fxLayout="row"
-                    fxLayoutGap="1em"
-                    fxLayoutAlign="start center"
+                <div
+                  fxLayout="row"
+                  fxLayoutGap="1em"
+                  fxLayoutAlign="start center"
+                  [matTooltip]="
+                    (content?.duration
+                      ? 'creator.content.timer-only-enabled-in-live-mode'
+                      : 'creator.content.enable-live-mode-to-use-timer'
+                    ) | transloco
+                  "
+                  [matTooltipDisabled]="isLiveMode()"
+                >
+                  <span
+                    [ngStyle]="{
+                      opacity: isLiveMode() && !formDisabled ? 1 : 0.5,
+                    }"
+                    >{{ 'creator.content.seconds-to-answer' | transloco }}</span
                   >
-                    <span>{{
-                      'creator.content.seconds-to-answer' | transloco
-                    }}</span>
-                    <mat-form-field
-                      appearance="outline"
-                      class="no-field-hint initial-width minimal-number-input smaller-select-input"
-                    >
-                      <input
-                        [(ngModel)]="duration"
-                        [disabled]="isAnswered"
-                        matInput
-                        type="number"
-                        max="600"
-                      />
-                    </mat-form-field>
-                  </div>
-                }
+                  <mat-form-field
+                    appearance="outline"
+                    class="no-field-hint initial-width minimal-number-input smaller-select-input"
+                  >
+                    <input
+                      [(ngModel)]="duration"
+                      [disabled]="isAnswered || !isLiveMode() || formDisabled"
+                      matInput
+                      type="number"
+                      max="600"
+                    />
+                  </mat-form-field>
+                </div>
               </div>
             }
             @if (!isLoading) {

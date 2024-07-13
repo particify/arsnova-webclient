@@ -263,15 +263,15 @@ export class ContentListComponent
     return this.contentPublishService.isRangePublished(this.contentGroup);
   }
 
-  isSinglePublished(): boolean {
-    return this.contentPublishService.isSinglePublished(this.contentGroup);
-  }
-
   isPublished(index: number): boolean {
     return this.contentPublishService.isIndexPublished(
       this.contentGroup,
       index
     );
+  }
+
+  isLiveMode(): boolean {
+    return this.contentPublishService.isGroupLive(this.contentGroup);
   }
 
   openedMenu(index: number) {
@@ -372,12 +372,7 @@ export class ContentListComponent
   }
 
   private updatePublishingIndexOnSorting(prev: number, current: number): void {
-    if (
-      this.isSinglePublished() &&
-      prev === this.contentGroup.publishingIndex
-    ) {
-      this.contentGroup.publishingIndex = current;
-    } else if (this.isRangePublished()) {
+    if (this.isRangePublished()) {
       if (this.isMovedIntoLocked(prev, current)) {
         this.contentGroup.publishingIndex--;
       } else if (this.isMovedIntoPublished(prev, current)) {

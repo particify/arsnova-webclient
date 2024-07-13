@@ -16,10 +16,14 @@ $item-height: 90px;
   border-width: 1px;
   border-radius: $border-radius;
   padding-bottom: $spacing-1;
-}
 
-.content-box:not(.single-published-item, :hover, :focus) {
-  border-color: var(--border);
+  &:not(:hover, :focus) {
+    border-color: var(--border);
+  }
+
+  &:hover {
+    border-color: var(--grey);
+  }
 }
 
 .button-bar {

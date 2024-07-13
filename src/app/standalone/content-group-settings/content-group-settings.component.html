@@ -23,32 +23,100 @@
       </mat-error>
     }
   </mat-form-field>
-  @if (data.contentGroup.groupType !== GroupType.FLASHCARDS) {
+  <app-settings-slide-toggle
+    [label]="'creator.content.publish-content-group'"
+    [disabled]="formDisabled"
+    [isChecked]="group.published"
+    (toggleEvent)="group.published = $event"
+  ></app-settings-slide-toggle>
+  @if (group.groupType !== GroupType.FLASHCARDS) {
     <app-settings-slide-toggle
       [label]="'creator.content.publish-statistics'"
       [disabled]="formDisabled"
-      [isChecked]="data.contentGroup.statisticsPublished"
-      (toggleEvent)="data.contentGroup.statisticsPublished = $event"
+      [isChecked]="group.statisticsPublished"
+      (toggleEvent)="group.statisticsPublished = $event"
     ></app-settings-slide-toggle>
   }
-  @if (
-    [GroupType.QUIZ, GroupType.MIXED].includes(data.contentGroup.groupType)
-  ) {
+  @if ([GroupType.QUIZ, GroupType.MIXED].includes(group.groupType)) {
     <app-settings-slide-toggle
       [label]="'creator.content.publish-correct-answers'"
       [disabled]="formDisabled"
-      [isChecked]="data.contentGroup.correctOptionsPublished"
-      (toggleEvent)="data.contentGroup.correctOptionsPublished = $event"
+      [isChecked]="group.correctOptionsPublished"
+      (toggleEvent)="group.correctOptionsPublished = $event"
     ></app-settings-slide-toggle>
   }
-  @if (data.contentGroup.groupType === GroupType.QUIZ) {
+  @if (group.groupType === GroupType.QUIZ) {
     <app-settings-slide-toggle
       [label]="'creator.content.enable-leaderboard'"
       [disabled]="formDisabled"
-      [isChecked]="data.contentGroup.leaderboardEnabled"
-      (toggleEvent)="data.contentGroup.leaderboardEnabled = $event"
+      [isChecked]="group.leaderboardEnabled"
+      (toggleEvent)="group.leaderboardEnabled = $event"
     ></app-settings-slide-toggle>
   }
+  @if (group.groupType === GroupType.QUIZ) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.live-mode'"
+      [disabled]="formDisabled"
+      [isChecked]="isLive()"
+      (toggleEvent)="
+        group.publishingMode = $event ? PublishingMode.LIVE : PublishingMode.ALL
+      "
+    ></app-settings-slide-toggle>
+  }
+  <div
+    fxLayout="column"
+    fxLayoutGap="8px"
+    [matTooltip]="
+      'creator.content.publishing-modes-not-available-in-live-mode' | transloco
+    "
+    [matTooltipDisabled]="!isLive()"
+  >
+    <span class="publishing-mode-label" [ngClass]="{ disabled: isLive() }">{{
+      'creator.content.publishing-mode' | transloco
+    }}</span>
+    <mat-button-toggle-group
+      name="publishingMode"
+      [hideSingleSelectionIndicator]="true"
+      [(ngModel)]="group.publishingMode"
+      class="mode-toggle-btn"
+    >
+      <div fxFlex>
+        <mat-button-toggle
+          fxFlex
+          [disabled]="isLive()"
+          [value]="PublishingMode.ALL"
+          >{{
+            'creator.content.publishing-mode-all' | transloco
+          }}</mat-button-toggle
+        >
+      </div>
+
+      <mat-button-toggle
+        fxFlex
+        [disabled]="isLive()"
+        [value]="PublishingMode.UP_TO"
+        >{{
+          'creator.content.publishing-mode-up-to' | transloco
+        }}</mat-button-toggle
+      >
+    </mat-button-toggle-group>
+    <div class="publishing-mode-description">
+      @switch (group.publishingMode) {
+        @case (PublishingMode.ALL) {
+          <span>{{
+            'creator.content.publishing-mode-description-all' | transloco
+          }}</span>
+        }
+        @case (PublishingMode.UP_TO) {
+          <span
+            >{{
+              'creator.content.publishing-mode-description-up-to' | transloco
+            }}
+          </span>
+        }
+      }
+    </div>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions fxLayoutAlign="end">
   <button mat-button matDialogClose>

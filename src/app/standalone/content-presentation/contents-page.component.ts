@@ -8,7 +8,7 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Subject, take, takeUntil } from 'rxjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -275,7 +275,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     ) {
       return;
     }
-    if (this.contentGroup.publishingMode !== PublishingMode.NONE) {
+    if (this.contentGroup.published) {
       this.updateStateChange();
     }
     this.canAnswerContent = ![

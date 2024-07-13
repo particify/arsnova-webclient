@@ -6,9 +6,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -57,7 +58,8 @@ export class ContentGroupsComponent {
     private routingService: RoutingService,
     private contentGroupService: ContentGroupService,
     private translateService: TranslocoService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private contentPublishService: ContentPublishService
   ) {}
 
   viewContents() {
@@ -74,21 +76,18 @@ export class ContentGroupsComponent {
   }
 
   isLocked(): boolean {
-    return this.contentGroup.publishingMode === PublishingMode.NONE;
+    return this.contentPublishService.isGroupLocked(this.contentGroup);
   }
 
   togglePublishing(): void {
     const changes = {
-      publishingMode:
-        this.contentGroup.publishingMode === PublishingMode.NONE
-          ? PublishingMode.ALL
-          : PublishingMode.NONE,
+      published: !this.contentGroup.published,
     };
     this.contentGroupService
       .patchContentGroup(this.contentGroup, changes)
       .subscribe((group) => {
         this.contentGroup = group;
-        if (this.contentGroup.publishingMode === PublishingMode.NONE) {
+        if (this.isLocked()) {
           const msg = this.translateService.translate(
             'creator.content.group-locked'
           );

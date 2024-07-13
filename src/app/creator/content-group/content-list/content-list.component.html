@@ -55,8 +55,7 @@
             [routerLink]="(i + 1).toString()"
             [ngClass]="{
               'not-supported': contentTypes.indexOf(content.format) === -1,
-              'locked-item': showAsLocked(i),
-              'single-published-item': isSinglePublished() && isPublished(i),
+              'locked-item': !isPublished(i),
               'no-pointer-events': publishingChangeActive,
             }"
             [ngStyle]="{
@@ -83,7 +82,7 @@
                     <mat-icon
                       class="type-icon"
                       [ngClass]="{
-                        'locked-content': showAsLocked(i),
+                        'locked-content': !isPublished(i),
                       }"
                       >{{ iconList.get(content.format) }}</mat-icon
                     >
@@ -207,9 +206,7 @@
                           updatePublishingIndex(i); $event.stopPropagation()
                         "
                         [matTooltip]="
-                          'creator.content.' +
-                            (isSinglePublished() ? 'publish' : 'publish-up-to')
-                            | transloco
+                          'creator.content.publish-up-to' | transloco
                         "
                       >
                         <mat-icon>lock_open</mat-icon>
