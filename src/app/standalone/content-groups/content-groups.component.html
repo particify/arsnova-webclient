@@ -4,7 +4,6 @@
   role="button"
   id="content-group"
   #contentGroupCard
-  class="primary-shadow-hover"
   fxLayoutAlign="start center"
   (click)="viewContents()"
   attr.aria-label="{{
@@ -22,26 +21,43 @@
     fxLayoutAlign="space-between center"
     fxLayoutGap="0.5em"
   >
-    <div
-      fxLayout="row"
-      fxLayoutAlign="start center"
-      fxLayoutGap="0.5em"
-      class="ellipsis group-name"
-    >
-      <app-text-overflow-clip
-        class="ellipsis"
-        [text]="contentGroup.name"
-      ></app-text-overflow-clip>
-      @if (getLength()) {
-        <app-list-badge [count]="getLength()"></app-list-badge>
-      }
-    </div>
-    @if (isLocked()) {
-      <mat-icon
-        class="locked"
-        [matTooltip]="'creator.room-page.group-locked' | transloco"
-        >locked</mat-icon
+    <div fxLayout="column" fxLayoutGap="8px" class="ellipsis">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxLayoutGap="0.5em"
+        class="ellipsis group-name"
       >
+        <app-text-overflow-clip
+          class="ellipsis"
+          [text]="contentGroup.name"
+        ></app-text-overflow-clip>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+        <app-content-group-info
+          [contentGroup]="contentGroup"
+        ></app-content-group-info>
+      </div>
+    </div>
+    @if (!this.isParticipant()) {
+      <button
+        mat-icon-button
+        color="primary"
+        class="publishing-btn"
+        (click)="$event.stopPropagation(); togglePublishing()"
+      >
+        <mat-icon
+          [matTooltip]="
+            (contentGroup.publishingMode === 'NONE'
+              ? 'creator.content.publish'
+              : 'creator.content.lock'
+            ) | transloco
+          "
+          >{{
+            contentGroup.publishingMode === 'NONE' ? 'lock_open' : 'locked'
+          }}</mat-icon
+        >
+      </button>
     }
   </div>
 </mat-card>

@@ -399,7 +399,12 @@
     "get-ready-alias": "Mach dich bereit, {{alias}}!",
     "leaderboard": "Rangliste",
     "no-leaderboard-entries": "Noch keine Ergebnisse.",
-    "points": "Punkte"
+    "points": "Punkte",
+    "group-type-mixed": "Mix",
+    "group-type-quiz": "Quiz",
+    "group-type-survey": "Umfrage",
+    "group-type-flashcards": "Lernkarten",
+    "content-count": "{{count}} Inhalte"
   },
   "answer": {
     "word": "Schlagwort",

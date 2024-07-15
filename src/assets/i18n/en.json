@@ -399,7 +399,12 @@
     "get-ready-alias": "Get ready, {{alias}}!",
     "leaderboard": "Leaderboard",
     "no-leaderboard-entries": "No results yet.",
-    "points": "Points"
+    "points": "Points",
+    "group-type-mixed": "Mixed",
+    "group-type-quiz": "Quiz",
+    "group-type-survey": "Survey",
+    "group-type-flashcards": "Flashcards",
+    "content-count": "{{count}} Contents"
   },
   "answer": {
     "word": "Keyword",

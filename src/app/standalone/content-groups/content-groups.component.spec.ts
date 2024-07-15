@@ -2,12 +2,18 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentGroupsComponent } from './content-groups.component';
 import { Router } from '@angular/router';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { MockGlobalStorageService, MockRouter } from '@testing/test-helpers';
+import {
+  MockGlobalStorageService,
+  MockNotificationService,
+  MockRouter,
+} from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 
 describe('ContentGroupsComponent', () => {
   let component: ContentGroupsComponent;
@@ -15,6 +21,10 @@ describe('ContentGroupsComponent', () => {
 
   const mockRoutingService = jasmine.createSpyObj('RoutingService', [
     'getRoleRoute',
+  ]);
+
+  const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', [
+    'patchContentGroup',
   ]);
 
   beforeEach(waitForAsync(() => {
@@ -33,6 +43,14 @@ describe('ContentGroupsComponent', () => {
         {
           provide: RoutingService,
           useValue: mockRoutingService,
+        },
+        {
+          provide: ContentGroupService,
+          useValue: mockContentGroupService,
+        },
+        {
+          provide: NotificationService,
+          useClass: MockNotificationService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -1,0 +1,55 @@
+@import '../../../variables';
+
+@include xs {
+  .group-type {
+    font-size: $xs-font-size;
+  }
+
+  .content-count {
+    font-size: $xs-font-size;
+  }
+
+  .locked-info {
+    font-size: $xs-font-size;
+
+    mat-icon {
+      font-size: $xs-font-size;
+      width: $xs-font-size;
+      height: $xs-font-size;
+    }
+  }
+}
+
+@include gt-xs {
+  .group-type {
+    font-size: $s-font-size;
+  }
+
+  .content-count {
+    font-size: $s-font-size;
+  }
+
+  .locked-info {
+    font-size: $s-font-size;
+
+    mat-icon {
+      font-size: $s-font-size;
+      width: $s-font-size;
+      height: $s-font-size;
+    }
+  }
+}
+
+.group-type {
+  padding: calc($spacing / 4) calc($spacing / 2);
+  border-radius: $border-radius;
+}
+
+.content-count {
+  opacity: 0.7;
+}
+
+.locked-info {
+  color: var(--on-surface);
+  opacity: 0.7;
+}

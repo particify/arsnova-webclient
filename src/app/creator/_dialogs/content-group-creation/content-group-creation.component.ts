@@ -47,7 +47,7 @@ export class ContentGroupCreationComponent extends FormComponent {
     super(formService);
     Object.values(GroupType).forEach((type) => {
       const title = this.translateService.translate(
-        'creator.content.group-type-' + type.toLowerCase()
+        'content.group-type-' + type.toLowerCase()
       );
       const description = this.translateService.translate(
         'creator.content.group-type-description-' + type.toLowerCase()

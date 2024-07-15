@@ -3,24 +3,23 @@
 #content-group {
   width: 100%;
   margin-top: 10px;
-  padding: 0 16px;
+  padding: $spacing-2;
 
-  &:hover {
+  @media (hover: hover) {
+    &:not(:hover, :focus-within) {
+      border-color: var(--border);
+
+      .publishing-btn {
+        display: none;
+      }
+    }
+  }
+
+  &:hover,
+  :focus {
+    border-color: var(--grey);
     cursor: pointer;
   }
-}
-
-.container {
-  width: 100%;
-}
-
-.locked {
-  opacity: 0.5;
-  flex-shrink: 0;
-}
-
-.group-name {
-  margin: 16px 0;
 }
 
 @include xs {
