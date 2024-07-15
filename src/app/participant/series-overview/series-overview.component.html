@@ -73,10 +73,10 @@
             [selectedIndex]="selectedTabIndex"
             [animationDuration]="0"
           >
-            <mat-tab [label]="'content.leaderboard' | transloco"> </mat-tab>
             <mat-tab
               [label]="'participant.content.contents' | transloco"
             ></mat-tab>
+            <mat-tab [label]="'content.leaderboard' | transloco"> </mat-tab>
           </mat-tab-group>
         </div>
       }
@@ -108,19 +108,7 @@
         <app-loading-indicator></app-loading-indicator>
       }
       @if (
-        !isLoading &&
-        group.leaderboardEnabled &&
-        leaderboard &&
-        selectedTabIndex === 0
-      ) {
-        <app-leaderboard
-          fxFill
-          [leaderboardItems]="leaderboard"
-          [aliasId]="alias?.id"
-        ></app-leaderboard>
-      }
-      @if (
-        !isLoading && (!group.leaderboardEnabled || selectedTabIndex === 1)
+        !isLoading && (!group.leaderboardEnabled || selectedTabIndex === 0)
       ) {
         <mat-list>
           @for (content of contentsWithResults; track content; let i = $index) {
@@ -189,6 +177,18 @@
             </mat-list-item>
           }
         </mat-list>
+      }
+      @if (
+        !isLoading &&
+        group.leaderboardEnabled &&
+        leaderboard &&
+        selectedTabIndex === 1
+      ) {
+        <app-leaderboard
+          fxFill
+          [leaderboardItems]="leaderboard"
+          [aliasId]="alias?.id"
+        ></app-leaderboard>
       }
     </div>
   </mat-card>
