@@ -59,11 +59,6 @@ $icon-container-size: 40px;
   }
 }
 
-.icon-container {
-  height: $icon-container-size;
-  width: $icon-container-size;
-}
-
 .body {
   max-width: calc(100% - (#{$icon-container-size} + 16px));
 }
