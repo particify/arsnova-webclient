@@ -39,7 +39,10 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
   displayedColumns = ['position', 'name', 'score'];
 
   ngOnChanges(): void {
-    if (this.contentDuration) {
+    if (
+      this.contentDuration &&
+      !this.displayedColumns.includes('currentDuration')
+    ) {
       this.displayedColumns.push('currentDuration');
     }
     const tableItems: LeaderboardTableItem[] = [];
