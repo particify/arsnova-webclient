@@ -478,14 +478,20 @@
           @if (isRangePublished() && contentGroup.publishingIndex === i) {
             <div
               cdkDrag
+              [cdkDragDisabled]="isLiveMode()"
               (cdkDragStarted)="publishingChangeActive = true"
               (cdkDragDropped)="dropPublishingDivider($event)"
               cdkDragBoundary=".content-list"
               class="locked-divider-container"
+              [ngClass]="{ 'static-divider': isLiveMode() }"
             >
-              <div class="locked-divider primary-background"></div>
               <div
-                class="locked-drag primary-border primary"
+                class="locked-divider"
+                [ngClass]="{ 'primary-background': !isLiveMode() }"
+              ></div>
+              <div
+                class="locked-drag"
+                [ngClass]="{ 'primary primary-border': !isLiveMode() }"
                 fxLayout="row"
                 fxLayoutAlign="start center"
                 fxLayoutGap="4px"
