@@ -144,11 +144,11 @@ export class ContentParticipantComponent
   wordloudContent!: ContentWordcloud;
   numericContent!: ContentNumeric;
 
-  choiceAnswer!: ChoiceAnswer;
-  prioritizationAnswer!: PrioritizationAnswer;
-  wordcloudAnswer!: MultipleTextsAnswer;
-  textAnswer!: TextAnswer;
-  numericAnswer!: NumericAnswer;
+  choiceAnswer?: ChoiceAnswer;
+  prioritizationAnswer?: PrioritizationAnswer;
+  wordcloudAnswer?: MultipleTextsAnswer;
+  textAnswer?: TextAnswer;
+  numericAnswer?: NumericAnswer;
 
   selectedRoute = '';
   endDate?: Date;
@@ -281,6 +281,14 @@ export class ContentParticipantComponent
   }
 
   initAnswerData() {
+    if (!this.answer) {
+      this.choiceAnswer,
+        this.textAnswer,
+        this.prioritizationAnswer,
+        this.numericAnswer,
+        (this.wordcloudAnswer = undefined);
+      return;
+    }
     if (
       [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
         this.content.format

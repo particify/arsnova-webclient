@@ -22,7 +22,7 @@ import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/c
 })
 export class ContentNumericParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentNumeric;
-  @Input({ required: true }) answer!: NumericAnswer;
+  @Input() answer?: NumericAnswer;
   @Input() correctOptionsPublished = false;
   @Output() answerChanged = new EventEmitter<NumericAnswer>();
 

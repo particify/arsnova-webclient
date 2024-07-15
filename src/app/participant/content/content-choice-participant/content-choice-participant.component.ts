@@ -26,7 +26,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 })
 export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentChoice;
-  @Input({ required: true }) answer!: ChoiceAnswer;
+  @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
   @Input() correctOptionsPublished = false;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
@@ -102,7 +102,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
           (this.content as ContentChoice).correctOptionIndexes =
             this.correctOptionIndexes;
           this.getCorrectAnswer();
-          if (this.isChoice) {
+          if (this.isChoice && this.answer) {
             this.checkAnswer(this.answer.selectedChoiceIndexes);
             this.isLoading = false;
           } else {
