@@ -164,11 +164,7 @@
                   (keyup.enter)="goToContent(i)"
                 ></app-rendered-text>
                 <span class="fill-remaining-space"></span>
-                @if (
-                  contents[i].duration !== undefined &&
-                  content.duration !== undefined &&
-                  isLiveMode()
-                ) {
+                @if (content.duration && isLiveMode()) {
                   <span class="duration">{{
                     content.duration | duration
                   }}</span>
