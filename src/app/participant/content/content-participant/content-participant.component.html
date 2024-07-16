@@ -211,14 +211,11 @@
                       >
                         @if (alreadySent) {
                           <div>
-                            @if (
-                              !hasAbstained && !content.state.answeringEndTime
-                            ) {
+                            @if (!hasAbstained && !content.duration) {
                               <p class="primary">
                                 {{ 'participant.answer.has-voted' | transloco }}
                               </p>
-                            }
-                            @if (
+                            } @else if (
                               !hasAbstained &&
                               answer &&
                               answer.durationMs &&
@@ -235,8 +232,7 @@
                                         }
                                 }}
                               </p>
-                            }
-                            @if (hasAbstained) {
+                            } @else if (hasAbstained) {
                               <p class="primary">
                                 {{
                                   'participant.answer.has-abstained' | transloco
@@ -244,8 +240,7 @@
                               </p>
                             }
                           </div>
-                        }
-                        @if (!alreadySent && answeringLocked) {
+                        } @else if (answeringLocked) {
                           <div>
                             <p>
                               {{
