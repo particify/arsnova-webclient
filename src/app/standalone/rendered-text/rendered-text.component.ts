@@ -30,6 +30,7 @@ export class RenderedTextComponent implements OnChanges {
   @Input() markdownFeatureset = MarkdownFeatureset.EXTENDED;
   @Input() linebreaks = true;
   @Input() listPreview = false;
+  @Input() minimalHeight = false;
   @Output() rendered = new EventEmitter();
   displayedText?: string | SafeHtml;
   isLoading = false;
