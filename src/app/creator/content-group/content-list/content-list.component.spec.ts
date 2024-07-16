@@ -66,6 +66,7 @@ describe('ContentListComponent', () => {
     'getContentsByIds',
     'getTypeIcons',
     'getAnswersDeleted',
+    'hasFormatRounds',
   ]);
   mockContentService.getContentsByIds.and.returnValue(of([]));
   mockContentService.getTypeIcons.and.returnValue(

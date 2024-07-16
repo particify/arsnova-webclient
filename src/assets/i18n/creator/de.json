@@ -271,7 +271,8 @@
     "content-started": "Der Inhalt wurde gestartet.",
     "content-stopped": "Der Inhalt wurde gestoppt.",
     "stop-active-content-to-start": "Stoppe den aktuellen Inhalt, um diesen Inhalt zu starten.",
-    "answering-finished": "Die Beantwortung wurde beendet"
+    "answering-finished": "Die Beantwortung wurde beendet",
+    "starting-multiple-rounds-not-available-for-content-type": "Mehrere Runden werden bei diesem Frageformat nicht unterstützt. Lösche die Antworten, um den Inhalt erneut zu starten."
   },
   "survey": {
     "a11y-stop-survey": "Stoppt das Live Feedback.",
