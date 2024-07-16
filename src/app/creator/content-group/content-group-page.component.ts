@@ -2,7 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
-import { ContentGroup, GroupType } from '@app/core/models/content-group';
+import {
+  ContentGroup,
+  GroupType,
+  PublishingMode,
+} from '@app/core/models/content-group';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -234,6 +238,14 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
             msg,
             AdvancedSnackBarTypes.WARNING
           );
+          if (this.contentGroup.publishingMode === PublishingMode.LIVE) {
+            this.updateContentGroup({ publishingIndex: 0 }).subscribe(
+              (contentGroup) => {
+                this.contentGroup.publishingIndex =
+                  contentGroup.publishingIndex;
+              }
+            );
+          }
         }
       });
   }
