@@ -167,6 +167,8 @@ describe('ContentListComponent', () => {
       'roomId',
       'test',
       ['0', '1', '2', '3', '4', '5'],
+      true,
+      true,
       true
     );
     mockContentGroupService.patchContentGroup.and.returnValue(
@@ -189,9 +191,11 @@ describe('ContentListComponent', () => {
       'roomId',
       'test',
       ['0', '1', '2', '3', '4', '5'],
-      true
+      true,
+      true,
+      false
     );
-    component.contentGroup.publishingMode = PublishingMode.NONE;
+    component.contentGroup.publishingMode = PublishingMode.ALL;
     mockContentGroupService.patchContentGroup.and.returnValue(
       of(component.contentGroup)
     );
@@ -241,6 +245,8 @@ describe('ContentListComponent', () => {
       'roomId',
       'test',
       ['0', '1', '2', '3', '4', '5'],
+      true,
+      true,
       true
     );
     component.contentGroup.publishingMode = PublishingMode.ALL;
@@ -293,6 +299,8 @@ describe('ContentListComponent', () => {
       'roomId',
       'test',
       ['0', '1', '2', '3', '4', '5'],
+      true,
+      true,
       true
     );
     component.contentGroup.publishingMode = PublishingMode.UP_TO;
@@ -345,6 +353,8 @@ describe('ContentListComponent', () => {
       'roomId',
       'test',
       ['0', '1', '2', '3', '4', '5'],
+      true,
+      true,
       true
     );
     component.contentGroup.publishingMode = PublishingMode.UP_TO;
@@ -397,6 +407,8 @@ describe('ContentListComponent', () => {
       'roomId',
       'test',
       ['0', '1', '2', '3', '4', '5'],
+      true,
+      true,
       true
     );
     component.contentGroup.publishingMode = PublishingMode.UP_TO;

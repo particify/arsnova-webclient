@@ -95,17 +95,17 @@
               }
               <button
                 mat-icon-button
-                (click)="openSettings()"
-                [matTooltip]="'creator.content.group-settings' | transloco"
-              >
-                <mat-icon class="action-icon">settings</mat-icon>
-              </button>
-              <button
-                mat-icon-button
                 [matMenuTriggerFor]="groupSettings"
                 [matTooltip]="'creator.content.more-options' | transloco"
               >
                 <mat-icon class="action-icon">more_vert</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                (click)="openSettings()"
+                [matTooltip]="'creator.content.group-settings' | transloco"
+              >
+                <mat-icon class="action-icon">settings</mat-icon>
               </button>
               <mat-menu #groupSettings="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="exportMenu">
@@ -167,65 +167,6 @@
                 </button>
               </mat-menu>
             </div>
-            <mat-form-field
-              appearance="outline"
-              class="no-field-hint smaller-select-input"
-            >
-              <mat-label>{{
-                'creator.content.publishing-mode' | transloco
-              }}</mat-label>
-              <mat-select
-                panelClass="mid-size-panel"
-                (selectionChange)="publishContents()"
-                [(value)]="selectedPublishingMode"
-                [hideSingleSelectionIndicator]="true"
-                appHotkey="4"
-                [appHotkeyTitle]="'creator.content.edit-publishing' | transloco"
-                appTrackInteraction="Content group publishing mode changed"
-                [appTrackName]="contentGroup.publishingMode"
-              >
-                <mat-select-trigger
-                  style="margin-top: 2px"
-                  fxLayout="row"
-                  fxLayoutAlign="start center"
-                  fxLayoutGap="10px"
-                >
-                  <mat-icon
-                    style="font-size: 16px; width: 16px; height: 16px"
-                    >{{ selectedPublishingMode.icon }}</mat-icon
-                  >
-                  <span class="trigger-text">{{
-                    'creator.content.publishing-mode-' +
-                      selectedPublishingMode.name | transloco
-                  }}</span>
-                </mat-select-trigger>
-                @for (state of publishingModeItems; track state) {
-                  <mat-option [value]="state" class="state-option">
-                    <div fxLayout="row" fxLayoutAlign="start center">
-                      <mat-icon>{{ state.icon }}</mat-icon>
-                      <div fxLayout="column" fxLayoutAlign="center">
-                        <span
-                          [attr.aria-label]="
-                            'creator.content.a11y-publishing-mode-' + state.name
-                              | transloco
-                          "
-                          class="state-name"
-                        >
-                          {{
-                            'creator.content.publishing-mode-' + state.name
-                              | transloco
-                          }}</span
-                        >
-                        <span class="state-description">{{
-                          'creator.content.publishing-mode-description-' +
-                            state.name | transloco
-                        }}</span>
-                      </div>
-                    </div>
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
           </div>
         </div>
         @if (!isLoading && totalCorrect) {
@@ -306,6 +247,25 @@
               <mat-icon>file_upload</mat-icon>
             </button>
           </div>
+          @if (!contentGroup.published) {
+            <div
+              fxLayout="column"
+              fxLayoutGap="16px"
+              fxLayoutAlign="center center"
+            >
+              <span class="hint-sm">{{
+                'creator.content.group-is-hidden-for-participants' | transloco
+              }}</span>
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="publishContentGroup()"
+              >
+                <mat-icon>lock_open</mat-icon
+                >{{ 'creator.content.publish-content-group' | transloco }}
+              </button>
+            </div>
+          }
           <app-content-list
             [room]="room"
             [contentGroup]="contentGroup"

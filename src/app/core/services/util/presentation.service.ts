@@ -59,20 +59,20 @@ export class PresentationService {
     this.currentGroup$.next(group);
   }
 
-  startCountdown(): void {
-    if (this.currentContent?.duration) {
+  startContent(): void {
+    if (this.currentContent) {
       this.contentService
-        .startCountdown(this.currentContent.roomId, this.currentContent.id)
+        .startContent(this.currentContent.roomId, this.currentContent.id)
         .subscribe(() => {
           this.reloadCurrentContent();
         });
     }
   }
 
-  stopCountdown(): void {
-    if (this.currentContent?.duration) {
+  stopContent(): void {
+    if (this.currentContent) {
       this.contentService
-        .stopCountdown(this.currentContent.roomId, this.currentContent.id)
+        .stopContent(this.currentContent.roomId, this.currentContent.id)
         .subscribe(() => {
           this.reloadCurrentContent();
         });

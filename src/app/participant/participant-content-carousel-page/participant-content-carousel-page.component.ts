@@ -2,11 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import {
   STEPPER_ANIMATION_DURATION,
@@ -240,10 +236,7 @@ export class ParticipantContentCarouselPageComponent
     const publishedIds = this.contentPublishService.filterPublishedIds(
       this.contentGroup
     );
-    if (
-      publishedIds.length > 0 &&
-      this.contentGroup.publishingMode !== PublishingMode.NONE
-    ) {
+    if (publishedIds.length > 0 && this.contentGroup.published) {
       this.contentService
         .getContentsByIds(this.contentGroup.roomId, publishedIds)
         .subscribe((contents) => {
@@ -330,7 +323,10 @@ export class ParticipantContentCarouselPageComponent
   }
 
   isContentTimerActive(content: Content): boolean {
-    return new Date(content.state.answeringEndTime) > new Date();
+    return (
+      !!content.state.answeringEndTime &&
+      new Date(content.state.answeringEndTime) > new Date()
+    );
   }
 
   getInitialStep() {

@@ -20,7 +20,7 @@ import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 import { MatMenuModule } from '@angular/material/menu';
 import { RoomService } from '@app/core/services/http/room.service';
 import { MatButtonHarness } from '@angular/material/button/testing';
@@ -590,7 +590,7 @@ describe('NavBarComponent', () => {
       ['1', '2'],
       true,
       true,
-      PublishingMode.ALL
+      true
     );
     const changedProperties = ['revision', 'publishingIndex'];
     const changes = {

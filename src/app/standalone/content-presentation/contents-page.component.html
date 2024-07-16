@@ -62,6 +62,7 @@
         [startIndex]="contentIndex"
         [hideControls]="true"
         [attributions]="attributions"
+        [isLiveMode]="isLiveMode()"
         (indexChanged)="updateURL($event)"
         (answerCountUpdated)="updateCounter($event)"
       >
@@ -78,40 +79,33 @@
   showHotkeyActionButtons &&
   !isLoading &&
   !isGroupLocked() &&
+  isLiveMode() &&
   content &&
-  content.duration &&
-  !content.state.answeringEndTime &&
   isPublished()
 ) {
-  <div @hotkeyEnterLeaveAnimation fxFill>
-    <app-hotkey-action-button
-      hotkey="s"
-      [hotkeyTitle]="'creator.content.start-quiz' | transloco"
-      [action]="'creator.content.to-start-quiz' | transloco"
-      [isNavBarVisible]="controlBarVisible"
-      (buttonClicked)="startCountdown()"
-    ></app-hotkey-action-button>
-  </div>
-}
-@if (
-  showHotkeyActionButtons &&
-  !isLoading &&
-  !isGroupLocked() &&
-  content &&
-  endDate &&
-  !answeringLocked &&
-  isPublished()
-) {
-  <div @hotkeyEnterLeaveAnimation fxFill>
-    <app-hotkey-action-button
-      hotkey="s"
-      [hotkeyTitle]="'creator.content.stop-quiz' | transloco"
-      [action]="'creator.content.to-stop-quiz' | transloco"
-      [isNavBarVisible]="controlBarVisible"
-      [additionalBottomSpace]="!answeringLocked"
-      (buttonClicked)="stopCountdown()"
-    ></app-hotkey-action-button>
-  </div>
+  @if (!content.state.answeringEndTime) {
+    <div @hotkeyEnterLeaveAnimation fxFill>
+      <app-hotkey-action-button
+        hotkey="s"
+        [hotkeyTitle]="'creator.content.start-quiz' | transloco"
+        [action]="'creator.content.to-start-quiz' | transloco"
+        [isNavBarVisible]="controlBarVisible"
+        (buttonClicked)="startCountdown()"
+      ></app-hotkey-action-button>
+    </div>
+  }
+  @if (endDate && !answeringLocked) {
+    <div @hotkeyEnterLeaveAnimation fxFill>
+      <app-hotkey-action-button
+        hotkey="s"
+        [hotkeyTitle]="'creator.content.stop-quiz' | transloco"
+        [action]="'creator.content.to-stop-quiz' | transloco"
+        [isNavBarVisible]="controlBarVisible"
+        [additionalBottomSpace]="!answeringLocked"
+        (buttonClicked)="stopCountdown()"
+      ></app-hotkey-action-button>
+    </div>
+  }
 }
 <div
   class="countdown-container"
@@ -133,7 +127,8 @@
   !isLoading &&
   !isGroupLocked() &&
   content &&
-  !isPublished()
+  !isPublished() &&
+  !this.isPublishing
 ) {
   <app-hotkey-action-button
     @hotkeyEnterLeaveAnimation

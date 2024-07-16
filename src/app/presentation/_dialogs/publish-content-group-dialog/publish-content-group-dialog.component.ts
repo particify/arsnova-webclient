@@ -7,6 +7,7 @@ import {
   PublishingModeItem,
 } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 
@@ -25,12 +26,11 @@ export class PublishContentGroupDialogComponent extends FormComponent {
     public dialogRef: MatDialogRef<PublishContentGroupDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: { contentGroup: ContentGroup },
     private contentGroupService: ContentGroupService,
+    private contentPublishService: ContentPublishService,
     protected formService: FormService
   ) {
     super(formService);
-    this.publishingModes = this.publishingModes.filter(
-      (m) => m.type !== PublishingMode.NONE
-    );
+    this.publishingModes = PUBLISHING_MODE_ITEMS;
     this.selectedMode = this.publishingModes[0];
   }
 
@@ -39,7 +39,12 @@ export class PublishContentGroupDialogComponent extends FormComponent {
       return;
     }
     this.disableForm();
-    const changes = { publishingMode: this.selectedMode.type };
+    const changes: { published: boolean; publishingMode?: PublishingMode } = {
+      published: true,
+    };
+    if (!this.isLive()) {
+      changes.publishingMode = this.selectedMode.type;
+    }
     this.contentGroupService
       .patchContentGroup(this.data.contentGroup, changes)
       .subscribe(
@@ -52,5 +57,9 @@ export class PublishContentGroupDialogComponent extends FormComponent {
 
   close(publishingMode?: PublishingMode) {
     this.dialogRef.close(publishingMode);
+  }
+
+  isLive(): boolean {
+    return this.contentPublishService.isGroupLive(this.data.contentGroup);
   }
 }

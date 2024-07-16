@@ -21,7 +21,7 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { Subject } from 'rxjs';
@@ -455,7 +455,7 @@ export class ControlBarComponent
   }
 
   isGroupLocked(group: ContentGroup): boolean {
-    return group.publishingMode === PublishingMode.NONE;
+    return !group.published;
   }
 
   private checkForQuizMode(): void {

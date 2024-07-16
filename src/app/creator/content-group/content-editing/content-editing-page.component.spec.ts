@@ -26,6 +26,7 @@ import { of } from 'rxjs';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Room } from '@app/core/models/room';
 import { ContentGroup } from '@app/core/models/content-group';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 @Injectable()
 class MockContentService {
@@ -89,6 +90,10 @@ describe('ContentEditingPageComponent', () => {
     snapshot
   );
 
+  const contentPublishService = jasmine.createSpyObj(ContentPublishService, [
+    'isGroupLive',
+  ]);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ContentEditingPageComponent, A11yIntroPipe],
@@ -140,6 +145,10 @@ describe('ContentEditingPageComponent', () => {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
+        },
+        {
+          provide: ContentPublishService,
+          useValue: contentPublishService,
         },
       ],
       imports: [getTranslocoModule(), MatMenuModule],

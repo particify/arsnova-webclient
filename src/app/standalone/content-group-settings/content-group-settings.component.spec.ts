@@ -7,6 +7,7 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 describe('ContentGroupSettingsComponent', () => {
   let component: ContentGroupSettingsComponent;
@@ -19,6 +20,10 @@ describe('ContentGroupSettingsComponent', () => {
 
   const mockContentGroupService = jasmine.createSpyObj(ContentGroupService, [
     'patchContentGroup',
+  ]);
+
+  const contentPublishService = jasmine.createSpyObj(ContentPublishService, [
+    'isGroupLive',
   ]);
 
   beforeEach(async () => {
@@ -40,6 +45,10 @@ describe('ContentGroupSettingsComponent', () => {
         {
           provide: ContentGroupService,
           useValue: mockContentGroupService,
+        },
+        {
+          provide: ContentPublishService,
+          useValue: contentPublishService,
         },
       ],
     }).compileComponents();

@@ -10,7 +10,7 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import { ContentGroup } from '@app/core/models/content-group';
 import { EventService } from '@app/core/services/util/event.service';
 import { Observable, Subject, Subscription, map, takeUntil } from 'rxjs';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
@@ -508,16 +508,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   getFirstGroupWithPublishedContents(): ContentGroup {
     return (
-      this.contentGroups.filter(
-        (cg) => cg.publishingMode !== PublishingMode.NONE
-      )[0] || this.contentGroups[0]
+      this.contentGroups.filter((cg) => cg.published)[0] ||
+      this.contentGroups[0]
     );
   }
 
   filterPublishedGroups(): boolean {
-    this.contentGroups = this.contentGroups.filter(
-      (cg) => cg.publishingMode !== PublishingMode.NONE
-    );
+    this.contentGroups = this.contentGroups.filter((cg) => cg.published);
     if (this.contentGroups.length === 0) {
       this.removeContentFeatureItem();
       return false;
@@ -567,7 +564,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.contentGroups[index] = changes.entity;
       }
       if (this.groupName !== changes.entity.name) {
-        if (changes.entity.publishingMode !== PublishingMode.NONE) {
+        if (changes.entity.published) {
           this.group = changes.entity;
           this.updateGroupName(changes.entity.name);
           this.checkChanges(changes);
@@ -590,8 +587,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
     if (changedEvent.hasPropertyChanged('name')) {
       this.updateGroupName(changes.entity.name);
     }
-    if (changedEvent.hasPropertyChanged('publishingMode')) {
-      if (changes.entity.publishingMode === PublishingMode.NONE) {
+    if (changedEvent.hasPropertyChanged('published')) {
+      if (!changes.entity.published) {
         if (this.filterPublishedGroups()) {
           this.setGroup();
         }

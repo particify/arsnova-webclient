@@ -40,6 +40,7 @@ export class ContentStepperComponent implements AfterViewInit, OnInit {
   @Input() attributions: ContentLicenseAttribution[] = [];
   @Input() hideControls = false;
   @Input() showStepInfo = true;
+  @Input() isLiveMode = false;
   @Output() indexChanged: EventEmitter<number> = new EventEmitter<number>();
   @Output() answerCountUpdated: EventEmitter<number> =
     new EventEmitter<number>();

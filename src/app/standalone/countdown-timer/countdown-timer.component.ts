@@ -29,6 +29,7 @@ export class CountdownTimerComponent implements OnInit, OnDestroy {
   @Input() layout = 'row';
   @Input() borderRadius = 0;
   @Input() fontSize?: string;
+  @Input() showProgressBar = true;
   @Output() finished = new EventEmitter<void>();
   totalTime = 0;
   timeLeft = 0;

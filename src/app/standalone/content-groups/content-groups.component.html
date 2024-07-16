@@ -48,14 +48,12 @@
       >
         <mat-icon
           [matTooltip]="
-            (contentGroup.publishingMode === 'NONE'
+            (!contentGroup.published
               ? 'creator.content.publish'
               : 'creator.content.lock'
             ) | transloco
           "
-          >{{
-            contentGroup.publishingMode === 'NONE' ? 'lock_open' : 'locked'
-          }}</mat-icon
+          >{{ !contentGroup.published ? 'lock_open' : 'locked' }}</mat-icon
         >
       </button>
     }

@@ -12,7 +12,7 @@
         'no-shadow': !showCard,
       }"
     >
-      @if (contentGroup.groupType === GroupType.QUIZ && showWaitingArea()) {
+      @if (showWaitingArea()) {
         <div fxFill>
           <app-content-waiting
             [current]="getIndexInContentGroup() + 1"
@@ -21,15 +21,7 @@
             [roomId]="content.roomId"
           ></app-content-waiting>
         </div>
-      }
-      @if (
-        !isLoading &&
-        (contentGroup.groupType !== GroupType.QUIZ ||
-          !content.duration ||
-          (content.duration &&
-            (endDate || content.state.answeringEndTime) &&
-            alias?.id))
-      ) {
+      } @else {
         <div fxLayout="column" fxLayoutGap="0.5em">
           <div
             fxLayout.gt-xs="row"

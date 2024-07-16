@@ -41,6 +41,7 @@ import { NgStyle, NgClass } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -122,7 +123,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     private contentGroupService: ContentGroupService,
     private themeService: ThemeService,
     private router: Router,
-    private contentCarouselService: ContentCarouselService
+    private contentCarouselService: ContentCarouselService,
+    private contentPublishService: ContentPublishService
   ) {}
 
   ngOnDestroy(): void {
@@ -470,5 +472,9 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       }
     }
     return -1;
+  }
+
+  isLiveMode(): boolean {
+    return this.contentPublishService.isGroupLive(this.group);
   }
 }

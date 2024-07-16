@@ -22,6 +22,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 interface ContentFormat {
   type: ContentType;
@@ -73,6 +74,7 @@ export class ContentEditingPageComponent
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
     private notificationService: NotificationService,
+    private contentPublishService: ContentPublishService,
     protected formService: FormService
   ) {
     super(formService);
@@ -217,6 +219,10 @@ export class ContentEditingPageComponent
         }
       );
     }
+  }
+
+  isLiveMode(): boolean {
+    return this.contentPublishService.isGroupLive(this.contentGroup);
   }
 
   private afterCreation() {
