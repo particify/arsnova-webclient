@@ -26,7 +26,7 @@ import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/co
 })
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentScale;
-  @Input({ required: true }) answer!: ChoiceAnswer;
+  @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 

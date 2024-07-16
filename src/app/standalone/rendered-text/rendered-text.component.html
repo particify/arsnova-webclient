@@ -4,7 +4,10 @@
 @if (!isLoading) {
   <div
     class="rendered-text text-container"
-    [ngClass]="{ 'rendered-list-preview': listPreview }"
+    [ngClass]="{
+      'rendered-list-preview': listPreview,
+      'minimal-height-list-preview': minimalHeight,
+    }"
     [innerHTML]="displayedText"
   ></div>
 }

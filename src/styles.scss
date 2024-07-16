@@ -932,9 +932,11 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
   max-height: calc(2em + 19px);
 }
 
-.rendered-list-preview {
+.minimal-height-list-preview {
   height: 28px;
+}
 
+.rendered-list-preview {
   h1,
   h2,
   h3,

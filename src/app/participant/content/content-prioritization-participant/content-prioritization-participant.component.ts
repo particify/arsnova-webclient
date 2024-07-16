@@ -24,7 +24,7 @@ import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-an
 })
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentPrioritization;
-  @Input({ required: true }) answer!: PrioritizationAnswer;
+  @Input() answer?: PrioritizationAnswer;
   @Output() answerChanged = new EventEmitter<PrioritizationAnswer>();
 
   isLoading = true;
@@ -54,7 +54,7 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
 
   init() {
     if (this.isDisabled) {
-      this.hasAbstained = !this.answer.assignedPoints;
+      this.hasAbstained = !this.answer?.assignedPoints;
     }
     this.initAnswers();
   }

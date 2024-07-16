@@ -27,7 +27,7 @@ import { FlexModule } from '@angular/flex-layout';
 })
 export class ContentTextParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: Content;
-  @Input({ required: true }) answer!: TextAnswer;
+  @Input() answer?: TextAnswer;
   @Output() answerChanged = new EventEmitter<TextAnswer>();
 
   givenAnswer?: TextAnswer;

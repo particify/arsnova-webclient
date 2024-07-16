@@ -34,7 +34,7 @@ import { NgClass } from '@angular/common';
 })
 export class ContentSortParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentChoice;
-  @Input({ required: true }) answer!: ChoiceAnswer;
+  @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
   @Input() correctOptionsPublished = false;
   @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
@@ -96,8 +96,9 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
           (this.content as ContentChoice).correctOptionIndexes =
             this.correctOptionIndexes;
           this.isCorrect =
+            this.answer &&
             this.answer.selectedChoiceIndexes.toString() ===
-            this.correctOptionIndexes.toString();
+              this.correctOptionIndexes.toString();
           this.isLoading = false;
         });
     }

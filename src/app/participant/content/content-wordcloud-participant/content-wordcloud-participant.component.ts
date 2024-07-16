@@ -24,7 +24,7 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
 })
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentWordcloud;
-  @Input({ required: true }) answer!: MultipleTextsAnswer;
+  @Input() answer?: MultipleTextsAnswer;
   @Output() answerChanged = new EventEmitter<MultipleTextsAnswer>();
 
   givenAnswer?: MultipleTextsAnswer;
