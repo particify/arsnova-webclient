@@ -224,11 +224,12 @@ export class ContentListComponent
         newGroup.roomId = this.room.id;
         newGroup.name = groupName;
         this.contentGroupService.post(newGroup).subscribe((group) => {
-          const groupStats = new ContentGroupStatistics(
-            group.id,
-            group.name,
-            0
-          );
+          const groupStats = {
+            id: group.id,
+            groupName: group.name,
+            contentCount: 0,
+            groupType: group.groupType,
+          };
           this.contentGroupStats.push(groupStats);
           this.useContentInOtherGroup(contentId, groupStats, action);
         });
@@ -515,5 +516,12 @@ export class ContentListComponent
       this.endDate = undefined;
       this.startedContentIndex = undefined;
     }
+  }
+
+  isCompatibleWithGroupType(content: Content, groupType: GroupType): boolean {
+    return this.contentGroupService.isContentCompatibleWithGroupType(
+      content,
+      groupType
+    );
   }
 }
