@@ -454,7 +454,7 @@ export class ContentListComponent
             this.contentGroup.publishingIndex = index;
           }
           const msg = this.translateService.translate(
-            'creator.content.quiz-started'
+            'creator.content.content-started'
           );
           this.notificationService.showAdvanced(
             msg,
@@ -470,7 +470,7 @@ export class ContentListComponent
       this.reloadContent(contentId).subscribe(() => {
         this.finishAnswering();
         const msg = this.translateService.translate(
-          'creator.content.quiz-stopped'
+          'creator.content.content-stopped'
         );
         this.notificationService.showAdvanced(
           msg,

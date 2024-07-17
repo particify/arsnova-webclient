@@ -267,7 +267,9 @@
                           style="margin-right: 8px"
                           class="stop-button"
                           (click)="stopContent(i); $event.stopPropagation()"
-                          [matTooltip]="'creator.content.stop-quiz' | transloco"
+                          [matTooltip]="
+                            'creator.content.stop-content' | transloco
+                          "
                         >
                           <mat-icon>stop</mat-icon>
                         </button>
@@ -275,7 +277,7 @@
                         <div
                           (click)="$event.stopPropagation()"
                           [matTooltip]="
-                            'creator.content.stop-active-quiz-to-start'
+                            'creator.content.stop-active-content-to-start'
                               | transloco
                           "
                           [matTooltipDisabled]="
@@ -289,7 +291,7 @@
                             class="start-button"
                             (click)="startContent(i); $event.stopPropagation()"
                             [matTooltip]="
-                              'creator.content.start-quiz' | transloco
+                              'creator.content.start-content' | transloco
                             "
                           >
                             <mat-icon>play_arrow</mat-icon>
