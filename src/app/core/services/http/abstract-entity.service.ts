@@ -271,6 +271,9 @@ export abstract class AbstractEntityService<
   private handleEntityChangeEvent(id: string, msg: IMessage) {
     const changes: object = JSON.parse(msg.body);
     const entity = this.cache.get(this.generateCacheKey(id)) as T;
+    if (!entity) {
+      return;
+    }
     this.mergeChangesRecursively(entity, changes);
     const event = new EntityChanged<T>(
       this.entityType,
