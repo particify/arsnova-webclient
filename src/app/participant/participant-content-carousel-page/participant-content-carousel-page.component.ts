@@ -2,7 +2,11 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
-import { ContentGroup, GroupType } from '@app/core/models/content-group';
+import {
+  ContentGroup,
+  GroupType,
+  PublishingMode,
+} from '@app/core/models/content-group';
 import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import {
   STEPPER_ANIMATION_DURATION,
@@ -419,19 +423,15 @@ export class ParticipantContentCarouselPageComponent
       if (this.started) {
         setTimeout(() => {
           if (index < this.contents.length - 1) {
-            if (
-              this.contentGroup.groupType !== GroupType.QUIZ ||
-              (this.contentGroup.groupType === GroupType.QUIZ &&
-                !this.isContentTimerActive(this.contents[this.currentStep]))
-            ) {
+            if (this.contentGroup.publishingMode !== PublishingMode.LIVE) {
               this.nextContent();
               setTimeout(() => {
                 document.getElementById('step')?.focus();
               }, 200);
             }
           } else if (
-            this.contentGroup.groupType !== GroupType.QUIZ ||
-            (this.contentGroup.groupType === GroupType.QUIZ &&
+            this.contentGroup.publishingMode !== PublishingMode.LIVE ||
+            (this.contentGroup.publishingMode === PublishingMode.LIVE &&
               this.contents.length === this.contentGroup.contentIds.length)
           ) {
             this.goToOverview();
@@ -497,7 +497,7 @@ export class ParticipantContentCarouselPageComponent
         if (this.focusModeEnabled) {
           this.reloadContents();
         } else if (
-          this.contentGroup.groupType === GroupType.QUIZ &&
+          this.contentGroup.publishingMode === PublishingMode.LIVE &&
           changedEvent.hasPropertyChanged('publishingIndex')
         ) {
           this.isReloading = true;
