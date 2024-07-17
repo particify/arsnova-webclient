@@ -21,17 +21,17 @@ import { EventCategory, TrackingService } from './tracking.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { PublishContentGroupDialogComponent } from '@app/presentation/_dialogs/publish-content-group-dialog/publish-content-group-dialog.component';
 
+export const DIALOG_SIZES: Readonly<Record<string, string>> = {
+  xsmall: '350px',
+  small: '400px',
+  medium: '600px',
+  large: '80%',
+  xlarge: '90%',
+  max: '832px',
+};
+
 @Injectable()
 export class DialogService {
-  size = {
-    xsmall: '350px',
-    small: '400px',
-    medium: '600px',
-    large: '80%',
-    xlarge: '90%',
-    max: '832px',
-  };
-
   constructor(
     public dialog: MatDialog,
     private trackingService: TrackingService
@@ -76,7 +76,7 @@ export class DialogService {
     confirmAction?: () => Observable<object | void>
   ): MatDialogRef<BaseDialogComponent> {
     return this.openDialog(BaseDialogComponent, {
-      width: this.size.small,
+      width: DIALOG_SIZES.small,
       data: {
         dialogId: 'delete-' + dialogIdSuffix,
         body: body,
@@ -94,7 +94,7 @@ export class DialogService {
     roomId?: string
   ): MatDialogRef<ContentGroupCreationComponent> {
     return this.openDialog(ContentGroupCreationComponent, {
-      width: this.size.medium,
+      width: DIALOG_SIZES.medium,
       maxWidth: '90vw',
       data: {
         roomId: roomId,
@@ -110,7 +110,7 @@ export class DialogService {
     navigateAfterCreation = true
   ): MatDialogRef<RoomCreateComponent> {
     return this.openDialog(RoomCreateComponent, {
-      width: this.size.xsmall,
+      width: DIALOG_SIZES.xsmall,
       data: {
         prefilledName: prefilledName,
         roomId: roomId,
@@ -123,7 +123,7 @@ export class DialogService {
     username: string
   ): MatDialogRef<UserActivationComponent> {
     return this.openDialog(UserActivationComponent, {
-      width: this.size.xsmall,
+      width: DIALOG_SIZES.xsmall,
       data: username,
     });
   }
@@ -134,7 +134,7 @@ export class DialogService {
     updateAvailable?: Observable<VersionReadyEvent>
   ): MatDialogRef<UpdateInfoComponent> {
     return this.openDialog(UpdateInfoComponent, {
-      width: this.size.medium,
+      width: DIALOG_SIZES.medium,
       disableClose: !afterUpdate,
       data: {
         afterUpdate: afterUpdate,
@@ -152,7 +152,7 @@ export class DialogService {
     contentGroup: ContentGroup
   ): MatDialogRef<PublishContentGroupDialogComponent> {
     return this.openDialog(PublishContentGroupDialogComponent, {
-      width: this.size.small,
+      width: DIALOG_SIZES.small,
       data: {
         contentGroup: contentGroup,
       },

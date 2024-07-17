@@ -29,6 +29,10 @@ import { ContentStats } from '@app/creator/content-group/content-group-page.comp
 import { Content } from '@app/core/models/content';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentService } from '@app/core/services/http/content.service';
+import { ImportResult } from '@app/core/models/import-result';
+import { DIALOG_SIZES } from '@app/core/services/util/dialog.service';
+import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -60,6 +64,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     private roomStatsService: RoomStatsService,
     private contentAnswerService: ContentAnswerService,
     private contentService: ContentService,
+    private dialog: MatDialog,
     cachingService: CachingService
   ) {
     super(
@@ -223,21 +228,51 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     return contentGroups.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  import(roomId: string, groupId: string, blob: Blob): Observable<Blob> {
+  import(
+    roomId: string,
+    groupId: string,
+    blob: Blob
+  ): Observable<ImportResult> {
     const connectionUrl = this.buildUri(`/${groupId}/import`, roomId);
     const formData = new FormData();
     formData.append('file', blob);
-    return this.httpClient
-      .post<Blob>(connectionUrl, formData)
-      .pipe(
-        catchError(
-          this.handleError<Blob>(
-            'importContentGroup',
-            undefined,
-            'creator.content.import-failed'
-          )
+    return this.httpClient.post<ImportResult>(connectionUrl, formData).pipe(
+      tap((r) => this.handleImportResult(r)),
+      catchError(
+        this.handleError<ImportResult>(
+          'importContentGroup',
+          undefined,
+          'creator.content.import-failed'
         )
-      );
+      )
+    );
+  }
+
+  private handleImportResult(result: ImportResult) {
+    if (result.importedLines >= result.totalLines) {
+      return;
+    }
+    const message1 = this.translateService.translate(
+      'creator.dialog.csv-import-errors',
+      { importedLines: result.importedLines, totalLines: result.totalLines }
+    );
+    const message2 =
+      result.importedLines > 0
+        ? ' ' +
+          this.translateService.translate(
+            'creator.dialog.csv-import-errors-line-info',
+            { errorLines: result.errorLines.join(', ') }
+          )
+        : '';
+    this.dialog.open(BaseDialogComponent, {
+      width: DIALOG_SIZES.small,
+      data: {
+        headerLabel: 'creator.dialog.csv-import-errors-header',
+        body: message1 + message2,
+        confirmLabel: 'dialog.close',
+        type: 'button-primary',
+      },
+    });
   }
 
   getAnswerStats(
