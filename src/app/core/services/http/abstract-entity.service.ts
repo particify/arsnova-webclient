@@ -19,6 +19,7 @@ import {
 } from '@app/core/models/events/entity-change-notification';
 
 const PARTITION_SIZE = 50;
+const CACHE_NAME_PREFIX = 'entity-';
 
 /**
  * A specialized version of BaseHttpService which manages persistent data which
@@ -29,7 +30,7 @@ export abstract class AbstractEntityService<
 > extends AbstractCachingHttpService<T> {
   private aliasIdMapping: Map<string, string> = new Map<string, string>();
   private stompSubscriptions = new Map<string, Subscription>();
-  protected cacheName = 'entity';
+  protected readonly cacheName;
 
   constructor(
     protected entityType: string,
@@ -52,6 +53,7 @@ export abstract class AbstractEntityService<
       cachingService,
       useChangeSubscriptions
     );
+    this.cacheName = CACHE_NAME_PREFIX + entityType;
     this.cache.registerDisposeHandler(this.cacheName, (id) =>
       this.handleCacheDisposeEvent(id)
     );
@@ -255,7 +257,7 @@ export abstract class AbstractEntityService<
   }
 
   protected generateCacheKey(id: string): CacheKey {
-    return { type: `${this.cacheName}-${this.entityType}`, id: id };
+    return { type: `${this.cacheName}`, id: id };
   }
 
   private handleCacheDisposeEvent(id: string) {
@@ -269,6 +271,9 @@ export abstract class AbstractEntityService<
   private handleEntityChangeEvent(id: string, msg: IMessage) {
     const changes: object = JSON.parse(msg.body);
     const entity = this.cache.get(this.generateCacheKey(id)) as T;
+    if (!entity) {
+      return;
+    }
     this.mergeChangesRecursively(entity, changes);
     const event = new EntityChanged<T>(
       this.entityType,
