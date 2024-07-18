@@ -397,6 +397,7 @@
     "join-quiz": "Join quiz",
     "get-ready": "Get ready!",
     "get-ready-alias": "Get ready, {{alias}}!",
+    "content-not-published": "Content not published",
     "leaderboard": "Leaderboard",
     "no-leaderboard-entries": "No results yet.",
     "points": "Points",

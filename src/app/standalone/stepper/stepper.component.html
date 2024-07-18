@@ -37,8 +37,13 @@
         >
           <span class="fill-remaining-space"></span>
           @for (step of steps; track step; let i = $index) {
-            <div class="step-container" (click)="onClick(i)">
+            <div
+              class="step-container"
+              (click)="onClick(i)"
+              [ngStyle]="{ opacity: completed.has(i) ? 1 : 0.7 }"
+            >
               <button
+                [disabled]="!completed.has(i)"
                 class="step"
                 tabindex="-1"
                 [ngClass]="{

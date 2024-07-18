@@ -397,6 +397,7 @@
     "join-quiz": "Quiz beitreten",
     "get-ready": "Mach dich bereit!",
     "get-ready-alias": "Mach dich bereit, {{alias}}!",
+    "content-not-published": "Inhalt nicht freigeschaltet",
     "leaderboard": "Rangliste",
     "no-leaderboard-entries": "Noch keine Ergebnisse.",
     "points": "Punkte",

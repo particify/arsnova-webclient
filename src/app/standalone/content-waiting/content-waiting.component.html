@@ -1,9 +1,9 @@
 <div
-  fxFill
   fxLayout="column"
   fxLayoutAlign="center center"
   fxLayoutGap="3em"
   class="waiting-container"
+  [ngStyle]="{ opacity: isLocked ? 0.7 : 1 }"
 >
   <app-content-step-info
     [current]="current"
@@ -44,14 +44,21 @@
       ></app-loading-button>
     </form>
   }
-  @if (alias?.id) {
-    <span>{{
-      'content.get-ready-alias' | transloco: { alias: alias?.alias }
-    }}</span>
-  }
-  @if (!alias) {
-    <span>
-      {{ 'content.get-ready' | transloco }}
-    </span>
+  @if (isLocked) {
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="0.5em">
+      <mat-icon class="locked-icon">lock</mat-icon>
+      <span>{{ 'content.content-not-published' | transloco }}</span>
+    </div>
+  } @else {
+    @if (alias?.id) {
+      <span>{{
+        'content.get-ready-alias' | transloco: { alias: alias?.alias }
+      }}</span>
+    }
+    @if (!alias) {
+      <span>
+        {{ 'content.get-ready' | transloco }}
+      </span>
+    }
   }
 </div>
