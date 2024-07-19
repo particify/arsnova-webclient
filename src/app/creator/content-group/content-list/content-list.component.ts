@@ -1,9 +1,11 @@
 import {
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -50,6 +52,7 @@ export class ContentListComponent
   @Input() isModerator = false;
   @Input() attributionsExist = false;
   @Input() contentStats = new Map<string, ContentStats>();
+  @Output() hasStartedContentChanged = new EventEmitter<boolean>();
 
   currentGroupIndex?: number;
   contentTypes: string[] = Object.values(ContentType);
@@ -489,7 +492,7 @@ export class ContentListComponent
       );
     }
     this.endDate = undefined;
-    this.startedContentIndex = undefined;
+    this.setStartedContent();
   }
 
   private reloadContent(contentId: string): Observable<Content> {
@@ -509,13 +512,18 @@ export class ContentListComponent
   private setTimerData(content: Content): void {
     if (content.state.answeringEndTime) {
       this.endDate = new Date(content.state.answeringEndTime);
-      this.startedContentIndex = this.contents
-        .map((c) => c.id)
-        .indexOf(content.id);
+      this.setStartedContent(
+        this.contents.map((c) => c.id).indexOf(content.id)
+      );
     } else {
       this.endDate = undefined;
-      this.startedContentIndex = undefined;
+      this.setStartedContent();
     }
+  }
+
+  setStartedContent(index?: number): void {
+    this.startedContentIndex = index;
+    this.hasStartedContentChanged.emit(this.startedContentIndex !== undefined);
   }
 
   isCompatibleWithGroupType(content: Content, groupType: GroupType): boolean {

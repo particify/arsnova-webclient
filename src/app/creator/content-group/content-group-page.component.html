@@ -274,6 +274,7 @@
             [isModerator]="isModerator"
             [attributionsExist]="attributionsExist"
             [contentStats]="contentStats"
+            (hasStartedContentChanged)="handleActiveContentChanged($event)"
           ></app-content-list>
         </div>
       </div>
