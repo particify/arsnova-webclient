@@ -21,6 +21,7 @@ export class ContentWaitingComponent extends FormComponent {
   @Input({ required: true }) alias?: RoomUserAlias;
   @Input({ required: true }) roomId!: string;
   @Input() isLocked = false;
+  @Input() timerActive = false;
 
   enteredAlias = '';
 
