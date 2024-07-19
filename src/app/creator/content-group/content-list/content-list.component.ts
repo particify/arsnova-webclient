@@ -101,6 +101,7 @@ export class ContentListComponent
           content.state.answeringEndTime = undefined;
           content.state.round = 1;
           this.finishedContents.set(content.id, false);
+          this.contentStats.set(contentId, { count: 0 });
         }
       }
     });
