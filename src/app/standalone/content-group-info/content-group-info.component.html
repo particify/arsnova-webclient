@@ -1,10 +1,17 @@
 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
-  <div class="primary primary-border group-type">
-    {{
+  <div
+    fxLayout="row"
+    fxLayoutAlign="center center"
+    class="group-type-container"
+    [class]="contentGroup.groupType.toLowerCase()"
+    [matTooltip]="
       'content.group-type-' + contentGroup.groupType.toLowerCase() | transloco
-    }}
+    "
+  >
+    <mat-icon class="group-type">{{
+      typeIcons.get(contentGroup.groupType)
+    }}</mat-icon>
   </div>
-
   <span class="content-count">{{
     'content.content-count'
       | transloco

@@ -49,8 +49,8 @@ interface AnswerStatisticsSummary {
 export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
     [GroupType.MIXED, 'dashboard'],
-    [GroupType.QUIZ, 'emoji_events'],
-    [GroupType.SURVEY, 'bar_chart'],
+    [GroupType.QUIZ, 'sports_esports'],
+    [GroupType.SURVEY, 'tune'],
     [GroupType.FLASHCARDS, 'school'],
   ]);
 

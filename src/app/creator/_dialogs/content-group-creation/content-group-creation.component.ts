@@ -50,18 +50,20 @@ export class ContentGroupCreationComponent extends FormComponent {
   ) {
     super(formService);
     Object.values(GroupType).forEach((type) => {
+      const typeString = type.toLowerCase();
       const title = this.translateService.translate(
-        'content.group-type-' + type.toLowerCase()
+        'content.group-type-' + typeString
       );
       const description = this.translateService.translate(
-        'creator.content.group-type-description-' + type.toLowerCase()
+        'creator.content.group-type-description-' + typeString
       );
       this.radioItems.push(
         new DetailedRadioGroup(
           type,
           title,
           description,
-          this.contentGroupService.getTypeIcons().get(type)
+          this.contentGroupService.getTypeIcons().get(type),
+          `var(--${typeString})`
         )
       );
     });
