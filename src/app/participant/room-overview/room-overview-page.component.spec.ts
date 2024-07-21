@@ -116,8 +116,6 @@ describe('RoomOverviewPageComponent', () => {
 
   mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
 
-  const splitShortIdPipe = new SplitShortIdPipe();
-
   const mockFocusModeService = jasmine.createSpyObj(['getFocusModeEnabled']);
   mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
 
@@ -173,10 +171,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: EventService,
           useClass: MockEventService,
-        },
-        {
-          provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe,
         },
         {
           provide: CommentSettingsService,

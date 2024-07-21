@@ -65,8 +65,6 @@ describe('RoomListComponent', () => {
     'openDeleteDialog',
   ]);
 
-  const mockSplitShortId = new SplitShortIdPipe();
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [RoomListComponent, SplitShortIdPipe],
@@ -107,10 +105,6 @@ describe('RoomListComponent', () => {
         {
           provide: Router,
           useClass: MockRouter,
-        },
-        {
-          provide: SplitShortIdPipe,
-          useValue: mockSplitShortId,
         },
         {
           provide: FeatureFlagService,

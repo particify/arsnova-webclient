@@ -93,8 +93,6 @@ describe('RoomOverviewPageComponent', () => {
     snapshot
   );
 
-  const splitShortIdPipe = new SplitShortIdPipe();
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -142,10 +140,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: CommentService,
           useValue: mockCommentService,
-        },
-        {
-          provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe,
         },
         {
           provide: RoutingService,
