@@ -138,7 +138,9 @@
             @if (!['slide', 'flashcard'].includes(selectedFormat.name)) {
               <div
                 fxLayout="row"
+                fxLayout.xs="column-reverse"
                 fxLayoutAlign="space-between center"
+                fxLayoutAlign.xs="start start"
                 fxLayoutGap="1em"
               >
                 <mat-checkbox
@@ -149,6 +151,7 @@
                 </mat-checkbox>
                 <div
                   fxLayout="row"
+                  fxLayout.xs="row-reverse"
                   fxLayoutGap="1em"
                   fxLayoutAlign="start center"
                   [matTooltip]="
