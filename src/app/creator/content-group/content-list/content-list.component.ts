@@ -185,6 +185,7 @@ export class ContentListComponent
 
   removeContentFromList(index: number) {
     this.contents.splice(index, 1);
+    this.contentGroup.contentIds.splice(index, 1);
   }
 
   useContentInOtherGroup(
