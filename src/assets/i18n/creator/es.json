@@ -98,7 +98,6 @@
     "a11y-dont-publish-answers": "Bloquea las respuestas a este contenido",
     "a11y-add-to-this-content-group": "Agrega este contenido a la serie de preguntas {{name}}",
     "a11y-new-content-group": "Agrega este contenido a una nueva serie de preguntas",
-    "a11y-sort-content": "Posición {{index}} de {{length}}: {{content}}.",
     "a11y-content-item-selected": "Contenido {{index}} de {{length}}: {{body}}",
     "a11y-sort-answer": "Posición {{index}} de {{length}}: {{answer}}.",
     "abort": "Abortar",

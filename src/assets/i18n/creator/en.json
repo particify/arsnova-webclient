@@ -98,7 +98,6 @@
     "a11y-dont-publish-answers": "Lock answers to this content",
     "a11y-add-to-this-content-group": "Add this content to the question series {{name}}",
     "a11y-new-content-group": "Add this content to a new question series",
-    "a11y-sort-content": "Position {{index}} of {{length}}: {{content}}.",
     "a11y-content-item-selected": "Content {{index}} of {{length}}: {{body}}",
     "a11y-sort-answer": "Position {{index}} of {{length}}: {{answer}}.",
     "abort": "Abort",
@@ -140,7 +139,6 @@
     "duplicate-series-name": "There is already a question series with this name.",
     "content-group-update-failed": "Something went wrong. Maybe the question series is already present?",
     "publish": "Publish",
-    "publish-up-to": "Publish up to here",
     "publish-statistics": "Publish statistics",
     "publish-statistics-info": "Participants can view the results after they have answered.",
     "publish-answers": "Publish answers",
@@ -272,7 +270,9 @@
     "content-stopped": "Content has been stopped.",
     "stop-active-content-to-start": "Stop the current content to start this content.",
     "answering-finished": "Answering is finished",
-    "starting-multiple-rounds-not-available-for-content-type": "Multiple rounds are not supported for this content format. Delete the answers to restart the content."
+    "starting-multiple-rounds-not-available-for-content-type": "Multiple rounds are not supported for this content format. Delete the answers to restart the content.",
+    "publishing-index-info": "Published up to the content {{index}}. Use control key with arrow keys to edit the publishing.",
+    "publishing-index-info-live": "Published up to the content {{index}}. Start the next content to publish it."
   },
   "survey": {
     "a11y-stop-survey": "Stops the live feedback.",

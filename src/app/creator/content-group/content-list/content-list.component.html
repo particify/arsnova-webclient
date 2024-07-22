@@ -42,7 +42,7 @@
             (keyup)="moveAnswer($event, i)"
             #sortListItem
             mat-list-item
-            attr.aria-label="{{
+            [attr.aria-label]="
               'creator.content.a11y-content-item-selected'
                 | transloco
                   : {
@@ -50,7 +50,7 @@
                       length: contents.length,
                       body: content.renderedBody | a11yRenderedBody,
                     }
-            }}"
+            "
             class="content-box primary-border-color"
             [routerLink]="(i + 1).toString()"
             [ngClass]="{
@@ -239,25 +239,6 @@
                         appTrackName="on"
                       >
                         <mat-icon>visibility_off</mat-icon>
-                      </button>
-                    }
-                    @if (
-                      !isModerator &&
-                      isRangePublished() &&
-                      !isLiveMode() &&
-                      i !== contentGroup.publishingIndex
-                    ) {
-                      <button
-                        mat-icon-button
-                        color="primary"
-                        (click)="
-                          updatePublishingIndex(i); $event.stopPropagation()
-                        "
-                        [matTooltip]="
-                          'creator.content.publish-up-to' | transloco
-                        "
-                      >
-                        <mat-icon>lock_open</mat-icon>
                       </button>
                     }
                     @if (!isModerator && isLiveMode()) {
@@ -500,13 +481,26 @@
           </button>
           @if (isRangePublished() && contentGroup.publishingIndex === i) {
             <div
+              #publishingDivider
               cdkDrag
               [cdkDragDisabled]="isLiveMode()"
               (cdkDragStarted)="publishingChangeActive = true"
               (cdkDragDropped)="dropPublishingDivider($event)"
+              (keyup.control.ArrowUp)="movePublishingDividerUp(i)"
+              (keyup.control.ArrowDown)="movePublishingDividerDown(i)"
               cdkDragBoundary=".content-list"
               class="locked-divider-container"
               [ngClass]="{ 'static-divider': isLiveMode() }"
+              [tabindex]="isLiveMode() ? -1 : 0"
+              [attr.aria-label]="
+                (isLiveMode()
+                  ? 'creator.content.publishing-index-info-live'
+                  : 'creator.content.publishing-index-info'
+                ) | transloco: { index: contentGroup.publishingIndex + 1 }
+              "
+              appHotkey="p"
+              [appHotkeyDisabled]="isLiveMode()"
+              [appHotkeyTitle]="'creator.content.edit-publishing' | transloco"
             >
               <div
                 class="locked-divider"

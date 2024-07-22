@@ -98,7 +98,6 @@
     "a11y-dont-publish-answers": "Gib die Antworten auf diesen Inhalt nicht frei",
     "a11y-add-to-this-content-group": "Füge diesen Inhalt der Fragenserie {{name}} hinzu",
     "a11y-new-content-group": "Füge diesen Inhalt einer neuen Fragenserie hinzu",
-    "a11y-sort-content": "Position {{index}} von {{length}}: {{content}}.",
     "a11y-content-item-selected": "Inhalt {{index}} von {{length}}: {{body}}",
     "a11y-sort-answer": "Position {{index}} von {{length}}: {{answer}}.",
     "abort": "Abbrechen",
@@ -140,7 +139,6 @@
     "duplicate-series-name": "Es existiert bereits eine Fragenserie mit diesem Namen.",
     "content-group-update-failed": "Etwas ist schiefgegangen. Existiert die Fragenserie vielleicht schon?",
     "publish": "Freischalten",
-    "publish-up-to": "Bis hier freischalten",
     "publish-statistics": "Statistiken freigeben",
     "publish-statistics-info": "Die Teilnehmenden können die Ergebnisse einsehen, nachdem sie geantwortet haben.",
     "publish-answers": "Antworten freigeben",
@@ -272,7 +270,9 @@
     "content-stopped": "Der Inhalt wurde gestoppt.",
     "stop-active-content-to-start": "Stoppe den aktuellen Inhalt, um diesen Inhalt zu starten.",
     "answering-finished": "Die Beantwortung wurde beendet",
-    "starting-multiple-rounds-not-available-for-content-type": "Mehrere Runden werden bei diesem Frageformat nicht unterstützt. Lösche die Antworten, um den Inhalt erneut zu starten."
+    "starting-multiple-rounds-not-available-for-content-type": "Mehrere Runden werden bei diesem Frageformat nicht unterstützt. Lösche die Antworten, um den Inhalt erneut zu starten.",
+    "publishing-index-info": "Freigeschaltet bis zum Inhalt {{index}}. Verwende die Steuerungstaste mit den Pfeiltasten, um Freischaltung zu bearbeiten.",
+    "publishing-index-info-live": "Freigeschaltet bis zum Inhalt {{index}}. Starte den nächsten Inhalt um diesen freizugeben."
   },
   "survey": {
     "a11y-stop-survey": "Stoppt das Live Feedback.",
