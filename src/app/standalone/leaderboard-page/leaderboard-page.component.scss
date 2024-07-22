@@ -1,6 +1,20 @@
+@import '../../../variables';
+
 .title-icon {
   color: var(--gold);
-  width: 32px;
-  height: 32px;
-  font-size: 32px;
+  width: $xl-font-size;
+  height: $xl-font-size;
+  font-size: $xl-font-size;
+}
+
+.title {
+  font-size: $xl-font-size;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-1;
+  align-items: center;
+  margin-bottom: $spacing-1;
 }

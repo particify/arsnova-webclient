@@ -1,7 +1,7 @@
 <app-base-card [showShadow]="showCard">
-  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+  <div class="header">
     <mat-icon class="title-icon">emoji_events</mat-icon>
-    <h1>{{ 'content.leaderboard' | transloco }}</h1>
+    <span class="title">{{ 'content.leaderboard' | transloco }}</span>
   </div>
   @if (isLoading) {
     <app-loading-indicator></app-loading-indicator>
