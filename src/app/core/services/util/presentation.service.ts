@@ -9,9 +9,9 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Content } from '@app/core/models/content';
 import { ContentService } from '@app/core/services/http/content.service';
 
-const SCALE_FACTOR = 1000;
+const SCALE_FACTOR = 1080;
 const MIN_SCALE = 1;
-const MAX_SCALE = 1.9;
+const ASPECT_RATIO = 0.6;
 
 @Injectable()
 export class PresentationService {
@@ -37,8 +37,12 @@ export class PresentationService {
 
   constructor(private contentService: ContentService) {}
 
-  getScale() {
-    return Math.min(Math.max(innerWidth / SCALE_FACTOR, MIN_SCALE), MAX_SCALE);
+  getScale(factor = 1) {
+    const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;
+    const deviceScale = parseFloat(
+      ((innerWidth / SCALE_FACTOR) * ratioScale * factor).toFixed(1)
+    );
+    return Math.max(deviceScale, MIN_SCALE);
   }
 
   getStepState(index: number, listLength: number) {
