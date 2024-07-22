@@ -27,6 +27,7 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { EditContentGroupTemplateComponent } from '@app/standalone/_dialogs/edit-content-group-template/edit-content-group-template.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { AuthProvider } from '@app/core/models/auth-provider';
+import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
 
 @Component({
   standalone: true,
@@ -36,6 +37,7 @@ import { AuthProvider } from '@app/core/models/auth-provider';
     TemplateLicenseComponent,
     AddTemplateButtonComponent,
     ClipboardModule,
+    ContentGroupInfoComponent,
   ],
   selector: 'app-content-group-template-preview',
   templateUrl: './content-group-template-preview.component.html',

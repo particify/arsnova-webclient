@@ -10,6 +10,14 @@ import { MockNotificationService } from '@testing/test-helpers';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { GroupType } from '@app/core/models/content-group';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+
+class MockContentGroupService {
+  getTypeIcons() {
+    return new Map<GroupType, string>();
+  }
+}
 
 describe('ContentGroupTemplateComponent', () => {
   let component: ContentGroupTemplateComponent;
@@ -52,6 +60,10 @@ describe('ContentGroupTemplateComponent', () => {
         {
           provide: DialogService,
           useValue: mockDialogService,
+        },
+        {
+          provide: ContentGroupService,
+          useClass: MockContentGroupService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

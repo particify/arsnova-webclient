@@ -60,12 +60,17 @@
       </div>
       <p class="template-description">{{ template.description }}</p>
       <div fxLayout="column" fxLayoutGap="1em">
-        <app-template-license
-          [ownerName]="template.attribution"
-          [license]="template.license"
-          [showLink]="true"
-          [aiGenerated]="template.aiGenerated"
-        ></app-template-license>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+          <app-content-group-info
+            [groupType]="template.groupType"
+          ></app-content-group-info>
+          <app-template-license
+            [ownerName]="template.attribution"
+            [license]="template.license"
+            [showLink]="true"
+            [aiGenerated]="template.aiGenerated"
+          ></app-template-license>
+        </div>
         <div fxLayout="row" fxLayoutAlign="start center">
           <mat-chip-set>
             @for (tag of template.tags; track tag) {
