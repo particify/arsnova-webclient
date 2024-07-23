@@ -53,13 +53,17 @@
       (toggleEvent)="group.leaderboardEnabled = $event"
     ></app-settings-slide-toggle>
   }
-  @if (group.groupType === GroupType.QUIZ) {
+  @if (group.groupType !== GroupType.FLASHCARDS) {
     <app-settings-slide-toggle
       [label]="'creator.content.live-mode'"
       [disabled]="formDisabled"
       [isChecked]="isLive()"
       (toggleEvent)="
-        group.publishingMode = $event ? PublishingMode.LIVE : PublishingMode.ALL
+        group.publishingMode = $event
+          ? PublishingMode.LIVE
+          : data.contentGroup.publishingMode === PublishingMode.UP_TO
+            ? PublishingMode.UP_TO
+            : PublishingMode.ALL
       "
     ></app-settings-slide-toggle>
   }

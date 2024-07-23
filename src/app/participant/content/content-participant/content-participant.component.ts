@@ -279,7 +279,7 @@ export class ContentParticipantComponent
   }
 
   checkForCountdown(): void {
-    if (this.contentGroup.groupType === GroupType.QUIZ) {
+    if (this.contentPublishService.isGroupLive(this.contentGroup)) {
       if (this.content.state.answeringEndTime) {
         const now = new Date();
         if (

@@ -87,8 +87,8 @@
     <div @hotkeyEnterLeaveAnimation fxFill>
       <app-hotkey-action-button
         hotkey="s"
-        [hotkeyTitle]="'creator.content.start-quiz' | transloco"
-        [action]="'creator.content.to-start-quiz' | transloco"
+        [hotkeyTitle]="'creator.content.start-content' | transloco"
+        [action]="'creator.content.to-start-content' | transloco"
         [isNavBarVisible]="controlBarVisible"
         (buttonClicked)="startCountdown()"
       ></app-hotkey-action-button>
@@ -98,8 +98,8 @@
     <div @hotkeyEnterLeaveAnimation fxFill>
       <app-hotkey-action-button
         hotkey="s"
-        [hotkeyTitle]="'creator.content.stop-quiz' | transloco"
-        [action]="'creator.content.to-stop-quiz' | transloco"
+        [hotkeyTitle]="'creator.content.stop-content' | transloco"
+        [action]="'creator.content.to-stop-content' | transloco"
         [isNavBarVisible]="controlBarVisible"
         [additionalBottomSpace]="!answeringLocked"
         (buttonClicked)="stopCountdown()"

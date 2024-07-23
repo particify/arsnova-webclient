@@ -80,7 +80,7 @@
           </mat-tab-group>
         </div>
       }
-      @if (group.groupType !== GroupType.QUIZ) {
+      @if (!group.leaderboardEnabled) {
         <div
           fxLayout.gt-xs="row"
           fxLayout.lt-sm="column"
