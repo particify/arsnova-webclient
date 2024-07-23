@@ -25,6 +25,7 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 class MockService {}
 
@@ -157,6 +158,10 @@ export default {
           useValue: {
             snapshot: { data: {}, queryParams: { lang: 'en' } },
           },
+        },
+        {
+          provide: DialogService,
+          useClass: MockService,
         },
       ],
     }),

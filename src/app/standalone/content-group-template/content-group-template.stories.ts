@@ -15,6 +15,7 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 class MockService {}
 
@@ -44,6 +45,10 @@ export default {
         },
         {
           provide: RoutingService,
+          useClass: MockService,
+        },
+        {
+          provide: DialogService,
           useClass: MockService,
         },
       ],

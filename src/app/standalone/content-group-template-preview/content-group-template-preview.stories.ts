@@ -24,6 +24,7 @@ import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 class MockService {}
 
@@ -129,6 +130,10 @@ export default {
         },
         {
           provide: AuthenticationService,
+          useClass: MockService,
+        },
+        {
+          provide: DialogService,
           useClass: MockService,
         },
       ],
