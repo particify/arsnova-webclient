@@ -110,7 +110,7 @@ export class ContentEditingPageComponent
           this.content = content;
           this.question = content.body;
           this.abstentionsAllowed = !!this.content?.abstentionsAllowed;
-          this.duration = this.content.duration;
+          this.duration = this.content.duration || undefined;
           this.isEditMode = true;
           const format = this.formats.find(
             (c) => c.name === this.content?.format.toLowerCase()
