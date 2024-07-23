@@ -46,7 +46,6 @@ describe('RoomJoinComponent', () => {
   let loader: HarnessLoader;
   let joinButton: MatButtonHarness;
   let inputField: MatInputHarness;
-  const splitShortIdPipe = new SplitShortIdPipe();
 
   beforeEach(async () => {
     router.navigate.calls.reset();
@@ -89,10 +88,6 @@ describe('RoomJoinComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRoute,
-        },
-        {
-          provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

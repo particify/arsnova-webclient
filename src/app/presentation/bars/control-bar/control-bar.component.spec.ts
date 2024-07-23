@@ -100,8 +100,6 @@ describe('ControlBarComponent', () => {
   );
   (activatedRouteStub as { [key: string]: any })['children'] = {};
 
-  const splitShortIdPipe = new SplitShortIdPipe();
-
   const mockRoutingService = jasmine.createSpyObj([
     'getRoleString',
     'getRouteChanges',
@@ -203,10 +201,6 @@ describe('ControlBarComponent', () => {
         {
           provide: EventService,
           useClass: MockEventService,
-        },
-        {
-          provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe,
         },
         {
           provide: RoutingService,

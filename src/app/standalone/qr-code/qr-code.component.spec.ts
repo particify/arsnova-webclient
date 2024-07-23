@@ -23,8 +23,6 @@ describe('QrCodeComponent', () => {
   let component: QrCodeComponent;
   let fixture: ComponentFixture<QrCodeComponent>;
 
-  const splitShortIdPipe = new SplitShortIdPipe();
-
   const snapshot = new ActivatedRouteSnapshot();
 
   snapshot.data = {
@@ -108,10 +106,6 @@ describe('QrCodeComponent', () => {
       declarations: [SplitShortIdPipe],
       imports: [QrCodeComponent, ExtensionPointModule],
       providers: [
-        {
-          provide: SplitShortIdPipe,
-          useValue: splitShortIdPipe,
-        },
         {
           provide: ApiConfigService,
           useValue: mockApiConfigService,
