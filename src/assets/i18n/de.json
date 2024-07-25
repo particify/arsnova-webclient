@@ -609,7 +609,8 @@
     "time-is-up": "Die Zeit ist abgelaufen"
   },
   "general": {
-    "a11y-remove-filter": "Filter entfernen"
+    "a11y-remove-filter": "Filter entfernen",
+    "not-specified": "Nicht festegelegt"
   },
   "ordinal": {
     "one": "",

@@ -19,6 +19,7 @@ export class TemplateLanguageSelectionComponent
   @Output() selectedLangChanged = new EventEmitter<string>();
   @Input() smaller = false;
   @Input() defaultLang?: string;
+  @Input() allowNoneSelection = false;
   selectedLang?: IsoLanguage;
   langs: IsoLanguage[] = [];
 
@@ -37,12 +38,16 @@ export class TemplateLanguageSelectionComponent
       );
       this.selectedLang = this.langs.find(
         (l) =>
-          l.code === (this.defaultLang || this.translateService.getActiveLang())
+          l.code ===
+          (this.defaultLang ||
+            (this.allowNoneSelection
+              ? undefined
+              : this.translateService.getActiveLang()))
       );
     });
   }
 
-  updateLang(lang: IsoLanguage): void {
+  updateLang(lang?: IsoLanguage): void {
     this.selectedLang = lang;
     this.selectedLangChanged.emit(this.selectedLang?.code);
   }

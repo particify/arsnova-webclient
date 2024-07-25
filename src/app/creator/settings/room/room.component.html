@@ -1,96 +1,101 @@
 @if (editRoom) {
-  <div>
-    <div fxLayout="column">
-      <div tabindex="0" id="room-settings" class="visually-hidden">
-        {{ 'creator.settings.a11y-room' | transloco }}
-      </div>
-      <mat-form-field class="input-block" appearance="outline">
-        <mat-label>{{ 'creator.room.room-name' | transloco }}</mat-label>
-        <input
-          [disabled]="formDisabled"
-          [(ngModel)]="name"
-          matInput
-          placeholder="{{ 'creator.settings.enter-room-name' | transloco }}"
-          name="room-name"
-          maxlength="50"
-          aria-labelledby="room-name"
-        />
-        <mat-hint align="end"
-          ><span aria-hidden="true">{{ name.length }} / 50</span></mat-hint
-        >
-      </mat-form-field>
-      <div class="relative">
-        <mat-tab-group
-          [dynamicHeight]="true"
-          animationDuration="0"
-          (selectedTabChange)="descriptionTabChanged($event)"
-        >
-          <mat-tab label="{{ 'creator.settings.description' | transloco }}">
-            @if (!renderPreview) {
-              <app-formatting-toolbar
-                class="tab-group-formatting-bar-mobile"
-                [inputElement]="descriptionInput"
-                [disabled]="formDisabled"
-                (valueChanged)="description = $event"
-              ></app-formatting-toolbar>
-            }
-            <mat-form-field class="input-block" appearance="outline">
-              <textarea
-                #descriptionInput
-                (input)="updateTextContainsImage(descriptionInput.value)"
-                [disabled]="formDisabled"
-                [(ngModel)]="description"
-                matInput
-                cdkTextareaAutosize
-                cdkAutosizeMinRows="3"
-                cdkAutosizeMaxRows="5"
-                maxlength="500"
-                name="description"
-                aria-labelledby="room-description"
-                placeholder="{{
-                  'creator.settings.enter-room-description' | transloco
-                }}"
-                dir="auto"
-              ></textarea>
-              <mat-hint align="end">
-                <span aria-hidden="true">
-                  {{ description ? description.length : 0 }} / 500
-                </span>
-              </mat-hint>
-            </mat-form-field>
-            @if (textContainsImage) {
-              <app-hint
-                text="creator.utils.formatting-image-hint"
-                [type]="HintType.WARNING"
-              ></app-hint>
-            }
-          </mat-tab>
-          <mat-tab
-            label="{{ 'creator.room.preview' | transloco }}"
-            [disabled]="!description"
-          >
-            <div class="preview-container">
-              <app-rendered-text
-                [rawText]="description"
-                [dynamic]="renderPreview"
-                [markdownFeatureset]="markdownFeatureset"
-                appLangContext
-                appDirContext
-              >
-              </app-rendered-text>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
-        @if (!renderPreview) {
-          <app-formatting-toolbar
-            class="tab-group-formatting-bar"
-            [inputElement]="descriptionInput"
-            [disabled]="formDisabled"
-            (valueChanged)="description = $event"
-          ></app-formatting-toolbar>
-        }
-      </div>
+  <div fxLayout="column" fxLayoutGap="12px">
+    <div tabindex="0" id="room-settings" class="visually-hidden">
+      {{ 'creator.settings.a11y-room' | transloco }}
     </div>
+    <mat-form-field class="input-block" appearance="outline">
+      <mat-label>{{ 'creator.room.room-name' | transloco }}</mat-label>
+      <input
+        [disabled]="formDisabled"
+        [(ngModel)]="name"
+        matInput
+        placeholder="{{ 'creator.settings.enter-room-name' | transloco }}"
+        name="room-name"
+        maxlength="50"
+        aria-labelledby="room-name"
+      />
+      <mat-hint align="end"
+        ><span aria-hidden="true">{{ name.length }} / 50</span></mat-hint
+      >
+    </mat-form-field>
+    <div class="relative">
+      <mat-tab-group
+        [dynamicHeight]="true"
+        animationDuration="0"
+        (selectedTabChange)="descriptionTabChanged($event)"
+        fxLayout="column"
+        fxLayoutGap="12px"
+      >
+        <mat-tab label="{{ 'creator.settings.description' | transloco }}">
+          @if (!renderPreview) {
+            <app-formatting-toolbar
+              class="tab-group-formatting-bar-mobile"
+              [inputElement]="descriptionInput"
+              [disabled]="formDisabled"
+              (valueChanged)="description = $event"
+            ></app-formatting-toolbar>
+          }
+          <mat-form-field appearance="outline">
+            <textarea
+              #descriptionInput
+              (input)="updateTextContainsImage(descriptionInput.value)"
+              [disabled]="formDisabled"
+              [(ngModel)]="description"
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="3"
+              cdkAutosizeMaxRows="5"
+              maxlength="500"
+              name="description"
+              aria-labelledby="room-description"
+              placeholder="{{
+                'creator.settings.enter-room-description' | transloco
+              }}"
+              dir="auto"
+            ></textarea>
+            <mat-hint align="end">
+              <span aria-hidden="true">
+                {{ description ? description.length : 0 }} / 500
+              </span>
+            </mat-hint>
+          </mat-form-field>
+          @if (textContainsImage) {
+            <app-hint
+              text="creator.utils.formatting-image-hint"
+              [type]="HintType.WARNING"
+            ></app-hint>
+          }
+        </mat-tab>
+        <mat-tab
+          label="{{ 'creator.room.preview' | transloco }}"
+          [disabled]="!description"
+        >
+          <div class="preview-container">
+            <app-rendered-text
+              [rawText]="description"
+              [dynamic]="renderPreview"
+              [markdownFeatureset]="markdownFeatureset"
+              appLangContext
+              appDirContext
+            >
+            </app-rendered-text>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+      @if (!renderPreview) {
+        <app-formatting-toolbar
+          class="tab-group-formatting-bar"
+          [inputElement]="descriptionInput"
+          [disabled]="formDisabled"
+          (valueChanged)="description = $event"
+        ></app-formatting-toolbar>
+      }
+    </div>
+    <app-template-language-selection
+      [defaultLang]="editRoom.language"
+      [allowNoneSelection]="true"
+      (selectedLangChanged)="editRoom.language = $event"
+    ></app-template-language-selection>
     <app-settings-slide-toggle
       *appFeatureFlag="'FOCUS_MODE'"
       label="creator.settings.focus-mode"
