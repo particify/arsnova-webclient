@@ -427,7 +427,13 @@
                         ) {
                           <button
                             mat-menu-item
-                            [disabled]="i === currentGroupIndex"
+                            [disabled]="
+                              i === currentGroupIndex ||
+                              !isCompatibleWithGroupType(
+                                content,
+                                groupStats.groupType
+                              )
+                            "
                             (click)="
                               useContentInOtherGroup(
                                 content.id,

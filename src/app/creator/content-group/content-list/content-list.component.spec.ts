@@ -20,12 +20,15 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { MatMenuModule } from '@angular/material/menu';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
+import {
+  ContentGroup,
+  GroupType,
+  PublishingMode,
+} from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentState } from '@app/core/models/content-state';
-import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { EventService } from '@app/core/services/util/event.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 
@@ -149,7 +152,12 @@ describe('ContentListComponent', () => {
     );
     component.isModerator = false;
     component.contentGroupStats = [
-      new ContentGroupStatistics('groupId', 'name', 0),
+      {
+        id: 'groupId',
+        groupName: 'name',
+        contentCount: 0,
+        groupType: GroupType.MIXED,
+      },
     ];
   }));
 
