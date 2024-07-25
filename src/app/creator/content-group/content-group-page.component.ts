@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
@@ -28,7 +28,19 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
 import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
 import { TranslocoService } from '@ngneat/transloco';
-import { Observable, Subject, mergeMap, of, takeUntil } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  mergeMap,
+  of,
+  takeUntil,
+  takeWhile,
+  take,
+  timer,
+} from 'rxjs';
+
+const STATS_REFRESH_INTERVAL = 10000;
+const STATS_REFRESH_LIMIT = 60;
 
 export interface ContentStats {
   count: number;
@@ -68,6 +80,8 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     empty: -1,
   };
 
+  isContentStarted = false;
+
   constructor(
     private route: ActivatedRoute,
     private contentService: ContentService,
@@ -80,7 +94,8 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     private localFileService: LocalFileService,
     private dialogService: DialogService,
     private routingService: RoutingService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private destroyRef: DestroyRef
   ) {
     this.isModerator = route.snapshot.data.userRole === UserRole.MODERATOR;
     this.room = route.snapshot.data.room;
@@ -238,6 +253,8 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
             msg,
             AdvancedSnackBarTypes.WARNING
           );
+          this.contentStats.clear();
+          this.totalCorrect = 0;
           if (this.contentGroup.publishingMode === PublishingMode.LIVE) {
             this.updateContentGroup({ publishingIndex: 0 }).subscribe(
               (contentGroup) => {
@@ -354,6 +371,24 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
         if (correct) {
           this.totalCorrect = correct / total;
         }
+      });
+  }
+
+  handleActiveContentChanged(isStarted: boolean): void {
+    this.isContentStarted = isStarted;
+    if (isStarted) {
+      this.startRefreshingStats();
+    }
+  }
+
+  startRefreshingStats(): void {
+    timer(0, STATS_REFRESH_INTERVAL)
+      .pipe(
+        take(STATS_REFRESH_LIMIT),
+        takeWhile(() => this.isContentStarted)
+      )
+      .subscribe(() => {
+        this.loadStats();
       });
   }
 }
