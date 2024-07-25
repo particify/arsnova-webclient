@@ -15,6 +15,7 @@ export class Room {
   focusModeEnabled = false;
   closed: boolean;
   settings!: RoomSettings;
+  language?: string;
   lmsCourseId?: string;
   extensions?: RoomExtensions;
 
