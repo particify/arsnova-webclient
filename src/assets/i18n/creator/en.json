@@ -271,7 +271,8 @@
     "content-started": "Content has been started.",
     "content-stopped": "Content has been stopped.",
     "stop-active-content-to-start": "Stop the current content to start this content.",
-    "answering-finished": "Answering is finished"
+    "answering-finished": "Answering is finished",
+    "starting-multiple-rounds-not-available-for-content-type": "Multiple rounds are not supported for this content format. Delete the answers to restart the content."
   },
   "survey": {
     "a11y-stop-survey": "Stops the live feedback.",

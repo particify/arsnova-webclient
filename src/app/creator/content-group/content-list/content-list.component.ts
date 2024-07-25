@@ -453,7 +453,12 @@ export class ContentListComponent
   startContent(index: number): void {
     const contentId = this.contents[index].id;
     this.contentGroupService
-      .startContent(this.room.id, this.contentGroup.id, contentId)
+      .startContent(
+        this.room.id,
+        this.contentGroup.id,
+        contentId,
+        this.finishedContents.get(contentId) ? 2 : undefined
+      )
       .subscribe(() => {
         this.reloadContent(contentId).subscribe(() => {
           if (this.contentGroup.publishingIndex < index) {
@@ -526,6 +531,10 @@ export class ContentListComponent
   setStartedContent(index?: number): void {
     this.startedContentIndex = index;
     this.hasStartedContentChanged.emit(this.startedContentIndex !== undefined);
+  }
+
+  hasFormatRounds(format: ContentType): boolean {
+    return this.contentService.hasFormatRounds(format);
   }
 
   isCompatibleWithGroupType(content: Content, groupType: GroupType): boolean {

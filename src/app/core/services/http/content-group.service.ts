@@ -333,12 +333,16 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   startContent(
     roomId: string,
     contentGroupId: string,
-    contentId: string
+    contentId: string,
+    round?: number
   ): Observable<void> {
-    const connectionUrl = this.buildUri(
+    let connectionUrl = this.buildUri(
       `/${contentGroupId}/start-content?contentId=${contentId}`,
       roomId
     );
+    if (round) {
+      connectionUrl += `&round=${round}`;
+    }
     return this.http
       .post<void>(connectionUrl, httpOptions)
       .pipe(

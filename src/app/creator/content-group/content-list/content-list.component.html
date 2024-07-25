@@ -277,24 +277,45 @@
                         <div
                           (click)="$event.stopPropagation()"
                           [matTooltip]="
-                            'creator.content.stop-active-content-to-start'
-                              | transloco
+                            (startedContentIndex !== undefined
+                              ? 'creator.content.stop-active-content-to-start'
+                              : hasFormatRounds(content.format)
+                                ? 'creator.content.starting-new-round-not-possible'
+                                : 'creator.content.starting-multiple-rounds-not-available-for-content-type'
+                            ) | transloco
                           "
                           [matTooltipDisabled]="
-                            startedContentIndex == undefined
+                            startedContentIndex == undefined &&
+                            !(
+                              finishedContents.get(content.id) &&
+                              (content.state.round > 1 ||
+                                !hasFormatRounds(content.format))
+                            )
                           "
                         >
                           <button
                             mat-icon-button
-                            [disabled]="startedContentIndex !== undefined"
+                            [disabled]="
+                              startedContentIndex !== undefined ||
+                              (finishedContents.get(content.id) &&
+                                (content.state.round > 1 ||
+                                  !hasFormatRounds(content.format)))
+                            "
                             style="margin-right: 8px"
                             class="start-button"
                             (click)="startContent(i); $event.stopPropagation()"
                             [matTooltip]="
-                              'creator.content.start-content' | transloco
+                              (finishedContents.get(content.id)
+                                ? 'creator.content.start-new-round'
+                                : 'creator.content.start-content'
+                              ) | transloco
                             "
                           >
-                            <mat-icon>play_arrow</mat-icon>
+                            <mat-icon>{{
+                              finishedContents.get(content.id)
+                                ? 'replay'
+                                : 'play_arrow'
+                            }}</mat-icon>
                           </button>
                         </div>
                       }
@@ -385,22 +406,15 @@
                           }}</span>
                         </button>
                       }
-                      <div
-                        [matTooltip]="
-                          'creator.content.starting-new-round-not-possible'
-                            | transloco
-                        "
-                        [matTooltipDisabled]="content.state.round === 1"
-                        matTooltipPosition="before"
-                      >
-                        @if (
-                          [
-                            ContentType.CHOICE,
-                            ContentType.BINARY,
-                            ContentType.SCALE,
-                            ContentType.NUMERIC,
-                          ].includes(content.format)
-                        ) {
+                      @if (hasFormatRounds(content.format) && !isLiveMode()) {
+                        <div
+                          [matTooltip]="
+                            'creator.content.starting-new-round-not-possible'
+                              | transloco
+                          "
+                          [matTooltipDisabled]="content.state.round === 1"
+                          matTooltipPosition="before"
+                        >
                           <button
                             mat-menu-item
                             (click)="startNewRound(content)"
@@ -409,8 +423,8 @@
                             <mat-icon>replay</mat-icon>
                             {{ 'creator.content.start-new-round' | transloco }}
                           </button>
-                        }
-                      </div>
+                        </div>
+                      }
                       <button mat-menu-item (click)="deleteContent(i)">
                         <mat-icon color="warn">delete_forever</mat-icon>
                         <span>{{
