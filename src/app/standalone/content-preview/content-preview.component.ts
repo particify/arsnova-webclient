@@ -24,6 +24,7 @@ import { ContentTextAnswerComponent } from '@app/standalone/content-answers/cont
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
 import { ContentNumeric } from '@app/core/models/content-numeric';
+import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 @Component({
   selector: 'app-content-preview',
@@ -38,6 +39,7 @@ import { ContentNumeric } from '@app/core/models/content-numeric';
     ContentTextAnswerComponent,
     ContentWordcloudAnswerComponent,
     ContentNumericAnswerComponent,
+    LanguageContextDirective,
   ],
   providers: [provideTranslocoScope('creator')],
   templateUrl: './content-preview.component.html',

@@ -42,6 +42,7 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
 import { MultipleRoundSelectionComponent } from '@app/standalone/multiple-round-selection/multiple-round-selection.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
+import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 @Component({
   selector: 'app-content-results',
@@ -68,6 +69,7 @@ import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
     StatisticNumericComponent,
     MatDivider,
     TranslocoPipe,
+    LanguageContextDirective,
   ],
 })
 export class ContentResultsComponent implements OnInit, OnDestroy {

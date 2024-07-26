@@ -18,6 +18,7 @@ import { FormService } from '@app/core/services/util/form.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { take } from 'rxjs';
+import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 @Component({
   standalone: true,
@@ -27,6 +28,7 @@ import { take } from 'rxjs';
     DateComponent,
     FormattingToolbarComponent,
     LoadingButtonComponent,
+    LanguageContextDirective,
   ],
   providers: [provideTranslocoScope('creator')],
   selector: 'app-comment-answer',

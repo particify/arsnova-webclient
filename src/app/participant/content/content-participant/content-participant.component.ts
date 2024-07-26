@@ -61,6 +61,7 @@ import { CoreModule } from '@app/core/core.module';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentState } from '@app/core/models/content-state';
+import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 interface ContentActionTab {
   route: string;
@@ -104,6 +105,7 @@ interface ContentActionTab {
     DividerComponent,
     LeaderboardPageComponent,
     TranslocoPipe,
+    LanguageContextDirective,
   ],
 })
 export class ContentParticipantComponent

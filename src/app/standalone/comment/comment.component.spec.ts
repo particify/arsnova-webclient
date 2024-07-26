@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentComponent } from './comment.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
@@ -23,6 +23,7 @@ import {
   BROWSER_LANG,
   LanguageService,
 } from '@app/core/services/util/language.service';
+import { Room } from '@app/core/models/room';
 
 class MockLanguageService {
   langEmitter = new EventEmitter<string>();
@@ -44,10 +45,16 @@ describe('CommentComponent', () => {
     'openDeleteDialog',
   ]);
 
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.data = {
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+  };
+
   const data = {
     viewRole: UserRole.PARTICIPANT,
   };
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   const mockVoteService = jasmine.createSpyObj('VoteService', [
     'voteUp',

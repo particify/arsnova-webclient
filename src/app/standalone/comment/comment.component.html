@@ -188,11 +188,13 @@
       </mat-menu>
     </div>
     <div fxLayout="row" fxLayoutAlign="start">
-      <div fxLayout="column">
+      <div fxLayout="column" style="width: 100%">
         <div
           class="body click"
           fxLayout="column"
           fxLayoutAlign="start"
+          appLangContext
+          appDirContext
           (click)="openPresentDialog()"
         >
           <span aria-hidden="true">{{ comment.body.trim() }}</span>

@@ -5,6 +5,7 @@ import { CommentService } from '@app/core/services/http/comment.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
+  ActivatedRouteStub,
   MockAnnounceService,
   MockGlobalStorageService,
   MockMatDialogRef,
@@ -20,6 +21,8 @@ import { VoteService } from '@app/core/services/http/vote.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { Room } from '@app/core/models/room';
 
 class MockVoteService {}
 
@@ -34,6 +37,18 @@ describe('CommentAnswerComponent', () => {
   const mockDialogData = {
     comment: new Comment(),
   };
+
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.data = {
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+  };
+
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -77,6 +92,10 @@ describe('CommentAnswerComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

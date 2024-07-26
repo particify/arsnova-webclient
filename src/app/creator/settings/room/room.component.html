@@ -50,6 +50,7 @@
                 placeholder="{{
                   'creator.settings.enter-room-description' | transloco
                 }}"
+                dir="auto"
               ></textarea>
               <mat-hint align="end">
                 <span aria-hidden="true">
@@ -73,6 +74,8 @@
                 [rawText]="description"
                 [dynamic]="renderPreview"
                 [markdownFeatureset]="markdownFeatureset"
+                appLangContext
+                appDirContext
               >
               </app-rendered-text>
             </div>

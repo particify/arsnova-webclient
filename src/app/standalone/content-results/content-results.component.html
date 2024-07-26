@@ -131,6 +131,8 @@
       tabindex="0"
       [rawText]="content.body"
       [renderedText]="content.renderedBody"
+      appLangContext
+      appDirContext
     ></app-rendered-text>
   }
   @if (format === ContentType.FLASHCARD) {
@@ -159,7 +161,11 @@
   extensionId="attachment-list"
   [extensionData]="attachmentData"
 ></lib-extension-point>
-<div [ngClass]="{ 'presentation-space': isPresentation }">
+<div
+  [ngClass]="{ 'presentation-space': isPresentation }"
+  appLangContext
+  appDirContext
+>
   @if ([ContentType.CHOICE, ContentType.BINARY].indexOf(format) !== -1) {
     <app-statistic-choice
       [content]="choiceContent"
