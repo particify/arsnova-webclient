@@ -109,7 +109,7 @@ export class LiveFeedbackPageComponent
   afterInitHook() {
     this.focusModeService.updateFeedbackState(this.room, !this.isClosed);
     setTimeout(() => {
-      const scale = Math.max(Math.min(innerWidth, 2100) / 1500, 1);
+      const scale = this.presentationService.getScale(0.8);
       const liveFeedback = document.getElementById('live-feedback');
       if (liveFeedback) {
         liveFeedback.style.transform = `scale(${scale})`;
