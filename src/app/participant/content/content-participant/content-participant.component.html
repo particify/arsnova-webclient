@@ -19,6 +19,7 @@
             [totalCount]="contentGroup.contentIds.length"
             [alias]="alias"
             [roomId]="content.roomId"
+            [timerActive]="!!content.duration"
           ></app-content-waiting>
         </div>
       } @else {

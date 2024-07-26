@@ -51,14 +51,27 @@
     </div>
   } @else {
     @if (alias?.id) {
-      <span>{{
+      <span class="primary">{{
         'content.get-ready-alias' | transloco: { alias: alias?.alias }
       }}</span>
     }
     @if (!alias) {
-      <span>
+      <span class="primary">
         {{ 'content.get-ready' | transloco }}
       </span>
     }
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center"
+      style="font-size: 14px; opacity: 0.7"
+    >
+      @if (timerActive) {
+        <span>
+          {{ 'content.answer-fast-to-get-more-points' | transloco }}
+        </span>
+      } @else {
+        <span> {{ 'content.answer-correct-to-get-points' | transloco }} </span>
+      }
+    </div>
   }
 </div>
