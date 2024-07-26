@@ -14,38 +14,53 @@
       @if (contents.length > 0 && !this.showOverview) {
         <app-stepper
           (newIndex)="updateContentIndexUrl($event)"
-          [listLength]="contents.length"
+          [listLength]="contentGroup.contentIds.length"
           [completed]="alreadySent"
           [showSteps]="showStepper && !focusModeEnabled"
           [allowNavigation]="!focusModeEnabled"
         >
-          @for (content of contents; track content; let i = $index) {
+          @for (
+            contentId of contentGroup.contentIds;
+            track contentId;
+            let i = $index
+          ) {
             <cdk-step>
               @if (currentStep >= i - 1 && currentStep <= i + 1) {
                 <div tabindex="0" [appAutofocus] id="step">
                   @if (isReloadingCurrentContent) {
                     <app-loading-indicator></app-loading-indicator>
-                  }
-                  @if (!isReloadingCurrentContent) {
-                    <app-content-participant
-                      (answerChanged)="receiveSentStatus($event, i)"
-                      (answerReset)="resetAnswer($event, i)"
-                      (next)="nextContent()"
-                      [content]="content"
-                      [contentGroup]="contentGroup"
-                      [answer]="answers[i]"
-                      [lastContent]="i === contents.length - 1"
-                      [active]="currentStep === i"
-                      [index]="i"
-                      [statsPublished]="contentGroup.statisticsPublished"
-                      [correctOptionsPublished]="
-                        contentGroup.correctOptionsPublished
-                      "
-                      [attribution]="getAttribution()"
-                      [alias]="alias"
-                      [showCard]="showCard"
-                    >
-                    </app-content-participant>
+                  } @else {
+                    @if (contents[i]) {
+                      <app-content-participant
+                        (answerChanged)="receiveSentStatus($event, i)"
+                        (answerReset)="resetAnswer($event, i)"
+                        (next)="nextContent()"
+                        [content]="contents[i]"
+                        [contentGroup]="contentGroup"
+                        [answer]="answers[i]"
+                        [lastContent]="i === contents.length - 1"
+                        [active]="currentStep === i"
+                        [index]="i"
+                        [statsPublished]="contentGroup.statisticsPublished"
+                        [correctOptionsPublished]="
+                          contentGroup.correctOptionsPublished
+                        "
+                        [attribution]="getAttribution()"
+                        [alias]="alias"
+                        [showCard]="showCard"
+                      >
+                      </app-content-participant>
+                    } @else {
+                      <app-base-card>
+                        <app-content-waiting
+                          [alias]="alias"
+                          [current]="i + 1"
+                          [totalCount]="contentGroup.contentIds.length"
+                          [roomId]="contentGroup.roomId"
+                          [isLocked]="true"
+                        ></app-content-waiting>
+                      </app-base-card>
+                    }
                   }
                 </div>
               }

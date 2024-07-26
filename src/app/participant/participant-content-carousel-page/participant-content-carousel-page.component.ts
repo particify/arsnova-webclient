@@ -46,6 +46,8 @@ import { CdkStep } from '@angular/cdk/stepper';
 import { FlexModule } from '@angular/flex-layout';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
+import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -61,6 +63,8 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
     SeriesOverviewComponent,
     AsyncPipe,
     TranslocoPipe,
+    BaseCardComponent,
+    ContentWaitingComponent,
   ],
   providers: [FocusModeService],
 })
@@ -242,9 +246,14 @@ export class ParticipantContentCarouselPageComponent
     );
     if (publishedIds.length > 0 && this.contentGroup.published) {
       this.contentService
-        .getContentsByIds(this.contentGroup.roomId, publishedIds)
-        .subscribe((contents) => {
-          this.contents = this.contentService.getSupportedContents(contents);
+        .getContentsByIds(
+          this.contentGroup.roomId,
+          this.contentGroup.contentIds
+        )
+        .subscribe((contents: Content[]) => {
+          this.contents = this.contentService.getSupportedContents(
+            contents.filter((c) => !!c)
+          );
           if (nextContentId) {
             lastContentIndex = this.getIndexOfContentById(nextContentId);
           }
@@ -455,15 +464,22 @@ export class ParticipantContentCarouselPageComponent
             this.answers = [];
             this.alreadySent = new Map<number, boolean>();
             for (const [index, content] of this.contents.entries()) {
-              if (answersAdded < answers.length) {
-                for (const answer of answers) {
-                  if (content.id === answer.contentId) {
-                    this.answers[index] = answer;
-                    answersAdded++;
+              if (
+                this.contentPublishService.isIndexPublished(
+                  this.contentGroup,
+                  index
+                )
+              ) {
+                if (answersAdded < answers.length) {
+                  for (const answer of answers) {
+                    if (content.id === answer.contentId) {
+                      this.answers[index] = answer;
+                      answersAdded++;
+                    }
                   }
                 }
+                this.alreadySent.set(index, !!this.answers[index]);
               }
-              this.alreadySent.set(index, !!this.answers[index]);
             }
             this.finishLoading();
             this.checkIfLastContentExists(lastContentIndex);

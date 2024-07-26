@@ -6,18 +6,17 @@
   (touchend)="swipe($event, 'end')"
 >
   @if (showSteps) {
-    <div fxLayout="row" class="inner-container">
+    <div fxLayout="row" fxLayoutAlign="start center" class="inner-container">
       @if (listLength > 5) {
         <button
           tabindex="-1"
           mat-icon-button
+          color="primary"
           disableRipple
           [disabled]="headerPos < 1"
           (click)="moveHeaderRight(true)"
         >
-          <mat-icon color="primary" [ngClass]="{ disabled: headerPos < 1 }"
-            >keyboard_arrow_left</mat-icon
-          >
+          <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
       }
       <div
@@ -28,7 +27,7 @@
       >
         <div
           fxLayout="row"
-          fxLayoutAlign="start"
+          fxLayoutAlign="start center"
           [@slideHeader]="{
             value: headerAnimationState,
             params: { position: headerPos * -20 },
@@ -37,10 +36,16 @@
         >
           <span class="fill-remaining-space"></span>
           @for (step of steps; track step; let i = $index) {
-            <div class="step-container" (click)="onClick(i)">
+            <div class="step-container" fxLayout="row" fxLayout="center center">
               <button
-                class="step"
-                tabindex="-1"
+                mat-icon-button
+                (click)="onClick(i)"
+                [disabled]="completed.size > 0 && !completed.has(i)"
+                class="step-btn"
+                [ngStyle]="{
+                  'background-color':
+                    selectedIndex === i ? null : 'var(--surface)',
+                }"
                 [ngClass]="{
                   'primary-background primary-border': selectedIndex === i,
                   'primary primary-border':
@@ -65,14 +70,11 @@
           mat-icon-button
           tabindex="-1"
           disableRipple
-          [disabled]="headerPos >= listLength"
+          color="primary"
+          [disabled]="headerPos >= listLength - 5"
           (click)="moveHeaderLeft(true)"
         >
-          <mat-icon
-            color="primary"
-            [ngClass]="{ disabled: headerPos >= listLength - 5 }"
-            >keyboard_arrow_right</mat-icon
-          >
+          <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
       }
     </div>

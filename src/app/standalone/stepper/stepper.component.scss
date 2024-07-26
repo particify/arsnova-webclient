@@ -1,8 +1,11 @@
 @import '../../../variables';
 
+$step-button-size: 32px;
+$step-button-count: 5;
+
 .container {
   overflow: hidden;
-  padding: 8px;
+  padding: $spacing;
 }
 
 .fixed-width-container {
@@ -11,65 +14,41 @@
 }
 
 .inner-container {
-  margin: 0 5px min(3%, 1em);
+  margin-bottom: $spacing-2;
 }
 
 .stepper-container {
-  width: calc(100vw - calc(70px + 6%));
-  max-width: calc(760px + 6%);
+  width: 100%;
   overflow: hidden;
 }
 
 .step-container {
-  min-width: 50px;
-  height: 50px;
-  background-color: var(--background);
-  cursor: pointer;
-  margin: 0 calc(calc(100% - 250px) / 10);
-  border-radius: 50%;
-  -webkit-tap-highlight-color: transparent;
+  margin: 0
+    calc(
+      calc(100% - calc($step-button-count * $step-button-size)) /
+        calc($step-button-count * 2)
+    );
 }
 
-.step {
-  transition: 300ms;
-  min-width: 30px;
-  height: 30px;
-  font-size: 16px;
-  outline: 0;
-  border-radius: 50%;
-  padding: 6px;
-  margin: 10px;
-  cursor: pointer;
+.step-btn {
+  --mat-icon-button-state-layer-color: var(--surface);
 
-  &:not(.primary-border) {
-    border: 1px solid var(--surface);
+  height: $step-button-size !important;
+  width: $step-button-size !important;
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: $m-font-size;
+  line-height: $m-font-size;
+
+  mat-icon {
+    font-size: $m-font-size;
+    width: $m-font-size;
+    height: $m-font-size;
   }
 
-  &:not(.primary-background) {
-    background-color: var(--surface);
+  span {
+    padding-top: 2px;
   }
-
-  &:not(.primary, .primary-background) {
-    color: var(--on-surface);
-  }
-}
-
-.mat-mdc-icon-button {
-  align-self: center;
-  width: max(calc(20px + 3%), 40px);
-}
-
-.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.flag-icon {
-  width: 20px;
-  height: 20px;
-  font-size: 20px;
-}
-
-.last {
-  padding: 2px;
 }
