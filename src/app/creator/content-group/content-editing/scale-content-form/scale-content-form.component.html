@@ -29,11 +29,11 @@
       </mat-form-field>
     </div>
     <div>
-      <mat-list>
+      <mat-list *transloco="let t; lang: room.language">
         @for (answerLabel of answerLabels; track answerLabel) {
           <mat-list-item class="bottom-border">
             <div fxLayout="row">
-              <p>{{ answerLabel | transloco }}</p>
+              <p>{{ t(answerLabel) }}</p>
             </div>
           </mat-list-item>
         }
