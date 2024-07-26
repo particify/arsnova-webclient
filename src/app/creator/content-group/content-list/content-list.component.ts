@@ -2,12 +2,11 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  ElementRef,
   Input,
-  OnDestroy,
   OnInit,
   Output,
-  QueryList,
-  ViewChildren,
+  ViewChild,
 } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -19,9 +18,6 @@ import { TranslocoService } from '@ngneat/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
-import { take } from 'rxjs/operators';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { MatButton } from '@angular/material/button';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Room } from '@app/core/models/room';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
@@ -29,7 +25,6 @@ import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-base.component';
 import { CdkDragDrop, CdkDragSortEvent } from '@angular/cdk/drag-drop';
-import { MatListItem } from '@angular/material/list';
 import { ContentStats } from '@app/creator/content-group/content-group-page.component';
 import { Observable, tap } from 'rxjs';
 
@@ -40,10 +35,9 @@ import { Observable, tap } from 'rxjs';
 })
 export class ContentListComponent
   extends DragDropBaseComponent
-  implements OnInit, OnDestroy
+  implements OnInit
 {
-  @ViewChildren('lockMenu') lockMenus!: QueryList<MatButton>;
-  @ViewChildren('sortListItem') sortItems!: QueryList<MatListItem>;
+  @ViewChild('publishingDivider') publishingDivider!: ElementRef;
 
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) contentGroup!: ContentGroup;
@@ -59,10 +53,7 @@ export class ContentListComponent
 
   activeMenuIndex?: number;
   activeContentId?: string;
-  contentHotkeysRegistered = false;
   markdownFeatureset = MarkdownFeatureset.MINIMUM;
-
-  private hotkeyRefs: symbol[] = [];
 
   ContentType: typeof ContentType = ContentType;
   GroupType = GroupType;
@@ -84,7 +75,6 @@ export class ContentListComponent
     private dialogService: DialogService,
     private contentGroupService: ContentGroupService,
     private contentPublishService: ContentPublishService,
-    private hotkeyService: HotkeyService,
     private changeDetectorRef: ChangeDetectorRef
   ) {
     super();
@@ -114,38 +104,6 @@ export class ContentListComponent
         this.setTimerData(c);
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.unregisterHotkeys();
-  }
-
-  registerHotkeys() {
-    this.translateService
-      .selectTranslate('creator.control-bar.publish-or-lock-content')
-      .pipe(take(1))
-      .subscribe((t) =>
-        this.hotkeyService.registerHotkey(
-          {
-            key: 'l',
-            action: () => {
-              if (!this.activeContentId) {
-                return;
-              }
-              const activeIndex = this.contents
-                .map((c) => c.id)
-                .indexOf(this.activeContentId);
-              this.lockMenus.toArray()[activeIndex].focus();
-            },
-            actionTitle: t,
-          },
-          this.hotkeyRefs
-        )
-      );
-  }
-
-  unregisterHotkeys() {
-    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
   }
 
   getCurrentGroupIndex() {
@@ -303,15 +261,6 @@ export class ContentListComponent
 
   updateActive(contentId: string) {
     this.activeContentId = contentId;
-    if (this.activeContentId) {
-      if (!this.contentHotkeysRegistered) {
-        this.registerHotkeys();
-        this.contentHotkeysRegistered = true;
-      }
-    } else {
-      this.unregisterHotkeys();
-      this.contentHotkeysRegistered = false;
-    }
   }
 
   duplicate(contentId: string) {
@@ -422,6 +371,27 @@ export class ContentListComponent
     if (this.contentGroup.publishingIndex !== newPublishingIndex) {
       this.contentGroup.publishingIndex = newPublishingIndex;
       this.updatePublishingIndex(newPublishingIndex).subscribe();
+    }
+  }
+
+  movePublishingDividerUp(index: number) {
+    if (index > 0) {
+      this.movePublishingDivider(index - 1);
+    }
+  }
+
+  movePublishingDividerDown(index: number) {
+    if (index < this.dragDroplist.length - 1) {
+      this.movePublishingDivider(index + 1);
+    }
+  }
+
+  private movePublishingDivider(index: number) {
+    if (!this.isLiveMode()) {
+      this.contentGroup.publishingIndex = index;
+      this.updatePublishingIndex(index).subscribe(() => {
+        this.publishingDivider.nativeElement.focus();
+      });
     }
   }
 

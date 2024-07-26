@@ -135,6 +135,10 @@ $item-height: 90px;
     opacity: 1;
   }
 
+  &:focus {
+    opacity: 1;
+  }
+
   &.static-divider {
     opacity: 1;
 

@@ -45,7 +45,7 @@ export class DragDropBaseComponent {
   }
 
   setFocus() {
-    if (this.selectedSortItem) {
+    if (this.selectedSortItem !== undefined) {
       const selectedItem = this.listItems.toArray()[this.selectedSortItem];
       if (selectedItem instanceof ElementRef) {
         selectedItem.nativeElement.focus();
