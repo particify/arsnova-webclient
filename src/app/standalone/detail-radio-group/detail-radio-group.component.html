@@ -31,13 +31,13 @@
             item.color
           }}; --mdc-radio-selected-focus-icon-color: {{ item.color }}"
         >
-          <div fxLayout="row" fxLayoutGap="0.75em" fxLayoutAlign="start center">
+          <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center">
             @if (item.icon) {
-              <mat-icon fxHide.lt-sm [style]="'color: ' + item.color">{{
+              <mat-icon [style]="'color: ' + item.color">{{
                 item.icon
               }}</mat-icon>
             }
-            <div fxLayout="column" fxLayoutGap="2px">
+            <div fxLayout="column">
               <span class="radio-name">
                 {{ item.title }}
               </span>
