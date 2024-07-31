@@ -2949,6 +2949,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource/material-symbols-outlined@npm:5.0.36":
+  version: 5.0.36
+  resolution: "@fontsource/material-symbols-outlined@npm:5.0.36"
+  checksum: 10c0/bac0114becae76e4a0b081a8655eae2037820c252fdaeae866fbe017717bcdd2a9b2fae21318c4646ec49e48b98881de70b4b9700990f71122e918d5fa94716e
+  languageName: node
+  linkType: hard
+
 "@fontsource/roboto@npm:5.0.14":
   version: 5.0.14
   resolution: "@fontsource/roboto@npm:5.0.14"
@@ -7185,6 +7192,7 @@ __metadata:
     "@angular/router": "npm:18.0.7"
     "@angular/service-worker": "npm:18.0.7"
     "@eslint/js": "npm:8.57.0"
+    "@fontsource/material-symbols-outlined": "npm:5.0.36"
     "@fontsource/roboto": "npm:5.0.14"
     "@ngneat/transloco": "npm:6.0.4"
     "@stomp/rx-stomp": "npm:2.0.0"
@@ -7226,7 +7234,6 @@ __metadata:
     karma-viewport: "npm:1.0.9"
     katex: "npm:0.16.11"
     lru-cache: "npm:10.4.3"
-    material-design-icons-iconfont: "npm:6.7.0"
     ng-packagr: "npm:18.0.0"
     ng-qrcode: "npm:17.0.0"
     prettier: "npm:3.3.3"
@@ -12793,13 +12800,6 @@ __metadata:
   peerDependencies:
     react: ">= 0.14.0"
   checksum: 10c0/191b9a9defeed02e12dd340cebf279f577266dac7b34574fa44ce4d64ee8536f9967d455b8303c853f84413feb473118290a6160d8221eeaf3b9e4961b8980e3
-  languageName: node
-  linkType: hard
-
-"material-design-icons-iconfont@npm:6.7.0":
-  version: 6.7.0
-  resolution: "material-design-icons-iconfont@npm:6.7.0"
-  checksum: 10c0/21037623d981c1e964d427d8360d54931b390a3ad1d459a71aeb449fc073946d28517b8a9122d5042699c2ad622264af1088a3be5ba6e907c28f821288555686
   languageName: node
   linkType: hard
 
