@@ -69,6 +69,8 @@ export class BinaryContentFormComponent
     if (this.currentOption !== BINARY_OPTION.NEITHER) {
       const index = this.currentOption === BINARY_OPTION.YES ? 0 : 1;
       (this.content as ContentChoice).correctOptionIndexes = [index];
+    } else {
+      (this.content as ContentChoice).correctOptionIndexes = [];
     }
     const options: AnswerOption[] = [];
     this.options.forEach((val) => {
