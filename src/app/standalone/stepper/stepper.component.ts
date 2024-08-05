@@ -23,6 +23,7 @@ import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
 import { AnswerResultType } from '@app/core/models/answer-result';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 
 export const STEPPER_ANIMATION_DURATION = 300;
 
@@ -126,6 +127,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
     private announceService: AnnounceService,
     private hotkeyService: HotkeyService,
     private translateService: TranslocoService,
+    private answerService: ContentAnswerService,
     dir: Directionality,
     changeDetectorRef: ChangeDetectorRef,
     elementRef: ElementRef<HTMLElement>
@@ -313,5 +315,12 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
         break;
     }
     this.selectedIndex = this.nextIndex;
+  }
+
+  getAnswerResultIcon(index: number) {
+    const state = this.answerResults.get(index);
+    if (state) {
+      return this.answerService.getAnswerResultIcon(state);
+    }
   }
 }

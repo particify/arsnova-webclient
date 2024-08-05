@@ -1,6 +1,6 @@
 @import '../../../variables';
 
-$step-button-size: 32px;
+$step-button-size: 40px;
 $step-button-count: 5;
 
 .container {
@@ -39,16 +39,37 @@ $step-button-count: 5;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: $m-font-size;
-  line-height: $m-font-size;
+  background-color: var(--surface);
+
+  &.bold {
+    font-weight: $font-weight-extra-bold;
+  }
 
   mat-icon {
-    font-size: $m-font-size;
-    width: $m-font-size;
-    height: $m-font-size;
+    font-size: $xs-font-size;
+    width: $xs-font-size;
+    height: $xs-font-size;
   }
 
   span {
-    padding-top: 2px;
+    font-size: $m-font-size;
+
+    &.smaller-text {
+      font-size: $s-font-size;
+      padding-top: 2px;
+    }
   }
+}
+
+.correct {
+  color: var(--success);
+}
+
+.wrong {
+  color: var(--warn);
+}
+
+.abstained,
+.unanswered {
+  color: var(--grey);
 }

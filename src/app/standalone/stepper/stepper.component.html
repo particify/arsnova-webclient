@@ -42,23 +42,32 @@
                 (click)="onClick(i)"
                 [disabled]="answerResults.size > 0 && !answerResults.has(i)"
                 class="step-btn"
-                [ngStyle]="{
-                  'background-color':
-                    selectedIndex === i ? null : 'var(--surface)',
-                }"
                 [ngClass]="{
-                  'primary-background primary-border': selectedIndex === i,
-                  'primary primary-border':
-                    answerResults.get(i) !== AnswerResultType.UNANSWERED &&
-                    selectedIndex !== i,
-                  last: i === listLength - 1,
+                  'primary-border bold': selectedIndex === i,
                 }"
               >
-                @if (!additionalStepIcon || i < listLength - 1) {
-                  <span>{{ i + 1 }}</span>
-                }
                 @if (additionalStepIcon && i === listLength - 1) {
                   <mat-icon>{{ additionalStepIcon }}</mat-icon>
+                } @else {
+                  @if (answerResults.size > 0) {
+                    <div
+                      fxLayout="column"
+                      fxLayoutAlign="center center"
+                      fxLayoutGap="1px"
+                    >
+                      <span class="smaller-text">{{ i + 1 }}</span>
+                      <mat-icon
+                        [ngClass]="{
+                          primary:
+                            answerResults.get(i) === AnswerResultType.NEUTRAL,
+                        }"
+                        [class]="answerResults.get(i)!.toLowerCase()"
+                        >{{ getAnswerResultIcon(i) }}</mat-icon
+                      >
+                    </div>
+                  } @else {
+                    <span>{{ i + 1 }} </span>
+                  }
                 }
               </button>
             </div>

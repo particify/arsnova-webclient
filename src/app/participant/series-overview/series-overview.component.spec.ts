@@ -17,6 +17,7 @@ import { ContentCarouselService } from '@app/core/services/util/content-carousel
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
@@ -50,6 +51,10 @@ describe('SeriesOverviewComponent', () => {
 
   const contentPublishService = jasmine.createSpyObj(ContentPublishService, [
     'isGroupLive',
+  ]);
+
+  const contentAnswerService = jasmine.createSpyObj(ContentAnswerService, [
+    'getAnswerResultIcon',
   ]);
 
   beforeEach(async () => {
@@ -87,6 +92,10 @@ describe('SeriesOverviewComponent', () => {
         {
           provide: ContentPublishService,
           useValue: contentPublishService,
+        },
+        {
+          provide: ContentAnswerService,
+          useValue: contentAnswerService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

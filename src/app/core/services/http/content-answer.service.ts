@@ -14,6 +14,7 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
 import { AnswerOption } from '@app/core/models/answer-option';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -240,5 +241,18 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
       answers[j] = temp;
     }
     return answers;
+  }
+
+  getAnswerResultIcon(state: AnswerResultType) {
+    switch (state) {
+      case AnswerResultType.CORRECT:
+        return 'check';
+      case AnswerResultType.WRONG:
+        return 'close';
+      case AnswerResultType.UNANSWERED:
+        return 'horizontal_rule';
+      default:
+        return 'fiber_manual_record';
+    }
   }
 }
