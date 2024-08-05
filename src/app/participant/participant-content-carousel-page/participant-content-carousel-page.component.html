@@ -15,7 +15,7 @@
         <app-stepper
           (newIndex)="updateContentIndexUrl($event)"
           [listLength]="contentGroup.contentIds.length"
-          [completed]="alreadySent"
+          [answerResults]="answerResults"
           [showSteps]="showStepper && !focusModeEnabled"
           [allowNavigation]="!focusModeEnabled"
         >
@@ -30,14 +30,14 @@
                   @if (isReloadingCurrentContent) {
                     <app-loading-indicator></app-loading-indicator>
                   } @else {
-                    @if (contents[i]) {
+                    @if (contents[i] && userId) {
                       <app-content-participant
                         (answerChanged)="receiveSentStatus($event, i)"
-                        (answerReset)="resetAnswer($event, i)"
+                        (answerReset)="resetAnswer(i)"
                         (next)="nextContent()"
                         [content]="contents[i]"
                         [contentGroup]="contentGroup"
-                        [answer]="answers[i]"
+                        [userId]="userId"
                         [lastContent]="i === contents.length - 1"
                         [active]="currentStep === i"
                         [index]="i"
@@ -48,6 +48,9 @@
                         [attribution]="getAttribution()"
                         [alias]="alias"
                         [showCard]="showCard"
+                        [hasAbstained]="
+                          answerResults.get(i) === AnswerResultType.ABSTAINED
+                        "
                       >
                       </app-content-participant>
                     } @else {

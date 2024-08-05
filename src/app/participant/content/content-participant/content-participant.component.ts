@@ -64,6 +64,8 @@ import { ContentState } from '@app/core/models/content-state';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { Room } from '@app/core/models/room';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 interface ContentActionTab {
   route: string;
@@ -117,7 +119,7 @@ export class ContentParticipantComponent
 {
   @Input({ required: true }) content!: Content;
   @Input({ required: true }) contentGroup!: ContentGroup;
-  @Input() answer?: Answer;
+  @Input({ required: true }) userId!: string;
   @Input() lastContent = false;
   @Input() active = false;
   @Input({ required: true }) index!: number;
@@ -126,14 +128,15 @@ export class ContentParticipantComponent
   @Input() attribution?: string;
   @Input() alias?: RoomUserAlias;
   @Input() showCard = true;
-  @Output() answerChanged = new EventEmitter<Answer>();
+  @Input() hasAbstained = false;
+  @Output() answerChanged = new EventEmitter<AnswerResultType>();
   @Output() next = new EventEmitter<void>();
   @Output() answerReset = new EventEmitter<string>();
 
   sendEvent = new EventEmitter<string>();
+  answer?: Answer;
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
-  hasAbstained = false;
   answersString = '';
   extensionData: any;
   alreadySent = false;
@@ -192,7 +195,8 @@ export class ContentParticipantComponent
     private contentService: ContentService,
     private translateService: TranslocoService,
     private notificationService: NotificationService,
-    private contentPublishService: ContentPublishService
+    private contentPublishService: ContentPublishService,
+    private answerService: ContentAnswerService
   ) {
     super(formService);
     this.language = (route.snapshot.data['room'] as Room).language;
@@ -204,15 +208,24 @@ export class ContentParticipantComponent
       this.checkForCountdown();
     }
     this.setExtensionData(this.content.roomId, this.content.id);
-    if (this.answer) {
-      this.alreadySent = true;
-      this.checkIfAbstention(this.answer);
-      this.initAnswerData();
-    }
     this.initContentData();
     this.isMultiple = (this.content as ContentChoice).multiple;
     this.a11yMsg = this.getA11yMessage();
-    this.isLoading = false;
+    this.answerService
+      .getAnswersByUserIdContentIds(this.content.roomId, this.userId, [
+        this.content.id,
+      ])
+      .subscribe({
+        next: (answer) => {
+          if (answer[0]) {
+            this.answer = answer[0];
+            this.alreadySent = true;
+            this.initAnswerData();
+          }
+          this.isLoading = false;
+        },
+        error: () => (this.isLoading = false),
+      });
     this.eventService
       .on<EntityChangeNotification>('EntityChangeNotification')
       .pipe(takeUntil(this.destroyed$))
@@ -389,32 +402,17 @@ export class ContentParticipantComponent
     };
   }
 
-  checkIfAbstention(answer: Answer) {
-    if (answer.format === ContentType.TEXT) {
-      this.hasAbstained = !(answer as TextAnswer).body;
-    } else if (answer.format === ContentType.WORDCLOUD) {
-      this.hasAbstained = !((answer as MultipleTextsAnswer).texts?.length > 0);
-    } else if (answer.format === ContentType.PRIORITIZATION) {
-      this.hasAbstained = !(answer as PrioritizationAnswer).assignedPoints;
-    } else if (answer.format === ContentType.NUMERIC) {
-      this.hasAbstained = !(answer as NumericAnswer).selectedNumber;
-    } else {
-      this.hasAbstained = !(answer as ChoiceAnswer).selectedChoiceIndexes;
-    }
-  }
-
   submitAnswerEvent($event: MouseEvent, type: string) {
     $event.preventDefault();
     this.sendEvent.emit(type);
   }
 
-  forwardAnswerMessage($event: Answer) {
-    this.answerChanged.emit($event);
+  forwardAnswerMessage(answerResultType: AnswerResultType) {
+    this.answerChanged.emit(answerResultType);
     setTimeout(() => {
-      this.answer = $event;
       this.enableForm();
       this.initAnswerData();
-      this.checkIfAbstention($event);
+      this.hasAbstained = answerResultType === AnswerResultType.ABSTAINED;
       this.alreadySent = true;
     }, 100);
   }

@@ -40,7 +40,7 @@
               <button
                 mat-icon-button
                 (click)="onClick(i)"
-                [disabled]="completed.size > 0 && !completed.has(i)"
+                [disabled]="answerResults.size > 0 && !answerResults.has(i)"
                 class="step-btn"
                 [ngStyle]="{
                   'background-color':
@@ -49,7 +49,8 @@
                 [ngClass]="{
                   'primary-background primary-border': selectedIndex === i,
                   'primary primary-border':
-                    completed.get(i) && selectedIndex !== i,
+                    answerResults.get(i) !== AnswerResultType.UNANSWERED &&
+                    selectedIndex !== i,
                   last: i === listLength - 1,
                 }"
               >

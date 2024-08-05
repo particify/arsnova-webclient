@@ -6,9 +6,9 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { Answer } from '@app/core/models/answer';
 import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 @Component({
   template: '',
@@ -17,7 +17,7 @@ export abstract class ContentParticipantBaseComponent
   extends FormComponent
   implements OnInit
 {
-  @Output() answerChanged = new EventEmitter();
+  @Output() answerChanged = new EventEmitter<AnswerResultType>();
   @Input() isDisabled = false;
   @Input({ required: true }) sendEvent!: EventEmitter<string>;
 
@@ -58,8 +58,8 @@ export abstract class ContentParticipantBaseComponent
     // Implementation in extended classes
   }
 
-  sendStatusToParent(answer: Answer) {
-    this.answerChanged.emit(answer);
+  sendStatusToParent(answerResultType: AnswerResultType) {
+    this.answerChanged.emit(answerResultType);
   }
 
   submitAnswer() {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { TextAnswer } from '@app/core/models/text-answer';
 import {
@@ -17,6 +17,7 @@ import { ContentTextAnswerComponent } from '@app/standalone/content-answers/cont
 import { FormsModule } from '@angular/forms';
 
 import { FlexModule } from '@angular/flex-layout';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 @Component({
   selector: 'app-content-text-participant',
@@ -28,7 +29,6 @@ import { FlexModule } from '@angular/flex-layout';
 export class ContentTextParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: Content;
   @Input() answer?: TextAnswer;
-  @Output() answerChanged = new EventEmitter<TextAnswer>();
 
   givenAnswer?: TextAnswer;
 
@@ -94,7 +94,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
               AdvancedSnackBarTypes.SUCCESS
             );
           });
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.NEUTRAL);
       }),
       () => {
         this.enableForm();
@@ -107,7 +107,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       .addAnswerText(this.content.roomId, answer)
       .subscribe((answer) => {
         this.givenAnswer = answer;
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.ABSTAINED);
       }),
       () => {
         this.enableForm();

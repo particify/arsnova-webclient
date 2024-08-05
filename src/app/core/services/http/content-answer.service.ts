@@ -21,11 +21,6 @@ const httpOptions = {
 
 @Injectable()
 export class ContentAnswerService extends AbstractEntityService<Answer> {
-  serviceApiUrl = {
-    text: '/text',
-    choice: '/choice',
-  };
-
   constructor(
     private http: HttpClient,
     protected ws: WsConnectorService,
@@ -204,46 +199,16 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     );
   }
 
-  getAnswerText(roomId: string, id: string): Observable<TextAnswer> {
-    const url = this.buildUri(`${this.serviceApiUrl.text}/${id}`, roomId);
+  getAnswer<T extends Answer>(
+    roomId: string,
+    contentId: string
+  ): Observable<T> {
+    const url = this.buildUri(`/${contentId}`, roomId);
     return this.http
-      .get<TextAnswer>(url)
-      .pipe(catchError(this.handleError<TextAnswer>(`getAnswerText id=${id}`)));
-  }
-
-  getAnswerChoice(roomId: string, id: string): Observable<ChoiceAnswer> {
-    const url = this.buildUri(`${this.serviceApiUrl.choice}/${id}`, roomId);
-    return this.http
-      .get<ChoiceAnswer>(url)
+      .get<T>(url)
       .pipe(
-        catchError(this.handleError<ChoiceAnswer>(`getChoiceAnswer id=${id}`))
+        catchError(this.handleError<T>(`getAnswerText contentId=${contentId}`))
       );
-  }
-
-  updateAnswerText(
-    roomId: string,
-    updatedAnswerText: TextAnswer
-  ): Observable<TextAnswer> {
-    const connectionUrl = this.buildUri(
-      `${this.serviceApiUrl.text}/${updatedAnswerText.id}`,
-      roomId
-    );
-    return this.http
-      .put<TextAnswer>(connectionUrl, updatedAnswerText, httpOptions)
-      .pipe(catchError(this.handleError<TextAnswer>('updateTextAnswer')));
-  }
-
-  updateAnswerChoice(
-    roomId: string,
-    updatedAnswerChoice: ChoiceAnswer
-  ): Observable<ChoiceAnswer> {
-    const connectionUrl = this.buildUri(
-      `${this.serviceApiUrl.choice}/${updatedAnswerChoice.id}`,
-      roomId
-    );
-    return this.http
-      .put<ChoiceAnswer>(connectionUrl, updatedAnswerChoice, httpOptions)
-      .pipe(catchError(this.handleError<ChoiceAnswer>('updateChoiceAnswer')));
   }
 
   deleteAnswerText(roomId: string, id: string): Observable<TextAnswer> {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
   AdvancedSnackBarTypes,
@@ -13,6 +13,7 @@ import { FormService } from '@app/core/services/util/form.service';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 @Component({
   selector: 'app-content-numeric-participant',
@@ -24,7 +25,6 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
   @Input({ required: true }) content!: ContentNumeric;
   @Input() answer?: NumericAnswer;
   @Input() correctOptionsPublished = false;
-  @Output() answerChanged = new EventEmitter<NumericAnswer>();
 
   selectedNumber?: number;
 
@@ -87,7 +87,11 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
           msg,
           AdvancedSnackBarTypes.SUCCESS
         );
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(
+          this.content.correctNumber
+            ? AnswerResultType.ABSTAINED
+            : this.getAnswerResultType()
+        );
       }),
       () => {
         this.enableForm();
@@ -102,12 +106,26 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
     );
     this.answerService
       .addAnswerNumeric(this.content.roomId, answer)
-      .subscribe((answer) => {
+      .subscribe(() => {
         this.selectedNumber = undefined;
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.ABSTAINED);
       }),
       () => {
         this.enableForm();
       };
+  }
+
+  private getAnswerResultType(): AnswerResultType {
+    if (!this.content.correctNumber) {
+      return AnswerResultType.NEUTRAL;
+    } else {
+      return !!this.selectedNumber &&
+        this.selectedNumber >=
+          this.content.correctNumber - this.content.tolerance &&
+        this.selectedNumber <=
+          this.content.correctNumber + this.content.tolerance
+        ? AnswerResultType.CORRECT
+        : AnswerResultType.WRONG;
+    }
   }
 }

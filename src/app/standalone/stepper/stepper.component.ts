@@ -22,6 +22,7 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 export const STEPPER_ANIMATION_DURATION = 300;
 
@@ -108,9 +109,10 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() showSteps = true;
   @Input() allowNavigation = true;
   @Input() listLength = 0;
-  @Input() completed: Map<number, boolean> = new Map<number, boolean>();
+  @Input() answerResults = new Map<number, AnswerResultType>();
   @Input() fixedWitdth = true;
   @Input() additionalStepIcon?: string;
+  AnswerResultType = AnswerResultType;
   headerPos = 0;
   stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
   headerAnimationState = HEADER_ANIMATION_STATE.INIT;

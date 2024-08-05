@@ -51,10 +51,7 @@ export class ContentChoiceAnswerComponent {
   }
 
   isCorrectOrSelectedOption(index: number): boolean {
-    return (
-      this.isAnswerOptionSelected(index) ||
-      this.correctOptionIndexes.includes(index)
-    );
+    return this.isAnswerOptionSelected(index);
   }
 
   checkOption(index: number, checkCorrect: boolean) {

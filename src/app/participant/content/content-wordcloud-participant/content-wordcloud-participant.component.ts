@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
   AdvancedSnackBarTypes,
@@ -15,6 +15,7 @@ import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 @Component({
   selector: 'app-content-wordcloud-participant',
@@ -25,7 +26,6 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentWordcloud;
   @Input() answer?: MultipleTextsAnswer;
-  @Output() answerChanged = new EventEmitter<MultipleTextsAnswer>();
 
   givenAnswer?: MultipleTextsAnswer;
 
@@ -95,7 +95,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
               AdvancedSnackBarTypes.SUCCESS
             );
           });
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.NEUTRAL);
       }),
       () => {
         this.enableForm();
@@ -113,7 +113,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       .addAnswer(this.content.roomId, answer)
       .subscribe((answer) => {
         this.givenAnswer = answer;
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.ABSTAINED);
       }),
       () => {
         this.enableForm();
