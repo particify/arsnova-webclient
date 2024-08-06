@@ -165,7 +165,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot([], { paramsInheritanceStrategy: 'always' })],
+  imports: [
+    RouterModule.forRoot([], {
+      paramsInheritanceStrategy: 'always',
+      bindToComponentInputs: true,
+    }),
+  ],
   exports: [RouterModule],
   providers: [
     {
