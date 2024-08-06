@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   UntypedFormControl,
   FormGroupDirective,
@@ -13,7 +13,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
@@ -41,11 +41,13 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
 export class PasswordResetComponent extends FormComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
+  // Route data input below
+  @Input() email!: string;
+
   keyFormControl = new UntypedFormControl('', [Validators.required]);
   matcher = new PasswordResetErrorStateMatcher();
 
   deviceWidth = innerWidth;
-  email = '';
   isLoading = true;
 
   constructor(
@@ -53,7 +55,6 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
     private userService: UserService,
     private notificationService: NotificationService,
     public eventService: EventService,
-    private route: ActivatedRoute,
     private router: Router,
     protected formService: FormService
   ) {
@@ -62,7 +63,6 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.setFormControl(this.keyFormControl);
-    this.email = this.route.snapshot.params['email'];
     this.isLoading = false;
   }
 

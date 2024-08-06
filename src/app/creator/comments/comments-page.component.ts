@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
@@ -34,9 +34,11 @@ export class CommentsPageComponent
   extends AbstractCommentsPageComponent
   implements OnInit, OnDestroy
 {
+  // Route data input below
+  @Input({ required: true }) isModeration!: boolean;
+
   private moderationComments$?: Observable<Comment[]>;
 
-  isModeration = false;
   moderationCounter = 0;
 
   constructor(
@@ -47,7 +49,6 @@ export class CommentsPageComponent
     protected notificationService: NotificationService,
     protected announceService: AnnounceService,
     protected router: Router,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected commentSettingsService: CommentSettingsService,
     protected authenticationService: AuthenticationService,
@@ -62,12 +63,10 @@ export class CommentsPageComponent
       notificationService,
       announceService,
       router,
-      route,
       globalStorageService,
       commentSettingsService,
       authenticationService
     );
-    this.isModeration = route.snapshot.data.isModeration;
   }
 
   ngOnInit(): void {
@@ -111,7 +110,7 @@ export class CommentsPageComponent
 
   subscribeModeratorStream() {
     this.wsCommentService
-      .getModeratorCommentStream(this.roomId)
+      .getModeratorCommentStream(this.room.id)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((message: Message) => {
         this.parseIncomingModeratorMessage(message);
@@ -176,7 +175,7 @@ export class CommentsPageComponent
 
   toggleReadonly() {
     const commentSettings = new CommentSettings(
-      this.roomId,
+      this.room.id,
       this.directSend,
       this.fileUploadEnabled,
       this.disabled,
@@ -218,7 +217,7 @@ export class CommentsPageComponent
 
   activateComments() {
     const settings = new CommentSettings(
-      this.roomId,
+      this.room.id,
       this.directSend,
       this.fileUploadEnabled,
       false,

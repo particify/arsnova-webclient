@@ -17,8 +17,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { StatisticWordcloudComponent } from '@app/standalone/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { StatisticScaleComponent } from '@app/standalone/statistic-content/statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { UserRole } from '@app/core/models/user-roles.enum';
+import { RouterLink } from '@angular/router';
 import { UserSettings } from '@app/core/models/user-settings';
 import { StatisticPrioritizationComponent } from '@app/standalone/statistic-content/statistic-prioritization/statistic-prioritization.component';
 import { Content } from '@app/core/models/content';
@@ -106,6 +105,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   @Output() updatedCounter: EventEmitter<AnswerResponseCounts> =
     new EventEmitter<AnswerResponseCounts>();
   @Input() settings = new UserSettings();
+  @Input() isParticipant = false;
+  @Input() language?: string;
 
   attachmentData: any;
   answersVisible = false;
@@ -120,7 +121,6 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   multipleRounds = false;
   roundsToDisplay = 0;
   showWordcloudModeration = false;
-  isParticipant = true;
   allowingUnitChange = false;
 
   visualizationUnitChanged = new EventEmitter<boolean>();
@@ -133,7 +133,6 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
 
   constructor(
     private announceService: AnnounceService,
-    private route: ActivatedRoute,
     private presentationService: PresentationService,
     private contentService: ContentService
   ) {}
@@ -156,8 +155,6 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     }
     this.roundsToDisplay = this.content.state.round - 1;
     this.multipleRounds = this.roundsToDisplay > 0;
-    this.isParticipant =
-      this.route.snapshot.data.viewRole === UserRole.PARTICIPANT;
     this.isLoading = false;
     if (this.indexChanged) {
       this.indexChanged.subscribe(() => {

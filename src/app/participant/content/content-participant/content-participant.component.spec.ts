@@ -5,7 +5,6 @@ import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EventService } from '@app/core/services/util/event.service';
 import {
-  ActivatedRouteStub,
   MockEventService,
   MockFeatureFlagService,
   MockGlobalStorageService,
@@ -13,9 +12,7 @@ import {
 } from '@testing/test-helpers';
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { of } from 'rxjs';
-import { Room } from '@app/core/models/room';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ENVIRONMENT } from '@environments/environment-token';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
@@ -26,6 +23,7 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { Room } from '@app/core/models/room';
 
 describe('ContentParticipantComponent', () => {
   let component: ContentParticipantComponent;
@@ -36,17 +34,6 @@ describe('ContentParticipantComponent', () => {
   const mockContentService = jasmine.createSpyObj('ContentService', [
     'getContent',
   ]);
-
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.params = of([{ seriesName: 'SERIES' }]);
-  snapshot.data = {
-    room: new Room(),
-  };
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   const formattingService = jasmine.createSpyObj(['postString']);
   formattingService.postString.and.returnValue(of('rendered'));
@@ -98,10 +85,6 @@ describe('ContentParticipantComponent', () => {
           useClass: MockNotificationService,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: FormattingService,
           useValue: formattingService,
         },
@@ -143,6 +126,7 @@ describe('ContentParticipantComponent', () => {
     component = fixture.componentInstance;
     component.content = new ContentChoice('1234', 'subject', 'body', []);
     component.contentGroup = new ContentGroup();
+    component.room = new Room();
     fixture.detectChanges();
   });
 

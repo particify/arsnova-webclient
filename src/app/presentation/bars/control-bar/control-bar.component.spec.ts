@@ -250,6 +250,11 @@ describe('ControlBarComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ControlBarComponent);
     component = fixture.componentInstance;
+    const room = new Room();
+    room.settings = { feedbackLocked: true };
+    component.room = room;
+    component.userRole = UserRole.EDITOR;
+    component.viewRole = UserRole.EDITOR;
     fixture.detectChanges();
   });
 

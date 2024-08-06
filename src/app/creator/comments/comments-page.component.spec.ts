@@ -4,7 +4,6 @@ import { CommentsPageComponent } from './comments-page.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  ActivatedRouteStub,
   MockAnnounceService,
   MockEventService,
   MockGlobalStorageService,
@@ -17,11 +16,7 @@ import { CommentSettingsService } from '@app/core/services/http/comment-settings
 import { EventService } from '@app/core/services/util/event.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { Location } from '@angular/common';
@@ -75,18 +70,6 @@ describe('CommentsPageComponent', () => {
   const mockCommentSettingsService = jasmine.createSpyObj(['get']);
   mockCommentSettingsService.get.and.returnValue(of({}));
 
-  const room = new Room();
-  const data = {
-    room: room,
-  };
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = data;
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CommentsPageComponent],
@@ -115,10 +98,6 @@ describe('CommentsPageComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
@@ -150,6 +129,7 @@ describe('CommentsPageComponent', () => {
 
     fixture = TestBed.createComponent(CommentsPageComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
     fixture.detectChanges();
   });
 

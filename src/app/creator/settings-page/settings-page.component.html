@@ -35,6 +35,7 @@
                   [editRoom]="room"
                   [name]="room.name"
                   [description]="room.description"
+                  [isCreator]="isCreator"
                   (saveEvent)="saveRoom($event)"
                 ></app-room-edit>
               }

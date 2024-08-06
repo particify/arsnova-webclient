@@ -8,7 +8,11 @@
       @if (!focusModeEnabled) {
         <mat-drawer mode="side" opened [disableClose]="true">
           <div fxLayout="column" fxLayoutAlign="space-between" fxFill>
-            <app-nav-bar></app-nav-bar>
+            <app-nav-bar
+              [userRole]="userRole"
+              [viewRole]="viewRole"
+              [room]="room"
+            ></app-nav-bar>
           </div>
         </mat-drawer>
       }

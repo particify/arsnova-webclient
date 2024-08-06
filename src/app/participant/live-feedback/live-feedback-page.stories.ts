@@ -26,6 +26,7 @@ import { LiveFeedbackPageComponent } from '@app/participant/live-feedback/live-f
 import { RoomService } from '@app/core/services/http/room.service';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { Message } from '@stomp/stompjs';
+import { Room } from '@app/core/models/room';
 
 class MockFeedbackService {
   messageEvent = new EventEmitter<Message>();
@@ -166,4 +167,12 @@ export default {
 
 type Story = StoryObj<LiveFeedbackPageComponent>;
 
-export const Participant: Story = {};
+const room = new Room();
+room.settings = { feedbackLocked: false };
+
+export const Participant: Story = {
+  args: {
+    room: room,
+    showCard: true,
+  },
+};

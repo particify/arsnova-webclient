@@ -12,6 +12,7 @@
         [shortId]="room.shortId"
         [description]="room.description"
         [renderedDescription]="room.renderedDescription"
+        [roomJoinUrl]="roomJoinUrl"
         appLangContext
         appDirContext
       ></app-room-overview-header>
@@ -86,7 +87,7 @@
           @for (contentGroup of contentGroups; track contentGroup) {
             <app-content-groups
               [contentGroup]="contentGroup"
-              [role]="role"
+              [role]="viewRole"
               [shortId]="room.shortId"
             ></app-content-groups>
           }

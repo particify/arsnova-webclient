@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RoomComponent } from './room.component';
 import {
-  ActivatedRouteStub,
   MockEventService,
   MockGlobalStorageService,
   MockNotificationService,
@@ -12,16 +11,11 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { RoomService } from '@app/core/services/http/room.service';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
@@ -37,18 +31,6 @@ class MockFormattingService {}
 describe('RoomComponent', () => {
   let component: RoomComponent;
   let fixture: ComponentFixture<RoomComponent>;
-
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.data = {
-    userRole: UserRole.OWNER,
-  };
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   const mockFocusModeService = jasmine.createSpyObj('FocusModeService', [
     'updateOverviewState',
@@ -85,10 +67,6 @@ describe('RoomComponent', () => {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: FocusModeService,

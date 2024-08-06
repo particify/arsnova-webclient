@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { ActivatedRoute } from '@angular/router';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Subject } from 'rxjs';
 import { Content } from '@app/core/models/content';
@@ -23,6 +22,7 @@ import {
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { Room } from '@app/core/models/room';
 
 interface ContentFormat {
   type: ContentType;
@@ -42,12 +42,17 @@ export class ContentEditingPageComponent
   @ViewChild('ContentForm') private contentForm!: ContentForm;
   @ViewChild('questionInput') bodyInput!: ElementRef;
 
+  // Route data input below
+  @Input({ required: true }) contentGroup!: ContentGroup;
+  @Input({ required: true }) seriesName!: string;
+  @Input({ required: true }) room!: Room;
+  @Input() isEditMode = false;
+  @Input() contentId?: string;
+
   question = '';
   ContentType = ContentType;
   formats: ContentFormat[] = [];
   selectedFormat?: ContentFormat;
-  seriesName: string;
-  roomId: string;
 
   attachmentData: any;
   linkAttachmentsSubject: Subject<string> = new Subject<string>();
@@ -58,18 +63,15 @@ export class ContentEditingPageComponent
   HintType = HintType;
   abstentionsAllowed = true;
   duration?: number;
-  isEditMode = false;
   isLoading = true;
   created = false;
   isAnswered = false;
-  contentGroup: ContentGroup;
   GroupType = GroupType;
 
   constructor(
     private translateService: TranslocoService,
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
-    private route: ActivatedRoute,
     private formattingService: FormattingService,
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
@@ -78,43 +80,28 @@ export class ContentEditingPageComponent
     protected formService: FormService
   ) {
     super(formService);
-    this.seriesName = this.route.snapshot.params['seriesName'];
-    this.roomId = this.route.snapshot.data.room.id;
-    this.contentGroup = this.route.snapshot.data.contentGroup;
-    this.contentGroupService
-      .getByRoomIdAndName(
-        this.route.snapshot.data.room.id,
-        this.seriesName,
-        true
-      )
-      .subscribe((group) => {
-        this.contentGroup = group;
-        const iconList = this.contentService.getTypeIcons();
-        const supportedTypes =
-          this.contentGroupService.getContentFormatsOfGroupType(
-            this.contentGroup.groupType
-          );
-        for (const type of supportedTypes) {
-          const icon = iconList.get(type);
-          if (icon) {
-            this.formats.push({
-              type: type,
-              name: type.toLowerCase(),
-              icon: icon,
-            });
-          }
-        }
-        this.selectedFormat = this.formats[0];
-      });
   }
 
   ngOnInit() {
-    if (this.route.snapshot.data.isEditMode) {
+    const iconList = this.contentService.getTypeIcons();
+    const supportedTypes =
+      this.contentGroupService.getContentFormatsOfGroupType(
+        this.contentGroup.groupType
+      );
+    for (const type of supportedTypes) {
+      const icon = iconList.get(type);
+      if (icon) {
+        this.formats.push({
+          type: type,
+          name: type.toLowerCase(),
+          icon: icon,
+        });
+      }
+    }
+    this.selectedFormat = this.formats[0];
+    if (this.isEditMode && this.contentId) {
       this.contentService
-        .getContent(
-          this.route.snapshot.data.room.id,
-          this.route.snapshot.params['contentId']
-        )
+        .getContent(this.room.id, this.contentId)
         .subscribe((content) => {
           this.content = content;
           this.question = content.body;
@@ -167,7 +154,7 @@ export class ContentEditingPageComponent
     if (!this.setContent() || !this.content) {
       return false;
     }
-    this.content.roomId = this.roomId;
+    this.content.roomId = this.room.id;
     this.content.body = this.question;
     this.content.abstentionsAllowed = this.abstentionsAllowed;
     this.content.duration = this.duration;
@@ -202,7 +189,7 @@ export class ContentEditingPageComponent
           this.attachmentData.refIf = createdContent.id;
           this.linkAttachmentsSubject.next(createdContent.id);
           this.contentGroupService
-            .addContentToGroup(this.roomId, this.seriesName, createdContent.id)
+            .addContentToGroup(this.room.id, this.seriesName, createdContent.id)
             .subscribe();
           this.contentGroupService.saveGroupInMemoryStorage(this.seriesName);
           this.afterCreation();

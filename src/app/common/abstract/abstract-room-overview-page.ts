@@ -9,15 +9,26 @@ import { CommentService } from '@app/core/services/http/comment.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { ApiConfig } from '@app/core/models/api-config';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
-export class AbstractRoomOverviewPage {
+@Component({ template: '' })
+export class AbstractRoomOverviewPageComponent {
+  // Route data input below
+  @Input({ required: true }) viewRole!: UserRole;
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true })
+  set apiConfig(config: ApiConfig) {
+    this.roomJoinUrl = this.routingService.getRoomJoinUrl(
+      config.ui.links?.join?.url
+    );
+  }
+  roomJoinUrl!: string;
   destroyed$ = new Subject<void>();
 
   isLoading = true;
 
-  room: Room;
-  role: UserRole;
   contentGroups: ContentGroup[] = [];
   roomStats?: RoomStats;
   commentCounter = 0;
@@ -30,11 +41,8 @@ export class AbstractRoomOverviewPage {
     protected contentGroupService: ContentGroupService,
     protected wsCommentService: WsCommentService,
     protected eventService: EventService,
-    protected route: ActivatedRoute
-  ) {
-    this.role = route.snapshot.data.viewRole;
-    this.room = route.snapshot.data.room;
-  }
+    protected routingService: RoutingService
+  ) {}
 
   initializeStats(extendedStats: boolean) {
     this.roomStatsService
@@ -110,7 +118,7 @@ export class AbstractRoomOverviewPage {
     this.attachmentData = {
       refId: this.room.id,
       refType: 'room',
-      role: this.role,
+      role: this.viewRole,
       detailedView: true,
       pureImageView: false,
     };

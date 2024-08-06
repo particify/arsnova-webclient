@@ -31,10 +31,6 @@ describe('PresentationComponent', () => {
   const mockPresentationService = jasmine.createSpyObj(['updateCurrentGroup']);
 
   const snapshot = new ActivatedRouteSnapshot();
-  snapshot.params = {
-    shortId: '12345678',
-    seriesName: 'Quiz',
-  };
   const firstChild = {
     firstChild: {
       url: [
@@ -48,11 +44,6 @@ describe('PresentationComponent', () => {
 
   Object.defineProperty(snapshot, 'firstChild', { value: firstChild });
 
-  const room = new Room();
-  room.settings = { feedbackLocked: true };
-  snapshot.data = {
-    room: room,
-  };
   const activatedRouteStub = new ActivatedRouteStub(
     undefined,
     undefined,
@@ -100,6 +91,7 @@ describe('PresentationComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PresentationComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
     fixture.detectChanges();
   });
 

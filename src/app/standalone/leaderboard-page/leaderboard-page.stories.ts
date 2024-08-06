@@ -12,10 +12,11 @@ import { TranslocoRootModule } from '@app/transloco-root.module';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { of } from 'rxjs';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ActivatedRoute } from '@angular/router';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { MaterialCssVarsService } from 'angular-material-css-vars';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { Room } from '@app/core/models/room';
+import { ContentGroup } from '@app/core/models/content-group';
 
 class MockContentGroupService {
   getLeaderboard() {
@@ -104,17 +105,6 @@ export default {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                room: { id: 'roomId' },
-                contentGroup: { id: 'contentGroupId' },
-              },
-            },
-          },
-        },
         ThemeService,
         {
           provide: MaterialCssVarsService,
@@ -137,4 +127,10 @@ export default {
 
 type Story = StoryObj<LeaderboardPageComponent>;
 
-export const Editor: Story = {};
+export const Editor: Story = {
+  args: {
+    room: new Room(),
+    contentGroup: new ContentGroup(),
+    showCard: true,
+  },
+};

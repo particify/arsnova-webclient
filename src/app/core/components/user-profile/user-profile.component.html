@@ -5,7 +5,7 @@
   <mat-accordion>
     <mat-expansion-panel
       class="settings-panel"
-      [expanded]="page === 'user'"
+      [expanded]="accountSettingsName === 'user'"
       (afterExpand)="updatePage('user')"
     >
       <mat-expansion-panel-header>
@@ -62,7 +62,7 @@
     </mat-expansion-panel>
     <mat-expansion-panel
       class="settings-panel"
-      [expanded]="page === 'preferences'"
+      [expanded]="accountSettingsName === 'preferences'"
       (afterExpand)="updatePage('preferences')"
     >
       <mat-expansion-panel-header>

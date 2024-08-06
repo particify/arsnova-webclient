@@ -11,12 +11,7 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import {
-  ActivatedRouteStub,
-  MockGlobalStorageService,
-  MockMatDialog,
-} from '@testing/test-helpers';
+import { MockGlobalStorageService, MockMatDialog } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -80,20 +75,6 @@ describe('ContentEditingPageComponent', () => {
   let component: ContentEditingPageComponent;
   let fixture: ComponentFixture<ContentEditingPageComponent>;
 
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.params = of([{ seriesName: 'SERIES' }]);
-  snapshot.data = {
-    room: new Room(),
-    contentGroup: new ContentGroup(),
-  };
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   const contentPublishService = jasmine.createSpyObj(ContentPublishService, [
     'isGroupLive',
   ]);
@@ -135,10 +116,6 @@ describe('ContentEditingPageComponent', () => {
           useClass: MockAnnouncer,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
         },
@@ -163,6 +140,8 @@ describe('ContentEditingPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentEditingPageComponent);
     component = fixture.componentInstance;
+    component.contentGroup = new ContentGroup();
+    component.room = new Room();
     fixture.detectChanges();
   });
 

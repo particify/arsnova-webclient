@@ -10,11 +10,7 @@ import { ContentState } from '@app/core/models/content-state';
 import { of } from 'rxjs';
 import { ContentGroup } from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   ActivatedRouteStub,
   MockFeatureFlagService,
@@ -40,7 +36,6 @@ import { TrackingService } from '@app/core/services/util/tracking.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Injectable()
@@ -95,22 +90,9 @@ describe('ContentGroupPageComponent', () => {
   let component: ContentGroupPageComponent;
   let fixture: ComponentFixture<ContentGroupPageComponent>;
 
-  const snapshot = new ActivatedRouteSnapshot();
-  const params = {
+  const activatedRouteStub = new ActivatedRouteStub({
     seriesName: 'SERIES',
-  };
-
-  snapshot.params = params;
-  snapshot.data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-    userRole: UserRole.EDITOR,
-  };
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    params,
-    undefined,
-    snapshot
-  );
+  });
 
   const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
 
@@ -216,6 +198,7 @@ describe('ContentGroupPageComponent', () => {
 
     fixture = TestBed.createComponent(ContentGroupPageComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
     fixture.detectChanges();
   });
 

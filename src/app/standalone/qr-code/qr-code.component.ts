@@ -1,9 +1,14 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { ActivatedRoute } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
@@ -11,6 +16,7 @@ import { QrCodeModule } from 'ng-qrcode';
 import { CoreModule } from '@app/core/core.module';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { CopyUrlComponent } from '@app/standalone/copy-url/copy-url.component';
+import { Room } from '@app/core/models/room';
 
 @Component({
   selector: 'app-qr-code',
@@ -24,9 +30,13 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   onResize() {
     this.setQRSize();
   }
-  shortId: string;
-  roomId: string;
-  passwordProtected: boolean;
+
+  // Route data input below
+  @Input() shortId!: string;
+  @Input() room!: Room;
+  @Input() showCopyUrlButton!: boolean;
+  @Input() showUserCount!: boolean;
+  @Input() showIcon!: boolean;
 
   bgColor: `#${string}`;
   fgColor: `#${string}`;
@@ -37,25 +47,14 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   displayUrl?: string;
   useJoinUrl = false;
   userCount = 1;
-  showCopyUrlButton: boolean;
-  showUserCount: boolean;
-  showIcon: boolean;
 
   constructor(
     private themeService: ThemeService,
     private apiConfigService: ApiConfigService,
-    private route: ActivatedRoute,
     private routingService: RoutingService,
     private roomService: RoomService,
     private focusModeService: FocusModeService
   ) {
-    this.showCopyUrlButton = !!this.route.snapshot.data.showCopyUrlButton;
-    this.showIcon = !!this.route.snapshot.data.showIcon;
-    this.showUserCount = !!this.route.snapshot.data.showUserCount;
-    const room = this.route.snapshot.data.room;
-    this.shortId = room.shortId;
-    this.roomId = room.id;
-    this.passwordProtected = room.passwordProtected;
     this.bgColor = this.themeService.getColor('surface') as `#${string}`;
     this.fgColor = this.themeService.getColor('on-surface') as `#${string}`;
     this.setQRSize();
@@ -64,7 +63,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initQrCode();
     this.roomService
-      .getRoomSummaries([this.roomId])
+      .getRoomSummaries([this.room.id])
       .pipe(takeUntil(this.destroyed$))
       .subscribe((summary) => {
         this.userCount = summary[0].stats.roomUserCount;
@@ -72,7 +71,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     this.roomService.getCurrentRoomsMessageStream().subscribe((msg) => {
       this.userCount = JSON.parse(msg.body).UserCountChanged.userCount;
     });
-    this.focusModeService.updateOverviewState(this.route.snapshot.data.room);
+    this.focusModeService.updateOverviewState(this.room);
   }
 
   initQrCode() {

@@ -25,7 +25,7 @@
     </div>
 
     <div class="selection-container" fxLayout="column" fxLayoutGap="1em">
-      @if (showPublic) {
+      @if (showPublic && selectedLang) {
         <app-template-tag-selection
           (selectedTagsChanged)="updateTags($event)"
           [lang]="selectedLang"

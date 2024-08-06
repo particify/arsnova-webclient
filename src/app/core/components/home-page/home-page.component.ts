@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { ApiConfig } from '@app/core/models/api-config';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
@@ -12,19 +12,22 @@ import {
   styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent {
+  // Route data input below
+  @Input({ required: true })
+  set apiConfig(config: ApiConfig) {
+    this.appTitle = config.ui.registration?.service || 'ARSnova';
+  }
   deviceType: string;
-  appTitle: string;
+
+  appTitle!: string;
 
   constructor(
     private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService,
-    private route: ActivatedRoute
+    private globalStorageService: GlobalStorageService
   ) {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
     );
-    this.appTitle =
-      this.route.snapshot.data.apiConfig.ui.registration?.service || 'ARSnova';
   }
 
   openCreateRoomDialog(): void {

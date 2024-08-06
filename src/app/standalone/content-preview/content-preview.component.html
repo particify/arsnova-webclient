@@ -38,6 +38,7 @@
       [dynamicRendering]="
         content.format === 'CHOICE' && renderAnswersDynamically
       "
+      [language]="language"
     ></app-content-choice-answer>
   }
   @if (content.format === 'SORT') {

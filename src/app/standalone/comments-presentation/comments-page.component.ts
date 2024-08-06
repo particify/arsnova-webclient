@@ -1,13 +1,15 @@
 import { Location } from '@angular/common';
 import {
+  booleanAttribute,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
@@ -58,9 +60,10 @@ export class CommentsPageComponent
 {
   @ViewChild('commentList') commentListRef!: ElementRef;
 
-  protected hotkeyRefs: symbol[] = [];
+  // Route data input below
+  @Input({ transform: booleanAttribute }) showCommentPreview!: boolean;
 
-  showCommentPreview = false;
+  protected hotkeyRefs: symbol[] = [];
 
   constructor(
     protected commentService: CommentService,
@@ -70,7 +73,6 @@ export class CommentsPageComponent
     protected notificationService: NotificationService,
     protected announceService: AnnounceService,
     protected router: Router,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected commentSettingsService: CommentSettingsService,
     protected hotkeyService: HotkeyService,
@@ -89,12 +91,10 @@ export class CommentsPageComponent
       notificationService,
       announceService,
       router,
-      route,
       globalStorageService,
       commentSettingsService,
       authenticationService
     );
-    this.showCommentPreview = this.route.snapshot.data.showCommentPreview;
   }
 
   ngOnInit(): void {
@@ -241,7 +241,7 @@ export class CommentsPageComponent
 
   activateComments() {
     const settings = new CommentSettings(
-      this.roomId,
+      this.room.id,
       this.directSend,
       this.fileUploadEnabled,
       false,
@@ -265,7 +265,7 @@ export class CommentsPageComponent
 
   toggleReadonly() {
     const commentSettings = new CommentSettings(
-      this.roomId,
+      this.room.id,
       this.directSend,
       this.fileUploadEnabled,
       this.disabled,

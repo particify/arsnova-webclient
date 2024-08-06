@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
@@ -8,7 +8,7 @@ import { UserService } from '@app/core/services/http/user.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from '@app/core/models/user';
 import { Person } from '@app/core/models/person';
 import { AuthProvider } from '@app/core/models/auth-provider';
@@ -35,6 +35,8 @@ export class FormField {
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
+  // Route data input below
+  @Input() accountSettingsName?: string;
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   auth!: ClientAuthentication;
   user!: User;
@@ -43,7 +45,6 @@ export class UserProfileComponent implements OnInit {
   isLoading = true;
 
   settings = new UserSettings();
-  page: string;
 
   HintType = HintType;
 
@@ -54,11 +55,8 @@ export class UserProfileComponent implements OnInit {
     private notificationService: NotificationService,
     private dialogService: DialogService,
     private router: Router,
-    private route: ActivatedRoute,
     private location: Location
-  ) {
-    this.page = route.snapshot.params['accountSettingsName'];
-  }
+  ) {}
 
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
@@ -144,7 +142,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   updatePage(page: string) {
-    this.page = page;
-    this.location.replaceState(`account/${this.page}`);
+    this.accountSettingsName = page;
+    this.location.replaceState(`account/${this.accountSettingsName}`);
   }
 }

@@ -2,13 +2,8 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SettingsPageComponent } from './settings-page.component';
 import { RoomService } from '@app/core/services/http/room.service';
+import { Router } from '@angular/router';
 import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
-import {
-  ActivatedRouteStub,
   MockEventService,
   MockGlobalStorageService,
   MockNotificationService,
@@ -20,7 +15,6 @@ import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
 
 @Injectable()
@@ -29,18 +23,6 @@ class MockRoomService {}
 describe('SettingsPageComponent', () => {
   let component: SettingsPageComponent;
   let fixture: ComponentFixture<SettingsPageComponent>;
-
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = {
-    userRole: UserRole.EDITOR,
-    room: new Room(),
-  };
-  snapshot.params = { settingsName: 'comments' };
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -59,10 +41,6 @@ describe('SettingsPageComponent', () => {
           useClass: MockEventService,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
         },
@@ -79,6 +57,7 @@ describe('SettingsPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SettingsPageComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
     fixture.detectChanges();
   });
 

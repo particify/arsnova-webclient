@@ -36,7 +36,7 @@
         <span class="url text">{{
           useJoinUrl ? displayUrl : (shortId | splitShortId: false)
         }}</span>
-        @if (passwordProtected) {
+        @if (room.passwordProtected) {
           <lib-extension-point
             extensionId="share-room-password"
           ></lib-extension-point>

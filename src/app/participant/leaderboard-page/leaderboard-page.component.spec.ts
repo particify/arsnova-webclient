@@ -2,12 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LeaderboardPageComponent } from './leaderboard-page.component';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ActivatedRouteStub } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Room } from '@app/core/models/room';
-import { ContentGroup } from '@app/core/models/content-group';
 import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -42,18 +38,6 @@ describe('LeaderboardPageComponent', () => {
   };
   mockContentService.getAnswersChangedStream.and.returnValue(of(message));
 
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.params = of([{ seriesName: 'SERIES' }]);
-  snapshot.data = {
-    room: new Room(),
-    contentGroup: new ContentGroup(),
-  };
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   const themeService = jasmine.createSpyObj(ThemeService, ['getTextColors']);
   themeService.getTextColors.and.returnValue([]);
 
@@ -70,10 +54,6 @@ describe('LeaderboardPageComponent', () => {
           useValue: mockContentGroupService,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: ContentService,
           useValue: mockContentService,
         },
@@ -88,6 +68,7 @@ describe('LeaderboardPageComponent', () => {
     fixture = TestBed.createComponent(LeaderboardPageComponent);
     component = fixture.componentInstance;
     component.content = new Content();
+    component.groupId = 'groupId';
     fixture.detectChanges();
   });
 

@@ -1,13 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RoomOverviewPageComponent } from './room-overview-page.component';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
   MockEventService,
@@ -20,7 +15,6 @@ import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Room } from '@app/core/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
@@ -33,11 +27,12 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { RoomStats } from '@app/core/models/room-stats';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
-import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-header/room-overview-header.component';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
+import { CommentSettings } from '@app/core/models/comment-settings';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -79,36 +74,6 @@ describe('RoomOverviewPageComponent', () => {
     new ContentGroup('roomId', 'name', [], true),
   ]);
 
-  const room = new Room(
-    '1234',
-    'shortId',
-    'abbreviation',
-    'name',
-    'description'
-  );
-  room.settings = { feedbackLocked: true };
-
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.data = {
-    room: room,
-    viewRole: UserRole.PARTICIPANT,
-    commentSettings: {
-      disabled: true,
-    },
-    apiConfig: {
-      ui: {
-        links: [],
-      },
-    },
-  };
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   const mockCommentSettingsService = jasmine.createSpyObj([
     'getSettingsStream',
   ]);
@@ -126,14 +91,14 @@ describe('RoomOverviewPageComponent', () => {
   const formattingService = jasmine.createSpyObj(['postString']);
   formattingService.postString.and.returnValue(of('rendered'));
 
+  const mockRoutingService = jasmine.createSpyObj('RoutingService', [
+    'getRoomJoinUrl',
+  ]);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [A11yIntroPipe, SplitShortIdPipe],
-      imports: [
-        getTranslocoModule(),
-        RoomOverviewPageComponent,
-        RoomOverviewHeaderComponent,
-      ],
+      imports: [getTranslocoModule(), RoomOverviewPageComponent],
       providers: [
         {
           provide: RoomStatsService,
@@ -154,10 +119,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: ContentGroupService,
           useValue: mockContentGroupService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,
@@ -199,6 +160,10 @@ describe('RoomOverviewPageComponent', () => {
           provide: FormattingService,
           useValue: formattingService,
         },
+        {
+          provide: RoutingService,
+          useValue: mockRoutingService,
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -207,6 +172,9 @@ describe('RoomOverviewPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
+    component.room.settings = { feedbackLocked: true };
+    component.commentSettings = new CommentSettings();
   });
 
   it('should create', () => {

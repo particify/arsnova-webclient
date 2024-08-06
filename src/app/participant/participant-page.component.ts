@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRouteSnapshot, RouterOutlet } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -13,6 +13,9 @@ import {
   MatDrawerContent,
 } from '@angular/material/sidenav';
 import { FlexModule } from '@angular/flex-layout';
+import { RoutingFeature } from '@app/core/models/routing-feature.enum';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 @Component({
   selector: 'app-participant-page',
@@ -35,11 +38,21 @@ import { FlexModule } from '@angular/flex-layout';
 export class ParticipantPageComponent implements OnInit {
   focusModeEnabled = false;
 
+  // Route data input below
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) userRole!: UserRole;
+  @Input({ required: true }) viewRole!: UserRole;
+  @Input()
+  set firstChild(firstChild: ActivatedRouteSnapshot | null) {
+    this.feature = firstChild?.firstChild?.data.feature;
+  }
+
+  feature?: RoutingFeature;
+
   constructor(
     protected translateService: TranslocoService,
     protected langService: LanguageService,
-    private focusModeService: FocusModeService,
-    private route: ActivatedRoute
+    private focusModeService: FocusModeService
   ) {
     langService.langEmitter.subscribe((lang) => {
       translateService.setActiveLang(lang);
@@ -47,12 +60,10 @@ export class ParticipantPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.focusModeService.init(
-        data.room,
-        this.route.snapshot.firstChild?.firstChild?.data.feature
-      );
-    });
+    if (!this.feature) {
+      return;
+    }
+    this.focusModeService.init(this.room, this.feature);
     this.focusModeService
       .getFocusModeEnabled()
       .subscribe(

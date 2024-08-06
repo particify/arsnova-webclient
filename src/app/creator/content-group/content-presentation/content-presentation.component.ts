@@ -1,5 +1,11 @@
-import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { Location } from '@angular/common';
@@ -17,13 +23,19 @@ import { ContentLicenseAttribution } from '@app/core/models/content-license-attr
   styleUrls: ['./content-presentation.component.scss'],
 })
 export class ContentPresentationComponent implements OnInit, OnDestroy {
+  // Route data input below
+  @Input({ required: true }) seriesName!: string;
+  @Input({ required: true }) room!: Room;
+  @Input() isEditMode = false;
+  @Input()
+  set contentIndex(index: number) {
+    this.currentStep = index - 1;
+  }
+
   destroyed$ = new Subject<void>();
 
   contents: Content[] = [];
   isLoading = true;
-  shortId: string;
-  room: Room;
-  contentGroupName: string;
   currentStep = 0;
   indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup?: ContentGroup;
@@ -32,18 +44,12 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   stepCount = 0;
 
   constructor(
-    private route: ActivatedRoute,
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
     private location: Location,
     private router: Router,
     private userService: UserService
-  ) {
-    this.contentGroupName = route.snapshot.params['seriesName'];
-    this.currentStep = route.snapshot.params['contentIndex'] - 1;
-    this.room = route.snapshot.data.room;
-    this.shortId = route.snapshot.data.room.shortId;
-  }
+  ) {}
 
   ngOnInit() {
     this.userService.getCurrentUsersSettings().subscribe((settings) => {
@@ -72,7 +78,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
 
   private initGroup() {
     this.contentGroupService
-      .getByRoomIdAndName(this.room.id, this.contentGroupName, true)
+      .getByRoomIdAndName(this.room.id, this.seriesName, true)
       .subscribe((group) => {
         this.contentGroup = group;
         if (this.contentGroup.contentIds) {
@@ -106,9 +112,9 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   private updateRoute(index: number) {
     const urlTree = this.router.createUrlTree([
       'edit',
-      this.shortId,
+      this.room.shortId,
       'series',
-      this.contentGroupName,
+      this.seriesName,
       index,
     ]);
     this.location.replaceState(this.router.serializeUrl(urlTree));

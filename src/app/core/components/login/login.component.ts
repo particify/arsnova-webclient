@@ -1,6 +1,8 @@
 import {
   AfterContentInit,
+  booleanAttribute,
   Component,
+  Input,
   OnChanges,
   OnInit,
   SimpleChanges,
@@ -33,6 +35,10 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
+function setDefaultTrue(value: boolean | undefined): boolean {
+  return value ?? true;
+}
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -43,6 +49,13 @@ export class LoginComponent
   implements AfterContentInit, OnChanges, OnInit
 {
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
+
+  // Route data input below
+  @Input({ transform: booleanAttribute }) isStandalone!: boolean;
+  @Input({ transform: setDefaultTrue }) allowPwReset!: boolean;
+  @Input({ transform: setDefaultTrue }) allowRegister!: boolean;
+  @Input({ transform: setDefaultTrue }) navigateIfAlreadyLoggedIn!: boolean;
+  @Input() externalRouteAfterLogin?: string;
 
   isStandard = true;
   username = '';
@@ -60,11 +73,6 @@ export class LoginComponent
 
   matcher = new FormErrorStateMatcher();
 
-  isStandalone: boolean;
-  allowPwReset: boolean;
-  allowRegister: boolean;
-  navigateIfAlreadyLoggedIn: boolean;
-
   constructor(
     public authenticationService: AuthenticationService,
     public router: Router,
@@ -78,11 +86,6 @@ export class LoginComponent
     protected formService: FormService
   ) {
     super(formService);
-    this.isStandalone = !!this.route.snapshot.data.isStandalone;
-    this.allowPwReset = this.route.snapshot.data.allowPwReset ?? true;
-    this.allowRegister = this.route.snapshot.data.allowRegister ?? true;
-    this.navigateIfAlreadyLoggedIn =
-      this.route.snapshot.data.navigateIfAlreadyLoggedIn ?? true;
   }
 
   ngOnInit() {
@@ -218,10 +221,8 @@ export class LoginComponent
       this.dialog.closeAll();
       if (this.isStandard) {
         if (!this.routingService.redirect()) {
-          if (this.route.snapshot.data.externalRouteAfterLogin) {
-            window.location.replace(
-              this.route.snapshot.data.externalRouteAfterLogin
-            );
+          if (this.externalRouteAfterLogin) {
+            window.location.replace(this.externalRouteAfterLogin);
           } else {
             this.router.navigateByUrl('user');
           }

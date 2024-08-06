@@ -1,16 +1,12 @@
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { ActivatedRouteStub, MockRouter } from '@testing/test-helpers';
+import { MockRouter } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { RedeemTokenComponent } from './redeem-token.component';
 
@@ -36,21 +32,6 @@ describe('RedeemTokenComponent', () => {
 
   const mockRoutingService = jasmine.createSpyObj(['setRedirect']);
 
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.params = of([
-    {
-      roomId: 'roomId',
-      token: 'token',
-    },
-  ]);
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RedeemTokenComponent],
@@ -58,10 +39,6 @@ describe('RedeemTokenComponent', () => {
         {
           provide: Router,
           useClass: MockRouter,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: RoutingService,

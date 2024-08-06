@@ -1,11 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -45,10 +41,7 @@ describe('LoginComponent', () => {
     },
   };
 
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = data;
-
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
+  const activatedRouteStub = new ActivatedRouteStub(undefined, data);
 
   beforeEach(async () => {
     TestBed.configureTestingModule({

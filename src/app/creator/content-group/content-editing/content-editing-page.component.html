@@ -43,7 +43,9 @@
                         fxLayoutGap="12px"
                         class="primary"
                       >
-                        <mat-icon>{{ selectedFormat?.icon }}</mat-icon>
+                        <mat-icon class="format-button-icon">{{
+                          selectedFormat?.icon
+                        }}</mat-icon>
                         <span>{{
                           'creator.content.format-' + selectedFormat?.name
                             | transloco
@@ -204,6 +206,7 @@
                       [content]="content"
                       [isAnswered]="isAnswered"
                       [isEditMode]="isEditMode"
+                      [language]="room.language"
                     >
                     </app-scale-content-form>
                   }
@@ -278,7 +281,10 @@
             class="back side"
           >
             @if (flipped && content) {
-              <app-content-preview [content]="content"></app-content-preview>
+              <app-content-preview
+                [content]="content"
+                [language]="room.language"
+              ></app-content-preview>
             }
           </div>
           <div

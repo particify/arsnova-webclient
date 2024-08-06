@@ -1,7 +1,6 @@
 import {
   Component,
   EventEmitter,
-  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -79,7 +78,6 @@ export class ControlBarComponent
 {
   @ViewChild(ContentPresentationMenuComponent)
   moreMenuComponent!: ContentPresentationMenuComponent;
-  @Input({ required: true }) shortId!: string;
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
   @Output() activeGroup: EventEmitter<string> = new EventEmitter<string>();
 
@@ -231,7 +229,7 @@ export class ControlBarComponent
         if (config.ui.links?.join) {
           this.joinUrl =
             this.removeProtocolFromString(config.ui.links.join.url) +
-            this.shortId;
+            this.room.shortId;
         }
       });
     this.isLoading = false;
@@ -405,7 +403,7 @@ export class ControlBarComponent
   }
 
   getBaseUrl(): string {
-    return `/present/${this.shortId}/`;
+    return `/present/${this.room.shortId}/`;
   }
 
   getFeatureUrl(feature: string): string {
@@ -449,7 +447,7 @@ export class ControlBarComponent
       if (this.inFullscreen) {
         this.exitFullscreen();
       }
-      this.router.navigateByUrl(`edit/${this.shortId}`);
+      this.router.navigateByUrl(`edit/${this.room.shortId}`);
     }
   }
 

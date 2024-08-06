@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
@@ -25,6 +24,12 @@ import { NgClass } from '@angular/common';
   providers: [provideTranslocoScope('creator')],
 })
 export class AnswerListComponent implements OnInit {
+  // Route data input below
+  @Input()
+  set viewRole(role: UserRole) {
+    this.isModerator = role !== UserRole.PARTICIPANT;
+  }
+
   @Input({ required: true }) answers!: TextStatistic[];
   @Input() banMode = true;
   @Input() isPresentation = false;
@@ -34,11 +39,7 @@ export class AnswerListComponent implements OnInit {
 
   isModerator = false;
 
-  constructor(private route: ActivatedRoute) {}
-
   ngOnInit(): void {
-    this.isModerator =
-      this.route.snapshot.data.viewRole !== UserRole.PARTICIPANT;
     this.answers = this.sortAnswers();
   }
 

@@ -6,7 +6,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
 import { RoomDeleted } from '@app/core/models/events/room-deleted';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -15,7 +15,6 @@ import {
   MarkdownFeatureset,
 } from '@app/core/services/http/formatting.service';
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -34,11 +33,11 @@ export class RoomComponent extends FormComponent implements OnInit {
   @Input({ required: true }) editRoom!: Room;
   @Input({ required: true }) name!: string;
   @Input({ required: true }) description!: string;
+  @Input() isCreator = false;
   markdownFeatureset = MarkdownFeatureset.EXTENDED;
   renderPreview = false;
   textContainsImage = false;
   HintType = HintType;
-  isCreator = false;
   focusModeEnabled = false;
 
   constructor(
@@ -49,7 +48,6 @@ export class RoomComponent extends FormComponent implements OnInit {
     public eventService: EventService,
     protected translateService: TranslocoService,
     private dialogService: DialogService,
-    private route: ActivatedRoute,
     private formattingService: FormattingService,
     private focusModeService: FocusModeService,
     protected formService: FormService
@@ -57,7 +55,6 @@ export class RoomComponent extends FormComponent implements OnInit {
     super(formService);
   }
   ngOnInit(): void {
-    this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
     this.focusModeEnabled = this.editRoom.focusModeEnabled;
   }
 

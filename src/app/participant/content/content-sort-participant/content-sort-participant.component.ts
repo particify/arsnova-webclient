@@ -10,7 +10,7 @@ import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { FormService } from '@app/core/services/util/form.service';
@@ -49,7 +49,6 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
     private contentService: ContentService,
@@ -58,7 +57,6 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     super(
       notificationService,
       translateService,
-      route,
       globalStorageService,
       router,
       formService

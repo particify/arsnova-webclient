@@ -72,9 +72,10 @@
         [hidden]="showLeaderboard"
         [contents]="contents"
         [settings]="settings"
-        [startIndex]="contentIndex"
+        [startIndex]="currentIndex"
         [hideControls]="true"
         [attributions]="attributions"
+        [language]="room.language"
         [isLiveMode]="isLiveMode()"
         (indexChanged)="updateURL($event)"
         (answerCountUpdated)="updateCounter($event)"
@@ -83,6 +84,9 @@
     }
     @if (showLeaderboard) {
       <app-leaderboard-page
+        [contentGroup]="contentGroup"
+        [room]="room"
+        [showCard]="false"
         [ngClass]="{ 'over-control-bar': controlBarVisible }"
       ></app-leaderboard-page>
     }

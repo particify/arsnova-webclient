@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
 import { TranslocoService } from '@jsverse/transloco';
 import {
@@ -44,17 +44,25 @@ export class UpdateEvent {
   styleUrls: ['./settings-page.component.scss'],
 })
 export class SettingsPageComponent {
+  // Route data input below
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true })
+  set userRole(userRole: UserRole) {
+    this.isCreator = userRole === UserRole.OWNER;
+  }
+  @Input()
+  set settingsName(name: string | undefined) {
+    this.currentRoute = name || this.settings[0].name;
+  }
   settings: Settings[];
-  room: Room;
   isLoading = true;
-  currentRoute: string;
+  currentRoute!: string;
   isCreator = false;
 
   HotkeyAction = HotkeyAction;
 
   constructor(
     protected roomService: RoomService,
-    protected route: ActivatedRoute,
     protected eventService: EventService,
     protected translateService: TranslocoService,
     private globalStorageService: GlobalStorageService,
@@ -88,10 +96,6 @@ export class SettingsPageComponent {
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
-    this.currentRoute =
-      route.snapshot.params['settingsName'] || this.settings[0].name;
-    this.room = route.snapshot.data.room;
     this.isLoading = false;
   }
 

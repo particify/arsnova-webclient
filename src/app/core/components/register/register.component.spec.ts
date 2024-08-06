@@ -1,14 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
-  ActivatedRouteStub,
   MockEventService,
   MockNotificationService,
   MockRouter,
@@ -22,27 +17,6 @@ describe('RegisterComponent', () => {
   let fixture: ComponentFixture<RegisterComponent>;
 
   const mockUserService = jasmine.createSpyObj(['register']);
-
-  const data = {
-    apiConfig: {
-      ui: {
-        links: {
-          tos: {
-            url: 'tos',
-          },
-        },
-      },
-    },
-  };
-
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = data;
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -64,10 +38,6 @@ describe('RegisterComponent', () => {
         {
           provide: EventService,
           useClass: MockEventService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

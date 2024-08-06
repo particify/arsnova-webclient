@@ -59,6 +59,7 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { MaterialCssVarsService } from 'angular-material-css-vars';
 import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { Room } from '@app/core/models/room';
 
 class MockService {}
 class MockGlobalStorageService {
@@ -438,4 +439,15 @@ export default {
 
 type Story = StoryObj<ContentsPageComponent>;
 
-export const ContentsPagePresentation: Story = {};
+export const ContentsPagePresentation: Story = {
+  args: {
+    room: new Room(),
+    showStepInfo: true,
+    showAnswerCount: true,
+    showHotkeyActionButtons: true,
+    showResults: true,
+    seriesName: 'My mixed series',
+    contentIndex: 1,
+    noControlBar: undefined,
+  },
+};
