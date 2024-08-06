@@ -390,8 +390,7 @@ export class ParticipantContentCarouselPageComponent
     if (this.currentStep < this.contents.length - 1) {
       this.stepper.next();
     } else {
-      this.stepper.headerPos = 0;
-      this.stepper.onClick(0);
+      this.goToOverview();
     }
   }
 
@@ -425,25 +424,22 @@ export class ParticipantContentCarouselPageComponent
       this.hasAnsweredLastContent
     );
     this.checkState();
-    if (!this.focusModeEnabled) {
-      if (this.started) {
-        setTimeout(() => {
-          if (index < this.contents.length - 1) {
-            if (this.contentGroup.publishingMode !== PublishingMode.LIVE) {
-              this.nextContent();
-              setTimeout(() => {
-                document.getElementById('step')?.focus();
-              }, 200);
-            }
-          } else if (
-            this.contentGroup.publishingMode !== PublishingMode.LIVE ||
-            (this.contentGroup.publishingMode === PublishingMode.LIVE &&
-              this.contents.length === this.contentGroup.contentIds.length)
-          ) {
-            this.goToOverview();
-          }
-        }, 1000);
-      }
+    if (
+      !this.focusModeEnabled &&
+      this.started &&
+      this.contentGroup.publishingMode !== PublishingMode.LIVE &&
+      this.contentGroup.groupType !== GroupType.QUIZ
+    ) {
+      setTimeout(() => {
+        if (index < this.contents.length - 1) {
+          this.nextContent();
+          setTimeout(() => {
+            document.getElementById('step')?.focus();
+          }, 200);
+        } else {
+          this.goToOverview();
+        }
+      }, 1000);
     }
   }
 

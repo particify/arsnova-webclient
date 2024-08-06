@@ -58,7 +58,11 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CoreModule } from '@app/core/core.module';
-import { ContentGroup, GroupType } from '@app/core/models/content-group';
+import {
+  ContentGroup,
+  GroupType,
+  PublishingMode,
+} from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentState } from '@app/core/models/content-state';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
@@ -164,6 +168,7 @@ export class ContentParticipantComponent
   endDate?: Date;
   answeringLocked = false;
   GroupType = GroupType;
+  PublishingMode = PublishingMode;
 
   tabs: ContentActionTab[] = [
     {

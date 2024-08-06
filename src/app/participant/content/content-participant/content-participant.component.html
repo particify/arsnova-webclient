@@ -212,37 +212,66 @@
                           visible: alreadySent || answeringLocked,
                           invisible: !alreadySent && !answeringLocked,
                         }"
-                        class="text primary"
+                        class="primary info-container"
                       >
                         @if (alreadySent) {
-                          <div>
-                            @if (!hasAbstained && !content.duration) {
-                              <p class="primary">
-                                {{ 'participant.answer.has-voted' | transloco }}
-                              </p>
-                            } @else if (
-                              !hasAbstained &&
-                              answer &&
-                              answer.durationMs &&
-                              content.state.answeringEndTime
+                          <div
+                            fxLayout="row"
+                            fxLayoutAlign="start center"
+                            fxLayoutGap="16px"
+                          >
+                            <div>
+                              @if (!hasAbstained && !content.duration) {
+                                <p class="primary">
+                                  {{
+                                    'participant.answer.has-voted' | transloco
+                                  }}
+                                </p>
+                              } @else if (
+                                !hasAbstained &&
+                                answer &&
+                                answer.durationMs &&
+                                content.state.answeringEndTime
+                              ) {
+                                <p class="primary">
+                                  {{
+                                    'participant.answer.answered-in-time'
+                                      | transloco
+                                        : {
+                                            duration: (
+                                              answer.durationMs / 1000
+                                            ).toFixed(2),
+                                          }
+                                  }}
+                                </p>
+                              } @else if (hasAbstained) {
+                                <p class="primary">
+                                  {{
+                                    'participant.answer.has-abstained'
+                                      | transloco
+                                  }}
+                                </p>
+                              }
+                            </div>
+                            @if (
+                              (contentGroup.publishingMode !==
+                                PublishingMode.LIVE ||
+                                lastContent) &&
+                              contentGroup.groupType === GroupType.QUIZ
                             ) {
-                              <p class="primary">
+                              <button
+                                type="button"
+                                mat-raised-button
+                                color="primary"
+                                (click)="next.emit()"
+                              >
                                 {{
-                                  'participant.answer.answered-in-time'
-                                    | transloco
-                                      : {
-                                          duration: (
-                                            answer.durationMs / 1000
-                                          ).toFixed(2),
-                                        }
+                                  (lastContent
+                                    ? 'participant.answer.go-to-overview'
+                                    : 'participant.answer.next-content'
+                                  ) | transloco
                                 }}
-                              </p>
-                            } @else if (hasAbstained) {
-                              <p class="primary">
-                                {{
-                                  'participant.answer.has-abstained' | transloco
-                                }}
-                              </p>
+                              </button>
                             }
                           </div>
                         } @else if (answeringLocked) {

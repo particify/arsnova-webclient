@@ -10,10 +10,6 @@ p {
   margin: 0;
 }
 
-.text {
-  padding: 10px 0;
-}
-
 .invisible {
   position: absolute;
   left: 50%;
@@ -51,4 +47,8 @@ p {
   .tab-icon-link.mat-mdc-tab-link.mdc-tab.mdc-tab--active
   .mat-icon {
   color: var(--palette-primary-contrast-200);
+}
+
+.info-container {
+  height: var(--mdc-protected-button-container-height);
 }
