@@ -477,4 +477,15 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   isLiveMode(): boolean {
     return this.contentPublishService.isGroupLive(this.group);
   }
+
+  getTrophyIconColor(): string {
+    switch (this.getPosition()) {
+      case 1:
+        return 'gold';
+      case 2:
+        return 'silver';
+      default:
+        return 'bronze';
+    }
+  }
 }

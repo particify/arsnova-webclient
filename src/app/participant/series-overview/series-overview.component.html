@@ -1,20 +1,42 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <mat-card fxLayout="column" fxLayoutGap="16px">
-    @if (!isLoading && !group.leaderboardEnabled) {
-      <span class="header-text">
-        {{ getHeaderText() | transloco }}
-      </span>
+    @if (
+      !isLoading &&
+      (!group.leaderboardEnabled || (userLeaderboardItem && getPosition() > 3))
+    ) {
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
+        <span class="header-text">
+          {{ getHeaderText() | transloco }}
+        </span>
+        @if (group.leaderboardEnabled) {
+          <span class="position-info">
+            {{
+              'participant.content.you-are-at-position'
+                | transloco: { position: getPosition() | ordinal }
+            }}
+          </span>
+        }
+      </div>
     }
     @if (isLoading) {
       <app-loading-indicator></app-loading-indicator>
     }
     <div fxLayout="column" fxLayoutGap="24px">
-      @if (!isLoading && group.leaderboardEnabled && userLeaderboardItem) {
+      @if (
+        !isLoading &&
+        group.leaderboardEnabled &&
+        userLeaderboardItem &&
+        getPosition() <= 3
+      ) {
         <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="24px">
-          <mat-icon class="leaderboard-icon">emoji_events</mat-icon>
-          <span class="position-text">
+          <mat-icon
+            class="leaderboard-icon"
+            [style]="'color: var(--' + getTrophyIconColor() + ')'"
+            >emoji_events</mat-icon
+          >
+          <span class="header-text">
             {{
-              'participant.content.you-are-at-position'
+              'participant.content.you-are-at-position-congrats'
                 | transloco: { position: getPosition() | ordinal }
             }}
           </span>
