@@ -5,6 +5,7 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   ActivatedRouteStub,
   MockAnnounceService,
+  MockEventService,
   MockGlobalStorageService,
   MockNotificationService,
 } from '@testing/test-helpers';
@@ -25,6 +26,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { EventService } from '@app/core/services/util/event.service';
 
 describe('LiveFeedbackPageComponent', () => {
   let component: LiveFeedbackPageComponent;
@@ -118,6 +120,10 @@ describe('LiveFeedbackPageComponent', () => {
         {
           provide: PresentationService,
           useValue: mockPresentationService,
+        },
+        {
+          provide: EventService,
+          useClass: MockEventService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

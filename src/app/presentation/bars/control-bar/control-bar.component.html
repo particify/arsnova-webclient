@@ -3,11 +3,7 @@
   [extensionData]="{ isPresentation: true }"
 ></lib-extension-point>
 @if (currentRouteIndex > -1) {
-  <div class="info-container" fxLayout="row" fxLayoutGap="1em">
-    <div fxLayoutAlign="center">
-      <p class="code">{{ joinUrl || (shortId | splitShortId) }}</p>
-    </div>
-  </div>
+  <span class="code">{{ joinUrl || (shortId | splitShortId) }}</span>
 }
 <div
   class="bar-container"

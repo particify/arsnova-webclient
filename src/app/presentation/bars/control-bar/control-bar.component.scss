@@ -164,20 +164,18 @@ $logo-width: 120px;
 }
 
 .code {
-  font-size: 22px;
-  font-weight: $font-weight-bold;
-  margin: 0;
+  position: fixed;
+  top: $spacing-3;
+  left: $spacing-3;
+  color: var(--on-surface);
+  font-size: $l-font-size;
+  opacity: 0.7;
 }
 
-.info-container {
-  z-index: 3;
-  min-width: 110px;
-  opacity: 0.6;
-  transition: 300ms;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: $bar-padding * 2;
+@include gt-xl {
+  .code {
+    font-size: $xl-font-size;
+  }
 }
 
 .no-padding {

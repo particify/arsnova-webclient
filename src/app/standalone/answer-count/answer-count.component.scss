@@ -1,54 +1,27 @@
 @import '../../../variables';
 
-.container {
-  margin: 8px 0;
+.container:not(.presentation-container) {
+  margin: $spacing 0;
   text-align: center;
-}
-
-.container:not(.medium-container) > :first-child {
-  margin-right: 8px;
 }
 
 .medium-container {
   width: 120px;
-  margin: 8px 0 0;
-}
-
-.small-container {
-  margin: 8px 0 0;
 }
 
 .counter {
-  font-size: 24px;
+  font-size: $xl-font-size;
   font-weight: $font-weight-bold;
-  margin: 0;
-}
-
-.counter-text {
-  line-height: 28px;
-  margin: 0;
 }
 
 .presentation-container {
-  position: fixed;
-  bottom: 1em;
-  right: 4px;
-  margin: 0;
-  padding: 0 1em;
-
   .counter-text {
-    font-weight: $font-weight-bold;
-    font-size: 20px;
-    line-height: 33px;
+    font-size: $l-font-size;
   }
 
-  .counter {
-    font-size: 28px;
+  @include gt-xl {
+    .counter-text {
+      font-size: $xl-font-size;
+    }
   }
-
-  transition: bottom 300ms;
-}
-
-.over-control-bar {
-  bottom: calc(1em + 70px);
 }

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
-import { EventService } from '@app/core/services/util/event.service';
 import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
@@ -11,19 +10,7 @@ import { TranslocoModule } from '@ngneat/transloco';
   templateUrl: './answer-count.component.html',
   styleUrls: ['./answer-count.component.scss'],
 })
-export class AnswerCountComponent implements OnInit {
+export class AnswerCountComponent {
   @Input({ required: true }) count!: number;
   @Input() size?: string;
-
-  controlBar = false;
-
-  constructor(private eventService: EventService) {}
-
-  ngOnInit(): void {
-    this.eventService
-      .on<boolean>('ControlBarVisible')
-      .subscribe((isVisible) => {
-        this.controlBar = isVisible;
-      });
-  }
 }

@@ -1,4 +1,4 @@
-@import '../../presentation/bars/control-bar/control-bar.component';
+@import '../../../variables';
 
 app-content-stepper,
 app-leaderboard-page {
@@ -13,23 +13,19 @@ app-leaderboard-page {
   position: absolute;
 }
 
-.step-info-container {
+.step-info {
+  color: var(--on-surface);
   position: fixed;
-  right: 0;
-  top: $app-padding;
-  border: 2px solid var(--grey);
-  border-bottom-left-radius: 10px;
-  border-top-left-radius: 10px;
-  border-right: none;
+  top: $spacing-3;
+  right: $spacing-3;
+  opacity: 0.7;
+  font-size: $l-font-size;
 }
 
-.step-info {
-  opacity: 0.8;
-  min-width: 30px;
-  text-align: center;
-  font-size: 24px;
-  margin: 10px;
-  padding: 4px;
+@include gt-xl {
+  .step-info {
+    font-size: $xl-font-size;
+  }
 }
 
 .countdown-container {
@@ -42,7 +38,7 @@ app-leaderboard-page {
 }
 
 .over-control-bar {
-  bottom: 70px;
+  bottom: $navigation-rail-width;
 }
 
 .locked-hint {
@@ -54,6 +50,17 @@ app-leaderboard-page {
   padding: $spacing-1 $spacing-2;
   border-radius: $border-radius * 2;
   margin-bottom: 20px;
+
+  &:not(.over-control-bar) {
+    bottom: 0;
+  }
+}
+
+.answer-count {
+  position: fixed;
+  margin-bottom: $spacing-3;
+  right: $spacing-3;
+  transition: bottom 300ms;
 
   &:not(.over-control-bar) {
     bottom: 0;

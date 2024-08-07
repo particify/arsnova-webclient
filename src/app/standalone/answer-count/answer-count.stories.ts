@@ -4,19 +4,10 @@ import {
   moduleMetadata,
   StoryObj,
 } from '@storybook/angular';
-
 import { AnswerCountComponent } from './answer-count.component';
-import { EventService } from '@app/core/services/util/event.service';
-import { Observable, of } from 'rxjs';
 import { importProvidersFrom } from '@angular/core';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { HttpClientModule } from '@angular/common/http';
-
-class MockEventService {
-  on(): Observable<boolean> {
-    return of(true);
-  }
-}
 
 export default {
   component: AnswerCountComponent,
@@ -25,12 +16,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [AnswerCountComponent],
-      providers: [
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-      ],
     }),
     applicationConfig({
       providers: [
