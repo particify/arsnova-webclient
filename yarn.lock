@@ -7239,7 +7239,7 @@ __metadata:
     tslib: "npm:2.6.3"
     typescript: "npm:5.4.5"
     typescript-eslint: "npm:7.12.0"
-    zone.js: "npm:0.14.8"
+    zone.js: "npm:0.14.10"
   languageName: unknown
   linkType: soft
 
@@ -17981,9 +17981,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zone.js@npm:0.14.8":
-  version: 0.14.8
-  resolution: "zone.js@npm:0.14.8"
-  checksum: 10c0/9d5c70f084e7291887059fc7ed3131e4ba1b3d4d604923cbae133ae37be08ac9293d7becebe25a7055f4fd10252b72f427e839a17f5b9d2a7cb9e105d8530498
+"zone.js@npm:0.14.10":
+  version: 0.14.10
+  resolution: "zone.js@npm:0.14.10"
+  checksum: 10c0/61283d152cb1eff899bae61621dccd572aa9f47e0c60c04b249bf86b43e3e4ba627bf6dba371b725023a4f302f39e554d7bf2d25bbf40c869c6c52f774b17e8b
   languageName: node
   linkType: hard
