@@ -9,6 +9,7 @@ import Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { NgFor } from '@angular/common';
+import { ThemeService } from '@app/core/theme/theme.service';
 
 // Font size was reduced from 60 to avoid dropped words
 const TARGET_FONT_SIZE = 50;
@@ -55,7 +56,7 @@ export class WordcloudComponent implements OnChanges {
 
   private timerSubscription?: Subscription;
 
-  constructor() {
+  constructor(private themeService: ThemeService) {
     // Determine theme CSS so we can avoid to hard code styles here.
     const bodyStyle = getComputedStyle(document.body);
     this.fontFamily = bodyStyle.fontFamily;
@@ -109,16 +110,7 @@ export class WordcloudComponent implements OnChanges {
 
   color(word?: string) {
     if (word) {
-      // TODO: Move color palette to theme service.
-      const colors = [
-        '#027db9',
-        '#eb0054',
-        '#4d8076',
-        '#9f6b3f',
-        '#8e79ab',
-        '#e64a19',
-        '#787b1d',
-      ];
+      const colors = this.themeService.getAltTextColors();
       const index = this.wordColorIndexes.indexOf(word);
       return colors[index % colors.length];
     }
