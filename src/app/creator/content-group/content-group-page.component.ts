@@ -1,4 +1,5 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
@@ -385,7 +386,8 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     timer(0, STATS_REFRESH_INTERVAL)
       .pipe(
         take(STATS_REFRESH_LIMIT),
-        takeWhile(() => this.isContentStarted)
+        takeWhile(() => this.isContentStarted),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
         this.loadStats();
