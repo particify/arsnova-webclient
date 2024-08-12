@@ -12,6 +12,8 @@
         [shortId]="room.shortId"
         [description]="room.description"
         [renderedDescription]="room.renderedDescription"
+        appLangContext
+        appDirContext
       ></app-room-overview-header>
       <div fxLayout="column" fxLayoutAlign="center">
         @if ((commentsEnabled || surveyEnabled) && !focusModeEnabled) {

@@ -35,6 +35,8 @@
               tabindex="0"
               [rawText]="content.body"
               [renderedText]="content.renderedBody"
+              appLangContext
+              appDirContext
             ></app-rendered-text>
             @if (alreadySent) {
               <div tabindex="0" class="visually-hidden">
@@ -98,6 +100,8 @@
               <form
                 (ngSubmit)="submitAnswerEvent($event, 'answer')"
                 id="answerForm"
+                appLangContext
+                [dir]="language | languageDirection"
               >
                 <div>
                   @if (

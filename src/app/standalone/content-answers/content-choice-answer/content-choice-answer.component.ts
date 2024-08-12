@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
+import { Room } from '@app/core/models/room';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 
@@ -24,6 +26,12 @@ export class ContentChoiceAnswerComponent {
   @Input() contentId?: string;
   @Input() dynamicRendering = false;
   @Output() answerIndexSelected = new EventEmitter<number>();
+
+  room: Room;
+
+  constructor(route: ActivatedRoute) {
+    this.room = route.snapshot.data['room'];
+  }
 
   selectSingleAnswer(index: number) {
     this.answerIndexSelected.emit(index);

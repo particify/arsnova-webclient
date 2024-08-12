@@ -9,7 +9,7 @@
         [responsive]="true"
         [timestamp]="comment.timestamp"
       ></app-date>
-      <p class="comment">{{ comment.body }}</p>
+      <p class="comment" appLangContext appDirContext>{{ comment.body }}</p>
     </mat-card>
     <div fxLayout="row" fxLayoutAlign="center">
       @if (isEditor || answer) {
@@ -24,6 +24,8 @@
                   'comment-page.a11y-entered-answer'
                     | transloco: { answer: answer }
                 "
+                appLangContext
+                appDirContext
               >
               </app-rendered-text>
               <div fxLayout="row" fxLayoutAlign="end">
@@ -76,6 +78,7 @@
                         'creator.comment-page.enter-answer' | transloco
                       "
                       appHotkey="1"
+                      dir="auto"
                     >
                     </textarea>
                     <mat-hint align="end">

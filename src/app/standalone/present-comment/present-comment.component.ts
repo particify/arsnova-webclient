@@ -5,13 +5,14 @@ import { Comment } from '@app/core/models/comment';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { take } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
+import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 @Component({
   selector: 'app-present-comment',
   templateUrl: './present-comment.component.html',
   styleUrls: ['./present-comment.component.scss'],
   standalone: true,
-  imports: [FlexModule, TranslocoPipe],
+  imports: [FlexModule, LanguageContextDirective, TranslocoPipe],
 })
 export class PresentCommentComponent implements OnInit, OnDestroy {
   @Input() isPresentation = false;

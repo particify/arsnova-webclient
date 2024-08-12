@@ -4,6 +4,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import {
+  ActivatedRouteStub,
   MockEventService,
   MockGlobalStorageService,
   MockThemeService,
@@ -20,6 +21,8 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { UserSettings } from '@app/core/models/user-settings';
 import { FormattingService } from '@app/core/services/http/formatting.service';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { Room } from '@app/core/models/room';
 
 describe('StatisticScaleComponent', () => {
   let component: StatisticScaleComponent;
@@ -59,6 +62,18 @@ describe('StatisticScaleComponent', () => {
   const mockFormattingService = jasmine.createSpyObj(['postString']);
   mockFormattingService.postString.and.returnValue(of('rendered'));
 
+  const snapshot = new ActivatedRouteSnapshot();
+
+  snapshot.data = {
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+  };
+
+  const activatedRouteStub = new ActivatedRouteStub(
+    undefined,
+    undefined,
+    snapshot
+  );
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticScaleComponent],
@@ -90,6 +105,10 @@ describe('StatisticScaleComponent', () => {
         {
           provide: FormattingService,
           useValue: mockFormattingService,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

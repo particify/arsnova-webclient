@@ -1,4 +1,4 @@
-<div>
+<div appLangContext appDirContext>
   <div
     fxLayout="row"
     fxLayoutAlign="space-between center"
@@ -11,7 +11,7 @@
     ></app-text-overflow-clip>
     <div class="room-short-id">
       <app-copy-url [url]="roomJoinUrl">
-        <span>{{ shortId | splitShortId }}</span>
+        <span dir="ltr">{{ shortId | splitShortId }}</span>
       </app-copy-url>
     </div>
   </div>
@@ -20,6 +20,8 @@
       <app-rendered-text
         [rawText]="description.trim()"
         [renderedText]="renderedDescription"
+        appLangContext
+        appDirContext
       ></app-rendered-text>
     </div>
   }

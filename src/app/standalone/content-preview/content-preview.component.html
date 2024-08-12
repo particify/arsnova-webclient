@@ -12,7 +12,11 @@
     }}
   </h3>
 }
-<mat-card appearance="outlined">
+<mat-card
+  appearance="outlined"
+  appLangContext
+  [dir]="language | languageDirection"
+>
   <app-rendered-text
     tabindex="0"
     [rawText]="content.body"

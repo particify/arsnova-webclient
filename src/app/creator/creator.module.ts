@@ -31,6 +31,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { AnnouncementComponent } from '@app/standalone/announcement/announcement.component';
 import { NavBarComponent } from '@app/standalone/nav-bar/nav-bar.component';
 import { DetailRadioGroupComponent } from '@app/standalone/detail-radio-group/detail-radio-group.component';
+import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { DetailRadioGroupComponent } from '@app/standalone/detail-radio-group/de
     AnnouncementComponent,
     NavBarComponent,
     DetailRadioGroupComponent,
+    LanguageContextDirective,
   ],
   declarations: [
     RoomComponent,

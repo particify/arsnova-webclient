@@ -9,6 +9,8 @@ import { Content } from '@app/core/models/content';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
+import { Room } from '@app/core/models/room';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-scale-content-form',
@@ -36,12 +38,15 @@ export class ScaleContentFormComponent
   selectedTemplate = LikertScaleTemplate.AGREEMENT;
   neutralOption = true;
   answerLabels: string[] = [];
+  room: Room;
 
   constructor(
     private likertScaleService: LikertScaleService,
-    protected formService: FormService
+    protected formService: FormService,
+    route: ActivatedRoute
   ) {
     super(formService);
+    this.room = route.snapshot.data['room'];
   }
 
   ngOnInit(): void {

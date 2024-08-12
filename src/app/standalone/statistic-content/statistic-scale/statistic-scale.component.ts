@@ -14,6 +14,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgIf, NgClass, NgFor } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-statistic-scale',
@@ -38,7 +39,8 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     protected themeService: ThemeService,
     protected eventService: EventService,
     protected presentationService: PresentationService,
-    private likertScaleService: LikertScaleService
+    private likertScaleService: LikertScaleService,
+    private route: ActivatedRoute
   ) {
     super(
       contentService,
@@ -55,11 +57,12 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
       scaleContent.optionTemplate,
       scaleContent.optionCount
     );
+    const language = this.route.snapshot.data['room'].language;
     if (scaleOptions) {
       const optionLabels$ = scaleOptions.map(
         (l) =>
           this.translateService
-            .selectTranslate(l)
+            .selectTranslate(l, undefined, language)
             .pipe(take(1)) as Observable<string>
       );
       forkJoin(optionLabels$).subscribe(

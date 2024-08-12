@@ -63,7 +63,7 @@
     [(ngModel)]="selectedAnswerIndex"
     name="{{ 'answer' + contentId }}"
   >
-    <mat-list>
+    <mat-list *transloco="let t; lang: room.language + '|static'">
       @for (
         checkedAnswer of selectableAnswers;
         track checkedAnswer;
@@ -84,13 +84,13 @@
             color="primary"
             class="answer-radio-button choice-answer"
             [ngClass]="{ 'answer-radio-checked': selectedAnswerIndex === i }"
-            aria-label="{{ checkedAnswer.answerOption.label | transloco }}"
+            aria-label="{{ t(checkedAnswer.answerOption.label) }}"
             [checked]="checkedAnswer.checked"
             [value]="i"
             name="answer"
           >
             <app-rendered-text
-              [rawText]="checkedAnswer.answerOption.label | transloco"
+              [rawText]="t(checkedAnswer.answerOption.label)"
               [renderedText]="checkedAnswer.answerOption.renderedLabel"
               [dynamic]="dynamicRendering"
               [markdown]="false"

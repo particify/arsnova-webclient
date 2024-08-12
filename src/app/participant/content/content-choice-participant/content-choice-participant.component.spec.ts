@@ -20,6 +20,7 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
+import { Room } from '@app/core/models/room';
 
 describe('ContentChoiceParticipantComponent', () => {
   let component: ContentChoiceParticipantComponent;
@@ -37,6 +38,9 @@ describe('ContentChoiceParticipantComponent', () => {
   };
 
   snapshot.params = of([params]);
+  snapshot.data = {
+    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
+  };
 
   const activatedRouteStub = new ActivatedRouteStub(
     undefined,

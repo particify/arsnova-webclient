@@ -36,10 +36,17 @@ import { CommentAnswerComponent } from '@app/standalone/_dialogs/comment-answer/
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { VotingComponent } from '@app/standalone/voting/voting.component';
 import { Vote } from '@app/core/models/vote';
+import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 @Component({
   standalone: true,
-  imports: [CoreModule, DateComponent, ExtensionPointModule, VotingComponent],
+  imports: [
+    CoreModule,
+    DateComponent,
+    ExtensionPointModule,
+    LanguageContextDirective,
+    VotingComponent,
+  ],
   providers: [provideTranslocoScope('creator')],
   selector: 'app-comment',
   templateUrl: './comment.component.html',
