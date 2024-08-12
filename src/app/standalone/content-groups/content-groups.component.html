@@ -35,7 +35,11 @@
       </div>
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
         <app-content-group-info
-          [contentGroup]="contentGroup"
+          [groupType]="contentGroup.groupType"
+          [contentCount]="
+            contentGroup.contentIds ? contentGroup.contentIds.length : 0
+          "
+          [published]="contentGroup.published"
         ></app-content-group-info>
       </div>
     </div>

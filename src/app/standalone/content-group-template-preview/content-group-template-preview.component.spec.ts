@@ -22,6 +22,14 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { GroupType } from '@app/core/models/content-group';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+
+class MockContentGroupService {
+  getTypeIcons() {
+    return new Map<GroupType, string>();
+  }
+}
 
 describe('ContentGroupTemplatePreviewComponent', () => {
   let component: ContentGroupTemplatePreviewComponent;
@@ -128,6 +136,10 @@ describe('ContentGroupTemplatePreviewComponent', () => {
         {
           provide: DialogService,
           useValue: mockDialogService,
+        },
+        {
+          provide: ContentGroupService,
+          useClass: MockContentGroupService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

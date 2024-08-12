@@ -1,3 +1,4 @@
+import { GroupType } from '@app/core/models/content-group';
 import { TemplateTag } from '@app/core/models/template-tag';
 
 // TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
@@ -8,6 +9,7 @@ export class ContentGroupTemplate {
   language: string;
   tags: TemplateTag[];
   license: string;
+  groupType!: GroupType;
   aiGenerated: boolean;
   attribution?: string;
   templateIds: string[] = [];

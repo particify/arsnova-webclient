@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentGroupInfoComponent } from './content-group-info.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { ContentGroup, GroupType } from '@app/core/models/content-group';
+import { GroupType } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 
 class MockContentGroupService {
@@ -28,7 +28,6 @@ describe('ContentGroupInfoComponent', () => {
 
     fixture = TestBed.createComponent(ContentGroupInfoComponent);
     component = fixture.componentInstance;
-    component.contentGroup = new ContentGroup();
     fixture.detectChanges();
   });
 
