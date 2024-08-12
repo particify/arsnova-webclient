@@ -70,7 +70,11 @@
                   }}</span>
                 </button>
               }
-              <button mat-menu-item (click)="deleteGroup()">
+              <button
+                mat-menu-item
+                (click)="deleteGroup()"
+                [disabled]="isModerator"
+              >
                 <mat-icon color="warn">delete_forever</mat-icon>
                 {{ 'creator.content.delete-content-group' | transloco }}
               </button>
