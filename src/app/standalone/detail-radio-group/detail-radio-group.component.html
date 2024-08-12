@@ -8,28 +8,36 @@
   <mat-list>
     @for (item of items; track item) {
       <div
-        class="radio-item unselected"
+        class="radio-item"
+        [ngStyle]="{
+          'border-color':
+            selectedItemValue === item.value ? item.color : 'var(--border)',
+        }"
         [ngClass]="{
-          'primary-border-color': selectedItemValue === item.value,
+          selected: selectedItemValue === item.value,
+          'primary-border-color':
+            selectedItemValue === item.value && !item.color,
         }"
       >
         <mat-radio-button
           labelPosition="before"
-          color="primary"
           [value]="item.value"
           fxLayout="row"
-          class="answer-radio-button choice-answer"
+          color="primary"
+          class="answer-radio-button choice-answer {{
+            item.value.toLowerCase()
+          }}"
+          style="--mdc-radio-selected-icon-color: {{
+            item.color
+          }}; --mdc-radio-selected-focus-icon-color: {{ item.color }}"
         >
-          <div
-            fxLayout="row"
-            fxLayoutGap="0.75em"
-            fxLayoutAlign="start center"
-            [ngClass]="{ primary: selectedItemValue === item.value }"
-          >
+          <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center">
             @if (item.icon) {
-              <mat-icon fxHide.lt-sm>{{ item.icon }}</mat-icon>
+              <mat-icon [style]="'color: ' + item.color">{{
+                item.icon
+              }}</mat-icon>
             }
-            <div fxLayout="column" fxLayoutGap="2px">
+            <div fxLayout="column">
               <span class="radio-name">
                 {{ item.title }}
               </span>

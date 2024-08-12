@@ -7,20 +7,12 @@
   border-width: 2px;
   border-radius: $border-radius;
 
-  &:not(.primary-border-color) {
-    border-color: var(--grey-light);
-
-    mat-icon {
-      opacity: 0.5;
-    }
+  &.selected {
+    transition: border-color 300ms;
   }
 
   &:not(:first-of-type) {
     margin-top: $spacing-1;
-  }
-
-  &.primary-border-color {
-    transition: border-color 300ms;
   }
 }
 
@@ -31,4 +23,11 @@
 
 .radio-description {
   font-size: $xs-font-size;
+}
+
+mat-icon {
+  min-width: $l-font-size;
+  width: $l-font-size;
+  height: $l-font-size;
+  font-size: $l-font-size;
 }

@@ -11,17 +11,20 @@ export class DetailedRadioGroup {
   title: string;
   description: string;
   icon?: string;
+  color?: string;
 
   constructor(
     value: string,
     title: string,
     description: string,
-    icon?: string
+    icon?: string,
+    color?: string
   ) {
     this.value = value;
     this.title = title;
     this.description = description;
     this.icon = icon;
+    this.color = color;
   }
 }
 

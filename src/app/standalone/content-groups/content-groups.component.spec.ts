@@ -10,10 +10,18 @@ import {
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
+
+class MockContentGroupService {
+  patchContentGroup() {}
+
+  getTypeIcons() {
+    return new Map<GroupType, string>();
+  }
+}
 
 describe('ContentGroupsComponent', () => {
   let component: ContentGroupsComponent;
@@ -21,10 +29,6 @@ describe('ContentGroupsComponent', () => {
 
   const mockRoutingService = jasmine.createSpyObj('RoutingService', [
     'getRoleRoute',
-  ]);
-
-  const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', [
-    'patchContentGroup',
   ]);
 
   beforeEach(waitForAsync(() => {
@@ -46,7 +50,7 @@ describe('ContentGroupsComponent', () => {
         },
         {
           provide: ContentGroupService,
-          useValue: mockContentGroupService,
+          useClass: MockContentGroupService,
         },
         {
           provide: NotificationService,
