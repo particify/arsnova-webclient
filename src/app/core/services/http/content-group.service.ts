@@ -460,7 +460,9 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
       );
       if (contentSummaries.length > 0) {
         count = this.calculateStatsCount(contentSummaries);
-        correct = this.calculateCorrectStats(contentSummaries);
+        if (this.isContentScorable(content)) {
+          correct = this.calculateCorrectStats(contentSummaries);
+        }
       }
       if (correct) {
         correct = (correct / count) * 100;
