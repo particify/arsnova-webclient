@@ -240,7 +240,6 @@ export class ParticipantContentCarouselPageComponent
   }
 
   getContents(lastContentIndex?: number, nextContentId?: string) {
-    this.contents = [];
     const publishedIds = this.contentPublishService.filterPublishedIds(
       this.contentGroup
     );
@@ -276,6 +275,7 @@ export class ParticipantContentCarouselPageComponent
           this.getAnswers(lastContentIndex);
         });
     } else {
+      this.contents = [];
       this.finishLoading();
     }
   }
@@ -516,7 +516,6 @@ export class ParticipantContentCarouselPageComponent
           this.contentGroup.publishingMode === PublishingMode.LIVE &&
           changedEvent.hasPropertyChanged('publishingIndex')
         ) {
-          this.isReloading = true;
           this.getContents(
             this.currentStep,
             this.contentGroup.contentIds[changes.entity.publishingIndex]
