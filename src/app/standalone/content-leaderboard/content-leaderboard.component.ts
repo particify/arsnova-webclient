@@ -11,6 +11,7 @@ import { CoreModule } from '@app/core/core.module';
 import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
+import { provideTranslocoScope } from '@ngneat/transloco';
 
 interface LeaderboardTableItem {
   position: number;
@@ -24,6 +25,7 @@ interface LeaderboardTableItem {
 @Component({
   standalone: true,
   imports: [CoreModule, OrdinalPipe, MatSortModule],
+  providers: [provideTranslocoScope('participant')],
   selector: 'app-content-leaderboard',
   templateUrl: './content-leaderboard.component.html',
   styleUrl: './content-leaderboard.component.scss',

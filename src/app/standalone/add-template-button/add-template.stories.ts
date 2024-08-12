@@ -14,6 +14,7 @@ import { BaseTemplateService } from '@app/core/services/http/base-template.servi
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 class MockService {}
 
@@ -39,6 +40,10 @@ export default {
         },
         {
           provide: RoomMembershipService,
+          useClass: MockService,
+        },
+        {
+          provide: DialogService,
           useClass: MockService,
         },
       ],

@@ -5,7 +5,7 @@ import {
   StoryObj,
 } from '@storybook/angular';
 
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { importProvidersFrom } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -74,6 +74,10 @@ export default {
         {
           provide: MatDialogRef,
           useClass: MockMatDialogRef,
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {},
         },
       ],
     }),
