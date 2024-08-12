@@ -3,20 +3,30 @@
 $icon-container-size: 40px;
 
 .header-text {
-  margin: 0;
-  opacity: 0.8;
-  font-weight: bold;
+  font-weight: $font-weight-bold;
 }
 
-@media (max-width: 767px) {
+.position-info {
+  opacity: 0.7;
+}
+
+@include xs {
   .header-text {
-    font-size: 18px;
+    font-size: $l-font-size;
+  }
+
+  .position-info {
+    font-size: $m-font-size;
   }
 }
 
-@media (min-width: 768px) {
+@include gt-xs {
   .header-text {
-    font-size: 24px;
+    font-size: $xl-font-size;
+  }
+
+  .position-info {
+    font-size: $l-font-size;
   }
 }
 
@@ -68,15 +78,9 @@ app-hint {
 }
 
 .leaderboard-icon {
-  color: var(--gold);
   width: 64px;
   height: 64px;
   font-size: 64px;
-}
-
-.position-text {
-  font-weight: $font-weight-bold;
-  font-size: $xl-font-size;
 }
 
 .duration {
