@@ -25,6 +25,7 @@ $app-padding: 4vw;
 $spacing: 8px;
 $spacing-1: $spacing * 1.5;
 $spacing-2: $spacing * 2;
+$spacing-3: $spacing * 2.5;
 
 // Borders
 
@@ -45,6 +46,7 @@ $screen-xs-max: 599px;
 $screen-sm-min: 600px;
 $screen-sm-max: 999px;
 $screen-md-min: 1000px;
+$screen-xl-min: 1920px;
 
 @mixin xs {
   @media (max-width: $screen-xs-max) {
@@ -66,6 +68,12 @@ $screen-md-min: 1000px;
 
 @mixin gt-md {
   @media (min-width: $screen-md-min) {
+    @content;
+  }
+}
+
+@mixin gt-xl {
+  @media (min-width: $screen-xl-min) {
     @content;
   }
 }

@@ -1,4 +1,21 @@
+@import '../../../variables';
+
 app-live-feedback {
   width: 100%;
   max-width: 832px;
+}
+
+.answer-count {
+  position: fixed;
+  margin-bottom: $spacing-3;
+  right: $spacing-3;
+  transition: bottom 300ms;
+
+  &:not(.over-control-bar) {
+    bottom: 0;
+  }
+}
+
+.over-control-bar {
+  bottom: $navigation-rail-width;
 }

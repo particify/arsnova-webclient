@@ -22,6 +22,7 @@ import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 import { LiveFeedbackComponent } from '@app/standalone/live-feedback/live-feedback.component';
+import { EventService } from '@app/core/services/util/event.service';
 
 @Component({
   selector: 'app-live-feedback-page',
@@ -42,6 +43,7 @@ export class LiveFeedbackPageComponent
   private hotkeyRefs: symbol[] = [];
 
   showAnswerCount = false;
+  controlBarVisible = true;
 
   constructor(
     protected notificationService: NotificationService,
@@ -54,7 +56,8 @@ export class LiveFeedbackPageComponent
     protected route: ActivatedRoute,
     protected focusModeService: FocusModeService,
     protected hotkeyService: HotkeyService,
-    protected presentationService: PresentationService
+    protected presentationService: PresentationService,
+    private eventService: EventService
   ) {
     super(
       wsFeedbackService,
@@ -97,6 +100,11 @@ export class LiveFeedbackPageComponent
           },
           this.hotkeyRefs
         );
+      });
+    this.eventService
+      .on<boolean>('ControlBarVisible')
+      .subscribe((isVisible) => {
+        this.controlBarVisible = isVisible;
       });
   }
 

@@ -1,13 +1,7 @@
 @if (showStepInfo && !isLoading && !isGroupLocked() && contents) {
-  <div
-    class="step-info-container"
-    fxLayout="column"
-    fxLayoutAlign="center center"
-  >
-    <p class="step-info">
-      {{ currentStep + 1 + ' / ' + stepCount }}
-    </p>
-  </div>
+  <span class="step-info">
+    {{ currentStep + 1 + ' / ' + stepCount }}
+  </span>
 }
 @if (
   showAnswerCount &&
@@ -17,10 +11,15 @@
   content &&
   (content.state.answeringEndTime || !content.duration)
 ) {
-  <app-answer-count
-    [count]="answerCount"
-    [size]="'presentation'"
-  ></app-answer-count>
+  <div
+    class="answer-count"
+    [ngClass]="{ 'over-control-bar': controlBarVisible }"
+  >
+    <app-answer-count
+      [count]="answerCount"
+      [size]="'presentation'"
+    ></app-answer-count>
+  </div>
 }
 @if (isLoading) {
   <app-loading-indicator></app-loading-indicator>

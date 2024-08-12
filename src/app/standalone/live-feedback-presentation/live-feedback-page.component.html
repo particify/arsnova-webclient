@@ -20,11 +20,16 @@
     ></app-live-feedback>
   }
   @if (showAnswerCount) {
-    <app-answer-count
-      id="answer-count"
-      tabindex="{{ !isClosed ? '0' : '-1' }}"
-      [count]="answerCount"
-      size="presentation"
-    ></app-answer-count>
+    <div
+      class="answer-count"
+      [ngClass]="{ 'over-control-bar': controlBarVisible }"
+    >
+      <app-answer-count
+        id="answer-count"
+        tabindex="{{ !isClosed ? '0' : '-1' }}"
+        [count]="answerCount"
+        [size]="'presentation'"
+      ></app-answer-count>
+    </div>
   }
 </div>
