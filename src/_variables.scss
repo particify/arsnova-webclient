@@ -46,7 +46,7 @@ $screen-xs-max: 599px;
 $screen-sm-min: 600px;
 $screen-sm-max: 999px;
 $screen-md-min: 1000px;
-$screen-xl-min: 1920px;
+$screen-xl-min: 1600px;
 
 @mixin xs {
   @media (max-width: $screen-xs-max) {
