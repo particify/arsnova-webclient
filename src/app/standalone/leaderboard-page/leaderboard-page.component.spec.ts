@@ -9,6 +9,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { ContentGroup } from '@app/core/models/content-group';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { ThemeService } from '@app/core/theme/theme.service';
 
 describe('LeaderboardPageComponent', () => {
   let component: LeaderboardPageComponent;
@@ -34,6 +35,9 @@ describe('LeaderboardPageComponent', () => {
     snapshot
   );
 
+  const themeService = jasmine.createSpyObj(ThemeService, ['getTextColors']);
+  themeService.getTextColors.and.returnValue([]);
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LeaderboardPageComponent, getTranslocoModule()],
@@ -45,6 +49,10 @@ describe('LeaderboardPageComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
+        },
+        {
+          provide: ThemeService,
+          useValue: themeService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

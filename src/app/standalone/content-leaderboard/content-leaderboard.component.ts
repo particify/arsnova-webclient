@@ -12,6 +12,7 @@ import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-ite
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { provideTranslocoScope } from '@ngneat/transloco';
+import { ThemeService } from '@app/core/theme/theme.service';
 
 interface LeaderboardTableItem {
   position: number;
@@ -39,6 +40,11 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
 
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
   displayedColumns = ['position', 'name', 'score'];
+  colors: string[];
+
+  constructor(private themeService: ThemeService) {
+    this.colors = this.themeService.getTextColors();
+  }
 
   ngOnChanges(): void {
     if (
