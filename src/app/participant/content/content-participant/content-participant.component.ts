@@ -62,6 +62,8 @@ import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentState } from '@app/core/models/content-state';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
+import { Room } from '@app/core/models/room';
+import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 
 interface ContentActionTab {
   route: string;
@@ -106,6 +108,7 @@ interface ContentActionTab {
     LeaderboardPageComponent,
     TranslocoPipe,
     LanguageContextDirective,
+    LanguageDirectionPipe,
   ],
 })
 export class ContentParticipantComponent
@@ -138,6 +141,7 @@ export class ContentParticipantComponent
   flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
   a11yMsg?: string;
+  language?: string;
 
   // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
   choiceContent!: ContentChoice;
@@ -191,6 +195,7 @@ export class ContentParticipantComponent
     private contentPublishService: ContentPublishService
   ) {
     super(formService);
+    this.language = (route.snapshot.data['room'] as Room).language;
   }
 
   ngOnInit(): void {

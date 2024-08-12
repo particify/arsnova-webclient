@@ -25,6 +25,9 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
 import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
+import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
+import { ActivatedRoute } from '@angular/router';
+import { Room } from '@app/core/models/room';
 
 @Component({
   selector: 'app-content-preview',
@@ -40,6 +43,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
     ContentWordcloudAnswerComponent,
     ContentNumericAnswerComponent,
     LanguageContextDirective,
+    LanguageDirectionPipe,
   ],
   providers: [provideTranslocoScope('creator')],
   templateUrl: './content-preview.component.html',
@@ -60,12 +64,16 @@ export class ContentPreviewComponent implements OnInit {
   additionalText?: string;
   assignablePoints?: number;
   numericContent?: ContentNumeric;
+  language?: string;
 
   constructor(
     private answerService: ContentAnswerService,
     private likertScaleService: LikertScaleService,
-    private translateService: TranslocoService
-  ) {}
+    private translateService: TranslocoService,
+    route: ActivatedRoute
+  ) {
+    this.language = (route.snapshot.data['room'] as Room).language;
+  }
 
   ngOnInit(): void {
     const format = this.content.format;

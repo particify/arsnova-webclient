@@ -101,7 +101,7 @@
                 (ngSubmit)="submitAnswerEvent($event, 'answer')"
                 id="answerForm"
                 appLangContext
-                appDirContext
+                [dir]="language | languageDirection"
               >
                 <div>
                   @if (
