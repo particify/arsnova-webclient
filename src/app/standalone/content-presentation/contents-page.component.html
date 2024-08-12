@@ -101,7 +101,7 @@
         [hotkeyTitle]="'creator.content.stop-content' | transloco"
         [action]="'creator.content.to-stop-content' | transloco"
         [isNavBarVisible]="controlBarVisible"
-        [additionalBottomSpace]="!answeringLocked"
+        [additionalBottomSpace]="!answeringLocked && !!content.duration"
         (buttonClicked)="stopCountdown()"
       ></app-hotkey-action-button>
     </div>
