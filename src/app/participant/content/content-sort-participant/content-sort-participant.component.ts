@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import {
   AdvancedSnackBarTypes,
@@ -19,6 +19,7 @@ import { MatIcon } from '@angular/material/icon';
 import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgClass } from '@angular/common';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 @Component({
   selector: 'app-content-sort-participant',
@@ -37,7 +38,6 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
   @Input() correctOptionsPublished = false;
-  @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
   hasAbstained = false;
@@ -141,7 +141,9 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
               AdvancedSnackBarTypes.SUCCESS
             );
           });
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(
+          this.isCorrect ? AnswerResultType.CORRECT : AnswerResultType.WRONG
+        );
       },
       () => {
         this.enableForm();
@@ -157,9 +159,9 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     );
     this.answerService
       .addAnswerChoice(this.content.roomId, answer)
-      .subscribe((answer) => {
+      .subscribe(() => {
         this.hasAbstained = true;
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.ABSTAINED);
       }),
       () => {
         this.enableForm();

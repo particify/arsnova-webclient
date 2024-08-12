@@ -51,7 +51,10 @@ describe('ContentParticipantComponent', () => {
   const formattingService = jasmine.createSpyObj(['postString']);
   formattingService.postString.and.returnValue(of('rendered'));
 
-  const mockContentAnswerService = jasmine.createSpyObj(['addAnswerChoice']);
+  const mockContentAnswerService = jasmine.createSpyObj([
+    'getAnswersByUserIdContentIds',
+  ]);
+  mockContentAnswerService.getAnswersByUserIdContentIds.and.returnValue(of([]));
 
   const contentPublishService = jasmine.createSpyObj(ContentPublishService, [
     'isGroupLive',

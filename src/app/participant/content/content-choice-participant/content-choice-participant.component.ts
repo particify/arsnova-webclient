@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
@@ -17,6 +17,7 @@ import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 @Component({
   selector: 'app-content-choice-participant',
@@ -29,7 +30,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
   @Input() correctOptionsPublished = false;
-  @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
@@ -39,8 +39,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
   isCorrect = false;
   isChoice = false;
   hasAbstained = false;
-  multipleAlreadyAnswered = '';
-  allAnswers = '';
 
   constructor(
     protected answerService: ContentAnswerService,
@@ -73,8 +71,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       ) {
         for (const i of this.answer.selectedChoiceIndexes) {
           this.selectableAnswers[i].checked = true;
-          this.multipleAlreadyAnswered +=
-            this.selectableAnswers[i].answerOption.label + '&';
           if (!this.content.multiple) {
             this.selectedAnswerIndex = this.answer.selectedChoiceIndexes[0];
           }
@@ -91,7 +87,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     }
   }
 
-  getCorrectAnswerOptions() {
+  getCorrectAnswerOptions(sendResult = false) {
     if (this.correctOptionsPublished) {
       this.contentService
         .getCorrectChoiceIndexes(this.content.roomId, this.content.id)
@@ -101,27 +97,28 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
           });
           (this.content as ContentChoice).correctOptionIndexes =
             this.correctOptionIndexes;
-          this.getCorrectAnswer();
+          this.checkIfCorrectAnswer();
           if (this.isChoice && this.answer) {
             this.checkAnswer(this.answer.selectedChoiceIndexes);
             this.isLoading = false;
           } else {
             this.isLoading = false;
           }
+          if (sendResult) {
+            this.sendStatusToParent(
+              !this.isChoice
+                ? AnswerResultType.NEUTRAL
+                : this.isCorrect
+                  ? AnswerResultType.CORRECT
+                  : AnswerResultType.WRONG
+            );
+          }
         });
     } else {
-      this.isLoading = false;
-    }
-  }
-
-  getCorrectAnswer() {
-    this.checkIfCorrectAnswer();
-    if (!this.isChoice) {
-      for (const i in this.content.options) {
-        if (this.content.options[i]) {
-          this.allAnswers += this.content.options[i].label + '&';
-        }
+      if (sendResult) {
+        this.sendStatusToParent(AnswerResultType.NEUTRAL);
       }
+      this.isLoading = false;
     }
   }
 
@@ -206,7 +203,7 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       .addAnswerChoice(this.content.roomId, answer)
       .subscribe((answer) => {
         this.answer = answer;
-        this.getCorrectAnswerOptions();
+        this.getCorrectAnswerOptions(true);
         this.translateService
           .selectTranslate('participant.answer.sent')
           .pipe(take(1))
@@ -216,7 +213,6 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
               AdvancedSnackBarTypes.SUCCESS
             );
           });
-        this.sendStatusToParent(answer);
       }),
       () => {
         this.enableForm();
@@ -231,10 +227,10 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
     );
     this.answerService
       .addAnswerChoice(this.content.roomId, answer)
-      .subscribe((answer) => {
+      .subscribe(() => {
         this.resetCheckedAnswers();
         this.hasAbstained = true;
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.ABSTAINED);
       }),
       () => {
         this.enableForm();

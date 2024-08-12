@@ -8,6 +8,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import { ChangeDetectorRef, NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 
 describe('StepperComponent', () => {
   let component: StepperComponent;
@@ -23,6 +24,10 @@ describe('StepperComponent', () => {
   ]);
 
   const mockFocusModeService = jasmine.createSpyObj(['getFocusModeEnabled']);
+
+  const contentAnswerService = jasmine.createSpyObj(ContentAnswerService, [
+    'getAnswerResultIcon',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -55,6 +60,10 @@ describe('StepperComponent', () => {
         {
           provide: FocusModeService,
           useValue: mockFocusModeService,
+        },
+        {
+          provide: ContentAnswerService,
+          useValue: contentAnswerService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -19,9 +19,7 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Location, AsyncPipe } from '@angular/common';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { Answer } from '@app/core/models/answer';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -48,6 +46,7 @@ import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -81,9 +80,10 @@ export class ParticipantContentCarouselPageComponent
   contentGroup: ContentGroup;
   shortId: string;
   isLoading = true;
-  alreadySent: Map<number, boolean> = new Map<number, boolean>();
   started = false;
-  answers: (Answer | undefined)[] = [];
+  answerResults = new Map<number, AnswerResultType>();
+  AnswerResultType = AnswerResultType;
+  userId?: string;
   currentStep = 0;
   isReloading = false;
   isReloadingCurrentContent = false;
@@ -112,7 +112,6 @@ export class ParticipantContentCarouselPageComponent
     private announceService: AnnounceService,
     private globalStorageService: GlobalStorageService,
     private location: Location,
-    private answerService: ContentAnswerService,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
     private eventService: EventService,
@@ -121,7 +120,8 @@ export class ParticipantContentCarouselPageComponent
     private contentCarouselService: ContentCarouselService,
     private contentPublishService: ContentPublishService,
     private focusModeService: FocusModeService,
-    private roomUserAliasService: RoomUserAliasService
+    private roomUserAliasService: RoomUserAliasService,
+    private contentGroupService: ContentGroupService
   ) {
     this.shortId = route.snapshot.data.room.shortId;
     this.showStepper = route.snapshot.data.showStepper ?? true;
@@ -138,8 +138,6 @@ export class ParticipantContentCarouselPageComponent
     if (this.routeChangedSubscription) {
       this.routeChangedSubscription.unsubscribe();
     }
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   ngOnInit() {
@@ -370,7 +368,7 @@ export class ParticipantContentCarouselPageComponent
     for (let i = 0; i < this.contents.length; i++) {
       const content = this.contents[i];
       if (
-        this.alreadySent.get(i) === false &&
+        this.answerResults.get(i) === AnswerResultType.UNANSWERED &&
         (!content.state.answeringEndTime ||
           this.isContentTimerActive(content)) &&
         !this.isInfoContent(content)
@@ -413,21 +411,20 @@ export class ParticipantContentCarouselPageComponent
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
-  resetAnswer(contentId: string, index: number): void {
-    this.alreadySent.set(index, false);
-    this.answers[this.getIndexOfContentById(contentId)] = undefined;
+  resetAnswer(index: number): void {
+    this.answerResults.set(index, AnswerResultType.UNANSWERED);
   }
 
-  receiveSentStatus(answer: Answer, index: number) {
-    this.alreadySent.set(index, !!answer);
+  receiveSentStatus(answerResultType: AnswerResultType, index: number) {
+    this.answerResults.set(index, answerResultType);
     if (index === this.contents.length - 1) {
-      this.hasAnsweredLastContent = this.alreadySent.get(index) || false;
+      this.hasAnsweredLastContent =
+        answerResultType !== AnswerResultType.UNANSWERED;
     }
     this.contentCarouselService.setLastContentAnswered(
       this.hasAnsweredLastContent
     );
     this.checkState();
-    this.answers[this.getIndexOfContentById(answer.contentId)] = answer;
     if (!this.focusModeEnabled) {
       if (this.started) {
         setTimeout(() => {
@@ -452,39 +449,22 @@ export class ParticipantContentCarouselPageComponent
 
   getAnswers(lastContentIndex?: number) {
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
-      this.answerService
-        .getAnswersByUserIdContentIds(
+      this.userId = auth.userId;
+      this.contentGroupService
+        .getAnswerStats(
           this.contentGroup.roomId,
-          auth.userId,
-          this.contents.map((c) => c.id)
+          this.contentGroup.id,
+          this.userId
         )
-        .subscribe(
-          (answers) => {
-            let answersAdded = 0;
-            this.answers = [];
-            this.alreadySent = new Map<number, boolean>();
-            for (const [index, content] of this.contents.entries()) {
-              if (
-                this.contentPublishService.isIndexPublished(
-                  this.contentGroup,
-                  index
-                )
-              ) {
-                if (answersAdded < answers.length) {
-                  for (const answer of answers) {
-                    if (content.id === answer.contentId) {
-                      this.answers[index] = answer;
-                      answersAdded++;
-                    }
-                  }
-                }
-                this.alreadySent.set(index, !!this.answers[index]);
-              }
-            }
+        .subscribe({
+          next: (resultOverview) => {
+            this.contents.forEach((c, i) => {
+              this.answerResults.set(i, resultOverview.answerResults[i].state);
+            });
             this.finishLoading();
             this.checkIfLastContentExists(lastContentIndex);
           },
-          () => {
+          error: () => {
             this.finishLoading();
             const msg = this.translateService.translate(
               'participant.answer.group-not-available'
@@ -493,8 +473,8 @@ export class ParticipantContentCarouselPageComponent
               msg,
               AdvancedSnackBarTypes.WARNING
             );
-          }
-        );
+          },
+        });
     });
   }
 

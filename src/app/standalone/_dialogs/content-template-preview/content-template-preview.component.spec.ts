@@ -13,6 +13,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 
 describe('ContentTemplatePreviewComponent', () => {
   let component: ContentTemplatePreviewComponent;
@@ -21,6 +22,10 @@ describe('ContentTemplatePreviewComponent', () => {
   const mockHotkeyService = jasmine.createSpyObj(HotkeyService, [
     'registerHotkey',
     'unregisterHotkey',
+  ]);
+
+  const contentAnswerService = jasmine.createSpyObj(ContentAnswerService, [
+    'getAnswerResultIcon',
   ]);
 
   beforeEach(() => {
@@ -51,6 +56,10 @@ describe('ContentTemplatePreviewComponent', () => {
         {
           provide: HotkeyService,
           useValue: mockHotkeyService,
+        },
+        {
+          provide: ContentAnswerService,
+          useValue: contentAnswerService,
         },
       ],
     });

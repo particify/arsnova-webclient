@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
@@ -17,6 +17,7 @@ import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
+import { AnswerResultType } from '@app/core/models/answer-result';
 
 @Component({
   selector: 'app-content-scale-participant',
@@ -28,7 +29,6 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   @Input({ required: true }) content!: ContentScale;
   @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
-  @Output() answerChanged = new EventEmitter<ChoiceAnswer>();
 
   selectableAnswers: SelectableAnswer[] = [];
   hasAbstained = false;
@@ -111,7 +111,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
               AdvancedSnackBarTypes.SUCCESS
             );
           });
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.NEUTRAL);
       },
       () => {
         this.enableForm();
@@ -127,9 +127,9 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     );
     this.answerService
       .addAnswerChoice(this.content.roomId, answer)
-      .subscribe((answer) => {
+      .subscribe(() => {
         this.hasAbstained = true;
-        this.sendStatusToParent(answer);
+        this.sendStatusToParent(AnswerResultType.ABSTAINED);
       }),
       () => {
         this.enableForm();
