@@ -85,11 +85,12 @@ export abstract class StatisticContentBaseComponent implements OnInit {
     this.updateCounterEvent.emit(this.answerCount);
   }
 
-  getDataLabel(value: number, roundData: number[]): string {
+  getDataLabel(value: number, roundData: number[], count?: number): string {
     let label: string;
+    const total = count ?? this.getSum(roundData);
     if (this.settings.contentVisualizationUnitPercent) {
       label = this.getLabelWithPercentageSign(
-        ((value / this.getSum(roundData)) * 100).toFixed(0)
+        ((value / total) * 100).toFixed(0)
       );
     } else {
       label = value.toString();

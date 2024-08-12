@@ -258,7 +258,8 @@ export class StatisticChoiceComponent
             formatter: (value, context) => {
               return this.getDataLabel(
                 context.dataset.data[context.dataIndex] as number,
-                context.dataset.data as number[]
+                context.dataset.data as number[],
+                this.answerCount
               );
             },
             display: (context) => {
