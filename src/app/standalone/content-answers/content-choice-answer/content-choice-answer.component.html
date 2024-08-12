@@ -83,7 +83,10 @@
             (change)="selectSingleAnswer(i)"
             color="primary"
             class="answer-radio-button choice-answer"
-            [ngClass]="{ 'answer-radio-checked': selectedAnswerIndex === i }"
+            [ngClass]="{
+              'answer-radio-checked': selectedAnswerIndex === i,
+              'disabled-choice-answer': isDisabled,
+            }"
             aria-label="{{ t(checkedAnswer.answerOption.label) }}"
             [checked]="checkedAnswer.checked"
             [value]="i"
