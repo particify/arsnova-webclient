@@ -22,6 +22,7 @@ import { LikertScaleService } from '@app/core/services/util/likert-scale.service
 import { ContentScale } from '@app/core/models/content-scale';
 import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
 import { Room } from '@app/core/models/room';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 describe('ContentScaleParticipantComponent', () => {
   let component: ContentScaleParticipantComponent;
@@ -51,6 +52,11 @@ describe('ContentScaleParticipantComponent', () => {
     undefined,
     snapshot
   );
+
+  const mockLangService = jasmine.createSpyObj(LanguageService, [
+    'ensureValidLang',
+  ]);
+  mockLangService.ensureValidLang.and.returnValue(true);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -83,6 +89,10 @@ describe('ContentScaleParticipantComponent', () => {
         {
           provide: LikertScaleService,
           useValue: mockLikertScaleService,
+        },
+        {
+          provide: LanguageService,
+          useValue: mockLangService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

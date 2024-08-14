@@ -92,4 +92,11 @@ export class LanguageService extends AbstractHttpService<void> {
   getIsoLanguages(): Observable<IsoLanguage[]> {
     return this.httpClient.get<IsoLanguage[]>(this.buildUri('/'));
   }
+
+  ensureValidLang(lang?: string): string {
+    return lang &&
+      this.translateService.getAvailableLangs().some((l) => l === lang)
+      ? lang
+      : this.translateService.getActiveLang();
+  }
 }

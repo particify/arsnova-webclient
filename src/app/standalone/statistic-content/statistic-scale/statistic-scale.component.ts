@@ -15,6 +15,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { NgIf, NgClass, NgFor } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { ActivatedRoute } from '@angular/router';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 @Component({
   selector: 'app-statistic-scale',
@@ -33,6 +34,8 @@ import { ActivatedRoute } from '@angular/router';
   ],
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {
+  language: string;
+
   constructor(
     protected contentService: ContentService,
     protected translateService: TranslocoService,
@@ -40,7 +43,8 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     protected eventService: EventService,
     protected presentationService: PresentationService,
     private likertScaleService: LikertScaleService,
-    private route: ActivatedRoute
+    route: ActivatedRoute,
+    languageService: LanguageService
   ) {
     super(
       contentService,
@@ -48,6 +52,9 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
       themeService,
       eventService,
       presentationService
+    );
+    this.language = languageService.ensureValidLang(
+      route.snapshot.data.room?.language
     );
   }
 
@@ -57,12 +64,11 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
       scaleContent.optionTemplate,
       scaleContent.optionCount
     );
-    const language = this.route.snapshot.data['room'].language;
     if (scaleOptions) {
       const optionLabels$ = scaleOptions.map(
         (l) =>
           this.translateService
-            .selectTranslate(l, undefined, language)
+            .selectTranslate(l, undefined, this.language)
             .pipe(take(1)) as Observable<string>
       );
       forkJoin(optionLabels$).subscribe(

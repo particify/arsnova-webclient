@@ -17,6 +17,7 @@ import {
 import { of } from 'rxjs';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Room } from '@app/core/models/room';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 @Injectable()
 class MockContentAnswerService {}
@@ -43,6 +44,11 @@ describe('ContentPreviewComponent', () => {
     snapshot
   );
 
+  const mockLangService = jasmine.createSpyObj(LanguageService, [
+    'ensureValidLang',
+  ]);
+  mockLangService.ensureValidLang.and.returnValue(true);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -65,6 +71,10 @@ describe('ContentPreviewComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
+        },
+        {
+          provide: LanguageService,
+          useValue: mockLangService,
         },
       ],
       imports: [
