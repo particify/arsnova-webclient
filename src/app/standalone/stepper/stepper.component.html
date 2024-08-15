@@ -61,7 +61,7 @@
                           primary:
                             answerResults.get(i) === AnswerResultType.NEUTRAL,
                         }"
-                        [class]="answerResults.get(i)!.toLowerCase()"
+                        [class]="answerResults.get(i)?.toLowerCase() ?? ''"
                         >{{ getAnswerResultIcon(i) }}</mat-icon
                       >
                     </div>
