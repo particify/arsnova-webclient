@@ -8,9 +8,8 @@ describe('PulsatingCircleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PulsatingCircleComponent]
-    })
-    .compileComponents();
+      imports: [PulsatingCircleComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PulsatingCircleComponent);
     component = fixture.componentInstance;

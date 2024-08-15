@@ -174,11 +174,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       .getAnswersDeleted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((contentId) => {
-        if (
-          contentId &&
-          contentId === this.content.id &&
-          this.content.duration
-        ) {
+        if (contentId && contentId === this.content.id) {
           this.presentationService.reloadCurrentContent();
         }
       });
