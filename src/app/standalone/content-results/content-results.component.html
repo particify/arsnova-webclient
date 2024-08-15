@@ -31,14 +31,24 @@
         }
         <div fxLayout="row">
           <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="8px">
-            @if (multipleRounds && answersVisible) {
+            @if (isStandalone && !isParticipant) {
+              <button
+                mat-icon-button
+                color="primary"
+                [matTooltip]="'creator.content.edit-content' | transloco"
+                [routerLink]="['..', 'edit', content.id]"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            }
+            @if (multipleRounds) {
               <app-multiple-round-selection
                 [round]="roundsToDisplay"
                 (roundChanged)="changeRound($event)"
               >
               </app-multiple-round-selection>
             }
-            @if (answersVisible && allowingUnitChange && isStandalone) {
+            @if (allowingUnitChange && isStandalone) {
               <button
                 mat-icon-button
                 color="primary"
