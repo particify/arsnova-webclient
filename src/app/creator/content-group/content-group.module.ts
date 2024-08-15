@@ -40,6 +40,7 @@ import { ContentStepperComponent } from '@app/standalone/content-stepper/content
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdo
     FlexLayoutModule,
     ContentGroupInfoComponent,
     CountdownTimerComponent,
+    PulsatingCircleComponent,
   ],
 })
 export class ContentGroupModule {}
