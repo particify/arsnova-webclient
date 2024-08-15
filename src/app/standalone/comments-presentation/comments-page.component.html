@@ -49,7 +49,7 @@
             [isSimpleView]="true"
             [outlinedCard]="!showCommentPreview"
             [isNew]="comment.id === newestComment.id"
-            (activeComment)="updateCurrentComment($event)"
+            (click)="updateCurrentComment(comment)"
           >
           </app-comment>
         }
