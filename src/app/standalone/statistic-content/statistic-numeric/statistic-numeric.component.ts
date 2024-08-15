@@ -340,9 +340,6 @@ export class StatisticNumericComponent
                 context.dataset.data as number[]
               );
             },
-            display: (context) => {
-              return (context.dataset.data[context.dataIndex] as number) > 0;
-            },
             color: this.colorStrings.onBackground,
             anchor: 'end',
             align: 'end',
