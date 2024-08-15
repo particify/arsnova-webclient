@@ -272,7 +272,8 @@
     "answering-finished": "Answering is finished",
     "starting-multiple-rounds-not-available-for-content-type": "Multiple rounds are not supported for this content format. Delete the answers to restart the content.",
     "publishing-index-info": "Published up to the content {{index}}. Use control key with arrow keys to edit the publishing.",
-    "publishing-index-info-live": "Published up to the content {{index}}. Start the next content to publish it."
+    "publishing-index-info-live": "Published up to the content {{index}}. Start the next content to publish it.",
+    "correct-options-always-published-with-leaderboard": "Correct answers are always published if the leaderboard is enabled."
   },
   "survey": {
     "a11y-stop-survey": "Stops the live feedback.",

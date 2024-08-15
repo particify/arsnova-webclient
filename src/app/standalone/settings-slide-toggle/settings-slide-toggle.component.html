@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
-  <div>
+  <div [ngClass]="{ disabled: disabled }">
     <div fxLayout="row" fxLayoutAlign="start center">
       <p class="slide-toggle-header">{{ label | transloco }}</p>
       <ng-content>

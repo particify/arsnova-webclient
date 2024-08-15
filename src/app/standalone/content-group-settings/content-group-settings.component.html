@@ -39,8 +39,13 @@
   }
   @if ([GroupType.QUIZ, GroupType.MIXED].includes(group.groupType)) {
     <app-settings-slide-toggle
+      [matTooltip]="
+        'creator.content.correct-options-always-published-with-leaderboard'
+          | transloco
+      "
+      [matTooltipDisabled]="!group.leaderboardEnabled"
       [label]="'creator.content.publish-correct-answers'"
-      [disabled]="formDisabled"
+      [disabled]="formDisabled || group.leaderboardEnabled"
       [isChecked]="group.correctOptionsPublished"
       (toggleEvent)="group.correctOptionsPublished = $event"
     ></app-settings-slide-toggle>
