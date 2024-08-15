@@ -18,9 +18,11 @@
       @if (showIcon) {
         <mat-icon class="timer-icon">timer</mat-icon>
       }
-      <span [style.font-size]="fontSize">{{
-        getTime() || ('timer.time-is-up' | transloco)
-      }}</span>
+      <span
+        [style.font-size]="fontSize"
+        [ngClass]="{ 'big-font': bigFontSize }"
+        >{{ getTime() || ('timer.time-is-up' | transloco) }}</span
+      >
     </div>
   </div>
 }

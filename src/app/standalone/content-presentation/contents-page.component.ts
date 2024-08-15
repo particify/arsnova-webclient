@@ -38,6 +38,7 @@ import { ContentWaitingComponent } from '@app/standalone/content-waiting/content
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
 import { LeaderboardPageComponent } from '@app/standalone/leaderboard-page/leaderboard-page.component';
+import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 
 @Component({
   selector: 'app-contents-page',
@@ -56,6 +57,7 @@ import { LeaderboardPageComponent } from '@app/standalone/leaderboard-page/leade
     ContentStepInfoComponent,
     ContentStepperComponent,
     LeaderboardPageComponent,
+    PulsatingCircleComponent,
   ],
   templateUrl: './contents-page.component.html',
   styleUrls: ['./contents-page.component.scss'],

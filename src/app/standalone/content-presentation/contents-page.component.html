@@ -100,7 +100,7 @@
         [hotkeyTitle]="'creator.content.stop-content' | transloco"
         [action]="'creator.content.to-stop-content' | transloco"
         [isNavBarVisible]="controlBarVisible"
-        [additionalBottomSpace]="!answeringLocked && !!content.duration"
+        [additionalBottomSpace]="!answeringLocked"
         (buttonClicked)="stopCountdown()"
       ></app-hotkey-action-button>
     </div>
@@ -110,15 +110,28 @@
   class="countdown-container"
   [ngClass]="{ 'over-control-bar': controlBarVisible }"
 >
-  @if (content && content.duration && endDate && !answeringLocked) {
-    <app-countdown-timer
-      [endDate]="endDate"
-      [duration]="content.duration"
-      [showIcon]="true"
-      [layout]="'column-reverse'"
-      [fontSize]="'24px'"
-      (finished)="answeringLocked = true"
-    ></app-countdown-timer>
+  @if (content && endDate && !answeringLocked) {
+    @if (content.duration) {
+      <app-countdown-timer
+        [endDate]="endDate"
+        [duration]="content.duration"
+        [showIcon]="true"
+        [layout]="'column-reverse'"
+        [bigFontSize]="true"
+        (finished)="answeringLocked = true"
+      ></app-countdown-timer>
+    } @else {
+      <div
+        fxFill
+        fxLayout="row"
+        fxLayoutGap="8px"
+        fxLayoutAlign="center center"
+        class="live-info"
+      >
+        <app-pulsating-circle [size]="10"></app-pulsating-circle>
+        <span>{{ 'creator.content.live' | transloco }}</span>
+      </div>
+    }
   }
 </div>
 @if (
