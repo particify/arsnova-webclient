@@ -51,3 +51,10 @@
   margin-top: -$spacing;
   margin-bottom: $spacing !important;
 }
+
+.live-icon {
+  font-size: $m-font-size;
+  width: $m-font-size;
+  height: $m-font-size;
+  color: var(--play);
+}

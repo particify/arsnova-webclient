@@ -256,7 +256,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
           );
           this.contentStats.clear();
           this.totalCorrect = 0;
-          if (this.contentGroup.publishingMode === PublishingMode.LIVE) {
+          if (this.isLiveMode()) {
             this.updateContentGroup({ publishingIndex: 0 }).subscribe(
               (contentGroup) => {
                 this.contentGroup.publishingIndex =
@@ -392,5 +392,9 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadStats();
       });
+  }
+
+  isLiveMode(): boolean {
+    return this.contentGroup.publishingMode === PublishingMode.LIVE;
   }
 }

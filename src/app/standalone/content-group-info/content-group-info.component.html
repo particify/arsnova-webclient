@@ -11,13 +11,15 @@
     </div>
   }
   @if (contentCount !== undefined) {
-    <span class="content-count">{{
-      'content.content-count'
-        | transloco
-          : {
-              count: contentCount,
-            }
-    }}</span>
+    <span class="content-count"
+      >{{
+        'content.content-count'
+          | transloco
+            : {
+                count: contentCount,
+              }
+      }}
+    </span>
   }
   @if (!published) {
     <div
