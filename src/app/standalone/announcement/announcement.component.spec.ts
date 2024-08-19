@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DateFormatPipe } from '@app/core/pipes/date-format.pipe';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { AnnouncementComponent } from './announcement.component';
@@ -17,7 +16,6 @@ describe('AnnouncementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DateFormatPipe],
       imports: [getTranslocoModule(), AnnouncementComponent],
       providers: [
         {
