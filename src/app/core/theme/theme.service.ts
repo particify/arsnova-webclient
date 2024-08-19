@@ -57,6 +57,15 @@ export class ThemeService {
     'red',
     'brown',
   ];
+  private altTextColors = [
+    'blue',
+    'pink',
+    'teal',
+    'orange',
+    'purple',
+    'green',
+    'red',
+  ];
   private binaryColors = ['strongly-agree', 'strongly-disagree'];
   private lightWarnColor = '#c62828';
   private lightColors = new Colors('#5e35b1', '#2e7d32');
@@ -138,6 +147,10 @@ export class ThemeService {
 
   getTextColors(): string[] {
     return this.getColorArray(this.textColors, 'text');
+  }
+
+  getAltTextColors(): string[] {
+    return this.getColorArray(this.altTextColors, 'alt-text');
   }
 
   getPrimaryColor() {
