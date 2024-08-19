@@ -20,6 +20,13 @@
                 "
                 [published]="contentGroup.published"
               ></app-content-group-info>
+              @if (isLiveMode()) {
+                <mat-icon
+                  class="live-icon"
+                  [matTooltip]="'creator.content.live-mode' | transloco"
+                  >slideshow</mat-icon
+                >
+              }
             </div>
             <mat-menu #groupSettings="matMenu">
               <button mat-menu-item [matMenuTriggerFor]="importExportMenu">
