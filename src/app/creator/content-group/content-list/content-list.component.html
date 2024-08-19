@@ -85,6 +85,10 @@
                       [ngClass]="{
                         'locked-content': !isPublished(i),
                       }"
+                      [matTooltip]="
+                        'creator.content.format-' + content.format.toLowerCase()
+                          | transloco
+                      "
                       >{{ iconList.get(content.format) }}</mat-icon
                     >
                     @if (contentStats.get(content.id)) {
