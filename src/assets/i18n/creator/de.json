@@ -272,7 +272,8 @@
     "answering-finished": "Die Beantwortung wurde beendet",
     "starting-multiple-rounds-not-available-for-content-type": "Mehrere Runden werden bei diesem Frageformat nicht unterstützt. Lösche die Antworten, um den Inhalt erneut zu starten.",
     "publishing-index-info": "Freigeschaltet bis zum Inhalt {{index}}. Verwende die Steuerungstaste mit den Pfeiltasten, um Freischaltung zu bearbeiten.",
-    "publishing-index-info-live": "Freigeschaltet bis zum Inhalt {{index}}. Starte den nächsten Inhalt um diesen freizugeben."
+    "publishing-index-info-live": "Freigeschaltet bis zum Inhalt {{index}}. Starte den nächsten Inhalt um diesen freizugeben.",
+    "correct-options-always-published-with-leaderboard": "Richtige Antworten sind immer freigegeben, wenn die Rangliste aktiviert ist."
   },
   "survey": {
     "a11y-stop-survey": "Stoppt das Live Feedback.",
