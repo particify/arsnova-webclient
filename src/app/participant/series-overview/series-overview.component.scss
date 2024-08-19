@@ -35,22 +35,16 @@ $icon-container-size: 40px;
   margin: 16px 0 32px;
 }
 
-.correct:not(.answered) {
+.correct {
   color: var(--success);
 }
 
-.wrong:not(.answered) {
+.wrong {
   color: var(--warn);
 }
 
-.answered {
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-
-  &:not(.primary) {
-    color: var(--grey);
-  }
+.grey {
+  color: var(--grey);
 }
 
 .full-border {

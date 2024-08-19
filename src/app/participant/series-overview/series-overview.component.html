@@ -152,10 +152,12 @@
                       [ngClass]="{
                         correct: content.state === resultTypes.CORRECT,
                         wrong: content.state === resultTypes.WRONG,
-                        answered:
-                          ![resultTypes.CORRECT, resultTypes.WRONG].includes(
-                            content.state
-                          ) || !group.correctOptionsPublished,
+                        grey:
+                          [
+                            resultTypes.ABSTAINED,
+                            resultTypes.UNANSWERED,
+                          ].includes(content.state) ||
+                          !group.correctOptionsPublished,
                         primary: hasAnsweredState(content.state),
                       }"
                       [matTooltip]="
