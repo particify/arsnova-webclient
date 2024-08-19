@@ -39,7 +39,9 @@
     "please-assign-valid-points": "Please assign between 0 and {{points}} Points per answer.",
     "please-select-number-from-range": "Please select a number from the range.",
     "not-answered-in-time": "You didn't answer in time.",
-    "answered-in-time": "You answered in {{duration}} seconds."
+    "answered-in-time": "You answered in {{duration}} seconds.",
+    "go-to-overview": "Go to overview",
+    "next-content": "Next content"
   },
   "content": {
     "thanks-for-participation": "Thanks for your participation!",
