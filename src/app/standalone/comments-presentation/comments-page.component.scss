@@ -21,3 +21,7 @@
   width: 52vw;
   height: calc(var(--full-height) - 4vw - 72px);
 }
+
+app-comment {
+  cursor: pointer;
+}
