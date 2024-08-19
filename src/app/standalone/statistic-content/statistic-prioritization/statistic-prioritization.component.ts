@@ -212,9 +212,6 @@ export class StatisticPrioritizationComponent
                 context.dataset.data[context.dataIndex] as number
               );
             },
-            display: (context) => {
-              return (context.dataset.data[context.dataIndex] as number) > 0;
-            },
             color: this.colorStrings.onBackground,
             anchor: 'start',
             align: 'start',
@@ -284,7 +281,7 @@ export class StatisticPrioritizationComponent
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
       label = this.getLabelWithPercentageSign(
-        (value / (this.answerCount - this.abstentionCount)).toFixed(0)
+        (value / (this.answerCount - this.abstentionCount) || 0).toFixed(0)
       );
     } else {
       label = value.toString();

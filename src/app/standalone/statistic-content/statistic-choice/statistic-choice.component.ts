@@ -262,9 +262,6 @@ export class StatisticChoiceComponent
                 this.answerCount
               );
             },
-            display: (context) => {
-              return (context.dataset.data[context.dataIndex] as number) > 0;
-            },
             color: this.colorStrings.onBackground,
             anchor: 'end',
             align: 'end',
