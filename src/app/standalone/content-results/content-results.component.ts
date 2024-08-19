@@ -17,7 +17,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { StatisticWordcloudComponent } from '@app/standalone/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { StatisticScaleComponent } from '@app/standalone/statistic-content/statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { UserSettings } from '@app/core/models/user-settings';
 import { StatisticPrioritizationComponent } from '@app/standalone/statistic-content/statistic-prioritization/statistic-prioritization.component';
@@ -70,6 +70,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
     MatDivider,
     TranslocoPipe,
     LanguageContextDirective,
+    RouterLink,
   ],
 })
 export class ContentResultsComponent implements OnInit, OnDestroy {
