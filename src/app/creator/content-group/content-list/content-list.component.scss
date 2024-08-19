@@ -247,26 +247,3 @@ $item-height: 90px;
     height: $xs-font-size;
   }
 }
-
-.live-circle {
-  width: 8px;
-  height: 8px;
-  background-color: var(--play);
-  border-radius: 50%;
-  animation: pulsate 2s ease-out;
-  animation-iteration-count: infinite;
-}
-
-@keyframes pulsate {
-  0% {
-    opacity: 0.4;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.4;
-  }
-}

@@ -157,12 +157,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
       this.indexChanged.subscribe(() => {
         this.updateCounter(this.answerCount);
         this.broadcastRoundState();
-        if (
-          this.settings.showContentResultsDirectly &&
-          this.active &&
-          !this.answersVisible &&
-          !this.content.duration
-        ) {
+        if (this.directShow && this.active && !this.answersVisible) {
           this.toggleAnswers();
         }
       });

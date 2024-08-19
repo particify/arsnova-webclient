@@ -22,8 +22,15 @@ app-leaderboard-page {
   font-size: $l-font-size;
 }
 
+.live-info {
+  color: var(--play);
+  padding-bottom: $spacing-3;
+  font-size: $l-font-size;
+}
+
 @include gt-xl {
-  .step-info {
+  .step-info,
+  .live-info {
     font-size: $xl-font-size;
   }
 }
