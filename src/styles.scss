@@ -231,12 +231,6 @@ ul {
 
 // Inputs
 
-.mat-mdc-form-field.mat-primary
-  .mdc-text-field--focused:not(.mdc-text-field--disabled)
-  .mdc-floating-label {
-  @extend %primary;
-}
-
 input,
 input:focus {
   color: var(--on-surface);
