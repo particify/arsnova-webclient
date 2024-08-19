@@ -23,6 +23,7 @@ import { UserSettings } from '@app/core/models/user-settings';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Room } from '@app/core/models/room';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 describe('StatisticScaleComponent', () => {
   let component: StatisticScaleComponent;
@@ -74,6 +75,11 @@ describe('StatisticScaleComponent', () => {
     snapshot
   );
 
+  const mockLangService = jasmine.createSpyObj(LanguageService, [
+    'ensureValidLang',
+  ]);
+  mockLangService.ensureValidLang.and.returnValue(true);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticScaleComponent],
@@ -109,6 +115,10 @@ describe('StatisticScaleComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
+        },
+        {
+          provide: LanguageService,
+          useValue: mockLangService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

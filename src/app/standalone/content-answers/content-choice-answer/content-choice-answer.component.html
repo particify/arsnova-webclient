@@ -63,7 +63,7 @@
     [(ngModel)]="selectedAnswerIndex"
     name="{{ 'answer' + contentId }}"
   >
-    <mat-list *transloco="let t; lang: room.language + '|static'">
+    <mat-list *transloco="let t; lang: language + '|static'">
       @for (
         checkedAnswer of selectableAnswers;
         track checkedAnswer;

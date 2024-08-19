@@ -21,6 +21,7 @@ import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { Room } from '@app/core/models/room';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 describe('ContentChoiceParticipantComponent', () => {
   let component: ContentChoiceParticipantComponent;
@@ -47,6 +48,11 @@ describe('ContentChoiceParticipantComponent', () => {
     undefined,
     snapshot
   );
+
+  const mockLangService = jasmine.createSpyObj(LanguageService, [
+    'ensureValidLang',
+  ]);
+  mockLangService.ensureValidLang.and.returnValue(true);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -75,6 +81,10 @@ describe('ContentChoiceParticipantComponent', () => {
         {
           provide: ContentService,
           useValue: mockContentService,
+        },
+        {
+          provide: LanguageService,
+          useValue: mockLangService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

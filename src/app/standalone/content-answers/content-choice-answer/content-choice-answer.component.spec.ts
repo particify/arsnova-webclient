@@ -6,6 +6,7 @@ import { ActivatedRouteStub } from '@testing/test-helpers';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Room } from '@app/core/models/room';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 const snapshot = new ActivatedRouteSnapshot();
 
@@ -19,6 +20,11 @@ const activatedRouteStub = new ActivatedRouteStub(
   snapshot
 );
 
+const mockLangService = jasmine.createSpyObj(LanguageService, [
+  'ensureValidLang',
+]);
+mockLangService.ensureValidLang.and.returnValue(true);
+
 describe('ContentChoiceAnswerComponent', () => {
   let component: ContentChoiceAnswerComponent;
   let fixture: ComponentFixture<ContentChoiceAnswerComponent>;
@@ -30,6 +36,10 @@ describe('ContentChoiceAnswerComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
+        },
+        {
+          provide: LanguageService,
+          useValue: mockLangService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -27,7 +27,6 @@ import { ContentNumeric } from '@app/core/models/content-numeric';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 import { ActivatedRoute } from '@angular/router';
-import { Room } from '@app/core/models/room';
 
 @Component({
   selector: 'app-content-preview',
@@ -72,7 +71,7 @@ export class ContentPreviewComponent implements OnInit {
     private translateService: TranslocoService,
     route: ActivatedRoute
   ) {
-    this.language = (route.snapshot.data['room'] as Room).language;
+    this.language = route.snapshot.data.room?.language;
   }
 
   ngOnInit(): void {

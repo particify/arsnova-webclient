@@ -6,6 +6,7 @@ import { LikertScaleService } from '@app/core/services/util/likert-scale.service
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Room } from '@app/core/models/room';
 import { ActivatedRouteStub } from '@testing/test-helpers';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 @Injectable()
 class MockLikertScaleService {
@@ -28,6 +29,11 @@ describe('ScaleContentFormComponent', () => {
     snapshot
   );
 
+  const mockLangService = jasmine.createSpyObj(LanguageService, [
+    'ensureValidLang',
+  ]);
+  mockLangService.ensureValidLang.and.returnValue(true);
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ScaleContentFormComponent],
@@ -39,6 +45,10 @@ describe('ScaleContentFormComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
+        },
+        {
+          provide: LanguageService,
+          useValue: mockLangService,
         },
       ],
       imports: [getTranslocoModule()],
