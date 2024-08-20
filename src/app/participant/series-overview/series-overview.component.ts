@@ -394,9 +394,6 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   }
 
   getIcon(state: AnswerResultType) {
-    if (!this.group.correctOptionsPublished) {
-      state = AnswerResultType.NEUTRAL;
-    }
     return this.answerService.getAnswerResultIcon(state);
   }
 
