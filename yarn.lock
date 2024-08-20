@@ -7097,7 +7097,7 @@ __metadata:
     karma-jasmine-html-reporter: "npm:2.1.0"
     karma-viewport: "npm:1.0.9"
     katex: "npm:0.16.11"
-    lru-cache: "npm:10.4.3"
+    lru-cache: "npm:11.0.0"
     ng-packagr: "npm:18.0.0"
     ng-qrcode: "npm:18.0.0"
     prettier: "npm:3.3.3"
@@ -12462,10 +12462,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:10.4.3":
-  version: 10.4.3
-  resolution: "lru-cache@npm:10.4.3"
-  checksum: 10c0/ebd04fbca961e6c1d6c0af3799adcc966a1babe798f685bb84e6599266599cd95d94630b10262f5424539bc4640107e8a33aa28585374abf561d30d16f4b39fb
+"lru-cache@npm:11.0.0":
+  version: 11.0.0
+  resolution: "lru-cache@npm:11.0.0"
+  checksum: 10c0/827ff0e0739f9b0f30f92f5a5fc97c6a2bd3ae32c0452bc58cb7411d6c589d49536073027293f2d1f02d0c2e72b63b162f238df7e9ff6f4cc0345f92afec4d1d
   languageName: node
   linkType: hard
 
