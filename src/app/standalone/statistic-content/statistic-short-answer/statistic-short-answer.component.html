@@ -1,0 +1,34 @@
+<div
+  class="text-answer-container"
+  [ngClass]="{ 'answers-visible': answersVisible }"
+>
+  @if (isLoading) {
+    <app-loading-indicator></app-loading-indicator>
+  } @else {
+    @if (answerList.length === 0) {
+      <div fxLayoutAlign="center">
+        <p class="hint">
+          {{ 'statistic.no-answers' | transloco }}
+        </p>
+      </div>
+    }
+    @if (answersVisible) {
+      @if (showModeration) {
+        <app-answer-list
+          [answers]="answerList"
+          [banMode]="true"
+          [isPresentation]="isPresentation"
+          [showCorrect]="showCorrect"
+          [correctAnswers]="getCorrectAnswers()"
+          (deleteClicked)="banAnswer($event)"
+        ></app-answer-list>
+      } @else {
+        <app-answer-grid-list
+          [answers]="answerList"
+          [showCorrect]="showCorrect"
+          [correctTerms]="getCorrectAnswers()"
+        ></app-answer-grid-list>
+      }
+    }
+  }
+</div>

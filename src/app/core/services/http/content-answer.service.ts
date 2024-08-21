@@ -15,6 +15,7 @@ import { AnswerOption } from '@app/core/models/answer-option';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { AnswerResultType } from '@app/core/models/answer-result';
+import { AnswerResponse } from '@app/core/models/answer-response';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -198,6 +199,18 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     return this.requestOnce<T>('POST', url, answer, httpOptions).pipe(
       catchError(this.handleError<T>('addAnswer'))
     );
+  }
+
+  addAnswerAndCheckResult<T extends Answer>(
+    roomId: string,
+    answer: T
+  ): Observable<AnswerResponse> {
+    const url = this.buildUri('/check-result', roomId);
+    return this.http
+      .post<AnswerResponse>(url, answer, httpOptions)
+      .pipe(
+        catchError(this.handleError<AnswerResponse>('addAnswerAndCheckResult'))
+      );
   }
 
   getAnswer<T extends Answer>(

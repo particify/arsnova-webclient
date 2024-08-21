@@ -41,6 +41,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
+import { ShortAnswerContentFormComponent } from '@app/creator/content-group/content-editing/short-answer-content-form/short-answer-content-form.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsa
     AnswerOptionListComponent,
     PublishContentGroupTemplateComponent,
     NumericContentFormComponent,
+    ShortAnswerContentFormComponent,
   ],
   imports: [
     ContentGroupRoutingModule,

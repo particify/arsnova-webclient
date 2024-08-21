@@ -35,6 +35,7 @@ const httpOptions = {
 export class ContentService extends AbstractEntityService<Content> {
   answersDeleted = new BehaviorSubject<string | null>(null);
   private roundStarted = new BehaviorSubject<Content | null>(null);
+  private answerBanned = new BehaviorSubject<string | null>(null);
 
   serviceApiUrl = {
     answer: '/answer',
@@ -47,6 +48,7 @@ export class ContentService extends AbstractEntityService<Content> {
     [ContentType.SCALE, 'mood'],
     [ContentType.BINARY, 'rule'],
     [ContentType.TEXT, 'description'],
+    [ContentType.SHORT_ANSWER, 'sms'],
     [ContentType.WORDCLOUD, 'cloud'],
     [ContentType.SORT, 'move_up'],
     [ContentType.PRIORITIZATION, 'sort'],
@@ -174,6 +176,16 @@ export class ContentService extends AbstractEntityService<Content> {
     return this.http
       .get<number[]>(connectionUrl)
       .pipe(catchError(this.handleError('getCorrectChoiceIndexes', [])));
+  }
+
+  getCorrectTerms(roomId: string, contentId: string): Observable<string[]> {
+    const connectionUrl = this.buildUri(
+      '/' + contentId + '/correct-terms',
+      roomId
+    );
+    return this.http
+      .get<string[]>(connectionUrl)
+      .pipe(catchError(this.handleError<string[]>('getCorrectTerms')));
   }
 
   addContent(content: Content): Observable<Content> {
@@ -318,6 +330,32 @@ export class ContentService extends AbstractEntityService<Content> {
           )
         )
       );
+  }
+
+  banAnswer(roomId: string, contentId: string, answer: string) {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'ban-answer',
+      'creator.dialog.really-ban-answer',
+      answer,
+      'creator.dialog.ban',
+      () => this.banKeywordForContent(roomId, contentId, answer)
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const msg = this.translateService.translate(
+          'creator.statistic.answer-banned'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+        this.answerBanned.next(answer);
+      }
+    });
+  }
+
+  getAnswerBanned(): Observable<string | null> {
+    return this.answerBanned;
   }
 
   resetBannedKeywords(roomId: string, contentId: string): Observable<void> {

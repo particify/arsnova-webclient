@@ -178,6 +178,8 @@
     "format-wordcloud-description": "Die Teilnehmenden können mit Schlagwörtern antworten. Die relativen Häufigkeiten werden in Form einer Wortwolke visualisiert.",
     "format-prioritization": "Priorisierung",
     "format-prioritization-description": "Die Teilnehmenden können den Antwortmöglichkeiten eine bestimmte Anzahl von Punkten zuordnen.",
+    "format-short_answer": "Kurzantwort",
+    "format-short_answer-description": "Die Teilnehmenden antworten mit einer Texteingabe. Es werden eine oder mehrere richtige Antworten definiert.",
     "multiple-answers-allowed": "Mehrfachauswahl für Antworten erlauben",
     "no-correct-answer": "Keine richtigen Antworten festlegen",
     "format-not-supported": "Dieses Format wird derzeit nicht unterstützt.",
@@ -399,8 +401,8 @@
     "answer-deleted": "Die Antwort wurde gelöscht.",
     "show-wordcloud-list": "Zeige die Antworten als Liste",
     "show-wordcloud": "Zeige die Antworten als Wortwolke",
-    "ban-answer": "Schlagwort verbannen",
-    "answer-banned": "Das Schlagwort wurde gebannt."
+    "ban-answer": "Antwort verbannen",
+    "answer-banned": "Die Antwort wurde gebannt."
   },
   "dialog": {
     "really-delete-comment": "Willst du diesen Beitrag wirklich löschen?",
@@ -431,7 +433,7 @@
     "really-discard-announcement": "Willst du deine Eingaben wirklich verwerfen?",
     "discard": "Verwefen",
     "ban": "Verbannen",
-    "really-ban-answer": "Willst du das Schlagwort wirklich verbannen?",
+    "really-ban-answer": "Willst du die Antwort wirklich verbannen?",
     "really-start-new-round": "Willst du wirklich eine neue Runde starten?",
     "start": "Starten",
     "started-new-round": "Neue Runde wurde gestartet.",

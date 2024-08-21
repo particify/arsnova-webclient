@@ -254,6 +254,14 @@
                     >
                     </app-numeric-content-form>
                   }
+                  @case (ContentType.SHORT_ANSWER) {
+                    <app-short-answer-content-form
+                      [content]="content"
+                      [isAnswered]="isAnswered"
+                      [isEditMode]="isEditMode"
+                    >
+                    </app-short-answer-content-form>
+                  }
                 }
               </div>
             }

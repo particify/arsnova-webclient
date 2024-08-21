@@ -1,0 +1,25 @@
+<div
+  fxLayout="column"
+  fxLayoutAlign="space-between"
+  class="answer-container"
+  fxLayoutGap="8px"
+>
+  <form>
+    <app-content-text-answer
+      (inputEvent)="textAnswer = $event"
+      [disabled]="isDisabled"
+      [givenAnswer]="answer?.text"
+      [minRows]="1"
+      [correct]="isCorrect"
+      [lengthLimit]="80"
+    ></app-content-text-answer>
+  </form>
+  @if (!!answer && !!correctTerms && correctTerms.length > 1) {
+    <span class="answer-hint"
+      >{{ 'answer.correct-answers-are' | transloco }}
+      @for (term of correctTerms; track term; let i = $index) {
+        <b>{{ (i > 0 ? ', ' : '') + term }}</b>
+      }
+    </span>
+  }
+</div>

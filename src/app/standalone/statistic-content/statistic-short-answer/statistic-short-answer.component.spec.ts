@@ -1,19 +1,17 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { StatisticWordcloudComponent } from './statistic-wordcloud.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { StatisticShortAnswerComponent } from './statistic-short-answer.component';
 import { ContentService } from '@app/core/services/http/content.service';
-import { ThemeService } from '@app/core/theme/theme.service';
-import { MockThemeService } from '@testing/test-helpers';
-import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { of } from 'rxjs';
 import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { ContentShortAnswer } from '@app/core/models/content-short-answer';
 
-describe('StatisticWordcloudComponent', () => {
-  let component: StatisticWordcloudComponent;
-  let fixture: ComponentFixture<StatisticWordcloudComponent>;
+describe('StatisticShortAnswerComponent', () => {
+  let component: StatisticShortAnswerComponent;
+  let fixture: ComponentFixture<StatisticShortAnswerComponent>;
 
   const mockContentService = jasmine.createSpyObj([
     'getAnswersChangedStream',
@@ -38,33 +36,21 @@ describe('StatisticWordcloudComponent', () => {
   mockContentService.getAnswersDeleted.and.returnValue(of({}));
   mockContentService.getAnswerBanned.and.returnValue(of('Test'));
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [getTranslocoModule(), StatisticWordcloudComponent],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [StatisticShortAnswerComponent, getTranslocoModule()],
       providers: [
         {
           provide: ContentService,
           useValue: mockContentService,
         },
-        {
-          provide: ThemeService,
-          useClass: MockThemeService,
-        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(StatisticWordcloudComponent);
+    fixture = TestBed.createComponent(StatisticShortAnswerComponent);
     component = fixture.componentInstance;
-    component.content = new ContentWordcloud(
-      'room1234',
-      'subject',
-      'body',
-      [],
-      ContentType.WORDCLOUD
-    );
+    component.content = new ContentShortAnswer();
     fixture.detectChanges();
   });
 

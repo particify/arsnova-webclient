@@ -372,7 +372,12 @@
                         }}</span>
                       </button>
                       <mat-divider></mat-divider>
-                      @if (content.format === ContentType.WORDCLOUD) {
+                      @if (
+                        [
+                          ContentType.WORDCLOUD,
+                          ContentType.SHORT_ANSWER,
+                        ].includes(content.format)
+                      ) {
                         <button
                           mat-menu-item
                           (click)="resetBannedAnswers(content.id)"

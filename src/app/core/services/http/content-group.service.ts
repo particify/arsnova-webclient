@@ -366,7 +366,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
         return [
           ContentType.CHOICE,
           ContentType.BINARY,
-          ContentType.TEXT,
+          ContentType.SHORT_ANSWER,
           ContentType.SORT,
           ContentType.NUMERIC,
           ContentType.SLIDE,
@@ -414,6 +414,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
       ContentType.BINARY,
       ContentType.NUMERIC,
       ContentType.SORT,
+      ContentType.SHORT_ANSWER,
     ];
     if (!scorableFormats.includes(content.format)) {
       return false;

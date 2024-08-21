@@ -11,11 +11,27 @@
     >
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <span fxFlex class="answer">{{ answer.answer }}</span>
-        <div fxLayout="row" fxLayoutAlign="start center">
-          @if (answer.count > 1) {
-            <span fxFlex="noshrink" class="count">x {{ answer.count }}</span>
-          }
-          @if (isModerator && (answer.id || banMode) && !isPresentation) {
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            @if (answer.count > 1) {
+              <span fxFlex="noshrink">x {{ answer.count }}</span>
+            }
+            @if (hasCorrectAnswers()) {
+              <mat-icon
+                class="correct-icon"
+                [ngClass]="{
+                  'show-correct-icon': showCorrect && isCorrect(answer.answer),
+                }"
+                >check_circle</mat-icon
+              >
+            }
+          </div>
+          @if (
+            isModerator &&
+            (answer.id || banMode) &&
+            !isPresentation &&
+            !isCorrect(answer.answer)
+          ) {
             <button
               mat-icon-button
               color="warn"

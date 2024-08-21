@@ -1,41 +1,40 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
-import { AnswerStatistics } from '@app/core/models/answer-statistics';
-import { TextRoundStatistics } from '@app/core/models/round-statistics';
-import { ContentService } from '@app/core/services/http/content.service';
-import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
-import { TextStatistic } from '@app/core/models/text-statistic';
-import {
-  WordCloudItem,
-  WordcloudComponent,
-} from '@app/standalone/wordcloud/wordcloud.component';
-import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
-import { FlexModule } from '@angular/flex-layout';
 import { NgClass } from '@angular/common';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
+import { ContentShortAnswer } from '@app/core/models/content-short-answer';
+import { TextRoundStatistics } from '@app/core/models/round-statistics';
+import { TextStatistic } from '@app/core/models/text-statistic';
+import { ContentService } from '@app/core/services/http/content.service';
+import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
+import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-statistic-wordcloud',
-  templateUrl: './statistic-wordcloud.component.html',
-  styleUrls: ['../text-statistic-content.scss'],
+  selector: 'app-statistic-short-answer',
   standalone: true,
   imports: [
+    AnswerListComponent,
+    AnswerGridListComponent,
+    LoadingIndicatorComponent,
     NgClass,
     FlexModule,
-    WordcloudComponent,
-    AnswerListComponent,
     TranslocoPipe,
   ],
+  templateUrl: './statistic-short-answer.component.html',
 })
-export class StatisticWordcloudComponent
+export class StatisticShortAnswerComponent
   extends StatisticContentBaseComponent
-  implements OnInit, OnDestroy
+  implements OnDestroy
 {
   @Input() showModeration = false;
 
-  wordWeights: WordCloudItem[] = [];
-
   answerList: TextStatistic[] = [];
+
+  showCorrect = false;
 
   constructor(
     protected contentService: ContentService,
@@ -69,7 +68,7 @@ export class StatisticWordcloudComponent
   }
 
   deleteAnswers() {
-    this.wordWeights = [];
+    this.answerList = [];
     this.updateCounter([]);
   }
 
@@ -80,13 +79,9 @@ export class StatisticWordcloudComponent
       if (!texts) {
         return;
       }
-      this.wordWeights = stats.roundStatistics[0].independentCounts.map(
-        (count, i) => new WordCloudItem(texts[i], count)
-      );
-      this.answerList = Array.from(
-        this.wordWeights,
-        (w) => new TextStatistic(w.text, w.size)
-      );
+      this.answerList = stats.roundStatistics[0].independentCounts
+        .map((count, i) => new TextStatistic(texts[i], count))
+        .sort((a, b) => b.count - a.count);
     }
   }
 
@@ -99,7 +94,14 @@ export class StatisticWordcloudComponent
   }
 
   filterAnswers(keyword: string) {
-    this.wordWeights = this.wordWeights.filter((w) => w.text !== keyword);
     this.answerList = this.answerList.filter((a) => a.answer !== keyword);
+  }
+
+  toggleCorrect(): void {
+    this.showCorrect = !this.showCorrect;
+  }
+
+  getCorrectAnswers(): string[] {
+    return (this.content as ContentShortAnswer).correctTerms;
   }
 }

@@ -28,6 +28,8 @@ export class AnswerListComponent implements OnInit {
   @Input({ required: true }) answers!: TextStatistic[];
   @Input() banMode = true;
   @Input() isPresentation = false;
+  @Input() showCorrect = false;
+  @Input() correctAnswers?: string[];
   @Output() deleteClicked = new EventEmitter<TextStatistic>();
 
   isModerator = false;
@@ -48,5 +50,13 @@ export class AnswerListComponent implements OnInit {
 
   deleteAnswer(answer: TextStatistic): void {
     this.deleteClicked.emit(answer);
+  }
+
+  isCorrect(answer: string): boolean {
+    return !!this.correctAnswers && this.correctAnswers.includes(answer);
+  }
+
+  hasCorrectAnswers(): boolean {
+    return !!this.correctAnswers;
   }
 }

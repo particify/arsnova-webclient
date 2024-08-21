@@ -10,13 +10,8 @@
   word-break: break-word;
 }
 
-.count {
-  margin-left: 0.5em;
-}
-
 .delete-button {
   opacity: 0;
-  margin-left: 0.5em;
 }
 
 @mixin show-delete-button {
@@ -37,4 +32,14 @@
   .delete-button {
     @include show-delete-button;
   }
+}
+
+.correct-icon {
+  color: var(--success);
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.show-correct-icon {
+  opacity: 1;
 }

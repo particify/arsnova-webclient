@@ -178,6 +178,8 @@
     "format-wordcloud-description": "Participants can answer with keywords. The relative frequencies are visualized in the form of a word cloud.",
     "format-prioritization": "Prioritization",
     "format-prioritization-description": "Participants can assign a certain number of points to the answer options.",
+    "format-short_answer": "Short answer",
+    "format-short_answer-description": "The participants answer with a text entry. One or more correct answers are defined.",
     "multiple-answers-allowed": "Allow to select multiple answers",
     "no-correct-answer": "Do not set correct answers",
     "format-not-supported": "This format is currently not supported.",
@@ -399,8 +401,8 @@
     "answer-deleted": "The answer has been deleted.",
     "show-wordcloud-list": "Show answers as list",
     "show-wordcloud": "Show answers as wordcloud",
-    "ban-answer": "Ban keyword",
-    "answer-banned": "The keyword has been banned."
+    "ban-answer": "Ban answer",
+    "answer-banned": "The answer has been banned."
   },
   "dialog": {
     "really-delete-comment": "Do you really want to delete this post?",
@@ -431,7 +433,7 @@
     "really-discard-announcement": "Do you really want to discard your input?",
     "discard": "Discard",
     "ban": "Ban",
-    "really-ban-answer": "Do you really want to ban the keyword?",
+    "really-ban-answer": "Do you really want to ban the answer?",
     "really-start-new-round": "Do you really want to start a new round?",
     "started-new-round": "New round has been started.",
     "start": "Start",
