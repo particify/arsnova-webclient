@@ -127,7 +127,7 @@
                         }
                       </div>
                     }
-                    @if (endDate && isStarted(i)) {
+                    @if (isLiveMode() && endDate && isStarted(i)) {
                       <div
                         fxLayout="row"
                         fxLayoutGap="4px"
