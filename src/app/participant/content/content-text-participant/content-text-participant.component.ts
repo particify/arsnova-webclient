@@ -29,8 +29,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
   @Input({ required: true }) content!: Content;
   @Input() answer?: TextAnswer;
 
-  givenAnswer?: TextAnswer;
-
   textAnswer = '';
 
   constructor(
@@ -50,13 +48,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       router,
       formService
     );
-  }
-
-  init() {
-    if (this.answer) {
-      this.givenAnswer = this.answer;
-    }
-    this.isLoading = false;
   }
 
   submitAnswer() {
@@ -81,7 +72,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     );
     this.answerService.addAnswerText(this.content.roomId, answer).subscribe(
       (answer) => {
-        this.givenAnswer = answer;
+        this.answer = answer;
         this.translateService
           .selectTranslate('participant.answer.sent')
           .pipe(take(1))
@@ -103,7 +94,7 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     const answer = new TextAnswer(this.content.id, this.content.state.round);
     this.answerService.addAnswerText(this.content.roomId, answer).subscribe(
       (answer) => {
-        this.givenAnswer = answer;
+        this.answer = answer;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
       },
       () => {

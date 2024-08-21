@@ -9,6 +9,7 @@ import {
 import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { AnswerResultType } from '@app/core/models/answer-result';
+import { Answer } from '@app/core/models/answer';
 
 @Component({
   template: '',
@@ -17,9 +18,13 @@ export abstract class ContentParticipantBaseComponent
   extends FormComponent
   implements OnInit
 {
-  @Output() answerChanged = new EventEmitter<AnswerResultType>();
+  @Output() answerChanged = new EventEmitter<{
+    answer: Answer;
+    answerResult: AnswerResultType;
+  }>();
   @Input() isDisabled = false;
   @Input({ required: true }) sendEvent!: EventEmitter<string>;
+  @Input() answer?: Answer;
 
   isLoading = true;
   shortId: string;
@@ -58,8 +63,13 @@ export abstract class ContentParticipantBaseComponent
     // Implementation in extended classes
   }
 
-  sendStatusToParent(answerResultType: AnswerResultType) {
-    this.answerChanged.emit(answerResultType);
+  sendStatusToParent(answerResult: AnswerResultType) {
+    if (this.answer) {
+      this.answerChanged.emit({
+        answer: this.answer,
+        answerResult: answerResult,
+      });
+    }
   }
 
   submitAnswer() {

@@ -26,8 +26,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
   @Input({ required: true }) content!: ContentWordcloud;
   @Input() answer?: MultipleTextsAnswer;
 
-  givenAnswer?: MultipleTextsAnswer;
-
   words: string[] = [];
 
   constructor(
@@ -51,7 +49,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
 
   init() {
     if (this.answer) {
-      this.givenAnswer = this.answer;
       this.words = this.answer.texts;
     } else {
       this.words = new Array<string>(this.content.maxAnswers).fill('');
@@ -82,7 +79,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     answer.texts = words;
     this.answerService.addAnswer(this.content.roomId, answer).subscribe(
       (answer) => {
-        this.givenAnswer = answer;
+        this.answer = answer;
         this.translateService
           .selectTranslate('participant.answer.sent')
           .pipe(take(1))
@@ -109,7 +106,7 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     );
     this.answerService.addAnswer(this.content.roomId, answer).subscribe(
       (answer) => {
-        this.givenAnswer = answer;
+        this.answer = answer;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
       },
       () => {
