@@ -1,9 +1,9 @@
 .list-item {
+  padding: 12px 16px;
+
   &:not(:first-of-type) {
     border-top: 1px solid var(--border);
   }
-
-  padding: 12px 16px;
 }
 
 .answer {

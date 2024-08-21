@@ -20,7 +20,6 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'lib-extension-point',
   template: '<svg>Particify</svg>',
 })
