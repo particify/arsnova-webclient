@@ -19,11 +19,11 @@
 }
 
 .presentation-comment {
+  max-width: 100%;
+
   &:not(.primary-shadow-always) {
     box-shadow: none;
   }
-
-  max-width: 100%;
 }
 
 .mat-mdc-card-content > :first-child {
@@ -43,12 +43,12 @@
 }
 
 .score-creator {
+  margin: 0 8px;
+  opacity: 0.8;
+
   &:not(.on-secondary) {
     color: var(--on-surface);
   }
-
-  margin: 0 8px;
-  opacity: 0.8;
 
   @media (min-width: 1920px) {
     font-size: 20px;

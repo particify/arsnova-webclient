@@ -4,7 +4,7 @@ $chart-size: 100px;
 
 .canvas-container {
   width: $chart-size;
-  height: $chart-size / 2;
+  height: calc($chart-size / 2);
   position: relative;
 }
 
