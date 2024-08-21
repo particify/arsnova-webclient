@@ -30,7 +30,8 @@ describe('StatisticChoiceComponent', () => {
   ]);
   const roundStatistics = new RoundStatistics(1, [], [], 0, 0);
   const stats = new AnswerStatistics();
-  (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+  stats.contentId = '1234';
+  stats.roundStatistics = [roundStatistics];
   const body = {
     payload: {
       stats: stats,

@@ -289,8 +289,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
 
   private updateCorrectChart() {
     if (this.correctChart) {
-      (this.correctChart.data.datasets[0].data = this.getScoreData()),
-        this.correctChart.update();
+      this.correctChart.data.datasets[0].data = this.getScoreData();
+      this.correctChart.update();
     } else {
       setTimeout(() => {
         this.correctChart = this.createChart(
@@ -309,8 +309,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
 
   private updateProgressChart() {
     if (this.progressChart) {
-      (this.progressChart.data.datasets[0].data = this.getProgressData()),
-        this.progressChart.update();
+      this.progressChart.data.datasets[0].data = this.getProgressData();
+      this.progressChart.update();
     } else {
       setTimeout(() => {
         this.progressChart = this.createChart(
@@ -324,8 +324,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
 
   private updatePointsChart() {
     if (this.pointsChart) {
-      (this.pointsChart.data.datasets[0].data = this.getPointChartData()),
-        this.pointsChart.update();
+      this.pointsChart.data.datasets[0].data = this.getPointChartData();
+      this.pointsChart.update();
     } else {
       setTimeout(() => {
         this.pointsChart = this.createChart(
