@@ -6,7 +6,6 @@ import { ContentScale } from '@app/core/models/content-scale';
 import { ContentService } from '@app/core/services/http/content.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
-import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { MatIcon } from '@angular/material/icon';
@@ -40,19 +39,12 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     protected contentService: ContentService,
     protected translateService: TranslocoService,
     protected themeService: ThemeService,
-    protected eventService: EventService,
     protected presentationService: PresentationService,
     private likertScaleService: LikertScaleService,
     route: ActivatedRoute,
     languageService: LanguageService
   ) {
-    super(
-      contentService,
-      translateService,
-      themeService,
-      eventService,
-      presentationService
-    );
+    super(contentService, translateService, themeService, presentationService);
     this.language = languageService.ensureValidLang(
       route.snapshot.data.room?.language
     );

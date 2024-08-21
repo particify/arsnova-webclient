@@ -19,7 +19,6 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
-import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
@@ -64,16 +63,9 @@ export class StatisticPrioritizationComponent
     protected contentService: ContentService,
     protected translateService: TranslocoService,
     protected themeService: ThemeService,
-    protected eventService: EventService,
     protected presentationService: PresentationService
   ) {
-    super(
-      contentService,
-      translateService,
-      themeService,
-      eventService,
-      presentationService
-    );
+    super(contentService, translateService, themeService, presentationService);
   }
 
   ngOnDestroy() {

@@ -12,7 +12,6 @@ import {
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
-  MockEventService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
@@ -20,7 +19,6 @@ import { ContentAnswerService } from '@app/core/services/http/content-answer.ser
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { EventService } from '@app/core/services/util/event.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ContentWordcloudParticipantComponent', () => {
@@ -71,10 +69,6 @@ describe('ContentWordcloudParticipantComponent', () => {
         {
           provide: Router,
           useClass: MockRouter,
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

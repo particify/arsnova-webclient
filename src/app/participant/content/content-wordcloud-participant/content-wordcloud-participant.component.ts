@@ -6,7 +6,6 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
@@ -35,7 +34,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    public eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,

@@ -12,14 +12,12 @@ import {
   ActivatedRouteStub,
   MockGlobalStorageService,
   MockRouter,
-  MockEventService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { EventService } from '@app/core/services/util/event.service';
 import { Content } from '@app/core/models/content';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -71,10 +69,6 @@ describe('ContentTextParticipantComponent', () => {
         {
           provide: Router,
           useClass: MockRouter,
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

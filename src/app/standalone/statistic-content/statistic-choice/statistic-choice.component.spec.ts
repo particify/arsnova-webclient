@@ -1,10 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticChoiceComponent } from './statistic-choice.component';
-import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import {
-  MockEventService,
   MockThemeService,
   MockGlobalStorageService,
 } from '@testing/test-helpers';
@@ -52,10 +50,6 @@ describe('StatisticChoiceComponent', () => {
     TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticChoiceComponent],
       providers: [
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
         {
           provide: ContentService,
           useValue: mockContentService,

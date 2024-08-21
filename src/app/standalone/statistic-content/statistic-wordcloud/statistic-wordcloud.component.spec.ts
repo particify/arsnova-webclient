@@ -1,10 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticWordcloudComponent } from './statistic-wordcloud.component';
-import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import {
-  MockEventService,
   MockNotificationService,
   MockThemeService,
 } from '@testing/test-helpers';
@@ -51,10 +49,6 @@ describe('StatisticWordcloudComponent', () => {
     TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticWordcloudComponent],
       providers: [
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
         {
           provide: ContentService,
           useValue: mockContentService,

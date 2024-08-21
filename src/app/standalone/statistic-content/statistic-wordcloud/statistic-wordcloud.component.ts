@@ -4,7 +4,6 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
 import { ContentService } from '@app/core/services/http/content.service';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
-import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import {
   WordCloudItem,
@@ -45,12 +44,11 @@ export class StatisticWordcloudComponent
 
   constructor(
     protected contentService: ContentService,
-    protected eventService: EventService,
     protected translateService: TranslocoService,
     private dialogService: DialogService,
     private notificationService: NotificationService
   ) {
-    super(contentService, eventService, translateService);
+    super(contentService, translateService);
   }
 
   afterInit() {

@@ -22,7 +22,6 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
-import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { takeUntil } from 'rxjs';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
@@ -95,10 +94,9 @@ export class StatisticNumericComponent
     protected contentService: ContentService,
     protected translateService: TranslocoService,
     protected themeService: ThemeService,
-    protected eventService: EventService,
     protected presentationService: PresentationService
   ) {
-    super(contentService, eventService, translateService);
+    super(contentService, translateService);
   }
 
   ngOnDestroy() {

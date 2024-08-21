@@ -27,7 +27,6 @@ import { takeUntil } from 'rxjs/operators';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { Combination } from '@app/core/models/round-statistics';
-import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -77,11 +76,10 @@ export class StatisticSortComponent
     protected contentService: ContentService,
     private themeService: ThemeService,
     protected translateService: TranslocoService,
-    protected eventService: EventService,
     private presentationService: PresentationService,
     private contentAnswerService: ContentAnswerService
   ) {
-    super(contentService, eventService, translateService);
+    super(contentService, translateService);
     this.onSurface = this.themeService.getColor('on-surface');
     this.surface = this.themeService.getColor('surface');
     this.green = this.themeService.getColor('green');
