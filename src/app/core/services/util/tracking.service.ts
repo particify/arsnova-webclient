@@ -84,6 +84,7 @@ export class TrackingService {
       );
   }
 
+  // eslint-disable-next-line complexity
   init(uiConfig: any) {
     this.uiConfig = uiConfig;
     if (

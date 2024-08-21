@@ -17,6 +17,7 @@ export class Comment {
   tag: string;
   answer: string;
 
+  // eslint-disable-next-line complexity
   constructor(
     roomId = '',
     creatorId = '',

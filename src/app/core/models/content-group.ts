@@ -13,6 +13,7 @@ export class ContentGroup {
   groupType: GroupType;
   leaderboardEnabled: boolean;
 
+  // eslint-disable-next-line complexity
   constructor(
     roomId = '',
     name = '',
