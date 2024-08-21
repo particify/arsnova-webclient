@@ -156,6 +156,7 @@ export class HotkeyService {
     );
   }
 
+  // eslint-disable-next-line complexity
   private handleKeyboardEvent(event: KeyboardEvent) {
     for (const hotkey of this.hotkeyRegistrations.values()) {
       if (event.key !== hotkey.key) {
