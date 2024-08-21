@@ -641,7 +641,8 @@ div {
     .nav-button,
     .mat-primary,
     .mat-accent,
-    .mat-warn
+    .mat-warn,
+    .mat-mdc-snack-bar-action
   ) {
   opacity: 0.8;
 
@@ -885,7 +886,8 @@ div {
 // Snackbar
 
 .mat-mdc-snack-bar-container {
-  --mat-mdc-snack-bar-button-color: var(--surface);
+  --mat-snack-bar-button-color: var(--surface);
+  --mdc-snackbar-supporting-text-color: var(--surface);
 }
 
 .presentation-snack-bar {
