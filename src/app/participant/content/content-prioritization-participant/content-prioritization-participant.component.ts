@@ -138,12 +138,14 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
     );
     this.answerService
       .addAnswerPrioritization(this.content.roomId, answer)
-      .subscribe(() => {
-        this.hasAbstained = true;
-        this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      }),
-      () => {
-        this.enableForm();
-      };
+      .subscribe(
+        () => {
+          this.hasAbstained = true;
+          this.sendStatusToParent(AnswerResultType.ABSTAINED);
+        },
+        () => {
+          this.enableForm();
+        }
+      );
   }
 }

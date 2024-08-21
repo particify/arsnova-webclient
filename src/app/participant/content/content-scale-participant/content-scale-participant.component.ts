@@ -125,14 +125,14 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
       this.content.state.round,
       ContentType.SCALE
     );
-    this.answerService
-      .addAnswerChoice(this.content.roomId, answer)
-      .subscribe(() => {
+    this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
+      () => {
         this.hasAbstained = true;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 }

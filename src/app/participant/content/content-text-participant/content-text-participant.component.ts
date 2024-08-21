@@ -81,9 +81,8 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
       this.content.state.round,
       this.textAnswer
     );
-    this.answerService
-      .addAnswerText(this.content.roomId, answer)
-      .subscribe((answer) => {
+    this.answerService.addAnswerText(this.content.roomId, answer).subscribe(
+      (answer) => {
         this.givenAnswer = answer;
         this.translateService
           .selectTranslate('participant.answer.sent')
@@ -95,22 +94,23 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
             );
           });
         this.sendStatusToParent(AnswerResultType.NEUTRAL);
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 
   abstain() {
     const answer = new TextAnswer(this.content.id, this.content.state.round);
-    this.answerService
-      .addAnswerText(this.content.roomId, answer)
-      .subscribe((answer) => {
+    this.answerService.addAnswerText(this.content.roomId, answer).subscribe(
+      (answer) => {
         this.givenAnswer = answer;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 }

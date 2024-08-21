@@ -157,14 +157,14 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
       this.content.state.round,
       ContentType.SORT
     );
-    this.answerService
-      .addAnswerChoice(this.content.roomId, answer)
-      .subscribe(() => {
+    this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
+      () => {
         this.hasAbstained = true;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 }

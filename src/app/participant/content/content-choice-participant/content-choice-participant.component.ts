@@ -199,9 +199,8 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       ContentType.CHOICE
     );
     answer.selectedChoiceIndexes = selectedAnswers;
-    this.answerService
-      .addAnswerChoice(this.content.roomId, answer)
-      .subscribe((answer) => {
+    this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
+      (answer) => {
         this.answer = answer;
         this.getCorrectAnswerOptions(true);
         this.translateService
@@ -213,10 +212,11 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
               AdvancedSnackBarTypes.SUCCESS
             );
           });
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 
   abstain() {
@@ -225,15 +225,15 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       this.content.state.round,
       ContentType.CHOICE
     );
-    this.answerService
-      .addAnswerChoice(this.content.roomId, answer)
-      .subscribe(() => {
+    this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
+      () => {
         this.resetCheckedAnswers();
         this.hasAbstained = true;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 }
