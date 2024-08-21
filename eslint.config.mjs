@@ -48,6 +48,8 @@ export default eslintTypescript.config(
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
+      'import/no-named-as-default': 'off',
+      'import/no-named-as-default-member': 'off',
       'no-restricted-imports': [
         'error',
         {
