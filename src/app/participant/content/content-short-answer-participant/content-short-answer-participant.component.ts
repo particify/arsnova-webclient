@@ -83,11 +83,14 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
       this.textAnswer
     );
     this.answerService
-      .addAnswerAndCheckResult(this.content.roomId, answer)
+      .addAnswerAndCheckResult<
+        ShortAnswerAnswer,
+        string[]
+      >(this.content.roomId, answer)
       .subscribe({
         next: (answerResponse) => {
           this.answer = answerResponse.answer;
-          this.correctTerms = answerResponse.correctnessCriteria as string[];
+          this.correctTerms = answerResponse.correctnessCriteria;
           const state = answerResponse.answerResult.state;
           this.isCorrect = state === AnswerResultType.CORRECT;
           this.sendStatusToParent(state);

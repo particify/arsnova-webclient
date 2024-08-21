@@ -201,15 +201,17 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     );
   }
 
-  addAnswerAndCheckResult<T extends Answer>(
+  addAnswerAndCheckResult<T extends Answer, R>(
     roomId: string,
     answer: T
-  ): Observable<AnswerResponse> {
+  ): Observable<AnswerResponse<R>> {
     const url = this.buildUri('/check-result', roomId);
     return this.http
-      .post<AnswerResponse>(url, answer, httpOptions)
+      .post<AnswerResponse<R>>(url, answer, httpOptions)
       .pipe(
-        catchError(this.handleError<AnswerResponse>('addAnswerAndCheckResult'))
+        catchError(
+          this.handleError<AnswerResponse<R>>('addAnswerAndCheckResult')
+        )
       );
   }
 
