@@ -34,10 +34,6 @@ export class ContentTemplatePreviewComponent implements AfterViewInit {
     }, 0);
   }
 
-  close(): void {
-    this.dialogRef.close;
-  }
-
   nextContent(): void {
     this.stepper.next();
   }

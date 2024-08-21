@@ -96,8 +96,9 @@ export class TrackingService {
 
     const feedbackRoomShortId =
       uiConfig.links?.feedback?.url?.match(/\/([0-9]{8})$/)?.[1];
-    feedbackRoomShortId &&
+    if (feedbackRoomShortId) {
       this.specialRooms.set(feedbackRoomShortId, 'Feedback');
+    }
 
     if (uiConfig.tracking.heartbeat) {
       this._paq.push(['enableHeartBeatTimer']);

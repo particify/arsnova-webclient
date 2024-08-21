@@ -78,9 +78,8 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
       ContentType.NUMERIC
     );
     answer.selectedNumber = this.selectedNumber;
-    this.answerService
-      .addAnswerNumeric(this.content.roomId, answer)
-      .subscribe((answer) => {
+    this.answerService.addAnswerNumeric(this.content.roomId, answer).subscribe(
+      (answer) => {
         this.answer = answer;
         const msg = this.translateService.translate('participant.answer.sent');
         this.notificationService.showAdvanced(
@@ -92,10 +91,11 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
             ? AnswerResultType.ABSTAINED
             : this.getAnswerResultType()
         );
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 
   abstain() {
@@ -104,15 +104,15 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
       this.content.state.round,
       ContentType.NUMERIC
     );
-    this.answerService
-      .addAnswerNumeric(this.content.roomId, answer)
-      .subscribe(() => {
+    this.answerService.addAnswerNumeric(this.content.roomId, answer).subscribe(
+      () => {
         this.selectedNumber = undefined;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 
   private getAnswerResultType(): AnswerResultType {

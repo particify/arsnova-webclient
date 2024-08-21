@@ -51,8 +51,8 @@ describe('StatisticNumericComponent', () => {
     0
   );
   const defaultStats = new AnswerStatistics();
-  (defaultStats.contentId = '1234'),
-    (defaultStats.roundStatistics = [defaultRoundStatistics]);
+  defaultStats.contentId = '1234';
+  defaultStats.roundStatistics = [defaultRoundStatistics];
   const body = {
     payload: {
       stats: defaultStats,
@@ -136,7 +136,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     component.content.minNumber = 1;
     component.content.maxNumber = 10;
     const groupedData: AnswerGroup[] = [
@@ -173,7 +174,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     component.content.minNumber = 0;
     component.content.maxNumber = 10;
     const groupedData: AnswerGroup[] = [
@@ -211,7 +213,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     component.content.minNumber = -5;
     component.content.maxNumber = 5;
     const groupedData: AnswerGroup[] = [
@@ -249,7 +252,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = 1;
     component.content.maxNumber = 20;
@@ -288,7 +292,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = 1;
     component.content.maxNumber = 50;
@@ -322,7 +327,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = -1;
     component.content.maxNumber = 50;
@@ -357,7 +363,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = 1;
     component.content.maxNumber = 49;
@@ -390,7 +397,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = -1;
     component.content.maxNumber = 49;
@@ -424,7 +432,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = 0;
     component.content.maxNumber = 179;
@@ -461,7 +470,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = 1800;
     component.content.maxNumber = 2000;
@@ -500,7 +510,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = 0;
     component.content.maxNumber = 1000000;
@@ -539,7 +550,8 @@ describe('StatisticNumericComponent', () => {
       0
     );
     const stats = new AnswerStatistics();
-    (stats.contentId = '1234'), (stats.roundStatistics = [roundStatistics]);
+    stats.contentId = '1234';
+    stats.roundStatistics = [roundStatistics];
     mockContentService.getAnswer.and.returnValue(of(stats));
     component.content.minNumber = -1000000;
     component.content.maxNumber = 1000000;

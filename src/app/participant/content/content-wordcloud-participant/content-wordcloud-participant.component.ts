@@ -82,9 +82,8 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       ContentType.WORDCLOUD
     );
     answer.texts = words;
-    this.answerService
-      .addAnswer(this.content.roomId, answer)
-      .subscribe((answer) => {
+    this.answerService.addAnswer(this.content.roomId, answer).subscribe(
+      (answer) => {
         this.givenAnswer = answer;
         this.translateService
           .selectTranslate('participant.answer.sent')
@@ -96,10 +95,11 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
             );
           });
         this.sendStatusToParent(AnswerResultType.NEUTRAL);
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 
   abstain() {
@@ -109,14 +109,14 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       this.content.state.round,
       ContentType.WORDCLOUD
     );
-    this.answerService
-      .addAnswer(this.content.roomId, answer)
-      .subscribe((answer) => {
+    this.answerService.addAnswer(this.content.roomId, answer).subscribe(
+      (answer) => {
         this.givenAnswer = answer;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      }),
+      },
       () => {
         this.enableForm();
-      };
+      }
+    );
   }
 }
