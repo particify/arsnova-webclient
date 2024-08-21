@@ -254,7 +254,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
             msg,
             AdvancedSnackBarTypes.WARNING
           );
-          this.contentStats.clear();
           this.totalCorrect = 0;
           if (this.isLiveMode()) {
             this.updateContentGroup({ publishingIndex: 0 }).subscribe(
