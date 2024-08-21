@@ -26,7 +26,7 @@ export class ContentPrioritizationAnswerComponent implements OnInit {
     this.getAssignedPoints();
   }
 
-  assignPoints(index: number, operation = -1 || 1) {
+  assignPoints(index: number, operation: -1 | 1) {
     this.answerOptions[index].points += this.STEP_SIZE * operation;
     this.getAssignedPoints();
   }

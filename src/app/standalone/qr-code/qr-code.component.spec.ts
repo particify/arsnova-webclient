@@ -65,12 +65,10 @@ describe('QrCodeComponent', () => {
   ]);
   mockRoutingService.getRoomJoinUrl
     .withArgs('https://partici.fi/')
-    .and.returnValue(
-      ('https://partici.fi/' || document.baseURI + 'p/') + '12345678'
-    );
+    .and.returnValue('https://partici.fi/12345678');
   mockRoutingService.getRoomJoinUrl
     .withArgs(undefined)
-    .and.returnValue((undefined || document.baseURI + 'p/') + '12345678');
+    .and.returnValue(document.baseURI + 'p/12345678');
   mockRoutingService.removeProtocolFromUrl
     .withArgs('http://localhost:9876/')
     .and.returnValue('localhost:9876/');
