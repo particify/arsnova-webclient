@@ -44,10 +44,10 @@
                         class="primary"
                       >
                         <mat-icon class="format-button-icon">{{
-                          selectedFormat.icon
+                          selectedFormat?.icon
                         }}</mat-icon>
                         <span>{{
-                          'creator.content.format-' + selectedFormat.name
+                          'creator.content.format-' + selectedFormat?.name
                             | transloco
                         }}</span>
                       </div>
@@ -93,7 +93,7 @@
                 class="input-block no-field-hint"
               >
                 <mat-label>{{
-                  (selectedFormat.name !== 'slide'
+                  (selectedFormat?.name !== 'slide'
                     ? 'creator.content.body'
                     : 'creator.content.body-neutral'
                   ) | transloco
@@ -114,7 +114,7 @@
                   matInput
                   cdkTextareaAutosize
                   maxlength="{{
-                    selectedFormat.name !== 'slide' ? 1000 : 2000
+                    selectedFormat?.name !== 'slide' ? 1000 : 2000
                   }}"
                   name="questionInput"
                   appHotkey="1"
@@ -136,7 +136,10 @@
               }
               <div class="form-spacer"></div>
             </form>
-            @if (!['slide', 'flashcard'].includes(selectedFormat.name)) {
+            @if (
+              selectedFormat &&
+              !['slide', 'flashcard'].includes(selectedFormat.name)
+            ) {
               <div
                 fxLayout="row"
                 fxLayout.xs="column-reverse"
@@ -185,7 +188,7 @@
                 </div>
               </div>
             }
-            @if (!isLoading) {
+            @if (!isLoading && selectedFormat) {
               <div>
                 @switch (selectedFormat.type) {
                   @case (ContentType.CHOICE) {

@@ -62,6 +62,10 @@ class MockContentGroupService {
   getContentFormatsOfGroupType() {
     return Object.values(ContentType);
   }
+
+  getByRoomIdAndName() {
+    return of(new ContentGroup());
+  }
 }
 
 @Injectable()

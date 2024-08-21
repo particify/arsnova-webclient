@@ -45,7 +45,7 @@ export class ContentEditingPageComponent
   question = '';
   ContentType = ContentType;
   formats: ContentFormat[] = [];
-  selectedFormat: ContentFormat;
+  selectedFormat?: ContentFormat;
   seriesName: string;
   roomId: string;
 
@@ -81,22 +81,31 @@ export class ContentEditingPageComponent
     this.seriesName = this.route.snapshot.params['seriesName'];
     this.roomId = this.route.snapshot.data.room.id;
     this.contentGroup = this.route.snapshot.data.contentGroup;
-    const iconList = this.contentService.getTypeIcons();
-    const supportedTypes =
-      this.contentGroupService.getContentFormatsOfGroupType(
-        this.contentGroup.groupType
-      );
-    for (const type of supportedTypes) {
-      const icon = iconList.get(type);
-      if (icon) {
-        this.formats.push({
-          type: type,
-          name: type.toLowerCase(),
-          icon: icon,
-        });
-      }
-    }
-    this.selectedFormat = this.formats[0];
+    this.contentGroupService
+      .getByRoomIdAndName(
+        this.route.snapshot.data.room.id,
+        this.seriesName,
+        true
+      )
+      .subscribe((group) => {
+        this.contentGroup = group;
+        const iconList = this.contentService.getTypeIcons();
+        const supportedTypes =
+          this.contentGroupService.getContentFormatsOfGroupType(
+            this.contentGroup.groupType
+          );
+        for (const type of supportedTypes) {
+          const icon = iconList.get(type);
+          if (icon) {
+            this.formats.push({
+              type: type,
+              name: type.toLowerCase(),
+              icon: icon,
+            });
+          }
+        }
+        this.selectedFormat = this.formats[0];
+      });
   }
 
   ngOnInit() {
@@ -120,6 +129,7 @@ export class ContentEditingPageComponent
           }
           this.prepareAttachmentData();
           if (
+            this.selectedFormat &&
             [
               ContentType.TEXT,
               ContentType.FLASHCARD,
@@ -258,11 +268,12 @@ export class ContentEditingPageComponent
   private setContent(): boolean {
     let content: Content | undefined;
     if (
+      this.selectedFormat &&
       ![ContentType.SLIDE, ContentType.TEXT].includes(this.selectedFormat.type)
     ) {
       content = this.contentForm.getContent();
     } else {
-      if (!this.isEditMode) {
+      if (!this.isEditMode && this.selectedFormat) {
         content = new Content();
         content.format = this.selectedFormat.type;
       } else {
