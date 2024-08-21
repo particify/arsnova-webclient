@@ -41,7 +41,7 @@ export class ContentNumericAnswerComponent implements OnInit {
   isCorrect(): boolean {
     if (this.content.correctNumber !== undefined && this.answer) {
       return (
-        !!this.answer.selectedNumber &&
+        this.answer.selectedNumber !== undefined &&
         this.answer.selectedNumber >=
           this.content.correctNumber - this.content.tolerance &&
         this.answer.selectedNumber <=

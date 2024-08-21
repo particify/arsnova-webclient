@@ -86,11 +86,7 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
           msg,
           AdvancedSnackBarTypes.SUCCESS
         );
-        this.sendStatusToParent(
-          this.content.correctNumber
-            ? AnswerResultType.ABSTAINED
-            : this.getAnswerResultType()
-        );
+        this.sendStatusToParent(this.getAnswerResultType());
       },
       () => {
         this.enableForm();
@@ -116,10 +112,10 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
   }
 
   private getAnswerResultType(): AnswerResultType {
-    if (!this.content.correctNumber) {
+    if (this.content.correctNumber === undefined) {
       return AnswerResultType.NEUTRAL;
     } else {
-      return !!this.selectedNumber &&
+      return this.selectedNumber !== undefined &&
         this.selectedNumber >=
           this.content.correctNumber - this.content.tolerance &&
         this.selectedNumber <=
