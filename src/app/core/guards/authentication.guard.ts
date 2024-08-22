@@ -13,7 +13,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';

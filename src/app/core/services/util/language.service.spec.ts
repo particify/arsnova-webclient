@@ -4,7 +4,7 @@ import {
   BROWSER_LANG,
   LanguageService,
 } from '@app/core/services/util/language.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,

@@ -3,7 +3,7 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,

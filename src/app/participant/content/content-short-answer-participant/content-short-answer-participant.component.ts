@@ -15,7 +15,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
-import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-content-short-answer-participant',

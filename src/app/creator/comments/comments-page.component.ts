@@ -18,7 +18,7 @@ import {
   AbstractCommentsPageComponent,
   BAR_PADDING,
 } from '@app/common/abstract/abstract-comments-page.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { Observable, takeUntil } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';

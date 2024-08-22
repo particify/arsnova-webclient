@@ -14,7 +14,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UntypedFormControl, Validators } from '@angular/forms';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   AuthenticationProvider,

@@ -33,7 +33,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 import { HotkeyDirective } from './directives/hotkey.directive';
 import { TrackInteractionDirective } from './directives/track-interaction.directive';
 import { A11yIntroPipe } from './pipes/a11y-intro.pipe';

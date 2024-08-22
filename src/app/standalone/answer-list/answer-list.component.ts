@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { TranslocoPipe, provideTranslocoScope } from '@ngneat/transloco';
+import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIconButton } from '@angular/material/button';

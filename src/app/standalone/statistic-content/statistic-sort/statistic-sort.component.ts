@@ -25,7 +25,7 @@ import {
 } from '@app/standalone/statistic-content/statistic-content-base';
 import { takeUntil } from 'rxjs/operators';
 import { ThemeService } from '@app/core/theme/theme.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Combination } from '@app/core/models/round-statistics';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { AnswerOption } from '@app/core/models/answer-option';

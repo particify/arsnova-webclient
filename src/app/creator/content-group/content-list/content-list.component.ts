@@ -14,7 +14,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';

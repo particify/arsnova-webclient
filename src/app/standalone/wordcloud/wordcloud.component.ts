@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { NgFor } from '@angular/common';
 import { ThemeService } from '@app/core/theme/theme.service';
 

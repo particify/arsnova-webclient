@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
-import { provideTranslocoScope, TranslocoService } from '@ngneat/transloco';
+import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
 import {

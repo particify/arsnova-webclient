@@ -5,7 +5,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';

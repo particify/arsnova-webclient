@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { filter, take, tap } from 'rxjs/operators';
 import { UpdateInstalled } from '@app/core/models/events/update-installed';
 import { UpdateImportance, VersionInfo } from '@app/core/models/version-info';

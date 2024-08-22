@@ -7,7 +7,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { take, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

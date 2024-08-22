@@ -10,7 +10,7 @@ import { AnnouncementService } from '@app/core/services/http/announcement.servic
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { UserAnnouncement } from '@app/core/models/user-announcement';
 import { take } from 'rxjs';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MatButton } from '@angular/material/button';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AnnouncementComponent } from '@app/standalone/announcement/announcement.component';

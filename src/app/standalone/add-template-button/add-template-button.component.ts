@@ -17,7 +17,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomSelectionComponent } from '@app/standalone/_dialogs/room-selection/room-selection.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { takeUntil } from 'rxjs';
 
 @Component({

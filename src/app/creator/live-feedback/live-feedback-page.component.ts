@@ -15,7 +15,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { takeUntil } from 'rxjs';
 

@@ -9,7 +9,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,

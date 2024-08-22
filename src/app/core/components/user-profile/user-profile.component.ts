@@ -5,7 +5,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { UserService } from '@app/core/services/http/user.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { ActivatedRoute, Router } from '@angular/router';

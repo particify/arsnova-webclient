@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AbstractHttpService } from './abstract-http.service';
 import { ApiConfig } from '@app/core/models/api-config';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { EventService } from '@app/core/services/util/event.service';

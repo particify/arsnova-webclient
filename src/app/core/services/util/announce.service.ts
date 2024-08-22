@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { take } from 'rxjs';
 

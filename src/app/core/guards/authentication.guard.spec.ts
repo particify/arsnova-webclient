@@ -10,7 +10,7 @@ import {
   MockRouter,
   MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';

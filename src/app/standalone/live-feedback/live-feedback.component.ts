@@ -16,7 +16,7 @@ import { LiveFeedbackSurveyLabel } from '@app/core/models/live-feedback-survey-l
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { take } from 'rxjs';
 
 class LiveFeedback {

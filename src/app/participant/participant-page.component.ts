@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { LanguageService } from '@app/core/services/util/language.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
 import { NavBarComponent } from '@app/standalone/nav-bar/nav-bar.component';
 import { NgClass } from '@angular/common';

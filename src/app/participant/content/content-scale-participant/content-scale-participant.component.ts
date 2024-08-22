@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentType } from '@app/core/models/content-type.enum';

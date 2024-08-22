@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { catchError, first, Observable } from 'rxjs';
 import { Announcement } from '@app/core/models/announcement';
 import { AnnouncementState } from '@app/core/models/announcement-state';

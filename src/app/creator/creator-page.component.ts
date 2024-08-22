@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LanguageService } from '@app/core/services/util/language.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-creator-page',

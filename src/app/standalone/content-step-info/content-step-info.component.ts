@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-content-step-info',

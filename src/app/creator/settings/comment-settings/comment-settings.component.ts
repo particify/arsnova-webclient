@@ -4,7 +4,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Router } from '@angular/router';
 import { CommentService } from '@app/core/services/http/comment.service';

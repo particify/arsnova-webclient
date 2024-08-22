@@ -6,7 +6,7 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { UserSettings } from '@app/core/models/user-settings';
 import { ChartTypeRegistry, TooltipItem } from 'chart.js';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 export const ABSTENTION_SIGN = '–';
 

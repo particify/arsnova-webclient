@@ -7,7 +7,7 @@ import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentScale } from '@app/core/models/content-scale';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
-import { TranslocoService, provideTranslocoScope } from '@ngneat/transloco';
+import { TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
 import { forkJoin, Observable, take } from 'rxjs';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';

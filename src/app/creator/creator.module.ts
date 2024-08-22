@@ -3,7 +3,7 @@ import { CreatorRoutingModule } from './creator-routing.module';
 import { extensions } from './creator.extensions';
 import { CoreModule } from '@app/core/core.module';
 import { RoomComponent } from './settings/room/room.component';
-import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { AccessComponent } from './settings/access/access.component';
 import { CommentSettingsComponent } from './settings/comment-settings/comment-settings.component';
 import { ContentGroupCreationComponent } from './_dialogs/content-group-creation/content-group-creation.component';

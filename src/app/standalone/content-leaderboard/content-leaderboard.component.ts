@@ -11,7 +11,7 @@ import { CoreModule } from '@app/core/core.module';
 import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
-import { provideTranslocoScope } from '@ngneat/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 
 interface LeaderboardTableItem {

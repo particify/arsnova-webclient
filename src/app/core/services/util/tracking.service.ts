@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
 import { StorageItemCategory } from '@app/core/models/storage';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { EventService } from './event.service';
 import { ThemeService } from '@app/core/theme/theme.service';

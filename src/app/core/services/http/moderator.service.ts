@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Moderator } from '@app/core/models/moderator';
 import { catchError } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { UserRole } from '@app/core/models/user-roles.enum';

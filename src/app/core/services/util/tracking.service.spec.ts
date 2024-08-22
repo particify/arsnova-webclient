@@ -7,7 +7,7 @@ import {
   MockThemeService,
   MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
 import { ThemeService } from '@app/core/theme/theme.service';

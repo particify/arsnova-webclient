@@ -9,7 +9,7 @@ import {
   MockNotificationService,
   MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Cache, CachingService } from '@app/core/services/util/caching.service';

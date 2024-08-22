@@ -8,7 +8,7 @@ import {
   MockNotificationService,
   MockTranslocoService,
 } from '@testing/test-helpers';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { Injectable } from '@angular/core';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';

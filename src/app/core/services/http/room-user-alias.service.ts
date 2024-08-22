@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AbstractEntityService } from './abstract-entity.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { CachingService } from '@app/core/services/util/caching.service';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';

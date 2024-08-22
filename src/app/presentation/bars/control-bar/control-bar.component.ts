@@ -28,7 +28,7 @@ import { Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { Content } from '@app/core/models/content';
 import { DialogService } from '@app/core/services/util/dialog.service';

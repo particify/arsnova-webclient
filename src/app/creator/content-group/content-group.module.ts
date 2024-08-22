@@ -17,7 +17,7 @@ import { ScaleContentFormComponent } from './content-editing/scale-content-form/
 import { BinaryContentFormComponent } from './content-editing/binary-content-form/binary-content-form.component';
 import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';

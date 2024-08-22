@@ -2,7 +2,7 @@ import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-s
 
 import { TestBed } from '@angular/core/testing';
 
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 describe('LocalizeDecimalSeperatorPipe', () => {
   const translateService = jasmine.createSpyObj('TranslocoService', [

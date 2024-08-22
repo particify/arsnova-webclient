@@ -6,7 +6,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { AdminService } from '@app/core/services/http/admin.service';

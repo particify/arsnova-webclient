@@ -15,7 +15,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { TemplateLicenseComponent } from '@app/standalone/template-license/template-license.component';
 import { Subject, takeUntil } from 'rxjs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,

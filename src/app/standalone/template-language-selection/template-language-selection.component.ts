@@ -4,7 +4,7 @@ import { IsoLanguage } from '@app/core/models/iso-language';
 import { FormService } from '@app/core/services/util/form.service';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-template-language-selection',

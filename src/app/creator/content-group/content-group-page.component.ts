@@ -28,7 +28,7 @@ import {
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
 import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   Observable,
   Subject,

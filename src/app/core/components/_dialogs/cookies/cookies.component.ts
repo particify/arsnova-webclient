@@ -5,7 +5,7 @@ import {
   ConsentGiven,
   CookieCategory,
 } from '@app/core/services/util/consent.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,

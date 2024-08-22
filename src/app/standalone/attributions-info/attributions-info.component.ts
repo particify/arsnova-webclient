@@ -3,7 +3,7 @@ import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { LICENSES } from '@app/core/models/licenses';
-import { provideTranslocoScope } from '@ngneat/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-attributions-info',

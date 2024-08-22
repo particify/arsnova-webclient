@@ -4,7 +4,7 @@ import { extensions } from './presentation.extensions';
 import { ControlBarComponent } from './bars/control-bar/control-bar.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { PresentationComponent } from './presentation/presentation.component';
-import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { QrCodeModule } from 'ng-qrcode';
 import { KeyButtonBarComponent } from './bars/key-button-bar/key-button-bar.component';
 import { CoreModule } from '@app/core/core.module';

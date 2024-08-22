@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Comment } from '@app/core/models/comment';
 import { catchError, take, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { CommentCreated } from '@app/core/models/events/comment-created';

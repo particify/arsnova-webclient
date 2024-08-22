@@ -11,7 +11,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
