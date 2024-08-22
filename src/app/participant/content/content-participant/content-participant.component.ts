@@ -247,7 +247,6 @@ export class ContentParticipantComponent
   }
 
   reloadContent() {
-    this.isLoading = true;
     this.contentService
       .getContent(this.content.roomId, this.content.id, false)
       .pipe(takeUntil(this.destroyed$))
@@ -268,14 +267,13 @@ export class ContentParticipantComponent
           if (content.state.round > 1 && newState.answeringEndTime) {
             this.startCountdown(newState.answeringEndTime);
           }
+          this.updateTab('');
         } else if (this.isContentStarted(newState)) {
           this.startCountdown(newState.answeringEndTime!);
         } else if (this.isContentStopped(newState)) {
           this.answeringLocked = true;
         }
         this.content.state = newState;
-        this.updateTab('');
-        this.isLoading = false;
       });
   }
 
