@@ -113,14 +113,14 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
       this.content.id,
       this.content.state.round
     );
-    this.answerService
-      .addAnswerText(this.content.roomId, answer)
-      .subscribe((answer) => {
+    this.answerService.addAnswerText(this.content.roomId, answer).subscribe({
+      next: (answer) => {
         this.answer = answer;
         this.sendStatusToParent(AnswerResultType.ABSTAINED);
-      }),
-      () => {
+      },
+      error: () => {
         this.enableForm();
-      };
+      },
+    });
   }
 }
