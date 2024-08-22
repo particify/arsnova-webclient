@@ -72,6 +72,7 @@ import { ContentAnswerService } from '@app/core/services/http/content-answer.ser
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
 import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
+import { STEPPER_ANIMATION_DURATION } from '@app/standalone/stepper/stepper.component';
 
 interface ContentActionTab {
   route: string;
@@ -174,6 +175,7 @@ export class ContentParticipantComponent
   answeringLocked = false;
   GroupType = GroupType;
   PublishingMode = PublishingMode;
+  waitForCountdown = true;
 
   tabs: ContentActionTab[] = [
     {
@@ -298,10 +300,13 @@ export class ContentParticipantComponent
     this.resetAnswerData();
   }
 
-  private startCountdown(endDate: Date): void {
+  private startCountdown(endDate: Date, timeout = 0): void {
     if (this.active) {
       this.answeringLocked = false;
       this.endDate = new Date(endDate);
+      setTimeout(() => {
+        this.waitForCountdown = false;
+      }, timeout);
     }
   }
 
@@ -329,7 +334,10 @@ export class ContentParticipantComponent
         ) {
           this.answeringLocked = true;
         } else {
-          this.startCountdown(this.content.state.answeringEndTime);
+          this.startCountdown(
+            this.content.state.answeringEndTime,
+            STEPPER_ANIMATION_DURATION
+          );
         }
       }
     }
