@@ -70,12 +70,7 @@
                 <mat-icon>percent</mat-icon>
               </button>
             }
-            @if (
-              answersVisible &&
-              !survey &&
-              correctOptionsPublished &&
-              isStandalone
-            ) {
+            @if (answersVisible && !survey && isStandalone) {
               <button
                 mat-icon-button
                 color="primary"
@@ -180,6 +175,7 @@
     <app-statistic-choice
       [content]="choiceContent"
       [directShow]="directShow"
+      [showCorrect]="showCorrect"
       (updateCounterEvent)="updateCounter($event)"
       [isSurvey]="survey"
       [isPresentation]="isPresentation"
@@ -193,7 +189,7 @@
       [content]="choiceContent"
       [directShow]="directShow"
       (updateCounterEvent)="updateCounter($event)"
-      [isSurvey]="survey"
+      [isSurvey]="true"
       [isPresentation]="isPresentation"
       [active]="active"
       [settings]="settings"
@@ -212,6 +208,7 @@
     <app-statistic-sort
       [content]="choiceContent"
       [isPresentation]="isPresentation"
+      [showCorrect]="showCorrect"
       [directShow]="directShow"
       (updateCounterEvent)="updateCounter($event)"
       [active]="active"
@@ -245,6 +242,7 @@
       [content]="numericContent"
       [isPresentation]="isPresentation"
       [directShow]="directShow"
+      [showCorrect]="showCorrect"
       (updateCounterEvent)="updateCounter($event)"
       [active]="active"
       [settings]="settings"
@@ -256,6 +254,7 @@
       [content]="content"
       [isPresentation]="isPresentation"
       [directShow]="directShow"
+      [showCorrect]="showCorrect"
       [showModeration]="!isPresentation && !isParticipant"
       (updateCounterEvent)="updateCounter($event)"
     ></app-statistic-short-answer>

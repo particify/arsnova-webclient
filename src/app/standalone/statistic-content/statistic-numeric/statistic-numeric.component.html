@@ -19,7 +19,7 @@
       >
         <canvas class="chart" id="{{ chartId }}"></canvas>
       </div>
-      @if (answersVisible && !colorLabel) {
+      @if (answersVisible && !showCorrect) {
         <div
           class="border-container"
           [ngClass]="{
@@ -48,7 +48,7 @@
     <div
       class="results-container"
       [ngClass]="{
-        invisible: !answersVisible || !colorLabel,
+        invisible: !answersVisible || !showCorrect,
       }"
       fxLayout="column"
       fxLayoutAlign="start center"

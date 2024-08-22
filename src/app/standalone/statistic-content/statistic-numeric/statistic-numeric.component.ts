@@ -65,11 +65,11 @@ export class StatisticNumericComponent
   @Input({ required: true }) content!: ContentNumeric;
   @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
+  @Input() showCorrect = false;
 
   chart?: Chart;
   chartId = '';
   colors: Array<string[]> = [[], []];
-  colorLabel = false;
   data: Array<AnswerGroup[]> = [[], []];
   colorStrings = {
     onBackground: '',
@@ -133,7 +133,6 @@ export class StatisticNumericComponent
   }
 
   toggleAnswers(visible?: boolean): boolean {
-    this.colorLabel = false;
     this.answersVisible = visible ?? !this.answersVisible;
     if (this.answersVisible) {
       this.updateChart();
@@ -370,7 +369,7 @@ export class StatisticNumericComponent
   }
 
   toggleCorrect() {
-    this.colorLabel = !this.colorLabel;
+    this.showCorrect = !this.showCorrect;
   }
 
   private getColors() {

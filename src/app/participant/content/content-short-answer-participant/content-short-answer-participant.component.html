@@ -10,7 +10,7 @@
       [disabled]="isDisabled"
       [givenAnswer]="answer?.text"
       [minRows]="1"
-      [correct]="isCorrect"
+      [correct]="correctOptionsPublished ? isCorrect : undefined"
       [lengthLimit]="80"
     ></app-content-text-answer>
   </form>

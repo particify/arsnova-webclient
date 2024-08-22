@@ -96,7 +96,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   @Input() directShow = false;
   @Input() active = false;
   @Input() index = 0;
-  @Input() correctOptionsPublished = false;
+  @Input() showCorrect = false;
   @Input() isPresentation = false;
   @Input() indexChanged?: EventEmitter<number>;
   @Input() isStandalone = true;
