@@ -55,7 +55,7 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
   }
 
   init() {
-    if (this.answer) {
+    if (this.answer && this.correctOptionsPublished) {
       this.contentService
         .getCorrectTerms(this.content.roomId, this.content.id)
         .subscribe((terms) => {
@@ -93,7 +93,9 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
           this.correctTerms = answerResponse.correctnessCriteria;
           const state = answerResponse.answerResult.state;
           this.isCorrect = state === AnswerResultType.CORRECT;
-          this.sendStatusToParent(state);
+          this.sendStatusToParent(
+            this.correctOptionsPublished ? state : AnswerResultType.NEUTRAL
+          );
           const msg = this.translateService.translate(
             'participant.answer.sent'
           );

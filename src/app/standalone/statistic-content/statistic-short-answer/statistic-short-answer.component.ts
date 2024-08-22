@@ -31,10 +31,9 @@ export class StatisticShortAnswerComponent
   implements OnDestroy
 {
   @Input() showModeration = false;
+  @Input() showCorrect = false;
 
   answerList: TextStatistic[] = [];
-
-  showCorrect = false;
 
   constructor(
     protected contentService: ContentService,
@@ -64,7 +63,16 @@ export class StatisticShortAnswerComponent
   }
 
   init(stats: AnswerStatistics) {
-    this.updateData(stats);
+    if (this.showCorrect && !this.getCorrectAnswers()) {
+      this.contentService
+        .getCorrectTerms(this.content.roomId, this.content.id)
+        .subscribe((correctTerms) => {
+          (this.content as ContentShortAnswer).correctTerms = correctTerms;
+          this.updateData(stats);
+        });
+    } else {
+      this.updateData(stats);
+    }
   }
 
   deleteAnswers() {

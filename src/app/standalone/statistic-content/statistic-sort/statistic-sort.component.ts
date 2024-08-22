@@ -56,6 +56,7 @@ export class StatisticSortComponent
   @Input({ required: true }) content!: ContentChoice;
   @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
+  @Input() showCorrect = false;
 
   chart?: Chart;
   chartId = '';
@@ -66,7 +67,6 @@ export class StatisticSortComponent
   colors: string[] = [];
   indicationColors: string[] = [];
   answerOptions: AnswerOption[] = [];
-  showCorrect = false;
   onSurface: string;
   surface: string;
   green: string;

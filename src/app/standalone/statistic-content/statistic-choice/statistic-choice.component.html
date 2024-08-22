@@ -24,7 +24,7 @@
         <p
           class="chart-answer-label"
           [ngClass]="{
-            'not-correct': colorLabel && !checkIfCorrect(i),
+            'not-correct': showCorrect && !checkIfCorrect(i),
             'no-margin': content.format !== ContentType.SCALE,
           }"
         >
@@ -35,7 +35,10 @@
         </p>
       }
       @if (content.abstentionsAllowed) {
-        <p class="chart-answer-label" [ngClass]="{ 'not-correct': colorLabel }">
+        <p
+          class="chart-answer-label"
+          [ngClass]="{ 'not-correct': showCorrect }"
+        >
           {{ 'statistic.abstentions' | transloco }}
         </p>
       }
@@ -51,7 +54,7 @@
           class="answer-item"
           role="listitem"
           [ngClass]="{
-            correct: colorLabel && checkIfCorrect(i),
+            correct: showCorrect && checkIfCorrect(i),
             'no-background answer-text': isPresentation,
             'all-animations': !isPresentation,
           }"
@@ -82,7 +85,7 @@
             @if (!isSurvey) {
               <mat-icon
                 [ngClass]="{
-                  'show-correct-icon': colorLabel && checkIfCorrect(i),
+                  'show-correct-icon': showCorrect && checkIfCorrect(i),
                 }"
                 class="correct-icon"
                 >check</mat-icon
