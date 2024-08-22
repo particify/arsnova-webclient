@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="space-between" class="answer-container">
-  @if (!givenAnswer) {
+  @if (!answer) {
     <form>
       <app-content-text-answer
         (inputEvent)="textAnswer = $event"
@@ -7,9 +7,9 @@
       ></app-content-text-answer>
     </form>
   }
-  @if (givenAnswer) {
+  @if (answer) {
     <div>
-      <p class="answer">{{ givenAnswer.body }}</p>
+      <p class="answer">{{ answer.body }}</p>
     </div>
   }
 </div>

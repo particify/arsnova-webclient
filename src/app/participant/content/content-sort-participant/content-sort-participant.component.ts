@@ -99,6 +99,9 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
             this.answer &&
             this.answer.selectedChoiceIndexes.toString() ===
               this.correctOptionIndexes.toString();
+          this.sendStatusToParent(
+            this.isCorrect ? AnswerResultType.CORRECT : AnswerResultType.WRONG
+          );
           this.isLoading = false;
         });
     }
@@ -141,9 +144,6 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
               AdvancedSnackBarTypes.SUCCESS
             );
           });
-        this.sendStatusToParent(
-          this.isCorrect ? AnswerResultType.CORRECT : AnswerResultType.WRONG
-        );
       },
       () => {
         this.enableForm();

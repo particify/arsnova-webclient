@@ -421,11 +421,16 @@ export class ContentParticipantComponent
     this.sendEvent.emit(type);
   }
 
-  forwardAnswerMessage(answerResultType: AnswerResultType) {
-    this.answerChanged.emit(answerResultType);
+  forwardAnswerMessage(status: {
+    answer: Answer;
+    answerResult: AnswerResultType;
+  }) {
+    this.answer = status.answer;
+    this.initAnswerData();
+    this.answerChanged.emit(status.answerResult);
     setTimeout(() => {
       this.enableForm();
-      this.hasAbstained = answerResultType === AnswerResultType.ABSTAINED;
+      this.hasAbstained = status.answerResult === AnswerResultType.ABSTAINED;
       this.alreadySent = true;
     }, 100);
   }
