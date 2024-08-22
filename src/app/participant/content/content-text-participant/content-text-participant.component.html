@@ -1,15 +1,9 @@
 <div fxLayout="column" fxLayoutAlign="space-between" class="answer-container">
-  @if (!answer) {
-    <form>
-      <app-content-text-answer
-        (inputEvent)="textAnswer = $event"
-        [disabled]="isDisabled"
-      ></app-content-text-answer>
-    </form>
-  }
-  @if (answer) {
-    <div>
-      <p class="answer">{{ answer.body }}</p>
-    </div>
-  }
+  <form>
+    <app-content-text-answer
+      (inputEvent)="textAnswer = $event"
+      [disabled]="isDisabled"
+      [givenAnswer]="answer?.body"
+    ></app-content-text-answer>
+  </form>
 </div>
