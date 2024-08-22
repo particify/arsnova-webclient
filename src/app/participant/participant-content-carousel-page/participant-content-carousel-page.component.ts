@@ -319,8 +319,8 @@ export class ParticipantContentCarouselPageComponent
   }
 
   updateContentIndexUrl(index: number = 0) {
-    setTimeout(() => {
-      if ((!!index && this.currentStep !== index) || !this.isReloading) {
+    if (this.currentStep !== index && (!!index || !this.isReloading)) {
+      setTimeout(() => {
         this.currentStep = index || 0;
         this.replaceUrl([
           'p',
@@ -329,8 +329,8 @@ export class ParticipantContentCarouselPageComponent
           this.contentGroup.name,
           index + 1,
         ]);
-      }
-    }, STEPPER_ANIMATION_DURATION);
+      }, STEPPER_ANIMATION_DURATION);
+    }
   }
 
   isContentTimerActive(content: Content): boolean {
