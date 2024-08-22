@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { HELP_KEY } from '@app/core/services/util/hotkey.service';

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Vote } from '@app/core/models/vote';
 import { VoteService } from '@app/core/services/http/vote.service';
-import { provideTranslocoScope } from '@ngneat/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
   standalone: true,

@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 
 import { Subject, takeUntil, timer } from 'rxjs';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 
 const TIME_UPDATE_INTERVAL = 60000;

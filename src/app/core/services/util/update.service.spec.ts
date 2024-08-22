@@ -10,7 +10,7 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { UpdateImportance, VersionInfo } from '@app/core/models/version-info';
 import { Injectable } from '@angular/core';
 import { MockEventService } from '@testing/test-helpers';

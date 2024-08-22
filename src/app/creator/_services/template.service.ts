@@ -4,7 +4,7 @@ import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
 
 interface ContentGroupTemplateBody extends ContentGroupTemplate {

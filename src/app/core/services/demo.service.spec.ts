@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { EventService } from '@app/core/services/util/event.service';
 import { MockEventService, MockTranslocoService } from '@testing/test-helpers';
 import { RoomService } from '@app/core/services/http/room.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 
 @Injectable()

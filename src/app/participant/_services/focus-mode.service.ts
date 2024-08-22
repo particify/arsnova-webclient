@@ -12,7 +12,7 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
 import { EventService } from '@app/core/services/util/event.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,

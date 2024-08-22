@@ -1,7 +1,7 @@
 import {
   TranslocoTestingModule,
   TranslocoTestingOptions,
-} from '@ngneat/transloco';
+} from '@jsverse/transloco';
 // import i18nEn from '../assets/i18n/en.json';
 // import i18nAdminEn from '../assets/i18n/admin/en.json';
 // import i18nCreatorEn from '../assets/i18n/creator/en.json';

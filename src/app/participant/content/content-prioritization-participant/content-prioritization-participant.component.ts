@@ -10,7 +10,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';

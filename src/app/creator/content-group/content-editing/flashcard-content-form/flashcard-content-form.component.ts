@@ -9,7 +9,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { HintType } from '@app/core/models/hint-type.enum';

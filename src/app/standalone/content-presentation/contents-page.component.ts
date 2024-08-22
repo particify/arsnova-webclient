@@ -24,7 +24,7 @@ import {
   HotkeyActionButtonComponent,
   hotkeyEnterLeaveAnimation,
 } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { CoreModule } from '@app/core/core.module';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';

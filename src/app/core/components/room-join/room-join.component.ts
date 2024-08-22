@@ -6,7 +6,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { THINSP } from '@app/core/utils/html-entities';

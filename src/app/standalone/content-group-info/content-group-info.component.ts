@@ -4,7 +4,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { GroupType } from '@app/core/models/content-group';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { MatIconModule } from '@angular/material/icon';
-import { provideTranslocoScope } from '@ngneat/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 

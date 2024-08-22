@@ -8,7 +8,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 const MAX_ANSWER_OPTIONS = 12;
 

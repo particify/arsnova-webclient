@@ -5,7 +5,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,

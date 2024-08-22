@@ -6,7 +6,7 @@ import {
   TranslocoModule,
   provideTransloco,
   provideTranslocoLoader,
-} from '@ngneat/transloco';
+} from '@jsverse/transloco';
 
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {

@@ -29,7 +29,7 @@ import { EventService } from '@app/core/services/util/event.service';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
 import { takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { ActivatedRoute, Router } from '@angular/router';

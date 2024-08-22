@@ -10,7 +10,7 @@ import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
-import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { takeUntil } from 'rxjs';
 
 @Component({

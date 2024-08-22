@@ -33,7 +33,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@environments/environment';
 import { extensions } from '@environments/extensions';
 import { ModeratorService } from '@app/core/services/http/moderator.service';
-import { getBrowserLang } from '@ngneat/transloco';
+import { getBrowserLang } from '@jsverse/transloco';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';

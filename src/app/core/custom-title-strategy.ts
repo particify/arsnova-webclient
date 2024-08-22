@@ -4,7 +4,7 @@ import {
   RouterStateSnapshot,
   TitleStrategy,
 } from '@angular/router';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Title } from '@angular/platform-browser';
 import { take } from 'rxjs';
 

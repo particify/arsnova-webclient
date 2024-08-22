@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { UserRole } from '@app/core/models/user-roles.enum';

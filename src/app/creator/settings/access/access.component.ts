@@ -10,7 +10,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { ModeratorService } from '@app/core/services/http/moderator.service';
 import { Moderator } from '@app/core/models/moderator';
 import { UntypedFormControl, Validators } from '@angular/forms';

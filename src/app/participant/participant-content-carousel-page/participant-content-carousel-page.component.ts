@@ -7,7 +7,7 @@ import {
   GroupType,
   PublishingMode,
 } from '@app/core/models/content-group';
-import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   STEPPER_ANIMATION_DURATION,
   StepperComponent,

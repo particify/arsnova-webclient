@@ -8,7 +8,7 @@ import {
 import { TemplateService } from '@app/creator/_services/template.service';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-publish-content-group-template',

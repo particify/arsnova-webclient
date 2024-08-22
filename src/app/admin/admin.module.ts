@@ -3,7 +3,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { extensions } from './admin.extensions';
 import { SharedAdminModule } from './shared-admin.module';
 import { CoreModule } from '@app/core/core.module';
-import { TranslocoModule, provideTranslocoScope } from '@ngneat/transloco';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { SummaryBarComponent } from './summary-bar/summary-bar.component';
 import { SystemStatusComponent } from './system-status/system-status.component';

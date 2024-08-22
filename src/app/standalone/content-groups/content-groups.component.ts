@@ -26,7 +26,7 @@ import {
   TranslocoModule,
   TranslocoService,
   provideTranslocoScope,
-} from '@ngneat/transloco';
+} from '@jsverse/transloco';
 
 @Component({
   standalone: true,

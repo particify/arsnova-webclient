@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Announcement } from '@app/core/models/announcement';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { DateComponent } from '@app/standalone/date/date.component';
 import { MatIcon } from '@angular/material/icon';

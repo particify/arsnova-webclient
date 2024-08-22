@@ -12,7 +12,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService, provideTranslocoScope } from '@ngneat/transloco';
+import { TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
 import { LanguageService } from '@app/core/services/util/language.service';
 import {
   animate,

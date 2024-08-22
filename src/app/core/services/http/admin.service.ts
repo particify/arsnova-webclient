@@ -5,7 +5,7 @@ import { AbstractHttpService } from './abstract-http.service';
 import { Observable } from 'rxjs';
 import { Room } from '@app/core/models/room';
 import { User } from '@app/core/models/user';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { UserService } from './user.service';

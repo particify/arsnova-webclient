@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Comment } from '@app/core/models/comment';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { take } from 'rxjs';

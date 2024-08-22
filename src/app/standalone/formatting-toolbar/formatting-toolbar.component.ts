@@ -7,7 +7,7 @@ import {
   FormattingOption,
   PATTERN_PLACEHOLDER,
 } from '@app/core/models/formatting-option';
-import { provideTranslocoScope } from '@ngneat/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
   standalone: true,

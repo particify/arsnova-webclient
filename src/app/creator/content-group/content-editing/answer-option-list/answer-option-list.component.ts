@@ -6,7 +6,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-base.component';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-answer-option-list',

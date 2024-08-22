@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { forkJoin, Observable, take } from 'rxjs';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ContentScale } from '@app/core/models/content-scale';

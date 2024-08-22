@@ -1,4 +1,4 @@
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { OrdinalPipe } from './ordinal.pipe';
 import { TestBed } from '@angular/core/testing';
 import { getTranslocoModule } from '@testing/transloco-testing.module';

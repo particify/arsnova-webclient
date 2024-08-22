@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { NotificationService } from '@app/core/services/util/notification.service';

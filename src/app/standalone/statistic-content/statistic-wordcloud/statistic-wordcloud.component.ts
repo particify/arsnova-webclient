@@ -9,7 +9,7 @@ import {
   WordCloudItem,
   WordcloudComponent,
 } from '@app/standalone/wordcloud/wordcloud.component';
-import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { FlexModule } from '@angular/flex-layout';
 import { NgClass } from '@angular/common';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';

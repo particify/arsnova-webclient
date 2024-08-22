@@ -26,7 +26,7 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { MatTooltip } from '@angular/material/tooltip';

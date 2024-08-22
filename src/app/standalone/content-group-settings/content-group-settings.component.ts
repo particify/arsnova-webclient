@@ -14,7 +14,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { provideTranslocoScope } from '@ngneat/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-content-group-settings',

@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,

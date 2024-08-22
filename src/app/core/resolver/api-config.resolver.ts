@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { Resolve } from '@angular/router';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import { Observable, timer } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 import { SnackBarAdvancedComponent } from '@app/core/components/snack-bar-advanced/snack-bar-advanced.component';

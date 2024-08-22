@@ -26,7 +26,7 @@ import {
 } from '@app/core/models/client-authentication-result';
 import { EventService } from '@app/core/services/util/event.service';
 import { jwtDecode } from 'jwt-decode';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,

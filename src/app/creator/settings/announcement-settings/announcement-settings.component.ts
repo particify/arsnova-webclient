@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { Announcement } from '@app/core/models/announcement';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
