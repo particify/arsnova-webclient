@@ -21,7 +21,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { UserSettings } from '@app/core/models/user-settings';
 import { StatisticPrioritizationComponent } from '@app/standalone/statistic-content/statistic-prioritization/statistic-prioritization.component';
-import { RemoteService } from '@app/core/services/util/remote.service';
 import { Content } from '@app/core/models/content';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
@@ -131,7 +130,6 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   constructor(
     private announceService: AnnounceService,
     private route: ActivatedRoute,
-    private remoteService: RemoteService,
     private presentationService: PresentationService,
     private contentService: ContentService
   ) {}
@@ -177,24 +175,6 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
           }
         });
     }
-    if (this.isPresentation) {
-      this.remoteService.getUiState().subscribe((state) => {
-        if (this.content.id === state.contentId) {
-          if (state.resultsVisible !== this.answersVisible) {
-            this.toggleAnswers(false);
-          }
-          if (state.correctAnswersVisible !== this.correctVisible) {
-            const timeout = state.timeout ? 500 : 0;
-            setTimeout(() => {
-              this.toggleCorrect(false);
-            }, timeout);
-          }
-        }
-      });
-      if (this.active) {
-        this.sendUiState(false, false);
-      }
-    }
     this.allowingUnitChange = [
       ContentType.BINARY,
       ContentType.SCALE,
@@ -231,27 +211,15 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendUiState(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    answersVisible = this.answersVisible,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    correctVisible = this.correctVisible
-  ) {
-    // TODO: Send UI state for remote
-  }
-
-  toggleAnswers(sendState = true) {
+  toggleAnswers() {
     if (this.format === ContentType.SLIDE) {
       return;
     }
     if (this.correctVisible) {
-      this.toggleCorrect(false);
+      this.toggleCorrect();
     }
     this.toggleAnswersInChildComponents();
     this.announceAnswers();
-    if (this.isPresentation && sendState) {
-      this.sendUiState();
-    }
   }
 
   toggleAnswersInChildComponents() {
@@ -285,7 +253,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleCorrect(sendState = true) {
+  toggleCorrect() {
     if (this.answersVisible && !this.survey) {
       switch (this.format) {
         case ContentType.SORT:
@@ -303,9 +271,6 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
           break;
       }
       this.correctVisible = !this.correctVisible;
-      if (this.isPresentation && sendState) {
-        this.sendUiState();
-      }
     }
   }
 
