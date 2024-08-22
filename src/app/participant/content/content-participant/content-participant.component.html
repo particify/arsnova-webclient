@@ -196,6 +196,20 @@
                     >
                     </app-content-numeric-participant>
                   }
+                  @if (content.format === ContentType.SHORT_ANSWER) {
+                    <app-content-short-answer-participant
+                      [answer]="shortAnswerAnswer"
+                      [content]="content"
+                      [isDisabled]="
+                        formDisabled || alreadySent || answeringLocked
+                      "
+                      [sendEvent]="sendEvent"
+                      [correctOptionsPublished]="correctOptionsPublished"
+                      [isCorrect]="answerResult === 'CORRECT'"
+                      (answerChanged)="forwardAnswerMessage($event)"
+                    >
+                    </app-content-short-answer-participant>
+                  }
                 </div>
                 <div fxLayout="row-reverse" fxLayoutAlign="end">
                   @if (

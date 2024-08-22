@@ -59,13 +59,7 @@
                             format.icon
                           }}</mat-icon>
                           <div fxLayout="column" fxLayoutAlign="center">
-                            <span
-                              [attr.aria-label]="
-                                'creator.content.a11y-format-' + format.name
-                                  | transloco
-                              "
-                              class="format-name"
-                            >
+                            <span class="format-name">
                               {{
                                 'creator.content.format-' + format.name
                                   | transloco
@@ -262,6 +256,14 @@
                       [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
                     >
                     </app-numeric-content-form>
+                  }
+                  @case (ContentType.SHORT_ANSWER) {
+                    <app-short-answer-content-form
+                      [content]="content"
+                      [isAnswered]="isAnswered"
+                      [isEditMode]="isEditMode"
+                    >
+                    </app-short-answer-content-form>
                   }
                 }
               </div>

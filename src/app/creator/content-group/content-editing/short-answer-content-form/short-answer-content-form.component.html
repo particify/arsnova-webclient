@@ -1,0 +1,18 @@
+<div fxLayout="column" fxLayoutGap="10px">
+  @if (displayAnswers.length > 0) {
+    <app-divider></app-divider>
+  }
+  <app-answer-option-list
+    [answers]="displayAnswers"
+    [allowDeletion]="!isEditMode || !isAnswered"
+    [disabled]="formDisabled || isAnswered"
+    [minimumAnswerCount]="1"
+    [lengthLimit]="80"
+  ></app-answer-option-list>
+  @if (!isEditMode || !isAnswered) {
+    <app-create-answer-option
+      [answers]="displayAnswers"
+      [lengthLimit]="80"
+    ></app-create-answer-option>
+  }
+</div>

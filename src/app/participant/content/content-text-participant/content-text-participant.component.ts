@@ -6,7 +6,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@ngneat/transloco';
-import { EventService } from '@app/core/services/util/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
@@ -38,7 +37,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    protected eventService: EventService,
     protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,

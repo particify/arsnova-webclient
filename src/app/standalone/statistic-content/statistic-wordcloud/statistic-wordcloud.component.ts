@@ -4,18 +4,12 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
 import { ContentService } from '@app/core/services/http/content.service';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
-import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import {
   WordCloudItem,
   WordcloudComponent,
 } from '@app/standalone/wordcloud/wordcloud.component';
 import { TranslocoService, TranslocoPipe } from '@ngneat/transloco';
-import { DialogService } from '@app/core/services/util/dialog.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
 import { FlexModule } from '@angular/flex-layout';
 import { NgClass } from '@angular/common';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
@@ -45,12 +39,9 @@ export class StatisticWordcloudComponent
 
   constructor(
     protected contentService: ContentService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    private dialogService: DialogService,
-    private notificationService: NotificationService
+    protected translateService: TranslocoService
   ) {
-    super(contentService, eventService, translateService);
+    super(contentService, translateService);
   }
 
   afterInit() {
@@ -61,6 +52,11 @@ export class StatisticWordcloudComponent
         const stats = JSON.parse(msg.body).payload.stats;
         this.updateData(stats);
       });
+    this.contentService.getAnswerBanned().subscribe((answer) => {
+      if (answer) {
+        this.filterAnswers(answer);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -95,30 +91,11 @@ export class StatisticWordcloudComponent
   }
 
   banAnswer(answer: TextStatistic) {
-    const dialogRef = this.dialogService.openDeleteDialog(
-      'ban-answer',
-      'creator.dialog.really-ban-answer',
-      answer.answer,
-      'creator.dialog.ban',
-      () =>
-        this.contentService.banKeywordForContent(
-          this.content.roomId,
-          this.content.id,
-          answer.answer
-        )
+    this.contentService.banAnswer(
+      this.content.roomId,
+      this.content.id,
+      answer.answer
     );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const msg = this.translateService.translate(
-          'creator.statistic.answer-banned'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-        this.filterAnswers(answer.answer);
-      }
-    });
   }
 
   filterAnswers(keyword: string) {

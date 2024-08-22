@@ -399,6 +399,7 @@
     "your-answer": "Tu respuesta",
     "select-a-number-between": "Selecciona un número entre {{min}} y {{max}}",
     "correct-answer-is": "La respuesta correcta es",
+    "correct-answers-are": "La respuestas correctas son:",
     "have-answered-correctly": "han respondido correctamente"
   },
   "survey": {

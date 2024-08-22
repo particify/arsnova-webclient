@@ -9,6 +9,7 @@
         #answerInput
         [(ngModel)]="newAnswer"
         autocomplete="off"
+        [maxLength]="lengthLimit"
       />
       <button
         [disabled]="formDisabled"

@@ -21,6 +21,7 @@ export class CreateAnswerOptionComponent extends FormComponent {
   @ViewChild('answerInput') answerInput!: ElementRef;
 
   @Input({ required: true }) answers!: DisplayAnswer[];
+  @Input() lengthLimit = 250;
 
   newAnswer = '';
 

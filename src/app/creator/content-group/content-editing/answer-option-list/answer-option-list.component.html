@@ -54,6 +54,7 @@
               (focus)="goInEditMode(i)"
               (blur)="leaveEditMode()"
               autocomplete="off"
+              [maxLength]="lengthLimit"
             />
           </mat-form-field>
         </form>

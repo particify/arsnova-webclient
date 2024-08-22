@@ -6,7 +6,6 @@ import { ContentAnswerService } from '@app/core/services/http/content-answer.ser
 import { TextAnswer } from '@app/core/models/text-answer';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { Observable, takeUntil } from 'rxjs';
-import { EventService } from '@app/core/services/util/event.service';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -46,11 +45,10 @@ export class StatisticTextComponent
     protected contentService: ContentService,
     private contentAnswerService: ContentAnswerService,
     protected translateService: TranslocoService,
-    protected eventService: EventService,
     private dialogService: DialogService,
     private notificationService: NotificationService
   ) {
-    super(contentService, eventService, translateService);
+    super(contentService, translateService);
   }
 
   loadData(): Observable<TextAnswer[]> {

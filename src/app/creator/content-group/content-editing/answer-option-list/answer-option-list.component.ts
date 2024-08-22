@@ -23,6 +23,8 @@ export class AnswerOptionListComponent
   @Input() allowDeletion = false;
   @Input() disabled = false;
   @Input() sortable = false;
+  @Input() minimumAnswerCount = 2;
+  @Input() lengthLimit = 250;
 
   isAnswerEdit = -1;
 
@@ -45,7 +47,7 @@ export class AnswerOptionListComponent
   ): boolean {
     let msg: string | undefined;
     if (!this.hasMinimumOptionCount()) {
-      msg = this.translateService.translate('creator.content.need-answers');
+      msg = this.translateService.translate(this.getMinimumAnswerMessage());
     } else if (!this.areLabelsValid()) {
       return false;
     } else if (hasCorrectOptions) {
@@ -63,6 +65,12 @@ export class AnswerOptionListComponent
       return false;
     }
     return true;
+  }
+
+  getMinimumAnswerMessage(): string {
+    return this.minimumAnswerCount === 1
+      ? 'creator.content.need-answer'
+      : 'creator.content.need-answers';
   }
 
   switchValue(index: number) {
@@ -126,7 +134,7 @@ export class AnswerOptionListComponent
   }
 
   private hasMinimumOptionCount(): boolean {
-    return this.answers.length > 1;
+    return this.answers.length >= this.minimumAnswerCount;
   }
 
   private hasMoreCorrectOptions(count: number): boolean {

@@ -43,6 +43,7 @@ import { MultipleRoundSelectionComponent } from '@app/standalone/multiple-round-
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
+import { StatisticShortAnswerComponent } from '@app/standalone/statistic-content/statistic-short-answer/statistic-short-answer.component';
 
 @Component({
   selector: 'app-content-results',
@@ -67,6 +68,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
     StatisticWordcloudComponent,
     StatisticPrioritizationComponent,
     StatisticNumericComponent,
+    StatisticShortAnswerComponent,
     MatDivider,
     TranslocoPipe,
     LanguageContextDirective,
@@ -86,6 +88,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   prioritizationStatistic!: StatisticPrioritizationComponent;
   @ViewChild(StatisticNumericComponent)
   numericStatistic!: StatisticNumericComponent;
+  @ViewChild(StatisticShortAnswerComponent)
+  shortAnswerStatistic!: StatisticShortAnswerComponent;
 
   destroyed$: Subject<void> = new Subject();
 
@@ -273,6 +277,9 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
       case ContentType.NUMERIC:
         this.answersVisible = this.numericStatistic.toggleAnswers();
         break;
+      case ContentType.SHORT_ANSWER:
+        this.answersVisible = this.shortAnswerStatistic.toggleAnswers();
+        break;
       default:
         this.answersVisible = this.choiceStatistic.toggleAnswers();
     }
@@ -280,14 +287,20 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
 
   toggleCorrect(sendState = true) {
     if (this.answersVisible && !this.survey) {
-      if (this.format === ContentType.SORT) {
-        this.sortStatistic.toggleCorrect();
-      } else if (this.format === ContentType.NUMERIC) {
-        this.numericStatistic.toggleCorrect();
-      } else if (
-        [ContentType.CHOICE, ContentType.BINARY].includes(this.format)
-      ) {
-        this.choiceStatistic.toggleCorrect();
+      switch (this.format) {
+        case ContentType.SORT:
+          this.sortStatistic.toggleCorrect();
+          break;
+        case ContentType.NUMERIC:
+          this.numericStatistic.toggleCorrect();
+          break;
+        case ContentType.CHOICE:
+        case ContentType.BINARY:
+          this.choiceStatistic.toggleCorrect();
+          break;
+        case ContentType.SHORT_ANSWER:
+          this.shortAnswerStatistic.toggleCorrect();
+          break;
       }
       this.correctVisible = !this.correctVisible;
       if (this.isPresentation && sendState) {

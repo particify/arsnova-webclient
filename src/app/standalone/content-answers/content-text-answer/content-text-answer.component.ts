@@ -11,4 +11,8 @@ import { CoreModule } from '@app/core/core.module';
 export class ContentTextAnswerComponent {
   @Output() inputEvent: EventEmitter<string> = new EventEmitter();
   @Input() disabled = false;
+  @Input() givenAnswer?: string;
+  @Input() correct?: boolean;
+  @Input() minRows? = 3;
+  @Input() lengthLimit = 500;
 }

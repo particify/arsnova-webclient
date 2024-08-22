@@ -1,0 +1,10 @@
+@import '../../../../variables';
+
+.answer-container {
+  margin-top: $spacing;
+  margin-bottom: $spacing-2;
+}
+
+.answer-hint {
+  font-size: $s-font-size;
+}

@@ -1,11 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticScaleComponent } from './statistic-scale.component';
-import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import {
   ActivatedRouteStub,
-  MockEventService,
   MockGlobalStorageService,
   MockThemeService,
 } from '@testing/test-helpers';
@@ -85,10 +83,6 @@ describe('StatisticScaleComponent', () => {
     TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticScaleComponent],
       providers: [
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
         {
           provide: ContentService,
           useValue: mockContentService,

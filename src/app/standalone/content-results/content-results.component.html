@@ -251,6 +251,15 @@
       [visualizationUnitChanged]="visualizationUnitChanged"
     ></app-statistic-numeric>
   }
+  @if (format === ContentType.SHORT_ANSWER) {
+    <app-statistic-short-answer
+      [content]="content"
+      [isPresentation]="isPresentation"
+      [directShow]="directShow"
+      [showModeration]="!isPresentation && !isParticipant"
+      (updateCounterEvent)="updateCounter($event)"
+    ></app-statistic-short-answer>
+  }
 </div>
 @if (content.format === ContentType.FLASHCARD && answersVisible) {
   <div>

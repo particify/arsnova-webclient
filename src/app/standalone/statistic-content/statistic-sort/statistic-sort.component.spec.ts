@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StatisticSortComponent } from './statistic-sort.component';
-import { EventService } from '@app/core/services/util/event.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ThemeService } from '@app/core/theme/theme.service';
-import { MockEventService, MockThemeService } from '@testing/test-helpers';
+import { MockThemeService } from '@testing/test-helpers';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -49,10 +48,6 @@ describe('StatisticSortComponent', () => {
     TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticSortComponent],
       providers: [
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
         {
           provide: ContentService,
           useValue: mockContentService,

@@ -70,6 +70,8 @@ import { Room } from '@app/core/models/room';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { AnswerResultType } from '@app/core/models/answer-result';
+import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
+import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
 
 interface ContentActionTab {
   route: string;
@@ -104,6 +106,7 @@ interface ContentActionTab {
     ContentWordcloudParticipantComponent,
     ContentPrioritizationParticipantComponent,
     ContentNumericParticipantComponent,
+    ContentShortAnswerParticipantComponent,
     NgClass,
     MatButton,
     LoadingButtonComponent,
@@ -133,6 +136,7 @@ export class ContentParticipantComponent
   @Input() alias?: RoomUserAlias;
   @Input() showCard = true;
   @Input() hasAbstained = false;
+  @Input() answerResult?: AnswerResultType;
   @Output() answerChanged = new EventEmitter<AnswerResultType>();
   @Output() next = new EventEmitter<void>();
   @Output() answerReset = new EventEmitter<string>();
@@ -163,6 +167,7 @@ export class ContentParticipantComponent
   wordcloudAnswer?: MultipleTextsAnswer;
   textAnswer?: TextAnswer;
   numericAnswer?: NumericAnswer;
+  shortAnswerAnswer?: ShortAnswerAnswer;
 
   selectedRoute = '';
   endDate?: Date;
@@ -292,7 +297,7 @@ export class ContentParticipantComponent
     this.answeringLocked = false;
     this.endDate = undefined;
     this.answer = undefined;
-    this.initAnswerData();
+    this.resetAnswerData();
   }
 
   private startCountdown(endDate: Date): void {
@@ -332,15 +337,16 @@ export class ContentParticipantComponent
     }
   }
 
+  private resetAnswerData(): void {
+    this.choiceAnswer = undefined;
+    this.textAnswer = undefined;
+    this.prioritizationAnswer = undefined;
+    this.numericAnswer = undefined;
+    this.wordcloudAnswer = undefined;
+    this.shortAnswerAnswer = undefined;
+  }
+
   initAnswerData() {
-    if (!this.answer) {
-      this.choiceAnswer = undefined;
-      this.textAnswer = undefined;
-      this.prioritizationAnswer = undefined;
-      this.numericAnswer = undefined;
-      this.wordcloudAnswer = undefined;
-      return;
-    }
     if (
       [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
         this.content.format
@@ -351,7 +357,10 @@ export class ContentParticipantComponent
       this.initWordcloudAnswerData();
     } else if (this.content.format === ContentType.TEXT) {
       this.textAnswer = this.answer as TextAnswer;
-      this.answersString = (this.answer as TextAnswer).body || '';
+      this.answersString = this.textAnswer.body ?? '';
+    } else if (this.content.format === ContentType.SHORT_ANSWER) {
+      this.shortAnswerAnswer = this.answer as ShortAnswerAnswer;
+      this.answersString = this.shortAnswerAnswer.text || '';
     } else if (this.content.format === ContentType.PRIORITIZATION) {
       this.prioritizationAnswer = this.answer as PrioritizationAnswer;
     } else if (this.content.format === ContentType.SCALE) {
@@ -416,7 +425,6 @@ export class ContentParticipantComponent
     this.answerChanged.emit(answerResultType);
     setTimeout(() => {
       this.enableForm();
-      this.initAnswerData();
       this.hasAbstained = answerResultType === AnswerResultType.ABSTAINED;
       this.alreadySent = true;
     }, 100);

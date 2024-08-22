@@ -64,14 +64,6 @@
     "a11y-answer-deleted": "La respuesta ha sido eliminada",
     "a11y-answer-added": "La respuesta ha sido agregada, vuelve para eliminar, editar o marcar la respuesta como correcta o incorrecta",
     "a11y-choose-format": "Cambia el formato de tu contenido. El formato actual es {{format}}",
-    "a11y-format-choice": "Selecciona el formato “Opción”.",
-    "a11y-format-scale": "Selecciona el formato “Likert”.",
-    "a11y-format-binary": "Selecciona el formato “Sí / No”.",
-    "a11y-format-text": "Selecciona el formato “Texto”.",
-    "a11y-format-slide": "Selecciona el formato “Diapositiva”.",
-    "a11y-format-sort": "Selecciona el formato “Ordenar”.",
-    "a11y-format-flashcard": "Selecciona el formato “Tarjeta didáctica”.",
-    "a11y-format-prioritization": "Selecciona el formato “Priorización”.",
     "a11y-single-choice": "Actualmente has seleccionado el formato de opción simple. Cambia a opción múltiple con las teclas de flecha.",
     "a11y-multiple-choice": "Actualmente has seleccionado el formato de opción múltiple. Cambia a opción simple con las teclas de flecha.",
     "a11y-answer-yes": "Actualmente la respuesta a este contenido es “Sí”. Cambia a “No” con las teclas de flecha.",
@@ -352,8 +344,8 @@
     "answer-deleted": "La respuesta ha sido eliminada.",
     "show-wordcloud-list": "Mostrar respuestas como lista",
     "show-wordcloud": "Mostrar respuestas como nube de palabras",
-    "ban-answer": "Bloquear palabra clave",
-    "answer-banned": "La palabra clave ha sido bloqueada."
+    "ban-answer": "Bloquear respuesta",
+    "answer-banned": "La respuesta ha sido bloqueada."
   },
   "dialog": {
     "really-delete-comment": "¿Realmente quieres eliminar esta publicación?",
@@ -382,7 +374,7 @@
     "really-discard-announcement": "¿Realmente quieres descartar tu entrada?",
     "discard": "Descartar",
     "ban": "Prohibir",
-    "really-ban-answer": "¿Realmente quieres prohibir la palabra clave?",
+    "really-ban-answer": "¿Realmente quieres prohibir la respuesta?",
     "really-start-new-round": "¿De verdad quieres empezar una nueva ronda?",
     "started-new-round": "Se ha iniciado una nueva ronda.",
     "start": "Comenzar"

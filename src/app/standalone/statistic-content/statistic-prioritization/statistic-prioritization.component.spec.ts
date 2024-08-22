@@ -1,13 +1,11 @@
 import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContentService } from '@app/core/services/http/content.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { ContentType } from '@app/core/models/content-type.enum';
 import {
-  MockEventService,
   MockGlobalStorageService,
   MockThemeService,
 } from '@testing/test-helpers';
@@ -64,10 +62,6 @@ describe('StatisticPrioritizationComponent', () => {
     await TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticPrioritizationComponent],
       providers: [
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
         {
           provide: ContentService,
           useValue: mockContentService,

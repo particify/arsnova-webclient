@@ -3,7 +3,6 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
-import { EventService } from '@app/core/services/util/event.service';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { UserSettings } from '@app/core/models/user-settings';
 import { ChartTypeRegistry, TooltipItem } from 'chart.js';
@@ -30,7 +29,6 @@ export abstract class StatisticContentBaseComponent implements OnInit {
 
   protected constructor(
     protected contentService: ContentService,
-    protected eventService: EventService,
     protected translateService: TranslocoService
   ) {}
 
