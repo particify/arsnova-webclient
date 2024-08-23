@@ -58,12 +58,7 @@
           </span>
         }
         @if (type === LiveFeedbackType.FEEDBACK) {
-          <mat-icon
-            class="button-label-icon"
-            [matTooltip]="'participant.survey.' + feedbackLabels[i] | transloco"
-          >
-            {{ feedbackIcons[i] }}</mat-icon
-          >
+          <mat-icon class="button-label-icon"> {{ feedbackIcons[i] }}</mat-icon>
         }
       </button>
     }
