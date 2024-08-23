@@ -87,7 +87,13 @@
             extensionId="attachment-list"
             [extensionData]="extensionData"
           ></lib-extension-point>
-          @if (active && content.duration && endDate && !answeringLocked) {
+          @if (
+            active &&
+            content.duration &&
+            endDate &&
+            !answeringLocked &&
+            !waitForCountdown
+          ) {
             <app-countdown-timer
               [endDate]="endDate"
               [duration]="content.duration"
