@@ -428,11 +428,13 @@ export class ContentParticipantComponent
   }
 
   forwardAnswerMessage(status: {
-    answer: Answer;
+    answer?: Answer;
     answerResult: AnswerResultType;
   }) {
     this.answer = status.answer;
-    this.initAnswerData();
+    if (this.answer) {
+      this.initAnswerData();
+    }
     this.answerChanged.emit(status.answerResult);
     setTimeout(() => {
       this.enableForm();
