@@ -61,9 +61,11 @@ describe('ParticipantContentCarouselPageComponent', () => {
     'getById',
     'filterPublishedIds',
     'getAttributions',
+    'getChangesStreamForEntity',
   ]);
   mockContentGroupService.filterPublishedIds.and.returnValue([]);
   mockContentGroupService.getAttributions.and.returnValue(of([]));
+  mockContentGroupService.getChangesStreamForEntity.and.returnValue(of({}));
 
   const mockAuthenticationService = jasmine.createSpyObj([
     'getCurrentAuthentication',
