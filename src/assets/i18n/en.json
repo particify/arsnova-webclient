@@ -407,7 +407,8 @@
     "group-type-flashcards": "Flashcards",
     "content-count": "{{count}} Contents",
     "answer-fast-to-get-more-points": "Answer quickly to get more points",
-    "answer-correct-to-get-points": "Answer correctly to get points"
+    "answer-correct-to-get-points": "Answer correctly to get points",
+    "contents-will-be-published-gradually": "The contents will be released gradually"
   },
   "answer": {
     "word": "Keyword",

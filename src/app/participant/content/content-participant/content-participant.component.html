@@ -20,6 +20,7 @@
             [alias]="alias"
             [roomId]="content.roomId"
             [timerActive]="!!content.duration"
+            [aliasRequired]="contentGroup.leaderboardEnabled"
           ></app-content-waiting>
         </div>
       } @else {
@@ -57,7 +58,9 @@
             }
             @if (
               !isLoading &&
-              (alreadySent || content.format === ContentType.FLASHCARD) &&
+              (alreadySent ||
+                answeringLocked ||
+                content.format === ContentType.FLASHCARD) &&
               content.format !== ContentType.SLIDE &&
               (statsPublished || contentGroup.leaderboardEnabled)
             ) {
