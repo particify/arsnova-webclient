@@ -52,45 +52,22 @@
   opacity: 0.7;
 }
 
-@mixin darken-background($color) {
-  background-color: hsl(from $color h s 15);
-}
-
-@mixin color-icon($color) {
-  background-color: hsl(from $color h s 93);
-  color: $color;
-}
-
 .mixed {
-  @include color-icon(var(--mixed));
+  color: var(--mixed);
+  background-color: var(--mixed-variant);
 }
 
 .quiz {
-  @include color-icon(var(--quiz));
+  color: var(--quiz);
+  background-color: var(--quiz-variant);
 }
 
 .survey {
-  @include color-icon(var(--survey));
+  color: var(--survey);
+  background-color: var(--survey-variant);
 }
 
 .flashcards {
-  @include color-icon(var(--flashcards));
-}
-
-:host-context(.theme-dark) {
-  .mixed {
-    @include darken-background(var(--mixed));
-  }
-
-  .quiz {
-    @include darken-background(var(--quiz));
-  }
-
-  .survey {
-    @include darken-background(var(--survey));
-  }
-
-  .flashcards {
-    @include darken-background(var(--flashcards));
-  }
+  color: var(--flashcards);
+  background-color: var(--flashcards-variant);
 }
