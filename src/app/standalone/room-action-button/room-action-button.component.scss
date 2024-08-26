@@ -31,9 +31,9 @@
 }
 
 .button-text {
-  font-size: 18px;
+  font-size: $m-font-size;
   padding: 0;
-  margin: 16px 0 0;
+  margin: $spacing-2 0 0;
   line-height: 20px;
   font-weight: $font-weight-bold;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
