@@ -19,7 +19,7 @@ export abstract class ContentParticipantBaseComponent
   implements OnInit
 {
   @Output() answerChanged = new EventEmitter<{
-    answer: Answer;
+    answer?: Answer;
     answerResult: AnswerResultType;
   }>();
   @Input() isDisabled = false;
@@ -64,12 +64,10 @@ export abstract class ContentParticipantBaseComponent
   }
 
   sendStatusToParent(answerResult: AnswerResultType) {
-    if (this.answer) {
-      this.answerChanged.emit({
-        answer: this.answer,
-        answerResult: answerResult,
-      });
-    }
+    this.answerChanged.emit({
+      answer: this.answer,
+      answerResult: answerResult,
+    });
   }
 
   submitAnswer() {
