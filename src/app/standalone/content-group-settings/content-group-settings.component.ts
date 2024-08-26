@@ -42,7 +42,11 @@ export class ContentGroupSettingsComponent
     protected formService: FormService,
     private dialogRef: MatDialogRef<ContentGroupSettingsComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { contentGroup: ContentGroup; groupNames: string[] },
+    public data: {
+      contentGroup: ContentGroup;
+      groupNames: string[];
+      alreadyAnswered: boolean;
+    },
     private contentGroupService: ContentGroupService,
     private contentPublishService: ContentPublishService
   ) {

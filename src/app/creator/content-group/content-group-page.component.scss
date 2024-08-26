@@ -53,8 +53,13 @@
 }
 
 .live-icon {
-  font-size: $m-font-size;
-  width: $m-font-size;
-  height: $m-font-size;
+  font-size: $s-font-size;
+  width: $s-font-size;
+  height: $s-font-size;
+}
+
+.live-mode-hint {
+  cursor: pointer;
+  font-size: $s-font-size;
   color: var(--play);
 }
