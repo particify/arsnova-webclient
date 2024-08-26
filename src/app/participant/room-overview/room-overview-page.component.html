@@ -82,7 +82,7 @@
         </p>
       }
       @if (room && contentGroups && !focusModeEnabled) {
-        <div>
+        <div fxLayout="column" fxLayoutGap="8px">
           @for (contentGroup of contentGroups; track contentGroup) {
             <app-content-groups
               [contentGroup]="contentGroup"

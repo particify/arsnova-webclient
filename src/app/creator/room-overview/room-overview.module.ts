@@ -10,6 +10,7 @@ import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-heade
 import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
+import { HintComponent } from '@app/standalone/hint/hint.component';
 
 @NgModule({
   declarations: [RoomOverviewPageComponent],
@@ -23,6 +24,7 @@ import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
     ContentGroupsComponent,
     LoadingIndicatorComponent,
     ExtensionPointModule,
+    HintComponent,
   ],
 })
 export class RoomOverviewModule {}

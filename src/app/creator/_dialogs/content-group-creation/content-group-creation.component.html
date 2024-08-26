@@ -23,6 +23,7 @@
       >
     </mat-form-field>
     <app-detail-radio-group
+      [selectedItemValue]="selectedType"
       [items]="radioItems"
       (itemValueChanged)="changeType($event)"
     ></app-detail-radio-group>

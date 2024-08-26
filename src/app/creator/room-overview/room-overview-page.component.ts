@@ -17,6 +17,10 @@ import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-ove
 import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
 import { takeUntil } from 'rxjs';
+import { GroupType } from '@app/core/models/content-group';
+import { HintType } from '@app/core/models/hint-type.enum';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 @Component({
   selector: 'app-creator-overview',
   templateUrl: './room-overview-page.component.html',
@@ -27,6 +31,9 @@ export class RoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
   isModerator = false;
+  groupTypes: Map<GroupType, string>;
+  groupContentFormatIcons: Map<GroupType, Map<ContentType, string>> = new Map();
+  hintType = HintType.INFO;
 
   constructor(
     protected roomStatsService: RoomStatsService,
@@ -39,7 +46,8 @@ export class RoomOverviewPageComponent
     protected translateService: TranslocoService,
     protected dialogService: DialogService,
     protected globalStorageService: GlobalStorageService,
-    protected routingService: RoutingService
+    protected routingService: RoutingService,
+    private contentService: ContentService
   ) {
     super(
       roomStatsService,
@@ -49,6 +57,21 @@ export class RoomOverviewPageComponent
       eventService,
       route
     );
+    this.groupTypes = this.contentGroupService.getTypeIcons();
+    this.groupTypes.forEach((value, key) => {
+      const groupTypeIcons = new Map<ContentType, string>();
+      this.contentService.getTypeIcons().forEach((icon, type) => {
+        if (
+          this.contentGroupService
+            .getContentFormatsOfGroupType(key)
+            .includes(type) &&
+          type !== ContentType.SLIDE
+        ) {
+          groupTypeIcons.set(type, icon);
+        }
+      });
+      this.groupContentFormatIcons.set(key, groupTypeIcons);
+    });
   }
 
   ngOnInit() {
@@ -77,9 +100,9 @@ export class RoomOverviewPageComponent
     );
   }
 
-  openCreateContentGroupDialog() {
+  openCreateContentGroupDialog(type = GroupType.MIXED) {
     this.dialogService
-      .openContentGroupCreationDialog(this.room.id)
+      .openContentGroupCreationDialog(this.room.id, type)
       .afterClosed()
       .subscribe((name) => {
         if (name) {

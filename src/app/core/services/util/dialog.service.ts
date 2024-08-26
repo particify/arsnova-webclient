@@ -18,7 +18,7 @@ import {
   ExportOptions,
 } from '@app/creator/content-group/_dialogs/export/export.component';
 import { EventCategory, TrackingService } from './tracking.service';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { PublishContentGroupDialogComponent } from '@app/presentation/_dialogs/publish-content-group-dialog/publish-content-group-dialog.component';
 
 export const DIALOG_SIZES: Readonly<Record<string, string>> = {
@@ -91,13 +91,15 @@ export class DialogService {
   }
 
   openContentGroupCreationDialog(
-    roomId?: string
+    roomId?: string,
+    type?: GroupType
   ): MatDialogRef<ContentGroupCreationComponent> {
     return this.openDialog(ContentGroupCreationComponent, {
       width: DIALOG_SIZES.medium,
       maxWidth: '90vw',
       data: {
         roomId: roomId,
+        type: type,
       },
     });
   }

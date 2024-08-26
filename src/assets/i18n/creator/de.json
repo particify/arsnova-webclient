@@ -229,9 +229,9 @@
     "group-type-quiz": "Quiz",
     "group-type-survey": "Umfrage",
     "group-type-flashcards": "Lernkarten",
-    "group-type-description-mixed": "Nutze alle Formate für eine individuelle Fragenserie.",
-    "group-type-description-quiz": "Teste das Wissen mit Formaten wie Multiple Choice oder Finde die Zahl.",
-    "group-type-description-survey": "Sammle Input mit Likert, Wortwolken oder offenen Fragen.",
+    "group-type-description-mixed": "Nutze diesen Typ, um Quizfragen und Umfragen zu mischen.",
+    "group-type-description-quiz": "Lasse die Teilnehmenden mit Nicknames gegeneinander antreten.",
+    "group-type-description-survey": "Sammle Feedback und Erkenntnisse von den Teilnehmenden.",
     "group-type-description-flashcards": "Stelle den Teilnehmenden Lernkarten zum Üben zur Verfügung.",
     "content-is-locked": "Inhalt ist gesperrt",
     "to-publish-content": "zum Freischalten des Inhalts",
@@ -298,7 +298,8 @@
     "room-loading-error": "Der Raum konnte nicht geladen werden",
     "room-settings": "Einstellungen",
     "no-content-groups": "Keine Fragenserien vorhanden.",
-    "group-locked": "Die Fragenserie ist nicht freigegeben"
+    "group-locked": "Die Fragenserie ist nicht freigegeben",
+    "content-groups-description": "Erstelle Quizzes, Umfragen, Brainstormings und vieles mehr. Wähle den passenden Typ oder kombiniere alle Formate einer Fragenserie. Wenn du nicht bei Null anfangen willst, schau dir die Vorlagen an."
   },
   "settings": {
     "a11y-message": "Du befindest dich jetzt in den Raum-Einstellungen.",

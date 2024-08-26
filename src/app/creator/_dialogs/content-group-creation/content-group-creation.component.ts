@@ -22,6 +22,7 @@ import { DetailedRadioGroup } from '@app/standalone/detail-radio-group/detail-ra
 
 interface DialogData {
   roomId?: string;
+  type?: GroupType;
 }
 
 @Component({
@@ -67,6 +68,7 @@ export class ContentGroupCreationComponent extends FormComponent {
         )
       );
     });
+    this.selectedType = this.data.type ?? GroupType.MIXED;
   }
 
   changeType(type: string) {
