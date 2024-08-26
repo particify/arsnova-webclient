@@ -138,6 +138,7 @@ export class ParticipantContentCarouselPageComponent
     if (this.routeChangedSubscription) {
       this.routeChangedSubscription.unsubscribe();
     }
+    this.contentCarouselService.setLastContentAnswered(false);
   }
 
   ngOnInit() {
@@ -189,13 +190,12 @@ export class ParticipantContentCarouselPageComponent
       .subscribe((route) => {
         const newGroup = route.params['seriesName'];
         if (newGroup && newGroup !== this.contentGroup.name) {
-          this.contentgroupService
-            .getByRoomIdAndName(this.contentGroup.roomId, newGroup)
-            .subscribe((group) => {
-              this.contentGroup = group;
-              this.isReloading = true;
-              this.getContents();
-              this.loadAttributions();
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['..', newGroup], {
+                relativeTo: this.route,
+              });
             });
         }
       });
