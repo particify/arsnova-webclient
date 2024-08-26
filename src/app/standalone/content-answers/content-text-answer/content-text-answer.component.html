@@ -10,7 +10,7 @@
   <textarea
     #answer
     matInput
-    [value]="givenAnswer"
+    [value]="givenAnswer || ''"
     [disabled]="disabled || givenAnswer"
     (input)="inputEvent.emit(answer.value)"
     name="answer"
