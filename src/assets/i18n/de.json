@@ -407,7 +407,8 @@
     "group-type-flashcards": "Lernkarten",
     "content-count": "{{count}} Inhalte",
     "answer-fast-to-get-more-points": "Antworte schnell, um mehr Punkte zu bekommen",
-    "answer-correct-to-get-points": "Antworte richtig, um Punkte zu bekommen"
+    "answer-correct-to-get-points": "Antworte richtig, um Punkte zu bekommen",
+    "contents-will-be-published-gradually": "Die Inhalte werden nach und nach freigegeben"
   },
   "answer": {
     "word": "Schlagwort",
