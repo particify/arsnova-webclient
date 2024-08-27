@@ -40,12 +40,10 @@
                       <div
                         fxLayout="row"
                         fxLayoutAlign="start center"
-                        fxLayoutGap="10px"
+                        fxLayoutGap="12px"
                         class="primary"
                       >
-                        <mat-icon class="format-button-icon">{{
-                          selectedFormat?.icon
-                        }}</mat-icon>
+                        <mat-icon>{{ selectedFormat?.icon }}</mat-icon>
                         <span>{{
                           'creator.content.format-' + selectedFormat?.name
                             | transloco
@@ -54,11 +52,15 @@
                     </mat-select-trigger>
                     @for (format of formats; track format) {
                       <mat-option [value]="format" class="higher-option">
-                        <div fxLayout="row">
+                        <div
+                          fxLayout="row"
+                          fxLayoutAlign="start center"
+                          fxLayoutGap="12px"
+                        >
                           <mat-icon class="format-icon">{{
                             format.icon
                           }}</mat-icon>
-                          <div fxLayout="column" fxLayoutAlign="center">
+                          <div fxLayout="column" fxLayoutGap="2px">
                             <span class="format-name">
                               {{
                                 'creator.content.format-' + format.name

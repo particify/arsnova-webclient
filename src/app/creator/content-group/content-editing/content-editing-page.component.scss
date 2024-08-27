@@ -4,30 +4,19 @@ form {
   width: 100%;
 }
 
+.higher-option {
+  padding: $spacing $spacing-2;
+}
+
 .format-name {
-  line-height: 100%;
   font-weight: $font-weight-bold;
-  height: 16px;
-  font-size: 14px;
-  text-align: start;
-  margin-top: 8px;
+  font-size: $s-font-size;
   color: var(--on-dialog);
 }
 
 .format-description {
-  white-space: normal;
-  line-height: 16px;
-  font-size: 14px;
-  margin: 4px 0 8px;
+  font-size: $xs-font-size;
   color: var(--on-dialog);
-}
-
-.format-icon {
-  align-self: center;
-}
-
-.format-button-icon {
-  margin-bottom: 2px;
 }
 
 .mat-mdc-card {
