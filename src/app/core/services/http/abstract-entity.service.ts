@@ -232,24 +232,28 @@ export abstract class AbstractEntityService<
     );
   }
 
+  getChangesStreamForEntity(entity: T): Observable<EntityChanged<T>> {
+    const entityType = this.uriPrefix.replace(/\//, '');
+    const roomId =
+      entityType === 'room' ? entity.id : entity['roomId' as keyof T];
+    return this.wsConnector
+      .getWatcher(`/topic/${roomId}.${entityType}-${entity.id}.changes.stream`)
+      .pipe(map((msg) => this.buildEntityChangeEvent(entity, msg)));
+  }
+
   protected handleEntityCaching(idOrAlias: string, entity: T) {
     if (idOrAlias !== entity.id) {
       this.aliasIdMapping.set(idOrAlias, entity.id);
     }
-    const entityType = this.uriPrefix.replace(/\//, '');
-    const roomId =
-      entityType === 'room' ? entity.id : entity['roomId' as keyof T];
     if (
       this.useChangeSubscriptions &&
       !this.stompSubscriptions.has(entity.id)
     ) {
-      const entityChanges$ = this.wsConnector.getWatcher(
-        `/topic/${roomId}.${entityType}-${entity.id}.changes.stream`
-      );
+      const entityChanges$ = this.getChangesStreamForEntity(entity);
       this.stompSubscriptions.set(
         entity.id,
-        entityChanges$.subscribe((msg) =>
-          this.handleEntityChangeEvent(entity.id, msg)
+        entityChanges$.subscribe((e) =>
+          this.eventService.broadcast(e.type, e.payload)
         )
       );
     }
@@ -268,19 +272,15 @@ export abstract class AbstractEntityService<
     }
   }
 
-  private handleEntityChangeEvent(id: string, msg: IMessage) {
+  private buildEntityChangeEvent(entity: T, msg: IMessage) {
     const changes: object = JSON.parse(msg.body);
-    const entity = this.cache.get(this.generateCacheKey(id)) as T;
-    if (!entity) {
-      return;
-    }
     this.mergeChangesRecursively(entity, changes);
     const event = new EntityChanged<T>(
       this.entityType,
       entity,
       Object.keys(changes)
     );
-    this.eventService.broadcast(event.type, event.payload);
+    return event;
   }
 
   private handleEntityChangeNotificationEvent(event: EntityChangeNotification) {

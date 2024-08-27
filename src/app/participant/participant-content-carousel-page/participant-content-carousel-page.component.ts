@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
@@ -25,7 +31,6 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
@@ -33,7 +38,6 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
-import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { LICENSES } from '@app/core/models/licenses';
 import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
@@ -47,6 +51,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
 import { AnswerResultType } from '@app/core/models/answer-result';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -90,7 +95,6 @@ export class ParticipantContentCarouselPageComponent
   displaySnackBar = false;
   focusModeEnabled = false;
   lockedContentId?: string;
-  changesSubscription?: Subscription;
   routeChangedSubscription?: Subscription;
 
   isFinished = false;
@@ -114,14 +118,14 @@ export class ParticipantContentCarouselPageComponent
     private location: Location,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
-    private eventService: EventService,
     private router: Router,
     private routingService: RoutingService,
     private contentCarouselService: ContentCarouselService,
     private contentPublishService: ContentPublishService,
     private focusModeService: FocusModeService,
     private roomUserAliasService: RoomUserAliasService,
-    private contentGroupService: ContentGroupService
+    private contentGroupService: ContentGroupService,
+    private destroyRef: DestroyRef
   ) {
     this.shortId = route.snapshot.data.room.shortId;
     this.showStepper = route.snapshot.data.showStepper ?? true;
@@ -132,9 +136,6 @@ export class ParticipantContentCarouselPageComponent
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-    if (this.changesSubscription) {
-      this.changesSubscription.unsubscribe();
-    }
     if (this.routeChangedSubscription) {
       this.routeChangedSubscription.unsubscribe();
     }
@@ -174,11 +175,10 @@ export class ParticipantContentCarouselPageComponent
     }
     this.getContents(lastContentIndex);
     this.loadAttributions();
-    this.changesSubscription = this.eventService
-      .on('EntityChanged')
-      .subscribe((changes) => {
-        this.handleStateEvent(changes as EntityChangedPayload<ContentGroup>);
-      });
+    this.contentGroupService
+      .getChangesStreamForEntity(this.contentGroup)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((e) => this.handleStateEvent(e));
     this.focusModeService
       .getContentState()
       .pipe(takeUntil(this.destroyed$))
@@ -474,51 +474,45 @@ export class ParticipantContentCarouselPageComponent
     });
   }
 
-  handleStateEvent(changes: EntityChangedPayload<ContentGroup>) {
-    if (changes.entity.id === this.contentGroup.id) {
-      this.contentGroup = changes.entity;
-      const changedEvent = new EntityChanged(
-        'ContentGroup',
-        changes.entity,
-        changes.changedProperties
+  handleStateEvent(changedEvent: EntityChanged<ContentGroup>) {
+    this.contentGroup = changedEvent.payload.entity;
+    if (
+      !changedEvent.hasPropertyChanged('publishingMode') &&
+      !changedEvent.hasPropertyChanged('publishingIndex')
+    ) {
+      return;
+    }
+    if (this.focusModeEnabled) {
+      this.reloadContents();
+    } else if (
+      this.contentGroup.publishingMode === PublishingMode.LIVE &&
+      changedEvent.hasPropertyChanged('publishingIndex')
+    ) {
+      this.getContents(
+        this.currentStep,
+        this.contentGroup.contentIds[
+          changedEvent.payload.entity.publishingIndex
+        ]
       );
-      if (
-        changedEvent.hasPropertyChanged('publishingMode') ||
-        changedEvent.hasPropertyChanged('publishingIndex')
-      ) {
-        if (this.focusModeEnabled) {
-          this.reloadContents();
-        } else if (
-          this.contentGroup.publishingMode === PublishingMode.LIVE &&
-          changedEvent.hasPropertyChanged('publishingIndex')
-        ) {
-          this.getContents(
-            this.currentStep,
-            this.contentGroup.contentIds[changes.entity.publishingIndex]
-          );
-          this.showOverview = false;
-        } else {
-          if (!this.displaySnackBar) {
-            this.displaySnackBar = true;
-            const contentsChangedMessage = this.translateService.translate(
-              'participant.answer.state-changed'
-            );
-            const loadString = this.translateService.translate(
-              'participant.answer.load'
-            );
-            this.notificationService.show(contentsChangedMessage, loadString, {
-              duration: 5000,
-            });
-            this.notificationService.snackRef.onAction().subscribe(() => {
-              this.displaySnackBar = false;
-              this.reloadContents();
-            });
-            this.notificationService.snackRef.afterDismissed().subscribe(() => {
-              this.displaySnackBar = false;
-            });
-          }
-        }
-      }
+      this.showOverview = false;
+    } else if (!this.displaySnackBar) {
+      this.displaySnackBar = true;
+      const contentsChangedMessage = this.translateService.translate(
+        'participant.answer.state-changed'
+      );
+      const loadString = this.translateService.translate(
+        'participant.answer.load'
+      );
+      this.notificationService.show(contentsChangedMessage, loadString, {
+        duration: 5000,
+      });
+      this.notificationService.snackRef.onAction().subscribe(() => {
+        this.displaySnackBar = false;
+        this.reloadContents();
+      });
+      this.notificationService.snackRef.afterDismissed().subscribe(() => {
+        this.displaySnackBar = false;
+      });
     }
   }
 
