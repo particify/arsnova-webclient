@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { TranslocoService } from '@jsverse/transloco';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
@@ -238,10 +238,7 @@ export abstract class AbstractEntityService<
       entityType === 'room' ? entity.id : entity['roomId' as keyof T];
     return this.wsConnector
       .getWatcher(`/topic/${roomId}.${entityType}-${entity.id}.changes.stream`)
-      .pipe(
-        map((msg) => this.buildEntityChangeEvent(entity.id, msg)),
-        filter((e) => !!e)
-      ) as Observable<EntityChanged<T>>;
+      .pipe(map((msg) => this.buildEntityChangeEvent(entity, msg)));
   }
 
   protected handleEntityCaching(idOrAlias: string, entity: T) {
@@ -275,12 +272,8 @@ export abstract class AbstractEntityService<
     }
   }
 
-  private buildEntityChangeEvent(id: string, msg: IMessage) {
+  private buildEntityChangeEvent(entity: T, msg: IMessage) {
     const changes: object = JSON.parse(msg.body);
-    const entity = this.cache.get(this.generateCacheKey(id)) as T;
-    if (!entity) {
-      return;
-    }
     this.mergeChangesRecursively(entity, changes);
     const event = new EntityChanged<T>(
       this.entityType,
