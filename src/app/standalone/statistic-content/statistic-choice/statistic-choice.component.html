@@ -21,18 +21,29 @@
   ) {
     <div fxLayout="row" fxLayoutAlign="space-around">
       @for (a of options; track a; let i = $index) {
-        <p
-          class="chart-answer-label"
-          [ngClass]="{
-            'not-correct': showCorrect && !checkIfCorrect(i),
-            'no-margin': content.format !== ContentType.SCALE,
-          }"
-        >
-          <app-rendered-text
-            [rawText]="a.label"
-            [renderedText]="a.renderedLabel"
-          ></app-rendered-text>
-        </p>
+        <div fxLayout="column" fxLayoutAlign="start center">
+          <p
+            class="chart-answer-label"
+            [ngClass]="{
+              'not-correct': showCorrect && !checkIfCorrect(i),
+              'no-margin': content.format !== ContentType.SCALE,
+            }"
+          >
+            <app-rendered-text
+              [rawText]="a.label"
+              [renderedText]="a.renderedLabel"
+            ></app-rendered-text>
+          </p>
+          @if (!isSurvey) {
+            <mat-icon
+              [ngClass]="{
+                'show-correct-icon': showCorrect && checkIfCorrect(i),
+              }"
+              class="correct-icon"
+              >check</mat-icon
+            >
+          }
+        </div>
       }
       @if (content.abstentionsAllowed) {
         <p
