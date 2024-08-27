@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
 import { TranslocoService } from '@jsverse/transloco';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
@@ -241,6 +241,23 @@ export abstract class AbstractEntityService<
       .pipe(map((msg) => this.buildEntityChangeEvent(entity, msg)));
   }
 
+  private getChangesStreamForCache(entity: T): Observable<EntityChanged<T>> {
+    const entityType = this.uriPrefix.replace(/\//, '');
+    const roomId =
+      entityType === 'room' ? entity.id : entity['roomId' as keyof T];
+    return this.wsConnector
+      .getWatcher(`/topic/${roomId}.${entityType}-${entity.id}.changes.stream`)
+      .pipe(
+        map((msg) => {
+          const cachedEntity = this.cache.get(this.generateCacheKey(entity.id));
+          return cachedEntity
+            ? this.buildEntityChangeEvent(cachedEntity, msg)
+            : undefined;
+        }),
+        filter((e) => !!e)
+      ) as Observable<EntityChanged<T>>;
+  }
+
   protected handleEntityCaching(idOrAlias: string, entity: T) {
     if (idOrAlias !== entity.id) {
       this.aliasIdMapping.set(idOrAlias, entity.id);
@@ -249,7 +266,7 @@ export abstract class AbstractEntityService<
       this.useChangeSubscriptions &&
       !this.stompSubscriptions.has(entity.id)
     ) {
-      const entityChanges$ = this.getChangesStreamForEntity(entity);
+      const entityChanges$ = this.getChangesStreamForCache(entity);
       this.stompSubscriptions.set(
         entity.id,
         entityChanges$.subscribe((e) =>
