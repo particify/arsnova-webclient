@@ -39,7 +39,9 @@
     "please-assign-valid-points": "Por favor, asigna entre 0 y {{points}} puntos por respuesta.",
     "please-select-number-from-range": "Seleccione un número de la gama.",
     "not-answered-in-time": "No ha contestado a tiempo.",
-    "answered-in-time": "Has contestado en {{duration}} segundos."
+    "answered-in-time": "Has contestado en {{duration}} segundos.",
+    "go-to-overview": "Ir al resumen",
+    "next-content": "Contenido siguiente"
   },
   "content": {
     "thanks-for-participation": "¡Gracias por tu participación!",
@@ -57,7 +59,16 @@
     "there-is-one-locked-content": "Hay {{count}} más contenido disponible, que de momento no se publica.",
     "new-round-started": "Una nueva ronda ha sido iniciada.",
     "answers-reset": "Se han restablecido las respuestas.",
-    "attribution-info": "Este contenido está basado en una plantilla de {{attribution}} que está licenciada bajo {{license}}."
+    "attribution-info": "Este contenido está basado en una plantilla de {{attribution}} que está licenciada bajo {{license}}.",
+    "leaderboard-duration": "Tiempo",
+    "leaderboard-points": "Puntos",
+    "you-are-at-position-congrats": "¡Estás en {{ position }} lugar!",
+    "answered-correctly": "Respuesta correcta",
+    "partially-answered-correctly": "Respuesta parcialmente correcta",
+    "answered-incorrectly": "Respuesta incorrecta",
+    "contents": "Contenidos",
+    "leaderboard-name": "Nombre",
+    "you-are-at-position": "Estás en {{ position }} lugar."
   },
   "comment-list": {
     "a11y-search-list": "Buscar por publicaciones",

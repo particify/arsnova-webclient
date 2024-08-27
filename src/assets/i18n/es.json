@@ -286,7 +286,9 @@
     "display-overview": "Mostrar atajos de teclado",
     "action": "Acción",
     "keys": "Atajo de teclado",
-    "input-field": "campo de entrada"
+    "input-field": "campo de entrada",
+    "press": "Pulse",
+    "to-do-action": "para {{ action }}"
   },
   "keys": {
     "ctrl": "Ctrl",
@@ -388,7 +390,25 @@
     "round-displayed": "Se muestra la ronda {{rounds}}",
     "rounds-displayed": "Se muestran las rondas {{rounds}}",
     "leaderboard": "Clasificación",
-    "points": "Puntos"
+    "points": "Puntos",
+    "contents-will-be-published-gradually": "Los contenidos se darán a conocer gradualmente",
+    "content": "Contenido",
+    "of": "de",
+    "your-name": "Su nombre",
+    "join-quiz": "Participar en el concurso",
+    "get-ready": "¡Prepárate!",
+    "get-ready-alias": "¡Prepárate, {{alias}}!",
+    "no-leaderboard-entries": "Aún no hay resultados.",
+    "group-type-mixed": "Mixto",
+    "group-type-quiz": "Quiz",
+    "group-type-survey": "Encuesta",
+    "group-type-flashcards": "Tarjetas de memoria",
+    "content-not-published": "Contenido no publicado",
+    "content-count": "{{count}} contenido",
+    "enter-alias-for-participation": "Introduzca un apodo para su participación",
+    "generate-new-alias": "Generar nuevo apodo",
+    "answer-fast-to-get-more-points": "Responde rápido para conseguir más puntos",
+    "answer-correct-to-get-points": "Responda correctamente para obtener puntos"
   },
   "answer": {
     "word": "Palabra clave",
@@ -591,7 +611,8 @@
     "report-room": "Sala de informes"
   },
   "general": {
-    "a11y-remove-filter": "Quitar filtro"
+    "a11y-remove-filter": "Quitar filtro",
+    "not-specified": "No especificado"
   },
   "ordinal": {
     "one": "",
