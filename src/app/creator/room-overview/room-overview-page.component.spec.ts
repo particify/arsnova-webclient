@@ -31,6 +31,8 @@ import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStats } from '@app/core/models/room-stats';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 class MockRoutingService {}
 
@@ -60,6 +62,7 @@ describe('RoomOverviewPageComponent', () => {
     'getByIds',
     'isIndexPublished',
     'sortContentGroupsByName',
+    'getTypeIcons',
   ]);
   mockContentGroupService.getByRoomIdAndName.and.returnValue(
     of(new ContentGroup('roomId', 'name', [], true))
@@ -74,6 +77,9 @@ describe('RoomOverviewPageComponent', () => {
   mockContentGroupService.sortContentGroupsByName.and.returnValue([
     new ContentGroup('roomId', 'name', [], true),
   ]);
+  mockContentGroupService.getTypeIcons.and.returnValue(
+    new Map<GroupType, string>()
+  );
 
   const mockDialogService = jasmine.createSpyObj('DialogService', [
     'openContentGroupCreationDialog',
@@ -90,6 +96,13 @@ describe('RoomOverviewPageComponent', () => {
     undefined,
     undefined,
     snapshot
+  );
+
+  const mockContentService = jasmine.createSpyObj(ContentService, [
+    'getTypeIcons',
+  ]);
+  mockContentService.getTypeIcons.and.returnValue(
+    new Map<ContentType, string>()
   );
 
   beforeEach(waitForAsync(() => {
@@ -143,6 +156,10 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: RoutingService,
           useClass: MockRoutingService,
+        },
+        {
+          provide: ContentService,
+          useValue: mockContentService,
         },
       ],
       imports: [getTranslocoModule()],

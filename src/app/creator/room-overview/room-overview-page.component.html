@@ -44,52 +44,19 @@
         ></app-room-action-button>
       </div>
       <app-divider></app-divider>
-      <div
-        fxLayout="column"
-        fxLayoutAlign.xs="start center"
-        [ngClass]="{
-          'group-container': contentGroups.length > 0,
-          'empty-group-container': contentGroups.length === 0,
-        }"
-      >
-        @if (contentGroups.length === 0) {
-          <p class="hint-sm">
-            {{ 'creator.room-page.no-content-groups' | transloco }}
-          </p>
-          <p
-            tabindex="-1"
-            id="no-content-groups"
-            class="visually-hidden"
-            appHotkey="4"
-            [appHotkeyTitle]="'content.groups' | transloco"
-          >
-            {{ 'room-page.a11y-no-content-groups' | transloco }}
-          </p>
-        }
+      <div fxLayout="column" fxLayoutGap="12px">
+        <span class="content-groups-header">{{
+          'content.groups' | transloco
+        }}</span>
+        <span class="content-groups-description">
+          {{ 'creator.room-page.content-groups-description' | transloco }}
+        </span>
         @if (!isModerator) {
-          <div
-            class="button-container"
-            [ngClass]="{
-              empty: contentGroups.length === 0,
-            }"
-          >
-            <button
-              *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
-              id="content-group-create-button"
-              mat-stroked-button
-              class="add-group"
-              (click)="navigateToTemplateSelection()"
-              appHotkey="4"
-              [appHotkeyTitle]="'creator.room-page.use-template' | transloco"
-            >
-              <mat-icon>text_snippet</mat-icon>
-              {{ 'creator.room-page.use-template' | transloco }}
-            </button>
+          <div fxLayout="row wrap" fxLayoutGap="8px">
             <button
               id="content-group-create-button"
               mat-raised-button
               color="primary"
-              class="add-group"
               [attr.aria-label]="
                 'creator.room-page.a11y-create-content-group' | transloco
               "
@@ -99,36 +66,100 @@
                 'creator.room-page.create-content-group' | transloco
               "
             >
-              <mat-icon>playlist_add</mat-icon>
+              <mat-icon>add</mat-icon>
               {{ 'creator.room-page.create-content-group' | transloco }}
+            </button>
+            <button
+              *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
+              id="content-group-create-button"
+              mat-button
+              (click)="navigateToTemplateSelection()"
+              appHotkey="4"
+              [appHotkeyTitle]="'creator.room-page.use-template' | transloco"
+            >
+              <mat-icon>text_snippet</mat-icon>
+              {{ 'creator.room-page.use-template' | transloco }}
             </button>
           </div>
         }
-        @if (!!contentGroups) {
-          <p
-            tabindex="-1"
-            id="content-groups"
-            class="visually-hidden"
-            appHotkey="5"
-            [appHotkeyTitle]="'content.groups' | transloco"
-          >
-            {{
-              'room-page.a11y-content-groups'
-                | transloco: { count: contentGroups.length }
-            }}
-          </p>
+        @if (contentGroups.length === 0) {
+          <div class="group-types-container">
+            @for (type of groupTypes.keys(); track type; let i = $index) {
+              <mat-card
+                class="type-card"
+                appearance="outlined"
+                tabindex="0"
+                type="button"
+                (click)="openCreateContentGroupDialog(type)"
+                matRipple
+              >
+                <div fxLayout="column" fxLayoutGap="8px">
+                  <div
+                    fxLayout="row"
+                    fxLayoutAlign="start center"
+                    fxLayoutGap="8px"
+                  >
+                    <mat-icon
+                      [style]="'color: ' + 'var(--' + type.toLowerCase() + ')'"
+                      >{{ groupTypes.get(type) }}</mat-icon
+                    >
+                    <span class="group-type">{{
+                      'creator.content.group-type-' + type.toLowerCase()
+                        | transloco
+                    }}</span>
+                  </div>
+                  <span class="group-type-description">{{
+                    'creator.content.group-type-description-' +
+                      type.toLowerCase() | transloco
+                  }}</span>
+                  <mat-icon class="add-group-type-icon primary"> add </mat-icon>
+                  <div fxLayout="row" fxLayoutGap="4px">
+                    @for (
+                      format of groupContentFormatIcons.get(type)?.keys();
+                      track format
+                    ) {
+                      <mat-icon
+                        class="content-type-icon"
+                        [matTooltip]="
+                          'creator.content.format-' + format.toLowerCase()
+                            | transloco
+                        "
+                        >{{
+                          groupContentFormatIcons.get(type)?.get(format)
+                        }}</mat-icon
+                      >
+                    }
+                  </div>
+                </div>
+              </mat-card>
+            }
+          </div>
+        }
+        @if (room && contentGroups.length > 0) {
+          <div fxLayout="column" fxLayoutGap="8px">
+            @for (contentGroup of contentGroups; track contentGroup) {
+              <app-content-groups
+                [contentGroup]="contentGroup"
+                [role]="role"
+                [shortId]="room.shortId"
+              ></app-content-groups>
+            }
+          </div>
         }
       </div>
-      @if (room && contentGroups) {
-        <div>
-          @for (contentGroup of contentGroups; track contentGroup) {
-            <app-content-groups
-              [contentGroup]="contentGroup"
-              [role]="role"
-              [shortId]="room.shortId"
-            ></app-content-groups>
-          }
-        </div>
+      @if (!!contentGroups) {
+        <p
+          tabindex="-1"
+          id="content-groups"
+          class="visually-hidden"
+          appHotkey="5"
+          [appHotkeyTitle]="'content.groups' | transloco"
+        >
+          {{
+            'room-page.a11y-content-groups'
+              | transloco: { count: contentGroups.length }
+          }}
+        </p>
       }
       @if (!isModerator) {
         <lib-extension-point

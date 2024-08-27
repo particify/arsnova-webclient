@@ -229,10 +229,10 @@
     "group-type-quiz": "Quiz",
     "group-type-survey": "Survey",
     "group-type-flashcards": "Flashcards",
-    "group-type-description-mixed": "Use all question formats for a customised question series.",
-    "group-type-description-quiz": "Test knowledge with formats such as multiple choice or find the number.",
-    "group-type-description-survey": "Collect input with Likert, word clouds or open questions.",
-    "group-type-description-flashcards": "Provide participants with flashcards to practise on.",
+    "group-type-description-mixed": "Use this type to mix quiz questions and surveys.",
+    "group-type-description-quiz": "Let the participants compete against each other using nicknames.",
+    "group-type-description-survey": "Gather valuable feedback and insights from the participants.",
+    "group-type-description-flashcards": "Provide the participants with flashcards or info slides to practise on.",
     "content-is-locked": "Content is locked",
     "to-publish-content": "to publish content",
     "publish-current-content": "Publish current content",
@@ -301,7 +301,8 @@
     "room-loading-error": "The room could not be loaded",
     "room-settings": "Room administration",
     "no-content-groups": "There are no question series.",
-    "group-locked": "The question series is not released"
+    "group-locked": "The question series is not released",
+    "content-groups-description": "Create quizzes, surveys, brainstormings and much more. Choose the right type or create a mix of all formats. If you don't want to start from scratch, look at the templates."
   },
   "settings": {
     "a11y-message": "You are now in the room settings.",

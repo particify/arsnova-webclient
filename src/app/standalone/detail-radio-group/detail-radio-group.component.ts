@@ -45,11 +45,12 @@ export class DetailedRadioGroup {
 })
 export class DetailRadioGroupComponent implements OnInit {
   @Input({ required: true }) items!: DetailedRadioGroup[];
+  @Input() selectedItemValue?: string;
   @Output() itemValueChanged = new EventEmitter<string>();
 
-  selectedItemValue?: string;
-
   ngOnInit(): void {
-    this.selectedItemValue = this.items[0].value;
+    if (!this.selectedItemValue) {
+      this.selectedItemValue = this.items[0].value;
+    }
   }
 }
