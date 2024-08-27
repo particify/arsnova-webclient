@@ -148,7 +148,7 @@
   "user-profile": {
     "a11y-message": "Ahora estás en la página de la cuenta.",
     "account-settings": "Configuración de la cuenta",
-    "username": "Nombre de usuario",
+    "username": "ID de usuario",
     "guest-hint": "No has iniciado sesión y estás utilizando una cuenta de invitado.",
     "first-name": "Nombre",
     "last-name": "Apellido",
@@ -347,7 +347,7 @@
     "select-time-all": "Sin límite",
     "sort-votedesc": "Mejor clasificación",
     "sort-voteasc": "Peor clasificación",
-    "sort-time": "Última creación",
+    "sort-time": "Última",
     "list": "Lista de publicaciones",
     "there-are-new-posts": "Hay nuevas publicaciones",
     "comments-are-not-enabled": "La sección de preguntas y respuestas no está habilitada.",
