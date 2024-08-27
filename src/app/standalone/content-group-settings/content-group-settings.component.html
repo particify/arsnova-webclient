@@ -52,16 +52,34 @@
   }
   @if (group.groupType === GroupType.QUIZ) {
     <app-settings-slide-toggle
+      [matTooltip]="
+        'creator.content.reset-answers-to-disable-setting' | transloco
+      "
+      [matTooltipDisabled]="
+        !isLive() || !data.alreadyAnswered || !group.leaderboardEnabled
+      "
       [label]="'creator.content.enable-leaderboard'"
-      [disabled]="formDisabled"
+      [disabled]="
+        formDisabled ||
+        (isLive() && data.alreadyAnswered && group.leaderboardEnabled)
+      "
       [isChecked]="group.leaderboardEnabled"
       (toggleEvent)="group.leaderboardEnabled = $event"
     ></app-settings-slide-toggle>
   }
   @if (group.groupType !== GroupType.FLASHCARDS) {
     <app-settings-slide-toggle
+      [matTooltip]="
+        'creator.content.reset-answers-to-disable-setting' | transloco
+      "
+      [matTooltipDisabled]="
+        !isLive() || !data.alreadyAnswered || !group.leaderboardEnabled
+      "
       [label]="'creator.content.live-mode'"
-      [disabled]="formDisabled"
+      [disabled]="
+        formDisabled ||
+        (isLive() && data.alreadyAnswered && group.leaderboardEnabled)
+      "
       [isChecked]="isLive()"
       (toggleEvent)="
         group.publishingMode = $event

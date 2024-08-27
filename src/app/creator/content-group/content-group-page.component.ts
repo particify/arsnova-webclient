@@ -319,6 +319,10 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
         data: {
           contentGroup: { ...this.contentGroup },
           groupNames: this.contentGroupStats.map((s) => s.groupName),
+          alreadyAnswered:
+            Array.from(this.contentStats.values()).filter(
+              (stats) => stats.count > 0
+            ).length > 0,
         },
       }
     );

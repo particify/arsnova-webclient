@@ -21,11 +21,16 @@
                 [published]="contentGroup.published"
               ></app-content-group-info>
               @if (isLiveMode()) {
-                <mat-icon
-                  class="live-icon"
-                  [matTooltip]="'creator.content.live-mode' | transloco"
-                  >slideshow</mat-icon
+                <div
+                  fxLayout="row"
+                  fxLayoutGap="4px"
+                  class="live-mode-hint"
+                  type="button"
+                  (click)="openSettings()"
                 >
+                  <mat-icon class="live-icon">play_circle</mat-icon>
+                  <span>{{ 'creator.content.live-mode' | transloco }}</span>
+                </div>
               }
             </div>
             <mat-menu #groupSettings="matMenu">
@@ -77,7 +82,7 @@
                 >
                   <mat-icon>clear_all</mat-icon>
                   <span>{{
-                    'creator.content.delete-answers' | transloco
+                    'creator.content.reset-group-results' | transloco
                   }}</span>
                 </button>
               }

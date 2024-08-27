@@ -389,12 +389,23 @@
                         </button>
                       }
                       @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
-                        <button mat-menu-item (click)="deleteAnswers(content)">
-                          <mat-icon>clear_all</mat-icon>
-                          <span>{{
-                            'creator.content.delete-answers' | transloco
-                          }}</span>
-                        </button>
+                        <div
+                          [matTooltip]="
+                            'creator.content.stop-content-to-delete-answers'
+                              | transloco
+                          "
+                        >
+                          <button
+                            mat-menu-item
+                            (click)="deleteAnswers(content)"
+                            [disabled]="isStarted(i)"
+                          >
+                            <mat-icon>clear_all</mat-icon>
+                            <span>{{
+                              'creator.content.delete-answers' | transloco
+                            }}</span>
+                          </button>
+                        </div>
                       }
                       @if (hasFormatRounds(content.format) && !isLiveMode()) {
                         <div
