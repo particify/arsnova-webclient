@@ -28,7 +28,7 @@
     "has-answered": "Vous avez répondu au contenu.",
     "no-contents-published": "Pas de contenu disponible.",
     "results": "Résultats",
-    "answering": "Réponse",
+    "my-answer": "Ma réponse",
     "a11y-current-text": "{{index}}. C'est une question ouverte. Pour aller vers le contenu et le champ de réponse, appuyez sur la touche tab.",
     "a11y-current-slide": "{{index}}. Il s'agit d'une diapo. Naviguez avec la touche tab pour accéder au contenu.",
     "group-not-available": "Cette série de questions n'est pas disponible",

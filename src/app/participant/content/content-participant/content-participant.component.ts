@@ -180,9 +180,9 @@ export class ContentParticipantComponent
   tabs: ContentActionTab[] = [
     {
       route: '',
-      label: 'participant.answer.answering',
+      label: 'participant.answer.my-answer',
       hotkey: '1',
-      icon: 'edit',
+      icon: 'person_edit',
     },
     {
       route: 'results',
