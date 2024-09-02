@@ -219,6 +219,12 @@ export class ContentParticipantComponent
       this.selectedRoute = this.route.snapshot.params['action'] || '';
       this.checkForCountdown();
     }
+    if (this.content.format === ContentType.FLASHCARD) {
+      this.tabs[0].label = 'content.flashcard-front';
+      this.tabs[0].icon = 'indeterminate_question_box';
+      this.tabs[1].label = 'content.flashcard-back';
+      this.tabs[1].icon = 'fact_check';
+    }
     this.setExtensionData(this.content.roomId, this.content.id);
     this.initContentData();
     this.isMultiple = (this.content as ContentChoice).multiple;
