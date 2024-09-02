@@ -31,44 +31,6 @@
   ></app-settings-slide-toggle>
   @if (group.groupType !== GroupType.FLASHCARDS) {
     <app-settings-slide-toggle
-      [label]="'creator.content.publish-statistics'"
-      [disabled]="formDisabled"
-      [isChecked]="group.statisticsPublished"
-      (toggleEvent)="group.statisticsPublished = $event"
-    ></app-settings-slide-toggle>
-  }
-  @if ([GroupType.QUIZ, GroupType.MIXED].includes(group.groupType)) {
-    <app-settings-slide-toggle
-      [matTooltip]="
-        'creator.content.correct-options-always-published-with-leaderboard'
-          | transloco
-      "
-      [matTooltipDisabled]="!group.leaderboardEnabled"
-      [label]="'creator.content.publish-correct-answers'"
-      [disabled]="formDisabled || group.leaderboardEnabled"
-      [isChecked]="group.correctOptionsPublished"
-      (toggleEvent)="group.correctOptionsPublished = $event"
-    ></app-settings-slide-toggle>
-  }
-  @if (group.groupType === GroupType.QUIZ) {
-    <app-settings-slide-toggle
-      [matTooltip]="
-        'creator.content.reset-answers-to-disable-setting' | transloco
-      "
-      [matTooltipDisabled]="
-        !isLive() || !data.alreadyAnswered || !group.leaderboardEnabled
-      "
-      [label]="'creator.content.enable-leaderboard'"
-      [disabled]="
-        formDisabled ||
-        (isLive() && data.alreadyAnswered && group.leaderboardEnabled)
-      "
-      [isChecked]="group.leaderboardEnabled"
-      (toggleEvent)="group.leaderboardEnabled = $event"
-    ></app-settings-slide-toggle>
-  }
-  @if (group.groupType !== GroupType.FLASHCARDS) {
-    <app-settings-slide-toggle
       [matTooltip]="
         'creator.content.reset-answers-to-disable-setting' | transloco
       "
@@ -144,6 +106,44 @@
       }
     </div>
   </div>
+  @if (group.groupType === GroupType.QUIZ) {
+    <app-settings-slide-toggle
+      [matTooltip]="
+        'creator.content.reset-answers-to-disable-setting' | transloco
+      "
+      [matTooltipDisabled]="
+        !isLive() || !data.alreadyAnswered || !group.leaderboardEnabled
+      "
+      [label]="'creator.content.enable-leaderboard'"
+      [disabled]="
+        formDisabled ||
+        (isLive() && data.alreadyAnswered && group.leaderboardEnabled)
+      "
+      [isChecked]="group.leaderboardEnabled"
+      (toggleEvent)="group.leaderboardEnabled = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if (group.groupType !== GroupType.FLASHCARDS) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.publish-statistics'"
+      [disabled]="formDisabled"
+      [isChecked]="group.statisticsPublished"
+      (toggleEvent)="group.statisticsPublished = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if ([GroupType.QUIZ, GroupType.MIXED].includes(group.groupType)) {
+    <app-settings-slide-toggle
+      [matTooltip]="
+        'creator.content.correct-options-always-published-with-leaderboard'
+          | transloco
+      "
+      [matTooltipDisabled]="!group.leaderboardEnabled"
+      [label]="'creator.content.publish-correct-answers'"
+      [disabled]="formDisabled || group.leaderboardEnabled"
+      [isChecked]="group.correctOptionsPublished"
+      (toggleEvent)="group.correctOptionsPublished = $event"
+    ></app-settings-slide-toggle>
+  }
 </mat-dialog-content>
 <mat-dialog-actions fxLayoutAlign="end">
   <button mat-button matDialogClose>
