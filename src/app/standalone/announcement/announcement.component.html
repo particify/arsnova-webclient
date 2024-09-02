@@ -43,12 +43,11 @@
       <span>&nbsp;({{ 'announcement.edited' | transloco }})</span>
     }
   </p>
-  <div>
-    <app-rendered-text
-      [rawText]="announcement.renderedBody"
-      [markdownFeatureset]="markdownFeatureset"
-    ></app-rendered-text>
-  </div>
+  <app-rendered-text
+    [rawText]="announcement.body"
+    [renderedText]="announcement.renderedBody"
+    [markdownFeatureset]="markdownFeatureset"
+  ></app-rendered-text>
   <div fxLayoutAlign="start">
     @if (role !== 'OWNER') {
       <div fxLayoutAlign="center center" class="label-container room-container">
