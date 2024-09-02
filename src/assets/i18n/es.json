@@ -408,7 +408,9 @@
     "enter-alias-for-participation": "Introduzca un apodo para su participación",
     "generate-new-alias": "Generar nuevo apodo",
     "answer-fast-to-get-more-points": "Responde rápido para conseguir más puntos",
-    "answer-correct-to-get-points": "Responda correctamente para obtener puntos"
+    "answer-correct-to-get-points": "Responda correctamente para obtener puntos",
+    "flashcard-front": "Anverso",
+    "flashcard-back": "Reverso"
   },
   "answer": {
     "word": "Palabra clave",

@@ -186,8 +186,6 @@
     "abstentions-allowed": "Allow abstentions",
     "offer-neutral-option": "Offer neutral option",
     "answer-template": "Answer template",
-    "flashcard-front": "Front",
-    "flashcard-back": "Back",
     "group-settings": "Settings",
     "import-successful": "Your contents has been imported.",
     "import-failed": "Import failed due to invalid file format.",

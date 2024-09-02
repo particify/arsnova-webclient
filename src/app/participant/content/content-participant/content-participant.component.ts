@@ -180,9 +180,9 @@ export class ContentParticipantComponent
   tabs: ContentActionTab[] = [
     {
       route: '',
-      label: 'participant.answer.answering',
+      label: 'participant.answer.my-answer',
       hotkey: '1',
-      icon: 'edit',
+      icon: 'person_edit',
     },
     {
       route: 'results',
@@ -218,6 +218,12 @@ export class ContentParticipantComponent
     if (this.active) {
       this.selectedRoute = this.route.snapshot.params['action'] || '';
       this.checkForCountdown();
+    }
+    if (this.content.format === ContentType.FLASHCARD) {
+      this.tabs[0].label = 'content.flashcard-front';
+      this.tabs[0].icon = 'indeterminate_question_box';
+      this.tabs[1].label = 'content.flashcard-back';
+      this.tabs[1].icon = 'fact_check';
     }
     this.setExtensionData(this.content.roomId, this.content.id);
     this.initContentData();
