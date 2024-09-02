@@ -38,7 +38,10 @@
                         [content]="contents[i]"
                         [contentGroup]="contentGroup"
                         [userId]="userId"
-                        [lastContent]="i === contentGroup.contentIds.length - 1"
+                        [lastContent]="
+                          i === contentGroup.contentIds.length - 1 ||
+                          !contents[i + 1]
+                        "
                         [active]="currentStep === i"
                         [index]="i"
                         [statsPublished]="contentGroup.statisticsPublished"
