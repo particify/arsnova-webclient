@@ -249,7 +249,14 @@ export class ParticipantContentCarouselPageComponent
         )
         .subscribe((contents: Content[]) => {
           this.contents = this.contentService.getSupportedContents(
-            contents.filter((c) => !!c)
+            contents.filter(
+              (c, i) =>
+                !!c &&
+                this.contentPublishService.isIndexPublished(
+                  this.contentGroup,
+                  i
+                )
+            )
           );
           if (nextContentId) {
             lastContentIndex = this.getIndexOfContentById(nextContentId);
