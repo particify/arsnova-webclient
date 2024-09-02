@@ -93,8 +93,16 @@ export class StatisticSortComponent
 
   init(stats: AnswerStatistics) {
     this.chartId = 'chart-' + this.content.id;
-    this.shuffleAnswerOptions();
+    this.determineAnswerOptions();
     this.updateData(stats);
+  }
+
+  private determineAnswerOptions(): void {
+    this.answerOptions = this.showCorrect
+      ? this.content.options
+      : this.contentAnswerService.shuffleAnswerOptions([
+          ...this.content.options,
+        ]);
   }
 
   afterInit() {
@@ -172,12 +180,6 @@ export class StatisticSortComponent
       .indexOf(this.content.options[index].label);
   }
 
-  shuffleAnswerOptions() {
-    this.answerOptions = this.contentAnswerService.shuffleAnswerOptions(
-      JSON.parse(JSON.stringify(this.content.options))
-    );
-  }
-
   /**
    * Returns most answered combinations and always includes correct combination if there are correct answers.
    */
@@ -241,11 +243,7 @@ export class StatisticSortComponent
 
   toggleCorrect() {
     this.showCorrect = !this.showCorrect;
-    if (this.showCorrect) {
-      this.answerOptions = this.content.options;
-    } else {
-      this.shuffleAnswerOptions();
-    }
+    this.determineAnswerOptions();
     this.initLabels();
     const dataset = this.chart?.config.data
       .datasets[0] as BarControllerDatasetOptions;
