@@ -565,7 +565,6 @@
     "no-templates-found": "No hay plantillas.",
     "contents": "Contenidos",
     "licensed-under": "Con licencia",
-    "anonymous": "Anónimo",
     "use": "Utilice",
     "template-added": "Se ha añadido la plantilla.",
     "back": "Volver",
@@ -614,7 +613,8 @@
   },
   "general": {
     "a11y-remove-filter": "Quitar filtro",
-    "not-specified": "No especificado"
+    "not-specified": "No especificado",
+    "anonymous": "Anónimo"
   },
   "ordinal": {
     "one": "",

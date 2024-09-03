@@ -574,7 +574,6 @@
     "contents": "Inhalte",
     "licensed-under": "Lizenziert unter",
     "by": "von",
-    "anonymous": "Anonym",
     "use": "Verwenden",
     "template-added": "Die Vorlage wurde hinzugefügt.",
     "preview": "Vorschau",
@@ -614,7 +613,8 @@
   },
   "general": {
     "a11y-remove-filter": "Filter entfernen",
-    "not-specified": "Nicht festegelegt"
+    "not-specified": "Nicht festegelegt",
+    "anonymous": "Anonym"
   },
   "ordinal": {
     "one": "",

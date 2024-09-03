@@ -43,6 +43,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 const RELOAD_INTERVAL = 2250;
@@ -77,6 +78,7 @@ interface ContentResultView {
     CoreModule,
     TranslocoPipe,
     OrdinalPipe,
+    ContentWaitingComponent,
   ],
 })
 export class SeriesOverviewComponent implements OnInit, OnDestroy {
@@ -143,6 +145,19 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadLeaderboard(): void {
+    this.contentGroupService
+      .getLeaderboard(this.group.roomId, this.group.id)
+      .subscribe((leaderboard) => {
+        this.leaderboard = leaderboard;
+        this.userLeaderboardItem = this.leaderboard.find(
+          (l) => l.userAlias?.id === this.alias?.id
+        );
+        this.updatePointsChart();
+        this.isLoading = false;
+      });
+  }
+
   private init() {
     this.contentGroupService
       .getAnswerStats(this.group.roomId, this.group.id, this.auth.userId)
@@ -153,16 +168,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
           this.setViewData();
           this.checkIfLastContentIsLoaded();
           if (this.group.leaderboardEnabled) {
-            this.contentGroupService
-              .getLeaderboard(this.group.roomId, this.group.id)
-              .subscribe((leaderboard) => {
-                this.leaderboard = leaderboard;
-                this.userLeaderboardItem = this.leaderboard.find(
-                  (l) => l.userAlias.id === this.alias?.id
-                );
-                this.updatePointsChart();
-                this.isLoading = false;
-              });
+            this.loadLeaderboard();
           } else {
             this.isLoading = false;
           }
@@ -260,7 +266,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
             .subscribe((leaderboard) => {
               this.leaderboard = leaderboard;
               this.userLeaderboardItem = this.leaderboard.find(
-                (l) => l.userAlias.id === this.alias?.id
+                (l) => l.userAlias?.id === this.alias?.id
               );
               this.updatePointsChart();
             });
@@ -455,8 +461,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   getPosition(): number {
     if (this.userLeaderboardItem) {
       const position = this.leaderboard
-        ?.map((l) => l.userAlias.id)
-        .indexOf(this.userLeaderboardItem.userAlias.id);
+        ?.map((l) => l.userAlias?.id)
+        .indexOf(this.userLeaderboardItem.userAlias?.id);
       if (position !== undefined) {
         return position + 1;
       }

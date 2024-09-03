@@ -5,10 +5,12 @@
   class="waiting-container"
   [ngStyle]="{ opacity: isLocked ? 0.7 : 1 }"
 >
-  <app-content-step-info
-    [current]="current"
-    [totalCount]="totalCount"
-  ></app-content-step-info>
+  @if (current !== undefined && totalCount !== undefined) {
+    <app-content-step-info
+      [current]="current"
+      [totalCount]="totalCount"
+    ></app-content-step-info>
+  }
   @if (alias && !alias.id && aliasRequired) {
     <form
       fxLayout="column"
@@ -20,14 +22,16 @@
         'content.enter-alias-for-participation' | transloco
       }}</span>
       <mat-form-field class="no-field-hint">
-        <input
-          name="alias-input"
-          [disabled]="formDisabled"
-          matInput
-          [(ngModel)]="enteredAlias"
-          [placeholder]="alias.alias"
-          [maxLength]="30"
-        />
+        @if (alias.alias) {
+          <input
+            name="alias-input"
+            [disabled]="formDisabled"
+            matInput
+            [(ngModel)]="enteredAlias"
+            [placeholder]="alias.alias"
+            [maxLength]="30"
+          />
+        }
         <button mat-icon-button matSuffix (click)="generateAlias()">
           @if (!alias.id) {
             <mat-icon

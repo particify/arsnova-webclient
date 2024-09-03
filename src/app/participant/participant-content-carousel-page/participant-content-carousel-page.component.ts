@@ -549,7 +549,7 @@ export class ParticipantContentCarouselPageComponent
       {
         attribution:
           attribution.attribution ||
-          this.translateService.translate('templates.anonymous'),
+          this.translateService.translate('general.anonymous'),
         license: LICENSES.get(attribution.license)?.name,
       }
     );
