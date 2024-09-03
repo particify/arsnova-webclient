@@ -8,8 +8,10 @@ describe('LeaderboardComponent', () => {
   let component: LeaderboardComponent;
   let fixture: ComponentFixture<LeaderboardComponent>;
 
-  const themeService = jasmine.createSpyObj(ThemeService, ['getTextColors']);
-  themeService.getTextColors.and.returnValue([]);
+  const themeService = jasmine.createSpyObj(ThemeService, [
+    'getTextColorFromSeed',
+  ]);
+  themeService.getTextColorFromSeed.and.returnValue('red');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

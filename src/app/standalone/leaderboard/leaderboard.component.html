@@ -8,7 +8,7 @@
         [ngClass]="{
           'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
-        [ngStyle]="{ color: colors[i % colors.length] }"
+        [ngStyle]="{ color: getColor(element.userAlias?.seed) }"
       >
         {{ element.position | ordinal }}
       </td>
@@ -21,7 +21,7 @@
         [ngClass]="{
           'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
-        [ngStyle]="{ color: colors[i % colors.length] }"
+        [ngStyle]="{ color: getColor(element.userAlias?.seed) }"
       >
         {{ element.userAlias?.alias ?? 'general.anonymous' | transloco }}
       </td>
@@ -34,7 +34,7 @@
         [ngClass]="{
           'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
-        [ngStyle]="{ color: colors[i % colors.length] }"
+        [ngStyle]="{ color: getColor(element.userAlias?.seed) }"
       >
         <span
           >{{ element.score }}

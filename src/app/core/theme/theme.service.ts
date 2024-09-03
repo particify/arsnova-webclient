@@ -47,16 +47,7 @@ export class ThemeService {
     'disagree',
     'strongly-disagree',
   ];
-  private textColors = [
-    'blue',
-    'pink',
-    'teal',
-    'orange',
-    'purple',
-    'green',
-    'red',
-    'brown',
-  ];
+  private textColors = ['blue', 'pink', 'teal', 'orange', 'purple', 'green'];
   private altTextColors = [
     'blue',
     'pink',
@@ -147,6 +138,14 @@ export class ThemeService {
 
   getTextColors(): string[] {
     return this.getColorArray(this.textColors, 'text');
+  }
+
+  getTextColorFromSeed(seed?: number): string {
+    if (seed) {
+      return this.getTextColors()[Math.abs(seed) % this.getTextColors().length];
+    } else {
+      return this.getColor('text-grey');
+    }
   }
 
   getAltTextColors(): string[] {

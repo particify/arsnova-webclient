@@ -25,11 +25,8 @@ export class LeaderboardComponent implements OnChanges {
   @Input() aliasId?: string;
 
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
-  colors: string[];
 
-  constructor(private themeService: ThemeService) {
-    this.colors = this.themeService.getTextColors();
-  }
+  constructor(private themeService: ThemeService) {}
 
   ngOnChanges(): void {
     const tableItems: LeaderboardTableItem[] = [];
@@ -56,5 +53,9 @@ export class LeaderboardComponent implements OnChanges {
         .includes(this.aliasId);
     }
     return false;
+  }
+
+  getColor(seed?: number): string {
+    return this.themeService.getTextColorFromSeed(seed);
   }
 }

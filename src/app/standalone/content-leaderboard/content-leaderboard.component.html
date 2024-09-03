@@ -11,7 +11,7 @@
         mat-cell
         *matCellDef="let element; index as i"
         class="position"
-        [ngStyle]="{ color: colors[i % colors.length] }"
+        [ngStyle]="{ color: getColor(element.alias?.seed) }"
       >
         {{ element.position | ordinal }}
       </td>
@@ -29,7 +29,7 @@
           'bold-text bg-dark': element.alias?.id === aliasId,
         }"
         *matCellDef="let element; index as i"
-        [ngStyle]="{ color: colors[i % colors.length] }"
+        [ngStyle]="{ color: getColor(element.alias?.seed) }"
       >
         {{ element.alias?.alias ?? 'general.anonymous' | transloco }}
       </td>
@@ -46,7 +46,7 @@
           'bold-text bg-dark': element.alias?.id === aliasId,
         }"
         *matCellDef="let element; index as i"
-        [ngStyle]="{ color: colors[i % colors.length] }"
+        [ngStyle]="{ color: getColor(element.alias?.seed) }"
       >
         <div fxLayout.xs="column">
           <span>
@@ -82,7 +82,7 @@
           'bold-text bg-dark': element.alias?.id === aliasId,
         }"
         *matCellDef="let element; index as i"
-        [ngStyle]="{ color: colors[i % colors.length] }"
+        [ngStyle]="{ color: getColor(element.alias?.seed) }"
       >
         <span class="less-visible">{{
           element.currentDuration | duration: contentDuration
