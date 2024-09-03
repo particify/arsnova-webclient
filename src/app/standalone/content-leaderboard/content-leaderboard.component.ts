@@ -40,11 +40,8 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
 
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
   displayedColumns = ['position', 'name', 'score'];
-  colors: string[];
 
-  constructor(private themeService: ThemeService) {
-    this.colors = this.themeService.getTextColors();
-  }
+  constructor(private themeService: ThemeService) {}
 
   ngOnChanges(): void {
     if (
@@ -83,5 +80,9 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
       .slice(0, 10)
       .map((l) => l.userAlias?.id)
       .includes(this.aliasId);
+  }
+
+  getColor(seed?: number): string {
+    return this.themeService.getTextColorFromSeed(seed);
   }
 }

@@ -9,8 +9,10 @@ describe('ContentLeaderboardComponent', () => {
   let component: ContentLeaderboardComponent;
   let fixture: ComponentFixture<ContentLeaderboardComponent>;
 
-  const themeService = jasmine.createSpyObj(ThemeService, ['getTextColors']);
-  themeService.getTextColors.and.returnValue([]);
+  const themeService = jasmine.createSpyObj(ThemeService, [
+    'getTextColorFromSeed',
+  ]);
+  themeService.getTextColorFromSeed.and.returnValue('red');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
