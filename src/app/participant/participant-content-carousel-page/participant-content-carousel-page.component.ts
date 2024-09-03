@@ -198,6 +198,10 @@ export class ParticipantContentCarouselPageComponent
               });
             });
         }
+        if (this.showOverview && route.params['contentIndex']) {
+          this.showOverview = false;
+          this.initStepper(route.params['contentIndex'] - 1);
+        }
       });
   }
 
@@ -403,13 +407,7 @@ export class ParticipantContentCarouselPageComponent
 
   goToOverview() {
     this.showOverview = true;
-    // Using `onSameUrlNavigation` reload strategy to reload components on routing if only params have been removed
-    this.router.navigate(
-      ['p', this.shortId, 'series', this.contentGroup.name],
-      {
-        onSameUrlNavigation: 'reload',
-      }
-    );
+    this.replaceUrl(['p', this.shortId, 'series', this.contentGroup.name]);
   }
 
   replaceUrl(url: any[]) {
