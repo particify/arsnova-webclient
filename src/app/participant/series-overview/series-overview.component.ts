@@ -158,7 +158,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
               .subscribe((leaderboard) => {
                 this.leaderboard = leaderboard;
                 this.userLeaderboardItem = this.leaderboard.find(
-                  (l) => l.userAlias.id === this.alias?.id
+                  (l) => l.userAlias?.id === this.alias?.id
                 );
                 this.updatePointsChart();
                 this.isLoading = false;
@@ -260,7 +260,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
             .subscribe((leaderboard) => {
               this.leaderboard = leaderboard;
               this.userLeaderboardItem = this.leaderboard.find(
-                (l) => l.userAlias.id === this.alias?.id
+                (l) => l.userAlias?.id === this.alias?.id
               );
               this.updatePointsChart();
             });
@@ -455,8 +455,8 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   getPosition(): number {
     if (this.userLeaderboardItem) {
       const position = this.leaderboard
-        ?.map((l) => l.userAlias.id)
-        .indexOf(this.userLeaderboardItem.userAlias.id);
+        ?.map((l) => l.userAlias?.id)
+        .indexOf(this.userLeaderboardItem.userAlias?.id);
       if (position !== undefined) {
         return position + 1;
       }

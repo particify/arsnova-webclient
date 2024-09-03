@@ -6,7 +6,7 @@
         *matCellDef="let element; index as i"
         class="position"
         [ngClass]="{
-          'bold-text bg-dark': element.userAlias.id === aliasId,
+          'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
         [ngStyle]="{ color: colors[i % colors.length] }"
       >
@@ -19,11 +19,11 @@
         *matCellDef="let element; index as i"
         class="alias"
         [ngClass]="{
-          'bold-text bg-dark': element.userAlias.id === aliasId,
+          'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
         [ngStyle]="{ color: colors[i % colors.length] }"
       >
-        {{ element.userAlias.alias }}
+        {{ element.userAlias?.alias ?? 'general.anonymous' | transloco }}
       </td>
     </ng-container>
     <ng-container matColumnDef="score">
@@ -32,7 +32,7 @@
         *matCellDef="let element; index as i"
         class="score"
         [ngClass]="{
-          'bold-text bg-dark': element.userAlias.id === aliasId,
+          'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
         [ngStyle]="{ color: colors[i % colors.length] }"
       >
