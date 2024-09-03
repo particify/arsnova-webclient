@@ -40,7 +40,8 @@
                         [userId]="userId"
                         [lastContent]="
                           i === contentGroup.contentIds.length - 1 ||
-                          !contents[i + 1]
+                          (!contents[i + 1] &&
+                            contentGroup.publishingMode !== PublishingMode.LIVE)
                         "
                         [active]="currentStep === i"
                         [index]="i"

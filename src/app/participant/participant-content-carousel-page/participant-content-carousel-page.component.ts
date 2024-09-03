@@ -80,6 +80,7 @@ export class ParticipantContentCarouselPageComponent
   private destroyed$ = new Subject<void>();
 
   ContentType: typeof ContentType = ContentType;
+  PublishingMode = PublishingMode;
 
   contents: Content[] = [];
   contentGroup: ContentGroup;
