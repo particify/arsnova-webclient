@@ -10,7 +10,7 @@
   }
   <span>
     {{ 'templates.by' | transloco }}
-    {{ ownerName || ('templates.anonymous' | transloco) }}
+    {{ ownerName || ('general.anonymous' | transloco) }}
   </span>
   @if (!!aiGenerated) {
     <span>&bull; {{ 'templates.ai-generated-hint' | transloco }}</span>

@@ -574,7 +574,6 @@
     "contents": "Contents",
     "licensed-under": "Licensed under",
     "by": "by",
-    "anonymous": "Anonymous",
     "use": "Use",
     "template-added": "The template has been added.",
     "preview": "Preview",
@@ -614,7 +613,8 @@
   },
   "general": {
     "a11y-remove-filter": "Remove filter",
-    "not-specified": "Not specified"
+    "not-specified": "Not specified",
+    "anonymous": "Anonymous"
   },
   "ordinal": {
     "one": "st",

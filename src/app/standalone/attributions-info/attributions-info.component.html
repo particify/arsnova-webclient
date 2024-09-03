@@ -10,7 +10,7 @@
         {{ getContentIndex(attribution.contentId) + 1 + ':' }}
       </span>
       <span>{{
-        (attribution.attribution || ('templates.anonymous' | transloco)) +
+        (attribution.attribution || ('general.anonymous' | transloco)) +
           ', ' +
           LICENSES.get(attribution.license)?.name
       }}</span>
