@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -16,13 +16,14 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   styleUrl: './content-waiting.component.scss',
 })
 export class ContentWaitingComponent extends FormComponent {
-  @Input({ required: true }) current!: number;
-  @Input({ required: true }) totalCount!: number;
-  @Input({ required: true }) alias?: RoomUserAlias;
+  @Input() current?: number;
+  @Input() totalCount?: number;
   @Input({ required: true }) roomId!: string;
+  @Input() alias?: RoomUserAlias;
   @Input() isLocked = false;
   @Input() timerActive = false;
   @Input() aliasRequired = false;
+  @Output() aliasSet = new EventEmitter<void>();
 
   enteredAlias = '';
 
@@ -48,6 +49,7 @@ export class ContentWaitingComponent extends FormComponent {
             if (this.enteredAlias) {
               this.alias.alias = this.enteredAlias;
             }
+            this.aliasSet.emit();
           }
         });
     });

@@ -202,11 +202,20 @@
         leaderboard &&
         selectedTabIndex === 1
       ) {
-        <app-leaderboard
-          fxFill
-          [leaderboardItems]="leaderboard"
-          [aliasId]="alias?.id"
-        ></app-leaderboard>
+        @if (alias?.id) {
+          <app-leaderboard
+            fxFill
+            [leaderboardItems]="leaderboard"
+            [aliasId]="alias?.id"
+          ></app-leaderboard>
+        } @else {
+          <app-content-waiting
+            [alias]="alias"
+            [roomId]="group.roomId"
+            [aliasRequired]="true"
+            (aliasSet)="loadLeaderboard()"
+          ></app-content-waiting>
+        }
       }
     </div>
   </mat-card>

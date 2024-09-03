@@ -380,15 +380,19 @@
               </div>
             }
             @if (selectedRoute === 'leaderboard' && alias) {
-              <div>
-                <div fxLayout="row" fxLayoutAlign="space-between">
-                  <app-leaderboard-page
-                    fxFill
-                    [content]="content"
-                    [aliasId]="alias.id"
-                  ></app-leaderboard-page>
-                </div>
-              </div>
+              @if (alias.id) {
+                <app-leaderboard-page
+                  fxFill
+                  [content]="content"
+                  [aliasId]="alias.id"
+                ></app-leaderboard-page>
+              } @else {
+                <app-content-waiting
+                  [alias]="alias"
+                  [roomId]="content.roomId"
+                  [aliasRequired]="true"
+                ></app-content-waiting>
+              }
             }
           </mat-tab-nav-panel>
         </div>

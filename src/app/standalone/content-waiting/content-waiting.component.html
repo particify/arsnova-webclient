@@ -5,10 +5,12 @@
   class="waiting-container"
   [ngStyle]="{ opacity: isLocked ? 0.7 : 1 }"
 >
-  <app-content-step-info
-    [current]="current"
-    [totalCount]="totalCount"
-  ></app-content-step-info>
+  @if (current !== undefined && totalCount !== undefined) {
+    <app-content-step-info
+      [current]="current"
+      [totalCount]="totalCount"
+    ></app-content-step-info>
+  }
   @if (alias && !alias.id && aliasRequired) {
     <form
       fxLayout="column"
