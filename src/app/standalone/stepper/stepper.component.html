@@ -40,7 +40,7 @@
               <button
                 mat-icon-button
                 (click)="onClick(i)"
-                [disabled]="answerResults.size > 0 && !answerResults.has(i)"
+                [disabled]="isLocked(i) && lockedContentsDisabled"
                 class="step-btn"
                 [ngClass]="{
                   'primary-border bold': selectedIndex === i,

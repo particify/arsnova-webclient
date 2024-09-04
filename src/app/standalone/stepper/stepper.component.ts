@@ -113,6 +113,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() answerResults = new Map<number, AnswerResultType>();
   @Input() fixedWitdth = true;
   @Input() additionalStepIcon?: string;
+  @Input() lockedContentsDisabled = false;
   AnswerResultType = AnswerResultType;
   headerPos = 0;
   stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
@@ -209,15 +210,14 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   next(): void {
     if (this.allowNavigation) {
-      if (this.selectedIndex < this.listLength - 1) {
-        if (this.selectedIndex < this.listLength - 1) {
-          this.onClick(this.selectedIndex + 1);
-          setTimeout(() => {
-            document.getElementById('step')?.focus();
-          }, 300);
-        } else {
-          this.announceService.announce('statistic.a11y-no-more-questions');
-        }
+      if (
+        this.selectedIndex < this.listLength - 1 &&
+        (!this.isLocked(this.selectedIndex + 1) || !this.lockedContentsDisabled)
+      ) {
+        this.onClick(this.selectedIndex + 1);
+        setTimeout(() => {
+          document.getElementById('step')?.focus();
+        }, 300);
       } else {
         this.announceService.announce('statistic.a11y-no-more-questions');
       }
@@ -322,5 +322,9 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
     if (state) {
       return this.answerService.getAnswerResultIcon(state);
     }
+  }
+
+  isLocked(index: number): boolean {
+    return !this.answerResults.has(index);
   }
 }

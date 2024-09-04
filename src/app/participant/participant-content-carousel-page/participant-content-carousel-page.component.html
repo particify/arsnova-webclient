@@ -18,6 +18,7 @@
           [answerResults]="answerResults"
           [showSteps]="showStepper && !focusModeEnabled"
           [allowNavigation]="!focusModeEnabled"
+          [lockedContentsDisabled]="true"
         >
           @for (
             contentId of contentGroup.contentIds;
