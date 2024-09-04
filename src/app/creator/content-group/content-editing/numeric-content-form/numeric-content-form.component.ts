@@ -31,6 +31,7 @@ export class NumericContentFormComponent
   @Input() isEditMode = false;
   @Input() correctAnswerSelection = false;
   @Input() isQuiz = false;
+  @Input() isAnswered = false;
 
   noCorrect = false;
   minimum = 1;
