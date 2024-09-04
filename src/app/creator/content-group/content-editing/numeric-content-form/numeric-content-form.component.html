@@ -1,7 +1,10 @@
 <div fxLayout="column" fxLayoutGap="1em">
   <div>
     @if (correctAnswerSelection) {
-      <mat-checkbox [disabled]="formDisabled" [(ngModel)]="noCorrect">
+      <mat-checkbox
+        [disabled]="formDisabled || isAnswered"
+        [(ngModel)]="noCorrect"
+      >
         {{ 'creator.content.no-correct-answer' | transloco }}
       </mat-checkbox>
     }
@@ -43,7 +46,7 @@
             }}</mat-label>
             <input
               matInput
-              [disabled]="formDisabled || noCorrect"
+              [disabled]="formDisabled || noCorrect || isAnswered"
               type="number"
               [(ngModel)]="correctNumber"
             />
@@ -57,7 +60,7 @@
             }}</mat-label>
             <input
               matInput
-              [disabled]="formDisabled || noCorrect"
+              [disabled]="formDisabled || noCorrect || isAnswered"
               type="number"
               [(ngModel)]="tolerance"
             />
