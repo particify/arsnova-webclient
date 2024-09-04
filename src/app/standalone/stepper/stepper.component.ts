@@ -209,14 +209,15 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
 
   next(): void {
     if (this.allowNavigation) {
-      if (
-        this.selectedIndex < this.listLength - 1 &&
-        !this.isLocked(this.selectedIndex + 1)
-      ) {
-        this.onClick(this.selectedIndex + 1);
-        setTimeout(() => {
-          document.getElementById('step')?.focus();
-        }, 300);
+      if (this.selectedIndex < this.listLength - 1) {
+        if (this.selectedIndex < this.listLength - 1) {
+          this.onClick(this.selectedIndex + 1);
+          setTimeout(() => {
+            document.getElementById('step')?.focus();
+          }, 300);
+        } else {
+          this.announceService.announce('statistic.a11y-no-more-questions');
+        }
       } else {
         this.announceService.announce('statistic.a11y-no-more-questions');
       }
@@ -321,9 +322,5 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
     if (state) {
       return this.answerService.getAnswerResultIcon(state);
     }
-  }
-
-  isLocked(index: number): boolean {
-    return !this.answerResults.has(index);
   }
 }
