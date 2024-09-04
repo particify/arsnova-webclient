@@ -8,6 +8,7 @@ import { RoundState } from '@app/core/models/events/round-state';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Content } from '@app/core/models/content';
 import { ContentService } from '@app/core/services/http/content.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
 
 const SCALE_FACTOR = 1080;
 const MIN_SCALE = 1;
@@ -35,7 +36,10 @@ export class PresentationService {
 
   private currentContent?: Content;
 
-  constructor(private contentService: ContentService) {}
+  constructor(
+    private contentService: ContentService,
+    private contentGroupService: ContentGroupService
+  ) {}
 
   getScale(factor = 1) {
     const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;
@@ -63,10 +67,14 @@ export class PresentationService {
     this.currentGroup$.next(group);
   }
 
-  startContent(): void {
+  startContent(contentGroupId: string): void {
     if (this.currentContent) {
-      this.contentService
-        .startContent(this.currentContent.roomId, this.currentContent.id)
+      this.contentGroupService
+        .startContent(
+          this.currentContent.roomId,
+          contentGroupId,
+          this.currentContent.id
+        )
         .subscribe(() => {
           this.reloadCurrentContent();
         });

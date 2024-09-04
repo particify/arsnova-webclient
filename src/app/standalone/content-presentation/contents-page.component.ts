@@ -312,7 +312,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   }
 
   startCountdown(): void {
-    this.presentationService.startContent();
+    this.presentationService.startContent(this.contentGroup.id);
   }
 
   stopCountdown(): void {

@@ -504,19 +504,6 @@ export class ContentService extends AbstractEntityService<Content> {
     return answers;
   }
 
-  startContent(roomId: string, contentId: string): Observable<void> {
-    const connectionUrl = this.buildUri(`/${contentId}/start`, roomId);
-    return this.http
-      .post<void>(connectionUrl, httpOptions)
-      .pipe(
-        catchError(
-          this.handleError<void>(
-            `Start content, room: ${roomId}, content: ${contentId}`
-          )
-        )
-      );
-  }
-
   stopContent(roomId: string, contentId: string): Observable<void> {
     const connectionUrl = this.buildUri(`/${contentId}/stop`, roomId);
     return this.http
