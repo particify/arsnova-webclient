@@ -11,7 +11,7 @@
   </div>
   @if (!isLoading && !isReloading) {
     <div fxLayout="column" fxLayoutAlign="start center">
-      @if (contents.length > 0 && !this.showOverview) {
+      @if (contents.length > 0 && !showOverview) {
         <app-stepper
           (newIndex)="updateContentIndexUrl($event)"
           [listLength]="contentGroup.contentIds.length"
@@ -25,7 +25,11 @@
             let i = $index
           ) {
             <cdk-step>
-              @if (currentStep >= i - 1 && currentStep <= i + 1) {
+              @if (
+                currentStep !== undefined &&
+                currentStep >= i - 1 &&
+                currentStep <= i + 1
+              ) {
                 <div tabindex="0" [appAutofocus] id="step">
                   @if (isReloadingCurrentContent) {
                     <app-loading-indicator></app-loading-indicator>

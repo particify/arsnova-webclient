@@ -90,7 +90,7 @@ export class ParticipantContentCarouselPageComponent
   answerResults = new Map<number, AnswerResultType>();
   AnswerResultType = AnswerResultType;
   userId?: string;
-  currentStep = 0;
+  currentStep?: number;
   isReloading = false;
   isReloadingCurrentContent = false;
   displaySnackBar = false;
@@ -399,7 +399,10 @@ export class ParticipantContentCarouselPageComponent
   }
 
   nextContent() {
-    if (this.currentStep < this.contents.length - 1) {
+    if (
+      this.currentStep !== undefined &&
+      this.currentStep < this.contents.length - 1
+    ) {
       this.stepper.next();
     } else {
       this.goToOverview();
@@ -538,7 +541,9 @@ export class ParticipantContentCarouselPageComponent
       return;
     }
     const attribution = this.attributions.find(
-      (a) => a.contentId === this.contents[this.currentStep].id
+      (a) =>
+        this.currentStep !== undefined &&
+        a.contentId === this.contents[this.currentStep].id
     );
     if (!attribution || attribution.license === 'CC0-1.0') {
       return;
