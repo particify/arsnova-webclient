@@ -166,6 +166,9 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       if (this.content.state.answeringEndTime) {
         this.endDate = new Date(this.content.state.answeringEndTime);
         this.answeringLocked = new Date() > this.endDate;
+        this.contents
+          .filter((c) => c.id !== this.content.id && c.state.answeringEndTime)
+          .forEach((c) => (c.state.answeringEndTime = new Date()));
       } else {
         this.endDate = undefined;
       }
@@ -312,7 +315,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   }
 
   startCountdown(): void {
-    this.presentationService.startContent();
+    this.presentationService.startContent(this.contentGroup.id);
   }
 
   stopCountdown(): void {
