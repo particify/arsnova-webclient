@@ -70,7 +70,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     BaseCardComponent,
     ContentWaitingComponent,
   ],
-  providers: [FocusModeService],
 })
 export class ParticipantContentCarouselPageComponent
   implements OnInit, OnDestroy
