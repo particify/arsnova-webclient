@@ -33,9 +33,12 @@ export class AnswerGridListComponent {
     const correctTerms = this.answers.filter(
       (a) => !!this.correctTerms && this.correctTerms.includes(a.answer)
     );
-    const totalCount = this.getAnswerCount(this.answers);
-    const correctCount = this.getAnswerCount(correctTerms);
-    const percent = (correctCount / totalCount) * 100;
+    let percent = 0;
+    if (this.answers.length > 0 && correctTerms.length > 0) {
+      const totalCount = this.getAnswerCount(this.answers);
+      const correctCount = this.getAnswerCount(correctTerms);
+      percent = (correctCount / totalCount) * 100;
+    }
     return percent.toFixed(0) + '\u202F%';
   }
 
