@@ -537,11 +537,14 @@
             @if (finishedContents.get(content.id)) {
               <div
                 fxLayout="row"
+                fxLayoutGap="4px"
                 fxLayoutAlign="start center"
                 class="content-stats-info live-info"
-                [matTooltip]="'creator.content.answering-finished' | transloco"
               >
-                <mat-icon>flag</mat-icon>
+                <mat-icon>sports_score</mat-icon>
+                <span>{{
+                  'creator.content.answering-finished' | transloco
+                }}</span>
               </div>
             }
           </div>
