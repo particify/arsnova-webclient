@@ -210,7 +210,7 @@
     "select-correct-number-in-defined-range": "La respuesta correcta debe encontrarse dentro del intervalo definido.",
     "import-failed": "El formato del archivo no es válido.",
     "publish-correct-answers-info": "Los participantes pueden ver las respuestas correctas después de haber contestado.",
-    "group-progress-info": "{{percent}} por ciento de las respuestas son correctas.",
+    "group-progress-info": "Por término medio, {{percent}} por ciento de las respuestas son correctas.",
     "enable-leaderboard-info": "Los participantes toman parte en el concurso utilizando un seudónimo y pueden compararse en una tabla de clasificación.",
     "lock": "Bloquear",
     "enable-live-mode-to-use-timer": "Para establecer un temporizador para el contenido, active el modo en directo en los ajustes de la serie de preguntas.",
