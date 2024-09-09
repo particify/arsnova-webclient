@@ -248,7 +248,7 @@
     "answers-count": "{{count}} answers",
     "answer-count": "{{count}} answer",
     "answer-correct": "{{percentage}} correct",
-    "group-progress-info": "{{percent}} percent of the answers are correct.",
+    "group-progress-info": "On average, {{percent}} percent of the answers are correct.",
     "locked": "Locked",
     "lock": "Lock",
     "publish-content-group": "Publish question series",
