@@ -372,7 +372,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
           }
         });
         if (correct) {
-          this.totalCorrect = correct / total;
+          this.totalCorrect = Math.round(correct / total);
         }
       });
   }

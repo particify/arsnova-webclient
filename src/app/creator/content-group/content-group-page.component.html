@@ -194,7 +194,7 @@
               'creator.content.group-progress-info'
                 | transloco
                   : {
-                      percent: totalCorrect.toFixed(),
+                      percent: totalCorrect,
                     }
             "
           >
@@ -204,7 +204,7 @@
               class="custom-height progress-background"
               [class]="'progress-' + getProgressColor()"
             ></mat-progress-bar>
-            <span class="percent">{{ totalCorrect.toFixed() + ' %' }}</span>
+            <span class="percent">{{ totalCorrect + ' %' }}</span>
           </div>
         }
         <div fxLayout="column" fxLayoutGap="12px">
