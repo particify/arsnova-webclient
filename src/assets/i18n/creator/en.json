@@ -261,7 +261,7 @@
     "content-started": "Content has been started.",
     "content-stopped": "Content has been stopped.",
     "stop-active-content-to-start": "Stop the current content to start this content.",
-    "answering-finished": "Answering is finished",
+    "answering-finished": "Finished",
     "starting-multiple-rounds-not-available-for-content-type": "Multiple rounds are not supported for this content format. Delete the answers to restart the content.",
     "publishing-index-info": "Published up to the content {{index}}. Use control key with arrow keys to edit the publishing.",
     "publishing-index-info-live": "Published up to the content {{index}}. Start the next content to publish it.",

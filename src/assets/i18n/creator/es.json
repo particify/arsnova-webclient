@@ -238,7 +238,7 @@
     "timer-only-enabled-in-live-mode": "El temporizador sólo puede utilizarse en modo directo. El modo en directo puede activarse en los ajustes de la serie de preguntas.",
     "publish-content-group": "Publicar serie de preguntas",
     "live": "En directo",
-    "answering-finished": "Contestación finalizada",
+    "answering-finished": "Finalizada",
     "publish-content-group-info": "Los participantes sólo pueden ver las series de preguntas publicadas.",
     "live-mode": "Modo en directo",
     "group-is-hidden-for-participants": "La serie de preguntas está oculta para los participantes.",
