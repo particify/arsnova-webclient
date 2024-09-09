@@ -6,12 +6,11 @@ import duration from 'dayjs/plugin/duration';
 export class DurationPipe implements PipeTransform {
   transform(milliseconds: number, contentDuration?: number): string {
     dayjs.extend(duration);
-    return dayjs!
-      .duration(milliseconds, 'milliseconds')
-      .format('mm:ss.SSS')
-      .slice(
-        contentDuration && contentDuration < 60 ? 3 : 0,
-        contentDuration && contentDuration > 59 ? -4 : -2
-      );
+    return !contentDuration || contentDuration > 60
+      ? dayjs!.duration(milliseconds, 'milliseconds').format('m:ss')
+      : dayjs!
+          .duration(milliseconds, 'milliseconds')
+          .format('s.SSS')
+          .slice(0, -2);
   }
 }
