@@ -43,6 +43,11 @@ import {
 const STATS_REFRESH_INTERVAL = 10000;
 const STATS_REFRESH_LIMIT = 60;
 
+const STATUS_OKAY = 50;
+const STATUS_BETTER = 62.5;
+const STATUS_GOOD = 75;
+const STATUS_EXCELLENT = 87.5;
+
 export interface ContentStats {
   count: number;
   correct?: number;
@@ -74,12 +79,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   contentStats = new Map<string, ContentStats>();
   totalCorrect?: number;
-  status = {
-    good: 85,
-    okay: 50,
-    zero: 0,
-    empty: -1,
-  };
 
   isContentStarted = false;
 
@@ -399,5 +398,23 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   isLiveMode(): boolean {
     return this.contentGroup.publishingMode === PublishingMode.LIVE;
+  }
+
+  getProgressColor(): string {
+    if (!this.totalCorrect) {
+      return '';
+    } else {
+      if (this.totalCorrect < STATUS_OKAY) {
+        return 'red';
+      } else if (this.totalCorrect < STATUS_BETTER) {
+        return 'orange';
+      } else if (this.totalCorrect < STATUS_GOOD) {
+        return 'yellow';
+      } else if (this.totalCorrect < STATUS_EXCELLENT) {
+        return 'green';
+      } else {
+        return 'blue';
+      }
+    }
   }
 }

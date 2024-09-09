@@ -201,14 +201,8 @@
             <mat-progress-bar
               mode="determinate"
               value="{{ totalCorrect }}"
-              class="custom-height statistic-progress"
-              [ngClass]="{
-                'statistic-status-good': totalCorrect >= status.good,
-                'statistic-status-okay':
-                  totalCorrect < status.good && totalCorrect >= status.okay,
-                'statistic-status-bad':
-                  totalCorrect < status.okay && totalCorrect !== status.empty,
-              }"
+              class="custom-height progress-background"
+              [class]="'progress-' + getProgressColor()"
             ></mat-progress-bar>
             <span class="percent">{{ totalCorrect.toFixed() + ' %' }}</span>
           </div>

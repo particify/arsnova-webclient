@@ -360,20 +360,28 @@ div {
   background-color: var(--background) !important;
 }
 
-.statistic-progress .mdc-linear-progress__buffer-bar {
+.progress-background .mdc-linear-progress__buffer-bar {
   background-color: var(--background) !important;
 }
 
-.statistic-status-good .mdc-linear-progress__bar-inner {
-  background-color: var(--green);
+.progress-red .mdc-linear-progress__bar-inner {
+  background-color: var(--red);
 }
 
-.statistic-status-okay .mdc-linear-progress__bar-inner {
+.progress-orange .mdc-linear-progress__bar-inner {
+  background-color: var(--orange);
+}
+
+.progress-yellow .mdc-linear-progress__bar-inner {
   background-color: var(--yellow);
 }
 
-.statistic-status-bad .mdc-linear-progress__bar-inner {
-  background-color: var(--red);
+.progress-green .mdc-linear-progress__bar-inner {
+  background-color: var(--green);
+}
+
+.progress-blue .mdc-linear-progress__bar-inner {
+  background-color: var(--blue-light);
 }
 
 // Mat Tab
