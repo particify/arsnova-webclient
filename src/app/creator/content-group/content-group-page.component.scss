@@ -52,14 +52,31 @@
   margin-bottom: $spacing !important;
 }
 
-.live-icon {
-  font-size: $s-font-size;
-  width: $s-font-size;
-  height: $s-font-size;
-}
-
 .live-mode-hint {
   cursor: pointer;
-  font-size: $s-font-size;
   color: var(--play);
+}
+
+@include xs {
+  .live-mode-hint {
+    font-size: $xs-font-size;
+
+    mat-icon {
+      font-size: $xs-font-size;
+      width: $xs-font-size;
+      height: $xs-font-size;
+    }
+  }
+}
+
+@include gt-xs {
+  .live-mode-hint {
+    font-size: $s-font-size;
+
+    mat-icon {
+      font-size: $s-font-size;
+      width: $s-font-size;
+      height: $s-font-size;
+    }
+  }
 }

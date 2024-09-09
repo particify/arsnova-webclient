@@ -28,7 +28,7 @@
                   type="button"
                   (click)="openSettings()"
                 >
-                  <mat-icon class="live-icon">play_circle</mat-icon>
+                  <mat-icon>play_circle</mat-icon>
                   <span>{{ 'creator.content.live-mode' | transloco }}</span>
                 </div>
               }
@@ -110,17 +110,17 @@
               }
               <button
                 mat-icon-button
-                [matMenuTriggerFor]="groupSettings"
-                [matTooltip]="'creator.content.more-options' | transloco"
-              >
-                <mat-icon class="action-icon">more_vert</mat-icon>
-              </button>
-              <button
-                mat-icon-button
                 (click)="openSettings()"
                 [matTooltip]="'creator.content.group-settings' | transloco"
               >
                 <mat-icon class="action-icon">settings</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="groupSettings"
+                [matTooltip]="'creator.content.more-options' | transloco"
+              >
+                <mat-icon class="action-icon">more_vert</mat-icon>
               </button>
               <mat-menu #groupSettings="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="exportMenu">
