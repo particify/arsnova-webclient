@@ -362,10 +362,10 @@ export class StatisticChoiceComponent
 
   updateCounterForRound(round: number) {
     const index = round > 1 ? 1 : round;
-    this.updateCounter(
-      this.stats?.roundStatistics[index].combinatedCounts.map((c) => c.count) ??
-        []
-    );
+    this.updateCounter({
+      answers: this.stats?.roundStatistics[index].answerCount ?? 0,
+      abstentions: this.stats?.roundStatistics[index].abstentionCount ?? 0,
+    });
   }
 
   prepareChartForRoundCompare(resetChart: boolean) {

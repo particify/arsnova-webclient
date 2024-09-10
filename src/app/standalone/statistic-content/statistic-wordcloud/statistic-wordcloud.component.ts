@@ -70,13 +70,16 @@ export class StatisticWordcloudComponent
 
   deleteAnswers() {
     this.wordWeights = [];
-    this.updateCounter([]);
+    this.updateCounter({ answers: 0, abstentions: 0 });
   }
 
   updateData(stats: AnswerStatistics) {
     if (stats) {
       const texts = (stats?.roundStatistics[0] as TextRoundStatistics)?.texts;
-      this.updateCounter([stats.roundStatistics[0].answerCount]);
+      this.updateCounter({
+        answers: stats.roundStatistics[0].answerCount,
+        abstentions: stats.roundStatistics[0].abstentionCount,
+      });
       if (!texts) {
         return;
       }

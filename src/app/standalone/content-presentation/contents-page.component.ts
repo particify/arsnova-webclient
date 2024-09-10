@@ -39,6 +39,8 @@ import { ContentStepInfoComponent } from '@app/standalone/content-step-info/cont
 import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
 import { LeaderboardPageComponent } from '@app/standalone/leaderboard-page/leaderboard-page.component';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
+import { CountComponent } from '@app/standalone/count/count.component';
+import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
 @Component({
   selector: 'app-contents-page',
@@ -58,6 +60,7 @@ import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsa
     ContentStepperComponent,
     LeaderboardPageComponent,
     PulsatingCircleComponent,
+    CountComponent,
   ],
   templateUrl: './contents-page.component.html',
   styleUrls: ['./contents-page.component.scss'],
@@ -73,7 +76,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   room: Room;
   contentGroupName: string;
   currentStep = 0;
-  answerCount = 0;
+  responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   content!: Content;
   contentGroup!: ContentGroup;
@@ -322,8 +325,8 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.presentationService.stopContent();
   }
 
-  updateCounter(count: number) {
-    this.answerCount = count;
+  updateCounter(counts: AnswerResponseCounts) {
+    this.responseCounts = counts;
   }
 
   updateStateChange() {

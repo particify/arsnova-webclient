@@ -135,9 +135,11 @@ export class StatisticSortComponent
     if (roundStatistics.combinatedCounts) {
       this.initLabels();
     }
-    const listToCount = combinedCounts.map((c) => c.count);
-    listToCount.push(abstentionCount);
-    this.updateCounter(listToCount);
+    this.updateCounter({
+      answers: roundStatistics.answerCount,
+      abstentions: roundStatistics.abstentionCount,
+    });
+
     this.setColors();
   }
 

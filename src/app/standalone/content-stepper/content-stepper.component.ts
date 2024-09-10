@@ -9,6 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
+import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { Content } from '@app/core/models/content';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { UserSettings } from '@app/core/models/user-settings';
@@ -42,8 +43,8 @@ export class ContentStepperComponent implements AfterViewInit, OnInit {
   @Input() showStepInfo = true;
   @Input() isLiveMode = false;
   @Output() indexChanged: EventEmitter<number> = new EventEmitter<number>();
-  @Output() answerCountUpdated: EventEmitter<number> =
-    new EventEmitter<number>();
+  @Output() answerCountUpdated: EventEmitter<AnswerResponseCounts> =
+    new EventEmitter<AnswerResponseCounts>();
 
   stepCount = 0;
   currentStep = 0;
@@ -66,7 +67,7 @@ export class ContentStepperComponent implements AfterViewInit, OnInit {
     }, 300);
   }
 
-  updateCounter(count: number, isActive: boolean) {
+  updateCounter(count: AnswerResponseCounts, isActive: boolean) {
     if (isActive) {
       this.answerCountUpdated.emit(count);
     }

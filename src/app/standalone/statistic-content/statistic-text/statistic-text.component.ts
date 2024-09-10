@@ -92,7 +92,12 @@ export class StatisticTextComponent
 
   getData() {
     this.getAnswerStats();
-    this.updateCounter(this.answerStats.map((a) => a.count));
+    this.updateCounter({
+      answers: this.getSum(
+        this.answerStats.filter((a) => a.answer).map((a) => a.count)
+      ),
+      abstentions: this.abstentionCount,
+    });
   }
 
   getAnswerStats() {
