@@ -120,16 +120,6 @@ export class StatisticTextComponent
     this.answerStats.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
-    if (this.abstentionCount > 0) {
-      const abstentionString = this.translateService.translate(
-        this.abstentionCount === 1
-          ? 'statistic.abstention'
-          : 'statistic.abstentions'
-      );
-      this.answerStats.push(
-        new TextStatistic(abstentionString, this.abstentionCount)
-      );
-    }
   }
 
   deleteAnswer(answer: TextStatistic): void {

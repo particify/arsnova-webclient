@@ -347,7 +347,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     this.roundsToDisplay = round;
     chartComponent.roundsToDisplay = round;
     chartComponent.rounds = round + 1;
-    chartComponent.updateCounterForRound();
+    chartComponent.updateCounterForRound(round);
     if (this.answersVisible) {
       chartComponent.updateChart();
     }

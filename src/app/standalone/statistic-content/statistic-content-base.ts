@@ -5,10 +5,7 @@ import { Content } from '@app/core/models/content';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { UserSettings } from '@app/core/models/user-settings';
-import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 import { TranslocoService } from '@jsverse/transloco';
-
-export const ABSTENTION_SIGN = '–';
 
 @Component({
   template: '',
@@ -97,13 +94,5 @@ export abstract class StatisticContentBaseComponent implements OnInit {
 
   protected getLabelWithPercentageSign(label: string) {
     return label + '\u202F%';
-  }
-
-  protected getTooltipTitle(
-    item: TooltipItem<keyof ChartTypeRegistry>
-  ): string {
-    return item.label === ABSTENTION_SIGN
-      ? this.translateService.translate('statistic.abstentions')
-      : item.label;
   }
 }

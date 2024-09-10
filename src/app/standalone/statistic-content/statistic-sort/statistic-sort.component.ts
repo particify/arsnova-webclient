@@ -16,13 +16,9 @@ import {
   Chart,
   ChartDataset,
   LinearScale,
-  Tooltip,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {
-  ABSTENTION_SIGN,
-  StatisticContentBaseComponent,
-} from '@app/standalone/statistic-content/statistic-content-base';
+import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { takeUntil } from 'rxjs/operators';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -135,13 +131,8 @@ export class StatisticSortComponent
       data: combinedCounts.map((c) => c.count),
       backgroundColor: this.showCorrect ? this.indicationColors : this.colors,
     });
-    let abstentionCount = 0;
-    if (this.content.abstentionsAllowed) {
-      abstentionCount = roundStatistics.abstentionCount;
-      this.data[0].data.push(abstentionCount);
-    }
     this.answerIndexes = combinedCounts.map((c) => c.selectedChoiceIndexes);
-    if (roundStatistics.combinatedCounts || roundStatistics.abstentionCount) {
+    if (roundStatistics.combinatedCounts) {
       this.initLabels();
     }
     const listToCount = combinedCounts.map((c) => c.count);
@@ -168,9 +159,6 @@ export class StatisticSortComponent
           this.translateService.translate('statistic.other-combinations')
         );
       }
-    }
-    if (this.content.abstentionsAllowed) {
-      this.labels.push(ABSTENTION_SIGN);
     }
   }
 
@@ -273,10 +261,6 @@ export class StatisticSortComponent
         ? this.colors[i]
         : this.grey;
     }
-    if (this.content.abstentionsAllowed) {
-      this.colors.splice(length, 1, this.grey);
-      this.indicationColors.splice(length, 1, this.grey);
-    }
   }
 
   initChart() {
@@ -290,8 +274,7 @@ export class StatisticSortComponent
       BarElement,
       CategoryScale,
       LinearScale,
-      ChartDataLabels,
-      Tooltip
+      ChartDataLabels
     );
     const gridConfig = {
       tickColor: this.isPresentation ? this.surface : this.onSurface,
@@ -342,13 +325,6 @@ export class StatisticSortComponent
         plugins: {
           legend: {
             display: false,
-          },
-          tooltip: {
-            mode: 'point',
-            displayColors: false,
-            callbacks: {
-              title: (items) => this.getTooltipTitle(items[0]),
-            },
           },
           datalabels: {
             formatter: (value, context) => {
