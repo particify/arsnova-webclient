@@ -9,7 +9,7 @@
   !isGroupLocked() &&
   canAnswerContent &&
   content &&
-  (content.state.answeringEndTime || !content.duration)
+  (content.state.answeringEndTime || !isLiveMode())
 ) {
   <div
     class="answer-count"
