@@ -8,6 +8,15 @@
       {{ 'statistic.a11y-message-type-info' | transloco: { index: index + 1 } }}
     </div>
   }
+  @if (isStandalone) {
+    <app-rendered-text
+      tabindex="0"
+      [rawText]="content.body"
+      [renderedText]="content.renderedBody"
+      appLangContext
+      appDirContext
+    ></app-rendered-text>
+  }
   @if ([ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1) {
     <div>
       <div tabindex="0" [appAutofocus] class="visually-hidden">
@@ -143,15 +152,6 @@
         </div>
       </div>
     </div>
-  }
-  @if (isStandalone) {
-    <app-rendered-text
-      tabindex="0"
-      [rawText]="content.body"
-      [renderedText]="content.renderedBody"
-      appLangContext
-      appDirContext
-    ></app-rendered-text>
   }
   @if (format === ContentType.FLASHCARD) {
     <div>
