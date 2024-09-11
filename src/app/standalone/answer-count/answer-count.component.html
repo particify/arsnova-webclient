@@ -1,16 +1,14 @@
 <div
-  class="container {{ size + '-container' }}"
-  fxLayout="{{ size !== 'medium' ? 'row' : 'column' }}"
+  class="container"
+  [ngClass]="{ 'bigger-font': biggerFont }"
+  fxLayout="row"
   fxLayoutAlign="center center"
-  [fxLayoutGap]="size === 'medium' ? '2px' : '8px'"
+  [fxLayoutGap]="biggerFont ? '6px' : '4px'"
 >
-  <span
-    class="counter"
-    [ngClass]="size === 'presentation' ? 'primary' : 'secondary'"
-  >
+  <span>
     {{ count }}
   </span>
-  <span class="counter-text">
+  <span>
     {{ (count === 1 ? 'statistic.answer' : 'statistic.answers') | transloco }}
   </span>
 </div>

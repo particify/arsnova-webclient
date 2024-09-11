@@ -12,5 +12,5 @@ import { TranslocoModule } from '@jsverse/transloco';
 })
 export class AnswerCountComponent {
   @Input({ required: true }) count!: number;
-  @Input() size?: string;
+  @Input() biggerFont = false;
 }
