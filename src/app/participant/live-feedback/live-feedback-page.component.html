@@ -6,15 +6,17 @@
 }
 @if (!isLoading) {
   <app-base-card [showShadow]="showCard">
-    <app-live-feedback
-      [data]="data"
-      [dataChanged]="dataChanged"
-      [fixedSize]="false"
-      [isClosed]="isClosed"
-      [type]="type"
-    ></app-live-feedback>
-    <div fxLayout="row" fxLayoutAlign="center">
-      <app-answer-count [count]="answerCount"></app-answer-count>
+    <div fxLayout="column" fxLayoutGap="8px">
+      <app-live-feedback
+        [data]="data"
+        [dataChanged]="dataChanged"
+        [fixedSize]="false"
+        [isClosed]="isClosed"
+        [type]="type"
+      ></app-live-feedback>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <app-answer-count [count]="answerCount"></app-answer-count>
+      </div>
     </div>
   </app-base-card>
 }

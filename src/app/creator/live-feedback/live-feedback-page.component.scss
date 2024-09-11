@@ -1,7 +1,5 @@
 .bottom-button {
-  height: 36px;
   transition: 300ms;
-  margin: 16px 0 8px;
 }
 
 .button-container {
@@ -11,7 +9,6 @@
 .invisible-button {
   position: relative;
   width: 0;
-  margin: 0 !important;
   left: 100px;
   opacity: 0;
   overflow: hidden;
@@ -23,6 +20,4 @@
   top: 0;
   opacity: 1;
   width: auto;
-  overflow: auto;
-  margin-right: 10px !important;
 }
