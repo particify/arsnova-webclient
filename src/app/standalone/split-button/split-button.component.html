@@ -1,0 +1,21 @@
+<div>
+  <button
+    mat-raised-button
+    [color]="color"
+    class="split-btn-primary"
+    (click)="clickedPrimary.emit()"
+  >
+    @if (icon) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    {{ label }}
+  </button>
+  <button
+    mat-raised-button
+    class="split-btn-secondary"
+    [color]="color"
+    [matMenuTriggerFor]="menuRef"
+  >
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+</div>
