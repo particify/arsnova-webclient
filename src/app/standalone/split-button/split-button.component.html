@@ -2,7 +2,7 @@
   <button
     mat-raised-button
     [color]="color"
-    class="split-btn-primary"
+    [ngClass]="{ 'split-btn-primary': showSplitButton }"
     (click)="clickedPrimary.emit()"
   >
     @if (icon) {
@@ -10,12 +10,14 @@
     }
     {{ label }}
   </button>
-  <button
-    mat-raised-button
-    class="split-btn-secondary"
-    [color]="color"
-    [matMenuTriggerFor]="menuRef"
-  >
-    <mat-icon>keyboard_arrow_down</mat-icon>
-  </button>
+  @if (showSplitButton) {
+    <button
+      mat-raised-button
+      class="split-btn-secondary"
+      [color]="color"
+      [matMenuTriggerFor]="menuRef"
+    >
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+  }
 </div>

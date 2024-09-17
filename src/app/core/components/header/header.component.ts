@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit {
   isPreview = false;
   userCharacter?: string;
   openPresentationDirectly = false;
+  showOverlayLink = false;
   announcementState?: AnnouncementState;
   room?: Room;
 
@@ -88,6 +89,8 @@ export class HeaderComponent implements OnInit {
     });
     this.openPresentationDirectly =
       !this.extensionFactory.getExtension('present-in-new-tab');
+    this.showOverlayLink =
+      !!this.extensionFactory.getExtension('overlay-menu-link');
   }
 
   toggleDrawer(): void {

@@ -106,6 +106,8 @@ import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 import { ServerTimeInterceptor } from '@app/core/interceptors/server-time.interceptor';
 import { DefaultHeaderInterceptor } from '@app/core/interceptors/default-header.interceptor';
+import { SplitButtonComponent } from '@app/standalone/split-button/split-button.component';
+import { MenuItemDetailsComponent } from '@app/standalone/menu-item-details/menu-item-details.component';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -154,6 +156,8 @@ export function initializeApp(appConfig: AppConfig) {
     HttpClientModule,
     FooterLinksComponent,
     TextOverflowClipComponent,
+    SplitButtonComponent,
+    MenuItemDetailsComponent,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),

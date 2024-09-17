@@ -58,6 +58,7 @@
     "editing-view": "Edit",
     "room-settings": "Room settings",
     "present": "Present",
+    "present-description": "Present the current view.",
     "presentation-mode": "Presentation mode",
     "public-templates": "Public templates"
   },

@@ -51,20 +51,37 @@
                 </button>
               }
               @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
-                <button
-                  [disabled]="isPreview"
-                  mat-raised-button
-                  color="primary"
-                  [matMenuTriggerFor]="
-                    openPresentationDirectly ? hideMenu : presentationMenu
-                  "
-                  (click)="presentCurrentView()"
-                >
-                  <mat-icon>jamboard_kiosk</mat-icon>
-                  {{ 'header.present' | transloco }}
-                </button>
+                <app-split-button
+                  [label]="'header.present' | transloco"
+                  [icon]="'jamboard_kiosk'"
+                  [menuRef]="presentationMenu"
+                  [showSplitButton]="showOverlayLink"
+                  (clickedPrimary)="presentCurrentView()"
+                ></app-split-button>
               }
-              <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
+              <mat-menu #presentationMenu="matMenu" xPosition="before">
+                @if (showOverlayLink || !openPresentationDirectly) {
+                  <button mat-menu-item (click)="presentCurrentView(true)">
+                    <mat-icon class="menu-icon">jamboard_kiosk</mat-icon>
+                    <app-menu-item-details
+                      [label]="'header.present' | transloco"
+                      [description]="'header.present-description' | transloco"
+                    ></app-menu-item-details>
+                  </button>
+                  @if (showOverlayLink && room) {
+                    <button mat-menu-item style="padding: 0">
+                      <lib-extension-point
+                        extensionId="overlay-menu-link"
+                        [extensionData]="{ shortId: room.shortId }"
+                      ></lib-extension-point>
+                    </button>
+                  }
+                  <lib-extension-point
+                    extensionId="present-in-new-tab"
+                    (extensionEvent)="checkIfOpenPresentationDirectly($event)"
+                  ></lib-extension-point>
+                }
+              </mat-menu>
             </div>
             <div class="mobile-action-container">
               @if (!isPreview) {
@@ -102,16 +119,6 @@
             </mat-menu>
           </div>
         }
-        <mat-menu #presentationMenu="matMenu">
-          <button mat-menu-item tabindex="0" (click)="presentCurrentView(true)">
-            <mat-icon class="menu-icon">personal_video</mat-icon>
-            <span>{{ 'header.presentation-mode' | transloco }}</span>
-          </button>
-          <lib-extension-point
-            extensionId="present-in-new-tab"
-            (extensionEvent)="checkIfOpenPresentationDirectly($event)"
-          ></lib-extension-point>
-        </mat-menu>
         <div fxLayoutGap="16px" fxLayoutAlign="center center">
           @if (announcementState) {
             <button
