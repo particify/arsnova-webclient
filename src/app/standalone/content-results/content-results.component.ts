@@ -43,6 +43,8 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { StatisticShortAnswerComponent } from '@app/standalone/statistic-content/statistic-short-answer/statistic-short-answer.component';
+import { CountComponent } from '@app/standalone/count/count.component';
+import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
 @Component({
   selector: 'app-content-results',
@@ -72,6 +74,7 @@ import { StatisticShortAnswerComponent } from '@app/standalone/statistic-content
     TranslocoPipe,
     LanguageContextDirective,
     RouterLink,
+    CountComponent,
   ],
 })
 export class ContentResultsComponent implements OnInit, OnDestroy {
@@ -100,14 +103,15 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   @Input() isPresentation = false;
   @Input() indexChanged?: EventEmitter<number>;
   @Input() isStandalone = true;
-  @Output() updatedCounter: EventEmitter<number> = new EventEmitter<number>();
+  @Output() updatedCounter: EventEmitter<AnswerResponseCounts> =
+    new EventEmitter<AnswerResponseCounts>();
   @Input() settings = new UserSettings();
 
   attachmentData: any;
   answersVisible = false;
   correctVisible = false;
   survey = false;
-  answerCount = 0;
+  responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
   isLoading = true;
   format!: ContentType;
   ContentType: typeof ContentType = ContentType;
@@ -157,7 +161,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     this.isLoading = false;
     if (this.indexChanged) {
       this.indexChanged.subscribe(() => {
-        this.updateCounter(this.answerCount);
+        this.updateCounter(this.responseCounts);
         this.broadcastRoundState();
         if (this.directShow && this.active && !this.answersVisible) {
           this.toggleAnswers();
@@ -307,16 +311,16 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     this.survey = noCorrect;
   }
 
-  updateCounter($event: number) {
-    this.answerCount = $event;
+  updateCounter(counts: AnswerResponseCounts) {
+    this.responseCounts = counts;
     if (this.isPresentation) {
-      this.updatedCounter.emit(this.answerCount);
+      this.updatedCounter.emit(this.responseCounts);
     }
   }
 
   private announceAnswers() {
     const isText = this.content.format === ContentType.TEXT;
-    if (!isText || this.answerCount > 0) {
+    if (!isText || this.responseCounts.answers > 0) {
       const action = this.answersVisible ? 'expanded' : 'collapsed';
       const msg =
         'creator.statistic.a11y-' +
@@ -347,7 +351,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     this.roundsToDisplay = round;
     chartComponent.roundsToDisplay = round;
     chartComponent.rounds = round + 1;
-    chartComponent.updateCounterForRound();
+    chartComponent.updateCounterForRound(round);
     if (this.answersVisible) {
       chartComponent.updateChart();
     }

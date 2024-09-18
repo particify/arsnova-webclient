@@ -45,14 +45,6 @@
           }
         </div>
       }
-      @if (content.abstentionsAllowed) {
-        <p
-          class="chart-answer-label"
-          [ngClass]="{ 'not-correct': showCorrect }"
-        >
-          {{ 'statistic.abstentions' | transloco }}
-        </p>
-      }
     </div>
   }
   @if (

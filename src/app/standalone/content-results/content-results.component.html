@@ -12,22 +12,35 @@
     <div>
       <div tabindex="0" [appAutofocus] class="visually-hidden">
         {{
-          (answerCount === 0
+          (responseCounts.answers === 0
             ? 'creator.statistic.a11y-message-evaluation'
             : 'statistic.a11y-message-evaluation-answers'
-          ) | transloco: { index: index + 1, answers: answerCount }
+          ) | transloco: { index: index + 1, answers: responseCounts.answers }
         }}
       </div>
       <div
         [attr.hidden]="isPresentation || null"
         fxLayout="row"
-        fxLayoutAlign="space-between"
+        fxLayoutAlign="space-between center"
       >
         @if (!isLoading && isStandalone) {
-          <app-answer-count
-            tabindex="-1"
-            [count]="answerCount"
-          ></app-answer-count>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+            <app-answer-count
+              tabindex="-1"
+              [count]="responseCounts.answers"
+            ></app-answer-count>
+            @if (responseCounts.abstentions) {
+              <app-count
+                [count]="responseCounts.abstentions"
+                [label]="
+                  (responseCounts.abstentions === 1
+                    ? 'statistic.abstention'
+                    : 'statistic.abstentions'
+                  ) | transloco
+                "
+              ></app-count>
+            }
+          </div>
         }
         <div fxLayout="row">
           <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="8px">

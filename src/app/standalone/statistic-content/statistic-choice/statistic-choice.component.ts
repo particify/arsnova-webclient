@@ -14,7 +14,6 @@ import {
   ChartDataset,
   GridLineOptions,
   LinearScale,
-  Tooltip,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -23,10 +22,7 @@ import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
-import {
-  ABSTENTION_SIGN,
-  StatisticContentBaseComponent,
-} from '@app/standalone/statistic-content/statistic-content-base';
+import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentScale } from '@app/core/models/content-scale';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -74,13 +70,13 @@ export class StatisticChoiceComponent
     onBackground: '',
     background: '',
     correct: '',
-    abstention: '',
+    wrong: '',
   };
   rounds = 1;
   roundsToDisplay = 0;
   roundsDisplayed = 0;
-  independentAnswerCount: number[][] = [[], [], []];
   ContentType: typeof ContentType = ContentType;
+  stats?: AnswerStatistics;
 
   constructor(
     protected contentService: ContentService,
@@ -158,8 +154,7 @@ export class StatisticChoiceComponent
       BarElement,
       CategoryScale,
       LinearScale,
-      ChartDataLabels,
-      Tooltip
+      ChartDataLabels
     );
 
     const gridConfig = {
@@ -182,9 +177,6 @@ export class StatisticChoiceComponent
     }
     const scale = this.presentationService.getScale();
     const labels = Array.from(this.labelLetters).slice(0, this.options.length);
-    if (this.content.abstentionsAllowed) {
-      labels.push(ABSTENTION_SIGN);
-    }
     this.createChart(labels, dataSets, scale, gridConfig as GridLineOptions);
   }
 
@@ -254,19 +246,12 @@ export class StatisticChoiceComponent
           legend: {
             display: false,
           },
-          tooltip: {
-            mode: 'point',
-            displayColors: false,
-            callbacks: {
-              title: (items) => this.getTooltipTitle(items[0]),
-            },
-          },
           datalabels: {
             formatter: (value, context) => {
               return this.getDataLabel(
                 context.dataset.data[context.dataIndex] as number,
                 context.dataset.data as number[],
-                this.answerCount
+                this.responseCounts.answers
               );
             },
             color: this.colorStrings.onBackground,
@@ -328,10 +313,10 @@ export class StatisticChoiceComponent
     this.colorStrings.onBackground = this.themeService.getColor('on-surface');
     this.colorStrings.background = this.themeService.getColor('surface');
     this.colorStrings.correct = this.themeService.getColor('green');
-    this.colorStrings.abstention = this.themeService.getColor('grey');
+    this.colorStrings.wrong = this.themeService.getColor('grey');
   }
 
-  initRoundAnswerOptions(answerIndex: number, length: number) {
+  initRoundAnswerOptions(answerIndex: number) {
     const barColors = this.getBarColors();
     for (let j = 0; j < this.rounds; j++) {
       this.colors[j][answerIndex] = barColors[answerIndex % barColors.length];
@@ -342,25 +327,21 @@ export class StatisticChoiceComponent
               ? this.colors[j][answerIndex]
               : this.colorStrings.correct;
         } else {
-          this.indicationColors[j][answerIndex] = this.colorStrings.abstention;
+          this.indicationColors[j][answerIndex] = this.colorStrings.wrong;
         }
-      }
-      if (answerIndex === length - 1 && this.content.abstentionsAllowed) {
-        this.colors[j].push(this.colorStrings.abstention);
-        this.indicationColors[j].push(this.colorStrings.abstention);
       }
     }
   }
 
   initChart() {
-    const length = this.options.length;
     this.getColors();
-    for (let i = 0; i < length; i++) {
-      this.initRoundAnswerOptions(i, length);
-    }
+    this.options.forEach((value, index) => {
+      this.initRoundAnswerOptions(index);
+    });
   }
 
   updateData(stats: AnswerStatistics) {
+    this.stats = stats;
     if (stats) {
       if (this.rounds > 1) {
         for (let i = 0; i < this.rounds; i++) {
@@ -371,43 +352,20 @@ export class StatisticChoiceComponent
       } else {
         this.setData(stats, this.roundsToDisplay);
       }
-    } else {
-      this.independentAnswerCount = [[], [], []];
     }
-    this.updateCounterForRound();
   }
 
   setData(stats: AnswerStatistics, roundIndex: number) {
-    let abstentionCount = 0;
     this.data[roundIndex] = stats.roundStatistics[roundIndex].independentCounts;
-    if (this.content.abstentionsAllowed) {
-      abstentionCount = stats.roundStatistics[roundIndex].abstentionCount;
-      this.data[roundIndex].push(abstentionCount);
-    }
-    this.updateIndependentAnswerCounts(stats, roundIndex, abstentionCount);
+    this.updateCounterForRound(roundIndex);
   }
 
-  updateIndependentAnswerCounts(
-    stats: AnswerStatistics,
-    round: number,
-    abstentions: number
-  ) {
-    this.independentAnswerCount[round] =
-      stats.roundStatistics[round].combinatedCounts?.map((a) => a.count) || [];
-    this.independentAnswerCount[2] =
-      this.independentAnswerCount[this.getMaxCountIndex()];
-    this.independentAnswerCount[round].push(abstentions);
-  }
-
-  getMaxCountIndex() {
-    return this.getSum(this.independentAnswerCount[0]) >
-      this.getSum(this.independentAnswerCount[1])
-      ? 0
-      : 1;
-  }
-
-  updateCounterForRound() {
-    this.updateCounter(this.independentAnswerCount[this.roundsToDisplay]);
+  updateCounterForRound(round: number) {
+    const index = round > 1 ? 1 : round;
+    this.updateCounter({
+      answers: this.stats?.roundStatistics[index].answerCount ?? 0,
+      abstentions: this.stats?.roundStatistics[index].abstentionCount ?? 0,
+    });
   }
 
   prepareChartForRoundCompare(resetChart: boolean) {

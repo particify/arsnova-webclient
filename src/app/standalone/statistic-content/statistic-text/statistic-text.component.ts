@@ -92,7 +92,12 @@ export class StatisticTextComponent
 
   getData() {
     this.getAnswerStats();
-    this.updateCounter(this.answerStats.map((a) => a.count));
+    this.updateCounter({
+      answers: this.getSum(
+        this.answerStats.filter((a) => a.answer).map((a) => a.count)
+      ),
+      abstentions: this.abstentionCount,
+    });
   }
 
   getAnswerStats() {
@@ -120,16 +125,6 @@ export class StatisticTextComponent
     this.answerStats.sort((a, b) => {
       return a.count > b.count ? -1 : 1;
     });
-    if (this.abstentionCount > 0) {
-      const abstentionString = this.translateService.translate(
-        this.abstentionCount === 1
-          ? 'statistic.abstention'
-          : 'statistic.abstentions'
-      );
-      this.answerStats.push(
-        new TextStatistic(abstentionString, this.abstentionCount)
-      );
-    }
   }
 
   deleteAnswer(answer: TextStatistic): void {

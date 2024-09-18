@@ -5,10 +5,8 @@ import { Content } from '@app/core/models/content';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { UserSettings } from '@app/core/models/user-settings';
-import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 import { TranslocoService } from '@jsverse/transloco';
-
-export const ABSTENTION_SIGN = '–';
+import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
 @Component({
   template: '',
@@ -16,8 +14,8 @@ export const ABSTENTION_SIGN = '–';
 export abstract class StatisticContentBaseComponent implements OnInit {
   @Input({ required: true }) content!: Content;
   @Input() directShow = false;
-  @Output() updateCounterEvent: EventEmitter<number> =
-    new EventEmitter<number>();
+  @Output() updateCounterEvent: EventEmitter<AnswerResponseCounts> =
+    new EventEmitter<AnswerResponseCounts>();
   @Input() isPresentation = false;
   @Input() active = false;
   @Input() settings: UserSettings = new UserSettings();
@@ -25,7 +23,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   destroyed$ = new Subject<void>();
   isLoading = true;
   answersVisible = false;
-  answerCount = 0;
+  responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
 
   protected constructor(
     protected contentService: ContentService,
@@ -74,13 +72,9 @@ export abstract class StatisticContentBaseComponent implements OnInit {
     }
   }
 
-  updateCounter(list: number[]) {
-    if (list.length > 0) {
-      this.answerCount = this.getSum(list);
-    } else {
-      this.answerCount = 0;
-    }
-    this.updateCounterEvent.emit(this.answerCount);
+  updateCounter(responseCounts: AnswerResponseCounts) {
+    this.responseCounts = responseCounts;
+    this.updateCounterEvent.emit(this.responseCounts);
   }
 
   getDataLabel(value: number, roundData: number[], count?: number): string {
@@ -97,13 +91,5 @@ export abstract class StatisticContentBaseComponent implements OnInit {
 
   protected getLabelWithPercentageSign(label: string) {
     return label + '\u202F%';
-  }
-
-  protected getTooltipTitle(
-    item: TooltipItem<keyof ChartTypeRegistry>
-  ): string {
-    return item.label === ABSTENTION_SIGN
-      ? this.translateService.translate('statistic.abstentions')
-      : item.label;
   }
 }

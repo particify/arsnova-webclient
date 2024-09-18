@@ -14,9 +14,23 @@
   <div
     class="answer-count"
     [ngClass]="{ 'over-control-bar': controlBarVisible }"
+    fxLayout="column"
+    fxLayoutAlign="start end"
+    fxLayoutGap="4px"
   >
+    @if (responseCounts.abstentions) {
+      <app-count
+        [count]="responseCounts.abstentions"
+        [label]="
+          (responseCounts.abstentions === 1
+            ? 'statistic.abstention'
+            : 'statistic.abstentions'
+          ) | transloco
+        "
+      ></app-count>
+    }
     <app-answer-count
-      [count]="answerCount"
+      [count]="responseCounts.answers"
       [size]="'presentation'"
     ></app-answer-count>
   </div>

@@ -52,8 +52,6 @@ export class StatisticPrioritizationComponent
   chartColors: string[] = [];
   chartData: number[] = [];
   emptyData: number[] = [];
-  answerCount = 0;
-  abstentionCount = 0;
   chartHeight = 0;
   scale = 0;
   fontSize = 0;
@@ -273,7 +271,7 @@ export class StatisticPrioritizationComponent
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
       label = this.getLabelWithPercentageSign(
-        (value / (this.answerCount - this.abstentionCount) || 0).toFixed(0)
+        (value / this.responseCounts.answers).toFixed(0)
       );
     } else {
       label = value.toString();
@@ -298,9 +296,12 @@ export class StatisticPrioritizationComponent
     if (stats) {
       this.setData(stats);
     } else {
-      this.answerCount = 0;
+      this.responseCounts = { answers: 0, abstentions: 0 };
     }
-    this.updateCounter([stats.roundStatistics[0].answerCount]);
+    this.updateCounter({
+      answers: stats.roundStatistics[0].answerCount,
+      abstentions: stats.roundStatistics[0].abstentionCount,
+    });
   }
 
   setData(stats: AnswerStatistics) {
@@ -308,12 +309,11 @@ export class StatisticPrioritizationComponent
       stats.roundStatistics[0] as PrioritizationRoundStatistics
     ).assignedPoints;
     this.emptyData = this.chartData.map(() => 0);
-    this.abstentionCount = stats.roundStatistics[0].abstentionCount;
   }
 
   getA11yMessage(): string {
     let a11yMsg = '';
-    if (this.answerCount === 0) {
+    if (this.responseCounts.answers === 0) {
       a11yMsg = this.translateService.translate('statistic.no-answers');
     } else {
       this.options.forEach((option, i) => {

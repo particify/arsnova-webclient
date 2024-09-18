@@ -1,0 +1,9 @@
+@import '../../../variables';
+
+.container {
+  opacity: 0.7;
+
+  :first-child {
+    font-weight: $font-weight-bold;
+  }
+}

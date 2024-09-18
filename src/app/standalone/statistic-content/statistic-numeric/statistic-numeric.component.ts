@@ -423,21 +423,19 @@ export class StatisticNumericComponent
 
   updateCounterForRound() {
     if (this.compareRounds()) {
-      this.answerCount = Math.max(
-        this.getAnswerCountForRound(0),
-        this.getAnswerCountForRound(1)
-      );
+      const index =
+        this.roundStats[0]?.answerCount > this.roundStats[1]?.answerCount
+          ? 0
+          : 1;
+      this.responseCounts.answers = this.roundStats[index]?.answerCount;
+      this.responseCounts.abstentions = this.roundStats[index].abstentionCount;
     } else {
-      this.answerCount = this.getAnswerCountForRound(this.roundsToDisplay);
+      this.responseCounts.answers =
+        this.roundStats[this.roundsToDisplay].answerCount;
+      this.responseCounts.abstentions =
+        this.roundStats[this.roundsToDisplay].abstentionCount;
     }
-    this.updateCounterEvent.emit(this.answerCount);
-  }
-
-  private getAnswerCountForRound(round: number): number {
-    return (
-      this.roundStats[round]?.answerCount +
-        this.roundStats[round]?.abstentionCount || 0
-    );
+    this.updateCounterEvent.emit(this.responseCounts);
   }
 
   private prepareChartForRoundCompare(resetChart: boolean) {
