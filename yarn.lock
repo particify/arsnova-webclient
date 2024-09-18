@@ -2947,9 +2947,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsverse/transloco@npm:7.4.4":
-  version: 7.4.4
-  resolution: "@jsverse/transloco@npm:7.4.4"
+"@jsverse/transloco@npm:7.5.0":
+  version: 7.5.0
+  resolution: "@jsverse/transloco@npm:7.5.0"
   dependencies:
     "@jsverse/transloco-utils": "npm:^7.0.0"
     flat: "npm:6.0.1"
@@ -2961,7 +2961,7 @@ __metadata:
     tslib: "npm:^2.2.0"
   peerDependencies:
     "@angular/core": ">=16.0.0"
-  checksum: 10c0/24488e734c1b080ed519c8f0358195180d8ce5c8c74988127418c329cf7a681936340d7b8e390b355b21775c93292d298a0b06cd69c3b029121cea1c53977bd4
+  checksum: 10c0/db8e538ca0beaa224d32a7cbaa0bd0775395bad87714c12c773a361ca5090094b98cd68b243315517e145d1f9528c5ace81c1c32d82c95bd6dd606c48f6aae55
   languageName: node
   linkType: hard
 
@@ -5393,7 +5393,7 @@ __metadata:
     "@eslint/js": "npm:9.10.0"
     "@fontsource/material-symbols-outlined": "npm:5.1.0"
     "@fontsource/roboto": "npm:5.1.0"
-    "@jsverse/transloco": "npm:7.4.4"
+    "@jsverse/transloco": "npm:7.5.0"
     "@stomp/rx-stomp": "npm:2.0.0"
     "@stomp/stompjs": "npm:7.0.0"
     "@storybook/addon-essentials": "npm:8.3.1"
