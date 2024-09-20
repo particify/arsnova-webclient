@@ -3,15 +3,13 @@
     <app-loading-indicator></app-loading-indicator>
   }
   @if (!isLoading) {
-    <div fxLayout="column" fxLayoutGap="16px">
-      @if (showCorrect) {
-        <app-correct-answer-results
-          [answerCounts]="getAnswerCounts()"
-          [correctAnswerCounts]="getCorrectAnswerCounts()"
-          [abstentionCounts]="getAbstentionCounts()"
-          [show]="showCorrect"
-        ></app-correct-answer-results>
-      }
+    <div fxLayout="column" [fxLayoutGap]="showCorrect ? '16px' : '0px'">
+      <app-correct-answer-results
+        [answerCounts]="getAnswerCounts()"
+        [correctAnswerCounts]="getCorrectAnswerCounts()"
+        [abstentionCounts]="getAbstentionCounts()"
+        [show]="showCorrect"
+      ></app-correct-answer-results>
       <div
         class="chart-container"
         [ngClass]="{

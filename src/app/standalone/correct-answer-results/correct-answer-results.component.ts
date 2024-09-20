@@ -28,8 +28,7 @@ export class CorrectAnswerResultsComponent {
     ) {
       percent =
         this.correctAnswerFractions[round] *
-        (this.answerCounts[round] /
-          (this.answerCounts[round] + this.getAbstentionCounts(round))) *
+        (this.answerCounts[round] / this.getTotalResponses(round)) *
         100;
     } else {
       if (
@@ -39,17 +38,29 @@ export class CorrectAnswerResultsComponent {
         this.correctAnswerCounts[round] > 0
       ) {
         percent =
-          (this.correctAnswerCounts[round] /
-            (this.answerCounts[round] + this.getAbstentionCounts(round))) *
+          (this.correctAnswerCounts[round] / this.getTotalResponses(round)) *
           100;
       }
     }
+    return this.getCountWithPercentageSign(percent);
+  }
+
+  getAbstentionPercentage(round: number): string | undefined {
+    if (this.abstentionCounts && this.abstentionCounts[round] > 0) {
+      const percent =
+        (this.abstentionCounts[round] / this.getTotalResponses(round)) * 100;
+      return this.getCountWithPercentageSign(percent);
+    }
+  }
+
+  private getCountWithPercentageSign(percent: number): string {
     return percent.toFixed(0) + '\u202F%';
   }
 
-  private getAbstentionCounts(round: number): number {
-    return this.abstentionCounts && this.abstentionCounts[round]
-      ? this.abstentionCounts[round]
-      : 0;
+  private getTotalResponses(round: number): number {
+    if (this.answerCounts && this.abstentionCounts) {
+      return this.answerCounts[round] + this.abstentionCounts[round];
+    }
+    return 0;
   }
 }

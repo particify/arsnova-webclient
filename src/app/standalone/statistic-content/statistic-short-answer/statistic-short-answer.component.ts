@@ -36,6 +36,7 @@ export class StatisticShortAnswerComponent
   @Input() showCorrect = false;
 
   answerList: TextStatistic[] = [];
+  abstentionCount = 0;
 
   constructor(
     protected contentService: ContentService,
@@ -85,9 +86,10 @@ export class StatisticShortAnswerComponent
   updateData(stats: AnswerStatistics) {
     if (stats) {
       const texts = (stats?.roundStatistics[0] as TextRoundStatistics)?.texts;
+      this.abstentionCount = stats.roundStatistics[0].abstentionCount;
       this.updateCounter({
         answers: stats.roundStatistics[0].answerCount,
-        abstentions: stats.roundStatistics[0].abstentionCount,
+        abstentions: this.abstentionCount,
       });
       if (!texts) {
         return;
