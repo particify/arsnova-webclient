@@ -33,6 +33,7 @@ import { StatisticInfoComponent } from '@app/standalone/statistic-info/statistic
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
+import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 
 const MAX_BARS = 15;
 const LEGEND_LOCALIZATION_START = 10_000;
@@ -56,6 +57,7 @@ interface AnswerGroup {
     MatIcon,
     MatDivider,
     TranslocoPipe,
+    CorrectAnswerResultsComponent,
   ],
 })
 export class StatisticNumericComponent
@@ -506,9 +508,7 @@ export class StatisticNumericComponent
     return this.roundsToDisplay > 1;
   }
 
-  getCorrectPercentage(round: number): string {
-    return this.getLabelWithPercentageSign(
-      (this.roundStats[round]?.correctAnswerFraction * 100).toFixed(0)
-    );
+  getCorrectAnswerFractions(): number[] {
+    return this.roundStats.map((s) => s.correctAnswerFraction);
   }
 }

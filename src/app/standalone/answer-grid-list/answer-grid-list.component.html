@@ -1,61 +1,45 @@
-<div fxLayout="column" fxLayoutGap="16px">
-  @if (!!correctTerms) {
-    <div
-      class="correct-info-container"
-      [ngClass]="{ 'show-container': showCorrect }"
-      fxLayout="row"
-      fxLayoutAlign="center center"
-      fxLayoutGap="8px"
+<div class="grid-container">
+  @for (answer of answers; track answer; let i = $index) {
+    <mat-card
+      appearance="outlined"
+      [ngClass]="{
+        'correct-card': showCorrect && isCorrect(answer.answer),
+      }"
     >
-      <b>{{ getCorrectPercentage() }}</b>
-      <span class="correct-info-text">{{
-        'answer.have-answered-correctly' | transloco
-      }}</span>
-    </div>
-  }
-  <div class="grid-container">
-    @for (answer of answers; track answer; let i = $index) {
-      <mat-card
-        appearance="outlined"
-        [ngClass]="{
-          'correct-card': showCorrect && isCorrect(answer.answer),
-        }"
+      <div
+        fxFill
+        fxLayout="row"
+        fxLayoutAlign="space-between"
+        fxLayoutGap="12px"
       >
-        <div
-          fxFill
-          fxLayout="row"
-          fxLayoutAlign="space-between"
-          fxLayoutGap="12px"
-        >
-          <span class="answer">{{ answer.answer }}</span>
-          @if (answer.count > 1) {
-            <div
-              fxLayout="column"
-              fxLayoutAlign="space-between center"
-              fxLayoutGap="6px"
-            >
-              <div fxLayoutAlign="center center" class="count">
-                <span>{{ answer.count }}</span>
-              </div>
-              <ng-template [ngTemplateOutlet]="correctIcon"></ng-template>
+        <span class="answer">{{ answer.answer }}</span>
+        @if (answer.count > 1) {
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between center"
+            fxLayoutGap="6px"
+          >
+            <div fxLayoutAlign="center center" class="count">
+              <span>{{ answer.count }}</span>
             </div>
-          }
-        </div>
-        @if (answer.count === 1) {
-          <div class="icon-absolute">
             <ng-template [ngTemplateOutlet]="correctIcon"></ng-template>
           </div>
         }
-      </mat-card>
-      <ng-template #correctIcon>
-        <mat-icon
-          class="correct-icon"
-          [ngClass]="{
-            'show-correct-icon': showCorrect && isCorrect(answer.answer),
-          }"
-          >check_circle</mat-icon
-        >
-      </ng-template>
-    }
-  </div>
+      </div>
+      @if (answer.count === 1) {
+        <div class="icon-absolute">
+          <ng-template [ngTemplateOutlet]="correctIcon"></ng-template>
+        </div>
+      }
+    </mat-card>
+    <ng-template #correctIcon>
+      <mat-icon
+        class="correct-icon"
+        [ngClass]="{
+          'show-correct-icon': showCorrect && isCorrect(answer.answer),
+        }"
+        >check_circle</mat-icon
+      >
+    </ng-template>
+  }
 </div>

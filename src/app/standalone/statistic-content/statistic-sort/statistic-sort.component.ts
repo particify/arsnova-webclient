@@ -22,7 +22,10 @@ import { StatisticContentBaseComponent } from '@app/standalone/statistic-content
 import { takeUntil } from 'rxjs/operators';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { Combination } from '@app/core/models/round-statistics';
+import {
+  Combination,
+  RoundStatistics,
+} from '@app/core/models/round-statistics';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -30,6 +33,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
+import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 
 export const MAX_COMBINATIONS = 4;
 
@@ -43,6 +47,7 @@ export const MAX_COMBINATIONS = 4;
     LoadingIndicatorComponent,
     NgClass,
     RenderedTextComponent,
+    CorrectAnswerResultsComponent,
   ],
 })
 export class StatisticSortComponent
@@ -67,6 +72,7 @@ export class StatisticSortComponent
   surface: string;
   green: string;
   grey: string;
+  stats?: RoundStatistics;
 
   constructor(
     protected contentService: ContentService,
@@ -121,23 +127,23 @@ export class StatisticSortComponent
   }
 
   updateData(stats: AnswerStatistics) {
-    const roundStatistics = stats.roundStatistics[0];
+    this.stats = stats.roundStatistics[0];
     this.data = [];
     this.answerIndexes = [];
     const combinedCounts = this.getTopCombinations(
-      roundStatistics.combinatedCounts ?? []
+      this.stats.combinatedCounts ?? []
     );
     this.data.push({
       data: combinedCounts.map((c) => c.count),
       backgroundColor: this.showCorrect ? this.indicationColors : this.colors,
     });
     this.answerIndexes = combinedCounts.map((c) => c.selectedChoiceIndexes);
-    if (roundStatistics.combinatedCounts) {
+    if (this.stats.combinatedCounts) {
       this.initLabels();
     }
     this.updateCounter({
-      answers: roundStatistics.answerCount,
-      abstentions: roundStatistics.abstentionCount,
+      answers: this.stats.answerCount,
+      abstentions: this.stats.abstentionCount,
     });
 
     this.setColors();
@@ -368,5 +374,21 @@ export class StatisticSortComponent
         this.createChart();
       }, 300);
     }
+  }
+
+  getAnswerCounts(): number[] {
+    if (this.stats) {
+      return [this.stats.answerCount];
+    }
+    return [0];
+  }
+
+  getCorrectAnswerCounts(): number[] {
+    if (this.stats && this.stats.answerCount) {
+      return [
+        this.stats.independentCounts.find((c, i) => this.checkIfCorrect(i))!,
+      ];
+    }
+    return [0];
   }
 }

@@ -3,15 +3,24 @@
     <app-loading-indicator></app-loading-indicator>
   }
   @if (!isLoading) {
-    <div
-      class="chart-container"
-      [ngClass]="{
-        invisible: !answersVisible,
-        'normal-chart': !isPresentation && answersVisible,
-        'presentation-chart': isPresentation && answersVisible,
-      }"
-    >
-      <canvas class="chart" id="{{ chartId }}"></canvas>
+    <div fxLayout="column" fxLayoutGap="16px">
+      @if (showCorrect) {
+        <app-correct-answer-results
+          [answerCounts]="getAnswerCounts()"
+          [correctAnswerCounts]="getCorrectAnswerCounts()"
+          [show]="showCorrect"
+        ></app-correct-answer-results>
+      }
+      <div
+        class="chart-container"
+        [ngClass]="{
+          invisible: !answersVisible,
+          'normal-chart': !isPresentation && answersVisible,
+          'presentation-chart': isPresentation && answersVisible,
+        }"
+      >
+        <canvas class="chart" id="{{ chartId }}"></canvas>
+      </div>
     </div>
   }
   @if (!isLoading) {

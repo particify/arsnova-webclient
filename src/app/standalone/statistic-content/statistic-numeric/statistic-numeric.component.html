@@ -1,8 +1,16 @@
-<div fxLayout="column">
+<div fxLayout="column" fxLayoutGap="16px">
   @if (isLoading) {
     <app-loading-indicator></app-loading-indicator>
   }
   @if (!isLoading) {
+    @if (content.correctNumber !== undefined) {
+      <app-correct-answer-results
+        [correctAnswerFractions]="getCorrectAnswerFractions()"
+        [show]="showCorrect"
+        [round]="roundsToDisplay + 1"
+        [compareRounds]="compareRounds()"
+      ></app-correct-answer-results>
+    }
     <div
       class="results-container"
       [ngClass]="{
@@ -85,23 +93,6 @@
               >&plusmn;&nbsp;{{ content.tolerance }}</span
             >
           }
-        </div>
-        <mat-divider class="divider" [vertical]="!isPresentation"></mat-divider>
-        <div
-          class="inner-container"
-          [ngClass]="{ 'column-container': isPresentation }"
-        >
-          <div>
-            <b>{{
-              getCorrectPercentage(compareRounds() ? 0 : roundsDisplayed)
-            }}</b>
-            @if (compareRounds()) {
-              <b>&nbsp;&vert;&nbsp;{{ getCorrectPercentage(1) }}</b>
-            }
-          </div>
-          <span class="info-text">{{
-            'answer.have-answered-correctly' | transloco
-          }}</span>
         </div>
       </div>
     </div>
