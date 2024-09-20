@@ -1,0 +1,17 @@
+<div
+  class="correct-info-container"
+  [ngClass]="{ 'show-container': show }"
+  fxLayout="row"
+  fxLayoutAlign="center center"
+  fxLayoutGap="8px"
+>
+  <div>
+    <b>{{ getCorrectPercentage(compareRounds ? 0 : round - 1) }}</b>
+    @if (compareRounds) {
+      <b>&nbsp;&vert;&nbsp;{{ getCorrectPercentage(1) }}</b>
+    }
+  </div>
+  <span class="correct-info-text">{{
+    'answer.have-answered-correctly' | transloco
+  }}</span>
+</div>

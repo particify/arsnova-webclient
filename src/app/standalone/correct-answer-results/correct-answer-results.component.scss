@@ -1,0 +1,23 @@
+@import '../../../variables';
+
+.correct-info-container {
+  overflow: hidden;
+  transition:
+    max-height 300ms,
+    opacity 300ms;
+
+  &:not(.show-container) {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  &.show-container {
+    max-height: 30px;
+    opacity: 1;
+  }
+}
+
+.correct-info-text {
+  font-size: $xs-font-size;
+  opacity: 0.7;
+}
