@@ -508,6 +508,18 @@ export class StatisticNumericComponent
     return this.roundsToDisplay > 1;
   }
 
+  getAnswerCounts(): number[] | undefined {
+    if (this.roundStats) {
+      return this.roundStats.map((s) => s.answerCount);
+    }
+  }
+
+  getAbstentionCounts(): number[] | undefined {
+    if (this.roundStats) {
+      return this.roundStats.map((s) => s.abstentionCount);
+    }
+  }
+
   getCorrectAnswerFractions(): number[] {
     return this.roundStats.map((s) => s.correctAnswerFraction);
   }

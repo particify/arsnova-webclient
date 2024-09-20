@@ -435,14 +435,19 @@ export class StatisticChoiceComponent
     this.roundsDisplayed = this.roundsToDisplay;
   }
 
-  getAnswerCounts(): number[] {
+  getAbstentionCounts(): number[] | undefined {
+    if (this.stats) {
+      return this.stats?.roundStatistics.map((s) => s.abstentionCount);
+    }
+  }
+
+  getAnswerCounts(): number[] | undefined {
     if (this.stats) {
       return this.stats?.roundStatistics.map((s) => s.answerCount);
     }
-    return [0];
   }
 
-  getCorrectAnswerCounts(): number[] {
+  getCorrectAnswerCounts(): number[] | undefined {
     if (this.stats) {
       if (this.content.multiple) {
         return this.stats.roundStatistics.map((s) =>
@@ -458,6 +463,5 @@ export class StatisticChoiceComponent
         );
       }
     }
-    return [0];
   }
 }

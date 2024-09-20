@@ -376,19 +376,23 @@ export class StatisticSortComponent
     }
   }
 
-  getAnswerCounts(): number[] {
+  getAnswerCounts(): number[] | undefined {
     if (this.stats) {
       return [this.stats.answerCount];
     }
-    return [0];
   }
 
-  getCorrectAnswerCounts(): number[] {
+  getAbstentionCounts(): number[] | undefined {
+    if (this.stats) {
+      return [this.stats.abstentionCount];
+    }
+  }
+
+  getCorrectAnswerCounts(): number[] | undefined {
     if (this.stats && this.stats.answerCount) {
       return [
         this.stats.independentCounts.find((c, i) => this.checkIfCorrect(i))!,
       ];
     }
-    return [0];
   }
 }

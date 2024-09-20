@@ -14,14 +14,23 @@ export class CorrectAnswerResultsComponent {
   @Input() answerCounts?: number[];
   @Input() correctAnswerCounts?: number[];
   @Input() correctAnswerFractions?: number[];
+  @Input() abstentionCounts?: number[];
   @Input() round = 1;
   @Input() compareRounds = false;
   @Input() show = false;
 
   getCorrectPercentage(round: number): string {
     let percent = 0;
-    if (this.correctAnswerFractions && this.correctAnswerFractions[round]) {
-      percent = this.correctAnswerFractions[round] * 100;
+    if (
+      this.answerCounts &&
+      this.correctAnswerFractions &&
+      this.correctAnswerFractions[round]
+    ) {
+      percent =
+        this.correctAnswerFractions[round] *
+        (this.answerCounts[round] /
+          (this.answerCounts[round] + this.getAbstentionCounts(round))) *
+        100;
     } else {
       if (
         this.answerCounts &&
@@ -30,9 +39,17 @@ export class CorrectAnswerResultsComponent {
         this.correctAnswerCounts[round] > 0
       ) {
         percent =
-          (this.correctAnswerCounts[round] / this.answerCounts[round]) * 100;
+          (this.correctAnswerCounts[round] /
+            (this.answerCounts[round] + this.getAbstentionCounts(round))) *
+          100;
       }
     }
     return percent.toFixed(0) + '\u202F%';
+  }
+
+  private getAbstentionCounts(round: number): number {
+    return this.abstentionCounts && this.abstentionCounts[round]
+      ? this.abstentionCounts[round]
+      : 0;
   }
 }

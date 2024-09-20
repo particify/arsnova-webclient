@@ -5,7 +5,9 @@
   @if (!isLoading) {
     @if (content.correctNumber !== undefined) {
       <app-correct-answer-results
+        [answerCounts]="getAnswerCounts()"
         [correctAnswerFractions]="getCorrectAnswerFractions()"
+        [abstentionCounts]="getAbstentionCounts()"
         [show]="showCorrect"
         [round]="roundsToDisplay + 1"
         [compareRounds]="compareRounds()"
