@@ -453,13 +453,18 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     contents.forEach((content) => {
       let count = 0;
       let correct: number | undefined;
+      let abstentions = 0;
       const contentSummaries = stats.filter(
         (stats) =>
-          stats.contentId === content.id &&
-          stats.round === content.state.round &&
-          stats.result !== AnswerResultType.ABSTAINED
+          stats.contentId === content.id && stats.round === content.state.round
       );
       if (contentSummaries.length > 0) {
+        const abstentionStats = contentSummaries.filter(
+          (contentStats) => contentStats.result === AnswerResultType.ABSTAINED
+        );
+        abstentions = abstentionStats
+          .map((s) => s.count)
+          .reduce((a, b) => a + b, 0);
         count = this.calculateStatsCount(contentSummaries);
         if (this.isContentScorable(content)) {
           correct = this.calculateCorrectStats(contentSummaries);
@@ -468,7 +473,11 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
       if (correct) {
         correct = (correct / count) * 100;
       }
-      result.set(content.id, { count: count, correct: correct });
+      result.set(content.id, {
+        count: count - abstentions,
+        correct: correct,
+        abstentions: abstentions,
+      });
     });
     return result;
   }

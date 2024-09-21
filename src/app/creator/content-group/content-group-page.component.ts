@@ -51,6 +51,7 @@ const STATUS_EXCELLENT = 87.5;
 export interface ContentStats {
   count: number;
   correct?: number;
+  abstentions?: number;
 }
 
 @Component({
@@ -79,6 +80,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   contentStats = new Map<string, ContentStats>();
   totalCorrect?: number;
+  totalAbstentions?: number;
 
   isContentStarted = false;
 
@@ -365,14 +367,19 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
         this.contentStats = stats;
         let correct = 0;
         let total = 0;
+        let abstentions = 0;
         Array.from(this.contentStats.values()).forEach((stats) => {
           if (stats.correct !== undefined) {
             correct += stats.correct;
             total++;
+            abstentions += stats.abstentions ?? 0;
           }
         });
         if (correct) {
           this.totalCorrect = Math.round(correct / total);
+          this.totalAbstentions = Math.round(
+            (abstentions / (total + abstentions)) * 100
+          );
         }
       });
   }
