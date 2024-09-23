@@ -21,7 +21,7 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { Subject } from 'rxjs';
@@ -106,7 +106,6 @@ export class ControlBarComponent
   ];
   groupItems: KeyNavBarItem[] = [
     new KeyNavBarItem('results', 'insert_chart', '', ' '),
-    new KeyNavBarItem('correct', 'check_circle', '', 'c'),
   ];
   surveyItems: KeyNavBarItem[] = [
     new KeyNavBarItem('start', 'play_arrow', '', ' '),
@@ -209,7 +208,7 @@ export class ControlBarComponent
         const group = this.contentGroups.find((g) => g.name === this.groupName);
         if (group) {
           this.group = group;
-          this.checkForQuizMode();
+          this.determineGroupControls();
         }
         if (
           this.isActiveFeature(RoutingFeature.CONTENTS) &&
@@ -458,18 +457,37 @@ export class ControlBarComponent
     return !group.published;
   }
 
-  private checkForQuizMode(): void {
+  private determineGroupControls(): void {
+    if (
+      this.group &&
+      ![GroupType.SURVEY, GroupType.FLASHCARDS].includes(this.group.groupType)
+    ) {
+      if (this.getIndexOfGroupItem('correct') === -1) {
+        this.groupItems.push(
+          new KeyNavBarItem('correct', 'check_circle', '', 'c')
+        );
+      }
+    } else {
+      const correctItemIndex = this.getIndexOfGroupItem('correct');
+      if (correctItemIndex > -1) {
+        this.groupItems.splice(correctItemIndex, 1);
+      }
+    }
     if (this.group?.leaderboardEnabled) {
-      if (!this.groupItems.map((i) => i.name).includes('leaderboard')) {
+      if (this.getIndexOfGroupItem('leaderboard') === -1) {
         this.groupItems.push(
           new KeyNavBarItem('leaderboard', 'emoji_events', '', 'l')
         );
       }
     } else {
-      if (this.groupItems.map((i) => i.name).includes('leaderboard')) {
+      if (this.getIndexOfGroupItem('leaderboard') > -1) {
         this.groupItems.splice(-1, 1);
       }
     }
+  }
+
+  private getIndexOfGroupItem(name: string): number {
+    return this.groupItems.map((i) => i.name).indexOf(name);
   }
 
   changeGroup(contentGroup: ContentGroup) {
@@ -484,7 +502,7 @@ export class ControlBarComponent
 
   updateGroup(contentGroup: ContentGroup) {
     this.setGroup(contentGroup);
-    this.checkForQuizMode();
+    this.determineGroupControls();
     this.activeGroup.emit(this.groupName);
   }
 
