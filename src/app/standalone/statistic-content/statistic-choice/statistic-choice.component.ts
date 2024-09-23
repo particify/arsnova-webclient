@@ -33,6 +33,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
+import { RoundStatistics } from '@app/core/models/round-statistics';
 
 @Component({
   selector: 'app-statistic-choice',
@@ -78,7 +79,7 @@ export class StatisticChoiceComponent
   roundsToDisplay = 0;
   roundsDisplayed = 0;
   ContentType: typeof ContentType = ContentType;
-  stats?: AnswerStatistics;
+  roundStats?: RoundStatistics[];
 
   constructor(
     protected contentService: ContentService,
@@ -343,11 +344,14 @@ export class StatisticChoiceComponent
   }
 
   updateData(stats: AnswerStatistics) {
-    this.stats = stats;
     if (stats) {
+      if (!this.roundStats) {
+        this.roundStats = stats.roundStatistics;
+      }
       if (this.rounds > 1) {
         for (let i = 0; i < this.rounds; i++) {
           if (stats.roundStatistics[i]) {
+            this.roundStats[i] = stats.roundStatistics[i];
             this.setData(stats, i);
           }
         }
@@ -363,10 +367,13 @@ export class StatisticChoiceComponent
   }
 
   updateCounterForRound(round: number) {
+    if (!this.roundStats) {
+      return;
+    }
     const index = round > 1 ? 1 : round;
     this.updateCounter({
-      answers: this.stats?.roundStatistics[index].answerCount ?? 0,
-      abstentions: this.stats?.roundStatistics[index].abstentionCount ?? 0,
+      answers: this.roundStats[index].answerCount ?? 0,
+      abstentions: this.roundStats[index].abstentionCount ?? 0,
     });
   }
 
@@ -436,21 +443,21 @@ export class StatisticChoiceComponent
   }
 
   getAbstentionCounts(): number[] | undefined {
-    if (this.stats) {
-      return this.stats?.roundStatistics.map((s) => s.abstentionCount);
+    if (this.roundStats) {
+      return this.roundStats.map((s) => s.abstentionCount);
     }
   }
 
   getAnswerCounts(): number[] | undefined {
-    if (this.stats) {
-      return this.stats?.roundStatistics.map((s) => s.answerCount);
+    if (this.roundStats) {
+      return this.roundStats.map((s) => s.answerCount);
     }
   }
 
   getCorrectAnswerCounts(): number[] | undefined {
-    if (this.stats) {
+    if (this.roundStats) {
       if (this.content.multiple) {
-        return this.stats.roundStatistics.map((s) =>
+        return this.roundStats.map((s) =>
           s.combinatedCounts
             ? (s.combinatedCounts.find((c) =>
                 c.selectedChoiceIndexes.every((i) => this.checkIfCorrect(i))
@@ -458,7 +465,7 @@ export class StatisticChoiceComponent
             : 0
         );
       } else {
-        return this.stats.roundStatistics.map(
+        return this.roundStats.map(
           (s) => s.independentCounts.find((c, i) => this.checkIfCorrect(i))!
         );
       }
