@@ -18,9 +18,16 @@
 
 .mode-name {
   font-weight: $font-weight-bold;
-  font-size: $m-font-size;
+  font-size: $s-font-size;
 }
 
 .mode-description {
   font-size: $xs-font-size;
+}
+
+mat-icon {
+  min-width: $l-font-size;
+  width: $l-font-size;
+  height: $l-font-size;
+  font-size: $l-font-size;
 }
