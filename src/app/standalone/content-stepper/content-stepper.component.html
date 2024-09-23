@@ -15,21 +15,25 @@
             showStepInfo && isLiveMode && !content.state.answeringEndTime
           "
         >
-          <app-content-results
-            [content]="content"
-            [directShow]="
-              currentStep === i &&
-              settings.showContentResultsDirectly &&
-              !isLiveMode
-            "
-            [active]="currentStep === i"
-            [index]="i"
-            [isPresentation]="hideControls"
-            (updatedCounter)="updateCounter($event, currentStep === i)"
-            [indexChanged]="indexChanged"
-            [settings]="settings"
-          >
-          </app-content-results>
+          @if (currentStep === undefined) {
+            <app-loading-indicator></app-loading-indicator>
+          } @else {
+            <app-content-results
+              [content]="content"
+              [directShow]="
+                currentStep === i &&
+                settings.showContentResultsDirectly &&
+                !isLiveMode
+              "
+              [active]="currentStep === i"
+              [index]="i"
+              [isPresentation]="hideControls"
+              (updatedCounter)="updateCounter($event, currentStep === i)"
+              [indexChanged]="indexChanged"
+              [settings]="settings"
+            >
+            </app-content-results>
+          }
         </mat-card>
         <div
           fxFill
@@ -41,11 +45,13 @@
             !showStepInfo || !isLiveMode || content.state.answeringEndTime
           "
         >
-          <app-content-step-info
-            [current]="currentStep + 1"
-            [totalCount]="stepCount"
-          ></app-content-step-info>
-          <span>{{ 'content.get-ready' | transloco }}</span>
+          @if (currentStep !== undefined) {
+            <app-content-step-info
+              [current]="currentStep + 1"
+              [totalCount]="stepCount"
+            ></app-content-step-info>
+            <span>{{ 'content.get-ready' | transloco }}</span>
+          }
         </div>
       </div>
       <div tabindex="0" class="visually-hidden">

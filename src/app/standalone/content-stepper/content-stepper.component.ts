@@ -17,6 +17,7 @@ import { AttributionsInfoComponent } from '@app/standalone/attributions-info/att
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-content-stepper',
@@ -28,6 +29,7 @@ import { StepperComponent } from '@app/standalone/stepper/stepper.component';
     ContentResultsComponent,
     ContentStepInfoComponent,
     AttributionsInfoComponent,
+    LoadingIndicatorComponent,
   ],
   templateUrl: './content-stepper.component.html',
   styleUrl: './content-stepper.component.scss',
@@ -47,7 +49,7 @@ export class ContentStepperComponent implements AfterViewInit, OnInit {
     new EventEmitter<AnswerResponseCounts>();
 
   stepCount = 0;
-  currentStep = 0;
+  currentStep?: number;
 
   ngOnInit(): void {
     this.stepCount = this.contents.length + (this.attributions.length ? 1 : 0);
