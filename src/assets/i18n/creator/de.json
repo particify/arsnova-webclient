@@ -248,7 +248,7 @@
     "answers-count": "{{count}} Antworten",
     "answer-count": "{{count}} Antwort",
     "answer-correct": "{{percentage}} richtig",
-    "group-progress-info": "Im Durchschnitt sind {{percent}} Prozent der Antworten richtig.",
+    "group-progress-info": "Im Durchschnitt sind {{percent}} % der Antworten richtig. {{abstentions}} % haben sich enthalten.",
     "locked": "Gesperrt",
     "lock": "Sperren",
     "publish-content-group": "Fragenserie freischalten",
