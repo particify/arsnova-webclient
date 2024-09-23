@@ -1,0 +1,23 @@
+<div>
+  <button
+    mat-raised-button
+    [color]="color"
+    [ngClass]="{ 'split-btn-primary': showSplitButton }"
+    (click)="clickedPrimary.emit()"
+  >
+    @if (icon) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    {{ label }}
+  </button>
+  @if (showSplitButton) {
+    <button
+      mat-raised-button
+      class="split-btn-secondary"
+      [color]="color"
+      [matMenuTriggerFor]="menuRef"
+    >
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+  }
+</div>

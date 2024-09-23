@@ -1,0 +1,18 @@
+@import '../../../variables';
+
+.split-btn-primary {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-right: 1px solid var(--grey-light);
+}
+
+.split-btn-secondary {
+  min-width: unset;
+  padding: 0 $spacing;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+
+  mat-icon {
+    margin: 0;
+  }
+}
