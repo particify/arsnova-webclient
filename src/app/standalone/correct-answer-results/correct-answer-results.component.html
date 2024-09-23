@@ -1,0 +1,34 @@
+<div
+  class="correct-info-container"
+  [ngClass]="{ 'show-container': show }"
+  fxLayout="column"
+  fxLayoutGap="2px"
+>
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+    <div>
+      <b>{{ getCorrectPercentage(compareRounds ? 0 : round - 1) }}</b>
+      @if (compareRounds) {
+        <b>&nbsp;&vert;&nbsp;{{ getCorrectPercentage(1) }}</b>
+      }
+    </div>
+    <span class="info-text">{{
+      'answer.have-answered-correctly' | transloco
+    }}</span>
+  </div>
+  @if (abstentionCounts && abstentionCounts[round - 1] > 0) {
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxLayoutGap="6px"
+      class="abstention-info"
+    >
+      <div>
+        <b>{{ getAbstentionPercentage(compareRounds ? 0 : round - 1) }}</b>
+        @if (compareRounds) {
+          <b>&nbsp;&vert;&nbsp;{{ getAbstentionPercentage(1) }}</b>
+        }
+      </div>
+      <span class="info-text">{{ 'answer.have-abstained' | transloco }}</span>
+    </div>
+  }
+</div>

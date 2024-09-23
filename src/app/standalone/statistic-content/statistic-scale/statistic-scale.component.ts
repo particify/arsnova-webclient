@@ -15,6 +15,7 @@ import { NgIf, NgClass, NgFor } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { ActivatedRoute } from '@angular/router';
 import { LanguageService } from '@app/core/services/util/language.service';
+import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 
 @Component({
   selector: 'app-statistic-scale',
@@ -30,6 +31,7 @@ import { LanguageService } from '@app/core/services/util/language.service';
     RenderedTextComponent,
     MatIcon,
     TranslocoPipe,
+    CorrectAnswerResultsComponent,
   ],
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {

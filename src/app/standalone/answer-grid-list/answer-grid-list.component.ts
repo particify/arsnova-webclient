@@ -28,21 +28,4 @@ export class AnswerGridListComponent {
   isCorrect(answer: string): boolean {
     return !!this.correctTerms && this.correctTerms.includes(answer);
   }
-
-  getCorrectPercentage(): string {
-    const correctTerms = this.answers.filter(
-      (a) => !!this.correctTerms && this.correctTerms.includes(a.answer)
-    );
-    let percent = 0;
-    if (this.answers.length > 0 && correctTerms.length > 0) {
-      const totalCount = this.getAnswerCount(this.answers);
-      const correctCount = this.getAnswerCount(correctTerms);
-      percent = (correctCount / totalCount) * 100;
-    }
-    return percent.toFixed(0) + '\u202F%';
-  }
-
-  private getAnswerCount(answers: TextStatistic[]): number {
-    return answers.map((a) => a.count).reduce((a, b) => a + b);
-  }
 }

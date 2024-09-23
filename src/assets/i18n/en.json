@@ -422,7 +422,8 @@
     "select-a-number-between": "Select a number between {{min}} and {{max}}",
     "correct-answer-is": "The correct answer is",
     "correct-answers-are": "Correct answers are:",
-    "have-answered-correctly": "have answered correctly"
+    "have-answered-correctly": "have answered correctly",
+    "have-abstained": "have abstained"
   },
   "survey": {
     "a11y-message": "You are now in live feedback mode.",

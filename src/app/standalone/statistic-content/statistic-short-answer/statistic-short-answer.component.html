@@ -12,23 +12,31 @@
         </p>
       </div>
     }
-    @if (answersVisible) {
-      @if (showModeration) {
-        <app-answer-list
-          [answers]="answerList"
-          [banMode]="true"
-          [isPresentation]="isPresentation"
-          [showCorrect]="showCorrect"
-          [correctAnswers]="getCorrectAnswers()"
-          (deleteClicked)="banAnswer($event)"
-        ></app-answer-list>
-      } @else {
-        <app-answer-grid-list
-          [answers]="answerList"
-          [showCorrect]="showCorrect"
-          [correctTerms]="getCorrectAnswers()"
-        ></app-answer-grid-list>
+    <div fxLayout="column" fxLayoutGap="16px">
+      @if (answersVisible) {
+        <app-correct-answer-results
+          [answerCounts]="[getAnswerCount()]"
+          [correctAnswerCounts]="[getCorrectAnswerCount()]"
+          [abstentionCounts]="[abstentionCount]"
+          [show]="showCorrect"
+        ></app-correct-answer-results>
+        @if (showModeration) {
+          <app-answer-list
+            [answers]="answerList"
+            [banMode]="true"
+            [isPresentation]="isPresentation"
+            [showCorrect]="showCorrect"
+            [correctAnswers]="getCorrectAnswers()"
+            (deleteClicked)="banAnswer($event)"
+          ></app-answer-list>
+        } @else {
+          <app-answer-grid-list
+            [answers]="answerList"
+            [showCorrect]="showCorrect"
+            [correctTerms]="getCorrectAnswers()"
+          ></app-answer-grid-list>
+        }
       }
-    }
+    </div>
   }
 </div>

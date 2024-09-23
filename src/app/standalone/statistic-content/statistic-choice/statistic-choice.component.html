@@ -3,17 +3,27 @@
     <app-loading-indicator></app-loading-indicator>
   }
   @if (!isLoading) {
-    <div
-      class="chart-container"
-      [ngClass]="{
-        invisible: !answersVisible,
-        'normal-chart': !isPresentation && answersVisible,
-        'presentation-chart': isPresentation && answersVisible,
-        'no-bottom-margin':
-          settings.contentAnswersDirectlyBelowChart && isPresentation,
-      }"
-    >
-      <canvas class="chart" id="{{ chartId }}"></canvas>
+    <div fxLayout="column" [fxLayoutGap]="showCorrect ? '16px' : '0px'">
+      <app-correct-answer-results
+        [answerCounts]="getAnswerCounts()"
+        [correctAnswerCounts]="getCorrectAnswerCounts()"
+        [abstentionCounts]="getAbstentionCounts()"
+        [show]="showCorrect"
+        [round]="roundsToDisplay + 1"
+        [compareRounds]="this.roundsToDisplay > 1"
+      ></app-correct-answer-results>
+      <div
+        class="chart-container"
+        [ngClass]="{
+          invisible: !answersVisible,
+          'normal-chart': !isPresentation && answersVisible,
+          'presentation-chart': isPresentation && answersVisible,
+          'no-bottom-margin':
+            settings.contentAnswersDirectlyBelowChart && isPresentation,
+        }"
+      >
+        <canvas class="chart" id="{{ chartId }}"></canvas>
+      </div>
     </div>
   }
   @if (

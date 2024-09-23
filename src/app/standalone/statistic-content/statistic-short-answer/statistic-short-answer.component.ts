@@ -8,6 +8,7 @@ import { TextStatistic } from '@app/core/models/text-statistic';
 import { ContentService } from '@app/core/services/http/content.service';
 import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
+import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -23,6 +24,7 @@ import { takeUntil } from 'rxjs';
     NgClass,
     FlexModule,
     TranslocoPipe,
+    CorrectAnswerResultsComponent,
   ],
   templateUrl: './statistic-short-answer.component.html',
 })
@@ -34,6 +36,7 @@ export class StatisticShortAnswerComponent
   @Input() showCorrect = false;
 
   answerList: TextStatistic[] = [];
+  abstentionCount = 0;
 
   constructor(
     protected contentService: ContentService,
@@ -83,9 +86,10 @@ export class StatisticShortAnswerComponent
   updateData(stats: AnswerStatistics) {
     if (stats) {
       const texts = (stats?.roundStatistics[0] as TextRoundStatistics)?.texts;
+      this.abstentionCount = stats.roundStatistics[0].abstentionCount;
       this.updateCounter({
         answers: stats.roundStatistics[0].answerCount,
-        abstentions: stats.roundStatistics[0].abstentionCount,
+        abstentions: this.abstentionCount,
       });
       if (!texts) {
         return;
@@ -114,5 +118,19 @@ export class StatisticShortAnswerComponent
 
   getCorrectAnswers(): string[] {
     return (this.content as ContentShortAnswer).correctTerms;
+  }
+
+  getCorrectAnswerCount(): number {
+    const correctTerms = this.answerList.filter((a) =>
+      this.getCorrectAnswers().includes(a.answer)
+    );
+    if (correctTerms.length > 0) {
+      return this.getAnswerCount(correctTerms);
+    }
+    return 0;
+  }
+
+  getAnswerCount(answers: TextStatistic[] = this.answerList): number {
+    return answers.map((a) => a.count).reduce((a, b) => a + b, 0);
   }
 }

@@ -32,6 +32,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
+import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 
 @Component({
   selector: 'app-statistic-choice',
@@ -45,6 +46,7 @@ import { FlexModule } from '@angular/flex-layout';
     RenderedTextComponent,
     MatIcon,
     TranslocoPipe,
+    CorrectAnswerResultsComponent,
   ],
 })
 export class StatisticChoiceComponent
@@ -431,5 +433,35 @@ export class StatisticChoiceComponent
       }, 300);
     }
     this.roundsDisplayed = this.roundsToDisplay;
+  }
+
+  getAbstentionCounts(): number[] | undefined {
+    if (this.stats) {
+      return this.stats?.roundStatistics.map((s) => s.abstentionCount);
+    }
+  }
+
+  getAnswerCounts(): number[] | undefined {
+    if (this.stats) {
+      return this.stats?.roundStatistics.map((s) => s.answerCount);
+    }
+  }
+
+  getCorrectAnswerCounts(): number[] | undefined {
+    if (this.stats) {
+      if (this.content.multiple) {
+        return this.stats.roundStatistics.map((s) =>
+          s.combinatedCounts
+            ? (s.combinatedCounts.find((c) =>
+                c.selectedChoiceIndexes.every((i) => this.checkIfCorrect(i))
+              )?.count ?? 0)
+            : 0
+        );
+      } else {
+        return this.stats.roundStatistics.map(
+          (s) => s.independentCounts.find((c, i) => this.checkIfCorrect(i))!
+        );
+      }
+    }
   }
 }
