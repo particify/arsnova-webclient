@@ -16,7 +16,7 @@ import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.ser
 import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { take, takeUntil } from 'rxjs';
+import { debounceTime, fromEvent, take, takeUntil } from 'rxjs';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -117,12 +117,21 @@ export class LiveFeedbackPageComponent
   afterInitHook() {
     this.focusModeService.updateFeedbackState(this.room, !this.isClosed);
     setTimeout(() => {
-      const scale = this.presentationService.getScale(0.8);
-      const liveFeedback = document.getElementById('live-feedback');
-      if (liveFeedback) {
-        liveFeedback.style.transform = `scale(${scale})`;
-      }
+      this.initScale();
     });
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(100), takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.initScale();
+      });
+  }
+
+  private initScale(): void {
+    const scale = this.presentationService.getScale(0.8);
+    const liveFeedback = document.getElementById('live-feedback');
+    if (liveFeedback) {
+      liveFeedback.style.transform = `scale(${scale})`;
+    }
   }
 
   changeType() {
