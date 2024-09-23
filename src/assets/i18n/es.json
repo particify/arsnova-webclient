@@ -59,7 +59,8 @@
     "room-settings": "Configuración de la sala",
     "present": "Presentar",
     "presentation-mode": "Modo de presentación",
-    "public-templates": "Plantillas públicas"
+    "public-templates": "Plantillas públicas",
+    "present-description": "Presenta la vista actual."
   },
   "home-page": {
     "a11y-join-button": "Ingresa a la sala con el número de sala especificado.",
@@ -422,7 +423,8 @@
     "select-a-number-between": "Selecciona un número entre {{min}} y {{max}}",
     "correct-answer-is": "La respuesta correcta es",
     "correct-answers-are": "La respuestas correctas son:",
-    "have-answered-correctly": "han respondido correctamente"
+    "have-answered-correctly": "han respondido correctamente",
+    "have-abstained": "se han abstenido"
   },
   "survey": {
     "a11y-message": "Ahora estás en modo de retroalimentación en vivo.",
