@@ -4,14 +4,16 @@
   }
   @if (!isLoading) {
     <div fxLayout="column" [fxLayoutGap]="showCorrect ? '16px' : '0px'">
-      <app-correct-answer-results
-        [answerCounts]="getAnswerCounts()"
-        [correctAnswerCounts]="getCorrectAnswerCounts()"
-        [abstentionCounts]="getAbstentionCounts()"
-        [show]="showCorrect"
-        [round]="roundsToDisplay + 1"
-        [compareRounds]="this.roundsToDisplay > 1"
-      ></app-correct-answer-results>
+      @if (!isSurvey) {
+        <app-correct-answer-results
+          [answerCounts]="getAnswerCounts()"
+          [correctAnswerCounts]="getCorrectAnswerCounts()"
+          [abstentionCounts]="getAbstentionCounts()"
+          [show]="showCorrect"
+          [round]="roundsToDisplay + 1"
+          [compareRounds]="this.roundsToDisplay > 1"
+        ></app-correct-answer-results>
+      }
       <div
         class="chart-container"
         [ngClass]="{
