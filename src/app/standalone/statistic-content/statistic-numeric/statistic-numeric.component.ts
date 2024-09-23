@@ -82,7 +82,7 @@ export class StatisticNumericComponent
   rounds = 1;
   roundsToDisplay = 0;
   roundsDisplayed = 0;
-  roundStats: NumericRoundStatistics[] = [];
+  roundStats?: NumericRoundStatistics[];
   statInfos: Array<keyof NumericRoundStatistics> = [
     'mean',
     'median',
@@ -397,6 +397,9 @@ export class StatisticNumericComponent
 
   updateData(stats: AnswerStatistics) {
     if (stats) {
+      if (!this.roundStats) {
+        this.roundStats = stats.roundStatistics as NumericRoundStatistics[];
+      }
       if (this.rounds > 1) {
         for (let i = 0; i < this.rounds; i++) {
           if (stats.roundStatistics[i]) {
@@ -424,6 +427,9 @@ export class StatisticNumericComponent
   }
 
   updateCounterForRound() {
+    if (!this.roundStats) {
+      return;
+    }
     if (this.compareRounds()) {
       const index =
         this.roundStats[0]?.answerCount > this.roundStats[1]?.answerCount
@@ -520,7 +526,9 @@ export class StatisticNumericComponent
     }
   }
 
-  getCorrectAnswerFractions(): number[] {
-    return this.roundStats.map((s) => s.correctAnswerFraction);
+  getCorrectAnswerFractions(): number[] | undefined {
+    if (this.roundStats) {
+      return this.roundStats.map((s) => s.correctAnswerFraction);
+    }
   }
 }
