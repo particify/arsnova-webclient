@@ -29,11 +29,17 @@
       </div>
       <div
         [attr.hidden]="isPresentation || null"
-        fxLayout="row"
+        fxLayout="row wrap"
+        fxLayoutGap="16px"
         fxLayoutAlign="space-between center"
       >
         @if (!isLoading && isStandalone) {
-          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="16px"
+            class="count-container"
+          >
             <app-answer-count
               tabindex="-1"
               [count]="responseCounts.answers"
