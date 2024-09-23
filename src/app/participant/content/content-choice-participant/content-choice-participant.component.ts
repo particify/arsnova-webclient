@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
@@ -25,7 +25,10 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   standalone: true,
   imports: [LoadingIndicatorComponent, ContentChoiceAnswerComponent],
 })
-export class ContentChoiceParticipantComponent extends ContentParticipantBaseComponent {
+export class ContentChoiceParticipantComponent
+  extends ContentParticipantBaseComponent
+  implements OnChanges
+{
   @Input({ required: true }) content!: ContentChoice;
   @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
@@ -58,6 +61,16 @@ export class ContentChoiceParticipantComponent extends ContentParticipantBaseCom
       router,
       formService
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.answer &&
+      !changes.answer.currentValue &&
+      !!changes.answer.previousValue
+    ) {
+      this.resetCheckedAnswers();
+    }
   }
 
   init() {

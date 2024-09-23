@@ -70,7 +70,7 @@ export class ContentChoiceAnswerComponent {
   }
 
   isAnswerOptionSelected(index: number): boolean {
-    return !this.answer || this.answer.selectedChoiceIndexes.includes(index);
+    return !!this.answer?.selectedChoiceIndexes.includes(index);
   }
 
   isAnswerOptionCorrect(index: number): boolean {
