@@ -10,7 +10,7 @@ import { Location } from '@angular/common';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { Subject, take, takeUntil } from 'rxjs';
+import { debounceTime, fromEvent, Subject, take, takeUntil } from 'rxjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { UserSettings } from '@app/core/models/user-settings';
@@ -249,6 +249,11 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.isLoading = false;
     if (initial) {
       this.initScale();
+      fromEvent(window, 'resize')
+        .pipe(debounceTime(100), takeUntil(this.destroyed$))
+        .subscribe(() => {
+          this.initScale();
+        });
       this.presentationService
         .getCurrentGroup()
         .pipe(takeUntil(this.destroyed$))

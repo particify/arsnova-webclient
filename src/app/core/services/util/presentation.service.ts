@@ -28,6 +28,9 @@ export class PresentationService {
     undefined
   );
 
+  private useRatioScale = true;
+  private scaleFactor = SCALE_FACTOR;
+
   private commentSortChanged = new Subject<CommentSort>();
   private commentZoomChanged = new Subject<number>();
   private contentGroupUpdated = new Subject<ContentGroup>();
@@ -44,9 +47,21 @@ export class PresentationService {
   getScale(factor = 1) {
     const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;
     const deviceScale = parseFloat(
-      ((innerWidth / SCALE_FACTOR) * ratioScale * factor).toFixed(1)
+      (
+        (innerWidth / this.scaleFactor) *
+        (this.useRatioScale ? ratioScale : 1) *
+        factor
+      ).toFixed(1)
     );
     return Math.max(deviceScale, MIN_SCALE);
+  }
+
+  setUseRatioScale(useRatioScale: boolean): void {
+    this.useRatioScale = useRatioScale;
+  }
+
+  setScaleFactor(scaleFactor: number): void {
+    this.scaleFactor = scaleFactor;
   }
 
   getStepState(index: number, listLength: number) {
