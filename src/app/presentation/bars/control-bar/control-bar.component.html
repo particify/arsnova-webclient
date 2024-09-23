@@ -67,12 +67,14 @@
           @if (contentGroups.length > 1) {
             <button
               mat-button
-              class="group-button full-height"
+              class="full-height"
               [matMenuTriggerFor]="groupMenu"
               (menuOpened)="menuOpen = true"
               (menuClosed)="menuClosed()"
             >
-              {{ groupName }}
+              <div class="ellipsis group-button-label">
+                {{ groupName }}
+              </div>
               <mat-icon>arrow_drop_down</mat-icon>
             </button>
           }
