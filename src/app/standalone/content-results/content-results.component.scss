@@ -1,3 +1,5 @@
+@import '../../../variables';
+
 .flashcard-container {
   flex-direction: row !important;
 }
@@ -8,4 +10,8 @@
 
 .presentation-space {
   margin-top: 1em;
+}
+
+.count-container {
+  padding: $spacing 0;
 }
