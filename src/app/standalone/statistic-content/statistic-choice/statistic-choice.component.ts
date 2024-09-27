@@ -345,13 +345,9 @@ export class StatisticChoiceComponent
 
   updateData(stats: AnswerStatistics) {
     if (stats) {
-      if (!this.roundStats) {
-        this.roundStats = stats.roundStatistics;
-      }
       if (this.rounds > 1) {
         for (let i = 0; i < this.rounds; i++) {
           if (stats.roundStatistics[i]) {
-            this.roundStats[i] = stats.roundStatistics[i];
             this.setData(stats, i);
           }
         }
@@ -362,6 +358,11 @@ export class StatisticChoiceComponent
   }
 
   setData(stats: AnswerStatistics, roundIndex: number) {
+    if (!this.roundStats) {
+      this.roundStats = stats.roundStatistics;
+    } else {
+      this.roundStats[roundIndex] = stats.roundStatistics[roundIndex];
+    }
     this.data[roundIndex] = stats.roundStatistics[roundIndex].independentCounts;
     this.updateCounterForRound(roundIndex);
   }
