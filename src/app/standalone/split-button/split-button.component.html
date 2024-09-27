@@ -3,6 +3,7 @@
     mat-raised-button
     [color]="color"
     [ngClass]="{ 'split-btn-primary': showSplitButton }"
+    [disabled]="disabled"
     (click)="clickedPrimary.emit()"
   >
     @if (icon) {
@@ -16,6 +17,7 @@
       class="split-btn-secondary"
       [color]="color"
       [matMenuTriggerFor]="menuRef"
+      [disabled]="disabled"
     >
       <mat-icon>keyboard_arrow_down</mat-icon>
     </button>

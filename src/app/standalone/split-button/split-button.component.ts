@@ -24,5 +24,6 @@ export class SplitButtonComponent {
   @Input({ required: true }) showSplitButton!: boolean;
   @Input() icon?: string;
   @Input() color = 'primary';
+  @Input() disabled = false;
   @Output() clickedPrimary = new EventEmitter<void>();
 }
