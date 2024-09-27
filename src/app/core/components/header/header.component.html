@@ -56,6 +56,7 @@
                   [icon]="'jamboard_kiosk'"
                   [menuRef]="presentationMenu"
                   [showSplitButton]="showOverlayLink"
+                  [disabled]="isPreview"
                   (clickedPrimary)="presentCurrentView()"
                 ></app-split-button>
               }
