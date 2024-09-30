@@ -31,10 +31,11 @@
   @if (
     !isLoading && isPresentation && settings.contentAnswersDirectlyBelowChart
   ) {
-    <div fxLayout="row" fxLayoutAlign="space-around">
+    <div fxLayout="row" fxLayoutAlign="space-between">
       @for (a of options; track a; let i = $index) {
         <div fxLayout="column" fxLayoutAlign="start center">
           <p
+            [style.width]="answerLabelWidth"
             class="chart-answer-label"
             [ngClass]="{
               'not-correct': showCorrect && !checkIfCorrect(i),
