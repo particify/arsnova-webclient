@@ -14,6 +14,8 @@ const SCALE_FACTOR = 1080;
 const MIN_SCALE = 1;
 const ASPECT_RATIO = 0.6;
 
+export const CARD_WIDTH = 640;
+
 @Injectable()
 export class PresentationService {
   private currentGroup$ = new Subject<string>();
