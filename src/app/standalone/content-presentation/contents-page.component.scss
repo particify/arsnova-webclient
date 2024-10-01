@@ -2,12 +2,11 @@
 
 app-content-stepper,
 app-leaderboard-page {
-  width: 640px;
+  width: 100%;
 }
 
 .scalable {
   transform-origin: 0 0;
-  max-width: 610px;
   transition: transform 300ms;
   transform: scale(1);
   position: absolute;

@@ -11,7 +11,10 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { ContentGroup } from '@app/core/models/content-group';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { debounceTime, fromEvent, Subject, take, takeUntil } from 'rxjs';
-import { PresentationService } from '@app/core/services/util/presentation.service';
+import {
+  CARD_WIDTH,
+  PresentationService,
+} from '@app/core/services/util/presentation.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { UserSettings } from '@app/core/models/user-settings';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
@@ -200,8 +203,9 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     const scale = this.presentationService.getScale();
     const stepperContainer = document.getElementById('stepper-container');
     if (stepperContainer) {
+      stepperContainer.style.width = `${CARD_WIDTH}px`;
       stepperContainer.style.transform = `scale(${scale})`;
-      stepperContainer.style.left = `calc(50vw - calc(305px * ${scale})`;
+      stepperContainer.style.left = `calc(50vw - calc(${CARD_WIDTH / 2}px * ${scale})`;
       stepperContainer.style.top = `calc(4vw - calc(1em * ${scale}))`;
     }
   }

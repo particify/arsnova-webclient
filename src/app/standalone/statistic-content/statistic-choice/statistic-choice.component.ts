@@ -25,7 +25,10 @@ import { takeUntil } from 'rxjs/operators';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentScale } from '@app/core/models/content-scale';
-import { PresentationService } from '@app/core/services/util/presentation.service';
+import {
+  CARD_WIDTH,
+  PresentationService,
+} from '@app/core/services/util/presentation.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { MatIcon } from '@angular/material/icon';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
@@ -80,6 +83,7 @@ export class StatisticChoiceComponent
   roundsDisplayed = 0;
   ContentType: typeof ContentType = ContentType;
   roundStats?: RoundStatistics[];
+  answerLabelWidth?: string;
 
   constructor(
     protected contentService: ContentService,
@@ -104,6 +108,10 @@ export class StatisticChoiceComponent
     this.chartId = 'chart-' + this.content.id;
     if (this.content.options) {
       this.options = [...this.content.options];
+      // Calculate label width: (card with - spacing) / count of labels
+      this.answerLabelWidth =
+        (CARD_WIDTH - (this.options.length - 1) * 12) / this.options.length +
+        'px';
     }
     if (this.content.correctOptionIndexes || !this.showCorrect) {
       this.correctOptionIndexes = this.content.correctOptionIndexes;
