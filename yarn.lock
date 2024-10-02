@@ -5632,7 +5632,7 @@ __metadata:
     eslint: "npm:9.11.1"
     eslint-import-resolver-typescript: "npm:3.6.3"
     eslint-plugin-import: "npm:2.30.0"
-    eslint-plugin-jsdoc: "npm:50.3.0"
+    eslint-plugin-jsdoc: "npm:50.3.1"
     eslint-plugin-prefer-arrow: "npm:1.2.3"
     eslint-plugin-storybook: "npm:0.9.0"
     is-docker: "npm:3.0.0"
@@ -7801,9 +7801,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:50.3.0":
-  version: 50.3.0
-  resolution: "eslint-plugin-jsdoc@npm:50.3.0"
+"eslint-plugin-jsdoc@npm:50.3.1":
+  version: 50.3.1
+  resolution: "eslint-plugin-jsdoc@npm:50.3.1"
   dependencies:
     "@es-joy/jsdoccomment": "npm:~0.48.0"
     are-docs-informative: "npm:^0.0.2"
@@ -7818,7 +7818,7 @@ __metadata:
     synckit: "npm:^0.9.1"
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
-  checksum: 10c0/2188f10c350f3306f476913f63880bb3324932006a40f28f4b7b95c10d147e8fd98b03917357c01ae2f81d60bc1c169dbdacc72031e2c1ae602445f39e574da1
+  checksum: 10c0/b4e8d58f02794917581d74936e2af947aea3b518c4ad670866caa0b3f1f25cfec08414567c19d580a77d84431b2477f0a4075be500bb27b715013c59679f307e
   languageName: node
   linkType: hard
 
