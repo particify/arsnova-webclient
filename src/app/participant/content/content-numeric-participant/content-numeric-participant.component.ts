@@ -5,7 +5,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
@@ -20,6 +20,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   templateUrl: './content-numeric-participant.component.html',
   standalone: true,
   imports: [ContentNumericAnswerComponent],
+  providers: [provideTranslocoScope('participant')],
 })
 export class ContentNumericParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentNumeric;

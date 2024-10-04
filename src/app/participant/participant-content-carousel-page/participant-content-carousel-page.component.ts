@@ -13,7 +13,11 @@ import {
   GroupType,
   PublishingMode,
 } from '@app/core/models/content-group';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import {
+  provideTranslocoScope,
+  TranslocoService,
+  TranslocoPipe,
+} from '@jsverse/transloco';
 import {
   STEPPER_ANIMATION_DURATION,
   StepperComponent,
@@ -70,6 +74,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     BaseCardComponent,
     ContentWaitingComponent,
   ],
+  providers: [provideTranslocoScope('participant')],
 })
 export class ParticipantContentCarouselPageComponent
   implements OnInit, OnDestroy

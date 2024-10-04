@@ -6,7 +6,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
@@ -32,6 +32,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
     NgClass,
     MatIcon,
   ],
+  providers: [provideTranslocoScope('participant')],
 })
 export class ContentSortParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentChoice;
