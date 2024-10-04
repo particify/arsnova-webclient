@@ -12,13 +12,24 @@ import { HttpClientModule } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { ContentGroup } from '@app/core/models/content-group';
+import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 
 class MockGlobalStorageService {}
 class MockRoutingService {}
 class MockService {}
+class MockContentGroupService {
+  private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
+    [GroupType.MIXED, 'dashboard'],
+    [GroupType.QUIZ, 'sports_esports'],
+    [GroupType.SURVEY, 'tune'],
+    [GroupType.FLASHCARDS, 'school'],
+  ]);
+  getTypeIcons() {
+    return this.typeIcons;
+  }
+}
 
 export default {
   component: ContentGroupsComponent,
@@ -39,7 +50,7 @@ export default {
         },
         {
           provide: ContentGroupService,
-          useClass: MockService,
+          useClass: MockContentGroupService,
         },
         {
           provide: NotificationService,

@@ -14,7 +14,7 @@ export default {
 
 type Story = StoryObj<PulsatingCircleComponent>;
 
-export const Divider: Story = {
+export const PulsatingCircle: Story = {
   args: {
     size: 8,
   },

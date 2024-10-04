@@ -41,7 +41,7 @@ export default {
 type Story = StoryObj<ContentSortAnswerComponent>;
 
 const answerOptions = [
-  new AnswerOption('answer 1'),
+  new AnswerOption('*answer 1*'),
   new AnswerOption('answer 2'),
   new AnswerOption('answer 3'),
   new AnswerOption('answer 4'),

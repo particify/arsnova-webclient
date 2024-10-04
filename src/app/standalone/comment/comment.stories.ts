@@ -26,7 +26,6 @@ class MockHotkeyService {
 class MockCommentService {}
 class MockNotificationService {}
 class MockDialogService {}
-class MockActivatedRoute {}
 class MockLangService {
   langEmitter = new EventEmitter<string>();
 }
@@ -49,7 +48,13 @@ export default {
         },
         {
           provide: ActivatedRoute,
-          useClass: MockActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                room: { id: 'roomId' },
+              },
+            },
+          },
         },
         {
           provide: CommentService,

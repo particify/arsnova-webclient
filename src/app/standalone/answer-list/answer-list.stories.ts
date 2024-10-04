@@ -23,7 +23,7 @@ class MockActivatedRoute {
 
 export default {
   component: AnswerListComponent,
-  title: 'AnswerListComponent',
+  title: 'AnswerList',
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
