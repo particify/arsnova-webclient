@@ -15,8 +15,15 @@ import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { ActivatedRoute } from '@angular/router';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 class MockFormattingService {}
+class MockLangService {
+  ensureValidLang(lang: string): string {
+    return lang;
+  }
+}
 
 export default {
   component: ContentChoiceAnswerComponent,
@@ -29,6 +36,20 @@ export default {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                room: { id: 'roomId' },
+              },
+            },
+          },
+        },
+        {
+          provide: LanguageService,
+          useClass: MockLangService,
         },
       ],
     }),

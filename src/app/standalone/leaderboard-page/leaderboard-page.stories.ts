@@ -13,6 +13,7 @@ import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { of } from 'rxjs';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ActivatedRoute } from '@angular/router';
+import { ThemeService } from '@app/core/theme/theme.service';
 
 class MockContentGroupService {
   getLeaderboard() {
@@ -77,6 +78,10 @@ class MockContentGroupService {
   }
 }
 
+class MockThemeService {
+  getTextColorFromSeed() {}
+}
+
 export default {
   component: LeaderboardPageComponent,
   title: 'LeaderboardPage',
@@ -99,6 +104,10 @@ export default {
               },
             },
           },
+        },
+        {
+          provide: ThemeService,
+          useClass: MockThemeService,
         },
       ],
     }),

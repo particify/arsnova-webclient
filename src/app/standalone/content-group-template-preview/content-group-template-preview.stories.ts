@@ -25,6 +25,10 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { GroupType } from '@app/core/models/content-group';
+import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthProvider } from '@app/core/models/auth-provider';
 
 class MockService {}
 
@@ -86,6 +90,31 @@ class MockContentService {
   }
 }
 
+class MockContentGroupService {
+  private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
+    [GroupType.MIXED, 'dashboard'],
+    [GroupType.QUIZ, 'sports_esports'],
+    [GroupType.SURVEY, 'tune'],
+    [GroupType.FLASHCARDS, 'school'],
+  ]);
+  getTypeIcons() {
+    return this.typeIcons;
+  }
+}
+
+class MockAuthenticationService {
+  getCurrentAuthentication() {
+    return of(
+      new ClientAuthentication(
+        'userId',
+        'loginId',
+        AuthProvider.ARSNOVA,
+        'token'
+      )
+    );
+  }
+}
+
 export default {
   component: ContentGroupTemplatePreviewComponent,
   title: 'ContentGroupTemplatePreview',
@@ -130,11 +159,15 @@ export default {
         },
         {
           provide: AuthenticationService,
-          useClass: MockService,
+          useClass: MockAuthenticationService,
         },
         {
           provide: DialogService,
           useClass: MockService,
+        },
+        {
+          provide: ContentGroupService,
+          useClass: MockContentGroupService,
         },
       ],
     }),

@@ -11,6 +11,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
+import { ThemeService } from '@app/core/theme/theme.service';
+
+class MockThemeService {
+  getTextColorFromSeed() {}
+}
 
 export default {
   component: LeaderboardComponent,
@@ -19,6 +24,12 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [LeaderboardComponent, OrdinalPipe],
+      providers: [
+        {
+          provide: ThemeService,
+          useClass: MockThemeService,
+        },
+      ],
     }),
     applicationConfig({
       providers: [

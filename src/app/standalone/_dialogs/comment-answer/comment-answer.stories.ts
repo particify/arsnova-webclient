@@ -19,6 +19,7 @@ import { Observable, of } from 'rxjs';
 import { importProvidersFrom } from '@angular/core';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 class MockHotkeyService {
   unregisterHotkey() {}
@@ -85,6 +86,16 @@ export default {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                room: { id: 'roomId' },
+              },
+            },
+          },
         },
       ],
     }),

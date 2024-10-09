@@ -10,6 +10,19 @@ import { importProvidersFrom } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { GroupType } from '@app/core/models/content-group';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+
+class MockContentGroupService {
+  private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
+    [GroupType.MIXED, 'dashboard'],
+    [GroupType.QUIZ, 'sports_esports'],
+    [GroupType.SURVEY, 'tune'],
+    [GroupType.FLASHCARDS, 'school'],
+  ]);
+  getTypeIcons() {
+    return this.typeIcons;
+  }
+}
 
 export default {
   component: ContentGroupInfoComponent,
@@ -18,6 +31,12 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [ContentGroupInfoComponent],
+      providers: [
+        {
+          provide: ContentGroupService,
+          useClass: MockContentGroupService,
+        },
+      ],
     }),
     applicationConfig({
       providers: [

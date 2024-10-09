@@ -26,6 +26,8 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { GroupType } from '@app/core/models/content-group';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
 
 class MockService {}
 
@@ -111,6 +113,18 @@ class MockAuthenticationService {
   }
 }
 
+class MockContentGroupService {
+  private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
+    [GroupType.MIXED, 'dashboard'],
+    [GroupType.QUIZ, 'sports_esports'],
+    [GroupType.SURVEY, 'tune'],
+    [GroupType.FLASHCARDS, 'school'],
+  ]);
+  getTypeIcons() {
+    return this.typeIcons;
+  }
+}
+
 export default {
   component: ContentGroupTemplateSelectionComponent,
   title: 'ContentGroupTemplateSelection',
@@ -162,6 +176,10 @@ export default {
         {
           provide: DialogService,
           useClass: MockService,
+        },
+        {
+          provide: ContentGroupService,
+          useClass: MockContentGroupService,
         },
       ],
     }),

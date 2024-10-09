@@ -11,6 +11,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
+import { ThemeService } from '@app/core/theme/theme.service';
+
+class MockThemeService {
+  getTextColorFromSeed() {}
+}
 
 export default {
   component: ContentLeaderboardComponent,
@@ -19,6 +24,12 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [ContentLeaderboardComponent, OrdinalPipe],
+      providers: [
+        {
+          provide: ThemeService,
+          useClass: MockThemeService,
+        },
+      ],
     }),
     applicationConfig({
       providers: [

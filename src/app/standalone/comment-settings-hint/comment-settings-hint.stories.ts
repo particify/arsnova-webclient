@@ -30,7 +30,7 @@ type Story = StoryObj<CommentSettingsHintComponent>;
 
 export const CommentSettingsHint: Story = {
   args: {
-    disabled: false,
+    disabled: true,
     readonly: false,
     showToggleButton: true,
   },

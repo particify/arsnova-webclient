@@ -23,6 +23,8 @@ import { Content } from '@app/core/models/content';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
+import { ActivatedRoute } from '@angular/router';
+import { LanguageService } from '@app/core/services/util/language.service';
 
 class MockService {}
 
@@ -35,6 +37,12 @@ class MockFormattingService {
 class MockContentAnswerService {
   shuffleAnswerOptions(options: AnswerOption[]) {
     return options;
+  }
+}
+
+class MockLangService {
+  ensureValidLang(lang: string): string {
+    return lang;
   }
 }
 
@@ -59,6 +67,22 @@ export default {
         {
           provide: FeatureFlagService,
           useClass: MockService,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                room: {
+                  id: 'id',
+                },
+              },
+            },
+          },
+        },
+        {
+          provide: LanguageService,
+          useClass: MockLangService,
         },
       ],
     }),

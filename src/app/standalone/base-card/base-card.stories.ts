@@ -14,4 +14,4 @@ export default {
 
 type Story = StoryObj<BaseCardComponent>;
 
-export const Card: Story = {};
+export const BaseCard: Story = {};
