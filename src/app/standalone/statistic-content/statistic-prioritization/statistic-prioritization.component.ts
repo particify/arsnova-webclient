@@ -270,9 +270,8 @@ export class StatisticPrioritizationComponent
   getDataLabel(value: number): string {
     let label: string;
     if (this.settings.contentVisualizationUnitPercent) {
-      label = this.getLabelWithPercentageSign(
-        (value / this.responseCounts.answers).toFixed(0)
-      );
+      value = value ? value / this.responseCounts.answers : 0;
+      label = this.getLabelWithPercentageSign(value.toFixed(0));
     } else {
       label = value.toString();
     }
