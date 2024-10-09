@@ -391,7 +391,8 @@ export class StatisticSortComponent
   getCorrectAnswerCounts(): number[] | undefined {
     if (this.stats && this.stats.answerCount) {
       return [
-        this.stats.independentCounts.find((c, i) => this.checkIfCorrect(i))!,
+        this.stats.combinatedCounts.find((c, i) => this.checkIfCorrect(i))
+          ?.count ?? 0,
       ];
     }
   }
