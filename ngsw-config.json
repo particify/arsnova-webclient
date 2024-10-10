@@ -23,23 +23,9 @@
           "/*.html",
           "/*.css",
           "/*.js",
-          "!/*-es5.*.js",
-          "/MaterialIcons-Regular.*.woff2",
-          "/roboto-latin-400-normal.*.woff2",
-          "/roboto-latin-500-normal.*.woff2"
-        ]
-      }
-    },
-    {
-      "name": "compatibility",
-      "installMode": "lazy",
-      "updateMode": "prefetch",
-      "resources": {
-        "files": [
-          "/*-es5.*.js",
-          "/MaterialIcons-Regular.*.woff",
-          "/roboto-latin-400-normal.*.woff",
-          "/roboto-latin-500-normal.*.woff"
+          "/media/material-symbols-outlined-latin-400-normal-*.woff2",
+          "/media/roboto-latin-400-normal-*.woff2",
+          "/media/roboto-latin-500-normal-*.woff2"
         ]
       }
     },
@@ -48,7 +34,7 @@
       "installMode": "lazy",
       "updateMode": "lazy",
       "resources": {
-        "files": ["/assets/**", "/roboto-*", "/KaTeX_*"]
+        "files": ["/assets/**", "/media/**", "!/media/*.ttf", "!/media/*.woff"]
       }
     }
   ]
