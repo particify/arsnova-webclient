@@ -102,6 +102,7 @@ export class StatisticTextComponent
 
   getAnswerStats() {
     this.answerStats = [];
+    this.abstentionCount = 0;
     const answersMap = new Map<string, TextStatistic>();
     for (const answer of this.answers) {
       if (answer.body) {
