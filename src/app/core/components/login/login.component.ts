@@ -88,9 +88,11 @@ export class LoginComponent
   ngOnInit() {
     this.setFormControl(this.loginIdFormControl);
     this.loginIdFormControl.clearValidators();
-    this.route.data.subscribe(
-      (data) => (this.authProviders = data.apiConfig.authenticationProviders)
-    );
+    this.route.data.subscribe((data) => {
+      this.authProviders = data.apiConfig.authenticationProviders;
+      this.allowRegister =
+        this.allowRegister && !data.apiConfig.ui.registrationDisabled;
+    });
   }
 
   ngAfterContentInit() {
