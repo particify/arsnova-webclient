@@ -69,7 +69,11 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
       this.isDisabled = true;
       if (this.answer.selectedChoiceIndexes) {
         this.setSortOfAnswer(this.answer.selectedChoiceIndexes);
-        this.checkIfCorrect();
+        if (this.correctOptionsPublished) {
+          this.checkIfCorrect();
+        } else {
+          this.isLoading = false;
+        }
       } else {
         this.hasAbstained = true;
         this.initAnswers();
@@ -86,24 +90,24 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     this.isLoading = false;
   }
 
-  checkIfCorrect() {
-    if (this.correctOptionsPublished) {
-      this.contentService
-        .getCorrectChoiceIndexes(this.content.roomId, this.content.id)
-        .subscribe((correctOptions) => {
-          this.correctOptionIndexes = correctOptions;
-          (this.content as ContentChoice).correctOptionIndexes =
-            this.correctOptionIndexes;
-          this.isCorrect =
-            this.answer &&
-            this.answer.selectedChoiceIndexes.toString() ===
-              this.correctOptionIndexes.toString();
+  checkIfCorrect(sendStatus = false) {
+    this.contentService
+      .getCorrectChoiceIndexes(this.content.roomId, this.content.id)
+      .subscribe((correctOptions) => {
+        this.correctOptionIndexes = correctOptions;
+        (this.content as ContentChoice).correctOptionIndexes =
+          this.correctOptionIndexes;
+        this.isCorrect =
+          this.answer &&
+          this.answer.selectedChoiceIndexes.toString() ===
+            this.correctOptionIndexes.toString();
+        if (sendStatus) {
           this.sendStatusToParent(
             this.isCorrect ? AnswerResultType.CORRECT : AnswerResultType.WRONG
           );
-          this.isLoading = false;
-        });
-    }
+        }
+        this.isLoading = false;
+      });
   }
 
   setSortOfAnswer(sorting: number[]) {
@@ -133,7 +137,11 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
     this.answerService.addAnswerChoice(this.content.roomId, answer).subscribe(
       (answer) => {
         this.answer = answer;
-        this.checkIfCorrect();
+        if (this.correctOptionsPublished) {
+          this.checkIfCorrect(true);
+        } else {
+          this.sendStatusToParent(AnswerResultType.NEUTRAL);
+        }
         this.translateService
           .selectTranslate('participant.answer.sent')
           .pipe(take(1))
