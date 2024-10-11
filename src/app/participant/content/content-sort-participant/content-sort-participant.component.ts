@@ -36,7 +36,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 export class ContentSortParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentChoice;
   @Input() answer?: ChoiceAnswer;
-  @Input() statsPublished = false;
   @Input() correctOptionsPublished = false;
 
   isLoading = true;
