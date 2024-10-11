@@ -14,7 +14,12 @@
       [lengthLimit]="80"
     ></app-content-text-answer>
   </form>
-  @if (!!answer && !!correctTerms && correctTerms.length > 1) {
+  @if (
+    !!answer &&
+    !!correctTerms &&
+    correctTerms.length > 1 &&
+    correctOptionsPublished
+  ) {
     <span class="answer-hint"
       >{{ 'answer.correct-answers-are' | transloco }}
       @for (term of correctTerms; track term; let i = $index) {
