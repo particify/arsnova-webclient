@@ -117,7 +117,7 @@ export class StatisticShortAnswerComponent
   }
 
   getCorrectAnswers(): string[] {
-    return (this.content as ContentShortAnswer).correctTerms;
+    return (this.content as ContentShortAnswer).correctTerms ?? [];
   }
 
   getCorrectAnswerCount(): number {

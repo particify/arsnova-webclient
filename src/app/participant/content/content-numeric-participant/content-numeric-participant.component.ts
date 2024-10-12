@@ -112,7 +112,10 @@ export class ContentNumericParticipantComponent extends ContentParticipantBaseCo
   }
 
   private getAnswerResultType(): AnswerResultType {
-    if (this.content.correctNumber === undefined) {
+    if (
+      this.content.correctNumber === undefined ||
+      !this.correctOptionsPublished
+    ) {
       return AnswerResultType.NEUTRAL;
     } else {
       return this.selectedNumber !== undefined &&

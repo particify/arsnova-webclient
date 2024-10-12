@@ -7,7 +7,7 @@
       [answerOptions]="answerOptions"
       [disabled]="isDisabled"
     ></app-content-sort-answer>
-    @if (!hasAbstained && statsPublished && correctOptionsPublished) {
+    @if (!hasAbstained && correctOptionsPublished) {
       <div
         class="solution invisible"
         [ngClass]="{ visible: isDisabled && isCorrect !== undefined }"
