@@ -36,7 +36,10 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
-import { RoundStatistics } from '@app/core/models/round-statistics';
+import {
+  Combination,
+  RoundStatistics,
+} from '@app/core/models/round-statistics';
 
 @Component({
   selector: 'app-statistic-choice',
@@ -463,21 +466,29 @@ export class StatisticChoiceComponent
     }
   }
 
+  private isCombinationCorrect(combination: Combination): boolean {
+    return (
+      combination.selectedChoiceIndexes.every((i) => this.checkIfCorrect(i)) &&
+      this.correctOptionIndexes.length ===
+        combination.selectedChoiceIndexes.length
+    );
+  }
+
   getCorrectAnswerCounts(): number[] | undefined {
-    if (this.roundStats) {
-      if (this.content.multiple) {
-        return this.roundStats.map((s) =>
-          s.combinatedCounts
-            ? (s.combinatedCounts.find((c) =>
-                c.selectedChoiceIndexes.every((i) => this.checkIfCorrect(i))
-              )?.count ?? 0)
-            : 0
-        );
-      } else {
-        return this.roundStats.map(
-          (s) => s.independentCounts.find((c, i) => this.checkIfCorrect(i))!
-        );
-      }
+    if (!this.roundStats) {
+      return;
+    }
+    if (this.content.multiple) {
+      return this.roundStats.map((s) =>
+        s.combinatedCounts
+          ? (s.combinatedCounts.find((c) => this.isCombinationCorrect(c))
+              ?.count ?? 0)
+          : 0
+      );
+    } else {
+      return this.roundStats.map(
+        (s) => s.independentCounts.find((c, i) => this.checkIfCorrect(i))!
+      );
     }
   }
 }
