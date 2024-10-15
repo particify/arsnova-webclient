@@ -111,16 +111,21 @@ export class LiveFeedbackPageComponent
     const msg = JSON.parse(message.body);
     const payload = msg.payload;
     const type = msg.type;
-    if (type === FeedbackMessageType.CHANGED) {
-      this.updateFeedback(payload.values);
-    } else {
-      this.roomService.getRoom(this.room.id).subscribe((room) => {
-        this.loadConfig(room);
-      });
-      this.isClosed = type === FeedbackMessageType.STOPPED;
-      if (this.isClosed) {
+    switch (type) {
+      case FeedbackMessageType.CHANGED:
+        this.updateFeedback(payload.values);
+        break;
+      case FeedbackMessageType.RESET:
         this.updateFeedback([0, 0, 0, 0]);
-      }
+        break;
+      case FeedbackMessageType.STARTED:
+        this.roomService.getRoom(this.room.id).subscribe((room) => {
+          this.type = this.feedbackService.getType(room);
+          this.isClosed = false;
+        });
+        break;
+      default:
+        this.isClosed = true;
     }
   }
 }
