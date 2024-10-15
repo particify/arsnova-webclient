@@ -66,6 +66,10 @@ const routes: Routes = [
       contentGroup: ContentGroupResolver,
     },
   },
+  {
+    path: 'series/:seriesName/edit/:contentId',
+    redirectTo: 'series/:seriesName',
+  },
 ];
 
 @NgModule({
