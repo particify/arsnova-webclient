@@ -199,18 +199,9 @@ export class RoutingService {
   }
 
   switchRole() {
-    if (!this.fullCurrentRoute) {
-      return;
-    }
-    const currentRoleString = this.getRoleRoute(this.role);
-    const url =
-      '/' +
-      (this.fullCurrentRoute.includes(currentRoleString)
-        ? RoutePrefix.PARTICIPANT
-        : currentRoleString) +
-      '/' +
-      this.shortId;
-    this.router.navigateByUrl(url);
+    this.router.navigateByUrl(
+      `/${this.isPreview ? RoutePrefix.CREATOR : RoutePrefix.PARTICIPANT}/${this.shortId}`
+    );
   }
 
   replaceRoleInUrl(url: string, oldRole: string, newRole: string): string {
