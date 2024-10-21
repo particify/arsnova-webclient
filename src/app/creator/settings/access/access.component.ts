@@ -178,20 +178,29 @@ export class AccessComponent
       this.disableForm();
       this.moderatorService
         .add(this.room.id, this.newModeratorId, this.selectedRole)
-        .subscribe(() => {
-          this.saveEvent.emit(new UpdateEvent(null, false, true));
-          this.moderators.push(
-            new Moderator(this.newModeratorId, this.loginId, this.selectedRole)
-          );
-          const msg = this.translationService.translate(
-            'creator.settings.user-added'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-          this.loginId = '';
-          this.enableForm();
+        .subscribe({
+          next: () => {
+            this.saveEvent.emit(new UpdateEvent(null, false, true));
+            this.moderators.push(
+              new Moderator(
+                this.newModeratorId,
+                this.loginId,
+                this.selectedRole
+              )
+            );
+            const msg = this.translationService.translate(
+              'creator.settings.user-added'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+            this.loginId = '';
+            this.enableForm();
+          },
+          error: () => {
+            this.enableForm();
+          },
         });
     } else {
       this.inviteModerator();
