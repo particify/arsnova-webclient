@@ -65,11 +65,11 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
             .selectTranslate(l, undefined, this.language)
             .pipe(take(1)) as Observable<string>
       );
-      forkJoin(optionLabels$).subscribe(
-        (labels) => (this.options = labels.map((l) => ({ label: l })))
-      );
+      forkJoin(optionLabels$).subscribe((labels) => {
+        this.options = labels.map((l) => ({ label: l }));
+        this.correctOptionIndexes = [];
+        super.init(stats);
+      });
     }
-    this.correctOptionIndexes = [];
-    super.init(stats);
   }
 }
