@@ -410,9 +410,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cdk@npm:18.2.9":
-  version: 18.2.9
-  resolution: "@angular/cdk@npm:18.2.9"
+"@angular/cdk@npm:18.2.10":
+  version: 18.2.10
+  resolution: "@angular/cdk@npm:18.2.10"
   dependencies:
     parse5: "npm:^7.1.2"
     tslib: "npm:^2.3.0"
@@ -423,7 +423,7 @@ __metadata:
   dependenciesMeta:
     parse5:
       optional: true
-  checksum: 10c0/2ddc67f8d3e2ee186c5b0e111be8e08ddfa286bb4bfd2d297e39b077819df132f940a5b959b947341fe0e841182fd44cd46a9da7ffe5e36158e489b6a5e5e42b
+  checksum: 10c0/7e5d234d8e597b66bbfeffcbedca4a8f72b6730c2096810ffad90afbd2b8f5bdb70a6838519b43da04126d7abe5ecb08ba2fae15ab409b1d507b72289a1314d5
   languageName: node
   linkType: hard
 
@@ -556,20 +556,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/material@npm:18.2.9":
-  version: 18.2.9
-  resolution: "@angular/material@npm:18.2.9"
+"@angular/material@npm:18.2.10":
+  version: 18.2.10
+  resolution: "@angular/material@npm:18.2.10"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
     "@angular/animations": ^18.0.0 || ^19.0.0
-    "@angular/cdk": 18.2.9
+    "@angular/cdk": 18.2.10
     "@angular/common": ^18.0.0 || ^19.0.0
     "@angular/core": ^18.0.0 || ^19.0.0
     "@angular/forms": ^18.0.0 || ^19.0.0
     "@angular/platform-browser": ^18.0.0 || ^19.0.0
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10c0/c41e858e627db1c87d3e5b15fffac9404efd8323100cf5c439501ad6ac2da707b37e6b732c93ba6dddb2a6c532c6a6566d4a799e7bf15a00e77a7c56da90d72f
+  checksum: 10c0/1ecd99c77586f4248fddf0c5019a5306d0a7f134d9f4eee0c08cede3214427e20e0d249818f658d2f3817903fcbe7fcb3aaffd9322da2dd1b7403fcebfa9f8f9
   languageName: node
   linkType: hard
 
@@ -5799,7 +5799,7 @@ __metadata:
     "@angular-eslint/schematics": "npm:18.3.1"
     "@angular-eslint/template-parser": "npm:18.3.1"
     "@angular/animations": "npm:18.2.9"
-    "@angular/cdk": "npm:18.2.9"
+    "@angular/cdk": "npm:18.2.10"
     "@angular/cli": "npm:18.2.10"
     "@angular/common": "npm:18.2.9"
     "@angular/compiler": "npm:18.2.9"
@@ -5808,7 +5808,7 @@ __metadata:
     "@angular/flex-layout": "npm:15.0.0-beta.42"
     "@angular/forms": "npm:18.2.9"
     "@angular/language-service": "npm:18.2.9"
-    "@angular/material": "npm:18.2.9"
+    "@angular/material": "npm:18.2.10"
     "@angular/platform-browser": "npm:18.2.9"
     "@angular/platform-browser-dynamic": "npm:18.2.9"
     "@angular/router": "npm:18.2.9"
