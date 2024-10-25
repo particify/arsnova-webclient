@@ -136,10 +136,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const loginId = this.globalStorageService.getItem(
-      STORAGE_KEYS.USER
-    ).loginId;
-    this.userService.getUserSettingsByLoginId(loginId).subscribe((settings) => {
+    this.userService.getCurrentUsersSettings().subscribe((settings) => {
       if (settings) {
         this.settings = settings;
         if (this.route.snapshot.queryParams.showResults === 'true') {
