@@ -12,6 +12,10 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 import { CachingService } from '@app/core/services/util/caching.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { UserSettings } from '@app/core/models/user-settings';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -32,6 +36,7 @@ export class UserService extends AbstractEntityService<User> {
     protected eventService: EventService,
     protected translateService: TranslocoService,
     protected notificationService: NotificationService,
+    private globalStorageService: GlobalStorageService,
     cachingService: CachingService
   ) {
     super(
@@ -139,19 +144,12 @@ export class UserService extends AbstractEntityService<User> {
       .pipe(catchError(this.handleError('getUserId', [])));
   }
 
-  getUserSettingsByLoginId(loginId: string): Observable<UserSettings> {
-    const url = this.buildUri(this.apiUrl.find) + '?view=owner';
-    return this.http
-      .post<User[]>(url, {
-        properties: { loginId: loginId },
-        externalFilters: {},
-      })
-      .pipe(
-        map((users) => {
-          return users[0].settings;
-        }),
-        catchError(this.handleError<UserSettings>('getUserSettingsByLoginId'))
-      );
+  getCurrentUsersSettings(): Observable<UserSettings> {
+    const userId = this.globalStorageService.getItem(STORAGE_KEYS.USER).userId;
+    return this.getById(userId, { view: 'owner' }).pipe(
+      map((u) => u.settings),
+      catchError(this.handleError<UserSettings>('getUserSettings'))
+    );
   }
 
   getUserData(userIds: string[]): Observable<User[]> {

@@ -74,9 +74,9 @@ describe('ParticipantContentCarouselPageComponent', () => {
   mockAuthenticationService.getAuthenticationChanges.and.returnValue(of({}));
 
   const mockUserService = jasmine.createSpyObj('UserService', [
-    'getUserSettingsByLoginId',
+    'getCurrentUsersSettings',
   ]);
-  mockUserService.getUserSettingsByLoginId.and.returnValue(
+  mockUserService.getCurrentUsersSettings.and.returnValue(
     of(new UserSettings())
   );
 

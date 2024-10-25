@@ -2,10 +2,6 @@ import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
-import {
-  GlobalStorageService,
-  STORAGE_KEYS,
-} from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -39,7 +35,6 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private contentService: ContentService,
     private contentGroupService: ContentGroupService,
-    private globalStorageService: GlobalStorageService,
     private location: Location,
     private router: Router,
     private userService: UserService
@@ -51,10 +46,7 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const loginId = this.globalStorageService.getItem(
-      STORAGE_KEYS.USER
-    ).loginId;
-    this.userService.getUserSettingsByLoginId(loginId).subscribe((settings) => {
+    this.userService.getCurrentUsersSettings().subscribe((settings) => {
       if (settings) {
         this.settings = settings;
       }
