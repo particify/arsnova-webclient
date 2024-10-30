@@ -28,7 +28,7 @@ import {
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { take, takeUntil } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
 import { PresentCommentComponent } from '@app/standalone/present-comment/present-comment.component';
@@ -50,6 +50,7 @@ import { CommentComponent } from '@app/standalone/comment/comment.component';
     CommentListHintComponent,
     CommentComponent,
   ],
+  providers: [provideTranslocoScope('creator')],
 })
 export class CommentsPageComponent
   extends AbstractCommentsPageComponent
