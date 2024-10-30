@@ -45,19 +45,20 @@ describe('LiveFeedbackPageComponent', () => {
   const mockFeedbackService = jasmine.createSpyObj('FeedbackService', [
     'startSub',
     'get',
+    'getType',
   ]);
   mockFeedbackService.messageEvent = new EventEmitter<Message>();
   mockFeedbackService.get.and.returnValue(of([0, 0, 0, 0]));
 
-  const room = new Room();
-  room.settings = { feedbackLocked: true };
   const data = {
-    room: room,
     viewRole: UserRole.PARTICIPANT,
   };
+  const room = new Room();
+  room.settings = { feedbackLocked: true };
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
     isPresentation: false,
+    room: room,
   };
   const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 

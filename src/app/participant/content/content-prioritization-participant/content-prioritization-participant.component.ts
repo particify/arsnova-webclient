@@ -10,7 +10,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
-import { TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
@@ -22,6 +22,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   templateUrl: './content-prioritization-participant.component.html',
   standalone: true,
   imports: [ContentPrioritizationAnswerComponent],
+  providers: [provideTranslocoScope('participant')],
 })
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentPrioritization;

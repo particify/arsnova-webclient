@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -24,6 +24,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   templateUrl: './content-scale-participant.component.html',
   standalone: true,
   imports: [ContentChoiceAnswerComponent],
+  providers: [provideTranslocoScope('participant')],
 })
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: ContentScale;

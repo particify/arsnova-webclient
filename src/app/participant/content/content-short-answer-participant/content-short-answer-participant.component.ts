@@ -15,7 +15,11 @@ import {
 } from '@app/core/services/util/notification.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import {
+  provideTranslocoScope,
+  TranslocoPipe,
+  TranslocoService,
+} from '@jsverse/transloco';
 
 @Component({
   selector: 'app-content-short-answer-participant',
@@ -23,6 +27,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
   imports: [FlexModule, FormsModule, ContentTextAnswerComponent, TranslocoPipe],
   templateUrl: './content-short-answer-participant.component.html',
   styleUrl: './content-short-answer-participant.component.scss',
+  providers: [provideTranslocoScope('participant')],
 })
 export class ContentShortAnswerParticipantComponent extends ContentParticipantBaseComponent {
   @Input({ required: true }) content!: Content;

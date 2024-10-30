@@ -10,12 +10,14 @@ import { FlexModule } from '@angular/flex-layout';
 import { ContentService } from '@app/core/services/http/content.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { throttleTime } from 'rxjs';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-leaderboard-page',
   templateUrl: './leaderboard-page.component.html',
   standalone: true,
   imports: [FlexModule, LoadingIndicatorComponent, ContentLeaderboardComponent],
+  providers: [provideTranslocoScope('participant')],
 })
 export class LeaderboardPageComponent implements OnInit {
   @Input({ required: true }) content!: Content;

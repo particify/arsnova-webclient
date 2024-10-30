@@ -15,7 +15,11 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import {
+  TranslocoService,
+  TranslocoPipe,
+  provideTranslocoScope,
+} from '@jsverse/transloco';
 import { takeUntil } from 'rxjs';
 import { CommentListFloatingButtonsComponent } from '@app/standalone/comment-list-floating-buttons/comment-list-floating-buttons.component';
 import { CommentListAddButtonComponent } from '@app/standalone/comment-list-add-button/comment-list-add-button.component';
@@ -44,6 +48,7 @@ import { FlexModule } from '@angular/flex-layout';
     CommentListFloatingButtonsComponent,
     TranslocoPipe,
   ],
+  providers: [provideTranslocoScope('participant')],
 })
 export class CommentsPageComponent
   extends AbstractCommentsPageComponent
