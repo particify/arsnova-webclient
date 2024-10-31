@@ -278,7 +278,7 @@ class MockContentPublishService {
 }
 
 class MockUserService {
-  getUserSettingsByLoginId() {
+  getCurrentUsersSettings() {
     return of(new UserSettings(false, true, true));
   }
 }
