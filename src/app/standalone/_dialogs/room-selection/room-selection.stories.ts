@@ -77,7 +77,7 @@ export default {
         },
         {
           provide: MAT_DIALOG_DATA,
-          useValue: {},
+          useValue: { memberships: [] },
         },
       ],
     }),
