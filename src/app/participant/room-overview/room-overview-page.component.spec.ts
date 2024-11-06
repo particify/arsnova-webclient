@@ -33,6 +33,7 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { ApiConfig } from '@app/core/models/api-config';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -175,6 +176,7 @@ describe('RoomOverviewPageComponent', () => {
     component.room = new Room();
     component.room.settings = { feedbackLocked: true };
     component.commentSettings = new CommentSettings();
+    component.apiConfig = new ApiConfig([], {}, {});
   });
 
   it('should create', () => {

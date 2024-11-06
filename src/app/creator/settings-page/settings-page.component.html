@@ -11,7 +11,7 @@
     <mat-accordion>
       @for (setting of settings; track setting) {
         <mat-expansion-panel
-          [disabled]="setting.name === 'access' && !isCreator"
+          [disabled]="setting.name === 'access' && !isOwner()"
           class="settings-panel"
           [expanded]="currentRoute === setting.name"
           (afterExpand)="updateUrl(setting.name)"
@@ -35,7 +35,7 @@
                   [editRoom]="room"
                   [name]="room.name"
                   [description]="room.description"
-                  [isCreator]="isCreator"
+                  [isCreator]="isOwner()"
                   (saveEvent)="saveRoom($event)"
                 ></app-room-edit>
               }

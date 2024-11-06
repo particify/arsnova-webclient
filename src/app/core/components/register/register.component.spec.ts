@@ -11,6 +11,7 @@ import {
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { UserService } from '@app/core/services/http/user.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ApiConfig } from '@app/core/models/api-config';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -46,6 +47,7 @@ describe('RegisterComponent', () => {
       .then(() => {
         fixture = TestBed.createComponent(RegisterComponent);
         component = fixture.componentInstance;
+        component.apiConfig = new ApiConfig([], {}, {});
         fixture.detectChanges();
       });
   });

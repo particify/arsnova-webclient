@@ -25,10 +25,7 @@ import { NgClass } from '@angular/common';
 })
 export class AnswerListComponent implements OnInit {
   // Route data input below
-  @Input()
-  set viewRole(role: UserRole) {
-    this.isModerator = role !== UserRole.PARTICIPANT;
-  }
+  @Input() viewRole!: UserRole;
 
   @Input({ required: true }) answers!: TextStatistic[];
   @Input() banMode = true;
@@ -36,8 +33,6 @@ export class AnswerListComponent implements OnInit {
   @Input() showCorrect = false;
   @Input() correctAnswers?: string[];
   @Output() deleteClicked = new EventEmitter<TextStatistic>();
-
-  isModerator = false;
 
   ngOnInit(): void {
     this.answers = this.sortAnswers();
@@ -59,5 +54,9 @@ export class AnswerListComponent implements OnInit {
 
   hasCorrectAnswers(): boolean {
     return !!this.correctAnswers;
+  }
+
+  isModerator(): boolean {
+    return this.viewRole !== UserRole.PARTICIPANT;
   }
 }

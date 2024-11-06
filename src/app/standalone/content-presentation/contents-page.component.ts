@@ -82,12 +82,9 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   @Input({ transform: booleanAttribute }) showAnswerCount!: boolean;
   @Input({ transform: booleanAttribute }) showHotkeyActionButtons!: boolean;
   @Input({ transform: booleanAttribute }) showResults?: boolean;
+  @Input({ transform: booleanAttribute }) noControlBar?: boolean;
   @Input() seriesName!: string;
   @Input() contentIndex?: number;
-  @Input()
-  set noControlBar(noControlBar: boolean) {
-    this.controlBarVisible = !noControlBar;
-  }
 
   destroyed$ = new Subject<void>();
 
@@ -105,7 +102,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   attributions: ContentLicenseAttribution[] = [];
   stepCount = 0;
   endDate?: Date;
-  controlBarVisible = true;
   showLeaderboard = false;
   answeringLocked = false;
   isPublishing = false;
@@ -150,7 +146,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.eventService
       .on<boolean>('ControlBarVisible')
       .subscribe((isVisible) => {
-        this.controlBarVisible = isVisible;
+        this.noControlBar = !isVisible;
       });
     this.translateService
       .selectTranslate('creator.control-bar.leaderboard')

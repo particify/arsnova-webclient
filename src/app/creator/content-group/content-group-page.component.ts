@@ -61,10 +61,7 @@ export interface ContentStats {
 })
 export class ContentGroupPageComponent implements OnInit, OnDestroy {
   // Route data input below
-  @Input({ required: true })
-  set userRole(userRole: UserRole) {
-    this.isModerator = userRole === UserRole.MODERATOR;
-  }
+  @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) seriesName!: string;
   destroyed$ = new Subject<void>();
@@ -75,7 +72,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   contentGroup!: ContentGroup;
   contents: Content[] = [];
   contentGroupStats: ContentGroupStatistics[] = [];
-  isModerator = false;
   isGuest = true;
 
   onInit = false;
@@ -428,5 +424,9 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
         return 'blue';
       }
     }
+  }
+
+  isModerator(): boolean {
+    return this.userRole === UserRole.MODERATOR;
   }
 }

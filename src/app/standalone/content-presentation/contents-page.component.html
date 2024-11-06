@@ -13,7 +13,7 @@
 ) {
   <div
     class="answer-count"
-    [ngClass]="{ 'over-control-bar': controlBarVisible }"
+    [ngClass]="{ 'over-control-bar': !noControlBar }"
     fxLayout="column"
     fxLayoutAlign="start end"
     fxLayoutGap="4px"
@@ -87,7 +87,7 @@
         [contentGroup]="contentGroup"
         [room]="room"
         [showCard]="false"
-        [ngClass]="{ 'over-control-bar': controlBarVisible }"
+        [ngClass]="{ 'over-control-bar': !noControlBar }"
       ></app-leaderboard-page>
     }
   </div>
@@ -106,7 +106,7 @@
         hotkey="s"
         [hotkeyTitle]="'creator.content.start-content' | transloco"
         [action]="'creator.content.to-start-content' | transloco"
-        [isNavBarVisible]="controlBarVisible"
+        [isNavBarVisible]="!noControlBar"
         (buttonClicked)="startCountdown()"
       ></app-hotkey-action-button>
     </div>
@@ -117,7 +117,7 @@
         hotkey="s"
         [hotkeyTitle]="'creator.content.stop-content' | transloco"
         [action]="'creator.content.to-stop-content' | transloco"
-        [isNavBarVisible]="controlBarVisible"
+        [isNavBarVisible]="!noControlBar"
         [additionalBottomSpace]="!answeringLocked"
         (buttonClicked)="stopCountdown()"
       ></app-hotkey-action-button>
@@ -126,7 +126,7 @@
 }
 <div
   class="countdown-container"
-  [ngClass]="{ 'over-control-bar': controlBarVisible }"
+  [ngClass]="{ 'over-control-bar': !noControlBar }"
 >
   @if (content && endDate && !answeringLocked) {
     @if (content.duration) {
@@ -165,7 +165,7 @@
     hotkey="p"
     [hotkeyTitle]="'creator.content.publish-current-content' | transloco"
     [action]="'creator.content.to-publish-content' | transloco"
-    [isNavBarVisible]="controlBarVisible"
+    [isNavBarVisible]="!noControlBar"
     infoIcon="locked"
     [infoLabel]="'creator.content.content-is-locked' | transloco"
     (buttonClicked)="publishCurrentContent()"
@@ -180,7 +180,7 @@
 ) {
   <div
     class="locked-hint"
-    [ngClass]="{ 'over-control-bar': controlBarVisible }"
+    [ngClass]="{ 'over-control-bar': !noControlBar }"
     fxLayout="row"
     fxLayoutAlign="start center"
     fxLayoutGap="8px"

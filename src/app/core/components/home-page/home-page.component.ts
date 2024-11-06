@@ -13,13 +13,9 @@ import {
 })
 export class HomePageComponent {
   // Route data input below
-  @Input({ required: true })
-  set apiConfig(config: ApiConfig) {
-    this.appTitle = config.ui.registration?.service || 'ARSnova';
-  }
-  deviceType: string;
+  @Input({ required: true }) apiConfig!: ApiConfig;
 
-  appTitle!: string;
+  deviceType: string;
 
   constructor(
     private dialogService: DialogService,
@@ -32,5 +28,9 @@ export class HomePageComponent {
 
   openCreateRoomDialog(): void {
     this.dialogService.openRoomCreateDialog();
+  }
+
+  getAppTitle(): string {
+    return this.apiConfig.ui.registration?.service || 'ARSnova';
   }
 }

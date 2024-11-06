@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="center">
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{
-      (isModerator
+      (isModerator()
         ? 'creator.room-page.a11y-moderator-message'
         : 'room-page.a11y-room-message'
       )
@@ -19,7 +19,7 @@
         [shortId]="room.shortId"
         [description]="room.description"
         [renderedDescription]="room.renderedDescription"
-        [roomJoinUrl]="roomJoinUrl"
+        [roomJoinUrl]="getRoomJoinUrl()"
         appLangContext
         appDirContext
       ></app-room-overview-header>
@@ -52,7 +52,7 @@
         <span class="content-groups-description">
           {{ 'creator.room-page.content-groups-description' | transloco }}
         </span>
-        @if (!isModerator) {
+        @if (!isModerator()) {
           <div fxLayout="row wrap" fxLayoutGap="8px">
             <button
               id="content-group-create-button"
@@ -162,7 +162,7 @@
           }}
         </p>
       }
-      @if (!isModerator) {
+      @if (!isModerator()) {
         <lib-extension-point
           extensionId="attachment-list"
           [extensionData]="attachmentData"

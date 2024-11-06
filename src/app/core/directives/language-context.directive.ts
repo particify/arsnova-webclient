@@ -15,21 +15,19 @@ import { Room } from '@app/core/models/room';
 @Directive({ selector: '[appLangContext]', standalone: true })
 export class LanguageContextDirective implements OnInit {
   // Route data input below
-  @Input()
-  set room(room: Room) {
-    this.language = room?.language;
-  }
+  @Input() room?: Room;
+
   private elementRef: ElementRef<HTMLElement> = inject(ElementRef);
-  private language?: string;
   public appDirContext = input();
 
   ngOnInit(): void {
+    const lang = this.room?.language;
     const el = this.elementRef.nativeElement;
-    if (this.language) {
-      el.setAttribute('lang', this.language);
+    if (lang) {
+      el.setAttribute('lang', lang);
     }
     if (this.appDirContext() !== undefined) {
-      el.setAttribute('dir', this.determineDirection(this.language));
+      el.setAttribute('dir', this.determineDirection(lang));
     }
   }
 

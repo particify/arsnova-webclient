@@ -31,12 +31,8 @@ export class RoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
   // Route data input below
-  @Input()
-  set userRole(userRole: UserRole) {
-    this.isModerator = userRole === UserRole.MODERATOR;
-  }
+  @Input({ required: true }) userRole!: UserRole;
 
-  isModerator = false;
   groupTypes: Map<GroupType, string>;
   groupContentFormatIcons: Map<GroupType, Map<ContentType, string>> = new Map();
   hintType = HintType.INFO;
@@ -122,5 +118,9 @@ export class RoomOverviewPageComponent
       this.room.shortId,
       'templates',
     ]);
+  }
+
+  isModerator(): boolean {
+    return this.userRole === UserRole.MODERATOR;
   }
 }

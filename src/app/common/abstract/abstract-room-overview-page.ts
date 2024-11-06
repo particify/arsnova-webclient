@@ -18,13 +18,7 @@ export class AbstractRoomOverviewPageComponent {
   // Route data input below
   @Input({ required: true }) viewRole!: UserRole;
   @Input({ required: true }) room!: Room;
-  @Input({ required: true })
-  set apiConfig(config: ApiConfig) {
-    this.roomJoinUrl = this.routingService.getRoomJoinUrl(
-      config.ui.links?.join?.url
-    );
-  }
-  roomJoinUrl!: string;
+  @Input({ required: true }) apiConfig!: ApiConfig;
   destroyed$ = new Subject<void>();
 
   isLoading = true;
@@ -122,5 +116,11 @@ export class AbstractRoomOverviewPageComponent {
       detailedView: true,
       pureImageView: false,
     };
+  }
+
+  getRoomJoinUrl(): string {
+    return this.routingService.getRoomJoinUrl(
+      this.apiConfig.ui.links?.join?.url
+    );
   }
 }

@@ -14,7 +14,7 @@
         [isClosed]="isClosed"
         [type]="type"
       ></app-live-feedback>
-      @if (!isModerator) {
+      @if (!isModerator()) {
         <div
           fxLayout="row"
           fxLayoutAlign="center center"

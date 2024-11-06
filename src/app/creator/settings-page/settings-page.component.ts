@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { Router } from '@angular/router';
@@ -43,21 +43,14 @@ export class UpdateEvent {
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss'],
 })
-export class SettingsPageComponent {
+export class SettingsPageComponent implements OnInit {
   // Route data input below
   @Input({ required: true }) room!: Room;
-  @Input({ required: true })
-  set userRole(userRole: UserRole) {
-    this.isCreator = userRole === UserRole.OWNER;
-  }
-  @Input()
-  set settingsName(name: string | undefined) {
-    this.currentRoute = name || this.settings[0].name;
-  }
+  @Input({ required: true }) userRole!: UserRole;
+  @Input() settingsName?: string;
   settings: Settings[];
   isLoading = true;
-  currentRoute!: string;
-  isCreator = false;
+  currentRoute?: string;
 
   HotkeyAction = HotkeyAction;
 
@@ -99,6 +92,10 @@ export class SettingsPageComponent {
     this.isLoading = false;
   }
 
+  ngOnInit(): void {
+    this.currentRoute = this.settingsName || this.settings[0].name;
+  }
+
   saveRoom(updateEvent: UpdateEvent) {
     if (!updateEvent.loadRoom && updateEvent.room) {
       this.formService.disableForm();
@@ -138,5 +135,9 @@ export class SettingsPageComponent {
       this.currentRoute,
     ]);
     this.location.replaceState(this.router.serializeUrl(urlTree));
+  }
+
+  isOwner(): boolean {
+    return this.userRole === UserRole.OWNER;
   }
 }

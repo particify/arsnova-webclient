@@ -24,11 +24,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   // Route data input below
-  @Input({ required: true })
-  set apiConfig(config: ApiConfig) {
-    this.accountServiceTitle = config.ui.registration?.service || 'ARSnova';
-    this.linkOfToS = config.ui.links.tos?.url;
-  }
+  @Input({ required: true }) apiConfig!: ApiConfig;
 
   usernameFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
@@ -49,6 +45,9 @@ export class RegisterComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.accountServiceTitle =
+      this.apiConfig.ui.registration?.service || 'ARSnova';
+    this.linkOfToS = this.apiConfig.ui.links?.tos?.url;
     this.setFormControl(this.usernameFormControl);
     this.usernameFormControl.clearValidators();
   }

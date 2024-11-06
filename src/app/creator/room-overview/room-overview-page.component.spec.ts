@@ -27,6 +27,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStats } from '@app/core/models/room-stats';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { ApiConfig } from '@app/core/models/api-config';
 
 class MockRoutingService {}
 
@@ -156,6 +157,7 @@ describe('RoomOverviewPageComponent', () => {
     fixture = TestBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
     component.room = new Room();
+    component.apiConfig = new ApiConfig([], {}, {});
   });
 
   it('should create', () => {

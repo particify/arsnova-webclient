@@ -89,7 +89,7 @@
               <button
                 mat-menu-item
                 (click)="deleteGroup()"
-                [disabled]="isModerator"
+                [disabled]="isModerator()"
               >
                 <mat-icon color="warn">delete_forever</mat-icon>
                 {{ 'creator.content.delete-content-group' | transloco }}
@@ -281,7 +281,7 @@
             [contentGroup]="contentGroup"
             [contents]="contents"
             [contentGroupStats]="contentGroupStats"
-            [isModerator]="isModerator"
+            [isModerator]="isModerator()"
             [attributionsExist]="attributionsExist"
             [contentStats]="contentStats"
             (hasStartedContentChanged)="handleActiveContentChanged($event)"

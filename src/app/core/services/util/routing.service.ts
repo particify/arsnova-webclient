@@ -7,6 +7,7 @@ import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ApiConfig } from '@app/core/models/api-config';
 import { BehaviorSubject } from 'rxjs';
+import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 
 enum RoutePrefix {
   CREATOR = 'edit',
@@ -24,6 +25,7 @@ export class RoutingService {
   private viewRole?: UserRole;
   private shortId?: string;
   private roomId?: string;
+  private routingFeature?: RoutingFeature;
   role?: UserRole;
   role$ = new EventEmitter<UserRole>();
   isPreview = false;
@@ -71,6 +73,7 @@ export class RoutingService {
     this.shortId = route.params['shortId'];
     this.isPreview = this.role !== this.viewRole;
     this.isPreview$.emit(this.isPreview);
+    this.routingFeature = route.data.feature ?? this.routingFeature;
   }
 
   getRoutes(route: ActivatedRouteSnapshot) {
@@ -240,5 +243,9 @@ export class RoutingService {
 
   showFooterLinks(): BehaviorSubject<boolean> {
     return this.showFooterLinks$;
+  }
+
+  getRoutingFeature(): RoutingFeature | undefined {
+    return this.routingFeature;
   }
 }

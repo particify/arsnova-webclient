@@ -28,15 +28,10 @@ export class LiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
   // Route data input below
-  @Input()
-  set userRole(userRole: UserRole) {
-    this.isModerator = userRole === UserRole.MODERATOR;
-  }
+  @Input({ required: true }) userRole!: UserRole;
 
   toggleKey = '1';
   changeKey = '2';
-
-  isModerator = false;
 
   HotkeyAction = HotkeyAction;
 
@@ -110,6 +105,10 @@ export class LiveFeedbackPageComponent
           this.formService.enableForm();
         }
       );
+  }
+
+  isModerator(): boolean {
+    return this.userRole === UserRole.MODERATOR;
   }
 
   private announceType() {

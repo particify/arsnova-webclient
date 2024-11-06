@@ -17,6 +17,10 @@ import { UserSettings } from '@app/core/models/user-settings';
 import { Room } from '@app/core/models/room';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 
+function decrease(value: number) {
+  return value - 1;
+}
+
 @Component({
   selector: 'app-content-presentation',
   templateUrl: './content-presentation.component.html',
@@ -27,16 +31,12 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   @Input({ required: true }) seriesName!: string;
   @Input({ required: true }) room!: Room;
   @Input() isEditMode = false;
-  @Input()
-  set contentIndex(index: number) {
-    this.currentStep = index - 1;
-  }
+  @Input({ transform: decrease }) contentIndex = 0;
 
   destroyed$ = new Subject<void>();
 
   contents: Content[] = [];
   isLoading = true;
-  currentStep = 0;
   indexChanged: EventEmitter<number> = new EventEmitter<number>();
   contentGroup?: ContentGroup;
   settings = new UserSettings();
@@ -66,11 +66,11 @@ export class ContentPresentationComponent implements OnInit, OnDestroy {
   }
 
   updateURL(index: number) {
-    if (this.currentStep === index) {
+    if (this.contentIndex === index) {
       return;
     }
-    this.currentStep = index;
-    this.updateRoute(this.currentStep + 1);
+    this.contentIndex = index;
+    this.updateRoute(this.contentIndex + 1);
     setTimeout(() => {
       this.indexChanged.emit();
     }, 300);

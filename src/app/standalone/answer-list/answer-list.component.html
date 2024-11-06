@@ -3,7 +3,7 @@
     <div
       tabindex="0"
       class="list-item"
-      [ngClass]="{ moderation: isModerator && !isPresentation }"
+      [ngClass]="{ moderation: isModerator() && !isPresentation }"
       attr.aria-label="{{
         'statistic.a11y-text-evaluation'
           | transloco: { count: answer.count, answer: answer.answer }
@@ -27,7 +27,7 @@
             }
           </div>
           @if (
-            isModerator &&
+            isModerator() &&
             (answer.id || banMode) &&
             !isPresentation &&
             !isCorrect(answer.answer)

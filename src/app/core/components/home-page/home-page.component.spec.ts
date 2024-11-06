@@ -17,6 +17,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { ApiConfig } from '@app/core/models/api-config';
 @Component({
   selector: 'lib-extension-point',
   template: '<svg>Particify</svg>',
@@ -74,6 +75,7 @@ describe('HomePageComponent', () => {
 
     fixture = TestBed.createComponent(HomePageComponent);
     component = fixture.componentInstance;
+    component.apiConfig = new ApiConfig([], {}, {});
     dialogService = TestBed.inject(DialogService);
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
