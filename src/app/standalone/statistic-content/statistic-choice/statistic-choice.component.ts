@@ -111,6 +111,8 @@ export class StatisticChoiceComponent
     this.chartId = 'chart-' + this.content.id;
     if (this.content.options) {
       this.options = [...this.content.options];
+    }
+    if (this.options) {
       // Calculate label width: (card with - spacing) / count of labels
       this.answerLabelWidth =
         (CARD_WIDTH - (this.options.length - 1) * 12) / this.options.length +
