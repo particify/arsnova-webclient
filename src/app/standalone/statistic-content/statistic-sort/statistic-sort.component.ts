@@ -252,12 +252,18 @@ export class StatisticSortComponent
     }
   }
 
-  checkIfCorrect(index: number): boolean {
+  isCombinationCorrect(combination: Combination): boolean {
     const correct = this.content.options
-      .map((o) => this.content.options.map((a) => a.label).indexOf(o.label))
+      .map((value, index) => index)
       .toString();
-    const toCheck = this.answerIndexes[index].toString();
-    return toCheck === correct;
+    return combination.selectedChoiceIndexes.toString() === correct;
+  }
+
+  isCombinationIndexCorrect(index: number): boolean {
+    if (!this.stats) {
+      return false;
+    }
+    return this.isCombinationCorrect(this.stats.combinatedCounts[index]);
   }
 
   setColors() {
@@ -265,7 +271,7 @@ export class StatisticSortComponent
     const length = this.answerIndexes.length;
     for (let i = 0; i < length; i++) {
       this.colors[i] = barColors[i % barColors.length];
-      this.indicationColors[i] = this.checkIfCorrect(i)
+      this.indicationColors[i] = this.isCombinationIndexCorrect(i)
         ? this.colors[i]
         : this.grey;
     }
@@ -391,7 +397,7 @@ export class StatisticSortComponent
   getCorrectAnswerCounts(): number[] | undefined {
     if (this.stats && this.stats.answerCount) {
       return [
-        this.stats.combinatedCounts.find((c, i) => this.checkIfCorrect(i))
+        this.stats.combinatedCounts.find((c) => this.isCombinationCorrect(c))
           ?.count ?? 0,
       ];
     }
