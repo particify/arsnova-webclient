@@ -107,6 +107,7 @@ docker_image:
   before_script:
     - date
   script:
+    - chmod -R o+rX "$BUILD_DIR"
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor
