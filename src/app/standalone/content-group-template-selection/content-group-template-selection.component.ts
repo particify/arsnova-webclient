@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
@@ -33,18 +39,22 @@ export class ContentGroupTemplateSelectionComponent
   extends FormComponent
   implements OnInit, OnDestroy
 {
+  // Route data input below
+  @Input() room?: Room;
+  @Input() tagIds?: string[];
+  @Input() lang?: string;
+
   destroyed$ = new Subject<void>();
 
   loadingTemplates = true;
   templates: ContentGroupTemplate[] = [];
-  selectedLang: string;
+  selectedLang?: string;
   selectedTags: TemplateTag[] = [];
   langChanged = new EventEmitter<string>();
   showPublic = true;
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   creatorId!: string;
   tagIdsQueryParams: string[] = [];
-  room?: Room;
 
   constructor(
     protected formService: FormService,
@@ -55,20 +65,16 @@ export class ContentGroupTemplateSelectionComponent
     private route: ActivatedRoute
   ) {
     super(formService);
-    this.room = this.route.snapshot.data.room;
-    const queryParams = this.route.snapshot.queryParams;
-    // If lang is set via query param, use this one instead of active lang as default
-    this.selectedLang =
-      queryParams.lang || this.translateService.getActiveLang();
-    if (queryParams.tagIds) {
-      this.tagIdsQueryParams =
-        this.route.snapshot.queryParamMap.getAll('tagIds');
-    } else {
-      this.loadTemplates();
-    }
   }
 
   ngOnInit(): void {
+    // If lang is set via query param, use this one instead of active lang as default
+    this.selectedLang = this.lang || this.translateService.getActiveLang();
+    if (this.tagIds) {
+      this.tagIdsQueryParams = this.tagIds;
+    } else {
+      this.loadTemplates();
+    }
     this.authService
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))

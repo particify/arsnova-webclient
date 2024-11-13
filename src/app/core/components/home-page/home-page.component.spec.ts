@@ -8,7 +8,6 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import {
-  ActivatedRouteStub,
   MockAnnounceService,
   MockEventService,
   MockGlobalStorageService,
@@ -17,8 +16,8 @@ import {
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { ApiConfig } from '@app/core/models/api-config';
 @Component({
   selector: 'lib-extension-point',
   template: '<svg>Particify</svg>',
@@ -40,25 +39,6 @@ describe('HomePageComponent', () => {
 
   let loader: HarnessLoader;
   let newRoomButton: MatButtonHarness;
-
-  const data = {
-    apiConfig: {
-      ui: {
-        registration: {
-          service: 'ARSnova',
-        },
-      },
-    },
-  };
-
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = data;
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -89,16 +69,13 @@ describe('HomePageComponent', () => {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
         },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePageComponent);
     component = fixture.componentInstance;
+    component.apiConfig = new ApiConfig([], {}, {});
     dialogService = TestBed.inject(DialogService);
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();

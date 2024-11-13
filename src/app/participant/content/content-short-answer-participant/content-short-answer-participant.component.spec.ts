@@ -2,16 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentShortAnswerParticipantComponent } from './content-short-answer-participant.component';
 import {
-  ActivatedRouteStub,
   MockGlobalStorageService,
   MockNotificationService,
   MockRouter,
 } from '@testing/test-helpers';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
 import { ContentShortAnswer } from '@app/core/models/content-short-answer';
@@ -29,21 +24,6 @@ describe('ContentShortAnswerParticipantComponent', () => {
   const mockContentAnswerService = jasmine.createSpyObj([
     'addAnswerAndCheckResult',
   ]);
-
-  const snapshot = new ActivatedRouteSnapshot();
-
-  const params = {
-    shortId: '12345678',
-    seriesName: 'Quiz',
-  };
-
-  snapshot.params = of([params]);
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   const mockContentService = jasmine.createSpyObj(ContentService, [
     'getCorrectTerms',
@@ -65,10 +45,6 @@ describe('ContentShortAnswerParticipantComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,

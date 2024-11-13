@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { UserService } from '@app/core/services/http/user.service';
 import {
@@ -7,12 +7,13 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { ApiConfig } from '@app/core/models/api-config';
 
 @Component({
   selector: 'app-register',
@@ -22,12 +23,15 @@ import { take } from 'rxjs';
 export class RegisterComponent extends FormComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
+  // Route data input below
+  @Input({ required: true }) apiConfig!: ApiConfig;
+
   usernameFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
   deviceWidth = innerWidth;
   acceptToS = false;
-  linkOfToS: string;
-  accountServiceTitle: string;
+  linkOfToS?: string;
+  accountServiceTitle!: string;
 
   constructor(
     private translationService: TranslocoService,
@@ -35,16 +39,15 @@ export class RegisterComponent extends FormComponent implements OnInit {
     public notificationService: NotificationService,
     public eventService: EventService,
     private router: Router,
-    private route: ActivatedRoute,
     protected formService: FormService
   ) {
     super(formService);
-    this.accountServiceTitle =
-      route.snapshot.data.apiConfig.ui.registration?.service || 'ARSnova';
-    this.linkOfToS = route.snapshot.data.apiConfig.ui.links.tos?.url;
   }
 
   ngOnInit(): void {
+    this.accountServiceTitle =
+      this.apiConfig.ui.registration?.service || 'ARSnova';
+    this.linkOfToS = this.apiConfig.ui.links?.tos?.url;
     this.setFormControl(this.usernameFormControl);
     this.usernameFormControl.clearValidators();
   }

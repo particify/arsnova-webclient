@@ -9,7 +9,6 @@ import { importProvidersFrom, EventEmitter } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { of } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -33,6 +32,9 @@ import { EventService } from '@app/core/services/util/event.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { Room } from '@app/core/models/room';
+import { CommentSettings } from '@app/core/models/comment-settings';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 class MockCommentService {
   getAckComments() {
@@ -176,23 +178,6 @@ export default {
           provide: ContentGroupService,
           useClass: MockService,
         },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                room: { id: 'roomId' },
-                commentSettings: {
-                  directSend: true,
-                  fileUploadEnabled: false,
-                  disabled: false,
-                  readonly: false,
-                },
-                showCommentPreview: true,
-              },
-            },
-          },
-        },
       ],
     }),
     applicationConfig({
@@ -206,4 +191,11 @@ export default {
 
 type Story = StoryObj<CommentsPageComponent>;
 
-export const Presentation: Story = {};
+export const Presentation: Story = {
+  args: {
+    room: new Room(),
+    commentSettings: new CommentSettings('roomId', true, false, false, false),
+    viewRole: UserRole.EDITOR,
+    showCommentPreview: true,
+  },
+};

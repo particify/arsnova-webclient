@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LiveFeedbackPageComponent } from './live-feedback-page.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  ActivatedRouteStub,
   MockAnnounceService,
   MockEventService,
   MockGlobalStorageService,
@@ -12,8 +11,6 @@ import {
 import { of } from 'rxjs';
 import { Message } from '@stomp/stompjs';
 import { Room } from '@app/core/models/room';
-import { UserRole } from '@app/core/models/user-roles.enum';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { RoomService } from '@app/core/services/http/room.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
@@ -49,18 +46,6 @@ describe('LiveFeedbackPageComponent', () => {
   ]);
   mockFeedbackService.messageEvent = new EventEmitter<Message>();
   mockFeedbackService.get.and.returnValue(of([0, 0, 0, 0]));
-
-  const data = {
-    viewRole: UserRole.PARTICIPANT,
-  };
-  const room = new Room();
-  room.settings = { feedbackLocked: true };
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = {
-    isPresentation: false,
-    room: room,
-  };
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   const mockFocusModeService = jasmine.createSpyObj(['updateFeedbackState']);
 
@@ -107,10 +92,6 @@ describe('LiveFeedbackPageComponent', () => {
           useClass: MockAnnounceService,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
         },
@@ -132,6 +113,8 @@ describe('LiveFeedbackPageComponent', () => {
 
     fixture = TestBed.createComponent(LiveFeedbackPageComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
+    component.room.settings = { feedbackLocked: true };
     fixture.detectChanges();
   });
 

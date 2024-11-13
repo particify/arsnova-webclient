@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslocoService } from '@jsverse/transloco';
 
@@ -8,6 +10,10 @@ import { TranslocoService } from '@jsverse/transloco';
   styleUrls: ['../common/styles/room-page.scss'],
 })
 export class CreatorPageComponent {
+  // Route data input below
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) userRole!: UserRole;
+  @Input({ required: true }) viewRole!: UserRole;
   constructor(
     protected translateService: TranslocoService,
     protected langService: LanguageService

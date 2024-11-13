@@ -1,11 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommentComponent } from './comment.component';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
   MockNotificationService,
-  ActivatedRouteStub,
   MockGlobalStorageService,
   MockAnnounceService,
 } from '@testing/test-helpers';
@@ -13,7 +11,6 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { CommentService } from '@app/core/services/http/comment.service';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { Comment } from '@app/core/models/comment';
@@ -23,7 +20,6 @@ import {
   BROWSER_LANG,
   LanguageService,
 } from '@app/core/services/util/language.service';
-import { Room } from '@app/core/models/room';
 
 class MockLanguageService {
   langEmitter = new EventEmitter<string>();
@@ -44,17 +40,6 @@ describe('CommentComponent', () => {
     'openPublishGroupDialog',
     'openDeleteDialog',
   ]);
-
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-  };
-
-  const data = {
-    viewRole: UserRole.PARTICIPANT,
-  };
-  const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
 
   const mockVoteService = jasmine.createSpyObj('VoteService', [
     'voteUp',
@@ -82,10 +67,6 @@ describe('CommentComponent', () => {
         {
           provide: NotificationService,
           useClass: MockNotificationService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,

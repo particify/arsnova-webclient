@@ -9,7 +9,6 @@ import { Content } from '@app/core/models/content';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
-import { ActivatedRoute } from '@angular/router';
 import { LanguageService } from '@app/core/services/util/language.service';
 
 @Component({
@@ -30,6 +29,7 @@ export class ScaleContentFormComponent
   @Input() content?: Content;
   @Input() isAnswered = false;
   @Input() isEditMode = false;
+  @Input() language?: string;
 
   templates = LIKERT_SCALE_TEMPLATES;
   templateLabels = LIKERT_SCALE_TEMPLATES.map(
@@ -38,18 +38,13 @@ export class ScaleContentFormComponent
   selectedTemplate = LikertScaleTemplate.AGREEMENT;
   neutralOption = true;
   answerLabels: string[] = [];
-  language: string;
 
   constructor(
     private likertScaleService: LikertScaleService,
     protected formService: FormService,
-    route: ActivatedRoute,
-    languageService: LanguageService
+    private languageService: LanguageService
   ) {
     super(formService);
-    this.language = languageService.ensureValidLang(
-      route.snapshot.data.room?.language
-    );
   }
 
   ngOnInit(): void {
@@ -59,6 +54,7 @@ export class ScaleContentFormComponent
       this.neutralOption = scaleContent.optionCount % 2 !== 0;
     }
     this.updateOptionLabels();
+    this.language = this.languageService.ensureValidLang(this.language);
   }
 
   getContent(): Content {

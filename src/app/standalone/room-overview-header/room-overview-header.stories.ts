@@ -7,18 +7,13 @@ import {
 
 import { RoomOverviewHeaderComponent } from '@app/standalone/room-overview-header/room-overview-header.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RoutingService } from '@app/core/services/util/routing.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { Observable, of } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import { TranslocoRootModule } from '@app/transloco-root.module';
-import { ActivatedRoute } from '@angular/router';
 
-class MockRoutingService {
-  getRoomJoinUrl() {}
-}
 class MockNotificationService {}
 class MockFormattingService {
   postString(text: string): Observable<string> {
@@ -35,20 +30,12 @@ export default {
       imports: [RoomOverviewHeaderComponent, RouterTestingModule],
       providers: [
         {
-          provide: RoutingService,
-          useClass: MockRoutingService,
-        },
-        {
           provide: NotificationService,
           useClass: MockNotificationService,
         },
         {
           provide: FormattingService,
           useClass: MockFormattingService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: { snapshot: { data: { apiConfig: { ui: {} } } } },
         },
       ],
     }),
@@ -69,5 +56,6 @@ export const RoomOverviewHeader: Story = {
     shortId: '12345678',
     description: '*This is a room description.*',
     renderedDescription: '<b>This is a room description.</b>',
+    roomJoinUrl: 'https://awesome-room-join-url.de',
   },
 };

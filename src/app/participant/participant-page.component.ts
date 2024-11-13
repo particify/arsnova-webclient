@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -13,6 +13,9 @@ import {
   MatDrawerContent,
 } from '@angular/material/sidenav';
 import { FlexModule } from '@angular/flex-layout';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 @Component({
   selector: 'app-participant-page',
@@ -35,11 +38,16 @@ import { FlexModule } from '@angular/flex-layout';
 export class ParticipantPageComponent implements OnInit {
   focusModeEnabled = false;
 
+  // Route data input below
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) userRole!: UserRole;
+  @Input({ required: true }) viewRole!: UserRole;
+
   constructor(
     protected translateService: TranslocoService,
     protected langService: LanguageService,
     private focusModeService: FocusModeService,
-    private route: ActivatedRoute
+    private routingService: RoutingService
   ) {
     langService.langEmitter.subscribe((lang) => {
       translateService.setActiveLang(lang);
@@ -47,12 +55,11 @@ export class ParticipantPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.focusModeService.init(
-        data.room,
-        this.route.snapshot.firstChild?.firstChild?.data.feature
-      );
-    });
+    const feature = this.routingService.getRoutingFeature();
+    if (!feature) {
+      return;
+    }
+    this.focusModeService.init(this.room, feature);
     this.focusModeService
       .getFocusModeEnabled()
       .subscribe(

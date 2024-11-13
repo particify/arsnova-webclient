@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
@@ -13,15 +13,18 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { take } from 'rxjs';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 @Component({
   selector: 'app-presentation',
   templateUrl: './presentation.component.html',
 })
 export class PresentationComponent implements OnInit, OnDestroy {
-  shortId: string;
-  roomId: string;
-  passwordProtected: boolean;
+  // Route data input below
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) userRole!: UserRole;
+  @Input({ required: true }) viewRole!: UserRole;
   lastGroup?: string;
   featureString?: string;
 
@@ -34,16 +37,15 @@ export class PresentationComponent implements OnInit, OnDestroy {
     private presentationService: PresentationService,
     private notificationService: NotificationService
   ) {
-    this.shortId = this.route.snapshot.params['shortId'];
-    const room = this.route.snapshot.data.room;
-    this.roomId = room.id;
-    this.passwordProtected = room.passwordProtected;
     const childRoute = this.route.snapshot?.firstChild?.firstChild;
     if (childRoute) {
       this.featureString = childRoute.url[0]?.path;
       this.lastGroup = childRoute.params['seriesName'];
     }
-    if (room.focusModeEnabled) {
+  }
+
+  ngOnInit(): void {
+    if (this.room.focusModeEnabled) {
       this.translateService
         .selectTranslate(
           'presentation.focus-mode-enabled-info',
@@ -58,9 +60,6 @@ export class PresentationComponent implements OnInit, OnDestroy {
           );
         });
     }
-  }
-
-  ngOnInit(): void {
     document.body.style.background = 'var(--surface)';
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
@@ -70,14 +69,16 @@ export class PresentationComponent implements OnInit, OnDestroy {
         STORAGE_KEYS.LAST_GROUP
       );
       if (this.lastGroup === undefined) {
-        this.roomStatsService.getStats(this.roomId, true).subscribe((stats) => {
-          if (stats.groupStats) {
-            this.lastGroup = stats.groupStats[0].groupName;
-            if (this.lastGroup) {
-              this.setGroupInSessionStorage(this.lastGroup);
+        this.roomStatsService
+          .getStats(this.room.id, true)
+          .subscribe((stats) => {
+            if (stats.groupStats) {
+              this.lastGroup = stats.groupStats[0].groupName;
+              if (this.lastGroup) {
+                this.setGroupInSessionStorage(this.lastGroup);
+              }
             }
-          }
-        });
+          });
       }
     }
   }
@@ -98,7 +99,7 @@ export class PresentationComponent implements OnInit, OnDestroy {
       this.presentationService.updateCurrentGroup(group);
       this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     }
-    const urlList = ['present', this.shortId];
+    const urlList = ['present', this.room.shortId];
     if (this.featureString) {
       urlList.push(this.featureString);
       if (isGroup) {

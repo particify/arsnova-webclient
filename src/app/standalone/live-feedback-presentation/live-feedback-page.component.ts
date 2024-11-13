@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AbstractLiveFeedbackPage } from '@app/common/abstract/abstract-live-feedback-page';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
@@ -37,12 +36,13 @@ import { EventService } from '@app/core/services/util/event.service';
   ],
 })
 export class LiveFeedbackPageComponent
-  extends AbstractLiveFeedbackPage
+  extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
+  // Route data input below
+  @Input() showAnswerCount?: boolean;
   private hotkeyRefs: symbol[] = [];
 
-  showAnswerCount = false;
   controlBarVisible = true;
 
   constructor(
@@ -53,7 +53,6 @@ export class LiveFeedbackPageComponent
     protected translateService: TranslocoService,
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
-    protected route: ActivatedRoute,
     protected focusModeService: FocusModeService,
     protected hotkeyService: HotkeyService,
     protected presentationService: PresentationService,
@@ -65,10 +64,8 @@ export class LiveFeedbackPageComponent
       roomService,
       translateService,
       announceService,
-      globalStorageService,
-      route
+      globalStorageService
     );
-    this.showAnswerCount = this.route.snapshot.data.showAnswerCount;
   }
 
   ngOnInit() {

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
@@ -38,7 +38,6 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
     protected formService: FormService
@@ -46,7 +45,6 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
     super(
       notificationService,
       translateService,
-      route,
       globalStorageService,
       router,
       formService

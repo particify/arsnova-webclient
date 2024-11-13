@@ -26,7 +26,6 @@ import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/c
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-content-preview',
@@ -52,6 +51,7 @@ export class ContentPreviewComponent implements OnInit {
   @Input({ required: true }) content!: Content;
   @Input() renderAnswersDynamically = true;
   @Input() showTitle = true;
+  @Input() language?: string;
 
   answerOptions: AnswerOption[] = [];
   answerOptionsWithPoints: AnswerWithPoints[] = [];
@@ -63,16 +63,12 @@ export class ContentPreviewComponent implements OnInit {
   additionalText?: string;
   assignablePoints?: number;
   numericContent?: ContentNumeric;
-  language?: string;
 
   constructor(
     private answerService: ContentAnswerService,
     private likertScaleService: LikertScaleService,
-    private translateService: TranslocoService,
-    route: ActivatedRoute
-  ) {
-    this.language = route.snapshot.data.room?.language;
-  }
+    private translateService: TranslocoService
+  ) {}
 
   ngOnInit(): void {
     const format = this.content.format;

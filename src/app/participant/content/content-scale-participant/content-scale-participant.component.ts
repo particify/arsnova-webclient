@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentScale } from '@app/core/models/content-scale';
@@ -30,6 +30,7 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   @Input({ required: true }) content!: ContentScale;
   @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
+  @Input() language?: string;
 
   selectableAnswers: SelectableAnswer[] = [];
   hasAbstained = false;
@@ -39,7 +40,6 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
     private likertScaleService: LikertScaleService,
@@ -48,7 +48,6 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
     super(
       notificationService,
       translateService,
-      route,
       globalStorageService,
       router,
       formService

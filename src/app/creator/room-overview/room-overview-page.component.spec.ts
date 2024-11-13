@@ -4,7 +4,6 @@ import { RoomOverviewPageComponent } from './room-overview-page.component';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
-  ActivatedRouteStub,
   MockEventService,
   MockGlobalStorageService,
   MockNotificationService,
@@ -12,11 +11,7 @@ import {
 } from '@testing/test-helpers';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
@@ -30,9 +25,9 @@ import { CommentService } from '@app/core/services/http/comment.service';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStats } from '@app/core/models/room-stats';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { ApiConfig } from '@app/core/models/api-config';
 
 class MockRoutingService {}
 
@@ -85,25 +80,16 @@ describe('RoomOverviewPageComponent', () => {
     'openContentGroupCreationDialog',
   ]);
 
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-    viewRole: UserRole.EDITOR,
-  };
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   const mockContentService = jasmine.createSpyObj(ContentService, [
     'getTypeIcons',
   ]);
   mockContentService.getTypeIcons.and.returnValue(
     new Map<ContentType, string>()
   );
+
+  const mockRoutingService = jasmine.createSpyObj('RoutingService', [
+    'getRoomJoinUrl',
+  ]);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -128,10 +114,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: ContentGroupService,
           useValue: mockContentGroupService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: DialogService,
@@ -161,6 +143,10 @@ describe('RoomOverviewPageComponent', () => {
           provide: ContentService,
           useValue: mockContentService,
         },
+        {
+          provide: RoutingService,
+          useValue: mockRoutingService,
+        },
       ],
       imports: [getTranslocoModule()],
       schemas: [NO_ERRORS_SCHEMA],
@@ -170,6 +156,8 @@ describe('RoomOverviewPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
+    component.apiConfig = new ApiConfig([], {}, {});
   });
 
   it('should create', () => {

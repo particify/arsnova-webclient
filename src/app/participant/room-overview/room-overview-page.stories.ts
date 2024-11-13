@@ -46,6 +46,9 @@ import { ENVIRONMENT } from '@environments/environment-token';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ApiConfig } from '@app/core/models/api-config';
 import { FormattingService } from '@app/core/services/http/formatting.service';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { CommentSettings } from '@app/core/models/comment-settings';
 
 class MockFeedbackService {
   messageEvent = new EventEmitter<Message>();
@@ -347,4 +350,20 @@ export default {
 
 type Story = StoryObj<RoomOverviewPageComponent>;
 
-export const Participant: Story = {};
+const room = new Room(
+  'ownerId',
+  '12345678',
+  '',
+  'My awesome room',
+  'This is my awesome room description.'
+);
+room.settings = { feedbackLocked: false };
+
+export const Participant: Story = {
+  args: {
+    room: room,
+    viewRole: UserRole.PARTICIPANT,
+    commentSettings: new CommentSettings(),
+    apiConfig: new ApiConfig([], {}, {}),
+  },
+};

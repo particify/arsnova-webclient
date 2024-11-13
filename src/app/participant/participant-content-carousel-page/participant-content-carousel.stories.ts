@@ -35,7 +35,6 @@ import { ENVIRONMENT } from '@environments/environment-token';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ApiConfig } from '@app/core/models/api-config';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { SeriesOverviewComponent } from '@app/participant/series-overview/series-overview.component';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -56,6 +55,7 @@ import { LikertScaleService } from '@app/core/services/util/likert-scale.service
 import { ContentScale } from '@app/core/models/content-scale';
 import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import { Room } from '@app/core/models/room';
 
 class MockService {}
 class MockGlobalStorageService {
@@ -311,7 +311,10 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [SeriesOverviewComponent, BrowserAnimationsModule],
+      imports: [
+        ParticipantContentCarouselPageComponent,
+        BrowserAnimationsModule,
+      ],
       providers: [
         {
           provide: RoomService,
@@ -394,28 +397,7 @@ export default {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              data: {
-                apiConfig: { ui: {} },
-                room: {
-                  id: 'roomId',
-                  name: 'My awesome room',
-                  shortId: '12345678',
-                  description: 'This is my awesome room description.',
-                  settings: {},
-                },
-                contentGroup: new ContentGroup(
-                  'roomId',
-                  'My mixed series',
-                  ['content1', 'content2', 'content3', 'content4'],
-                  true,
-                  true,
-                  true,
-                  PublishingMode.ALL,
-                  0,
-                  GroupType.MIXED,
-                  false
-                ),
-              },
+              data: {},
               params: {
                 contentIndex: 1,
                 seriesName: 'My mixed series',
@@ -442,6 +424,25 @@ export default {
   ],
 } as Meta;
 
-type Story = StoryObj<SeriesOverviewComponent>;
+type Story = StoryObj<ParticipantContentCarouselPageComponent>;
 
-export const ParticipantContentCarouselPage: Story = {};
+export const ParticipantContentCarouselPage: Story = {
+  args: {
+    contentGroup: new ContentGroup(
+      'roomId',
+      'My mixed series',
+      ['content1', 'content2', 'content3', 'content4'],
+      true,
+      true,
+      true,
+      PublishingMode.ALL,
+      0,
+      GroupType.MIXED,
+      false
+    ),
+    room: new Room(),
+    contentIndex: 1,
+    showCard: true,
+    showStepper: true,
+  },
+};

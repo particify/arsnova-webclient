@@ -127,6 +127,7 @@
                       [sendEvent]="sendEvent"
                       [statsPublished]="statsPublished"
                       [correctOptionsPublished]="correctOptionsPublished"
+                      [language]="room.language"
                     >
                     </app-content-choice-participant>
                   }
@@ -140,6 +141,7 @@
                       (answerChanged)="forwardAnswerMessage($event)"
                       [sendEvent]="sendEvent"
                       [statsPublished]="statsPublished"
+                      [language]="room.language"
                     >
                     </app-content-scale-participant>
                   }
@@ -362,6 +364,8 @@
                     [directShow]="true"
                     [showCorrect]="correctOptionsPublished"
                     [isStandalone]="false"
+                    [isParticipant]="true"
+                    [language]="room.language"
                   >
                   </app-content-results>
                 }
@@ -384,6 +388,7 @@
                   fxFill
                   [content]="content"
                   [aliasId]="alias.id"
+                  [groupId]="contentGroup.id"
                 ></app-leaderboard-page>
               } @else {
                 <app-content-waiting

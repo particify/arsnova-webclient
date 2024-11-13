@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
@@ -47,7 +47,10 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
   template: ContentGroupTemplate;
 
-  room?: Room;
+  // Route data input below
+  @Input() room?: Room;
+  @Input() templateId!: string;
+
   contents: Content[] = [];
   LICENSES = LICENSES;
 
@@ -60,7 +63,6 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   constructor(
     private templateService: BaseTemplateService,
     private contentService: ContentService,
-    private route: ActivatedRoute,
     private dialog: MatDialog,
     private translateService: TranslocoService,
     private notificationService: NotificationService,
@@ -71,7 +73,6 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
     private router: Router
   ) {
     this.template = history?.state?.data?.template;
-    this.room = route.snapshot.data.room;
   }
 
   ngOnDestroy(): void {
@@ -84,10 +85,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
       .getApiConfig$()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((config) => {
-        this.url = this.routingService.getRoute(
-          ['t', this.route.snapshot.params['templateId']],
-          config
-        );
+        this.url = this.routingService.getRoute(['t', this.templateId], config);
       });
     if (this.template) {
       this.getContentTemplates();
@@ -95,7 +93,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
       return;
     }
     this.templateService
-      .getContentGroupTemplate(this.route.snapshot.params.templateId)
+      .getContentGroupTemplate(this.templateId)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((template) => {
         this.template = template;

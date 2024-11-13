@@ -9,7 +9,6 @@ import { importProvidersFrom, EventEmitter } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { of } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { CommentsPageComponent } from '@app/participant/comments/comments-page.component';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
@@ -29,6 +28,9 @@ import { TrackingService } from '@app/core/services/util/tracking.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { LanguageService } from '@app/core/services/util/language.service';
+import { Room } from '@app/core/models/room';
+import { CommentSettings } from '@app/core/models/comment-settings';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 class MockCommentService {
   getAckComments() {
@@ -157,22 +159,6 @@ export default {
           provide: LanguageService,
           useClass: MockLangService,
         },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                room: { id: 'roomId' },
-                commentSettings: {
-                  directSend: true,
-                  fileUploadEnabled: false,
-                  disabled: false,
-                  readonly: false,
-                },
-              },
-            },
-          },
-        },
       ],
     }),
     applicationConfig({
@@ -186,4 +172,10 @@ export default {
 
 type Story = StoryObj<CommentsPageComponent>;
 
-export const Participant: Story = {};
+export const Participant: Story = {
+  args: {
+    room: new Room(),
+    commentSettings: new CommentSettings('roomId', true, false, false, false),
+    viewRole: UserRole.PARTICIPANT,
+  },
+};

@@ -3,7 +3,7 @@
   [extensionData]="{ isPresentation: true }"
 ></lib-extension-point>
 @if (currentRouteIndex > -1) {
-  <span class="code">{{ joinUrl || (shortId | splitShortId) }}</span>
+  <span class="code">{{ joinUrl || (room.shortId | splitShortId) }}</span>
 }
 <div
   class="bar-container"
@@ -138,7 +138,7 @@
             <app-content-presentation-menu
               [content]="content"
               [groupName]="groupName"
-              [shortId]="shortId"
+              [shortId]="room.shortId"
               [contentIndex]="contentIndex"
             ></app-content-presentation-menu>
           }

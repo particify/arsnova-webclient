@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { forkJoin, Observable, take } from 'rxjs';
 import { ThemeService } from '@app/core/theme/theme.service';
@@ -13,7 +13,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { NgIf, NgClass, NgFor } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
-import { ActivatedRoute } from '@angular/router';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 
@@ -35,7 +34,7 @@ import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-re
   ],
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {
-  language: string;
+  @Input() language?: string;
 
   constructor(
     protected contentService: ContentService,
@@ -43,16 +42,13 @@ export class StatisticScaleComponent extends StatisticChoiceComponent {
     protected themeService: ThemeService,
     protected presentationService: PresentationService,
     private likertScaleService: LikertScaleService,
-    route: ActivatedRoute,
-    languageService: LanguageService
+    private languageService: LanguageService
   ) {
     super(contentService, translateService, themeService, presentationService);
-    this.language = languageService.ensureValidLang(
-      route.snapshot.data.room?.language
-    );
   }
 
   init(stats: AnswerStatistics) {
+    this.language = this.languageService.ensureValidLang(this.language);
     const scaleContent = this.content as ContentScale;
     const scaleOptions = this.likertScaleService.getOptionLabels(
       scaleContent.optionTemplate,

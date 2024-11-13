@@ -10,13 +10,8 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
-import {
-  ActivatedRouteStub,
-  MockFeatureFlagService,
-} from '@testing/test-helpers';
+import { MockFeatureFlagService } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { Room } from '@app/core/models/room';
 import { LanguageService } from '@app/core/services/util/language.service';
 
 @Injectable()
@@ -31,18 +26,6 @@ describe('ContentPreviewComponent', () => {
 
   const mockFormattingService = jasmine.createSpyObj(['postString']);
   mockFormattingService.postString.and.returnValue(of('rendered'));
-
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.data = {
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-  };
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   const mockLangService = jasmine.createSpyObj(LanguageService, [
     'ensureValidLang',
@@ -67,10 +50,6 @@ describe('ContentPreviewComponent', () => {
         {
           provide: FeatureFlagService,
           useClass: MockFeatureFlagService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: LanguageService,

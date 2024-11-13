@@ -1,18 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserProfileComponent } from './user-profile.component';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   MockEventService,
   MockGlobalStorageService,
   MockRouter,
-  ActivatedRouteStub,
 } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -62,16 +57,6 @@ describe('UserProfileComponent', () => {
   );
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of(auth));
 
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.params = of([{ accountSettingsName: null }]);
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [UserProfileComponent, A11yIntroPipe],
@@ -104,10 +89,6 @@ describe('UserProfileComponent', () => {
         {
           provide: DialogService,
           useValue: mockDialogService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

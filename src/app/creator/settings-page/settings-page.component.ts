@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
 import { TranslocoService } from '@jsverse/transloco';
 import {
@@ -43,18 +43,19 @@ export class UpdateEvent {
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss'],
 })
-export class SettingsPageComponent {
+export class SettingsPageComponent implements OnInit {
+  // Route data input below
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) userRole!: UserRole;
+  @Input() settingsName?: string;
   settings: Settings[];
-  room: Room;
   isLoading = true;
-  currentRoute: string;
-  isCreator = false;
+  currentRoute?: string;
 
   HotkeyAction = HotkeyAction;
 
   constructor(
     protected roomService: RoomService,
-    protected route: ActivatedRoute,
     protected eventService: EventService,
     protected translateService: TranslocoService,
     private globalStorageService: GlobalStorageService,
@@ -88,11 +89,11 @@ export class SettingsPageComponent {
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.isCreator = this.route.snapshot.data.userRole === UserRole.OWNER;
-    this.currentRoute =
-      route.snapshot.params['settingsName'] || this.settings[0].name;
-    this.room = route.snapshot.data.room;
     this.isLoading = false;
+  }
+
+  ngOnInit(): void {
+    this.currentRoute = this.settingsName || this.settings[0].name;
   }
 
   saveRoom(updateEvent: UpdateEvent) {
@@ -134,5 +135,9 @@ export class SettingsPageComponent {
       this.currentRoute,
     ]);
     this.location.replaceState(this.router.serializeUrl(urlTree));
+  }
+
+  isOwner(): boolean {
+    return this.userRole === UserRole.OWNER;
   }
 }

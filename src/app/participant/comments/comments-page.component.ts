@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
@@ -66,7 +66,6 @@ export class CommentsPageComponent
     protected notificationService: NotificationService,
     protected announceService: AnnounceService,
     protected router: Router,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected commentSettingsService: CommentSettingsService,
     protected authenticationService: AuthenticationService,
@@ -82,7 +81,6 @@ export class CommentsPageComponent
       notificationService,
       announceService,
       router,
-      route,
       globalStorageService,
       commentSettingsService,
       authenticationService
@@ -114,7 +112,7 @@ export class CommentsPageComponent
   afterCommentsLoadedHook() {
     if (this.userId) {
       this.voteService
-        .getByRoomIdAndUserID(this.roomId, this.userId)
+        .getByRoomIdAndUserID(this.room.id, this.userId)
         .pipe(takeUntil(this.destroyed$))
         .subscribe((votes) => {
           for (const v of votes) {

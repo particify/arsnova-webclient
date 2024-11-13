@@ -2,14 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LeaderboardPageComponent } from './leaderboard-page.component';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { ActivatedRouteStub } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Room } from '@app/core/models/room';
 import { ContentGroup } from '@app/core/models/content-group';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ThemeService } from '@app/core/theme/theme.service';
+import { Room } from '@app/core/models/room';
 
 describe('LeaderboardPageComponent', () => {
   let component: LeaderboardPageComponent;
@@ -24,17 +22,6 @@ describe('LeaderboardPageComponent', () => {
   );
   mockContentGroupService.getLeaderboard.and.returnValue(of([]));
 
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.params = of([{ seriesName: 'SERIES' }]);
-  snapshot.data = {
-    room: new Room(),
-  };
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   const themeService = jasmine.createSpyObj(ThemeService, ['getTextColors']);
   themeService.getTextColors.and.returnValue([]);
 
@@ -47,10 +34,6 @@ describe('LeaderboardPageComponent', () => {
           useValue: mockContentGroupService,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: ThemeService,
           useValue: themeService,
         },
@@ -60,6 +43,8 @@ describe('LeaderboardPageComponent', () => {
 
     fixture = TestBed.createComponent(LeaderboardPageComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
+    component.contentGroup = new ContentGroup();
     fixture.detectChanges();
   });
 

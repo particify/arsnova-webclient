@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { Content } from '@app/core/models/content';
 import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
@@ -43,7 +43,6 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
     protected formService: FormService,
@@ -52,7 +51,6 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
     super(
       notificationService,
       translateService,
-      route,
       globalStorageService,
       router,
       formService

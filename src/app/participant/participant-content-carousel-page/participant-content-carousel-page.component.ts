@@ -1,6 +1,7 @@
 import {
   Component,
   DestroyRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -56,6 +57,11 @@ import { BaseCardComponent } from '@app/standalone/base-card/base-card.component
 import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Room } from '@app/core/models/room';
+
+function setDefaultTrue(value: boolean | undefined): boolean {
+  return value ?? true;
+}
 
 @Component({
   selector: 'app-participant-content-carousel-page',
@@ -81,14 +87,26 @@ export class ParticipantContentCarouselPageComponent
 {
   @ViewChild(StepperComponent) stepper!: StepperComponent;
 
+  // Route data input below
+  @Input({ required: true }) contentGroup!: ContentGroup;
+  @Input({ required: true }) room!: Room;
+  @Input() activeTab?: string;
+  @Input() contentIndex?: number;
+  @Input({
+    transform: setDefaultTrue,
+  })
+  showCard!: boolean;
+  @Input({
+    transform: setDefaultTrue,
+  })
+  showStepper!: boolean;
+
   private destroyed$ = new Subject<void>();
 
   ContentType: typeof ContentType = ContentType;
   PublishingMode = PublishingMode;
 
   contents: Content[] = [];
-  contentGroup: ContentGroup;
-  shortId: string;
   isLoading = true;
   started = false;
   answerResults = new Map<number, AnswerResultType>();
@@ -110,8 +128,6 @@ export class ParticipantContentCarouselPageComponent
   attributions: ContentLicenseAttribution[] = [];
   GroupType = GroupType;
   alias?: RoomUserAlias;
-  showStepper: boolean;
-  showCard: boolean;
 
   constructor(
     private contentService: ContentService,
@@ -131,12 +147,7 @@ export class ParticipantContentCarouselPageComponent
     private roomUserAliasService: RoomUserAliasService,
     private contentGroupService: ContentGroupService,
     private destroyRef: DestroyRef
-  ) {
-    this.shortId = route.snapshot.data.room.shortId;
-    this.showStepper = route.snapshot.data.showStepper ?? true;
-    this.showCard = route.snapshot.data.showCard ?? true;
-    this.contentGroup = route.snapshot.data.contentGroup;
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -157,8 +168,6 @@ export class ParticipantContentCarouselPageComponent
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    const params = this.route.snapshot.params;
-    const lastContentIndex = params['contentIndex'] - 1;
     if (this.contentGroup.leaderboardEnabled) {
       this.roomUserAliasService
         .generateAlias(this.contentGroup.roomId)
@@ -178,7 +187,7 @@ export class ParticipantContentCarouselPageComponent
         }
       });
     }
-    this.getContents(lastContentIndex);
+    this.getContents(this.contentIndex ? this.contentIndex - 1 : undefined);
     this.loadAttributions();
     this.contentGroupService
       .getChangesStreamForEntity(this.contentGroup)
@@ -232,7 +241,7 @@ export class ParticipantContentCarouselPageComponent
         .getById(state.contentGroupId, { roomId: this.contentGroup.roomId })
         .subscribe((group) => {
           this.router
-            .navigate(['p', 'room', this.shortId, 'group', group.name])
+            .navigate(['p', 'room', this.room.shortId, 'group', group.name])
             .then(() => {
               this.contentGroup = group;
               this.isReloading = true;
@@ -340,7 +349,7 @@ export class ParticipantContentCarouselPageComponent
         this.currentStep = index || 0;
         this.replaceUrl([
           'p',
-          this.shortId,
+          this.room.shortId,
           'series',
           this.contentGroup.name,
           index + 1,
@@ -415,7 +424,7 @@ export class ParticipantContentCarouselPageComponent
 
   goToOverview() {
     this.showOverview = true;
-    this.replaceUrl(['p', this.shortId, 'series', this.contentGroup.name]);
+    this.replaceUrl(['p', this.room.shortId, 'series', this.contentGroup.name]);
   }
 
   replaceUrl(url: any[]) {

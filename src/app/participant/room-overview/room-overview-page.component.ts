@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import {
   provideTranslocoScope,
   TranslocoService,
@@ -20,7 +19,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-overview-page';
+import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { DataChanged } from '@app/core/models/events/data-changed';
@@ -35,6 +34,8 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { AsyncPipe } from '@angular/common';
 import { CoreModule } from '@app/core/core.module';
 import { FlexModule } from '@angular/flex-layout';
+import { CommentSettings } from '@app/core/models/comment-settings';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 @Component({
   selector: 'app-participant-overview',
@@ -57,9 +58,12 @@ import { FlexModule } from '@angular/flex-layout';
   providers: [provideTranslocoScope('participant')],
 })
 export class RoomOverviewPageComponent
-  extends AbstractRoomOverviewPage
+  extends AbstractRoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
+  // Route data input below
+  @Input({ required: true }) commentSettings!: CommentSettings;
+
   surveyEnabled = false;
   commentsEnabled = false;
   focusModeEnabled = false;
@@ -71,13 +75,13 @@ export class RoomOverviewPageComponent
     protected contentGroupService: ContentGroupService,
     protected wsCommentService: WsCommentService,
     protected eventService: EventService,
-    protected route: ActivatedRoute,
     protected translateService: TranslocoService,
     protected globalStorageService: GlobalStorageService,
     protected feedbackService: FeedbackService,
     protected commentSettingsService: CommentSettingsService,
     protected contentPublishService: ContentPublishService,
-    protected focusModeService: FocusModeService
+    protected focusModeService: FocusModeService,
+    protected routingService: RoutingService
   ) {
     super(
       roomStatsService,
@@ -85,7 +89,7 @@ export class RoomOverviewPageComponent
       contentGroupService,
       wsCommentService,
       eventService,
-      route
+      routingService
     );
   }
 
@@ -104,7 +108,7 @@ export class RoomOverviewPageComponent
     this.initializeStats(false);
     this.subscribeCommentStream();
     this.getFeedback();
-    this.commentsEnabled = !this.route.snapshot.data.commentSettings.disabled;
+    this.commentsEnabled = !this.commentSettings.disabled;
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );

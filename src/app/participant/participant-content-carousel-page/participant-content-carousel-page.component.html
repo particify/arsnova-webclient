@@ -40,6 +40,7 @@
                         (answerChanged)="receiveSentStatus($event, i)"
                         (answerReset)="resetAnswer(i)"
                         (next)="nextContent()"
+                        [room]="room"
                         [content]="contents[i]"
                         [contentGroup]="contentGroup"
                         [userId]="userId"
@@ -61,6 +62,7 @@
                           answerResults.get(i) === AnswerResultType.ABSTAINED
                         "
                         [answerResult]="answerResults.get(i)"
+                        [activeTab]="activeTab"
                       >
                       </app-content-participant>
                     } @else {

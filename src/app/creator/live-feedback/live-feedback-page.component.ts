@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AbstractLiveFeedbackPage } from '@app/common/abstract/abstract-live-feedback-page';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
@@ -25,13 +24,14 @@ import { takeUntil } from 'rxjs';
   styleUrls: ['./live-feedback-page.component.scss'],
 })
 export class LiveFeedbackPageComponent
-  extends AbstractLiveFeedbackPage
+  extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
+  // Route data input below
+  @Input({ required: true }) userRole!: UserRole;
+
   toggleKey = '1';
   changeKey = '2';
-
-  isModerator = false;
 
   HotkeyAction = HotkeyAction;
 
@@ -43,7 +43,6 @@ export class LiveFeedbackPageComponent
     protected translateService: TranslocoService,
     protected announceService: AnnounceService,
     protected globalStorageService: GlobalStorageService,
-    protected route: ActivatedRoute,
     private formService: FormService
   ) {
     super(
@@ -52,10 +51,8 @@ export class LiveFeedbackPageComponent
       roomService,
       translateService,
       announceService,
-      globalStorageService,
-      route
+      globalStorageService
     );
-    this.isModerator = this.route.snapshot.data.userRole === UserRole.MODERATOR;
   }
 
   ngOnInit() {
@@ -108,6 +105,10 @@ export class LiveFeedbackPageComponent
           this.formService.enableForm();
         }
       );
+  }
+
+  isModerator(): boolean {
+    return this.userRole === UserRole.MODERATOR;
   }
 
   private announceType() {

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
@@ -60,16 +60,18 @@ export interface ContentStats {
   styleUrls: ['./content-group-page.component.scss'],
 })
 export class ContentGroupPageComponent implements OnInit, OnDestroy {
+  // Route data input below
+  @Input({ required: true }) userRole!: UserRole;
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) seriesName!: string;
   destroyed$ = new Subject<void>();
 
   isLoading = true;
 
-  room: Room;
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   contentGroup!: ContentGroup;
   contents: Content[] = [];
   contentGroupStats: ContentGroupStatistics[] = [];
-  isModerator = false;
   isGuest = true;
 
   onInit = false;
@@ -99,16 +101,15 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     private destroyRef: DestroyRef
   ) {
-    this.isModerator = route.snapshot.data.userRole === UserRole.MODERATOR;
-    this.room = route.snapshot.data.room;
     route.params.subscribe((params) => {
       const groupName = params['seriesName'];
-      if (this.contentGroup?.name !== groupName)
+      if (this.contentGroup && this.contentGroup.name !== groupName)
         this.setContentGroup(groupName);
     });
   }
 
   ngOnInit(): void {
+    this.setContentGroup();
     this.onInit = true;
     this.authService
       .getCurrentAuthentication()
@@ -123,7 +124,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  setContentGroup(groupName: string) {
+  setContentGroup(groupName = this.seriesName) {
     if (!this.contentGroup || groupName !== this.contentGroup.name) {
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, groupName);
       this.reloadContentGroup(groupName);
@@ -423,5 +424,9 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
         return 'blue';
       }
     }
+  }
+
+  isModerator(): boolean {
+    return this.userRole === UserRole.MODERATOR;
   }
 }

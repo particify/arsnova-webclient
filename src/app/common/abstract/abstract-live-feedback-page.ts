@@ -1,5 +1,4 @@
-import { EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, Input } from '@angular/core';
 import { LiveFeedbackIcon } from '@app/core/models/live-feedback-icon.enum';
 import { LiveFeedbackLabel } from '@app/core/models/live-feedback-label.enum';
 import { LiveFeedbackSurveyLabel } from '@app/core/models/live-feedback-survey-label.enum';
@@ -16,12 +15,14 @@ import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.ser
 import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { Subject, takeUntil } from 'rxjs';
+@Component({ template: '' })
+export class AbstractLiveFeedbackPageComponent {
+  // Route data input below
+  @Input({ required: true }) room!: Room;
 
-export class AbstractLiveFeedbackPage {
   destroyed$ = new Subject<void>();
   isLoading = true;
 
-  room: Room;
   isClosed = false;
   type: LiveFeedbackType = LiveFeedbackType.FEEDBACK;
   answerCount = 0;
@@ -39,29 +40,24 @@ export class AbstractLiveFeedbackPage {
     protected roomService: RoomService,
     protected translateService: TranslocoService,
     protected announceService: AnnounceService,
-    protected globalStorageService: GlobalStorageService,
-    protected route: ActivatedRoute
-  ) {
-    this.room = this.route.snapshot.data.room;
-  }
+    protected globalStorageService: GlobalStorageService
+  ) {}
 
   initData() {
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.route.data.subscribe((data) => {
-      this.loadConfig(data.room);
-      this.feedbackService.startSub(data.room.id);
-      this.feedbackService.messageEvent
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((message) => {
-          this.parseIncomingMessage(message);
-        });
-      this.feedbackService.get(this.room.id).subscribe((values: number[]) => {
-        this.updateFeedback(values);
-        this.isLoading = false;
-        this.afterInitHook();
+    this.loadConfig(this.room);
+    this.feedbackService.startSub(this.room.id);
+    this.feedbackService.messageEvent
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((message) => {
+        this.parseIncomingMessage(message);
       });
+    this.feedbackService.get(this.room.id).subscribe((values: number[]) => {
+      this.updateFeedback(values);
+      this.isLoading = false;
+      this.afterInitHook();
     });
   }
 

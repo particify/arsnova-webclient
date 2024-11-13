@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -27,21 +27,15 @@ export abstract class ContentParticipantBaseComponent
   @Input() answer?: Answer;
 
   isLoading = true;
-  shortId: string;
-  contentGroupName: string;
 
   protected constructor(
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
     protected formService: FormService
   ) {
     super(formService);
-    const params = route.snapshot.params;
-    this.shortId = params['shortId'];
-    this.contentGroupName = params['seriesName'];
   }
 
   ngOnInit() {

@@ -196,7 +196,7 @@ describe('NavBarComponent', () => {
       feedbackLocked: false,
     };
     component.room = room;
-    component.role = UserRole.EDITOR;
+    component.userRole = UserRole.EDITOR;
     component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     expect(component).toBeTruthy();
@@ -228,7 +228,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.PARTICIPANT;
+    component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     const feedbackButtonElement =
@@ -243,7 +243,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.OWNER;
+    component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     feedbackButton = await loader.getHarness(
@@ -259,7 +259,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.OWNER;
+    component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
@@ -351,7 +351,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.OWNER;
+    component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
@@ -369,7 +369,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.OWNER;
+    component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
@@ -391,7 +391,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.OWNER;
+    component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
@@ -413,7 +413,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.OWNER;
+    component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
@@ -445,7 +445,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.OWNER;
+    component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
@@ -482,7 +482,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.OWNER;
+    component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
@@ -526,7 +526,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.PARTICIPANT;
+    component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     const stats = {
       groupStats: [
@@ -571,7 +571,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.PARTICIPANT;
+    component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     const stats = {
       groupStats: [
@@ -611,7 +611,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.PARTICIPANT;
+    component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     let feedbackButtonElement =
@@ -639,7 +639,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.PARTICIPANT;
+    component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     let feedbackBadge = fixture.nativeElement.querySelector('#feedback-badge');
@@ -663,7 +663,7 @@ describe('NavBarComponent', () => {
     };
     room.shortId = '12345678';
     component.room = room;
-    component.role = UserRole.PARTICIPANT;
+    component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     fixture.detectChanges();
     let feedbackButtonElement =

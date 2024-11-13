@@ -32,7 +32,7 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Location, NgClass } from '@angular/common';
 import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
 import { DividerComponent } from '@app/standalone/divider/divider.component';
@@ -125,6 +125,7 @@ export class ContentParticipantComponent
   extends FormComponent
   implements OnInit, OnChanges
 {
+  @Input({ required: true }) room!: Room;
   @Input({ required: true }) content!: Content;
   @Input({ required: true }) contentGroup!: ContentGroup;
   @Input({ required: true }) userId!: string;
@@ -138,6 +139,7 @@ export class ContentParticipantComponent
   @Input() showCard = true;
   @Input() hasAbstained = false;
   @Input() answerResult?: AnswerResultType;
+  @Input() activeTab?: string;
   @Output() answerChanged = new EventEmitter<AnswerResultType>();
   @Output() next = new EventEmitter<void>();
   @Output() answerReset = new EventEmitter<string>();
@@ -201,7 +203,6 @@ export class ContentParticipantComponent
   constructor(
     protected formService: FormService,
     private router: Router,
-    private route: ActivatedRoute,
     private location: Location,
     private eventService: EventService,
     private contentService: ContentService,
@@ -211,12 +212,12 @@ export class ContentParticipantComponent
     private answerService: ContentAnswerService
   ) {
     super(formService);
-    this.language = (route.snapshot.data['room'] as Room).language;
   }
 
   ngOnInit(): void {
+    this.language = this.room.language;
     if (this.active) {
-      this.selectedRoute = this.route.snapshot.params['action'] || '';
+      this.selectedRoute = this.activeTab || '';
       this.checkForCountdown();
     }
     if (this.content.format === ContentType.FLASHCARD) {
@@ -477,9 +478,9 @@ export class ContentParticipantComponent
     this.selectedRoute = route;
     const urlList = [
       'p',
-      this.route.snapshot.params['shortId'],
+      this.room.shortId,
       'series',
-      this.route.snapshot.params['seriesName'],
+      this.contentGroup.name,
       this.index + 1,
     ];
     if (this.selectedRoute) {

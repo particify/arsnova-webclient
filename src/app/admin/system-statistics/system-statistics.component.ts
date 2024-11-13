@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -48,6 +48,9 @@ export class AdminStats {
   styleUrls: ['../admin-styles.scss'],
 })
 export class SystemStatisticsComponent implements OnInit {
+  // Route data input below
+  @Input({ required: true }) tenantId!: string;
+
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   stats!: AdminStats;
   isLoading = true;
@@ -61,13 +64,12 @@ export class SystemStatisticsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    let tenantId = this.route.snapshot.params['tenantId'];
-    this.loadStats(tenantId);
+    this.loadStats(this.tenantId);
     this.route.params.subscribe((params) => {
       const newTenantId = params.tenantId;
-      if (newTenantId !== tenantId) {
-        tenantId = newTenantId;
-        this.loadStats(tenantId);
+      if (newTenantId !== this.tenantId) {
+        this.tenantId = newTenantId;
+        this.loadStats(this.tenantId);
       }
     });
   }

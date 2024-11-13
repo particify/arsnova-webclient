@@ -4,7 +4,6 @@ import { CommentsPageComponent } from './comments-page.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
-  ActivatedRouteStub,
   MockAnnounceService,
   MockEventService,
   MockGlobalStorageService,
@@ -18,11 +17,7 @@ import { CommentSettingsService } from '@app/core/services/http/comment-settings
 import { EventService } from '@app/core/services/util/event.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
 import { Room } from '@app/core/models/room';
@@ -34,7 +29,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 
@@ -72,17 +66,6 @@ describe('CommentsPageComponent', () => {
 
   const mockCommentSettingsService = jasmine.createSpyObj(['get']);
   mockCommentSettingsService.get.and.returnValue(of({}));
-
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = {
-    userRole: UserRole.PARTICIPANT,
-    room: new Room(),
-  };
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   const mockFocusModeService = jasmine.createSpyObj([
     'getFocusModeEnabled',
@@ -137,10 +120,6 @@ describe('CommentsPageComponent', () => {
           useClass: MockNotificationService,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
         },
@@ -178,6 +157,7 @@ describe('CommentsPageComponent', () => {
 
     fixture = TestBed.createComponent(CommentsPageComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
     fixture.detectChanges();
   });
 

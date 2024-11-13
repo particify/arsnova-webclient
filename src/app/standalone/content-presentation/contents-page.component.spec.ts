@@ -8,21 +8,13 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import {
-  ActivatedRouteStub,
-  MockEventService,
-  MockRouter,
-} from '@testing/test-helpers';
+import { MockEventService, MockRouter } from '@testing/test-helpers';
 import { SpyLocation } from '@angular/common/testing';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Room } from '@app/core/models/room';
 import { of } from 'rxjs';
 import { UserSettings } from '@app/core/models/user-settings';
@@ -76,20 +68,6 @@ describe('ContentsPageComponent', () => {
     'unregisterHotkey',
   ]);
 
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = {
-    isPresentation: false,
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-  };
-
-  snapshot.params = of([{ seriesName: 'SERIES' }]);
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   const mockUserService = jasmine.createSpyObj('UserService', [
     'getCurrentUsersSettings',
   ]);
@@ -133,7 +111,7 @@ describe('ContentsPageComponent', () => {
         },
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteStub,
+          useValue: {},
         },
         {
           provide: DialogService,
@@ -179,6 +157,13 @@ describe('ContentsPageComponent', () => {
     component = fixture.componentInstance;
     component.contentGroup = new ContentGroup();
     component.contentGroup.contentIds = ['0', '1', '2', '3', '4', '5', '6'];
+    component.room = new Room(
+      '1234',
+      'shortId',
+      'abbreviation',
+      'name',
+      'description'
+    );
     setTimeout(() => {
       fixture.detectChanges();
     }, 100);

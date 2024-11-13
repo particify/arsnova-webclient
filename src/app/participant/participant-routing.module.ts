@@ -83,7 +83,7 @@ const routes: Routes = [
     title: 'series',
   },
   {
-    path: 'series/:seriesName/:contentIndex/:action',
+    path: 'series/:seriesName/:contentIndex/:activeTab',
     component: ParticipantContentCarouselPageComponent,
     data: {
       feature: RoutingFeature.CONTENTS,

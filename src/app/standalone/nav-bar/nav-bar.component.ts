@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
@@ -74,6 +74,9 @@ export class NavBarItem {
   ],
 })
 export class NavBarComponent implements OnInit, OnDestroy {
+  @Input({ required: true }) userRole!: UserRole;
+  @Input({ required: true }) viewRole!: UserRole;
+  @Input({ required: true }) room!: Room;
   destroyed$ = new Subject<void>();
   barItems: NavBarItem[] = [];
   features: NavBarItem[] = [
@@ -86,11 +89,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   activeFeatures: string[] = [RoutingFeature.OVERVIEW];
   group?: ContentGroup;
   groupName?: string;
-  role: UserRole;
-  viewRole: UserRole;
-  shortId: string;
-  roomId: string;
-  room: Room;
   private changesSubscription?: Subscription;
   private statsChangesSubscription?: Subscription;
   private feedbackSubscription?: Subscription;
@@ -117,14 +115,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     protected roomService: RoomService,
     protected commentSettingsService: CommentSettingsService,
     protected focusModeService: FocusModeService
-  ) {
-    const routeData = this.route.snapshot.data;
-    this.role = routeData.userRole;
-    this.viewRole = routeData.viewRole;
-    this.shortId = routeData.room.shortId;
-    this.roomId = routeData.room.id;
-    this.room = routeData.room;
-  }
+  ) {}
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {
@@ -162,7 +153,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     ) {
       this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
     }
-    this.feedbackService.startSub(this.roomId);
+    this.feedbackService.startSub(this.room.id);
     let group = this.routingService.seriesName;
     if (group === undefined) {
       group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
@@ -170,7 +161,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.setGroupInSessionStorage(group);
     }
     this.roomStatsService
-      .getStats(this.roomId, this.viewRole !== UserRole.PARTICIPANT)
+      .getStats(this.room.id, this.viewRole !== UserRole.PARTICIPANT)
       .subscribe((stats) => {
         if (stats.groupStats) {
           this.groupName = group || stats.groupStats[0].groupName;
@@ -189,11 +180,11 @@ export class NavBarComponent implements OnInit, OnDestroy {
     if (!this.isLoading) {
       return;
     }
-    if (this.role === UserRole.PARTICIPANT) {
+    if (this.userRole === UserRole.PARTICIPANT) {
       this.subscribeToContentGroups();
     } else {
       this.subscribeToContentGroupEvents();
-      this.roomService.getRoomSummaries([this.roomId]).subscribe((summary) => {
+      this.roomService.getRoomSummaries([this.room.id]).subscribe((summary) => {
         this.userCount = summary[0].stats.roomUserCount;
         this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
         this.roomSub = this.roomWatch.subscribe((msg) =>
@@ -292,22 +283,26 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.eventService
       .on<typeof createdEvent.payload>(createdEvent.type)
       .subscribe((group) => {
-        this.roomStatsService.getStats(this.roomId, true).subscribe((stats) => {
-          this.groupName = group.name;
-          this.addContentFeatureItem();
-          this.updateGroups(stats.groupStats, true);
-        });
+        this.roomStatsService
+          .getStats(this.room.id, true)
+          .subscribe((stats) => {
+            this.groupName = group.name;
+            this.addContentFeatureItem();
+            this.updateGroups(stats.groupStats, true);
+          });
       });
     const deletedEvent = new SeriesDeleted();
     this.eventService
       .on<typeof deletedEvent.payload>(deletedEvent.type)
       .subscribe(() => {
-        this.roomStatsService.getStats(this.roomId, true).subscribe((stats) => {
-          if (!stats.groupStats) {
-            this.removeContentFeatureItem();
-          }
-          this.updateGroups(stats.groupStats, false);
-        });
+        this.roomStatsService
+          .getStats(this.room.id, true)
+          .subscribe((stats) => {
+            if (!stats.groupStats) {
+              this.removeContentFeatureItem();
+            }
+            this.updateGroups(stats.groupStats, false);
+          });
       });
   }
 
@@ -369,7 +364,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   getBaseUrl(): string {
     return `/${this.routingService.getRoleRoute(this.viewRole)}/${
-      this.shortId
+      this.room.shortId
     }`;
   }
 
@@ -388,7 +383,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     const route = [
       this.routingService.getRoleRoute(this.viewRole),
-      this.shortId,
+      this.room.shortId,
     ];
     if (item.name !== RoutingFeature.OVERVIEW) {
       route.push(item.name);
@@ -421,7 +416,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.contentGroupService
         .getByIds(
           groupStats.map((stats) => stats.id),
-          { roomId: this.roomId }
+          { roomId: this.room.id }
         )
         .subscribe((groups) => {
           for (const group of groups) {
@@ -438,7 +433,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 this.setGroup(currentGroup);
                 this.addContentFeatureItem();
                 // route data's `userRole` is used here to prevent showing notification indicator in creators room preview
-                if (this.role === UserRole.PARTICIPANT && showNews) {
+                if (this.userRole === UserRole.PARTICIPANT && showNews) {
                   this.toggleNews(RoutingFeature.CONTENTS);
                 }
                 this.afterInit();

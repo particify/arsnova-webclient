@@ -6,7 +6,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { Content } from '@app/core/models/content';
@@ -36,7 +36,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
     protected formService: FormService
@@ -44,7 +43,6 @@ export class ContentTextParticipantComponent extends ContentParticipantBaseCompo
     super(
       notificationService,
       translateService,
-      route,
       globalStorageService,
       router,
       formService

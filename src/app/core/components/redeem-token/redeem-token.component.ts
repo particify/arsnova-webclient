@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -10,10 +10,13 @@ import { Subject, takeUntil } from 'rxjs';
   template: '',
 })
 export class RedeemTokenComponent implements OnInit, OnDestroy {
+  // Route data input below
+  @Input({ required: true }) roomId!: string;
+  @Input({ required: true }) token!: string;
+
   destroyed$ = new Subject<void>();
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private routingService: RoutingService,
     private authenticationService: AuthenticationService,
@@ -31,10 +34,8 @@ export class RedeemTokenComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
         if (!!auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
-          const roomId = this.route.snapshot.params.roomId;
-          const token = this.route.snapshot.params.token;
           this.roomMembershipService
-            .requestMembership(roomId, token)
+            .requestMembership(this.roomId, this.token)
             .subscribe(() => {
               this.router.navigate(['user']);
             });

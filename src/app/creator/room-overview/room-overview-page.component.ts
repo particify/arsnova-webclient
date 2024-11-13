@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -13,7 +13,7 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { AbstractRoomOverviewPage } from '@app/common/abstract/abstract-room-overview-page';
+import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
 import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
 import { takeUntil } from 'rxjs';
@@ -27,10 +27,12 @@ import { ContentType } from '@app/core/models/content-type.enum';
   styleUrls: ['./room-overview-page.component.scss'],
 })
 export class RoomOverviewPageComponent
-  extends AbstractRoomOverviewPage
+  extends AbstractRoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
-  isModerator = false;
+  // Route data input below
+  @Input({ required: true }) userRole!: UserRole;
+
   groupTypes: Map<GroupType, string>;
   groupContentFormatIcons: Map<GroupType, Map<ContentType, string>> = new Map();
   hintType = HintType.INFO;
@@ -41,7 +43,6 @@ export class RoomOverviewPageComponent
     protected contentGroupService: ContentGroupService,
     protected wsCommentService: WsCommentService,
     protected eventService: EventService,
-    protected route: ActivatedRoute,
     protected router: Router,
     protected translateService: TranslocoService,
     protected dialogService: DialogService,
@@ -55,7 +56,7 @@ export class RoomOverviewPageComponent
       contentGroupService,
       wsCommentService,
       eventService,
-      route
+      routingService
     );
     this.groupTypes = this.contentGroupService.getTypeIcons();
     this.groupTypes.forEach((value, key) => {
@@ -85,7 +86,6 @@ export class RoomOverviewPageComponent
       .subscribe(() => this.initializeStats(true));
     this.initializeStats(true);
     this.subscribeCommentStream();
-    this.isModerator = this.route.snapshot.data.userRole === UserRole.MODERATOR;
   }
 
   ngOnDestroy() {
@@ -118,5 +118,9 @@ export class RoomOverviewPageComponent
       this.room.shortId,
       'templates',
     ]);
+  }
+
+  isModerator(): boolean {
+    return this.userRole === UserRole.MODERATOR;
   }
 }

@@ -3,20 +3,15 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentPresentationComponent } from './content-presentation.component';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { ActivatedRouteStub, MockRouter } from '@testing/test-helpers';
+import { MockRouter } from '@testing/test-helpers';
 import { Location } from '@angular/common';
 import { SpyLocation } from '@angular/common/testing';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
-import { Room } from '@app/core/models/room';
 import { of } from 'rxjs';
 import { ContentGroup } from '@app/core/models/content-group';
 import { Content } from '@app/core/models/content';
@@ -53,20 +48,6 @@ describe('ContentPresentationComponent', () => {
   let component: ContentPresentationComponent;
   let fixture: ComponentFixture<ContentPresentationComponent>;
 
-  const snapshot = new ActivatedRouteSnapshot();
-  snapshot.data = {
-    isPresentation: false,
-    room: new Room('1234', 'shortId', 'abbreviation', 'name', 'description'),
-  };
-
-  snapshot.params = of([{ seriesName: 'SERIES' }]);
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
-
   const mockUserService = jasmine.createSpyObj('UserService', [
     'getCurrentUsersSettings',
   ]);
@@ -96,10 +77,6 @@ describe('ContentPresentationComponent', () => {
         {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
         },
         {
           provide: GlobalStorageService,

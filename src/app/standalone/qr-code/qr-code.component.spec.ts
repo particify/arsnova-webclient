@@ -6,10 +6,8 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
-  ActivatedRouteStub,
   MockFeatureFlagService,
   MockThemeService,
 } from '@testing/test-helpers';
@@ -18,26 +16,11 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { RoomSummary, RoomSummaryStats } from '@app/core/models/room-summary';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
+import { Room } from '@app/core/models/room';
 
 describe('QrCodeComponent', () => {
   let component: QrCodeComponent;
   let fixture: ComponentFixture<QrCodeComponent>;
-
-  const snapshot = new ActivatedRouteSnapshot();
-
-  snapshot.data = {
-    room: {
-      id: '1234',
-      shortId: '12345678',
-      passwordProtected: true,
-    },
-  };
-
-  const activatedRouteStub = new ActivatedRouteStub(
-    undefined,
-    undefined,
-    snapshot
-  );
 
   const mockApiConfigService = jasmine.createSpyObj(ApiConfigService, [
     'getApiConfig$',
@@ -113,10 +96,6 @@ describe('QrCodeComponent', () => {
           useClass: MockThemeService,
         },
         {
-          provide: ActivatedRoute,
-          useValue: activatedRouteStub,
-        },
-        {
           provide: RoutingService,
           useValue: mockRoutingService,
         },
@@ -141,6 +120,7 @@ describe('QrCodeComponent', () => {
     mockApiConfigService.getApiConfig$.and.returnValue(of(configWithJoinLink));
     fixture = TestBed.createComponent(QrCodeComponent);
     component = fixture.componentInstance;
+    component.room = new Room();
   });
 
   it('should create', () => {

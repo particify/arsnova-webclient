@@ -6,7 +6,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
@@ -33,7 +33,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     protected answerService: ContentAnswerService,
     protected notificationService: NotificationService,
     protected translateService: TranslocoService,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected router: Router,
     protected formService: FormService
@@ -41,7 +40,6 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
     super(
       notificationService,
       translateService,
-      route,
       globalStorageService,
       router,
       formService

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -11,7 +11,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import {
   GlobalStorageService,
@@ -24,6 +24,7 @@ import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CommentPeriod } from '@app/core/models/comment-period.enum';
 import { CreateCommentComponent } from '@app/standalone/_dialogs/create-comment/create-comment.component';
+import { CommentSettings } from '@app/core/models/comment-settings';
 
 export const itemRenderNumber = 20;
 
@@ -36,8 +37,12 @@ export class AbstractCommentsPageComponent {
   protected publicComments$?: Observable<Comment[]>;
   protected activeComments$?: Observable<Comment[]>;
 
-  isLoading = true;
+  // Route data input below
+  @Input({ required: true }) viewRole!: UserRole;
+  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) commentSettings!: CommentSettings;
 
+  isLoading = true;
   comments: Comment[] = [];
   filteredComments: Comment[] = [];
   commentsFilteredByTime: Comment[] = [];
@@ -46,11 +51,7 @@ export class AbstractCommentsPageComponent {
   newestComment = new Comment();
   hideCommentsList = false;
   publicCounter = 0;
-
-  viewRole: UserRole;
   userId?: string;
-  roomId: string;
-  room: Room;
 
   currentSort: CommentSort;
   currentFilter?: CommentFilter;
@@ -88,7 +89,6 @@ export class AbstractCommentsPageComponent {
     protected notificationService: NotificationService,
     protected announceService: AnnounceService,
     protected router: Router,
-    protected route: ActivatedRoute,
     protected globalStorageService: GlobalStorageService,
     protected commentSettingsService: CommentSettingsService,
     protected authenticationService: AuthenticationService
@@ -101,9 +101,6 @@ export class AbstractCommentsPageComponent {
     translateService.setActiveLang(
       globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.room = this.route.snapshot.data.room;
-    this.roomId = this.room.id;
-    this.viewRole = this.route.snapshot.data.viewRole;
   }
 
   load(reload = false) {
@@ -143,11 +140,10 @@ export class AbstractCommentsPageComponent {
 
   initRoom(reload = false) {
     if (!reload) {
-      const commentSettings = this.route.snapshot.data.commentSettings;
-      this.directSend = commentSettings.directSend;
-      this.fileUploadEnabled = commentSettings.fileUploadEnabled;
-      this.disabled = commentSettings.disabled;
-      this.readonly = commentSettings.readonly;
+      this.directSend = this.commentSettings.directSend;
+      this.fileUploadEnabled = this.commentSettings.fileUploadEnabled;
+      this.disabled = this.commentSettings.disabled;
+      this.readonly = this.commentSettings.readonly;
     }
     this.getComments();
     if (reload && this.searchInput) {
@@ -302,7 +298,7 @@ export class AbstractCommentsPageComponent {
 
   addNewComment(comment: Comment) {
     const c = new Comment();
-    c.roomId = this.roomId;
+    c.roomId = this.room.id;
     c.body = comment.body;
     c.id = comment.id;
     c.timestamp = comment.timestamp;
@@ -426,7 +422,7 @@ export class AbstractCommentsPageComponent {
       data: {
         userId: this.userId,
         tags: tags,
-        roomId: this.roomId,
+        roomId: this.room.id,
         directSend: this.directSend,
         fileUploadEnabled: this.fileUploadEnabled,
         role: this.viewRole,
@@ -520,7 +516,7 @@ export class AbstractCommentsPageComponent {
 
   subscribeCommentStream() {
     this.wsCommentService
-      .getCommentStream(this.roomId)
+      .getCommentStream(this.room.id)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((message: Message) => {
         this.parseIncomingMessage(message);

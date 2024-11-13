@@ -2,7 +2,6 @@
 // import { LiveFeedbackPageComponent } from './live-feedback-page.component';
 // import { getTranslocoModule } from '@testing/transloco-testing.module';
 // import {
-//   ActivatedRouteStub,
 //   MockAnnounceService,
 //   MockGlobalStorageService,
 // } from '@testing/test-helpers';
@@ -12,7 +11,6 @@
 // import { AuthProvider } from '@app/core/models/auth-provider';
 // import { Room } from '@app/core/models/room';
 // import { UserRole } from '@app/core/models/user-roles.enum';
-// import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 // import { RoomService } from '@app/core/services/http/room.service';
 // import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 // import { FeedbackService } from '@app/core/services/http/feedback.service';
@@ -60,19 +58,6 @@
 //   );
 //   mockAuthenticationService.getCurrentAuthentication.and.returnValue(of(auth));
 //
-//   const room = new Room();
-//   room.id = 'roomId';
-//   room.settings = { feedbackLocked: true };
-//   const data = {
-//     room: room,
-//     viewRole: UserRole.PARTICIPANT,
-//   };
-//   const snapshot = new ActivatedRouteSnapshot();
-//   snapshot.data = {
-//     isPresentation: false,
-//   };
-//   const activatedRouteStub = new ActivatedRouteStub(undefined, data, snapshot);
-//
 //   const mockHotkeyService = jasmine.createSpyObj([
 //     'registerHotkey',
 //     'unregisterHotkey',
@@ -113,10 +98,6 @@
 //         {
 //           provide: AuthenticationService,
 //           useValue: mockAuthenticationService,
-//         },
-//         {
-//           provide: ActivatedRoute,
-//           useValue: activatedRouteStub,
 //         },
 //         {
 //           provide: GlobalStorageService,

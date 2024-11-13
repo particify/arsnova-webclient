@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
@@ -70,14 +76,22 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   animations: [hotkeyEnterLeaveAnimation],
 })
 export class ContentsPageComponent implements OnInit, OnDestroy {
+  // Route data input below
+  @Input({ required: true }) room!: Room;
+  @Input({ transform: booleanAttribute }) showStepInfo!: boolean;
+  @Input({ transform: booleanAttribute }) showAnswerCount!: boolean;
+  @Input({ transform: booleanAttribute }) showHotkeyActionButtons!: boolean;
+  @Input({ transform: booleanAttribute }) showResults?: boolean;
+  @Input({ transform: booleanAttribute }) noControlBar?: boolean;
+  @Input() seriesName!: string;
+  @Input() contentIndex?: number;
+
   destroyed$ = new Subject<void>();
 
   contents: Content[] = [];
   isLoading = true;
   entryIndex = 0;
-  contentIndex = 0;
-  room: Room;
-  contentGroupName: string;
+  currentIndex = 0;
   currentStep = 0;
   responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
@@ -88,11 +102,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   attributions: ContentLicenseAttribution[] = [];
   stepCount = 0;
   endDate?: Date;
-  controlBarVisible = true;
   showLeaderboard = false;
-  showStepInfo: boolean;
-  showAnswerCount: boolean;
-  showHotkeyActionButtons: boolean;
   answeringLocked = false;
   isPublishing = false;
 
@@ -112,34 +122,22 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     private eventService: EventService,
     private translateService: TranslocoService,
     private hotkeyService: HotkeyService
-  ) {
-    const routeSeriesName = this.route.snapshot.params['seriesName'];
+  ) {}
+
+  ngOnInit() {
     // Use index from route if available. Otherwise use the stored index or 0 as fallback.
-    const routeContentIndex =
-      (this.route.snapshot.params['contentIndex'] ?? 0) - 1;
+    const routeContentIndex = (this.contentIndex ?? 0) - 1;
     const lastIndex =
       this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) ?? 0;
     this.entryIndex = routeContentIndex > -1 ? routeContentIndex : lastIndex;
-    this.contentGroupName =
+    this.seriesName =
       this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) ||
-      routeSeriesName;
-    this.globalStorageService.setItem(
-      STORAGE_KEYS.LAST_GROUP,
-      this.contentGroupName
-    );
-    this.room = this.route.snapshot.data.room;
-    this.showStepInfo = !!this.route.snapshot.data.showStepInfo;
-    this.showAnswerCount = !!this.route.snapshot.data.showAnswerCount;
-    this.showHotkeyActionButtons =
-      !!this.route.snapshot.data.showHotkeyActionButtons;
-    this.controlBarVisible = !this.route.snapshot.data.noControlBar;
-  }
-
-  ngOnInit() {
+      this.seriesName;
+    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.seriesName);
     this.userService.getCurrentUsersSettings().subscribe((settings) => {
       if (settings) {
         this.settings = settings;
-        if (this.route.snapshot.queryParams.showResults === 'true') {
+        if (this.showResults) {
           this.settings.showContentResultsDirectly = true;
         }
       }
@@ -148,7 +146,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.eventService
       .on<boolean>('ControlBarVisible')
       .subscribe((isVisible) => {
-        this.controlBarVisible = isVisible;
+        this.noControlBar = !isVisible;
       });
     this.translateService
       .selectTranslate('creator.control-bar.leaderboard')
@@ -209,7 +207,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
 
   initGroup(initial = false) {
     this.contentGroupService
-      .getByRoomIdAndName(this.room.id, this.contentGroupName, true)
+      .getByRoomIdAndName(this.room.id, this.seriesName, true)
       .subscribe((group) => {
         this.contentGroup = group;
         if (this.contentGroup.contentIds) {
@@ -234,8 +232,8 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
                   this.finishInit(initial);
                 });
               if (this.entryIndex > -1) {
-                this.contentIndex = initial ? this.entryIndex : 0;
-                this.setCurrentContent(this.contentIndex);
+                this.currentIndex = initial ? this.entryIndex : 0;
+                this.setCurrentContent(this.currentIndex);
               }
               this.sendContentStepState();
             });
@@ -260,14 +258,14 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((group) => {
           this.isLoading = true;
-          this.contentGroupName = group;
+          this.seriesName = group;
           this.initGroup();
         });
     }
   }
 
   updateRoute(index: number) {
-    const currentPath = this.route.snapshot.params.contentIndex ? '..' : '.';
+    const currentPath = this.contentIndex ? '..' : '.';
     const urlTree = this.router.createUrlTree([currentPath, index], {
       relativeTo: this.route,
       queryParams: this.route.snapshot.queryParams,
@@ -298,7 +296,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       ContentType.FLASHCARD,
     ].includes(this.content.format);
     if (index !== this.entryIndex) {
-      this.contentIndex = -1;
+      this.currentIndex = -1;
     }
   }
 

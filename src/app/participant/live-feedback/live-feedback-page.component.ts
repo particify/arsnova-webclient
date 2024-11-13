@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AbstractLiveFeedbackPage } from '@app/common/abstract/abstract-live-feedback-page';
+import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -26,6 +26,10 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { NgClass, AsyncPipe } from '@angular/common';
 import { CoreModule } from '@app/core/core.module';
 
+function setDefaultTrue(value: boolean | undefined): boolean {
+  return value ?? true;
+}
+
 @Component({
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
@@ -48,13 +52,18 @@ import { CoreModule } from '@app/core/core.module';
   providers: [provideTranslocoScope('participant')],
 })
 export class LiveFeedbackPageComponent
-  extends AbstractLiveFeedbackPage
+  extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
+  // Route data input below
+  @Input({
+    transform: setDefaultTrue,
+  })
+  showCard!: boolean;
+
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   userId!: string;
   voteKeys = ['1', '2', '3', '4'];
-  showCard: boolean;
 
   constructor(
     protected wsFeedbackService: WsFeedbackService,
@@ -72,10 +81,8 @@ export class LiveFeedbackPageComponent
       roomService,
       translateService,
       announceService,
-      globalStorageService,
-      route
+      globalStorageService
     );
-    this.showCard = route.snapshot.data.showCard ?? true;
   }
 
   ngOnInit() {

@@ -10,10 +10,11 @@
       <app-content-stepper
         [contents]="contents"
         [settings]="settings"
-        [startIndex]="currentStep"
+        [startIndex]="contentIndex"
         [attributions]="attributions"
         (indexChanged)="updateURL($event)"
         [showStepInfo]="false"
+        [language]="room.language"
       ></app-content-stepper>
     }
   </div>

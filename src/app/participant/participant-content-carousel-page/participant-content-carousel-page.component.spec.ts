@@ -27,7 +27,6 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SpyLocation } from '@angular/common/testing';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { Room } from '@app/core/models/room';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { UserSettings } from '@app/core/models/user-settings';
@@ -42,6 +41,7 @@ import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.se
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { ContentGroup } from '@app/core/models/content-group';
+import { Room } from '@app/core/models/room';
 
 describe('ParticipantContentCarouselPageComponent', () => {
   let component: ParticipantContentCarouselPageComponent;
@@ -104,10 +104,7 @@ describe('ParticipantContentCarouselPageComponent', () => {
   };
 
   snapshot.params = of([params]);
-  snapshot.data = {
-    room: new Room(),
-    contentGroup: new ContentGroup(),
-  };
+  snapshot.data = {};
 
   const activatedRouteStub = new ActivatedRouteStub(
     undefined,
@@ -230,6 +227,8 @@ describe('ParticipantContentCarouselPageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ParticipantContentCarouselPageComponent);
     component = fixture.componentInstance;
+    component.contentGroup = new ContentGroup();
+    component.room = new Room();
     fixture.detectChanges();
   });
 
