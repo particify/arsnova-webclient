@@ -18,7 +18,7 @@
     "lint": "ng lint",
     "storybook": "yarn ng run arsnova-webclient:storybook",
     "build-storybook": "yarn ng run arsnova-webclient:build-storybook",
-    "e2e": "ng e2e"
+    "e2e": "yarn playwright test -c e2e/playwright.config.ts"
   },
   "dependencies": {
     "@angular/animations": "18.2.13",
@@ -65,6 +65,7 @@
     "@angular/compiler-cli": "18.2.13",
     "@angular/language-service": "18.2.13",
     "@eslint/js": "9.14.0",
+    "@playwright/test": "1.49.1",
     "@storybook/addon-essentials": "8.4.4",
     "@storybook/angular": "8.4.4",
     "@storybook/blocks": "8.4.4",
@@ -93,6 +94,7 @@
     "karma-jasmine-html-reporter": "2.1.0",
     "karma-viewport": "1.0.9",
     "ng-packagr": "18.2.1",
+    "playwright-ng-schematics": "1.2.2",
     "prettier": "3.3.3",
     "storybook": "8.4.4",
     "stylelint": "16.10.0",
