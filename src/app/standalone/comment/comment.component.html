@@ -12,6 +12,7 @@
   }"
   [@slide]="isNew ? slideAnimationState : null"
   (@slide.done)="changeSlideState()"
+  data-testid="comment-card"
 >
   <div
     fxLayout="column"
