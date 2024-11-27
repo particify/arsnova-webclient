@@ -30,6 +30,7 @@
           style="--mdc-radio-selected-icon-color: {{
             item.color
           }}; --mdc-radio-selected-focus-icon-color: {{ item.color }}"
+          [attr.data-testid]="item.title"
         >
           <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center">
             @if (item.icon) {

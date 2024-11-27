@@ -49,6 +49,9 @@
           <mat-icon
             class="answer-indicator"
             [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'"
+            [attr.data-testid]="
+              isAnswerOptionCorrect(i) ? 'correct-icon' : 'wrong-icon'
+            "
           >
             {{ isAnswerOptionCorrect(i) ? 'check' : 'close' }}</mat-icon
           >
@@ -103,6 +106,9 @@
             <mat-icon
               class="answer-indicator"
               [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'"
+              [attr.data-testid]="
+                isAnswerOptionCorrect(i) ? 'correct-icon' : 'wrong-icon'
+              "
             >
               {{ isAnswerOptionCorrect(i) ? 'check' : 'close' }}</mat-icon
             >

@@ -61,6 +61,7 @@
             [ngStyle]="{
               'border-color': publishingChangeActive ? 'transparent' : null,
             }"
+            data-testid="content-item"
           >
             <div fxLayout="column" fxLayoutGap="8px">
               <div fxLayout="row" fxLayoutAlign="space-between" fxFill>
@@ -166,6 +167,7 @@
                             [matTooltip]="
                               'creator.content.stop-content' | transloco
                             "
+                            [attr.data-testid]="'stop-content-' + i"
                           >
                             <mat-icon>stop</mat-icon>
                           </button>
@@ -208,6 +210,7 @@
                                   : 'creator.content.start-content'
                                 ) | transloco
                               "
+                              [attr.data-testid]="'start-content-' + i"
                             >
                               <mat-icon>{{
                                 finishedContents.get(content.id)
@@ -241,6 +244,7 @@
                           matTooltip="{{
                             'creator.content.more-options' | transloco
                           }}"
+                          [attr.data-testid]="'open-more-options-' + i"
                         >
                           <mat-icon>more_vert</mat-icon>
                         </button>

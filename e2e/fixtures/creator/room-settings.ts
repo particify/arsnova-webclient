@@ -22,10 +22,38 @@ export class RoomSettingsPage {
       this.page.waitForResponse(
         (res) =>
           res.url().includes('/api/room/') &&
-          res.status() === 200 &&
+          res.ok() &&
+          res.ok() &&
           res.request().method() === 'DELETE'
       ),
       this.confirmDeleteRoomButton.click(),
     ]);
+  }
+
+  async saveSettings() {
+    await this.page.getByRole('button', { name: 'save' }).click();
+  }
+
+  async updateName(name: string) {
+    await this.page.getByRole('textbox').first().fill(name);
+    await this.saveSettings();
+  }
+
+  async updateDescription(description: string) {
+    await this.page
+      .getByRole('textbox', { name: 'description' })
+      .fill(description);
+    await this.saveSettings();
+  }
+
+  async setLanguage(lang: string) {
+    await this.page.getByRole('combobox', { name: 'Language' }).click();
+    await this.page.getByRole('option', { name: lang }).click();
+    await this.saveSettings();
+  }
+
+  async toggleFocusMode() {
+    await this.page.getByLabel('guide the participants').click();
+    await this.saveSettings();
   }
 }
