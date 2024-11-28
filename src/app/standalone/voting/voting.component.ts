@@ -1,12 +1,24 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Pipe, PipeTransform } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Vote } from '@app/core/models/vote';
 import { VoteService } from '@app/core/services/http/vote.service';
 import { provideTranslocoScope } from '@jsverse/transloco';
 
+@Pipe({ name: 'voteAction', pure: true, standalone: true })
+export class VoteAction implements PipeTransform {
+  transform(vote: number | undefined, direction: string): string {
+    const base = 'participant.comment-page.';
+    const action =
+      vote === (direction === 'up' ? 1 : -1)
+        ? 'withdraw-' + direction + 'vote'
+        : 'vote-' + direction;
+    return base + action;
+  }
+}
+
 @Component({
   standalone: true,
-  imports: [CoreModule],
+  imports: [CoreModule, VoteAction],
   providers: [provideTranslocoScope('participant')],
   selector: 'app-voting',
   templateUrl: './voting.component.html',
