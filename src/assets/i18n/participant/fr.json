@@ -39,7 +39,8 @@
     "please-select-number-from-range": "Veuillez sélectionnée un nombre compris dans les seuils.",
     "not-answered-in-time": "Vous n'avez pas répondu à temps.",
     "answered-in-time": "Vous avez répondu en {{duration}} secondes.",
-    "a11y-current-flashcard": "{{index}}. C'est une carte mémoire. Naviguez à l'aide de la touche tab et appuyez sur la touche espace pour la retourner."
+    "a11y-current-flashcard": "{{index}}. C'est une carte mémoire. Naviguez à l'aide de la touche tab et appuyez sur la touche espace pour la retourner.",
+    "go-to-overview": "Aller à la vue d'ensemble"
   },
   "content": {
     "thanks-for-participation": "Merci pour votre participation !",
@@ -59,7 +60,8 @@
     "answers-reset": "Les réponses ont été réinitialisées.",
     "you-are-at-position-congrats": "Vous êtes en {{ position }} position !",
     "you-are-at-position": "Vous êtes en {{ position }} position.",
-    "new-round-started": "Un nouvelle partie a commencée."
+    "new-round-started": "Un nouvelle partie a commencée.",
+    "leaderboard-duration": "Durée"
   },
   "room-page": {
     "a11y-statistics": "Ouvre les statistiques pour la série de questions.",

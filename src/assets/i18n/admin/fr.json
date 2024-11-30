@@ -107,7 +107,15 @@
     "tag-has-been-verified": "Le tag a été vérifié.",
     "tag-verification-has-been-removed": "La vérification a été supprimée.",
     "tag-deleted": "Le tag a été supprimé.",
-    "open": "Ouvert"
+    "open": "Ouvert",
+    "ALL": "Tout",
+    "UP_TO": "Étendu",
+    "LIVE": "Présentation en direct",
+    "MIXED": "Mixte",
+    "QUIZ": "Quiz",
+    "SURVEY": "Sondage",
+    "SHORT_ANSWER": "Réponse courte",
+    "FLASHCARDS": "Flashcards"
   },
   "dialog": {
     "really-delete-account-admin": "Voulez-vous supprimer de façon définitive ce compte et toutes les salles ?",

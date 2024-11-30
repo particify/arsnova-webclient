@@ -2,6 +2,7 @@
   "comment-list": {
     "allow-creation": "Autoriser la création de nouveaux messages",
     "dont-allow-creation": "Interdire la création de nouveaux messages",
-    "more-options": "Plus d'options"
+    "more-options": "Plus d'options",
+    "moderation": "Modération"
   }
 }
