@@ -1,0 +1,56 @@
+= E2E Guidelines
+v1.0, 2024-11-21
+
+== Setup Playwright
+1. If you are using VS Code, we recomment using the https://playwright.dev/docs/getting-started-vscode[Playwright VS Code extension]. Alternatively you can https://playwright.dev/docs/getting-started-vscode[install it standalone via yarn/npm].
+2. Playwright tests are located in `e2e` folder. Global config is defined in link:../../e2e/playwright.config.ts[playwright.config.ts].
+
+== Writing e2e tests
+=== 1. Structure
+Tests are located in `e2e/tests`, see link:../../e2e/tests/poc.spec.ts[poc.spec.ts] as example.
+
+To write reusable test code, we are using fixtures as interface to our UI. So the tests itself are isolated from the UI and changes can be easily made in the globally used fixtures.
+
+=== 2. Locators
+To test user-visible behavior you should try to select DOM elements with information the user sees and knows. For example, instead getting a button by its CSS class, just go for the text the user sees and locate it with https://playwright.dev/docs/locators[built-in locators]: `page.getByText('write a post')`
+
+If this isn't possible for an element, set a `data-testid` for it and locate it with `page.getByTestId`.
+
+=== 3. Fixtures
+Fixtures enable reusable interactions with the UI and can be used by multiple tests. They use locators to perform actions on the UI as clicking a button, fill an input or select an option. So if you want to create a Q&A post, create a method which clicks the create button, enter a text and submits the form:
+```
+export class CommentsPage {
+  private readonly openCreateDialogButton: Locator;
+  private readonly commentBodyInput: Locator;
+  private readonly submitCommentCreationButton: Locator;
+  …
+
+  constructor(public readonly page: Page) {
+    this.openCreateDialogButton = page.getByText('write a post').first();
+    this.commentBodyInput = page.getByLabel('your post');
+    this.submitCommentCreationButton = page.getByRole('button', {
+      name: 'send',
+    });
+    …
+  }
+
+  async createPost(body: string) {
+    await this.openCreateDialogButton.click();
+    await this.commentBodyInput.fill(body);
+    await this.submitCommentCreationButton.click();
+  }
+  …
+}
+
+```
+
+The fixture can then be used in a test file as follows:
+
+```
+test('should create a post', async () => {
+    const commentsPage = new CommentsPage(page);
+    await commentsPage.createPost('This is my first post.');
+    …
+  });
+
+```
