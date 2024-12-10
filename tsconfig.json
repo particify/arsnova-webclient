@@ -26,7 +26,8 @@
       "@testing/*": ["./testing/*"],
       "@environments/*": ["./environments/*"],
       "@projects/*": ["../projects/*"],
-      "@ext-point/*": ["../projects/extension-point/src/lib/*"]
+      "@ext-point/*": ["../projects/extension-point/src/lib/*"],
+      "@e2e/*": ["../e2e/*"]
     }
   },
   "angularCompilerOptions": {

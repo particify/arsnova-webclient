@@ -44,3 +44,7 @@ Thumbs.db
 *.log
 *.orig
 *.tmp
+
+# Playwright
+/playwright-report/*
+/test-results/*
