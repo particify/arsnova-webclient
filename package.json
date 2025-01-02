@@ -97,7 +97,7 @@
     "playwright-ng-schematics": "1.2.2",
     "prettier": "3.4.2",
     "storybook": "8.4.7",
-    "stylelint": "16.10.0",
+    "stylelint": "16.12.0",
     "stylelint-config-standard-scss": "14.0.0",
     "ts-node": "10.9.2",
     "typescript": "5.4.5",
