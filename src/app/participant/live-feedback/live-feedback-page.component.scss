@@ -41,8 +41,8 @@ $card-padding: min(4vw, 16px);
       height: calc(
         var(--full-height) - calc(
             ($card-padding * 4) + ($bar-height-mobile * 4) +
-              ($bar-margin-mobile * 8) + $mobile-bar-height + ($app-padding * 2) +
-              $bar-height
+              ($bar-margin-mobile * 8) + $mobile-bar-height +
+              ($app-padding * 2) + $bar-height
           )
       );
     }
