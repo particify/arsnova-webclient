@@ -104,6 +104,7 @@
                   [disabled]="!contentGroup.leaderboardEnabled"
                   [matTooltip]="'content.leaderboard' | transloco"
                   [routerLink]="'leaderboard'"
+                  data-testid="leaderboard-btn"
                 >
                   <mat-icon class="action-icon">emoji_events</mat-icon>
                 </button>
@@ -112,6 +113,7 @@
                 mat-icon-button
                 (click)="openSettings()"
                 [matTooltip]="'creator.content.group-settings' | transloco"
+                data-testid="content-group-settings"
               >
                 <mat-icon class="action-icon">settings</mat-icon>
               </button>
@@ -119,6 +121,7 @@
                 mat-icon-button
                 [matMenuTriggerFor]="groupSettings"
                 [matTooltip]="'creator.content.more-options' | transloco"
+                data-testid="group-more-menu"
               >
                 <mat-icon class="action-icon">more_vert</mat-icon>
               </button>

@@ -49,6 +49,9 @@
         color="primary"
         class="publishing-btn"
         (click)="$event.stopPropagation(); togglePublishing()"
+        [attr.data-testid]="
+          contentGroup.published ? 'lock-group-btn' : 'publish-group-btn'
+        "
       >
         <mat-icon
           [matTooltip]="

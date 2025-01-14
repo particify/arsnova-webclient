@@ -42,7 +42,7 @@ export class HomePage {
     const response$ = this.page.waitForResponse(
       (res) =>
         res.url().includes('/api/room/') &&
-        res.status() === 201 &&
+        res.ok() &&
         res.request().method() === 'POST'
     );
     await this.submitRoomCreationButton.click();

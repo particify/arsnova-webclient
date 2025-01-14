@@ -20,4 +20,8 @@ export class RoomOverviewPage {
   async goToComments() {
     return await this.commentsButton.click();
   }
+
+  async goToContentGroup(name: string) {
+    await this.page.getByRole('button', { name: name }).click();
+  }
 }

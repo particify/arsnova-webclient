@@ -7,6 +7,7 @@ export class Header {
   private readonly roomsButton: Locator;
   private readonly roomSettingsButton: Locator;
   private readonly returnToEditViewButton: Locator;
+  private readonly backButton: Locator;
 
   constructor(public readonly page: Page) {
     this.menuButton = page.locator('menu-button');
@@ -17,6 +18,7 @@ export class Header {
     this.returnToEditViewButton = page.getByRole('button', {
       name: 'switch back',
     });
+    this.backButton = page.getByRole('button', { name: 'back' }).first();
   }
 
   async openMainMenu() {
@@ -32,7 +34,15 @@ export class Header {
     await this.roomSettingsButton.click();
   }
 
+  async goToPresentation() {
+    await this.page.getByRole('button', { name: 'present' }).click();
+  }
+
   async switchRole() {
     await this.returnToEditViewButton.click();
+  }
+
+  async goBack() {
+    await this.backButton.click();
   }
 }

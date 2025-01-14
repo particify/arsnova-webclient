@@ -30,6 +30,7 @@
             [(ngModel)]="enteredAlias"
             [placeholder]="alias.alias"
             [maxLength]="30"
+            data-testid="nickname-input"
           />
         }
         <button mat-icon-button matSuffix (click)="generateAlias()">
