@@ -290,10 +290,11 @@ export function initConsentService(
   consentService: ConsentService,
   apiConfigService: ApiConfigService
 ) {
-  return () =>
+  return () => {
     apiConfigService
       .getApiConfig$()
       .subscribe((apiConfig) => consentService.init(apiConfig));
+  };
 }
 
 export function initWsRoomEventDispatcherService(
