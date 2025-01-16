@@ -6,6 +6,9 @@
 @import 'variables';
 @import 'util';
 
+@include mat.elevation-classes;
+@include mat.app-background;
+
 @include mat-css-vars.init-material-css-vars(
     $typography-config: $custom-typography
   )
