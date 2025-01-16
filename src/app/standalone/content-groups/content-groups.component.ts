@@ -20,7 +20,6 @@ import {
 } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
-import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 import {
   TranslocoModule,
@@ -35,7 +34,6 @@ import {
     MatTooltipModule,
     FlexModule,
     TranslocoModule,
-    ListBadgeComponent,
     TextOverflowClipComponent,
     ContentGroupInfoComponent,
     CommonModule,

@@ -4,12 +4,10 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TextStatistic } from '@app/core/models/text-statistic';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-answer-grid-list',
   imports: [
-    TranslocoPipe,
     MatCardModule,
     MatIconModule,
     NgClass,

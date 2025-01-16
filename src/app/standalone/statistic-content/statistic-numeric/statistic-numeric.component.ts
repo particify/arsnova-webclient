@@ -27,7 +27,6 @@ import { takeUntil } from 'rxjs';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericRoundStatistics } from '@app/core/models/round-statistics';
-import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { StatisticInfoComponent } from '@app/standalone/statistic-info/statistic-info.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -54,7 +53,6 @@ interface AnswerGroup {
     NgClass,
     StatisticInfoComponent,
     MatIcon,
-    MatDivider,
     TranslocoPipe,
     CorrectAnswerResultsComponent,
   ],

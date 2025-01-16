@@ -36,15 +36,10 @@ import {
 import { TranslocoService } from '@jsverse/transloco';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { CoreModule } from '@app/core/core.module';
-import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
-import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { CdkStepperModule } from '@angular/cdk/stepper';
-import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
-import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
-import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
 import { LeaderboardPageComponent } from '@app/standalone/leaderboard-page/leaderboard-page.component';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
@@ -55,16 +50,11 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   selector: 'app-contents-page',
   imports: [
     CoreModule,
-    ContentResultsComponent,
     LoadingIndicatorComponent,
     AnswerCountComponent,
-    StepperComponent,
     CdkStepperModule,
-    AttributionsInfoComponent,
     HotkeyActionButtonComponent,
     CountdownTimerComponent,
-    ContentWaitingComponent,
-    ContentStepInfoComponent,
     ContentStepperComponent,
     LeaderboardPageComponent,
     PulsatingCircleComponent,

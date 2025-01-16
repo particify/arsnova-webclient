@@ -15,7 +15,6 @@ import {
   provideTranslocoScope,
 } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
-import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
@@ -44,7 +43,6 @@ function setDefaultTrue(value: boolean | undefined): boolean {
     NgClass,
     MatButton,
     MatIcon,
-    MatTooltip,
     AsyncPipe,
     TranslocoPipe,
   ],

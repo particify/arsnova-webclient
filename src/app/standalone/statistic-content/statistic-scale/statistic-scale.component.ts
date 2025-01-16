@@ -11,7 +11,7 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { MatIcon } from '@angular/material/icon';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { NgIf, NgClass, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
@@ -22,10 +22,8 @@ import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-re
   styleUrls: ['../statistic-choice/statistic-choice.component.scss'],
   imports: [
     FlexModule,
-    NgIf,
     LoadingIndicatorComponent,
     NgClass,
-    NgFor,
     RenderedTextComponent,
     MatIcon,
     TranslocoPipe,
