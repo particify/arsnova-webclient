@@ -15,6 +15,7 @@ import {
   selector: 'app-cookies',
   templateUrl: './cookies.component.html',
   styleUrls: ['./cookies.component.scss'],
+  standalone: false,
 })
 export class CookiesComponent {
   readonly dialogId = 'cookie-settings';

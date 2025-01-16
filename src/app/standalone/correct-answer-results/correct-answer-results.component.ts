@@ -5,7 +5,6 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-correct-answer-results',
-  standalone: true,
   imports: [NgClass, TranslocoPipe, FlexLayoutModule],
   templateUrl: './correct-answer-results.component.html',
   styleUrl: './correct-answer-results.component.scss',

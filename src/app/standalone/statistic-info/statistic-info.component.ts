@@ -4,7 +4,6 @@ import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-s
 
 @Component({
   selector: 'app-statistic-info',
-  standalone: true,
   imports: [CoreModule],
   providers: [LocalizeDecimalSeperatorPipe],
   templateUrl: './statistic-info.component.html',

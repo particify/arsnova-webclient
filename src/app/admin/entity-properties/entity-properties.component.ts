@@ -7,6 +7,7 @@ import { TranslocoService } from '@jsverse/transloco';
   selector: 'app-entity-properties',
   templateUrl: './entity-properties.component.html',
   styleUrls: ['./entity-properties.component.scss'],
+  standalone: false,
 })
 export class EntityPropertiesComponent implements OnChanges {
   @Input({ required: true }) entity!: object;

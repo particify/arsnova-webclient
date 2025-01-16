@@ -6,6 +6,7 @@ import {
 
 @Directive({
   selector: '[appTrackInteraction]',
+  standalone: false,
 })
 export class TrackInteractionDirective implements OnInit, OnDestroy {
   @Input({ required: true }) appTrackInteraction!: string;

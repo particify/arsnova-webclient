@@ -6,7 +6,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 
 @Component({
-  standalone: true,
   imports: [
     CoreModule,
     CopyUrlComponent,

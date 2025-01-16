@@ -35,7 +35,6 @@ export class NavButton {
 
 @Component({
   selector: 'app-navigation-drawer',
-  standalone: true,
   imports: [CoreModule, FooterComponent],
   templateUrl: './navigation-drawer.component.html',
   styleUrls: ['./navigation-drawer.component.scss'],

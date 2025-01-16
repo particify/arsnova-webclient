@@ -5,7 +5,6 @@ const INITIAL_SLICE_POSITION = 5;
 
 @Component({
   selector: 'app-text-overflow-clip',
-  standalone: true,
   imports: [FlexModule],
   templateUrl: './text-overflow-clip.component.html',
 })

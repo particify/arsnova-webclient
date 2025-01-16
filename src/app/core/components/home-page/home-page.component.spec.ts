@@ -21,6 +21,7 @@ import { ApiConfig } from '@app/core/models/api-config';
 @Component({
   selector: 'lib-extension-point',
   template: '<svg>Particify</svg>',
+  standalone: false,
 })
 class LibExtensionPointStubComponent {
   @Input({ required: true }) extensionId!: string;

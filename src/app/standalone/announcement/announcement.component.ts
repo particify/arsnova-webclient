@@ -17,7 +17,6 @@ import { MatCard } from '@angular/material/card';
   selector: 'app-announcement',
   templateUrl: './announcement.component.html',
   styleUrls: ['./announcement.component.scss'],
-  standalone: true,
   imports: [
     MatCard,
     NgClass,

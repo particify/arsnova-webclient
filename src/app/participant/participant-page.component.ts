@@ -22,7 +22,6 @@ import { RoutingService } from '@app/core/services/util/routing.service';
   templateUrl: './participant-page.component.html',
   styleUrls: ['../common/styles/room-page.scss'],
   providers: [FocusModeService],
-  standalone: true,
   imports: [
     FlexModule,
     MatDrawerContainer,

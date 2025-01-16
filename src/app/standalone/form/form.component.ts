@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   template: '',
+  standalone: false,
 })
 export abstract class FormComponent implements OnDestroy {
   protected destroyed$ = new Subject<void>();

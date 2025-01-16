@@ -4,7 +4,6 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-count',
-  standalone: true,
   imports: [FlexLayoutModule, TranslocoPipe],
   templateUrl: './count.component.html',
   styleUrl: './count.component.scss',

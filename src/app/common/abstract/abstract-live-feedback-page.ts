@@ -15,7 +15,10 @@ import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.ser
 import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { Subject, takeUntil } from 'rxjs';
-@Component({ template: '' })
+@Component({
+  template: '',
+  standalone: false,
+})
 export class AbstractLiveFeedbackPageComponent {
   // Route data input below
   @Input({ required: true }) room!: Room;

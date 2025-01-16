@@ -19,7 +19,6 @@ import { startWith, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-template-tag-selection',
-  standalone: true,
   imports: [CoreModule],
   templateUrl: './template-tag-selection.component.html',
 })

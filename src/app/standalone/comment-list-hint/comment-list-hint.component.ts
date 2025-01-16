@@ -3,7 +3,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [TranslocoModule, FlexModule],
   selector: 'app-comment-list-hint',
   templateUrl: './comment-list-hint.component.html',

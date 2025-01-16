@@ -21,6 +21,7 @@ import { LanguageService } from '@app/core/services/util/language.service';
       useExisting: ScaleContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class ScaleContentFormComponent
   extends FormComponent

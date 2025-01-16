@@ -25,7 +25,6 @@ import { FlexModule } from '@angular/flex-layout';
   selector: 'app-announcement-list',
   templateUrl: './announcement-list.component.html',
   styleUrls: ['./announcement-list.component.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     MatDialogTitle,

@@ -25,6 +25,7 @@ import { ContentType } from '@app/core/models/content-type.enum';
   selector: 'app-creator-overview',
   templateUrl: './room-overview-page.component.html',
   styleUrls: ['./room-overview-page.component.scss'],
+  standalone: false,
 })
 export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent

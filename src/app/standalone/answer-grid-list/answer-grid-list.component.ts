@@ -8,7 +8,6 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-answer-grid-list',
-  standalone: true,
   imports: [
     TranslocoPipe,
     MatCardModule,

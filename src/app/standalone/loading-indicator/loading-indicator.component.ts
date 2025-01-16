@@ -4,7 +4,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
-  standalone: true,
   imports: [CommonModule, FlexModule, MatProgressSpinnerModule],
   selector: 'app-loading-indicator',
   templateUrl: './loading-indicator.component.html',

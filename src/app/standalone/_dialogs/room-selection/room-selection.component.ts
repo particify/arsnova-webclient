@@ -11,7 +11,6 @@ import { Membership } from '@app/core/models/membership';
 
 @Component({
   selector: 'app-room-selection',
-  standalone: true,
   imports: [CoreModule, LoadingIndicatorComponent],
   templateUrl: './room-selection.component.html',
 })

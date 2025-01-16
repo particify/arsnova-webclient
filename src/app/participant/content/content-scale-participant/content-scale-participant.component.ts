@@ -22,7 +22,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 @Component({
   selector: 'app-content-scale-participant',
   templateUrl: './content-scale-participant.component.html',
-  standalone: true,
   imports: [ContentChoiceAnswerComponent],
   providers: [provideTranslocoScope('participant')],
 })

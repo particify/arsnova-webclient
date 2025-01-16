@@ -48,7 +48,6 @@ interface AnswerGroup {
   selector: 'app-statistic-numeric',
   templateUrl: './statistic-numeric.component.html',
   styleUrls: ['./statistic-numeric.component.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     LoadingIndicatorComponent,

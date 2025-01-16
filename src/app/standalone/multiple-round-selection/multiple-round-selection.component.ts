@@ -10,7 +10,6 @@ import { FlexModule } from '@angular/flex-layout';
   selector: 'app-multiple-round-selection',
   templateUrl: './multiple-round-selection.component.html',
   styleUrls: ['./multiple-round-selection.component.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     MatButton,

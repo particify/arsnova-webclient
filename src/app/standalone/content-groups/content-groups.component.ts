@@ -29,7 +29,6 @@ import {
 } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [
     MatCardModule,
     MatIconModule,

@@ -58,6 +58,7 @@ export interface ContentStats {
   selector: 'app-content-group-page',
   templateUrl: './content-group-page.component.html',
   styleUrls: ['./content-group-page.component.scss'],
+  standalone: false,
 })
 export class ContentGroupPageComponent implements OnInit, OnDestroy {
   // Route data input below

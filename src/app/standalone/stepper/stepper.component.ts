@@ -42,7 +42,6 @@ enum HEADER_ANIMATION_STATE {
 }
 
 @Component({
-  standalone: true,
   imports: [CoreModule, TranslocoModule, CdkStepperModule],
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',

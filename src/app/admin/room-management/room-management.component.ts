@@ -18,6 +18,7 @@ import { take } from 'rxjs';
   selector: 'app-room-management',
   templateUrl: './room-management.component.html',
   styleUrls: ['../admin-styles.scss'],
+  standalone: false,
 })
 export class RoomManagementComponent {
   room?: Room;

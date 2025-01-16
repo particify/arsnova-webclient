@@ -8,7 +8,6 @@ import { ConsentService } from '@app/core/services/util/consent.service';
 
 @Component({
   selector: 'app-footer-links',
-  standalone: true,
   imports: [CoreModule, RouterModule],
   templateUrl: './footer-links.component.html',
   styleUrl: './footer-links.component.scss',

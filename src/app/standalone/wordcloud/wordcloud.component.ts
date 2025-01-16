@@ -38,7 +38,6 @@ export class WordCloudItem {
       }
     `,
   ],
-  standalone: true,
   imports: [NgFor, TranslocoPipe],
 })
 export class WordcloudComponent implements OnChanges {

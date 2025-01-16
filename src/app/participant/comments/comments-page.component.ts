@@ -35,7 +35,6 @@ import { FlexModule } from '@angular/flex-layout';
   selector: 'app-comments-page',
   templateUrl: './comments-page.component.html',
   styleUrls: ['../../common/styles/comments-page.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     CommentListBarComponent,

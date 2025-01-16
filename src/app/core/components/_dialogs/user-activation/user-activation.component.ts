@@ -16,6 +16,7 @@ import { take } from 'rxjs';
   selector: 'app-user-activation',
   templateUrl: './user-activation.component.html',
   styleUrls: ['./user-activation.component.scss'],
+  standalone: false,
 })
 export class UserActivationComponent extends FormComponent implements OnInit {
   readonly dialogId = 'activate-user';

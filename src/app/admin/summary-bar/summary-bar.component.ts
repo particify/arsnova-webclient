@@ -11,6 +11,7 @@ import { SystemHealth } from '@app/admin/_models/system-health';
   selector: 'app-admin-summary-bar',
   templateUrl: './summary-bar.component.html',
   styleUrls: ['./summary-bar.component.scss'],
+  standalone: false,
 })
 export class SummaryBarComponent {
   @Input({ required: true }) healthInfo!: Observable<SystemHealth>;

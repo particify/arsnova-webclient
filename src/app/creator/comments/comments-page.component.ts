@@ -29,6 +29,7 @@ const TAB_GROUP_HEIGHT = 48;
   selector: 'app-comments-page',
   templateUrl: './comments-page.component.html',
   styleUrls: ['../../common/styles/comments-page.scss'],
+  standalone: false,
 })
 export class CommentsPageComponent
   extends AbstractCommentsPageComponent

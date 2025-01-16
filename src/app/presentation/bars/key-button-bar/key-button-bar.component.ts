@@ -6,6 +6,7 @@ import { KeyNavBarItem } from '@app/presentation/bars/control-bar/control-bar.co
   selector: 'app-key-button-bar',
   templateUrl: './key-button-bar.component.html',
   styleUrls: ['./key-button-bar.component.scss'],
+  standalone: false,
 })
 export class KeyButtonBarComponent {
   @Input({ required: true }) items!: KeyNavBarItem[];

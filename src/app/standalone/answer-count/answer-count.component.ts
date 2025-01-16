@@ -4,7 +4,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [CommonModule, FlexModule, TranslocoModule],
   selector: 'app-answer-count',
   templateUrl: './answer-count.component.html',

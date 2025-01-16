@@ -18,6 +18,7 @@ import { FormService } from '@app/core/services/util/form.service';
   selector: 'app-announcement-settings',
   templateUrl: './announcement-settings.component.html',
   styleUrls: ['./announcement-settings.component.scss'],
+  standalone: false,
 })
 export class AnnouncementSettingsComponent
   extends FormComponent

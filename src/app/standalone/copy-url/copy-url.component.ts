@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { take } from 'rxjs';
 
 @Component({
-  standalone: true,
   imports: [
     TranslocoModule,
     ClipboardModule,

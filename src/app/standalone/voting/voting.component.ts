@@ -17,7 +17,6 @@ export class VoteAction implements PipeTransform {
 }
 
 @Component({
-  standalone: true,
   imports: [CoreModule, VoteAction],
   providers: [provideTranslocoScope('participant')],
   selector: 'app-voting',

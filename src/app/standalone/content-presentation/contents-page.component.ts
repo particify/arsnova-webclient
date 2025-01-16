@@ -53,7 +53,6 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
 @Component({
   selector: 'app-contents-page',
-  standalone: true,
   imports: [
     CoreModule,
     ContentResultsComponent,

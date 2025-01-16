@@ -85,7 +85,6 @@ interface ContentActionTab {
   selector: 'app-content-participant',
   templateUrl: './content-participant.component.html',
   styleUrls: ['./content-participant.component.scss'],
-  standalone: true,
   imports: [
     CoreModule,
     LoadingIndicatorComponent,

@@ -34,6 +34,7 @@ interface ContentFormat {
   selector: 'app-content-editing-page',
   templateUrl: './content-editing-page.component.html',
   styleUrls: ['./content-editing-page.component.scss'],
+  standalone: false,
 })
 export class ContentEditingPageComponent
   extends FormComponent

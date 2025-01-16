@@ -16,7 +16,6 @@ import { BaseTemplateService } from '@app/core/services/http/base-template.servi
 
 @Component({
   selector: 'app-edit-content-group-template',
-  standalone: true,
   imports: [
     CoreModule,
     LoadingButtonComponent,

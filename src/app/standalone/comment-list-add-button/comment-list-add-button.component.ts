@@ -6,7 +6,6 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 
 @Component({
-  standalone: true,
   imports: [
     FlexModule,
     TranslocoModule,

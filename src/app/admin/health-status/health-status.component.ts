@@ -5,6 +5,7 @@ import { HealthStatus } from '@app/admin/_models/health-status.enum';
   selector: 'app-health-status',
   templateUrl: './health-status.component.html',
   styleUrls: ['./health-status.component.scss'],
+  standalone: false,
 })
 export class HealthStatusComponent {
   @Input() status?: HealthStatus;

@@ -32,6 +32,7 @@ import { Observable, tap } from 'rxjs';
   selector: 'app-content-list',
   templateUrl: './content-list.component.html',
   styleUrls: ['./content-list.component.scss'],
+  standalone: false,
 })
 export class ContentListComponent
   extends DragDropBaseComponent

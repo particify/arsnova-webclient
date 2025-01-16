@@ -29,7 +29,6 @@ export interface DialogData {
 }
 
 @Component({
-  standalone: true,
   imports: [CoreModule, ExtensionPointModule, LoadingButtonComponent],
   selector: 'app-submit-comment',
   templateUrl: './create-comment.component.html',

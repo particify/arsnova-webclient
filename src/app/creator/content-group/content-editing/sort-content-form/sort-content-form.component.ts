@@ -26,6 +26,7 @@ import { ContentForm } from '@app/creator/content-group/content-editing/content-
       useExisting: SortContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class SortContentFormComponent
   extends FormComponent

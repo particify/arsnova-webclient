@@ -66,7 +66,6 @@ function setDefaultTrue(value: boolean | undefined): boolean {
 @Component({
   selector: 'app-participant-content-carousel-page',
   templateUrl: './participant-content-carousel-page.component.html',
-  standalone: true,
   imports: [
     LoadingIndicatorComponent,
     CoreModule,

@@ -5,7 +5,6 @@ import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-filter-chip',
-  standalone: true,
   imports: [MatChipsModule, MatIconModule, TranslocoModule],
   templateUrl: './filter-chip.component.html',
 })

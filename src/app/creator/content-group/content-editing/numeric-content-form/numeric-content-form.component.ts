@@ -22,6 +22,7 @@ const MAX_VALUE = 1_000_000_000_000_000; // Maximum value is up (or down) to one
       useExisting: NumericContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class NumericContentFormComponent
   extends FormComponent

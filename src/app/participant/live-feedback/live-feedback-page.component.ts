@@ -34,7 +34,6 @@ function setDefaultTrue(value: boolean | undefined): boolean {
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
   styleUrls: ['./live-feedback-page.component.scss'],
-  standalone: true,
   imports: [
     CoreModule,
     LoadingIndicatorComponent,

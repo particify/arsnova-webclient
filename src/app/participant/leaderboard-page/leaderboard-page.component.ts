@@ -14,7 +14,6 @@ import { provideTranslocoScope } from '@jsverse/transloco';
 @Component({
   selector: 'app-leaderboard-page',
   templateUrl: './leaderboard-page.component.html',
-  standalone: true,
   imports: [FlexModule, LoadingIndicatorComponent, ContentLeaderboardComponent],
   providers: [provideTranslocoScope('participant')],
 })

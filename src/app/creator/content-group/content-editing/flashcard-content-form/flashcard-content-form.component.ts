@@ -27,6 +27,7 @@ import { ContentForm } from '@app/creator/content-group/content-editing/content-
       useExisting: FlashcardContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class FlashcardContentFormComponent
   extends FormComponent

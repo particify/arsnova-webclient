@@ -4,7 +4,6 @@ import { LICENSES } from '@app/core/models/licenses';
 
 @Component({
   selector: 'app-template-license',
-  standalone: true,
   imports: [CoreModule],
   templateUrl: './template-license.component.html',
   styleUrls: ['./template-license.component.scss'],

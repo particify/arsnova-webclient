@@ -42,6 +42,7 @@ export class UpdateEvent {
   selector: 'app-settings-page',
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss'],
+  standalone: false,
 })
 export class SettingsPageComponent implements OnInit {
   // Route data input below

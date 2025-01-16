@@ -17,6 +17,7 @@ import { take } from 'rxjs';
   selector: 'app-request-password-reset',
   templateUrl: './request-password-reset.component.html',
   styleUrls: ['./request-password-reset.component.scss'],
+  standalone: false,
 })
 export class RequestPasswordResetComponent
   extends FormComponent

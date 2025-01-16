@@ -21,7 +21,6 @@ interface DialogData {
 }
 
 @Component({
-  standalone: true,
   imports: [CoreModule, LoadingButtonComponent],
   selector: 'app-base-dialog',
   templateUrl: './base-dialog.component.html',

@@ -39,7 +39,6 @@ import { Vote } from '@app/core/models/vote';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 @Component({
-  standalone: true,
   imports: [
     CoreModule,
     DateComponent,

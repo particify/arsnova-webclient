@@ -29,6 +29,7 @@ interface DialogData {
   selector: 'app-content-group-creation',
   templateUrl: './content-group-creation.component.html',
   styleUrl: './content-group-creation.component.scss',
+  standalone: false,
 })
 export class ContentGroupCreationComponent extends FormComponent {
   readonly dialogId = 'create-content-group';

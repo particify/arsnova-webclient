@@ -24,6 +24,7 @@ enum BINARY_OPTION {
       useExisting: BinaryContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class BinaryContentFormComponent
   extends FormComponent

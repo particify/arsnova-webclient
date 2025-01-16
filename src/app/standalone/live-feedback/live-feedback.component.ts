@@ -24,7 +24,6 @@ class LiveFeedback {
 }
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     TranslocoModule,

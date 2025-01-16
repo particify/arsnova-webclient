@@ -46,6 +46,7 @@ export class AdminStats {
   selector: 'app-system-statistics',
   templateUrl: './system-statistics.component.html',
   styleUrls: ['../admin-styles.scss'],
+  standalone: false,
 })
 export class SystemStatisticsComponent implements OnInit {
   // Route data input below

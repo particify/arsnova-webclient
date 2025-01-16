@@ -21,7 +21,6 @@ import { Subject, of, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-content-presentation-menu',
-  standalone: true,
   imports: [CoreModule, RouterLink],
   templateUrl: './content-presentation-menu.component.html',
 })

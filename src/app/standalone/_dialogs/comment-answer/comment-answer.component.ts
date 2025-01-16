@@ -21,7 +21,6 @@ import { take } from 'rxjs';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 
 @Component({
-  standalone: true,
   imports: [
     CoreModule,
     RenderedTextComponent,

@@ -19,6 +19,7 @@ import { ApiConfig } from '@app/core/models/api-config';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
+  standalone: false,
 })
 export class RegisterComponent extends FormComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;

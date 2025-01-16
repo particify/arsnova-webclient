@@ -7,7 +7,6 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-split-button',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatIconModule,

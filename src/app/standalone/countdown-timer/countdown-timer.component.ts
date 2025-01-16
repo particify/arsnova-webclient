@@ -17,7 +17,6 @@ const DELAY_BUFFER = 250;
 
 @Component({
   selector: 'app-countdown-timer',
-  standalone: true,
   imports: [CoreModule],
   styleUrl: './countdown-timer.component.scss',
   templateUrl: './countdown-timer.component.html',

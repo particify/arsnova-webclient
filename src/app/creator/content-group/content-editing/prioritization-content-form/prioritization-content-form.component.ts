@@ -25,6 +25,7 @@ import { ContentForm } from '@app/creator/content-group/content-editing/content-
       useExisting: PrioritizationContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class PrioritizationContentFormComponent
   extends FormComponent

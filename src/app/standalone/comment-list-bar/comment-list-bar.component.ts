@@ -18,7 +18,6 @@ class SortItem {
 }
 
 @Component({
-  standalone: true,
   imports: [CoreModule, FilterChipComponent],
   selector: 'app-comment-list-bar',
   templateUrl: './comment-list-bar.component.html',

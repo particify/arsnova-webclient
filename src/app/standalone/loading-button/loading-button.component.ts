@@ -5,7 +5,6 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 
 @Component({
-  standalone: true,
   imports: [CoreModule, LoadingIndicatorComponent],
   selector: 'app-loading-button',
   templateUrl: './loading-button.component.html',

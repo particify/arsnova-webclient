@@ -8,7 +8,6 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     TranslocoModule,

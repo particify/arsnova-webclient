@@ -7,7 +7,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [
     CommonModule,
     FlexModule,

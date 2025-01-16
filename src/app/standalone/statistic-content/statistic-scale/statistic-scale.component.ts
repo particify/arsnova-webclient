@@ -20,7 +20,6 @@ import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-re
   selector: 'app-statistic-scale',
   templateUrl: '../statistic-choice/statistic-choice.component.html',
   styleUrls: ['../statistic-choice/statistic-choice.component.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     NgIf,

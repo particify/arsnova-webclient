@@ -30,7 +30,6 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
 
 @Component({
-  standalone: true,
   imports: [
     CoreModule,
     LoadingIndicatorComponent,

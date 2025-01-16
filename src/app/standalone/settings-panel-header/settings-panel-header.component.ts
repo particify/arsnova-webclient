@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [TranslocoModule, MatIconModule, MatExpansionModule, FlexModule],
   selector: 'app-settings-panel-header',
   templateUrl: './settings-panel-header.component.html',
