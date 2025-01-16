@@ -1,25 +1,43 @@
+@import '../../../variables';
+
 .list-container {
   max-width: 800px;
 }
 
-.fixed-list {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: calc(40vw - 4em);
-  background-color: var(--background);
-  height: calc(var(--full-height) - 2em - 72px);
-  overflow: auto;
-  padding: 2em 2em 72px;
-  margin-bottom: 2em;
+@include gt-md {
+  .list-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: calc(40vw - 4em);
+    background-color: var(--background);
+    height: calc(var(--full-height) - 2em - 72px);
+    overflow: auto;
+    padding: 2em 2em 72px;
+    margin-bottom: 2em;
+  }
+
+  .presentation-container {
+    position: absolute;
+    top: 4vw;
+    left: 4vw;
+    width: 52vw;
+    height: calc(var(--full-height) - 4vw - 72px);
+  }
+
+  .comment-presentation-container {
+    justify-content: start;
+  }
 }
 
-.presentation-container {
-  position: absolute;
-  top: 4vw;
-  left: 4vw;
-  width: 52vw;
-  height: calc(var(--full-height) - 4vw - 72px);
+@include lt-md {
+  .presentation-container {
+    display: none;
+  }
+
+  .comment-presentation-container {
+    justify-content: center;
+  }
 }
 
 app-comment {

@@ -60,7 +60,7 @@ export class CommentsPageComponent
   @ViewChild('commentList') commentListRef!: ElementRef;
 
   // Route data input below
-  @Input({ transform: booleanAttribute }) showCommentPreview!: boolean;
+  @Input({ transform: booleanAttribute }) outlinedCards!: boolean;
 
   protected hotkeyRefs: symbol[] = [];
 
