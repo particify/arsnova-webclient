@@ -46,6 +46,7 @@ export default eslintTypescript.config(
           style: 'camelCase',
         },
       ],
+      '@angular-eslint/prefer-standalone': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
       'import/no-named-as-default': 'off',
