@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { QrCodeComponent } from './qr-code.component';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -84,7 +83,6 @@ describe('QrCodeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SplitShortIdPipe],
       imports: [QrCodeComponent, ExtensionPointModule],
       providers: [
         {

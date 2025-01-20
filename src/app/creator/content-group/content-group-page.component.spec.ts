@@ -94,8 +94,6 @@ describe('ContentGroupPageComponent', () => {
     seriesName: 'SERIES',
   });
 
-  const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
-
   const mockHotkeyService = jasmine.createSpyObj([
     'registerHotkey',
     'unregisterHotkey',
@@ -171,10 +169,6 @@ describe('ContentGroupPageComponent', () => {
         {
           provide: HotkeyService,
           useValue: mockHotkeyService,
-        },
-        {
-          provide: A11yRenderedBodyPipe,
-          useValue: a11yRenderedBodyPipe,
         },
         {
           provide: ContentPublishService,

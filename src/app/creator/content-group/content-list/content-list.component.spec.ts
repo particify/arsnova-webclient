@@ -55,7 +55,6 @@ describe('ContentListComponent', () => {
   const content6 = new Content();
   content6.id = '5';
   content6.state = contentState;
-  const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
 
   const mockHotkeyService = jasmine.createSpyObj([
     'registerHotkey',
@@ -121,10 +120,6 @@ describe('ContentListComponent', () => {
         {
           provide: HotkeyService,
           useValue: mockHotkeyService,
-        },
-        {
-          provide: A11yRenderedBodyPipe,
-          useValue: a11yRenderedBodyPipe,
         },
         {
           provide: ContentPublishService,

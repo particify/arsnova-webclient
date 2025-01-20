@@ -29,8 +29,6 @@ describe('ContentParticipantComponent', () => {
   let component: ContentParticipantComponent;
   let fixture: ComponentFixture<ContentParticipantComponent>;
 
-  const a11yRenderedBodyPipe = new A11yRenderedBodyPipe();
-
   const mockContentService = jasmine.createSpyObj('ContentService', [
     'getContent',
   ]);
@@ -68,10 +66,6 @@ describe('ContentParticipantComponent', () => {
       declarations: [A11yRenderedBodyPipe],
       imports: [getTranslocoModule(), ContentParticipantComponent],
       providers: [
-        {
-          provide: A11yRenderedBodyPipe,
-          useValue: a11yRenderedBodyPipe,
-        },
         {
           provide: EventService,
           useClass: MockEventService,
