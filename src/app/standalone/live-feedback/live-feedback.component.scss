@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 $bar-height-desktop: min(65px, 8vh);
 $bar-margin-desktop: min(10px, 2vh);

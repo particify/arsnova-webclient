@@ -1,12 +1,12 @@
-@import '@fontsource/material-symbols-outlined';
-@import '@fontsource/roboto/index.css';
-@import '@fontsource/roboto/400-italic.css';
-@import '@fontsource/roboto/500.css';
-@import '@fontsource/roboto/500-italic.css';
-@import '@fontsource/roboto/700.css';
-@import '@fontsource/roboto/700-italic.css';
-@import 'katex/dist/katex.min.css';
-@import 'prismjs/themes/prism-okaidia.css';
+@use '@fontsource/material-symbols-outlined';
+@use '@fontsource/roboto/index' as roboto;
+@use '@fontsource/roboto/400-italic' as roboto400i;
+@use '@fontsource/roboto/500' as roboto500;
+@use '@fontsource/roboto/500-italic' as roboto500i;
+@use '@fontsource/roboto/700' as roboto700;
+@use '@fontsource/roboto/700-italic' as roboto700i;
+@use 'katex/dist/katex.min';
+@use 'prismjs/themes/prism-okaidia';
 
 mat-icon {
   font-family: 'Material Symbols Outlined', sans-serif;

@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 $drawer-width: 73px;
 $content-padding: 2em;

@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 .less-bottom-space {
   padding-bottom: 8px;

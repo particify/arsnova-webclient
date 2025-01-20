@@ -1,5 +1,5 @@
-@import '../../common/styles/room-overview';
-@import '../../../variables';
+@use '../../../variables' as *;
+@use '../../common/styles/room-overview';
 
 .group-types-container {
   display: grid;

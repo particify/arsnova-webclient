@@ -1,16 +1,16 @@
 @use 'angular-material-css-vars' as mat-css-vars;
 @use '@angular/material' as mat;
 @use 'app/core/theme/app-theme';
-@import 'app/core/theme/dark-theme/dark-theme';
-@import 'app/core/theme/light-theme/light-theme';
-@import 'variables';
-@import 'util';
+@use 'app/core/theme/dark-theme/dark-theme';
+@use 'app/core/theme/light-theme/light-theme';
+@use 'variables' as *;
+@use 'util';
 
 @include mat.elevation-classes;
 @include mat.app-background;
 
 @include mat-css-vars.init-material-css-vars(
-    $typography-config: $custom-typography
+    $typography-config: light-theme.$custom-typography
   )
   using($light-theme) {
   .theme-light {
@@ -19,8 +19,8 @@
 }
 
 .theme-dark {
-  @include mat.all-component-colors($dark-theme);
-  @include app-theme.theme($dark-theme, false);
+  @include mat.all-component-colors(dark-theme.$dark-theme);
+  @include app-theme.theme(dark-theme.$dark-theme, false);
 }
 
 html,

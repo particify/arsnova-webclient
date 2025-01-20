@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 $step-button-size: 40px;
 $step-button-count: 5;

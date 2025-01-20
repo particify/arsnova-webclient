@@ -1,4 +1,4 @@
-@import '../contents-with-options';
+@use '../contents-with-options' as cwo;
 
 .disabled {
   opacity: 0.8;
@@ -10,7 +10,7 @@
 }
 
 .list-item {
-  margin-top: $option-padding-full;
+  margin-top: cwo.$option-padding-full;
   border-width: 2px;
   border-style: solid;
   border-radius: 5px;
@@ -43,5 +43,5 @@
 }
 
 .answer-indicator {
-  margin-right: $option-padding-full;
+  margin-right: cwo.$option-padding-full;
 }
