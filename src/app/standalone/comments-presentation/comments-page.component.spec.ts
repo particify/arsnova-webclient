@@ -69,6 +69,7 @@ describe('CommentsPageComponent', () => {
     'getCommentSortChanges',
     'getStepState',
     'updateCommentState',
+    'updateCommentZoom',
   ]);
 
   beforeEach(async () => {

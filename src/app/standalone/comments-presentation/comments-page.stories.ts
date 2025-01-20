@@ -196,6 +196,6 @@ export const Presentation: Story = {
     room: new Room(),
     commentSettings: new CommentSettings('roomId', true, false, false, false),
     viewRole: UserRole.EDITOR,
-    showCommentPreview: true,
+    outlinedCards: false,
   },
 };

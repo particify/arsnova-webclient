@@ -1,22 +1,15 @@
-<div fxLayout="row" [fxLayoutAlign]="showCommentPreview ? 'start' : 'center'">
+<div fxLayout="row" class="comment-presentation-container">
   <div id="presentation-button" tabIndex="-1" class="visually-hidden">
     {{ 'creator.presentation.a11y-comment-message' | transloco }}
   </div>
-  @if (showCommentPreview) {
-    <div class="presentation-container">
-      <app-present-comment
-        fxFill
-        [isPresentation]="true"
-        [comment]="activeComment"
-      ></app-present-comment>
-    </div>
-  }
-  <div
-    #commentList
-    (scroll)="onScroll()"
-    class="list-container"
-    [ngClass]="{ 'fixed-list': showCommentPreview }"
-  >
+  <div class="presentation-container">
+    <app-present-comment
+      fxFill
+      [isPresentation]="true"
+      [comment]="activeComment"
+    ></app-present-comment>
+  </div>
+  <div #commentList (scroll)="onScroll()" class="list-container">
     @if (isLoading) {
       <app-loading-indicator></app-loading-indicator>
     }
@@ -47,7 +40,7 @@
             [comment]="comment"
             [isEditor]="true"
             [isSimpleView]="true"
-            [outlinedCard]="!showCommentPreview"
+            [outlinedCard]="outlinedCards"
             [isNew]="comment.id === newestComment.id"
             (click)="updateCurrentComment(comment)"
           >
