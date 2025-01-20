@@ -37,6 +37,7 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
   styleUrls: ['./password-reset.component.scss'],
+  standalone: false,
 })
 export class PasswordResetComponent extends FormComponent implements OnInit {
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;

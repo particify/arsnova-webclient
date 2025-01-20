@@ -29,7 +29,6 @@ import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 
 @Component({
   selector: 'app-content-preview',
-  standalone: true,
   imports: [
     CoreModule,
     RenderedTextComponent,

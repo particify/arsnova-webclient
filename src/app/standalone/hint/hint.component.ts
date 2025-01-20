@@ -24,7 +24,6 @@ export const HINTS: Hint[] = [
 ];
 
 @Component({
-  standalone: true,
   imports: [FlexModule, MatIconModule, TranslocoModule],
   selector: 'app-hint',
   templateUrl: './hint.component.html',

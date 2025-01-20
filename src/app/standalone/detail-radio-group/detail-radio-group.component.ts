@@ -30,7 +30,6 @@ export class DetailedRadioGroup {
 
 @Component({
   selector: 'app-detail-radio-group',
-  standalone: true,
   imports: [
     CommonModule,
     MatRadioModule,

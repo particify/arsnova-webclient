@@ -24,7 +24,6 @@ import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-sele
 import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [
     CoreModule,
     TemplateLanguageSelectionComponent,

@@ -9,7 +9,6 @@ import {
 import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [
     TranslocoModule,
     MatSlideToggleModule,

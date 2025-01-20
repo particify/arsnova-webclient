@@ -9,6 +9,7 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
 
 @Directive({
   selector: '[appFeatureFlag]',
+  standalone: false,
 })
 export class FeatureFlagDirective implements OnInit {
   @Input({ required: true }) appFeatureFlag!: string;

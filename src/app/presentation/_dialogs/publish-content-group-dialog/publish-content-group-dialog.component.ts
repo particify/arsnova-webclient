@@ -15,6 +15,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
   selector: 'app-publish-content-group-dialog',
   templateUrl: './publish-content-group-dialog.component.html',
   styleUrl: './publish-content-group-dialog.component.scss',
+  standalone: false,
 })
 export class PublishContentGroupDialogComponent extends FormComponent {
   readonly dialogId = 'publish-content';

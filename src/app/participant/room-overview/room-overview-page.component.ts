@@ -41,7 +41,6 @@ import { RoutingService } from '@app/core/services/util/routing.service';
   selector: 'app-participant-overview',
   templateUrl: './room-overview-page.component.html',
   styleUrls: ['../../common/styles/room-overview.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     CoreModule,

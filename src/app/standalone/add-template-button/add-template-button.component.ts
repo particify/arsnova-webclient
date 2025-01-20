@@ -22,7 +22,6 @@ import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-template-button',
-  standalone: true,
   imports: [CoreModule, LoadingButtonComponent],
   templateUrl: './add-template-button.component.html',
 })

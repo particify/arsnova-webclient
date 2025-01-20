@@ -6,7 +6,6 @@ import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 @Component({
   selector: 'app-content-sort-answer',
-  standalone: true,
   imports: [CoreModule, DragDropModule, RenderedTextComponent],
   templateUrl: './content-sort-answer.component.html',
   styleUrls: ['./content-sort-answer.component.scss'],

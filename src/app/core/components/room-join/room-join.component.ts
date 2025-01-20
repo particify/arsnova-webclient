@@ -15,6 +15,7 @@ import { THINSP } from '@app/core/utils/html-entities';
   selector: 'app-room-join',
   templateUrl: './room-join.component.html',
   styleUrls: ['./room-join.component.scss'],
+  standalone: false,
 })
 export class RoomJoinComponent {
   @Input({ required: true }) appTitle!: string;

@@ -16,7 +16,6 @@ import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-statistic-short-answer',
-  standalone: true,
   imports: [
     AnswerListComponent,
     AnswerGridListComponent,

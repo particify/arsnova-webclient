@@ -14,6 +14,7 @@ import { TranslocoService } from '@jsverse/transloco';
   selector: 'app-publish-content-group-template',
   templateUrl: './publish-content-group-template.component.html',
   styleUrls: ['./publish-content-group-template.component.scss'],
+  standalone: false,
 })
 export class PublishContentGroupTemplateComponent extends FormComponent {
   @ViewChild(ContentGroupTemplateEditingComponent)

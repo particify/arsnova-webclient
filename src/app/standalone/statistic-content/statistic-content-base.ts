@@ -10,6 +10,7 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
 @Component({
   template: '',
+  standalone: false,
 })
 export abstract class StatisticContentBaseComponent implements OnInit {
   @Input({ required: true }) content!: Content;

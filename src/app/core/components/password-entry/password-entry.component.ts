@@ -40,6 +40,7 @@ const PATTERNS: RegExp[] = [
   selector: 'app-password-entry',
   templateUrl: './password-entry.component.html',
   styleUrls: ['./password-entry.component.scss'],
+  standalone: false,
 })
 export class PasswordEntryComponent
   extends FormComponent

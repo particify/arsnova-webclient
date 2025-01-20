@@ -17,6 +17,7 @@ import { TranslocoService } from '@jsverse/transloco';
   styleUrls: [
     '../../../standalone/comment-list-bar/comment-list-bar.component.scss',
   ],
+  standalone: false,
 })
 export class CommentListBarExtensionComponent {
   @Input({ required: true }) room!: Room;

@@ -6,6 +6,7 @@ import { UserService } from '@app/core/services/http/user.service';
 @Component({
   selector: 'app-user-search',
   template: '',
+  standalone: false,
 })
 export class UserSearchComponent {
   user?: User;

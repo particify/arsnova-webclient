@@ -8,6 +8,7 @@ export const LOADING_ICON = '_loading';
   selector: 'app-snack-bar-advanced',
   templateUrl: './snack-bar-advanced.component.html',
   styleUrls: ['./snack-bar-advanced.component.scss'],
+  standalone: false,
 })
 export class SnackBarAdvancedComponent {
   LOADING_ICON = LOADING_ICON;

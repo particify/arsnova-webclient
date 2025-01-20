@@ -8,6 +8,7 @@ import { TranslocoService } from '@jsverse/transloco';
   selector: 'app-creator-page',
   templateUrl: './creator-page.component.html',
   styleUrls: ['../common/styles/room-page.scss'],
+  standalone: false,
 })
 export class CreatorPageComponent {
   // Route data input below

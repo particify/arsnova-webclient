@@ -9,6 +9,7 @@ import {
   selector: 'app-hotkeys',
   templateUrl: './hotkeys.component.html',
   styleUrls: ['./hotkeys.component.scss'],
+  standalone: false,
 })
 export class HotkeysComponent {
   readonly dialogId = 'hotkeys';

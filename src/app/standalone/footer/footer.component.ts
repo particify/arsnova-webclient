@@ -11,7 +11,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { RoutingService } from '@app/core/services/util/routing.service';
 
 @Component({
-  standalone: true,
   imports: [
     TranslocoModule,
     MatMenuModule,

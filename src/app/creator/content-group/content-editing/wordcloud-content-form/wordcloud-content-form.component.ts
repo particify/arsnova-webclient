@@ -22,6 +22,7 @@ const MAX_KEYWORDS = 10;
       useExisting: WordcloudContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class WordcloudContentFormComponent
   extends FormComponent

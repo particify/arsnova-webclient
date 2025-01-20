@@ -12,7 +12,6 @@ import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-s
 
 @Component({
   selector: 'app-content-numeric-answer',
-  standalone: true,
   imports: [CoreModule],
   providers: [LocalizeDecimalSeperatorPipe],
   templateUrl: './content-numeric-answer.component.html',

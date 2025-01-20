@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
-@Pipe({ name: 'duration' })
+@Pipe({
+  name: 'duration',
+  standalone: false,
+})
 export class DurationPipe implements PipeTransform {
   transform(milliseconds: number, contentDuration?: number): string {
     dayjs.extend(duration);

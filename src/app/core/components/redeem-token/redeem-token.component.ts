@@ -8,6 +8,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   template: '',
+  standalone: false,
 })
 export class RedeemTokenComponent implements OnInit, OnDestroy {
   // Route data input below

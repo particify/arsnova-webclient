@@ -18,6 +18,7 @@ import { take } from 'rxjs';
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['../admin-styles.scss'],
+  standalone: false,
 })
 export class UserManagementComponent
   extends UserSearchComponent

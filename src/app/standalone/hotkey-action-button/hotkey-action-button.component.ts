@@ -13,7 +13,6 @@ export const hotkeyEnterLeaveAnimation = trigger('hotkeyEnterLeaveAnimation', [
 
 @Component({
   selector: 'app-hotkey-action-button',
-  standalone: true,
   imports: [CoreModule],
   templateUrl: './hotkey-action-button.component.html',
   styleUrl: './hotkey-action-button.component.scss',

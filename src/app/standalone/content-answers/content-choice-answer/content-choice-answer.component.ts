@@ -7,7 +7,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 
 @Component({
   selector: 'app-content-choice-answer',
-  standalone: true,
   imports: [CoreModule, RenderedTextComponent],
   templateUrl: './content-choice-answer.component.html',
   styleUrls: ['./content-choice-answer.component.scss'],

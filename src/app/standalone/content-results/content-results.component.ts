@@ -49,7 +49,6 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   selector: 'app-content-results',
   templateUrl: './content-results.component.html',
   styleUrls: ['./content-results.component.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     NgClass,

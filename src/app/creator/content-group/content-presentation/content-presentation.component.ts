@@ -25,6 +25,7 @@ function decrease(value: number) {
   selector: 'app-content-presentation',
   templateUrl: './content-presentation.component.html',
   styleUrls: ['./content-presentation.component.scss'],
+  standalone: false,
 })
 export class ContentPresentationComponent implements OnInit, OnDestroy {
   // Route data input below

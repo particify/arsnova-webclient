@@ -21,6 +21,7 @@ const NON_TEXT_INPUT_TYPES = ['button', 'checkbox', 'radio'];
 
 @Directive({
   selector: '[appHotkey]',
+  standalone: false,
 })
 export class HotkeyDirective implements OnDestroy, OnChanges {
   @Input({ required: true }) appHotkey!: string;

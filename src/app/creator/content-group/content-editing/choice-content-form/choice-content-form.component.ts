@@ -27,6 +27,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
       useExisting: ChoiceContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class ChoiceContentFormComponent
   extends FormComponent

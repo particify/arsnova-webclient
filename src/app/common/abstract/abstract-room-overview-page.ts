@@ -13,7 +13,10 @@ import { Component, Input } from '@angular/core';
 import { ApiConfig } from '@app/core/models/api-config';
 import { RoutingService } from '@app/core/services/util/routing.service';
 
-@Component({ template: '' })
+@Component({
+  template: '',
+  standalone: false,
+})
 export class AbstractRoomOverviewPageComponent {
   // Route data input below
   @Input({ required: true }) viewRole!: UserRole;

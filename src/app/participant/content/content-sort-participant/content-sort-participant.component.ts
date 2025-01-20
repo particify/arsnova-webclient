@@ -25,7 +25,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   selector: 'app-content-sort-participant',
   templateUrl: './content-sort-participant.component.html',
   styleUrls: ['./content-sort-participant.component.scss'],
-  standalone: true,
   imports: [
     LoadingIndicatorComponent,
     ContentSortAnswerComponent,

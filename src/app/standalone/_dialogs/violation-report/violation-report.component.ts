@@ -18,7 +18,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-violation-report',
-  standalone: true,
   imports: [CoreModule, LoadingButtonComponent],
   templateUrl: './violation-report.component.html',
 })

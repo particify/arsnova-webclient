@@ -30,7 +30,10 @@ export const itemRenderNumber = 20;
 
 export const BAR_PADDING = 16;
 const APP_PADDING = 0.04;
-@Component({ template: '' })
+@Component({
+  template: '',
+  standalone: false,
+})
 export class AbstractCommentsPageComponent {
   protected destroyed$ = new Subject<void>();
 

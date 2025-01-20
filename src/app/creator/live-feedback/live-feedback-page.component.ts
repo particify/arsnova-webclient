@@ -22,6 +22,7 @@ import { takeUntil } from 'rxjs';
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
   styleUrls: ['./live-feedback-page.component.scss'],
+  standalone: false,
 })
 export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPageComponent

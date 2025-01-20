@@ -23,7 +23,6 @@ import {
 
 @Component({
   selector: 'app-content-short-answer-participant',
-  standalone: true,
   imports: [FlexModule, FormsModule, ContentTextAnswerComponent, TranslocoPipe],
   templateUrl: './content-short-answer-participant.component.html',
   styleUrl: './content-short-answer-participant.component.scss',

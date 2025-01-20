@@ -45,7 +45,6 @@ import {
   selector: 'app-statistic-choice',
   templateUrl: './statistic-choice.component.html',
   styleUrls: ['./statistic-choice.component.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     LoadingIndicatorComponent,

@@ -15,6 +15,7 @@ export interface ExportOptions {
 
 @Component({
   templateUrl: './export.component.html',
+  standalone: false,
 })
 export class ExportComponent {
   readonly dialogId = 'export';

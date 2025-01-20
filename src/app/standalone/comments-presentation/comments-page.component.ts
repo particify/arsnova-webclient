@@ -43,7 +43,6 @@ import { CommentComponent } from '@app/standalone/comment/comment.component';
   selector: 'app-comments-presentation',
   templateUrl: './comments-page.component.html',
   styleUrls: ['./comments-page.component.scss'],
-  standalone: true,
   imports: [
     CoreModule,
     PresentCommentComponent,

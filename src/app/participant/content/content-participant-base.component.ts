@@ -13,6 +13,7 @@ import { Answer } from '@app/core/models/answer';
 
 @Component({
   template: '',
+  standalone: false,
 })
 export abstract class ContentParticipantBaseComponent
   extends FormComponent

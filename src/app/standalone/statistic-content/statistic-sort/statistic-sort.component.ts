@@ -41,7 +41,6 @@ export const MAX_COMBINATIONS = 4;
   selector: 'app-statistic-sort',
   templateUrl: './statistic-sort.component.html',
   styleUrls: ['./statistic-sort.component.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     LoadingIndicatorComponent,

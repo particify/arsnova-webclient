@@ -17,6 +17,7 @@ import { Observable } from 'rxjs';
   selector: 'app-report-management',
   templateUrl: './report-management.component.html',
   styleUrl: '../admin-styles.scss',
+  standalone: false,
 })
 export class ReportManagementComponent implements OnInit {
   isLoading = true;

@@ -3,18 +3,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-split-button',
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    TranslocoPipe,
-    MatMenuModule,
-    NgClass,
-  ],
+  imports: [MatButtonModule, MatIconModule, MatMenuModule, NgClass],
   templateUrl: './split-button.component.html',
   styleUrl: './split-button.component.scss',
 })

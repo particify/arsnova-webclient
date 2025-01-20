@@ -7,7 +7,6 @@ import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-attributions-info',
-  standalone: true,
   imports: [CoreModule],
   providers: [provideTranslocoScope('creator')],
   templateUrl: './attributions-info.component.html',

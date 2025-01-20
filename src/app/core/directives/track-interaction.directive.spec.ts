@@ -18,6 +18,7 @@ const TEST_TRACK_NAME = 'test-track-name';
   >
     Tracked Button
   </button>`,
+  standalone: false,
 })
 class TestComponent {
   @ViewChild('button') button!: ElementRef<HTMLButtonElement>;

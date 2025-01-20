@@ -31,6 +31,7 @@ import { take } from 'rxjs';
 @Component({
   selector: 'app-room-create',
   templateUrl: './room-create.component.html',
+  standalone: false,
 })
 export class RoomCreateComponent extends FormComponent implements OnInit {
   readonly dialogId = 'create-room';

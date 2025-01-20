@@ -8,7 +8,6 @@ import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-template-language-selection',
-  standalone: true,
   imports: [CoreModule],
   templateUrl: './template-language-selection.component.html',
 })

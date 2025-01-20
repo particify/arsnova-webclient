@@ -12,6 +12,7 @@ import { TranslocoService } from '@jsverse/transloco';
   selector: 'app-answer-option-list',
   templateUrl: './answer-option-list.component.html',
   styleUrls: ['./answer-option-list.component.scss'],
+  standalone: false,
 })
 export class AnswerOptionListComponent
   extends DragDropBaseComponent

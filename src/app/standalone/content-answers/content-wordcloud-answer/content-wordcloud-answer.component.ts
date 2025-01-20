@@ -4,7 +4,6 @@ import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 
 @Component({
   selector: 'app-content-wordcloud-answer',
-  standalone: true,
   imports: [CoreModule],
   templateUrl: './content-wordcloud-answer.component.html',
   styleUrls: ['./content-wordcloud-answer.component.scss'],

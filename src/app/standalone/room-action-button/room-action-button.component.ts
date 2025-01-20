@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 
 @Component({
-  standalone: true,
   imports: [CoreModule, RouterModule],
   selector: 'app-room-action-button',
   templateUrl: './room-action-button.component.html',

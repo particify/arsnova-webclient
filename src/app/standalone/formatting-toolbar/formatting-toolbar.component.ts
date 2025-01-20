@@ -10,7 +10,6 @@ import {
 import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
-  standalone: true,
   imports: [CoreModule, FlexModule, MatButtonModule, MatIconModule],
   providers: [provideTranslocoScope('creator')],
   selector: 'app-formatting-toolbar',

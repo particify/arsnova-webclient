@@ -22,7 +22,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   selector: 'app-content-text-participant',
   templateUrl: './content-text-participant.component.html',
   styleUrls: ['./content-text-participant.component.scss'],
-  standalone: true,
   imports: [FlexModule, FormsModule, ContentTextAnswerComponent],
   providers: [provideTranslocoScope('participant')],
 })

@@ -20,6 +20,7 @@ interface DialogData {
   selector: 'app-update-info',
   templateUrl: './update-info.component.html',
   styleUrls: ['./update-info.component.scss'],
+  standalone: false,
 })
 export class UpdateInfoComponent implements OnInit {
   readonly dialogId = 'update-info';

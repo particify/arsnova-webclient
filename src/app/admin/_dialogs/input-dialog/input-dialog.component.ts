@@ -21,6 +21,7 @@ export interface DialogData {
 @Component({
   selector: 'app-input-dialog',
   templateUrl: './input-dialog.component.html',
+  standalone: false,
 })
 export class InputDialogComponent extends UserSearchComponent {
   clicked$ = new EventEmitter<string>();

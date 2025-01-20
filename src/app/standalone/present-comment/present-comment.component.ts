@@ -11,7 +11,6 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
   selector: 'app-present-comment',
   templateUrl: './present-comment.component.html',
   styleUrls: ['./present-comment.component.scss'],
-  standalone: true,
   imports: [FlexModule, LanguageContextDirective, TranslocoPipe],
 })
 export class PresentCommentComponent implements OnInit, OnDestroy {

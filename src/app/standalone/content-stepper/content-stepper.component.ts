@@ -21,7 +21,6 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 
 @Component({
   selector: 'app-content-stepper',
-  standalone: true,
   imports: [
     CoreModule,
     StepperComponent,

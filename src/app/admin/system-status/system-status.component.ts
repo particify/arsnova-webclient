@@ -6,6 +6,7 @@ import { SystemInfoService } from '@app/core/services/http/system-info.service';
   selector: 'app-system-status',
   templateUrl: './system-status.component.html',
   styleUrls: ['./system-status.component.scss'],
+  standalone: false,
 })
 export class SystemStatusComponent implements OnInit {
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.

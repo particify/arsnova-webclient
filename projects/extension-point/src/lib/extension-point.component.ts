@@ -13,6 +13,7 @@ import { ExtensionFactory } from './extension-factory';
   selector: 'lib-extension-point',
   templateUrl: './extension-point.component.html',
   styles: [':host:empty { display: none; }'],
+  standalone: false,
 })
 export class ExtensionPointComponent implements OnInit {
   @Input({ required: true }) extensionId!: string;

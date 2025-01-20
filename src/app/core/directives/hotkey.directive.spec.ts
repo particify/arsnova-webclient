@@ -17,6 +17,7 @@ import { HotkeyDirective } from './hotkey.directive';
   >
     Hotkey Button
   </button>`,
+  standalone: false,
 })
 class TestComponent {
   @ViewChild('button') button!: HTMLButtonElement;

@@ -15,7 +15,6 @@ import {
   provideTranslocoScope,
 } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
-import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
@@ -34,7 +33,6 @@ function setDefaultTrue(value: boolean | undefined): boolean {
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
   styleUrls: ['./live-feedback-page.component.scss'],
-  standalone: true,
   imports: [
     CoreModule,
     LoadingIndicatorComponent,
@@ -45,7 +43,6 @@ function setDefaultTrue(value: boolean | undefined): boolean {
     NgClass,
     MatButton,
     MatIcon,
-    MatTooltip,
     AsyncPipe,
     TranslocoPipe,
   ],

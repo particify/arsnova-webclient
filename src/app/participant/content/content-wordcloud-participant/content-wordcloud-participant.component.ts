@@ -19,7 +19,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 @Component({
   selector: 'app-content-wordcloud-participant',
   templateUrl: './content-wordcloud-participant.component.html',
-  standalone: true,
   imports: [ContentWordcloudAnswerComponent],
   providers: [provideTranslocoScope('participant')],
 })

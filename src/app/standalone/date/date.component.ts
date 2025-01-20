@@ -7,7 +7,6 @@ import { CoreModule } from '@app/core/core.module';
 const TIME_UPDATE_INTERVAL = 60000;
 
 @Component({
-  standalone: true,
   imports: [CoreModule],
   selector: 'app-date',
   templateUrl: './date.component.html',

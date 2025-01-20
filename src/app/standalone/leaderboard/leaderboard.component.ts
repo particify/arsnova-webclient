@@ -14,7 +14,6 @@ interface LeaderboardTableItem {
 }
 
 @Component({
-  standalone: true,
   imports: [CoreModule, OrdinalPipe, FlexLayoutModule],
   selector: 'app-leaderboard',
   templateUrl: './leaderboard.component.html',

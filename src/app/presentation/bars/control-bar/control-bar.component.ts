@@ -71,6 +71,7 @@ export class KeyNavBarItem extends NavBarItem {
   selector: 'app-control-bar',
   templateUrl: './control-bar.component.html',
   styleUrls: ['./control-bar.component.scss'],
+  standalone: false,
 })
 export class ControlBarComponent
   extends NavBarComponent

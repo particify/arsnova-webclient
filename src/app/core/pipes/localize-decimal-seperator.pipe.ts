@@ -1,7 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 
-@Pipe({ name: 'localizeDecimalSeperator' })
+@Pipe({
+  name: 'localizeDecimalSeperator',
+  standalone: false,
+})
 export class LocalizeDecimalSeperatorPipe implements PipeTransform {
   constructor(private translateService: TranslocoService) {}
 

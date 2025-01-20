@@ -3,7 +3,6 @@ import { Component, Input } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
-  standalone: true,
   imports: [CommonModule, MatDividerModule],
   selector: 'app-divider',
   templateUrl: './divider.component.html',

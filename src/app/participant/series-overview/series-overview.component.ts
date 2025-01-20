@@ -59,7 +59,6 @@ interface ContentResultView {
   selector: 'app-series-overview',
   templateUrl: './series-overview.component.html',
   styleUrls: ['./series-overview.component.scss'],
-  standalone: true,
   imports: [
     FlexModule,
     MatCard,

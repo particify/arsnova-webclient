@@ -5,7 +5,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 
 @Component({
   selector: 'app-content-prioritization-answer',
-  standalone: true,
   imports: [CoreModule, RenderedTextComponent],
   templateUrl: './content-prioritization-answer.component.html',
   styleUrls: ['./content-prioritization-answer.component.scss'],

@@ -14,7 +14,6 @@ import {
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @Component({
-  standalone: true,
   imports: [CommonModule, LoadingIndicatorComponent],
   selector: 'app-rendered-text',
   templateUrl: './rendered-text.component.html',

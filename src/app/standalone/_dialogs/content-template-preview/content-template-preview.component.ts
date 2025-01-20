@@ -8,7 +8,6 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-content-template-preview',
-  standalone: true,
   imports: [
     CoreModule,
     ContentPreviewComponent,

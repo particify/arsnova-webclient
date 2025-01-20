@@ -1,11 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-count',
-  standalone: true,
-  imports: [FlexLayoutModule, TranslocoPipe],
+  imports: [FlexLayoutModule],
   templateUrl: './count.component.html',
   styleUrl: './count.component.scss',
 })

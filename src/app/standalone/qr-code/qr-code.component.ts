@@ -20,7 +20,6 @@ import { Room } from '@app/core/models/room';
 
 @Component({
   selector: 'app-qr-code',
-  standalone: true,
   imports: [CoreModule, QrCodeModule, ExtensionPointModule, CopyUrlComponent],
   templateUrl: './qr-code.component.html',
   styleUrls: ['./qr-code.component.scss'],

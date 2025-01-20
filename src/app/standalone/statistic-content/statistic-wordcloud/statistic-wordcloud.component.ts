@@ -18,7 +18,6 @@ import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.com
   selector: 'app-statistic-wordcloud',
   templateUrl: './statistic-wordcloud.component.html',
   styleUrls: ['../text-statistic-content.scss'],
-  standalone: true,
   imports: [
     NgClass,
     FlexModule,

@@ -18,7 +18,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 @Component({
   selector: 'app-content-numeric-participant',
   templateUrl: './content-numeric-participant.component.html',
-  standalone: true,
   imports: [ContentNumericAnswerComponent],
   providers: [provideTranslocoScope('participant')],
 })

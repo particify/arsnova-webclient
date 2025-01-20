@@ -21,7 +21,6 @@ import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.com
   selector: 'app-statistic-text',
   templateUrl: './statistic-text.component.html',
   styleUrls: ['../text-statistic-content.scss'],
-  standalone: true,
   imports: [
     NgClass,
     AnswerListComponent,

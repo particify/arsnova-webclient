@@ -3,6 +3,7 @@ import { FormService } from '@app/core/services/util/form.service';
 
 @Directive({
   selector: '[appDisableForm]',
+  standalone: false,
 })
 export class DisableFormDirective implements OnInit {
   constructor(

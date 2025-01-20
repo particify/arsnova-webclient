@@ -20,7 +20,6 @@ function setDefaultTrue(value: boolean | undefined) {
 }
 @Component({
   selector: 'app-leaderboard-page',
-  standalone: true,
   imports: [
     FlexModule,
     MatIconModule,

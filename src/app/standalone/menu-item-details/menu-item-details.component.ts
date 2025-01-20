@@ -1,11 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-menu-item-details',
-  standalone: true,
-  imports: [FlexLayoutModule, TranslocoPipe],
+  imports: [FlexLayoutModule],
   templateUrl: './menu-item-details.component.html',
   styleUrl: './menu-item-details.component.scss',
 })

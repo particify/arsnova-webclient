@@ -4,7 +4,10 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { HELP_KEY } from '@app/core/services/util/hotkey.service';
 
-@Pipe({ name: 'a11yIntro' })
+@Pipe({
+  name: 'a11yIntro',
+  standalone: false,
+})
 export class A11yIntroPipe implements PipeTransform {
   constructor(private translateService: TranslocoService) {}
 

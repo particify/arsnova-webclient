@@ -10,7 +10,6 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 
 @Component({
   selector: 'app-content-waiting',
-  standalone: true,
   imports: [CoreModule, ContentStepInfoComponent, LoadingButtonComponent],
   templateUrl: './content-waiting.component.html',
   styleUrl: './content-waiting.component.scss',

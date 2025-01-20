@@ -18,7 +18,6 @@ import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-content-group-settings',
-  standalone: true,
   imports: [
     CoreModule,
     SettingsSlideToggleComponent,

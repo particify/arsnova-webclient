@@ -31,7 +31,6 @@ import { Subject, takeUntil } from 'rxjs';
     ContentGroupTemplateComponent,
     LoadingIndicatorComponent,
   ],
-  standalone: true,
   templateUrl: './content-group-template-selection.component.html',
   styleUrls: ['./content-group-template-selection.component.scss'],
 })

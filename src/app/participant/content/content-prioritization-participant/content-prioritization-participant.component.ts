@@ -20,7 +20,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 @Component({
   selector: 'app-content-prioritization-participant',
   templateUrl: './content-prioritization-participant.component.html',
-  standalone: true,
   imports: [ContentPrioritizationAnswerComponent],
   providers: [provideTranslocoScope('participant')],
 })

@@ -37,6 +37,7 @@ export interface Role {
   selector: 'app-access',
   templateUrl: './access.component.html',
   styleUrls: ['./access.component.scss'],
+  standalone: false,
 })
 export class AccessComponent
   extends FormComponent

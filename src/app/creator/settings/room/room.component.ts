@@ -25,6 +25,7 @@ import { take } from 'rxjs';
 @Component({
   selector: 'app-room-edit',
   templateUrl: './room.component.html',
+  standalone: false,
 })
 export class RoomComponent extends FormComponent implements OnInit {
   @Output() saveEvent: EventEmitter<UpdateEvent> =

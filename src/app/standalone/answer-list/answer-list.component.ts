@@ -12,7 +12,6 @@ import { NgClass } from '@angular/common';
   selector: 'app-answer-list',
   templateUrl: './answer-list.component.html',
   styleUrls: ['./answer-list.component.scss'],
-  standalone: true,
   imports: [
     NgClass,
     FlexModule,

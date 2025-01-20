@@ -6,6 +6,7 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
   selector: 'app-user-home',
   templateUrl: './user-home.component.html',
   styleUrls: ['./user-home.component.scss'],
+  standalone: false,
 })
 export class UserHomeComponent implements OnInit {
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.

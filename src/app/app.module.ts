@@ -1,4 +1,9 @@
-import { NgModule, APP_INITIALIZER, ErrorHandler } from '@angular/core';
+import {
+  NgModule,
+  ErrorHandler,
+  inject,
+  provideAppInitializer,
+} from '@angular/core';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from '@app/core/components/register/register.component';
 import { PasswordResetComponent } from '@app/core/components/password-reset/password-reset.component';
@@ -177,24 +182,25 @@ export function initializeApp(appConfig: AppConfig) {
       provide: ENVIRONMENT,
       useValue: environment,
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initAuthenticationService,
-      deps: [AuthenticationService],
-      multi: true,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initConsentService,
-      deps: [ConsentService, ApiConfigService],
-      multi: true,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initWsRoomEventDispatcherService,
-      deps: [WsRoomEventDispatcherService],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+      const initializerFn = initAuthenticationService(
+        inject(AuthenticationService)
+      );
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = initConsentService(
+        inject(ConsentService),
+        inject(ApiConfigService)
+      );
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = initWsRoomEventDispatcherService(
+        inject(WsRoomEventDispatcherService)
+      );
+      return initializerFn();
+    }),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
@@ -284,10 +290,11 @@ export function initConsentService(
   consentService: ConsentService,
   apiConfigService: ApiConfigService
 ) {
-  return () =>
+  return () => {
     apiConfigService
       .getApiConfig$()
       .subscribe((apiConfig) => consentService.init(apiConfig));
+  };
 }
 
 export function initWsRoomEventDispatcherService(

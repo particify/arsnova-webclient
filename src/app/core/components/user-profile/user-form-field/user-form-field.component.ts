@@ -4,6 +4,7 @@ import { FormField } from '@app/core/components/user-profile/user-profile.compon
 @Component({
   selector: 'app-user-form-field',
   templateUrl: './user-form-field.component.html',
+  standalone: false,
 })
 export class UserFormFieldComponent {
   @Input({ required: true }) formField!: FormField;

@@ -24,7 +24,6 @@ interface LeaderboardTableItem {
 }
 
 @Component({
-  standalone: true,
   imports: [CoreModule, OrdinalPipe, MatSortModule],
   providers: [provideTranslocoScope('participant')],
   selector: 'app-content-leaderboard',

@@ -16,6 +16,7 @@ const MAX_ANSWER_OPTIONS = 12;
   selector: 'app-create-answer-option',
   templateUrl: './create-answer-option.component.html',
   styleUrls: ['./create-answer-option.component.scss'],
+  standalone: false,
 })
 export class CreateAnswerOptionComponent extends FormComponent {
   @ViewChild('answerInput') answerInput!: ElementRef;

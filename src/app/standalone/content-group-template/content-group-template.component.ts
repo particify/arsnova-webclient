@@ -9,7 +9,6 @@ import { Room } from '@app/core/models/room';
 import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
 
 @Component({
-  standalone: true,
   imports: [
     CoreModule,
     TemplateLicenseComponent,

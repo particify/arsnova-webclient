@@ -26,6 +26,7 @@ import { ContentState } from '@app/core/models/content-state';
       useExisting: ShortAnswerContentFormComponent,
     },
   ],
+  standalone: false,
 })
 export class ShortAnswerContentFormComponent
   extends FormComponent

@@ -59,7 +59,6 @@ export class NavBarItem {
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss'],
   providers: [FocusModeService],
-  standalone: true,
   imports: [
     FlexModule,
     MatButton,

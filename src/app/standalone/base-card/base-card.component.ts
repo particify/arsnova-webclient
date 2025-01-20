@@ -4,7 +4,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  standalone: true,
   imports: [CommonModule, FlexModule, MatCardModule],
   selector: 'app-base-card',
   templateUrl: './base-card.component.html',

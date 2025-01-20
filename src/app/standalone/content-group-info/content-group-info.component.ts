@@ -10,7 +10,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-content-group-info',
-  standalone: true,
   imports: [
     TranslocoRootModule,
     CommonModule,
