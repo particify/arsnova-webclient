@@ -41,7 +41,9 @@ describe('ContentGroupTemplatePreviewComponent', () => {
   ]);
   mockBaseTemplateService.getContentTemplates.and.returnValue(of([]));
   mockBaseTemplateService.getContentGroupTemplate.and.returnValue(
-    of(new ContentGroupTemplate('name', 'description', 'en', [], 'license'))
+    of(
+      new ContentGroupTemplate('name', 'description', 'en', true, [], 'license')
+    )
   );
 
   const mockContentService = jasmine.createSpyObj(ContentService, [
@@ -150,6 +152,7 @@ describe('ContentGroupTemplatePreviewComponent', () => {
       'name',
       'description',
       'en',
+      true,
       [],
       'cc0-1.0',
       false,

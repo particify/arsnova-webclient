@@ -11,18 +11,18 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
-  selector: 'app-publish-content-group-template',
-  templateUrl: './publish-content-group-template.component.html',
-  styleUrls: ['./publish-content-group-template.component.scss'],
+  selector: 'app-create-content-group-template',
+  templateUrl: './create-content-group-template.component.html',
+  styleUrls: ['./create-content-group-template.component.scss'],
   standalone: false,
 })
-export class PublishContentGroupTemplateComponent extends FormComponent {
+export class CreateContentGroupTemplateComponent extends FormComponent {
   @ViewChild(ContentGroupTemplateEditingComponent)
   templateEditing!: ContentGroupTemplateEditingComponent;
 
   constructor(
     protected formService: FormService,
-    private dialogRef: MatDialogRef<PublishContentGroupTemplateComponent>,
+    private dialogRef: MatDialogRef<CreateContentGroupTemplateComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: { name: string; contentGroupId: string },
     private templateService: TemplateService,

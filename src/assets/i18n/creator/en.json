@@ -155,8 +155,8 @@
     "content-group-name-restriction": "This name is not available.",
     "content-group-name": "Name",
     "export-content-group": "Export",
-    "publish-as-template": "Publish as template",
-    "publishing-template-not-possible": "Please login to publish your question series as templates.",
+    "use-as-template": "Use as template",
+    "create-template-not-possible": "Please login to create templates.",
     "format": "Format",
     "format-choice": "Multiple-Choice",
     "format-scale": "Likert",
@@ -540,7 +540,7 @@
     "changes-saved": "Your changes have been saved."
   },
   "templates": {
-    "publish-template": "Publish template",
-    "content-group-template-creation-info": "With public templates you can share your question series with others under terms of a free license."
+    "create-template": "Create template",
+    "content-group-template-creation-info": "With templates, you can use your question series in your rooms or share them with others under a free license."
   }
 }

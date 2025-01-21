@@ -39,6 +39,7 @@ class MockTemplateService {
         'Template name',
         'This is a description.',
         'en',
+        true,
         [
           { id: 'tagId1', name: 'tag 1', verified: true },
           { id: 'tagId2', name: 'tag 2', verified: true },

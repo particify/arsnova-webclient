@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PublishContentGroupTemplateComponent } from './publish-content-group-template.component';
+import { CreateContentGroupTemplateComponent } from './create-content-group-template.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
@@ -16,9 +16,9 @@ import {
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TemplateService } from '@app/creator/_services/template.service';
 
-describe('PublishContentGroupTemplateComponent', () => {
-  let component: PublishContentGroupTemplateComponent;
-  let fixture: ComponentFixture<PublishContentGroupTemplateComponent>;
+describe('CreateContentGroupTemplateComponent', () => {
+  let component: CreateContentGroupTemplateComponent;
+  let fixture: ComponentFixture<CreateContentGroupTemplateComponent>;
 
   const mockTemplateService = jasmine.createSpyObj('TemplateService', [
     'addContentGroupTemplate',
@@ -26,7 +26,7 @@ describe('PublishContentGroupTemplateComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PublishContentGroupTemplateComponent],
+      declarations: [CreateContentGroupTemplateComponent],
       imports: [getTranslocoModule()],
       providers: [
         {
@@ -52,7 +52,7 @@ describe('PublishContentGroupTemplateComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
-    fixture = TestBed.createComponent(PublishContentGroupTemplateComponent);
+    fixture = TestBed.createComponent(CreateContentGroupTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

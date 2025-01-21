@@ -48,8 +48,9 @@ describe('EditContentGroupTemplateComponent', () => {
               'name',
               'description',
               'en',
+              true,
               [],
-              'licese'
+              'license'
             ),
           },
         },

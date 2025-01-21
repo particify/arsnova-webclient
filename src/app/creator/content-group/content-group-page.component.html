@@ -56,7 +56,7 @@
               </mat-menu>
               <div
                 [matTooltip]="
-                  'creator.content.publishing-template-not-possible' | transloco
+                  'creator.content.create-template-not-possible' | transloco
                 "
                 [matTooltipDisabled]="!isGuest"
                 matTooltipPosition="before"
@@ -64,13 +64,13 @@
                 <button
                   *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
                   mat-menu-item
-                  id="publish-as-template"
-                  (click)="publishAsTemplate()"
+                  id="create-as-template"
+                  (click)="createTemplate()"
                   [disabled]="contents.length < 1 || isGuest"
-                  appTrackInteraction="Publish as template dialog opened"
+                  appTrackInteraction="Create as template dialog opened"
                 >
-                  <mat-icon>public</mat-icon>
-                  {{ 'creator.content.publish-as-template' | transloco }}
+                  <mat-icon>draft</mat-icon>
+                  {{ 'creator.content.use-as-template' | transloco }}
                 </button>
               </div>
               <mat-divider></mat-divider>
@@ -148,8 +148,7 @@
                 </mat-menu>
                 <div
                   [matTooltip]="
-                    'creator.content.publishing-template-not-possible'
-                      | transloco
+                    'creator.content.create-template-not-possible' | transloco
                   "
                   [matTooltipDisabled]="!isGuest"
                   matTooltipPosition="before"
@@ -157,13 +156,13 @@
                   <button
                     *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
                     mat-menu-item
-                    id="publish-as-template"
-                    (click)="publishAsTemplate()"
+                    id="use-as-template"
+                    (click)="createTemplate()"
                     [disabled]="contents.length < 1 || isGuest"
                     appTrackInteraction="Publish as template dialog opened"
                   >
-                    <mat-icon>public</mat-icon>
-                    {{ 'creator.content.publish-as-template' | transloco }}
+                    <mat-icon>draft</mat-icon>
+                    {{ 'creator.content.use-as-template' | transloco }}
                   </button>
                 </div>
                 <mat-divider></mat-divider>

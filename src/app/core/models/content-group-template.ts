@@ -4,15 +4,16 @@ import { TemplateTag } from '@app/core/models/template-tag';
 // TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
 export class ContentGroupTemplate {
   id!: string;
+  templateIds: string[] = [];
   name: string;
-  description: string;
+  published: boolean;
   language: string;
+  description: string;
   tags: TemplateTag[];
   license: string;
   groupType!: GroupType;
   aiGenerated: boolean;
   attribution?: string;
-  templateIds: string[] = [];
   creatorId!: string;
   revision!: string;
 
@@ -20,15 +21,17 @@ export class ContentGroupTemplate {
     name: string,
     description: string,
     language: string,
-    tags: TemplateTag[],
+    published: boolean,
+    tags: TemplateTag[] = [],
     license: string,
     aiGenerated = false,
     attribution?: string,
     templateIds?: string[]
   ) {
     this.name = name;
-    this.description = description;
+    this.published = published;
     this.language = language;
+    this.description = description;
     this.tags = tags;
     this.license = license;
     this.aiGenerated = aiGenerated;
