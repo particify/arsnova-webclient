@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 .name-input {
   margin-top: $spacing-2;

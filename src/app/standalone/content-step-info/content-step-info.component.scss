@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 .step-hint {
   font-size: $m-font-size * 2;

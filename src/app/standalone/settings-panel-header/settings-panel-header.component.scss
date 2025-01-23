@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 .mat-expansion-panel-header-title {
   color: var(--on-surface);

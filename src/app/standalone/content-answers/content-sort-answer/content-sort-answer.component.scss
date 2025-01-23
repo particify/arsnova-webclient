@@ -1,12 +1,12 @@
-@import '../contents-with-options';
+@use '../contents-with-options' as cwo;
 
 $option-padding: 0;
 
 .answer {
   background-color: var(--surface);
-  margin-top: $option-padding-full;
+  margin-top: cwo.$option-padding-full;
   cursor: grabbing;
-  padding: $option-padding $option-padding-full;
+  padding: $option-padding cwo.$option-padding-full;
   border: 2px solid var(--grey-light);
   border-radius: 4px;
 

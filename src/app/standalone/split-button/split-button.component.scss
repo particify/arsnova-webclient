@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 .split-btn-primary {
   border-bottom-right-radius: 0;

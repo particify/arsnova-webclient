@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables' as *;
 
 td:not(:last-of-type) {
   padding-right: 0;

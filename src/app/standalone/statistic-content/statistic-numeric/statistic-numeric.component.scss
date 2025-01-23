@@ -1,5 +1,5 @@
-@import '../statistic-content';
-@import '../../../../variables';
+@use '../../../../variables' as *;
+@use '../statistic-content';
 
 $border-witdth: 1px;
 $border-container-padding: 1.5em;

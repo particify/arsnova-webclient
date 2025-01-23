@@ -1,22 +1,22 @@
 @use '@angular/material' as mat;
 @use 'app/core/theme/app-theme';
 @use 'sass:map';
-@import '../src/styles';
-@import 'app/core/theme/dark-theme/dark-theme';
-@import 'app/core/theme/light-theme/light-theme';
-@import '../src/variables';
-@import '../src/util';
+@use '../src/styles';
+@use 'app/core/theme/dark-theme/dark-theme';
+@use 'app/core/theme/light-theme/light-theme';
+@use '../src/variables' as *;
+@use '../src/util';
 
 @include mat.elevation-classes;
 @include mat.app-background;
-@include mat.all-component-themes($light-theme);
+@include mat.all-component-themes(light-theme.$light-theme);
 
 .theme-light {
-  @include mat.all-component-colors($light-theme);
-  @include app-theme.theme($light-theme);
+  @include mat.all-component-colors(light-theme.$light-theme);
+  @include app-theme.theme(light-theme.$light-theme);
 
   // Fix secondary colors for testing which are broken because material-css-vars lib cannot be used here
-  $secondary-palette: map.get($light-theme, accent);
+  $secondary-palette: map.get(light-theme.$light-theme, accent);
   $secondary: mat.m2-get-color-from-palette($secondary-palette, 800);
   $on-secondary: mat.m2-get-color-from-palette(
     $secondary-palette,
@@ -35,6 +35,6 @@
 }
 
 .theme-dark {
-  @include mat.all-component-colors($dark-theme);
-  @include app-theme.theme($dark-theme, false);
+  @include mat.all-component-colors(dark-theme.$dark-theme);
+  @include app-theme.theme(dark-theme.$dark-theme, false);
 }

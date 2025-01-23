@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
 @use 'sass:color';
-@import '../../../../variables';
+@use '../../../../variables' as *;
 
 $light-primary: mat.m2-define-palette(mat.$m2-deep-purple-palette, 600);
 $light-accent: mat.m2-define-palette(mat.$m2-green-palette, 800);
