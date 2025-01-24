@@ -147,7 +147,7 @@ export class WordcloudComponent implements OnChanges {
     let factor =
       Math.log2((word.size as number) + 1) / Math.log2(this.max() + 1);
     factor *=
-      factor > 0.9 && word.text && word.text.length > 20
+      factor >= 0.6 && word.text && word.text.length >= 20
         ? Math.pow(0.95, word.text?.length - 20)
         : 1;
     return TARGET_FONT_SIZE * factor;
