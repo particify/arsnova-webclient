@@ -86,6 +86,10 @@ export class WordcloudComponent implements OnChanges {
 
   updateWordcloud() {
     const max = this.max();
+    // Reduce scale if there are more than 8 words and no duplicates
+    const reduceScale =
+      this.wordWeights.every((w) => w.size === 1) &&
+      this.wordWeights.length > 8;
     Wordcloud()
       .size([this.width, this.height])
       .words(this.wordWeights.map((d) => ({ text: d.text, size: d.size })))
@@ -98,7 +102,7 @@ export class WordcloudComponent implements OnChanges {
             : 0
       )
       .font(this.fontFamily)
-      .fontSize((d: Wordcloud.Word) => this.fontSize(d))
+      .fontSize((d: Wordcloud.Word) => this.fontSize(d, reduceScale))
       .on('end', (d: Wordcloud.Word[]) => {
         this.determineScaling();
         return (this.renderedWords = d);
@@ -143,9 +147,12 @@ export class WordcloudComponent implements OnChanges {
   /* Calculates the font size based on word frequency (logarithmical). The font
    * size is reduced for long words (> 20 chars) if they would otherwise be
    * rendered with a large font size to ensure they will fit the canvas. */
-  private fontSize(word: Wordcloud.Word) {
+  private fontSize(word: Wordcloud.Word, reduceScale: boolean) {
     let factor =
       Math.log2((word.size as number) + 1) / Math.log2(this.max() + 1);
+    if (reduceScale) {
+      factor *= 0.65;
+    }
     factor *=
       factor >= 0.6 && word.text && word.text.length >= 20
         ? Math.pow(0.95, word.text?.length - 20)
