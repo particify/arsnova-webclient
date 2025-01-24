@@ -91,7 +91,7 @@ export class WordcloudComponent implements OnChanges {
       .words(this.wordWeights.map((d) => ({ text: d.text, size: d.size })))
       .padding(4)
       .rotate((d: Wordcloud.Word) =>
-        d === max ? 0 : ~~(Math.random() * 2) * 90
+        d.size === max ? 0 : ~~(Math.random() * 2) * 90
       )
       .font(this.fontFamily)
       .fontSize((d: Wordcloud.Word) => this.fontSize(d))
