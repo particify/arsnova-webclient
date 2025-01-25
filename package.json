@@ -47,7 +47,7 @@
     "dayjs": "1.11.13",
     "is-docker": "3.0.0",
     "jwt-decode": "4.0.0",
-    "katex": "0.16.19",
+    "katex": "0.16.21",
     "lru-cache": "11.0.2",
     "ng-qrcode": "19.0.1",
     "prismjs": "1.29.0",
