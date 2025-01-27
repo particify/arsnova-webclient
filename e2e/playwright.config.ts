@@ -12,6 +12,7 @@ export default defineConfig({
     browserName: 'chromium',
     trace: 'on',
     headless: false,
+    permissions: ['clipboard-read'],
   },
   projects: [
     {
