@@ -265,7 +265,6 @@
     "starting-multiple-rounds-not-available-for-content-type": "Multiple rounds are not supported for this content format. Delete the answers to restart the content.",
     "publishing-index-info": "Published up to the content {{index}}. Use control key with arrow keys to edit the publishing.",
     "publishing-index-info-live": "Published up to the content {{index}}. Start the next content to publish it.",
-    "correct-options-always-published-with-leaderboard": "Correct answers are always published if the leaderboard is enabled.",
     "reset-answers-to-disable-setting": "Reset the results for this series of questions to deactivate this setting.",
     "reset-group-results": "Reset results",
     "stop-content-to-delete-answers": "Stop content to delete the answers."
