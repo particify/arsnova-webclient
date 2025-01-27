@@ -99,4 +99,42 @@ test.describe('participant answer async quiz', () => {
     await participant.answerTextContent();
     await expect(participant.getHintAfterAbstaining()).toBeVisible();
   });
+
+  test('answer MC content correctly but correct options are not published', async ({
+    page,
+    baseURL,
+  }) => {
+    mockApi.mockContentGroup(
+      'My quiz',
+      ['content1', 'content2'],
+      GroupType.QUIZ,
+      true,
+      false
+    );
+    const participant = new ParticipantContentGroupPage(page, baseURL);
+    await participant.goto('12345678', 'My quiz');
+    await participant.joinQuiz();
+    await participant.answerContent(['b']);
+    await expect(participant.getHintAfterAnswering()).toBeVisible();
+    await expect(participant.getCorrectStateIcon('correct')).toBeHidden();
+  });
+
+  test('answer MC content wrong but correct options are not published', async ({
+    page,
+    baseURL,
+  }) => {
+    mockApi.mockContentGroup(
+      'My quiz',
+      ['content1', 'content2'],
+      GroupType.QUIZ,
+      true,
+      false
+    );
+    const participant = new ParticipantContentGroupPage(page, baseURL);
+    await participant.goto('12345678', 'My quiz');
+    await participant.joinQuiz();
+    await participant.answerContent(['c']);
+    await expect(participant.getHintAfterAnswering()).toBeVisible();
+    await expect(participant.getCorrectStateIcon('wrong')).toBeHidden();
+  });
 });

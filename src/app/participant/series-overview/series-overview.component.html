@@ -167,6 +167,7 @@
                           : ''
                         ) | transloco
                       "
+                      [attr.data-testid]="content.state.toLowerCase() + '-icon'"
                     >
                       {{ getIcon(content.state) }}
                     </mat-icon>
