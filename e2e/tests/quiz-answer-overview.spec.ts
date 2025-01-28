@@ -82,6 +82,8 @@ test.describe('participant answer async quiz', () => {
     await expect(page.getByText('2 / 2')).toBeVisible();
     await expect(page.getByText('my choice content')).toBeVisible();
     await expect(page.getByText('my short answer content')).toBeVisible();
+    await expect(page.getByTestId('correct-icon')).toBeVisible();
+    await expect(page.getByTestId('wrong-icon')).toBeVisible();
   });
 
   test('answer all contents wrong and show overview', async ({
@@ -115,6 +117,8 @@ test.describe('participant answer async quiz', () => {
     await expect(page.getByText('you are in 1st place')).toBeVisible();
     await expect(page.getByText('0%')).toBeVisible();
     await expect(page.getByText('2 / 2')).toBeVisible();
+    await expect(page.getByTestId('correct-icon')).toBeHidden();
+    await expect(page.getByTestId('wrong-icon').first()).toBeVisible();
   });
 
   test('answer all contents correct and show overview and leaderboard', async ({
@@ -150,6 +154,8 @@ test.describe('participant answer async quiz', () => {
     await expect(page.getByText('1000')).toBeVisible();
     await expect(page.getByText('100%')).toBeVisible();
     await expect(page.getByText('2 / 2')).toBeVisible();
+    await expect(page.getByTestId('correct-icon').first()).toBeVisible();
+    await expect(page.getByTestId('wrong-icon')).toBeHidden();
     await expect(page.getByRole('tab', { name: 'contents' })).toBeVisible();
     await expect(page.getByRole('tab', { name: 'leaderboard' })).toBeVisible();
     await participant.switchToLeaderboardTab();
@@ -230,24 +236,72 @@ test.describe('participant answer async quiz', () => {
     mockApi.mockGroupStats(2, 2, 1000, 1000, [
       {
         contentId: 'content1',
-        achievedPoints: 500,
-        maxPoints: 500,
-        state: AnswerResultType.CORRECT,
+        achievedPoints: 0,
+        maxPoints: 0,
+        state: AnswerResultType.NEUTRAL,
         duration: 0,
       },
       {
         contentId: 'content2',
-        achievedPoints: 500,
-        maxPoints: 500,
-        state: AnswerResultType.CORRECT,
+        achievedPoints: 0,
+        maxPoints: 0,
+        state: AnswerResultType.NEUTRAL,
         duration: 0,
       },
     ]);
     mockApi.mockGroupLeaderboard(1000, 'Funny fish');
     await participant.getGoToOverviewButton().click();
+    await expect(page.getByText('you are in 1st place')).toBeHidden();
     await expect(page.getByText('100%')).toBeHidden();
     await expect(page.getByText('correct')).toBeHidden();
     await expect(page.getByText('thanks for your participation')).toBeVisible();
     await expect(page.getByText('2 / 2')).toBeVisible();
+    await expect(page.getByTestId('correct-icon')).toBeHidden();
+    await expect(page.getByTestId('neutral-icon').first()).toBeVisible();
+  });
+
+  test('answer all contents and show overview with correct options not published but leaderboard enabled', async ({
+    page,
+    baseURL,
+  }) => {
+    mockApi.mockContentGroup(
+      'My quiz',
+      ['content1', 'content2'],
+      GroupType.QUIZ,
+      true,
+      false
+    );
+
+    const participant = new ParticipantContentGroupPage(page, baseURL);
+    await participant.goto('12345678', 'My quiz');
+    await participant.joinQuiz();
+    await participant.answerContent(['b']);
+    await participant.goToNextContent();
+    await participant.answerTextContent('abc');
+    mockApi.mockGroupStats(2, 2, 1000, 1000, [
+      {
+        contentId: 'content1',
+        achievedPoints: 0,
+        maxPoints: 0,
+        state: AnswerResultType.NEUTRAL,
+        duration: 0,
+      },
+      {
+        contentId: 'content2',
+        achievedPoints: 0,
+        maxPoints: 0,
+        state: AnswerResultType.NEUTRAL,
+        duration: 0,
+      },
+    ]);
+    mockApi.mockGroupLeaderboard(1000, 'Funny fish');
+    await participant.getGoToOverviewButton().click();
+    await expect(page.getByText('you are in 1st place')).toBeVisible();
+    await expect(page.getByText('thanks for your participation')).toBeHidden();
+    await expect(page.getByText('100%')).toBeHidden();
+    await expect(page.getByText('correct')).toBeHidden();
+    await expect(page.getByText('2 / 2')).toBeVisible();
+    await expect(page.getByTestId('correct-icon')).toBeHidden();
+    await expect(page.getByTestId('neutral-icon').first()).toBeVisible();
   });
 });

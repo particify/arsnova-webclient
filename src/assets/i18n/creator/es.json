@@ -224,7 +224,6 @@
     "seconds-to-answer": "Segundos para responder",
     "group-not-published": "El grupo no se publica.",
     "answering-is-locked": "Contestación bloqueada",
-    "correct-options-always-published-with-leaderboard": "Las respuestas correctas siempre se publican si la tabla de clasificación está activada.",
     "reset-answers-to-disable-setting": "Reinicie los resultados de esta serie de preguntas para desactivar este ajuste.",
     "reset-group-results": "Restablecer resultados",
     "stop-content-to-delete-answers": "Deje de contentarse con borrar las respuestas.",
