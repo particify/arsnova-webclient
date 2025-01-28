@@ -18,6 +18,7 @@
         (item.displayKey | transloco) +
         ')'
       "
+      [attr.data-testid]="item.name + '-btn'"
     >
       <mat-icon [ngClass]="{ 'nav-icon': withText }">{{ item.icon }}</mat-icon>
       @if (withText) {

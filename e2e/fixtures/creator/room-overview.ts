@@ -5,6 +5,7 @@ export class RoomOverviewPage {
   private readonly createSeriesButton: Locator;
   private readonly questionSeriesNameInput: Locator;
   private readonly submitSeriesCreationButton: Locator;
+  private readonly liveFeedbackButton: Locator;
 
   constructor(
     public readonly page: Page,
@@ -21,6 +22,10 @@ export class RoomOverviewPage {
     this.submitSeriesCreationButton = page.getByRole('button', {
       name: 'create',
     });
+    this.liveFeedbackButton = page.getByRole('button', {
+      name: 'Live Feedback',
+      exact: true,
+    });
   }
 
   async goto(shortId: string) {
@@ -29,6 +34,10 @@ export class RoomOverviewPage {
 
   async goToComments() {
     return await this.commentsButton.click();
+  }
+
+  async goToLiveFeedback() {
+    return await this.liveFeedbackButton.click();
   }
 
   async createQuestionSeries(name: string, type: string) {
