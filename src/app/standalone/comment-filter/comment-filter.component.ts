@@ -14,6 +14,7 @@ export class CommentFilterComponent {
   @Input() period = CommentPeriod.ALL;
   @Input() categories?: string[];
   @Input() selectedCategory?: string;
+  @Input() useIconButton = true;
 
   @Output() filterSelected = new EventEmitter<CommentFilter>();
   @Output() periodSelected = new EventEmitter<CommentPeriod>();
@@ -27,6 +28,7 @@ export class CommentFilterComponent {
     if (type === this.currentFilter) {
       this.filterSelected.emit(undefined);
     } else {
+      this.categorySelected.emit();
       this.filterSelected.emit(type);
     }
   }
@@ -41,6 +43,7 @@ export class CommentFilterComponent {
     } else {
       this.selectedCategory = undefined;
     }
+    this.filterSelected.emit();
     this.categorySelected.emit(this.selectedCategory);
   }
 }

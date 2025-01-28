@@ -332,6 +332,7 @@
     "comment-deleted": "The post has been deleted.",
     "filter-comments": "Filter posts",
     "sort-comments": "Sort posts",
+    "filter-all": "All",
     "filter-favorite": "Favorite",
     "filter-correct": "Affirmed",
     "filter-wrong": "Negated",

@@ -44,6 +44,8 @@ import { PresentationStepPosition } from '@app/core/models/events/presentation-s
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
+import { CommentFilter } from '@app/core/models/comment-filter.enum';
+import { CommentPeriod } from '@app/core/models/comment-period.enum';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -94,6 +96,10 @@ export class ControlBarComponent
   joinUrl?: string;
   currentCommentZoom = 100;
   currentCommentSort?: CommentSort;
+  currentCommentFilter?: CommentFilter;
+  currentCommentPeriod: CommentPeriod;
+  currentCommentCategory?: string;
+  commentCategories?: string[];
   commentSortTypes = [CommentSort.TIME, CommentSort.VOTEDESC];
   contentIndex = 0;
   content?: Content;
@@ -168,6 +174,9 @@ export class ControlBarComponent
     );
     this.showBar();
     this.setBarTimer(3000);
+    this.currentCommentPeriod =
+      this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||
+      CommentPeriod.ALL;
   }
 
   ngOnDestroy() {
@@ -200,6 +209,7 @@ export class ControlBarComponent
       lastSort && lastSort !== CommentSort.VOTEASC
         ? lastSort
         : CommentSort.TIME;
+    this.commentCategories = this.room.extensions?.comments?.tags;
     this.route.data.subscribe((data) => {
       this.surveyStarted = !data.room.settings.feedbackLocked;
       this.setSurveyState();
@@ -561,6 +571,21 @@ export class ControlBarComponent
   changeCommentSort(sort: CommentSort) {
     this.currentCommentSort = sort;
     this.presentationService.updateCommentSort(this.currentCommentSort);
+  }
+
+  changeCommentFilter(filter: CommentFilter) {
+    this.currentCommentFilter = filter;
+    this.presentationService.updateCommentFilter(this.currentCommentFilter);
+  }
+
+  changeCommentCategory(category: string) {
+    this.currentCommentCategory = category;
+    this.presentationService.updateCommentCategory(this.currentCommentCategory);
+  }
+
+  changeCommentPeriod(period: CommentPeriod) {
+    this.currentCommentPeriod = period;
+    this.presentationService.updateCommentPeriod(this.currentCommentPeriod);
   }
 
   private registerHotkeys() {
