@@ -10,6 +10,7 @@ import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 describe('StatisticWordcloudComponent', () => {
   let component: StatisticWordcloudComponent;
@@ -39,6 +40,14 @@ describe('StatisticWordcloudComponent', () => {
   mockContentService.getAnswersDeleted.and.returnValue(of({}));
   mockContentService.getAnswerBanned.and.returnValue(of('Test'));
 
+  const presentationService = jasmine.createSpyObj(PresentationService, [
+    'getWordcloudVisualizationChanged',
+    'updateWordcloudVisualization',
+  ]);
+  presentationService.getWordcloudVisualizationChanged.and.returnValue(
+    of(true)
+  );
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [getTranslocoModule(), StatisticWordcloudComponent],
@@ -51,6 +60,7 @@ describe('StatisticWordcloudComponent', () => {
           provide: ThemeService,
           useClass: MockThemeService,
         },
+        { provide: PresentationService, useValue: presentationService },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

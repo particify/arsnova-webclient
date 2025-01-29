@@ -13,6 +13,7 @@ import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { FlexModule } from '@angular/flex-layout';
 import { NgClass } from '@angular/common';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 @Component({
   selector: 'app-statistic-wordcloud',
@@ -36,9 +37,12 @@ export class StatisticWordcloudComponent
 
   answerList: TextStatistic[] = [];
 
+  rotateWords?: boolean;
+
   constructor(
     protected contentService: ContentService,
-    protected translateService: TranslocoService
+    protected translateService: TranslocoService,
+    private presentationService: PresentationService
   ) {
     super(contentService, translateService);
   }
@@ -56,6 +60,14 @@ export class StatisticWordcloudComponent
         this.filterAnswers(answer);
       }
     });
+    this.rotateWords = this.settings.rotateWordcloudItems;
+    this.presentationService.updateWordcloudVisualization(this.rotateWords);
+    this.presentationService
+      .getWordcloudVisualizationChanged()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((rotateWords) => {
+        this.rotateWords = rotateWords;
+      });
   }
 
   ngOnDestroy() {

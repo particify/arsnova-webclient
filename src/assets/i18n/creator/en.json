@@ -198,6 +198,8 @@
     "group-published": "Question series has been published.",
     "group-locked": "Question series has been locked.",
     "preferences": "Display settings",
+    "rotate-words": "Rotate words",
+    "do-not-rotate-words": "Don't rotate words",
     "reset-banned-answers": "Reset banned keywords",
     "banned-keywords-reset": "Banned keywords have been reset.",
     "start-new-round": "Start new round",

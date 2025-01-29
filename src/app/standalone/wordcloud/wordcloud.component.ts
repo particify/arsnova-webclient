@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   Component,
   ElementRef,
   Input,
@@ -41,6 +42,7 @@ export class WordCloudItem {
 })
 export class WordcloudComponent implements OnChanges {
   @Input({ required: true }) wordWeights!: WordCloudItem[];
+  @Input({ transform: booleanAttribute }) rotateWords?: boolean;
   @ViewChild('wordcloud') elementRef!: ElementRef<SVGGeometryElement>;
 
   width: number = RENDER_WIDTH;
@@ -94,13 +96,7 @@ export class WordcloudComponent implements OnChanges {
       .size([this.width, this.height])
       .words(this.wordWeights.map((d) => ({ text: d.text, size: d.size })))
       .padding(4)
-      .rotate((d: Wordcloud.Word) =>
-        d.size === max || (d.text && d.text.length >= 10)
-          ? 0
-          : Math.random() > 0.5
-            ? 90
-            : 0
-      )
+      .rotate((d: Wordcloud.Word) => this.getRotation(d, max))
       .font(this.fontFamily)
       .fontSize((d: Wordcloud.Word) => this.fontSize(d, reduceScale))
       .on('end', (d: Wordcloud.Word[]) => {
@@ -164,5 +160,19 @@ export class WordcloudComponent implements OnChanges {
     return this.wordWeights
       .map((w) => w.size)
       .reduce((a, b) => Math.max(a, b), 0);
+  }
+
+  /* Determinates the rotation of a word in degree. This should be set to 0
+   * if rotation is disabled, it's the most common word or word size is larger than 10.
+   * Otherwise 50% of the words should be rotated by 90 degrees.
+  . */
+  private getRotation(word: Wordcloud.Word, maxCount: number): number {
+    return !this.rotateWords ||
+      word.size === maxCount ||
+      (word.text && word.text.length >= 10)
+      ? 0
+      : Math.random() > 0.5
+        ? 90
+        : 0;
   }
 }

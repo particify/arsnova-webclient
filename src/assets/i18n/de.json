@@ -165,7 +165,9 @@
     "answers-below-chart": "Antwortoptionen unter Diagrammen anzeigen",
     "answers-below-chart-info": "Antwortoptionen nicht als Liste, sondern direkt unter dem Diagramm angezeigt.",
     "show-results-directly": "Ergebnisse sofort anzeigen",
-    "show-results-directly-info": "Die Ergebnisse von Inhalten werden bei der Präsentation direkt angezeigt."
+    "show-results-directly-info": "Die Ergebnisse von Inhalten werden bei der Präsentation direkt angezeigt.",
+    "rotate-wordcloud-items": "Wörter in Wortwolke drehen",
+    "rotate-wordcloud-items-info": "Einige Wörter in Wortwolken werden um 90 Grad gedreht."
   },
   "room-list": {
     "a11y-join-room": "Den Raum {{room}} mit der Nummer {{id}} in der Rolle {{role}} betreten.",

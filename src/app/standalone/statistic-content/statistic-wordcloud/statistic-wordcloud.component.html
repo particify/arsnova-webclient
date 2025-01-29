@@ -12,7 +12,10 @@
   @if (answersVisible) {
     <div>
       @if (!showModeration) {
-        <app-wordcloud [wordWeights]="wordWeights"></app-wordcloud>
+        <app-wordcloud
+          [wordWeights]="wordWeights"
+          [rotateWords]="rotateWords"
+        ></app-wordcloud>
       }
       @if (showModeration) {
         <app-answer-list
