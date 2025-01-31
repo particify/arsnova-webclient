@@ -5294,7 +5294,7 @@ __metadata:
     karma-viewport: "npm:1.0.9"
     katex: "npm:0.16.21"
     lru-cache: "npm:11.0.2"
-    ng-packagr: "npm:19.1.1"
+    ng-packagr: "npm:19.1.2"
     ng-qrcode: "npm:19.0.1"
     playwright-ng-schematics: "npm:1.2.2"
     prettier: "npm:3.4.2"
@@ -10505,9 +10505,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ng-packagr@npm:19.1.1":
-  version: 19.1.1
-  resolution: "ng-packagr@npm:19.1.1"
+"ng-packagr@npm:19.1.2":
+  version: 19.1.2
+  resolution: "ng-packagr@npm:19.1.2"
   dependencies:
     "@rollup/plugin-json": "npm:^6.1.0"
     "@rollup/wasm-node": "npm:^4.24.0"
@@ -10532,7 +10532,7 @@ __metadata:
     sass: "npm:^1.81.0"
   peerDependencies:
     "@angular/compiler-cli": ^19.0.0 || ^19.1.0-next.0 || ^19.2.0-next.0
-    tailwindcss: ^2.0.0 || ^3.0.0
+    tailwindcss: ^2.0.0 || ^3.0.0 || ^4.0.0
     tslib: ^2.3.0
     typescript: ">=5.5 <5.8"
   dependenciesMeta:
@@ -10543,7 +10543,7 @@ __metadata:
       optional: true
   bin:
     ng-packagr: cli/main.js
-  checksum: 10c0/a66392dc48c53ff1579c0bcd20dd61484a306f150df10a7a3cdebbcc029c0def8e7f817266b43c3f16ac3b8cd7eeac2ee374b9488c5798faf2cb8afa5a8040ee
+  checksum: 10c0/901450bc60949a463a8f10697b0ff6240816881480218e534e6a4edf09c6c9aa8626391e56bf295dd67f3d12885dfddcb819cb1b1d0ec915ccb21c5efb8679f3
   languageName: node
   linkType: hard
 
