@@ -48,6 +48,7 @@ class MockTemplateService {
         'Template name',
         'This is a description.',
         'en',
+        true,
         [
           { id: 'tagId1', name: 'tag 1', verified: true },
           { id: 'tagId2', name: 'tag 2', verified: true },
@@ -62,6 +63,7 @@ class MockTemplateService {
         'Another template name',
         'This is another description.',
         'en',
+        true,
         [
           { id: 'tagId1', name: 'tag 3', verified: true },
           { id: 'tagId2', name: 'tag 4', verified: true },
@@ -76,6 +78,7 @@ class MockTemplateService {
         'Template name',
         'This is a description.',
         'en',
+        true,
         [
           { id: 'tagId1', name: 'tag 1', verified: true },
           { id: 'tagId2', name: 'tag 3', verified: true },

@@ -60,7 +60,7 @@
     "present": "Präsentieren",
     "present-description": "Präsentiere die aktuelle Ansicht.",
     "presentation-mode": "Präsentationsmodus",
-    "public-templates": "Öffentliche Vorlagen"
+    "templates": "Vorlagen"
   },
   "home-page": {
     "a11y-join-button": "Betritt den Raum, von welchem du die Nummer eingegeben hast.",
@@ -269,7 +269,7 @@
     "admin": "Administration",
     "presentation-mode": "Präsentation",
     "account": "Mein Account",
-    "templates": "Öffentliche Vorlagen"
+    "templates": "Vorlagen"
   },
   "comment-export": {
     "answer": "Antwort",
@@ -554,6 +554,8 @@
     "create-new-tag": "Neuen Tag erstellen",
     "no-special-characters-allowed": "Keine Sonderzeichen erlaubt.",
     "language": "Sprache",
+    "publish-template": "Vorlage veröffentlichen",
+    "publish-template-info": "Teile deine Vorlage mit anderen unter einer freien Lizenz.",
     "license": "Lizenz",
     "attribution": "Namensnennung",
     "optional": "optional",
@@ -568,7 +570,7 @@
     "license-description-cc-by-nc-sa-4-0": "Erlaubt anderen, die Vorlage für nicht-kommerzielle Zwecke zu verbreiten, zu remixen, anzupassen und darauf aufzubauen, solange der Urheber genannt wird. Vorlagen, die auf dieser basieren, müssen unter denselben Bedingungen lizenziert werden.",
     "is-ai-generated": "Diese Vorlage wurde mit Hilfe von KI erstellt.",
     "ai-generated-hint": "Erstellt mit Hilfe von KI",
-    "publish": "Veröffentlichen",
+    "create": "Erstellen",
     "template-published": "Deine Vorlage wurde veröffentlicht.",
     "public-templates": "Öffentliche Vorlagen",
     "my-templates": "Meine Vorlagen",

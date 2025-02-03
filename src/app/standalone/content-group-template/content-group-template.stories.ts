@@ -88,10 +88,30 @@ const tags = [
   { id: 'tagId3', name: 'tag 3', verified: true },
 ];
 
+const privateTemplate = new ContentGroupTemplate(
+  'Template name',
+  'This is a description.',
+  'en',
+  false,
+  tags,
+  'CC-1.0',
+  false,
+  undefined,
+  ['templateId1', 'templateId2', 'templateId3', 'templateId4']
+);
+privateTemplate.groupType = GroupType.MIXED;
+
+export const ContentGroupTemplatePrivate: Story = {
+  args: {
+    template: privateTemplate,
+  },
+};
+
 const templateWithAttribution = new ContentGroupTemplate(
   'Template name',
   'This is a description.',
   'en',
+  true,
   tags,
   'CC-BY-4.0',
   false,
@@ -110,6 +130,7 @@ const templateWithoutAttribution = new ContentGroupTemplate(
   'Template name',
   'This is a description.',
   'en',
+  true,
   tags,
   'CC0-1.0',
   false,
@@ -128,6 +149,7 @@ const templateWithAttributionAiGenerated = new ContentGroupTemplate(
   'Template name',
   'This is a description.',
   'en',
+  true,
   tags,
   'CC-BY-4.0',
   true,
@@ -146,6 +168,7 @@ const templateWithOneContent = new ContentGroupTemplate(
   'Template name',
   'This is a description.',
   'en',
+  true,
   tags,
   'CC-BY-4.0',
   false,
@@ -174,6 +197,7 @@ const templateWithManyLongTags = new ContentGroupTemplate(
   'Template name',
   'This is a description.',
   'en',
+  true,
   longTags,
   'CC-BY-4.0',
   false,

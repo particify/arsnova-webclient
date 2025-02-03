@@ -26,7 +26,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
+import { CreateContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/create-content-group-template/create-content-group-template.component';
 import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
 import { TranslocoService } from '@jsverse/transloco';
 import {
@@ -304,8 +304,8 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  publishAsTemplate() {
-    this.dialogService.openDialog(PublishContentGroupTemplateComponent, {
+  createTemplate() {
+    this.dialogService.openDialog(CreateContentGroupTemplateComponent, {
       width: '600px',
       data: {
         name: this.contentGroup.name,

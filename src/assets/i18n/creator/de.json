@@ -155,8 +155,8 @@
     "content-group-name-restriction": "Dieser Name ist nicht verfügbar.",
     "content-group-name": "Name",
     "export-content-group": "Export",
-    "publish-as-template": "Als Vorlage veröffentlichen",
-    "publishing-template-not-possible": "Bitte melde dich an, um deine Fragenserien als Vorlagen zu veröffentlichen.",
+    "use-as-template": "Als Vorlage verwenden",
+    "create-template-not-possible": "Bitte melde dich an, um Vorlagen zu erstellen.",
     "format": "Format",
     "format-choice": "Multiple-Choice",
     "format-scale": "Likert",
@@ -539,7 +539,7 @@
     "changes-saved": "Deine Änderungen wurden gespeichert."
   },
   "templates": {
-    "publish-template": "Vorlage veröffentlichen",
-    "content-group-template-creation-info": "Mit öffentlichen Vorlagen kannst du deine Fragenserien unter einer freien Lizenz mit anderen teilen."
+    "create-template": "Vorlage erstellen",
+    "content-group-template-creation-info": "Mit Vorlagen kannst du deine Fragenserien in deinen Räumen nutzen oder unter einer freien Lizenz mit anderen teilen."
   }
 }

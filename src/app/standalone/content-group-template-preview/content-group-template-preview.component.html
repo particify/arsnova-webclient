@@ -64,22 +64,26 @@
           <app-content-group-info
             [groupType]="template.groupType"
           ></app-content-group-info>
-          <app-template-license
-            [ownerName]="template.attribution"
-            [license]="template.license"
-            [showLink]="true"
-            [aiGenerated]="template.aiGenerated"
-          ></app-template-license>
+          @if (template.published) {
+            <app-template-license
+              [ownerName]="template.attribution"
+              [license]="template.license"
+              [showLink]="true"
+              [aiGenerated]="template.aiGenerated"
+            ></app-template-license>
+          }
         </div>
-        <div fxLayout="row" fxLayoutAlign="start center">
-          <mat-chip-set>
-            @for (tag of template.tags; track tag) {
-              <mat-chip>
-                {{ tag.name }}
-              </mat-chip>
-            }
-          </mat-chip-set>
-        </div>
+        @if (template.published) {
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-chip-set>
+              @for (tag of template.tags; track tag) {
+                <mat-chip>
+                  {{ tag.name }}
+                </mat-chip>
+              }
+            </mat-chip-set>
+          </div>
+        }
         @if (isLoadingContents) {
           <app-loading-indicator></app-loading-indicator>
         }

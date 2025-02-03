@@ -192,8 +192,8 @@
     "correct-answer": "Respuesta correcta",
     "numeric-minimum-has-to-be-lower-than-maximum": "El mínimo debe ser menor que el máximo.",
     "attribution-info-slide": "Diapositiva informativa de atribución",
-    "publish-as-template": "Publicar como plantilla",
-    "publishing-template-not-possible": "Inicie sesión para publicar sus series de preguntas como plantillas.",
+    "use-as-template": "Utilizar como plantilla",
+    "create-template-not-possible": "Inicie sesión para crear plantillas.",
     "format-numeric": "Encontrar el número",
     "format-numeric-description": "Se define un intervalo numérico en el que los participantes pueden responder.",
     "attributions": "Atribuciones",
@@ -539,7 +539,7 @@
     "changes-saved": "Tus cambios han sido guardados."
   },
   "templates": {
-    "publish-template": "Publicar plantilla",
-    "content-group-template-creation-info": "Con las plantillas públicas puedes compartir tus series de preguntas con otras personas bajo los términos de una licencia libre."
+    "create-template": "Crear plantilla",
+    "content-group-template-creation-info": "Con las plantillas, puedes utilizar tus series de preguntas en tus salas o compartirlas con otras personas con una licencia gratuita."
   }
 }

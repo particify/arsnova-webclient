@@ -59,7 +59,7 @@
     "room-settings": "Configuración de la sala",
     "present": "Presentar",
     "presentation-mode": "Modo de presentación",
-    "public-templates": "Plantillas públicas",
+    "templates": "Plantillas",
     "present-description": "Presenta la vista actual."
   },
   "home-page": {
@@ -269,7 +269,7 @@
     "admin": "Administración",
     "presentation-mode": "Modo de presentación",
     "account": "Mi cuenta",
-    "templates": "Plantillas públicas"
+    "templates": "Plantillas"
   },
   "comment-export": {
     "answer": "Respuesta",
@@ -561,7 +561,7 @@
     "license-description-cc-by-nc-sa-4-0": "Permite que otros distribuyan, remezclen, adapten y desarrollen la plantilla con fines no comerciales, siempre que se cite al creador. Las plantillas que se basen en este modelo deben tener las mismas condiciones de licencia.",
     "is-ai-generated": "Esta plantilla se creó con ayuda de la IA.",
     "ai-generated-hint": "Creado con ayuda de la IA",
-    "publish": "Publicar",
+    "create": "Crear",
     "template-published": "Su plantilla ha sido publicada.",
     "public-templates": "Plantillas públicas",
     "my-templates": "Mis plantillas",
@@ -577,6 +577,8 @@
     "login-to-report-template": "Inicia sesión para informar de esta plantilla.",
     "edit-template": "Editar",
     "language": "Idioma",
+    "publish-template": "Publicar plantilla",
+    "publish-template-info": "Comparta su plantilla con otros usuarios con una licencia gratuita.",
     "license": "Licencia",
     "please-fill-name": "Introduzca un nombre.",
     "please-fill-description": "Introduzca una descripción.",

@@ -19,6 +19,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TranslocoService } from '@jsverse/transloco';
@@ -28,6 +29,7 @@ import { TranslocoService } from '@jsverse/transloco';
     CoreModule,
     TemplateLanguageSelectionComponent,
     TemplateTagSelectionComponent,
+    SettingsSlideToggleComponent,
   ],
   selector: 'app-content-group-template-editing',
   templateUrl: './content-group-template-editing.component.html',
@@ -49,6 +51,7 @@ export class ContentGroupTemplateEditingComponent
   selectedTags: TemplateTag[] = [];
   selectedLicense: string;
   selectedLang: string;
+  published = false;
   langChanged = new EventEmitter<string>();
 
   licenseKeys = Array.from(LICENSES.keys());
@@ -67,10 +70,11 @@ export class ContentGroupTemplateEditingComponent
   ngOnInit(): void {
     if (this.template) {
       this.name = this.template.name;
+      this.published = this.template.published;
       this.description = this.template.description;
       this.attribution = this.template.attribution;
       this.aiGenerated = this.template.aiGenerated;
-      this.selectedTags = this.template.tags;
+      this.selectedTags = this.template.tags ?? [];
       this.selectedLicense = this.template.license;
       this.selectedLang = this.template.language;
     }
@@ -105,15 +109,28 @@ export class ContentGroupTemplateEditingComponent
     this.selectedTags = tags;
   }
 
+  checkInput(control: string) {
+    if (this.formGroup.get(control)?.invalid) {
+      const invalidInput = this.inputs.find((i) => i.id === control + 'Input');
+      if (invalidInput) {
+        invalidInput.focus();
+        return control;
+      }
+    }
+  }
+
   getTemplate(): ContentGroupTemplate | undefined {
     let invalidInputName: string | undefined;
     for (const control in this.formGroup.controls) {
-      if (this.formGroup.get(control)?.invalid && !invalidInputName) {
-        this.inputs.find((i) => i.id === control + 'Input')?.focus();
-        invalidInputName = control;
+      if (!invalidInputName) {
+        invalidInputName = this.checkInput(control);
       }
     }
-    if (this.selectedTags.length === 0 && !invalidInputName) {
+    if (
+      this.published &&
+      this.selectedTags?.length === 0 &&
+      !invalidInputName
+    ) {
       this.templateTagSelectionComponent.tagInput.nativeElement.focus();
       invalidInputName = 'tags';
     }
@@ -124,12 +141,17 @@ export class ContentGroupTemplateEditingComponent
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
+    return this.prepareTemplate();
+  }
+
+  prepareTemplate() {
     const template = new ContentGroupTemplate(
       this.name,
       this.description,
       this.selectedLang,
+      this.published,
       this.selectedTags,
-      this.selectedLicense,
+      this.published ? this.selectedLicense : this.licenseKeys[0],
       this.aiGenerated,
       this.attribution
     );

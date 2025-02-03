@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{ 'creator.templates.publish-template' | transloco }}</h2>
+<h2 mat-dialog-title>{{ 'creator.templates.create-template' | transloco }}</h2>
 <mat-dialog-content fxLayout="column" fxLayoutGap="20px">
   <p class="info">
     {{ 'creator.templates.content-group-template-creation-info' | transloco }}
@@ -14,6 +14,6 @@
   <app-loading-button
     [isDialog]="true"
     (clicked)="publish()"
-    name="templates.publish"
+    name="templates.create"
   ></app-loading-button>
 </mat-dialog-actions>

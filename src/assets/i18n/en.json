@@ -60,7 +60,7 @@
     "present": "Present",
     "present-description": "Present the current view.",
     "presentation-mode": "Presentation mode",
-    "public-templates": "Public templates"
+    "templates": "Templates"
   },
   "home-page": {
     "a11y-join-button": "Enter the room with the specified room number.",
@@ -269,7 +269,7 @@
     "admin": "Administration",
     "presentation-mode": "Presentation",
     "account": "My account",
-    "templates": "Public templates"
+    "templates": "Templates"
   },
   "comment-export": {
     "answer": "Answer",
@@ -554,6 +554,8 @@
     "create-new-tag": "Create new tag",
     "no-special-characters-allowed": "No special characters allowed.",
     "language": "Language",
+    "publish-template": "Publish template",
+    "publish-template-info": "Share your template with others under a free license.",
     "license": "License",
     "attribution": "Attribution",
     "optional": "optional",
@@ -568,7 +570,7 @@
     "license-description-cc-by-nc-sa-4-0": "Allows others to distribute, remix, adapt, and build upon the template  for noncommercial purposes as long as as attribution is given to the creator. Templates based on this must be licensed under identical terms.",
     "is-ai-generated": "This template was created with the help of AI.",
     "ai-generated-hint": "Created with the help of AI",
-    "publish": "Publish",
+    "create": "Create",
     "template-published": "Your template has been published.",
     "public-templates": "Public templates",
     "my-templates": "My templates",

@@ -3,7 +3,6 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { PublishContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/publish-content-group-template/publish-content-group-template.component';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
@@ -29,7 +28,7 @@ export class EditContentGroupTemplateComponent extends FormComponent {
 
   constructor(
     protected formService: FormService,
-    private dialogRef: MatDialogRef<PublishContentGroupTemplateComponent>,
+    private dialogRef: MatDialogRef<EditContentGroupTemplateComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: { template: ContentGroupTemplate },
     private templateService: BaseTemplateService,

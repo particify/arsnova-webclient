@@ -56,6 +56,7 @@ describe('ContentGroupTemplateSelectionComponent', () => {
         'name',
         'description',
         'en',
+        true,
         [],
         'CC0-1.0',
         false,
