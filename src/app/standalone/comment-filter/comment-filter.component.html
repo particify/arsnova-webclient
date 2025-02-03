@@ -1,0 +1,182 @@
+@if (useIconButton) {
+  <button
+    id="filter-button"
+    mat-icon-button
+    [matMenuTriggerFor]="filterMenu"
+    [matTooltip]="'comment-list.filter-comments' | transloco"
+    appHotkey="4"
+  >
+    <mat-icon class="bar-icon">filter_alt</mat-icon>
+  </button>
+} @else {
+  <button
+    mat-button
+    style="height: 100%; opacity: 1"
+    [matMenuTriggerFor]="filterMenu"
+  >
+    {{
+      selectedCategory ??
+        (currentFilter
+          ? 'comment-list.filter-' + currentFilter
+          : period !== CommentPeriod.ALL
+            ? 'comment-list.select-' + period
+            : 'comment-list.filter-all') | transloco
+    }}
+    <mat-icon>filter_alt</mat-icon>
+  </button>
+}
+<mat-menu
+  #filterMenu="matMenu"
+  appTrackInteraction="Comment filter menu opened"
+>
+  <button
+    mat-menu-item
+    (click)="filter(CommentFilter.FAVORITE)"
+    [attr.aria-label]="'comment-list.a11y-filter-favorite' | transloco"
+    appTrackInteraction="Comments filtered"
+    appTrackName="favorite"
+  >
+    <mat-icon
+      [ngClass]="{
+        'yellow icon-important': currentFilter === CommentFilter.FAVORITE,
+      }"
+      >grade</mat-icon
+    >
+    <span
+      [ngClass]="{
+        'selected-menu-item': currentFilter === CommentFilter.FAVORITE,
+      }"
+      >{{ 'comment-list.filter-favorite' | transloco }}</span
+    >
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="filter(CommentFilter.ANSWERED)"
+    [attr.aria-label]="'comment-list.a11y-filter-answer' | transloco"
+    appTrackInteraction="Comments filtered"
+    appTrackName="answer"
+  >
+    <mat-icon
+      [ngClass]="{
+        'blue icon-important': currentFilter === CommentFilter.ANSWERED,
+      }"
+      >comment</mat-icon
+    >
+    <span
+      [ngClass]="{
+        'selected-menu-item': currentFilter === CommentFilter.ANSWERED,
+      }"
+      >{{ 'comment-list.filter-answered' | transloco }}</span
+    >
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="filter(CommentFilter.CORRECT)"
+    [attr.aria-label]="'comment-list.a11y-filter-correct' | transloco"
+    appTrackInteraction="Comments filtered"
+    appTrackName="correct"
+  >
+    <mat-icon
+      [ngClass]="{
+        'green icon-important': currentFilter === CommentFilter.CORRECT,
+      }"
+      >check_circle</mat-icon
+    >
+    <span
+      [ngClass]="{
+        'selected-menu-item': currentFilter === CommentFilter.CORRECT,
+      }"
+      >{{ 'comment-list.filter-correct' | transloco }}</span
+    >
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="filter(CommentFilter.WRONG)"
+    [attr.aria-label]="'comment-list.a11y-filter-wrong' | transloco"
+    appTrackInteraction="Comments filtered"
+    appTrackName="wrong"
+  >
+    <mat-icon
+      [ngClass]="{
+        'red icon-important': currentFilter === CommentFilter.WRONG,
+      }"
+      >cancel</mat-icon
+    >
+    <span
+      [ngClass]="{
+        'selected-menu-item': currentFilter === CommentFilter.WRONG,
+      }"
+      >{{ 'comment-list.filter-wrong' | transloco }}</span
+    >
+  </button>
+
+  <button mat-menu-item [matMenuTriggerFor]="timeMenu">
+    <mat-icon>access_time</mat-icon>
+    <span
+      [ngClass]="{
+        'selected-menu-item': period !== CommentPeriod.ALL,
+      }"
+      >{{ 'comment-list.filter-time' | transloco }}</span
+    >
+  </button>
+
+  <div
+    [matTooltip]="'comment-list.no-categories-in-this-room' | transloco"
+    [matTooltipDisabled]="!!categories"
+  >
+    <button
+      [disabled]="!categories"
+      mat-menu-item
+      [matMenuTriggerFor]="categoriesMenu"
+    >
+      <mat-icon>sell</mat-icon>
+      <span
+        [ngClass]="{
+          'selected-menu-item': selectedCategory,
+        }"
+        >{{ 'comment-list.filter-categories' | transloco }}</span
+      >
+    </button>
+  </div>
+</mat-menu>
+
+<mat-menu #timeMenu="matMenu">
+  @for (periodItem of periodsList; track periodItem) {
+    <div>
+      <button
+        mat-menu-item
+        (click)="setTimePeriod(periodItem)"
+        [attr.aria-label]="'comment-list.a11y-select-' + periodItem | transloco"
+        appTrackInteraction="Comments filtered (period)"
+        [appTrackName]="periodItem"
+      >
+        <span [ngClass]="{ 'selected-menu-item': periodItem === period }">{{
+          'comment-list.select-' + periodItem | transloco
+        }}</span>
+      </button>
+    </div>
+  }
+</mat-menu>
+
+<mat-menu #categoriesMenu="matMenu">
+  @for (category of categories; track category) {
+    <div>
+      <button
+        mat-menu-item
+        (click)="selectCategory(category)"
+        appTrackInteraction="Comments filtered (category)"
+        [appTrackName]="category"
+      >
+        <span
+          [ngClass]="{
+            'selected-menu-item': selectedCategory === category,
+          }"
+          >{{ category }}</span
+        >
+      </button>
+    </div>
+  }
+</mat-menu>

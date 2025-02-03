@@ -14,6 +14,7 @@ import { HotkeyActionButtonComponent } from '@app/standalone/hotkey-action-butto
 import { PublishContentGroupDialogComponent } from '@app/presentation/_dialogs/publish-content-group-dialog/publish-content-group-dialog.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
+import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ContentPresentationMenuComponent } from '@app/standalone/content-presen
     HotkeyActionButtonComponent,
     LoadingButtonComponent,
     ContentPresentationMenuComponent,
+    CommentFilterComponent,
   ],
   providers: [provideTranslocoScope('creator'), FocusModeService],
 })

@@ -110,25 +110,44 @@ export class CommentsPageComponent
 
   subscribeToPresentationEvents() {
     if (this.displayComments.length > 0) {
-      setTimeout(() => {
-        if (!this.activeComment) {
-          this.goToFirstComment();
-        }
-      }, 300);
+      if (!this.activeComment) {
+        this.goToFirstComment();
+      }
     }
     this.presentationService
       .getCommentSortChanges()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((sort) => {
         this.sortComments(sort as CommentSort);
-        setTimeout(() => {
-          this.goToFirstComment();
-        }, 300);
+        this.goToFirstComment();
+      });
+    this.presentationService
+      .getCommentFilterChanges()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((filter) => {
+        this.filterComments(filter);
+        this.goToFirstComment();
+      });
+    this.presentationService
+      .getCommentPeriodChanges()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((period) => {
+        this.setTimePeriod(period);
+        this.goToFirstComment();
+      });
+    this.presentationService
+      .getCommentCategoryChanges()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((category) => {
+        this.selectTag(category);
+        this.goToFirstComment();
       });
   }
 
   goToFirstComment() {
-    this.updateCurrentComment(this.displayComments[0]);
+    setTimeout(() => {
+      this.updateCurrentComment(this.displayComments[0]);
+    }, 300);
   }
 
   afterCommentsLoadedHook(): void {

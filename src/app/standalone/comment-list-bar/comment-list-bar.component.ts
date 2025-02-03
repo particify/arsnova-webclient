@@ -4,6 +4,7 @@ import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CommentPeriod } from '@app/core/models/comment-period.enum';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { FilterChipComponent } from '@app/standalone/filter-chip/filter-chip.component';
+import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
 
 class SortItem {
   name: CommentSort;
@@ -18,7 +19,7 @@ class SortItem {
 }
 
 @Component({
-  imports: [CoreModule, FilterChipComponent],
+  imports: [CoreModule, FilterChipComponent, CommentFilterComponent],
   selector: 'app-comment-list-bar',
   templateUrl: './comment-list-bar.component.html',
   styleUrls: ['./comment-list-bar.component.scss'],
@@ -66,28 +67,19 @@ export class CommentListBarComponent {
     this.createCommentClicked.emit();
   }
 
-  filter(type: CommentFilter): void {
-    if (type === this.currentFilter) {
-      this.filterSelected.emit(undefined);
-    } else {
-      this.filterSelected.emit(type);
-    }
+  filter(type?: CommentFilter): void {
+    this.filterSelected.emit(type);
   }
 
   sort(type: CommentSort): void {
     this.sortingSelected.emit(type);
   }
 
-  setTimePeriod(period: CommentPeriod) {
+  setPeriod(period: CommentPeriod) {
     this.periodSelected.emit(period);
   }
 
   selectCategory(category?: string): void {
-    if (category && this.selectedCategory !== category) {
-      this.selectedCategory = category;
-    } else {
-      this.selectedCategory = undefined;
-    }
-    this.categorySelected.emit(this.selectedCategory);
+    this.categorySelected.emit(category);
   }
 }
