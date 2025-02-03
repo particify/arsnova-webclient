@@ -2,7 +2,9 @@
   fxLayout="column"
   fxLayoutAlign="space-between"
   tabindex="0"
-  class="less-bottom-space"
+  class="template-card primary-shadow-hover primary-shadow-focus"
+  role="button"
+  (click)="preview()"
 >
   <div>
     <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="1em">
@@ -38,15 +40,6 @@
           [aiGenerated]="template.aiGenerated"
         ></app-template-license>
       }
-      @if (!template.published) {
-        <div
-          style="width: 100%; padding-bottom: 4px"
-          fxLayout="row"
-          fxLayoutAlign="end"
-        >
-          <ng-template [ngTemplateOutlet]="buttonRow"></ng-template>
-        </div>
-      }
     </div>
     @if (template.published) {
       <div fxLayout="row" fxLayoutAlign="start center">
@@ -57,23 +50,7 @@
             </mat-chip>
           }
         </mat-chip-set>
-        <ng-template [ngTemplateOutlet]="buttonRow"></ng-template>
       </div>
     }
   </div>
 </mat-card>
-<ng-template #buttonRow>
-  <div fxLayout="row" fxLayoutAlign="end center" class="fade-container">
-    <div class="button-fade"></div>
-    <div class="button-container" fxLayout="row" fxLayoutGap="10px">
-      <button mat-stroked-button (click)="preview()">
-        {{ 'templates.preview' | transloco }}
-      </button>
-      <app-add-template-button
-        [templateId]="template.id"
-        [templateName]="template.name"
-        [room]="room"
-      ></app-add-template-button>
-    </div>
-  </div>
-</ng-template>

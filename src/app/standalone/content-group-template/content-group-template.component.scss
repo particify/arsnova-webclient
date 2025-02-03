@@ -1,7 +1,17 @@
 @use '../../../variables' as *;
 
-.less-bottom-space {
+.template-card {
   padding-bottom: 8px;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 0px 3px var(--grey);
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
 }
 
 .template-name {
@@ -30,60 +40,6 @@
   width: 100%;
   position: relative;
   background-image: linear-gradient(to right, transparent, var(--surface));
-}
-
-.button-container {
-  visibility: hidden;
-}
-
-.fade-container {
-  width: 0;
-  visibility: hidden;
-  position: relative;
-}
-
-@mixin show-button-container {
-  .fade-container {
-    visibility: visible;
-    width: initial;
-
-    .button-container {
-      visibility: visible;
-    }
-  }
-
-  .chip-container::after {
-    width: initial;
-  }
-
-  .button-fade {
-    height: 100%;
-    position: absolute;
-    background: linear-gradient(to left, var(--surface) 20%, transparent);
-  }
-
-  @media (max-width: 599px) {
-    .button-fade {
-      width: 4em;
-      left: -4em;
-    }
-  }
-
-  @media (min-width: 600px) {
-    .button-fade {
-      width: 8em;
-      left: -8em;
-    }
-  }
-}
-
-@media (hover: none) {
-  @include show-button-container;
-}
-
-.mat-mdc-card:hover,
-.mat-mdc-card:focus-within {
-  @include show-button-container;
 }
 
 @media (max-width: 599px) {
