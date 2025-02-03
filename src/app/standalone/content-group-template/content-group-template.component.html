@@ -3,27 +3,12 @@
   fxLayoutAlign="space-between"
   tabindex="0"
   class="template-card primary-shadow-hover primary-shadow-focus"
+  [ngClass]="{ 'less-bottom-space': template.published }"
   role="button"
   (click)="preview()"
 >
   <div>
-    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="1em">
-      <span class="template-name">{{ template.name }}</span>
-      <div
-        fxLayoutAlign="center center"
-        class="primary-variant content-count-container"
-      >
-        <span class="on-primary-variant content-count"
-          >{{ template.templateIds.length }}
-          @if (template.templateIds.length === 1) {
-            <span>{{ 'templates.content' | transloco }}</span>
-          }
-          @if (template.templateIds.length > 1) {
-            <span>{{ 'templates.contents' | transloco }}</span>
-          }
-        </span>
-      </div>
-    </div>
+    <span class="template-name">{{ template.name }}</span>
     <p class="ellipsis template-description">
       {{ template.description }}
     </p>
@@ -32,6 +17,8 @@
     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
       <app-content-group-info
         [groupType]="template.groupType"
+        [contentCount]="template.templateIds.length"
+        [countColor]="true"
       ></app-content-group-info>
       @if (template.published) {
         <app-template-license
