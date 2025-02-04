@@ -25,6 +25,7 @@ export class ContentGroupInfoComponent {
   @Input() groupType?: GroupType;
   @Input() contentCount?: number;
   @Input() published = true;
+  @Input() countColor = false;
 
   GroupType = GroupType;
   typeIcons: Map<GroupType, string>;

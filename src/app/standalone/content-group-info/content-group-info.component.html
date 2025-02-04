@@ -11,7 +11,10 @@
     </div>
   }
   @if (contentCount !== undefined) {
-    <span class="content-count"
+    <span
+      class="content-count no-bg"
+      [ngClass]="{ 'count-color': countColor }"
+      [class]="countColor && groupType ? groupType.toLowerCase() : ''"
       >{{
         'content.content-count'
           | transloco

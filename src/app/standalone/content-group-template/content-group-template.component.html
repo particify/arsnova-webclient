@@ -2,26 +2,13 @@
   fxLayout="column"
   fxLayoutAlign="space-between"
   tabindex="0"
-  class="less-bottom-space"
+  class="template-card primary-shadow-hover primary-shadow-focus"
+  [ngClass]="{ 'less-bottom-space': template.published }"
+  role="button"
+  (click)="preview()"
 >
   <div>
-    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="1em">
-      <span class="template-name">{{ template.name }}</span>
-      <div
-        fxLayoutAlign="center center"
-        class="primary-variant content-count-container"
-      >
-        <span class="on-primary-variant content-count"
-          >{{ template.templateIds.length }}
-          @if (template.templateIds.length === 1) {
-            <span>{{ 'templates.content' | transloco }}</span>
-          }
-          @if (template.templateIds.length > 1) {
-            <span>{{ 'templates.contents' | transloco }}</span>
-          }
-        </span>
-      </div>
-    </div>
+    <span class="template-name">{{ template.name }}</span>
     <p class="ellipsis template-description">
       {{ template.description }}
     </p>
@@ -30,6 +17,8 @@
     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
       <app-content-group-info
         [groupType]="template.groupType"
+        [contentCount]="template.templateIds.length"
+        [countColor]="true"
       ></app-content-group-info>
       @if (template.published) {
         <app-template-license
@@ -37,15 +26,6 @@
           [license]="template.license"
           [aiGenerated]="template.aiGenerated"
         ></app-template-license>
-      }
-      @if (!template.published) {
-        <div
-          style="width: 100%; padding-bottom: 4px"
-          fxLayout="row"
-          fxLayoutAlign="end"
-        >
-          <ng-template [ngTemplateOutlet]="buttonRow"></ng-template>
-        </div>
       }
     </div>
     @if (template.published) {
@@ -57,23 +37,7 @@
             </mat-chip>
           }
         </mat-chip-set>
-        <ng-template [ngTemplateOutlet]="buttonRow"></ng-template>
       </div>
     }
   </div>
 </mat-card>
-<ng-template #buttonRow>
-  <div fxLayout="row" fxLayoutAlign="end center" class="fade-container">
-    <div class="button-fade"></div>
-    <div class="button-container" fxLayout="row" fxLayoutGap="10px">
-      <button mat-stroked-button (click)="preview()">
-        {{ 'templates.preview' | transloco }}
-      </button>
-      <app-add-template-button
-        [templateId]="template.id"
-        [templateName]="template.name"
-        [room]="room"
-      ></app-add-template-button>
-    </div>
-  </div>
-</ng-template>

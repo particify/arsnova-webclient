@@ -3,7 +3,7 @@
     <app-loading-indicator></app-loading-indicator>
   }
   @if (!isLoadingContentGroup) {
-    <mat-card class="template-card">
+    <mat-card>
       <div
         fxLayout="row-wrap"
         fxLayoutAlign="space-between center"
@@ -63,6 +63,8 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
           <app-content-group-info
             [groupType]="template.groupType"
+            [contentCount]="template.templateIds.length"
+            [countColor]="true"
           ></app-content-group-info>
           @if (template.published) {
             <app-template-license

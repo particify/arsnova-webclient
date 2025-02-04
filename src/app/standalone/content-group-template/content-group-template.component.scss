@@ -1,21 +1,24 @@
 @use '../../../variables' as *;
 
 .less-bottom-space {
-  padding-bottom: 8px;
+  padding-bottom: $spacing;
+}
+
+.template-card {
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 0px 3px var(--grey);
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
 }
 
 .template-name {
   font-size: 20px;
-  font-weight: $font-weight-bold;
-}
-
-.content-count-container {
-  border-radius: 4px;
-  padding: 4px 8px;
-}
-
-.content-count {
-  font-size: $s-font-size;
   font-weight: $font-weight-bold;
 }
 
@@ -32,60 +35,6 @@
   background-image: linear-gradient(to right, transparent, var(--surface));
 }
 
-.button-container {
-  visibility: hidden;
-}
-
-.fade-container {
-  width: 0;
-  visibility: hidden;
-  position: relative;
-}
-
-@mixin show-button-container {
-  .fade-container {
-    visibility: visible;
-    width: initial;
-
-    .button-container {
-      visibility: visible;
-    }
-  }
-
-  .chip-container::after {
-    width: initial;
-  }
-
-  .button-fade {
-    height: 100%;
-    position: absolute;
-    background: linear-gradient(to left, var(--surface) 20%, transparent);
-  }
-
-  @media (max-width: 599px) {
-    .button-fade {
-      width: 4em;
-      left: -4em;
-    }
-  }
-
-  @media (min-width: 600px) {
-    .button-fade {
-      width: 8em;
-      left: -8em;
-    }
-  }
-}
-
-@media (hover: none) {
-  @include show-button-container;
-}
-
-.mat-mdc-card:hover,
-.mat-mdc-card:focus-within {
-  @include show-button-container;
-}
-
 @media (max-width: 599px) {
   .mat-mdc-standard-chip {
     --mdc-chip-label-text-size: 12px;
@@ -97,9 +46,5 @@
 
   .template-description {
     font-size: $s-font-size;
-  }
-
-  .content-count {
-    font-size: $xs-font-size;
   }
 }
