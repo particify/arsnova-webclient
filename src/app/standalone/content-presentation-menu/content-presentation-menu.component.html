@@ -25,6 +25,17 @@
         <span>{{ 'creator.content.delete-answers' | transloco }}</span>
       </button>
     }
+    @if (hasFormatCloudVisualization()) {
+      <button mat-menu-item (click)="changeWordcloudVisualization()">
+        <mat-icon>cloud</mat-icon>
+        <span>{{
+          (rotateWordcloudItems
+            ? 'creator.content.do-not-rotate-words'
+            : 'creator.content.rotate-words'
+          ) | transloco
+        }}</span>
+      </button>
+    }
     @if (settingsEnabled) {
       <button mat-menu-item [routerLink]="'/account/preferences'">
         <mat-icon>settings_suggest</mat-icon>

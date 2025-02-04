@@ -184,6 +184,8 @@
     "contents": "Contenidos",
     "group-published": "La serie de preguntas ha sido publicada.",
     "preferences": "Configuraciones de visualización",
+    "rotate-words": "Rotar palabras",
+    "do-not-rotate-words": "No rotar palabras",
     "reset-banned-answers": "Restablecer palabras clave prohibidas",
     "banned-keywords-reset": "Las palabras clave prohibidas han sido restablecidas.",
     "export-content-group": "Exportación",

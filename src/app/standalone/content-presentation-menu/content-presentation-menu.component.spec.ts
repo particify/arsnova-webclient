@@ -43,10 +43,14 @@ describe('ContentPresentationMenuComponent', () => {
     'getMultipleRoundState',
     'getContentState',
     'updateRoundState',
+    'getWordcloudVisualizationChanged',
   ]);
   presentationService.getMultipleRoundState.and.returnValue(of(true));
   presentationService.getContentState.and.returnValue(
     of(new ContentPresentationState(PresentationStepPosition.START, 0, content))
+  );
+  presentationService.getWordcloudVisualizationChanged.and.returnValue(
+    of(true)
   );
 
   beforeEach(async () => {

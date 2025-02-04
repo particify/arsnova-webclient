@@ -198,6 +198,8 @@
     "group-published": "Die Fragenserie wurde freigegeben.",
     "group-locked": "Die Fragenserie wurde gesperrt.",
     "preferences": "Anzeigeeinstellungen",
+    "rotate-words": "Wörter drehen",
+    "do-not-rotate-words": "Wörter nicht drehen",
     "reset-banned-answers": "Gebannte Wörter zurücksetzen",
     "banned-keywords-reset": "Gebannte Schlagwörter wurden zurückgesetzt.",
     "start-new-round": "Neue Runde starten",

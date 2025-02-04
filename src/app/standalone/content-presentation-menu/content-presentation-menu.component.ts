@@ -44,6 +44,8 @@ export class ContentPresentationMenuComponent
   rounds = ['1', '2', '1 & 2'];
   ContentType: typeof ContentType = ContentType;
 
+  rotateWordcloudItems?: boolean;
+
   constructor(
     private contentService: ContentService,
     private dialogService: DialogService,
@@ -87,6 +89,12 @@ export class ContentPresentationMenuComponent
         this.contentRounds.set(this.content.id, this.content.state.round - 1);
       }
     });
+    this.presentationService
+      .getWordcloudVisualizationChanged()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((rotateWordcloudItems) => {
+        this.rotateWordcloudItems = rotateWordcloudItems;
+      });
   }
 
   ngOnDestroy() {
@@ -100,6 +108,10 @@ export class ContentPresentationMenuComponent
 
   hasFormatRounds(format: ContentType): boolean {
     return this.contentService.hasFormatRounds(format);
+  }
+
+  hasFormatCloudVisualization(): boolean {
+    return this.content.format === ContentType.WORDCLOUD;
   }
 
   editContent() {
@@ -144,5 +156,12 @@ export class ContentPresentationMenuComponent
       return;
     }
     this.contentService.startNewRound(this.content);
+  }
+
+  changeWordcloudVisualization() {
+    this.rotateWordcloudItems = !this.rotateWordcloudItems;
+    this.presentationService.updateWordcloudVisualization(
+      this.rotateWordcloudItems
+    );
   }
 }

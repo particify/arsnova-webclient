@@ -96,6 +96,11 @@
             [isChecked]="settings.showContentResultsDirectly"
             (toggleEvent)="updateSettings($event, 'showContentResultsDirectly')"
           ></app-settings-slide-toggle>
+          <app-settings-slide-toggle
+            label="user-profile.rotate-wordcloud-items"
+            [isChecked]="settings.rotateWordcloudItems"
+            (toggleEvent)="updateSettings($event, 'rotateWordcloudItems')"
+          ></app-settings-slide-toggle>
           <lib-extension-point extensionId="user-quota"></lib-extension-point>
         </div>
       }

@@ -165,7 +165,9 @@
     "answers-below-chart": "Mostrar opciones de respuesta debajo de los gráficos",
     "answers-below-chart-info": "Las opciones de respuesta se muestran directamente debajo del gráfico en lugar de como una lista.",
     "show-results-directly": "Mostrar resultados directamente",
-    "show-results-directly-info": "Los resultados del contenido se muestran directamente al presentarlo."
+    "show-results-directly-info": "Los resultados del contenido se muestran directamente al presentarlo.",
+    "rotate-wordcloud-items": "Rotar palabras en la nube de palabras",
+    "rotate-wordcloud-items-info": "Algunas palabras de las nubes de palabras están giradas 90 grados."
   },
   "room-list": {
     "a11y-join-room": "Ingresa a la sala {{room}} con el número {{id}} en el rol {{role}}.",

@@ -165,7 +165,9 @@
     "answers-below-chart": "Show answer options below charts",
     "answers-below-chart-info": "Answer options displayed directly below chart rather than as a list.",
     "show-results-directly": "Show results directly",
-    "show-results-directly-info": "Content results are displayed directly when presented."
+    "show-results-directly-info": "Content results are displayed directly when presented.",
+    "rotate-wordcloud-items": "Rotate words in word cloud",
+    "rotate-wordcloud-items-info": "Some words in word clouds are rotated by 90 degrees."
   },
   "room-list": {
     "a11y-join-room": "Enter the room {{room}} with the number {{id}} in the role {{role}}.",

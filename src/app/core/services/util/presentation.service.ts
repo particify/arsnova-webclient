@@ -43,6 +43,7 @@ export class PresentationService {
   private contentGroupUpdated = new Subject<ContentGroup>();
   private roundStateChanged = new Subject<RoundState>();
   private countdownChanged = new Subject<Content>();
+  private wordcloudVisualizationCHanged = new Subject<boolean>();
 
   private currentContent?: Content;
 
@@ -219,5 +220,13 @@ export class PresentationService {
 
   getCountdownChanged(): Observable<Content> {
     return this.countdownChanged;
+  }
+
+  updateWordcloudVisualization(rotateWordcloudItems: boolean) {
+    this.wordcloudVisualizationCHanged.next(rotateWordcloudItems);
+  }
+
+  getWordcloudVisualizationChanged(): Observable<boolean> {
+    return this.wordcloudVisualizationCHanged;
   }
 }
