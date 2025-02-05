@@ -7,6 +7,9 @@
     <app-loading-indicator></app-loading-indicator>
   }
   @if (!isLoading) {
-    <app-leaderboard [leaderboardItems]="leaderboardItems"></app-leaderboard>
+    <app-leaderboard
+      [leaderboardItems]="leaderboardItems"
+      [allowScrolling]="!showCard"
+    ></app-leaderboard>
   }
 </app-base-card>

@@ -22,6 +22,7 @@ interface LeaderboardTableItem {
 export class LeaderboardComponent implements OnChanges {
   @Input({ required: true }) leaderboardItems: LeaderboardItem[] = [];
   @Input() aliasId?: string;
+  @Input() allowScrolling = false;
 
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
 
@@ -32,6 +33,7 @@ export class LeaderboardComponent implements OnChanges {
     this.leaderboardItems.forEach((item, index) => {
       if (
         index < 10 ||
+        (this.allowScrolling && index < 100) ||
         (this.showBelowList() && item.userAlias?.id === this.aliasId)
       ) {
         tableItems.push({
@@ -45,7 +47,7 @@ export class LeaderboardComponent implements OnChanges {
   }
 
   private showBelowList(): boolean {
-    if (this.aliasId) {
+    if (this.aliasId && !this.allowScrolling) {
       return !this.leaderboardItems
         .slice(0, 10)
         .map((l) => l.userAlias?.id)
