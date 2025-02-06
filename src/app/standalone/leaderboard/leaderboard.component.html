@@ -8,10 +8,17 @@
           class="position"
           [ngClass]="{
             'bold-text bg-dark': element.userAlias?.id === aliasId,
+            'no-border':
+              i < dataSource.data.length - 1 &&
+              dataSource.data[i + 1].position === element.position,
           }"
           [ngStyle]="{ color: getColor(element.userAlias?.seed) }"
         >
-          {{ element.position | ordinal }}
+          {{
+            i > 0 && dataSource.data[i - 1].position === element.position
+              ? ''
+              : (element.position | ordinal)
+          }}
         </td>
       </ng-container>
       <ng-container matColumnDef="name">

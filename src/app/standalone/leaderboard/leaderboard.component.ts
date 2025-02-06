@@ -29,21 +29,36 @@ export class LeaderboardComponent implements OnChanges {
   constructor(private themeService: ThemeService) {}
 
   ngOnChanges(): void {
-    const tableItems: LeaderboardTableItem[] = [];
+    let tableItems: LeaderboardTableItem[] = [];
     this.leaderboardItems.forEach((item, index) => {
-      if (
-        index < 10 ||
-        (this.allowScrolling && index < 100) ||
-        (this.showBelowList() && item.userAlias?.id === this.aliasId)
-      ) {
+      if (index < 100) {
         tableItems.push({
-          position: index + 1,
+          position: this.getPosition(index, item, tableItems),
           userAlias: item.userAlias,
           score: item.score,
         });
       }
     });
+    const aliasItem = tableItems.find((t) => t.userAlias?.id === this.aliasId);
+    if (!this.allowScrolling) {
+      tableItems = tableItems.slice(0, 10);
+    }
+    if (this.showBelowList()) {
+      if (aliasItem) {
+        tableItems.push(aliasItem);
+      }
+    }
     this.dataSource = new MatTableDataSource(tableItems);
+  }
+
+  private getPosition(
+    index: number,
+    item: LeaderboardItem,
+    tableItems: LeaderboardTableItem[]
+  ) {
+    return index > 0 && item.score === tableItems[index - 1].score
+      ? tableItems[index - 1].position
+      : index + 1;
   }
 
   private showBelowList(): boolean {
