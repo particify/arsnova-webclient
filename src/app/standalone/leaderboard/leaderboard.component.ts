@@ -23,6 +23,7 @@ export class LeaderboardComponent implements OnChanges {
   @Input({ required: true }) leaderboardItems: LeaderboardItem[] = [];
   @Input() aliasId?: string;
   @Input() allowScrolling = false;
+  @Input() showAll = false;
 
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
 
@@ -40,7 +41,7 @@ export class LeaderboardComponent implements OnChanges {
       }
     });
     const aliasItem = tableItems.find((t) => t.userAlias?.id === this.aliasId);
-    if (!this.allowScrolling) {
+    if (!(this.allowScrolling || this.showAll)) {
       tableItems = tableItems.slice(0, 10);
     }
     if (this.showBelowList()) {
