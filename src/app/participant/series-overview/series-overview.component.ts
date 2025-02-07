@@ -459,13 +459,19 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   }
 
   getPosition(): number {
-    if (this.userLeaderboardItem) {
-      const position = this.leaderboard
-        ?.map((l) => l.userAlias?.id)
-        .indexOf(this.userLeaderboardItem.userAlias?.id);
-      if (position !== undefined) {
-        return position + 1;
-      }
+    if (this.userLeaderboardItem && this.leaderboard) {
+      let score = 1;
+      let position = score;
+      this.leaderboard.forEach((value, index) => {
+        if (index > 0 && value.score !== this.leaderboard![index - 1].score) {
+          score = index + 1;
+        }
+        if (this.userLeaderboardItem?.userAlias?.id === value.userAlias?.id) {
+          position = score;
+          return;
+        }
+      });
+      return position;
     }
     return -1;
   }
