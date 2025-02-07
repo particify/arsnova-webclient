@@ -114,6 +114,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   retryCount = 0;
   hasScore = false;
   score = 0;
+  leaderboardPosition?: number;
   HintType = HintType;
   leaderboard?: LeaderboardItem[];
   userLeaderboardItem?: LeaderboardItem;
@@ -153,6 +154,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
         this.userLeaderboardItem = this.leaderboard.find(
           (l) => l.userAlias?.id === this.alias?.id
         );
+        this.leaderboardPosition = this.getPosition();
         this.updatePointsChart();
         this.isLoading = false;
       });
@@ -261,15 +263,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
             this.checkIfLastContentIsLoaded();
           });
         if (this.group.leaderboardEnabled) {
-          this.contentGroupService
-            .getLeaderboard(this.group.roomId, this.group.id)
-            .subscribe((leaderboard) => {
-              this.leaderboard = leaderboard;
-              this.userLeaderboardItem = this.leaderboard.find(
-                (l) => l.userAlias?.id === this.alias?.id
-              );
-              this.updatePointsChart();
-            });
+          this.loadLeaderboard();
         }
         this.retryCount++;
       }, RELOAD_INTERVAL);
@@ -458,7 +452,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     return this.totalContentCount - this.contents.length;
   }
 
-  getPosition(): number {
+  private getPosition(): number {
     if (this.userLeaderboardItem && this.leaderboard) {
       let score = 1;
       let position = score;
@@ -481,7 +475,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   }
 
   getTrophyIconColor(): string {
-    switch (this.getPosition()) {
+    switch (this.leaderboardPosition) {
       case 1:
         return 'gold';
       case 2:
