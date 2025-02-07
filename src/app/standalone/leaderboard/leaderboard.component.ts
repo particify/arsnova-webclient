@@ -1,17 +1,13 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
-import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { MatTableDataSource } from '@angular/material/table';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ThemeService } from '@app/core/theme/theme.service';
-
-interface LeaderboardTableItem {
-  position: number;
-  userAlias?: RoomUserAlias;
-  score: number;
-}
+import {
+  LeaderboardService,
+  LeaderboardTableItem,
+} from '@app/core/services/util/leaderboard.service';
 
 @Component({
   imports: [CoreModule, OrdinalPipe, FlexLayoutModule],
@@ -27,52 +23,15 @@ export class LeaderboardComponent implements OnChanges {
 
   dataSource?: MatTableDataSource<LeaderboardTableItem>;
 
-  constructor(private themeService: ThemeService) {}
+  constructor(private leaderboardService: LeaderboardService) {}
 
   ngOnChanges(): void {
-    let tableItems: LeaderboardTableItem[] = [];
-    this.leaderboardItems.forEach((item, index) => {
-      if (index < 100) {
-        tableItems.push({
-          position: this.getPosition(index, item, tableItems),
-          userAlias: item.userAlias,
-          score: item.score,
-        });
-      }
-    });
-    const aliasItem = tableItems.find((t) => t.userAlias?.id === this.aliasId);
-    if (!(this.allowScrolling || this.showAll)) {
-      tableItems = tableItems.slice(0, 10);
-    }
-    if (this.showBelowList()) {
-      if (aliasItem) {
-        tableItems.push(aliasItem);
-      }
-    }
-    this.dataSource = new MatTableDataSource(tableItems);
-  }
-
-  private getPosition(
-    index: number,
-    item: LeaderboardItem,
-    tableItems: LeaderboardTableItem[]
-  ) {
-    return index > 0 && item.score === tableItems[index - 1].score
-      ? tableItems[index - 1].position
-      : index + 1;
-  }
-
-  private showBelowList(): boolean {
-    if (this.aliasId && !this.allowScrolling) {
-      return !this.leaderboardItems
-        .slice(0, 10)
-        .map((l) => l.userAlias?.id)
-        .includes(this.aliasId);
-    }
-    return false;
-  }
-
-  getColor(seed?: number): string {
-    return this.themeService.getTextColorFromSeed(seed);
+    this.dataSource = new MatTableDataSource(
+      this.leaderboardService.buildLeaderboardTableData(
+        this.leaderboardItems,
+        this.aliasId,
+        this.showAll
+      )
+    );
   }
 }
