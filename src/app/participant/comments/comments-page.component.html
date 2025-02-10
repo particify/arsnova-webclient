@@ -65,6 +65,7 @@
     }
     @if (comments.length < 3 && !isLoading && !disabled) {
       <app-comment-list-add-button
+        [disabled]="readonly"
         (buttonClicked)="openCreateDialog()"
       ></app-comment-list-add-button>
     }
