@@ -181,7 +181,7 @@
       >
         <router-outlet></router-outlet>
       </div>
-      @if (!isAdmin && !isRoom) {
+      @if (!isAdmin && !isRoom && !isStandalone) {
         <router-outlet name="footer"></router-outlet>
       }
     </mat-drawer-content>
