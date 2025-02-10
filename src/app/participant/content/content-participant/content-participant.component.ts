@@ -459,9 +459,7 @@ export class ContentParticipantComponent
         );
       case 'results':
         return (
-          this.statsPublished ||
-          this.content.format === ContentType.FLASHCARD ||
-          this.contentGroup.leaderboardEnabled
+          this.statsPublished || this.content.format === ContentType.FLASHCARD
         );
       case 'leaderboard':
         return (
