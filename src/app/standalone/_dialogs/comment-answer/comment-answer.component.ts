@@ -101,7 +101,7 @@ export class CommentAnswerComponent extends FormComponent {
       if (result) {
         this.answer = '';
         const msg = this.translateService.translate(
-          'comment-page.answer-deleted'
+          'creator.comment-page.answer-deleted'
         );
         this.notificationService.showAdvanced(
           msg,
