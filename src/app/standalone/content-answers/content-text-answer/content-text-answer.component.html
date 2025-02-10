@@ -7,19 +7,32 @@
   }"
 >
   <mat-label>{{ 'answer.your-answer' | transloco }}</mat-label>
-  <textarea
-    #answer
-    matInput
-    [value]="givenAnswer || ''"
-    [disabled]="disabled || givenAnswer"
-    (input)="inputEvent.emit(answer.value)"
-    name="answer"
-    cdkTextareaAutosize
-    [cdkAutosizeMinRows]="minRows"
-    cdkAutosizeMaxRows="8"
-    [maxLength]="lengthLimit"
-    dir="auto"
-  ></textarea>
+  @if (minRows > 1) {
+    <textarea
+      #answer
+      matInput
+      [value]="givenAnswer || ''"
+      [disabled]="disabled || givenAnswer"
+      (input)="inputEvent.emit(answer.value)"
+      name="answer"
+      cdkTextareaAutosize
+      [cdkAutosizeMinRows]="minRows"
+      cdkAutosizeMaxRows="8"
+      [maxLength]="lengthLimit"
+      dir="auto"
+    ></textarea>
+  } @else {
+    <input
+      matInput
+      #answer
+      [value]="givenAnswer || ''"
+      [disabled]="disabled || givenAnswer"
+      (input)="inputEvent.emit(answer.value)"
+      name="answer"
+      [maxLength]="lengthLimit"
+      dir="auto"
+    />
+  }
   @if (givenAnswer && correct !== undefined) {
     <mat-icon
       matSuffix
