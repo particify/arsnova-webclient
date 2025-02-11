@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -14,6 +15,7 @@ import { TemplateTag } from '@app/core/models/template-tag';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { FormService } from '@app/core/services/util/form.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -61,7 +63,9 @@ export class ContentGroupTemplateSelectionComponent
     private translateService: TranslocoService,
     private authService: AuthenticationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location,
+    private routingService: RoutingService
   ) {
     super(formService);
   }
@@ -69,16 +73,17 @@ export class ContentGroupTemplateSelectionComponent
   ngOnInit(): void {
     // If lang is set via query param, use this one instead of active lang as default
     this.selectedLang = this.lang || this.translateService.getActiveLang();
-    if (this.tagIds) {
-      this.tagIdsQueryParams = this.tagIds;
-    } else {
-      this.loadTemplates();
-    }
     this.authService
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
         this.creatorId = auth.userId;
+        if (this.tagIds) {
+          this.tagIdsQueryParams = this.tagIds;
+        } else {
+          this.showPublic = !this.route.snapshot.data.showMyTemplates;
+          this.loadTemplates();
+        }
       });
   }
 
@@ -101,11 +106,21 @@ export class ContentGroupTemplateSelectionComponent
 
   showPreview(templateId: string): void {
     const template = this.templates.find((t) => t.id === templateId);
-
-    this.router.navigate([templateId], {
-      relativeTo: this.route,
+    const url = this.getBaseUrl();
+    url.push(templateId);
+    this.router.navigate(url, {
       state: { data: { template: template } },
     });
+  }
+
+  private getBaseUrl() {
+    const url = [];
+    if (this.room) {
+      url.push(this.routingService.getRoleRoute());
+      url.push(this.room.shortId);
+    }
+    url.push('templates');
+    return url;
   }
 
   updateLanguage(lang: string): void {
@@ -115,6 +130,13 @@ export class ContentGroupTemplateSelectionComponent
 
   switchList(event: MatTabChangeEvent): void {
     this.showPublic = event.index === 0;
+    const url = this.getBaseUrl();
+    if (!this.showPublic) {
+      url.push('my');
+    }
+    this.location.replaceState(
+      this.router.serializeUrl(this.router.createUrlTree(url))
+    );
     this.loadTemplates();
   }
 

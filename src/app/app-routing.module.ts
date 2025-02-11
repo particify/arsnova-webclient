@@ -92,6 +92,14 @@ const routes: Routes = [
     title: 'templates',
   },
   {
+    path: 'templates/my',
+    component: ContentGroupTemplateSelectionComponent,
+    title: 'templates',
+    data: {
+      showMyTemplates: true,
+    },
+  },
+  {
     path: 'templates/:templateId',
     component: ContentGroupTemplatePreviewComponent,
     title: 'templates',

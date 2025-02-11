@@ -26,6 +26,7 @@ import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-sele
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { RoutingService } from '@app/core/services/util/routing.service';
 
 describe('ContentGroupTemplateSelectionComponent', () => {
   let component: ContentGroupTemplateSelectionComponent;
@@ -89,6 +90,10 @@ describe('ContentGroupTemplateSelectionComponent', () => {
   });
   const activatedRoute = new ActivatedRouteStub(undefined, undefined, snapshot);
 
+  const mockRoutingService = jasmine.createSpyObj(RoutingService, [
+    'getRoleRoute',
+  ]);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -136,6 +141,10 @@ describe('ContentGroupTemplateSelectionComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRoute,
+        },
+        {
+          provide: RoutingService,
+          useValue: mockRoutingService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
