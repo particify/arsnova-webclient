@@ -215,7 +215,11 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
         if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
           console.error('Could not refresh authentication (expired).');
           if (!guest) {
-            this.handleUnauthorizedError();
+            if (this.router.url.startsWith('/embed')) {
+              this.router.navigate(['embed', 'external-login']);
+            } else {
+              this.handleUnauthorizedError();
+            }
           }
         } else if (result.status === AuthenticationStatus.UNKNOWN_ERROR) {
           console.error('Could not refresh authentication.');
