@@ -15,29 +15,36 @@ test.describe('participant answer survey', () => {
     mockApi.mockRoomSettings();
     mockApi.mockContentGroup(
       'My survey',
-      ['content1', 'content2'],
+      ['content1', 'content2', 'content3'],
       GroupType.SURVEY,
       true,
-      true,
+      false,
       true,
       PublishingMode.ALL,
       0,
       false
     );
     mockApi.mockFocusEvent();
-    mockApi.mockRoomStats('My survey', 2, GroupType.SURVEY);
+    mockApi.mockRoomStats('My survey', 3, GroupType.SURVEY);
     mockApi.mockGroupStats(0, 0, 0, 0, [
       {
         contentId: 'content1',
         achievedPoints: 0,
-        maxPoints: 500,
+        maxPoints: 0,
         state: AnswerResultType.UNANSWERED,
         duration: 0,
       },
       {
         contentId: 'content2',
         achievedPoints: 0,
-        maxPoints: 500,
+        maxPoints: 0,
+        state: AnswerResultType.UNANSWERED,
+        duration: 0,
+      },
+      {
+        contentId: 'content3',
+        achievedPoints: 0,
+        maxPoints: 0,
         state: AnswerResultType.UNANSWERED,
         duration: 0,
       },
@@ -82,6 +89,7 @@ test.describe('participant answer survey', () => {
     await participant.goto('12345678', 'My survey');
     await expect(page.getByText('My likert content')).toBeVisible();
     await participant.answerContent(['Somewhat agree']);
+    await participant.answerTextContent('xyz');
     mockApi.mockGroupStats(0, 0, 0, 0, [
       {
         contentId: 'content1',
@@ -97,13 +105,21 @@ test.describe('participant answer survey', () => {
         state: AnswerResultType.NEUTRAL,
         duration: 0,
       },
+      {
+        contentId: 'content3',
+        achievedPoints: 0,
+        maxPoints: 0,
+        state: AnswerResultType.NEUTRAL,
+        duration: 0,
+      },
     ]);
-    await participant.answerTextContent('xyz');
+    await expect(page.getByText('my choice content')).toBeVisible();
+    await participant.answerContent(['answer 1']);
     await expect(page.getByText('you are in 1st place')).toBeHidden();
     await expect(page.getByText('thanks for your participation')).toBeVisible();
     await expect(page.getByText('points')).toBeHidden();
     await expect(page.getByText('correct')).toBeHidden();
-    await expect(page.getByText('2 / 2')).toBeVisible();
+    await expect(page.getByText('3 / 3')).toBeVisible();
     await expect(page.getByText('my likert content')).toBeVisible();
     await expect(page.getByText('my open question content')).toBeVisible();
   });

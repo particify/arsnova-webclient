@@ -64,11 +64,12 @@ export class MockApi {
     });
   }
 
-  async mockRoomWithShortId() {
+  async mockRoomWithShortId(lang?: string) {
     await this.page.route('*/**/room/~12345678', async (route) => {
       const room = new Room('ownerId', '12345678', '', 'My room');
       room.id = 'roomId';
       room.settings = { feedbackLocked: true };
+      room.language = lang;
       await route.fulfill({ status: 200, json: room });
     });
   }
@@ -240,7 +241,7 @@ export class MockApi {
 
   async mockContentsSurvey() {
     await this.page.route(
-      '*/**/room/roomId/content/?ids=content1,content2',
+      '*/**/room/roomId/content/?ids=content1,content2,content3',
       async (route) => {
         const content1 = new ContentScale(LikertScaleTemplate.AGREEMENT, 5);
         content1.id = 'content1';
@@ -256,7 +257,17 @@ export class MockApi {
         content2.id = 'content2';
         content2.renderedBody = '<p>My open question content</p>';
         content2.state = new ContentState(1, undefined, true);
-        const contents = [content1, content2];
+        const content3 = new ContentChoice(
+          'roomId',
+          undefined,
+          'My choice content',
+          undefined,
+          [new AnswerOption('answer 1'), new AnswerOption('answer 2')]
+        );
+        content3.id = 'content3';
+        content3.renderedBody = '<p>My choice content</p>';
+        content3.state = new ContentState(1, undefined, true);
+        const contents = [content1, content2, content3];
         await route.fulfill({
           status: 200,
           json: contents,
