@@ -4,7 +4,7 @@
   class="answer-container"
   fxLayoutGap="8px"
 >
-  <form>
+  <form (ngSubmit)="submitAnswer()">
     <app-content-text-answer
       (inputEvent)="textAnswer = $event"
       [disabled]="isDisabled"

@@ -12,6 +12,6 @@ export class ContentTextAnswerComponent {
   @Input() disabled = false;
   @Input() givenAnswer?: string;
   @Input() correct?: boolean;
-  @Input() minRows? = 3;
+  @Input() minRows = 3;
   @Input() lengthLimit = 500;
 }
