@@ -132,6 +132,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
       data: {
         contents: this.contents,
         index: this.contents.map((c) => c.id).indexOf(content.id),
+        lang: this.template.language,
       },
       panelClass: 'big-dialog-panel',
     });

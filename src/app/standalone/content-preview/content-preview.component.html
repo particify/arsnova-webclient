@@ -39,6 +39,7 @@
         content.format === 'CHOICE' && renderAnswersDynamically
       "
       [language]="language"
+      [translateOptions]="content.format === 'SCALE'"
     ></app-content-choice-answer>
   }
   @if (content.format === 'SORT') {

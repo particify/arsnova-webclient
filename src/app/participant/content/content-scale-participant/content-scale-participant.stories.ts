@@ -30,6 +30,7 @@ import { ContentScale } from '@app/core/models/content-scale';
 import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
+import { TranslocoService } from '@jsverse/transloco';
 
 class MockService {}
 class MockGlobalStorageService {
@@ -52,6 +53,14 @@ class MockLangService {
   ensureValidLang(lang: string): string {
     return lang;
   }
+}
+
+class MockTranslocoService {
+  selectTranslate(key: string) {
+    return of(key);
+  }
+
+  setActiveLang() {}
 }
 
 export default {
@@ -83,6 +92,10 @@ export default {
           useClass: MockContentAnswerService,
         },
         LikertScaleService,
+        {
+          provide: TranslocoService,
+          useClass: MockTranslocoService,
+        },
         {
           provide: ActivatedRoute,
           useValue: {

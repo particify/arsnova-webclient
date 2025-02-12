@@ -21,7 +21,7 @@ export class ContentTemplatePreviewComponent implements AfterViewInit {
   constructor(
     private dialogRef: MatDialogRef<ContentTemplatePreviewComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { contents: Content[]; index: number }
+    public data: { contents: Content[]; index: number; lang: string }
   ) {}
 
   @ViewChild(StepperComponent) stepper!: StepperComponent;

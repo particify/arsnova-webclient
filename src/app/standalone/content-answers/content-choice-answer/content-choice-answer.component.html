@@ -1,7 +1,7 @@
 @if (multipleAnswersAllowed) {
   <mat-list>
     @for (
-      checkedAnswer of selectableAnswers;
+      checkedAnswer of displayAnswers;
       track checkedAnswer;
       let i = $index
     ) {
@@ -35,7 +35,6 @@
             [(ngModel)]="checkedAnswer.checked"
             name="answer"
             class="answer-checkbox choice-answer"
-            aria-label="{{ checkedAnswer.answerOption.label | transloco }}"
           >
             <app-rendered-text
               [rawText]="checkedAnswer.answerOption.label"
@@ -60,15 +59,15 @@
     }
   </mat-list>
 }
-@if (!multipleAnswersAllowed) {
+@if (!multipleAnswersAllowed && displayAnswers) {
   <mat-radio-group
     [disabled]="isDisabled"
     [(ngModel)]="selectedAnswerIndex"
     name="{{ 'answer' + contentId }}"
   >
-    <mat-list *transloco="let t; lang: language + '|static'">
+    <mat-list>
       @for (
-        checkedAnswer of selectableAnswers;
+        checkedAnswer of displayAnswers;
         track checkedAnswer;
         let i = $index
       ) {
@@ -90,13 +89,12 @@
               'answer-radio-checked': selectedAnswerIndex === i,
               'disabled-choice-answer': isDisabled,
             }"
-            aria-label="{{ t(checkedAnswer.answerOption.label) }}"
             [checked]="checkedAnswer.checked"
             [value]="i"
             name="answer"
           >
             <app-rendered-text
-              [rawText]="t(checkedAnswer.answerOption.label)"
+              [rawText]="checkedAnswer.answerOption.label"
               [renderedText]="checkedAnswer.answerOption.renderedLabel"
               [dynamic]="dynamicRendering"
               [markdown]="false"

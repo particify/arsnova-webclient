@@ -10,7 +10,7 @@ export class Header {
   private readonly backButton: Locator;
 
   constructor(public readonly page: Page) {
-    this.menuButton = page.locator('menu-button');
+    this.menuButton = page.getByTestId('main-menu-button');
     this.roomsButton = page.getByRole('button', { name: 'my rooms' });
     this.roomSettingsButton = page.getByRole('button', {
       name: 'room settings',
@@ -44,5 +44,14 @@ export class Header {
 
   async goBack() {
     await this.backButton.click();
+  }
+
+  async changeLanguage(lang: string) {
+    await this.page.getByTestId('language-button').click();
+    await this.page
+      .getByRole('menuitem', {
+        name: lang,
+      })
+      .click();
   }
 }

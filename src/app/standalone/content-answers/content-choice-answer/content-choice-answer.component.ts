@@ -4,6 +4,8 @@ import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { TranslocoService } from '@jsverse/transloco';
+import { forkJoin, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-content-choice-answer',
@@ -24,12 +26,42 @@ export class ContentChoiceAnswerComponent implements OnInit {
   @Input() contentId?: string;
   @Input() dynamicRendering = false;
   @Input() language?: string;
+  @Input() translateOptions = false;
   @Output() answerIndexSelected = new EventEmitter<number>();
 
-  constructor(private languageService: LanguageService) {}
+  displayAnswers?: SelectableAnswer[];
+
+  constructor(
+    private languageService: LanguageService,
+    private translateService: TranslocoService
+  ) {}
 
   ngOnInit(): void {
     this.language = this.languageService.ensureValidLang(this.language);
+    if (this.translateOptions) {
+      const optionLabels$ = this.selectableAnswers.map(
+        (l) =>
+          <Observable<string>>(
+            this.translateService
+              .selectTranslate(l.answerOption.label, undefined, this.language)
+              .pipe()
+          )
+      );
+      forkJoin(optionLabels$).subscribe((labels) => {
+        this.displayAnswers = labels.map(
+          (l) =>
+            new SelectableAnswer(
+              {
+                label: l,
+                renderedLabel: l,
+              },
+              false
+            )
+        );
+      });
+    } else {
+      this.displayAnswers = this.selectableAnswers;
+    }
   }
 
   selectSingleAnswer(index: number) {
