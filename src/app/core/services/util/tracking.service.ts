@@ -244,6 +244,9 @@ export class TrackingService {
         );
       }
     });
+    this.appErrorHandler.uiErrorCount$
+      .pipe(filter((count) => count > 0 && count <= 5))
+      .subscribe(() => this.addEvent(EventCategory.ERROR, 'UI error'));
     this.eventService
       .on<any>('HttpRequestFailed')
       .subscribe((e) =>
