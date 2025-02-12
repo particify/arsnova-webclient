@@ -6,7 +6,7 @@
     <app-loading-indicator></app-loading-indicator>
   }
   @if (!isLoading && room) {
-    <mat-card>
+    <mat-card fxLayout="column" fxLayoutGap="16px">
       <app-room-overview-header
         [name]="room.name"
         [shortId]="room.shortId"
@@ -16,8 +16,8 @@
         appLangContext
         appDirContext
       ></app-room-overview-header>
-      <div fxLayout="column" fxLayoutAlign="center">
-        @if ((commentsEnabled || surveyEnabled) && !focusModeEnabled) {
+      @if ((commentsEnabled || surveyEnabled) && !focusModeEnabled) {
+        <div fxLayout="column" fxLayoutAlign="center">
           <div
             class="action-button-container"
             fxLayout="row"
@@ -56,8 +56,8 @@
               </p>
             }
           </div>
-        }
-      </div>
+        </div>
+      }
       @if (contentGroups.length > 0) {
         <p
           tabindex="-1"
