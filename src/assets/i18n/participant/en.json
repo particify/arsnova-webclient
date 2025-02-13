@@ -68,7 +68,9 @@
     "leaderboard-duration": "Time",
     "answered-correctly": "Answered correctly",
     "partially-answered-correctly": "Partially answered correctly",
-    "answered-incorrectly": "Answered incorrectly"
+    "answered-incorrectly": "Answered incorrectly",
+    "show-answer": "Show answer",
+    "hide-answer": "Hide answer"
   },
   "comment-list": {
     "a11y-search-list": "Search for posts",

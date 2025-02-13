@@ -219,12 +219,6 @@ export class ContentParticipantComponent
       this.selectedRoute = this.activeTab || '';
       this.checkForCountdown();
     }
-    if (this.content.format === ContentType.FLASHCARD) {
-      this.tabs[0].label = 'content.flashcard-front';
-      this.tabs[0].icon = 'indeterminate_question_box';
-      this.tabs[1].label = 'content.flashcard-back';
-      this.tabs[1].icon = 'fact_check';
-    }
     this.setExtensionData(this.content.roomId, this.content.id);
     this.initContentData();
     this.isMultiple = (this.content as ContentChoice).multiple;
@@ -452,20 +446,11 @@ export class ContentParticipantComponent
   showTab(route: string): boolean {
     switch (route) {
       case '':
-        return (
-          this.statsPublished ||
-          this.content.format === ContentType.FLASHCARD ||
-          this.contentGroup.leaderboardEnabled
-        );
+        return this.statsPublished || this.contentGroup.leaderboardEnabled;
       case 'results':
-        return (
-          this.statsPublished || this.content.format === ContentType.FLASHCARD
-        );
+        return this.statsPublished;
       case 'leaderboard':
-        return (
-          this.contentGroup.leaderboardEnabled &&
-          this.content.format !== ContentType.FLASHCARD
-        );
+        return this.contentGroup.leaderboardEnabled;
       default:
         return false;
     }
