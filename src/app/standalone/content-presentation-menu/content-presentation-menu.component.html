@@ -78,7 +78,7 @@
       <button
         mat-menu-item
         (click)="startNewRound()"
-        [disabled]="content.state.round > 1"
+        [disabled]="content.state.round > 1 || (isLive && !isFinished)"
       >
         <mat-icon>replay</mat-icon>
         {{ 'creator.content.start-new-round' | transloco }}

@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
@@ -12,6 +13,7 @@ import { MatMenu } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
+import { PublishingMode } from '@app/core/models/content-group';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { RoundState } from '@app/core/models/events/round-state';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -25,7 +27,7 @@ import { Subject, of, takeUntil } from 'rxjs';
   templateUrl: './content-presentation-menu.component.html',
 })
 export class ContentPresentationMenuComponent
-  implements AfterViewInit, OnDestroy, OnInit
+  implements AfterViewInit, OnChanges, OnDestroy, OnInit
 {
   @ViewChild('moreMenu') moreMenu!: MatMenu;
 
@@ -35,6 +37,7 @@ export class ContentPresentationMenuComponent
   @Input({ required: true }) contentIndex!: number;
   @Input() editingEnabled = true;
   @Input() settingsEnabled = true;
+  @Input() publishingMode?: PublishingMode;
   @Output() menuLoaded = new EventEmitter<void>();
 
   destroyed$ = new Subject<void>();
@@ -45,6 +48,8 @@ export class ContentPresentationMenuComponent
   ContentType: typeof ContentType = ContentType;
 
   rotateWordcloudItems?: boolean;
+  isLive = false;
+  isFinished = true;
 
   constructor(
     private contentService: ContentService,
@@ -58,7 +63,12 @@ export class ContentPresentationMenuComponent
     });
   }
 
+  ngOnChanges() {
+    this.isLive = this.publishingMode === PublishingMode.LIVE;
+  }
+
   ngOnInit(): void {
+    this.checkIfFinished();
     this.contentService
       .getAnswersDeleted()
       .pipe(takeUntil(this.destroyed$))
@@ -95,11 +105,20 @@ export class ContentPresentationMenuComponent
       .subscribe((rotateWordcloudItems) => {
         this.rotateWordcloudItems = rotateWordcloudItems;
       });
+    this.presentationService.getCountdownChanged().subscribe((content) => {
+      this.content = content;
+      this.checkIfFinished();
+    });
   }
 
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  private checkIfFinished() {
+    const endTime = this.content.state.answeringEndTime;
+    this.isFinished = !!endTime && new Date() > new Date(endTime);
   }
 
   hasFormatAnswer(format: ContentType): boolean {
