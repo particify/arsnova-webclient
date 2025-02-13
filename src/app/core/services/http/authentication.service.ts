@@ -52,6 +52,7 @@ interface Jwt {
 export class AuthenticationService extends AbstractHttpService<ClientAuthentication> {
   private readonly ADMIN_ROLE: string = 'ADMIN';
   private popupDimensions = [500, 500];
+  private singleLogoutEnabled = false;
 
   /**
    * Higher-order Observable which provides a stream of changes to
@@ -104,6 +105,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
       if (popupDimensions) {
         this.popupDimensions = [+popupDimensions[1], +popupDimensions[2]];
       }
+      this.singleLogoutEnabled = !!config.ui.sso?.singleLogoutEnabled;
     });
     const offset =
       REFRESH_INTERVAL_MAX_OFFSET_MINUTES * Math.random() * 60 * 1000;
@@ -312,14 +314,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   loginViaSso(providerId: string): Observable<ClientAuthenticationResult> {
     const ssoUrl = this.buildUri(this.serviceApiUrl.sso + '/' + providerId);
     const loginUrl = this.buildUri(this.serviceApiUrl.login + '?refresh=true');
-    const [popupW, popupH] = this.popupDimensions;
-    const popupX = window.screenX + window.outerWidth / 2 - popupW / 2;
-    const popupY = window.screenY + window.outerHeight / 2 - popupH / 2;
-    const popup = window.open(
-      ssoUrl,
-      'auth_popup',
-      `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`
-    );
+    const popup = this.openSsoPopup(ssoUrl);
     const auth$ = timer(0, 500).pipe(
       map(() => popup?.closed),
       filter((closed) => closed || false),
@@ -355,11 +350,31 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   logout() {
     this.globalStorageService.removeItem(STORAGE_KEYS.USER);
-    // FIXME: This is currently needed to assign null
-    // This should be refactored at some point
-    // eslint-disable-next-line
-    // @ts-ignore
-    this.auth$$.next(of(null));
+    this.getCurrentAuthentication().subscribe((auth) => {
+      // FIXME: This is currently needed to assign null
+      // This should be refactored at some point
+      // eslint-disable-next-line
+      // @ts-ignore
+      this.auth$$.next(of(null));
+      if (this.singleLogoutEnabled) {
+        const url = `/sso/${auth.authProvider}/logout`;
+        const popup = this.openSsoPopup(url);
+        if (!popup) {
+          location.href = url;
+        }
+      }
+    });
+  }
+
+  private openSsoPopup(url: string): Window | null {
+    const [popupW, popupH] = this.popupDimensions;
+    const popupX = window.screenX + window.outerWidth / 2 - popupW / 2;
+    const popupY = window.screenY + window.outerHeight / 2 - popupH / 2;
+    return window.open(
+      url,
+      'auth_popup',
+      `left=${popupX},top=${popupY},width=${popupW},height=${popupH},resizable`
+    );
   }
 
   /**
