@@ -35,6 +35,7 @@ export class LeaderboardPageComponent implements OnInit {
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) contentGroup!: ContentGroup;
   @Input({ transform: setDefaultTrue }) showCard!: boolean;
+  @Input() showAll = false;
   leaderboardItems: LeaderboardItem[] = [];
   isLoading = true;
 

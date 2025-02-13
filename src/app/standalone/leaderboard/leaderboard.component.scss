@@ -4,6 +4,18 @@ td:not(:last-of-type) {
   padding-right: 0;
 }
 
+.table-container-with-limited-height {
+  overflow: auto;
+
+  // Limit table height to 10 items minus border
+  height: calc(calc(var(--mat-table-row-item-container-height) * 10) - 2px);
+  max-height: calc(calc(var(--mat-table-row-item-container-height) * 10) - 2px);
+}
+
+.table-container-with-limited-height::-webkit-scrollbar {
+  display: none;
+}
+
 table {
   background-color: var(--surface);
 }
@@ -37,4 +49,8 @@ table {
     width: 72px;
     padding: 0;
   }
+}
+
+.no-border {
+  border-bottom: none;
 }

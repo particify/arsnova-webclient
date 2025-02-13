@@ -6,12 +6,12 @@
       </th>
       <td
         [ngClass]="{
-          'bold-text bg-dark': element.alias?.id === aliasId,
+          'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
         mat-cell
         *matCellDef="let element; index as i"
         class="position"
-        [ngStyle]="{ color: getColor(element.alias?.seed) }"
+        [ngStyle]="{ color: element.color }"
       >
         {{ element.position | ordinal }}
       </td>
@@ -26,12 +26,12 @@
         mat-cell
         class="alias"
         [ngClass]="{
-          'bold-text bg-dark': element.alias?.id === aliasId,
+          'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
         *matCellDef="let element; index as i"
-        [ngStyle]="{ color: getColor(element.alias?.seed) }"
+        [ngStyle]="{ color: element.color }"
       >
-        {{ element.alias?.alias ?? 'general.anonymous' | transloco }}
+        {{ element.userAlias?.alias ?? 'general.anonymous' | transloco }}
       </td>
     </ng-container>
     <ng-container matColumnDef="score">
@@ -43,10 +43,10 @@
       <td
         mat-cell
         [ngClass]="{
-          'bold-text bg-dark': element.alias?.id === aliasId,
+          'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
         *matCellDef="let element; index as i"
-        [ngStyle]="{ color: getColor(element.alias?.seed) }"
+        [ngStyle]="{ color: element.color }"
       >
         <div fxLayout.xs="column">
           <span>
@@ -79,10 +79,10 @@
       <td
         mat-cell
         [ngClass]="{
-          'bold-text bg-dark': element.alias?.id === aliasId,
+          'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
         *matCellDef="let element; index as i"
-        [ngStyle]="{ color: getColor(element.alias?.seed) }"
+        [ngStyle]="{ color: element.color }"
       >
         <span class="less-visible">{{
           element.currentDuration | duration: contentDuration

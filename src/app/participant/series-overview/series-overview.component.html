@@ -2,17 +2,18 @@
   <mat-card fxLayout="column" fxLayoutGap="16px">
     @if (
       !isLoading &&
-      (!group.leaderboardEnabled || (userLeaderboardItem && getPosition() > 3))
+      (!group.leaderboardEnabled ||
+        (userLeaderboardItem && leaderboardPosition && leaderboardPosition > 3))
     ) {
       <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
         <span class="header-text">
           {{ getHeaderText() | transloco }}
         </span>
-        @if (group.leaderboardEnabled) {
+        @if (group.leaderboardEnabled && leaderboardPosition) {
           <span class="position-info">
             {{
               'participant.content.you-are-at-position'
-                | transloco: { position: getPosition() | ordinal }
+                | transloco: { position: leaderboardPosition | ordinal }
             }}
           </span>
         }
@@ -26,7 +27,8 @@
         !isLoading &&
         group.leaderboardEnabled &&
         userLeaderboardItem &&
-        getPosition() <= 3
+        leaderboardPosition &&
+        leaderboardPosition <= 3
       ) {
         <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="24px">
           <mat-icon
@@ -37,7 +39,7 @@
           <span class="header-text">
             {{
               'participant.content.you-are-at-position-congrats'
-                | transloco: { position: getPosition() | ordinal }
+                | transloco: { position: leaderboardPosition | ordinal }
             }}
           </span>
         </div>

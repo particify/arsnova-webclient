@@ -36,6 +36,9 @@ const routes: Routes = [
     path: 'leaderboard',
     component: LeaderboardPageComponent,
     title: 'series',
+    data: {
+      showAll: true,
+    },
   },
   {
     path: ':contentIndex',
