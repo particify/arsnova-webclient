@@ -25,7 +25,7 @@ export class AnswerOptionListComponent
   @Input() disabled = false;
   @Input() sortable = false;
   @Input() minimumAnswerCount = 2;
-  @Input() lengthLimit = 250;
+  @Input() lengthLimit = 500;
 
   isAnswerEdit = -1;
 
