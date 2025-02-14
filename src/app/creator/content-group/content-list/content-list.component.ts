@@ -267,6 +267,8 @@ export class ContentListComponent
   duplicate(contentId: string) {
     this.duplicateContent$(contentId).subscribe((content) => {
       this.contents.push(content);
+      this.contentGroup.contentIds.push(content.id);
+      this.contentStats.set(content.id, { count: 0 });
       const msg = this.translateService.translate(
         'creator.content.content-has-been-duplicated'
       );
