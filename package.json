@@ -71,7 +71,7 @@
     "@storybook/blocks": "8.5.4",
     "@storybook/test": "8.5.4",
     "@types/d3-cloud": "^1.2.5",
-    "@types/jasmine": "5.1.5",
+    "@types/jasmine": "5.1.6",
     "@types/jasminewd2": "2.0.13",
     "@types/node": "22.13.1",
     "@types/wordcloud": "1.2.2",
