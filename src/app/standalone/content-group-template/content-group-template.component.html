@@ -20,7 +20,7 @@
         [contentCount]="template.templateIds.length"
         [countColor]="true"
       ></app-content-group-info>
-      @if (template.published) {
+      @if (template.published && template.license) {
         <app-template-license
           [ownerName]="template.attribution"
           [license]="template.license"

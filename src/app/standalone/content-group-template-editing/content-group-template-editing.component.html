@@ -45,35 +45,33 @@
     (toggleEvent)="published = !published"
   ></app-settings-slide-toggle>
   @if (published) {
-    @if (selectedLicense) {
-      <mat-form-field appearance="outline" class="no-field-hint">
-        <mat-label>{{ 'templates.license' | transloco }}</mat-label>
-        <mat-select
-          panelClass="bigger-panel"
-          [value]="selectedLicense"
-          formControlName="licenses"
-        >
-          <mat-select-trigger>
-            {{ LICENSES.get(selectedLicense)?.name }}
-          </mat-select-trigger>
-          @for (license of licenseKeys; track license) {
-            <mat-option [value]="license" (click)="updateLicense(license)">
-              <div class="license-option" fxLayout="column" fxLayoutGap="4px">
-                <span class="license-name">
-                  {{ LICENSES.get(license)?.name }}</span
-                >
-                <span class="license-description">
-                  {{
-                    'templates.license-description-' + replaceDots(license)
-                      | transloco
-                  }}
-                </span>
-              </div>
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    }
+    <mat-form-field appearance="outline" class="no-field-hint">
+      <mat-label>{{ 'templates.license' | transloco }}</mat-label>
+      <mat-select
+        panelClass="bigger-panel"
+        [value]="selectedLicense"
+        formControlName="licenses"
+      >
+        <mat-select-trigger>
+          {{ LICENSES.get(selectedLicense)?.name }}
+        </mat-select-trigger>
+        @for (license of licenseKeys; track license) {
+          <mat-option [value]="license" (click)="updateLicense(license)">
+            <div class="license-option" fxLayout="column" fxLayoutGap="4px">
+              <span class="license-name">
+                {{ LICENSES.get(license)?.name }}</span
+              >
+              <span class="license-description">
+                {{
+                  'templates.license-description-' + replaceDots(license)
+                    | transloco
+                }}
+              </span>
+            </div>
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
     <mat-form-field
       class="no-field-hint"
       [appAutofocus]="true"
