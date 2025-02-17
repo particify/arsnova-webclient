@@ -37,6 +37,7 @@
     >
   </mat-form-field>
   <app-template-language-selection
+    [defaultLang]="selectedLang"
     (selectedLangChanged)="updateLanguage($event)"
   ></app-template-language-selection>
   <app-settings-slide-toggle
