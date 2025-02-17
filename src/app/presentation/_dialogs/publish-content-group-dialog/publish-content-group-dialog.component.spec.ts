@@ -23,8 +23,11 @@ describe('PublishContentGroupDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PublishContentGroupDialogComponent],
-      imports: [BrowserAnimationsModule, getTranslocoModule()],
+      imports: [
+        PublishContentGroupDialogComponent,
+        BrowserAnimationsModule,
+        getTranslocoModule(),
+      ],
       providers: [
         {
           provide: MatDialogRef,
