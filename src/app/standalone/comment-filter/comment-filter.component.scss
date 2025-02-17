@@ -1,3 +1,9 @@
+@use '../../../variables' as *;
+
 .bar-icon {
   opacity: 0.7;
+}
+
+.extra-padding {
+  padding: 0 $spacing-2;
 }
