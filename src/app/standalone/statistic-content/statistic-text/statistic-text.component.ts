@@ -59,7 +59,7 @@ export class StatisticTextComponent
 
   init(answers: TextAnswer[]) {
     this.updateData(answers);
-    this.getData();
+    this.determinateAnswerData();
   }
 
   afterInit() {
@@ -80,7 +80,7 @@ export class StatisticTextComponent
 
   deleteAnswers() {
     this.answers = [];
-    this.getData();
+    this.determinateAnswerData();
   }
 
   updateData(answers: TextAnswer[]) {
@@ -89,7 +89,7 @@ export class StatisticTextComponent
     });
   }
 
-  getData() {
+  determinateAnswerData() {
     this.getAnswerStats();
     this.updateCounter({
       answers: this.getSum(
@@ -149,16 +149,18 @@ export class StatisticTextComponent
           AdvancedSnackBarTypes.WARNING
         );
         this.filterAnswers(answer.id!);
+        this.determinateAnswerData();
       }
     });
   }
 
   private filterAnswers(answerId: string) {
     this.answerStats = this.answerStats.filter((a) => a.id !== answerId);
+    this.answers = this.answers.filter((a) => a.id !== answerId);
   }
 
   addAnswerToList(answer: TextAnswer) {
     this.answers.push(answer);
-    this.getData();
+    this.determinateAnswerData();
   }
 }
