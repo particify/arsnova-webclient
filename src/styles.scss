@@ -614,8 +614,6 @@ div {
 }
 
 .primary-shadow-always {
-  box-sizing: border-box;
-  border: none !important;
   @extend %primary-shadow;
 }
 

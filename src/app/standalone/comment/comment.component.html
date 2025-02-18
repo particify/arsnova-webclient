@@ -8,7 +8,8 @@
     'highlighted secondary-background on-secondary':
       comment.highlighted && !isSimpleView,
     'presentation-comment': isSimpleView,
-    'primary-shadow-always': comment.highlighted && isSimpleView,
+    'primary-shadow-always border-color-transparent':
+      comment.highlighted && isSimpleView,
   }"
   [@slide]="isNew ? slideAnimationState : null"
   (@slide.done)="changeSlideState()"
