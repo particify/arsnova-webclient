@@ -58,9 +58,7 @@
             }
             @if (
               !isLoading &&
-              (alreadySent ||
-                answeringLocked ||
-                content.format === ContentType.FLASHCARD) &&
+              (alreadySent || answeringLocked) &&
               content.format !== ContentType.SLIDE &&
               (statsPublished || contentGroup.leaderboardEnabled)
             ) {
@@ -283,19 +281,9 @@
                                 lastContent) &&
                               contentGroup.groupType === GroupType.QUIZ
                             ) {
-                              <button
-                                type="button"
-                                mat-raised-button
-                                color="primary"
-                                (click)="next.emit()"
-                              >
-                                {{
-                                  (lastContent
-                                    ? 'participant.answer.go-to-overview'
-                                    : 'participant.answer.next-content'
-                                  ) | transloco
-                                }}
-                              </button>
+                              <ng-template
+                                [ngTemplateOutlet]="nextButton"
+                              ></ng-template>
                             }
                           </div>
                         } @else if (answeringLocked) {
@@ -368,8 +356,7 @@
                     [language]="room.language"
                   >
                   </app-content-results>
-                }
-                @if (content.format === ContentType.FLASHCARD) {
+                } @else {
                   <div>
                     <app-divider></app-divider>
                     <app-rendered-text
@@ -397,6 +384,41 @@
                 ></app-content-waiting>
               }
             }
+            @if (content.format === ContentType.FLASHCARD) {
+              <div fxLayoutAlign="center center" fxLayoutGap="8px">
+                @if (selectedRoute === '') {
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="updateTab('results')"
+                    [appHotkey]="' '"
+                    [appHotkeyTitle]="
+                      'participant.content.show-answer' | transloco
+                    "
+                    [appHotkeyAction]="HotkeyAction.CLICK"
+                    [appHotkeyDisabled]="!active"
+                  >
+                    <mat-icon>keyboard_arrow_down</mat-icon>
+                    {{ 'participant.content.show-answer' | transloco }}
+                  </button>
+                } @else {
+                  <button
+                    mat-button
+                    (click)="updateTab('')"
+                    [appHotkey]="' '"
+                    [appHotkeyTitle]="
+                      'participant.content.hide-answer' | transloco
+                    "
+                    [appHotkeyAction]="HotkeyAction.CLICK"
+                    [appHotkeyDisabled]="!active"
+                  >
+                    <mat-icon>keyboard_arrow_up</mat-icon>
+                    {{ 'participant.content.hide-answer' | transloco }}
+                  </button>
+                  <ng-template [ngTemplateOutlet]="nextButton"></ng-template>
+                }
+              </div>
+            }
           </mat-tab-nav-panel>
         </div>
       }
@@ -407,3 +429,13 @@
     <div id="abstain">{{ 'participant.answer.a11y-abstain' | transloco }}</div>
   </div>
 </div>
+<ng-template #nextButton>
+  <button type="button" mat-raised-button color="primary" (click)="next.emit()">
+    {{
+      (lastContent
+        ? 'participant.answer.go-to-overview'
+        : 'participant.answer.next-content'
+      ) | transloco
+    }}
+  </button>
+</ng-template>

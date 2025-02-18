@@ -68,7 +68,9 @@
     "leaderboard-duration": "Zeit",
     "answered-correctly": "Richtig beantwortet",
     "partially-answered-correctly": "Teilweise richtig beantwortet",
-    "answered-incorrectly": "Falsch beantwortet"
+    "answered-incorrectly": "Falsch beantwortet",
+    "show-answer": "Antwort anzeigen",
+    "hide-answer": "Antwort verbergen"
   },
   "comment-list": {
     "a11y-search-list": "Durchsuche die Beiträge",

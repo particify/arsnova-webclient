@@ -68,7 +68,9 @@
     "answered-incorrectly": "Respuesta incorrecta",
     "contents": "Contenidos",
     "leaderboard-name": "Nombre",
-    "you-are-at-position": "Estás en {{ position }} lugar."
+    "you-are-at-position": "Estás en {{ position }} lugar.",
+    "show-answer": "Mostrar respuesta",
+    "hide-answer": "Ocultar respuesta"
   },
   "comment-list": {
     "a11y-search-list": "Buscar por publicaciones",
