@@ -9,12 +9,12 @@
     position: absolute;
     right: 0;
     top: 0;
-    width: calc(40vw - 4em);
+    width: calc(40vw - calc(2 * $spacing-3));
     background-color: var(--background);
-    height: calc(var(--full-height) - 2em - 72px);
+    height: calc(var(--full-height) - $spacing-3 - 72px);
     overflow: auto;
-    padding: 2em 2em 72px;
-    margin-bottom: 2em;
+    padding: $spacing-3 $spacing-3 72px;
+    margin-bottom: $spacing-3;
   }
 
   .presentation-container {
