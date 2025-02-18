@@ -10,7 +10,7 @@ export class ContentGroupTemplate {
   language: string;
   description: string;
   tags: TemplateTag[];
-  license: string;
+  license?: string;
   groupType!: GroupType;
   aiGenerated: boolean;
   attribution?: string;
@@ -23,7 +23,7 @@ export class ContentGroupTemplate {
     language: string,
     published: boolean,
     tags: TemplateTag[] = [],
-    license: string,
+    license?: string,
     aiGenerated = false,
     attribution?: string,
     templateIds?: string[]

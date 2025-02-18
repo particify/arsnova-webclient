@@ -75,8 +75,10 @@ export class ContentGroupTemplateEditingComponent
       this.attribution = this.template.attribution;
       this.aiGenerated = this.template.aiGenerated;
       this.selectedTags = this.template.tags ?? [];
-      this.selectedLicense = this.template.license;
       this.selectedLang = this.template.language;
+      if (this.template.license) {
+        this.selectedLicense = this.template.license;
+      }
     }
     this.formGroup = new FormGroup({
       name: new FormControl(this.name, Validators.required),
@@ -84,6 +86,9 @@ export class ContentGroupTemplateEditingComponent
       attribution: new FormControl(this.attribution),
       licenses: new FormControl(this.selectedLicense),
     });
+    if (this.template?.license) {
+      this.formGroup.get('licenses')?.disable();
+    }
   }
 
   replaceDots(key: string): string {
@@ -151,7 +156,7 @@ export class ContentGroupTemplateEditingComponent
       this.selectedLang,
       this.published,
       this.selectedTags,
-      this.published ? this.selectedLicense : this.licenseKeys[0],
+      this.published ? this.selectedLicense : undefined,
       this.aiGenerated,
       this.attribution
     );
