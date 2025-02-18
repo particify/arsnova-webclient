@@ -13,6 +13,10 @@ $option-padding: 0;
   &:first-of-type {
     margin-top: 8px;
   }
+
+  &:focus {
+    border-color: transparent;
+  }
 }
 
 .mat-icon {
@@ -21,6 +25,11 @@ $option-padding: 0;
 
 .no-grab {
   cursor: initial;
+}
+
+.cdk-drag-preview {
+  border-color: transparent;
+  box-sizing: border-box;
 }
 
 .cdk-drop-list-dragging {
