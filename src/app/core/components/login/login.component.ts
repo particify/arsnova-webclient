@@ -97,6 +97,9 @@ export class LoginComponent
       this.allowRegister =
         this.allowRegister && !data.apiConfig.ui.registrationDisabled;
     });
+    if (this.externalRouteAfterLogin) {
+      this.routingService.setRedirect(this.externalRouteAfterLogin);
+    }
   }
 
   ngAfterContentInit() {
@@ -222,11 +225,7 @@ export class LoginComponent
       this.dialog.closeAll();
       if (this.isStandard) {
         if (!this.routingService.redirect()) {
-          if (this.externalRouteAfterLogin) {
-            window.location.replace(this.externalRouteAfterLogin);
-          } else {
-            this.router.navigateByUrl('user');
-          }
+          this.router.navigateByUrl('user');
         }
       }
     } else if (result.status === AuthenticationStatus.ACTIVATION_PENDING) {

@@ -9,9 +9,12 @@ export const completeLoginGuard: CanActivateFn = () => {
   const authenticationService = inject(AuthenticationService);
   const routingService = inject(RoutingService);
   const auth$ = authenticationService.completeLogin();
-  const redirect = routingService.getRedirectUrl() ?? '/user';
   return auth$.pipe(
-    tap(() => router.navigateByUrl(redirect)),
+    tap(() => {
+      if (!routingService.redirect()) {
+        router.navigateByUrl('/user');
+      }
+    }),
     map(() => true)
   );
 };
