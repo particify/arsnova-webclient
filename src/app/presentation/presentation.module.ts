@@ -21,7 +21,6 @@ import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-f
     ControlBarComponent,
     PresentationComponent,
     KeyButtonBarComponent,
-    PublishContentGroupDialogComponent,
   ],
   imports: [
     extensions,
@@ -35,6 +34,7 @@ import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-f
     LoadingButtonComponent,
     ContentPresentationMenuComponent,
     CommentFilterComponent,
+    PublishContentGroupDialogComponent,
   ],
   providers: [provideTranslocoScope('creator'), FocusModeService],
 })

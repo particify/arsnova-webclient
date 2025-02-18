@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CoreModule } from '@app/core/core.module';
 import {
   ContentGroup,
   PUBLISHING_MODE_ITEMS,
@@ -10,12 +11,16 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-publish-content-group-dialog',
   templateUrl: './publish-content-group-dialog.component.html',
   styleUrl: './publish-content-group-dialog.component.scss',
-  standalone: false,
+  standalone: true,
+  imports: [CoreModule, LoadingButtonComponent],
+  providers: [provideTranslocoScope('creator')],
 })
 export class PublishContentGroupDialogComponent extends FormComponent {
   readonly dialogId = 'publish-content';
