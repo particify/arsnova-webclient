@@ -335,6 +335,18 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   }
 
   /**
+   * Completes the login process using a cookie set by the backend.
+   */
+  completeLogin() {
+    const restoreGuestLogin = this.isLoggedIn();
+    const loginUrl = this.buildUri(this.serviceApiUrl.login + '?refresh=true');
+    const auth$ = this.http.post<ClientAuthentication>(loginUrl, null, {
+      withCredentials: true,
+    });
+    return this.handleLoginResponse(auth$, restoreGuestLogin);
+  }
+
+  /**
    * Resets the local authentication state.
    */
   logout() {
