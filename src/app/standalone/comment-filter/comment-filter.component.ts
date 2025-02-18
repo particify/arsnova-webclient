@@ -15,6 +15,7 @@ export class CommentFilterComponent {
   @Input() categories?: string[];
   @Input() selectedCategory?: string;
   @Input() useIconButton = true;
+  @Input() useExtraPadding = true;
 
   @Output() filterSelected = new EventEmitter<CommentFilter>();
   @Output() periodSelected = new EventEmitter<CommentPeriod>();
