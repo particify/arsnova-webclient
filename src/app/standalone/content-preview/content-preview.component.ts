@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentScale } from '@app/core/models/content-scale';
@@ -55,7 +54,6 @@ export class ContentPreviewComponent implements OnInit {
   answerOptionsWithPoints: AnswerWithPoints[] = [];
   selectableAnswers: SelectableAnswer[] = [];
   multipleAnswers = false;
-  markdownFeatureset = MarkdownFeatureset.SIMPLE;
   attachmentData: any;
   words: string[] = [];
   additionalText?: string;
@@ -116,10 +114,6 @@ export class ContentPreviewComponent implements OnInit {
       this.numericContent = this.content as ContentNumeric;
     }
     this.setSelectableAnswers();
-    this.markdownFeatureset =
-      [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1
-        ? MarkdownFeatureset.EXTENDED
-        : MarkdownFeatureset.SIMPLE;
     this.prepareAttachmentData();
   }
 

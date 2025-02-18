@@ -21,7 +21,6 @@
     tabindex="0"
     [rawText]="content.body"
     [dynamic]="true"
-    [markdownFeatureset]="markdownFeatureset"
   ></app-rendered-text>
   <lib-extension-point
     extensionId="attachment-list"
@@ -75,11 +74,7 @@
     </h3>
     <mat-card appearance="outlined">
       @if (additionalText) {
-        <app-rendered-text
-          [rawText]="additionalText"
-          [dynamic]="true"
-          [markdownFeatureset]="markdownFeatureset"
-        >
+        <app-rendered-text [rawText]="additionalText" [dynamic]="true">
         </app-rendered-text>
       }
     </mat-card>
