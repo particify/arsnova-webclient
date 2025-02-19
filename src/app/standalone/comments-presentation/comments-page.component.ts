@@ -38,6 +38,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-hint/comment-settings-hint.component';
 import { CommentListHintComponent } from '@app/standalone/comment-list-hint/comment-list-hint.component';
 import { CommentComponent } from '@app/standalone/comment/comment.component';
+import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-comments-presentation',
@@ -80,7 +81,8 @@ export class CommentsPageComponent
     protected routingService: RoutingService,
     protected eventService: EventService,
     private presentationService: PresentationService,
-    protected focusModeService: FocusModeService
+    protected focusModeService: FocusModeService,
+    private formService: FormService
   ) {
     super(
       commentService,
@@ -269,6 +271,7 @@ export class CommentsPageComponent
       .update(settings)
       .subscribe((updatedSettings) => {
         this.disabled = updatedSettings.disabled;
+        this.formService.enableForm();
         this.isLoading = true;
         this.load(true);
         const msg = this.translateService.translate(
@@ -291,6 +294,7 @@ export class CommentsPageComponent
     );
     this.commentSettingsService.update(commentSettings).subscribe(() => {
       this.readonly = !this.readonly;
+      this.formService.enableForm();
       this.showReadonlyStateNotification();
     });
   }
