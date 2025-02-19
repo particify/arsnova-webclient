@@ -22,6 +22,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { Observable, takeUntil } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { FormService } from '@app/core/services/util/form.service';
 
 const TAB_GROUP_HEIGHT = 48;
 
@@ -54,7 +55,8 @@ export class CommentsPageComponent
     protected commentSettingsService: CommentSettingsService,
     protected authenticationService: AuthenticationService,
     protected location: Location,
-    protected routingService: RoutingService
+    protected routingService: RoutingService,
+    private formService: FormService
   ) {
     super(
       commentService,
@@ -184,6 +186,7 @@ export class CommentsPageComponent
     );
     this.commentSettingsService.update(commentSettings).subscribe(() => {
       this.readonly = !this.readonly;
+      this.formService.enableForm();
       this.showReadonlyStateNotification();
     });
   }
@@ -228,6 +231,7 @@ export class CommentsPageComponent
       .update(settings)
       .subscribe((updatedSettings) => {
         this.disabled = updatedSettings.disabled;
+        this.formService.enableForm();
         this.isLoading = true;
         this.load(true);
         const msg = this.translateService.translate(
