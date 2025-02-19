@@ -127,7 +127,11 @@ export class RoutingService {
     const url = this.getRedirectUrl();
     if (url) {
       this.removeRedirectUrl();
-      this.navigate(url);
+      if (URL.canParse(url)) {
+        location.href = url;
+      } else {
+        this.navigate(url);
+      }
       return true;
     } else {
       return false;
