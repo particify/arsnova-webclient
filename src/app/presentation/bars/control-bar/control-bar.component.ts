@@ -413,24 +413,6 @@ export class ControlBarComponent
     });
   }
 
-  getBaseUrl(): string {
-    return `/present/${this.room.shortId}/`;
-  }
-
-  getFeatureUrl(feature: string): string {
-    return this.groupName && feature === RoutingFeature.CONTENTS
-      ? feature + this.getGroupUrl()
-      : feature;
-  }
-
-  navToUrl(index: number) {
-    const item = this.barItems[index];
-    const url = item.url;
-    if (url) {
-      this.router.navigateByUrl(url);
-    }
-  }
-
   toggleFullscreen() {
     if (this.inFullscreen) {
       this.exitFullscreen();

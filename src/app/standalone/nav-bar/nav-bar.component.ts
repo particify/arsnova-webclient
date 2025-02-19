@@ -307,7 +307,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   getItems() {
     for (const feature of this.features) {
-      const url = this.getBaseUrl() + this.getFeatureUrl(feature.name);
       const index = this.activeFeatures.indexOf(feature.name);
       const barIndex = this.barItems.map((b) => b.name).indexOf(feature.name);
       if (index > -1) {
@@ -315,7 +314,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.barItems.splice(
             index,
             0,
-            new NavBarItem(feature.name, feature.icon, url, false)
+            new NavBarItem(
+              feature.name,
+              feature.icon,
+              this.getFeatureUrl(feature.name),
+              false
+            )
           );
         }
       } else {
@@ -341,34 +345,34 @@ export class NavBarComponent implements OnInit, OnDestroy {
   isRouteMatching(barItem: NavBarItem): boolean {
     if (
       barItem.name === RoutingFeature.OVERVIEW &&
-      this.router.url === this.getBaseUrl()
+      this.router.url ===
+        this.router.serializeUrl(this.router.createUrlTree(this.getBaseUrl()))
     ) {
       return true;
     }
-    const urlTree = this.router.createUrlTree([barItem.url]);
-    return this.router.url.includes(this.router.serializeUrl(urlTree));
+    return !!barItem.url && this.router.url.includes(barItem.url);
   }
 
-  getFeatureUrl(feature: string): string {
+  private getFeatureUrl(feature: string): string {
+    const url = this.getBaseUrl();
     if (feature) {
-      let url = '/' + feature;
+      url.push(feature);
       if (this.groupName && feature === RoutingFeature.CONTENTS) {
-        url += this.getGroupUrl();
+        url.push(this.groupName);
       }
-      return url;
-    } else {
-      return '';
     }
+    return this.router.serializeUrl(this.router.createUrlTree(url));
   }
 
-  getBaseUrl(): string {
-    return `/${this.routingService.getRoleRoute(this.viewRole)}/${
-      this.room.shortId
-    }`;
-  }
-
-  getGroupUrl() {
-    return '/' + this.groupName;
+  private getBaseUrl(): string[] {
+    return [
+      this.routingService.getRoleRoute(
+        this.viewRole === UserRole.PARTICIPANT
+          ? UserRole.PARTICIPANT
+          : undefined
+      ),
+      this.room.shortId,
+    ];
   }
 
   navToUrl(index: number, newGroup?: ContentGroup) {
@@ -531,9 +535,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.groupName = name;
     const groupBarIndex = this.getBarIndexOfFeature(RoutingFeature.CONTENTS);
     if (this.barItems[groupBarIndex]) {
-      this.barItems[groupBarIndex].url = `${this.getBaseUrl()}/${
+      this.barItems[groupBarIndex].url = this.getFeatureUrl(
         RoutingFeature.CONTENTS
-      }/${this.groupName}`;
+      );
     }
     this.setGroupInSessionStorage(this.groupName);
   }
