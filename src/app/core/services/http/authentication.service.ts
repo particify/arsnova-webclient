@@ -331,6 +331,10 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
       take(1)
     );
 
+    if (!popup) {
+      location.href = ssoUrl;
+    }
+
     return this.handleLoginResponse(auth$, this.isLoggedIn());
   }
 
