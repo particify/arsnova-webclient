@@ -20,6 +20,7 @@
         attr.aria-label="{{
           'creator.content.a11y-delete-answers' | transloco
         }}"
+        [disabled]="isLive && !isFinished"
       >
         <mat-icon>clear_all</mat-icon>
         <span>{{ 'creator.content.delete-answers' | transloco }}</span>
