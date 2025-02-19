@@ -11,6 +11,7 @@ import { ContentPresentationState } from '@app/core/models/events/content-presen
 import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ContentState } from '@app/core/models/content-state';
 
 describe('ContentPresentationMenuComponent', () => {
   let component: ContentPresentationMenuComponent;
@@ -44,6 +45,7 @@ describe('ContentPresentationMenuComponent', () => {
     'getContentState',
     'updateRoundState',
     'getWordcloudVisualizationChanged',
+    'getCountdownChanged',
   ]);
   presentationService.getMultipleRoundState.and.returnValue(of(true));
   presentationService.getContentState.and.returnValue(
@@ -52,6 +54,7 @@ describe('ContentPresentationMenuComponent', () => {
   presentationService.getWordcloudVisualizationChanged.and.returnValue(
     of(true)
   );
+  presentationService.getCountdownChanged.and.returnValue(of(content));
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -69,6 +72,8 @@ describe('ContentPresentationMenuComponent', () => {
 
     fixture = TestBed.createComponent(ContentPresentationMenuComponent);
     component = fixture.componentInstance;
+    component.content = new Content();
+    component.content.state = new ContentState(1, undefined, true);
     fixture.detectChanges();
   });
 

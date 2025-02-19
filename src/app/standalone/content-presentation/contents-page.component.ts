@@ -153,17 +153,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.presentationService.getCountdownChanged().subscribe((content) => {
       this.initScale();
       this.content.state = content.state;
-      if (this.content.state.answeringEndTime) {
-        this.endDate = new Date(this.content.state.answeringEndTime);
-        this.answeringLocked = new Date() > this.endDate;
-        if (this.contents) {
-          this.contents
-            .filter((c) => c.id !== this.content.id && c.state.answeringEndTime)
-            .forEach((c) => (c.state.answeringEndTime = new Date()));
-        }
-      } else {
-        this.endDate = undefined;
-      }
+      this.evaluateContentState();
     });
     this.contentService
       .getAnswersDeleted()
@@ -173,6 +163,29 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
           this.presentationService.reloadCurrentContent();
         }
       });
+    this.contentService
+      .getRoundStarted()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((content) => {
+        if (content && content.id === this.content.id) {
+          this.content.state.answeringEndTime = undefined;
+          this.evaluateContentState();
+        }
+      });
+  }
+
+  private evaluateContentState() {
+    if (this.content.state.answeringEndTime) {
+      this.endDate = new Date(this.content.state.answeringEndTime);
+      this.answeringLocked = new Date() > this.endDate;
+      if (this.contents) {
+        this.contents
+          .filter((c) => c.id !== this.content.id && c.state.answeringEndTime)
+          .forEach((c) => (c.state.answeringEndTime = new Date()));
+      }
+    } else {
+      this.endDate = undefined;
+    }
   }
 
   private toggleLeaderboard() {
