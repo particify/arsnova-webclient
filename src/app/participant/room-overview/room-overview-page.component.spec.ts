@@ -15,13 +15,11 @@ import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Room } from '@app/core/models/room';
 import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
-import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { Message } from '@stomp/stompjs';
-import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { RoomStats } from '@app/core/models/room-stats';
@@ -98,7 +96,6 @@ describe('RoomOverviewPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [A11yIntroPipe, SplitShortIdPipe],
       imports: [getTranslocoModule(), RoomOverviewPageComponent],
       providers: [
         {
