@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ContentParticipantComponent } from './content-participant.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EventService } from '@app/core/services/util/event.service';
 import {
@@ -63,7 +62,6 @@ describe('ContentParticipantComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [A11yRenderedBodyPipe],
       imports: [getTranslocoModule(), ContentParticipantComponent],
       providers: [
         {

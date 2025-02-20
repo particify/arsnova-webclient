@@ -27,7 +27,6 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SpyLocation } from '@angular/common/testing';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { UserSettings } from '@app/core/models/user-settings';
 import { UserService } from '@app/core/services/http/user.service';
@@ -140,7 +139,6 @@ describe('ParticipantContentCarouselPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [A11yIntroPipe],
       imports: [
         getTranslocoModule(),
         ParticipantContentCarouselPageComponent,
