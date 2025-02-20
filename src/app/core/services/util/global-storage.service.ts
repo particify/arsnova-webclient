@@ -36,6 +36,8 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   BROWSER_SESSION_INITIALIZED: Symbol(),
   REDIRECT_URL: Symbol(),
   HOTKEY_COUNT: Symbol(),
+  UI_ERROR_COUNT: Symbol(),
+  HTTP_ERROR_COUNT: Symbol(),
 };
 
 /**
@@ -148,6 +150,18 @@ export const STORAGE_CONFIG: StorageItem[] = [
   {
     key: STORAGE_KEYS.HOTKEY_COUNT,
     name: 'HOTKEY_COUNT',
+    category: StorageItemCategory.STATISTICS,
+    backend: StorageBackend.SESSIONSTORAGE,
+  },
+  {
+    key: STORAGE_KEYS.UI_ERROR_COUNT,
+    name: 'UI_ERROR_COUNT',
+    category: StorageItemCategory.STATISTICS,
+    backend: StorageBackend.SESSIONSTORAGE,
+  },
+  {
+    key: STORAGE_KEYS.HTTP_ERROR_COUNT,
+    name: 'HTTP_ERROR_COUNT',
     category: StorageItemCategory.STATISTICS,
     backend: StorageBackend.SESSIONSTORAGE,
   },
