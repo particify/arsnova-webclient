@@ -309,6 +309,7 @@ export class AbstractCommentsPageComponent {
     c.answer = comment.answer;
     c.favorite = comment.favorite;
     c.correct = comment.correct;
+    c.ack = this.directSend;
     this.announceNewComment(c);
     this.comments = this.comments.concat(c);
     this.commentCounter++;
