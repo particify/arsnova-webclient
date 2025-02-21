@@ -438,9 +438,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cdk@npm:19.1.4":
-  version: 19.1.4
-  resolution: "@angular/cdk@npm:19.1.4"
+"@angular/cdk@npm:19.1.5":
+  version: 19.1.5
+  resolution: "@angular/cdk@npm:19.1.5"
   dependencies:
     parse5: "npm:^7.1.2"
     tslib: "npm:^2.3.0"
@@ -451,7 +451,7 @@ __metadata:
   dependenciesMeta:
     parse5:
       optional: true
-  checksum: 10c0/ee1318903858cef9f7db37d60aceaa89d100efdca494d7df5820725740a05440451a368836adc2dc5f5a322760d3b4aed6f308244a37366b96d08e178d8f2a19
+  checksum: 10c0/28159d3a5d7739cb784208e775ed2d19bb8306d56948d9c16ba19747b1df6d90b7383c0e5b2b50dc9399b01806c06b64ff72524732e5cccd32f21df368553b8e
   languageName: node
   linkType: hard
 
@@ -579,20 +579,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/material@npm:19.1.4":
-  version: 19.1.4
-  resolution: "@angular/material@npm:19.1.4"
+"@angular/material@npm:19.1.5":
+  version: 19.1.5
+  resolution: "@angular/material@npm:19.1.5"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
     "@angular/animations": ^19.0.0 || ^20.0.0
-    "@angular/cdk": 19.1.4
+    "@angular/cdk": 19.1.5
     "@angular/common": ^19.0.0 || ^20.0.0
     "@angular/core": ^19.0.0 || ^20.0.0
     "@angular/forms": ^19.0.0 || ^20.0.0
     "@angular/platform-browser": ^19.0.0 || ^20.0.0
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10c0/9548c8b3da6cd3212df9166bb1e791dbd11bb7da402922ea2af2a8bcae2bf9a89c12bebd3e32aef1e8e5b4abbe43ad845f97feafe5af075340d39b62c7d8c418
+  checksum: 10c0/c39b457c8dea1c371cf998795ed1b2c173a8a2c67f98c4cd20f360b542dc3b80be13d25d99894146955589a005d8bd5da27faadb4df2da8c6461d37182519aec
   languageName: node
   linkType: hard
 
@@ -5406,7 +5406,7 @@ __metadata:
     "@angular-eslint/schematics": "npm:19.1.0"
     "@angular-eslint/template-parser": "npm:19.1.0"
     "@angular/animations": "npm:19.1.7"
-    "@angular/cdk": "npm:19.1.4"
+    "@angular/cdk": "npm:19.1.5"
     "@angular/cli": "npm:19.1.8"
     "@angular/common": "npm:19.1.7"
     "@angular/compiler": "npm:19.1.7"
@@ -5415,7 +5415,7 @@ __metadata:
     "@angular/flex-layout": "npm:15.0.0-beta.42"
     "@angular/forms": "npm:19.1.7"
     "@angular/language-service": "npm:19.1.7"
-    "@angular/material": "npm:19.1.4"
+    "@angular/material": "npm:19.1.5"
     "@angular/platform-browser": "npm:19.1.7"
     "@angular/platform-browser-dynamic": "npm:19.1.7"
     "@angular/router": "npm:19.1.7"
