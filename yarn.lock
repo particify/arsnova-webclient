@@ -4428,17 +4428,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jasmine@npm:*":
+"@types/jasmine@npm:*, @types/jasmine@npm:5.1.7":
   version: 5.1.7
   resolution: "@types/jasmine@npm:5.1.7"
   checksum: 10c0/f8df11fb8c8dce20088bfbaf5f805878b1228b4522f6ef100ea539e2f363537304095200ea8e856a0795e45d18803970d12683bc5afa35ccb475cc8ec5ea6d54
-  languageName: node
-  linkType: hard
-
-"@types/jasmine@npm:5.1.6":
-  version: 5.1.6
-  resolution: "@types/jasmine@npm:5.1.6"
-  checksum: 10c0/89f1e182346664e3633997a98117b2cca33142c1c09ab6296255404143136b415453ab6f653b53a9019584e909b8177078a55c3d70b7573500c698971c231cf1
   languageName: node
   linkType: hard
 
@@ -5415,7 +5408,7 @@ __metadata:
     "@storybook/blocks": "npm:8.5.8"
     "@storybook/test": "npm:8.5.8"
     "@types/d3-cloud": "npm:^1.2.5"
-    "@types/jasmine": "npm:5.1.6"
+    "@types/jasmine": "npm:5.1.7"
     "@types/jasminewd2": "npm:2.0.13"
     "@types/node": "npm:22.13.4"
     "@types/wordcloud": "npm:1.2.2"
