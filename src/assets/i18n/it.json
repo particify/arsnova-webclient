@@ -23,7 +23,7 @@
     "a11y-copy-url": "Copia il link alla stanza negli appunti",
     "answer-statistics": "Statistiche",
     "live-feedback": "Feedback in tempo reale",
-    "comments": "DOMANDE E RISPOSTE",
+    "comments": "Domande e risposte",
     "copy-url": "Indirizzo di copia",
     "url-copied": "Il link della stanza è stato copiato negli appunti."
   },
@@ -288,7 +288,7 @@
   },
   "title": {
     "user": "Le mie stanze",
-    "comments": "DOMANDE E RISPOSTE",
+    "comments": "Domande e risposte",
     "register": "Registro",
     "login": "Accesso",
     "request-pw-reset": "Reimpostazione della password",
@@ -526,7 +526,7 @@
   },
   "sidebar": {
     "a11y-switch-to-feature": "Passa a {{feature}}.",
-    "comments": "DOMANDE E RISPOSTE",
+    "comments": "Domande e risposte",
     "series": "Serie di domande",
     "feedback": "Feedback in tempo reale",
     "overview": "Panoramica"
