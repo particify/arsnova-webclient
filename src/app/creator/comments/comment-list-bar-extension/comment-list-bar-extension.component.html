@@ -10,6 +10,7 @@
     appHotkey="5"
     appTrackInteraction="Comments readonly state toggled"
     appTrackName="{{ readonly ? 'off' : 'on' }}"
+    data-testid="toggle-readonly-button"
   >
     <mat-icon class="bar-icon">{{ readonly ? 'lock_open' : 'lock' }}</mat-icon>
   </button>
@@ -20,6 +21,7 @@
     [matMenuTriggerFor]="moreMenu"
     matTooltip="{{ 'creator.comment-list.more-options' | transloco }}"
     appHotkey="6"
+    data-testid="comments-more-menu-button"
   >
     <mat-icon class="bar-icon">more_vert</mat-icon>
   </button>

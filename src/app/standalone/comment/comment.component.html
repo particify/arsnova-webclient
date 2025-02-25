@@ -67,6 +67,7 @@
           [disabled]="!isEditor || isSimpleView"
           (click)="markCorrect(1)"
           [matTooltip]="'creator.comment-page.mark-not-correct' | transloco"
+          data-testid="comment-correct-button"
         >
           <mat-icon class="green">check_circle </mat-icon>
         </button>
@@ -77,6 +78,7 @@
           [disabled]="!isEditor || isSimpleView"
           (click)="markCorrect(2)"
           [matTooltip]="'creator.comment-page.mark-not-wrong' | transloco"
+          data-testid="comment-wrong-button"
         >
           <mat-icon class="red">cancel </mat-icon>
         </button>
@@ -87,6 +89,7 @@
           [disabled]="!isEditor || isSimpleView"
           (click)="setFavorite()"
           [matTooltip]="'creator.comment-page.mark-not-favorite' | transloco"
+          data-testid="comment-favorite-button"
         >
           <mat-icon class="yellow">grade </mat-icon>
         </button>
@@ -96,6 +99,7 @@
           mat-icon-button
           (click)="answerComment()"
           [matTooltip]="'comment-page.go-to-answer' | transloco"
+          data-testid="comment-answer-button"
         >
           <mat-icon class="blue">comment </mat-icon>
         </button>
@@ -106,6 +110,7 @@
           color="primary"
           (click)="setAck()"
           [matTooltip]="'creator.comment-page.reject' | transloco"
+          data-testid="release-comment-button"
         >
           <mat-icon>lock_open</mat-icon>
         </button>
@@ -115,6 +120,7 @@
           mat-icon-button
           [matMenuTriggerFor]="actionsMenu"
           [matTooltip]="'creator.comment-page.show-actions' | transloco"
+          data-testid="comment-more-menu-button"
         >
           <mat-icon>more_horiz </mat-icon>
         </button>

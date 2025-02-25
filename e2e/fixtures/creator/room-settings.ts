@@ -56,4 +56,18 @@ export class RoomSettingsPage {
     await this.page.getByLabel('guide the participants').click();
     await this.saveSettings();
   }
+
+  async goToCommentSettings() {
+    await this.page.getByRole('button', { name: 'Q&A', exact: true }).click();
+  }
+
+  async toggleCommentsEnabled() {
+    await this.page.getByLabel('enable the Q&A section').click();
+  }
+
+  async toggleDirectSend() {
+    await this.page
+      .getByLabel('moderator or the lecturer must activate new posts')
+      .click();
+  }
 }
