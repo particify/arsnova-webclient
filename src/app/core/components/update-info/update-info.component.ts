@@ -26,7 +26,7 @@ export class UpdateInfoComponent implements OnInit {
   readonly dialogId = 'update-info';
 
   isLoading = true;
-  changes: string[] = [];
+  changes?: string[] = [];
   newsUrl?: string;
   afterUpdate = false;
   versions: VersionInfo[];
@@ -48,8 +48,9 @@ export class UpdateInfoComponent implements OnInit {
     this.changes = this.versions
       .filter((v) => v.changes?.[lang]?.length > 0)
       .reduce(
-        (acc, cur) => (cur.id > acc.id ? cur : acc),
-        this.versions[0]
+        (acc: VersionInfo | undefined, cur) =>
+          cur.id > (acc?.id ?? 0) ? cur : acc,
+        undefined
       )?.changes?.[lang];
     if (this.data.updateAvailable) {
       this.data.updateAvailable.subscribe(() => (this.updateReady = true));
