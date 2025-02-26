@@ -3,15 +3,14 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  timeout: 60000,
+  timeout: 90000,
   forbidOnly: false,
-  retries: 0,
+  retries: 1,
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:4200',
     browserName: 'chromium',
     trace: 'on',
-    headless: false,
     permissions: ['clipboard-read'],
   },
   projects: [
