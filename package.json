@@ -95,7 +95,7 @@
     "karma-viewport": "1.0.9",
     "ng-packagr": "19.1.2",
     "playwright-ng-schematics": "1.2.2",
-    "prettier": "3.5.1",
+    "prettier": "3.5.2",
     "storybook": "8.5.8",
     "stylelint": "16.14.1",
     "stylelint-config-standard-scss": "14.0.0",
