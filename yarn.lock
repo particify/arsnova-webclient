@@ -5478,7 +5478,7 @@ __metadata:
     playwright-ng-schematics: "npm:1.2.2"
     prettier: "npm:3.5.2"
     prismjs: "npm:1.29.0"
-    rxjs: "npm:7.8.1"
+    rxjs: "npm:7.8.2"
     storybook: "npm:8.5.8"
     stylelint: "npm:16.14.1"
     stylelint-config-standard-scss: "npm:14.0.0"
@@ -12559,7 +12559,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.8.1":
+"rxjs@npm:7.8.2, rxjs@npm:^7.8.1":
   version: 7.8.2
   resolution: "rxjs@npm:7.8.2"
   dependencies:
