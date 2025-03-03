@@ -7,6 +7,7 @@
       [answers]="answerStats"
       [banMode]="false"
       [isPresentation]="isPresentation"
+      [isModerator]="!isParticipant"
       (deleteClicked)="deleteAnswer($event)"
     ></app-answer-list>
   }

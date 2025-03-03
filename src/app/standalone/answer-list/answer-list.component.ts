@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TextStatistic } from '@app/core/models/text-statistic';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -23,12 +22,10 @@ import { NgClass } from '@angular/common';
   providers: [provideTranslocoScope('creator')],
 })
 export class AnswerListComponent implements OnInit {
-  // Route data input below
-  @Input() viewRole!: UserRole;
-
   @Input({ required: true }) answers!: TextStatistic[];
   @Input() banMode = true;
   @Input() isPresentation = false;
+  @Input() isModerator = true;
   @Input() showCorrect = false;
   @Input() correctAnswers?: string[];
   @Output() deleteClicked = new EventEmitter<TextStatistic>();
@@ -53,9 +50,5 @@ export class AnswerListComponent implements OnInit {
 
   hasCorrectAnswers(): boolean {
     return !!this.correctAnswers;
-  }
-
-  isModerator(): boolean {
-    return this.viewRole !== UserRole.PARTICIPANT;
   }
 }

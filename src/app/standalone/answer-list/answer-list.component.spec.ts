@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { AnswerListComponent } from './answer-list.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -25,7 +24,7 @@ describe('AnswerListComponent', () => {
       new TextStatistic('MNO', 2),
       new TextStatistic('PQR', 5),
     ];
-    component.viewRole = UserRole.OWNER;
+    component.isModerator = true;
     fixture.detectChanges();
   });
 
