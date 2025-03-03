@@ -40,6 +40,9 @@ export class LeaderboardService {
     item: CurrentLeaderboardItem,
     tableItems: ContentLeaderboardTableItem[]
   ) {
+    if (tableItems.length === 0) {
+      return 1;
+    }
     return (index > 0 &&
       item.currentResult?.points === tableItems[index - 1]?.currentPoints) ||
       (!item.currentResult?.points && !tableItems[index - 1]?.currentPoints)
