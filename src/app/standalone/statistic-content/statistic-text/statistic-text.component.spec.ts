@@ -16,6 +16,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentState } from '@app/core/models/content-state';
 
 describe('StatisticTextComponent', () => {
   let component: StatisticTextComponent;
@@ -92,6 +93,7 @@ describe('StatisticTextComponent', () => {
       [],
       ContentType.TEXT
     );
+    component.content.state = new ContentState(1, new Date(), true);
     fixture.detectChanges();
   });
 

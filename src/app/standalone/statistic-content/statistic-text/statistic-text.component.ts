@@ -64,14 +64,16 @@ export class StatisticTextComponent
   }
 
   afterInit() {
-    this.contentService
-      .getTextAnswerCreatedStream(this.content.roomId, this.content.id)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((msg) => {
-        const answer = JSON.parse(msg.body).payload as TextAnswer;
-        answer.contentId = this.content.id;
-        this.addAnswerToList(answer);
-      });
+    if (!this.isParticipant || this.content.state.answersPublished) {
+      this.contentService
+        .getTextAnswerCreatedStream(this.content.roomId, this.content.id)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((msg) => {
+          const answer = JSON.parse(msg.body).payload as TextAnswer;
+          answer.contentId = this.content.id;
+          this.addAnswerToList(answer);
+        });
+    }
   }
 
   ngOnDestroy() {
