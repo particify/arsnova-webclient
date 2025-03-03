@@ -309,6 +309,9 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       return;
     }
     this.currentStep = index;
+    if (!this.contents[index]) {
+      return;
+    }
     const lastAnsweringEndTime = this.content?.state.answeringEndTime;
     this.content = this.contents[index];
     if (
