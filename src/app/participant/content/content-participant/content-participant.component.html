@@ -75,6 +75,9 @@
                         [appHotkeyTitle]="tab.label | transloco"
                         [appHotkeyAction]="HotkeyAction.CLICK"
                         [appHotkeyDisabled]="!active"
+                        [attr.data-testid]="
+                          'content-tab-' + (tab.label | transloco).toLowerCase()
+                        "
                       >
                         <mat-icon color="primary">{{ tab.icon }}</mat-icon>
                       </a>
