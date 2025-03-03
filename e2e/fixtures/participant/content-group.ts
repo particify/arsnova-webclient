@@ -6,6 +6,7 @@ export class ContentGroupPage {
   private readonly submitButton: Locator;
   private readonly abstainButton: Locator;
   private readonly overviewLeaderboardTab: Locator;
+  private readonly contentResultsTab: Locator;
 
   constructor(
     public readonly page: Page,
@@ -18,6 +19,7 @@ export class ContentGroupPage {
     this.overviewLeaderboardTab = page.getByRole('tab', {
       name: 'leaderboard',
     });
+    this.contentResultsTab = page.getByTestId('content-tab-results');
   }
 
   async goto(shortId: string, seriesName: string, index = 1) {
@@ -96,5 +98,9 @@ export class ContentGroupPage {
 
   async switchToLeaderboardTab() {
     await this.overviewLeaderboardTab.click();
+  }
+
+  async switchToResultsTab() {
+    await this.contentResultsTab.click();
   }
 }

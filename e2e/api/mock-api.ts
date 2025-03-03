@@ -5,6 +5,7 @@ import {
   AnswerResultOverview,
   AnswerResultType,
 } from '@app/core/models/answer-result';
+import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { Content } from '@app/core/models/content';
@@ -22,6 +23,10 @@ import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum
 import { Membership } from '@app/core/models/membership';
 import { Room } from '@app/core/models/room';
 import { RoomStats } from '@app/core/models/room-stats';
+import {
+  RoundStatistics,
+  TextRoundStatistics,
+} from '@app/core/models/round-statistics';
 import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -177,6 +182,36 @@ export class MockApi {
     await this.page.route(
       '*/**/room/roomId/contentgroup/groupId/stats/user/**',
       async (route) => {
+        await route.fulfill({
+          status: 200,
+          json: stats,
+        });
+      }
+    );
+  }
+
+  async mockShortAnswerContentStats(
+    contentId: string,
+    texts: string[],
+    independentCounts: number[],
+    answerCount: number,
+    abstentionCount = 0,
+    round = 1
+  ) {
+    await this.page.route(
+      `*/**/room/roomId/content/${contentId}/stats`,
+      async (route) => {
+        const stats = new AnswerStatistics();
+        stats.roundStatistics = [
+          new TextRoundStatistics(
+            round,
+            independentCounts,
+            [],
+            abstentionCount,
+            answerCount,
+            texts
+          ),
+        ];
         await route.fulfill({
           status: 200,
           json: stats,

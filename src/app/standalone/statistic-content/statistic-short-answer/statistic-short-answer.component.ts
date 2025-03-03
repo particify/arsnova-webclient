@@ -65,7 +65,7 @@ export class StatisticShortAnswerComponent
   }
 
   init(stats: AnswerStatistics) {
-    if (this.showCorrect && !this.getCorrectAnswers()) {
+    if (this.showCorrect && this.getCorrectAnswers().length === 0) {
       this.contentService
         .getCorrectTerms(this.content.roomId, this.content.id)
         .subscribe((correctTerms) => {

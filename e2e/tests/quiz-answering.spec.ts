@@ -77,19 +77,28 @@ test.describe('participant answer async quiz', () => {
   });
 
   test('answer short answer content correctly', async ({ page, baseURL }) => {
+    mockApi.mockShortAnswerContentStats('content2', ['abc'], [1], 1);
     const participant = new ParticipantContentGroupPage(page, baseURL);
     await participant.goto('12345678', 'My quiz', 2);
     await participant.joinQuiz();
-    await participant.answerTextContent('xyz');
+    await participant.answerTextContent('abc');
     await expect(participant.getHintAfterAnswering()).toBeVisible();
+    await participant.switchToResultsTab();
+    await expect(page.getByText('100 %', { exact: true })).toBeVisible();
+    await expect(page.getByText('abc')).toBeVisible();
+    await expect(page.getByTestId('correct-indicator-icon')).toBeVisible();
   });
 
   test('answer short answer content wrong', async ({ page, baseURL }) => {
+    mockApi.mockShortAnswerContentStats('content2', ['xyz'], [1], 1);
     const participant = new ParticipantContentGroupPage(page, baseURL);
     await participant.goto('12345678', 'My quiz', 2);
     await participant.joinQuiz();
     await participant.answerTextContent('xyz');
     await expect(participant.getHintAfterAnswering()).toBeVisible();
+    await participant.switchToResultsTab();
+    await expect(page.getByText('0 %', { exact: true })).toBeVisible();
+    await expect(page.getByText('xyz')).toBeVisible();
   });
 
   test('abstain on short answer content', async ({ page, baseURL }) => {
