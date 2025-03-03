@@ -35,6 +35,7 @@ export class StatisticTextComponent
 {
   @Input({ required: true }) content!: Content;
   @Input() directShow = false;
+  @Input() isParticipant = true;
 
   answerStats: TextStatistic[] = [];
   answers: TextAnswer[] = [];
