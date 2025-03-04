@@ -86,7 +86,9 @@ test.describe('participant answer async quiz', () => {
     await participant.switchToResultsTab();
     await expect(page.getByText('100 %', { exact: true })).toBeVisible();
     await expect(page.getByText('abc')).toBeVisible();
-    await expect(page.getByTestId('correct-indicator-icon')).toBeVisible();
+    await expect(
+      page.getByTestId('short-answer-correct-indicator')
+    ).toBeVisible();
   });
 
   test('answer short answer content wrong', async ({ page, baseURL }) => {

@@ -24,7 +24,11 @@
             settings.contentAnswersDirectlyBelowChart && isPresentation,
         }"
       >
-        <canvas class="chart" id="{{ chartId }}"></canvas>
+        <canvas
+          class="chart"
+          id="{{ chartId }}"
+          data-testid="content-results-chart"
+        ></canvas>
       </div>
     </div>
   }

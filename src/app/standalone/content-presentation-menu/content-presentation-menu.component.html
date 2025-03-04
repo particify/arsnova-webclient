@@ -21,6 +21,7 @@
           'creator.content.a11y-delete-answers' | transloco
         }}"
         [disabled]="isLive && !isFinished"
+        data-testid="delete-content-answer-button"
       >
         <mat-icon>clear_all</mat-icon>
         <span>{{ 'creator.content.delete-answers' | transloco }}</span>
