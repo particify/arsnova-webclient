@@ -141,9 +141,28 @@ export class StatisticNumericComponent
 
   deleteAnswers() {
     this.data = [[], []];
-    this.roundStats = [];
+    if (this.roundStats) {
+      const stats = new AnswerStatistics();
+      stats.contentId = this.content.id;
+      this.roundStats.forEach((stats) => this.resetRoundStatistics(stats));
+      stats.roundStatistics = this.roundStats;
+      this.updateData(stats);
+    }
     this.updateCounterForRound();
     this.updateChart();
+  }
+
+  private resetRoundStatistics(stats: NumericRoundStatistics) {
+    stats.abstentionCount = 0;
+    stats.answerCount = 0;
+    stats.selectedNumbers = [];
+    stats.independentCounts = [];
+    stats.correctAnswerFraction = 0;
+    stats.minimum = 0;
+    stats.maximum = 0;
+    stats.mean = 0;
+    stats.median = 0;
+    stats.standardDeviation = 0;
   }
 
   private prepareDataAndCreateChart(colors: Array<string[]>) {
@@ -397,20 +416,13 @@ export class StatisticNumericComponent
       if (!this.roundStats) {
         this.roundStats = stats.roundStatistics as NumericRoundStatistics[];
       }
-      if (this.rounds > 1) {
-        for (let i = 0; i < this.rounds; i++) {
-          if (stats.roundStatistics[i]) {
-            this.setData(stats, i);
-            this.roundStats[i] = (
-              stats.roundStatistics as NumericRoundStatistics[]
-            )[i];
-          }
+      for (let i = 0; i < stats.roundStatistics.length; i++) {
+        if (stats.roundStatistics[i]) {
+          this.setData(stats, i);
+          this.roundStats[i] = (
+            stats.roundStatistics as NumericRoundStatistics[]
+          )[i];
         }
-      } else {
-        this.setData(stats, this.roundsToDisplay);
-        this.roundStats[this.roundsToDisplay] = (
-          stats.roundStatistics as NumericRoundStatistics[]
-        )[this.roundsToDisplay];
       }
     }
     this.updateCounterForRound();

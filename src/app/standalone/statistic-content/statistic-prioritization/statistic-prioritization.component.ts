@@ -101,7 +101,11 @@ export class StatisticPrioritizationComponent
   }
 
   deleteAnswers() {
-    this.chartData = [];
+    this.chartData.fill(0);
+    this.updateCounter({
+      answers: 0,
+      abstentions: 0,
+    });
     this.updateChart();
   }
 
@@ -293,13 +297,13 @@ export class StatisticPrioritizationComponent
   updateData(stats: AnswerStatistics) {
     if (stats) {
       this.setData(stats);
+      this.updateCounter({
+        answers: stats.roundStatistics[0].answerCount ?? 0,
+        abstentions: stats.roundStatistics[0].abstentionCount ?? 0,
+      });
     } else {
       this.responseCounts = { answers: 0, abstentions: 0 };
     }
-    this.updateCounter({
-      answers: stats.roundStatistics[0].answerCount,
-      abstentions: stats.roundStatistics[0].abstentionCount,
-    });
   }
 
   setData(stats: AnswerStatistics) {

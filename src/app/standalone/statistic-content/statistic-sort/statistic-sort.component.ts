@@ -233,6 +233,10 @@ export class StatisticSortComponent
   deleteAnswers() {
     this.data[0].data = [];
     this.labels = [];
+    this.updateCounter({
+      answers: 0,
+      abstentions: 0,
+    });
     this.updateChart();
   }
 
