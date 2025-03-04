@@ -21,9 +21,9 @@ import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil, throttleTime } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { Subject } from 'rxjs';
+import { fromEvent, Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
@@ -132,9 +132,9 @@ export class ControlBarComponent
   moreItem: KeyNavBarItem = new KeyNavBarItem('more', 'more_horiz', '', 'm');
 
   cursorTimer?: ReturnType<typeof setTimeout>;
-  barTimer?: ReturnType<typeof setTimeout>;
   cursorVisible = true;
   barVisible = false;
+  buttonHovered = false;
   HotkeyAction = HotkeyAction;
 
   private hotkeyRefs: symbol[] = [];
@@ -172,8 +172,7 @@ export class ControlBarComponent
       commentSettingsService,
       focusModeService
     );
-    this.showBar();
-    this.setBarTimer(3000);
+    this.afterMouseMoved();
     this.currentCommentPeriod =
       this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||
       CommentPeriod.ALL;
@@ -244,34 +243,59 @@ export class ControlBarComponent
         }
       });
     this.isLoading = false;
-    document.onmousemove = () => {
-      if (!this.destroyed) {
+    this.subscribeToMouseEvents();
+  }
+
+  private subscribeToMouseEvents() {
+    fromEvent<MouseEvent>(document, 'mousemove')
+      .pipe(
+        takeUntil(this.destroyed$),
+        throttleTime(20),
+        map((event) => {
+          // Check if a button is hovered via cursor style
+          const elementAtCursor = document.elementFromPoint(
+            event.clientX,
+            event.clientY
+          );
+          return elementAtCursor
+            ? window.getComputedStyle(elementAtCursor).cursor === 'pointer'
+            : false;
+        })
+      )
+      .subscribe((isButtonHovered) => {
+        this.buttonHovered = isButtonHovered;
         this.afterMouseMoved();
-      }
-    };
+      });
   }
 
   hideCursor() {
     this.cursorTimer = undefined;
     document.body.style.cursor = 'none';
     this.cursorVisible = false;
+    this.hideBar();
   }
 
   showCursor() {
     document.body.style.cursor = 'default';
     this.cursorVisible = true;
+    this.showBar();
   }
 
   afterMouseMoved() {
     if (!this.cursorVisible) {
       this.showCursor();
     }
+    if (!this.barVisible) {
+      this.showBar();
+    }
     if (this.cursorTimer) {
       clearTimeout(this.cursorTimer);
     }
-    this.cursorTimer = setTimeout(() => {
-      this.hideCursor();
-    }, 3000);
+    if (!this.buttonHovered) {
+      this.cursorTimer = setTimeout(() => {
+        this.hideCursor();
+      }, 3000);
+    }
   }
 
   subscribeToStates() {
@@ -514,40 +538,21 @@ export class ControlBarComponent
     });
   }
 
-  toggleBarVisibility(visible: boolean) {
-    if (!this.menuOpen) {
-      if (visible) {
-        if (this.barTimer) {
-          clearTimeout(this.barTimer);
-        } else {
-          this.showBar();
-        }
-      } else {
-        this.setBarTimer(1000);
-      }
-    }
-  }
-
   showBar() {
     this.barVisible = true;
     this.sendControlBarState();
   }
 
   hideBar() {
-    this.barTimer = undefined;
-    this.barVisible = false;
-    this.sendControlBarState();
-  }
-
-  setBarTimer(millis: number) {
-    this.barTimer = setTimeout(() => {
-      this.hideBar();
-    }, millis);
+    if (!this.menuOpen) {
+      this.barVisible = false;
+      this.sendControlBarState();
+    }
   }
 
   menuClosed() {
     this.menuOpen = false;
-    this.toggleBarVisibility(false);
+    this.hideBar();
   }
 
   changeCommentSort(sort: CommentSort) {
