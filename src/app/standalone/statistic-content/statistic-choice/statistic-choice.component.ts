@@ -71,7 +71,6 @@ export class StatisticChoiceComponent
   indicationColors: Array<string[]> = [[], []];
   labelLetters = 'ABCDEFGHIJKL';
   data: Array<number[]> = [[], []];
-  survey = false;
   options: AnswerOption[] = [];
   correctOptionIndexes: number[] = [];
   colorStrings = {
@@ -335,7 +334,7 @@ export class StatisticChoiceComponent
     const barColors = this.getBarColors();
     for (let j = 0; j < this.rounds; j++) {
       this.colors[j][answerIndex] = barColors[answerIndex % barColors.length];
-      if (!this.survey) {
+      if (!this.isSurvey) {
         if (this.checkIfCorrect(answerIndex)) {
           this.indicationColors[j][answerIndex] =
             this.content.correctOptionIndexes?.length === 1
@@ -395,9 +394,10 @@ export class StatisticChoiceComponent
       if (resetChart) {
         this.chart?.data.datasets.push({
           data: this.data[i],
-          backgroundColor: this.showCorrect
-            ? this.indicationColors[i]
-            : this.colors[i],
+          backgroundColor:
+            this.showCorrect && !this.isSurvey
+              ? this.indicationColors[i]
+              : this.colors[i],
         });
       } else {
         if (this.chart) {
@@ -409,9 +409,10 @@ export class StatisticChoiceComponent
 
   prepareChartForSingleRound(resetChart: boolean) {
     const data = this.data[this.roundsToDisplay];
-    const colors = this.showCorrect
-      ? this.indicationColors[this.roundsToDisplay]
-      : this.colors[this.roundsToDisplay];
+    const colors =
+      this.showCorrect && !this.isSurvey
+        ? this.indicationColors[this.roundsToDisplay]
+        : this.colors[this.roundsToDisplay];
     if (resetChart) {
       this.chart?.data.datasets.push({
         data: data,
@@ -446,7 +447,9 @@ export class StatisticChoiceComponent
       /* Wait for flip animation */
       setTimeout(() => {
         this.prepareDataAndCreateChart(
-          this.showCorrect && this.correctOptionIndexes.length > 0
+          this.showCorrect &&
+            !this.isSurvey &&
+            this.correctOptionIndexes.length > 0
             ? this.indicationColors
             : this.colors
         );
