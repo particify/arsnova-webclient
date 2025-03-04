@@ -565,18 +565,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
       const index = this.contentGroups
         .map((cg) => cg.id)
         .indexOf(changes.entity.id);
-      if (index !== undefined) {
+      if (index !== undefined && index > -1) {
         this.contentGroups[index] = changes.entity;
       }
-      if (this.groupName !== changes.entity.name) {
-        if (changes.entity.published) {
-          this.group = changes.entity;
-          this.updateGroupName(changes.entity.name);
-          this.checkChanges(changes);
-        }
-      } else {
-        this.checkChanges(changes);
-      }
+      this.checkChanges(changes);
     }
   }
 
@@ -594,9 +586,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     if (changedEvent.hasPropertyChanged('published')) {
       if (!changes.entity.published) {
-        if (this.filterPublishedGroups()) {
-          this.setGroup();
-        }
+        this.filterPublishedGroups();
       } else {
         this.addContentFeatureItem();
         this.toggleNews(RoutingFeature.CONTENTS);
