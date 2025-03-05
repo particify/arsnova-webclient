@@ -20,70 +20,9 @@
         ></lib-extension-point>
       }
       <span class="fill-remaining-space"></span>
-      <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
         @if (!!role && !hasRole(UserRole.PARTICIPANT)) {
-          <div>
-            <div
-              fxLayout="row"
-              fxLayoutGap="10px"
-              class="desktop-action-container"
-            >
-              <button
-                mat-button
-                color="{{ isPreview ? 'primary' : '' }}"
-                (click)="switchRole()"
-                aria-labelledby="switch-role"
-              >
-                <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
-                {{
-                  (isPreview ? 'header.editing-view' : 'header.preview')
-                    | transloco
-                }}
-              </button>
-              @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
-                <button
-                  [disabled]="isPreview"
-                  mat-button
-                  (click)="goToSettings()"
-                >
-                  <mat-icon>settings</mat-icon>
-                  {{ 'header.room-settings' | transloco }}
-                </button>
-              }
-              @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
-                <app-split-button
-                  [label]="'header.present' | transloco"
-                  [icon]="'jamboard_kiosk'"
-                  [menuRef]="presentationMenu"
-                  [showSplitButton]="showOverlayLink"
-                  [disabled]="isPreview"
-                  (clickedPrimary)="presentCurrentView()"
-                ></app-split-button>
-              }
-              <mat-menu #presentationMenu="matMenu" xPosition="before">
-                @if (showOverlayLink || !openPresentationDirectly) {
-                  <button mat-menu-item (click)="presentCurrentView(true)">
-                    <mat-icon class="menu-icon">jamboard_kiosk</mat-icon>
-                    <app-menu-item-details
-                      [label]="'header.present' | transloco"
-                      [description]="'header.present-description' | transloco"
-                    ></app-menu-item-details>
-                  </button>
-                  @if (showOverlayLink && room) {
-                    <button mat-menu-item style="padding: 0">
-                      <lib-extension-point
-                        extensionId="overlay-menu-link"
-                        [extensionData]="{ shortId: room.shortId }"
-                      ></lib-extension-point>
-                    </button>
-                  }
-                  <lib-extension-point
-                    extensionId="present-in-new-tab"
-                    (extensionEvent)="checkIfOpenPresentationDirectly($event)"
-                  ></lib-extension-point>
-                }
-              </mat-menu>
-            </div>
+          <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
             <div class="mobile-action-container">
               @if (!isPreview) {
                 <button mat-icon-button [matMenuTriggerFor]="roomMenu">
@@ -118,7 +57,75 @@
                 </button>
               }
             </mat-menu>
+            <div
+              fxLayout="row"
+              fxLayoutGap="10px"
+              class="desktop-action-container"
+            >
+              <button
+                mat-button
+                color="{{ isPreview ? 'primary' : '' }}"
+                (click)="switchRole()"
+                aria-labelledby="switch-role"
+              >
+                <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
+                {{
+                  (isPreview ? 'header.editing-view' : 'header.preview')
+                    | transloco
+                }}
+              </button>
+              @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
+                <button
+                  [disabled]="isPreview"
+                  mat-button
+                  (click)="goToSettings()"
+                >
+                  <mat-icon>settings</mat-icon>
+                  {{ 'header.room-settings' | transloco }}
+                </button>
+              }
+            </div>
+            @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
+              <div class="presentation-button-container">
+                <app-split-button
+                  [label]="'header.present' | transloco"
+                  [icon]="'jamboard_kiosk'"
+                  [menuRef]="presentationMenu"
+                  [showSplitButton]="showOverlayLink"
+                  [disabled]="isPreview"
+                  (clickedPrimary)="presentCurrentView()"
+                ></app-split-button>
+                <mat-menu #presentationMenu="matMenu" xPosition="before">
+                  @if (showOverlayLink || !openPresentationDirectly) {
+                    <button mat-menu-item (click)="presentCurrentView(true)">
+                      <mat-icon class="menu-icon">jamboard_kiosk</mat-icon>
+                      <app-menu-item-details
+                        [label]="'header.present' | transloco"
+                        [description]="'header.present-description' | transloco"
+                      ></app-menu-item-details>
+                    </button>
+                    @if (showOverlayLink && room) {
+                      <button mat-menu-item style="padding: 0">
+                        <lib-extension-point
+                          extensionId="overlay-menu-link"
+                          [extensionData]="{ shortId: room.shortId }"
+                        ></lib-extension-point>
+                      </button>
+                    }
+                    <lib-extension-point
+                      extensionId="present-in-new-tab"
+                      (extensionEvent)="checkIfOpenPresentationDirectly($event)"
+                    ></lib-extension-point>
+                  }
+                </mat-menu>
+              </div>
+              <div></div>
+            }
           </div>
+          <mat-divider
+            [vertical]="true"
+            class="room-actions-divider"
+          ></mat-divider>
         }
         <div fxLayoutGap="16px" fxLayoutAlign="center center">
           @if (announcementState) {

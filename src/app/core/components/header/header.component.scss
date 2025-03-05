@@ -31,22 +31,23 @@
   color: var(--on-surface);
 }
 
-.desktop-action-container {
-  height: 36px;
-  margin-right: 16px;
+@media (max-width: 599px) {
+  .presentation-button-container {
+    display: none !important;
+  }
+
+  .mobile-action-container {
+    margin-right: 0 !important;
+  }
 }
 
-.mobile-action-container {
-  margin-right: 8px;
-}
-
-@media (max-width: 1000px) {
+@media (max-width: 999px) {
   .desktop-action-container {
     display: none !important;
   }
 }
 
-@media (min-width: 1001px) {
+@media (min-width: 1000px) {
   .mobile-action-container {
     display: none;
   }
@@ -63,4 +64,8 @@
 .focus-mode-hint {
   font-size: 14px;
   opacity: 0.7;
+}
+
+.room-actions-divider {
+  height: var(--mdc-protected-button-container-height);
 }
