@@ -1,0 +1,27 @@
+@use '../../../variables' as *;
+
+@include lt-md {
+  .presentation-content {
+    display: none;
+  }
+}
+
+@include gt-md {
+  .mobile-hint-container {
+    display: none;
+  }
+}
+
+.mobile-hint {
+  padding: $spacing-3;
+  border-radius: $border-radius;
+  border: 1px solid var(--warn-soft);
+}
+
+.mobile-hint-text {
+  color: var(--on-surface);
+}
+
+.warn-icon {
+  color: var(--warn-soft);
+}

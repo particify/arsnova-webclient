@@ -19,6 +19,7 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 @Component({
   selector: 'app-presentation',
   templateUrl: './presentation.component.html',
+  styleUrl: './presentation.component.scss',
   standalone: false,
 })
 export class PresentationComponent implements OnInit, OnDestroy {
