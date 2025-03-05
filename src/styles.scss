@@ -791,7 +791,7 @@ div {
 
 .no-card-appearance {
   transition: none !important;
-  padding: 0 !important;
+  padding: 0 $spacing $spacing;
   margin: 0;
   box-shadow: none !important;
 }
