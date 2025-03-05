@@ -499,7 +499,8 @@
     "a11y-present": "Entrar en modo de presentación",
     "presentation-mode": "Modo de presentación",
     "present": "Entrar en modo de presentación",
-    "focus-mode-enabled-info": "Usted guía a los participantes por la sala."
+    "focus-mode-enabled-info": "Usted guía a los participantes por la sala.",
+    "please-use-larger-device": "Por favor, utilice un dispositivo más grande para la presentación."
   },
   "option-template": {
     "agreement": "De acuerdo",

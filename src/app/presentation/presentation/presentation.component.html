@@ -8,6 +8,19 @@
 <div tabindex="-1" [appAutofocus] class="visually-hidden">
   {{ 'creator.presentation.a11y-welcome' | transloco }}
 </div>
-<div fxFill>
+<div fxFill class="presentation-content">
   <router-outlet></router-outlet>
+</div>
+<div fxFill fxLayoutAlign="center center" class="mobile-hint-container">
+  <div
+    fxLayout="row"
+    fxLayoutGap="16px"
+    fxLayoutAlign="center center"
+    class="mobile-hint"
+  >
+    <mat-icon fxFlex="noshrink" class="warn-icon">warning</mat-icon>
+    <span class="mobile-hint-text">{{
+      'creator.presentation.please-use-larger-device' | transloco
+    }}</span>
+  </div>
 </div>
