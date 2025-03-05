@@ -192,10 +192,11 @@ export class ControlBarComponent
   }
 
   isActiveFeature(feature: string): boolean {
-    return (
-      this.barItems.map((b) => b.name).indexOf(feature) ===
-      this.currentRouteIndex
-    );
+    const featureIndex = this.barItems.map((b) => b.name).indexOf(feature);
+    if (featureIndex === -1) {
+      return false;
+    }
+    return featureIndex === this.currentRouteIndex;
   }
 
   afterInit() {
