@@ -229,7 +229,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
                 .getAttributions(this.room.id, this.contentGroup.id)
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe((attributions) => {
-                  if (attributions.length > 0) {
+                  if (attributions.some((a) => a.license !== 'CC0-1.0')) {
                     this.attributions = attributions;
                     this.stepCount++;
                   }
