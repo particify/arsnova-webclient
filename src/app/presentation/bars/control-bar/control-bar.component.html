@@ -25,7 +25,7 @@
       fxLayout="row"
       fxLayoutAlign="space-between center"
     >
-      <div fxLayout="row" class="nav-container">
+      <div fxLayout="row" class="nav-container presentation-feature-controls">
         @for (barItem of barItems; track barItem; let i = $index) {
           <div
             matRipple
@@ -54,167 +54,169 @@
           </div>
         }
       </div>
-      @if (isActiveFeature('series')) {
-        <div
-          fxLayout="row"
-          fxLayoutAlign="center center"
-          class="feature-container no-padding"
-        >
-          @if (contentGroups.length > 1) {
+      <div class="presentation-feature-controls">
+        @if (isActiveFeature('series')) {
+          <div
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            class="feature-container no-padding"
+          >
+            @if (contentGroups.length > 1) {
+              <button
+                mat-button
+                class="full-height"
+                [matMenuTriggerFor]="groupMenu"
+                (menuOpened)="menuOpen = true"
+                (menuClosed)="menuClosed()"
+              >
+                <div class="ellipsis group-button-label">
+                  {{ groupName }}
+                </div>
+                <mat-icon>arrow_drop_down</mat-icon>
+              </button>
+            }
+            <mat-menu #groupMenu="matMenu">
+              @for (contentGroup of contentGroups; track contentGroup) {
+                <button
+                  mat-menu-item
+                  fxLayoutAlign="space-between center"
+                  [value]="contentGroup.name"
+                  [disabled]="
+                    !contentGroup.contentIds ||
+                    contentGroup.contentIds.length === 0
+                  "
+                  (click)="changeGroup(contentGroup)"
+                  [ngClass]="{
+                    'locked-group': isGroupLocked(contentGroup),
+                  }"
+                >
+                  <span
+                    [ngClass]="{
+                      'selected-menu-item': contentGroup.name === groupName,
+                    }"
+                    >{{ contentGroup.name }}</span
+                  >
+                  @if (isGroupLocked(contentGroup)) {
+                    <mat-icon class="locked-icon">locked</mat-icon>
+                  }
+                </button>
+              }
+            </mat-menu>
+            <app-key-button-bar [items]="groupItems"></app-key-button-bar>
+            <div
+              matRipple
+              role="button"
+              fxLayout="column"
+              fxLayoutAlign="center center"
+              class="action-button more-button"
+              #moreMenuTrigger="matMenuTrigger"
+              [matMenuTriggerFor]="
+                moreMenuComponent ? moreMenuComponent.moreMenu : hideMenu
+              "
+              (menuOpened)="menuOpen = true"
+              (menuClosed)="menuClosed()"
+              [matTooltip]="
+                ('creator.control-bar.' + moreItem.name | transloco) +
+                ' (' +
+                moreItem.displayKey +
+                ')'
+              "
+              [appHotkey]="moreItem.key"
+              [appHotkeyAction]="HotkeyAction.CLICK"
+              [appHotkeyTitle]="
+                'creator.control-bar.' + moreItem.name | transloco
+              "
+            >
+              <mat-icon class="nav-icon">{{ moreItem.icon }}</mat-icon>
+              <p class="text">{{ 'creator.control-bar.more' | transloco }}</p>
+            </div>
+            <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
+            @if (content && groupName) {
+              <app-content-presentation-menu
+                [content]="content"
+                [groupName]="groupName"
+                [shortId]="room.shortId"
+                [contentIndex]="contentIndex"
+                [publishingMode]="group?.publishingMode"
+              ></app-content-presentation-menu>
+            }
+            <div class="bar-divider"></div>
+            <app-key-button-bar
+              [items]="arrowItems"
+              [withText]="false"
+            ></app-key-button-bar>
+          </div>
+        }
+        @if (isActiveFeature('comments')) {
+          <div
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxLayoutGap="8px"
+            class="feature-container no-padding"
+          >
             <button
               mat-button
               class="full-height"
-              [matMenuTriggerFor]="groupMenu"
+              [matMenuTriggerFor]="sortMenu"
               (menuOpened)="menuOpen = true"
               (menuClosed)="menuClosed()"
             >
-              <div class="ellipsis group-button-label">
-                {{ groupName }}
-              </div>
+              {{
+                'creator.control-bar.comment-sort-' + currentCommentSort
+                  | transloco
+              }}
               <mat-icon>arrow_drop_down</mat-icon>
             </button>
-          }
-          <mat-menu #groupMenu="matMenu">
-            @for (contentGroup of contentGroups; track contentGroup) {
-              <button
-                mat-menu-item
-                fxLayoutAlign="space-between center"
-                [value]="contentGroup.name"
-                [disabled]="
-                  !contentGroup.contentIds ||
-                  contentGroup.contentIds.length === 0
-                "
-                (click)="changeGroup(contentGroup)"
-                [ngClass]="{
-                  'locked-group': isGroupLocked(contentGroup),
-                }"
-              >
-                <span
-                  [ngClass]="{
-                    'selected-menu-item': contentGroup.name === groupName,
-                  }"
-                  >{{ contentGroup.name }}</span
+            <mat-menu #sortMenu="matMenu">
+              @for (sort of commentSortTypes; track sort) {
+                <button
+                  mat-menu-item
+                  [value]="currentCommentSort"
+                  (click)="changeCommentSort(sort)"
                 >
-                @if (isGroupLocked(contentGroup)) {
-                  <mat-icon class="locked-icon">locked</mat-icon>
-                }
-              </button>
-            }
-          </mat-menu>
-          <app-key-button-bar [items]="groupItems"></app-key-button-bar>
-          <div
-            matRipple
-            role="button"
-            fxLayout="column"
-            fxLayoutAlign="center center"
-            class="action-button more-button"
-            #moreMenuTrigger="matMenuTrigger"
-            [matMenuTriggerFor]="
-              moreMenuComponent ? moreMenuComponent.moreMenu : hideMenu
-            "
-            (menuOpened)="menuOpen = true"
-            (menuClosed)="menuClosed()"
-            [matTooltip]="
-              ('creator.control-bar.' + moreItem.name | transloco) +
-              ' (' +
-              moreItem.displayKey +
-              ')'
-            "
-            [appHotkey]="moreItem.key"
-            [appHotkeyAction]="HotkeyAction.CLICK"
-            [appHotkeyTitle]="
-              'creator.control-bar.' + moreItem.name | transloco
-            "
-          >
-            <mat-icon class="nav-icon">{{ moreItem.icon }}</mat-icon>
-            <p class="text">{{ 'creator.control-bar.more' | transloco }}</p>
-          </div>
-          <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
-          @if (content && groupName) {
-            <app-content-presentation-menu
-              [content]="content"
-              [groupName]="groupName"
-              [shortId]="room.shortId"
-              [contentIndex]="contentIndex"
-              [publishingMode]="group?.publishingMode"
-            ></app-content-presentation-menu>
-          }
-          <div class="bar-divider"></div>
-          <app-key-button-bar
-            [items]="arrowItems"
-            [withText]="false"
-          ></app-key-button-bar>
-        </div>
-      }
-      @if (isActiveFeature('comments')) {
-        <div
-          fxLayout="row"
-          fxLayoutAlign="center center"
-          fxLayoutGap="8px"
-          class="feature-container no-padding"
-        >
-          <button
-            mat-button
-            class="full-height"
-            [matMenuTriggerFor]="sortMenu"
-            (menuOpened)="menuOpen = true"
-            (menuClosed)="menuClosed()"
-          >
-            {{
-              'creator.control-bar.comment-sort-' + currentCommentSort
-                | transloco
-            }}
-            <mat-icon>arrow_drop_down</mat-icon>
-          </button>
-          <mat-menu #sortMenu="matMenu">
-            @for (sort of commentSortTypes; track sort) {
-              <button
-                mat-menu-item
-                [value]="currentCommentSort"
-                (click)="changeCommentSort(sort)"
-              >
-                <span
-                  [ngClass]="{
-                    'selected-menu-item': sort === currentCommentSort,
-                  }"
-                >
-                  {{ 'creator.control-bar.comment-sort-' + sort | transloco }}
-                </span>
-              </button>
-            }
-          </mat-menu>
-          <app-comment-filter
-            class="full-height"
-            [currentFilter]="currentCommentFilter"
-            [period]="currentCommentPeriod"
-            [categories]="commentCategories"
-            [selectedCategory]="currentCommentCategory"
-            [useIconButton]="false"
-            (filterSelected)="changeCommentFilter($event)"
-            (categorySelected)="changeCommentCategory($event)"
-            (periodSelected)="changeCommentPeriod($event)"
-          ></app-comment-filter>
-          <div fxLayout="row">
+                  <span
+                    [ngClass]="{
+                      'selected-menu-item': sort === currentCommentSort,
+                    }"
+                  >
+                    {{ 'creator.control-bar.comment-sort-' + sort | transloco }}
+                  </span>
+                </button>
+              }
+            </mat-menu>
+            <app-comment-filter
+              class="full-height"
+              [currentFilter]="currentCommentFilter"
+              [period]="currentCommentPeriod"
+              [categories]="commentCategories"
+              [selectedCategory]="currentCommentCategory"
+              [useIconButton]="false"
+              (filterSelected)="changeCommentFilter($event)"
+              (categorySelected)="changeCommentCategory($event)"
+              (periodSelected)="changeCommentPeriod($event)"
+            ></app-comment-filter>
+            <div fxLayout="row">
+              <app-key-button-bar
+                [items]="zoomItems.slice(1, 2)"
+                [withText]="false"
+              ></app-key-button-bar>
+              <p>{{ currentCommentZoom }}%</p>
+              <app-key-button-bar
+                [items]="zoomItems.slice(0, 1)"
+                [withText]="false"
+              ></app-key-button-bar>
+            </div>
+            <div class="bar-divider"></div>
             <app-key-button-bar
-              [items]="zoomItems.slice(1, 2)"
-              [withText]="false"
-            ></app-key-button-bar>
-            <p>{{ currentCommentZoom }}%</p>
-            <app-key-button-bar
-              [items]="zoomItems.slice(0, 1)"
+              [items]="arrowItems"
               [withText]="false"
             ></app-key-button-bar>
           </div>
-          <div class="bar-divider"></div>
-          <app-key-button-bar
-            [items]="arrowItems"
-            [withText]="false"
-          ></app-key-button-bar>
-        </div>
-      }
-      @if (isActiveFeature('feedback')) {
-        <app-key-button-bar [items]="surveyItems"></app-key-button-bar>
-      }
+        }
+        @if (isActiveFeature('feedback')) {
+          <app-key-button-bar [items]="surveyItems"></app-key-button-bar>
+        }
+      </div>
       <div fxLayout="row">
         <div fxLayout="row" class="feature-container icon-container">
           <app-key-button-bar

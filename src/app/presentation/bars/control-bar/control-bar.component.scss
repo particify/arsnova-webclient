@@ -39,6 +39,16 @@ $logo-width: 120px;
   padding-left: $logo-width + ($bar-padding * 2);
 }
 
+@include lt-md {
+  .presentation-feature-controls {
+    display: none !important;
+  }
+
+  .action-container {
+    place-content: center end !important;
+  }
+}
+
 .nav-container {
   border-radius: 8px;
   background-color: var(--surface);
