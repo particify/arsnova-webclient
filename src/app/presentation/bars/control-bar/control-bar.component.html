@@ -5,11 +5,7 @@
 @if (currentRouteIndex > -1) {
   <span class="code">{{ joinUrl || (room.shortId | splitShortId) }}</span>
 }
-<div
-  class="bar-container"
-  (mouseenter)="toggleBarVisibility(true)"
-  (mouseleave)="toggleBarVisibility(false)"
->
+<div class="bar-container">
   <div
     class="bar bar-hidden"
     [ngClass]="{
