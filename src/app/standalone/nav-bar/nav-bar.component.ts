@@ -408,6 +408,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     alreadySet: boolean,
     showNews = true
   ) {
+    const oldGroups = this.contentGroups.slice(0);
     if (this.contentGroups.length > 0) {
       if (this.listObjectIdsEquals(this.contentGroups, groupStats)) {
         return;
@@ -437,7 +438,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 this.addContentFeatureItem();
                 // route data's `userRole` is used here to prevent showing notification indicator in creators room preview
                 if (this.userRole === UserRole.PARTICIPANT && showNews) {
-                  this.toggleNews(RoutingFeature.CONTENTS);
+                  const newGroups = this.contentGroups.filter(
+                    (g) => !oldGroups.includes(g)
+                  );
+                  this.toggleNews(RoutingFeature.CONTENTS, newGroups[0]);
                 }
                 this.afterInit();
               } else {
@@ -546,9 +550,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
     return first === -1 && last === -1;
   }
 
-  toggleNews(feature: string) {
+  toggleNews(feature: string, newGroup?: ContentGroup) {
     const featureIndex = this.getBarIndexOfFeature(feature);
-    if (featureIndex !== this.currentRouteIndex) {
+    if (
+      featureIndex !== this.currentRouteIndex ||
+      (newGroup && this.group && newGroup.id !== this.group.id)
+    ) {
       this.barItems[featureIndex].changeIndicator = true;
     }
   }
@@ -558,18 +565,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
       const index = this.contentGroups
         .map((cg) => cg.id)
         .indexOf(changes.entity.id);
-      if (index !== undefined) {
+      if (index !== undefined && index > -1) {
         this.contentGroups[index] = changes.entity;
       }
-      if (this.groupName !== changes.entity.name) {
-        if (changes.entity.published) {
-          this.group = changes.entity;
-          this.updateGroupName(changes.entity.name);
-          this.checkChanges(changes);
-        }
-      } else {
-        this.checkChanges(changes);
-      }
+      this.checkChanges(changes);
     }
   }
 
@@ -587,9 +586,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     if (changedEvent.hasPropertyChanged('published')) {
       if (!changes.entity.published) {
-        if (this.filterPublishedGroups()) {
-          this.setGroup();
-        }
+        this.filterPublishedGroups();
       } else {
         this.addContentFeatureItem();
         this.toggleNews(RoutingFeature.CONTENTS);
