@@ -55,6 +55,28 @@ export class ContentGroupPage {
     await this.abstainButton.click();
   }
 
+  async answerWordcloudContent(answers?: string[]) {
+    if (answers) {
+      for (const [index, answer] of answers.entries()) {
+        await this.page.getByPlaceholder('keyword ' + (index + 1)).fill(answer);
+      }
+      await this.submitButton.click();
+      return;
+    }
+    await this.abstainButton.click();
+  }
+
+  async answerPrioritizationContent(assignedPoints?: number[]) {
+    if (assignedPoints) {
+      for (const [index, points] of assignedPoints.entries()) {
+        await this.page.locator('input').nth(index).fill(points.toString());
+      }
+      await this.submitButton.click();
+      return;
+    }
+    await this.abstainButton.click();
+  }
+
   async answerLikertContent(option?: string) {
     if (option) {
       await this.page.getByText(option, { exact: true }).click();

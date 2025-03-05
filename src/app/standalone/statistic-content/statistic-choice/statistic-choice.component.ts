@@ -158,7 +158,21 @@ export class StatisticChoiceComponent
 
   deleteAnswers() {
     this.data = [[], []];
+    if (this.roundStats) {
+      const stats = new AnswerStatistics();
+      stats.contentId = this.content.id;
+      this.roundStats.forEach((stats) => this.resetRoundStatistics(stats));
+      stats.roundStatistics = this.roundStats;
+      this.updateData(stats);
+    }
     this.updateChart();
+  }
+
+  private resetRoundStatistics(stats: RoundStatistics) {
+    stats.abstentionCount = 0;
+    stats.answerCount = 0;
+    stats.combinatedCounts = [];
+    stats.independentCounts = stats.independentCounts.fill(0);
   }
 
   prepareDataAndCreateChart(colors: Array<string[]>) {
@@ -356,15 +370,12 @@ export class StatisticChoiceComponent
 
   updateData(stats: AnswerStatistics) {
     if (stats) {
-      if (this.rounds > 1) {
-        for (let i = 0; i < this.rounds; i++) {
-          if (stats.roundStatistics[i]) {
-            this.setData(stats, i);
-          }
+      for (let i = 0; i < stats.roundStatistics.length; i++) {
+        if (stats.roundStatistics[i]) {
+          this.setData(stats, i);
         }
-      } else {
-        this.setData(stats, this.roundsToDisplay);
       }
+      this.updateCounterForRound(this.roundsToDisplay);
     }
   }
 
@@ -375,7 +386,6 @@ export class StatisticChoiceComponent
       this.roundStats[roundIndex] = stats.roundStatistics[roundIndex];
     }
     this.data[roundIndex] = stats.roundStatistics[roundIndex].independentCounts;
-    this.updateCounterForRound(roundIndex);
   }
 
   updateCounterForRound(round: number) {
