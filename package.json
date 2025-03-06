@@ -84,7 +84,7 @@
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jsdoc": "50.6.3",
     "eslint-plugin-prefer-arrow": "1.2.3",
-    "eslint-plugin-storybook": "0.11.3",
+    "eslint-plugin-storybook": "0.11.4",
     "jasmine-core": "5.6.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "6.4.4",
