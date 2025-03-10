@@ -37,7 +37,7 @@
     "@fontsource/material-symbols-outlined": "5.1.4",
     "@fontsource/roboto": "5.1.1",
     "@jsverse/transloco": "7.5.1",
-    "@stomp/rx-stomp": "2.0.0",
+    "@stomp/rx-stomp": "2.0.1",
     "@stomp/stompjs": "7.0.0",
     "angular-material-css-vars": "8.0.0",
     "backoff-rxjs": "7.0.0",
