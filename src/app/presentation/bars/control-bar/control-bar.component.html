@@ -160,6 +160,7 @@
               [matMenuTriggerFor]="sortMenu"
               (menuOpened)="menuOpen = true"
               (menuClosed)="menuClosed()"
+              data-testid="comments-sort-button"
             >
               {{
                 'creator.control-bar.comment-sort-' + currentCommentSort

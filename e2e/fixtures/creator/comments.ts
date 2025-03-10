@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-export class CommentsPage {
+export class CreatorCommentsPage {
   private readonly commentSearchInput: Locator;
   private readonly commentBodyInput: Locator;
   private readonly submitCommentCreationButton: Locator;
@@ -70,6 +70,14 @@ export class CommentsPage {
     await this.page
       .getByTestId('comment-more-menu-button')
       .nth(commentIndex)
+      .click();
+  }
+
+  async performMoreMenuAction(action: string) {
+    await this.page
+      .getByRole('menuitem', {
+        name: action,
+      })
       .click();
   }
 

@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-export class CommentsPage {
+export class ParticipantCommentsPage {
   private readonly commentSearchInput: Locator;
   private readonly openCreateDialogButton: Locator;
   private readonly commentBodyInput: Locator;
