@@ -81,6 +81,7 @@
             [fileUploadEnabled]="fileUploadEnabled"
             (activeComment)="updateCurrentComment($event)"
             (clickedOnTag)="selectTag($event)"
+            [tags]="this.room.extensions?.comments?.tags"
           >
           </app-comment>
         }
