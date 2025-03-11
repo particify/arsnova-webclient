@@ -37,14 +37,14 @@
               comment: comment.body.trim(),
               correct:
                 comment.correct === 1
-                  ? ('creator.comment-page.a11y-text-correct' | transloco)
+                  ? ('comment-page.a11y-text-correct' | transloco)
                   : '',
               wrong:
                 comment.correct === 2
-                  ? ('creator.comment-page.a11y-text-wrong' | transloco)
+                  ? ('comment-page.a11y-text-wrong' | transloco)
                   : '',
               favorite: comment.favorite
-                ? ('creator.comment-page.a11y-text-grade' | transloco)
+                ? ('comment-page.a11y-text-grade' | transloco)
                 : '',
               answer: comment.answer
                 ? ('comment-page.a11y-text-answer' | transloco)

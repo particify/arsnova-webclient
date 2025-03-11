@@ -18,9 +18,9 @@
       fxLayoutGap="0.75em"
       class="alias-form"
     >
-      <span class="alias-hint">{{
+      <label class="alias-hint">{{
         'content.enter-alias-for-participation' | transloco
-      }}</span>
+      }}</label>
       <mat-form-field class="no-field-hint">
         @if (alias.alias) {
           <input
@@ -33,13 +33,14 @@
             data-testid="nickname-input"
           />
         }
-        <button mat-icon-button matSuffix (click)="generateAlias()">
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="generateAlias()"
+          [matTooltip]="'content.generate-new-alias' | transloco"
+        >
           @if (!alias.id) {
-            <mat-icon
-              attr.aria-label="{{ 'content.generate-new-alias' | transloco }}"
-              class="generate-icon"
-              >autorenew</mat-icon
-            >
+            <mat-icon class="generate-icon">autorenew</mat-icon>
           }
         </button>
       </mat-form-field>

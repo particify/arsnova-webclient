@@ -10,8 +10,23 @@
           fxLayoutAlign="space-between"
           fxLayoutGap="16px"
         >
-          <div fxLayout="column" fxLayoutGap="8px">
-            <span>{{ contentGroup.name }}</span>
+          <div
+            fxLayout="column"
+            fxLayoutGap="8px"
+            tabindex="0"
+            [appAutofocus]
+            [attr.aria-label]="
+              'creator.content.a11y-content-group-info'
+                | transloco
+                  : {
+                      name: contentGroup.name,
+                      contentCount: contentGroup.contentIds
+                        ? contentGroup.contentIds.length
+                        : 0,
+                    }
+            "
+          >
+            <span aria-hidden="true">{{ contentGroup.name }}</span>
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
               <app-content-group-info
                 [groupType]="contentGroup.groupType"
@@ -33,69 +48,69 @@
                 </div>
               }
             </div>
-            <mat-menu #groupSettings="matMenu">
-              <button mat-menu-item [matMenuTriggerFor]="importExportMenu">
-                <mat-icon>download</mat-icon>
-                {{ 'creator.content.export-content-group' | transloco }}
-              </button>
-              <mat-menu #importExportMenu="matMenu">
-                <button
-                  mat-menu-item
-                  (click)="exportToCsv()"
-                  [disabled]="contents.length === 0"
-                >
-                  {{ 'creator.export.export-series' | transloco }}
-                </button>
-                <lib-extension-point
-                  extensionId="series-results-export"
-                  [extensionData]="{
-                    series: contentGroup,
-                    shortId: room.shortId,
-                  }"
-                ></lib-extension-point>
-              </mat-menu>
-              <div
-                [matTooltip]="
-                  'creator.content.create-template-not-possible' | transloco
-                "
-                [matTooltipDisabled]="!isGuest"
-                matTooltipPosition="before"
-              >
-                <button
-                  *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
-                  mat-menu-item
-                  id="create-as-template"
-                  (click)="createTemplate()"
-                  [disabled]="contents.length < 1 || isGuest"
-                  appTrackInteraction="Create as template dialog opened"
-                >
-                  <mat-icon>draft</mat-icon>
-                  {{ 'creator.content.use-as-template' | transloco }}
-                </button>
-              </div>
-              <mat-divider></mat-divider>
-              @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
-                <button
-                  mat-menu-item
-                  (click)="deleteAllAnswers()"
-                  [disabled]="contents.length === 0"
-                >
-                  <mat-icon>clear_all</mat-icon>
-                  <span>{{
-                    'creator.content.reset-group-results' | transloco
-                  }}</span>
-                </button>
-              }
+          </div>
+          <mat-menu #groupSettings="matMenu">
+            <button mat-menu-item [matMenuTriggerFor]="importExportMenu">
+              <mat-icon>download</mat-icon>
+              {{ 'creator.content.export-content-group' | transloco }}
+            </button>
+            <mat-menu #importExportMenu="matMenu">
               <button
                 mat-menu-item
-                (click)="deleteGroup()"
-                [disabled]="isModerator()"
+                (click)="exportToCsv()"
+                [disabled]="contents.length === 0"
               >
-                <mat-icon color="warn">delete_forever</mat-icon>
-                {{ 'creator.content.delete-content-group' | transloco }}
+                {{ 'creator.export.export-series' | transloco }}
               </button>
+              <lib-extension-point
+                extensionId="series-results-export"
+                [extensionData]="{
+                  series: contentGroup,
+                  shortId: room.shortId,
+                }"
+              ></lib-extension-point>
             </mat-menu>
-          </div>
+            <div
+              [matTooltip]="
+                'creator.content.create-template-not-possible' | transloco
+              "
+              [matTooltipDisabled]="!isGuest"
+              matTooltipPosition="before"
+            >
+              <button
+                *appFeatureFlag="'CONTENT_GROUP_TEMPLATES'"
+                mat-menu-item
+                id="create-as-template"
+                (click)="createTemplate()"
+                [disabled]="contents.length < 1 || isGuest"
+                appTrackInteraction="Create as template dialog opened"
+              >
+                <mat-icon>draft</mat-icon>
+                {{ 'creator.content.use-as-template' | transloco }}
+              </button>
+            </div>
+            <mat-divider></mat-divider>
+            @if (contentGroup.groupType !== GroupType.FLASHCARDS) {
+              <button
+                mat-menu-item
+                (click)="deleteAllAnswers()"
+                [disabled]="contents.length === 0"
+              >
+                <mat-icon>clear_all</mat-icon>
+                <span>{{
+                  'creator.content.reset-group-results' | transloco
+                }}</span>
+              </button>
+            }
+            <button
+              mat-menu-item
+              (click)="deleteGroup()"
+              [disabled]="isModerator()"
+            >
+              <mat-icon color="warn">delete_forever</mat-icon>
+              {{ 'creator.content.delete-content-group' | transloco }}
+            </button>
+          </mat-menu>
           <div fxLayout="row wrap" fxLayoutAlign.xs="center" fxLayoutGap="8px">
             <div fxLayout="row" fxLayoutGap="8px">
               @if (contentGroup.groupType === GroupType.QUIZ) {

@@ -16,6 +16,7 @@
     #customButton
     class="custom-button"
     role="button"
+    tabindex="0"
     [matTooltip]="'room-page.copy-url' | transloco"
     [cdkCopyToClipboard]="url"
     (cdkCopyToClipboardCopied)="showNotification($event)"

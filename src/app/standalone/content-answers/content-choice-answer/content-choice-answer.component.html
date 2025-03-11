@@ -51,6 +51,11 @@
             [attr.data-testid]="
               isAnswerOptionCorrect(i) ? 'correct-icon' : 'wrong-icon'
             "
+            [matTooltip]="
+              'participant.content.answer-state-' +
+                (correctOptionIndexes.includes(i) ? 'correct' : 'wrong')
+                | transloco
+            "
           >
             {{ isAnswerOptionCorrect(i) ? 'check' : 'close' }}</mat-icon
           >
@@ -106,6 +111,11 @@
               [ngClass]="correctOptionIndexes.includes(i) ? 'correct' : 'wrong'"
               [attr.data-testid]="
                 isAnswerOptionCorrect(i) ? 'correct-icon' : 'wrong-icon'
+              "
+              [matTooltip]="
+                'participant.content.answer-state-' +
+                  (correctOptionIndexes.includes(i) ? 'correct' : 'wrong')
+                  | transloco
               "
             >
               {{ isAnswerOptionCorrect(i) ? 'check' : 'close' }}</mat-icon

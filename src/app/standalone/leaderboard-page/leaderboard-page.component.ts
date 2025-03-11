@@ -1,16 +1,15 @@
 import { Component, DestroyRef, Input, OnInit } from '@angular/core';
-import { FlexModule } from '@angular/flex-layout';
-import { MatIconModule } from '@angular/material/icon';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { take, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Room } from '@app/core/models/room';
 import { ContentGroup } from '@app/core/models/content-group';
+import { CoreModule } from '@app/core/core.module';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 
 const REFRESH_INTERVAL = 5000;
 const REFRESH_LIMIT = 100;
@@ -21,9 +20,7 @@ function setDefaultTrue(value: boolean | undefined) {
 @Component({
   selector: 'app-leaderboard-page',
   imports: [
-    FlexModule,
-    MatIconModule,
-    TranslocoPipe,
+    CoreModule,
     LeaderboardComponent,
     LoadingIndicatorComponent,
     BaseCardComponent,
@@ -41,10 +38,12 @@ export class LeaderboardPageComponent implements OnInit {
 
   constructor(
     private contentGroupService: ContentGroupService,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    private announceService: AnnounceService
   ) {}
 
   ngOnInit(): void {
+    this.announceService.announce('creator.content.a11y-leaderboard-page-info');
     timer(0, REFRESH_INTERVAL)
       .pipe(take(REFRESH_LIMIT), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {

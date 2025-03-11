@@ -4,6 +4,11 @@
   width: 100% !important;
   height: 100% !important;
   transition: transform 150ms;
+
+  &:focus-visible {
+    border-width: 2px;
+    border-style: solid;
+  }
 }
 
 @media (hover: hover) {

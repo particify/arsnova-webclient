@@ -352,7 +352,6 @@
     "sort-votedesc": "Mejor clasificación",
     "sort-voteasc": "Peor clasificación",
     "sort-time": "Última",
-    "list": "Lista de publicaciones",
     "there-are-new-posts": "Hay nuevas publicaciones",
     "comments-are-not-enabled": "La sección de preguntas y respuestas no está habilitada.",
     "no-categories-in-this-room": "No hay categorías en esta sala"
@@ -459,7 +458,6 @@
   },
   "statistic": {
     "a11y-message-overview": "Ahora estás en la vista general de estadísticas.",
-    "a11y-message-evaluation-answers": "Ahora puedes ver los resultados. {{answers}} participantes han respondido al contenido. Navega a través de las respuestas con la tecla de tabulación.",
     "a11y-content-result": "El contenido {{content}} ha sido respondido por {{count}} personas hasta ahora, {{abstentions}} personas se han abstenido.",
     "a11y-choice-result": "El contenido fue respondido correctamente por {{percent}} por ciento.",
     "a11y-go-to-statistic": "Presiona la tecla Enter para ir a la evaluación del contenido.",

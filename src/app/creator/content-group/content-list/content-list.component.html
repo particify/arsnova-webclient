@@ -1,16 +1,4 @@
 <div fxLayout="column" fxLayoutAlign="start center" class="list-container">
-  <div
-    tabindex="-1"
-    id="content-list"
-    class="visually-hidden"
-    appHotkey="5"
-    [appHotkeyTitle]="'creator.content.contents' | transloco"
-  >
-    {{
-      'creator.content.a11y-content-list-contents'
-        | transloco: { count: contents.length }
-    }}
-  </div>
   @if (contents.length === 0) {
     <p class="hint">
       {{ 'creator.content.no-contents-yet' | transloco }}
@@ -51,7 +39,7 @@
                       body: content.renderedBody | a11yRenderedBody,
                     }
             "
-            class="content-box primary-border-color"
+            class="content-box"
             [routerLink]="(i + 1).toString()"
             [ngClass]="{
               'not-supported': contentTypes.indexOf(content.format) === -1,
@@ -120,10 +108,6 @@
                             toggleAnswersPublished(content);
                             $event.stopPropagation()
                           "
-                          [attr.aria-label]="
-                            'creator.content.a11y-dont-publish-answers'
-                              | transloco
-                          "
                           matTooltip="{{
                             'creator.content.dont-publish-answers' | transloco
                           }}"
@@ -144,9 +128,6 @@
                           (click)="
                             toggleAnswersPublished(content);
                             $event.stopPropagation()
-                          "
-                          [attr.aria-label]="
-                            'creator.content.a11y-publish-answers' | transloco
                           "
                           matTooltip="{{
                             'creator.content.publish-answers' | transloco

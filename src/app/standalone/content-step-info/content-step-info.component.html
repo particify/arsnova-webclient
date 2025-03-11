@@ -1,6 +1,12 @@
-<div fxLayout="row" fxLayoutGap="0.25em" class="step-hint">
+<span
+  fxLayout="row"
+  fxLayoutGap="0.25em"
+  class="step-hint"
+  [appAutofocus]
+  tabindex="-1"
+>
   <span>{{ 'content.content' | transloco }}</span>
   <strong>{{ current }}</strong>
   <span>{{ 'content.of' | transloco }}</span>
   <strong>{{ totalCount }}</strong>
-</div>
+</span>

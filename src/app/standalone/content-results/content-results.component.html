@@ -19,14 +19,6 @@
   }
   @if ([ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1) {
     <div>
-      <div tabindex="0" [appAutofocus] class="visually-hidden">
-        {{
-          (responseCounts.answers === 0
-            ? 'creator.statistic.a11y-message-evaluation'
-            : 'statistic.a11y-message-evaluation-answers'
-          ) | transloco: { index: index + 1, answers: responseCounts.answers }
-        }}
-      </div>
       <div
         [attr.hidden]="isPresentation || null"
         fxLayout="row wrap"

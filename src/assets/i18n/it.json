@@ -29,7 +29,6 @@
   },
   "statistic": {
     "a11y-message-overview": "Ora sei nella panoramica delle statistiche.",
-    "a11y-message-evaluation-answers": "Ora puoi vedere i risultati. {{answers}} partecipanti hanno risposto al contenuto. Naviga tra le risposte con il tasto tabulazione.",
     "a11y-content-result": "Al contenuto {{content}} hanno risposto finora {{count}} persone, {{abstentions}} persone si sono astenute.",
     "a11y-choice-result": "Il contenuto è stato risposto correttamente da {{percent}} %.",
     "a11y-go-to-statistic": "Premi il tasto Invio per passare alla valutazione del contenuto.",
@@ -372,7 +371,6 @@
     "select-time-all": "Illimitato",
     "sort-votedesc": "Valutazione migliore",
     "sort-voteasc": "Valutazione peggiore",
-    "list": "Elenco dei post",
     "there-are-new-posts": "Ci sono nuovi post",
     "comments-are-not-enabled": "La sezione Q&A non è abilitata.",
     "no-categories-in-this-room": "Non ci sono categorie in questa stanza"

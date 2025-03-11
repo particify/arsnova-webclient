@@ -352,7 +352,6 @@
     "sort-votedesc": "Beste Bewertung",
     "sort-voteasc": "Niedrige Bewertung",
     "sort-time": "Neueste",
-    "list": "Beitragsliste",
     "there-are-new-posts": "Es gibt neue Beiträge",
     "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert.",
     "no-categories-in-this-room": "In diesem Raum gibt es keine Kategorien"
@@ -396,7 +395,7 @@
     "content": "Inhalt",
     "of": "von",
     "enter-alias-for-participation": "Gib einen Spitznamen für deine Teilnahme ein",
-    "generate-new-alias": "Neuen Spritznames generieren.",
+    "generate-new-alias": "Neuen Spritznamen generieren",
     "your-name": "Dein Name",
     "join-quiz": "Quiz beitreten",
     "get-ready": "Mach dich bereit!",
@@ -459,7 +458,6 @@
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",
-    "a11y-message-evaluation-answers": "Du befindest dich jetzt bei den Ergebnissen. {{answers}} Teilnehmende haben den Inhalt beantwortet. Navigiere mit der Tab-Taste durch die Antworten.",
     "a11y-content-result": "Der Inhalt {{content}} wurde bisher von {{count}} Personen beantwortet, {{abstentions}} Personen haben sich enthalten.",
     "a11y-choice-result": "Der Inhalt wurde von {{percent}} Prozent richtig beantwortet.",
     "a11y-go-to-statistic": "Drücke die Enter-Taste, um zur Auswertung des Inhalts zu gelangen.",

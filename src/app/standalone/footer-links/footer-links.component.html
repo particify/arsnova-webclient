@@ -22,7 +22,9 @@
     }
   </div>
   <div fxLayout="row">
-    <a [matMenuTriggerFor]="privacyMenu"> {{ 'footer.dsgvo' | transloco }}</a>
+    <a matMenuTrigger [matMenuTriggerFor]="privacyMenu">
+      {{ 'footer.dsgvo' | transloco }}</a
+    >
     @if (imprintUrl) {
       <a [href]="imprintUrl" target="_blank">
         {{ 'footer.imprint' | transloco }}</a

@@ -21,7 +21,8 @@ $item-height: 90px;
     border-color: var(--border);
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
     border-color: var(--grey);
   }
 }

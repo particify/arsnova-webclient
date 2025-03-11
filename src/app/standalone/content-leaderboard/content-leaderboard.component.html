@@ -31,7 +31,7 @@
         *matCellDef="let element; index as i"
         [ngStyle]="{ color: element.color }"
       >
-        {{ element.userAlias?.alias ?? 'general.anonymous' | transloco }}
+        {{ element.userAlias?.alias ?? ('general.anonymous' | transloco) }}
       </td>
     </ng-container>
     <ng-container matColumnDef="score">

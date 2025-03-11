@@ -29,8 +29,12 @@
     </div>
   }
 </div>
-<div class="text invisible" [ngClass]="{ visible: isClosed }">
-  <h3 tabindex="-1" id="stopped-label">
+<div
+  class="text invisible"
+  [attr.aria-hidden]="!isClosed"
+  [ngClass]="{ visible: isClosed }"
+>
+  <span class="hint">
     {{ 'survey.is-stopped' | transloco }}
-  </h3>
+  </span>
 </div>

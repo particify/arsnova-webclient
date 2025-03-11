@@ -1,5 +1,10 @@
 <div fxLayout="row" fxLayoutAlign="center">
-  <div class="page-container">
+  <div
+    class="page-container"
+    tabindex="-1"
+    [appAutofocus]
+    [attr.aria-label]="'comment-page.a11y-message' | a11yIntro | async"
+  >
     @if (!disabled) {
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <app-comment-list-bar
@@ -42,13 +47,7 @@
       ></app-comment-list-hint>
     }
     @if (!isLoading && !disabled) {
-      <div
-        class="comments-container"
-        tabindex="-1"
-        appHotkey="7"
-        [appHotkeyTitle]="'comment-list.list' | transloco"
-        [attr.aria-label]="'comment-list.list' | transloco"
-      >
+      <div class="comments-container">
         @for (comment of displayComments; track comment) {
           <app-comment
             [comment]="comment"

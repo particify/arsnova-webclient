@@ -1,9 +1,9 @@
 <div class="canvas-container">
-  <canvas [id]="chartId"></canvas>
-  <div class="text-container">
+  <canvas aria-hidden="true" [id]="chartId"></canvas>
+  <div [attr.aria-label]="dataText + infoText" class="text-container">
     <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
-      <span class="data-text">{{ dataText }}</span>
-      <span class="info-text">{{ infoText }}</span>
+      <span aria-hidden="true" class="data-text">{{ dataText }}</span>
+      <span aria-hidden="true" class="info-text">{{ infoText }}</span>
     </div>
   </div>
 </div>
