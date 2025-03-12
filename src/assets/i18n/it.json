@@ -126,11 +126,11 @@
     "a11y-update": "Esegui l'aggiornamento e chiudi la finestra di dialogo. La pagina verrà ricaricata.",
     "a11y-close": "Chiude la finestra di dialogo e torna all'ultima pagina.",
     "create-room": "Crea una stanza",
-    "created-1": "La stanza \"",
-    "created-2": "\" è stato creato.",
+    "created-1": "La stanza “",
+    "created-2": "” è stata creata.",
     "exactly-8": "Un numero di stanza ha esattamente 8 cifre.",
     "only-numbers": "Il numero di una stanza contiene solo cifre.",
-    "room-id": "Camera-No.",
+    "room-id": "Stanza n.",
     "update-available": "Aggiornamento disponibile",
     "update-made": "Nuova versione!",
     "see-news": "L'elenco dettagliato delle modifiche è disponibile nel nostro sito ",
@@ -310,10 +310,10 @@
     "question": "Domanda",
     "favorite": "Favorito",
     "presented": "Presentato",
-    "timestamp": "Timestamp"
+    "timestamp": "Istante temporale"
   },
   "keys": {
-    "escape": "Fuga",
+    "escape": "Esc",
     "ctrl": "Ctrl",
     "alt": "Alt",
     "shift": "Turnover",
@@ -394,7 +394,7 @@
     "no-comments": "Nessun post presente.",
     "no-comments-found": "Nessun post trovato.",
     "zoom-in": "Ingrandisci",
-    "zoom-out": "Zoom out",
+    "zoom-out": "Riduci",
     "send": "Invia",
     "cancel": "Annulla",
     "your-comment": "Il tuo post",
@@ -589,7 +589,7 @@
     "get-ready": "Preparati!",
     "get-ready-alias": "Preparati, {{alias}}!",
     "content-not-published": "Contenuti non pubblicati",
-    "leaderboard": "Lavagna",
+    "leaderboard": "Classifica",
     "no-leaderboard-entries": "Non ci sono ancora risultati.",
     "points": "Punti",
     "group-type-mixed": "Misto",
@@ -601,7 +601,7 @@
     "answer-correct-to-get-points": "Rispondi correttamente per ottenere punti",
     "contents-will-be-published-gradually": "I contenuti saranno rilasciati gradualmente",
     "flashcard-front": "Fronte",
-    "flashcard-back": "Indietro"
+    "flashcard-back": "Retro"
   },
   "answer": {
     "word": "Parola chiave",
