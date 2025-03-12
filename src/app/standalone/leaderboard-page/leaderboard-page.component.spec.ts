@@ -8,6 +8,8 @@ import { ContentGroup } from '@app/core/models/content-group';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { Room } from '@app/core/models/room';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { MockAnnounceService } from '@testing/test-helpers';
 
 describe('LeaderboardPageComponent', () => {
   let component: LeaderboardPageComponent;
@@ -36,6 +38,10 @@ describe('LeaderboardPageComponent', () => {
         {
           provide: ThemeService,
           useValue: themeService,
+        },
+        {
+          provide: AnnounceService,
+          useClass: MockAnnounceService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

@@ -29,7 +29,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { Location, AsyncPipe } from '@angular/common';
+import { Location } from '@angular/common';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
@@ -74,7 +74,6 @@ function setDefaultTrue(value: boolean | undefined): boolean {
     CdkStep,
     ContentParticipantComponent,
     SeriesOverviewComponent,
-    AsyncPipe,
     TranslocoPipe,
     BaseCardComponent,
     ContentWaitingComponent,

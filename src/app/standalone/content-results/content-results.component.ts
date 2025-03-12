@@ -315,14 +315,9 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   }
 
   private announceAnswers() {
-    const isText = this.content.format === ContentType.TEXT;
-    if (!isText || this.responseCounts.answers > 0) {
+    if (this.responseCounts.answers > 0) {
       const action = this.answersVisible ? 'expanded' : 'collapsed';
-      const msg =
-        'creator.statistic.a11y-' +
-        action +
-        '-answers' +
-        (isText ? '-text' : '');
+      const msg = 'creator.statistic.a11y-' + action + '-results';
       this.announceService.announce(msg);
     } else {
       this.announceService.announce('creator.statistic.a11y-no-answers-yet');

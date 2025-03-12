@@ -4,6 +4,16 @@
       <mat-tab-group
         (selectedTabChange)="switchList($event.index)"
         [selectedIndex]="isModeration ? 1 : 0"
+        tabindex="-1"
+        [appAutofocus]
+        [attr.aria-label]="
+          (isModeration
+            ? 'creator.comment-page.a11y-message-moderation'
+            : 'comment-page.a11y-message'
+          )
+            | a11yIntro
+            | async
+        "
       >
         <mat-tab
           label="{{ 'creator.comment-list.public-list' | transloco }} {{
@@ -64,13 +74,7 @@
       ></app-comment-list-hint>
     }
     @if (!isLoading) {
-      <div
-        class="comments-container"
-        tabindex="-1"
-        appHotkey="7"
-        [appHotkeyTitle]="'comment-list.list' | transloco"
-        [attr.aria-label]="'comment-list.list' | transloco"
-      >
+      <div class="comments-container">
         @for (comment of displayComments; track comment) {
           <app-comment
             [comment]="comment"

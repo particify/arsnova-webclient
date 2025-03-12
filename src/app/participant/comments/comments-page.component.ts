@@ -15,11 +15,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import {
-  TranslocoService,
-  TranslocoPipe,
-  provideTranslocoScope,
-} from '@jsverse/transloco';
+import { TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
 import { takeUntil } from 'rxjs';
 import { CommentListFloatingButtonsComponent } from '@app/standalone/comment-list-floating-buttons/comment-list-floating-buttons.component';
 import { CommentListAddButtonComponent } from '@app/standalone/comment-list-add-button/comment-list-add-button.component';
@@ -29,14 +25,12 @@ import { CommentListHintComponent } from '@app/standalone/comment-list-hint/comm
 import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-hint/comment-settings-hint.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CommentListBarComponent } from '@app/standalone/comment-list-bar/comment-list-bar.component';
-import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-comments-page',
   templateUrl: './comments-page.component.html',
   styleUrls: ['../../common/styles/comments-page.scss'],
   imports: [
-    FlexModule,
     CommentListBarComponent,
     LoadingIndicatorComponent,
     CommentSettingsHintComponent,
@@ -45,7 +39,6 @@ import { FlexModule } from '@angular/flex-layout';
     CommentComponent,
     CommentListAddButtonComponent,
     CommentListFloatingButtonsComponent,
-    TranslocoPipe,
   ],
   providers: [provideTranslocoScope('participant')],
 })

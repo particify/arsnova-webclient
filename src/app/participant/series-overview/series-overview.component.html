@@ -6,17 +6,9 @@
         (userLeaderboardItem && leaderboardPosition && leaderboardPosition > 3))
     ) {
       <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
-        <span class="header-text">
+        <span [appAutofocus] tabindex="-1" class="header-text">
           {{ getHeaderText() | transloco }}
         </span>
-        @if (group.leaderboardEnabled && leaderboardPosition) {
-          <span class="position-info">
-            {{
-              'participant.content.you-are-at-position'
-                | transloco: { position: leaderboardPosition | ordinal }
-            }}
-          </span>
-        }
       </div>
     }
     @if (isLoading) {
@@ -36,7 +28,7 @@
             [style]="'color: var(--' + getTrophyIconColor() + ')'"
             >emoji_events</mat-icon
           >
-          <span class="header-text">
+          <span [appAutofocus] tabindex="-1" class="header-text">
             {{
               'participant.content.you-are-at-position-congrats'
                 | transloco: { position: leaderboardPosition | ordinal }
@@ -134,16 +126,31 @@
       @if (
         !isLoading && (!group.leaderboardEnabled || selectedTabIndex === 0)
       ) {
-        <mat-list>
+        <mat-action-list>
           @for (content of contentsWithResults; track content; let i = $index) {
-            <mat-list-item class="full-border" (click)="goToContent(i)">
+            <button
+              mat-list-item
+              disableRipple
+              class="full-border"
+              (click)="goToContent(i)"
+            >
               <div
                 fxLayout="row"
                 fxLayoutAlign="start center"
                 fxLayoutGap="16px"
                 fxFill
               >
-                <div fxLayoutAlign="center center">
+                <div
+                  fxLayoutAlign="center center"
+                  [attr.aria-label]="
+                    ![ContentType.FLASHCARD, ContentType.SLIDE].includes(
+                      contents[i].format
+                    )
+                      ? ('participant.content.answer-state-' +
+                          content.state.toLowerCase() | transloco) + ':'
+                      : ''
+                  "
+                >
                   @if (
                     !(
                       isLoadingLastContent &&
@@ -184,7 +191,6 @@
                   class="ellipsis body rendered-list-preview-container"
                   [renderedText]="content.body"
                   [listPreview]="true"
-                  tabindex="0"
                   role="button"
                   (keyup.enter)="goToContent(i)"
                 ></app-rendered-text>
@@ -195,9 +201,9 @@
                   }}</span>
                 }
               </div>
-            </mat-list-item>
+            </button>
           }
-        </mat-list>
+        </mat-action-list>
       }
       @if (
         !isLoading &&

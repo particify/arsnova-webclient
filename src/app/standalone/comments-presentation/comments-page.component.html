@@ -29,12 +29,7 @@
       ></app-comment-list-hint>
     }
     @if (!isLoading) {
-      <div
-        tabindex="-1"
-        appHotkey="7"
-        [appHotkeyTitle]="'comment-list.list' | transloco"
-        [attr.aria-label]="'comment-list.list' | transloco"
-      >
+      <div>
         @for (comment of displayComments; track comment) {
           <app-comment
             [comment]="comment"

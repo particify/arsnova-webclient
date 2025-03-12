@@ -28,11 +28,10 @@
               @if (isClosed) {
                 <button
                   id="switch-button"
-                  tabindex="{{ isClosed ? '0' : '-1' }}"
+                  [disabled]="!isClosed"
                   mat-stroked-button
                   class="bottom-button"
                   (click)="changeType()"
-                  aria-labelledby="change-type"
                   [appHotkey]="changeKey"
                   [appHotkeyTitle]="'creator.survey.change-type' | transloco"
                   [appHotkeyAction]="HotkeyAction.FOCUS"
@@ -42,15 +41,6 @@
                 >
                   {{ 'creator.survey.change-type' | transloco }}
                 </button>
-              } @else {
-                <div
-                  tabindex="-1"
-                  class="visually-hidden"
-                  [appHotkey]="changeKey"
-                  [appHotkeyTitle]="'creator.survey.change-type' | transloco"
-                >
-                  {{ 'creator.survey.a11y-first-stop-survey' | transloco }}
-                </div>
               }
             </div>
             <div
@@ -59,7 +49,6 @@
             >
               <app-answer-count
                 id="answer-count"
-                tabindex="{{ !isClosed ? '0' : '-1' }}"
                 [count]="answerCount"
               ></app-answer-count>
             </div>

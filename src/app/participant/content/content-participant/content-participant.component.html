@@ -1,12 +1,7 @@
-<div
-  [appAutofocus]
-  tabindex="-1"
-  attr.aria-label="{{ a11yMsg | transloco: { index: index + 1 } }}"
->
+<div>
   @if (isLoading) {
     <app-loading-indicator></app-loading-indicator>
-  }
-  @if (!isLoading) {
+  } @else {
     <mat-card
       [ngClass]="{
         'no-shadow': !showCard,
@@ -31,6 +26,9 @@
             fxLayoutAlign="space-between"
             fxLayoutAlign.xs="center center"
             fxLayoutGap="0.5em"
+            [appAutofocus]
+            tabindex="-1"
+            [attr.aria-label]="a11yMsg | transloco: { index: index + 1 }"
           >
             <app-rendered-text
               tabindex="0"
@@ -78,6 +76,7 @@
                         [attr.data-testid]="
                           'content-tab-' + (tab.label | transloco).toLowerCase()
                         "
+                        [matTooltip]="tab.label | transloco"
                       >
                         <mat-icon color="primary">{{ tab.icon }}</mat-icon>
                       </a>
@@ -305,20 +304,19 @@
                           <div fxLayoutAlign="center" fxLayoutGap="10px">
                             @if (content.abstentionsAllowed) {
                               <button
-                                tabindex="{{ alreadySent ? '-1' : '0' }}"
                                 mat-button
+                                [disabled]="alreadySent"
                                 class="abstain"
-                                [ngClass]="{ disabled: alreadySent }"
                                 type="button"
                                 (click)="
                                   submitAnswerEvent($event, 'abstention')
                                 "
-                                aria-labelledby="abstain"
                               >
                                 {{ 'participant.answer.abstain' | transloco }}
                               </button>
                             }
                             <app-loading-button
+                              [disabled]="alreadySent"
                               name="participant.answer.submit"
                             ></app-loading-button>
                           </div>
@@ -427,10 +425,6 @@
       }
     </mat-card>
   }
-  <div tabindex="-1" class="visually-hidden">
-    <div id="submit">{{ 'participant.answer.a11y-submit' | transloco }}</div>
-    <div id="abstain">{{ 'participant.answer.a11y-abstain' | transloco }}</div>
-  </div>
 </div>
 <ng-template #nextButton>
   <button type="button" mat-raised-button color="primary" (click)="next.emit()">

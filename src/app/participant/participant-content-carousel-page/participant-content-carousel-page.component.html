@@ -2,13 +2,6 @@
   <app-loading-indicator></app-loading-indicator>
 }
 <div>
-  <div [appAutofocus] class="visually-hidden" tabindex="-1">
-    {{
-      'participant.answer.a11y-message'
-        | a11yIntro: { group: contentGroup.name }
-        | async
-    }}
-  </div>
   @if (!isLoading && !isReloading) {
     <div fxLayout="column" fxLayoutAlign="start center">
       @if (contents.length > 0 && !showOverview) {

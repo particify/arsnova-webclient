@@ -58,9 +58,6 @@
               id="content-group-create-button"
               mat-raised-button
               color="primary"
-              [attr.aria-label]="
-                'creator.room-page.a11y-create-content-group' | transloco
-              "
               (click)="openCreateContentGroupDialog()"
               appHotkey="3"
               [appHotkeyTitle]="
@@ -90,9 +87,19 @@
                 class="type-card"
                 appearance="outlined"
                 tabindex="0"
-                type="button"
+                role="button"
                 (click)="openCreateContentGroupDialog(type)"
+                (keyup.enter)="openCreateContentGroupDialog(type)"
                 matRipple
+                [attr.aria-label]="
+                  'creator.room-page.a11y-create-series-type'
+                    | transloco
+                      : {
+                          type:
+                            'creator.content.group-type-' + type.toLowerCase()
+                            | transloco,
+                        }
+                "
               >
                 <div fxLayout="column" fxLayoutGap="8px">
                   <div

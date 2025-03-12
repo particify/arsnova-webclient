@@ -6,27 +6,15 @@ $icon-container-size: 40px;
   font-weight: $font-weight-bold;
 }
 
-.position-info {
-  opacity: 0.7;
-}
-
 @include xs {
   .header-text {
     font-size: $l-font-size;
-  }
-
-  .position-info {
-    font-size: $m-font-size;
   }
 }
 
 @include gt-xs {
   .header-text {
     font-size: $xl-font-size;
-  }
-
-  .position-info {
-    font-size: $l-font-size;
   }
 }
 
@@ -52,14 +40,17 @@ $icon-container-size: 40px;
   border-radius: 4px;
   border: 1px solid var(--border);
 
+  --mdc-list-list-item-hover-state-layer-color: var(--surface);
+  --mdc-list-list-item-focus-state-layer-color: var(--surface);
+
   &:not(:last-of-type) {
     margin-bottom: 8px;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     cursor: pointer;
-    box-shadow: 0 0 3px var(--grey);
-    border: 1px solid var(--surface);
+    border-color: var(--grey);
   }
 }
 

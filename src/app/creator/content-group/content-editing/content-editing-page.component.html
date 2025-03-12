@@ -4,29 +4,26 @@
       <div class="card" [ngClass]="{ flipped: flipped }">
         <mat-card>
           <div class="side" [ngClass]="{ 'invisible-card-content': flipped }">
-            <div class="visually-hidden">
-              <div [appAutofocus] tabIndex="-1">
-                {{
-                  (isEditMode
-                    ? 'creator.content.a11y-content-edit-message'
-                    : 'creator.content.a11y-content-create-message'
-                  )
-                    | a11yIntro
-                    | async
-                }}
-              </div>
-            </div>
             <form fxLayout="column" fxLayoutGap="12px">
               <div
                 class="header-container"
                 fxLayout="row wrap"
                 fxLayoutAlign="space-between center"
                 fxLayoutGap="1em"
+                tabindex="-1"
+                [appAutofocus]
+                [attr.aria-label]="
+                  (isEditMode
+                    ? 'creator.content.a11y-content-edit-message'
+                    : 'creator.content.a11y-content-create-message'
+                  )
+                    | a11yIntro
+                    | async
+                "
               >
                 <mat-form-field
                   appearance="outline"
                   class="no-field-hint primary-form-field smaller-select-input"
-                  tabindex="{{ isEditMode ? '-1' : '0' }}"
                 >
                   <mat-select
                     panelClass="bigger-panel"
@@ -163,11 +160,13 @@
                   "
                   [matTooltipDisabled]="isLiveMode()"
                 >
-                  <span
+                  <label
                     [ngStyle]="{
                       opacity: isLiveMode() && !formDisabled ? 1 : 0.5,
                     }"
-                    >{{ 'creator.content.seconds-to-answer' | transloco }}</span
+                    >{{
+                      'creator.content.seconds-to-answer' | transloco
+                    }}</label
                   >
                   <mat-form-field
                     appearance="outline"
@@ -296,7 +295,6 @@
             <button
               [disabled]="formDisabled"
               (click)="togglePreview()"
-              [attr.aria-label]="'creator.content.a11y-preview' | transloco"
               mat-stroked-button
             >
               {{

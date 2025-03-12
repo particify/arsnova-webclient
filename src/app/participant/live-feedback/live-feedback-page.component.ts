@@ -104,9 +104,7 @@ export class LiveFeedbackPageComponent
   }
 
   private announceAnswer(label: string) {
-    const answer = this.translateService.translate(
-      'participant.survey.' + label
-    );
+    const answer = this.translateService.translate('survey.' + label);
     const msg = this.translateService.translate(
       'participant.survey.a11y-selected-answer',
       {

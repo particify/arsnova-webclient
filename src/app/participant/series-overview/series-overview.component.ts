@@ -30,7 +30,7 @@ import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { MatTooltip } from '@angular/material/tooltip';
-import { MatList, MatListItem } from '@angular/material/list';
+import { MatActionList, MatListItem } from '@angular/material/list';
 import { MatButton } from '@angular/material/button';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
@@ -69,7 +69,7 @@ interface ContentResultView {
     HintComponent,
     NgStyle,
     MatButton,
-    MatList,
+    MatActionList,
     MatListItem,
     NgClass,
     MatTooltip,

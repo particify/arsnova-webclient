@@ -11,7 +11,6 @@
           <button
             type="button"
             mat-icon-button
-            tabindex="-1"
             (click)="assignPoints(i, -1)"
             [disabled]="answer.points <= 0 || isDisabled"
             [matTooltip]="'answer.remove-points' | transloco"
@@ -36,7 +35,6 @@
           <button
             type="button"
             mat-icon-button
-            tabindex="-1"
             (click)="assignPoints(i, 1)"
             [disabled]="pointsLeft < STEP_SIZE || isDisabled"
             [matTooltip]="'answer.add-points' | transloco"

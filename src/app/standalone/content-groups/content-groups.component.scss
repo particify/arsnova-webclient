@@ -4,18 +4,17 @@
   width: 100%;
   padding: $spacing-2;
 
-  @media (hover: hover) {
-    &:not(:hover, :focus-within) {
-      border-color: var(--border);
+  &:not(:hover, :focus, :focus-within) {
+    border-color: var(--border);
 
-      .publishing-btn {
-        display: none;
-      }
+    .publishing-btn {
+      display: none;
     }
   }
 
   &:hover,
-  :focus {
+  &:focus,
+  &:focus-within {
     border-color: var(--grey);
     cursor: pointer;
   }

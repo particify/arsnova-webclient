@@ -17,8 +17,6 @@
     "a11y-already-answered-text": "Has respondido a este contenido con {{answer}}.",
     "a11y-has-abstained": "Te has abstenido en este contenido. Presiona la tecla Tab para escuchar el contenido nuevamente.",
     "a11y-last-content": "Este fue el último contenido de esta serie de preguntas. Presiona la tecla 0 para regresar a la vista general de la sala.",
-    "a11y-submit": "Envía la respuesta y pasa a la siguiente.",
-    "a11y-abstain": "Abstente de este contenido y pasa al siguiente.",
     "a11y-sort-item": "Posición {{index}} de {{length}}: {{answer}}.",
     "abstain": "Abstenerse",
     "at-least-one": "Por favor, selecciona al menos una respuesta.",
