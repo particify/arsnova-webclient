@@ -169,6 +169,12 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   }
 
   init(index: number, length: number) {
+    if (index >= length) {
+      setTimeout(() => {
+        this.newIndex.emit(0);
+      });
+      return;
+    }
     this.onClick(index);
     if (index > 2 && length > 5) {
       const diff = index < length - 3 ? 2 : 5 - (length - 1 - index);

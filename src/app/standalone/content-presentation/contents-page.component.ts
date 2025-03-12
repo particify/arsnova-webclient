@@ -234,12 +234,15 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
                     this.stepCount++;
                   }
                   this.finishInit(initial);
+                  if (this.entryIndex > -1) {
+                    this.currentIndex =
+                      initial && this.entryIndex < this.stepCount
+                        ? this.entryIndex
+                        : 0;
+                    this.setCurrentContent(this.currentIndex);
+                  }
+                  this.sendContentStepState();
                 });
-              if (this.entryIndex > -1) {
-                this.currentIndex = initial ? this.entryIndex : 0;
-                this.setCurrentContent(this.currentIndex);
-              }
-              this.sendContentStepState();
             });
         } else {
           this.finishInit(initial);

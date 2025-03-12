@@ -94,7 +94,7 @@ export class ContentPresentationMenuComponent
         (multipleRounds) => (this.multipleRounds = multipleRounds || false)
       );
     this.presentationService.getContentState().subscribe((state) => {
-      if (state) {
+      if (state?.content) {
         this.content = state.content;
         this.contentRounds.set(this.content.id, this.content.state.round - 1);
       }
