@@ -113,5 +113,7 @@
     "show-answers": "Zeige die Antworten",
     "hide-chart": "Verstecke das Diagramm"
   },
-  "focus-mode": { "stopped": "Du kannst dich jetzt selbst im Raum bewegen." }
+  "focus-mode": {
+    "stopped": "Du kannst dich jetzt selbst im Raum bewegen."
+  }
 }
