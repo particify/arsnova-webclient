@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 export class PresentationModePage {
   constructor(
@@ -15,6 +15,14 @@ export class PresentationModePage {
       }
     }
     await this.page.goto(url);
+  }
+
+  async hoverControlBar() {
+    // Move mouse to bottom to ensure control bar is visible
+    await this.page.mouse.move(
+      100,
+      (this.page.viewportSize()?.height ?? 500) - 50
+    );
   }
 
   async exitPresentation() {
@@ -41,6 +49,8 @@ export class PresentationModePage {
   async copyUrl() {
     await this.page.getByLabel('Copy link').click();
   }
+
+  // Contents
 
   async publishContentGroup(mode?: string, isLive = false) {
     if (!isLive) {
@@ -99,14 +109,6 @@ export class PresentationModePage {
     await this.page.getByRole('button', { name: 'Start', exact: true }).click();
   }
 
-  async hoverControlBar() {
-    // Move mouse to bottom to ensure control bar is visible
-    await this.page.mouse.move(
-      100,
-      (this.page.viewportSize()?.height ?? 500) - 50
-    );
-  }
-
   async deleteContentAnswers() {
     await this.openContentMoreMenu();
     await this.page.getByTestId('delete-content-answer-button').click();
@@ -154,5 +156,29 @@ export class PresentationModePage {
   async goToPreviousContent() {
     await this.hoverControlBar();
     await this.page.getByTestId('left-btn').click();
+  }
+
+  // Comments
+
+  async enableComments() {
+    await this.page.getByRole('button', { name: 'Enable Q&A' }).click();
+  }
+
+  async disableCommentsReadOnlyMode() {
+    await this.page.getByRole('button', { name: 'Unlock creation' }).click();
+  }
+
+  async filterComments(filter: string) {
+    await this.page.getByTestId('comments-filter-button').click();
+    await this.page.getByRole('menuitem', { name: filter }).click();
+  }
+
+  getComment(index: number): Locator {
+    return this.page.getByTestId('comment-card').nth(index);
+  }
+
+  async sortComments(sorting: string) {
+    await this.page.getByTestId('comments-sort-button').click();
+    await this.page.getByRole('menuitem', { name: sorting }).click();
   }
 }

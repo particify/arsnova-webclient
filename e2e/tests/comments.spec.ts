@@ -1,7 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
-import { CommentsPage as CreatorCommentsPage } from '@e2e/fixtures/creator/comments';
-import { CommentsPage as ParticipantCommentsPage } from '@e2e/fixtures/participant/comments';
+import { CreatorCommentsPage } from '@e2e/fixtures/creator/comments';
+import { ParticipantCommentsPage } from '@e2e/fixtures/participant/comments';
 import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
 
@@ -99,17 +99,17 @@ test.describe('Q&A', () => {
     ).toBeVisible();
     await expect(
       page.getByRole('menuitem', {
-        name: 'mark as correct',
+        name: 'correct',
       })
     ).toBeVisible();
     await expect(
       page.getByRole('menuitem', {
-        name: 'mark as wrong',
+        name: 'wrong',
       })
     ).toBeVisible();
     await expect(
       page.getByRole('menuitem', {
-        name: 'mark as favorite',
+        name: 'favorite',
       })
     ).toBeVisible();
     await expect(
@@ -119,7 +119,7 @@ test.describe('Q&A', () => {
     ).toBeVisible();
     await expect(
       page.getByRole('menuitem', {
-        name: 'ban from public list',
+        name: 'ban',
       })
     ).toBeVisible();
     await page.keyboard.press('Escape');
@@ -129,11 +129,7 @@ test.describe('Q&A', () => {
     await commentsPage.goto(shortId);
     await commentsPage.createPost('This is my first post.');
     await commentsPage.openMoreMenu(0);
-    await page
-      .getByRole('menuitem', {
-        name: 'reply',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('reply');
     await page.getByPlaceholder('enter your answer').fill('This is my answer.');
     await page.getByRole('button', { name: 'save' }).click();
     await page.getByRole('button', { name: 'close' }).click();
@@ -144,11 +140,7 @@ test.describe('Q&A', () => {
     await commentsPage.goto(shortId);
     await commentsPage.createPost('This is my first post.');
     await commentsPage.openMoreMenu(0);
-    await page
-      .getByRole('menuitem', {
-        name: 'mark as correct',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('correct');
     await expect(page.getByTestId('comment-correct-button')).toBeVisible();
   });
 
@@ -156,11 +148,7 @@ test.describe('Q&A', () => {
     await commentsPage.goto(shortId);
     await commentsPage.createPost('This is my first post.');
     await commentsPage.openMoreMenu(0);
-    await page
-      .getByRole('menuitem', {
-        name: 'mark as wrong',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('wrong');
     await expect(page.getByTestId('comment-wrong-button')).toBeVisible();
   });
 
@@ -168,11 +156,7 @@ test.describe('Q&A', () => {
     await commentsPage.goto(shortId);
     await commentsPage.createPost('This is my first post.');
     await commentsPage.openMoreMenu(0);
-    await page
-      .getByRole('menuitem', {
-        name: 'mark as favorite',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('favorite');
     await expect(page.getByTestId('comment-favorite-button')).toBeVisible();
   });
 
@@ -180,11 +164,7 @@ test.describe('Q&A', () => {
     await commentsPage.goto(shortId);
     await commentsPage.createPost('This is my first post.');
     await commentsPage.openMoreMenu(0);
-    await page
-      .getByRole('menuitem', {
-        name: 'delete',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('delete');
     await page.getByRole('button', { name: 'delete' }).click();
     await expect(commentsPage.getNoCommentsHint()).toBeVisible();
   });
@@ -193,11 +173,7 @@ test.describe('Q&A', () => {
     await commentsPage.goto(shortId);
     await commentsPage.createPost('This is my first post.');
     await commentsPage.openMoreMenu(0);
-    await page
-      .getByRole('menuitem', {
-        name: 'ban',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('ban');
     await expect(commentsPage.getNoCommentsHint()).toBeVisible();
     await expect(page.getByText('Public (1)')).toBeHidden();
     await expect(page.getByText('Moderation (1)')).toBeVisible();
@@ -271,17 +247,9 @@ test.describe('Q&A', () => {
     await commentsPage.createPost('This is a third post.');
     await commentsPage.createPost('This is another favorite post.');
     await commentsPage.openMoreMenu(0);
-    await page
-      .getByRole('menuitem', {
-        name: 'mark as favorite',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('favorite');
     await commentsPage.openMoreMenu(2);
-    await page
-      .getByRole('menuitem', {
-        name: 'mark as favorite',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('favorite');
     await commentsPage.filterComments('favorite');
     await expect(
       page.getByText('This is my first post.', { exact: true })
@@ -361,11 +329,7 @@ test.describe('Q&A', () => {
     await commentsPage.createPost('This is my second post.');
     await commentsPage.createPost('This is a comment to be banned.');
     await commentsPage.openMoreMenu(0);
-    await page
-      .getByRole('menuitem', {
-        name: 'ban',
-      })
-      .click();
+    await commentsPage.performMoreMenuAction('ban');
     await expect(page.getByText('Public (2)')).toBeVisible();
     await commentsPage.switchToModeration();
     await expect(

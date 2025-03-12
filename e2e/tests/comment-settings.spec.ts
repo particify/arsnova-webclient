@@ -1,7 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
-import { CommentsPage as CreatorCommentsPage } from '@e2e/fixtures/creator/comments';
-import { CommentsPage as ParticipantCommentsPage } from '@e2e/fixtures/participant/comments';
+import { CreatorCommentsPage } from '@e2e/fixtures/creator/comments';
+import { ParticipantCommentsPage } from '@e2e/fixtures/participant/comments';
 import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
 
