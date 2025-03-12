@@ -207,7 +207,7 @@
         >
           <span aria-hidden="true">{{ comment.body.trim() }}</span>
         </div>
-        @if (comment.tag && comment.tag !== '') {
+        @if (showTag) {
           <div class="comment-tags light">
             <mat-chip-listbox>
               <mat-chip-option

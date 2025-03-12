@@ -72,6 +72,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() parseVote?: Vote;
   @Input() userId?: string;
   @Input() outlinedCard = false;
+  @Input() tags?: string[];
 
   @Output() clickedOnTag = new EventEmitter<string>();
   @Output() activeComment = new EventEmitter<Comment>();
@@ -81,6 +82,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   extensionData: any;
   extensionEvent: Subject<string> = new Subject<string>();
   destroyed$ = new Subject<void>();
+  showTag = false;
 
   constructor(
     private commentService: CommentService,
@@ -115,6 +117,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         }
       });
     }
+    this.showTag = !!this.tags?.includes(this.comment.tag);
   }
 
   ngOnDestroy() {

@@ -58,6 +58,7 @@
             [parseVote]="getVote(comment)"
             [userId]="userId"
             (clickedOnTag)="selectTag($event)"
+            [tags]="this.room.extensions?.comments?.tags"
           >
           </app-comment>
         }
