@@ -111,11 +111,10 @@ export class CommentsPageComponent
   }
 
   subscribeToPresentationEvents() {
-    if (this.displayComments.length > 0) {
-      if (!this.activeComment) {
-        this.goToFirstComment();
-      }
+    if (!this.activeComment) {
+      this.goToFirstComment();
     }
+
     this.presentationService
       .getCommentSortChanges()
       .pipe(takeUntil(this.destroyed$))
@@ -147,9 +146,16 @@ export class CommentsPageComponent
   }
 
   goToFirstComment() {
-    setTimeout(() => {
-      this.updateCurrentComment(this.displayComments[0]);
-    }, 300);
+    if (this.displayComments.length > 0) {
+      setTimeout(() => {
+        this.updateCurrentComment(this.displayComments[0]);
+      }, 300);
+    } else {
+      if (this.activeComment?.highlighted) {
+        this.commentService.lowlight(this.activeComment).subscribe();
+      }
+      this.activeComment = undefined;
+    }
   }
 
   afterCommentsLoadedHook(): void {

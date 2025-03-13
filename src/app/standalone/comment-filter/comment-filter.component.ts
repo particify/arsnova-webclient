@@ -29,7 +29,9 @@ export class CommentFilterComponent {
     if (type === this.currentFilter) {
       this.filterSelected.emit(undefined);
     } else {
-      this.categorySelected.emit();
+      if (this.selectedCategory) {
+        this.categorySelected.emit();
+      }
       this.filterSelected.emit(type);
     }
   }
@@ -44,7 +46,9 @@ export class CommentFilterComponent {
     } else {
       this.selectedCategory = undefined;
     }
-    this.filterSelected.emit();
+    if (this.currentFilter) {
+      this.filterSelected.emit();
+    }
     this.categorySelected.emit(this.selectedCategory);
   }
 }
