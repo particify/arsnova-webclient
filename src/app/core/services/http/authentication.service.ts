@@ -34,6 +34,7 @@ import {
 import { ApiConfigService } from './api-config.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { environment } from '@environments/environment';
+import { AuthProvider } from '@app/core/models/auth-provider';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -356,8 +357,13 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
       // eslint-disable-next-line
       // @ts-ignore
       this.auth$$.next(of(null));
-      if (this.singleLogoutEnabled) {
-        const url = `/sso/${auth.authProvider}/logout`;
+      if (
+        this.singleLogoutEnabled &&
+        [AuthProvider.OIDC, AuthProvider.SAML].includes(auth.authProvider)
+      ) {
+        const url = this.buildUri(
+          `${this.serviceApiUrl.sso}/${auth.authProvider.toLowerCase()}/logout`
+        );
         const popup = this.openSsoPopup(url);
         if (!popup) {
           location.href = url;
