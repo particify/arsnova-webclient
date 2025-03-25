@@ -5113,9 +5113,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"angular-material-css-vars@npm:8.0.0":
-  version: 8.0.0
-  resolution: "angular-material-css-vars@npm:8.0.0"
+"angular-material-css-vars@npm:8.0.1":
+  version: 8.0.1
+  resolution: "angular-material-css-vars@npm:8.0.1"
   dependencies:
     "@ctrl/tinycolor": "npm:^4.0.0"
     tslib: "npm:^2.3.0"
@@ -5123,7 +5123,7 @@ __metadata:
     "@angular/common": ">=19"
     "@angular/core": ">=19"
     "@angular/material": ">=19"
-  checksum: 10c0/145d35b9f70d454f4eb25eb484afa5daaff0b75be491512a2a4badd7670dc76608ab1b2a96a6672af8b42678ac59d10a93537f1913cd2f3fa5bd1472fb675e1c
+  checksum: 10c0/1d9cbe1cf8070bd84541c8cf7573deadccccd56ba9e804f1c22ba78d6be1449261522c32a57ef6cbbebbda24dc59aa92a134ec2ad1647057702ee52902df1b48
   languageName: node
   linkType: hard
 
@@ -5381,7 +5381,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:8.26.1"
     "@typescript-eslint/parser": "npm:8.26.1"
     "@typescript-eslint/utils": "npm:8.26.1"
-    angular-material-css-vars: "npm:8.0.0"
+    angular-material-css-vars: "npm:8.0.1"
     backoff-rxjs: "npm:7.0.0"
     chart.js: "npm:4.4.8"
     chartjs-plugin-datalabels: "npm:2.2.0"

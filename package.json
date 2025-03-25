@@ -39,7 +39,7 @@
     "@jsverse/transloco": "7.5.1",
     "@stomp/rx-stomp": "2.0.1",
     "@stomp/stompjs": "7.0.1",
-    "angular-material-css-vars": "8.0.0",
+    "angular-material-css-vars": "8.0.1",
     "backoff-rxjs": "7.0.0",
     "chart.js": "4.4.8",
     "chartjs-plugin-datalabels": "2.2.0",
