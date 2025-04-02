@@ -36,7 +36,7 @@
     "@angular/service-worker": "19.2.4",
     "@fontsource/material-symbols-outlined": "5.2.8",
     "@fontsource/roboto": "5.2.5",
-    "@jsverse/transloco": "7.5.1",
+    "@jsverse/transloco": "7.6.1",
     "@stomp/rx-stomp": "2.0.1",
     "@stomp/stompjs": "7.0.1",
     "angular-material-css-vars": "8.0.1",
