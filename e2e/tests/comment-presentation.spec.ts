@@ -33,6 +33,7 @@ test.describe('Q&A presentation', () => {
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToComments();
+    await page.waitForURL(/comments/);
     await expect(
       page.getByText(shortId.slice(0, 4) + ' ' + shortId.slice(4, 8))
     ).toBeVisible();
@@ -119,10 +120,10 @@ test.describe('Q&A presentation', () => {
     await page.waitForURL(/present/);
     await expect(page.getByText('Hello!', { exact: true })).toBeVisible();
     await expect(
-      page.getByText('This is a favorite post.', { exact: true })
+      page.getByText('This is a favorite post.', { exact: true }).first()
     ).toBeVisible();
     await expect(
-      page.getByText('This is a correct post.', { exact: true })
+      page.getByText('This is a correct post.', { exact: true }).first()
     ).toBeVisible();
     await presentationModePage.filterComments('favorite');
     await expect(page.getByText('Hello!', { exact: true })).toBeHidden();
@@ -130,12 +131,12 @@ test.describe('Q&A presentation', () => {
       page.getByText('This is a favorite post.', { exact: true }).first()
     ).toBeVisible();
     await expect(
-      page.getByText('This is a correct post.', { exact: true })
+      page.getByText('This is a correct post.', { exact: true }).first()
     ).toBeHidden();
     await presentationModePage.filterComments('correct');
     await expect(page.getByText('Hello!', { exact: true })).toBeHidden();
     await expect(
-      page.getByText('This is a favorite post.', { exact: true })
+      page.getByText('This is a favorite post.', { exact: true }).first()
     ).toBeHidden();
     await expect(
       page.getByText('This is a correct post.', { exact: true }).first()
