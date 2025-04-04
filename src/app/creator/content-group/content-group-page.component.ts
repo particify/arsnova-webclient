@@ -278,7 +278,10 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.routingService.goBack();
+        this.router.navigate([
+          this.routingService.getRoleRoute(),
+          this.room.shortId,
+        ]);
         this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
         const msg = this.translateService.translate(
           'creator.content.content-group-deleted'

@@ -10,15 +10,15 @@
         'header.admin-area' | transloco
       }}</a>
     }
+    @if (showJoinLink) {
+      <a routerLink="" (click)="sendClickedEvent()">
+        {{ 'room-list.join-room' | transloco }}
+      </a>
+    }
     @if (showHelp && helpUrl) {
       <a [attr.href]="helpUrl" target="_blank">{{
         'header.help' | transloco
       }}</a>
-    }
-    @if (accessibilityUrl) {
-      <a [attr.href]="accessibilityUrl" target="_blank">
-        {{ 'footer.accessibility' | transloco }}</a
-      >
     }
   </div>
   <div fxLayout="row">
@@ -28,6 +28,11 @@
     @if (imprintUrl) {
       <a [href]="imprintUrl" target="_blank">
         {{ 'footer.imprint' | transloco }}</a
+      >
+    }
+    @if (accessibilityUrl) {
+      <a [attr.href]="accessibilityUrl" target="_blank">
+        {{ 'footer.accessibility' | transloco }}</a
       >
     }
   </div>

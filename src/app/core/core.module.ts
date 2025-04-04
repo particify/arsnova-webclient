@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FlexModule } from '@angular/flex-layout';
+import { FlexLayoutModule, FlexModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -72,6 +72,7 @@ import { DurationPipe } from '@app/core/pipes/duration.pipe';
     // Angular
     CommonModule,
     FlexModule,
+    FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
 

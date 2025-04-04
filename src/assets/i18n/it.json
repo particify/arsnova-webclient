@@ -84,7 +84,6 @@
     "settings-saved": "Le tue impostazioni sono state salvate."
   },
   "header": {
-    "a11y-back": "Torna alla pagina precedente.",
     "a11y-switch-role": "Cambia ruolo per vedere la vista dei partecipanti.",
     "a11y-switch-back": "Torna alla vista amministratore.",
     "a11y-disable-dark-mode": "Disabilita la modalità scura",
@@ -97,7 +96,6 @@
     "templates": "Modelli",
     "a11y-room": "Apri il menu utente. Qui puoi visualizzare le stanze a cui hai partecipato o uscire dal tuo account. Troverai anche un link a una pagina di aiuto e le impostazioni per la lingua e la visualizzazione.",
     "a11y-sidenav-message": "Ora sei nel menu principale.",
-    "back": "Indietro",
     "admin-area": "Amministrazione",
     "account-settings": "Impostazioni dell'account",
     "not-logged-in": "Non è stato effettuato l'accesso",

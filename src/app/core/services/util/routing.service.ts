@@ -4,7 +4,6 @@ import { Location } from '@angular/common';
 import { filter, map } from 'rxjs/operators';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
-import { ParentRoute } from '@app/core/models/parent-route';
 import { ApiConfig } from '@app/core/models/api-config';
 import { BehaviorSubject } from 'rxjs';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
@@ -20,7 +19,6 @@ enum RoutePrefix {
   providedIn: 'root',
 })
 export class RoutingService {
-  private backRoute: string[] = [];
   private fullCurrentRoute?: string;
   private viewRole?: UserRole;
   private shortId?: string;
@@ -78,33 +76,6 @@ export class RoutingService {
 
   getRoutes(route: ActivatedRouteSnapshot) {
     this.routeEvent.emit(route);
-    this.getBackRoute(route, route.data.requiredRole || null);
-  }
-
-  getBackRoute(route: ActivatedRouteSnapshot, role: UserRole) {
-    if (!route.title) {
-      return;
-    }
-    const parentRoute = route.data.parentRoute;
-    if (parentRoute !== undefined) {
-      if (parentRoute === ParentRoute.ROOM) {
-        if (this.shortId) {
-          this.backRoute = [this.getRoleRoute(role), this.shortId];
-        }
-      } else {
-        this.backRoute = [parentRoute];
-      }
-    } else {
-      this.backRoute = [];
-    }
-  }
-
-  goBack() {
-    if (this.backRoute.length > 0) {
-      this.router.navigate(this.backRoute);
-    } else {
-      this.location.back();
-    }
   }
 
   navigate(route: string) {

@@ -63,7 +63,7 @@ test.describe('create room for quiz', () => {
       2
     );
     await contentCreation.createSlideContent('My slide content');
-    await header.goBack();
+    await page.goBack();
     expect(await contentGroupOverview.getContents()).toHaveLength(6);
     await expect(page.getByText('6 contents', { exact: true })).toBeVisible();
     await expect(
@@ -75,7 +75,7 @@ test.describe('create room for quiz', () => {
     await contentGroupOverview.createContent();
     await contentCreation.createBinaryContent('My binary content', 'No');
     await contentCreation.createBinaryContent('Another binary content', 'Yes');
-    await header.goBack();
+    await page.goBack();
     await expect(page.getByText('published up to here')).toBeVisible();
     await expect(page.getByText('Live mode', { exact: true })).toBeVisible();
     await contentGroupOverview.toggleLiveMode();

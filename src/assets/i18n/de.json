@@ -31,7 +31,6 @@
     "by": "powered by "
   },
   "header": {
-    "a11y-back": "Führt zur vorherigen Seite.",
     "a11y-room": "Öffnet das Nutzer-Menü. Hier kannst du deine besuchten Räume einsehen oder dich von deinem Konto abmelden. Auch findest du einen Link zu einer Hilfe-Seite und Einstellungsmöglichkeiten für Sprache und Anzeige.",
     "a11y-switch-role": "Wechsel die Rolle um die Ansicht der Teilnehmenden zu sehen.",
     "a11y-switch-back": "Wechsel zurück zur Adminansicht.",
@@ -39,7 +38,6 @@
     "a11y-disable-dark-mode": "Deaktiviere den Dark Mode",
     "a11y-enable-dark-mode": "Aktiviere den Dark Mode",
     "account-deleted": "Dein Konto wurde gelöscht.",
-    "back": "Zurück",
     "admin-area": "Administration",
     "account-settings": "Account-Einstellungen",
     "not-logged-in": "Nicht angemeldet",

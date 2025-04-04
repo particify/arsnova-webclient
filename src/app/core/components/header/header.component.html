@@ -1,23 +1,46 @@
 <mat-toolbar class="mat-elevation-z2" fxLayoutAlign="center">
   @if (!room?.focusModeEnabled || !hasRole(UserRole.PARTICIPANT)) {
-    <mat-toolbar-row>
-      @if (router.url !== '/') {
-        <button
-          id="back-button"
-          mat-icon-button
-          aria-labelledby="back-label"
-          (click)="goBack()"
-          appHotkey="0"
-          matTooltip="{{ 'header.back' | transloco }}"
-        >
-          <mat-icon class="header-icons">arrow_back</mat-icon>
-        </button>
-      }
+    <mat-toolbar-row fxLayoutAlign="start center">
       @if (router.url === '/') {
         <lib-extension-point
           extensionId="branding-logo"
           [extensionData]="{ headerPlacement: true }"
         ></lib-extension-point>
+      }
+      @if (title()) {
+        @if (!!role && room) {
+          <div
+            fxLayout="row"
+            fxLayoutAlign="start center"
+            fxLayoutGap="8px"
+            class="title"
+            ngStyle.md="width: 30%"
+            ngStyle.sm="width: 40%"
+            style="width: 50%"
+            data-testid="page-title"
+          >
+            @if (title() !== room.name) {
+              <div
+                class="room-name ellipsis"
+                [ngStyle.lt-xl]="
+                  'max-width:' + (title().length > 40 ? '35%' : '100%')
+                "
+              >
+                <app-text-overflow-clip
+                  class="ellipsis"
+                  [text]="room.name"
+                ></app-text-overflow-clip>
+                <mat-icon>chevron_right</mat-icon>
+              </div>
+            }
+            <app-text-overflow-clip
+              class="ellipsis"
+              [text]="title()"
+            ></app-text-overflow-clip>
+          </div>
+        } @else if (router.url !== '/') {
+          <span class="title" data-testid="page-title">{{ title() }}</span>
+        }
       }
       <span class="fill-remaining-space"></span>
       <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
@@ -186,7 +209,6 @@
 </mat-toolbar>
 
 <div class="visually-hidden">
-  <div id="back-label">{{ 'header.a11y-back' | transloco }}</div>
   <div id="room-label">{{ 'header.a11y-room' | transloco }}</div>
   <div id="switch-role">
     {{

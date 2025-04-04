@@ -16,6 +16,7 @@ export class FooterLinksComponent implements OnInit {
   @Input() auth?: ClientAuthentication;
   @Input({ required: true }) uiConfig!: UiConfig;
   @Input() showHelp = false;
+  @Input() showJoinLink = false;
   @Output() inAppLinkClicked = new EventEmitter<void>();
 
   helpUrl?: string;

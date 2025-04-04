@@ -91,7 +91,7 @@ test.describe('create room with question series', () => {
       'My flashcard content',
       'Back of flashcard'
     );
-    await header.goBack();
+    await page.goBack();
     expect(await contentGroupOverview.getContents()).toHaveLength(16);
     await expect(page.getByText('16 contents', { exact: true })).toBeVisible();
     await expect(
@@ -99,14 +99,14 @@ test.describe('create room with question series', () => {
     ).toBeHidden();
   });
 
-  test('create question series with a duplicated content', async () => {
+  test('create question series with a duplicated content', async ({ page }) => {
     await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
       ['b']
     );
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.duplicateContent('My choice content', 0);
     expect(await contentGroupOverview.getContents()).toHaveLength(2);
   });
@@ -119,14 +119,14 @@ test.describe('create room with question series', () => {
       ['b']
     );
     await contentCreation.createBinaryContent('My binary content');
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.copyContentToNewGroup(
       'My choice content',
       0,
       'Another question series',
       'dashboard'
     );
-    await header.goBack();
+    await page.goBack();
     expect(page.getByText('Another question series')).toBeVisible();
     expect(page.getByText('1 contents')).toBeVisible();
   });
@@ -142,7 +142,7 @@ test.describe('create room with question series', () => {
     await contentCreation.createShortAnswerContent('My short answer content', [
       'abc',
     ]);
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.moveContentToNewGroup(
       'My choice content',
       0,
@@ -150,7 +150,7 @@ test.describe('create room with question series', () => {
       'dashboard'
     );
     expect(await contentGroupOverview.getContents()).toHaveLength(2);
-    await header.goBack();
+    await page.goBack();
     expect(page.getByText('Another question series')).toBeVisible();
     expect(page.getByText('1 contents')).toBeVisible();
   });
@@ -177,7 +177,7 @@ test.describe('create room with question series', () => {
     await expect(
       page.getByRole('button', { name: 'Publish question series' })
     ).toBeVisible();
-    await header.goBack();
+    await page.goBack();
     await roomOverviewPage.publishQuestionSeries('My question series');
     await expect(page.getByText('Locked', { exact: true })).toBeHidden();
   });
@@ -186,7 +186,7 @@ test.describe('create room with question series', () => {
     await contentGroupOverview.createContent();
     await contentCreation.createTextContent('My text content');
     await contentCreation.createTextContent('Another text content');
-    await header.goBack();
+    await page.goBack();
     await expect(page.getByText('published up to here')).toBeHidden();
     await contentGroupOverview.usePublishingModeRange();
     await expect(page.getByText('published up to here')).toBeVisible();

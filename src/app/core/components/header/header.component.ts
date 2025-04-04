@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Router } from '@angular/router';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
@@ -19,11 +19,14 @@ import {
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { DrawerService } from '@app/core/services/util/drawer.service';
+import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
+import { PageTitleService } from '@app/core/services/util/page-title.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  providers: [CustomPageTitleStrategy],
   standalone: false,
 })
 export class HeaderComponent implements OnInit {
@@ -39,6 +42,7 @@ export class HeaderComponent implements OnInit {
   showOverlayLink = false;
   announcementState?: AnnouncementState;
   room?: Room;
+  title: Signal<string>;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -50,8 +54,11 @@ export class HeaderComponent implements OnInit {
     private dialog: MatDialog,
     private announcementService: AnnouncementService,
     private roomService: RoomService,
-    private drawerService: DrawerService
-  ) {}
+    private drawerService: DrawerService,
+    private pageTitleService: PageTitleService
+  ) {
+    this.title = this.pageTitleService.getTitle();
+  }
 
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
@@ -116,10 +123,6 @@ export class HeaderComponent implements OnInit {
 
   isGuest(): boolean {
     return !this.auth || this.auth.authProvider === AuthProvider.ARSNOVA_GUEST;
-  }
-
-  goBack() {
-    this.routingService.goBack();
   }
 
   presentCurrentView(shouldOpen = this.openPresentationDirectly) {

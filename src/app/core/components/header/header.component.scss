@@ -6,10 +6,6 @@
   z-index: 2;
 }
 
-.header-icons {
-  color: var(--on-surface);
-}
-
 .user-button {
   color: var(--black);
   margin-right: 0;
@@ -68,4 +64,33 @@
 
 .room-actions-divider {
   height: var(--mdc-protected-button-container-height);
+}
+
+.title {
+  font-weight: normal;
+  font-size: $s-font-size;
+}
+
+.room-name {
+  display: none;
+}
+
+@include gt-xl {
+  .title {
+    font-size: $m-font-size;
+  }
+}
+
+@include gt-md {
+  .room-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing;
+    opacity: 0.7;
+
+    mat-icon {
+      opacity: 0.7;
+    }
+  }
 }

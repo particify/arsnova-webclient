@@ -7,6 +7,7 @@ import {
 import { TranslocoService } from '@jsverse/transloco';
 import { Title } from '@angular/platform-browser';
 import { take } from 'rxjs';
+import { PageTitleService } from './services/util/page-title.service';
 
 @Injectable()
 export class CustomPageTitleStrategy extends TitleStrategy {
@@ -18,7 +19,8 @@ export class CustomPageTitleStrategy extends TitleStrategy {
 
   constructor(
     private translateService: TranslocoService,
-    private readonly titleService: Title
+    private readonly titleService: Title,
+    private pageTitleService: PageTitleService
   ) {
     super();
     // Subscribe to lang changes and updated title
@@ -86,6 +88,7 @@ export class CustomPageTitleStrategy extends TitleStrategy {
   }
 
   private setDocumentTitle(title: string, addSuffix = true) {
+    this.pageTitleService.setTitle(title);
     if (addSuffix) {
       title += this.titleSuffix;
     }
