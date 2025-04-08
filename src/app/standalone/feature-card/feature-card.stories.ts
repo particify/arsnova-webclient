@@ -5,7 +5,7 @@ import {
   StoryObj,
 } from '@storybook/angular';
 
-import { RoomActionButtonComponent } from './room-action-button.component';
+import { FeatureCardComponent } from './feature-card.component';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -20,12 +20,12 @@ class MockHotkeyService {
 class MockActivatedRoute {}
 
 export default {
-  component: RoomActionButtonComponent,
-  title: 'RoomActionButton',
+  component: FeatureCardComponent,
+  title: 'FeatureCard',
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [RoomActionButtonComponent],
+      imports: [FeatureCardComponent],
       providers: [
         {
           provide: HotkeyService,
@@ -46,22 +46,32 @@ export default {
   ],
 } as Meta;
 
-type Story = StoryObj<RoomActionButtonComponent>;
+type Story = StoryObj<FeatureCardComponent>;
 
 export const Comments: Story = {
   args: {
-    feature: 'comments',
+    feature: 'Q&A',
+    description: 'Description for Q&A feature.',
+    countHint: '42 posts',
+    state: true,
+    stateText: 'Open',
     icon: 'question_answer',
+    url: 'comments',
     hotkey: '1',
-    badgeCounter: 42,
+    clickable: true,
   },
 };
 
 export const LiveFeedback: Story = {
   args: {
-    feature: 'live-feedback',
+    feature: 'Live Feedback',
+    description: 'Description for Live Feedback feature.',
+    countHint: '123 answers',
+    state: false,
+    stateText: 'Stopped',
     url: 'feedback',
     icon: 'thumbs_up_down',
     hotkey: '2',
+    clickable: false,
   },
 };

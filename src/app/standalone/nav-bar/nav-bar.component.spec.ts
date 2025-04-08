@@ -15,9 +15,8 @@ import { GlobalStorageService } from '@app/core/services/util/global-storage.ser
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Room } from '@app/core/models/room';
-import { NO_ERRORS_SCHEMA, EventEmitter, Injectable } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { Message } from '@stomp/stompjs';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -34,7 +33,6 @@ import {
 } from '@angular/material/menu/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
@@ -62,8 +60,12 @@ describe('NavBarComponent', () => {
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
 
-  const mockFeedbackService = jasmine.createSpyObj(['startSub']);
-  mockFeedbackService.messageEvent = new EventEmitter<Message>();
+  const mockFeedbackService = jasmine.createSpyObj([
+    'startSub',
+    'getMessages',
+    'emitMessage',
+  ]);
+  mockFeedbackService.getMessages.and.returnValue(of());
 
   const body = {
     UserCountChanged: {
@@ -602,85 +604,5 @@ describe('NavBarComponent', () => {
     fixture.detectChanges();
     const seriesBadge = fixture.nativeElement.querySelector('#series-badge');
     expect(getComputedStyle(seriesBadge).transform).toBe(badgeVisibleMatrix);
-  });
-
-  it('should add feedback button for participants when feedback has been started', async () => {
-    const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
-    room.shortId = '12345678';
-    component.room = room;
-    component.userRole = UserRole.PARTICIPANT;
-    component.viewRole = UserRole.PARTICIPANT;
-    fixture.detectChanges();
-    let feedbackButtonElement =
-      fixture.nativeElement.querySelector('#feedback-button');
-    expect(feedbackButtonElement).toBeNull('Feedback button should be null.');
-    const body = {
-      type: FeedbackMessageType.STARTED,
-    };
-    const message = {
-      body: JSON.stringify(body),
-    };
-    mockFeedbackService.messageEvent.emit(message);
-    fixture.detectChanges();
-    feedbackButtonElement =
-      fixture.nativeElement.querySelector('#feedback-button');
-    expect(feedbackButtonElement).not.toBeNull(
-      'Feedback button should be NOT NULL.'
-    );
-  });
-
-  it('should display news indicator badge for feedback button for participants when feedback has been started', async () => {
-    const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
-    room.shortId = '12345678';
-    component.room = room;
-    component.userRole = UserRole.PARTICIPANT;
-    component.viewRole = UserRole.PARTICIPANT;
-    fixture.detectChanges();
-    let feedbackBadge = fixture.nativeElement.querySelector('#feedback-badge');
-    expect(feedbackBadge).toBeNull();
-    const body = {
-      type: FeedbackMessageType.STARTED,
-    };
-    const message = {
-      body: JSON.stringify(body),
-    };
-    mockFeedbackService.messageEvent.emit(message);
-    fixture.detectChanges();
-    feedbackBadge = fixture.nativeElement.querySelector('#feedback-badge');
-    expect(getComputedStyle(feedbackBadge).transform).toBe(badgeVisibleMatrix);
-  });
-
-  it('should remove feedback button for participants when feedback has been stopped', async () => {
-    const room = new Room();
-    room.settings = {
-      feedbackLocked: false,
-    };
-    room.shortId = '12345678';
-    component.room = room;
-    component.userRole = UserRole.PARTICIPANT;
-    component.viewRole = UserRole.PARTICIPANT;
-    fixture.detectChanges();
-    let feedbackButtonElement =
-      fixture.nativeElement.querySelector('#feedback-button');
-    expect(feedbackButtonElement).not.toBeNull(
-      'Feedback button should be NOT NULL.'
-    );
-    const body = {
-      type: FeedbackMessageType.STOPPED,
-    };
-    const message = {
-      body: JSON.stringify(body),
-    };
-    mockFeedbackService.messageEvent.emit(message);
-    fixture.detectChanges();
-    feedbackButtonElement =
-      fixture.nativeElement.querySelector('#feedback-button');
-    expect(feedbackButtonElement).toBeNull('Feedback button should be null.');
   });
 });

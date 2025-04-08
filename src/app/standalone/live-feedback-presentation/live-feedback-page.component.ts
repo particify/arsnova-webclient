@@ -7,10 +7,6 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
@@ -45,7 +41,6 @@ export class LiveFeedbackPageComponent
   controlBarVisible = true;
 
   constructor(
-    protected notificationService: NotificationService,
     protected wsFeedbackService: WsFeedbackService,
     protected feedbackService: FeedbackService,
     protected roomService: RoomService,
@@ -152,18 +147,6 @@ export class LiveFeedbackPageComponent
           this.updateFeedback([0, 0, 0, 0]);
           this.wsFeedbackService.reset(this.room.id);
         }
-        const state = this.isClosed ? 'stopped' : 'started';
-        this.translateService
-          .selectTranslate('creator.survey.' + state)
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              state === 'started'
-                ? AdvancedSnackBarTypes.SUCCESS
-                : AdvancedSnackBarTypes.WARNING
-            );
-          });
       });
   }
 

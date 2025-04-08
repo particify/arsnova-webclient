@@ -9,7 +9,6 @@ import { importProvidersFrom, EventEmitter } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { Observable, of } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
@@ -20,16 +19,11 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LanguageService } from '@app/core/services/util/language.service';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { RoomService } from '@app/core/services/http/room.service';
-import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
-import { Message } from '@stomp/stompjs';
 import { RoomOverviewPageComponent } from '@app/participant/room-overview/room-overview-page.component';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -41,36 +35,12 @@ import {
   GroupType,
   PublishingMode,
 } from '@app/core/models/content-group';
-import { RoutingService } from '@app/core/services/util/routing.service';
 import { ENVIRONMENT } from '@environments/environment-token';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ApiConfig } from '@app/core/models/api-config';
-import { FormattingService } from '@app/core/services/http/formatting.service';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { CommentSettings } from '@app/core/models/comment-settings';
-
-class MockFeedbackService {
-  messageEvent = new EventEmitter<Message>();
-
-  getType(): LiveFeedbackType {
-    return LiveFeedbackType.FEEDBACK;
-  }
-
-  startSub() {}
-
-  get() {
-    return of([42, 24, 13, 7]);
-  }
-
-  getAnswerSum() {
-    return 86;
-  }
-
-  getBarData(data: number[], sum: number): number[] {
-    return data.map((d) => (d / sum) * 100);
-  }
-}
 
 class MockService {}
 class MockGlobalStorageService {
@@ -89,8 +59,6 @@ class MockAuthenticationService {
     );
   }
 }
-
-class MockWsFeedbackService {}
 
 class MockHotkeyService {
   registerHotkey() {}
@@ -177,12 +145,6 @@ class MockContentGroupService {
   }
 }
 
-class MockWsCommentService {
-  getCommentStream() {
-    return of({ body: '{ "payload": {} }' });
-  }
-}
-
 class MockCommentSettingsService {
   getSettingsStream() {
     return of({});
@@ -204,19 +166,11 @@ class MockEventService {
   }
 }
 
-class MockRoutingService {
-  getRoomJoinUrl() {
-    return 'join-url';
-  }
-}
-
 class MockApiConfigService {
   getApiConfig$() {
     return of(new ApiConfig([], {}, {}));
   }
 }
-
-class MockFormattingService {}
 
 export default {
   component: RoomOverviewPageComponent,
@@ -227,20 +181,12 @@ export default {
       imports: [RoomOverviewPageComponent, BrowserAnimationsModule],
       providers: [
         {
-          provide: FeedbackService,
-          useClass: MockFeedbackService,
-        },
-        {
           provide: RoomService,
           useClass: MockService,
         },
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,
-        },
-        {
-          provide: WsFeedbackService,
-          useClass: MockWsFeedbackService,
         },
         {
           provide: NotificationService,
@@ -279,10 +225,6 @@ export default {
           useClass: MockContentGroupService,
         },
         {
-          provide: WsCommentService,
-          useClass: MockWsCommentService,
-        },
-        {
           provide: CommentSettingsService,
           useClass: MockCommentSettingsService,
         },
@@ -297,37 +239,6 @@ export default {
         {
           provide: FocusModeService,
           useClass: MockFocusModeService,
-        },
-        {
-          provide: RoutingService,
-          useClass: MockRoutingService,
-        },
-        {
-          provide: FormattingService,
-          useClass: MockFormattingService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                apiConfig: { ui: {} },
-                room: {
-                  id: 'roomId',
-                  name: 'My awesome room',
-                  shortId: '12345678',
-                  description: 'This is my awesome room description.',
-                  settings: {},
-                },
-                commentSettings: {
-                  directSend: true,
-                  fileUploadEnabled: false,
-                  disabled: false,
-                  readonly: false,
-                },
-              },
-            },
-          },
         },
       ],
     }),
@@ -364,6 +275,5 @@ export const Participant: Story = {
     room: room,
     viewRole: UserRole.PARTICIPANT,
     commentSettings: new CommentSettings(),
-    apiConfig: new ApiConfig([], {}, {}),
   },
 };

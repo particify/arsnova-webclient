@@ -12,8 +12,7 @@ export class RoomOverviewPage {
     private readonly baseURL: string | undefined
   ) {
     this.commentsButton = page.getByRole('button', {
-      name: 'Q&A',
-      exact: true,
+      name: 'Go to Q&A',
     });
     this.createSeriesButton = page.getByText('create question series');
     this.questionSeriesNameInput = page.getByLabel(
@@ -23,8 +22,7 @@ export class RoomOverviewPage {
       name: 'create',
     });
     this.liveFeedbackButton = page.getByRole('button', {
-      name: 'Live Feedback',
-      exact: true,
+      name: 'Go to Live Feedback',
     });
   }
 

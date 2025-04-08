@@ -9,7 +9,6 @@ export class RoomOverviewPage {
   ) {
     this.commentsButton = page.getByRole('button', {
       name: 'Q&A',
-      exact: true,
     });
   }
 

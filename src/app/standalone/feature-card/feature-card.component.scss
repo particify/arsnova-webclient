@@ -1,0 +1,47 @@
+@use '../../../variables' as *;
+
+.feature-header {
+  font-size: $m-font-size;
+  font-weight: $font-weight-bold;
+}
+
+.smaller-font {
+  font-size: $s-font-size;
+}
+
+.less-opacity {
+  opacity: 0.7;
+}
+
+.feature-action {
+  opacity: 0;
+}
+
+.feature-card {
+  height: 100%;
+  max-width: 100%;
+  user-select: none;
+}
+
+@media (hover: none) {
+  .feature-action {
+    opacity: 1;
+  }
+}
+
+.feature-card:hover,
+.feature-card:focus,
+.feature-card:focus-within {
+  .feature-action {
+    opacity: 1;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    outline: 1px solid var(--grey);
+  }
+}

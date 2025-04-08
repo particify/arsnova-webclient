@@ -452,7 +452,12 @@
     "live-feedback": "Live Feedback",
     "comments": "Q&A",
     "copy-url": "Link kopieren",
-    "url-copied": "Direktlink wurde in die Zwischenablage kopiert."
+    "url-copied": "Direktlink wurde in die Zwischenablage kopiert.",
+    "go-to-feature": "Gehe zu {{feature}}",
+    "open": "Offen",
+    "locked": "Gesperrt",
+    "started": "Gestartet",
+    "stopped": "Gestoppt"
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",

@@ -1,11 +1,27 @@
-@media (min-width: 701px) {
-  .action-button-container {
-    min-height: 160px;
-  }
+@use '../../../variables' as *;
+
+.overview-container {
+  width: 100%;
+  max-width: $card-width;
 }
 
-@media (max-width: 700px) {
-  .action-button-container {
-    min-height: 140px;
+.overview-row-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.feature-column-item {
+  width: 100%;
+}
+
+@include gt-md {
+  .feature-row-item {
+    width: calc(50% - $spacing);
+  }
+
+  .overview-row-container {
+    flex-direction: row;
+    gap: $spacing-2;
   }
 }

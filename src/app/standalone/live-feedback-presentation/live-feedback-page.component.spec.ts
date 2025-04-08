@@ -9,14 +9,13 @@ import {
   MockNotificationService,
 } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { Message } from '@stomp/stompjs';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -43,8 +42,9 @@ describe('LiveFeedbackPageComponent', () => {
     'startSub',
     'get',
     'getType',
+    'getMessages',
   ]);
-  mockFeedbackService.messageEvent = new EventEmitter<Message>();
+  mockFeedbackService.getMessages.and.returnValue(of());
   mockFeedbackService.get.and.returnValue(of([0, 0, 0, 0]));
 
   const mockFocusModeService = jasmine.createSpyObj(['updateFeedbackState']);

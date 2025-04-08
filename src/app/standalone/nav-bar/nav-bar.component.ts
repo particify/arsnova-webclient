@@ -228,8 +228,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   subscribeToParticipantEvents() {
     if (this.viewRole === UserRole.PARTICIPANT) {
-      this.feedbackSubscription = this.feedbackService.messageEvent.subscribe(
-        (message) => {
+      this.feedbackSubscription = this.feedbackService
+        .getMessages()
+        .subscribe((message) => {
           const type = JSON.parse(message.body).type;
           if (type === FeedbackMessageType.STARTED) {
             this.activeFeatures.push(RoutingFeature.FEEDBACK);
@@ -240,8 +241,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
             this.activeFeatures.splice(index, 1);
             this.getItems();
           }
-        }
-      );
+        });
       this.commentSettingsSubscription = this.commentSettingsService
         .getSettingsStream()
         .subscribe((settings) => {

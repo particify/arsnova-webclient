@@ -46,16 +46,6 @@
   @include show-add-group-button;
 }
 
-.content-groups-header {
-  font-size: $m-font-size;
-  font-weight: $font-weight-bold;
-}
-
-.content-groups-description {
-  font-size: $s-font-size;
-  opacity: 0.7;
-}
-
 .group-type {
   font-size: $s-font-size;
 }
@@ -70,4 +60,8 @@
   font-size: $m-font-size;
   width: $m-font-size;
   height: $m-font-size;
+}
+
+.overview-container {
+  width: $card-width;
 }

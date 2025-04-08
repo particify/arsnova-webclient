@@ -452,7 +452,12 @@
     "live-feedback": "Retroalimentación en vivo",
     "comments": "Preguntas y respuestas",
     "copy-url": "Copiar dirección",
-    "url-copied": "El enlace de la sala se ha copiado al portapapeles."
+    "url-copied": "El enlace de la sala se ha copiado al portapapeles.",
+    "go-to-feature": "Ir a {{feature}}",
+    "open": "Abra",
+    "locked": "Cerrado",
+    "started": "Iniciado",
+    "stopped": "Detenido"
   },
   "statistic": {
     "a11y-message-overview": "Ahora estás en la vista general de estadísticas.",

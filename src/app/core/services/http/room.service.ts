@@ -19,7 +19,10 @@ import {
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import {
   CachingService,
@@ -247,6 +250,16 @@ export class RoomService extends AbstractEntityService<Room> {
           const event = new SurveyStarted();
           this.eventService.broadcast(event.type);
         }
+        const state = updatedRoom.settings.feedbackLocked
+          ? 'stopped'
+          : 'started';
+        const msg = this.translateService.translate('creator.survey.' + state);
+        this.notificationService.showAdvanced(
+          msg,
+          updatedRoom.settings.feedbackLocked
+            ? AdvancedSnackBarTypes.WARNING
+            : AdvancedSnackBarTypes.SUCCESS
+        );
         return updatedRoom;
       })
     );

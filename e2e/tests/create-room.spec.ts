@@ -1,13 +1,15 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
 import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
+import { RoomOverviewPage } from '@e2e/fixtures/participant/room-overview';
 
 test.describe('create room', () => {
   let header: Header;
   let roomSettings: RoomSettingsPage;
   let roomOverviewPage: CreatorRoomOverviewPage;
+  let shortId: string;
 
   test.beforeEach(async ({ page, baseURL }) => {
     header = new Header(page);
@@ -15,7 +17,7 @@ test.describe('create room', () => {
     roomOverviewPage = new CreatorRoomOverviewPage(page, baseURL);
     const homePage = new HomePage(page, baseURL);
     await homePage.goto();
-    await homePage.createRoom('My room');
+    shortId = await homePage.createRoom('My room');
     await page.waitForURL(/edit/);
   });
 
@@ -42,15 +44,20 @@ test.describe('create room', () => {
     await expect(page.getByLabel('My awesome room')).toBeVisible();
   });
 
-  test('add room description', async ({ page }) => {
+  test('add room description', async ({ baseURL }) => {
     await header.goToSettings();
     await roomSettings.updateDescription(
       'This is a short discription for this awesome room.'
     );
-    await page.goBack();
+    const browser = await chromium.launch();
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    const participant = new RoomOverviewPage(page, baseURL);
+    await participant.goto(shortId);
     await expect(
       page.getByText('This is a short discription for this awesome room.')
     ).toBeVisible();
+    await context.close();
   });
 
   test('set room language', async ({ page }) => {
