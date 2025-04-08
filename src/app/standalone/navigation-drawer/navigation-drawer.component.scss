@@ -22,7 +22,7 @@ button {
 
 .navigation-container {
   height: calc(var(--full-height) - $bar-height);
-  margin: -$app-padding;
+  margin: -$spacing-2;
   width: 100vw;
 }
 
@@ -36,12 +36,17 @@ button {
   }
 }
 
+@include gt-xs {
+  .navigation-container {
+    margin-top: -$spacing-4;
+    margin-bottom: -$spacing-4;
+    margin-left: -$spacing-4;
+  }
+}
+
 @include gt-md {
   .navigation-container {
-    margin-top: -$app-padding;
-    margin-bottom: -$app-padding;
-    margin-left: -$app-padding;
-    width: calc(100vw);
+    width: 100vw;
   }
 
   .mat-drawer-content {

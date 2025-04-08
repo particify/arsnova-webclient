@@ -1,4 +1,6 @@
+@use '../../../variables' as *;
+
 .mat-accordion {
   width: 100%;
-  max-width: 832px;
+  max-width: $card-width;
 }

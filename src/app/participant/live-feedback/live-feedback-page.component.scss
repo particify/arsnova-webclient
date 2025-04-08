@@ -3,7 +3,6 @@
 $bar-height-desktop: min(65px, 8vh);
 $bar-margin-desktop: min(10px, 2vh);
 $bar-margin-mobile: min(6px, 1vh);
-$card-padding: min(4vw, 16px);
 
 .faded {
   opacity: 0.3;
@@ -11,7 +10,7 @@ $card-padding: min(4vw, 16px);
 
 .answer-button {
   height: auto !important;
-  width: calc(50% - $card-padding / 2);
+  width: calc(50% - $spacing-2 / 2);
 }
 
 @mixin desktop($bottom-bar-height) {
@@ -20,8 +19,8 @@ $card-padding: min(4vw, 16px);
       height: calc(
         var(--full-height) -
           (
-            ($card-padding * 4) + ($bar-height-desktop * 4) +
-              ($bar-margin-desktop * 8) + ($app-padding * 2) + $bar-height +
+            ($spacing-2 * 4) + ($bar-height-desktop * 4) +
+              ($bar-margin-desktop * 8) + ($spacing-4 * 2) + $bar-height +
               $bottom-bar-height
           )
       );
@@ -40,9 +39,9 @@ $card-padding: min(4vw, 16px);
     .answer-container {
       height: calc(
         var(--full-height) - calc(
-            ($card-padding * 4) + ($bar-height-mobile * 4) +
-              ($bar-margin-mobile * 8) + $mobile-bar-height +
-              ($app-padding * 2) + $bar-height
+            ($spacing-2 * 4) + ($bar-height-mobile * 4) +
+              ($bar-margin-mobile * 8) + $mobile-bar-height + ($spacing-2 * 2) +
+              $mobile-bar-height
           )
       );
     }
@@ -81,7 +80,7 @@ $card-padding: min(4vw, 16px);
 .card-row {
   height: 100%;
   width: 100%;
-  max-width: 832px;
-  margin-top: $card-padding;
-  gap: $card-padding;
+  max-width: $card-width;
+  margin-top: $spacing-2;
+  gap: $spacing-2;
 }

@@ -1,8 +1,10 @@
+@use '../../../variables' as *;
+
 .selection-container {
   padding-top: 1em;
 }
 
 .container {
   width: 100%;
-  max-width: 832px;
+  max-width: $card-width;
 }
