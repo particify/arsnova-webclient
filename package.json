@@ -38,7 +38,7 @@
     "@fontsource/roboto": "5.2.5",
     "@jsverse/transloco": "7.6.1",
     "@stomp/rx-stomp": "2.0.1",
-    "@stomp/stompjs": "7.0.1",
+    "@stomp/stompjs": "7.1.1",
     "angular-material-css-vars": "8.0.1",
     "backoff-rxjs": "7.0.0",
     "chart.js": "4.4.8",
