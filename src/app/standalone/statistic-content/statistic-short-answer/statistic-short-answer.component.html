@@ -13,7 +13,7 @@
       </div>
     }
     <div fxLayout="column" fxLayoutGap="16px">
-      @if (answersVisible) {
+      @if (answersVisible && isPresentation) {
         <app-correct-answer-results
           [answerCounts]="[getAnswerCount()]"
           [correctAnswerCounts]="[getCorrectAnswerCount()]"

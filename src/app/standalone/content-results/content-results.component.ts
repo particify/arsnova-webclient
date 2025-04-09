@@ -2,9 +2,10 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
-  Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
@@ -17,7 +18,6 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { StatisticWordcloudComponent } from '@app/standalone/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { StatisticScaleComponent } from '@app/standalone/statistic-content/statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { RouterLink } from '@angular/router';
 import { UserSettings } from '@app/core/models/user-settings';
 import { StatisticPrioritizationComponent } from '@app/standalone/statistic-content/statistic-prioritization/statistic-prioritization.component';
 import { Content } from '@app/core/models/content';
@@ -36,13 +36,10 @@ import { MatIconButton } from '@angular/material/button';
 import { CoreModule } from '@app/core/core.module';
 import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
-import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
 import { MultipleRoundSelectionComponent } from '@app/standalone/multiple-round-selection/multiple-round-selection.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
-import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { StatisticShortAnswerComponent } from '@app/standalone/statistic-content/statistic-short-answer/statistic-short-answer.component';
-import { CountComponent } from '@app/standalone/count/count.component';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
 @Component({
@@ -53,13 +50,11 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
     FlexModule,
     NgClass,
     CoreModule,
-    AnswerCountComponent,
     MultipleRoundSelectionComponent,
     MatIconButton,
     MatTooltip,
     MatIcon,
     RenderedTextComponent,
-    ExtensionPointModule,
     StatisticChoiceComponent,
     StatisticScaleComponent,
     StatisticTextComponent,
@@ -71,11 +66,9 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
     MatDivider,
     TranslocoPipe,
     LanguageContextDirective,
-    RouterLink,
-    CountComponent,
   ],
 })
-export class ContentResultsComponent implements OnInit, OnDestroy {
+export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
   // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
   @ViewChild(StatisticChoiceComponent)
   choiceStatistic!: StatisticChoiceComponent;
@@ -94,20 +87,17 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
   destroyed$: Subject<void> = new Subject();
 
   @Input({ required: true }) content!: Content;
+  @Input({ required: true }) settings!: UserSettings;
   @Input() directShow = false;
   @Input() active = false;
-  @Input() index = 0;
+  @Input() contentIndex = 0;
   @Input() showCorrect = false;
   @Input() isPresentation = false;
   @Input() indexChanged?: EventEmitter<number>;
   @Input() isStandalone = true;
-  @Output() updatedCounter: EventEmitter<AnswerResponseCounts> =
-    new EventEmitter<AnswerResponseCounts>();
-  @Input() settings = new UserSettings();
   @Input() isParticipant = false;
   @Input() language?: string;
 
-  attachmentData: any;
   answersVisible = false;
   correctVisible = false;
   survey = false;
@@ -141,12 +131,21 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.content?.currentValue) {
+      this.initData();
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      });
+    }
+  }
+
   ngOnInit(): void {
-    this.attachmentData = {
-      refType: 'content',
-      refId: this.content.id,
-      detailedView: false,
-    };
+    this.initData();
+  }
+
+  private initData() {
     this.format = this.content.format;
     this.checkIfSurvey();
     if (this.directShow) {
@@ -170,8 +169,17 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
         .getRoundStateChanges()
         .pipe(takeUntil(this.destroyed$))
         .subscribe((roundData) => {
-          if (this.index === roundData.contentIndex) {
+          if (this.contentIndex - 1 === roundData.contentIndex) {
             this.changeRound(roundData.round);
+            this.multipleRounds = roundData.round > 0;
+          }
+        });
+      this.contentService
+        .getAnswersDeleted()
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((contentId) => {
+          if (this.content.id === contentId) {
+            this.multipleRounds = false;
           }
         });
     }
@@ -309,8 +317,8 @@ export class ContentResultsComponent implements OnInit, OnDestroy {
 
   updateCounter(counts: AnswerResponseCounts) {
     this.responseCounts = counts;
-    if (this.isPresentation) {
-      this.updatedCounter.emit(this.responseCounts);
+    if (this.active) {
+      this.contentService.updateAnswerCounts(this.responseCounts);
     }
   }
 

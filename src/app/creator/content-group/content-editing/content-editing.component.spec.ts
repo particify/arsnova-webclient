@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ContentEditingPageComponent } from './content-editing-page.component';
+import { ContentEditingComponent } from './content-editing.component';
 import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -22,6 +22,7 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { Room } from '@app/core/models/room';
 import { ContentGroup } from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ContentGroupPageService } from '@app/creator/content-group/content-group-page.service';
 
 @Injectable()
 class MockContentService {
@@ -62,7 +63,6 @@ class MockContentGroupService {
     return of(new ContentGroup());
   }
 }
-
 @Injectable()
 class MockRoomStatsService {}
 @Injectable()
@@ -71,9 +71,9 @@ class MockAnnouncer {}
 @Injectable()
 class MockFormattingService {}
 
-describe('ContentEditingPageComponent', () => {
-  let component: ContentEditingPageComponent;
-  let fixture: ComponentFixture<ContentEditingPageComponent>;
+describe('ContentEditingComponent', () => {
+  let component: ContentEditingComponent;
+  let fixture: ComponentFixture<ContentEditingComponent>;
 
   const contentPublishService = jasmine.createSpyObj(ContentPublishService, [
     'isGroupLive',
@@ -81,7 +81,7 @@ describe('ContentEditingPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentEditingPageComponent, A11yIntroPipe],
+      declarations: [ContentEditingComponent, A11yIntroPipe],
       providers: [
         {
           provide: DialogService,
@@ -131,6 +131,7 @@ describe('ContentEditingPageComponent', () => {
           provide: ContentPublishService,
           useValue: contentPublishService,
         },
+        ContentGroupPageService,
       ],
       imports: [getTranslocoModule(), MatMenuModule],
       schemas: [NO_ERRORS_SCHEMA],
@@ -138,7 +139,7 @@ describe('ContentEditingPageComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContentEditingPageComponent);
+    fixture = TestBed.createComponent(ContentEditingComponent);
     component = fixture.componentInstance;
     component.contentGroup = new ContentGroup();
     component.room = new Room();

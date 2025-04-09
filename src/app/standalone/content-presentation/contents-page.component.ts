@@ -41,7 +41,7 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
 import { ContentStepperComponent } from '@app/standalone/content-stepper/content-stepper.component';
-import { LeaderboardPageComponent } from '@app/standalone/leaderboard-page/leaderboard-page.component';
+import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-leaderboard/content-group-leaderboard.component';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 import { CountComponent } from '@app/standalone/count/count.component';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
@@ -56,7 +56,7 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
     HotkeyActionButtonComponent,
     CountdownTimerComponent,
     ContentStepperComponent,
-    LeaderboardPageComponent,
+    ContentGroupLeaderboardComponent,
     PulsatingCircleComponent,
     CountComponent,
   ],
@@ -124,12 +124,11 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       this.seriesName;
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.seriesName);
     this.userService.getCurrentUsersSettings().subscribe((settings) => {
-      if (settings) {
-        this.settings = settings;
-        if (this.showResults) {
-          this.settings.showContentResultsDirectly = true;
-        }
+      this.settings = settings;
+      if (this.showResults) {
+        this.settings.showContentResultsDirectly = true;
       }
+
       this.initGroup(true);
     });
     this.eventService
@@ -171,6 +170,12 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
           this.content.state.answeringEndTime = undefined;
           this.evaluateContentState();
         }
+      });
+    this.contentService
+      .getAnswerCounts()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((counts) => {
+        this.responseCounts = counts;
       });
   }
 
@@ -340,10 +345,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
 
   stopCountdown(): void {
     this.presentationService.stopContent();
-  }
-
-  updateCounter(counts: AnswerResponseCounts) {
-    this.responseCounts = counts;
   }
 
   updateStateChange() {

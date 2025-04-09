@@ -140,7 +140,6 @@ test.describe('Presentation of a question series', () => {
       false,
       false
     );
-    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     await presentationModePage.goToContentEdit();
@@ -157,7 +156,6 @@ test.describe('Presentation of a question series', () => {
       false,
       false
     );
-    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     await presentationModePage.goToDisplaySettings();

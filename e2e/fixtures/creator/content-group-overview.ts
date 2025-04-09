@@ -12,7 +12,8 @@ export class ContentGroupOverviewPage {
       name: 'Create content',
     });
     this.publishContentGroupButton = page.getByRole('button', {
-      name: 'Publish question series',
+      name: 'Publish',
+      exact: true,
     });
   }
 
@@ -135,7 +136,7 @@ export class ContentGroupOverviewPage {
   }
 
   async hoverContent(body: string) {
-    await this.page.getByText(body).hover();
+    await this.page.getByRole('button', { name: body }).hover();
   }
 
   async openMoreMenu(i: number) {
@@ -205,7 +206,9 @@ export class ContentGroupOverviewPage {
 
   async deleteGroup(confirm = false) {
     await this.openGroupMoreMenu();
-    await this.page.getByRole('menuitem', { name: 'delete' }).click();
+    await this.page
+      .getByRole('menuitem', { name: 'delete question series' })
+      .click();
     if (confirm) {
       await Promise.all([
         this.page.waitForResponse(

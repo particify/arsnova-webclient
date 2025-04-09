@@ -26,6 +26,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ContentState } from '@app/core/models/content-state';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { AnswerOption } from '@app/core/models/answer-option';
+import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -36,6 +37,7 @@ export class ContentService extends AbstractEntityService<Content> {
   private answersDeleted = new Subject<string>();
   private roundStarted = new Subject<Content>();
   private answerBanned = new Subject<string>();
+  private answerCounts$ = new Subject<AnswerResponseCounts>();
 
   serviceApiUrl = {
     answer: '/answer',
@@ -515,5 +517,13 @@ export class ContentService extends AbstractEntityService<Content> {
           )
         )
       );
+  }
+
+  updateAnswerCounts(counts: AnswerResponseCounts) {
+    this.answerCounts$.next(counts);
+  }
+
+  getAnswerCounts(): Subject<AnswerResponseCounts> {
+    return this.answerCounts$;
   }
 }

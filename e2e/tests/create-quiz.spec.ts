@@ -37,7 +37,6 @@ test.describe('create room for quiz', () => {
     page,
   }) => {
     await contentGroupOverview.createContent();
-    await expect(page).toHaveTitle(/Create content/);
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -63,7 +62,6 @@ test.describe('create room for quiz', () => {
       2
     );
     await contentCreation.createSlideContent('My slide content');
-    await page.goBack();
     expect(await contentGroupOverview.getContents()).toHaveLength(6);
     await expect(page.getByText('6 contents', { exact: true })).toBeVisible();
     await expect(
@@ -75,7 +73,6 @@ test.describe('create room for quiz', () => {
     await contentGroupOverview.createContent();
     await contentCreation.createBinaryContent('My binary content', 'No');
     await contentCreation.createBinaryContent('Another binary content', 'Yes');
-    await page.goBack();
     await expect(page.getByText('published up to here')).toBeVisible();
     await expect(page.getByText('Live mode', { exact: true })).toBeVisible();
     await contentGroupOverview.toggleLiveMode();
@@ -84,8 +81,8 @@ test.describe('create room for quiz', () => {
   });
 
   test('disable leaderboard', async ({ page }) => {
-    await expect(page.getByTestId('leaderboard-btn')).toBeEnabled();
+    await expect(page.getByTestId('leaderboard-btn').first()).toBeEnabled();
     await contentGroupOverview.toggleLeaderboard();
-    await expect(page.getByTestId('leaderboard-btn')).toBeDisabled();
+    await expect(page.getByTestId('leaderboard-btn').first()).toBeDisabled();
   });
 });

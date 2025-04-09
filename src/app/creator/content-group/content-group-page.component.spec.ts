@@ -37,6 +37,9 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserSettings } from '@app/core/models/user-settings';
+import { UserService } from '@app/core/services/http/user.service';
+import { ContentGroupPageService } from './content-group-page.service';
 
 @Injectable()
 class MockContentService {
@@ -52,6 +55,10 @@ class MockContentService {
 
   getAnswersDeleted() {
     return of('1234');
+  }
+
+  getAnswerCounts() {
+    return of({ answers: 2, abstentions: 0 });
   }
 }
 
@@ -111,6 +118,13 @@ describe('ContentGroupPageComponent', () => {
         'token'
       )
     )
+  );
+
+  const mockUserService = jasmine.createSpyObj('UserService', [
+    'getCurrentUsersSettings',
+  ]);
+  mockUserService.getCurrentUsersSettings.and.returnValue(
+    of(new UserSettings())
   );
 
   beforeEach(async () => {
@@ -186,6 +200,11 @@ describe('ContentGroupPageComponent', () => {
           provide: AuthenticationService,
           useValue: mockAuthService,
         },
+        {
+          provide: UserService,
+          useValue: mockUserService,
+        },
+        ContentGroupPageService,
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

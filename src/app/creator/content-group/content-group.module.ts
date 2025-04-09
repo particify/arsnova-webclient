@@ -12,10 +12,9 @@ import { SortContentFormComponent } from './content-editing/sort-content-form/so
 import { FlashcardContentFormComponent } from './content-editing/flashcard-content-form/flashcard-content-form.component';
 import { WordcloudContentFormComponent } from './content-editing/wordcloud-content-form/wordcloud-content-form.component';
 import { ChoiceContentFormComponent } from './content-editing/choice-content-form/choice-content-form.component';
-import { ContentEditingPageComponent } from './content-editing/content-editing-page.component';
+import { ContentEditingComponent } from './content-editing/content-editing.component';
 import { ScaleContentFormComponent } from './content-editing/scale-content-form/scale-content-form.component';
 import { BinaryContentFormComponent } from './content-editing/binary-content-form/binary-content-form.component';
-import { ContentPresentationComponent } from './content-presentation/content-presentation.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TranslocoModule } from '@jsverse/transloco';
 import { HintComponent } from '@app/standalone/hint/hint.component';
@@ -42,6 +41,10 @@ import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/co
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 import { ShortAnswerContentFormComponent } from '@app/creator/content-group/content-editing/short-answer-content-form/short-answer-content-form.component';
+import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-leaderboard/content-group-leaderboard.component';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
+import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
+import { ContentGroupPageService } from './content-group-page.service';
 
 @NgModule({
   declarations: [
@@ -53,10 +56,9 @@ import { ShortAnswerContentFormComponent } from '@app/creator/content-group/cont
     FlashcardContentFormComponent,
     WordcloudContentFormComponent,
     ChoiceContentFormComponent,
-    ContentEditingPageComponent,
+    ContentEditingComponent,
     ScaleContentFormComponent,
     BinaryContentFormComponent,
-    ContentPresentationComponent,
     ExportComponent,
     AnswerOptionListComponent,
     CreateContentGroupTemplateComponent,
@@ -90,6 +92,12 @@ import { ShortAnswerContentFormComponent } from '@app/creator/content-group/cont
     ContentGroupInfoComponent,
     CountdownTimerComponent,
     PulsatingCircleComponent,
+    ContentGroupLeaderboardComponent,
+    MatTabNav,
+    MatTabLink,
+    MatTabNavPanel,
+    BackButtonComponent,
   ],
+  providers: [ContentGroupPageService],
 })
 export class ContentGroupModule {}

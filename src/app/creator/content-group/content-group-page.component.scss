@@ -1,5 +1,8 @@
 @use '../../../variables' as *;
 
+$content-list-max-width: 600px;
+$action-card-max-width: 1000px;
+
 .trigger-text {
   margin-top: 2px;
   font-size: var(--mdc-text-button-label-text-size);
@@ -23,17 +26,6 @@
   opacity: 0.7;
 }
 
-.import-btn-mobile {
-  background-color: var(--surface);
-  color: var(--on-surface);
-  position: fixed;
-  z-index: 3;
-  right: 4vw;
-
-  // 2 x padding (8vw) + fab height (56px) + nav bar height (56px)
-  bottom: calc(8vw + 112px);
-}
-
 .action-icon {
   opacity: 0.7;
 }
@@ -47,14 +39,72 @@
   white-space: nowrap;
 }
 
-.progress-container {
-  margin-top: -$spacing;
-  margin-bottom: $spacing !important;
-}
-
 .live-mode-hint {
   cursor: pointer;
   color: var(--play);
+}
+
+@include lt-md {
+  .group-container {
+    background-color: var(--surface);
+    box-shadow: var(
+      --mdc-elevated-card-container-elevation,
+      var(--mat-sys-level1)
+    );
+    padding: $spacing-2;
+    width: 100%;
+    max-width: $card-width;
+    border-radius: $border-radius;
+  }
+}
+
+@include gt-md {
+  .group-container {
+    width: 100%;
+    max-width: min(40%, $content-list-max-width);
+    background-color: var(--surface);
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: $spacing-4 $spacing-4 0;
+    height: 100%;
+    border-right: 1px solid var(--grey-light);
+    overflow: auto;
+  }
+
+  .action-container {
+    position: absolute;
+    top: 0;
+    left: min(40%, 600px);
+    width: 100%;
+    overflow: auto;
+    max-width: calc(
+      calc(100% - min(40%, $content-list-max-width)) - calc($spacing-4 * 2)
+    );
+    height: calc(100% - $spacing-4);
+    padding: $spacing-4 $spacing-4 0;
+  }
+
+  .action-card {
+    width: 100%;
+    max-width: $action-card-max-width;
+    padding: $spacing-4;
+    margin-bottom: $spacing-4;
+  }
+
+  .page-container {
+    gap: $spacing-4;
+  }
+
+  .group-actions-container {
+    height: calc(100vh - $bar-height - $spacing-4);
+  }
+
+  .list-container {
+    max-height: 100%;
+    overflow: auto;
+    padding-bottom: $spacing-4;
+  }
 }
 
 @include xs {

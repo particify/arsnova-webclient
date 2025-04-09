@@ -27,6 +27,9 @@ import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-
 import { CdkDragDrop, CdkDragSortEvent } from '@angular/cdk/drag-drop';
 import { ContentStats } from '@app/creator/content-group/content-group-page.component';
 import { Observable, tap } from 'rxjs';
+import { RoundState } from '@app/core/models/events/round-state';
+import { PresentationService } from '@app/core/services/util/presentation.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-content-list',
@@ -47,6 +50,7 @@ export class ContentListComponent
   @Input() isModerator = false;
   @Input() attributionsExist = false;
   @Input() contentStats = new Map<string, ContentStats>();
+  @Input() selectedContentIndex?: number;
   @Output() hasStartedContentChanged = new EventEmitter<boolean>();
 
   currentGroupIndex?: number;
@@ -76,7 +80,10 @@ export class ContentListComponent
     private dialogService: DialogService,
     private contentGroupService: ContentGroupService,
     private contentPublishService: ContentPublishService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private presentationService: PresentationService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     super();
     this.iconList = this.contentService.getTypeIcons();
@@ -129,6 +136,21 @@ export class ContentListComponent
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.removeContentFromList(index);
+        if (this.selectedContentIndex !== undefined) {
+          const url = ['.'];
+          if (this.contents.length > 0) {
+            if (index < this.selectedContentIndex) {
+              url.push(this.selectedContentIndex.toString());
+            }
+          } else {
+            url.push('create');
+          }
+          this.router.navigate(url, {
+            relativeTo: this.route,
+            onSameUrlNavigation: 'reload',
+            replaceUrl: true,
+          });
+        }
         const msg = this.translateService.translate(
           'creator.content.content-deleted'
         );
@@ -298,6 +320,19 @@ export class ContentListComponent
 
   startNewRound(content: Content) {
     this.contentService.startNewRound(content);
+    this.contentService.getRoundStarted().subscribe((content) => {
+      if (content) {
+        this.publishRoundState(content);
+      }
+    });
+  }
+
+  private publishRoundState(content: Content) {
+    const roundState = new RoundState(
+      this.contents.map((c) => c.id).indexOf(content.id),
+      content.state.round - 1
+    );
+    this.presentationService.updateRoundState(roundState);
   }
 
   private getSortIndex(
@@ -435,6 +470,7 @@ export class ContentListComponent
           if (this.contentGroup.publishingIndex < index) {
             this.contentGroup.publishingIndex = index;
           }
+          this.router.navigate(['.', index + 1], { relativeTo: this.route });
           const msg = this.translateService.translate(
             'creator.content.content-started'
           );

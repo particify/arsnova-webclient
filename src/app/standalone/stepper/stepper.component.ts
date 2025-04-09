@@ -111,7 +111,6 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   @Input() listLength = 0;
   @Input() answerResults = new Map<number, AnswerResultType>();
   @Input() fixedWitdth = true;
-  @Input() additionalStepIcon?: string;
   @Input() lockedContentsDisabled = false;
   AnswerResultType = AnswerResultType;
   headerPos = 0;

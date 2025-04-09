@@ -1,9 +1,4 @@
 <div fxLayout="column" fxLayoutAlign="start center" class="list-container">
-  @if (contents.length === 0) {
-    <p class="hint">
-      {{ 'creator.content.no-contents-yet' | transloco }}
-    </p>
-  }
   @if (contents.length > 0) {
     <mat-action-list
       cdkDropList
@@ -46,6 +41,9 @@
               'locked-item': !isPublished(i),
               'no-pointer-events': publishingChangeActive,
             }"
+            [ngClass.gt-sm]="{
+              'primary-border-color': selectedContentIndex === i,
+            }"
             [ngStyle]="{
               'border-color': publishingChangeActive ? 'transparent' : null,
             }"
@@ -68,7 +66,7 @@
                       [minimalHeight]="true"
                     ></app-rendered-text>
                   </div>
-                  <div fxHide.xs>
+                  <div class="hide-lt-lg">
                     <ng-template [ngTemplateOutlet]="contentInfo"></ng-template>
                   </div>
                 </div>
@@ -207,8 +205,8 @@
                           fxHide.xs
                           mat-icon-button
                           color="primary"
-                          (click)="$event.stopPropagation()"
                           [routerLink]="['edit', content.id]"
+                          (click)="$event.stopPropagation()"
                           [matTooltip]="
                             'creator.content.edit-content' | transloco
                           "
@@ -400,53 +398,53 @@
                   }
                 </div>
               </div>
-              <div fxHide.gt-xs>
+              <div class="hide-gt-lg">
                 <ng-template [ngTemplateOutlet]="contentInfo"></ng-template>
               </div>
             </div>
           </button>
-          @if (isRangePublished() && contentGroup.publishingIndex === i) {
-            <div
-              #publishingDivider
-              cdkDrag
-              [cdkDragDisabled]="isLiveMode()"
-              (cdkDragStarted)="publishingChangeActive = true"
-              (cdkDragDropped)="dropPublishingDivider($event)"
-              (keyup.control.ArrowUp)="movePublishingDividerUp(i)"
-              (keyup.control.ArrowDown)="movePublishingDividerDown(i)"
-              cdkDragBoundary=".content-list"
-              class="locked-divider-container"
-              [ngClass]="{ 'static-divider': isLiveMode() }"
-              [tabindex]="isLiveMode() ? -1 : 0"
-              [attr.aria-label]="
-                (isLiveMode()
-                  ? 'creator.content.publishing-index-info-live'
-                  : 'creator.content.publishing-index-info'
-                ) | transloco: { index: contentGroup.publishingIndex + 1 }
-              "
-              appHotkey="p"
-              [appHotkeyDisabled]="isLiveMode()"
-              [appHotkeyTitle]="'creator.content.edit-publishing' | transloco"
-            >
-              <div
-                class="locked-divider"
-                [ngClass]="{ 'primary-background': !isLiveMode() }"
-              ></div>
-              <div
-                class="locked-drag"
-                [ngClass]="{ 'primary primary-border': !isLiveMode() }"
-                fxLayout="row"
-                fxLayoutAlign="start center"
-                fxLayoutGap="4px"
-              >
-                <mat-icon>lock_open</mat-icon>
-                <span>{{
-                  'creator.content.published-up-to-here' | transloco
-                }}</span>
-              </div>
-            </div>
-          }
         </div>
+        @if (isRangePublished() && contentGroup.publishingIndex === i) {
+          <div
+            #publishingDivider
+            cdkDrag
+            [cdkDragDisabled]="isLiveMode()"
+            (cdkDragStarted)="publishingChangeActive = true"
+            (cdkDragDropped)="dropPublishingDivider($event)"
+            (keyup.control.ArrowUp)="movePublishingDividerUp(i)"
+            (keyup.control.ArrowDown)="movePublishingDividerDown(i)"
+            cdkDragBoundary=".content-list"
+            class="locked-divider-container"
+            [ngClass]="{ 'static-divider': isLiveMode() }"
+            [tabindex]="isLiveMode() ? -1 : 0"
+            [attr.aria-label]="
+              (isLiveMode()
+                ? 'creator.content.publishing-index-info-live'
+                : 'creator.content.publishing-index-info'
+              ) | transloco: { index: contentGroup.publishingIndex + 1 }
+            "
+            appHotkey="p"
+            [appHotkeyDisabled]="isLiveMode()"
+            [appHotkeyTitle]="'creator.content.edit-publishing' | transloco"
+          >
+            <div
+              class="locked-divider"
+              [ngClass]="{ 'primary-background': !isLiveMode() }"
+            ></div>
+            <div
+              class="locked-drag"
+              [ngClass]="{ 'primary primary-border': !isLiveMode() }"
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              fxLayoutGap="4px"
+            >
+              <mat-icon>lock_open</mat-icon>
+              <span>{{
+                'creator.content.published-up-to-here' | transloco
+              }}</span>
+            </div>
+          </div>
+        }
         <ng-template #contentInfo>
           <div fxLayout="row" fxLayoutGap="12px">
             <mat-icon
@@ -540,10 +538,15 @@
         <button
           disableRipple
           mat-list-item
-          [routerLink]="(this.contents.length + 1).toString()"
+          [ngClass]="{ primary: selectedContentIndex === -1 }"
+          [routerLink]="'attributions'"
         >
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
-            <mat-icon class="type-icon">attribution</mat-icon>
+            <mat-icon
+              [ngClass]="{ primary: selectedContentIndex === -1 }"
+              class="type-icon"
+              >attribution</mat-icon
+            >
             <p>{{ 'creator.content.attribution-info-slide' | transloco }}</p>
           </div>
         </button>

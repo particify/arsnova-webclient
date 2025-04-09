@@ -1,3 +1,5 @@
+@use '../../../../../variables' as *;
+
 .mat-mdc-radio-group {
-  margin: 10px 0;
+  margin-top: $spacing-1;
 }

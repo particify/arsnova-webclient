@@ -228,8 +228,7 @@
     "group-progress-info": "Im Durchschnitt sind {{percent}} % der Antworten richtig. {{abstentions}} % haben sich enthalten.",
     "locked": "Gesperrt",
     "lock": "Sperren",
-    "publish-content-group": "Fragenserie freischalten",
-    "publish-content-group-info": "Die Teilnehmenden können nur freigeschaltete Fragenserien sehen.",
+    "publish-info": "Die Teilnehmenden können nur freigeschaltete Fragenserien sehen.",
     "live-mode": "Live-Modus",
     "live-mode-info": "Die Inhalte werden live präsentiert und entweder manuell oder per Timer gestartet und gestoppt. Sobald in der Präsentation zum nächsten Inhalt navigiert wird, wird dieser freigegeben.",
     "publishing-modes-not-available-in-live-mode": "Diese Einstellung steht im Live-Modus nicht zur Verfügung.",
@@ -244,7 +243,8 @@
     "publishing-index-info-live": "Freigeschaltet bis zum Inhalt {{index}}. Starte den nächsten Inhalt um diesen freizugeben.",
     "reset-answers-to-disable-setting": "Setze die Ergebnisse für diese Fragenserie zurück, um diese Einstellung zu deaktivieren.",
     "reset-group-results": "Ergebnisse zurücksetzen",
-    "stop-content-to-delete-answers": "Stoppe den Inhalt, um die Antworten zu löschen."
+    "stop-content-to-delete-answers": "Stoppe den Inhalt, um die Antworten zu löschen.",
+    "back-to-series": "Zurück zur Fragenserie"
   },
   "survey": {
     "a11y-stop-survey": "Stoppt das Live Feedback.",

@@ -4,7 +4,7 @@
   }
   @if (!isLoading) {
     <div fxLayout="column" [fxLayoutGap]="showCorrect ? '16px' : '0px'">
-      @if (!isSurvey) {
+      @if (!isSurvey && isPresentation) {
         <app-correct-answer-results
           [answerCounts]="getAnswerCounts()"
           [correctAnswerCounts]="getCorrectAnswerCounts()"
@@ -116,12 +116,4 @@
       }
     </div>
   }
-</div>
-<div class="visually-hidden">
-  <div id="show-correct">
-    {{ 'participant.statistic.a11y-answer-indicator' | transloco }}
-  </div>
-  <div id="show-chart">
-    {{ 'participant.statistic.a11y-show-chart' | transloco }}
-  </div>
 </div>

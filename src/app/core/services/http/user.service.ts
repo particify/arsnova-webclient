@@ -147,7 +147,7 @@ export class UserService extends AbstractEntityService<User> {
   getCurrentUsersSettings(): Observable<UserSettings> {
     const userId = this.globalStorageService.getItem(STORAGE_KEYS.USER).userId;
     return this.getById(userId, { view: 'owner' }).pipe(
-      map((u) => u.settings),
+      map((u) => u.settings ?? new UserSettings()),
       catchError(this.handleError<UserSettings>('getUserSettings'))
     );
   }

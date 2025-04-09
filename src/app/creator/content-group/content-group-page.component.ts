@@ -1,6 +1,7 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, DestroyRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
 import {
@@ -38,7 +39,9 @@ import {
   takeWhile,
   take,
   timer,
+  filter,
 } from 'rxjs';
+import { ContentGroupPageService } from './content-group-page.service';
 
 const STATS_REFRESH_INTERVAL = 10000;
 const STATS_REFRESH_LIMIT = 60;
@@ -75,8 +78,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   contentGroupStats: ContentGroupStatistics[] = [];
   isGuest = true;
 
-  onInit = false;
-
   attributionsExist = false;
 
   GroupType = GroupType;
@@ -87,6 +88,13 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   isContentStarted = false;
 
+  showLeaderboard = false;
+  creationMode = false;
+  editMode = false;
+  selectedContentIndex?: number;
+  isDesktop?: boolean;
+  childActive = false;
+
   constructor(
     private route: ActivatedRoute,
     private contentService: ContentService,
@@ -94,35 +102,133 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     private translateService: TranslocoService,
     private globalStorageService: GlobalStorageService,
     private contentGroupService: ContentGroupService,
-    private router: Router,
+    public router: Router,
     private roomStatsService: RoomStatsService,
     private localFileService: LocalFileService,
     private dialogService: DialogService,
     private routingService: RoutingService,
     private authService: AuthenticationService,
-    private destroyRef: DestroyRef
+    private destroyRef: DestroyRef,
+    private breakpointObserver: BreakpointObserver,
+    private contentGroupPageService: ContentGroupPageService
   ) {
     route.params.subscribe((params) => {
       const groupName = params['seriesName'];
-      if (this.contentGroup && this.contentGroup.name !== groupName)
+      if (this.contentGroup && this.contentGroup.name !== groupName) {
+        this.selectedContentIndex = undefined;
         this.setContentGroup(groupName);
+      }
+    });
+    router.events
+      .pipe(
+        takeUntil(this.destroyed$),
+        filter((event) => event instanceof NavigationEnd)
+      )
+      .subscribe(() => {
+        this.determinateRouteState();
+        this.navigateToFirstContent();
+      });
+    breakpointObserver.observe(['(min-width: 1000px)']).subscribe((changes) => {
+      const temp = this.isDesktop;
+      this.isDesktop = changes.matches;
+      if (temp !== undefined && temp !== changes.matches) {
+        this.determinateRouteState();
+        this.navigateToFirstContent();
+        if (this.contents.length === 0 && this.isDesktop) {
+          this.openCreation();
+        }
+      }
     });
   }
 
   ngOnInit(): void {
     this.setContentGroup();
-    this.onInit = true;
     this.authService
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
         this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
       });
+    this.contentGroupPageService
+      .getCreatedContent()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((content) => {
+        this.addContentToList(content);
+      });
+    this.contentGroupPageService
+      .getEditedContent()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((content) => {
+        this.editContent(content);
+        this.router.navigate(['.'], { relativeTo: this.route });
+      });
+    this.contentService
+      .getAnswerCounts()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((counts) => {
+        this.reloadStats(counts.answers);
+      });
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  private determinateRouteState() {
+    const child = this.route.firstChild;
+    const childPath = child?.snapshot.routeConfig?.path;
+    this.showLeaderboard = childPath === 'leaderboard';
+    this.creationMode = childPath === 'create';
+    this.editMode = !!childPath?.includes('edit');
+    if (childPath === 'attributions' && this.isDesktop) {
+      this.selectedContentIndex = -1;
+    }
+    this.childActive = !!child;
+    this.evaluateRouteStateChild(child, childPath);
+  }
+
+  private evaluateRouteStateChild(
+    route: ActivatedRoute | null,
+    path: string | undefined
+  ) {
+    if (!route) {
+      if (this.selectedContentIndex !== undefined && this.isDesktop) {
+        this.router.navigate([this.selectedContentIndex + 1], {
+          relativeTo: this.route,
+          replaceUrl: true,
+        });
+      }
+      return;
+    }
+    if (path) {
+      const contentIndex = route.snapshot.params.contentIndex;
+      if (contentIndex !== undefined) {
+        this.selectedContentIndex = Number(contentIndex) - 1;
+        return;
+      }
+      const contentId = route.snapshot.params.contentId;
+      if (contentId) {
+        this.editMode = true;
+        const index = this.contents.map((c) => c.id).indexOf(contentId);
+        if (index !== undefined) {
+          this.selectedContentIndex = index;
+        }
+      }
+    }
+  }
+
+  private navigateToFirstContent() {
+    if (
+      this.isDesktop &&
+      this.selectedContentIndex === undefined &&
+      !this.showLeaderboard &&
+      !this.creationMode &&
+      !this.editMode &&
+      this.contents.length > 0
+    ) {
+      this.router.navigate([1], { relativeTo: this.route, replaceUrl: true });
+    }
   }
 
   setContentGroup(groupName = this.seriesName) {
@@ -160,6 +266,8 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
               }
               this.isLoading = false;
               this.loadStats();
+              this.determinateRouteState();
+              this.navigateToFirstContent();
             });
           this.contentGroupService
             .getAttributions(this.room.id, this.contentGroup.id)
@@ -169,6 +277,10 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
             });
         } else {
           this.contents = [];
+          if (this.isDesktop) {
+            this.openCreation();
+          }
+          this.determinateRouteState();
           this.isLoading = false;
         }
       });
@@ -387,6 +499,17 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       });
   }
 
+  reloadStats(counts: number) {
+    if (this.selectedContentIndex !== undefined) {
+      const currentStats = this.contentStats.get(
+        this.contents[this.selectedContentIndex].id
+      );
+      if (counts !== currentStats?.count) {
+        this.loadStats();
+      }
+    }
+  }
+
   handleActiveContentChanged(isStarted: boolean): void {
     this.isContentStarted = isStarted;
     if (isStarted) {
@@ -430,5 +553,47 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   isModerator(): boolean {
     return this.userRole === UserRole.MODERATOR;
+  }
+
+  toggleLeaderboard() {
+    const url = ['.'];
+    if (this.showLeaderboard) {
+      if (
+        this.selectedContentIndex !== undefined &&
+        this.selectedContentIndex > -1
+      ) {
+        url.push((this.selectedContentIndex + 1).toString());
+      }
+    } else {
+      url.push('leaderboard');
+    }
+    this.router.navigate(url, {
+      relativeTo: this.route,
+    });
+    this.showLeaderboard = !this.showLeaderboard;
+  }
+
+  private addContentToList(content: Content) {
+    this.contents.push(content);
+    if (this.contentGroup.contentIds) {
+      this.contentGroup.contentIds.push(content.id);
+    } else {
+      this.contentGroup.contentIds = [content.id];
+    }
+    this.contentStats.set(content.id, { count: 0 });
+  }
+
+  private editContent(content: Content) {
+    const index = this.contents.map((c) => c.id).indexOf(content.id);
+    if (index !== undefined) {
+      this.contents[index] = content;
+    }
+  }
+
+  private openCreation() {
+    this.router.navigate(['create'], {
+      relativeTo: this.route,
+      replaceUrl: true,
+    });
   }
 }

@@ -15,6 +15,7 @@ import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-
 import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 @Component({
   selector: 'app-prioritization-content-form',
@@ -49,7 +50,7 @@ export class PrioritizationContentFormComponent
     super(formService);
   }
   ngOnInit(): void {
-    if (this.isEditMode) {
+    if (this.content?.format === ContentType.PRIORITIZATION) {
       const content = this.content as ContentPrioritization;
       this.displayAnswers = this.contentService.getAnswerOptions(
         content.options

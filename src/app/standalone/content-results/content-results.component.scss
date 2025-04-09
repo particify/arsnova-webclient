@@ -1,17 +1,30 @@
 @use '../../../variables' as *;
 
-.flashcard-container {
-  flex-direction: row !important;
-}
-
 .divider-space {
-  height: 16px;
+  height: $spacing-2;
 }
 
 .presentation-space {
-  margin-top: 1em;
+  margin-top: $spacing-2;
 }
 
 .count-container {
   padding: $spacing 0;
+}
+
+.action-button {
+  background-color: var(--surface);
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.corner-button {
+  top: 0;
+}
+
+.results-container:hover,
+.results-container:focus {
+  .action-button {
+    opacity: 1;
+  }
 }

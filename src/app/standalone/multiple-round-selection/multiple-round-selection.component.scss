@@ -1,11 +1,16 @@
-.mat-mdc-outlined-button {
-  padding: 8px;
+@use '../../../variables' as *;
+
+.round-button {
+  padding: $spacing $spacing-1;
+  height: 100%;
+  border-radius: 20px;
+  background-color: var(--surface);
 }
 
 .round-legend {
-  height: 24px;
-  width: 24px;
-  border-radius: 2px;
+  height: $xl-font-size;
+  width: $xl-font-size;
+  border-radius: $border-radius;
 }
 
 .disabled {

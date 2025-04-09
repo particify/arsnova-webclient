@@ -1,23 +1,49 @@
-import { Component, Input } from '@angular/core';
-import { CoreModule } from '@app/core/core.module';
-import { Content } from '@app/core/models/content';
-import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
+import { Component, inject, input } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { MatListModule } from '@angular/material/list';
+import { ContentGroup } from '@app/core/models/content-group';
 import { LICENSES } from '@app/core/models/licenses';
-import { provideTranslocoScope } from '@jsverse/transloco';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-attributions-info',
-  imports: [CoreModule],
+  imports: [TranslocoPipe, MatListModule],
   providers: [provideTranslocoScope('creator')],
   templateUrl: './attributions-info.component.html',
 })
 export class AttributionsInfoComponent {
-  @Input({ required: true }) attributions!: ContentLicenseAttribution[];
-  @Input({ required: true }) contents!: Content[];
+  contentGroup = input.required<ContentGroup>();
+  private contentService = inject(ContentService);
+  private contentGroupService = inject(ContentGroupService);
+
+  contents = rxResource({
+    request: () => ({ contentGroup: this.contentGroup() }),
+    loader: ({ request }) =>
+      this.contentService.getContentsByIds(
+        request.contentGroup.roomId,
+        request.contentGroup.contentIds
+      ),
+  });
+
+  attributions = rxResource({
+    request: () => ({ contentGroup: this.contentGroup() }),
+    loader: ({ request }) =>
+      this.contentGroupService.getAttributions(
+        request.contentGroup.roomId,
+        request.contentGroup.id
+      ),
+  });
 
   LICENSES = LICENSES;
 
   getContentIndex(contentId: string): number {
-    return this.contents.map((c) => c.id).indexOf(contentId);
+    return (
+      this.contents
+        .value()
+        ?.map((c) => c.id)
+        .indexOf(contentId) ?? -1
+    );
   }
 }

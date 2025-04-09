@@ -16,7 +16,6 @@ import { CreatorPageComponent } from '@app/creator/creator-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
-import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 
 const routes: Routes = [
   {
@@ -52,16 +51,12 @@ const routes: Routes = [
     title: 'settings',
   },
   {
-    path: 'series/:seriesName',
+    path: 'series',
     loadChildren: () =>
       import('./content-group/content-group.module').then(
         (m) => m.ContentGroupModule
       ),
     title: 'series',
-    data: { extendedView: true },
-    resolve: {
-      contentGroup: ContentGroupResolver,
-    },
   },
   {
     path: 'comments',

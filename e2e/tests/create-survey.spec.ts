@@ -36,7 +36,6 @@ test.describe('create room for survey', () => {
     page,
   }) => {
     await contentGroupOverview.createContent();
-    await expect(page).toHaveTitle(/Create content/);
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -54,7 +53,6 @@ test.describe('create room for survey', () => {
     );
     await contentCreation.createNumericContent('My numeric content', -50, 50);
     await contentCreation.createSlideContent('My slide content');
-    await page.goBack();
     expect(await contentGroupOverview.getContents()).toHaveLength(8);
     await expect(page.getByText('8 contents', { exact: true })).toBeVisible();
     await contentGroupOverview.publishContentGroup();
@@ -67,10 +65,11 @@ test.describe('create room for survey', () => {
     await contentGroupOverview.createContent();
     await contentCreation.createBinaryContent('My binary content');
     await contentCreation.createBinaryContent('Another binary content');
-    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await contentGroupOverview.toggleLiveMode();
     await expect(page.getByText('published up to here')).toBeVisible();
-    await expect(page.getByText('Live mode', { exact: true })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Live mode', exact: true })
+    ).toBeVisible();
   });
 });

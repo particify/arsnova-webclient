@@ -10,8 +10,12 @@ export class ContentResolver implements Resolve<Content> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<Content> {
     return this.contentService.getContent(
-      route.data.room.id,
-      route.params['contentId']
+      route.parent?.data.room.id,
+      route.params.contentId ??
+        route.parent?.data.contentGroup.contentIds[
+          route.params['contentIndex'] - 1
+        ],
+      !!route.data.extendedView
     );
   }
 }

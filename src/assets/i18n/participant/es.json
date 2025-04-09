@@ -105,8 +105,6 @@
     "content-groups-description": "Participe en cuestionarios, encuestas y más."
   },
   "statistic": {
-    "a11y-answer-indicator": "Indica con el color verde qué respuestas son correctas.",
-    "a11y-show-chart": "Muestra un gráfico de barras que muestra la evaluación de las respuestas.",
     "answer-statistic": "Estadísticas de respuestas",
     "percentage": "Porcentaje",
     "answer-indicator": "Muestra las respuestas correctas",

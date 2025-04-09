@@ -3,7 +3,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { NgClass } from '@angular/common';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
-import { MatButton } from '@angular/material/button';
+import { MatFabButton } from '@angular/material/button';
 import { FlexModule } from '@angular/flex-layout';
 
 @Component({
@@ -12,7 +12,7 @@ import { FlexModule } from '@angular/flex-layout';
   styleUrls: ['./multiple-round-selection.component.scss'],
   imports: [
     FlexModule,
-    MatButton,
+    MatFabButton,
     MatMenuTrigger,
     MatTooltip,
     NgClass,

@@ -40,7 +40,6 @@ test.describe('Presentation of a quiz', () => {
     await contentCreation.createShortAnswerContent('My short answer content', [
       'abc',
     ]);
-    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
   });

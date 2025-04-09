@@ -15,6 +15,7 @@ export class CreatorPageComponent {
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;
+
   constructor(
     protected translateService: TranslocoService,
     protected langService: LanguageService

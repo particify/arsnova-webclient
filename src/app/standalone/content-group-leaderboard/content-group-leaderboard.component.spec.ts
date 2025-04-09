@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LeaderboardPageComponent } from './leaderboard-page.component';
+import { ContentGroupLeaderboardComponent } from './content-group-leaderboard.component';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -11,9 +11,9 @@ import { Room } from '@app/core/models/room';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { MockAnnounceService } from '@testing/test-helpers';
 
-describe('LeaderboardPageComponent', () => {
-  let component: LeaderboardPageComponent;
-  let fixture: ComponentFixture<LeaderboardPageComponent>;
+describe('ContentGroupLeaderboardComponent', () => {
+  let component: ContentGroupLeaderboardComponent;
+  let fixture: ComponentFixture<ContentGroupLeaderboardComponent>;
 
   const mockContentGroupService = jasmine.createSpyObj('ContentGroupService', [
     'getByRoomIdAndName',
@@ -29,7 +29,7 @@ describe('LeaderboardPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LeaderboardPageComponent, getTranslocoModule()],
+      imports: [ContentGroupLeaderboardComponent, getTranslocoModule()],
       providers: [
         {
           provide: ContentGroupService,
@@ -47,7 +47,7 @@ describe('LeaderboardPageComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LeaderboardPageComponent);
+    fixture = TestBed.createComponent(ContentGroupLeaderboardComponent);
     component = fixture.componentInstance;
     component.room = new Room();
     component.contentGroup = new ContentGroup();

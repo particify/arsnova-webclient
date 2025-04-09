@@ -51,7 +51,7 @@ export class SortContentFormComponent
   }
 
   ngOnInit(): void {
-    if (this.isEditMode) {
+    if (this.content?.format === ContentType.SORT) {
       const content = this.content as ContentChoice;
       this.displayAnswers = this.contentService.getAnswerOptions(
         content.options
