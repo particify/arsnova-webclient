@@ -1,0 +1,27 @@
+fragment UserFragment on User {
+  id
+  username
+}
+
+query UserById($id: ID!) {
+  userById(id: $id) {
+    ...UserFragment
+  }
+}
+
+query Users($query: UserQueryInput!, $cursor: String) {
+  users(user: $query, first: 10, after: $cursor) {
+    edges {
+      node {
+        ...UserFragment
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}

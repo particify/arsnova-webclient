@@ -1,0 +1,109 @@
+fragment RoomDetailsFragment on Room {
+  id
+  shortId
+  name
+  description
+  descriptionRendered
+}
+
+fragment RoomMembershipFragment on RoomMembership {
+  room {
+    id
+    shortId
+    name
+  }
+  role
+}
+
+query RoomById($id: ID!) {
+  roomById(id: $id) {
+    ...RoomDetailsFragment
+  }
+}
+
+query Rooms($room: RoomQueryInput!, $cursor: String) {
+  rooms(room: $room, first: 10, after: $cursor) {
+    edges {
+      node {
+        ...RoomDetailsFragment
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+query RoomMembershipByShortId($shortId: String!) {
+  roomMembershipByShortId(shortId: $shortId) {
+    ...RoomMembershipFragment
+  }
+}
+
+query RoomMemberships($query: RoomQueryInput, $cursor: String) {
+  roomMemberships(query: $query, first: 10, after: $cursor) {
+    edges {
+      node {
+        ...RoomMembershipFragment
+        stats {
+          roomUserCount
+          contentCount
+          ackCommentCount
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+query RoomsByUserId($userId: UUID!, $cursor: String) {
+  roomsByUserId(userId: $userId, first: 10, after: $cursor) {
+    edges {
+      node {
+        ...RoomMembershipFragment
+        stats {
+          roomUserCount
+          contentCount
+          ackCommentCount
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+mutation JoinRoom($shortId: ID!) {
+  joinRoom(input: { shortId: $shortId }) {
+    ...RoomMembershipFragment
+  }
+}
+
+mutation CreateRoom($name: String!) {
+  createRoom(input: { name: $name }) {
+    id
+    shortId
+  }
+}
+
+mutation DuplicateRoom($id: ID!, $newName: String!) {
+  duplicateRoom(input: { id: $id, newName: $newName }) {
+    id
+    shortId
+  }
+}
