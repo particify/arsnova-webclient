@@ -10,7 +10,8 @@
       "@app/*": ["./app/*"],
       "@testing/*": ["./testing/*"],
       "@environments/*": ["./environments/*"],
-      "@projects/*": ["../projects/*"]
+      "@projects/*": ["../projects/*"],
+      "@gql/*": ["./graphql/*"]
     }
   },
   "include": ["**/*.spec.ts", "**/*.d.ts"]

@@ -3,6 +3,7 @@ export const environment = {
   production: true,
   stomp_debug: false,
   debugOverrideRoomRole: false,
+  graphql: true,
   version: {
     commitHash: '$VERSION_COMMIT_HASH',
     commitDate: '$VERSION_COMMIT_DATE',

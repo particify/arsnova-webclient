@@ -1,0 +1,16 @@
+overwrite: true
+schema: http://user%40example.com:user@localhost:9080/api/graphql
+documents: src/graphql/*.graphql
+generates:
+  ./src/graphql/generated/graphql.ts:
+    config:
+      querySuffix: Gql
+      mutationSuffix: Gql
+      subscriptionSuffix: Gql
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-apollo-angular
+hooks:
+  afterAllFileWrite:
+    - prettier --write

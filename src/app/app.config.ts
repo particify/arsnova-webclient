@@ -83,6 +83,7 @@ import {
 } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { AppRoutingModule } from './app-routing.module';
+import { apolloProvider } from '@app/apollo-provider';
 
 if (environment.production) {
   enableProdMode();
@@ -103,6 +104,7 @@ export const AppConfig: ApplicationConfig = {
       provide: ENVIRONMENT,
       useValue: environment,
     },
+    environment.graphql ? apolloProvider : [],
     provideAppInitializer(() => {
       const initializerFn = initAuthenticationService(
         inject(AuthenticationService)
