@@ -1,8 +1,14 @@
 @use '../variables' as *;
 
 .app-component {
-  padding: 4%;
+  padding: $spacing-2;
   background-color: var(--background);
+}
+
+@include gt-xs {
+  .app-component {
+    padding: $spacing-4;
+  }
 }
 
 .standalone-container {

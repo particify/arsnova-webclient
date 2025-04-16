@@ -1,12 +1,11 @@
 @use '../../../variables' as *;
 
 #comment-card {
-  width: 92vw;
   margin-bottom: 10px;
   transition: background-color 0.5s linear;
 
   &:not(.presentation-comment) {
-    max-width: 832px;
+    max-width: $card-width;
   }
 
   &:not(.highlighted) {

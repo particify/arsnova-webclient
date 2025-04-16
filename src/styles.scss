@@ -308,8 +308,14 @@ textarea {
 }
 
 .big-dialog-panel {
-  width: calc(100vw - $app-padding * 2);
+  width: calc(100vw - $spacing-2 * 2);
   max-width: $card-width !important;
+}
+
+@include gt-xs {
+  .big-dialog-panel {
+    width: calc(100vw - $spacing-4 * 2);
+  }
 }
 
 .mat-mdc-dialog-title {
@@ -724,13 +730,19 @@ div {
 // Card
 
 .mat-mdc-card {
-  width: 92vw;
-  max-width: 832px;
+  width: calc(100vw - $spacing-2 * 2);
+  max-width: $card-width;
   padding: 1em;
   color: var(--on-surface);
 
   &:not(.secondary-background) {
     background-color: var(--surface) !important;
+  }
+}
+
+@include gt-xs {
+  .mat-mdc-card {
+    width: calc(100vw - $spacing-4 * 2);
   }
 }
 
@@ -740,7 +752,7 @@ div {
 
 .card-container {
   width: 100%;
-  max-width: 832px;
+  max-width: $card-width;
   position: relative;
   perspective: 3000px;
 }

@@ -1,6 +1,8 @@
+@use '../../../variables' as *;
+
 .mat-mdc-card {
-  width: 92vw;
-  max-width: 832px;
+  width: 100%;
+  max-width: $card-width;
   color: var(--on-surface);
 
   &.no-shadow {

@@ -1,17 +1,6 @@
+@use '../../../../variables' as *;
+
 app-room-list {
   width: 100%;
-  max-width: 800px;
-}
-
-button {
-  margin-bottom: 0.5em;
-}
-
-.container {
-  width: calc(92vw - 2em);
-  max-width: 800px;
-}
-
-.add-icon {
-  margin-right: 0.1em;
+  max-width: $card-width;
 }
