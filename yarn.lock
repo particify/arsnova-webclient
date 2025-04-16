@@ -3951,10 +3951,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stomp/stompjs@npm:7.0.1":
-  version: 7.0.1
-  resolution: "@stomp/stompjs@npm:7.0.1"
-  checksum: 10c0/d9ae82cc3a9ce318baa41124387b8cd12324e4991ab683e0effaf53e1bb7795637623cc6b5e98327acad552b96a13c4e2ba6f3256493542b3c052464a42e7c96
+"@stomp/stompjs@npm:7.1.1":
+  version: 7.1.1
+  resolution: "@stomp/stompjs@npm:7.1.1"
+  checksum: 10c0/a58d6c9167ec6453f5050eb70f09114f0c1f322bd7a2b5d381c168315f2d22b5132ebd0edf184c2ca42b616fed56787fd1755df9e36e562e5fb1ff09a46be9b3
   languageName: node
   linkType: hard
 
@@ -5619,7 +5619,7 @@ __metadata:
     "@jsverse/transloco": "npm:7.6.1"
     "@playwright/test": "npm:1.51.1"
     "@stomp/rx-stomp": "npm:2.0.1"
-    "@stomp/stompjs": "npm:7.0.1"
+    "@stomp/stompjs": "npm:7.1.1"
     "@storybook/addon-essentials": "npm:8.6.12"
     "@storybook/angular": "npm:8.6.12"
     "@storybook/blocks": "npm:8.6.12"
