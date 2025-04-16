@@ -1,37 +1,30 @@
-import { Locator, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 export const BASE_URL = 'http://localhost:4200';
 
 export class Header {
-  private readonly menuButton: Locator;
-  private readonly roomsButton: Locator;
-  private readonly roomSettingsButton: Locator;
-  private readonly returnToEditViewButton: Locator;
-  private readonly backButton: Locator;
-
-  constructor(public readonly page: Page) {
-    this.menuButton = page.getByTestId('main-menu-button');
-    this.roomsButton = page.getByRole('button', { name: 'my rooms' });
-    this.roomSettingsButton = page.getByRole('button', {
-      name: 'room settings',
-    });
-    this.returnToEditViewButton = page.getByRole('button', {
-      name: 'switch back',
-    });
-    this.backButton = page.getByRole('button', { name: 'back' }).first();
-  }
+  constructor(public readonly page: Page) {}
 
   async openMainMenu() {
-    await this.menuButton.click();
+    await this.page.getByTestId('main-menu-button').click();
   }
 
   async goToRooms() {
     await this.openMainMenu();
-    await this.roomsButton.click();
+    await this.page.getByRole('button', { name: 'my rooms' }).click();
+  }
+
+  async goToLogin() {
+    await this.openMainMenu();
+    await this.page.getByRole('button', { name: 'log in' }).click();
   }
 
   async goToSettings() {
-    await this.roomSettingsButton.click();
+    await this.page
+      .getByRole('button', {
+        name: 'room settings',
+      })
+      .click();
   }
 
   async goToPresentation() {
@@ -39,11 +32,11 @@ export class Header {
   }
 
   async switchRole() {
-    await this.returnToEditViewButton.click();
-  }
-
-  async goBack() {
-    await this.backButton.click();
+    await this.page
+      .getByRole('button', {
+        name: 'switch back',
+      })
+      .click();
   }
 
   async changeLanguage(lang: string) {

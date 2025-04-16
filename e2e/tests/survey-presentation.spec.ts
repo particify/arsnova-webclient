@@ -45,7 +45,7 @@ test.describe('Presentation of a survey', () => {
       false,
       false
     );
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     await expect(page.getByText('1 / 1')).toBeVisible();
@@ -77,7 +77,7 @@ test.describe('Presentation of a survey', () => {
       false,
       false
     );
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();
@@ -103,7 +103,7 @@ test.describe('Presentation of a survey', () => {
       false,
       false
     );
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();
@@ -123,7 +123,7 @@ test.describe('Presentation of a survey', () => {
 
   test('should delete answers of likert content', async ({ page, baseURL }) => {
     await contentCreation.createLikertContent('My likert content', 'agreement');
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();
@@ -143,7 +143,7 @@ test.describe('Presentation of a survey', () => {
 
   test('should delete answers of binary content', async ({ page, baseURL }) => {
     await contentCreation.createBinaryContent('My binary content');
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();
@@ -163,7 +163,7 @@ test.describe('Presentation of a survey', () => {
 
   test('should delete answers of text content', async ({ page, baseURL }) => {
     await contentCreation.createTextContent('My text content');
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();
@@ -186,7 +186,7 @@ test.describe('Presentation of a survey', () => {
     baseURL,
   }) => {
     await contentCreation.createWordcloudContent('My wordcloud content');
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();
@@ -212,7 +212,7 @@ test.describe('Presentation of a survey', () => {
       'My prioritization content',
       ['a', 'b', 'c', 'd']
     );
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();
@@ -235,7 +235,7 @@ test.describe('Presentation of a survey', () => {
     baseURL,
   }) => {
     await contentCreation.createNumericContent('My numeric content', 0, 100);
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();
@@ -258,7 +258,7 @@ test.describe('Presentation of a survey', () => {
     baseURL,
   }) => {
     await contentCreation.createNumericContent('My numeric content', 0, 100);
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     const browser = await chromium.launch();

@@ -120,7 +120,7 @@ test.describe('presentation mode', () => {
   test('navigate to series', async ({ page }) => {
     await roomOverviewPage.createQuestionSeries('Survey', 'Survey');
     await page.waitForURL(/Survey/);
-    await header.goBack();
+    await page.goBack();
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToQuestionSeries();

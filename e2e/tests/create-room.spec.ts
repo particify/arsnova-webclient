@@ -27,10 +27,10 @@ test.describe('create room', () => {
   test('create two question series', async ({ page }) => {
     await roomOverviewPage.createQuestionSeries('Survey', 'Survey');
     await page.waitForURL(/Survey/);
-    await header.goBack();
+    await page.goBack();
     await roomOverviewPage.createQuestionSeries('Quiz', 'Quiz');
     await page.waitForURL(/Quiz/);
-    await header.goBack();
+    await page.goBack();
     await expect(page.getByRole('button', { name: 'Quiz' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Survey' })).toBeVisible();
   });
@@ -38,7 +38,7 @@ test.describe('create room', () => {
   test('update room name', async ({ page }) => {
     await header.goToSettings();
     await roomSettings.updateName('My awesome room');
-    await header.goBack();
+    await page.goBack();
     await expect(page.getByLabel('My awesome room')).toBeVisible();
   });
 
@@ -47,7 +47,7 @@ test.describe('create room', () => {
     await roomSettings.updateDescription(
       'This is a short discription for this awesome room.'
     );
-    await header.goBack();
+    await page.goBack();
     await expect(
       page.getByText('This is a short discription for this awesome room.')
     ).toBeVisible();

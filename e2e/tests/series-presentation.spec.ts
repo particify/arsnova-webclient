@@ -140,7 +140,7 @@ test.describe('Presentation of a question series', () => {
       false,
       false
     );
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     await presentationModePage.goToContentEdit();
@@ -157,12 +157,12 @@ test.describe('Presentation of a question series', () => {
       false,
       false
     );
-    await header.goBack();
+    await page.goBack();
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
     await presentationModePage.goToDisplaySettings();
     await expect(page).toHaveURL(/account\/preferences/);
-    await header.goBack();
+    await page.goBack();
     await presentationModePage.exitPresentation();
   });
 });
