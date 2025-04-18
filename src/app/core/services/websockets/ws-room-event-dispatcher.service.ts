@@ -8,7 +8,7 @@ import {
 } from '@app/core/models/events/data-changed';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
 import { Room } from '@app/core/models/room';
-import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomRole } from '@gql/generated/graphql';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -49,14 +49,14 @@ export class WsRoomEventDispatcherService {
       });
   }
 
-  private registerDataChangeListener(room: Room, role: UserRole) {
+  private registerDataChangeListener(room: Room, role: RoomRole) {
     this.wsConnector
       .getWatcher(`/topic/${room.id}.changes.stream`)
       .pipe(takeUntil(this.roomChanged$))
       .subscribe((msg) => {
         this.dispatchDataChangeEvents(msg, room, false);
       });
-    if ([UserRole.OWNER, UserRole.EDITOR, UserRole.MODERATOR].includes(role)) {
+    if ([RoomRole.Owner, RoomRole.Editor, RoomRole.Moderator].includes(role)) {
       this.wsConnector
         .getWatcher(`/topic/${room.id}.moderator.changes.stream`)
         .pipe(takeUntil(this.roomChanged$))

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomRole } from '@gql/generated/graphql';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomSummary } from '@app/core/models/room-summary';
 import { CoreModule } from '@app/core/core.module';
@@ -34,7 +34,7 @@ export class RoomSelectionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.memberships = this.data.memberships.filter((m) =>
-      m.roles.includes(UserRole.OWNER)
+      m.roles.includes(RoomRole.Owner)
     );
     this.memberships = this.memberships.sort(
       (a, b) =>

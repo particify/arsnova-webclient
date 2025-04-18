@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomRole } from '@gql/generated/graphql';
 import { RoomService } from '@app/core/services/http/room.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
@@ -126,13 +126,13 @@ export class RoomListComponent implements OnInit, OnDestroy {
   sub?: Subscription;
   unsubscribe$ = new Subject<void>();
   deviceType: string;
-  roles: Map<UserRole, string> = new Map<UserRole, string>();
+  roles: Map<RoomRole, string> = new Map<RoomRole, string>();
   showImportMenu = false;
 
-  creatorRole = UserRole.OWNER;
-  participantRole = UserRole.PARTICIPANT;
-  executiveModeratorRole = UserRole.MODERATOR;
-  editorRole = UserRole.EDITOR;
+  creatorRole = RoomRole.Owner;
+  participantRole = RoomRole.Participant;
+  executiveModeratorRole = RoomRole.Moderator;
+  editorRole = RoomRole.Editor;
 
   constructor() {
     this.deviceType = this.globalStorageService.getItem(
@@ -164,10 +164,10 @@ export class RoomListComponent implements OnInit, OnDestroy {
       'room-list.a11y-creator-role',
     ];
     const roles = [
-      UserRole.PARTICIPANT,
-      UserRole.MODERATOR,
-      UserRole.EDITOR,
-      UserRole.OWNER,
+      RoomRole.Participant,
+      RoomRole.Moderator,
+      RoomRole.Editor,
+      RoomRole.Owner,
     ];
     this.translateService
       .selectTranslate(roleKeys)
@@ -285,7 +285,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
     }
   }
 
-  setCurrentRoom(shortId: string, role: UserRole) {
+  setCurrentRoom(shortId: string, role: RoomRole) {
     this.updateLastAccess(shortId);
     this.router.navigate([this.roleToString(role), shortId]);
   }
@@ -295,7 +295,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   openDeleteRoomDialog(room: RoomDataView) {
-    const isOwner = room.membership.roles.includes(UserRole.OWNER);
+    const isOwner = room.membership.roles.includes(RoomRole.Owner);
     const dialogRef = this.dialogService.openDeleteDialog(
       isOwner ? 'room' : 'room-membership',
       'dialog.' +
@@ -368,7 +368,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
     );
   }
 
-  roleToString(role: UserRole): string {
+  roleToString(role: RoomRole): string {
     return this.routingService.getRoleRoute(role);
   }
 

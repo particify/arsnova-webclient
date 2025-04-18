@@ -12,7 +12,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomRole } from '@gql/generated/graphql';
 import { TranslocoService } from '@jsverse/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
@@ -41,7 +41,7 @@ export class AuthenticationGuard implements CanActivate {
     }
     // Get roles having access to this route
     // undefined if every logged in user should have access regardless of its role
-    const viewRole = route.data['requiredRole'] as UserRole;
+    const viewRole = route.data['requiredRole'] as RoomRole;
     // Allow access when user is logged in AND
     // the route doesn't require a specific role OR
     // the user's role is one of the required roles
@@ -66,7 +66,7 @@ export class AuthenticationGuard implements CanActivate {
                   return of(true);
                 }
 
-                if (viewRole === UserRole.PARTICIPANT) {
+                if (viewRole === RoomRole.Participant) {
                   /* First time access / not a member yet -> request membership */
                   return this.roomMembershipService
                     .requestMembership(route.params.shortId)

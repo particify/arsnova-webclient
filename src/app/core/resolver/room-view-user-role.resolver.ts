@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomRole } from '@gql/generated/graphql';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
 
@@ -10,27 +10,27 @@ import { environment } from '@environments/environment';
  * for routing and the user's room role.
  */
 @Injectable()
-export class RoomViewUserRoleResolver implements Resolve<UserRole> {
+export class RoomViewUserRoleResolver implements Resolve<RoomRole> {
   private roomMembershipService = inject(RoomMembershipService);
 
-  resolve(route: ActivatedRouteSnapshot): Observable<UserRole> {
-    const viewRole = route.data['requiredRole'] as UserRole;
+  resolve(route: ActivatedRouteSnapshot): Observable<RoomRole> {
+    const viewRole = route.data['requiredRole'] as RoomRole;
 
     /* Ignore the user's real role, always use PARTICIPANT role for view. */
-    if (viewRole === UserRole.PARTICIPANT) {
-      return of(UserRole.PARTICIPANT);
+    if (viewRole === RoomRole.Participant) {
+      return of(RoomRole.Participant);
     }
 
     if (environment.debugOverrideRoomRole) {
       /* DEBUG: Override role handling */
-      return of(UserRole.OWNER);
+      return of(RoomRole.Owner);
     }
 
     /* Use the user's real role for moderation. */
     if (
       this.roomMembershipService.isRoleSubstitutable(
         viewRole,
-        UserRole.MODERATOR
+        RoomRole.Moderator
       )
     ) {
       return this.roomMembershipService.getPrimaryRoleByRoom(
