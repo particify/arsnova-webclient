@@ -4,8 +4,10 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { FlexModule } from '@angular/flex-layout';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { RoomListComponent } from '@app/core/components/room-list/room-list.component';
+import { RoomListGqlComponent } from '@app/core/components/room-list-gql/room-list-gql.component';
 import { AsyncPipe } from '@angular/common';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-user-home',
@@ -14,7 +16,7 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
   imports: [
     FlexModule,
     AutofocusDirective,
-    RoomListComponent,
+    environment.graphql ? RoomListGqlComponent : RoomListComponent,
     AsyncPipe,
     A11yIntroPipe,
   ],
