@@ -68,7 +68,9 @@
     "not-answered-in-time": "Non hai risposto in tempo.",
     "answered-in-time": "Hai risposto in {{duration}} secondi.",
     "go-to-overview": "Vai alla panoramica",
-    "next-content": "Contenuto successivo"
+    "next-content": "Contenuto successivo",
+    "a11y-current-numeric": "Contenuto {{index}}. Questo è un contenuto \"Trova il numero\". Per passare al contenuto e all'inserimento delle risposte, premi il tasto tabulazione.",
+    "a11y-current-short_answer": "Contenuto {{index}}. Questo è un contenuto a risposta breve. Per passare al contenuto e all'inserimento delle risposte, premi il tasto tabulazione."
   },
   "comment-list": {
     "a11y-search-list": "Cerca i messaggi",
