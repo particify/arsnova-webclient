@@ -2465,10 +2465,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/material-symbols-outlined@npm:5.2.8":
-  version: 5.2.8
-  resolution: "@fontsource/material-symbols-outlined@npm:5.2.8"
-  checksum: 10c0/8abb2d35afa1f278cdb23b40efd1a9f3a237e6886af8b78509eec95f300e2d2cdb16c0d6cd2444cd113e87fd90b77872f7a3711ef4331ba320c32cdfacc5b263
+"@fontsource/material-symbols-outlined@npm:5.2.9":
+  version: 5.2.9
+  resolution: "@fontsource/material-symbols-outlined@npm:5.2.9"
+  checksum: 10c0/d73d050493b8b7094a2ed35be8f6d90028f3cb16c5fd5958d2893f016ce0f5fb1a32aef9752edeb76f8c57c5510c0a8f47ec0439e93cae65f4bf10120bb062ca
   languageName: node
   linkType: hard
 
@@ -5614,7 +5614,7 @@ __metadata:
     "@angular/router": "npm:19.2.7"
     "@angular/service-worker": "npm:19.2.7"
     "@eslint/js": "npm:9.22.0"
-    "@fontsource/material-symbols-outlined": "npm:5.2.8"
+    "@fontsource/material-symbols-outlined": "npm:5.2.9"
     "@fontsource/roboto": "npm:5.2.5"
     "@jsverse/transloco": "npm:7.6.1"
     "@playwright/test": "npm:1.51.1"
