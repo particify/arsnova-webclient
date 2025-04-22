@@ -1,0 +1,54 @@
+<form mat-dialog-content (ngSubmit)="checkLogin()">
+  <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
+    <lib-extension-point
+      extensionId="lms-course-autocomplete"
+      [extensionData]="{ userId: auth?.userId, room: newRoom }"
+    >
+      <mat-form-field appearance="outline" fxFill>
+        <mat-label>{{ 'dialog.room-name' | transloco }}</mat-label>
+        <input
+          [disabled]="formDisabled"
+          (keypress)="resetEmptyInputs()"
+          matInput
+          #roomName
+          class="input-block"
+          type="text"
+          autocomplete="off"
+          maxlength="50"
+          [(ngModel)]="newRoom.name"
+          name="roomName"
+        />
+        @if (!emptyInputs) {
+          <mat-hint align="end"
+            ><span aria-hidden="true"
+              >{{ roomName.value.length }} / 50</span
+            ></mat-hint
+          >
+        }
+      </mat-form-field>
+    </lib-extension-point>
+    @if (!auth || auth.authProvider === 'ARSNOVA_GUEST') {
+      <app-hint
+        [type]="HintType.WARNING"
+        text="dialog.not-logged-in"
+      ></app-hint>
+    }
+  </div>
+</form>
+<div fxLayoutAlign="end">
+  <div mat-dialog-actions fxLayout="row-reverse" fxLayoutAling="end">
+    <app-loading-button
+      name="dialog.create-room"
+      [isDialog]="true"
+      (clicked)="checkLogin()"
+    ></app-loading-button>
+    <button
+      (click)="closeDialog()"
+      aria-labelledby="cancel"
+      mat-button
+      type="button"
+    >
+      {{ 'dialog.cancel' | transloco }}
+    </button>
+  </div>
+</div>

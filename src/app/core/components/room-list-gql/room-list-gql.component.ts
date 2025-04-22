@@ -244,7 +244,7 @@ export class RoomListGqlComponent implements AfterViewInit, OnInit {
   }
 
   openCreateRoomDialog(): void {
-    this.dialogService.openRoomCreateDialog();
+    this.dialogService.openRoomCreateGqlDialog();
   }
 
   isRoomActive(userCount: number) {
