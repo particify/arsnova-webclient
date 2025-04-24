@@ -73,7 +73,7 @@ export class ContentPresentationMenuComponent
       .getAnswersDeleted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((contentId) => {
-        if (this.content && contentId === this.content?.id) {
+        if (contentId === this.content?.id) {
           this.content.state.round = 1;
           this.changeRound(0);
           this.multipleRounds = false;
@@ -83,9 +83,7 @@ export class ContentPresentationMenuComponent
       .getRoundStarted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((content) => {
-        if (content) {
-          this.afterRoundStarted(content);
-        }
+        this.afterRoundStarted(content);
       });
     this.presentationService
       .getMultipleRoundState()

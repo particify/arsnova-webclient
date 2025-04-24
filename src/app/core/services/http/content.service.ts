@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
@@ -33,9 +33,9 @@ const httpOptions = {
 
 @Injectable()
 export class ContentService extends AbstractEntityService<Content> {
-  answersDeleted = new BehaviorSubject<string | null>(null);
-  private roundStarted = new BehaviorSubject<Content | null>(null);
-  private answerBanned = new BehaviorSubject<string | null>(null);
+  private answersDeleted = new Subject<string>();
+  private roundStarted = new Subject<Content>();
+  private answerBanned = new Subject<string>();
 
   serviceApiUrl = {
     answer: '/answer',
@@ -354,7 +354,7 @@ export class ContentService extends AbstractEntityService<Content> {
     });
   }
 
-  getAnswerBanned(): Observable<string | null> {
+  getAnswerBanned(): Observable<string> {
     return this.answerBanned;
   }
 
@@ -419,7 +419,7 @@ export class ContentService extends AbstractEntityService<Content> {
     );
   }
 
-  getAnswersDeleted(): Observable<string | null> {
+  getAnswersDeleted(): Observable<string> {
     return this.answersDeleted;
   }
 
@@ -484,7 +484,7 @@ export class ContentService extends AbstractEntityService<Content> {
       );
   }
 
-  getRoundStarted(): Observable<Content | null> {
+  getRoundStarted(): Observable<Content> {
     return this.roundStarted;
   }
 
