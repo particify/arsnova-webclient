@@ -366,10 +366,13 @@ export class StatisticPrioritizationComponent
     const width = this.getTextWidth(label);
     const diff =
       chartWidth - width - this.padding.label * 4 - this.padding.left;
-    if (diff >= 0) {
+    const CROP_AMOUNT = 3;
+    if (diff >= 0 || label.length < CROP_AMOUNT) {
       return label;
     } else {
-      return this.getLabel(label.substring(0, label.length - 3) + '…');
+      return this.getLabel(
+        label.substring(0, label.length - CROP_AMOUNT) + '…'
+      );
     }
   }
 
