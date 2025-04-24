@@ -53,9 +53,7 @@ export class StatisticShortAnswerComponent
         this.updateData(stats);
       });
     this.contentService.getAnswerBanned().subscribe((answer) => {
-      if (answer) {
-        this.filterAnswers(answer);
-      }
+      this.filterAnswers(answer);
     });
   }
 
