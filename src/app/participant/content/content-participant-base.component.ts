@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Router } from '@angular/router';
@@ -10,6 +18,8 @@ import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { Answer } from '@app/core/models/answer';
+import { Observable } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   template: '',
@@ -24,10 +34,11 @@ export abstract class ContentParticipantBaseComponent
     answerResult: AnswerResultType;
   }>();
   @Input() isDisabled = false;
-  @Input({ required: true }) sendEvent!: EventEmitter<string>;
+  @Input({ required: true }) answerSubmitted!: Observable<string>;
   @Input() answer?: Answer;
 
   isLoading = true;
+  private destroyRef$ = inject(DestroyRef);
 
   protected constructor(
     protected notificationService: NotificationService,
@@ -45,13 +56,15 @@ export abstract class ContentParticipantBaseComponent
     );
     this.init();
 
-    this.sendEvent.subscribe((send) => {
-      if (send === 'answer') {
-        this.submitAnswer();
-      } else {
-        this.abstain();
-      }
-    });
+    this.answerSubmitted
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe((send) => {
+        if (send === 'answer') {
+          this.submitAnswer();
+        } else {
+          this.abstain();
+        }
+      });
   }
 
   init() {

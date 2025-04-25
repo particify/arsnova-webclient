@@ -26,7 +26,7 @@ import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { EventService } from '@app/core/services/util/event.service';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
-import { takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -142,7 +142,7 @@ export class ContentParticipantComponent
   @Output() next = new EventEmitter<void>();
   @Output() answerReset = new EventEmitter<string>();
 
-  sendEvent = new EventEmitter<string>();
+  private answerSubmitted$ = new Subject<string>();
   answer?: Answer;
   isLoading = true;
   ContentType: typeof ContentType = ContentType;
@@ -209,6 +209,10 @@ export class ContentParticipantComponent
     private answerService: ContentAnswerService
   ) {
     super(formService);
+  }
+
+  get answerSubmitted(): Observable<string> {
+    return this.answerSubmitted$;
   }
 
   ngOnInit(): void {
@@ -422,7 +426,7 @@ export class ContentParticipantComponent
 
   submitAnswerEvent($event: MouseEvent, type: string) {
     $event.preventDefault();
-    this.sendEvent.emit(type);
+    this.answerSubmitted$.next(type);
   }
 
   forwardAnswerMessage(status: {

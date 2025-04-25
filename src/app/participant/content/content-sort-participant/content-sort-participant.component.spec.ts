@@ -11,9 +11,10 @@ import {
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentService } from '@app/core/services/http/content.service';
-import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { of } from 'rxjs';
 
 describe('ContentSortParticipantComponent', () => {
   let component: ContentSortParticipantComponent;
@@ -68,7 +69,7 @@ describe('ContentSortParticipantComponent', () => {
       false,
       ContentType.SORT
     );
-    component.sendEvent = new EventEmitter<string>();
+    component.answerSubmitted = of();
     fixture.detectChanges();
   });
 

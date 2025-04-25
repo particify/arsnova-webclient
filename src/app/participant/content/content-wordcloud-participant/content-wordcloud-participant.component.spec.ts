@@ -10,10 +10,11 @@ import {
 } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { of } from 'rxjs';
 
 describe('ContentWordcloudParticipantComponent', () => {
   let component: ContentWordcloudParticipantComponent;
@@ -61,7 +62,7 @@ describe('ContentWordcloudParticipantComponent', () => {
       ContentType.WORDCLOUD,
       3
     );
-    component.sendEvent = new EventEmitter<string>();
+    component.answerSubmitted = of();
     fixture.detectChanges();
   });
 

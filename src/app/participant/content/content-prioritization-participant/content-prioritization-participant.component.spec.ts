@@ -1,4 +1,4 @@
-import { EventEmitter, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
@@ -14,6 +14,7 @@ import {
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 
 import { ContentPrioritizationParticipantComponent } from './content-prioritization-participant.component';
+import { of } from 'rxjs';
 
 describe('ContentPrioritizationParticipantComponent', () => {
   let component: ContentPrioritizationParticipantComponent;
@@ -61,7 +62,7 @@ describe('ContentPrioritizationParticipantComponent', () => {
       ContentType.PRIORITIZATION,
       100
     );
-    component.sendEvent = new EventEmitter<string>();
+    component.answerSubmitted = of();
     fixture.detectChanges();
   });
 

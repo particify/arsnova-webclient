@@ -10,10 +10,11 @@ import {
 } from '@testing/test-helpers';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Content } from '@app/core/models/content';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { of } from 'rxjs';
 
 describe('ContentTextParticipantComponent', () => {
   let component: ContentTextParticipantComponent;
@@ -60,7 +61,7 @@ describe('ContentTextParticipantComponent', () => {
       [],
       ContentType.TEXT
     );
-    component.sendEvent = new EventEmitter<string>();
+    component.answerSubmitted = of();
     fixture.detectChanges();
   });
 

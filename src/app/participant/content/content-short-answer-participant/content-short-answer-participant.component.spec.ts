@@ -8,7 +8,7 @@ import {
 } from '@testing/test-helpers';
 import { Router } from '@angular/router';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentShortAnswer } from '@app/core/models/content-short-answer';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -65,7 +65,7 @@ describe('ContentShortAnswerParticipantComponent', () => {
     fixture = TestBed.createComponent(ContentShortAnswerParticipantComponent);
     component = fixture.componentInstance;
     component.content = new ContentShortAnswer();
-    component.sendEvent = new EventEmitter<string>();
+    component.answerSubmitted = of();
     fixture.detectChanges();
   });
 
