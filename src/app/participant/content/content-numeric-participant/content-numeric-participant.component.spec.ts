@@ -65,7 +65,7 @@ describe('ContentNumericParticipantComponent', () => {
       'subject',
       ContentType.NUMERIC
     );
-    component.sendEvent = new EventEmitter<string>();
+    component.answerSubmitted = new EventEmitter<string>();
     fixture.detectChanges();
   });
 
