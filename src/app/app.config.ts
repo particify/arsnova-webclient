@@ -15,6 +15,7 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
+import { AuthenticationGqlGuard } from '@app/core/guards/authentication-gql.guard';
 import { DemoRoomGuard } from '@app/core/guards/demo-room.guard';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -145,6 +146,7 @@ export const AppConfig: ApplicationConfig = {
     DialogService,
     AuthenticationService,
     AuthenticationGuard,
+    AuthenticationGqlGuard,
     DemoRoomGuard,
     RoomMembershipService,
     EventService,

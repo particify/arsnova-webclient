@@ -1,3 +1,5 @@
+import { Room as RoomGql } from '@gql/generated/graphql';
+
 // TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
 export class Room {
   id!: string;
@@ -27,5 +29,15 @@ export class Room {
     this.name = name;
     this.description = description;
     this.closed = closed;
+  }
+
+  static fromGql(roomData: RoomGql) {
+    const room = new Room();
+    room.id = roomData.id;
+    room.shortId = roomData.shortId;
+    room.name = roomData.name;
+    room.description = roomData.description ?? '';
+    room.renderedDescription = roomData.descriptionRendered ?? '';
+    return room;
   }
 }

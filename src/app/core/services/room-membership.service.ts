@@ -19,7 +19,7 @@ import {
   AUTH_SCHEME,
 } from './http/authentication.service';
 import { Membership } from '@app/core/models/membership';
-import { RoomRole } from '@gql/generated/graphql';
+import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Room } from '@app/core/models/room';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
@@ -32,6 +32,7 @@ import { MembershipsChanged } from '@app/core/models/events/memberships-changed'
 export class RoomMembershipService extends AbstractHttpService<Membership> {
   protected wsConnector = inject(WsConnectorService);
   protected authenticationService = inject(AuthenticationService);
+  private roomMembershipByShortIdGql = inject(RoomMembershipByShortIdGql);
 
   serviceApiUrl = {
     byUser: '/by-user',
@@ -211,6 +212,28 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
         membership.roles.some((r) => this.isRoleSubstitutable(r, requestedRole))
       )
     );
+  }
+
+  /**
+   * Checks if the user has the permissions of the given role for the given
+   * room.
+   */
+  hasAccessForRoomGql(
+    roomShortId: string,
+    requestedRole: RoomRole
+  ): Observable<boolean> {
+    return this.roomMembershipByShortIdGql
+      .fetch({ shortId: roomShortId })
+      .pipe(
+        map((r) =>
+          r.data.roomMembershipByShortId
+            ? this.isRoleSubstitutable(
+                r.data.roomMembershipByShortId?.role,
+                requestedRole
+              )
+            : false
+        )
+      );
   }
 
   /**

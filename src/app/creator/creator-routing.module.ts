@@ -17,6 +17,11 @@ import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { environment } from '@environments/environment';
+import { roomGqlResolver } from '@app/core/resolver/room-gql.resolver';
+import { roomViewUserRoleGqlResolver } from '@app/core/resolver/room-view-user-role-gql.resolver';
+import { roomUserRoleGqlResolver } from '@app/core/resolver/room-user-role-gql.resolver';
+import { AuthenticationGqlGuard } from '@app/core/guards/authentication-gql.guard';
 
 const routes: Routes = [
   {
@@ -135,13 +140,21 @@ const routes: Routes = [
         {
           path: ':shortId',
           component: CreatorPageComponent,
-          canActivate: [AuthenticationGuard],
+          canActivate: [
+            environment.graphql ? AuthenticationGqlGuard : AuthenticationGuard,
+          ],
           data: { requiredRole: UserRole.MODERATOR },
-          resolve: {
-            room: RoomResolver,
-            viewRole: RoomViewUserRoleResolver,
-            userRole: RoomUserRoleResolver,
-          },
+          resolve: environment.graphql
+            ? {
+                room: roomGqlResolver,
+                viewRole: roomViewUserRoleGqlResolver,
+                userRole: roomUserRoleGqlResolver,
+              }
+            : {
+                room: RoomResolver,
+                viewRole: RoomViewUserRoleResolver,
+                userRole: RoomUserRoleResolver,
+              },
           runGuardsAndResolvers: 'always',
           children: [
             ...routes,

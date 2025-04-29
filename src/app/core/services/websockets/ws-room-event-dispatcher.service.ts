@@ -1,18 +1,19 @@
 import { Injectable, inject } from '@angular/core';
 import { IMessage } from '@stomp/stompjs';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import {
   ModeratorDataChanged,
   PublicDataChanged,
 } from '@app/core/models/events/data-changed';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
 import { Room } from '@app/core/models/room';
-import { RoomRole } from '@gql/generated/graphql';
+import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { WsConnectorService } from './ws-connector.service';
+import { environment } from '@environments/environment';
 
 @Injectable()
 export class WsRoomEventDispatcherService {
@@ -20,6 +21,7 @@ export class WsRoomEventDispatcherService {
   private eventService = inject(EventService);
   private roomMembershipService = inject(RoomMembershipService);
   private roomService = inject(RoomService);
+  private roomMembershipByShortIdGql = inject(RoomMembershipByShortIdGql);
 
   private roomChanged$ = new Subject<void>();
 
@@ -32,9 +34,13 @@ export class WsRoomEventDispatcherService {
   private handleRoomChange(room?: Room) {
     this.roomChanged$.next();
     if (room) {
-      const role$ = this.roomMembershipService.getPrimaryRoleByRoom(
-        room.shortId
-      );
+      const role$ = environment.graphql
+        ? this.roomMembershipByShortIdGql
+            .fetch({ shortId: room.shortId })
+            .pipe(
+              map((r) => r.data.roomMembershipByShortId?.role ?? RoomRole.None)
+            )
+        : this.roomMembershipService.getPrimaryRoleByRoom(room.shortId);
       this.registerChangesMetaListener(room);
       role$.subscribe((role) => this.registerDataChangeListener(room, role));
     }
