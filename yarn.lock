@@ -10480,14 +10480,14 @@ __metadata:
   linkType: hard
 
 "memfs@npm:^4.6.0":
-  version: 4.17.0
-  resolution: "memfs@npm:4.17.0"
+  version: 4.17.1
+  resolution: "memfs@npm:4.17.1"
   dependencies:
     "@jsonjoy.com/json-pack": "npm:^1.0.3"
     "@jsonjoy.com/util": "npm:^1.3.0"
     tree-dump: "npm:^1.0.1"
     tslib: "npm:^2.0.0"
-  checksum: 10c0/2901f69e80e1fbefa8aafe994a253fff6f34eb176d8b80d57476311611e516a11ab4dd93f852c8739fe04f2b57d6a4ca7a1828fa0bd401ce631bcac214b3d58b
+  checksum: 10c0/f3e7931697e268b24506abe56ef5729cebddf8568cac76c7bd1b07e9964a26f16e6281c52a22333b9a42f1275f80b8c7f6d61b9f7a92e24401066ca2a0809100
   languageName: node
   linkType: hard
 
@@ -14929,8 +14929,8 @@ __metadata:
   linkType: hard
 
 "ws@npm:^8.18.0, ws@npm:^8.2.3":
-  version: 8.18.1
-  resolution: "ws@npm:8.18.1"
+  version: 8.18.2
+  resolution: "ws@npm:8.18.2"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ">=5.0.2"
@@ -14939,7 +14939,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 10c0/e498965d6938c63058c4310ffb6967f07d4fa06789d3364829028af380d299fe05762961742971c764973dce3d1f6a2633fe8b2d9410c9b52e534b4b882a99fa
+  checksum: 10c0/4b50f67931b8c6943c893f59c524f0e4905bbd183016cfb0f2b8653aa7f28dad4e456b9d99d285bbb67cca4fedd9ce90dfdfaa82b898a11414ebd66ee99141e4
   languageName: node
   linkType: hard
 
