@@ -75,7 +75,7 @@ describe('ContentChoiceParticipantComponent', () => {
       false,
       ContentType.CHOICE
     );
-    component.sendEvent = new EventEmitter<string>();
+    component.answerSubmitted = new EventEmitter<string>();
     fixture.detectChanges();
   });
 

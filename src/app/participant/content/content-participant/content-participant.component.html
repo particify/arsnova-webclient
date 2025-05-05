@@ -124,7 +124,7 @@
                         formDisabled || alreadySent || answeringLocked
                       "
                       (answerChanged)="forwardAnswerMessage($event)"
-                      [sendEvent]="sendEvent"
+                      [answerSubmitted]="answerSubmitted"
                       [statsPublished]="statsPublished"
                       [correctOptionsPublished]="correctOptionsPublished"
                       [language]="room.language"
@@ -139,7 +139,7 @@
                         formDisabled || alreadySent || answeringLocked
                       "
                       (answerChanged)="forwardAnswerMessage($event)"
-                      [sendEvent]="sendEvent"
+                      [answerSubmitted]="answerSubmitted"
                       [statsPublished]="statsPublished"
                       [language]="room.language"
                     >
@@ -152,7 +152,7 @@
                       [isDisabled]="
                         formDisabled || alreadySent || answeringLocked
                       "
-                      [sendEvent]="sendEvent"
+                      [answerSubmitted]="answerSubmitted"
                       (answerChanged)="forwardAnswerMessage($event)"
                     ></app-content-text-participant>
                   }
@@ -163,7 +163,7 @@
                       [isDisabled]="
                         formDisabled || alreadySent || answeringLocked
                       "
-                      [sendEvent]="sendEvent"
+                      [answerSubmitted]="answerSubmitted"
                       (answerChanged)="forwardAnswerMessage($event)"
                       [correctOptionsPublished]="correctOptionsPublished"
                     >
@@ -176,7 +176,7 @@
                       [isDisabled]="
                         formDisabled || alreadySent || answeringLocked
                       "
-                      [sendEvent]="sendEvent"
+                      [answerSubmitted]="answerSubmitted"
                       (answerChanged)="forwardAnswerMessage($event)"
                     >
                     </app-content-wordcloud-participant>
@@ -188,7 +188,7 @@
                       [isDisabled]="
                         formDisabled || alreadySent || answeringLocked
                       "
-                      [sendEvent]="sendEvent"
+                      [answerSubmitted]="answerSubmitted"
                       (answerChanged)="forwardAnswerMessage($event)"
                     >
                     </app-content-prioritization-participant>
@@ -200,7 +200,7 @@
                       [isDisabled]="
                         formDisabled || alreadySent || answeringLocked
                       "
-                      [sendEvent]="sendEvent"
+                      [answerSubmitted]="answerSubmitted"
                       (answerChanged)="forwardAnswerMessage($event)"
                       [correctOptionsPublished]="correctOptionsPublished"
                     >
@@ -213,7 +213,7 @@
                       [isDisabled]="
                         formDisabled || alreadySent || answeringLocked
                       "
-                      [sendEvent]="sendEvent"
+                      [answerSubmitted]="answerSubmitted"
                       [correctOptionsPublished]="correctOptionsPublished"
                       [isCorrect]="answerResult === 'CORRECT'"
                       (answerChanged)="forwardAnswerMessage($event)"

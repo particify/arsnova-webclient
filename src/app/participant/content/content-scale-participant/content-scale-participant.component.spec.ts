@@ -11,11 +11,12 @@ import {
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentService } from '@app/core/services/http/content.service';
-import { NO_ERRORS_SCHEMA, EventEmitter } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { ContentScale } from '@app/core/models/content-scale';
 import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
 import { LanguageService } from '@app/core/services/util/language.service';
+import { of } from 'rxjs';
 
 describe('ContentScaleParticipantComponent', () => {
   let component: ContentScaleParticipantComponent;
@@ -74,7 +75,7 @@ describe('ContentScaleParticipantComponent', () => {
     fixture = TestBed.createComponent(ContentScaleParticipantComponent);
     component = fixture.componentInstance;
     component.content = new ContentScale(LikertScaleTemplate.AGREEMENT, 5);
-    component.sendEvent = new EventEmitter<string>();
+    component.answerSubmitted = of();
     fixture.detectChanges();
   });
 
