@@ -9,51 +9,46 @@
   @for (content of contents; track content; let i = $index) {
     <cdk-step>
       <div fxLayoutAlign="center" id="step">
-        <mat-card
-          [ngClass]="{ 'no-card-appearance': hideControls }"
-          [hidden]="
-            showStepInfo && isLiveMode && !content.state.answeringEndTime
-          "
-        >
-          @if (currentStep === undefined) {
-            <app-loading-indicator></app-loading-indicator>
-          } @else {
-            <app-content-results
-              [content]="content"
-              [directShow]="
-                currentStep === i &&
-                settings.showContentResultsDirectly &&
-                !isLiveMode
-              "
-              [active]="currentStep === i"
-              [index]="i"
-              [isPresentation]="hideControls"
-              (updatedCounter)="updateCounter($event, currentStep === i)"
-              [indexChanged]="indexChanged"
-              [settings]="settings"
-              [language]="language"
-            >
-            </app-content-results>
-          }
-        </mat-card>
-        <div
-          fxFill
-          fxLayout="column"
-          fxLayoutAlign="center center"
-          fxLayoutGap="3em"
-          class="waiting-container"
-          [hidden]="
-            !showStepInfo || !isLiveMode || content.state.answeringEndTime
-          "
-        >
-          @if (currentStep !== undefined) {
-            <app-content-step-info
-              [current]="currentStep + 1"
-              [totalCount]="stepCount"
-            ></app-content-step-info>
-            <span>{{ 'content.get-ready' | transloco }}</span>
-          }
-        </div>
+        @if (!showStepInfo || !isLiveMode || content.state.answeringEndTime) {
+          <mat-card [ngClass]="{ 'no-card-appearance': hideControls }">
+            @if (currentStep === undefined) {
+              <app-loading-indicator></app-loading-indicator>
+            } @else {
+              <app-content-results
+                [content]="content"
+                [directShow]="
+                  currentStep === i &&
+                  settings.showContentResultsDirectly &&
+                  !isLiveMode
+                "
+                [active]="currentStep === i"
+                [index]="i"
+                [isPresentation]="hideControls"
+                (updatedCounter)="updateCounter($event, currentStep === i)"
+                [indexChanged]="indexChanged"
+                [settings]="settings"
+                [language]="language"
+              >
+              </app-content-results>
+            }
+          </mat-card>
+        } @else {
+          <div
+            fxFill
+            fxLayout="column"
+            fxLayoutAlign="center center"
+            fxLayoutGap="3em"
+            class="waiting-container"
+          >
+            @if (currentStep !== undefined) {
+              <app-content-step-info
+                [current]="currentStep + 1"
+                [totalCount]="stepCount"
+              ></app-content-step-info>
+              <span>{{ 'content.get-ready' | transloco }}</span>
+            }
+          </div>
+        }
       </div>
       <div tabindex="0" class="visually-hidden">
         {{ 'statistic.a11y-no-more-answers' | transloco }}
