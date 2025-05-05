@@ -86,14 +86,12 @@ export class ContentListComponent
     this.dragDroplist = this.contents;
     this.getCurrentGroupIndex();
     this.contentService.getAnswersDeleted().subscribe((contentId) => {
-      if (contentId) {
-        const content = this.contents.find((c) => c.id === contentId);
-        if (content) {
-          content.state.answeringEndTime = undefined;
-          content.state.round = 1;
-          this.finishedContents.set(content.id, false);
-          this.contentStats.set(contentId, { count: 0 });
-        }
+      const content = this.contents.find((c) => c.id === contentId);
+      if (content) {
+        content.state.answeringEndTime = undefined;
+        content.state.round = 1;
+        this.finishedContents.set(content.id, false);
+        this.contentStats.set(contentId, { count: 0 });
       }
     });
     this.contents.forEach((c) => {

@@ -159,7 +159,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       .getAnswersDeleted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((contentId) => {
-        if (contentId && contentId === this.content.id) {
+        if (contentId === this.content.id) {
           this.presentationService.reloadCurrentContent();
         }
       });
@@ -167,7 +167,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       .getRoundStarted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((content) => {
-        if (content && content.id === this.content.id) {
+        if (content.id === this.content.id) {
           this.content.state.answeringEndTime = undefined;
           this.evaluateContentState();
         }

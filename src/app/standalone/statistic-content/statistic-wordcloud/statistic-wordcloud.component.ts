@@ -56,9 +56,7 @@ export class StatisticWordcloudComponent
         this.updateData(stats);
       });
     this.contentService.getAnswerBanned().subscribe((answer) => {
-      if (answer) {
-        this.filterAnswers(answer);
-      }
+      this.filterAnswers(answer);
     });
     this.rotateWords = this.settings.rotateWordcloudItems;
     this.presentationService.updateWordcloudVisualization(this.rotateWords);
