@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { from, InMemoryCache } from '@apollo/client';
+import { from, InMemoryCache } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { provideApollo } from 'apollo-angular';
