@@ -9,10 +9,6 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
@@ -37,7 +33,6 @@ export class LiveFeedbackPageComponent
   HotkeyAction = HotkeyAction;
 
   constructor(
-    protected notificationService: NotificationService,
     protected wsFeedbackService: WsFeedbackService,
     protected feedbackService: FeedbackService,
     protected roomService: RoomService,
@@ -86,16 +81,6 @@ export class LiveFeedbackPageComponent
       .subscribe(
         (room) => {
           this.loadConfig(room);
-          const state = this.isClosed ? 'stopped' : 'started';
-          const msg = this.translateService.translate(
-            'creator.survey.' + state
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            !this.isClosed
-              ? AdvancedSnackBarTypes.SUCCESS
-              : AdvancedSnackBarTypes.WARNING
-          );
           if (this.isClosed) {
             this.updateFeedback([0, 0, 0, 0]);
             this.wsFeedbackService.reset(this.room.id);

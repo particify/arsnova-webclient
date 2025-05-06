@@ -52,7 +52,8 @@ export class AbstractLiveFeedbackPageComponent {
     );
     this.loadConfig(this.room);
     this.feedbackService.startSub(this.room.id);
-    this.feedbackService.messageEvent
+    this.feedbackService
+      .getMessages()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((message) => {
         this.parseIncomingMessage(message);

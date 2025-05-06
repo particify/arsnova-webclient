@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
@@ -38,6 +39,7 @@ import {
     ContentGroupInfoComponent,
     CommonModule,
     MatButtonModule,
+    MatRippleModule,
   ],
   providers: [provideTranslocoScope('creator')],
   selector: 'app-content-groups',
@@ -48,6 +50,8 @@ export class ContentGroupsComponent {
   @Input({ required: true }) contentGroup!: ContentGroup;
   @Input({ required: true }) role!: UserRole;
   @Input({ required: true }) shortId!: string;
+  @Input() disabled = false;
+  @Input() showRipple = false;
 
   constructor(
     private router: Router,

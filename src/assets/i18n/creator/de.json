@@ -275,7 +275,17 @@
     "room-settings": "Einstellungen",
     "no-content-groups": "Keine Fragenserien vorhanden.",
     "group-locked": "Die Fragenserie ist nicht freigegeben",
-    "content-groups-description": "Erstelle Quizzes, Umfragen, Brainstormings und vieles mehr. Wähle den passenden Typ oder kombiniere alle Formate einer Fragenserie. Wenn du nicht bei Null anfangen willst, schau dir die Vorlagen an."
+    "content-groups-description": "Erstelle Quizzes, Umfragen, Brainstormings und vieles mehr. Wenn du nicht bei Null anfangen willst, schau dir die Vorlagen an.",
+    "comments-description": "Lasse die Teilnehmenden anonym zu Wort kommen.",
+    "live-feedback-description": "Erhalte Echtzeit-Feedback zu einer spontanen Umfrage.",
+    "comment-count": "{{count}} Beiträge",
+    "answer-count": "{{count}} Antworten",
+    "start": "Starten",
+    "stop": "Stoppen",
+    "open-comments": "Öffne Q&A",
+    "lock-comments": "Sperre Q&A",
+    "comments-opened": "Q&A wude geöffnet.",
+    "comments-locked": "Q&A wurde gesperrt."
   },
   "settings": {
     "a11y-message": "Du befindest dich jetzt in den Raum-Einstellungen.",

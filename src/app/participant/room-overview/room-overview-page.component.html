@@ -1,112 +1,90 @@
-<div fxLayout="row" fxLayoutAlign="center">
+<div
+  class="overview-container"
+  fxLayout="column"
+  fxLayoutAlign="start center"
+  fxLayoutGap="16px"
+  fxLayoutGap.lt-lg="12px"
+>
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{ 'room-page.a11y-room-message' | a11yIntro: { name: room.name } | async }}
   </div>
   @if (isLoading) {
     <app-loading-indicator></app-loading-indicator>
-  }
-  @if (!isLoading && room) {
-    <mat-card fxLayout="column" fxLayoutGap="16px">
-      <app-room-overview-header
-        [name]="room.name"
-        [shortId]="room.shortId"
-        [description]="room.description"
-        [renderedDescription]="room.renderedDescription"
-        [roomJoinUrl]="getRoomJoinUrl()"
-        appLangContext
-        appDirContext
-      ></app-room-overview-header>
-      @if ((commentsEnabled || surveyEnabled) && !focusModeEnabled) {
-        <div fxLayout="column" fxLayoutAlign="center">
-          <div
-            class="action-button-container"
-            fxLayout="row"
-            fxLayoutAlign="center"
-          >
-            @if (commentsEnabled) {
-              <app-room-action-button
-                fxFlex
-                feature="comments"
-                icon="question_answer"
-                hotkey="1"
-                [badgeCounter]="commentCounter"
-              ></app-room-action-button>
-            }
-            @if (surveyEnabled) {
-              <app-room-action-button
-                fxFlex
-                feature="live-feedback"
-                url="feedback"
-                icon="thumbs_up_down"
-                hotkey="2"
-              ></app-room-action-button>
-            }
-            @if (!surveyEnabled) {
-              <p
-                tabindex="-1"
-                id="live-feedback-disabled"
-                class="visually-hidden"
-                appHotkey="2"
-                [appHotkeyTitle]="'room-page.live-feedback' | transloco"
-              >
-                {{
-                  'participant.room-page.a11y-live-feedback-disabled'
-                    | transloco
-                }}
-              </p>
-            }
-          </div>
-        </div>
+  } @else {
+    @if (focusModeEnabled) {
+      <mat-card>
+        <app-hint
+          text="participant.room-page.focus-mode-enabled"
+          [type]="HintType.INFO"
+        ></app-hint>
+      </mat-card>
+    } @else if (room) {
+      @if (room.description) {
+        <mat-card>
+          <app-rendered-text
+            [rawText]="room.description.trim()"
+            [renderedText]="room.renderedDescription"
+            appLangContext
+            appDirContext
+          ></app-rendered-text>
+        </mat-card>
       }
-      @if (contentGroups.length > 0) {
-        <p
-          tabindex="-1"
-          id="content-groups"
-          class="visually-hidden"
-          appHotkey="3"
-          [appHotkeyTitle]="'content.groups' | transloco"
+      @if (commentsEnabled || feedbackEnabled) {
+        <div
+          fxFill
+          [ngClass]="{
+            'overview-row-container': commentsEnabled && feedbackEnabled,
+          }"
         >
-          {{
-            'room-page.a11y-content-groups'
-              | transloco: { count: contentGroups.length }
-          }}
-        </p>
-      } @else {
-        <p
-          tabindex="-1"
-          id="no-content-groups"
-          class="visually-hidden"
-          appHotkey="3"
-          [appHotkeyTitle]="'content.groups' | transloco"
-        >
-          {{ 'room-page.a11y-no-content-groups' | transloco }}
-        </p>
-      }
-      @if (room && contentGroups && !focusModeEnabled) {
-        <div fxLayout="column" fxLayoutGap="8px">
-          @for (contentGroup of contentGroups; track contentGroup) {
-            <app-content-groups
-              [contentGroup]="contentGroup"
-              [role]="viewRole"
-              [shortId]="room.shortId"
-            ></app-content-groups>
+          @if (commentsEnabled) {
+            <app-comments-card
+              class="feature-row-item"
+              [room]="room"
+              [description]="
+                'participant.room-page.comments-description' | transloco
+              "
+              [clickable]="true"
+            >
+            </app-comments-card>
+          }
+          @if (feedbackEnabled) {
+            <app-live-feedback-card
+              class="feature-row-item"
+              [room]="room"
+              [description]="
+                'participant.room-page.live-feedback-description' | transloco
+              "
+              [clickable]="true"
+            >
+            </app-live-feedback-card>
           }
         </div>
       }
-      @if (focusModeEnabled) {
-        <div fxLayout="column">
-          <app-hint
-            style="margin-top: 1em"
-            text="participant.room-page.focus-mode-enabled"
-            [type]="HintType.INFO"
-          ></app-hint>
-        </div>
+      @if (contentGroups && contentGroups.length > 0) {
+        <app-feature-card
+          class="feature-column-item"
+          [ngClass]="{ disabled: focusModeEnabled }"
+          [feature]="'content.groups' | transloco"
+          [description]="
+            'participant.room-page.content-groups-description' | transloco
+          "
+          icon="equalizer"
+          [fillFeatureAction]="true"
+        >
+          <ng-container featureActionFill>
+            <div fxLayout="column" fxLayoutGap="8px">
+              @for (contentGroup of contentGroups; track contentGroup) {
+                <app-content-groups
+                  [contentGroup]="contentGroup"
+                  [role]="viewRole"
+                  [shortId]="room.shortId"
+                  [showRipple]="true"
+                ></app-content-groups>
+              }
+            </div>
+          </ng-container>
+        </app-feature-card>
       }
-      <lib-extension-point
-        extensionId="attachment-list"
-        [extensionData]="attachmentData"
-      >
-      </lib-extension-point>
-    </mat-card>
+    }
   }
 </div>

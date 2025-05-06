@@ -275,7 +275,17 @@
     "room-settings": "Room administration",
     "no-content-groups": "There are no question series.",
     "group-locked": "The question series is not released",
-    "content-groups-description": "Create quizzes, surveys, brainstormings and much more. Choose the right type or create a mix of all formats. If you don't want to start from scratch, look at the templates."
+    "content-groups-description": "Create quizzes, surveys, brainstormings and much more. If you don't want to start from scratch, have a look at the templates.",
+    "comments-description": "Let participants have their say anonymously in the Q&A.",
+    "live-feedback-description": "Get real-time feedback on a spontaneous poll.",
+    "comment-count": "{{count}} posts",
+    "answer-count": "{{count}} answers",
+    "start": "Start",
+    "stop": "Stop",
+    "open-comments": "Open Q&A",
+    "lock-comments": "Lock Q&A",
+    "comments-opened": "Q&A has been opened.",
+    "comments-locked": "Q&A has been locked."
   },
   "settings": {
     "a11y-message": "You are now in the room settings.",

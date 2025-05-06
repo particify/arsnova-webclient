@@ -99,7 +99,10 @@
     "a11y-statistics": "Abre las estadísticas de la serie de preguntas.",
     "a11y-live-feedback-disabled": "La retroalimentación en vivo no está activa actualmente.",
     "no-contents": "Aún no hay contenidos.",
-    "focus-mode-enabled": "El modo de enfoque está activo en esta sala. Su vista se sincronizará con la presentación."
+    "focus-mode-enabled": "El modo de enfoque está activo en esta sala. Su vista se sincronizará con la presentación.",
+    "comments-description": "Haga una pregunta o escriba un comentario.",
+    "live-feedback-description": "Dé su opinión al instante con un solo clic.",
+    "content-groups-description": "Participe en cuestionarios, encuestas y más."
   },
   "statistic": {
     "a11y-answer-indicator": "Indica con el color verde qué respuestas son correctas.",

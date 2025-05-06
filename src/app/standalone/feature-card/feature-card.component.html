@@ -1,0 +1,63 @@
+<mat-card
+  style="max-width: 100%"
+  class="feature-card"
+  [attr.tabindex]="clickable ? 0 : undefined"
+  [attr.role]="clickable ? 'button' : undefined"
+  [ngClass]="{
+    clickable: clickable,
+  }"
+  [routerLink]="clickable ? [url] : undefined"
+  matRipple
+  [matRippleDisabled]="!clickable"
+>
+  <div
+    fxFill
+    fxLayout="column"
+    fxLayoutAlign="space-between"
+    fxLayoutGap="12px"
+    fxLayoutGap.lt-md="8px"
+  >
+    <div fxLayout="column" fxLayoutGap="12px" fxLayoutGap.lt-md="8px">
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+          <mat-icon style="width: 20px; height: 20px; font-size: 20px">{{
+            icon
+          }}</mat-icon>
+          <span class="feature-header">{{ feature }}</span>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start" fxLayoutGap="12px">
+          @if (countHint) {
+            <span class="smaller-font less-opacity">{{ countHint }}</span>
+          }
+          <span
+            class="smaller-font"
+            [style]="'color: ' + (state ? 'var(--play)' : 'var(--warn)')"
+            >{{ stateText }}</span
+          >
+        </div>
+      </div>
+      <span class="smaller-font less-opacity">
+        {{ description }}
+      </span>
+    </div>
+    @if (url && hotkey && !clickable) {
+      <div fxLayout="row" fxLayoutAlign="space-between end">
+        <button
+          mat-button
+          [routerLink]="[url]"
+          [appHotkey]="hotkey"
+          [appHotkeyTitle]="feature"
+        >
+          {{ 'room-page.go-to-feature' | transloco: { feature: feature } }}
+        </button>
+        <div class="feature-action">
+          <ng-content select="[featureAction]"></ng-content>
+        </div>
+      </div>
+    } @else if (fillFeatureAction) {
+      <div fxFill>
+        <ng-content select="[featureActionFill]"></ng-content>
+      </div>
+    }
+  </div>
+</mat-card>

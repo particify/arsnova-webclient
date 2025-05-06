@@ -272,7 +272,17 @@
     "no-content-groups": "No hay series de preguntas.",
     "group-locked": "La serie de preguntas no está publicada",
     "use-template": "Utilizar plantilla",
-    "content-groups-description": "Crea cuestionarios, encuestas, lluvias de ideas y mucho más. Elige el tipo adecuado o crea una mezcla de todos los formatos. Si no quieres empezar de cero, consulta las plantillas."
+    "content-groups-description": "Crea cuestionarios, encuestas, lluvias de ideas y mucho más. Si no quieres empezar de cero, consulta las plantillas.",
+    "comments-description": "Deje que los participantes expresen su opinión de forma anónima en las preguntas y respuestas.",
+    "live-feedback-description": "Obtenga respuestas en tiempo real en una encuesta espontánea.",
+    "comment-count": "{{count}} publicaciones",
+    "answer-count": "{{count}} respuestas",
+    "start": "Iniciar",
+    "stop": "Detener",
+    "open-comments": "Abrir preguntas y respuestas",
+    "lock-comments": "Cerrar preguntas y respuestas",
+    "comments-opened": "Las preguntas y respuestas se han abierto.",
+    "comments-locked": "Las preguntas y respuestas se han cerrado."
   },
   "settings": {
     "a11y-message": "Ahora estás en la configuración de la sala.",

@@ -1,10 +1,10 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AbstractHttpService } from './abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventService } from '@app/core/services/util/event.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
@@ -17,7 +17,7 @@ const httpOptions = {
 
 @Injectable()
 export class FeedbackService extends AbstractHttpService<number[]> {
-  public messageEvent = new EventEmitter<Message>();
+  private messageEvent$ = new Subject<Message>();
   sub?: Subscription;
 
   constructor(
@@ -63,7 +63,11 @@ export class FeedbackService extends AbstractHttpService<number[]> {
   }
 
   emitMessage(message: Message) {
-    this.messageEvent.emit(message);
+    this.messageEvent$.next(message);
+  }
+
+  getMessages(): Subject<Message> {
+    return this.messageEvent$;
   }
 
   getAnswerSum(data: number[]): number {

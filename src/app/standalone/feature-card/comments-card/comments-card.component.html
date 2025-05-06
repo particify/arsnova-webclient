@@ -1,0 +1,42 @@
+<app-feature-card
+  [feature]="'room-page.comments' | transloco"
+  [description]="description"
+  [countHint]="
+    showCount && commentCounter !== undefined
+      ? ('creator.room-page.comment-count'
+        | transloco: { count: commentCounter })
+      : undefined
+  "
+  [state]="!commentSettings?.disabled"
+  [stateText]="
+    (commentSettings?.disabled ? 'room-page.locked' : 'room-page.open')
+      | transloco
+  "
+  [clickable]="clickable"
+  icon="question_answer"
+  url="comments"
+  hotkey="1"
+>
+  @if (showControls) {
+    <ng-container featureAction>
+      <button
+        mat-icon-button
+        [matTooltip]="
+          (commentSettings?.disabled
+            ? 'creator.room-page.open-comments'
+            : 'creator.room-page.lock-comments'
+          ) | transloco
+        "
+        [style]="
+          'color: ' +
+          (commentSettings?.disabled ? 'var(--play)' : 'var(--warn)')
+        "
+        (click)="toggleCommentFeature()"
+      >
+        <mat-icon>{{
+          commentSettings?.disabled ? 'lock_open' : 'lock'
+        }}</mat-icon>
+      </button>
+    </ng-container>
+  }
+</app-feature-card>

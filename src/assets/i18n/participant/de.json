@@ -101,7 +101,10 @@
     "a11y-statistics": "Öffnet die Statistiken zu den Fragenserie.",
     "a11y-live-feedback-disabled": "Das Live Feedback ist derzeit nicht aktiv.",
     "no-contents": "Keine Inhalte vorhanden.",
-    "focus-mode-enabled": "In diesem Raum ist der Fokus-Modus aktiv. Deine Ansicht wird mit der Präsentation synchronisiert."
+    "focus-mode-enabled": "In diesem Raum ist der Fokus-Modus aktiv. Deine Ansicht wird mit der Präsentation synchronisiert.",
+    "comments-description": "Stelle eine Frage oder schreibe einen Kommentar.",
+    "live-feedback-description": "Gib sofortiges Feedback mit einem Klick.",
+    "content-groups-description": "Mache mit bei Quizzes, Umfragen und mehr."
   },
   "statistic": {
     "a11y-answer-indicator": "Markiert die richtige oder richtigen Antworten grün.",

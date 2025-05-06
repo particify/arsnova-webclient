@@ -1,0 +1,38 @@
+<app-feature-card
+  [feature]="'room-page.live-feedback' | transloco"
+  [description]="description"
+  [countHint]="
+    showCount && feedbackAnswers !== undefined
+      ? ('creator.room-page.answer-count'
+        | transloco: { count: feedbackAnswers })
+      : undefined
+  "
+  [state]="feedbackEnabled"
+  [stateText]="
+    (feedbackEnabled ? 'room-page.started' : 'room-page.stopped') | transloco
+  "
+  [clickable]="clickable"
+  icon="thumbs_up_down"
+  url="feedback"
+  hotkey="2"
+>
+  @if (showControls) {
+    <ng-container featureAction>
+      <button
+        mat-icon-button
+        [matTooltip]="
+          (feedbackEnabled
+            ? 'creator.room-page.stop'
+            : 'creator.room-page.start'
+          ) | transloco
+        "
+        [style]="'color: ' + (feedbackEnabled ? 'var(--warn)' : 'var(--play)')"
+        (click)="toggleLiveFeedbackFeature()"
+      >
+        <mat-icon>{{
+          feedbackEnabled ? 'stop_circle' : 'play_circle'
+        }}</mat-icon>
+      </button>
+    </ng-container>
+  }
+</app-feature-card>

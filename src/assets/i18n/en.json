@@ -452,7 +452,12 @@
     "live-feedback": "Live Feedback",
     "comments": "Q&A",
     "copy-url": "Copy address",
-    "url-copied": "Room link was copied to the clipboard."
+    "url-copied": "Room link was copied to the clipboard.",
+    "go-to-feature": "Go to {{feature}}",
+    "open": "Open",
+    "locked": "Locked",
+    "started": "Started",
+    "stopped": "Stopped"
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview.",
