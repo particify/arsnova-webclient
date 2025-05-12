@@ -2,7 +2,7 @@
 
 .answer {
   font-size: $s-font-size;
-  word-break: break-word;
+  overflow-wrap: anywhere;
   line-height: 1.4;
   height: 40px;
   overflow: hidden;

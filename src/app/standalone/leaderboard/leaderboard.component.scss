@@ -30,7 +30,7 @@ table {
 
 .alias {
   hyphens: auto;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .score {
