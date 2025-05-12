@@ -241,8 +241,6 @@
     "community-lang": "Este lenguaje es mantenido por la comunidad y, por tanto, puede estar incompleto o anticuado.",
     "contribute-to-lang": "Puede contribuir a la traducción a través del siguiente enlace: ",
     "translation-server": "Ir al servidor de traducción",
-    "leave": "Deja",
-    "really-leave-room": "¿De verdad quieres salir de la sala?",
     "select-room": "Seleccione sala",
     "really-delete-template": "¿Realmente quieres eliminar la plantilla?"
   },
@@ -307,10 +305,6 @@
     "all-rooms": "Todas las salas",
     "no-announcements": "No hay anuncios.",
     "filter": "Filtro"
-  },
-  "focus-mode": {
-    "presenter-controls-app": "El presentador le guía por la sala.",
-    "leave-room": "Deja la sala"
   },
   "comment-list": {
     "a11y-sort-time": "Ordenar publicaciones por tiempo",

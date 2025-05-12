@@ -270,8 +270,6 @@
     "community-lang": "Questo linguaggio è gestito dalla comunità e quindi potrebbe essere incompleto o non aggiornato.",
     "contribute-to-lang": "Puoi contribuire alla traduzione attraverso il seguente link: ",
     "translation-server": "Vai al server di traduzione",
-    "leave": "Lascia",
-    "really-leave-room": "Vuoi davvero lasciare la stanza?",
     "select-room": "Seleziona la stanza",
     "really-delete-template": "Vuoi davvero eliminare il modello?"
   },
@@ -326,10 +324,6 @@
     "edited": "modificato",
     "new-announcements": "Ci sono nuovi annunci",
     "all-rooms": "Tutte le stanze"
-  },
-  "focus-mode": {
-    "presenter-controls-app": "Il presentatore ti guida attraverso la stanza.",
-    "leave-room": "Lascia spazio"
   },
   "comment-list": {
     "a11y-select-time-3h": "Mostra tutti i messaggi delle ultime 3 ore",

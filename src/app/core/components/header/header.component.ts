@@ -158,18 +158,4 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
-
-  leaveRoom() {
-    const dialogRef = this.dialogService.openDeleteDialog(
-      'leave-room',
-      'dialog.really-leave-room',
-      undefined,
-      'dialog.leave'
-    );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.router.navigateByUrl('user');
-      }
-    });
-  }
 }
