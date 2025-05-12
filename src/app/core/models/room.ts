@@ -33,7 +33,7 @@ export class Room {
 
   static fromGql(roomData: RoomGql) {
     const room = new Room();
-    room.id = roomData.id;
+    room.id = roomData.id.replaceAll('-', '');
     room.shortId = roomData.shortId;
     room.name = roomData.name;
     room.description = roomData.description ?? '';
