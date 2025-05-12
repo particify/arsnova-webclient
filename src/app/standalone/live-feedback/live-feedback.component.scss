@@ -78,12 +78,12 @@ $bar-margin-mobile: min(6px, 1vh);
   }
 }
 
-@media (max-width: 1000px) {
+@include lt-md {
   @include desktop($bottom-bar-height: $mobile-bar-height);
   @include mobile($bar-height-mobile: max(30px, 6vh), $min-button-height: 40px);
 }
 
-@media (min-width: 1001px) {
+@include gt-md {
   @include desktop($bottom-bar-height: 0px);
   @include mobile($bar-height-mobile: min(40px, 8vh), $min-button-height: 60px);
 }

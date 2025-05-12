@@ -10,18 +10,6 @@
   display: flex;
 }
 
-@media (min-width: 1001px) {
-  .icon-container {
-    flex-direction: column;
-  }
-
-  .list {
-    left: 0;
-    top: $spacing-4;
-    position: absolute;
-  }
-}
-
 .badge {
   position: absolute;
   top: 0;
@@ -72,7 +60,11 @@
   position: relative;
 }
 
-@media (min-width: 1001px) {
+@include gt-md {
+  .icon-container {
+    flex-direction: column;
+  }
+
   .text {
     display: none;
   }
@@ -83,9 +75,11 @@
   }
 
   .list {
+    left: 0;
+    top: 0;
+    position: absolute;
     padding: 0.5em 0 1em;
     height: calc(var(--full-height) - $bar-height);
-    top: 0;
     border-radius: 0;
     border-right: 1px solid var(--grey-light);
   }
@@ -106,7 +100,7 @@
   }
 }
 
-@media (max-width: 1000px) {
+@include lt-md {
   .nav {
     bottom: 0;
     width: 100vw;
@@ -138,7 +132,7 @@
     display: none !important;
   }
 
-  @media (min-width: 600px) {
+  @include gt-xs {
     .item {
       flex-direction: row;
       padding: 16px 12px;
@@ -153,7 +147,7 @@
     }
   }
 
-  @media (max-width: 599px) {
+  @include xs {
     .item {
       padding: 8px 12px;
       flex-direction: column;

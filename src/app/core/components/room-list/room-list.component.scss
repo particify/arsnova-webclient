@@ -99,6 +99,10 @@
   app-list-badge {
     display: none;
   }
+
+  .active-label * {
+    display: none;
+  }
 }
 
 .button-container {
@@ -131,11 +135,5 @@
   .search-input {
     font-size: 14px;
     width: 150px;
-  }
-}
-
-@media (max-width: 599px) {
-  .active-label * {
-    display: none;
   }
 }

@@ -44,19 +44,19 @@ $drawer-width: 73px;
   background-color: var(--background);
 }
 
-@media (max-width: 599px) {
+@include xs {
   .mat-drawer-container {
     height: calc(var(--full-height) - $mobile-bar-height);
   }
 }
 
-@media (min-width: 600px) {
+@include gt-xs {
   .mat-drawer-container {
     height: calc(var(--full-height) - $bar-height);
   }
 }
 
-@media (min-width: 1001px) {
+@include gt-md {
   .mat-drawer {
     width: $drawer-width;
   }
@@ -67,7 +67,7 @@ $drawer-width: 73px;
   }
 }
 
-@media (max-width: 1000px) {
+@include lt-md {
   .mat-drawer {
     width: 100vw;
     height: $mobile-bar-height;

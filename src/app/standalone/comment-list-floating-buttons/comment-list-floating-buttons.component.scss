@@ -53,7 +53,7 @@
   bottom: calc(4vw + 10px);
 }
 
-@media (max-width: 999px) {
+@include lt-md {
   // Padding (4vw) + nav bar height (56px)
   .scroll-top {
     bottom: calc(4vw + 56px);
