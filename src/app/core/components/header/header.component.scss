@@ -27,7 +27,7 @@
   color: var(--on-surface);
 }
 
-@media (max-width: 599px) {
+@include xs {
   .presentation-button-container {
     display: none !important;
   }
@@ -37,13 +37,13 @@
   }
 }
 
-@media (max-width: 999px) {
+@include lt-md {
   .desktop-action-container {
     display: none !important;
   }
 }
 
-@media (min-width: 1000px) {
+@include gt-md {
   .mobile-action-container {
     display: none;
   }

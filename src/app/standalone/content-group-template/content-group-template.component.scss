@@ -35,7 +35,7 @@
   background-image: linear-gradient(to right, transparent, var(--surface));
 }
 
-@media (max-width: 599px) {
+@include xs {
   .mat-mdc-standard-chip {
     --mdc-chip-label-text-size: 12px;
   }

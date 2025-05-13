@@ -48,7 +48,7 @@ body {
   display: none !important;
 }
 
-@media (max-width: 1000px) {
+@include lt-md {
   .hide-lg {
     display: none;
   }
@@ -338,7 +338,7 @@ div {
   outline: none;
 }
 
-@media (min-width: 1000px) {
+@include gt-md {
   .dialog-margin {
     .mat-mdc-dialog-container {
       margin-left: $navigation-rail-width;
@@ -891,7 +891,7 @@ div {
   }
 }
 
-@media (min-width: 1000px) {
+@include gt-md {
   .mat-mdc-menu-panel.series-menu {
     position: absolute;
     left: $navigation-rail-width;

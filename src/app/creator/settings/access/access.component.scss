@@ -11,7 +11,7 @@
 }
 
 // This is needed to prevent trailing space when row wrap
-@media (max-width: 600px) {
+@include xs {
   .email-input {
     margin-right: 0 !important;
   }

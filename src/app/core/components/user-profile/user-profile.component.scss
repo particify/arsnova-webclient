@@ -1,3 +1,5 @@
+@use '../../../../variables' as *;
+
 .mat-accordion {
   width: 100%;
   max-width: 800px;
@@ -20,7 +22,7 @@
   margin-top: 12px;
 }
 
-@media (max-width: 600px) {
+@include xs {
   .input-field {
     width: calc(100% - 40px);
   }
@@ -30,7 +32,7 @@
   }
 }
 
-@media (min-width: 600px) {
+@include gt-xs {
   .input-field {
     width: calc(50% - 28px);
   }
