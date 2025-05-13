@@ -241,8 +241,6 @@
     "community-lang": "This language is maintained by the community and therefore may be incomplete or outdated.",
     "contribute-to-lang": "You can contribute to the translation via the following link: ",
     "translation-server": "Go to translation server",
-    "leave": "Leave",
-    "really-leave-room": "Do you really want to leave the room?",
     "select-room": "Select room",
     "really-delete-template": "Do you really want to delete the template?"
   },
@@ -307,10 +305,6 @@
     "all-rooms": "All rooms",
     "no-announcements": "There are no announcements.",
     "filter": "Filter"
-  },
-  "focus-mode": {
-    "presenter-controls-app": "The presenter guides you trough the room.",
-    "leave-room": "Leave room"
   },
   "comment-list": {
     "a11y-sort-time": "Sorts posts by time",

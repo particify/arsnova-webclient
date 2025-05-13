@@ -1,211 +1,196 @@
 <mat-toolbar class="mat-elevation-z2" fxLayoutAlign="center">
-  @if (!room?.focusModeEnabled || !hasRole(UserRole.PARTICIPANT)) {
-    <mat-toolbar-row fxLayoutAlign="start center">
-      @if (router.url === '/') {
-        <lib-extension-point
-          extensionId="branding-logo"
-          [extensionData]="{ headerPlacement: true }"
-        ></lib-extension-point>
+  <mat-toolbar-row fxLayoutAlign="start center">
+    @if (router.url === '/') {
+      <lib-extension-point
+        extensionId="branding-logo"
+        [extensionData]="{ headerPlacement: true }"
+      ></lib-extension-point>
+    }
+    @if (title()) {
+      @if (!!role && room) {
+        <div
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxLayoutGap="8px"
+          class="title"
+          ngStyle.md="width: 30%"
+          ngStyle.sm="width: 40%"
+          style="width: 50%"
+          data-testid="page-title"
+        >
+          @if (title() !== room.name) {
+            <div
+              class="room-name ellipsis"
+              [ngStyle.lt-xl]="
+                'max-width:' + (title().length > 40 ? '35%' : '100%')
+              "
+            >
+              <app-text-overflow-clip
+                class="ellipsis"
+                [text]="room.name"
+              ></app-text-overflow-clip>
+              <mat-icon>chevron_right</mat-icon>
+            </div>
+          }
+          <app-text-overflow-clip
+            class="ellipsis"
+            [text]="title()"
+          ></app-text-overflow-clip>
+        </div>
+      } @else if (router.url !== '/') {
+        <span class="title" data-testid="page-title">{{ title() }}</span>
       }
-      @if (title()) {
-        @if (!!role && room) {
+    }
+    <span class="fill-remaining-space"></span>
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+      @if (!!role && !hasRole(UserRole.PARTICIPANT)) {
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+          <div class="mobile-action-container">
+            @if (!isPreview) {
+              <button mat-icon-button [matMenuTriggerFor]="roomMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            }
+            @if (isPreview) {
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="switchRole()"
+                aria-labelledby="switch-role"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            }
+          </div>
+          <mat-menu #roomMenu="matMenu">
+            <button
+              mat-menu-item
+              tabindex="0"
+              (click)="switchRole()"
+              aria-labelledby="switch-role"
+            >
+              <mat-icon>preview</mat-icon>
+              {{ 'header.preview' | transloco }}
+            </button>
+            @if (hasRole(UserRole.OWNER)) {
+              <button mat-menu-item tabindex="0" (click)="goToSettings()">
+                <mat-icon>settings</mat-icon>
+                <span>{{ 'header.room-settings' | transloco }}</span>
+              </button>
+            }
+          </mat-menu>
           <div
             fxLayout="row"
-            fxLayoutAlign="start center"
-            fxLayoutGap="8px"
-            class="title"
-            ngStyle.md="width: 30%"
-            ngStyle.sm="width: 40%"
-            style="width: 50%"
-            data-testid="page-title"
+            fxLayoutGap="10px"
+            class="desktop-action-container"
           >
-            @if (title() !== room.name) {
-              <div
-                class="room-name ellipsis"
-                [ngStyle.lt-xl]="
-                  'max-width:' + (title().length > 40 ? '35%' : '100%')
-                "
-              >
-                <app-text-overflow-clip
-                  class="ellipsis"
-                  [text]="room.name"
-                ></app-text-overflow-clip>
-                <mat-icon>chevron_right</mat-icon>
-              </div>
-            }
-            <app-text-overflow-clip
-              class="ellipsis"
-              [text]="title()"
-            ></app-text-overflow-clip>
-          </div>
-        } @else if (router.url !== '/') {
-          <span class="title" data-testid="page-title">{{ title() }}</span>
-        }
-      }
-      <span class="fill-remaining-space"></span>
-      <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-        @if (!!role && !hasRole(UserRole.PARTICIPANT)) {
-          <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-            <div class="mobile-action-container">
-              @if (!isPreview) {
-                <button mat-icon-button [matMenuTriggerFor]="roomMenu">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-              }
-              @if (isPreview) {
-                <button
-                  mat-icon-button
-                  color="primary"
-                  (click)="switchRole()"
-                  aria-labelledby="switch-role"
-                >
-                  <mat-icon>edit</mat-icon>
-                </button>
-              }
-            </div>
-            <mat-menu #roomMenu="matMenu">
-              <button
-                mat-menu-item
-                tabindex="0"
-                (click)="switchRole()"
-                aria-labelledby="switch-role"
-              >
-                <mat-icon>preview</mat-icon>
-                {{ 'header.preview' | transloco }}
-              </button>
-              @if (hasRole(UserRole.OWNER)) {
-                <button mat-menu-item tabindex="0" (click)="goToSettings()">
-                  <mat-icon>settings</mat-icon>
-                  <span>{{ 'header.room-settings' | transloco }}</span>
-                </button>
-              }
-            </mat-menu>
-            <div
-              fxLayout="row"
-              fxLayoutGap="10px"
-              class="desktop-action-container"
-            >
-              <button
-                mat-button
-                color="{{ isPreview ? 'primary' : '' }}"
-                (click)="switchRole()"
-                aria-labelledby="switch-role"
-              >
-                <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
-                {{
-                  (isPreview ? 'header.editing-view' : 'header.preview')
-                    | transloco
-                }}
-              </button>
-              @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
-                <button
-                  [disabled]="isPreview"
-                  mat-button
-                  (click)="goToSettings()"
-                >
-                  <mat-icon>settings</mat-icon>
-                  {{ 'header.room-settings' | transloco }}
-                </button>
-              }
-            </div>
-            @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
-              <div class="presentation-button-container">
-                <app-split-button
-                  [label]="'header.present' | transloco"
-                  [icon]="'jamboard_kiosk'"
-                  [menuRef]="presentationMenu"
-                  [showSplitButton]="showOverlayLink"
-                  [disabled]="isPreview"
-                  (clickedPrimary)="presentCurrentView()"
-                ></app-split-button>
-                <mat-menu #presentationMenu="matMenu" xPosition="before">
-                  @if (showOverlayLink || !openPresentationDirectly) {
-                    <button mat-menu-item (click)="presentCurrentView(true)">
-                      <mat-icon class="menu-icon">jamboard_kiosk</mat-icon>
-                      <app-menu-item-details
-                        [label]="'header.present' | transloco"
-                        [description]="'header.present-description' | transloco"
-                      ></app-menu-item-details>
-                    </button>
-                    @if (showOverlayLink && room) {
-                      <button mat-menu-item style="padding: 0">
-                        <lib-extension-point
-                          extensionId="overlay-menu-link"
-                          [extensionData]="{ shortId: room.shortId }"
-                        ></lib-extension-point>
-                      </button>
-                    }
-                    <lib-extension-point
-                      extensionId="present-in-new-tab"
-                      (extensionEvent)="checkIfOpenPresentationDirectly($event)"
-                    ></lib-extension-point>
-                  }
-                </mat-menu>
-              </div>
-              <div></div>
-            }
-          </div>
-          <mat-divider
-            [vertical]="true"
-            class="room-actions-divider"
-          ></mat-divider>
-        }
-        <div fxLayoutGap="16px" fxLayoutAlign="center center">
-          @if (announcementState) {
             <button
-              mat-icon-button
-              (click)="showNews()"
-              class="icon-badge"
-              [matTooltip]="
-                (announcementState.new > 0
-                  ? 'announcement.new-announcements'
-                  : 'announcement.announcements'
-                ) | transloco
-              "
-              matBadge="{{ announcementState.new }}"
-              matBadgeColor="accent"
-              [matBadgeHidden]="announcementState.new === 0"
-              appHotkey="a"
+              mat-button
+              color="{{ isPreview ? 'primary' : '' }}"
+              (click)="switchRole()"
+              aria-labelledby="switch-role"
             >
-              <mat-icon> notifications </mat-icon>
+              <mat-icon>{{ isPreview ? 'edit' : 'preview' }}</mat-icon>
+              {{
+                (isPreview ? 'header.editing-view' : 'header.preview')
+                  | transloco
+              }}
             </button>
+            @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
+              <button
+                [disabled]="isPreview"
+                mat-button
+                (click)="goToSettings()"
+              >
+                <mat-icon>settings</mat-icon>
+                {{ 'header.room-settings' | transloco }}
+              </button>
+            }
+          </div>
+          @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
+            <div class="presentation-button-container">
+              <app-split-button
+                [label]="'header.present' | transloco"
+                [icon]="'jamboard_kiosk'"
+                [menuRef]="presentationMenu"
+                [showSplitButton]="showOverlayLink"
+                [disabled]="isPreview"
+                (clickedPrimary)="presentCurrentView()"
+              ></app-split-button>
+              <mat-menu #presentationMenu="matMenu" xPosition="before">
+                @if (showOverlayLink || !openPresentationDirectly) {
+                  <button mat-menu-item (click)="presentCurrentView(true)">
+                    <mat-icon class="menu-icon">jamboard_kiosk</mat-icon>
+                    <app-menu-item-details
+                      [label]="'header.present' | transloco"
+                      [description]="'header.present-description' | transloco"
+                    ></app-menu-item-details>
+                  </button>
+                  @if (showOverlayLink && room) {
+                    <button mat-menu-item style="padding: 0">
+                      <lib-extension-point
+                        extensionId="overlay-menu-link"
+                        [extensionData]="{ shortId: room.shortId }"
+                      ></lib-extension-point>
+                    </button>
+                  }
+                  <lib-extension-point
+                    extensionId="present-in-new-tab"
+                    (extensionEvent)="checkIfOpenPresentationDirectly($event)"
+                  ></lib-extension-point>
+                }
+              </mat-menu>
+            </div>
+            <div></div>
           }
+        </div>
+        <mat-divider
+          [vertical]="true"
+          class="room-actions-divider"
+        ></mat-divider>
+      }
+      <div fxLayoutGap="16px" fxLayoutAlign="center center">
+        @if (announcementState) {
           <button
             mat-icon-button
-            class="user-button primary-variant"
-            aria-labelledby="room-label"
-            id="menu-button"
-            data-testid="main-menu-button"
-            appHotkey="9"
-            [appHotkeyTitle]="'header.menu' | transloco"
-            [ngClass]="{ guest: isGuest() }"
-            fxLayoutAlign="center center"
-            (click)="toggleDrawer()"
+            (click)="showNews()"
+            class="icon-badge"
+            [matTooltip]="
+              (announcementState.new > 0
+                ? 'announcement.new-announcements'
+                : 'announcement.announcements'
+              ) | transloco
+            "
+            matBadge="{{ announcementState.new }}"
+            matBadgeColor="accent"
+            [matBadgeHidden]="announcementState.new === 0"
+            appHotkey="a"
           >
-            @if (isGuest()) {
-              <mat-icon>person_outline</mat-icon>
-            }
-            @if (!isGuest()) {
-              <span>{{ userCharacter }}</span>
-            }
+            <mat-icon> notifications </mat-icon>
           </button>
-        </div>
+        }
+        <button
+          mat-icon-button
+          class="user-button primary-variant"
+          aria-labelledby="room-label"
+          id="menu-button"
+          data-testid="main-menu-button"
+          appHotkey="9"
+          [appHotkeyTitle]="'header.menu' | transloco"
+          [ngClass]="{ guest: isGuest() }"
+          fxLayoutAlign="center center"
+          (click)="toggleDrawer()"
+        >
+          @if (isGuest()) {
+            <mat-icon>person_outline</mat-icon>
+          }
+          @if (!isGuest()) {
+            <span>{{ userCharacter }}</span>
+          }
+        </button>
       </div>
-    </mat-toolbar-row>
-  } @else {
-    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
-      <span class="focus-mode-hint">{{
-        'focus-mode.presenter-controls-app' | transloco
-      }}</span>
-      <button
-        mat-icon-button
-        (click)="leaveRoom()"
-        [matTooltip]="'focus-mode.leave-room' | transloco"
-      >
-        <mat-icon color="warn">exit_to_app</mat-icon>
-      </button>
-    </mat-toolbar-row>
-  }
+    </div>
+  </mat-toolbar-row>
 </mat-toolbar>
 
 <div class="visually-hidden">

@@ -241,8 +241,6 @@
     "community-lang": "Diese Sprache wird von der Community gepflegt und kann daher unvollständig oder veraltet sein.",
     "contribute-to-lang": "Über den folgenden Link können Sie zur Übersetzung beitragen: ",
     "translation-server": "Zum Übersetzungsserver",
-    "leave": "Verlassen",
-    "really-leave-room": "Willst du den Raum wirklich verlassen?",
     "select-room": "Raum auswählen",
     "really-delete-template": "Willst du die Vorlage wirklich löschen?"
   },
@@ -307,10 +305,6 @@
     "all-rooms": "Alle Räume",
     "no-announcements": "Es gibt keine Ankündigungen.",
     "filter": "Filter"
-  },
-  "focus-mode": {
-    "presenter-controls-app": "Du wirst durch den Raum geführt.",
-    "leave-room": "Raum verlassen"
   },
   "comment-list": {
     "a11y-sort-time": "Sortiert Beiträge nach der Uhrzeit",
