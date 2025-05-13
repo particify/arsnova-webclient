@@ -61,7 +61,7 @@
 .body {
   text-align: start;
   color: var(--on-surface);
-  word-break: break-word;
+  overflow-wrap: anywhere;
   hyphens: auto;
   min-height: 2em;
   line-height: 150%;
