@@ -37,7 +37,6 @@ test.describe('create room with question series', () => {
     page,
   }) => {
     await contentGroupOverview.createContent();
-    await expect(page).toHaveTitle(/Create content/);
     await contentCreation.createChoiceContent(
       'My single choice content',
       ['a', 'b', 'c', 'd'],
@@ -91,7 +90,6 @@ test.describe('create room with question series', () => {
       'My flashcard content',
       'Back of flashcard'
     );
-    await page.goBack();
     expect(await contentGroupOverview.getContents()).toHaveLength(16);
     await expect(page.getByText('16 contents', { exact: true })).toBeVisible();
     await expect(
@@ -106,7 +104,6 @@ test.describe('create room with question series', () => {
       ['a', 'b', 'c', 'd'],
       ['b']
     );
-    await page.goBack();
     await contentGroupOverview.duplicateContent('My choice content', 0);
     expect(await contentGroupOverview.getContents()).toHaveLength(2);
   });
@@ -119,7 +116,6 @@ test.describe('create room with question series', () => {
       ['b']
     );
     await contentCreation.createBinaryContent('My binary content');
-    await page.goBack();
     await contentGroupOverview.copyContentToNewGroup(
       'My choice content',
       0,
@@ -142,7 +138,6 @@ test.describe('create room with question series', () => {
     await contentCreation.createShortAnswerContent('My short answer content', [
       'abc',
     ]);
-    await page.goBack();
     await contentGroupOverview.moveContentToNewGroup(
       'My choice content',
       0,
@@ -175,7 +170,7 @@ test.describe('create room with question series', () => {
       page.getByText('series is hidden for participants')
     ).toBeVisible();
     await expect(
-      page.getByRole('button', { name: 'Publish question series' })
+      page.getByRole('button', { name: 'Publish', exact: true })
     ).toBeVisible();
     await page.goBack();
     await roomOverviewPage.publishQuestionSeries('My question series');
@@ -186,7 +181,6 @@ test.describe('create room with question series', () => {
     await contentGroupOverview.createContent();
     await contentCreation.createTextContent('My text content');
     await contentCreation.createTextContent('Another text content');
-    await page.goBack();
     await expect(page.getByText('published up to here')).toBeHidden();
     await contentGroupOverview.usePublishingModeRange();
     await expect(page.getByText('published up to here')).toBeVisible();

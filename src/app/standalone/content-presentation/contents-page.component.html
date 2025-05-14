@@ -74,22 +74,21 @@
         [settings]="settings"
         [startIndex]="currentIndex"
         [hideControls]="true"
-        [attributions]="attributions"
         [language]="room.language"
         [isLiveMode]="isLiveMode()"
         (indexChanged)="updateURL($event)"
-        (answerCountUpdated)="updateCounter($event)"
       >
       </app-content-stepper>
     }
     @if (showLeaderboard) {
-      <app-leaderboard-page
+      <app-content-group-leaderboard
+        fxFill
         [contentGroup]="contentGroup"
         [room]="room"
-        [showCard]="false"
         [showAll]="true"
+        [allowScrolling]="true"
         [ngClass]="{ 'over-control-bar': !noControlBar }"
-      ></app-leaderboard-page>
+      ></app-content-group-leaderboard>
     }
   </div>
 </div>

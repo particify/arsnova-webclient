@@ -1,14 +1,20 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { Subject } from 'rxjs';
 import { Content } from '@app/core/models/content';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -23,6 +29,7 @@ import { ContentForm } from '@app/creator/content-group/content-editing/content-
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { Room } from '@app/core/models/room';
+import { ContentGroupPageService } from '@app/creator/content-group/content-group-page.service';
 
 interface ContentFormat {
   type: ContentType;
@@ -31,14 +38,14 @@ interface ContentFormat {
 }
 
 @Component({
-  selector: 'app-content-editing-page',
-  templateUrl: './content-editing-page.component.html',
-  styleUrls: ['./content-editing-page.component.scss'],
+  selector: 'app-content-editing',
+  templateUrl: './content-editing.component.html',
+  styleUrls: ['./content-editing.component.scss'],
   standalone: false,
 })
-export class ContentEditingPageComponent
+export class ContentEditingComponent
   extends FormComponent
-  implements OnInit
+  implements OnInit, OnChanges
 {
   @ViewChild('ContentForm') private contentForm!: ContentForm;
   @ViewChild('questionInput') bodyInput!: ElementRef;
@@ -49,17 +56,15 @@ export class ContentEditingPageComponent
   @Input({ required: true }) room!: Room;
   @Input() isEditMode = false;
   @Input() contentId?: string;
+  @Input() fixedHeight = false;
+  @Input() content?: Content;
 
   question = '';
   ContentType = ContentType;
   formats: ContentFormat[] = [];
   selectedFormat?: ContentFormat;
 
-  attachmentData: any;
-  linkAttachmentsSubject: Subject<string> = new Subject<string>();
-
-  flipped = false;
-  content?: Content;
+  isPreview = false;
   textContainsImage = false;
   HintType = HintType;
   abstentionsAllowed = true;
@@ -78,9 +83,16 @@ export class ContentEditingPageComponent
     private contentGroupService: ContentGroupService,
     private notificationService: NotificationService,
     private contentPublishService: ContentPublishService,
-    protected formService: FormService
+    protected formService: FormService,
+    private contentGroupPageService: ContentGroupPageService
   ) {
     super(formService);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.content?.previousValue && changes.content?.currentValue) {
+      this.initData();
+    }
   }
 
   ngOnInit() {
@@ -100,48 +112,46 @@ export class ContentEditingPageComponent
       }
     }
     this.selectedFormat = this.formats[0];
-    if (this.isEditMode && this.contentId) {
-      this.contentService
-        .getContent(this.room.id, this.contentId)
-        .subscribe((content) => {
-          this.content = content;
-          this.question = content.body;
-          this.abstentionsAllowed = !!this.content?.abstentionsAllowed;
-          this.duration = this.content.duration || undefined;
-          this.isEditMode = true;
-          const format = this.formats.find(
-            (c) => c.name === this.content?.format.toLowerCase()
-          );
-          if (format) {
-            this.selectedFormat = format;
-          }
-          this.prepareAttachmentData();
-          if (
-            this.selectedFormat &&
-            [
-              ContentType.TEXT,
-              ContentType.FLASHCARD,
-              ContentType.SLIDE,
-            ].includes(this.selectedFormat.type)
-          ) {
-            this.isLoading = false;
-          } else {
-            this.contentService
-              .getAnswer(content.roomId, content.id)
-              .subscribe((answer) => {
-                this.isAnswered = answer.roundStatistics[0].answerCount > 0;
-                this.isLoading = false;
-              });
-          }
-        });
+    if (this.isEditMode) {
+      this.initData();
     } else {
-      this.prepareAttachmentData();
       this.isLoading = false;
     }
 
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
+  }
+
+  private initData() {
+    if (!this.content) {
+      return;
+    }
+    this.question = this.content.body;
+    this.abstentionsAllowed = !!this.content?.abstentionsAllowed;
+    this.duration = this.content.duration || undefined;
+    this.isEditMode = true;
+    const format = this.formats.find(
+      (c) => c.name === this.content?.format.toLowerCase()
+    );
+    if (format) {
+      this.selectedFormat = format;
+    }
+    if (
+      this.selectedFormat &&
+      [ContentType.TEXT, ContentType.FLASHCARD, ContentType.SLIDE].includes(
+        this.selectedFormat.type
+      )
+    ) {
+      this.isLoading = false;
+    } else {
+      this.contentService
+        .getAnswer(this.content.roomId, this.content.id)
+        .subscribe((answer) => {
+          this.isAnswered = answer.roundStatistics[0].answerCount > 0;
+          this.isLoading = false;
+        });
+    }
   }
 
   private prepareContent(): boolean {
@@ -163,11 +173,11 @@ export class ContentEditingPageComponent
   }
 
   togglePreview() {
-    if (this.flipped) {
-      this.flipBack();
+    if (this.isPreview) {
+      this.showEditing();
     } else {
       if (this.prepareContent()) {
-        this.flipped = true;
+        this.isPreview = true;
       }
     }
   }
@@ -180,30 +190,33 @@ export class ContentEditingPageComponent
     if (!this.prepareContent() || !this.content) {
       return;
     }
-    if (this.flipped && !this.isEditMode) {
-      this.flipBack();
-    }
     this.disableForm();
     if (!this.isEditMode) {
       this.contentService.addContent(this.content).subscribe(
         (createdContent) => {
-          this.attachmentData.refIf = createdContent.id;
-          this.linkAttachmentsSubject.next(createdContent.id);
           this.contentGroupService
             .addContentToGroup(this.room.id, this.seriesName, createdContent.id)
             .subscribe();
           this.contentGroupService.saveGroupInMemoryStorage(this.seriesName);
           this.afterCreation();
+          if (this.isPreview) {
+            this.showEditing();
+          }
+          this.contentGroupPageService.updateCreatedContent(createdContent);
         },
         () => {
           this.enableForm();
+          if (this.isPreview) {
+            this.showEditing();
+          }
         }
       );
     } else {
       this.contentService.updateContent(this.content).subscribe(
-        (updateContent) => {
-          this.content = updateContent;
-          window.history.back();
+        (updatedContent) => {
+          this.content = updatedContent;
+          this.contentGroupPageService.updateEditedContent(updatedContent);
+          this.enableForm();
           const msg = this.translateService.translate(
             'creator.content.changes-made'
           );
@@ -238,19 +251,9 @@ export class ContentEditingPageComponent
     }, 300);
   }
 
-  private flipBack() {
-    this.flipped = false;
+  private showEditing() {
+    this.isPreview = false;
     this.announceService.announce('creator.content.a11y-back-in-creation');
-  }
-
-  private prepareAttachmentData() {
-    this.attachmentData = {
-      eventsSubject: this.linkAttachmentsSubject,
-      refType: 'content',
-      detailedView: false,
-      refId: this.isEditMode ? this.content?.id : null,
-      role: UserRole.OWNER,
-    };
   }
 
   private setContent(): boolean {

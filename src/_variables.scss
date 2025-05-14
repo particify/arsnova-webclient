@@ -46,6 +46,8 @@ $screen-xs-max: 599px;
 $screen-sm-min: 600px;
 $screen-sm-max: 999px;
 $screen-md-min: 1000px;
+$screen-md-max: 1279px;
+$screen-lg-min: 1280px;
 $screen-xl-min: 1600px;
 
 @mixin xs {
@@ -68,6 +70,18 @@ $screen-xl-min: 1600px;
 
 @mixin gt-md {
   @media (min-width: $screen-md-min) {
+    @content;
+  }
+}
+
+@mixin lt-lg {
+  @media (max-width: $screen-md-max) {
+    @content;
+  }
+}
+
+@mixin gt-lg {
+  @media (min-width: $screen-lg-min) {
     @content;
   }
 }

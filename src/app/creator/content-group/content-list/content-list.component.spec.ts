@@ -4,6 +4,7 @@ import { ContentListComponent } from './content-list.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import {
+  ActivatedRouteStub,
   MockEventService,
   MockGlobalStorageService,
   MockNotificationService,
@@ -12,7 +13,7 @@ import {
 import { ContentService } from '@app/core/services/http/content.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { of } from 'rxjs';
@@ -31,6 +32,7 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { ContentState } from '@app/core/models/content-state';
 import { EventService } from '@app/core/services/util/event.service';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 describe('ContentListComponent', () => {
   let component: ContentListComponent;
@@ -93,6 +95,12 @@ describe('ContentListComponent', () => {
     of(contentGroupDefault)
   );
 
+  const mockPresentationService = jasmine.createSpyObj('PresentationService', [
+    'updateRoundState',
+  ]);
+
+  const activatedRouteStub = new ActivatedRouteStub();
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ContentListComponent, A11yIntroPipe, A11yRenderedBodyPipe],
@@ -132,6 +140,14 @@ describe('ContentListComponent', () => {
         {
           provide: GlobalStorageService,
           useClass: MockGlobalStorageService,
+        },
+        {
+          provide: PresentationService,
+          useValue: mockPresentationService,
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: activatedRouteStub,
         },
       ],
       imports: [getTranslocoModule(), MatMenuModule],

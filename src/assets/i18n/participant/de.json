@@ -107,8 +107,6 @@
     "content-groups-description": "Mache mit bei Quizzes, Umfragen und mehr."
   },
   "statistic": {
-    "a11y-answer-indicator": "Markiert die richtige oder richtigen Antworten grün.",
-    "a11y-show-chart": "Zeigt ein Balkendiagramm, in welchem die Auswertung dargestellt wird.",
     "answer-statistic": "Antwortstatistik",
     "percentage": "Prozent",
     "answer-indicator": "Zeigt die richtigen Antworten",

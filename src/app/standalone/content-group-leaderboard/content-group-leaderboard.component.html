@@ -1,0 +1,16 @@
+<div class="header">
+  <mat-icon class="title-icon">emoji_events</mat-icon>
+  <span class="title">{{ 'content.leaderboard' | transloco }}</span>
+</div>
+@if (isLoading) {
+  <app-loading-indicator></app-loading-indicator>
+}
+@if (!isLoading) {
+  <div class="leaderboard">
+    <app-leaderboard
+      [leaderboardItems]="leaderboardItems"
+      [allowScrolling]="allowScrolling"
+      [showAll]="showAll"
+    ></app-leaderboard>
+  </div>
+}

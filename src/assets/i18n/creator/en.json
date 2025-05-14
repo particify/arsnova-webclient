@@ -228,8 +228,7 @@
     "group-progress-info": "On average, {{percent}} % of the answers are correct. {{abstentions}} % have abstained.",
     "locked": "Locked",
     "lock": "Lock",
-    "publish-content-group": "Publish question series",
-    "publish-content-group-info": "Participants can only see published question series.",
+    "publish-info": "Participants can only see published question series.",
     "live-mode": "Live mode",
     "live-mode-info": "Contents are presented live and started and stopped manually or with a timer. Once you navigate to the next content in the presentation, it is published.",
     "publishing-modes-not-available-in-live-mode": "This setting is not available in live mode.",
@@ -244,7 +243,8 @@
     "publishing-index-info-live": "Published up to the content {{index}}. Start the next content to publish it.",
     "reset-answers-to-disable-setting": "Reset the results for this series of questions to deactivate this setting.",
     "reset-group-results": "Reset results",
-    "stop-content-to-delete-answers": "Stop content to delete the answers."
+    "stop-content-to-delete-answers": "Stop content to delete the answers.",
+    "back-to-series": "Back to question series"
   },
   "survey": {
     "a11y-stop-survey": "Stops the live feedback.",

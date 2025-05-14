@@ -210,10 +210,9 @@
     "group-type-survey": "Encuesta",
     "group-type-flashcards": "Tarjetas de memoria",
     "timer-only-enabled-in-live-mode": "El temporizador sólo puede utilizarse en modo directo. El modo en directo puede activarse en los ajustes de la serie de preguntas.",
-    "publish-content-group": "Publicar serie de preguntas",
     "live": "En directo",
     "answering-finished": "Finalizada",
-    "publish-content-group-info": "Los participantes sólo pueden ver las series de preguntas publicadas.",
+    "publish-info": "Los participantes sólo pueden ver las series de preguntas publicadas.",
     "live-mode": "Modo en directo",
     "group-is-hidden-for-participants": "La serie de preguntas está oculta para los participantes.",
     "publishing-modes-not-available-in-live-mode": "Este ajuste no está disponible en el modo en directo.",
@@ -242,7 +241,8 @@
     "publishing-mode-up-to": "Gama",
     "publishing-mode-description-all": "Todos los contenidos se publican para los participantes.",
     "publishing-mode-description-up-to": "Se publica todo hasta el contenido seleccionado para los participantes.",
-    "format-short_answer-description": "Los participantes responden con una entrada de texto. Se definen una o varias respuestas correctas."
+    "format-short_answer-description": "Los participantes responden con una entrada de texto. Se definen una o varias respuestas correctas.",
+    "back-to-series": "Volver a la serie de preguntas"
   },
   "survey": {
     "a11y-stop-survey": "Detiene la retroalimentación en vivo.",

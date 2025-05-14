@@ -1,11 +1,14 @@
 <div
   fxLayout="column"
-  [ngClass]="{ 'flashcard-container': format === ContentType.FLASHCARD }"
   fxLayoutAlign="space-between"
+  class="results-container"
+  [style]="format === ContentType.WORDCLOUD ? 'position: relative' : ''"
 >
   @if ([ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) > -1) {
     <div tabindex="-1" [appAutofocus] class="visually-hidden">
-      {{ 'statistic.a11y-message-type-info' | transloco: { index: index + 1 } }}
+      {{
+        'statistic.a11y-message-type-info' | transloco: { index: contentIndex }
+      }}
     </div>
   }
   @if (isStandalone) {
@@ -16,101 +19,81 @@
       appLangContext
       appDirContext
     ></app-rendered-text>
-  }
-  @if ([ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1) {
-    <div>
+    @if ([ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1) {
+      @if (isPresentation) {
+        <div hidden>
+          @if (!survey) {
+            <button
+              (click)="toggleCorrect()"
+              matTooltip="{{ 'statistic.show-correct' | transloco }}"
+              appHotkey="c"
+              [appHotkeyAction]="HotkeyAction.CLICK"
+              [appHotkeyDisabled]="!active"
+              appTrackInteraction="Correct content answer options visibility toggled"
+              [appTrackName]="correctVisible ? 'on' : 'off'"
+            ></button>
+          }
+
+          <button
+            (click)="toggleAnswers()"
+            matTooltip="{{
+              (answersVisible
+                ? 'creator.statistic.hide-results'
+                : 'creator.statistic.show-results'
+              ) | transloco
+            }}"
+            appHotkey=" "
+            [appHotkeyAction]="HotkeyAction.CLICK"
+            [appHotkeyDisabled]="!active"
+            appTrackInteraction="Content results visibility toggled"
+            [appTrackName]="answersVisible ? 'on' : 'off'"
+          ></button>
+        </div>
+      }
       <div
-        [attr.hidden]="isPresentation || null"
-        fxLayout="row wrap"
-        fxLayoutGap="16px"
-        fxLayoutAlign="space-between center"
+        [style]="format !== ContentType.WORDCLOUD ? 'position: relative' : ''"
       >
-        @if (!isLoading && isStandalone) {
-          <div
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            fxLayoutGap="16px"
-            class="count-container"
-          >
-            <app-answer-count
-              tabindex="-1"
-              [count]="responseCounts.answers"
-            ></app-answer-count>
-            @if (responseCounts.abstentions) {
-              <app-count
-                [count]="responseCounts.abstentions"
-                [label]="
-                  (responseCounts.abstentions === 1
-                    ? 'statistic.abstention'
-                    : 'statistic.abstentions'
-                  ) | transloco
-                "
-              ></app-count>
-            }
-          </div>
-        }
-        <div fxLayout="row">
-          <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="8px">
-            @if (isStandalone && !isParticipant) {
-              <button
-                mat-icon-button
-                color="primary"
-                [matTooltip]="'creator.content.edit-content' | transloco"
-                [routerLink]="['..', 'edit', content.id]"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-            }
+        <div
+          style="position: absolute; right: 0"
+          [ngClass]="{ 'corner-button': format === ContentType.WORDCLOUD }"
+          [attr.hidden]="isPresentation || null"
+        >
+          <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="end">
             @if (multipleRounds) {
-              <app-multiple-round-selection
-                [round]="roundsToDisplay"
-                (roundChanged)="changeRound($event)"
-              >
-              </app-multiple-round-selection>
+              <div>
+                <app-multiple-round-selection
+                  class="action-button"
+                  [round]="roundsToDisplay"
+                  (roundChanged)="changeRound($event)"
+                >
+                </app-multiple-round-selection>
+              </div>
             }
-            @if (answersVisible && allowingUnitChange && isStandalone) {
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="toggleVisualizationUnit()"
-                [matTooltip]="
-                  'statistic.' +
-                    (settings.contentVisualizationUnitPercent
-                      ? 'show-absolute'
-                      : 'show-percentage') | transloco
-                "
-                appHotkey="v"
-                [appHotkeyAction]="HotkeyAction.CLICK"
-                [appHotkeyDisabled]="!active"
-                appTrackInteraction="Percentage as chart visualization unit toggled"
-                [appTrackName]="
-                  settings.contentVisualizationUnitPercent ? 'on' : 'off'
-                "
-              >
-                <mat-icon>percent</mat-icon>
-              </button>
+            @if (allowingUnitChange) {
+              <div>
+                <button
+                  mat-mini-fab
+                  class="action-button primary"
+                  (click)="toggleVisualizationUnit()"
+                  [matTooltip]="
+                    'statistic.' +
+                      (settings.contentVisualizationUnitPercent
+                        ? 'show-absolute'
+                        : 'show-percentage') | transloco
+                  "
+                  appHotkey="v"
+                  [appHotkeyAction]="HotkeyAction.CLICK"
+                  [appHotkeyDisabled]="!active"
+                  appTrackInteraction="Percentage as chart visualization unit toggled"
+                  [appTrackName]="
+                    settings.contentVisualizationUnitPercent ? 'on' : 'off'
+                  "
+                >
+                  <mat-icon>percent</mat-icon>
+                </button>
+              </div>
             }
-            @if (answersVisible && !survey && isStandalone) {
-              <button
-                mat-icon-button
-                color="primary"
-                disableRipple
-                (click)="toggleCorrect()"
-                matTooltip="{{ 'statistic.show-correct' | transloco }}"
-                appHotkey="c"
-                [appHotkeyAction]="HotkeyAction.CLICK"
-                [appHotkeyDisabled]="!active"
-                appTrackInteraction="Correct content answer options visibility toggled"
-                [appTrackName]="correctVisible ? 'on' : 'off'"
-              >
-                <mat-icon>playlist_add_check</mat-icon>
-              </button>
-            }
-            @if (
-              answersVisible &&
-              format === ContentType.WORDCLOUD &&
-              !isParticipant
-            ) {
+            @if (format === ContentType.WORDCLOUD) {
               <button
                 mat-icon-button
                 color="primary"
@@ -122,167 +105,125 @@
                   ) | transloco
                 }}"
               >
-                <mat-icon>toc</mat-icon>
-              </button>
-            }
-            @if (isStandalone) {
-              <button
-                id="show-chart-btn"
-                mat-icon-button
-                color="primary"
-                (click)="toggleAnswers()"
-                matTooltip="{{
-                  (answersVisible
-                    ? 'creator.statistic.hide-results'
-                    : 'creator.statistic.show-results'
-                  ) | transloco
-                }}"
-                appHotkey=" "
-                [appHotkeyAction]="HotkeyAction.CLICK"
-                [appHotkeyDisabled]="!active"
-                appTrackInteraction="Content results visibility toggled"
-                [appTrackName]="answersVisible ? 'on' : 'off'"
-              >
-                <mat-icon>insert_chart</mat-icon>
+                <mat-icon>{{
+                  showWordcloudModeration ? 'cloud' : 'toc'
+                }}</mat-icon>
               </button>
             }
           </div>
         </div>
       </div>
-    </div>
+    }
   }
-  @if (format === ContentType.FLASHCARD) {
-    <div>
-      <button
-        [attr.hidden]="isPresentation || null"
-        appHotkey=" "
-        [appHotkeyAction]="HotkeyAction.CLICK"
-        [appHotkeyDisabled]="!active"
-        mat-icon-button
-        color="primary"
-        (click)="toggleAnswers()"
-        [matTooltip]="
-          (answersVisible
-            ? 'creator.statistic.hide-flashcard-back'
-            : 'creator.statistic.show-flashcard-back'
-          ) | transloco
-        "
-      >
-        <mat-icon>fact_check</mat-icon>
-      </button>
+  @if (!isLoading) {
+    <div
+      [ngClass]="{ 'presentation-space': isPresentation }"
+      appLangContext
+      appDirContext
+    >
+      @if ([ContentType.CHOICE, ContentType.BINARY].indexOf(format) !== -1) {
+        <app-statistic-choice
+          [content]="choiceContent"
+          [directShow]="directShow"
+          [showCorrect]="showCorrect"
+          (updateCounterEvent)="updateCounter($event)"
+          [isSurvey]="survey"
+          [isPresentation]="isPresentation"
+          [active]="active"
+          [settings]="settings"
+          [visualizationUnitChanged]="visualizationUnitChanged"
+        ></app-statistic-choice>
+      }
+      @if (format === ContentType.SCALE) {
+        <app-statistic-scale
+          [content]="choiceContent"
+          [directShow]="directShow"
+          (updateCounterEvent)="updateCounter($event)"
+          [isSurvey]="true"
+          [isPresentation]="isPresentation"
+          [active]="active"
+          [settings]="settings"
+          [visualizationUnitChanged]="visualizationUnitChanged"
+          [language]="language"
+        ></app-statistic-scale>
+      }
+      @if (format === ContentType.TEXT) {
+        <app-statistic-text
+          [content]="content"
+          [isPresentation]="isPresentation"
+          [isParticipant]="isParticipant"
+          [directShow]="directShow"
+          (updateCounterEvent)="updateCounter($event)"
+        ></app-statistic-text>
+      }
+      @if (format === ContentType.SORT) {
+        <app-statistic-sort
+          [content]="choiceContent"
+          [isPresentation]="isPresentation"
+          [showCorrect]="showCorrect"
+          [directShow]="directShow"
+          (updateCounterEvent)="updateCounter($event)"
+          [active]="active"
+          [settings]="settings"
+          [visualizationUnitChanged]="visualizationUnitChanged"
+        ></app-statistic-sort>
+      }
+      @if (format === ContentType.WORDCLOUD) {
+        <app-statistic-wordcloud
+          [content]="content"
+          [showModeration]="showWordcloudModeration"
+          [directShow]="directShow"
+          [settings]="settings"
+          (updateCounterEvent)="updateCounter($event)"
+        ></app-statistic-wordcloud>
+      }
+      @if (format === ContentType.PRIORITIZATION) {
+        <app-statistic-prioritization
+          [content]="prioritizationContent"
+          [directShow]="directShow"
+          [settings]="settings"
+          [indexChanged]="indexChanged"
+          [isPresentation]="isPresentation"
+          [active]="active"
+          (updateCounterEvent)="updateCounter($event)"
+          [isCreator]="!isParticipant"
+          [visualizationUnitChanged]="visualizationUnitChanged"
+        ></app-statistic-prioritization>
+      }
+      @if (format === ContentType.NUMERIC) {
+        <app-statistic-numeric
+          [content]="numericContent"
+          [isPresentation]="isPresentation"
+          [directShow]="directShow"
+          [showCorrect]="showCorrect"
+          (updateCounterEvent)="updateCounter($event)"
+          [active]="active"
+          [settings]="settings"
+          [visualizationUnitChanged]="visualizationUnitChanged"
+        ></app-statistic-numeric>
+      }
+      @if (format === ContentType.SHORT_ANSWER) {
+        <app-statistic-short-answer
+          [content]="content"
+          [isPresentation]="isPresentation"
+          [directShow]="directShow"
+          [showCorrect]="showCorrect"
+          [showModeration]="!isPresentation && !isParticipant"
+          (updateCounterEvent)="updateCounter($event)"
+        ></app-statistic-short-answer>
+      }
     </div>
+    @if (content.format === ContentType.FLASHCARD && answersVisible) {
+      <div>
+        <div class="divider-space"></div>
+        <mat-divider></mat-divider>
+        <div class="divider-space"></div>
+        <app-rendered-text
+          [rawText]="flashcardContent.additionalText"
+          [dynamic]="true"
+          [markdownFeatureset]="flashcardMarkdownFeatures"
+        ></app-rendered-text>
+      </div>
+    }
   }
 </div>
-<lib-extension-point
-  extensionId="attachment-list"
-  [extensionData]="attachmentData"
-></lib-extension-point>
-<div
-  [ngClass]="{ 'presentation-space': isPresentation }"
-  appLangContext
-  appDirContext
->
-  @if ([ContentType.CHOICE, ContentType.BINARY].indexOf(format) !== -1) {
-    <app-statistic-choice
-      [content]="choiceContent"
-      [directShow]="directShow"
-      [showCorrect]="showCorrect"
-      (updateCounterEvent)="updateCounter($event)"
-      [isSurvey]="survey"
-      [isPresentation]="isPresentation"
-      [active]="active"
-      [settings]="settings"
-      [visualizationUnitChanged]="visualizationUnitChanged"
-    ></app-statistic-choice>
-  }
-  @if (format === ContentType.SCALE) {
-    <app-statistic-scale
-      [content]="choiceContent"
-      [directShow]="directShow"
-      (updateCounterEvent)="updateCounter($event)"
-      [isSurvey]="true"
-      [isPresentation]="isPresentation"
-      [active]="active"
-      [settings]="settings"
-      [visualizationUnitChanged]="visualizationUnitChanged"
-      [language]="language"
-    ></app-statistic-scale>
-  }
-  @if (format === ContentType.TEXT) {
-    <app-statistic-text
-      [content]="content"
-      [isPresentation]="isPresentation"
-      [isParticipant]="isParticipant"
-      [directShow]="directShow"
-      (updateCounterEvent)="updateCounter($event)"
-    ></app-statistic-text>
-  }
-  @if (format === ContentType.SORT) {
-    <app-statistic-sort
-      [content]="choiceContent"
-      [isPresentation]="isPresentation"
-      [showCorrect]="showCorrect"
-      [directShow]="directShow"
-      (updateCounterEvent)="updateCounter($event)"
-      [active]="active"
-      [settings]="settings"
-      [visualizationUnitChanged]="visualizationUnitChanged"
-    ></app-statistic-sort>
-  }
-  @if (format === ContentType.WORDCLOUD) {
-    <app-statistic-wordcloud
-      [content]="content"
-      [showModeration]="showWordcloudModeration"
-      [directShow]="directShow"
-      [settings]="settings"
-      (updateCounterEvent)="updateCounter($event)"
-    ></app-statistic-wordcloud>
-  }
-  @if (format === ContentType.PRIORITIZATION) {
-    <app-statistic-prioritization
-      [content]="prioritizationContent"
-      [directShow]="directShow"
-      [settings]="settings"
-      [indexChanged]="indexChanged"
-      [isPresentation]="isPresentation"
-      [active]="active"
-      (updateCounterEvent)="updateCounter($event)"
-      [isCreator]="!isParticipant"
-      [visualizationUnitChanged]="visualizationUnitChanged"
-    ></app-statistic-prioritization>
-  }
-  @if (format === ContentType.NUMERIC) {
-    <app-statistic-numeric
-      [content]="numericContent"
-      [isPresentation]="isPresentation"
-      [directShow]="directShow"
-      [showCorrect]="showCorrect"
-      (updateCounterEvent)="updateCounter($event)"
-      [active]="active"
-      [settings]="settings"
-      [visualizationUnitChanged]="visualizationUnitChanged"
-    ></app-statistic-numeric>
-  }
-  @if (format === ContentType.SHORT_ANSWER) {
-    <app-statistic-short-answer
-      [content]="content"
-      [isPresentation]="isPresentation"
-      [directShow]="directShow"
-      [showCorrect]="showCorrect"
-      [showModeration]="!isPresentation && !isParticipant"
-      (updateCounterEvent)="updateCounter($event)"
-    ></app-statistic-short-answer>
-  }
-</div>
-@if (content.format === ContentType.FLASHCARD && answersVisible) {
-  <div>
-    <div class="divider-space"></div>
-    <mat-divider></mat-divider>
-    <div class="divider-space"></div>
-    <app-rendered-text
-      [rawText]="flashcardContent.additionalText"
-      [dynamic]="true"
-      [markdownFeatureset]="flashcardMarkdownFeatures"
-    ></app-rendered-text>
-  </div>
-}

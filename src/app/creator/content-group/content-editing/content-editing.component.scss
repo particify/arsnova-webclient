@@ -1,5 +1,9 @@
 @use '../../../../variables' as *;
 
+:host {
+  height: 100%;
+}
+
 form {
   width: 100%;
 }
@@ -23,14 +27,25 @@ form {
   overflow: hidden;
 }
 
-.top-space {
-  margin-top: 16px;
-}
-
 .header-container {
   padding-bottom: 0.5em;
 }
 
 .back {
   margin-bottom: 20px;
+}
+
+.fixed-height {
+  max-height: calc(
+    100% - var(--mdc-protected-button-container-height) - $spacing-2
+  );
+}
+
+.button-container,
+.settings-container {
+  margin-top: $spacing-2;
+}
+
+.flashcard-container {
+  margin-top: $spacing-3;
 }

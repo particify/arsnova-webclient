@@ -140,12 +140,14 @@ export class StatisticChoiceComponent
         this.updateData(stats);
         this.updateChart();
       });
-    this.visualizationUnitChanged.subscribe((isUnitPercent) => {
-      this.settings.contentVisualizationUnitPercent = isUnitPercent;
-      if (this.chart) {
-        this.chart.update();
-      }
-    });
+    this.visualizationUnitChanged
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((isUnitPercent) => {
+        this.settings.contentVisualizationUnitPercent = isUnitPercent;
+        if (this.chart) {
+          this.chart.update();
+        }
+      });
   }
 
   toggleAnswers(visible?: boolean): boolean {

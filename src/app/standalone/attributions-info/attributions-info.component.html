@@ -3,7 +3,7 @@
   {{ 'creator.content.attributions-subheader' | transloco }}
 </p>
 <mat-list>
-  @for (attribution of attributions; track attribution) {
+  @for (attribution of attributions.value(); track attribution) {
     <mat-list-item class="bottom-border">
       <span>{{ 'creator.content.content' | transloco }}</span>
       <span>

@@ -9,6 +9,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { ContentNumeric } from '@app/core/models/content-numeric';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 const MAX_VALUE = 1_000_000_000_000_000; // Maximum value is up (or down) to one quadrillion
 
@@ -48,7 +49,7 @@ export class NumericContentFormComponent
     super(formService);
   }
   ngOnInit(): void {
-    if (this.isEditMode) {
+    if (this.content?.format === ContentType.NUMERIC) {
       const content = this.content as ContentNumeric;
       this.minimum = content.minNumber;
       this.maximum = content.maxNumber;

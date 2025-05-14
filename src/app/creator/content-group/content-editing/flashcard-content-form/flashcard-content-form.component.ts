@@ -17,6 +17,7 @@ import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 @Component({
   selector: 'app-flashcard-content-form',
@@ -50,7 +51,7 @@ export class FlashcardContentFormComponent
   }
 
   ngOnInit(): void {
-    if (this.isEditMode) {
+    if (this.content?.format === ContentType.FLASHCARD) {
       this.answer = (this.content as ContentFlashcard).additionalText;
     }
   }

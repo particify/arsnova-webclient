@@ -10,6 +10,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { LanguageService } from '@app/core/services/util/language.service';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 @Component({
   selector: 'app-scale-content-form',
@@ -49,7 +50,7 @@ export class ScaleContentFormComponent
   }
 
   ngOnInit(): void {
-    if (this.content) {
+    if (this.content?.format === ContentType.SCALE) {
       const scaleContent = this.content as ContentScale;
       this.selectedTemplate = scaleContent.optionTemplate;
       this.neutralOption = scaleContent.optionCount % 2 !== 0;

@@ -16,6 +16,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentShortAnswer } from '@app/core/models/content-short-answer';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentState } from '@app/core/models/content-state';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 @Component({
   selector: 'app-short-answer-content-form',
@@ -48,7 +49,7 @@ export class ShortAnswerContentFormComponent
   }
 
   ngOnInit(): void {
-    if (this.isEditMode) {
+    if (this.content?.format === ContentType.SHORT_ANSWER) {
       this.initContentForEditing();
     }
   }

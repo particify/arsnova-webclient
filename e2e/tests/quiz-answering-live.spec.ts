@@ -28,7 +28,6 @@ test.describe('live quiz with MC and short answer content', () => {
     await roomOverviewPage.createQuestionSeries('My quiz', 'Quiz');
     await expect(page).toHaveTitle(/My quiz/);
     await contentGroupOverview.createContent();
-    await expect(page).toHaveTitle(/Create content/);
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -39,7 +38,6 @@ test.describe('live quiz with MC and short answer content', () => {
     await contentCreation.createShortAnswerContent('My short answer content', [
       'abc',
     ]);
-    await page.goBack();
     await contentGroupOverview.publishContentGroup();
   });
 

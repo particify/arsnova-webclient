@@ -1,0 +1,304 @@
+<div fxFill>
+  <div fxFill fxLayout="column" fxLayoutAlign="space-between">
+    <div class="fixed-height" fxLayout="column" fxLayoutGap="16px">
+      <div fxLayout="row wrap" fxLayoutAlign="space-between start">
+        <mat-form-field
+          appearance="outline"
+          class="no-field-hint primary-form-field smaller-select-input"
+        >
+          <mat-select
+            panelClass="bigger-panel"
+            [(value)]="selectedFormat"
+            [disabled]="isEditMode || formDisabled || isPreview"
+            [hideSingleSelectionIndicator]="true"
+            panelWidth="500px"
+            appHotkey="2"
+            [appHotkeyTitle]="'creator.content.format' | transloco"
+            data-testid="format-selection"
+            fxLayoutAlign="start center"
+          >
+            <mat-select-trigger
+              fxLayout="row"
+              fxLayoutAlign="start center"
+              fxLayoutGap="12px"
+              class="primary"
+            >
+              <mat-icon class="format-button-icon">{{
+                selectedFormat?.icon
+              }}</mat-icon>
+              <span>{{
+                'creator.content.format-' + selectedFormat?.name | transloco
+              }}</span>
+            </mat-select-trigger>
+            @for (format of formats; track format) {
+              <mat-option [value]="format" class="higher-option">
+                <div
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  fxLayoutGap="12px"
+                >
+                  <mat-icon class="format-icon">{{ format.icon }}</mat-icon>
+                  <div fxLayout="column" fxLayoutGap="2px">
+                    <span class="format-name">
+                      {{
+                        'creator.content.format-' + format.name | transloco
+                      }}</span
+                    >
+                    <span class="format-description">{{
+                      'creator.content.format-' + format.name + '-description'
+                        | transloco
+                    }}</span>
+                  </div>
+                </div>
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <nav mat-tab-nav-bar [tabPanel]="tabPanel" fxLayout="column">
+          <a mat-tab-link [active]="!isPreview" (click)="togglePreview()">
+            {{ 'creator.content.edit-content' | transloco }}
+          </a>
+          <a mat-tab-link [active]="isPreview" (click)="togglePreview()">{{
+            'creator.room.preview' | transloco
+          }}</a>
+        </nav>
+      </div>
+      <div
+        style="flex: 1; overflow: auto; padding-bottom: 4px"
+        fxLayout="column"
+        fxLayoutGap="12px"
+      >
+        <mat-tab-nav-panel #tabPanel>
+          <div [attr.hidden]="isPreview || null">
+            <form fxLayout="column" fxLayoutGap="12px">
+              <div
+                fxLayout="row wrap"
+                fxLayoutAlign="space-between center"
+                fxLayoutGap="1em"
+                tabindex="-1"
+                [appAutofocus]
+                [attr.aria-label]="
+                  (isEditMode
+                    ? 'creator.content.a11y-content-edit-message'
+                    : 'creator.content.a11y-content-create-message'
+                  )
+                    | a11yIntro
+                    | async
+                "
+              >
+                <app-formatting-toolbar
+                  [inputElement]="questionInput"
+                  (valueChanged)="question = $event"
+                  [disabled]="formDisabled"
+                ></app-formatting-toolbar>
+              </div>
+              <mat-form-field
+                appearance="outline"
+                class="input-block no-field-hint"
+              >
+                <mat-label>{{
+                  (selectedFormat?.name !== 'slide'
+                    ? 'creator.content.body'
+                    : 'creator.content.body-neutral'
+                  ) | transloco
+                }}</mat-label>
+                <textarea
+                  [disabled]="formDisabled"
+                  #questionInput
+                  (input)="updateTextContainsImage(questionInput.value)"
+                  [(ngModel)]="question"
+                  [attr.aria-label]="
+                    (created
+                      ? 'creator.content.a11y-content-created'
+                      : 'creator.content.a11y-enter-body'
+                    ) | transloco
+                  "
+                  cdkAutosizeMaxRows="8"
+                  cdkAutosizeMinRows="3"
+                  matInput
+                  cdkTextareaAutosize
+                  maxlength="2000"
+                  name="questionInput"
+                  appHotkey="1"
+                  [appHotkeyTitle]="'creator.content.body' | transloco"
+                  dir="auto"
+                ></textarea>
+              </mat-form-field>
+              @if (textContainsImage) {
+                <app-hint
+                  text="creator.utils.formatting-image-hint"
+                  [type]="HintType.WARNING"
+                ></app-hint>
+              }
+            </form>
+            @if (
+              selectedFormat &&
+              !['slide', 'flashcard'].includes(selectedFormat.name)
+            ) {
+              <div
+                class="settings-container"
+                fxLayout="row"
+                fxLayout.xs="column-reverse"
+                fxLayoutAlign="space-between center"
+                fxLayoutAlign.xs="start start"
+                fxLayoutGap="1em"
+              >
+                <mat-checkbox
+                  [disabled]="formDisabled"
+                  [(ngModel)]="abstentionsAllowed"
+                >
+                  {{ 'creator.content.abstentions-allowed' | transloco }}
+                </mat-checkbox>
+                <div
+                  fxLayout="row"
+                  fxLayout.xs="row-reverse"
+                  fxLayoutGap="1em"
+                  fxLayoutAlign="start center"
+                  [matTooltip]="
+                    (content?.duration
+                      ? 'creator.content.timer-only-enabled-in-live-mode'
+                      : 'creator.content.enable-live-mode-to-use-timer'
+                    ) | transloco
+                  "
+                  [matTooltipDisabled]="isLiveMode()"
+                >
+                  <label
+                    [ngStyle]="{
+                      opacity: isLiveMode() && !formDisabled ? 1 : 0.5,
+                    }"
+                    >{{
+                      'creator.content.seconds-to-answer' | transloco
+                    }}</label
+                  >
+                  <mat-form-field
+                    appearance="outline"
+                    class="no-field-hint initial-width minimal-number-input smaller-select-input"
+                  >
+                    <input
+                      [(ngModel)]="duration"
+                      [disabled]="isAnswered || !isLiveMode() || formDisabled"
+                      matInput
+                      type="number"
+                      max="600"
+                      min="10"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            }
+            @if (!isLoading && selectedFormat) {
+              @switch (selectedFormat.type) {
+                @case (ContentType.CHOICE) {
+                  <app-choice-content-form
+                    [content]="content"
+                    [isAnswered]="isAnswered"
+                    [isEditMode]="isEditMode"
+                    [correctAnswerSelection]="
+                      contentGroup.groupType === GroupType.MIXED
+                    "
+                    [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                  >
+                  </app-choice-content-form>
+                }
+                @case (ContentType.SCALE) {
+                  <app-scale-content-form
+                    [content]="content"
+                    [isAnswered]="isAnswered"
+                    [isEditMode]="isEditMode"
+                    [language]="room.language"
+                  >
+                  </app-scale-content-form>
+                }
+                @case (ContentType.BINARY) {
+                  <app-binary-content-form
+                    [isEditMode]="isEditMode"
+                    [content]="content"
+                    [answerSelection]="
+                      contentGroup.groupType !== GroupType.SURVEY
+                    "
+                    [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                  >
+                  </app-binary-content-form>
+                }
+                @case (ContentType.FLASHCARD) {
+                  <div class="flashcard-container">
+                    <app-flashcard-content-form
+                      [content]="content"
+                      [isEditMode]="isEditMode"
+                    >
+                    </app-flashcard-content-form>
+                  </div>
+                }
+                @case (ContentType.SORT) {
+                  <app-sort-content-form
+                    [content]="content"
+                    [isEditMode]="isEditMode"
+                    [isAnswered]="isAnswered"
+                  >
+                  </app-sort-content-form>
+                }
+                @case (ContentType.WORDCLOUD) {
+                  <app-wordcloud-content-form
+                    [content]="content"
+                    [isEditMode]="isEditMode"
+                  >
+                  </app-wordcloud-content-form>
+                }
+                @case (ContentType.PRIORITIZATION) {
+                  <app-prioritization-content-form
+                    [content]="content"
+                    [isEditMode]="isEditMode"
+                    [isAnswered]="isAnswered"
+                  >
+                  </app-prioritization-content-form>
+                }
+                @case (ContentType.NUMERIC) {
+                  <app-numeric-content-form
+                    [content]="content"
+                    [isEditMode]="isEditMode"
+                    [correctAnswerSelection]="
+                      contentGroup.groupType === GroupType.MIXED
+                    "
+                    [isAnswered]="isAnswered"
+                    [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                  >
+                  </app-numeric-content-form>
+                }
+                @case (ContentType.SHORT_ANSWER) {
+                  <app-short-answer-content-form
+                    [content]="content"
+                    [isAnswered]="isAnswered"
+                    [isEditMode]="isEditMode"
+                  >
+                  </app-short-answer-content-form>
+                }
+              }
+            }
+          </div>
+          @if (isPreview && content) {
+            <app-content-preview
+              [content]="content"
+              [language]="room.language"
+              [showTitle]="false"
+            ></app-content-preview>
+          }
+        </mat-tab-nav-panel>
+      </div>
+    </div>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center"
+      fxLayoutGap="10px"
+      class="button-container"
+    >
+      <button [routerLink]="[isEditMode ? '../..' : '..']" mat-button>
+        {{ 'dialog.cancel' | transloco }}
+      </button>
+
+      <app-loading-button
+        [name]="isEditMode ? 'creator.content.save' : 'creator.content.create'"
+        (clicked)="submitContent()"
+      ></app-loading-button>
+    </div>
+  </div>
+</div>

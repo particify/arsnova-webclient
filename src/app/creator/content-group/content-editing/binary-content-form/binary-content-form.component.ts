@@ -45,7 +45,7 @@ export class BinaryContentFormComponent
   }
 
   ngOnInit(): void {
-    if (this.isEditMode) {
+    if (this.content?.format === ContentType.BINARY) {
       const correctOptions = (this.content as ContentChoice)
         .correctOptionIndexes;
       if (correctOptions) {

@@ -9,6 +9,7 @@ import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 const MAX_KEYWORDS = 10;
 
@@ -41,7 +42,7 @@ export class WordcloudContentFormComponent
     super(formService);
   }
   ngOnInit(): void {
-    if (this.isEditMode) {
+    if (this.content?.format === ContentType.WORDCLOUD) {
       this.maxAnswers = (this.content as ContentWordcloud).maxAnswers;
     }
   }

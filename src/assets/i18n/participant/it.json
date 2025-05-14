@@ -104,8 +104,6 @@
     "focus-mode-enabled": "In questa Camera è attiva la Modalità Focus. La tua visualizzazione sarà sincronizzata con la presentazione."
   },
   "statistic": {
-    "a11y-answer-indicator": "Indica con il colore verde le risposte corrette.",
-    "a11y-show-chart": "Mostra un grafico a barre che visualizza la valutazione delle risposte.",
     "answer-statistic": "Statistiche di risposta",
     "percentage": "Percentuale",
     "answer-indicator": "Mostra le risposte corrette",

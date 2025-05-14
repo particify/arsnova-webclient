@@ -5,7 +5,7 @@ import {
   StoryObj,
 } from '@storybook/angular';
 
-import { LeaderboardPageComponent } from '@app/standalone/leaderboard-page/leaderboard-page.component';
+import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-leaderboard/content-group-leaderboard.component';
 import { importProvidersFrom } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from '@app/transloco-root.module';
@@ -94,12 +94,12 @@ class MockMaterialCssVarsService {
 }
 
 export default {
-  component: LeaderboardPageComponent,
-  title: 'LeaderboardPage',
+  component: ContentGroupLeaderboardComponent,
+  title: 'ContentGroupLeaderboard',
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [LeaderboardPageComponent, OrdinalPipe],
+      imports: [ContentGroupLeaderboardComponent, OrdinalPipe],
       providers: [
         {
           provide: ContentGroupService,
@@ -125,12 +125,12 @@ export default {
   ],
 } as Meta;
 
-type Story = StoryObj<LeaderboardPageComponent>;
+type Story = StoryObj<ContentGroupLeaderboardComponent>;
 
 export const Editor: Story = {
   args: {
     room: new Room(),
     contentGroup: new ContentGroup(),
-    showCard: true,
+    showAll: true,
   },
 };

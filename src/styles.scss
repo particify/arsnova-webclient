@@ -490,11 +490,6 @@ div {
   max-height: 36px;
 }
 
-.form-spacer {
-  margin-bottom: 16px;
-  margin-right: 16px;
-}
-
 .surface-input .mat-mdc-text-field-wrapper,
 .surface-input .mat-mdc-form-field-focus-overlay {
   background-color: var(--surface) !important;
@@ -750,47 +745,6 @@ div {
   margin-bottom: 8px !important;
 }
 
-.card-container {
-  width: 100%;
-  max-width: $card-width;
-  position: relative;
-  perspective: 3000px;
-}
-
-.card {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transition: all 500ms;
-  transform-origin: 50% 50%;
-}
-
-.side {
-  position: relative;
-  transition: 400ms;
-}
-
-.card .back {
-  background-color: var(--surface);
-  transform: rotateY(180deg);
-}
-
-.card.flipped {
-  transform: rotateY(180deg);
-}
-
-.invisible-card-content {
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
-  display: none;
-}
-
-.invisible-card {
-  box-shadow: none !important;
-  background-color: var(--background) !important;
-}
-
 .login-card {
   width: 400px;
   max-width: 100%;
@@ -1035,5 +989,36 @@ app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
   .mdc-switch .mdc-switch__ripple {
     height: 0;
     width: 0;
+  }
+}
+
+// Hiding elements
+
+@mixin hide {
+  visibility: hidden;
+  display: none !important;
+}
+
+@include lt-md {
+  .hide-lt-md {
+    @include hide;
+  }
+}
+
+@include gt-md {
+  .hide-gt-md {
+    @include hide;
+  }
+}
+
+@include lt-lg {
+  .hide-lt-lg {
+    @include hide;
+  }
+}
+
+@include gt-lg {
+  .hide-gt-lg {
+    @include hide;
   }
 }

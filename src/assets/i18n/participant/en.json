@@ -107,8 +107,6 @@
     "content-groups-description": "Participate in quizzes, surveys and more."
   },
   "statistic": {
-    "a11y-answer-indicator": "Indicates with the color green which answers are correct.",
-    "a11y-show-chart": "Shows a bar chart which displays the evaluation of the answers.",
     "answer-statistic": "Answer statistics",
     "percentage": "Percentage",
     "answer-indicator": "Shows the correct answers",

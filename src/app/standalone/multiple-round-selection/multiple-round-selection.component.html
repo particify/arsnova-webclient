@@ -1,6 +1,8 @@
 <div fxLayout="row" fxLayoutAlign="end">
   <button
-    mat-stroked-button
+    class="round-button"
+    mat-fab
+    extended
     [matMenuTriggerFor]="roundMenu"
     [matTooltip]="
       'content.round' + (round > 1 ? 's-' : '-') + 'displayed'

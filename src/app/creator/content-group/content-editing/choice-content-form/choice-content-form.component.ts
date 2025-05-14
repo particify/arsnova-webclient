@@ -16,6 +16,7 @@ import { AnswerOptionListComponent } from '@app/creator/content-group/content-ed
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 @Component({
   selector: 'app-choice-content-form',
@@ -56,7 +57,7 @@ export class ChoiceContentFormComponent
   }
 
   ngOnInit(): void {
-    if (this.isEditMode) {
+    if (this.content?.format === ContentType.CHOICE) {
       this.initContentForEditing();
     } else {
       if (!this.correctAnswerSelection) {
@@ -129,7 +130,8 @@ export class ChoiceContentFormComponent
       content.correctOptionIndexes
     );
     this.multipleCorrectAnswers = (this.content as ContentChoice).multiple;
-    this.noCorrectAnswers = !(this.content as ContentChoice)
-      .correctOptionIndexes;
+    this.noCorrectAnswers =
+      !(this.content as ContentChoice).correctOptionIndexes ||
+      (this.content as ContentChoice).correctOptionIndexes.length === 0;
   }
 }
