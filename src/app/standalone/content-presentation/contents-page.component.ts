@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -65,6 +66,20 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   animations: [hotkeyEnterLeaveAnimation],
 })
 export class ContentsPageComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private contentService = inject(ContentService);
+  private contentGroupService = inject(ContentGroupService);
+  private globalStorageService = inject(GlobalStorageService);
+  private location = inject(Location);
+  private router = inject(Router);
+  private presentationService = inject(PresentationService);
+  private userService = inject(UserService);
+  private focusModeService = inject(FocusModeService);
+  private contentPublishService = inject(ContentPublishService);
+  private eventService = inject(EventService);
+  private translateService = inject(TranslocoService);
+  private hotkeyService = inject(HotkeyService);
+
   // Route data input below
   @Input({ required: true }) room!: Room;
   @Input({ transform: booleanAttribute }) showStepInfo!: boolean;
@@ -96,22 +111,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   isPublishing = false;
 
   private hotkeyRefs: symbol[] = [];
-
-  constructor(
-    private route: ActivatedRoute,
-    private contentService: ContentService,
-    private contentGroupService: ContentGroupService,
-    private globalStorageService: GlobalStorageService,
-    private location: Location,
-    private router: Router,
-    private presentationService: PresentationService,
-    private userService: UserService,
-    private focusModeService: FocusModeService,
-    private contentPublishService: ContentPublishService,
-    private eventService: EventService,
-    private translateService: TranslocoService,
-    private hotkeyService: HotkeyService
-  ) {}
 
   ngOnInit() {
     // Use index from route if available. Otherwise use the stored index or 0 as fallback.

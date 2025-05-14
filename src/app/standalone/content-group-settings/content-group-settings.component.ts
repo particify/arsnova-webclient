@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
@@ -32,24 +32,29 @@ export class ContentGroupSettingsComponent
   extends FormComponent
   implements OnInit
 {
+  protected formService: FormService;
+  private dialogRef =
+    inject<MatDialogRef<ContentGroupSettingsComponent>>(MatDialogRef);
+  data = inject<{
+    contentGroup: ContentGroup;
+    groupNames: string[];
+    alreadyAnswered: boolean;
+  }>(MAT_DIALOG_DATA);
+  private contentGroupService = inject(ContentGroupService);
+  private contentPublishService = inject(ContentPublishService);
+
   nameFormControl = new UntypedFormControl();
   group: ContentGroup;
   GroupType = GroupType;
   PublishingMode = PublishingMode;
 
-  constructor(
-    protected formService: FormService,
-    private dialogRef: MatDialogRef<ContentGroupSettingsComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: {
-      contentGroup: ContentGroup;
-      groupNames: string[];
-      alreadyAnswered: boolean;
-    },
-    private contentGroupService: ContentGroupService,
-    private contentPublishService: ContentPublishService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+    this.formService = formService;
+    const data = this.data;
+
     this.group = { ...data.contentGroup };
   }
   ngOnInit(): void {

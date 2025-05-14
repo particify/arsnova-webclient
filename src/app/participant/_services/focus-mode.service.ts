@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
@@ -26,6 +26,15 @@ const DELAY_AFTER_NAVIGATION = 500;
 
 @Injectable()
 export class FocusModeService extends AbstractFocusModeService {
+  protected wsConnector: WsConnectorService;
+  protected http: HttpClient;
+  protected featureFlagService: FeatureFlagService;
+  protected eventService: EventService;
+  private router = inject(Router);
+  private routingService = inject(RoutingService);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+
   private contentStateUpdated$ = new Subject<ContentFocusState>();
   private commentStateUpdated$ = new Subject<CommentFocusState>();
   private focusModeEnabled = false;
@@ -33,17 +42,18 @@ export class FocusModeService extends AbstractFocusModeService {
   private currentFeature?: RoutingFeature;
   private wsConnectionState?: RxStompState;
 
-  constructor(
-    protected wsConnector: WsConnectorService,
-    protected http: HttpClient,
-    protected featureFlagService: FeatureFlagService,
-    protected eventService: EventService,
-    private router: Router,
-    private routingService: RoutingService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
+    const wsConnector = inject(WsConnectorService);
+    const http = inject(HttpClient);
+    const featureFlagService = inject(FeatureFlagService);
+    const eventService = inject(EventService);
+
     super(wsConnector, http, eventService, featureFlagService);
+
+    this.wsConnector = wsConnector;
+    this.http = http;
+    this.featureFlagService = featureFlagService;
+    this.eventService = eventService;
   }
 
   init(room: Room, currentFeature: RoutingFeature) {

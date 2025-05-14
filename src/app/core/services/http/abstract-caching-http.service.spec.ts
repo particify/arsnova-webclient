@@ -1,7 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject as inject_1 } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -33,14 +33,17 @@ class MockCachingService {
 
 @Injectable()
 class TestCachingHttpService extends AbstractCachingHttpService<object> {
-  constructor(
-    httpClient: HttpClient,
-    protected wsConnector: WsConnectorService,
-    eventService: EventService,
-    translateService: TranslocoService,
-    notificationService: NotificationService,
-    protected cachingService: CachingService
-  ) {
+  protected wsConnector: WsConnectorService;
+  protected cachingService: CachingService;
+
+  constructor() {
+    const httpClient = inject_1(HttpClient);
+    const wsConnector = inject_1(WsConnectorService);
+    const eventService = inject_1(EventService);
+    const translateService = inject_1(TranslocoService);
+    const notificationService = inject_1(NotificationService);
+    const cachingService = inject_1(CachingService);
+
     super(
       '/test',
       httpClient,
@@ -50,6 +53,9 @@ class TestCachingHttpService extends AbstractCachingHttpService<object> {
       notificationService,
       cachingService
     );
+
+    this.wsConnector = wsConnector;
+    this.cachingService = cachingService;
   }
 
   public override fetchOnce<U extends object | object[]>(

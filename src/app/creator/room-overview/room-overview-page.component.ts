@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
@@ -29,6 +29,15 @@ export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
+  protected roomStatsService: RoomStatsService;
+  protected contentGroupService: ContentGroupService;
+  protected eventService: EventService;
+  protected router = inject(Router);
+  protected translateService = inject(TranslocoService);
+  protected dialogService = inject(DialogService);
+  protected globalStorageService = inject(GlobalStorageService);
+  private contentService = inject(ContentService);
+
   // Route data input below
   @Input({ required: true }) userRole!: UserRole;
 
@@ -36,17 +45,16 @@ export class RoomOverviewPageComponent
   groupContentFormatIcons: Map<GroupType, Map<ContentType, string>> = new Map();
   hintType = HintType.INFO;
 
-  constructor(
-    protected roomStatsService: RoomStatsService,
-    protected contentGroupService: ContentGroupService,
-    protected eventService: EventService,
-    protected router: Router,
-    protected translateService: TranslocoService,
-    protected dialogService: DialogService,
-    protected globalStorageService: GlobalStorageService,
-    private contentService: ContentService
-  ) {
+  constructor() {
+    const roomStatsService = inject(RoomStatsService);
+    const contentGroupService = inject(ContentGroupService);
+    const eventService = inject(EventService);
+
     super(roomStatsService, contentGroupService, eventService);
+    this.roomStatsService = roomStatsService;
+    this.contentGroupService = contentGroupService;
+    this.eventService = eventService;
+
     this.groupTypes = this.contentGroupService.getTypeIcons();
     this.groupTypes.forEach((value, key) => {
       const groupTypeIcons = new Map<ContentType, string>();

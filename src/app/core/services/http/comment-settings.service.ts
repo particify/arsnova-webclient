@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { CommentSettings } from '@app/core/models/comment-settings';
@@ -18,17 +18,24 @@ const httpOptions = {
 
 @Injectable()
 export class CommentSettingsService extends AbstractCachingHttpService<CommentSettings> {
+  private http: HttpClient;
+  protected wsConnectorService: WsConnectorService;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  protected cachingService: CachingService;
+  protected wsCommentService = inject(WsCommentService);
+
   private currentRoomSettings$: Observable<CommentSettings> = of();
-  constructor(
-    private http: HttpClient,
-    protected wsConnectorService: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    protected cachingService: CachingService,
-    protected wsCommentService: WsCommentService,
-    roomService: RoomService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const wsConnectorService = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+    const roomService = inject(RoomService);
+
     super(
       '/settings',
       http,
@@ -38,6 +45,13 @@ export class CommentSettingsService extends AbstractCachingHttpService<CommentSe
       notificationService,
       cachingService
     );
+    this.http = http;
+    this.wsConnectorService = wsConnectorService;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
+    this.cachingService = cachingService;
+
     roomService.getCurrentRoomStream().subscribe((room) => {
       if (room) {
         // The uri is needed for updating cache

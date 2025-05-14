@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -47,6 +47,15 @@ interface AnswerStatisticsSummary {
 
 @Injectable()
 export class ContentGroupService extends AbstractEntityService<ContentGroup> {
+  private http: HttpClient;
+  protected ws: WsConnectorService;
+  private globalStorageService = inject(GlobalStorageService);
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  private roomStatsService = inject(RoomStatsService);
+  private dialog = inject(MatDialog);
+
   typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
     [GroupType.MIXED, 'dashboard'],
     [GroupType.QUIZ, 'sports_esports'],
@@ -54,17 +63,14 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     [GroupType.FLASHCARDS, 'school'],
   ]);
 
-  constructor(
-    private http: HttpClient,
-    protected ws: WsConnectorService,
-    private globalStorageService: GlobalStorageService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private roomStatsService: RoomStatsService,
-    private dialog: MatDialog,
-    cachingService: CachingService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const ws = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+
     super(
       'ContentGroup',
       '/contentgroup',
@@ -75,6 +81,12 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
       notificationService,
       cachingService
     );
+
+    this.http = http;
+    this.ws = ws;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   getStatsByRoomIdAndName(

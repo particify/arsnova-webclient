@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
@@ -26,23 +26,27 @@ import { takeUntil } from 'rxjs';
   templateUrl: './add-template-button.component.html',
 })
 export class AddTemplateButtonComponent extends FormComponent {
+  protected formService: FormService;
+  private templateService = inject(BaseTemplateService);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private dialog = inject(MatDialog);
+  private membershipService = inject(RoomMembershipService);
+  private router = inject(Router);
+  private routingService = inject(RoutingService);
+  private dialogService = inject(DialogService);
+
   @Input({ required: true }) templateId!: string;
   @Input({ required: true }) templateName!: string;
   @Input() room?: Room;
   routeAfterSuccess: string[] = [];
 
-  constructor(
-    protected formService: FormService,
-    private templateService: BaseTemplateService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService,
-    private dialog: MatDialog,
-    private membershipService: RoomMembershipService,
-    private router: Router,
-    private routingService: RoutingService,
-    private dialogService: DialogService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   useTemplate(): void {

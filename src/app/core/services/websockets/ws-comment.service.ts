@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
@@ -7,7 +7,7 @@ import { IMessage } from '@stomp/stompjs';
   providedIn: 'root',
 })
 export class WsCommentService {
-  constructor(private wsConnector: WsConnectorService) {}
+  private wsConnector = inject(WsConnectorService);
 
   getCommentStream(roomId: string): Observable<IMessage> {
     return this.wsConnector.getWatcher(`/topic/${roomId}.comment.stream`);

@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { HttpClient } from '@angular/common/http';
@@ -12,17 +12,15 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
 
 @Injectable()
 export abstract class AbstractFocusModeService implements OnDestroy {
+  protected wsConnector = inject(WsConnectorService);
+  protected http = inject(HttpClient);
+  protected eventService = inject(EventService);
+  protected featureFlagService = inject(FeatureFlagService);
+
   destroyed$ = new Subject<void>();
   protected focusModeEnabled$ = new BehaviorSubject<boolean>(false);
 
   protected currentRoom?: Room;
-
-  constructor(
-    protected wsConnector: WsConnectorService,
-    protected http: HttpClient,
-    protected eventService: EventService,
-    protected featureFlagService: FeatureFlagService
-  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();

@@ -4,6 +4,7 @@ import {
   ElementRef,
   Input,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { TranslocoService } from '@jsverse/transloco';
@@ -46,6 +47,11 @@ export class PasswordEntryComponent
   extends FormComponent
   implements AfterViewInit
 {
+  private translationService = inject(TranslocoService);
+  notificationService = inject(NotificationService);
+  private _autofill = inject(AutofillMonitor);
+  protected formService: FormService;
+
   @ViewChild('passwordInput') passwordInput!: ElementRef;
 
   @Input() checkStrength = false;
@@ -62,13 +68,12 @@ export class PasswordEntryComponent
   autofilled = false;
   lastInput = '';
 
-  constructor(
-    private translationService: TranslocoService,
-    public notificationService: NotificationService,
-    private _autofill: AutofillMonitor,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngAfterViewInit(): void {

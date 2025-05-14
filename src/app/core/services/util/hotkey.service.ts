@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatDialogRef, MatDialogState } from '@angular/material/dialog';
 import { EventManager } from '@angular/platform-browser';
 import { environment } from '@environments/environment';
@@ -63,18 +63,20 @@ const excludedElementTypes = new Map<string, (el: Element) => boolean>([
 
 @Injectable()
 export class HotkeyService {
+  private eventManager = inject(EventManager);
+  private dialogService = inject(DialogService);
+  private eventService = inject(EventService);
+  private globalStorageService = inject(GlobalStorageService);
+  private document = inject<HTMLDocument>(DOCUMENT);
+
   hotkeyRegistrations: Map<symbol, Hotkey> = new Map();
 
   private dialogRef?: MatDialogRef<HotkeysComponent>;
   private counter: number;
 
-  constructor(
-    private eventManager: EventManager,
-    private dialogService: DialogService,
-    private eventService: EventService,
-    private globalStorageService: GlobalStorageService,
-    @Inject(DOCUMENT) private document: HTMLDocument
-  ) {
+  constructor() {
+    const globalStorageService = this.globalStorageService;
+
     this.registerHandler();
     this.registerDialogHotkey();
     this.counter = globalStorageService.getItem(STORAGE_KEYS.HOTKEY_COUNT) ?? 0;

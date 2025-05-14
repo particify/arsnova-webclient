@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ARSRxStompConfig } from '@app/rx-stomp.config';
@@ -14,9 +14,13 @@ const defaultMessageHeaders = {
   providedIn: 'root',
 })
 export class WsConnectorService {
+  private authService = inject(AuthenticationService);
+
   private client: RxStomp;
 
-  constructor(private authService: AuthenticationService) {
+  constructor() {
+    const authService = this.authService;
+
     this.client = new RxStomp();
     authService
       .getAuthenticationChanges()

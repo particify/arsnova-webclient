@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { TrackingService } from '@app/core/services/util/tracking.service';
@@ -33,24 +39,26 @@ import { UiService } from '@app/core/services/util/ui.service';
   standalone: false,
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  constructor(
-    private languageService: LanguageService,
-    private apiConfigService: ApiConfigService,
-    private trackingService: TrackingService,
-    private updateService: UpdateService,
-    private routingService: RoutingService,
-    public route: ActivatedRoute,
-    public router: Router,
-    private roomService: RoomService,
-    private drawerService: DrawerService,
-    private themeService: ThemeService,
-    private authenticationService: AuthenticationService,
-    private notificationService: NotificationService,
-    private translationService: TranslocoService,
-    private dialog: MatDialog,
-    private featureFlagService: FeatureFlagService,
-    private uiService: UiService
-  ) {
+  private languageService = inject(LanguageService);
+  private apiConfigService = inject(ApiConfigService);
+  private trackingService = inject(TrackingService);
+  private updateService = inject(UpdateService);
+  private routingService = inject(RoutingService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  private roomService = inject(RoomService);
+  private drawerService = inject(DrawerService);
+  private themeService = inject(ThemeService);
+  private authenticationService = inject(AuthenticationService);
+  private notificationService = inject(NotificationService);
+  private translationService = inject(TranslocoService);
+  private dialog = inject(MatDialog);
+  private featureFlagService = inject(FeatureFlagService);
+  private uiService = inject(UiService);
+
+  constructor() {
+    const themeService = this.themeService;
+
     this.currentTheme = themeService.getCurrentTheme();
     this.themes = this.themeService.getThemes();
     this.langs = this.languageService.getLangs();

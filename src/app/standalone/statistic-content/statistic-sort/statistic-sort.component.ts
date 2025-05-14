@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   EventEmitter,
+  inject,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -53,6 +54,12 @@ export class StatisticSortComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
+  protected contentService: ContentService;
+  private themeService = inject(ThemeService);
+  protected translateService: TranslocoService;
+  private presentationService = inject(PresentationService);
+  private contentAnswerService = inject(ContentAnswerService);
+
   @Input({ required: true }) content!: ContentChoice;
   @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
@@ -73,14 +80,14 @@ export class StatisticSortComponent
   grey: string;
   stats?: RoundStatistics;
 
-  constructor(
-    protected contentService: ContentService,
-    private themeService: ThemeService,
-    protected translateService: TranslocoService,
-    private presentationService: PresentationService,
-    private contentAnswerService: ContentAnswerService
-  ) {
+  constructor() {
+    const contentService = inject(ContentService);
+    const translateService = inject(TranslocoService);
+
     super(contentService, translateService);
+    this.contentService = contentService;
+    this.translateService = translateService;
+
     this.onSurface = this.themeService.getColor('on-surface');
     this.surface = this.themeService.getColor('surface');
     this.green = this.themeService.getColor('green');

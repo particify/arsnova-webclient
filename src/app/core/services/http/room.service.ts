@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { RoomSummary } from '@app/core/models/room-summary';
 import { SurveyStarted } from '@app/core/models/events/survey-started';
@@ -36,6 +36,16 @@ const httpOptions = {
 
 @Injectable()
 export class RoomService extends AbstractEntityService<Room> {
+  private http: HttpClient;
+  private ws: WsConnectorService;
+  private authService = inject(AuthenticationService);
+  private globalStorageService = inject(GlobalStorageService);
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  private feedbackService = inject(FeedbackService);
+  protected cachingService: CachingService;
+
   serviceApiUrl = {
     duplicate: '/duplicate',
     generateRandomData: '/generate-random-data',
@@ -49,17 +59,14 @@ export class RoomService extends AbstractEntityService<Room> {
   private messageStream$: Observable<IMessage> = of();
   private messageStreamSubscription?: Subscription;
 
-  constructor(
-    private http: HttpClient,
-    private ws: WsConnectorService,
-    private authService: AuthenticationService,
-    private globalStorageService: GlobalStorageService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private feedbackService: FeedbackService,
-    protected cachingService: CachingService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const ws = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+
     super(
       'Room',
       '/room',
@@ -70,6 +77,13 @@ export class RoomService extends AbstractEntityService<Room> {
       notificationService,
       cachingService
     );
+
+    this.http = http;
+    this.ws = ws;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
+    this.cachingService = cachingService;
   }
 
   /**

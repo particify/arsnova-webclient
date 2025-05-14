@@ -5,6 +5,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { FormService } from '@app/core/services/util/form.service';
@@ -32,6 +33,9 @@ export class SortContentFormComponent
   extends FormComponent
   implements OnInit, OnChanges, ContentForm
 {
+  private contentService = inject(ContentService);
+  protected formService: FormService;
+
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
@@ -43,11 +47,12 @@ export class SortContentFormComponent
 
   displayAnswers: DisplayAnswer[] = [];
 
-  constructor(
-    private contentService: ContentService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

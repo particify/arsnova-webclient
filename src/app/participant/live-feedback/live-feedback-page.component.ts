@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
@@ -52,6 +52,15 @@ export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
+  protected wsFeedbackService: WsFeedbackService;
+  protected feedbackService: FeedbackService;
+  protected roomService: RoomService;
+  protected translateService: TranslocoService;
+  protected announceService: AnnounceService;
+  protected globalStorageService: GlobalStorageService;
+  protected route = inject(ActivatedRoute);
+  protected authenticationService = inject(AuthenticationService);
+
   // Route data input below
   @Input({
     transform: setDefaultTrue,
@@ -62,16 +71,14 @@ export class LiveFeedbackPageComponent
   userId!: string;
   voteKeys = ['1', '2', '3', '4'];
 
-  constructor(
-    protected wsFeedbackService: WsFeedbackService,
-    protected feedbackService: FeedbackService,
-    protected roomService: RoomService,
-    protected translateService: TranslocoService,
-    protected announceService: AnnounceService,
-    protected globalStorageService: GlobalStorageService,
-    protected route: ActivatedRoute,
-    protected authenticationService: AuthenticationService
-  ) {
+  constructor() {
+    const wsFeedbackService = inject(WsFeedbackService);
+    const feedbackService = inject(FeedbackService);
+    const roomService = inject(RoomService);
+    const translateService = inject(TranslocoService);
+    const announceService = inject(AnnounceService);
+    const globalStorageService = inject(GlobalStorageService);
+
     super(
       wsFeedbackService,
       feedbackService,
@@ -80,6 +87,13 @@ export class LiveFeedbackPageComponent
       announceService,
       globalStorageService
     );
+
+    this.wsFeedbackService = wsFeedbackService;
+    this.feedbackService = feedbackService;
+    this.roomService = roomService;
+    this.translateService = translateService;
+    this.announceService = announceService;
+    this.globalStorageService = globalStorageService;
   }
 
   ngOnInit() {

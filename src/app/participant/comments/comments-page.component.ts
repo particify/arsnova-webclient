@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
@@ -46,25 +46,36 @@ export class CommentsPageComponent
   extends AbstractCommentsPageComponent
   implements OnInit, OnDestroy
 {
+  protected commentService: CommentService;
+  protected translateService: TranslocoService;
+  protected dialog: MatDialog;
+  protected wsCommentService: WsCommentService;
+  protected notificationService: NotificationService;
+  protected announceService: AnnounceService;
+  protected router: Router;
+  protected globalStorageService: GlobalStorageService;
+  protected commentSettingsService: CommentSettingsService;
+  protected authenticationService: AuthenticationService;
+  protected location = inject(Location);
+  private voteService = inject(VoteService);
+  private focusModeService = inject(FocusModeService);
+
   commentVoteMap = new Map<string, Vote>();
 
   focusModeEnabled = false;
 
-  constructor(
-    protected commentService: CommentService,
-    protected translateService: TranslocoService,
-    protected dialog: MatDialog,
-    protected wsCommentService: WsCommentService,
-    protected notificationService: NotificationService,
-    protected announceService: AnnounceService,
-    protected router: Router,
-    protected globalStorageService: GlobalStorageService,
-    protected commentSettingsService: CommentSettingsService,
-    protected authenticationService: AuthenticationService,
-    protected location: Location,
-    private voteService: VoteService,
-    private focusModeService: FocusModeService
-  ) {
+  constructor() {
+    const commentService = inject(CommentService);
+    const translateService = inject(TranslocoService);
+    const dialog = inject(MatDialog);
+    const wsCommentService = inject(WsCommentService);
+    const notificationService = inject(NotificationService);
+    const announceService = inject(AnnounceService);
+    const router = inject(Router);
+    const globalStorageService = inject(GlobalStorageService);
+    const commentSettingsService = inject(CommentSettingsService);
+    const authenticationService = inject(AuthenticationService);
+
     super(
       commentService,
       translateService,
@@ -77,6 +88,17 @@ export class CommentsPageComponent
       commentSettingsService,
       authenticationService
     );
+
+    this.commentService = commentService;
+    this.translateService = translateService;
+    this.dialog = dialog;
+    this.wsCommentService = wsCommentService;
+    this.notificationService = notificationService;
+    this.announceService = announceService;
+    this.router = router;
+    this.globalStorageService = globalStorageService;
+    this.commentSettingsService = commentSettingsService;
+    this.authenticationService = authenticationService;
   }
 
   ngOnInit(): void {

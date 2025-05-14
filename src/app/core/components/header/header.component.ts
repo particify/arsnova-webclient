@@ -1,4 +1,4 @@
-import { Component, OnInit, Signal } from '@angular/core';
+import { Component, OnInit, Signal, inject } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Router } from '@angular/router';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
@@ -30,6 +30,18 @@ import { PageTitleService } from '@app/core/services/util/page-title.service';
   standalone: false,
 })
 export class HeaderComponent implements OnInit {
+  private authenticationService = inject(AuthenticationService);
+  router = inject(Router);
+  eventService = inject(EventService);
+  private dialogService = inject(DialogService);
+  private routingService = inject(RoutingService);
+  private extensionFactory = inject(ExtensionFactory);
+  private dialog = inject(MatDialog);
+  private announcementService = inject(AnnouncementService);
+  private roomService = inject(RoomService);
+  private drawerService = inject(DrawerService);
+  private pageTitleService = inject(PageTitleService);
+
   auth?: ClientAuthentication;
 
   role?: UserRole;
@@ -44,19 +56,7 @@ export class HeaderComponent implements OnInit {
   room?: Room;
   title: Signal<string>;
 
-  constructor(
-    private authenticationService: AuthenticationService,
-    public router: Router,
-    public eventService: EventService,
-    private dialogService: DialogService,
-    private routingService: RoutingService,
-    private extensionFactory: ExtensionFactory,
-    private dialog: MatDialog,
-    private announcementService: AnnouncementService,
-    private roomService: RoomService,
-    private drawerService: DrawerService,
-    private pageTitleService: PageTitleService
-  ) {
+  constructor() {
     this.title = this.pageTitleService.getTitle();
   }
 

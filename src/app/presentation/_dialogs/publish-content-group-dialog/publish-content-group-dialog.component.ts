@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
 import {
@@ -23,19 +23,26 @@ import { provideTranslocoScope } from '@jsverse/transloco';
   providers: [provideTranslocoScope('creator')],
 })
 export class PublishContentGroupDialogComponent extends FormComponent {
+  dialogRef =
+    inject<MatDialogRef<PublishContentGroupDialogComponent>>(MatDialogRef);
+  private data = inject<{
+    contentGroup: ContentGroup;
+  }>(MAT_DIALOG_DATA);
+  private contentGroupService = inject(ContentGroupService);
+  private contentPublishService = inject(ContentPublishService);
+  protected formService: FormService;
+
   readonly dialogId = 'publish-content';
 
   publishingModes = PUBLISHING_MODE_ITEMS;
   selectedMode?: PublishingModeItem;
 
-  constructor(
-    public dialogRef: MatDialogRef<PublishContentGroupDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: { contentGroup: ContentGroup },
-    private contentGroupService: ContentGroupService,
-    private contentPublishService: ContentPublishService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+    this.formService = formService;
+
     this.publishingModes = PUBLISHING_MODE_ITEMS;
     this.selectedMode = this.publishingModes[0];
   }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Comment } from '@app/core/models/comment';
 import { Room } from '@app/core/models/room';
@@ -20,6 +20,12 @@ import { TranslocoService } from '@jsverse/transloco';
   standalone: false,
 })
 export class CommentListBarExtensionComponent {
+  private translateService = inject(TranslocoService);
+  private dialogService = inject(DialogService);
+  private commentService = inject(CommentService);
+  private notificationService = inject(NotificationService);
+  private router = inject(Router);
+
   @Input({ required: true }) room!: Room;
   @Input() isModeration = false;
   @Input() comments: Comment[] = [];
@@ -29,14 +35,6 @@ export class CommentListBarExtensionComponent {
   @Output() createCommentClicked = new EventEmitter<void>();
   @Output() toggleReadonlyClicked = new EventEmitter<void>();
   @Output() resetCommentsClicked = new EventEmitter<void>();
-
-  constructor(
-    private translateService: TranslocoService,
-    private dialogService: DialogService,
-    private commentService: CommentService,
-    private notificationService: NotificationService,
-    private router: Router
-  ) {}
 
   openDeleteCommentsDialog(): void {
     const dialogRef = this.dialogService.openDeleteDialog(

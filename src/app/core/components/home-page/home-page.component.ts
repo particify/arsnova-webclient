@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { ApiConfig } from '@app/core/models/api-config';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -13,15 +13,15 @@ import {
   standalone: false,
 })
 export class HomePageComponent {
+  private dialogService = inject(DialogService);
+  private globalStorageService = inject(GlobalStorageService);
+
   // Route data input below
   @Input({ required: true }) apiConfig!: ApiConfig;
 
   deviceType: string;
 
-  constructor(
-    private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService
-  ) {
+  constructor() {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
     );

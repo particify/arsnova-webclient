@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -15,6 +15,10 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   styleUrl: './content-waiting.component.scss',
 })
 export class ContentWaitingComponent extends FormComponent {
+  protected formService: FormService;
+  private roomUserAliasService = inject(RoomUserAliasService);
+  private authService = inject(AuthenticationService);
+
   @Input() current?: number;
   @Input() totalCount?: number;
   @Input({ required: true }) roomId!: string;
@@ -26,12 +30,12 @@ export class ContentWaitingComponent extends FormComponent {
 
   enteredAlias = '';
 
-  constructor(
-    protected formService: FormService,
-    private roomUserAliasService: RoomUserAliasService,
-    private authService: AuthenticationService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   setAlias(): void {

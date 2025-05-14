@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { KeyNavBarItem } from '@app/presentation/bars/control-bar/control-bar.component';
 
 @Component({
@@ -9,10 +9,10 @@ import { KeyNavBarItem } from '@app/presentation/bars/control-bar/control-bar.co
   standalone: false,
 })
 export class KeyButtonBarComponent {
+  private document = inject<Document>(DOCUMENT);
+
   @Input({ required: true }) items!: KeyNavBarItem[];
   @Input() withText = true;
-
-  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   sendKeyEvent(key: string) {
     const event = new KeyboardEvent('keydown', {

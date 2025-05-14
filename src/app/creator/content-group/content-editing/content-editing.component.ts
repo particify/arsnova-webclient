@@ -6,6 +6,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import {
@@ -47,6 +48,17 @@ export class ContentEditingComponent
   extends FormComponent
   implements OnInit, OnChanges
 {
+  private translateService = inject(TranslocoService);
+  private announceService = inject(AnnounceService);
+  private globalStorageService = inject(GlobalStorageService);
+  private formattingService = inject(FormattingService);
+  private contentService = inject(ContentService);
+  private contentGroupService = inject(ContentGroupService);
+  private notificationService = inject(NotificationService);
+  private contentPublishService = inject(ContentPublishService);
+  protected formService: FormService;
+  private contentGroupPageService = inject(ContentGroupPageService);
+
   @ViewChild('ContentForm') private contentForm!: ContentForm;
   @ViewChild('questionInput') bodyInput!: ElementRef;
 
@@ -74,19 +86,12 @@ export class ContentEditingComponent
   isAnswered = false;
   GroupType = GroupType;
 
-  constructor(
-    private translateService: TranslocoService,
-    private announceService: AnnounceService,
-    private globalStorageService: GlobalStorageService,
-    private formattingService: FormattingService,
-    private contentService: ContentService,
-    private contentGroupService: ContentGroupService,
-    private notificationService: NotificationService,
-    private contentPublishService: ContentPublishService,
-    protected formService: FormService,
-    private contentGroupPageService: ContentGroupPageService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

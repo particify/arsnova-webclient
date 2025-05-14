@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { TemplateTag } from '@app/core/models/template-tag';
@@ -13,12 +13,17 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BaseTemplateService extends AbstractHttpService<void> {
-  constructor(
-    protected httpClient: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
+  protected httpClient: HttpClient;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+
+  constructor() {
+    const httpClient = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super(
       '/template',
       httpClient,
@@ -26,6 +31,11 @@ export class BaseTemplateService extends AbstractHttpService<void> {
       translateService,
       notificationService
     );
+
+    this.httpClient = httpClient;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   getTemplateTags(lang: string, verified = true): Observable<TemplateTag[]> {

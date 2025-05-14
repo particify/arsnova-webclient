@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { Announcement } from '@app/core/models/announcement';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
@@ -24,6 +31,12 @@ export class AnnouncementSettingsComponent
   extends FormComponent
   implements OnInit
 {
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private announcementService = inject(AnnouncementService);
+  private dialogService = inject(DialogService);
+  protected formService: FormService;
+
   @ViewChild('inputTabs') inputTabs!: MatTabGroup;
   @ViewChild('titleInput') titleInput!: ElementRef;
 
@@ -40,14 +53,12 @@ export class AnnouncementSettingsComponent
 
   UserRole = UserRole;
 
-  constructor(
-    private translateService: TranslocoService,
-    private notificationService: NotificationService,
-    private announcementService: AnnouncementService,
-    private dialogService: DialogService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
@@ -36,6 +36,14 @@ export class FormField {
   standalone: false,
 })
 export class UserProfileComponent implements OnInit {
+  private authenticationService = inject(AuthenticationService);
+  private userService = inject(UserService);
+  private translationService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private dialogService = inject(DialogService);
+  private router = inject(Router);
+  private location = inject(Location);
+
   // Route data input below
   @Input() accountSettingsName?: string;
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
@@ -48,16 +56,6 @@ export class UserProfileComponent implements OnInit {
   settings = new UserSettings();
 
   HintType = HintType;
-
-  constructor(
-    private authenticationService: AuthenticationService,
-    private userService: UserService,
-    private translationService: TranslocoService,
-    private notificationService: NotificationService,
-    private dialogService: DialogService,
-    private router: Router,
-    private location: Location
-  ) {}
 
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {

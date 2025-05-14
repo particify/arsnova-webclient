@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
@@ -20,18 +20,16 @@ const REFRESH_LIMIT = 100;
   styleUrl: './content-group-leaderboard.component.scss',
 })
 export class ContentGroupLeaderboardComponent implements OnInit {
+  private contentGroupService = inject(ContentGroupService);
+  private destroyRef = inject(DestroyRef);
+  private announceService = inject(AnnounceService);
+
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) contentGroup!: ContentGroup;
   @Input() showAll = false;
   @Input() allowScrolling = false;
   leaderboardItems: LeaderboardItem[] = [];
   isLoading = true;
-
-  constructor(
-    private contentGroupService: ContentGroupService,
-    private destroyRef: DestroyRef,
-    private announceService: AnnounceService
-  ) {}
 
   ngOnInit(): void {
     this.announceService.announce('creator.content.a11y-leaderboard-page-info');

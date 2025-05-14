@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { UntypedFormControl, Validators } from '@angular/forms';
@@ -18,6 +18,12 @@ import { THINSP } from '@app/core/utils/html-entities';
   standalone: false,
 })
 export class RoomJoinComponent {
+  private router = inject(Router);
+  notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  authenticationService = inject(AuthenticationService);
+  eventService = inject(EventService);
+
   @Input({ required: true }) appTitle!: string;
   @Input() focusInput = false;
 
@@ -25,14 +31,6 @@ export class RoomJoinComponent {
     Validators.pattern(/[0-9\s]*/),
   ]);
   matcher = new FormErrorStateMatcher();
-
-  constructor(
-    private router: Router,
-    public notificationService: NotificationService,
-    private translateService: TranslocoService,
-    public authenticationService: AuthenticationService,
-    public eventService: EventService
-  ) {}
 
   onEnter(shortId: string) {
     this.joinRoom(shortId);

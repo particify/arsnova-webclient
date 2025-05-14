@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   GlobalStorageService,
@@ -21,17 +21,20 @@ import {
   standalone: false,
 })
 export class AdminHomeComponent implements OnInit {
+  protected langService = inject(LanguageService);
+  protected translateService = inject(TranslocoService);
+  protected globalStorageService = inject(GlobalStorageService);
+  protected router = inject(Router);
+  protected systemInfoService = inject(SystemInfoService);
+  protected featureFlagService = inject(FeatureFlagService);
+
   healthInfo: Observable<SystemHealth>;
   navButtonSection: NavButtonSection[] = [];
 
-  constructor(
-    protected langService: LanguageService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    protected systemInfoService: SystemInfoService,
-    protected featureFlagService: FeatureFlagService
-  ) {
+  constructor() {
+    const langService = this.langService;
+    const translateService = this.translateService;
+
     langService.langEmitter.subscribe((lang) => {
       translateService.setActiveLang(lang);
     });

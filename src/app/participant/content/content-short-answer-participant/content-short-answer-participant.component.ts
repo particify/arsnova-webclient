@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,6 +29,14 @@ import {
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentShortAnswerParticipantComponent extends ContentParticipantBaseComponent {
+  protected answerService = inject(ContentAnswerService);
+  protected notificationService: NotificationService;
+  protected translateService: TranslocoService;
+  protected globalStorageService: GlobalStorageService;
+  protected router: Router;
+  protected formService: FormService;
+  private contentService = inject(ContentService);
+
   @Input({ required: true }) content!: Content;
   @Input() answer?: ShortAnswerAnswer;
   @Input() correctOptionsPublished = false;
@@ -38,15 +46,13 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
 
   textAnswer = '';
 
-  constructor(
-    protected answerService: ContentAnswerService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    protected formService: FormService,
-    private contentService: ContentService
-  ) {
+  constructor() {
+    const notificationService = inject(NotificationService);
+    const translateService = inject(TranslocoService);
+    const globalStorageService = inject(GlobalStorageService);
+    const router = inject(Router);
+    const formService = inject(FormService);
+
     super(
       notificationService,
       translateService,
@@ -54,6 +60,12 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
       router,
       formService
     );
+
+    this.notificationService = notificationService;
+    this.translateService = translateService;
+    this.globalStorageService = globalStorageService;
+    this.router = router;
+    this.formService = formService;
   }
 
   init() {

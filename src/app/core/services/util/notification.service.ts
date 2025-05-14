@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   MatSnackBar,
   MatSnackBarConfig,
@@ -21,14 +21,12 @@ export enum AdvancedSnackBarTypes {
 
 @Injectable()
 export class NotificationService {
+  snackBar = inject(MatSnackBar);
+  private router = inject(Router);
+  private routingService = inject(RoutingService);
+
   public snackRef: any;
   isPresentation = false;
-
-  constructor(
-    public snackBar: MatSnackBar,
-    private router: Router,
-    private routingService: RoutingService
-  ) {}
 
   show(message: string, action?: string, config?: MatSnackBarConfig) {
     const defaultConfig: MatSnackBarConfig = {

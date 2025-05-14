@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable, of, Subject } from 'rxjs';
@@ -34,6 +34,15 @@ const httpOptions = {
 
 @Injectable()
 export class ContentService extends AbstractEntityService<Content> {
+  private http: HttpClient;
+  private ws: WsConnectorService;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  private router = inject(Router);
+  private dialogService = inject(DialogService);
+  private dialog = inject(MatDialog);
+
   private answersDeleted = new Subject<string>();
   private roundStarted = new Subject<Content>();
   private answerBanned = new Subject<string>();
@@ -59,17 +68,14 @@ export class ContentService extends AbstractEntityService<Content> {
     [ContentType.FLASHCARD, 'school'],
   ]);
 
-  constructor(
-    private http: HttpClient,
-    private ws: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    cachingService: CachingService,
-    private router: Router,
-    private dialogService: DialogService,
-    private dialog: MatDialog
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const ws = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+
     super(
       'Content',
       '/content',
@@ -81,6 +87,12 @@ export class ContentService extends AbstractEntityService<Content> {
       cachingService,
       false
     );
+
+    this.http = http;
+    this.ws = ws;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   getAnswersChangedStream(

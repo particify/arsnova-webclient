@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
@@ -43,6 +43,17 @@ import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/co
   styleUrls: ['./content-group-template-preview.component.scss'],
 })
 export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
+  private templateService = inject(BaseTemplateService);
+  private contentService = inject(ContentService);
+  private dialog = inject(MatDialog);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private routingService = inject(RoutingService);
+  private apiConfigService = inject(ApiConfigService);
+  private authService = inject(AuthenticationService);
+  private dialogService = inject(DialogService);
+  private router = inject(Router);
+
   private destroyed$ = new Subject<void>();
   template: ContentGroupTemplate;
 
@@ -59,18 +70,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   isCreator = false;
   isGuest = false;
 
-  constructor(
-    private templateService: BaseTemplateService,
-    private contentService: ContentService,
-    private dialog: MatDialog,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService,
-    private routingService: RoutingService,
-    private apiConfigService: ApiConfigService,
-    private authService: AuthenticationService,
-    private dialogService: DialogService,
-    private router: Router
-  ) {
+  constructor() {
     this.template = history?.state?.data?.template;
   }
 

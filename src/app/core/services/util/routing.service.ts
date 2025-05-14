@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter, map } from 'rxjs/operators';
@@ -19,6 +19,10 @@ enum RoutePrefix {
   providedIn: 'root',
 })
 export class RoutingService {
+  private router = inject(Router);
+  private location = inject(Location);
+  private globalStorageService = inject(GlobalStorageService);
+
   private fullCurrentRoute?: string;
   private viewRole?: UserRole;
   private shortId?: string;
@@ -32,11 +36,7 @@ export class RoutingService {
   seriesName?: string;
   showFooterLinks$ = new BehaviorSubject<boolean>(false);
 
-  constructor(
-    private router: Router,
-    private location: Location,
-    private globalStorageService: GlobalStorageService
-  ) {
+  constructor() {
     this.location.onUrlChange((url) => {
       this.fullCurrentRoute = url;
     });

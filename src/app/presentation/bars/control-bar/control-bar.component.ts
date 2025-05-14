@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
 import {
   NavBarComponent,
@@ -79,6 +80,25 @@ export class ControlBarComponent
   extends NavBarComponent
   implements OnInit, OnDestroy
 {
+  protected router: Router;
+  protected routingService: RoutingService;
+  protected route: ActivatedRoute;
+  protected globalStorageService: GlobalStorageService;
+  protected roomStatsService: RoomStatsService;
+  protected feedbackService: FeedbackService;
+  protected contentGroupService: ContentGroupService;
+  protected eventService: EventService;
+  protected apiConfigService = inject(ApiConfigService);
+  protected roomService: RoomService;
+  protected commentSettingsService: CommentSettingsService;
+  protected focusModeService: FocusModeService;
+  private announceService = inject(AnnounceService);
+  private hotkeyService = inject(HotkeyService);
+  private translateService = inject(TranslocoService);
+  private dialogService = inject(DialogService);
+  private notificationService = inject(NotificationService);
+  private presentationService = inject(PresentationService);
+
   @ViewChild(ContentPresentationMenuComponent)
   moreMenuComponent!: ContentPresentationMenuComponent;
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
@@ -139,26 +159,19 @@ export class ControlBarComponent
 
   private hotkeyRefs: symbol[] = [];
 
-  constructor(
-    protected router: Router,
-    protected routingService: RoutingService,
-    protected route: ActivatedRoute,
-    protected globalStorageService: GlobalStorageService,
-    protected roomStatsService: RoomStatsService,
-    protected feedbackService: FeedbackService,
-    protected contentGroupService: ContentGroupService,
-    protected eventService: EventService,
-    protected apiConfigService: ApiConfigService,
-    protected roomService: RoomService,
-    protected commentSettingsService: CommentSettingsService,
-    protected focusModeService: FocusModeService,
-    private announceService: AnnounceService,
-    private hotkeyService: HotkeyService,
-    private translateService: TranslocoService,
-    private dialogService: DialogService,
-    private notificationService: NotificationService,
-    private presentationService: PresentationService
-  ) {
+  constructor() {
+    const router = inject(Router);
+    const routingService = inject(RoutingService);
+    const route = inject(ActivatedRoute);
+    const globalStorageService = inject(GlobalStorageService);
+    const roomStatsService = inject(RoomStatsService);
+    const feedbackService = inject(FeedbackService);
+    const contentGroupService = inject(ContentGroupService);
+    const eventService = inject(EventService);
+    const roomService = inject(RoomService);
+    const commentSettingsService = inject(CommentSettingsService);
+    const focusModeService = inject(FocusModeService);
+
     super(
       router,
       routingService,
@@ -172,6 +185,18 @@ export class ControlBarComponent
       commentSettingsService,
       focusModeService
     );
+    this.router = router;
+    this.routingService = routingService;
+    this.route = route;
+    this.globalStorageService = globalStorageService;
+    this.roomStatsService = roomStatsService;
+    this.feedbackService = feedbackService;
+    this.contentGroupService = contentGroupService;
+    this.eventService = eventService;
+    this.roomService = roomService;
+    this.commentSettingsService = commentSettingsService;
+    this.focusModeService = focusModeService;
+
     this.afterMouseMoved();
     this.currentCommentPeriod =
       this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||

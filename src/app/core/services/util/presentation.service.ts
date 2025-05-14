@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { ContentGroup } from '@app/core/models/content-group';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
@@ -20,6 +20,9 @@ export const CARD_WIDTH = 640;
 
 @Injectable()
 export class PresentationService {
+  private contentService = inject(ContentService);
+  private contentGroupService = inject(ContentGroupService);
+
   private currentGroup$ = new Subject<string>();
   private feedbackStarted$ = new Subject<boolean>();
   private contentState$ = new BehaviorSubject<
@@ -46,11 +49,6 @@ export class PresentationService {
   private wordcloudVisualizationCHanged = new Subject<boolean>();
 
   private currentContent?: Content;
-
-  constructor(
-    private contentService: ContentService,
-    private contentGroupService: ContentGroupService
-  ) {}
 
   getScale(factor = 1) {
     const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;

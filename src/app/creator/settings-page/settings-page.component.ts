@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { Router } from '@angular/router';
@@ -45,6 +45,15 @@ export class UpdateEvent {
   standalone: false,
 })
 export class SettingsPageComponent implements OnInit {
+  protected roomService = inject(RoomService);
+  protected eventService = inject(EventService);
+  protected translateService = inject(TranslocoService);
+  private globalStorageService = inject(GlobalStorageService);
+  private router = inject(Router);
+  private location = inject(Location);
+  private notificationService = inject(NotificationService);
+  private formService = inject(FormService);
+
   // Route data input below
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) userRole!: UserRole;
@@ -55,16 +64,7 @@ export class SettingsPageComponent implements OnInit {
 
   HotkeyAction = HotkeyAction;
 
-  constructor(
-    protected roomService: RoomService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    private globalStorageService: GlobalStorageService,
-    private router: Router,
-    private location: Location,
-    private notificationService: NotificationService,
-    private formService: FormService
-  ) {
+  constructor() {
     this.settings = [
       {
         name: 'general',

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Moderator } from '@app/core/models/moderator';
@@ -15,12 +15,17 @@ const httpOptions = {
 
 @Injectable()
 export class ModeratorService extends AbstractHttpService<Moderator> {
-  constructor(
-    private http: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
+  private http: HttpClient;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+
+  constructor() {
+    const http = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super(
       '/moderator',
       http,
@@ -28,6 +33,11 @@ export class ModeratorService extends AbstractHttpService<Moderator> {
       translateService,
       notificationService
     );
+
+    this.http = http;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   get(roomId: string): Observable<Moderator[]> {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Content } from '@app/core/models/content';
 import { ContentPreviewComponent } from '@app/standalone/content-preview/content-preview.component';
@@ -18,11 +18,13 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
   styleUrls: ['./content-template-preview.component.scss'],
 })
 export class ContentTemplatePreviewComponent implements AfterViewInit {
-  constructor(
-    private dialogRef: MatDialogRef<ContentTemplatePreviewComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: { contents: Content[]; index: number; lang: string }
-  ) {}
+  private dialogRef =
+    inject<MatDialogRef<ContentTemplatePreviewComponent>>(MatDialogRef);
+  data = inject<{
+    contents: Content[];
+    index: number;
+    lang: string;
+  }>(MAT_DIALOG_DATA);
 
   @ViewChild(StepperComponent) stepper!: StepperComponent;
 

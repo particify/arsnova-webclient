@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  inject,
 } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Answer } from '@app/core/models/answer';
@@ -124,6 +125,16 @@ export class ContentParticipantComponent
   extends FormComponent
   implements OnInit, OnChanges
 {
+  protected formService: FormService;
+  private router = inject(Router);
+  private location = inject(Location);
+  private eventService = inject(EventService);
+  private contentService = inject(ContentService);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private contentPublishService = inject(ContentPublishService);
+  private answerService = inject(ContentAnswerService);
+
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) content!: Content;
   @Input({ required: true }) contentGroup!: ContentGroup;
@@ -199,18 +210,12 @@ export class ContentParticipantComponent
     },
   ];
 
-  constructor(
-    protected formService: FormService,
-    private router: Router,
-    private location: Location,
-    private eventService: EventService,
-    private contentService: ContentService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService,
-    private contentPublishService: ContentPublishService,
-    private answerService: ContentAnswerService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   get answerSubmitted(): Observable<string> {

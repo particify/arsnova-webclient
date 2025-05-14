@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { TemplateService } from '@app/admin/template-management/template.service';
@@ -29,6 +29,12 @@ export class TemplateManagementComponent
   extends FormComponent
   implements OnInit
 {
+  protected formService: FormService;
+  private templateService = inject(TemplateService);
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  private dialogService = inject(DialogService);
+
   isLoading = true;
   tags: TemplateTag[] = [];
   filteredTags: TemplateTag[] = [];
@@ -37,14 +43,12 @@ export class TemplateManagementComponent
   filterOptions = Object.values(FILTER);
   searchFormControl = new FormControl('');
 
-  constructor(
-    protected formService: FormService,
-    private templateService: TemplateService,
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    private dialogService: DialogService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

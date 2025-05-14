@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -43,19 +43,18 @@ import { FlexModule } from '@angular/flex-layout';
   ],
 })
 export class AnnouncementListComponent implements OnInit {
+  data = inject(MAT_DIALOG_DATA);
+  private dialogRef =
+    inject<MatDialogRef<AnnouncementListComponent>>(MatDialogRef);
+  private authService = inject(AuthenticationService);
+  private announcementService = inject(AnnouncementService);
+
   announcements: UserAnnouncement[] = [];
   displayAnnouncements: UserAnnouncement[] = [];
   announcementRooms = new Map<string, string>();
   selectedRoomId = '';
   newReadTimestamp = new Date();
   isLoading = true;
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<AnnouncementListComponent>,
-    private authService: AuthenticationService,
-    private announcementService: AnnouncementService
-  ) {}
 
   ngOnInit(): void {
     this.authService.getCurrentAuthentication().subscribe((auth) => {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { takeUntil } from 'rxjs';
@@ -56,6 +56,15 @@ export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
+  protected roomStatsService: RoomStatsService;
+  protected contentGroupService: ContentGroupService;
+  protected eventService: EventService;
+  protected translateService = inject(TranslocoService);
+  protected globalStorageService = inject(GlobalStorageService);
+  protected commentSettingsService = inject(CommentSettingsService);
+  protected focusModeService = inject(FocusModeService);
+  private feedbackService = inject(FeedbackService);
+
   // Route data input below
   @Input({ required: true }) commentSettings!: CommentSettings;
 
@@ -64,17 +73,16 @@ export class RoomOverviewPageComponent
   focusModeEnabled = false;
   HintType = HintType;
 
-  constructor(
-    protected roomStatsService: RoomStatsService,
-    protected contentGroupService: ContentGroupService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected commentSettingsService: CommentSettingsService,
-    protected focusModeService: FocusModeService,
-    private feedbackService: FeedbackService
-  ) {
+  constructor() {
+    const roomStatsService = inject(RoomStatsService);
+    const contentGroupService = inject(ContentGroupService);
+    const eventService = inject(EventService);
+
     super(roomStatsService, contentGroupService, eventService);
+
+    this.roomStatsService = roomStatsService;
+    this.contentGroupService = contentGroupService;
+    this.eventService = eventService;
   }
 
   ngOnDestroy(): void {

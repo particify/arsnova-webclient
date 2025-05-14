@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -49,6 +49,18 @@ interface RoomDataView {
   standalone: false,
 })
 export class RoomListComponent implements OnInit, OnDestroy {
+  private roomService = inject(RoomService);
+  eventService = inject(EventService);
+  protected roomMembershipService = inject(RoomMembershipService);
+  private authenticationService = inject(AuthenticationService);
+  notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  protected router = inject(Router);
+  private dialogService = inject(DialogService);
+  private globalStorageService = inject(GlobalStorageService);
+  private extensionFactory = inject(ExtensionFactory);
+  private routingService = inject(RoutingService);
+
   @Input({ required: true }) auth!: ClientAuthentication;
   showGuestAccountControls = false;
   isGuest = false;
@@ -70,19 +82,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   executiveModeratorRole = UserRole.MODERATOR;
   editorRole = UserRole.EDITOR;
 
-  constructor(
-    private roomService: RoomService,
-    public eventService: EventService,
-    protected roomMembershipService: RoomMembershipService,
-    private authenticationService: AuthenticationService,
-    public notificationService: NotificationService,
-    private translateService: TranslocoService,
-    protected router: Router,
-    private dialogService: DialogService,
-    private globalStorageService: GlobalStorageService,
-    private extensionFactory: ExtensionFactory,
-    private routingService: RoutingService
-  ) {
+  constructor() {
     this.deviceType = this.globalStorageService.getItem(
       STORAGE_KEYS.DEVICE_TYPE
     );

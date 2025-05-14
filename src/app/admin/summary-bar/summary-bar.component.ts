@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import {
   SummarizedStats,
   SystemInfoService,
@@ -14,10 +14,12 @@ import { SystemHealth } from '@app/admin/_models/system-health';
   standalone: false,
 })
 export class SummaryBarComponent {
+  protected systemInfoService = inject(SystemInfoService);
+
   @Input({ required: true }) healthInfo!: Observable<SystemHealth>;
   stats: Observable<SummarizedStats>;
 
-  constructor(protected systemInfoService: SystemInfoService) {
+  constructor() {
     this.stats = this.getStats();
   }
 

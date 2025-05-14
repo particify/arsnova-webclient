@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -9,13 +9,23 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class TemplateService extends BaseTemplateService {
-  constructor(
-    protected httpClient: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
+  protected httpClient: HttpClient;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+
+  constructor() {
+    const httpClient = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super(httpClient, eventService, translateService, notificationService);
+
+    this.httpClient = httpClient;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   patchTemplateTag(tagId: string, changes: object): Observable<TemplateTag> {

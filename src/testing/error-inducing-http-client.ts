@@ -8,7 +8,7 @@ import {
   HttpParams,
   HttpResponse,
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, map, pipe } from 'rxjs';
 
 const ERROR_RATE = 1.0 / 3;
@@ -40,7 +40,9 @@ function fakeError(url: string) {
  */
 @Injectable()
 export class ErrorInducingHttpClient extends HttpClient {
-  constructor(httpHander: HttpHandler) {
+  constructor() {
+    const httpHander = inject(HttpHandler);
+
     super(httpHander);
     console.warn('Using ErrorInducingHttpClient.');
   }

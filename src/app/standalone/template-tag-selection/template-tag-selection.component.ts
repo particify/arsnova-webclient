@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -26,6 +27,10 @@ export class TemplateTagSelectionComponent
   extends FormComponent
   implements OnInit
 {
+  protected formService: FormService;
+  private announceService = inject(AnnounceService);
+  private templateService = inject(BaseTemplateService);
+
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
 
   @Input({ required: true }) langChanged!: EventEmitter<string>;
@@ -41,12 +46,12 @@ export class TemplateTagSelectionComponent
     Validators.pattern(/^[\p{Ll}\p{Lu}\d\s]*$/u)
   );
 
-  constructor(
-    protected formService: FormService,
-    private announceService: AnnounceService,
-    private templateService: BaseTemplateService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

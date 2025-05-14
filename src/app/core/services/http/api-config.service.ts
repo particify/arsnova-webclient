@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AbstractHttpService } from './abstract-http.service';
@@ -12,15 +12,20 @@ import dayjs from 'dayjs';
 
 @Injectable()
 export class ApiConfigService extends AbstractHttpService<ApiConfig> {
+  private http: HttpClient;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+
   private config$: Observable<ApiConfig> = of();
   private cacheExpiry: dayjs.Dayjs = dayjs();
 
-  constructor(
-    private http: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super(
       '/configuration',
       http,
@@ -28,6 +33,11 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
       translateService,
       notificationService
     );
+
+    this.http = http;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   getApiConfig$(): Observable<ApiConfig> {

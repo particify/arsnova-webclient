@@ -5,6 +5,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
@@ -32,6 +33,9 @@ export class PrioritizationContentFormComponent
   extends FormComponent
   implements OnInit, OnChanges, ContentForm
 {
+  private contentService = inject(ContentService);
+  protected formService: FormService;
+
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
@@ -43,11 +47,12 @@ export class PrioritizationContentFormComponent
 
   displayAnswers: DisplayAnswer[] = [];
 
-  constructor(
-    private contentService: ContentService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
   ngOnInit(): void {
     if (this.content?.format === ContentType.PRIORITIZATION) {

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
@@ -13,6 +20,9 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   standalone: false,
 })
 export abstract class StatisticContentBaseComponent implements OnInit {
+  protected contentService = inject(ContentService);
+  protected translateService = inject(TranslocoService);
+
   @Input({ required: true }) content!: Content;
   @Input() directShow = false;
   @Output() updateCounterEvent: EventEmitter<AnswerResponseCounts> =
@@ -25,11 +35,6 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   isLoading = true;
   answersVisible = false;
   responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
-
-  protected constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService
-  ) {}
 
   ngOnInit(): void {
     this.loadData().subscribe((stats) => {

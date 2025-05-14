@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
@@ -29,6 +35,14 @@ export class ContentChoiceParticipantComponent
   extends ContentParticipantBaseComponent
   implements OnChanges
 {
+  protected answerService = inject(ContentAnswerService);
+  protected notificationService: NotificationService;
+  protected translateService: TranslocoService;
+  protected globalStorageService: GlobalStorageService;
+  protected router: Router;
+  private contentService = inject(ContentService);
+  protected formService: FormService;
+
   @Input({ required: true }) content!: ContentChoice;
   @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
@@ -44,15 +58,13 @@ export class ContentChoiceParticipantComponent
   isChoice = false;
   hasAbstained = false;
 
-  constructor(
-    protected answerService: ContentAnswerService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    private contentService: ContentService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const notificationService = inject(NotificationService);
+    const translateService = inject(TranslocoService);
+    const globalStorageService = inject(GlobalStorageService);
+    const router = inject(Router);
+    const formService = inject(FormService);
+
     super(
       notificationService,
       translateService,
@@ -60,6 +72,12 @@ export class ContentChoiceParticipantComponent
       router,
       formService
     );
+
+    this.notificationService = notificationService;
+    this.translateService = translateService;
+    this.globalStorageService = globalStorageService;
+    this.router = router;
+    this.formService = formService;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

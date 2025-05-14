@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -32,6 +32,14 @@ interface DialogData {
   standalone: false,
 })
 export class ContentGroupCreationComponent extends FormComponent {
+  dialogRef = inject<MatDialogRef<ContentGroupCreationComponent>>(MatDialogRef);
+  dialog = inject(MatDialog);
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  private contentGroupService = inject(ContentGroupService);
+  private data = inject<DialogData>(MAT_DIALOG_DATA);
+  protected formService: FormService;
+
   readonly dialogId = 'create-content-group';
 
   @ViewChild('nameInput') nameInput!: ElementRef;
@@ -41,16 +49,12 @@ export class ContentGroupCreationComponent extends FormComponent {
   selectedType = GroupType.MIXED;
   radioItems: DetailedRadioGroup[] = [];
 
-  constructor(
-    public dialogRef: MatDialogRef<ContentGroupCreationComponent>,
-    public dialog: MatDialog,
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    private contentGroupService: ContentGroupService,
-    @Inject(MAT_DIALOG_DATA) private data: DialogData,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+    this.formService = formService;
+
     Object.values(GroupType).forEach((type) => {
       const typeString = type.toLowerCase();
       const title = this.translateService.translate(

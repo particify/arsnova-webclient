@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, inject } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentShortAnswer } from '@app/core/models/content-short-answer';
@@ -31,17 +31,23 @@ export class StatisticShortAnswerComponent
   extends StatisticContentBaseComponent
   implements OnDestroy
 {
+  protected contentService: ContentService;
+  protected translateService: TranslocoService;
+
   @Input() showModeration = false;
   @Input() showCorrect = false;
 
   answerList: TextStatistic[] = [];
   abstentionCount = 0;
 
-  constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService
-  ) {
+  constructor() {
+    const contentService = inject(ContentService);
+    const translateService = inject(TranslocoService);
+
     super(contentService, translateService);
+
+    this.contentService = contentService;
+    this.translateService = translateService;
   }
 
   afterInit() {

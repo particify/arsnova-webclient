@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -29,6 +29,10 @@ export class NumericContentFormComponent
   extends FormComponent
   implements OnInit, ContentForm
 {
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  protected formService: FormService;
+
   @Input() content?: Content;
   @Input() isEditMode = false;
   @Input() correctAnswerSelection = false;
@@ -41,12 +45,12 @@ export class NumericContentFormComponent
   correctNumber?: number;
   tolerance?: number;
 
-  constructor(
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
   ngOnInit(): void {
     if (this.content?.format === ContentType.NUMERIC) {

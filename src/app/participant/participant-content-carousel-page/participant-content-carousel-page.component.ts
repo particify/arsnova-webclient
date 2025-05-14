@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -84,6 +85,24 @@ function setDefaultTrue(value: boolean | undefined): boolean {
 export class ParticipantContentCarouselPageComponent
   implements OnInit, OnDestroy
 {
+  private contentService = inject(ContentService);
+  protected translateService = inject(TranslocoService);
+  private contentgroupService = inject(ContentGroupService);
+  protected route = inject(ActivatedRoute);
+  private announceService = inject(AnnounceService);
+  private globalStorageService = inject(GlobalStorageService);
+  private location = inject(Location);
+  private authenticationService = inject(AuthenticationService);
+  private notificationService = inject(NotificationService);
+  private router = inject(Router);
+  private routingService = inject(RoutingService);
+  private contentCarouselService = inject(ContentCarouselService);
+  private contentPublishService = inject(ContentPublishService);
+  private focusModeService = inject(FocusModeService);
+  private roomUserAliasService = inject(RoomUserAliasService);
+  private contentGroupService = inject(ContentGroupService);
+  private destroyRef = inject(DestroyRef);
+
   @ViewChild(StepperComponent) stepper!: StepperComponent;
 
   // Route data input below
@@ -128,26 +147,6 @@ export class ParticipantContentCarouselPageComponent
   attributions: ContentLicenseAttribution[] = [];
   GroupType = GroupType;
   alias?: RoomUserAlias;
-
-  constructor(
-    private contentService: ContentService,
-    protected translateService: TranslocoService,
-    private contentgroupService: ContentGroupService,
-    protected route: ActivatedRoute,
-    private announceService: AnnounceService,
-    private globalStorageService: GlobalStorageService,
-    private location: Location,
-    private authenticationService: AuthenticationService,
-    private notificationService: NotificationService,
-    private router: Router,
-    private routingService: RoutingService,
-    private contentCarouselService: ContentCarouselService,
-    private contentPublishService: ContentPublishService,
-    private focusModeService: FocusModeService,
-    private roomUserAliasService: RoomUserAliasService,
-    private contentGroupService: ContentGroupService,
-    private destroyRef: DestroyRef
-  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();

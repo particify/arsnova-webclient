@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -19,20 +19,24 @@ import { take } from 'rxjs';
   standalone: false,
 })
 export class UserActivationComponent extends FormComponent implements OnInit {
+  data = inject(MAT_DIALOG_DATA);
+  userService = inject(UserService);
+  notificationService = inject(NotificationService);
+  dialogRef = inject<MatDialogRef<UserActivationComponent>>(MatDialogRef);
+  private translationService = inject(TranslocoService);
+  eventService = inject(EventService);
+  protected formService: FormService;
+
   readonly dialogId = 'activate-user';
 
   activationKeyFormControl = new UntypedFormControl('', [Validators.required]);
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: string,
-    public userService: UserService,
-    public notificationService: NotificationService,
-    public dialogRef: MatDialogRef<UserActivationComponent>,
-    private translationService: TranslocoService,
-    public eventService: EventService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

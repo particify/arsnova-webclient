@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
@@ -33,6 +33,13 @@ import { MembershipsChanged } from '@app/core/models/events/memberships-changed'
  */
 @Injectable()
 export class RoomMembershipService extends AbstractHttpService<Membership> {
+  protected http: HttpClient;
+  protected wsConnector = inject(WsConnectorService);
+  protected eventService: EventService;
+  protected authenticationService = inject(AuthenticationService);
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+
   serviceApiUrl = {
     byUser: '/by-user',
   };
@@ -40,14 +47,12 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   private memberships$$ = new BehaviorSubject<Observable<Membership[]>>(of([]));
   private newOwnerships: Membership[] = [];
 
-  constructor(
-    protected http: HttpClient,
-    protected wsConnector: WsConnectorService,
-    protected eventService: EventService,
-    protected authenticationService: AuthenticationService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super(
       '/_view/membership',
       http,
@@ -55,6 +60,12 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
       translateService,
       notificationService
     );
+    this.http = http;
+    this.eventService = eventService;
+    const authenticationService = this.authenticationService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
+
     const authChanged$ = authenticationService
       .getAuthenticationChanges()
       .pipe(skip(1));

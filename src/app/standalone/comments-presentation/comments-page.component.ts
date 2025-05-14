@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -58,6 +59,24 @@ export class CommentsPageComponent
   extends AbstractCommentsPageComponent
   implements OnInit, OnDestroy
 {
+  protected commentService: CommentService;
+  protected translateService: TranslocoService;
+  protected dialog: MatDialog;
+  protected wsCommentService: WsCommentService;
+  protected notificationService: NotificationService;
+  protected announceService: AnnounceService;
+  protected router: Router;
+  protected globalStorageService: GlobalStorageService;
+  protected commentSettingsService: CommentSettingsService;
+  protected hotkeyService = inject(HotkeyService);
+  protected authenticationService: AuthenticationService;
+  protected location = inject(Location);
+  protected routingService = inject(RoutingService);
+  protected eventService = inject(EventService);
+  private presentationService = inject(PresentationService);
+  protected focusModeService = inject(FocusModeService);
+  private formService = inject(FormService);
+
   @ViewChild('commentList') commentListRef!: ElementRef;
 
   // Route data input below
@@ -65,25 +84,18 @@ export class CommentsPageComponent
 
   protected hotkeyRefs: symbol[] = [];
 
-  constructor(
-    protected commentService: CommentService,
-    protected translateService: TranslocoService,
-    protected dialog: MatDialog,
-    protected wsCommentService: WsCommentService,
-    protected notificationService: NotificationService,
-    protected announceService: AnnounceService,
-    protected router: Router,
-    protected globalStorageService: GlobalStorageService,
-    protected commentSettingsService: CommentSettingsService,
-    protected hotkeyService: HotkeyService,
-    protected authenticationService: AuthenticationService,
-    protected location: Location,
-    protected routingService: RoutingService,
-    protected eventService: EventService,
-    private presentationService: PresentationService,
-    protected focusModeService: FocusModeService,
-    private formService: FormService
-  ) {
+  constructor() {
+    const commentService = inject(CommentService);
+    const translateService = inject(TranslocoService);
+    const dialog = inject(MatDialog);
+    const wsCommentService = inject(WsCommentService);
+    const notificationService = inject(NotificationService);
+    const announceService = inject(AnnounceService);
+    const router = inject(Router);
+    const globalStorageService = inject(GlobalStorageService);
+    const commentSettingsService = inject(CommentSettingsService);
+    const authenticationService = inject(AuthenticationService);
+
     super(
       commentService,
       translateService,
@@ -96,6 +108,17 @@ export class CommentsPageComponent
       commentSettingsService,
       authenticationService
     );
+
+    this.commentService = commentService;
+    this.translateService = translateService;
+    this.dialog = dialog;
+    this.wsCommentService = wsCommentService;
+    this.notificationService = notificationService;
+    this.announceService = announceService;
+    this.router = router;
+    this.globalStorageService = globalStorageService;
+    this.commentSettingsService = commentSettingsService;
+    this.authenticationService = authenticationService;
   }
 
   ngOnInit(): void {

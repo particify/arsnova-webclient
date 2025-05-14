@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
@@ -14,15 +14,25 @@ import { EventService } from '@app/core/services/util/event.service';
 
 @Injectable()
 export class FocusModeService extends AbstractFocusModeService {
+  protected wsConnector: WsConnectorService;
+  protected http: HttpClient;
+  protected eventService: EventService;
+  protected featureFlagService: FeatureFlagService;
+
   private state$ = new BehaviorSubject<FocusEvent | null>(null);
 
-  constructor(
-    protected wsConnector: WsConnectorService,
-    protected http: HttpClient,
-    protected eventService: EventService,
-    protected featureFlagService: FeatureFlagService
-  ) {
+  constructor() {
+    const wsConnector = inject(WsConnectorService);
+    const http = inject(HttpClient);
+    const eventService = inject(EventService);
+    const featureFlagService = inject(FeatureFlagService);
+
     super(wsConnector, http, eventService, featureFlagService);
+
+    this.wsConnector = wsConnector;
+    this.http = http;
+    this.eventService = eventService;
+    this.featureFlagService = featureFlagService;
   }
 
   protected handleState(state: FocusEvent) {

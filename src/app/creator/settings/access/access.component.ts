@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  inject,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -43,6 +44,16 @@ export class AccessComponent
   extends FormComponent
   implements OnInit, OnDestroy
 {
+  private dialogService = inject(DialogService);
+  notificationService = inject(NotificationService);
+  translationService = inject(TranslocoService);
+  protected moderatorService = inject(ModeratorService);
+  protected userService = inject(UserService);
+  eventService = inject(EventService);
+  private authenticationService = inject(AuthenticationService);
+  private accessTokenService = inject(AccessTokenService);
+  protected formService: FormService;
+
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
@@ -64,18 +75,12 @@ export class AccessComponent
 
   HintType = HintType;
 
-  constructor(
-    private dialogService: DialogService,
-    public notificationService: NotificationService,
-    public translationService: TranslocoService,
-    protected moderatorService: ModeratorService,
-    protected userService: UserService,
-    public eventService: EventService,
-    private authenticationService: AuthenticationService,
-    private accessTokenService: AccessTokenService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit() {

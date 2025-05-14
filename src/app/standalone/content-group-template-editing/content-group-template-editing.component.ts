@@ -6,6 +6,7 @@ import {
   QueryList,
   ViewChild,
   ViewChildren,
+  inject,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
@@ -39,6 +40,10 @@ export class ContentGroupTemplateEditingComponent
   extends FormComponent
   implements OnInit
 {
+  protected formService: FormService;
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+
   @ViewChildren(MatInput) inputs!: QueryList<MatInput>;
   @ViewChild(TemplateTagSelectionComponent)
   templateTagSelectionComponent!: TemplateTagSelectionComponent;
@@ -57,12 +62,12 @@ export class ContentGroupTemplateEditingComponent
   licenseKeys = Array.from(LICENSES.keys());
   LICENSES = LICENSES;
 
-  constructor(
-    protected formService: FormService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+    this.formService = formService;
+
     this.selectedLicense = this.licenseKeys[0];
     this.selectedLang = this.translateService.getActiveLang();
   }

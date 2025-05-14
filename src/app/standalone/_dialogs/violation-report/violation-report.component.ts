@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   ViolationReport,
   ViolationReportReason,
@@ -22,21 +22,28 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './violation-report.component.html',
 })
 export class ViolationReportComponent extends FormComponent implements OnInit {
+  protected formService: FormService;
+  private dialogRef =
+    inject<MatDialogRef<ViolationReportComponent>>(MatDialogRef);
+  private data = inject<{
+    targetType: string;
+    targetId: string;
+  }>(MAT_DIALOG_DATA);
+  private violationReportService = inject(ViolationReportService);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+
   reasons = Object.keys(ViolationReportReason);
   selectedReason?: ViolationReportReason;
   description = '';
   targetTypeString?: string;
 
-  constructor(
-    protected formService: FormService,
-    private dialogRef: MatDialogRef<ViolationReportComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    private data: { targetType: string; targetId: string },
-    private violationReportService: ViolationReportService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

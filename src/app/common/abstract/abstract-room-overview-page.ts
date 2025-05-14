@@ -6,13 +6,17 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 
 @Component({
   template: '',
   standalone: false,
 })
 export class AbstractRoomOverviewPageComponent {
+  protected roomStatsService = inject(RoomStatsService);
+  protected contentGroupService = inject(ContentGroupService);
+  protected eventService = inject(EventService);
+
   // Route data input below
   @Input({ required: true }) viewRole!: UserRole;
   @Input({ required: true }) room!: Room;
@@ -22,12 +26,6 @@ export class AbstractRoomOverviewPageComponent {
 
   contentGroups: ContentGroup[] = [];
   roomStats?: RoomStats;
-
-  constructor(
-    protected roomStatsService: RoomStatsService,
-    protected contentGroupService: ContentGroupService,
-    protected eventService: EventService
-  ) {}
 
   initializeStats(extendedStats: boolean) {
     this.roomStatsService

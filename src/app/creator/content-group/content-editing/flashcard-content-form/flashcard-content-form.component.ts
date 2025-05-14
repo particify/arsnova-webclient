@@ -4,6 +4,7 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
+  inject,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -34,6 +35,11 @@ export class FlashcardContentFormComponent
   extends FormComponent
   implements OnInit, OnChanges, ContentForm
 {
+  private notificationService = inject(NotificationService);
+  private translationService = inject(TranslocoService);
+  private formattingService = inject(FormattingService);
+  protected formService: FormService;
+
   @Input() content?: Content;
   @Input() isEditMode = false;
 
@@ -41,13 +47,12 @@ export class FlashcardContentFormComponent
   textContainsImage = false;
   HintType = HintType;
 
-  constructor(
-    private notificationService: NotificationService,
-    private translationService: TranslocoService,
-    private formattingService: FormattingService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

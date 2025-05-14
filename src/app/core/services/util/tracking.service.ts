@@ -1,4 +1,4 @@
-import { ErrorHandler, Inject, Injectable } from '@angular/core';
+import { ErrorHandler, Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { ConsentService } from './consent.service';
@@ -50,6 +50,17 @@ export enum EventCategory {
 
 @Injectable()
 export class TrackingService {
+  private consentService = inject(ConsentService);
+  private router = inject(Router);
+  private eventService = inject(EventService);
+  private authenticationService = inject(AuthenticationService);
+  private translateService = inject(TranslocoService);
+  private themeService = inject(ThemeService);
+  private globalStorageService = inject(GlobalStorageService);
+  private _window = inject<{
+    [key: string]: object;
+  }>(Window);
+
   _paq: any[];
   loaded = false;
   consentGiven?: boolean;
@@ -60,17 +71,10 @@ export class TrackingService {
   specialRooms = new Map<string, string>();
   appErrorHandler: AppErrorHandler;
 
-  constructor(
-    private consentService: ConsentService,
-    private router: Router,
-    private eventService: EventService,
-    private authenticationService: AuthenticationService,
-    private translateService: TranslocoService,
-    private themeService: ThemeService,
-    private globalStorageService: GlobalStorageService,
-    errorHandler: ErrorHandler,
-    @Inject(Window) private _window: { [key: string]: object }
-  ) {
+  constructor() {
+    const errorHandler = inject(ErrorHandler);
+    const _window = this._window;
+
     this.appErrorHandler = errorHandler as AppErrorHandler;
     _window['_paq'] = _window['_paq'] || [];
     this._paq = _window['_paq'] as any[];

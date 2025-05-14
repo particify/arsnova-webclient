@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { Resolve } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
@@ -14,11 +14,9 @@ import {
 
 @Injectable()
 export class ApiConfigResolver implements Resolve<ApiConfig> {
-  constructor(
-    private apiConfigService: ApiConfigService,
-    private notificationService: NotificationService,
-    private translateService: TranslocoService
-  ) {}
+  private apiConfigService = inject(ApiConfigService);
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
 
   resolve(): Observable<ApiConfig> {
     let snackbarRef: MatSnackBarRef<SnackBarAdvancedComponent>;

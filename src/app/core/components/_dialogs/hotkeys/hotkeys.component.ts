@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   Hotkey,
@@ -12,10 +12,10 @@ import {
   standalone: false,
 })
 export class HotkeysComponent {
+  hotkeys = inject(MAT_DIALOG_DATA);
+
   readonly dialogId = 'hotkeys';
 
   displayedColumns = ['action', 'keys'];
   HotkeyActionType = HotkeyActionType;
-
-  constructor(@Inject(MAT_DIALOG_DATA) public hotkeys: Hotkey[]) {}
 }

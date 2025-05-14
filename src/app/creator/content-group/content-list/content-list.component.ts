@@ -7,6 +7,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -41,6 +42,17 @@ export class ContentListComponent
   extends DragDropBaseComponent
   implements OnInit
 {
+  private contentService = inject(ContentService);
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  private dialogService = inject(DialogService);
+  private contentGroupService = inject(ContentGroupService);
+  private contentPublishService = inject(ContentPublishService);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private presentationService = inject(PresentationService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   @ViewChild('publishingDivider') publishingDivider!: ElementRef;
 
   @Input({ required: true }) room!: Room;
@@ -73,18 +85,7 @@ export class ContentListComponent
 
   finishedContents = new Map<string, boolean>();
 
-  constructor(
-    private contentService: ContentService,
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    private dialogService: DialogService,
-    private contentGroupService: ContentGroupService,
-    private contentPublishService: ContentPublishService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private presentationService: PresentationService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  constructor() {
     super();
     this.iconList = this.contentService.getTypeIcons();
   }

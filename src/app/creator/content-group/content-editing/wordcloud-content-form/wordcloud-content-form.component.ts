@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -29,17 +29,21 @@ export class WordcloudContentFormComponent
   extends FormComponent
   implements OnInit, ContentForm
 {
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  protected formService: FormService;
+
   @Input() content?: Content;
   @Input() isEditMode = false;
 
   maxAnswers = 3;
 
-  constructor(
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
   ngOnInit(): void {
     if (this.content?.format === ContentType.WORDCLOUD) {

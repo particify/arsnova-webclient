@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { forkJoin, Observable, take } from 'rxjs';
 import { ThemeService } from '@app/core/theme/theme.service';
@@ -31,17 +31,27 @@ import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-re
   ],
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {
+  protected contentService: ContentService;
+  protected translateService: TranslocoService;
+  protected themeService: ThemeService;
+  protected presentationService: PresentationService;
+  private likertScaleService = inject(LikertScaleService);
+  private languageService = inject(LanguageService);
+
   @Input() language?: string;
 
-  constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService,
-    protected themeService: ThemeService,
-    protected presentationService: PresentationService,
-    private likertScaleService: LikertScaleService,
-    private languageService: LanguageService
-  ) {
+  constructor() {
+    const contentService = inject(ContentService);
+    const translateService = inject(TranslocoService);
+    const themeService = inject(ThemeService);
+    const presentationService = inject(PresentationService);
+
     super(contentService, translateService, themeService, presentationService);
+
+    this.contentService = contentService;
+    this.translateService = translateService;
+    this.themeService = themeService;
+    this.presentationService = presentationService;
   }
 
   init(stats: AnswerStatistics) {

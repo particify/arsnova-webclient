@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
@@ -31,6 +31,10 @@ export class StatisticWordcloudComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
+  protected contentService: ContentService;
+  protected translateService: TranslocoService;
+  private presentationService = inject(PresentationService);
+
   @Input() showModeration = false;
 
   wordWeights: WordCloudItem[] = [];
@@ -39,12 +43,14 @@ export class StatisticWordcloudComponent
 
   rotateWords?: boolean;
 
-  constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService,
-    private presentationService: PresentationService
-  ) {
+  constructor() {
+    const contentService = inject(ContentService);
+    const translateService = inject(TranslocoService);
+
     super(contentService, translateService);
+
+    this.contentService = contentService;
+    this.translateService = translateService;
   }
 
   afterInit() {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -12,11 +12,9 @@ import { AuthenticationGuard } from './authentication.guard';
 
 @Injectable()
 export class DemoRoomGuard implements CanActivate {
-  constructor(
-    private demoService: DemoService,
-    private authenticationGuard: AuthenticationGuard,
-    private router: Router
-  ) {}
+  private demoService = inject(DemoService);
+  private authenticationGuard = inject(AuthenticationGuard);
+  private router = inject(Router);
 
   canActivate(
     route: ActivatedRouteSnapshot,

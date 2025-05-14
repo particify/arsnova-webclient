@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UserService } from '@app/core/services/http/user.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { AdminService } from '@app/core/services/http/admin.service';
@@ -24,20 +24,26 @@ export class UserManagementComponent
   extends UserSearchComponent
   implements OnInit
 {
+  protected adminService: AdminService;
+  protected userService: UserService;
+  protected dialogService = inject(DialogService);
+  protected notificationService = inject(NotificationService);
+  protected translateService = inject(TranslocoService);
+  protected apiConfigService = inject(ApiConfigService);
+  protected dialog = inject(MatDialog);
+  private formService = inject(FormService);
+
   addButtonText?: string;
   isLoading = false;
 
-  constructor(
-    protected adminService: AdminService,
-    protected userService: UserService,
-    protected dialogService: DialogService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected apiConfigService: ApiConfigService,
-    protected dialog: MatDialog,
-    private formService: FormService
-  ) {
+  constructor() {
+    const adminService = inject(AdminService);
+    const userService = inject(UserService);
+
     super(userService, adminService);
+
+    this.adminService = adminService;
+    this.userService = userService;
   }
 
   ngOnInit(): void {

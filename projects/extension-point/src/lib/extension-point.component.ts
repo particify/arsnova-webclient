@@ -6,6 +6,7 @@ import {
   ViewContainerRef,
   Input,
   Output,
+  inject,
 } from '@angular/core';
 import { ExtensionFactory } from './extension-factory';
 
@@ -16,16 +17,14 @@ import { ExtensionFactory } from './extension-factory';
   standalone: false,
 })
 export class ExtensionPointComponent implements OnInit {
+  private viewContainerRef = inject(ViewContainerRef);
+  private factory = inject(ExtensionFactory);
+
   @Input({ required: true }) extensionId!: string;
   @Input() extensionData?: object;
   @Output() extensionEvent = new EventEmitter();
   componentRef?: ComponentRef<any> | null;
   extensionUnavailable = false;
-
-  constructor(
-    private viewContainerRef: ViewContainerRef,
-    private factory: ExtensionFactory
-  ) {}
 
   ngOnInit() {
     this.componentRef = this.factory.createExtension(

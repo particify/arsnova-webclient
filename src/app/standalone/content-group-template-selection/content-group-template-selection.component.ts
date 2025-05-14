@@ -5,6 +5,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,6 +41,15 @@ export class ContentGroupTemplateSelectionComponent
   extends FormComponent
   implements OnInit, OnDestroy
 {
+  protected formService: FormService;
+  private templateService = inject(BaseTemplateService);
+  private translateService = inject(TranslocoService);
+  private authService = inject(AuthenticationService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
+  private routingService = inject(RoutingService);
+
   // Route data input below
   @Input() room?: Room;
   @Input() tagIds?: string[];
@@ -57,17 +67,12 @@ export class ContentGroupTemplateSelectionComponent
   creatorId!: string;
   tagIdsQueryParams: string[] = [];
 
-  constructor(
-    protected formService: FormService,
-    private templateService: BaseTemplateService,
-    private translateService: TranslocoService,
-    private authService: AuthenticationService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private location: Location,
-    private routingService: RoutingService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { UserService } from '@app/core/services/http/user.service';
 import {
@@ -22,6 +22,13 @@ import { ApiConfig } from '@app/core/models/api-config';
   standalone: false,
 })
 export class RegisterComponent extends FormComponent implements OnInit {
+  private translationService = inject(TranslocoService);
+  userService = inject(UserService);
+  notificationService = inject(NotificationService);
+  eventService = inject(EventService);
+  private router = inject(Router);
+  protected formService: FormService;
+
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   // Route data input below
@@ -34,15 +41,12 @@ export class RegisterComponent extends FormComponent implements OnInit {
   linkOfToS?: string;
   accountServiceTitle!: string;
 
-  constructor(
-    private translationService: TranslocoService,
-    public userService: UserService,
-    public notificationService: NotificationService,
-    public eventService: EventService,
-    private router: Router,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

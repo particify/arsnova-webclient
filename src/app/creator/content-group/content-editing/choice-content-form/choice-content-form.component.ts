@@ -5,6 +5,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
@@ -34,6 +35,9 @@ export class ChoiceContentFormComponent
   extends FormComponent
   implements OnInit, OnChanges, ContentForm
 {
+  private contentService = inject(ContentService);
+  protected formService: FormService;
+
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
@@ -49,11 +53,12 @@ export class ChoiceContentFormComponent
   multipleCorrectAnswers = false;
   noCorrectAnswers = false;
 
-  constructor(
-    private contentService: ContentService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

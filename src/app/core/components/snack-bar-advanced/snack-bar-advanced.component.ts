@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 
 /** Special icon name for spinner animation */
@@ -11,7 +11,7 @@ export const LOADING_ICON = '_loading';
   standalone: false,
 })
 export class SnackBarAdvancedComponent {
-  LOADING_ICON = LOADING_ICON;
+  data = inject(MAT_SNACK_BAR_DATA);
 
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
+  LOADING_ICON = LOADING_ICON;
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
@@ -26,6 +26,14 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {
+  protected answerService = inject(ContentAnswerService);
+  protected notificationService: NotificationService;
+  protected translateService: TranslocoService;
+  protected globalStorageService: GlobalStorageService;
+  protected router: Router;
+  private likertScaleService = inject(LikertScaleService);
+  protected formService: FormService;
+
   @Input({ required: true }) content!: ContentScale;
   @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
@@ -35,15 +43,13 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   hasAbstained = false;
   selectedAnswerIndex?: number;
 
-  constructor(
-    protected answerService: ContentAnswerService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    private likertScaleService: LikertScaleService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const notificationService = inject(NotificationService);
+    const translateService = inject(TranslocoService);
+    const globalStorageService = inject(GlobalStorageService);
+    const router = inject(Router);
+    const formService = inject(FormService);
+
     super(
       notificationService,
       translateService,
@@ -51,6 +57,12 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
       router,
       formService
     );
+
+    this.notificationService = notificationService;
+    this.translateService = translateService;
+    this.globalStorageService = globalStorageService;
+    this.router = router;
+    this.formService = formService;
   }
 
   init() {

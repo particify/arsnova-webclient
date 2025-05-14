@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 
@@ -24,16 +24,14 @@ import { RoutingService } from '@app/core/services/util/routing.service';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnDestroy, OnInit {
+  private route = inject(ActivatedRoute);
+  private routingService = inject(RoutingService);
+
   destroyed$ = new Subject();
   uiConfig?: UiConfig;
   referenceUrl =
     'https://particify.de/?mtm_campaign=powered-by&mtm_source=webclient';
   showFooterLinks = false;
-
-  constructor(
-    private route: ActivatedRoute,
-    private routingService: RoutingService
-  ) {}
 
   ngOnInit() {
     this.route.data.subscribe((data) => {

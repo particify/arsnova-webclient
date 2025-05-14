@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
@@ -48,6 +48,14 @@ const httpOptions = {
 
 @Injectable()
 export class ConsentService extends AbstractHttpService<ConsentSettings> {
+  dialog = inject(MatDialog);
+  private http: HttpClient;
+  private globalStorageService = inject(GlobalStorageService);
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  private router = inject(Router);
+
   private essentialCategory: CookieCategory = {
     key: StorageItemCategory.REQUIRED,
     id: 'essential',
@@ -82,15 +90,12 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
   private skipConsent$: Observable<boolean>;
   private consentInitialized$ = new BehaviorSubject(false);
 
-  constructor(
-    public dialog: MatDialog,
-    private http: HttpClient,
-    private globalStorageService: GlobalStorageService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private router: Router
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super(
       '/consent',
       http,
@@ -98,6 +103,11 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
       translateService,
       notificationService
     );
+    this.http = http;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
+
     this.skipConsent$ = this.router.events.pipe(
       filter((event) => event instanceof ActivationEnd),
       map((event) => event as ActivationEnd),

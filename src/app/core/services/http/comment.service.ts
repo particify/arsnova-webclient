@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Comment } from '@app/core/models/comment';
@@ -24,6 +24,13 @@ const httpOptions = {
 
 @Injectable()
 export class CommentService extends AbstractEntityService<Comment> {
+  private http: HttpClient;
+  protected ws: WsConnectorService;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  protected wsCommentService = inject(WsCommentService);
+
   serviceApiUrl = {
     highlight: '/highlight',
     lowlight: '/lowlight',
@@ -31,15 +38,14 @@ export class CommentService extends AbstractEntityService<Comment> {
     count: '/count',
   };
 
-  constructor(
-    private http: HttpClient,
-    protected ws: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    cachingService: CachingService,
-    protected wsCommentService: WsCommentService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const ws = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+
     super(
       'Comment',
       '/comment',
@@ -50,6 +56,12 @@ export class CommentService extends AbstractEntityService<Comment> {
       notificationService,
       cachingService
     );
+
+    this.http = http;
+    this.ws = ws;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   getComment(commentId: string, roomId: string): Observable<Comment> {

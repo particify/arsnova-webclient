@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
@@ -17,6 +17,12 @@ const httpOptions = {
 
 @Injectable()
 export class AdminService extends AbstractHttpService<void> {
+  private http: HttpClient;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  protected userService = inject(UserService);
+
   serviceApiUrl = {
     adminView: 'view=admin',
     user: '/user',
@@ -24,14 +30,18 @@ export class AdminService extends AbstractHttpService<void> {
     activate: '/activate',
   };
 
-  constructor(
-    private http: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    protected userService: UserService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super('', http, eventService, translateService, notificationService);
+
+    this.http = http;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   getUser(id: string) {

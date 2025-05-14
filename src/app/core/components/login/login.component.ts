@@ -7,6 +7,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -49,6 +50,17 @@ export class LoginComponent
   extends FormComponent
   implements AfterContentInit, OnChanges, OnInit
 {
+  authenticationService = inject(AuthenticationService);
+  router = inject(Router);
+  private translationService = inject(TranslocoService);
+  notificationService = inject(NotificationService);
+  dialog = inject(MatDialog);
+  eventService = inject(EventService);
+  private dialogService = inject(DialogService);
+  private route = inject(ActivatedRoute);
+  private routingService = inject(RoutingService);
+  protected formService: FormService;
+
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   // Route data input below
@@ -74,19 +86,12 @@ export class LoginComponent
 
   matcher = new FormErrorStateMatcher();
 
-  constructor(
-    public authenticationService: AuthenticationService,
-    public router: Router,
-    private translationService: TranslocoService,
-    public notificationService: NotificationService,
-    public dialog: MatDialog,
-    public eventService: EventService,
-    private dialogService: DialogService,
-    private route: ActivatedRoute,
-    private routingService: RoutingService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit() {

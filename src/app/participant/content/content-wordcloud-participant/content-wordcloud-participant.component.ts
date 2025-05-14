@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import {
   AdvancedSnackBarTypes,
@@ -23,19 +23,25 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentWordcloudParticipantComponent extends ContentParticipantBaseComponent {
+  protected answerService = inject(ContentAnswerService);
+  protected notificationService: NotificationService;
+  protected translateService: TranslocoService;
+  protected globalStorageService: GlobalStorageService;
+  protected router: Router;
+  protected formService: FormService;
+
   @Input({ required: true }) content!: ContentWordcloud;
   @Input() answer?: MultipleTextsAnswer;
 
   words: string[] = [];
 
-  constructor(
-    protected answerService: ContentAnswerService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const notificationService = inject(NotificationService);
+    const translateService = inject(TranslocoService);
+    const globalStorageService = inject(GlobalStorageService);
+    const router = inject(Router);
+    const formService = inject(FormService);
+
     super(
       notificationService,
       translateService,
@@ -43,6 +49,12 @@ export class ContentWordcloudParticipantComponent extends ContentParticipantBase
       router,
       formService
     );
+
+    this.notificationService = notificationService;
+    this.translateService = translateService;
+    this.globalStorageService = globalStorageService;
+    this.router = router;
+    this.formService = formService;
   }
 
   init() {

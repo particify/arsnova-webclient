@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { RoomCreated } from '@app/core/models/events/room-created';
@@ -34,6 +34,22 @@ import { take } from 'rxjs';
   standalone: false,
 })
 export class RoomCreateComponent extends FormComponent implements OnInit {
+  private roomService = inject(RoomService);
+  private router = inject(Router);
+  private notification = inject(NotificationService);
+  dialogRef = inject<MatDialogRef<RoomCreateComponent>>(MatDialogRef);
+  private translateService = inject(TranslocoService);
+  private authenticationService = inject(AuthenticationService);
+  eventService = inject(EventService);
+  private globalStorageService = inject(GlobalStorageService);
+  private apiConfigService = inject(ApiConfigService);
+  private data = inject<{
+    prefilledName?: string;
+    roomId?: string;
+    navigateAfterCreation: boolean;
+  }>(MAT_DIALOG_DATA);
+  protected formService: FormService;
+
   readonly dialogId = 'create-room';
 
   emptyInputs = false;
@@ -43,25 +59,12 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
   anonymousProvider?: AuthenticationProvider;
   createDuplication = false;
 
-  constructor(
-    private roomService: RoomService,
-    private router: Router,
-    private notification: NotificationService,
-    public dialogRef: MatDialogRef<RoomCreateComponent>,
-    private translateService: TranslocoService,
-    private authenticationService: AuthenticationService,
-    public eventService: EventService,
-    private globalStorageService: GlobalStorageService,
-    private apiConfigService: ApiConfigService,
-    @Inject(MAT_DIALOG_DATA)
-    private data: {
-      prefilledName?: string;
-      roomId?: string;
-      navigateAfterCreation: boolean;
-    },
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit() {

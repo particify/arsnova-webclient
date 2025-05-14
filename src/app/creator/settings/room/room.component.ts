@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { Room } from '@app/core/models/room';
 import {
   AdvancedSnackBarTypes,
@@ -28,6 +35,17 @@ import { take } from 'rxjs';
   standalone: false,
 })
 export class RoomComponent extends FormComponent implements OnInit {
+  notificationService = inject(NotificationService);
+  translationService = inject(TranslocoService);
+  protected roomService = inject(RoomService);
+  router = inject(Router);
+  eventService = inject(EventService);
+  protected translateService = inject(TranslocoService);
+  private dialogService = inject(DialogService);
+  private formattingService = inject(FormattingService);
+  private focusModeService = inject(FocusModeService);
+  protected formService: FormService;
+
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
@@ -41,19 +59,12 @@ export class RoomComponent extends FormComponent implements OnInit {
   HintType = HintType;
   focusModeEnabled = false;
 
-  constructor(
-    public notificationService: NotificationService,
-    public translationService: TranslocoService,
-    protected roomService: RoomService,
-    public router: Router,
-    public eventService: EventService,
-    protected translateService: TranslocoService,
-    private dialogService: DialogService,
-    private formattingService: FormattingService,
-    private focusModeService: FocusModeService,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
   ngOnInit(): void {
     this.focusModeEnabled = this.editRoom.focusModeEnabled;

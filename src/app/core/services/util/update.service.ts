@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { TranslocoService } from '@jsverse/transloco';
 import { filter, take, tap } from 'rxjs/operators';
@@ -15,15 +15,15 @@ import { environment } from '@environments/environment';
 
 @Injectable()
 export class UpdateService {
-  constructor(
-    private update: SwUpdate,
-    private globalStorageService: GlobalStorageService,
-    private eventService: EventService,
-    private dialogService: DialogService,
-    private notificationService: NotificationService,
-    private translationService: TranslocoService,
-    private window: Window
-  ) {
+  private update = inject(SwUpdate);
+  private globalStorageService = inject(GlobalStorageService);
+  private eventService = inject(EventService);
+  private dialogService = inject(DialogService);
+  private notificationService = inject(NotificationService);
+  private translationService = inject(TranslocoService);
+  private window = inject(Window);
+
+  constructor() {
     console.log(
       'Version:',
       environment.version.commitHash,

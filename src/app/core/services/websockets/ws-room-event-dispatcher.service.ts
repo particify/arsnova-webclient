@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { IMessage } from '@stomp/stompjs';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -16,14 +16,12 @@ import { WsConnectorService } from './ws-connector.service';
 
 @Injectable()
 export class WsRoomEventDispatcherService {
-  private roomChanged$ = new Subject<void>();
+  private wsConnector = inject(WsConnectorService);
+  private eventService = inject(EventService);
+  private roomMembershipService = inject(RoomMembershipService);
+  private roomService = inject(RoomService);
 
-  constructor(
-    private wsConnector: WsConnectorService,
-    private eventService: EventService,
-    private roomMembershipService: RoomMembershipService,
-    private roomService: RoomService
-  ) {}
+  private roomChanged$ = new Subject<void>();
 
   init() {
     this.roomService

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import {
   AdvancedSnackBarTypes,
@@ -18,6 +18,10 @@ export class AnswerOptionListComponent
   extends DragDropBaseComponent
   implements OnInit
 {
+  private announceService = inject(AnnounceService);
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+
   @Input() answers: DisplayAnswer[] = [];
   @Input() hasCorrectAnswers = false;
   @Input() hasMultipleCorrectAnswers = false;
@@ -28,14 +32,6 @@ export class AnswerOptionListComponent
   @Input() lengthLimit = 500;
 
   isAnswerEdit = -1;
-
-  constructor(
-    private announceService: AnnounceService,
-    private notificationService: NotificationService,
-    private translateService: TranslocoService
-  ) {
-    super();
-  }
   ngOnInit(): void {
     if (this.sortable) {
       this.updateDragDropList();

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -24,6 +24,13 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {
+  protected answerService = inject(ContentAnswerService);
+  protected notificationService: NotificationService;
+  protected translateService: TranslocoService;
+  protected globalStorageService: GlobalStorageService;
+  protected router: Router;
+  protected formService: FormService;
+
   @Input({ required: true }) content!: ContentPrioritization;
   @Input() answer?: PrioritizationAnswer;
 
@@ -33,14 +40,13 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
   answerOptions: AnswerWithPoints[] = [];
   assignedPoints: number[] = [];
 
-  constructor(
-    protected answerService: ContentAnswerService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const notificationService = inject(NotificationService);
+    const translateService = inject(TranslocoService);
+    const globalStorageService = inject(GlobalStorageService);
+    const router = inject(Router);
+    const formService = inject(FormService);
+
     super(
       notificationService,
       translateService,
@@ -48,6 +54,12 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
       router,
       formService
     );
+
+    this.notificationService = notificationService;
+    this.translateService = translateService;
+    this.globalStorageService = globalStorageService;
+    this.router = router;
+    this.formService = formService;
   }
 
   init() {

@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { FormService } from '@app/core/services/util/form.service';
@@ -23,19 +23,25 @@ import { BaseTemplateService } from '@app/core/services/http/base-template.servi
   templateUrl: './edit-content-group-template.component.html',
 })
 export class EditContentGroupTemplateComponent extends FormComponent {
+  protected formService: FormService;
+  private dialogRef =
+    inject<MatDialogRef<EditContentGroupTemplateComponent>>(MatDialogRef);
+  data = inject<{
+    template: ContentGroupTemplate;
+  }>(MAT_DIALOG_DATA);
+  private templateService = inject(BaseTemplateService);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+
   @ViewChild(ContentGroupTemplateEditingComponent)
   templateEditing!: ContentGroupTemplateEditingComponent;
 
-  constructor(
-    protected formService: FormService,
-    private dialogRef: MatDialogRef<EditContentGroupTemplateComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: { template: ContentGroupTemplate },
-    private templateService: BaseTemplateService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   save() {

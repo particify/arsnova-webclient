@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { FooterComponent } from '@app/standalone/footer/footer.component';
@@ -40,16 +40,14 @@ export class NavButton {
   styleUrls: ['./navigation-drawer.component.scss'],
 })
 export class NavigationDrawerComponent implements OnInit {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   @Input({ required: true }) buttonSections!: NavButtonSection[];
   @Input({ required: true }) parentRoute!: string;
   @Input() showFooter = true;
   @Input() backgroundColor = 'background';
   currentPage?: string;
-
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     this.setCurrentPage();

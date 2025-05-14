@@ -4,6 +4,7 @@ import {
   OnInit,
   TemplateRef,
   ViewContainerRef,
+  inject,
 } from '@angular/core';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
@@ -12,13 +13,11 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
   standalone: false,
 })
 export class FeatureFlagDirective implements OnInit {
-  @Input({ required: true }) appFeatureFlag!: string;
+  private featureFlagService = inject(FeatureFlagService);
+  private templateRef = inject<TemplateRef<unknown>>(TemplateRef);
+  private viewContainerRef = inject(ViewContainerRef);
 
-  constructor(
-    private featureFlagService: FeatureFlagService,
-    private templateRef: TemplateRef<unknown>,
-    private viewContainerRef: ViewContainerRef
-  ) {}
+  @Input({ required: true }) appFeatureFlag!: string;
 
   ngOnInit() {
     if (this.featureFlagService.isEnabled(this.appFeatureFlag)) {

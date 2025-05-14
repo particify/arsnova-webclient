@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { IsoLanguage } from '@app/core/models/iso-language';
 import { FormService } from '@app/core/services/util/form.service';
@@ -15,6 +22,10 @@ export class TemplateLanguageSelectionComponent
   extends FormComponent
   implements OnInit
 {
+  protected formService: FormService;
+  private translateService = inject(TranslocoService);
+  private langService = inject(LanguageService);
+
   @Output() selectedLangChanged = new EventEmitter<string>();
   @Input() smaller = false;
   @Input() defaultLang?: string;
@@ -22,12 +33,12 @@ export class TemplateLanguageSelectionComponent
   selectedLang?: IsoLanguage;
   langs: IsoLanguage[] = [];
 
-  constructor(
-    protected formService: FormService,
-    private translateService: TranslocoService,
-    private langService: LanguageService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

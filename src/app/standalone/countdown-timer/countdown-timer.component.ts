@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  inject,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Subject, takeUntil, timer } from 'rxjs';
@@ -22,6 +23,8 @@ const DELAY_BUFFER = 250;
   templateUrl: './countdown-timer.component.html',
 })
 export class CountdownTimerComponent implements OnInit, OnDestroy {
+  private serverTimeService = inject(ServerTimeService);
+
   @Input({ required: true }) endDate!: Date;
   @Input({ required: true }) duration!: number;
   @Input() showIcon = false;
@@ -35,8 +38,6 @@ export class CountdownTimerComponent implements OnInit, OnDestroy {
   timeLeft = 0;
 
   protected timerFinished$ = new Subject<void>();
-
-  constructor(private serverTimeService: ServerTimeService) {}
 
   ngOnInit(): void {
     this.endDate.setTime(this.endDate.getTime() - DELAY_BUFFER);

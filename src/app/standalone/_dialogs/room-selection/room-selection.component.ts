@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomSummary } from '@app/core/models/room-summary';
@@ -15,19 +15,17 @@ import { Membership } from '@app/core/models/membership';
   templateUrl: './room-selection.component.html',
 })
 export class RoomSelectionComponent implements OnInit, OnDestroy {
+  private roomService = inject(RoomService);
+  private dialogRef =
+    inject<MatDialogRef<ContentGroupTemplateSelectionComponent>>(MatDialogRef);
+  private data = inject<{
+    memberships: Membership[];
+  }>(MAT_DIALOG_DATA);
+
   private destroyed$ = new Subject<void>();
   isLoading = true;
   rooms: RoomSummary[] = [];
   memberships: Membership[] = [];
-
-  constructor(
-    private roomService: RoomService,
-    private dialogRef: MatDialogRef<ContentGroupTemplateSelectionComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    private data: {
-      memberships: Membership[];
-    }
-  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();

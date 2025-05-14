@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -23,14 +23,20 @@ const httpOptions = {
 
 @Injectable()
 export class ContentAnswerService extends AbstractEntityService<Answer> {
-  constructor(
-    private http: HttpClient,
-    protected ws: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    cachingService: CachingService
-  ) {
+  private http: HttpClient;
+  protected ws: WsConnectorService;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+
+  constructor() {
+    const http = inject(HttpClient);
+    const ws = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+
     super(
       'Answer',
       '/answer',
@@ -41,6 +47,12 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
       notificationService,
       cachingService
     );
+
+    this.http = http;
+    this.ws = ws;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   getAnswers(roomId: string, contentId: string): Observable<TextAnswer[]> {

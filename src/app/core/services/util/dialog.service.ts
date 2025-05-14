@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
 import {
   MatDialog,
@@ -32,10 +32,10 @@ export const DIALOG_SIZES: Readonly<Record<string, string>> = {
 
 @Injectable()
 export class DialogService {
-  constructor(
-    public dialog: MatDialog,
-    private trackingService: TrackingService
-  ) {
+  dialog = inject(MatDialog);
+  private trackingService = inject(TrackingService);
+
+  constructor() {
     // FIXME: This condition is currently necessary because there are multiple
     // dialog service instances - one per lazy loaded module. It is a workaround
     // until we have a way to only create a single instance and might break if

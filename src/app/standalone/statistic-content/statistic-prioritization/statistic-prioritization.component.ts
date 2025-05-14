@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
 import {
   BarController,
@@ -38,6 +39,11 @@ export class StatisticPrioritizationComponent
   extends StatisticChoiceComponent
   implements OnInit, OnDestroy
 {
+  protected contentService: ContentService;
+  protected translateService: TranslocoService;
+  protected themeService: ThemeService;
+  protected presentationService: PresentationService;
+
   readonly padding = {
     label: 8,
     top: 25,
@@ -56,13 +62,18 @@ export class StatisticPrioritizationComponent
   fontSize = 0;
   indexes: number[] = [];
 
-  constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService,
-    protected themeService: ThemeService,
-    protected presentationService: PresentationService
-  ) {
+  constructor() {
+    const contentService = inject(ContentService);
+    const translateService = inject(TranslocoService);
+    const themeService = inject(ThemeService);
+    const presentationService = inject(PresentationService);
+
     super(contentService, translateService, themeService, presentationService);
+
+    this.contentService = contentService;
+    this.translateService = translateService;
+    this.themeService = themeService;
+    this.presentationService = presentationService;
   }
 
   ngOnDestroy() {

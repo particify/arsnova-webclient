@@ -29,6 +29,12 @@ export abstract class ContentParticipantBaseComponent
   extends FormComponent
   implements OnInit
 {
+  protected notificationService = inject(NotificationService);
+  protected translateService = inject(TranslocoService);
+  protected globalStorageService = inject(GlobalStorageService);
+  protected router = inject(Router);
+  protected formService: FormService;
+
   @Output() answerChanged = new EventEmitter<{
     answer?: Answer;
     answerResult: AnswerResultType;
@@ -40,14 +46,12 @@ export abstract class ContentParticipantBaseComponent
   isLoading = true;
   private destroyRef$ = inject(DestroyRef);
 
-  protected constructor(
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    protected formService: FormService
-  ) {
+  protected constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit() {

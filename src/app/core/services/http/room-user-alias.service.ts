@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AbstractEntityService } from './abstract-entity.service';
@@ -13,20 +13,27 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
   providedIn: 'root',
 })
 export class RoomUserAliasService extends AbstractEntityService<RoomUserAlias> {
+  private http: HttpClient;
+  protected wsConnectorService: WsConnectorService;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  protected cachingService: CachingService;
+
   serviceApiUrl = {
     generate: '/-/generate',
   };
 
   currentAlias$ = new BehaviorSubject<RoomUserAlias | undefined>(undefined);
 
-  constructor(
-    private http: HttpClient,
-    protected wsConnectorService: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    protected cachingService: CachingService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const wsConnectorService = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+
     super(
       'RoomUserAlias',
       '/user-alias',
@@ -37,6 +44,13 @@ export class RoomUserAliasService extends AbstractEntityService<RoomUserAlias> {
       notificationService,
       cachingService
     );
+
+    this.http = http;
+    this.wsConnectorService = wsConnectorService;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
+    this.cachingService = cachingService;
   }
 
   updateAlias(

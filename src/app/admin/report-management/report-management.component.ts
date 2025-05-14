@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TemplateService } from '@app/admin/template-management/template.service';
 import {
   ViolationReport,
@@ -20,18 +20,17 @@ import { Observable } from 'rxjs';
   standalone: false,
 })
 export class ReportManagementComponent implements OnInit {
+  private violationReportService = inject(ViolationReportService);
+  private dialogService = inject(DialogService);
+  private translateService = inject(TranslocoService);
+  private templateService = inject(TemplateService);
+  private notificationService = inject(NotificationService);
+
   isLoading = true;
   selectedTab = 0;
   reports: ViolationReport[] = [];
 
   panelOpenState = false;
-  constructor(
-    private violationReportService: ViolationReportService,
-    private dialogService: DialogService,
-    private translateService: TranslocoService,
-    private templateService: TemplateService,
-    private notificationService: NotificationService
-  ) {}
 
   ngOnInit(): void {
     this.loadReports();

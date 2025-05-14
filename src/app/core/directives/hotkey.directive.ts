@@ -4,6 +4,7 @@ import {
   Input,
   OnChanges,
   OnDestroy,
+  inject,
 } from '@angular/core';
 import {
   Hotkey,
@@ -24,6 +25,9 @@ const NON_TEXT_INPUT_TYPES = ['button', 'checkbox', 'radio'];
   standalone: false,
 })
 export class HotkeyDirective implements OnDestroy, OnChanges {
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private hotkeyService = inject(HotkeyService);
+
   @Input({ required: true }) appHotkey!: string;
   @Input() appHotkeyDisabled = false;
   @Input() appHotkeyControl = false;
@@ -34,11 +38,6 @@ export class HotkeyDirective implements OnDestroy, OnChanges {
   @Input() matTooltip = '';
 
   private hotkeyRef?: symbol;
-
-  constructor(
-    private elementRef: ElementRef<HTMLElement>,
-    private hotkeyService: HotkeyService
-  ) {}
 
   ngOnDestroy(): void {
     if (this.hotkeyRef) {

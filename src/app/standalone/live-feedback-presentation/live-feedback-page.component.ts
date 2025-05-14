@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
@@ -34,24 +34,31 @@ export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
+  protected wsFeedbackService: WsFeedbackService;
+  protected feedbackService: FeedbackService;
+  protected roomService: RoomService;
+  protected translateService: TranslocoService;
+  protected announceService: AnnounceService;
+  protected globalStorageService: GlobalStorageService;
+  protected focusModeService = inject(FocusModeService);
+  protected hotkeyService = inject(HotkeyService);
+  protected presentationService = inject(PresentationService);
+  private eventService = inject(EventService);
+
   // Route data input below
   @Input() showAnswerCount?: boolean;
   private hotkeyRefs: symbol[] = [];
 
   controlBarVisible = true;
 
-  constructor(
-    protected wsFeedbackService: WsFeedbackService,
-    protected feedbackService: FeedbackService,
-    protected roomService: RoomService,
-    protected translateService: TranslocoService,
-    protected announceService: AnnounceService,
-    protected globalStorageService: GlobalStorageService,
-    protected focusModeService: FocusModeService,
-    protected hotkeyService: HotkeyService,
-    protected presentationService: PresentationService,
-    private eventService: EventService
-  ) {
+  constructor() {
+    const wsFeedbackService = inject(WsFeedbackService);
+    const feedbackService = inject(FeedbackService);
+    const roomService = inject(RoomService);
+    const translateService = inject(TranslocoService);
+    const announceService = inject(AnnounceService);
+    const globalStorageService = inject(GlobalStorageService);
+
     super(
       wsFeedbackService,
       feedbackService,
@@ -60,6 +67,13 @@ export class LiveFeedbackPageComponent
       announceService,
       globalStorageService
     );
+
+    this.wsFeedbackService = wsFeedbackService;
+    this.feedbackService = feedbackService;
+    this.roomService = roomService;
+    this.translateService = translateService;
+    this.announceService = announceService;
+    this.globalStorageService = globalStorageService;
   }
 
   ngOnInit() {

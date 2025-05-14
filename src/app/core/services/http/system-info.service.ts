@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -24,6 +24,11 @@ export interface SummarizedStats {
 
 @Injectable()
 export class SystemInfoService extends AbstractHttpService<void> {
+  private http: HttpClient;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+
   serviceApiUrl = {
     health: '/health',
     management: '/management/core',
@@ -31,13 +36,18 @@ export class SystemInfoService extends AbstractHttpService<void> {
     serviceStats: '/_system/servicestats',
   };
 
-  constructor(
-    private http: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super('', http, eventService, translateService, notificationService);
+
+    this.http = http;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   getHealthInfo(): Observable<SystemHealth> {

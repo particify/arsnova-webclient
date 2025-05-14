@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
@@ -35,6 +35,14 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
   styleUrls: ['./comment-answer.component.scss'],
 })
 export class CommentAnswerComponent extends FormComponent {
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  protected commentService = inject(CommentService);
+  private dialogService = inject(DialogService);
+  dialogRef = inject<MatDialogRef<CommentAnswerComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+  protected formService: FormService;
+
   readonly dialogId = 'comment-answer';
   @ViewChild('answerInput') answerInput!: ElementRef;
 
@@ -45,16 +53,12 @@ export class CommentAnswerComponent extends FormComponent {
   MarkdownFeatureset = MarkdownFeatureset;
   renderPreview = false;
 
-  constructor(
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    protected commentService: CommentService,
-    private dialogService: DialogService,
-    public dialogRef: MatDialogRef<CommentAnswerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+    this.formService = formService;
+
     this.comment = this.data.comment;
     this.answer = this.comment.answer;
     this.isEditor = !!this.data.isEditor;

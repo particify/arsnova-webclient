@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import {
   UntypedFormControl,
   FormGroupDirective,
@@ -40,6 +40,13 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   standalone: false,
 })
 export class PasswordResetComponent extends FormComponent implements OnInit {
+  private translationService = inject(TranslocoService);
+  private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
+  eventService = inject(EventService);
+  private router = inject(Router);
+  protected formService: FormService;
+
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   // Route data input below
@@ -51,15 +58,12 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
   deviceWidth = innerWidth;
   isLoading = true;
 
-  constructor(
-    private translationService: TranslocoService,
-    private userService: UserService,
-    private notificationService: NotificationService,
-    public eventService: EventService,
-    private router: Router,
-    protected formService: FormService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

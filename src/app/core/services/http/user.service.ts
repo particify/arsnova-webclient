@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AbstractEntityService } from './abstract-entity.service';
@@ -23,6 +23,13 @@ const httpOptions = {
 
 @Injectable()
 export class UserService extends AbstractEntityService<User> {
+  private http: HttpClient;
+  protected ws: WsConnectorService;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  private globalStorageService = inject(GlobalStorageService);
+
   serviceApiUrl = {
     register: '/register',
     activate: '/activate',
@@ -30,15 +37,14 @@ export class UserService extends AbstractEntityService<User> {
     resetPassword: '/resetpassword',
   };
 
-  constructor(
-    private http: HttpClient,
-    protected ws: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private globalStorageService: GlobalStorageService,
-    cachingService: CachingService
-  ) {
+  constructor() {
+    const http = inject(HttpClient);
+    const ws = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+
     super(
       'User',
       '/user',
@@ -49,6 +55,12 @@ export class UserService extends AbstractEntityService<User> {
       notificationService,
       cachingService
     );
+
+    this.http = http;
+    this.ws = ws;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   register(email: string, password: string): Observable<boolean> {

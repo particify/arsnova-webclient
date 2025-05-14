@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
 import {
   BarController,
@@ -61,6 +62,11 @@ export class StatisticNumericComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
+  protected contentService: ContentService;
+  protected translateService: TranslocoService;
+  protected themeService = inject(ThemeService);
+  protected presentationService = inject(PresentationService);
+
   @Input({ required: true }) content!: ContentNumeric;
   @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
@@ -89,13 +95,14 @@ export class StatisticNumericComponent
     'maximum',
   ];
 
-  constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService,
-    protected themeService: ThemeService,
-    protected presentationService: PresentationService
-  ) {
+  constructor() {
+    const contentService = inject(ContentService);
+    const translateService = inject(TranslocoService);
+
     super(contentService, translateService);
+
+    this.contentService = contentService;
+    this.translateService = translateService;
   }
 
   ngOnDestroy() {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {
   LikertScaleTemplate,
   LIKERT_SCALE_TEMPLATES,
@@ -28,6 +28,10 @@ export class ScaleContentFormComponent
   extends FormComponent
   implements OnInit, ContentForm
 {
+  private likertScaleService = inject(LikertScaleService);
+  protected formService: FormService;
+  private languageService = inject(LanguageService);
+
   @Input() content?: Content;
   @Input() isAnswered = false;
   @Input() isEditMode = false;
@@ -41,12 +45,12 @@ export class ScaleContentFormComponent
   neutralOption = true;
   answerLabels: string[] = [];
 
-  constructor(
-    private likertScaleService: LikertScaleService,
-    protected formService: FormService,
-    private languageService: LanguageService
-  ) {
+  constructor() {
+    const formService = inject(FormService);
+
     super(formService);
+
+    this.formService = formService;
   }
 
   ngOnInit(): void {

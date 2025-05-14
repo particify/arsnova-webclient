@@ -1,9 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import {
   EventEmitter,
-  Inject,
   Injectable,
   InjectionToken,
+  inject,
 } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
@@ -22,6 +22,14 @@ export const BROWSER_LANG = new InjectionToken<string>('BROWSER_LANG');
   providedIn: 'root',
 })
 export class LanguageService extends AbstractHttpService<void> {
+  protected httpClient: HttpClient;
+  protected eventService: EventService;
+  protected translateService: TranslocoService;
+  protected notificationService: NotificationService;
+  private globalStorageService = inject(GlobalStorageService);
+  private document = inject<Document>(DOCUMENT);
+  private browserLang = inject(BROWSER_LANG);
+
   public readonly langEmitter = new EventEmitter<string>();
   private langs: Language[] = [
     {
@@ -41,15 +49,12 @@ export class LanguageService extends AbstractHttpService<void> {
     },
   ];
 
-  constructor(
-    protected httpClient: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private globalStorageService: GlobalStorageService,
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(BROWSER_LANG) private browserLang: string
-  ) {
+  constructor() {
+    const httpClient = inject(HttpClient);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+
     super(
       '/language',
       httpClient,
@@ -57,6 +62,11 @@ export class LanguageService extends AbstractHttpService<void> {
       translateService,
       notificationService
     );
+
+    this.httpClient = httpClient;
+    this.eventService = eventService;
+    this.translateService = translateService;
+    this.notificationService = notificationService;
   }
 
   private getLangWithKey(key: string) {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -24,15 +24,13 @@ import { ClientAuthentication } from '@app/core/models/client-authentication';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-  constructor(
-    private authenticationService: AuthenticationService,
-    private roomMembershipService: RoomMembershipService,
-    private roomService: RoomService,
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    private routingService: RoutingService,
-    private router: Router
-  ) {}
+  private authenticationService = inject(AuthenticationService);
+  private roomMembershipService = inject(RoomMembershipService);
+  private roomService = inject(RoomService);
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  private routingService = inject(RoutingService);
+  private router = inject(Router);
 
   canActivate(
     route: ActivatedRouteSnapshot,

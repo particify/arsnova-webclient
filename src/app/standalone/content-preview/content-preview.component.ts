@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -45,6 +45,10 @@ import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
   styleUrls: ['./content-preview.component.scss'],
 })
 export class ContentPreviewComponent implements OnInit {
+  private answerService = inject(ContentAnswerService);
+  private likertScaleService = inject(LikertScaleService);
+  private translateService = inject(TranslocoService);
+
   @Input({ required: true }) content!: Content;
   @Input() renderAnswersDynamically = true;
   @Input() showTitle = true;
@@ -59,12 +63,6 @@ export class ContentPreviewComponent implements OnInit {
   additionalText?: string;
   assignablePoints?: number;
   numericContent?: ContentNumeric;
-
-  constructor(
-    private answerService: ContentAnswerService,
-    private likertScaleService: LikertScaleService,
-    private translateService: TranslocoService
-  ) {}
 
   ngOnInit(): void {
     const format = this.content.format;

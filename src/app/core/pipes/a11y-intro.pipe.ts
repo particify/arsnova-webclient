@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { HELP_KEY } from '@app/core/services/util/hotkey.service';
   standalone: false,
 })
 export class A11yIntroPipe implements PipeTransform {
-  constructor(private translateService: TranslocoService) {}
+  private translateService = inject(TranslocoService);
 
   transform(i18nKey: string, args?: object): Observable<string> {
     return this.translateService

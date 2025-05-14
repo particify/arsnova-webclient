@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject } from '@angular/core';
+import { Component, EventEmitter, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService } from '@app/core/services/http/user.service';
@@ -24,6 +24,14 @@ export interface DialogData {
   standalone: false,
 })
 export class InputDialogComponent extends UserSearchComponent {
+  private dialogRef = inject<MatDialogRef<InputDialogComponent>>(MatDialogRef);
+  data = inject<DialogData>(MAT_DIALOG_DATA);
+  protected userService: UserService;
+  protected translateService = inject(TranslocoService);
+  protected notificationService = inject(NotificationService);
+  protected adminService: AdminService;
+  private formService = inject(FormService);
+
   clicked$ = new EventEmitter<string>();
 
   input?: string;
@@ -33,16 +41,15 @@ export class InputDialogComponent extends UserSearchComponent {
   useUserSearch: boolean;
 
   formControl = new FormControl('', [Validators.required]);
-  constructor(
-    private dialogRef: MatDialogRef<InputDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    protected userService: UserService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    protected adminService: AdminService,
-    private formService: FormService
-  ) {
+  constructor() {
+    const userService = inject(UserService);
+    const adminService = inject(AdminService);
+
     super(userService, adminService);
+    const data = this.data;
+    this.userService = userService;
+    this.adminService = adminService;
+
     this.primaryAction = data.primaryAction;
     this.inputName = data.inputName;
     this.useUserSearch = data.useUserSearch || false;

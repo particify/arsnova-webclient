@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
@@ -17,14 +17,16 @@ import { AbstractCachingHttpService } from './abstract-caching-http.service';
 
 @Injectable()
 export class RoomStatsService extends AbstractCachingHttpService<RoomStats> {
-  constructor(
-    protected http: HttpClient,
-    ws: WsConnectorService,
-    eventService: EventService,
-    translateService: TranslocoService,
-    notificationService: NotificationService,
-    cachingService: CachingService
-  ) {
+  protected http: HttpClient;
+
+  constructor() {
+    const http = inject(HttpClient);
+    const ws = inject(WsConnectorService);
+    const eventService = inject(EventService);
+    const translateService = inject(TranslocoService);
+    const notificationService = inject(NotificationService);
+    const cachingService = inject(CachingService);
+
     super(
       '/stats',
       http,
@@ -34,6 +36,8 @@ export class RoomStatsService extends AbstractCachingHttpService<RoomStats> {
       notificationService,
       cachingService
     );
+    this.http = http;
+
     eventService
       .on<PublicDataChanged<RoomStats>>('PublicDataChanged')
       .pipe(filter((e) => e.payload.dataType === 'RoomStatistics'))
