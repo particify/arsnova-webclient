@@ -1,15 +1,9 @@
 import { Component, Input, inject } from '@angular/core';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { Router } from '@angular/router';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
@@ -23,39 +17,12 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 })
 export class ContentNumericParticipantComponent extends ContentParticipantBaseComponent {
   protected answerService = inject(ContentAnswerService);
-  protected notificationService: NotificationService;
-  protected translateService: TranslocoService;
-  protected globalStorageService: GlobalStorageService;
-  protected router: Router;
-  protected formService: FormService;
 
   @Input({ required: true }) content!: ContentNumeric;
   @Input() answer?: NumericAnswer;
   @Input() correctOptionsPublished = false;
 
   selectedNumber?: number;
-
-  constructor() {
-    const notificationService = inject(NotificationService);
-    const translateService = inject(TranslocoService);
-    const globalStorageService = inject(GlobalStorageService);
-    const router = inject(Router);
-    const formService = inject(FormService);
-
-    super(
-      notificationService,
-      translateService,
-      globalStorageService,
-      router,
-      formService
-    );
-
-    this.notificationService = notificationService;
-    this.translateService = translateService;
-    this.globalStorageService = globalStorageService;
-    this.router = router;
-    this.formService = formService;
-  }
 
   init() {
     if (this.answer) {

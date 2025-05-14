@@ -17,7 +17,6 @@ import { CoreModule } from '@app/core/core.module';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 
 export interface DialogData {
   userId: string;
@@ -40,21 +39,12 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
   private globalStorageService = inject(GlobalStorageService);
   private commentService = inject(CommentService);
   private notificationService = inject(NotificationService);
-  protected formService: FormService;
 
   readonly dialogId = 'create-comment';
 
   selectedTag?: string;
   eventsSubject = new Subject<string | void>();
   eventsWrapper: any;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit() {
     this.translateService.setActiveLang(

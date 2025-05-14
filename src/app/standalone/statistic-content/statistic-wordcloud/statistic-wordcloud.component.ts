@@ -2,14 +2,13 @@ import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
-import { ContentService } from '@app/core/services/http/content.service';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { TextStatistic } from '@app/core/models/text-statistic';
 import {
   WordCloudItem,
   WordcloudComponent,
 } from '@app/standalone/wordcloud/wordcloud.component';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { FlexModule } from '@angular/flex-layout';
 import { NgClass } from '@angular/common';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
@@ -31,8 +30,6 @@ export class StatisticWordcloudComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
-  protected contentService: ContentService;
-  protected translateService: TranslocoService;
   private presentationService = inject(PresentationService);
 
   @Input() showModeration = false;
@@ -42,16 +39,6 @@ export class StatisticWordcloudComponent
   answerList: TextStatistic[] = [];
 
   rotateWords?: boolean;
-
-  constructor() {
-    const contentService = inject(ContentService);
-    const translateService = inject(TranslocoService);
-
-    super(contentService, translateService);
-
-    this.contentService = contentService;
-    this.translateService = translateService;
-  }
 
   afterInit() {
     this.contentService

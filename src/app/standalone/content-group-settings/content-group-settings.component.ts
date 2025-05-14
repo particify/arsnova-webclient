@@ -8,7 +8,6 @@ import {
   PublishingMode,
 } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
@@ -32,7 +31,6 @@ export class ContentGroupSettingsComponent
   extends FormComponent
   implements OnInit
 {
-  protected formService: FormService;
   private dialogRef =
     inject<MatDialogRef<ContentGroupSettingsComponent>>(MatDialogRef);
   data = inject<{
@@ -49,10 +47,7 @@ export class ContentGroupSettingsComponent
   PublishingMode = PublishingMode;
 
   constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-    this.formService = formService;
+    super();
     const data = this.data;
 
     this.group = { ...data.contentGroup };

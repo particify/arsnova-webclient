@@ -1,12 +1,9 @@
 import { Component, Input, inject } from '@angular/core';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { forkJoin, Observable, take } from 'rxjs';
-import { ThemeService } from '@app/core/theme/theme.service';
 import { ContentScale } from '@app/core/models/content-scale';
-import { ContentService } from '@app/core/services/http/content.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
-import { PresentationService } from '@app/core/services/util/presentation.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { MatIcon } from '@angular/material/icon';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
@@ -31,28 +28,10 @@ import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-re
   ],
 })
 export class StatisticScaleComponent extends StatisticChoiceComponent {
-  protected contentService: ContentService;
-  protected translateService: TranslocoService;
-  protected themeService: ThemeService;
-  protected presentationService: PresentationService;
   private likertScaleService = inject(LikertScaleService);
   private languageService = inject(LanguageService);
 
   @Input() language?: string;
-
-  constructor() {
-    const contentService = inject(ContentService);
-    const translateService = inject(TranslocoService);
-    const themeService = inject(ThemeService);
-    const presentationService = inject(PresentationService);
-
-    super(contentService, translateService, themeService, presentationService);
-
-    this.contentService = contentService;
-    this.translateService = translateService;
-    this.themeService = themeService;
-    this.presentationService = presentationService;
-  }
 
   init(stats: AnswerStatistics) {
     this.language = this.languageService.ensureValidLang(this.language);

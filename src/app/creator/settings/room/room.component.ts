@@ -25,7 +25,6 @@ import { UpdateEvent } from '@app/creator/settings-page/settings-page.component'
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { take } from 'rxjs';
 
@@ -44,7 +43,6 @@ export class RoomComponent extends FormComponent implements OnInit {
   private dialogService = inject(DialogService);
   private formattingService = inject(FormattingService);
   private focusModeService = inject(FocusModeService);
-  protected formService: FormService;
 
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
@@ -59,13 +57,6 @@ export class RoomComponent extends FormComponent implements OnInit {
   HintType = HintType;
   focusModeEnabled = false;
 
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
   ngOnInit(): void {
     this.focusModeEnabled = this.editRoom.focusModeEnabled;
   }

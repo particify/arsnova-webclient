@@ -10,7 +10,6 @@ import { EventService } from '@app/core/services/util/event.service';
 import { PasswordResetErrorStateMatcher } from '@app/core/components/password-reset/password-reset.component';
 import { Router } from '@angular/router';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
 @Component({
@@ -28,20 +27,11 @@ export class RequestPasswordResetComponent
   private notificationService = inject(NotificationService);
   eventService = inject(EventService);
   private router = inject(Router);
-  protected formService: FormService;
 
   usernameFormControl = new UntypedFormControl();
   matcher = new PasswordResetErrorStateMatcher();
   deviceWidth = innerWidth;
   username?: string;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     this.setFormControl(this.usernameFormControl);

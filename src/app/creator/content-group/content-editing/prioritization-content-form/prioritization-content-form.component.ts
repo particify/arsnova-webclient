@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
@@ -34,7 +33,6 @@ export class PrioritizationContentFormComponent
   implements OnInit, OnChanges, ContentForm
 {
   private contentService = inject(ContentService);
-  protected formService: FormService;
 
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation!: CreateAnswerOptionComponent;
@@ -47,13 +45,6 @@ export class PrioritizationContentFormComponent
 
   displayAnswers: DisplayAnswer[] = [];
 
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
   ngOnInit(): void {
     if (this.content?.format === ContentType.PRIORITIZATION) {
       const content = this.content as ContentPrioritization;

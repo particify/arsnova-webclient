@@ -7,7 +7,7 @@ import {
 import { EventService } from './event.service';
 import { ConsentChangedEventPayload } from '@app/core/models/events/consent-changed';
 
-export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem> =
+export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem[]> =
   new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 
 /**

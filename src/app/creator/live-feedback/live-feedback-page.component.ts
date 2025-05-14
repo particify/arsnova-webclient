@@ -4,13 +4,7 @@ import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { RoomService } from '@app/core/services/http/room.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { takeUntil } from 'rxjs';
 
@@ -24,12 +18,6 @@ export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
-  protected wsFeedbackService: WsFeedbackService;
-  protected feedbackService: FeedbackService;
-  protected roomService: RoomService;
-  protected translateService: TranslocoService;
-  protected announceService: AnnounceService;
-  protected globalStorageService: GlobalStorageService;
   private formService = inject(FormService);
 
   // Route data input below
@@ -39,31 +27,6 @@ export class LiveFeedbackPageComponent
   changeKey = '2';
 
   HotkeyAction = HotkeyAction;
-
-  constructor() {
-    const wsFeedbackService = inject(WsFeedbackService);
-    const feedbackService = inject(FeedbackService);
-    const roomService = inject(RoomService);
-    const translateService = inject(TranslocoService);
-    const announceService = inject(AnnounceService);
-    const globalStorageService = inject(GlobalStorageService);
-
-    super(
-      wsFeedbackService,
-      feedbackService,
-      roomService,
-      translateService,
-      announceService,
-      globalStorageService
-    );
-
-    this.wsFeedbackService = wsFeedbackService;
-    this.feedbackService = feedbackService;
-    this.roomService = roomService;
-    this.translateService = translateService;
-    this.announceService = announceService;
-    this.globalStorageService = globalStorageService;
-  }
 
   ngOnInit() {
     this.initData();

@@ -19,7 +19,6 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-announcement-settings',
@@ -35,7 +34,6 @@ export class AnnouncementSettingsComponent
   private notificationService = inject(NotificationService);
   private announcementService = inject(AnnouncementService);
   private dialogService = inject(DialogService);
-  protected formService: FormService;
 
   @ViewChild('inputTabs') inputTabs!: MatTabGroup;
   @ViewChild('titleInput') titleInput!: ElementRef;
@@ -52,14 +50,6 @@ export class AnnouncementSettingsComponent
   isLoading = true;
 
   UserRole = UserRole;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     this.announcementService

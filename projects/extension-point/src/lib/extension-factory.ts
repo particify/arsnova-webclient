@@ -5,6 +5,8 @@ import {
   ComponentRef,
   EventEmitter,
   inject,
+  Inject,
+  Optional,
 } from '@angular/core';
 import { environment } from '@environments/environment';
 import { Extension } from './extension';
@@ -19,8 +21,7 @@ export class ExtensionFactory {
 
   extensions: { [key: string]: Extension } = {};
 
-  constructor() {
-    const extensions = inject(Extension, { optional: true });
+  constructor(@Inject(Extension) @Optional() extensions: Extension[]) {
     const featureFlagService = this.featureFlagService;
 
     if (extensions) {

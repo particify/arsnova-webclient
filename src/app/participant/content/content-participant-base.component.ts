@@ -14,7 +14,6 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { Answer } from '@app/core/models/answer';
@@ -33,7 +32,6 @@ export abstract class ContentParticipantBaseComponent
   protected translateService = inject(TranslocoService);
   protected globalStorageService = inject(GlobalStorageService);
   protected router = inject(Router);
-  protected formService: FormService;
 
   @Output() answerChanged = new EventEmitter<{
     answer?: Answer;
@@ -45,14 +43,6 @@ export abstract class ContentParticipantBaseComponent
 
   isLoading = true;
   private destroyRef$ = inject(DestroyRef);
-
-  protected constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit() {
     this.translateService.setActiveLang(

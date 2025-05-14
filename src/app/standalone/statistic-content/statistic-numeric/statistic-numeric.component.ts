@@ -19,8 +19,7 @@ import {
   TooltipItem,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -62,8 +61,6 @@ export class StatisticNumericComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
-  protected contentService: ContentService;
-  protected translateService: TranslocoService;
   protected themeService = inject(ThemeService);
   protected presentationService = inject(PresentationService);
 
@@ -94,16 +91,6 @@ export class StatisticNumericComponent
     'minimum',
     'maximum',
   ];
-
-  constructor() {
-    const contentService = inject(ContentService);
-    const translateService = inject(TranslocoService);
-
-    super(contentService, translateService);
-
-    this.contentService = contentService;
-    this.translateService = translateService;
-  }
 
   ngOnDestroy() {
     this.destroyed$.next();

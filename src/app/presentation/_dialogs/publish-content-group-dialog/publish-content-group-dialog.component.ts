@@ -9,7 +9,6 @@ import {
 } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { provideTranslocoScope } from '@jsverse/transloco';
@@ -30,7 +29,6 @@ export class PublishContentGroupDialogComponent extends FormComponent {
   }>(MAT_DIALOG_DATA);
   private contentGroupService = inject(ContentGroupService);
   private contentPublishService = inject(ContentPublishService);
-  protected formService: FormService;
 
   readonly dialogId = 'publish-content';
 
@@ -38,11 +36,7 @@ export class PublishContentGroupDialogComponent extends FormComponent {
   selectedMode?: PublishingModeItem;
 
   constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-    this.formService = formService;
-
+    super();
     this.publishingModes = PUBLISHING_MODE_ITEMS;
     this.selectedMode = this.publishingModes[0];
   }

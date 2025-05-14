@@ -25,7 +25,6 @@ import {
 } from '@app/core/models/api-config';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
 @Component({
@@ -48,7 +47,6 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     roomId?: string;
     navigateAfterCreation: boolean;
   }>(MAT_DIALOG_DATA);
-  protected formService: FormService;
 
   readonly dialogId = 'create-room';
 
@@ -58,14 +56,6 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
   HintType = HintType;
   anonymousProvider?: AuthenticationProvider;
   createDuplication = false;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit() {
     this.createDuplication = !!this.data?.prefilledName;

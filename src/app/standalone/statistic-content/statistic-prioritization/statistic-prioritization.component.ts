@@ -4,7 +4,6 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  inject,
 } from '@angular/core';
 import {
   BarController,
@@ -16,11 +15,7 @@ import {
   LinearScale,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService } from '@jsverse/transloco';
-import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
-import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { PrioritizationRoundStatistics } from '@app/core/models/round-statistics';
 import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
@@ -39,11 +34,6 @@ export class StatisticPrioritizationComponent
   extends StatisticChoiceComponent
   implements OnInit, OnDestroy
 {
-  protected contentService: ContentService;
-  protected translateService: TranslocoService;
-  protected themeService: ThemeService;
-  protected presentationService: PresentationService;
-
   readonly padding = {
     label: 8,
     top: 25,
@@ -61,20 +51,6 @@ export class StatisticPrioritizationComponent
   scale = 0;
   fontSize = 0;
   indexes: number[] = [];
-
-  constructor() {
-    const contentService = inject(ContentService);
-    const translateService = inject(TranslocoService);
-    const themeService = inject(ThemeService);
-    const presentationService = inject(PresentationService);
-
-    super(contentService, translateService, themeService, presentationService);
-
-    this.contentService = contentService;
-    this.translateService = translateService;
-    this.themeService = themeService;
-    this.presentationService = presentationService;
-  }
 
   ngOnDestroy() {
     this.destroyed$.next();

@@ -1,21 +1,12 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { Vote } from '@app/core/models/vote';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { CommentService } from '@app/core/services/http/comment.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { VoteService } from '@app/core/services/http/vote.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { takeUntil } from 'rxjs';
 import { CommentListFloatingButtonsComponent } from '@app/standalone/comment-list-floating-buttons/comment-list-floating-buttons.component';
 import { CommentListAddButtonComponent } from '@app/standalone/comment-list-add-button/comment-list-add-button.component';
@@ -46,16 +37,6 @@ export class CommentsPageComponent
   extends AbstractCommentsPageComponent
   implements OnInit, OnDestroy
 {
-  protected commentService: CommentService;
-  protected translateService: TranslocoService;
-  protected dialog: MatDialog;
-  protected wsCommentService: WsCommentService;
-  protected notificationService: NotificationService;
-  protected announceService: AnnounceService;
-  protected router: Router;
-  protected globalStorageService: GlobalStorageService;
-  protected commentSettingsService: CommentSettingsService;
-  protected authenticationService: AuthenticationService;
   protected location = inject(Location);
   private voteService = inject(VoteService);
   private focusModeService = inject(FocusModeService);
@@ -63,43 +44,6 @@ export class CommentsPageComponent
   commentVoteMap = new Map<string, Vote>();
 
   focusModeEnabled = false;
-
-  constructor() {
-    const commentService = inject(CommentService);
-    const translateService = inject(TranslocoService);
-    const dialog = inject(MatDialog);
-    const wsCommentService = inject(WsCommentService);
-    const notificationService = inject(NotificationService);
-    const announceService = inject(AnnounceService);
-    const router = inject(Router);
-    const globalStorageService = inject(GlobalStorageService);
-    const commentSettingsService = inject(CommentSettingsService);
-    const authenticationService = inject(AuthenticationService);
-
-    super(
-      commentService,
-      translateService,
-      dialog,
-      wsCommentService,
-      notificationService,
-      announceService,
-      router,
-      globalStorageService,
-      commentSettingsService,
-      authenticationService
-    );
-
-    this.commentService = commentService;
-    this.translateService = translateService;
-    this.dialog = dialog;
-    this.wsCommentService = wsCommentService;
-    this.notificationService = notificationService;
-    this.announceService = announceService;
-    this.router = router;
-    this.globalStorageService = globalStorageService;
-    this.commentSettingsService = commentSettingsService;
-    this.authenticationService = authenticationService;
-  }
 
   ngOnInit(): void {
     this.publicComments$ = this.commentService

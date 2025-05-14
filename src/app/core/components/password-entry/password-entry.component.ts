@@ -14,7 +14,6 @@ import {
 } from '@app/core/services/util/notification.service';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 
 enum Strength {
@@ -50,7 +49,6 @@ export class PasswordEntryComponent
   private translationService = inject(TranslocoService);
   notificationService = inject(NotificationService);
   private _autofill = inject(AutofillMonitor);
-  protected formService: FormService;
 
   @ViewChild('passwordInput') passwordInput!: ElementRef;
 
@@ -67,14 +65,6 @@ export class PasswordEntryComponent
   showPwButton = false;
   autofilled = false;
   lastInput = '';
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngAfterViewInit(): void {
     this.setFormControl(this.passwordFormControl);

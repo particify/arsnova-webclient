@@ -3,7 +3,6 @@ import { CoreModule } from '@app/core/core.module';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
@@ -15,7 +14,6 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   styleUrl: './content-waiting.component.scss',
 })
 export class ContentWaitingComponent extends FormComponent {
-  protected formService: FormService;
   private roomUserAliasService = inject(RoomUserAliasService);
   private authService = inject(AuthenticationService);
 
@@ -29,14 +27,6 @@ export class ContentWaitingComponent extends FormComponent {
   @Output() aliasSet = new EventEmitter<void>();
 
   enteredAlias = '';
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   setAlias(): void {
     this.disableForm();

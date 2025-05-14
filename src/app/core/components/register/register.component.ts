@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { ApiConfig } from '@app/core/models/api-config';
 
@@ -27,7 +26,6 @@ export class RegisterComponent extends FormComponent implements OnInit {
   notificationService = inject(NotificationService);
   eventService = inject(EventService);
   private router = inject(Router);
-  protected formService: FormService;
 
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
@@ -40,14 +38,6 @@ export class RegisterComponent extends FormComponent implements OnInit {
   acceptToS = false;
   linkOfToS?: string;
   accountServiceTitle!: string;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     this.accountServiceTitle =

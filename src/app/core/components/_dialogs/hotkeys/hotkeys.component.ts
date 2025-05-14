@@ -12,7 +12,7 @@ import {
   standalone: false,
 })
 export class HotkeysComponent {
-  hotkeys = inject(MAT_DIALOG_DATA);
+  hotkeys = inject<Hotkey[]>(MAT_DIALOG_DATA);
 
   readonly dialogId = 'hotkeys';
 

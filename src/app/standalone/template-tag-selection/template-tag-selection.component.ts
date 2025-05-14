@@ -14,7 +14,6 @@ import { CoreModule } from '@app/core/core.module';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { startWith, takeUntil } from 'rxjs';
 
@@ -27,7 +26,6 @@ export class TemplateTagSelectionComponent
   extends FormComponent
   implements OnInit
 {
-  protected formService: FormService;
   private announceService = inject(AnnounceService);
   private templateService = inject(BaseTemplateService);
 
@@ -45,14 +43,6 @@ export class TemplateTagSelectionComponent
     '',
     Validators.pattern(/^[\p{Ll}\p{Lu}\d\s]*$/u)
   );
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     this.setFormControl(this.tagFormControl);

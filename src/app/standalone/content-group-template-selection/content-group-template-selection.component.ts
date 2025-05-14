@@ -15,7 +15,6 @@ import { Room } from '@app/core/models/room';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentGroupTemplateComponent } from '@app/standalone/content-group-template/content-group-template.component';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -41,7 +40,6 @@ export class ContentGroupTemplateSelectionComponent
   extends FormComponent
   implements OnInit, OnDestroy
 {
-  protected formService: FormService;
   private templateService = inject(BaseTemplateService);
   private translateService = inject(TranslocoService);
   private authService = inject(AuthenticationService);
@@ -66,14 +64,6 @@ export class ContentGroupTemplateSelectionComponent
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   creatorId!: string;
   tagIdsQueryParams: string[] = [];
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     // If lang is set via query param, use this one instead of active lang as default

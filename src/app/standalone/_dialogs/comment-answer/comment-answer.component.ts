@@ -14,7 +14,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { DateComponent } from '@app/standalone/date/date.component';
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { take } from 'rxjs';
@@ -41,7 +40,6 @@ export class CommentAnswerComponent extends FormComponent {
   private dialogService = inject(DialogService);
   dialogRef = inject<MatDialogRef<CommentAnswerComponent>>(MatDialogRef);
   data = inject(MAT_DIALOG_DATA);
-  protected formService: FormService;
 
   readonly dialogId = 'comment-answer';
   @ViewChild('answerInput') answerInput!: ElementRef;
@@ -54,11 +52,7 @@ export class CommentAnswerComponent extends FormComponent {
   renderPreview = false;
 
   constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-    this.formService = formService;
-
+    super();
     this.comment = this.data.comment;
     this.answer = this.comment.answer;
     this.isEditor = !!this.data.isEditor;

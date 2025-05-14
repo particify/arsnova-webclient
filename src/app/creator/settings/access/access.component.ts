@@ -27,7 +27,6 @@ import { AccessTokenService } from '@app/core/services/http/access-token.service
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 
 export interface Role {
   name: string;
@@ -52,7 +51,6 @@ export class AccessComponent
   eventService = inject(EventService);
   private authenticationService = inject(AuthenticationService);
   private accessTokenService = inject(AccessTokenService);
-  protected formService: FormService;
 
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
@@ -74,14 +72,6 @@ export class AccessComponent
   currentInputIsChecked = true;
 
   HintType = HintType;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit() {
     this.setFormControl(this.usernameFormControl);

@@ -4,16 +4,7 @@ import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { RoomService } from '@app/core/services/http/room.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import {
-  TranslocoService,
-  TranslocoPipe,
-  provideTranslocoScope,
-} from '@jsverse/transloco';
+import { TranslocoPipe, provideTranslocoScope } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
@@ -52,12 +43,6 @@ export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
-  protected wsFeedbackService: WsFeedbackService;
-  protected feedbackService: FeedbackService;
-  protected roomService: RoomService;
-  protected translateService: TranslocoService;
-  protected announceService: AnnounceService;
-  protected globalStorageService: GlobalStorageService;
   protected route = inject(ActivatedRoute);
   protected authenticationService = inject(AuthenticationService);
 
@@ -70,31 +55,6 @@ export class LiveFeedbackPageComponent
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   userId!: string;
   voteKeys = ['1', '2', '3', '4'];
-
-  constructor() {
-    const wsFeedbackService = inject(WsFeedbackService);
-    const feedbackService = inject(FeedbackService);
-    const roomService = inject(RoomService);
-    const translateService = inject(TranslocoService);
-    const announceService = inject(AnnounceService);
-    const globalStorageService = inject(GlobalStorageService);
-
-    super(
-      wsFeedbackService,
-      feedbackService,
-      roomService,
-      translateService,
-      announceService,
-      globalStorageService
-    );
-
-    this.wsFeedbackService = wsFeedbackService;
-    this.feedbackService = feedbackService;
-    this.roomService = roomService;
-    this.translateService = translateService;
-    this.announceService = announceService;
-    this.globalStorageService = globalStorageService;
-  }
 
   ngOnInit() {
     this.authenticationService

@@ -4,7 +4,6 @@ import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dia
 import { TemplateService } from '@app/admin/template-management/template.service';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -29,7 +28,6 @@ export class TemplateManagementComponent
   extends FormComponent
   implements OnInit
 {
-  protected formService: FormService;
   private templateService = inject(TemplateService);
   private notificationService = inject(NotificationService);
   private translateService = inject(TranslocoService);
@@ -42,14 +40,6 @@ export class TemplateManagementComponent
   FILTER = FILTER;
   filterOptions = Object.values(FILTER);
   searchFormControl = new FormControl('');
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     this.loadTags(this.translateService.getActiveLang());

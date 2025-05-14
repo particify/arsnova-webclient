@@ -6,7 +6,6 @@ import {
 import { ViolationReportService } from '@app/core/services/http/violation-report.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -22,7 +21,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './violation-report.component.html',
 })
 export class ViolationReportComponent extends FormComponent implements OnInit {
-  protected formService: FormService;
   private dialogRef =
     inject<MatDialogRef<ViolationReportComponent>>(MatDialogRef);
   private data = inject<{
@@ -37,14 +35,6 @@ export class ViolationReportComponent extends FormComponent implements OnInit {
   selectedReason?: ViolationReportReason;
   description = '';
   targetTypeString?: string;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     this.formGroup = new FormGroup({

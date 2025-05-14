@@ -1,39 +1,16 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
 import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { HttpClient } from '@angular/common/http';
 import { Room } from '@app/core/models/room';
-import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AbstractFocusModeService } from '@app/common/abstract/abstract-focus-mode.service';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
-import { EventService } from '@app/core/services/util/event.service';
 
 @Injectable()
 export class FocusModeService extends AbstractFocusModeService {
-  protected wsConnector: WsConnectorService;
-  protected http: HttpClient;
-  protected eventService: EventService;
-  protected featureFlagService: FeatureFlagService;
-
   private state$ = new BehaviorSubject<FocusEvent | null>(null);
-
-  constructor() {
-    const wsConnector = inject(WsConnectorService);
-    const http = inject(HttpClient);
-    const eventService = inject(EventService);
-    const featureFlagService = inject(FeatureFlagService);
-
-    super(wsConnector, http, eventService, featureFlagService);
-
-    this.wsConnector = wsConnector;
-    this.http = http;
-    this.eventService = eventService;
-    this.featureFlagService = featureFlagService;
-  }
 
   protected handleState(state: FocusEvent) {
     this.state$.next(state);

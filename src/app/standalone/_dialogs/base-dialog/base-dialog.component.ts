@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { Observable, takeUntil } from 'rxjs';
@@ -28,17 +27,12 @@ interface DialogData {
 export class BaseDialogComponent extends FormComponent {
   dialogRef = inject<MatDialogRef<BaseDialogComponent>>(MatDialogRef);
   data = inject<DialogData>(MAT_DIALOG_DATA);
-  protected formService: FormService;
 
   readonly dialogId: string;
 
   constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
+    super();
     const data = this.data;
-    this.formService = formService;
-
     this.dialogId = data.dialogId;
   }
 

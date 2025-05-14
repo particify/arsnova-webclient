@@ -33,7 +33,6 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
 function setDefaultTrue(value: boolean | undefined): boolean {
@@ -59,7 +58,6 @@ export class LoginComponent
   private dialogService = inject(DialogService);
   private route = inject(ActivatedRoute);
   private routingService = inject(RoutingService);
-  protected formService: FormService;
 
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
@@ -85,14 +83,6 @@ export class LoginComponent
   loginIdFormControl = new UntypedFormControl();
 
   matcher = new FormErrorStateMatcher();
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit() {
     this.setFormControl(this.loginIdFormControl);

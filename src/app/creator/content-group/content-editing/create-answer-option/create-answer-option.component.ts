@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -22,7 +21,6 @@ export class CreateAnswerOptionComponent extends FormComponent {
   private translateService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
   private announceService = inject(AnnounceService);
-  protected formService: FormService;
 
   @ViewChild('answerInput') answerInput!: ElementRef;
 
@@ -30,14 +28,6 @@ export class CreateAnswerOptionComponent extends FormComponent {
   @Input() lengthLimit = 500;
 
   newAnswer = '';
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   createAnswer() {
     if (this.newAnswer === '') {

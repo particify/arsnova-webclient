@@ -20,7 +20,6 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   AdvancedSnackBarTypes,
@@ -56,7 +55,6 @@ export class ContentEditingComponent
   private contentGroupService = inject(ContentGroupService);
   private notificationService = inject(NotificationService);
   private contentPublishService = inject(ContentPublishService);
-  protected formService: FormService;
   private contentGroupPageService = inject(ContentGroupPageService);
 
   @ViewChild('ContentForm') private contentForm!: ContentForm;
@@ -85,14 +83,6 @@ export class ContentEditingComponent
   created = false;
   isAnswered = false;
   GroupType = GroupType;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.content?.previousValue && changes.content?.currentValue) {

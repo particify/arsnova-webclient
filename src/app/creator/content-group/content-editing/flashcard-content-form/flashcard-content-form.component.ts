@@ -14,7 +14,6 @@ import { TranslocoService } from '@jsverse/transloco';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
@@ -38,7 +37,6 @@ export class FlashcardContentFormComponent
   private notificationService = inject(NotificationService);
   private translationService = inject(TranslocoService);
   private formattingService = inject(FormattingService);
-  protected formService: FormService;
 
   @Input() content?: Content;
   @Input() isEditMode = false;
@@ -46,14 +44,6 @@ export class FlashcardContentFormComponent
   answer = '';
   textContainsImage = false;
   HintType = HintType;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.FLASHCARD) {

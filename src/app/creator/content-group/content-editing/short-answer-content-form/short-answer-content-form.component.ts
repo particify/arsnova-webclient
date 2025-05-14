@@ -5,11 +5,9 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
-  inject,
 } from '@angular/core';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { Content } from '@app/core/models/content';
 import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
@@ -34,8 +32,6 @@ export class ShortAnswerContentFormComponent
   extends FormComponent
   implements OnInit, OnChanges, ContentForm
 {
-  protected formService: FormService;
-
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
@@ -46,14 +42,6 @@ export class ShortAnswerContentFormComponent
   @Input() isEditMode = false;
 
   displayAnswers: DisplayAnswer[] = [];
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.SHORT_ANSWER) {

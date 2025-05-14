@@ -9,7 +9,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslocoService } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
 @Component({
@@ -25,19 +24,10 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   dialogRef = inject<MatDialogRef<UserActivationComponent>>(MatDialogRef);
   private translationService = inject(TranslocoService);
   eventService = inject(EventService);
-  protected formService: FormService;
 
   readonly dialogId = 'activate-user';
 
   activationKeyFormControl = new UntypedFormControl('', [Validators.required]);
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     this.setFormControl(this.activationKeyFormControl);

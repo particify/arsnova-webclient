@@ -1,15 +1,12 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
 import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
@@ -29,9 +26,6 @@ export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
-  protected roomStatsService: RoomStatsService;
-  protected contentGroupService: ContentGroupService;
-  protected eventService: EventService;
   protected router = inject(Router);
   protected translateService = inject(TranslocoService);
   protected dialogService = inject(DialogService);
@@ -46,15 +40,7 @@ export class RoomOverviewPageComponent
   hintType = HintType.INFO;
 
   constructor() {
-    const roomStatsService = inject(RoomStatsService);
-    const contentGroupService = inject(ContentGroupService);
-    const eventService = inject(EventService);
-
-    super(roomStatsService, contentGroupService, eventService);
-    this.roomStatsService = roomStatsService;
-    this.contentGroupService = contentGroupService;
-    this.eventService = eventService;
-
+    super();
     this.groupTypes = this.contentGroupService.getTypeIcons();
     this.groupTypes.forEach((value, key) => {
       const groupTypeIcons = new Map<ContentType, string>();

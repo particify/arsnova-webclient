@@ -8,7 +8,6 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -26,7 +25,6 @@ import { takeUntil } from 'rxjs';
   templateUrl: './add-template-button.component.html',
 })
 export class AddTemplateButtonComponent extends FormComponent {
-  protected formService: FormService;
   private templateService = inject(BaseTemplateService);
   private translateService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
@@ -40,14 +38,6 @@ export class AddTemplateButtonComponent extends FormComponent {
   @Input({ required: true }) templateName!: string;
   @Input() room?: Room;
   routeAfterSuccess: string[] = [];
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   useTemplate(): void {
     if (this.room) {

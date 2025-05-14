@@ -1,7 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { UserService } from '@app/core/services/http/user.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { AdminService } from '@app/core/services/http/admin.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -24,8 +22,6 @@ export class UserManagementComponent
   extends UserSearchComponent
   implements OnInit
 {
-  protected adminService: AdminService;
-  protected userService: UserService;
   protected dialogService = inject(DialogService);
   protected notificationService = inject(NotificationService);
   protected translateService = inject(TranslocoService);
@@ -35,16 +31,6 @@ export class UserManagementComponent
 
   addButtonText?: string;
   isLoading = false;
-
-  constructor() {
-    const adminService = inject(AdminService);
-    const userService = inject(UserService);
-
-    super(userService, adminService);
-
-    this.adminService = adminService;
-    this.userService = userService;
-  }
 
   ngOnInit(): void {
     this.apiConfigService.getApiConfig$().subscribe((config) => {

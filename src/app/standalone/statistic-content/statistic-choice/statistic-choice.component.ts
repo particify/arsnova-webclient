@@ -17,9 +17,8 @@ import {
   LinearScale,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
@@ -60,8 +59,6 @@ export class StatisticChoiceComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
-  protected contentService: ContentService;
-  protected translateService: TranslocoService;
   protected themeService = inject(ThemeService);
   protected presentationService = inject(PresentationService);
 
@@ -91,16 +88,6 @@ export class StatisticChoiceComponent
   ContentType: typeof ContentType = ContentType;
   roundStats?: RoundStatistics[];
   answerLabelWidth?: string;
-
-  constructor() {
-    const contentService = inject(ContentService);
-    const translateService = inject(TranslocoService);
-
-    super(contentService, translateService);
-
-    this.contentService = contentService;
-    this.translateService = translateService;
-  }
 
   ngOnDestroy() {
     this.destroyed$.next();

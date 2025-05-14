@@ -1,20 +1,14 @@
 import { Component, Input, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import { AnswerResultType } from '@app/core/models/answer-result';
@@ -27,12 +21,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 })
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {
   protected answerService = inject(ContentAnswerService);
-  protected notificationService: NotificationService;
-  protected translateService: TranslocoService;
-  protected globalStorageService: GlobalStorageService;
-  protected router: Router;
   private likertScaleService = inject(LikertScaleService);
-  protected formService: FormService;
 
   @Input({ required: true }) content!: ContentScale;
   @Input() answer?: ChoiceAnswer;
@@ -42,28 +31,6 @@ export class ContentScaleParticipantComponent extends ContentParticipantBaseComp
   selectableAnswers: SelectableAnswer[] = [];
   hasAbstained = false;
   selectedAnswerIndex?: number;
-
-  constructor() {
-    const notificationService = inject(NotificationService);
-    const translateService = inject(TranslocoService);
-    const globalStorageService = inject(GlobalStorageService);
-    const router = inject(Router);
-    const formService = inject(FormService);
-
-    super(
-      notificationService,
-      translateService,
-      globalStorageService,
-      router,
-      formService
-    );
-
-    this.notificationService = notificationService;
-    this.translateService = translateService;
-    this.globalStorageService = globalStorageService;
-    this.router = router;
-    this.formService = formService;
-  }
 
   init() {
     const optionLabels = this.likertScaleService.getOptionLabels(

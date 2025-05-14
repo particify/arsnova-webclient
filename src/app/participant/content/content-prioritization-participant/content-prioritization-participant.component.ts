@@ -1,18 +1,12 @@
 import { Component, Input, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
-import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-answers/content-prioritization-answer/content-prioritization-answer.component';
 import { AnswerResultType } from '@app/core/models/answer-result';
@@ -25,11 +19,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 })
 export class ContentPrioritizationParticipantComponent extends ContentParticipantBaseComponent {
   protected answerService = inject(ContentAnswerService);
-  protected notificationService: NotificationService;
-  protected translateService: TranslocoService;
-  protected globalStorageService: GlobalStorageService;
-  protected router: Router;
-  protected formService: FormService;
 
   @Input({ required: true }) content!: ContentPrioritization;
   @Input() answer?: PrioritizationAnswer;
@@ -39,28 +28,6 @@ export class ContentPrioritizationParticipantComponent extends ContentParticipan
   isCorrect = false;
   answerOptions: AnswerWithPoints[] = [];
   assignedPoints: number[] = [];
-
-  constructor() {
-    const notificationService = inject(NotificationService);
-    const translateService = inject(TranslocoService);
-    const globalStorageService = inject(GlobalStorageService);
-    const router = inject(Router);
-    const formService = inject(FormService);
-
-    super(
-      notificationService,
-      translateService,
-      globalStorageService,
-      router,
-      formService
-    );
-
-    this.notificationService = notificationService;
-    this.translateService = translateService;
-    this.globalStorageService = globalStorageService;
-    this.router = router;
-    this.formService = formService;
-  }
 
   init() {
     if (this.isDisabled) {

@@ -1,7 +1,6 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslocoService } from '@jsverse/transloco';
 import {
@@ -23,7 +22,6 @@ import { BaseTemplateService } from '@app/core/services/http/base-template.servi
   templateUrl: './edit-content-group-template.component.html',
 })
 export class EditContentGroupTemplateComponent extends FormComponent {
-  protected formService: FormService;
   private dialogRef =
     inject<MatDialogRef<EditContentGroupTemplateComponent>>(MatDialogRef);
   data = inject<{
@@ -35,14 +33,6 @@ export class EditContentGroupTemplateComponent extends FormComponent {
 
   @ViewChild(ContentGroupTemplateEditingComponent)
   templateEditing!: ContentGroupTemplateEditingComponent;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   save() {
     const template = this.templateEditing.getTemplate();

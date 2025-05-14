@@ -22,7 +22,6 @@ import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { EventService } from '@app/core/services/util/event.service';
@@ -125,7 +124,6 @@ export class ContentParticipantComponent
   extends FormComponent
   implements OnInit, OnChanges
 {
-  protected formService: FormService;
   private router = inject(Router);
   private location = inject(Location);
   private eventService = inject(EventService);
@@ -209,14 +207,6 @@ export class ContentParticipantComponent
       icon: 'emoji_events',
     },
   ];
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   get answerSubmitted(): Observable<string> {
     return this.answerSubmitted$;

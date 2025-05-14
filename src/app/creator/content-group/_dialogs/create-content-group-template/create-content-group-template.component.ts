@@ -1,6 +1,5 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -17,7 +16,6 @@ import { TranslocoService } from '@jsverse/transloco';
   standalone: false,
 })
 export class CreateContentGroupTemplateComponent extends FormComponent {
-  protected formService: FormService;
   private dialogRef =
     inject<MatDialogRef<CreateContentGroupTemplateComponent>>(MatDialogRef);
   data = inject<{
@@ -30,14 +28,6 @@ export class CreateContentGroupTemplateComponent extends FormComponent {
 
   @ViewChild(ContentGroupTemplateEditingComponent)
   templateEditing!: ContentGroupTemplateEditingComponent;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   closeDialog(): void {
     this.dialogRef.close();

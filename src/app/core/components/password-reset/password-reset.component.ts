@@ -16,7 +16,6 @@ import { EventService } from '@app/core/services/util/event.service';
 import { Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
@@ -45,7 +44,6 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
   private notificationService = inject(NotificationService);
   eventService = inject(EventService);
   private router = inject(Router);
-  protected formService: FormService;
 
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
@@ -57,14 +55,6 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
 
   deviceWidth = innerWidth;
   isLoading = true;
-
-  constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-
-    this.formService = formService;
-  }
 
   ngOnInit(): void {
     this.setFormControl(this.keyFormControl);

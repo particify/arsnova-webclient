@@ -14,7 +14,6 @@ import { CoreModule } from '@app/core/core.module';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { LICENSES } from '@app/core/models/licenses';
 import { TemplateTag } from '@app/core/models/template-tag';
-import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -40,7 +39,6 @@ export class ContentGroupTemplateEditingComponent
   extends FormComponent
   implements OnInit
 {
-  protected formService: FormService;
   private translateService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
 
@@ -63,11 +61,7 @@ export class ContentGroupTemplateEditingComponent
   LICENSES = LICENSES;
 
   constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-    this.formService = formService;
-
+    super();
     this.selectedLicense = this.licenseKeys[0];
     this.selectedLang = this.translateService.getActiveLang();
   }

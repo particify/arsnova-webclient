@@ -57,9 +57,7 @@ export class TrackingService {
   private translateService = inject(TranslocoService);
   private themeService = inject(ThemeService);
   private globalStorageService = inject(GlobalStorageService);
-  private _window = inject<{
-    [key: string]: object;
-  }>(Window);
+  private _window = window as Record<string, any>;
 
   _paq: any[];
   loaded = false;

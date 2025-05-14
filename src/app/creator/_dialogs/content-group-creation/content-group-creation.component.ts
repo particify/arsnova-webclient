@@ -16,7 +16,6 @@ import {
   PublishingMode,
 } from '@app/core/models/content-group';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { DetailedRadioGroup } from '@app/standalone/detail-radio-group/detail-radio-group.component';
 
@@ -38,7 +37,6 @@ export class ContentGroupCreationComponent extends FormComponent {
   private translateService = inject(TranslocoService);
   private contentGroupService = inject(ContentGroupService);
   private data = inject<DialogData>(MAT_DIALOG_DATA);
-  protected formService: FormService;
 
   readonly dialogId = 'create-content-group';
 
@@ -50,11 +48,7 @@ export class ContentGroupCreationComponent extends FormComponent {
   radioItems: DetailedRadioGroup[] = [];
 
   constructor() {
-    const formService = inject(FormService);
-
-    super(formService);
-    this.formService = formService;
-
+    super();
     Object.values(GroupType).forEach((type) => {
       const typeString = type.toLowerCase();
       const title = this.translateService.translate(
