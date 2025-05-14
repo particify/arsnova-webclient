@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Content } from '@app/core/models/content';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable, of, Subject } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
@@ -8,15 +8,9 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
-import { TranslocoService } from '@jsverse/transloco';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { EventService } from '@app/core/services/util/event.service';
 import { ContentCreated } from '@app/core/models/events/content-created';
-import { CachingService } from '@app/core/services/util/caching.service';
 import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -34,11 +28,7 @@ const httpOptions = {
 
 @Injectable()
 export class ContentService extends AbstractEntityService<Content> {
-  private http: HttpClient;
-  private ws: WsConnectorService;
-  protected eventService: EventService;
-  protected translateService: TranslocoService;
-  protected notificationService: NotificationService;
+  private ws = inject(WsConnectorService);
   private router = inject(Router);
   private dialogService = inject(DialogService);
   private dialog = inject(MatDialog);
@@ -69,30 +59,7 @@ export class ContentService extends AbstractEntityService<Content> {
   ]);
 
   constructor() {
-    const http = inject(HttpClient);
-    const ws = inject(WsConnectorService);
-    const eventService = inject(EventService);
-    const translateService = inject(TranslocoService);
-    const notificationService = inject(NotificationService);
-    const cachingService = inject(CachingService);
-
-    super(
-      'Content',
-      '/content',
-      http,
-      ws,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService,
-      false
-    );
-
-    this.http = http;
-    this.ws = ws;
-    this.eventService = eventService;
-    this.translateService = translateService;
-    this.notificationService = notificationService;
+    super('Content', '/content', false);
   }
 
   getAnswersChangedStream(

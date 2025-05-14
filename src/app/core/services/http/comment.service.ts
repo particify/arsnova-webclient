@@ -1,17 +1,11 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Comment } from '@app/core/models/comment';
 import { catchError, take, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { CommentCreated } from '@app/core/models/events/comment-created';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Room } from '@app/core/models/room';
-import { CachingService } from '@app/core/services/util/caching.service';
-import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { Message } from '@stomp/stompjs';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CorrectWrong } from '@app/core/models/correct-wrong.enum';
@@ -24,13 +18,6 @@ const httpOptions = {
 
 @Injectable()
 export class CommentService extends AbstractEntityService<Comment> {
-  private http: HttpClient;
-  protected ws: WsConnectorService;
-  protected eventService: EventService;
-  protected translateService: TranslocoService;
-  protected notificationService: NotificationService;
-  protected wsCommentService = inject(WsCommentService);
-
   serviceApiUrl = {
     highlight: '/highlight',
     lowlight: '/lowlight',
@@ -39,29 +26,7 @@ export class CommentService extends AbstractEntityService<Comment> {
   };
 
   constructor() {
-    const http = inject(HttpClient);
-    const ws = inject(WsConnectorService);
-    const eventService = inject(EventService);
-    const translateService = inject(TranslocoService);
-    const notificationService = inject(NotificationService);
-    const cachingService = inject(CachingService);
-
-    super(
-      'Comment',
-      '/comment',
-      http,
-      ws,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService
-    );
-
-    this.http = http;
-    this.ws = ws;
-    this.eventService = eventService;
-    this.translateService = translateService;
-    this.notificationService = notificationService;
+    super('Comment', '/comment');
   }
 
   getComment(commentId: string, roomId: string): Observable<Comment> {

@@ -7,16 +7,16 @@ import { Observable } from 'rxjs';
 export class TemplateService extends BaseTemplateService {
   patchTemplateTag(tagId: string, changes: object): Observable<TemplateTag> {
     const connectionUrl = this.buildUri(`/tag/${tagId}`);
-    return this.httpClient.patch<TemplateTag>(connectionUrl, changes);
+    return this.http.patch<TemplateTag>(connectionUrl, changes);
   }
 
   deleteTemplateTag(tagId: string): Observable<void> {
     const connectionUrl = this.buildUri(`/tag/${tagId}`);
-    return this.httpClient.delete<void>(connectionUrl);
+    return this.http.delete<void>(connectionUrl);
   }
 
   deleteTemplate(templateId: string): Observable<void> {
     const connectionUrl = this.buildUri(`/contentgroup/${templateId}`);
-    return this.httpClient.delete<void>(connectionUrl);
+    return this.http.delete<void>(connectionUrl);
   }
 }

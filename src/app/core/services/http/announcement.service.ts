@@ -1,41 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
+import { Injectable } from '@angular/core';
 import { catchError, first, Observable } from 'rxjs';
 import { Announcement } from '@app/core/models/announcement';
 import { AnnouncementState } from '@app/core/models/announcement-state';
 import { UserAnnouncement } from '@app/core/models/user-announcement';
-import { EventService } from '@app/core/services/util/event.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { AbstractHttpService } from './abstract-http.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnnouncementService extends AbstractHttpService<Announcement> {
-  private http: HttpClient;
-  protected eventService: EventService;
-  protected translateService: TranslocoService;
-  protected notificationService: NotificationService;
-
   constructor() {
-    const http = inject(HttpClient);
-    const eventService = inject(EventService);
-    const translateService = inject(TranslocoService);
-    const notificationService = inject(NotificationService);
-
-    super(
-      '/announcement',
-      http,
-      eventService,
-      translateService,
-      notificationService
-    );
-
-    this.http = http;
-    this.eventService = eventService;
-    this.translateService = translateService;
-    this.notificationService = notificationService;
+    super('/announcement');
   }
 
   add(roomId: string, title: string, body: string): Observable<Announcement> {

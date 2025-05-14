@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   first,
@@ -18,11 +18,8 @@ import {
   AUTH_HEADER_KEY,
   AUTH_SCHEME,
 } from './http/authentication.service';
-import { EventService } from './util/event.service';
 import { Membership } from '@app/core/models/membership';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from './util/notification.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Room } from '@app/core/models/room';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
@@ -33,12 +30,8 @@ import { MembershipsChanged } from '@app/core/models/events/memberships-changed'
  */
 @Injectable()
 export class RoomMembershipService extends AbstractHttpService<Membership> {
-  protected http: HttpClient;
   protected wsConnector = inject(WsConnectorService);
-  protected eventService: EventService;
   protected authenticationService = inject(AuthenticationService);
-  protected translateService: TranslocoService;
-  protected notificationService: NotificationService;
 
   serviceApiUrl = {
     byUser: '/by-user',
@@ -48,23 +41,8 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   private newOwnerships: Membership[] = [];
 
   constructor() {
-    const http = inject(HttpClient);
-    const eventService = inject(EventService);
-    const translateService = inject(TranslocoService);
-    const notificationService = inject(NotificationService);
-
-    super(
-      '/_view/membership',
-      http,
-      eventService,
-      translateService,
-      notificationService
-    );
-    this.http = http;
-    this.eventService = eventService;
+    super('/_view/membership');
     const authenticationService = this.authenticationService;
-    this.translateService = translateService;
-    this.notificationService = notificationService;
 
     const authChanged$ = authenticationService
       .getAuthenticationChanges()

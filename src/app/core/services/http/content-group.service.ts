@@ -1,20 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomStatsService } from './room-stats.service';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
-import { CachingService } from '@app/core/services/util/caching.service';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import {
   AnswerResultOverview,
   AnswerResultType,
@@ -47,12 +42,7 @@ interface AnswerStatisticsSummary {
 
 @Injectable()
 export class ContentGroupService extends AbstractEntityService<ContentGroup> {
-  private http: HttpClient;
-  protected ws: WsConnectorService;
   private globalStorageService = inject(GlobalStorageService);
-  protected eventService: EventService;
-  protected translateService: TranslocoService;
-  protected notificationService: NotificationService;
   private roomStatsService = inject(RoomStatsService);
   private dialog = inject(MatDialog);
 
@@ -64,29 +54,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   ]);
 
   constructor() {
-    const http = inject(HttpClient);
-    const ws = inject(WsConnectorService);
-    const eventService = inject(EventService);
-    const translateService = inject(TranslocoService);
-    const notificationService = inject(NotificationService);
-    const cachingService = inject(CachingService);
-
-    super(
-      'ContentGroup',
-      '/contentgroup',
-      http,
-      ws,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService
-    );
-
-    this.http = http;
-    this.ws = ws;
-    this.eventService = eventService;
-    this.translateService = translateService;
-    this.notificationService = notificationService;
+    super('ContentGroup', '/contentgroup');
   }
 
   getStatsByRoomIdAndName(
@@ -246,7 +214,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     const connectionUrl = this.buildUri(`/${groupId}/import`, roomId);
     const formData = new FormData();
     formData.append('file', blob);
-    return this.httpClient.post<ImportResult>(connectionUrl, formData).pipe(
+    return this.http.post<ImportResult>(connectionUrl, formData).pipe(
       tap((r) => this.handleImportResult(r)),
       catchError(
         this.handleError<ImportResult>(

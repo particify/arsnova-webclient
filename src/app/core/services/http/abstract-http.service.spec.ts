@@ -3,8 +3,7 @@ import { AbstractHttpService, HttpMethod } from './abstract-http.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { Injectable, inject as coreInject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {
   HttpClientTestingModule,
@@ -29,21 +28,8 @@ const data1 = { id: 1 };
 
 @Injectable()
 class TestHttpService extends AbstractHttpService<object> {
-  protected eventService: EventService;
-  protected translateService: TranslocoService;
-  protected notificationService: NotificationService;
-
   constructor() {
-    const http = coreInject(HttpClient);
-    const eventService = coreInject(EventService);
-    const translateService = coreInject(TranslocoService);
-    const notificationService = coreInject(NotificationService);
-
-    super('/test', http, eventService, translateService, notificationService);
-
-    this.eventService = eventService;
-    this.translateService = translateService;
-    this.notificationService = notificationService;
+    super('/test');
   }
 
   public override performGet<U extends object | object[]>(

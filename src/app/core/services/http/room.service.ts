@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { RoomSummary } from '@app/core/models/room-summary';
 import { SurveyStarted } from '@app/core/models/events/survey-started';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import {
@@ -11,23 +11,15 @@ import {
   AUTH_SCHEME,
 } from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
-import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
-import { TranslocoService } from '@jsverse/transloco';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
-import {
-  CachingService,
-  DefaultCache,
-} from '@app/core/services/util/caching.service';
+import { DefaultCache } from '@app/core/services/util/caching.service';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 const httpOptions = {
@@ -36,15 +28,10 @@ const httpOptions = {
 
 @Injectable()
 export class RoomService extends AbstractEntityService<Room> {
-  private http: HttpClient;
-  private ws: WsConnectorService;
+  private ws = inject(WsConnectorService);
   private authService = inject(AuthenticationService);
   private globalStorageService = inject(GlobalStorageService);
-  protected eventService: EventService;
-  protected translateService: TranslocoService;
-  protected notificationService: NotificationService;
   private feedbackService = inject(FeedbackService);
-  protected cachingService: CachingService;
 
   serviceApiUrl = {
     duplicate: '/duplicate',
@@ -60,30 +47,7 @@ export class RoomService extends AbstractEntityService<Room> {
   private messageStreamSubscription?: Subscription;
 
   constructor() {
-    const http = inject(HttpClient);
-    const ws = inject(WsConnectorService);
-    const eventService = inject(EventService);
-    const translateService = inject(TranslocoService);
-    const notificationService = inject(NotificationService);
-    const cachingService = inject(CachingService);
-
-    super(
-      'Room',
-      '/room',
-      http,
-      ws,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService
-    );
-
-    this.http = http;
-    this.ws = ws;
-    this.eventService = eventService;
-    this.translateService = translateService;
-    this.notificationService = notificationService;
-    this.cachingService = cachingService;
+    super('Room', '/room');
   }
 
   /**

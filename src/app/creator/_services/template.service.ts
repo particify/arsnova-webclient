@@ -16,6 +16,6 @@ export class TemplateService extends BaseTemplateService {
     const connectionUrl = this.buildUri('/contentgroup/from-existing');
     const body = template as ContentGroupTemplateBody;
     body.contentGroupId = contentGroupId;
-    return this.httpClient.post<ContentGroupTemplate>(connectionUrl, template);
+    return this.http.post<ContentGroupTemplate>(connectionUrl, template);
   }
 }

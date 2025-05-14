@@ -4,6 +4,7 @@ import {
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Observable, pipe, take, throwError } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 import {
@@ -35,19 +36,18 @@ export type HttpOptions = {
 };
 
 export abstract class AbstractHttpService<T> {
+  protected http = inject(HttpClient);
+  protected eventService = inject(EventService);
+  protected translateService = inject(TranslocoService);
+  protected notificationService = inject(NotificationService);
+
   protected apiUrl = {
     base: '/api',
     find: '/find',
     room: '/room',
   };
 
-  constructor(
-    protected uriPrefix: string,
-    protected httpClient: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {}
+  constructor(protected uriPrefix: string) {}
 
   /**
    * Performs a HTTP GET request. By default, if the request fails, it is send
@@ -88,7 +88,7 @@ export abstract class AbstractHttpService<T> {
     uri: string,
     options?: HttpOptions
   ): Observable<U> {
-    const request$ = this.httpClient.request<U>(method, uri, options);
+    const request$ = this.http.request<U>(method, uri, options);
     return options?.retry
       ? request$.pipe(defaultRetryBackoff(options?.retryInitialInterval))
       : request$;

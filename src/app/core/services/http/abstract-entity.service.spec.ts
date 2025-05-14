@@ -1,7 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { AbstractEntityService } from './abstract-entity.service';
-import { Injectable, inject as coreInject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -31,36 +30,8 @@ class TestEntity {
 
 @Injectable()
 class TestEntityService extends AbstractEntityService<TestEntity> {
-  protected httpClient: HttpClient;
-  protected wsConnector: WsConnectorService;
-  protected eventService: EventService;
-  protected translateService: TranslocoService;
-  protected notificationService: NotificationService;
-
   constructor() {
-    const httpClient = coreInject(HttpClient);
-    const wsConnector = coreInject(WsConnectorService);
-    const eventService = coreInject(EventService);
-    const translateService = coreInject(TranslocoService);
-    const notificationService = coreInject(NotificationService);
-    const cachingService = coreInject(CachingService);
-
-    super(
-      'Test',
-      '/test',
-      httpClient,
-      wsConnector,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService
-    );
-
-    this.httpClient = httpClient;
-    this.wsConnector = wsConnector;
-    this.eventService = eventService;
-    this.translateService = translateService;
-    this.notificationService = notificationService;
+    super('Test', '/test');
   }
 }
 
