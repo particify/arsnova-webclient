@@ -5,7 +5,6 @@ import { MockTranslocoService } from '@testing/test-helpers';
 import { TranslocoService } from '@jsverse/transloco';
 
 describe('A11yIntroPipe', () => {
-  let translateService: TranslocoService;
   let pipe: A11yIntroPipe;
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -16,8 +15,9 @@ describe('A11yIntroPipe', () => {
         },
       ],
     });
-    translateService = TestBed.inject(TranslocoService);
-    pipe = new A11yIntroPipe(translateService);
+    TestBed.runInInjectionContext(() => {
+      pipe = new A11yIntroPipe();
+    });
   });
 
   it('should be created', () => {

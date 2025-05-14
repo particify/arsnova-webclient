@@ -3,7 +3,7 @@ import { AbstractHttpService, HttpMethod } from './abstract-http.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { Injectable, inject as inject_1 } from '@angular/core';
+import { Injectable, inject as coreInject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import {
@@ -34,10 +34,10 @@ class TestHttpService extends AbstractHttpService<object> {
   protected notificationService: NotificationService;
 
   constructor() {
-    const http = inject_1(HttpClient);
-    const eventService = inject_1(EventService);
-    const translateService = inject_1(TranslocoService);
-    const notificationService = inject_1(NotificationService);
+    const http = coreInject(HttpClient);
+    const eventService = coreInject(EventService);
+    const translateService = coreInject(TranslocoService);
+    const notificationService = coreInject(NotificationService);
 
     super('/test', http, eventService, translateService, notificationService);
 

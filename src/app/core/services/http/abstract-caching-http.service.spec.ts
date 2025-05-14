@@ -1,7 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
-import { Injectable, inject as inject_1 } from '@angular/core';
+import { Injectable, inject as coreInject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -37,12 +37,12 @@ class TestCachingHttpService extends AbstractCachingHttpService<object> {
   protected cachingService: CachingService;
 
   constructor() {
-    const httpClient = inject_1(HttpClient);
-    const wsConnector = inject_1(WsConnectorService);
-    const eventService = inject_1(EventService);
-    const translateService = inject_1(TranslocoService);
-    const notificationService = inject_1(NotificationService);
-    const cachingService = inject_1(CachingService);
+    const httpClient = coreInject(HttpClient);
+    const wsConnector = coreInject(WsConnectorService);
+    const eventService = coreInject(EventService);
+    const translateService = coreInject(TranslocoService);
+    const notificationService = coreInject(NotificationService);
+    const cachingService = coreInject(CachingService);
 
     super(
       '/test',

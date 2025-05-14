@@ -19,7 +19,9 @@ describe('LocalizeDecimalSeperatorPipe', () => {
         },
       ],
     });
-    pipe = new LocalizeDecimalSeperatorPipe(translateService);
+    TestBed.runInInjectionContext(() => {
+      pipe = new LocalizeDecimalSeperatorPipe();
+    });
   });
 
   it('should be created', () => {
