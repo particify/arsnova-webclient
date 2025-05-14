@@ -1,7 +1,5 @@
 import {
-  ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
@@ -17,7 +15,6 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
@@ -127,14 +124,6 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   private swipeTime = 0;
 
   private hotkeyRefs: symbol[] = [];
-
-  constructor() {
-    const dir = inject(Directionality);
-    const changeDetectorRef = inject(ChangeDetectorRef);
-    const elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-
-    super(dir, changeDetectorRef, elementRef);
-  }
 
   ngOnInit() {
     this.translateService
