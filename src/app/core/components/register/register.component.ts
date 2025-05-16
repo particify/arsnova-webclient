@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { UserService } from '@app/core/services/http/user.service';
 import {
@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { ApiConfig } from '@app/core/models/api-config';
 
@@ -22,6 +21,12 @@ import { ApiConfig } from '@app/core/models/api-config';
   standalone: false,
 })
 export class RegisterComponent extends FormComponent implements OnInit {
+  private translationService = inject(TranslocoService);
+  userService = inject(UserService);
+  notificationService = inject(NotificationService);
+  eventService = inject(EventService);
+  private router = inject(Router);
+
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   // Route data input below
@@ -33,17 +38,6 @@ export class RegisterComponent extends FormComponent implements OnInit {
   acceptToS = false;
   linkOfToS?: string;
   accountServiceTitle!: string;
-
-  constructor(
-    private translationService: TranslocoService,
-    public userService: UserService,
-    public notificationService: NotificationService,
-    public eventService: EventService,
-    private router: Router,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     this.accountServiceTitle =

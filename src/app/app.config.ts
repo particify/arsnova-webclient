@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { IAppConfig } from '@app/core/models/app-config.model';
 
 @Injectable()
 export class AppConfig {
-  static settings: IAppConfig;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  static settings: IAppConfig;
 
   load() {
     const jsonFile = `assets/config/config.${environment.name}.json`;

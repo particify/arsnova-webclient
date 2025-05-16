@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import {
@@ -24,13 +24,8 @@ import {
   AuthenticationStatus,
   ClientAuthenticationResult,
 } from '@app/core/models/client-authentication-result';
-import { EventService } from '@app/core/services/util/event.service';
 import { jwtDecode } from 'jwt-decode';
-import { TranslocoService } from '@jsverse/transloco';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ApiConfigService } from './api-config.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { environment } from '@environments/environment';
@@ -51,6 +46,11 @@ interface Jwt {
  */
 @Injectable()
 export class AuthenticationService extends AbstractHttpService<ClientAuthentication> {
+  private globalStorageService = inject(GlobalStorageService);
+  private apiConfigService = inject(ApiConfigService);
+  private routingService = inject(RoutingService);
+  private router = inject(Router);
+
   private readonly ADMIN_ROLE: string = 'ADMIN';
   private popupDimensions = [500, 500];
   private singleLogoutEnabled = false;
@@ -72,17 +72,8 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     sso: '/sso',
   };
 
-  constructor(
-    private globalStorageService: GlobalStorageService,
-    public eventService: EventService,
-    private http: HttpClient,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private apiConfigService: ApiConfigService,
-    private routingService: RoutingService,
-    private router: Router
-  ) {
-    super('/auth', http, eventService, translateService, notificationService);
+  constructor() {
+    super('/auth');
     const savedAuth: ClientAuthentication = this.globalStorageService.getItem(
       STORAGE_KEYS.USER
     );

@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AbstractHttpService } from './abstract-http.service';
 import { ApiConfig } from '@app/core/models/api-config';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { EventService } from '@app/core/services/util/event.service';
 import { retryBackoff } from 'backoff-rxjs';
 import dayjs from 'dayjs';
 
@@ -15,19 +11,8 @@ export class ApiConfigService extends AbstractHttpService<ApiConfig> {
   private config$: Observable<ApiConfig> = of();
   private cacheExpiry: dayjs.Dayjs = dayjs();
 
-  constructor(
-    private http: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
-    super(
-      '/configuration',
-      http,
-      eventService,
-      translateService,
-      notificationService
-    );
+  constructor() {
+    super('/configuration');
   }
 
   getApiConfig$(): Observable<ApiConfig> {

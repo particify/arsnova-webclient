@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Room } from '@app/core/models/room';
@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class RoomResolver implements Resolve<Room> {
-  constructor(private roomService: RoomService) {}
+  private roomService = inject(RoomService);
 
   resolve(route: ActivatedRouteSnapshot): Observable<Room> {
     return this.roomService

@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Inject } from '@angular/core';
+import { Component, EventEmitter, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -9,7 +8,6 @@ import {
 import { TranslocoService } from '@jsverse/transloco';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 import { FormService } from '@app/core/services/util/form.service';
-import { AdminService } from '@app/core/services/http/admin.service';
 
 export interface DialogData {
   inputName: string;
@@ -24,6 +22,12 @@ export interface DialogData {
   standalone: false,
 })
 export class InputDialogComponent extends UserSearchComponent {
+  private dialogRef = inject<MatDialogRef<InputDialogComponent>>(MatDialogRef);
+  data = inject<DialogData>(MAT_DIALOG_DATA);
+  protected translateService = inject(TranslocoService);
+  protected notificationService = inject(NotificationService);
+  private formService = inject(FormService);
+
   clicked$ = new EventEmitter<string>();
 
   input?: string;
@@ -33,16 +37,9 @@ export class InputDialogComponent extends UserSearchComponent {
   useUserSearch: boolean;
 
   formControl = new FormControl('', [Validators.required]);
-  constructor(
-    private dialogRef: MatDialogRef<InputDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    protected userService: UserService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    protected adminService: AdminService,
-    private formService: FormService
-  ) {
-    super(userService, adminService);
+  constructor() {
+    super();
+    const data = this.data;
     this.primaryAction = data.primaryAction;
     this.inputName = data.inputName;
     this.useUserSearch = data.useUserSearch || false;

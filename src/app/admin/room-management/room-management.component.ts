@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -21,20 +21,18 @@ import { take } from 'rxjs';
   standalone: false,
 })
 export class RoomManagementComponent {
+  protected adminService = inject(AdminService);
+  protected roomService = inject(RoomService);
+  protected dialogService = inject(DialogService);
+  protected notificationService = inject(NotificationService);
+  protected translateService = inject(TranslocoService);
+  protected dialog = inject(MatDialog);
+  protected userService = inject(UserService);
+  private formService = inject(FormService);
+
   room?: Room;
   rooms: Room[] = [];
   searchResults: string[] = [];
-
-  constructor(
-    protected adminService: AdminService,
-    protected roomService: RoomService,
-    protected dialogService: DialogService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected dialog: MatDialog,
-    protected userService: UserService,
-    private formService: FormService
-  ) {}
 
   showRoom(searchResult: string) {
     const index = this.searchResults.indexOf(searchResult);

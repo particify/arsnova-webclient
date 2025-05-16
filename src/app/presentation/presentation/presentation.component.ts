@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
@@ -23,6 +23,14 @@ import { UserRole } from '@app/core/models/user-roles.enum';
   standalone: false,
 })
 export class PresentationComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  router = inject(Router);
+  private globalStorageService = inject(GlobalStorageService);
+  private roomStatsService = inject(RoomStatsService);
+  private translateService = inject(TranslocoService);
+  private presentationService = inject(PresentationService);
+  private notificationService = inject(NotificationService);
+
   // Route data input below
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) userRole!: UserRole;
@@ -30,15 +38,7 @@ export class PresentationComponent implements OnInit, OnDestroy {
   lastGroup?: string;
   featureString?: string;
 
-  constructor(
-    private route: ActivatedRoute,
-    public router: Router,
-    private globalStorageService: GlobalStorageService,
-    private roomStatsService: RoomStatsService,
-    private translateService: TranslocoService,
-    private presentationService: PresentationService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
     const childRoute = this.route.snapshot?.firstChild?.firstChild;
     if (childRoute) {
       this.featureString = childRoute.url[0]?.path;

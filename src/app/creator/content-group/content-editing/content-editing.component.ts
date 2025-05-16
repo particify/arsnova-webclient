@@ -6,6 +6,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import {
@@ -19,7 +20,6 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   AdvancedSnackBarTypes,
@@ -47,6 +47,16 @@ export class ContentEditingComponent
   extends FormComponent
   implements OnInit, OnChanges
 {
+  private translateService = inject(TranslocoService);
+  private announceService = inject(AnnounceService);
+  private globalStorageService = inject(GlobalStorageService);
+  private formattingService = inject(FormattingService);
+  private contentService = inject(ContentService);
+  private contentGroupService = inject(ContentGroupService);
+  private notificationService = inject(NotificationService);
+  private contentPublishService = inject(ContentPublishService);
+  private contentGroupPageService = inject(ContentGroupPageService);
+
   @ViewChild('ContentForm') private contentForm!: ContentForm;
   @ViewChild('questionInput') bodyInput!: ElementRef;
 
@@ -73,21 +83,6 @@ export class ContentEditingComponent
   created = false;
   isAnswered = false;
   GroupType = GroupType;
-
-  constructor(
-    private translateService: TranslocoService,
-    private announceService: AnnounceService,
-    private globalStorageService: GlobalStorageService,
-    private formattingService: FormattingService,
-    private contentService: ContentService,
-    private contentGroupService: ContentGroupService,
-    private notificationService: NotificationService,
-    private contentPublishService: ContentPublishService,
-    protected formService: FormService,
-    private contentGroupPageService: ContentGroupPageService
-  ) {
-    super(formService);
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.content?.previousValue && changes.content?.currentValue) {

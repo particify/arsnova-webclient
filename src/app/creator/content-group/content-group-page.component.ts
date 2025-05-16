@@ -1,5 +1,12 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, DestroyRef, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
@@ -64,6 +71,22 @@ export interface ContentStats {
   standalone: false,
 })
 export class ContentGroupPageComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private contentService = inject(ContentService);
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  private globalStorageService = inject(GlobalStorageService);
+  private contentGroupService = inject(ContentGroupService);
+  router = inject(Router);
+  private roomStatsService = inject(RoomStatsService);
+  private localFileService = inject(LocalFileService);
+  private dialogService = inject(DialogService);
+  private routingService = inject(RoutingService);
+  private authService = inject(AuthenticationService);
+  private destroyRef = inject(DestroyRef);
+  private breakpointObserver = inject(BreakpointObserver);
+  private contentGroupPageService = inject(ContentGroupPageService);
+
   // Route data input below
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) room!: Room;
@@ -95,23 +118,11 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   isDesktop?: boolean;
   childActive = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private contentService: ContentService,
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    private globalStorageService: GlobalStorageService,
-    private contentGroupService: ContentGroupService,
-    public router: Router,
-    private roomStatsService: RoomStatsService,
-    private localFileService: LocalFileService,
-    private dialogService: DialogService,
-    private routingService: RoutingService,
-    private authService: AuthenticationService,
-    private destroyRef: DestroyRef,
-    private breakpointObserver: BreakpointObserver,
-    private contentGroupPageService: ContentGroupPageService
-  ) {
+  constructor() {
+    const route = this.route;
+    const router = this.router;
+    const breakpointObserver = this.breakpointObserver;
+
     route.params.subscribe((params) => {
       const groupName = params['seriesName'];
       if (this.contentGroup && this.contentGroup.name !== groupName) {

@@ -1,6 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Content } from '@app/core/models/content';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { TextAnswer } from '@app/core/models/text-answer';
@@ -33,6 +32,10 @@ export class StatisticTextComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
+  private contentAnswerService = inject(ContentAnswerService);
+  private dialogService = inject(DialogService);
+  private notificationService = inject(NotificationService);
+
   @Input({ required: true }) content!: Content;
   @Input() directShow = false;
   @Input() isParticipant = true;
@@ -40,16 +43,6 @@ export class StatisticTextComponent
   answerStats: TextStatistic[] = [];
   answers: TextAnswer[] = [];
   abstentionCount = 0;
-
-  constructor(
-    protected contentService: ContentService,
-    private contentAnswerService: ContentAnswerService,
-    protected translateService: TranslocoService,
-    private dialogService: DialogService,
-    private notificationService: NotificationService
-  ) {
-    super(contentService, translateService);
-  }
 
   loadData(): Observable<TextAnswer[]> {
     return this.contentAnswerService.getAnswers(

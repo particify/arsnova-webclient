@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { TranslocoService } from '@jsverse/transloco';
 import { UserService } from '@app/core/services/http/user.service';
@@ -10,7 +10,6 @@ import { EventService } from '@app/core/services/util/event.service';
 import { PasswordResetErrorStateMatcher } from '@app/core/components/password-reset/password-reset.component';
 import { Router } from '@angular/router';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
 @Component({
@@ -23,21 +22,16 @@ export class RequestPasswordResetComponent
   extends FormComponent
   implements OnInit
 {
+  private translationService = inject(TranslocoService);
+  private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
+  eventService = inject(EventService);
+  private router = inject(Router);
+
   usernameFormControl = new UntypedFormControl();
   matcher = new PasswordResetErrorStateMatcher();
   deviceWidth = innerWidth;
   username?: string;
-
-  constructor(
-    private translationService: TranslocoService,
-    private userService: UserService,
-    private notificationService: NotificationService,
-    public eventService: EventService,
-    private router: Router,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     this.setFormControl(this.usernameFormControl);

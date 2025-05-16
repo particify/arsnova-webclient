@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
 import {
   BarController,
@@ -18,8 +19,7 @@ import {
   TooltipItem,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -61,6 +61,9 @@ export class StatisticNumericComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
+  protected themeService = inject(ThemeService);
+  protected presentationService = inject(PresentationService);
+
   @Input({ required: true }) content!: ContentNumeric;
   @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
@@ -88,15 +91,6 @@ export class StatisticNumericComponent
     'minimum',
     'maximum',
   ];
-
-  constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService,
-    protected themeService: ThemeService,
-    protected presentationService: PresentationService
-  ) {
-    super(contentService, translateService);
-  }
 
   ngOnDestroy() {
     this.destroyed$.next();

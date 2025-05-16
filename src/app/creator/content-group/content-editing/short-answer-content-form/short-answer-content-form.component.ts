@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { Content } from '@app/core/models/content';
 import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
@@ -43,10 +42,6 @@ export class ShortAnswerContentFormComponent
   @Input() isEditMode = false;
 
   displayAnswers: DisplayAnswer[] = [];
-
-  constructor(protected formService: FormService) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.SHORT_ANSWER) {

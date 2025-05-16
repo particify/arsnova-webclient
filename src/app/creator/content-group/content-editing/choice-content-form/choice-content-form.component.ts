@@ -5,11 +5,11 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { Content } from '@app/core/models/content';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
@@ -34,6 +34,8 @@ export class ChoiceContentFormComponent
   extends FormComponent
   implements OnInit, OnChanges, ContentForm
 {
+  private contentService = inject(ContentService);
+
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
@@ -48,13 +50,6 @@ export class ChoiceContentFormComponent
   displayAnswers: DisplayAnswer[] = [];
   multipleCorrectAnswers = false;
   noCorrectAnswers = false;
-
-  constructor(
-    private contentService: ContentService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.CHOICE) {

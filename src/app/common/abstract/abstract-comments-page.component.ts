@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -35,6 +35,17 @@ const APP_PADDING = 0.04;
   standalone: false,
 })
 export class AbstractCommentsPageComponent {
+  protected commentService = inject(CommentService);
+  protected translateService = inject(TranslocoService);
+  protected dialog = inject(MatDialog);
+  protected wsCommentService = inject(WsCommentService);
+  protected notificationService = inject(NotificationService);
+  protected announceService = inject(AnnounceService);
+  protected router = inject(Router);
+  protected globalStorageService = inject(GlobalStorageService);
+  protected commentSettingsService = inject(CommentSettingsService);
+  protected authenticationService = inject(AuthenticationService);
+
   protected destroyed$ = new Subject<void>();
 
   protected publicComments$?: Observable<Comment[]>;
@@ -84,18 +95,10 @@ export class AbstractCommentsPageComponent {
   unreadCommentCount = 0;
   referenceEvent: Subject<string> = new Subject<string>();
 
-  constructor(
-    protected commentService: CommentService,
-    protected translateService: TranslocoService,
-    protected dialog: MatDialog,
-    protected wsCommentService: WsCommentService,
-    protected notificationService: NotificationService,
-    protected announceService: AnnounceService,
-    protected router: Router,
-    protected globalStorageService: GlobalStorageService,
-    protected commentSettingsService: CommentSettingsService,
-    protected authenticationService: AuthenticationService
-  ) {
+  constructor() {
+    const translateService = this.translateService;
+    const globalStorageService = this.globalStorageService;
+
     const lastSort = globalStorageService.getItem(STORAGE_KEYS.COMMENT_SORT);
     this.currentSort = lastSort || CommentSort.TIME;
     this.period =

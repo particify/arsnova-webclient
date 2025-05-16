@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ENVIRONMENT } from '@environments/environment-token';
 
@@ -6,12 +6,14 @@ import { ENVIRONMENT } from '@environments/environment-token';
   providedIn: 'root',
 })
 export class FeatureFlagService {
+  private environment = inject(ENVIRONMENT);
+
   private enabledFeatures: string[];
 
-  constructor(
-    @Inject(ENVIRONMENT) private environment: any,
-    apiConfigService: ApiConfigService
-  ) {
+  constructor() {
+    const environment = this.environment;
+    const apiConfigService = inject(ApiConfigService);
+
     this.enabledFeatures = [...environment.features];
     apiConfigService.getApiConfig$().subscribe((config) => {
       if (config.ui.features) {

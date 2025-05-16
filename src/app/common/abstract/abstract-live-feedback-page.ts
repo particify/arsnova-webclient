@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, inject } from '@angular/core';
 import { LiveFeedbackIcon } from '@app/core/models/live-feedback-icon.enum';
 import { LiveFeedbackLabel } from '@app/core/models/live-feedback-label.enum';
 import { LiveFeedbackSurveyLabel } from '@app/core/models/live-feedback-survey-label.enum';
@@ -20,6 +20,13 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: false,
 })
 export class AbstractLiveFeedbackPageComponent {
+  protected wsFeedbackService = inject(WsFeedbackService);
+  protected feedbackService = inject(FeedbackService);
+  protected roomService = inject(RoomService);
+  protected translateService = inject(TranslocoService);
+  protected announceService = inject(AnnounceService);
+  protected globalStorageService = inject(GlobalStorageService);
+
   // Route data input below
   @Input({ required: true }) room!: Room;
 
@@ -36,15 +43,6 @@ export class AbstractLiveFeedbackPageComponent {
   feedbackLabels = Object.values(LiveFeedbackLabel);
   feedbackIcons = Object.values(LiveFeedbackIcon);
   surveyLabels = Object.values(LiveFeedbackSurveyLabel);
-
-  constructor(
-    protected wsFeedbackService: WsFeedbackService,
-    protected feedbackService: FeedbackService,
-    protected roomService: RoomService,
-    protected translateService: TranslocoService,
-    protected announceService: AnnounceService,
-    protected globalStorageService: GlobalStorageService
-  ) {}
 
   initData() {
     this.translateService.setActiveLang(

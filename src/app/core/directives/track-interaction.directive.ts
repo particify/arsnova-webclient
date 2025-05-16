@@ -1,4 +1,11 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import {
   EventCategory,
   TrackingService,
@@ -9,14 +16,12 @@ import {
   standalone: false,
 })
 export class TrackInteractionDirective implements OnInit, OnDestroy {
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private trackingService = inject(TrackingService);
+
   @Input({ required: true }) appTrackInteraction!: string;
   @Input() appTrackCategory = EventCategory.UI_INTERACTION;
   @Input() appTrackName?: string;
-
-  constructor(
-    private elementRef: ElementRef<HTMLElement>,
-    private trackingService: TrackingService
-  ) {}
 
   ngOnInit(): void {
     this.elementRef.nativeElement.addEventListener('click', () =>

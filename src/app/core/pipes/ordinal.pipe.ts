@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 
 @Pipe({
@@ -6,7 +6,7 @@ import { TranslocoService } from '@jsverse/transloco';
   standalone: true,
 })
 export class OrdinalPipe implements PipeTransform {
-  constructor(private translateService: TranslocoService) {}
+  private translateService = inject(TranslocoService);
 
   transform(value: number): string {
     const pluralRules = new Intl.PluralRules(

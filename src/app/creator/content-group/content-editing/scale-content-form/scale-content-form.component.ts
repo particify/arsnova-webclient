@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {
   LikertScaleTemplate,
   LIKERT_SCALE_TEMPLATES,
@@ -7,7 +7,6 @@ import { LikertScaleService } from '@app/core/services/util/likert-scale.service
 import { ContentScale } from '@app/core/models/content-scale';
 import { Content } from '@app/core/models/content';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -28,6 +27,9 @@ export class ScaleContentFormComponent
   extends FormComponent
   implements OnInit, ContentForm
 {
+  private likertScaleService = inject(LikertScaleService);
+  private languageService = inject(LanguageService);
+
   @Input() content?: Content;
   @Input() isAnswered = false;
   @Input() isEditMode = false;
@@ -40,14 +42,6 @@ export class ScaleContentFormComponent
   selectedTemplate = LikertScaleTemplate.AGREEMENT;
   neutralOption = true;
   answerLabels: string[] = [];
-
-  constructor(
-    private likertScaleService: LikertScaleService,
-    protected formService: FormService,
-    private languageService: LanguageService
-  ) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.SCALE) {

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, inject } from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { TranslocoService } from '@jsverse/transloco';
@@ -10,6 +10,8 @@ import { TranslocoService } from '@jsverse/transloco';
   standalone: false,
 })
 export class EntityPropertiesComponent implements OnChanges {
+  private translateService = inject(TranslocoService);
+
   @Input({ required: true }) entity!: object;
   @Input() translateKeys = false;
   @Input() expandOnInit = false;
@@ -17,8 +19,6 @@ export class EntityPropertiesComponent implements OnChanges {
     (obj) => obj.value
   );
   dataSource = new MatTreeNestedDataSource<object>();
-
-  constructor(private translateService: TranslocoService) {}
 
   ngOnChanges() {
     this.dataSource.data = this.toNode(this.entity);

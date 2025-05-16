@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
@@ -10,12 +10,10 @@ import { EventService } from './util/event.service';
 
 @Injectable()
 export class DemoService {
-  constructor(
-    private apiConfigService: ApiConfigService,
-    private roomService: RoomService,
-    private translateService: TranslocoService,
-    private eventService: EventService
-  ) {}
+  private apiConfigService = inject(ApiConfigService);
+  private roomService = inject(RoomService);
+  private translateService = inject(TranslocoService);
+  private eventService = inject(EventService);
 
   createDemoRoom(): Observable<Room> {
     return this.getLocalizedDemoRoomId().pipe(

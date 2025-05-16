@@ -1,4 +1,4 @@
-import { Inject, Injectable, InjectionToken, Provider } from '@angular/core';
+import { Injectable, InjectionToken, Provider, inject } from '@angular/core';
 import {
   StorageBackend,
   StorageItem,
@@ -7,7 +7,7 @@ import {
 import { EventService } from './event.service';
 import { ConsentChangedEventPayload } from '@app/core/models/events/consent-changed';
 
-export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem> =
+export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem[]> =
   new InjectionToken('STORAGECONFIG_PROVIDER_TOKEN');
 
 /**
@@ -188,16 +188,17 @@ const APP_PREFIX = 'ARS';
  */
 @Injectable()
 export class GlobalStorageService {
+  private eventService = inject(EventService);
+
   memory: Map<symbol, any> = new Map();
   shortId?: string;
   readonly storageConfig: Map<symbol, StorageItem> = new Map();
   readonly backendOverrides: Map<StorageItemCategory, StorageBackend> =
     new Map();
 
-  constructor(
-    @Inject(STORAGECONFIG_PROVIDER_TOKEN) storageConfigItems: StorageItem[],
-    private eventService: EventService
-  ) {
+  constructor() {
+    const storageConfigItems = inject(STORAGECONFIG_PROVIDER_TOKEN);
+
     storageConfigItems.forEach((item) => {
       this.storageConfig.set(item.key, item);
     });

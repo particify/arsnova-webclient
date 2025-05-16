@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   AdvancedSnackBarTypes,
@@ -25,6 +32,16 @@ import { take } from 'rxjs';
   standalone: false,
 })
 export class CommentSettingsComponent implements OnInit {
+  dialog = inject(MatDialog);
+  notificationService = inject(NotificationService);
+  translationService = inject(TranslocoService);
+  protected roomService = inject(RoomService);
+  router = inject(Router);
+  commentService = inject(CommentService);
+  commentSettingsService = inject(CommentSettingsService);
+  private liveAnnouncer = inject(LiveAnnouncer);
+  eventService = inject(EventService);
+
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
@@ -41,18 +58,6 @@ export class CommentSettingsComponent implements OnInit {
   tagName = '';
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   isLoading = true;
-
-  constructor(
-    public dialog: MatDialog,
-    public notificationService: NotificationService,
-    public translationService: TranslocoService,
-    protected roomService: RoomService,
-    public router: Router,
-    public commentService: CommentService,
-    public commentSettingsService: CommentSettingsService,
-    private liveAnnouncer: LiveAnnouncer,
-    public eventService: EventService
-  ) {}
 
   ngOnInit() {
     if (!this.room.extensions) {

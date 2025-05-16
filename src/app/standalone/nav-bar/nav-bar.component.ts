@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
@@ -73,6 +73,18 @@ export class NavBarItem {
   ],
 })
 export class NavBarComponent implements OnInit, OnDestroy {
+  protected router = inject(Router);
+  protected routingService = inject(RoutingService);
+  protected route = inject(ActivatedRoute);
+  protected globalStorageService = inject(GlobalStorageService);
+  protected roomStatsService = inject(RoomStatsService);
+  protected feedbackService = inject(FeedbackService);
+  protected contentGroupService = inject(ContentGroupService);
+  protected eventService = inject(EventService);
+  protected roomService = inject(RoomService);
+  protected commentSettingsService = inject(CommentSettingsService);
+  protected focusModeService = inject(FocusModeService);
+
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;
   @Input({ required: true }) room!: Room;
@@ -101,20 +113,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   focusModeEnabled = false;
   private roomSub?: Subscription;
   private roomWatch?: Observable<IMessage>;
-
-  constructor(
-    protected router: Router,
-    protected routingService: RoutingService,
-    protected route: ActivatedRoute,
-    protected globalStorageService: GlobalStorageService,
-    protected roomStatsService: RoomStatsService,
-    protected feedbackService: FeedbackService,
-    protected contentGroupService: ContentGroupService,
-    protected eventService: EventService,
-    protected roomService: RoomService,
-    protected commentSettingsService: CommentSettingsService,
-    protected focusModeService: FocusModeService
-  ) {}
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {

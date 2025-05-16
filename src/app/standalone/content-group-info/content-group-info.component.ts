@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { GroupType } from '@app/core/models/content-group';
 import { TranslocoRootModule } from '@app/transloco-root.module';
@@ -22,6 +22,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrl: './content-group-info.component.scss',
 })
 export class ContentGroupInfoComponent {
+  private contentGroupService = inject(ContentGroupService);
+
   @Input() groupType?: GroupType;
   @Input() contentCount?: number;
   @Input() published = true;
@@ -30,7 +32,9 @@ export class ContentGroupInfoComponent {
   GroupType = GroupType;
   typeIcons: Map<GroupType, string>;
 
-  constructor(private contentGroupService: ContentGroupService) {
+  constructor() {
+    const contentGroupService = this.contentGroupService;
+
     this.typeIcons = contentGroupService.getTypeIcons();
   }
 }

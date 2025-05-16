@@ -1,19 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
-import { Router } from '@angular/router';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ContentService } from '@app/core/services/http/content.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
@@ -34,6 +28,9 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentSortParticipantComponent extends ContentParticipantBaseComponent {
+  protected answerService = inject(ContentAnswerService);
+  private contentService = inject(ContentService);
+
   @Input({ required: true }) content!: ContentChoice;
   @Input() answer?: ChoiceAnswer;
   @Input() correctOptionsPublished = false;
@@ -43,24 +40,6 @@ export class ContentSortParticipantComponent extends ContentParticipantBaseCompo
   isCorrect: boolean | undefined;
   correctOptionIndexes: number[] = [];
   answerOptions: AnswerOption[] = [];
-
-  constructor(
-    protected answerService: ContentAnswerService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    private contentService: ContentService,
-    protected formService: FormService
-  ) {
-    super(
-      notificationService,
-      translateService,
-      globalStorageService,
-      router,
-      formService
-    );
-  }
 
   init() {
     if (this.answer) {

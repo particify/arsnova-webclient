@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VersionReadyEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
@@ -23,6 +23,11 @@ interface DialogData {
   standalone: false,
 })
 export class UpdateInfoComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<UpdateInfoComponent>>(MatDialogRef);
+  private data = inject<DialogData>(MAT_DIALOG_DATA);
+  private apiConfigService = inject(ApiConfigService);
+  private globalStorageService = inject(GlobalStorageService);
+
   readonly dialogId = 'update-info';
 
   isLoading = true;
@@ -33,12 +38,9 @@ export class UpdateInfoComponent implements OnInit {
   updateReady = false;
   inputFocus = false;
 
-  constructor(
-    public dialogRef: MatDialogRef<UpdateInfoComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: DialogData,
-    private apiConfigService: ApiConfigService,
-    private globalStorageService: GlobalStorageService
-  ) {
+  constructor() {
+    const data = this.data;
+
     this.afterUpdate = data.afterUpdate;
     this.versions = data.versions ?? [];
   }

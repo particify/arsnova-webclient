@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -24,6 +24,9 @@ import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-
   templateUrl: './live-feedback-card.component.html',
 })
 export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
+  private roomService = inject(RoomService);
+  private feedbackService = inject(FeedbackService);
+
   private destroyed$ = new Subject<void>();
 
   @Input({ required: true }) room!: Room;
@@ -34,11 +37,6 @@ export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
 
   feedbackEnabled = false;
   feedbackAnswers = 0;
-
-  constructor(
-    private roomService: RoomService,
-    private feedbackService: FeedbackService
-  ) {}
 
   ngOnInit() {
     this.feedbackEnabled = !this.room.settings.feedbackLocked;

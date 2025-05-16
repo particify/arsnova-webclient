@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractHttpService } from './abstract-http.service';
-import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { EventService } from '@app/core/services/util/event.service';
 
 export enum MarkdownFeatureset {
   MINIMUM = 'MINIMUM',
@@ -27,19 +23,8 @@ export class FormattingService extends AbstractHttpService<void> {
     render: '/render',
   };
 
-  constructor(
-    private http: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
-    super(
-      '/_util/formatting',
-      http,
-      eventService,
-      translateService,
-      notificationService
-    );
+  constructor() {
+    super('/_util/formatting');
   }
 
   postString(text: string, options?: FormattingOptions): Observable<any> {

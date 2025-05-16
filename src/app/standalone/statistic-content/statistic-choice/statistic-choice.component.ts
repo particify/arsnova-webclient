@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
 import {
   BarController,
@@ -16,9 +17,8 @@ import {
   LinearScale,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { takeUntil } from 'rxjs/operators';
@@ -59,6 +59,9 @@ export class StatisticChoiceComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
+  protected themeService = inject(ThemeService);
+  protected presentationService = inject(PresentationService);
+
   @Input({ required: true }) content!: ContentChoice;
   @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
@@ -85,15 +88,6 @@ export class StatisticChoiceComponent
   ContentType: typeof ContentType = ContentType;
   roundStats?: RoundStatistics[];
   answerLabelWidth?: string;
-
-  constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService,
-    protected themeService: ThemeService,
-    protected presentationService: PresentationService
-  ) {
-    super(contentService, translateService);
-  }
 
   ngOnDestroy() {
     this.destroyed$.next();

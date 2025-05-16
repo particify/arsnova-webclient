@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { Announcement } from '@app/core/models/announcement';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
@@ -12,7 +19,6 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 
 @Component({
   selector: 'app-announcement-settings',
@@ -24,6 +30,11 @@ export class AnnouncementSettingsComponent
   extends FormComponent
   implements OnInit
 {
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private announcementService = inject(AnnouncementService);
+  private dialogService = inject(DialogService);
+
   @ViewChild('inputTabs') inputTabs!: MatTabGroup;
   @ViewChild('titleInput') titleInput!: ElementRef;
 
@@ -39,16 +50,6 @@ export class AnnouncementSettingsComponent
   isLoading = true;
 
   UserRole = UserRole;
-
-  constructor(
-    private translateService: TranslocoService,
-    private notificationService: NotificationService,
-    private announcementService: AnnouncementService,
-    private dialogService: DialogService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     this.announcementService

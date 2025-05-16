@@ -1,16 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { RoomService } from '@app/core/services/http/room.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
 import { FormService } from '@app/core/services/util/form.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { takeUntil } from 'rxjs';
 
@@ -24,6 +18,8 @@ export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
+  private formService = inject(FormService);
+
   // Route data input below
   @Input({ required: true }) userRole!: UserRole;
 
@@ -31,25 +27,6 @@ export class LiveFeedbackPageComponent
   changeKey = '2';
 
   HotkeyAction = HotkeyAction;
-
-  constructor(
-    protected wsFeedbackService: WsFeedbackService,
-    protected feedbackService: FeedbackService,
-    protected roomService: RoomService,
-    protected translateService: TranslocoService,
-    protected announceService: AnnounceService,
-    protected globalStorageService: GlobalStorageService,
-    private formService: FormService
-  ) {
-    super(
-      wsFeedbackService,
-      feedbackService,
-      roomService,
-      translateService,
-      announceService,
-      globalStorageService
-    );
-  }
 
   ngOnInit() {
     this.initData();

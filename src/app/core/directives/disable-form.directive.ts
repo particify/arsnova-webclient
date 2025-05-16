@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnInit } from '@angular/core';
+import { Directive, ElementRef, OnInit, inject } from '@angular/core';
 import { FormService } from '@app/core/services/util/form.service';
 
 @Directive({
@@ -6,10 +6,8 @@ import { FormService } from '@app/core/services/util/form.service';
   standalone: false,
 })
 export class DisableFormDirective implements OnInit {
-  constructor(
-    private elementRef: ElementRef,
-    private formService: FormService
-  ) {}
+  private elementRef = inject(ElementRef);
+  private formService = inject(FormService);
 
   ngOnInit(): void {
     this.formService.getFormDisabled().subscribe((disabled) => {

@@ -1,12 +1,11 @@
 import {
-  ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  inject,
 } from '@angular/core';
 import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import {
@@ -16,7 +15,6 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Directionality } from '@angular/cdk/bidi';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
@@ -105,6 +103,11 @@ enum HEADER_ANIMATION_STATE {
   ],
 })
 export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
+  private announceService = inject(AnnounceService);
+  private hotkeyService = inject(HotkeyService);
+  private translateService = inject(TranslocoService);
+  private answerService = inject(ContentAnswerService);
+
   @Output() newIndex = new EventEmitter<number>();
   @Input() showSteps = true;
   @Input() allowNavigation = true;
@@ -121,18 +124,6 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   private swipeTime = 0;
 
   private hotkeyRefs: symbol[] = [];
-
-  constructor(
-    private announceService: AnnounceService,
-    private hotkeyService: HotkeyService,
-    private translateService: TranslocoService,
-    private answerService: ContentAnswerService,
-    dir: Directionality,
-    changeDetectorRef: ChangeDetectorRef,
-    elementRef: ElementRef<HTMLElement>
-  ) {
-    super(dir, changeDetectorRef, elementRef);
-  }
 
   ngOnInit() {
     this.translateService

@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  inject,
 } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Answer } from '@app/core/models/answer';
@@ -21,7 +22,6 @@ import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ContentScale } from '@app/core/models/content-scale';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { EventService } from '@app/core/services/util/event.service';
@@ -124,6 +124,15 @@ export class ContentParticipantComponent
   extends FormComponent
   implements OnInit, OnChanges
 {
+  private router = inject(Router);
+  private location = inject(Location);
+  private eventService = inject(EventService);
+  private contentService = inject(ContentService);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private contentPublishService = inject(ContentPublishService);
+  private answerService = inject(ContentAnswerService);
+
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) content!: Content;
   @Input({ required: true }) contentGroup!: ContentGroup;
@@ -198,20 +207,6 @@ export class ContentParticipantComponent
       icon: 'emoji_events',
     },
   ];
-
-  constructor(
-    protected formService: FormService,
-    private router: Router,
-    private location: Location,
-    private eventService: EventService,
-    private contentService: ContentService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService,
-    private contentPublishService: ContentPublishService,
-    private answerService: ContentAnswerService
-  ) {
-    super(formService);
-  }
 
   get answerSubmitted(): Observable<string> {
     return this.answerSubmitted$;

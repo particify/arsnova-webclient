@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AuthProvider } from '@app/core/models/auth-provider';
@@ -11,18 +11,16 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: false,
 })
 export class RedeemTokenComponent implements OnInit, OnDestroy {
+  private router = inject(Router);
+  private routingService = inject(RoutingService);
+  private authenticationService = inject(AuthenticationService);
+  private roomMembershipService = inject(RoomMembershipService);
+
   // Route data input below
   @Input({ required: true }) roomId!: string;
   @Input({ required: true }) token!: string;
 
   destroyed$ = new Subject<void>();
-
-  constructor(
-    private router: Router,
-    private routingService: RoutingService,
-    private authenticationService: AuthenticationService,
-    private roomMembershipService: RoomMembershipService
-  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();

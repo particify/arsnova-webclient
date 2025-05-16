@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
@@ -29,6 +28,9 @@ export class NumericContentFormComponent
   extends FormComponent
   implements OnInit, ContentForm
 {
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+
   @Input() content?: Content;
   @Input() isEditMode = false;
   @Input() correctAnswerSelection = false;
@@ -41,13 +43,6 @@ export class NumericContentFormComponent
   correctNumber?: number;
   tolerance?: number;
 
-  constructor(
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
   ngOnInit(): void {
     if (this.content?.format === ContentType.NUMERIC) {
       const content = this.content as ContentNumeric;

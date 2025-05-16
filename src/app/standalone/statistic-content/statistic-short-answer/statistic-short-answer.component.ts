@@ -5,13 +5,12 @@ import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentShortAnswer } from '@app/core/models/content-short-answer';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
 import { TextStatistic } from '@app/core/models/text-statistic';
-import { ContentService } from '@app/core/services/http/content.service';
 import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { takeUntil } from 'rxjs';
 
 @Component({
@@ -36,13 +35,6 @@ export class StatisticShortAnswerComponent
 
   answerList: TextStatistic[] = [];
   abstentionCount = 0;
-
-  constructor(
-    protected contentService: ContentService,
-    protected translateService: TranslocoService
-  ) {
-    super(contentService, translateService);
-  }
 
   afterInit() {
     this.contentService

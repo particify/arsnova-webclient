@@ -1,31 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
-import { EventService } from '@app/core/services/util/event.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BaseTemplateService extends AbstractHttpService<void> {
-  constructor(
-    protected httpClient: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
-    super(
-      '/template',
-      httpClient,
-      eventService,
-      translateService,
-      notificationService
-    );
+  constructor() {
+    super('/template');
   }
 
   getTemplateTags(lang: string, verified = true): Observable<TemplateTag[]> {
@@ -33,14 +18,14 @@ export class BaseTemplateService extends AbstractHttpService<void> {
     if (!verified) {
       connectionUrl += '&verified=false';
     }
-    return this.httpClient.get<TemplateTag[]>(connectionUrl);
+    return this.http.get<TemplateTag[]>(connectionUrl);
   }
 
   getContentTemplates(templateIds: string[]): Observable<Content[]> {
     const connectionUrl = this.buildUri(
       `/content/?ids=${templateIds.toString()}`
     );
-    return this.httpClient.get<Content[]>(connectionUrl);
+    return this.http.get<Content[]>(connectionUrl);
   }
 
   createCopyFromContentGroupTemplate(
@@ -51,7 +36,7 @@ export class BaseTemplateService extends AbstractHttpService<void> {
       `/contentgroup/-/create-from-template`,
       roomId
     );
-    return this.httpClient.post<void>(connectionUrl, {
+    return this.http.post<void>(connectionUrl, {
       id: templateId,
       roomId: roomId,
     });
@@ -70,27 +55,27 @@ export class BaseTemplateService extends AbstractHttpService<void> {
     } else if (language) {
       connectionUrl += `/?language=${language}`;
     }
-    return this.httpClient.get<ContentGroupTemplate[]>(connectionUrl);
+    return this.http.get<ContentGroupTemplate[]>(connectionUrl);
   }
 
   getContentGroupTemplate(
     templateId: string
   ): Observable<ContentGroupTemplate> {
     const connectionUrl = this.buildUri(`/contentgroup/${templateId}`);
-    return this.httpClient.get<ContentGroupTemplate>(connectionUrl);
+    return this.http.get<ContentGroupTemplate>(connectionUrl);
   }
 
   updateContentGroupTemplate(
     template: ContentGroupTemplate
   ): Observable<ContentGroupTemplate> {
     const connectionUrl = this.buildUri(`/contentgroup/${template.id}`);
-    return this.httpClient.put<ContentGroupTemplate>(connectionUrl, template);
+    return this.http.put<ContentGroupTemplate>(connectionUrl, template);
   }
 
   deleteContentGroupTemplate(
     templateId: string
   ): Observable<ContentGroupTemplate> {
     const connectionUrl = this.buildUri(`/contentgroup/${templateId}`);
-    return this.httpClient.delete<ContentGroupTemplate>(connectionUrl);
+    return this.http.delete<ContentGroupTemplate>(connectionUrl);
   }
 }

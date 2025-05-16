@@ -1,15 +1,10 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { IMessage } from '@stomp/stompjs';
-import { TranslocoService } from '@jsverse/transloco';
 import { AbstractCachingHttpService } from './abstract-caching-http.service';
-import { EventService } from '@app/core/services/util/event.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import {
-  CacheKey,
-  CachingService,
-} from '@app/core/services/util/caching.service';
+import { CacheKey } from '@app/core/services/util/caching.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { Entity } from '@app/core/models/entity';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
@@ -28,6 +23,7 @@ const CACHE_NAME_PREFIX = 'entity-';
 export abstract class AbstractEntityService<
   T extends Entity,
 > extends AbstractCachingHttpService<T> {
+  protected wsConnector = inject(WsConnectorService);
   private aliasIdMapping: Map<string, string> = new Map<string, string>();
   private stompSubscriptions = new Map<string, Subscription>();
   protected readonly cacheName;
@@ -35,24 +31,9 @@ export abstract class AbstractEntityService<
   constructor(
     protected entityType: string,
     protected uriPrefix: string,
-    protected httpClient: HttpClient,
-    protected wsConnector: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    cachingService: CachingService,
     private useChangeSubscriptions = true
   ) {
-    super(
-      uriPrefix,
-      httpClient,
-      wsConnector,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService,
-      useChangeSubscriptions
-    );
+    super(uriPrefix);
     this.cacheName = CACHE_NAME_PREFIX + entityType;
     this.cache.registerDisposeHandler(this.cacheName, (id) =>
       this.handleCacheDisposeEvent(id)

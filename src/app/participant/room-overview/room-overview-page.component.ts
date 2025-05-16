@@ -1,13 +1,10 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@app/core/services/util/event.service';
 import { takeUntil } from 'rxjs';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
@@ -56,6 +53,12 @@ export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
+  protected translateService = inject(TranslocoService);
+  protected globalStorageService = inject(GlobalStorageService);
+  protected commentSettingsService = inject(CommentSettingsService);
+  protected focusModeService = inject(FocusModeService);
+  private feedbackService = inject(FeedbackService);
+
   // Route data input below
   @Input({ required: true }) commentSettings!: CommentSettings;
 
@@ -63,19 +66,6 @@ export class RoomOverviewPageComponent
   commentsEnabled = false;
   focusModeEnabled = false;
   HintType = HintType;
-
-  constructor(
-    protected roomStatsService: RoomStatsService,
-    protected contentGroupService: ContentGroupService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected commentSettingsService: CommentSettingsService,
-    protected focusModeService: FocusModeService,
-    private feedbackService: FeedbackService
-  ) {
-    super(roomStatsService, contentGroupService, eventService);
-  }
 
   ngOnDestroy(): void {
     this.destroyed$.next();

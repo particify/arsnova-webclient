@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -13,7 +14,6 @@ import { CoreModule } from '@app/core/core.module';
 import { TemplateTag } from '@app/core/models/template-tag';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { startWith, takeUntil } from 'rxjs';
 
@@ -26,6 +26,9 @@ export class TemplateTagSelectionComponent
   extends FormComponent
   implements OnInit
 {
+  private announceService = inject(AnnounceService);
+  private templateService = inject(BaseTemplateService);
+
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
 
   @Input({ required: true }) langChanged!: EventEmitter<string>;
@@ -40,14 +43,6 @@ export class TemplateTagSelectionComponent
     '',
     Validators.pattern(/^[\p{Ll}\p{Lu}\d\s]*$/u)
   );
-
-  constructor(
-    protected formService: FormService,
-    private announceService: AnnounceService,
-    private templateService: BaseTemplateService
-  ) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     this.setFormControl(this.tagFormControl);

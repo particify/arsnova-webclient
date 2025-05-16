@@ -5,9 +5,9 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -32,6 +32,8 @@ export class SortContentFormComponent
   extends FormComponent
   implements OnInit, OnChanges, ContentForm
 {
+  private contentService = inject(ContentService);
+
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
@@ -42,13 +44,6 @@ export class SortContentFormComponent
   @Input() isAnswered = false;
 
   displayAnswers: DisplayAnswer[] = [];
-
-  constructor(
-    private contentService: ContentService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.SORT) {

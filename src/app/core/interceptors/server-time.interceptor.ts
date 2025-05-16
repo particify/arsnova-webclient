@@ -5,13 +5,13 @@ import {
   HttpInterceptor,
   HttpResponse,
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 
 @Injectable()
 export class ServerTimeInterceptor implements HttpInterceptor {
-  constructor(private serverTimeService: ServerTimeService) {}
+  private serverTimeService = inject(ServerTimeService);
 
   intercept(
     request: HttpRequest<unknown>,

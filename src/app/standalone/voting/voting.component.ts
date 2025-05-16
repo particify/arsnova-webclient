@@ -1,4 +1,4 @@
-import { Component, Input, Pipe, PipeTransform } from '@angular/core';
+import { Component, Input, Pipe, PipeTransform, inject } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Vote } from '@app/core/models/vote';
 import { VoteService } from '@app/core/services/http/vote.service';
@@ -24,6 +24,8 @@ export class VoteAction implements PipeTransform {
   styleUrls: ['./voting.component.scss'],
 })
 export class VotingComponent {
+  private voteService = inject(VoteService);
+
   @Input() score?: number;
   @Input({ required: true }) userId!: string;
   @Input({ required: true }) roomId!: string;
@@ -37,8 +39,6 @@ export class VotingComponent {
 
   currentVote?: number;
   currentVoteString = '';
-
-  constructor(private voteService: VoteService) {}
 
   voteComment(vote: number) {
     const voteString = vote.toString();

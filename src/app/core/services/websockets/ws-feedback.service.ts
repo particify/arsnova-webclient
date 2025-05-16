@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { CreateFeedback } from '@app/core/models/messages/create-feedback';
 import { ResetFeedback } from '@app/core/models/messages/reset-feedback';
@@ -9,7 +9,7 @@ import { IMessage } from '@stomp/stompjs';
   providedIn: 'root',
 })
 export class WsFeedbackService {
-  constructor(private wsConnector: WsConnectorService) {}
+  private wsConnector = inject(WsConnectorService);
 
   send(userId: string, feedback: number, roomId: string) {
     const createFeedback = new CreateFeedback(roomId, userId, feedback);

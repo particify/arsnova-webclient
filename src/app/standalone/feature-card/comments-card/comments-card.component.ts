@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -30,6 +30,12 @@ import { Message } from '@stomp/stompjs';
   templateUrl: './comments-card.component.html',
 })
 export class CommentsCardComponent implements OnDestroy, OnInit {
+  private notificationService = inject(NotificationService);
+  private commentSettingsService = inject(CommentSettingsService);
+  private commentService = inject(CommentService);
+  private translateService = inject(TranslocoService);
+  private wsCommentService = inject(WsCommentService);
+
   private destroyed$ = new Subject<void>();
 
   @Input({ required: true }) room!: Room;
@@ -40,14 +46,6 @@ export class CommentsCardComponent implements OnDestroy, OnInit {
 
   commentSettings?: CommentSettings;
   commentCounter = 0;
-
-  constructor(
-    private notificationService: NotificationService,
-    private commentSettingsService: CommentSettingsService,
-    private commentService: CommentService,
-    private translateService: TranslocoService,
-    private wsCommentService: WsCommentService
-  ) {}
 
   ngOnInit() {
     this.commentSettingsService

@@ -7,6 +7,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
 import { StatisticTextComponent } from '@app/standalone/statistic-content/statistic-text/statistic-text.component';
@@ -69,6 +70,10 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   ],
 })
 export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
+  private announceService = inject(AnnounceService);
+  private presentationService = inject(PresentationService);
+  private contentService = inject(ContentService);
+
   // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
   @ViewChild(StatisticChoiceComponent)
   choiceStatistic!: StatisticChoiceComponent;
@@ -119,12 +124,6 @@ export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
   prioritizationContent!: ContentPrioritization;
   flashcardContent!: ContentFlashcard;
   numericContent!: ContentNumeric;
-
-  constructor(
-    private announceService: AnnounceService,
-    private presentationService: PresentationService,
-    private contentService: ContentService
-  ) {}
 
   ngOnDestroy(): void {
     this.destroyed$.next();

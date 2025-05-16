@@ -5,6 +5,7 @@ import {
   Input,
   OnChanges,
   Output,
+  inject,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
@@ -20,6 +21,9 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
   styleUrls: ['./rendered-text.component.scss'],
 })
 export class RenderedTextComponent implements OnChanges {
+  private formattingService = inject(FormattingService);
+  private domSanitizer = inject(DomSanitizer);
+
   @Input() rawText?: string;
   @Input() renderedText?: string;
   @Input() dynamic = false;
@@ -33,11 +37,6 @@ export class RenderedTextComponent implements OnChanges {
   @Output() rendered = new EventEmitter();
   displayedText?: string | SafeHtml;
   isLoading = false;
-
-  constructor(
-    private formattingService: FormattingService,
-    private domSanitizer: DomSanitizer
-  ) {}
 
   ngOnChanges() {
     if (this.dynamic && this.rawText) {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
@@ -8,7 +8,6 @@ import {
   PublishingMode,
 } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
@@ -32,24 +31,25 @@ export class ContentGroupSettingsComponent
   extends FormComponent
   implements OnInit
 {
+  private dialogRef =
+    inject<MatDialogRef<ContentGroupSettingsComponent>>(MatDialogRef);
+  data = inject<{
+    contentGroup: ContentGroup;
+    groupNames: string[];
+    alreadyAnswered: boolean;
+  }>(MAT_DIALOG_DATA);
+  private contentGroupService = inject(ContentGroupService);
+  private contentPublishService = inject(ContentPublishService);
+
   nameFormControl = new UntypedFormControl();
   group: ContentGroup;
   GroupType = GroupType;
   PublishingMode = PublishingMode;
 
-  constructor(
-    protected formService: FormService,
-    private dialogRef: MatDialogRef<ContentGroupSettingsComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public data: {
-      contentGroup: ContentGroup;
-      groupNames: string[];
-      alreadyAnswered: boolean;
-    },
-    private contentGroupService: ContentGroupService,
-    private contentPublishService: ContentPublishService
-  ) {
-    super(formService);
+  constructor() {
+    super();
+    const data = this.data;
+
     this.group = { ...data.contentGroup };
   }
   ngOnInit(): void {

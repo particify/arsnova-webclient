@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -11,7 +11,7 @@ import { environment } from '@environments/environment';
  */
 @Injectable()
 export class RoomViewUserRoleResolver implements Resolve<UserRole> {
-  constructor(private roomMembershipService: RoomMembershipService) {}
+  private roomMembershipService = inject(RoomMembershipService);
 
   resolve(route: ActivatedRouteSnapshot): Observable<UserRole> {
     const viewRole = route.data['requiredRole'] as UserRole;

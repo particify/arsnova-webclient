@@ -7,30 +7,20 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  inject,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { CommentService } from '@app/core/services/http/comment.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { take, takeUntil } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
 import { PresentCommentComponent } from '@app/standalone/present-comment/present-comment.component';
@@ -58,45 +48,20 @@ export class CommentsPageComponent
   extends AbstractCommentsPageComponent
   implements OnInit, OnDestroy
 {
+  protected hotkeyService = inject(HotkeyService);
+  protected location = inject(Location);
+  protected routingService = inject(RoutingService);
+  protected eventService = inject(EventService);
+  private presentationService = inject(PresentationService);
+  protected focusModeService = inject(FocusModeService);
+  private formService = inject(FormService);
+
   @ViewChild('commentList') commentListRef!: ElementRef;
 
   // Route data input below
   @Input({ transform: booleanAttribute }) outlinedCards!: boolean;
 
   protected hotkeyRefs: symbol[] = [];
-
-  constructor(
-    protected commentService: CommentService,
-    protected translateService: TranslocoService,
-    protected dialog: MatDialog,
-    protected wsCommentService: WsCommentService,
-    protected notificationService: NotificationService,
-    protected announceService: AnnounceService,
-    protected router: Router,
-    protected globalStorageService: GlobalStorageService,
-    protected commentSettingsService: CommentSettingsService,
-    protected hotkeyService: HotkeyService,
-    protected authenticationService: AuthenticationService,
-    protected location: Location,
-    protected routingService: RoutingService,
-    protected eventService: EventService,
-    private presentationService: PresentationService,
-    protected focusModeService: FocusModeService,
-    private formService: FormService
-  ) {
-    super(
-      commentService,
-      translateService,
-      dialog,
-      wsCommentService,
-      notificationService,
-      announceService,
-      router,
-      globalStorageService,
-      commentSettingsService,
-      authenticationService
-    );
-  }
 
   ngOnInit(): void {
     this.publicComments$ = this.commentService.getAckComments(this.room.id);

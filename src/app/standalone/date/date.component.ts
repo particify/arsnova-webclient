@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, inject } from '@angular/core';
 
 import { Subject, takeUntil, timer } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
@@ -13,6 +13,8 @@ const TIME_UPDATE_INTERVAL = 60000;
   styleUrls: ['./date.component.scss'],
 })
 export class DateComponent implements OnDestroy {
+  private translateService = inject(TranslocoService);
+
   @Input({ required: true }) timestamp!: Date;
   @Input() responsive = false;
 
@@ -21,7 +23,7 @@ export class DateComponent implements OnDestroy {
 
   language: string;
 
-  constructor(private translateService: TranslocoService) {
+  constructor() {
     this.language = this.translateService.getActiveLang();
     this.translateService.langChanges$.subscribe((lang) => {
       this.language = lang;

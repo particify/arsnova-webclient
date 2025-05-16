@@ -1,14 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
-import { RoomService } from '@app/core/services/http/room.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { debounceTime, fromEvent, take, takeUntil } from 'rxjs';
@@ -34,33 +28,16 @@ export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPageComponent
   implements OnInit, OnDestroy
 {
+  protected focusModeService = inject(FocusModeService);
+  protected hotkeyService = inject(HotkeyService);
+  protected presentationService = inject(PresentationService);
+  private eventService = inject(EventService);
+
   // Route data input below
   @Input() showAnswerCount?: boolean;
   private hotkeyRefs: symbol[] = [];
 
   controlBarVisible = true;
-
-  constructor(
-    protected wsFeedbackService: WsFeedbackService,
-    protected feedbackService: FeedbackService,
-    protected roomService: RoomService,
-    protected translateService: TranslocoService,
-    protected announceService: AnnounceService,
-    protected globalStorageService: GlobalStorageService,
-    protected focusModeService: FocusModeService,
-    protected hotkeyService: HotkeyService,
-    protected presentationService: PresentationService,
-    private eventService: EventService
-  ) {
-    super(
-      wsFeedbackService,
-      feedbackService,
-      roomService,
-      translateService,
-      announceService,
-      globalStorageService
-    );
-  }
 
   ngOnInit() {
     this.initData();

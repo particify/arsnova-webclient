@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
@@ -14,6 +21,9 @@ import { forkJoin, Observable } from 'rxjs';
   styleUrls: ['./content-choice-answer.component.scss'],
 })
 export class ContentChoiceAnswerComponent implements OnInit {
+  private languageService = inject(LanguageService);
+  private translateService = inject(TranslocoService);
+
   @Input() answer?: ChoiceAnswer;
   @Input() selectableAnswers: SelectableAnswer[] = [];
   @Input() isDisabled = false;
@@ -30,11 +40,6 @@ export class ContentChoiceAnswerComponent implements OnInit {
   @Output() answerIndexSelected = new EventEmitter<number>();
 
   displayAnswers?: SelectableAnswer[];
-
-  constructor(
-    private languageService: LanguageService,
-    private translateService: TranslocoService
-  ) {}
 
   ngOnInit(): void {
     this.language = this.languageService.ensureValidLang(this.language);

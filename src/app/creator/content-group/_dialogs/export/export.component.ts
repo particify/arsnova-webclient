@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { TranslocoService } from '@jsverse/transloco';
@@ -18,6 +18,10 @@ export interface ExportOptions {
   standalone: false,
 })
 export class ExportComponent {
+  protected translateService = inject(TranslocoService);
+  private dialogRef =
+    inject<MatDialogRef<ExportComponent, ExportOptions>>(MatDialogRef);
+
   readonly dialogId = 'export';
 
   exportTypes = [
@@ -27,11 +31,6 @@ export class ExportComponent {
   charsets = charsets;
   selectedExportType = this.exportTypes[0];
   selectedCharset = this.charsets[1];
-
-  constructor(
-    protected translateService: TranslocoService,
-    private dialogRef: MatDialogRef<ExportComponent, ExportOptions>
-  ) {}
 
   export() {
     this.dialogRef.close({

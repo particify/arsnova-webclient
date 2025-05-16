@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -49,6 +49,9 @@ export class AdminStats {
   standalone: false,
 })
 export class SystemStatisticsComponent implements OnInit {
+  protected systemInfoService = inject(SystemInfoService);
+  private route = inject(ActivatedRoute);
+
   // Route data input below
   @Input({ required: true }) tenantId!: string;
 
@@ -58,11 +61,6 @@ export class SystemStatisticsComponent implements OnInit {
   showDetails = false;
   selectedTab = 0;
   tabs: string[] = [];
-
-  constructor(
-    protected systemInfoService: SystemInfoService,
-    private route: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     this.loadStats(this.tenantId);

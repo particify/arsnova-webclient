@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { RoomSummary } from '@app/core/models/room-summary';
 import { SurveyStarted } from '@app/core/models/events/survey-started';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import {
@@ -11,23 +11,15 @@ import {
   AUTH_SCHEME,
 } from './authentication.service';
 import { AbstractEntityService } from './abstract-entity.service';
-import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
-import { TranslocoService } from '@jsverse/transloco';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
-import {
-  CachingService,
-  DefaultCache,
-} from '@app/core/services/util/caching.service';
+import { DefaultCache } from '@app/core/services/util/caching.service';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 const httpOptions = {
@@ -36,6 +28,11 @@ const httpOptions = {
 
 @Injectable()
 export class RoomService extends AbstractEntityService<Room> {
+  private ws = inject(WsConnectorService);
+  private authService = inject(AuthenticationService);
+  private globalStorageService = inject(GlobalStorageService);
+  private feedbackService = inject(FeedbackService);
+
   serviceApiUrl = {
     duplicate: '/duplicate',
     generateRandomData: '/generate-random-data',
@@ -49,27 +46,8 @@ export class RoomService extends AbstractEntityService<Room> {
   private messageStream$: Observable<IMessage> = of();
   private messageStreamSubscription?: Subscription;
 
-  constructor(
-    private http: HttpClient,
-    private ws: WsConnectorService,
-    private authService: AuthenticationService,
-    private globalStorageService: GlobalStorageService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private feedbackService: FeedbackService,
-    protected cachingService: CachingService
-  ) {
-    super(
-      'Room',
-      '/room',
-      http,
-      ws,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService
-    );
+  constructor() {
+    super('Room', '/room');
   }
 
   /**

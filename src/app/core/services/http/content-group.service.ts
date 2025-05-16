@@ -1,20 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
-import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomStatsService } from './room-stats.service';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
-import { CachingService } from '@app/core/services/util/caching.service';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import {
   AnswerResultOverview,
   AnswerResultType,
@@ -47,6 +42,10 @@ interface AnswerStatisticsSummary {
 
 @Injectable()
 export class ContentGroupService extends AbstractEntityService<ContentGroup> {
+  private globalStorageService = inject(GlobalStorageService);
+  private roomStatsService = inject(RoomStatsService);
+  private dialog = inject(MatDialog);
+
   typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
     [GroupType.MIXED, 'dashboard'],
     [GroupType.QUIZ, 'sports_esports'],
@@ -54,27 +53,8 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     [GroupType.FLASHCARDS, 'school'],
   ]);
 
-  constructor(
-    private http: HttpClient,
-    protected ws: WsConnectorService,
-    private globalStorageService: GlobalStorageService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private roomStatsService: RoomStatsService,
-    private dialog: MatDialog,
-    cachingService: CachingService
-  ) {
-    super(
-      'ContentGroup',
-      '/contentgroup',
-      http,
-      ws,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService
-    );
+  constructor() {
+    super('ContentGroup', '/contentgroup');
   }
 
   getStatsByRoomIdAndName(
@@ -234,7 +214,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     const connectionUrl = this.buildUri(`/${groupId}/import`, roomId);
     const formData = new FormData();
     formData.append('file', blob);
-    return this.httpClient.post<ImportResult>(connectionUrl, formData).pipe(
+    return this.http.post<ImportResult>(connectionUrl, formData).pipe(
       tap((r) => this.handleImportResult(r)),
       catchError(
         this.handleError<ImportResult>(

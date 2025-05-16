@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { UiConfig } from '@app/core/models/api-config';
@@ -13,6 +20,9 @@ import { ConsentService } from '@app/core/services/util/consent.service';
   styleUrl: './footer-links.component.scss',
 })
 export class FooterLinksComponent implements OnInit {
+  private authenticationService = inject(AuthenticationService);
+  private consentService = inject(ConsentService);
+
   @Input() auth?: ClientAuthentication;
   @Input({ required: true }) uiConfig!: UiConfig;
   @Input() showHelp = false;
@@ -23,11 +33,6 @@ export class FooterLinksComponent implements OnInit {
   accessibilityUrl?: string;
   privacyUrl?: string;
   imprintUrl?: string;
-
-  constructor(
-    private authenticationService: AuthenticationService,
-    private consentService: ConsentService
-  ) {}
 
   ngOnInit(): void {
     this.helpUrl = this.uiConfig.links?.help?.url;

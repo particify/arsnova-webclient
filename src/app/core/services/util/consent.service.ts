@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import {
   catchError,
   filter,
@@ -12,9 +12,6 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { CookiesComponent } from '@app/core/components//_dialogs/cookies/cookies.component';
 import { StorageItemCategory } from '@app/core/models/storage';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from './notification.service';
-import { EventService } from './event.service';
 import { ApiConfig, Feature } from '@app/core/models/api-config';
 import { ConsentChangedEvent } from '@app/core/models/events/consent-changed';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
@@ -48,6 +45,10 @@ const httpOptions = {
 
 @Injectable()
 export class ConsentService extends AbstractHttpService<ConsentSettings> {
+  dialog = inject(MatDialog);
+  private globalStorageService = inject(GlobalStorageService);
+  private router = inject(Router);
+
   private essentialCategory: CookieCategory = {
     key: StorageItemCategory.REQUIRED,
     id: 'essential',
@@ -82,22 +83,8 @@ export class ConsentService extends AbstractHttpService<ConsentSettings> {
   private skipConsent$: Observable<boolean>;
   private consentInitialized$ = new BehaviorSubject(false);
 
-  constructor(
-    public dialog: MatDialog,
-    private http: HttpClient,
-    private globalStorageService: GlobalStorageService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private router: Router
-  ) {
-    super(
-      '/consent',
-      http,
-      eventService,
-      translateService,
-      notificationService
-    );
+  constructor() {
+    super('/consent');
     this.skipConsent$ = this.router.events.pipe(
       filter((event) => event instanceof ActivationEnd),
       map((event) => event as ActivationEnd),

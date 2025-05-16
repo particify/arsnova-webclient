@@ -5,21 +5,13 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
 import {
   NavBarComponent,
   NavBarItem,
 } from '@app/standalone/nav-bar/nav-bar.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RoutingService } from '@app/core/services/util/routing.service';
-import {
-  GlobalStorageService,
-  STORAGE_KEYS,
-} from '@app/core/services/util/global-storage.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { EventService } from '@app/core/services/util/event.service';
+import { STORAGE_KEYS } from '@app/core/services/util/global-storage.service';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { map, take, takeUntil, throttleTime } from 'rxjs/operators';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -35,14 +27,11 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { RoomService } from '@app/core/services/http/room.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
-import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CommentPeriod } from '@app/core/models/comment-period.enum';
@@ -79,6 +68,14 @@ export class ControlBarComponent
   extends NavBarComponent
   implements OnInit, OnDestroy
 {
+  protected apiConfigService = inject(ApiConfigService);
+  private announceService = inject(AnnounceService);
+  private hotkeyService = inject(HotkeyService);
+  private translateService = inject(TranslocoService);
+  private dialogService = inject(DialogService);
+  private notificationService = inject(NotificationService);
+  private presentationService = inject(PresentationService);
+
   @ViewChild(ContentPresentationMenuComponent)
   moreMenuComponent!: ContentPresentationMenuComponent;
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
@@ -139,39 +136,8 @@ export class ControlBarComponent
 
   private hotkeyRefs: symbol[] = [];
 
-  constructor(
-    protected router: Router,
-    protected routingService: RoutingService,
-    protected route: ActivatedRoute,
-    protected globalStorageService: GlobalStorageService,
-    protected roomStatsService: RoomStatsService,
-    protected feedbackService: FeedbackService,
-    protected contentGroupService: ContentGroupService,
-    protected eventService: EventService,
-    protected apiConfigService: ApiConfigService,
-    protected roomService: RoomService,
-    protected commentSettingsService: CommentSettingsService,
-    protected focusModeService: FocusModeService,
-    private announceService: AnnounceService,
-    private hotkeyService: HotkeyService,
-    private translateService: TranslocoService,
-    private dialogService: DialogService,
-    private notificationService: NotificationService,
-    private presentationService: PresentationService
-  ) {
-    super(
-      router,
-      routingService,
-      route,
-      globalStorageService,
-      roomStatsService,
-      feedbackService,
-      contentGroupService,
-      eventService,
-      roomService,
-      commentSettingsService,
-      focusModeService
-    );
+  constructor() {
+    super();
     this.afterMouseMoved();
     this.currentCommentPeriod =
       this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||

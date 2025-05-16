@@ -1,23 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
 import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { Room } from '@app/core/models/room';
-import { EventService } from '@app/core/services/util/event.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { RxStompState } from '@stomp/rx-stomp';
 import { AbstractFocusModeService } from '@app/common/abstract/abstract-focus-mode.service';
 
@@ -26,25 +22,17 @@ const DELAY_AFTER_NAVIGATION = 500;
 
 @Injectable()
 export class FocusModeService extends AbstractFocusModeService {
+  private router = inject(Router);
+  private routingService = inject(RoutingService);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+
   private contentStateUpdated$ = new Subject<ContentFocusState>();
   private commentStateUpdated$ = new Subject<CommentFocusState>();
   private focusModeEnabled = false;
 
   private currentFeature?: RoutingFeature;
   private wsConnectionState?: RxStompState;
-
-  constructor(
-    protected wsConnector: WsConnectorService,
-    protected http: HttpClient,
-    protected featureFlagService: FeatureFlagService,
-    protected eventService: EventService,
-    private router: Router,
-    private routingService: RoutingService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {
-    super(wsConnector, http, eventService, featureFlagService);
-  }
 
   init(room: Room, currentFeature: RoutingFeature) {
     if (!this.featureFlagService.isEnabled('FOCUS_MODE')) {

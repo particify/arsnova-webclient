@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
@@ -11,18 +11,20 @@ import { PageTitleService } from './services/util/page-title.service';
 
 @Injectable()
 export class CustomPageTitleStrategy extends TitleStrategy {
+  private translateService = inject(TranslocoService);
+  private readonly titleService = inject(Title);
+  private pageTitleService = inject(PageTitleService);
+
   homeTitle?: string;
   titleSuffix?: string;
   roomName?: string;
   seriesName?: string;
   title?: string;
 
-  constructor(
-    private translateService: TranslocoService,
-    private readonly titleService: Title,
-    private pageTitleService: PageTitleService
-  ) {
+  constructor() {
     super();
+    const translateService = this.translateService;
+
     // Subscribe to lang changes and updated title
     translateService.langChanges$.subscribe(() => {
       // Only update title if already set

@@ -1,9 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AbstractHttpService } from './abstract-http.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { EventService } from '@app/core/services/util/event.service';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import { HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
@@ -17,17 +14,13 @@ const httpOptions = {
 
 @Injectable()
 export class FeedbackService extends AbstractHttpService<number[]> {
+  protected wsFeedbackService = inject(WsFeedbackService);
+
   private messageEvent$ = new Subject<Message>();
   sub?: Subscription;
 
-  constructor(
-    private http: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    protected wsFeedbackService: WsFeedbackService
-  ) {
-    super('/survey', http, eventService, translateService, notificationService);
+  constructor() {
+    super('/survey');
   }
 
   startSub(roomId: string) {

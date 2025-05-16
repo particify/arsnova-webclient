@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { LanguageService } from '@app/core/services/util/language.service';
@@ -35,6 +35,11 @@ import { RoutingService } from '@app/core/services/util/routing.service';
   ],
 })
 export class ParticipantPageComponent implements OnInit {
+  protected translateService = inject(TranslocoService);
+  protected langService = inject(LanguageService);
+  private focusModeService = inject(FocusModeService);
+  private routingService = inject(RoutingService);
+
   focusModeEnabled = false;
 
   // Route data input below
@@ -42,12 +47,10 @@ export class ParticipantPageComponent implements OnInit {
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;
 
-  constructor(
-    protected translateService: TranslocoService,
-    protected langService: LanguageService,
-    private focusModeService: FocusModeService,
-    private routingService: RoutingService
-  ) {
+  constructor() {
+    const translateService = this.translateService;
+    const langService = this.langService;
+
     langService.langEmitter.subscribe((lang) => {
       translateService.setActiveLang(lang);
     });

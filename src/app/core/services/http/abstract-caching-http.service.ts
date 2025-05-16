@@ -1,5 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { TranslocoService } from '@jsverse/transloco';
+import { HttpParams } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
 import { share, tap } from 'rxjs/operators';
 import {
@@ -8,9 +8,6 @@ import {
   CachingService,
   DefaultCache,
 } from '@app/core/services/util/caching.service';
-import { EventService } from '@app/core/services/util/event.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import {
   AbstractHttpService,
   HttpOptions,
@@ -20,29 +17,15 @@ import {
 export abstract class AbstractCachingHttpService<
   T,
 > extends AbstractHttpService<T> {
+  protected cachingService = inject(CachingService);
   protected cacheName = 'http';
   protected stompSubscription?: Subscription;
   protected cache: Cache<T>;
   private inflightRequests = new Map<string, Observable<T | T[]>>();
 
-  constructor(
-    uriPrefix: string,
-    httpClient: HttpClient,
-    protected wsConnector: WsConnectorService,
-    eventService: EventService,
-    translateService: TranslocoService,
-    notificationService: NotificationService,
-    protected cachingService: CachingService,
-    useSharedCache = false
-  ) {
-    super(
-      uriPrefix,
-      httpClient,
-      eventService,
-      translateService,
-      notificationService
-    );
-    this.cache = cachingService.getCache<T>(
+  constructor(uriPrefix: string, useSharedCache = false) {
+    super(uriPrefix);
+    this.cache = this.cachingService.getCache<T>(
       useSharedCache ? DefaultCache.SHARED : DefaultCache.CURRENT_ROOM
     );
   }

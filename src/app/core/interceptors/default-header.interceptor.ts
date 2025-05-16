@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpHandler,
   HttpInterceptor,
@@ -8,7 +8,7 @@ import { TranslocoService } from '@jsverse/transloco';
 
 @Injectable()
 export class DefaultHeaderInterceptor implements HttpInterceptor {
-  constructor(private translateService: TranslocoService) {}
+  private translateService = inject(TranslocoService);
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler) {
     const requestWithHeaders = req.clone({

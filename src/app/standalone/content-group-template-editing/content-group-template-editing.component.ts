@@ -6,6 +6,7 @@ import {
   QueryList,
   ViewChild,
   ViewChildren,
+  inject,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
@@ -13,7 +14,6 @@ import { CoreModule } from '@app/core/core.module';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { LICENSES } from '@app/core/models/licenses';
 import { TemplateTag } from '@app/core/models/template-tag';
-import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -39,6 +39,9 @@ export class ContentGroupTemplateEditingComponent
   extends FormComponent
   implements OnInit
 {
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+
   @ViewChildren(MatInput) inputs!: QueryList<MatInput>;
   @ViewChild(TemplateTagSelectionComponent)
   templateTagSelectionComponent!: TemplateTagSelectionComponent;
@@ -57,12 +60,8 @@ export class ContentGroupTemplateEditingComponent
   licenseKeys = Array.from(LICENSES.keys());
   LICENSES = LICENSES;
 
-  constructor(
-    protected formService: FormService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {
-    super(formService);
+  constructor() {
+    super();
     this.selectedLicense = this.licenseKeys[0];
     this.selectedLang = this.translateService.getActiveLang();
   }

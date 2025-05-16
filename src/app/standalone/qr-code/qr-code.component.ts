@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { takeUntil } from 'rxjs/operators';
@@ -25,6 +26,12 @@ import { Room } from '@app/core/models/room';
   styleUrls: ['./qr-code.component.scss'],
 })
 export class QrCodeComponent implements OnInit, OnDestroy {
+  private themeService = inject(ThemeService);
+  private apiConfigService = inject(ApiConfigService);
+  private routingService = inject(RoutingService);
+  private roomService = inject(RoomService);
+  private focusModeService = inject(FocusModeService);
+
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.setQRSize();
@@ -47,13 +54,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   useJoinUrl = false;
   userCount = 1;
 
-  constructor(
-    private themeService: ThemeService,
-    private apiConfigService: ApiConfigService,
-    private routingService: RoutingService,
-    private roomService: RoomService,
-    private focusModeService: FocusModeService
-  ) {
+  constructor() {
     this.bgColor = this.themeService.getColor('surface') as `#${string}`;
     this.fgColor = this.themeService.getColor('on-surface') as `#${string}`;
     this.setQRSize();

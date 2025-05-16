@@ -5,6 +5,7 @@ import {
   Input,
   OnChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
@@ -41,6 +42,8 @@ export class WordCloudItem {
   imports: [TranslocoPipe],
 })
 export class WordcloudComponent implements OnChanges {
+  private themeService = inject(ThemeService);
+
   @Input({ required: true }) wordWeights!: WordCloudItem[];
   @Input({ transform: booleanAttribute }) rotateWords?: boolean;
   @ViewChild('wordcloud') elementRef!: ElementRef<SVGGeometryElement>;
@@ -56,7 +59,7 @@ export class WordcloudComponent implements OnChanges {
 
   private timerSubscription?: Subscription;
 
-  constructor(private themeService: ThemeService) {
+  constructor() {
     // Determine theme CSS so we can avoid to hard code styles here.
     const bodyStyle = getComputedStyle(document.body);
     this.fontFamily = bodyStyle.fontFamily;

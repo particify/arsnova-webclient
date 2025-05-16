@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { FormService } from '@app/core/services/util/form.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
@@ -30,19 +29,14 @@ export class BinaryContentFormComponent
   extends FormComponent
   implements OnInit, ContentForm
 {
+  private translateService = inject(TranslocoService);
+
   @Input() content?: Content;
   @Input() isEditMode = false;
   @Input() answerSelection = false;
   @Input() isQuiz = false;
   options: BINARY_OPTION[] = Object.values(BINARY_OPTION);
   currentOption = BINARY_OPTION.NEITHER;
-
-  constructor(
-    private translateService: TranslocoService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.BINARY) {

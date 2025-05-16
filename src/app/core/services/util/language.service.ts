@@ -1,20 +1,16 @@
 import { DOCUMENT } from '@angular/common';
 import {
   EventEmitter,
-  Inject,
   Injectable,
   InjectionToken,
+  inject,
 } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { Observable } from 'rxjs';
 import { IsoLanguage } from '@app/core/models/iso-language';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { EventService } from '@app/core/services/util/event.service';
-import { HttpClient } from '@angular/common/http';
 
 export const BROWSER_LANG = new InjectionToken<string>('BROWSER_LANG');
 
@@ -22,6 +18,10 @@ export const BROWSER_LANG = new InjectionToken<string>('BROWSER_LANG');
   providedIn: 'root',
 })
 export class LanguageService extends AbstractHttpService<void> {
+  private globalStorageService = inject(GlobalStorageService);
+  private document = inject<Document>(DOCUMENT);
+  private browserLang = inject(BROWSER_LANG);
+
   public readonly langEmitter = new EventEmitter<string>();
   private langs: Language[] = [
     {
@@ -41,22 +41,8 @@ export class LanguageService extends AbstractHttpService<void> {
     },
   ];
 
-  constructor(
-    protected httpClient: HttpClient,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private globalStorageService: GlobalStorageService,
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(BROWSER_LANG) private browserLang: string
-  ) {
-    super(
-      '/language',
-      httpClient,
-      eventService,
-      translateService,
-      notificationService
-    );
+  constructor() {
+    super('/language');
   }
 
   private getLangWithKey(key: string) {
@@ -90,7 +76,7 @@ export class LanguageService extends AbstractHttpService<void> {
   }
 
   getIsoLanguages(): Observable<IsoLanguage[]> {
-    return this.httpClient.get<IsoLanguage[]>(this.buildUri('/'));
+    return this.http.get<IsoLanguage[]>(this.buildUri('/'));
   }
 
   ensureValidLang(lang?: string): string {

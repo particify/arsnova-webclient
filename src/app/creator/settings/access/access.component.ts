@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  inject,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -26,7 +27,6 @@ import { AccessTokenService } from '@app/core/services/http/access-token.service
 import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 
 export interface Role {
   name: string;
@@ -43,6 +43,15 @@ export class AccessComponent
   extends FormComponent
   implements OnInit, OnDestroy
 {
+  private dialogService = inject(DialogService);
+  notificationService = inject(NotificationService);
+  translationService = inject(TranslocoService);
+  protected moderatorService = inject(ModeratorService);
+  protected userService = inject(UserService);
+  eventService = inject(EventService);
+  private authenticationService = inject(AuthenticationService);
+  private accessTokenService = inject(AccessTokenService);
+
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
@@ -63,20 +72,6 @@ export class AccessComponent
   currentInputIsChecked = true;
 
   HintType = HintType;
-
-  constructor(
-    private dialogService: DialogService,
-    public notificationService: NotificationService,
-    public translationService: TranslocoService,
-    protected moderatorService: ModeratorService,
-    protected userService: UserService,
-    public eventService: EventService,
-    private authenticationService: AuthenticationService,
-    private accessTokenService: AccessTokenService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit() {
     this.setFormControl(this.usernameFormControl);

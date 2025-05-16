@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -47,21 +47,19 @@ import {
   styleUrls: ['./content-groups.component.scss'],
 })
 export class ContentGroupsComponent {
+  private router = inject(Router);
+  private globalStorageService = inject(GlobalStorageService);
+  private routingService = inject(RoutingService);
+  private contentGroupService = inject(ContentGroupService);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private contentPublishService = inject(ContentPublishService);
+
   @Input({ required: true }) contentGroup!: ContentGroup;
   @Input({ required: true }) role!: UserRole;
   @Input({ required: true }) shortId!: string;
   @Input() disabled = false;
   @Input() showRipple = false;
-
-  constructor(
-    private router: Router,
-    private globalStorageService: GlobalStorageService,
-    private routingService: RoutingService,
-    private contentGroupService: ContentGroupService,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService,
-    private contentPublishService: ContentPublishService
-  ) {}
 
   viewContents() {
     this.router.navigate([

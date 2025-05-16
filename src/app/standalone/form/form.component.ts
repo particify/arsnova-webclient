@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FormService } from '@app/core/services/util/form.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,12 +8,14 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: false,
 })
 export abstract class FormComponent implements OnDestroy {
+  protected formService = inject(FormService);
+
   protected destroyed$ = new Subject<void>();
   private formControl: FormControl = new FormControl();
   protected formGroup: FormGroup = new FormGroup([]);
   formDisabled = false;
 
-  constructor(protected formService: FormService) {
+  constructor() {
     this.subscribeToFormChanges();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { catchError, of, shareReplay } from 'rxjs';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 
@@ -9,11 +9,11 @@ import { SystemInfoService } from '@app/core/services/http/system-info.service';
   standalone: false,
 })
 export class SystemStatusComponent implements OnInit {
+  protected systemInfoService = inject(SystemInfoService);
+
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
   dataSource!: object;
   isLoading = true;
-
-  constructor(protected systemInfoService: SystemInfoService) {}
 
   ngOnInit() {
     this.systemInfoService

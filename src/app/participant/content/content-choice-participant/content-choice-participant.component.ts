@@ -1,19 +1,19 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { Router } from '@angular/router';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { ContentParticipantBaseComponent } from '@app/participant/content/content-participant-base.component';
 import { ContentService } from '@app/core/services/http/content.service';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -29,6 +29,9 @@ export class ContentChoiceParticipantComponent
   extends ContentParticipantBaseComponent
   implements OnChanges
 {
+  protected answerService = inject(ContentAnswerService);
+  private contentService = inject(ContentService);
+
   @Input({ required: true }) content!: ContentChoice;
   @Input() answer?: ChoiceAnswer;
   @Input() statsPublished = false;
@@ -43,24 +46,6 @@ export class ContentChoiceParticipantComponent
   isCorrect = false;
   isChoice = false;
   hasAbstained = false;
-
-  constructor(
-    protected answerService: ContentAnswerService,
-    protected notificationService: NotificationService,
-    protected translateService: TranslocoService,
-    protected globalStorageService: GlobalStorageService,
-    protected router: Router,
-    private contentService: ContentService,
-    protected formService: FormService
-  ) {
-    super(
-      notificationService,
-      translateService,
-      globalStorageService,
-      router,
-      formService
-    );
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (

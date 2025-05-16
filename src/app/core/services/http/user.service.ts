@@ -1,16 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { AbstractEntityService } from './abstract-entity.service';
 import { User } from '@app/core/models/user';
 import { AccountCreated } from '@app/core/models/events/account-created';
 import { AccountDeleted } from '@app/core/models/events/account-deleted';
 import { catchError, map, tap } from 'rxjs/operators';
-import { EventService } from '@app/core/services/util/event.service';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { CachingService } from '@app/core/services/util/caching.service';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { UserSettings } from '@app/core/models/user-settings';
 import {
   GlobalStorageService,
@@ -23,6 +18,8 @@ const httpOptions = {
 
 @Injectable()
 export class UserService extends AbstractEntityService<User> {
+  private globalStorageService = inject(GlobalStorageService);
+
   serviceApiUrl = {
     register: '/register',
     activate: '/activate',
@@ -30,25 +27,8 @@ export class UserService extends AbstractEntityService<User> {
     resetPassword: '/resetpassword',
   };
 
-  constructor(
-    private http: HttpClient,
-    protected ws: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    private globalStorageService: GlobalStorageService,
-    cachingService: CachingService
-  ) {
-    super(
-      'User',
-      '/user',
-      http,
-      ws,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService
-    );
+  constructor() {
+    super('User', '/user');
   }
 
   register(email: string, password: string): Observable<boolean> {

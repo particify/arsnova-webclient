@@ -4,9 +4,9 @@ import {
   Input,
   OnDestroy,
   EventEmitter,
+  inject,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
-import { ContentService } from '@app/core/services/http/content.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import {
   BarController,
@@ -21,7 +21,6 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { StatisticContentBaseComponent } from '@app/standalone/statistic-content/statistic-content-base';
 import { takeUntil } from 'rxjs/operators';
 import { ThemeService } from '@app/core/theme/theme.service';
-import { TranslocoService } from '@jsverse/transloco';
 import {
   Combination,
   RoundStatistics,
@@ -53,6 +52,10 @@ export class StatisticSortComponent
   extends StatisticContentBaseComponent
   implements OnInit, OnDestroy
 {
+  private themeService = inject(ThemeService);
+  private presentationService = inject(PresentationService);
+  private contentAnswerService = inject(ContentAnswerService);
+
   @Input({ required: true }) content!: ContentChoice;
   @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
@@ -73,14 +76,8 @@ export class StatisticSortComponent
   grey: string;
   stats?: RoundStatistics;
 
-  constructor(
-    protected contentService: ContentService,
-    private themeService: ThemeService,
-    protected translateService: TranslocoService,
-    private presentationService: PresentationService,
-    private contentAnswerService: ContentAnswerService
-  ) {
-    super(contentService, translateService);
+  constructor() {
+    super();
     this.onSurface = this.themeService.getColor('on-surface');
     this.surface = this.themeService.getColor('surface');
     this.green = this.themeService.getColor('green');

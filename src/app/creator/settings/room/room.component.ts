@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { Room } from '@app/core/models/room';
 import {
   AdvancedSnackBarTypes,
@@ -18,7 +25,6 @@ import { UpdateEvent } from '@app/creator/settings-page/settings-page.component'
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { take } from 'rxjs';
 
@@ -28,6 +34,16 @@ import { take } from 'rxjs';
   standalone: false,
 })
 export class RoomComponent extends FormComponent implements OnInit {
+  notificationService = inject(NotificationService);
+  translationService = inject(TranslocoService);
+  protected roomService = inject(RoomService);
+  router = inject(Router);
+  eventService = inject(EventService);
+  protected translateService = inject(TranslocoService);
+  private dialogService = inject(DialogService);
+  private formattingService = inject(FormattingService);
+  private focusModeService = inject(FocusModeService);
+
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
 
@@ -41,20 +57,6 @@ export class RoomComponent extends FormComponent implements OnInit {
   HintType = HintType;
   focusModeEnabled = false;
 
-  constructor(
-    public notificationService: NotificationService,
-    public translationService: TranslocoService,
-    protected roomService: RoomService,
-    public router: Router,
-    public eventService: EventService,
-    protected translateService: TranslocoService,
-    private dialogService: DialogService,
-    private formattingService: FormattingService,
-    private focusModeService: FocusModeService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
   ngOnInit(): void {
     this.focusModeEnabled = this.editRoom.focusModeEnabled;
   }

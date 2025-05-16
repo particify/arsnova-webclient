@@ -1,15 +1,12 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
 import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
@@ -29,6 +26,12 @@ export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent
   implements OnInit, OnDestroy
 {
+  protected router = inject(Router);
+  protected translateService = inject(TranslocoService);
+  protected dialogService = inject(DialogService);
+  protected globalStorageService = inject(GlobalStorageService);
+  private contentService = inject(ContentService);
+
   // Route data input below
   @Input({ required: true }) userRole!: UserRole;
 
@@ -36,17 +39,8 @@ export class RoomOverviewPageComponent
   groupContentFormatIcons: Map<GroupType, Map<ContentType, string>> = new Map();
   hintType = HintType.INFO;
 
-  constructor(
-    protected roomStatsService: RoomStatsService,
-    protected contentGroupService: ContentGroupService,
-    protected eventService: EventService,
-    protected router: Router,
-    protected translateService: TranslocoService,
-    protected dialogService: DialogService,
-    protected globalStorageService: GlobalStorageService,
-    private contentService: ContentService
-  ) {
-    super(roomStatsService, contentGroupService, eventService);
+  constructor() {
+    super();
     this.groupTypes = this.contentGroupService.getTypeIcons();
     this.groupTypes.forEach((value, key) => {
       const groupTypeIcons = new Map<ContentType, string>();

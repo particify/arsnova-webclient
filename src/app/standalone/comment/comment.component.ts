@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  inject,
 } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -59,6 +60,15 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
   ],
 })
 export class CommentComponent implements OnInit, OnDestroy {
+  private commentService = inject(CommentService);
+  private notification = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  private dialogService = inject(DialogService);
+  protected langService = inject(LanguageService);
+  private announceService = inject(AnnounceService);
+  private globalStorageService = inject(GlobalStorageService);
+  private dialog = inject(MatDialog);
+
   @Input({ required: true }) comment!: Comment;
   @Input() isEditor = false;
 
@@ -84,16 +94,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   destroyed$ = new Subject<void>();
   showTag = false;
 
-  constructor(
-    private commentService: CommentService,
-    private notification: NotificationService,
-    private translateService: TranslocoService,
-    private dialogService: DialogService,
-    protected langService: LanguageService,
-    private announceService: AnnounceService,
-    private globalStorageService: GlobalStorageService,
-    private dialog: MatDialog
-  ) {
+  constructor() {
+    const langService = this.langService;
+    const globalStorageService = this.globalStorageService;
+
     langService.langEmitter.subscribe((lang) => {
       this.language = lang;
     });

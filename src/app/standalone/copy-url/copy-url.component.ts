@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -23,12 +23,10 @@ import { take } from 'rxjs';
   styleUrls: ['./copy-url.component.scss'],
 })
 export class CopyUrlComponent {
-  @Input({ required: true }) url!: string;
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
 
-  constructor(
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {}
+  @Input({ required: true }) url!: string;
 
   showNotification(success: boolean): void {
     if (success) {

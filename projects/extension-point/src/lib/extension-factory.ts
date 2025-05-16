@@ -1,11 +1,12 @@
 import {
   ComponentFactoryResolver,
-  Inject,
   Injectable,
-  Optional,
   ViewContainerRef,
   ComponentRef,
   EventEmitter,
+  inject,
+  Inject,
+  Optional,
 } from '@angular/core';
 import { environment } from '@environments/environment';
 import { Extension } from './extension';
@@ -15,13 +16,14 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
   providedIn: 'root',
 })
 export class ExtensionFactory {
+  private resolver = inject(ComponentFactoryResolver);
+  private featureFlagService = inject(FeatureFlagService);
+
   extensions: { [key: string]: Extension } = {};
 
-  constructor(
-    @Inject(Extension) @Optional() extensions: Extension[],
-    private resolver: ComponentFactoryResolver,
-    private featureFlagService: FeatureFlagService
-  ) {
+  constructor(@Inject(Extension) @Optional() extensions: Extension[]) {
+    const featureFlagService = this.featureFlagService;
+
     if (extensions) {
       extensions = extensions.filter((e) =>
         featureFlagService.isEnabled('extension-' + e.getId())

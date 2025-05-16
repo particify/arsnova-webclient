@@ -1,4 +1,4 @@
-import { Injectable, isDevMode, NgModule } from '@angular/core';
+import { Injectable, isDevMode, NgModule, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   Translation,
@@ -10,7 +10,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   getTranslation(langPath: string) {
     return this.http.get<Translation>(`/assets/i18n/${langPath}.json`);

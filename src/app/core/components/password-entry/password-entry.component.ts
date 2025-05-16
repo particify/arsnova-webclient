@@ -4,6 +4,7 @@ import {
   ElementRef,
   Input,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { TranslocoService } from '@jsverse/transloco';
@@ -13,7 +14,6 @@ import {
 } from '@app/core/services/util/notification.service';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
-import { FormService } from '@app/core/services/util/form.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 
 enum Strength {
@@ -46,6 +46,10 @@ export class PasswordEntryComponent
   extends FormComponent
   implements AfterViewInit
 {
+  private translationService = inject(TranslocoService);
+  notificationService = inject(NotificationService);
+  private _autofill = inject(AutofillMonitor);
+
   @ViewChild('passwordInput') passwordInput!: ElementRef;
 
   @Input() checkStrength = false;
@@ -61,15 +65,6 @@ export class PasswordEntryComponent
   showPwButton = false;
   autofilled = false;
   lastInput = '';
-
-  constructor(
-    private translationService: TranslocoService,
-    public notificationService: NotificationService,
-    private _autofill: AutofillMonitor,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngAfterViewInit(): void {
     this.setFormControl(this.passwordFormControl);

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
@@ -24,7 +24,8 @@ export interface ContentLeaderboardTableItem extends LeaderboardTableItem {
   providedIn: 'root',
 })
 export class LeaderboardService {
-  constructor(private themeService: ThemeService) {}
+  private themeService = inject(ThemeService);
+
   private determineLeaderboardPosition(
     index: number,
     item: LeaderboardItem,

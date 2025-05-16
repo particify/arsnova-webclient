@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -18,20 +18,23 @@ import {
   standalone: false,
 })
 export class CookiesComponent {
+  private dialogRef = inject<MatDialogRef<CookiesComponent>>(MatDialogRef);
+  protected route = inject(ActivatedRoute);
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+
   readonly dialogId = 'cookie-settings';
 
   categories: CookieCategory[];
   privacyUrl: string;
   inputFocus = false;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA)
-    data: { categories: CookieCategory[]; privacyUrl: string },
-    private dialogRef: MatDialogRef<CookiesComponent>,
-    protected route: ActivatedRoute,
-    private translateService: TranslocoService,
-    private notificationService: NotificationService
-  ) {
+  constructor() {
+    const data = inject<{
+      categories: CookieCategory[];
+      privacyUrl: string;
+    }>(MAT_DIALOG_DATA);
+
     this.categories = data.categories;
     this.privacyUrl = data.privacyUrl;
   }

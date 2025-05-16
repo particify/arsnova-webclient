@@ -7,6 +7,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,7 +33,6 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
 
 function setDefaultTrue(value: boolean | undefined): boolean {
@@ -49,6 +49,16 @@ export class LoginComponent
   extends FormComponent
   implements AfterContentInit, OnChanges, OnInit
 {
+  authenticationService = inject(AuthenticationService);
+  router = inject(Router);
+  private translationService = inject(TranslocoService);
+  notificationService = inject(NotificationService);
+  dialog = inject(MatDialog);
+  eventService = inject(EventService);
+  private dialogService = inject(DialogService);
+  private route = inject(ActivatedRoute);
+  private routingService = inject(RoutingService);
+
   @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
 
   // Route data input below
@@ -73,21 +83,6 @@ export class LoginComponent
   loginIdFormControl = new UntypedFormControl();
 
   matcher = new FormErrorStateMatcher();
-
-  constructor(
-    public authenticationService: AuthenticationService,
-    public router: Router,
-    private translationService: TranslocoService,
-    public notificationService: NotificationService,
-    public dialog: MatDialog,
-    public eventService: EventService,
-    private dialogService: DialogService,
-    private route: ActivatedRoute,
-    private routingService: RoutingService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit() {
     this.setFormControl(this.loginIdFormControl);

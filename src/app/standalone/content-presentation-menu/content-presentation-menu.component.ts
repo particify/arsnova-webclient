@@ -8,6 +8,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
@@ -29,6 +30,10 @@ import { Subject, of, takeUntil } from 'rxjs';
 export class ContentPresentationMenuComponent
   implements AfterViewInit, OnChanges, OnDestroy, OnInit
 {
+  private contentService = inject(ContentService);
+  private dialogService = inject(DialogService);
+  private presentationService = inject(PresentationService);
+
   @ViewChild('moreMenu') moreMenu!: MatMenu;
 
   @Input({ required: true }) content!: Content;
@@ -50,12 +55,6 @@ export class ContentPresentationMenuComponent
   rotateWordcloudItems?: boolean;
   isLive = false;
   isFinished = true;
-
-  constructor(
-    private contentService: ContentService,
-    private dialogService: DialogService,
-    private presentationService: PresentationService
-  ) {}
 
   ngAfterViewInit(): void {
     setTimeout(() => {

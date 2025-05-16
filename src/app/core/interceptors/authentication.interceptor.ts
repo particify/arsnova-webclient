@@ -1,5 +1,5 @@
 import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpErrorResponse,
   HttpEvent,
@@ -19,9 +19,13 @@ const API_LOGIN_URI_PATTERN = /^\/api\/auth\/login\/[^?].*/;
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
+  private authenticationService = inject(AuthenticationService);
+
   private token?: string;
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor() {
+    const authenticationService = this.authenticationService;
+
     authenticationService
       .getAuthenticationChanges()
       .subscribe((auth) => (this.token = auth?.token));

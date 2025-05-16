@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { RxStompState } from '@stomp/rx-stomp';
 import { interval } from 'rxjs';
 import { LRUCache } from 'lru-cache';
@@ -33,7 +33,9 @@ export class CachingService {
   private caches: Map<string | number, Cache<unknown>> = new Map();
   private wsDisconnectionTimestamp: Date = new Date();
 
-  constructor(ws: WsConnectorService) {
+  constructor() {
+    const ws = inject(WsConnectorService);
+
     ws.getConnectionState().subscribe((state) =>
       this.handleWsStateChange(state)
     );

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import {
   AdvancedSnackBarTypes,
@@ -17,7 +17,6 @@ import { CoreModule } from '@app/core/core.module';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 
 export interface DialogData {
   userId: string;
@@ -34,23 +33,18 @@ export interface DialogData {
   templateUrl: './create-comment.component.html',
 })
 export class CreateCommentComponent extends FormComponent implements OnInit {
+  dialogRef = inject<MatDialogRef<CreateCommentComponent>>(MatDialogRef);
+  private translateService = inject(TranslocoService);
+  data = inject<DialogData>(MAT_DIALOG_DATA);
+  private globalStorageService = inject(GlobalStorageService);
+  private commentService = inject(CommentService);
+  private notificationService = inject(NotificationService);
+
   readonly dialogId = 'create-comment';
 
   selectedTag?: string;
   eventsSubject = new Subject<string | void>();
   eventsWrapper: any;
-
-  constructor(
-    public dialogRef: MatDialogRef<CreateCommentComponent>,
-    private translateService: TranslocoService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private globalStorageService: GlobalStorageService,
-    private commentService: CommentService,
-    private notificationService: NotificationService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   ngOnInit() {
     this.translateService.setActiveLang(

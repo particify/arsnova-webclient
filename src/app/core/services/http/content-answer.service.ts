@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core';
 import { TextAnswer } from '@app/core/models/text-answer';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { Answer } from '@app/core/models/answer';
-import { CachingService } from '@app/core/services/util/caching.service';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
@@ -23,24 +18,8 @@ const httpOptions = {
 
 @Injectable()
 export class ContentAnswerService extends AbstractEntityService<Answer> {
-  constructor(
-    private http: HttpClient,
-    protected ws: WsConnectorService,
-    protected eventService: EventService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService,
-    cachingService: CachingService
-  ) {
-    super(
-      'Answer',
-      '/answer',
-      http,
-      ws,
-      eventService,
-      translateService,
-      notificationService,
-      cachingService
-    );
+  constructor() {
+    super('Answer', '/answer');
   }
 
   getAnswers(roomId: string, contentId: string): Observable<TextAnswer[]> {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { User } from '@app/core/models/user';
 import { AdminService } from '@app/core/services/http/admin.service';
 import { UserService } from '@app/core/services/http/user.service';
@@ -9,14 +9,12 @@ import { UserService } from '@app/core/services/http/user.service';
   standalone: false,
 })
 export class UserSearchComponent {
+  protected userService = inject(UserService);
+  protected adminService = inject(AdminService);
+
   user?: User;
   users: User[] = [];
   searchResults: string[] = [];
-
-  constructor(
-    protected userService: UserService,
-    protected adminService: AdminService
-  ) {}
 
   clear() {
     this.user = undefined;

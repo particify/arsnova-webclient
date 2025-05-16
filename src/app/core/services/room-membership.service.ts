@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   first,
@@ -18,11 +18,8 @@ import {
   AUTH_HEADER_KEY,
   AUTH_SCHEME,
 } from './http/authentication.service';
-import { EventService } from './util/event.service';
 import { Membership } from '@app/core/models/membership';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from './util/notification.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Room } from '@app/core/models/room';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
@@ -33,6 +30,9 @@ import { MembershipsChanged } from '@app/core/models/events/memberships-changed'
  */
 @Injectable()
 export class RoomMembershipService extends AbstractHttpService<Membership> {
+  protected wsConnector = inject(WsConnectorService);
+  protected authenticationService = inject(AuthenticationService);
+
   serviceApiUrl = {
     byUser: '/by-user',
   };
@@ -40,21 +40,10 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   private memberships$$ = new BehaviorSubject<Observable<Membership[]>>(of([]));
   private newOwnerships: Membership[] = [];
 
-  constructor(
-    protected http: HttpClient,
-    protected wsConnector: WsConnectorService,
-    protected eventService: EventService,
-    protected authenticationService: AuthenticationService,
-    protected translateService: TranslocoService,
-    protected notificationService: NotificationService
-  ) {
-    super(
-      '/_view/membership',
-      http,
-      eventService,
-      translateService,
-      notificationService
-    );
+  constructor() {
+    super('/_view/membership');
+    const authenticationService = this.authenticationService;
+
     const authChanged$ = authenticationService
       .getAuthenticationChanges()
       .pipe(skip(1));

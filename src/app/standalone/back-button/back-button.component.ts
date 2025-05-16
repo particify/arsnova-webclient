@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,14 +10,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   imports: [MatButtonModule, MatIconModule],
 })
 export class BackButtonComponent {
+  private location = inject(Location);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   @Input({ required: true }) text!: string;
   @Input() backRoute?: string[];
-
-  constructor(
-    private location: Location,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
 
   goBack() {
     if (this.backRoute) {

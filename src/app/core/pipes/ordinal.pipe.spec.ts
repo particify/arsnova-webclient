@@ -13,7 +13,9 @@ describe('OrdinalPipe', () => {
       providers: [TranslocoService],
     });
     translateService = TestBed.inject(TranslocoService);
-    pipe = new OrdinalPipe(translateService);
+    TestBed.runInInjectionContext(() => {
+      pipe = new OrdinalPipe();
+    });
     translateSpy = spyOn(translateService, 'translate');
   });
   it('create an instance', () => {

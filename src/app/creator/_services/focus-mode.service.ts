@@ -4,26 +4,13 @@ import { ContentFocusState } from '@app/core/models/events/remote/content-focus-
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
 import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { HttpClient } from '@angular/common/http';
 import { Room } from '@app/core/models/room';
-import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AbstractFocusModeService } from '@app/common/abstract/abstract-focus-mode.service';
-import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
-import { EventService } from '@app/core/services/util/event.service';
 
 @Injectable()
 export class FocusModeService extends AbstractFocusModeService {
   private state$ = new BehaviorSubject<FocusEvent | null>(null);
-
-  constructor(
-    protected wsConnector: WsConnectorService,
-    protected http: HttpClient,
-    protected eventService: EventService,
-    protected featureFlagService: FeatureFlagService
-  ) {
-    super(wsConnector, http, eventService, featureFlagService);
-  }
 
   protected handleState(state: FocusEvent) {
     this.state$.next(state);

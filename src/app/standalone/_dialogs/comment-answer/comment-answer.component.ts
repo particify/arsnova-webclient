@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
@@ -14,7 +14,6 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { DateComponent } from '@app/standalone/date/date.component';
 import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { FormService } from '@app/core/services/util/form.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { take } from 'rxjs';
@@ -35,6 +34,13 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
   styleUrls: ['./comment-answer.component.scss'],
 })
 export class CommentAnswerComponent extends FormComponent {
+  private notificationService = inject(NotificationService);
+  private translateService = inject(TranslocoService);
+  protected commentService = inject(CommentService);
+  private dialogService = inject(DialogService);
+  dialogRef = inject<MatDialogRef<CommentAnswerComponent>>(MatDialogRef);
+  data = inject(MAT_DIALOG_DATA);
+
   readonly dialogId = 'comment-answer';
   @ViewChild('answerInput') answerInput!: ElementRef;
 
@@ -45,16 +51,8 @@ export class CommentAnswerComponent extends FormComponent {
   MarkdownFeatureset = MarkdownFeatureset;
   renderPreview = false;
 
-  constructor(
-    private notificationService: NotificationService,
-    private translateService: TranslocoService,
-    protected commentService: CommentService,
-    private dialogService: DialogService,
-    public dialogRef: MatDialogRef<CommentAnswerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    protected formService: FormService
-  ) {
-    super(formService);
+  constructor() {
+    super();
     this.comment = this.data.comment;
     this.answer = this.comment.answer;
     this.isEditor = !!this.data.isEditor;

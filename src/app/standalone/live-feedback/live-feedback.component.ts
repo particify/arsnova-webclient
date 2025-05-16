@@ -5,6 +5,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,6 +38,10 @@ class LiveFeedback {
   styleUrls: ['./live-feedback.component.scss'],
 })
 export class LiveFeedbackComponent implements OnInit, OnDestroy {
+  private translateService = inject(TranslocoService);
+  private hotkeyService = inject(HotkeyService);
+  private announceService = inject(AnnounceService);
+
   @Input() type = LiveFeedbackType.FEEDBACK;
   @Input() isClosed = false;
   @Input() fixedSize = false;
@@ -56,12 +61,6 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
   surveyLabels = Object.values(LiveFeedbackSurveyLabel);
 
   private hotkeyRefs: symbol[] = [];
-
-  constructor(
-    private translateService: TranslocoService,
-    private hotkeyService: HotkeyService,
-    private announceService: AnnounceService
-  ) {}
 
   ngOnInit(): void {
     this.setData(this.data);

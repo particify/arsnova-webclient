@@ -1,7 +1,6 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { FormService } from '@app/core/services/util/form.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -19,21 +18,16 @@ const MAX_ANSWER_OPTIONS = 12;
   standalone: false,
 })
 export class CreateAnswerOptionComponent extends FormComponent {
+  private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
+  private announceService = inject(AnnounceService);
+
   @ViewChild('answerInput') answerInput!: ElementRef;
 
   @Input({ required: true }) answers!: DisplayAnswer[];
   @Input() lengthLimit = 500;
 
   newAnswer = '';
-
-  constructor(
-    private translateService: TranslocoService,
-    private notificationService: NotificationService,
-    private announceService: AnnounceService,
-    protected formService: FormService
-  ) {
-    super(formService);
-  }
 
   createAnswer() {
     if (this.newAnswer === '') {

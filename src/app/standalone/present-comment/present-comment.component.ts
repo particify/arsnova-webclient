@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Comment } from '@app/core/models/comment';
@@ -14,18 +14,16 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
   imports: [FlexModule, LanguageContextDirective, TranslocoPipe],
 })
 export class PresentCommentComponent implements OnInit, OnDestroy {
+  private translateService = inject(TranslocoService);
+  private presentationService = inject(PresentationService);
+  private hotkeyService = inject(HotkeyService);
+
   @Input() isPresentation = false;
   @Input() comment?: Comment;
 
   currentZoom = 1;
 
   private hotkeyRefs: symbol[] = [];
-
-  constructor(
-    private translateService: TranslocoService,
-    private presentationService: PresentationService,
-    private hotkeyService: HotkeyService
-  ) {}
 
   ngOnInit(): void {
     this.registerHotkeys();

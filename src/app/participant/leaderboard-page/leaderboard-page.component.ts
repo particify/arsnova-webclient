@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
@@ -18,17 +18,15 @@ import { provideTranslocoScope } from '@jsverse/transloco';
   providers: [provideTranslocoScope('participant')],
 })
 export class LeaderboardPageComponent implements OnInit {
+  private contentGroupService = inject(ContentGroupService);
+  private contentService = inject(ContentService);
+  private destroyRef = inject(DestroyRef);
+
   @Input({ required: true }) content!: Content;
   @Input({ required: true }) aliasId!: string;
   @Input({ required: true }) groupId!: string;
   leaderboardItems: CurrentLeaderboardItem[] = [];
   isLoading = true;
-
-  constructor(
-    private contentGroupService: ContentGroupService,
-    private contentService: ContentService,
-    private destroyRef: DestroyRef
-  ) {}
 
   ngOnInit(): void {
     this.loadLeaderboard();

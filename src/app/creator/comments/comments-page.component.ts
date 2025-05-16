@@ -1,27 +1,15 @@
 import { Location } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { CommentService } from '@app/core/services/http/comment.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { MatDialog } from '@angular/material/dialog';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import {
   AbstractCommentsPageComponent,
   BAR_PADDING,
 } from '@app/common/abstract/abstract-comments-page.component';
-import { TranslocoService } from '@jsverse/transloco';
 import { Message } from '@stomp/stompjs';
 import { Observable, takeUntil } from 'rxjs';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { FormService } from '@app/core/services/util/form.service';
 
 const TAB_GROUP_HEIGHT = 48;
@@ -36,41 +24,16 @@ export class CommentsPageComponent
   extends AbstractCommentsPageComponent
   implements OnInit, OnDestroy
 {
+  protected location = inject(Location);
+  protected routingService = inject(RoutingService);
+  private formService = inject(FormService);
+
   // Route data input below
   @Input({ required: true }) isModeration!: boolean;
 
   private moderationComments$?: Observable<Comment[]>;
 
   moderationCounter = 0;
-
-  constructor(
-    protected commentService: CommentService,
-    protected translateService: TranslocoService,
-    protected dialog: MatDialog,
-    protected wsCommentService: WsCommentService,
-    protected notificationService: NotificationService,
-    protected announceService: AnnounceService,
-    protected router: Router,
-    protected globalStorageService: GlobalStorageService,
-    protected commentSettingsService: CommentSettingsService,
-    protected authenticationService: AuthenticationService,
-    protected location: Location,
-    protected routingService: RoutingService,
-    private formService: FormService
-  ) {
-    super(
-      commentService,
-      translateService,
-      dialog,
-      wsCommentService,
-      notificationService,
-      announceService,
-      router,
-      globalStorageService,
-      commentSettingsService,
-      authenticationService
-    );
-  }
 
   ngOnInit(): void {
     this.publicComments$ = this.commentService.getAckComments(this.room.id);

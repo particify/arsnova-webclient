@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import {
   ArcElement,
@@ -82,6 +82,15 @@ interface ContentResultView {
   providers: [provideTranslocoScope('participant')],
 })
 export class SeriesOverviewComponent implements OnInit, OnDestroy {
+  private routingService = inject(RoutingService);
+  private authService = inject(AuthenticationService);
+  private contentGroupService = inject(ContentGroupService);
+  private themeService = inject(ThemeService);
+  private router = inject(Router);
+  private contentCarouselService = inject(ContentCarouselService);
+  private contentPublishService = inject(ContentPublishService);
+  private answerService = inject(ContentAnswerService);
+
   @Input({ required: true }) group!: ContentGroup;
   @Input({ required: true }) contents!: Content[];
   @Input() finished = false;
@@ -120,17 +129,6 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   userLeaderboardItem?: LeaderboardItem;
   selectedTabIndex = 0;
   GroupType = GroupType;
-
-  constructor(
-    private routingService: RoutingService,
-    private authService: AuthenticationService,
-    private contentGroupService: ContentGroupService,
-    private themeService: ThemeService,
-    private router: Router,
-    private contentCarouselService: ContentCarouselService,
-    private contentPublishService: ContentPublishService,
-    private answerService: ContentAnswerService
-  ) {}
 
   ngOnDestroy(): void {
     this.contentCarouselService.setLastContentAnswered(false);
