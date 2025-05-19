@@ -1,0 +1,95 @@
+@if (useMenuButton()) {
+  <button
+    mat-menu-item
+    [matMenuTriggerFor]="shareMenu"
+    (click)="prepareQrBlob()"
+  >
+    <mat-icon>share</mat-icon>
+    <span>{{ 'share.share' | transloco }}</span>
+  </button>
+} @else {
+  <button
+    [disabled]="disabled()"
+    mat-button
+    [matMenuTriggerFor]="shareMenu"
+    (click)="prepareQrBlob()"
+  >
+    <mat-icon>share</mat-icon>
+    {{ 'share.share' | transloco }}
+  </button>
+}
+<mat-menu
+  #shareMenu="matMenu"
+  xPosition="before"
+  panelClass="wider-panel"
+  class="wider-panel"
+>
+  <div #hiddenQr class="visually-hidden">
+    <qr-code
+      id="qr-code"
+      [size]="1000"
+      [value]="roomJoinUrl + '?entry=qr-downloaded'"
+      [errorCorrectionLevel]="'M'"
+    ></qr-code>
+  </div>
+  <mat-menu-content
+    (click)="$event.stopPropagation()"
+    fxLayout="column"
+    fxLayoutGap="24px"
+  >
+    <span class="share-menu-header">{{
+      'share.share-room-with-participants' | transloco
+    }}</span>
+    <mat-form-field class="no-field-hint" appearance="outline">
+      <mat-label> {{ 'share.link' | transloco }}</mat-label>
+      <input matInput [value]="roomJoinUrl" readonly />
+      <div
+        matSuffix
+        [matTooltip]="(linkCopied ? 'share.copied' : 'share.copy') | transloco"
+      >
+        @if (roomJoinUrl) {
+          <button
+            mat-icon-button
+            style="margin-right: 8px"
+            [disabled]="linkCopied"
+            [cdkCopyToClipboard]="roomJoinUrl"
+            (click)="copyRoomJoinLink(); copiedLinkTooltip.show()"
+          >
+            @if (linkCopied) {
+              <mat-icon style="color: var(--success)">check</mat-icon>
+            } @else {
+              <mat-icon>content_copy</mat-icon>
+            }
+          </button>
+        }
+        <div
+          matSuffix
+          #copiedLinkTooltip="matTooltip"
+          [matTooltip]="'share.copied' | transloco"
+        ></div>
+      </div>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="16px">
+      <div class="qr">
+        <qr-code
+          id="qr-code"
+          [size]="80"
+          [value]="roomJoinUrl + '?entry=qr-downloaded'"
+          [errorCorrectionLevel]="'M'"
+          [margin]="0"
+        ></qr-code>
+      </div>
+      <div fxLayout="column" fxLayoutGap="8px">
+        <button mat-button (click)="downloadRoomJoinQr()">
+          <mat-icon>download</mat-icon>
+          {{ 'share.download-qr-code' | transloco }}
+        </button>
+        <button mat-button (click)="presentQrCode()">
+          <mat-icon>jamboard_kiosk</mat-icon>
+          {{ 'share.present-qr-code' | transloco }}
+        </button>
+      </div>
+    </div>
+  </mat-menu-content>
+</mat-menu>
