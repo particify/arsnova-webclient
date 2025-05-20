@@ -3,9 +3,12 @@ import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
+import { FormsModule } from '@angular/forms';
+import { FlexModule } from '@angular/flex-layout';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 enum BINARY_OPTION {
   NEITHER = 'neither',
@@ -23,7 +26,13 @@ enum BINARY_OPTION {
       useExisting: BinaryContentFormComponent,
     },
   ],
-  standalone: false,
+  imports: [
+    FormsModule,
+    FlexModule,
+    MatRadioGroup,
+    MatRadioButton,
+    TranslocoPipe,
+  ],
 })
 export class BinaryContentFormComponent
   extends FormComponent

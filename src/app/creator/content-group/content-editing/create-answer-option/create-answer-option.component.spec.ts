@@ -16,8 +16,7 @@ describe('CreateAnswerOptionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CreateAnswerOptionComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), CreateAnswerOptionComponent],
       providers: [
         {
           provide: NotificationService,

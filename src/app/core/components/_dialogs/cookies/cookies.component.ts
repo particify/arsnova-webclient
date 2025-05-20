@@ -1,21 +1,42 @@
 import { Component, inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import {
   ConsentGiven,
   CookieCategory,
 } from '@app/core/services/util/consent.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
+import { FlexModule } from '@angular/flex-layout';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-cookies',
   templateUrl: './cookies.component.html',
   styleUrls: ['./cookies.component.scss'],
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    MatSlideToggle,
+    FormsModule,
+    MatDialogActions,
+    FlexModule,
+    MatButton,
+    TranslocoPipe,
+  ],
 })
 export class CookiesComponent {
   private dialogRef = inject<MatDialogRef<CookiesComponent>>(MatDialogRef);

@@ -16,6 +16,10 @@ import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-
 import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
+import { FlexModule } from '@angular/flex-layout';
+import { DividerComponent } from '../../../../standalone/divider/divider.component';
+import { AnswerOptionListComponent as AnswerOptionListComponent_1 } from '../answer-option-list/answer-option-list.component';
+import { CreateAnswerOptionComponent as CreateAnswerOptionComponent_1 } from '../create-answer-option/create-answer-option.component';
 
 @Component({
   selector: 'app-sort-content-form',
@@ -26,7 +30,12 @@ import { ContentForm } from '@app/creator/content-group/content-editing/content-
       useExisting: SortContentFormComponent,
     },
   ],
-  standalone: false,
+  imports: [
+    FlexModule,
+    DividerComponent,
+    AnswerOptionListComponent_1,
+    CreateAnswerOptionComponent_1,
+  ],
 })
 export class SortContentFormComponent
   extends FormComponent

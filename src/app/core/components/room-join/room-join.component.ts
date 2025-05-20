@@ -1,21 +1,52 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
-import { UntypedFormControl, Validators } from '@angular/forms';
+import {
+  UntypedFormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { THINSP } from '@app/core/utils/html-entities';
+import { FlexModule } from '@angular/flex-layout';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { HotkeyDirective } from '../../directives/hotkey.directive';
+import { AutofocusDirective } from '../../directives/autofocus.directive';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { SplitShortIdPipe } from '../../pipes/split-short-id.pipe';
 
 @Component({
   selector: 'app-room-join',
   templateUrl: './room-join.component.html',
   styleUrls: ['./room-join.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    HotkeyDirective,
+    AutofocusDirective,
+    ReactiveFormsModule,
+    MatMiniFabButton,
+    MatSuffix,
+    MatIcon,
+    SplitShortIdPipe,
+    TranslocoPipe,
+  ],
 })
 export class RoomJoinComponent {
   private router = inject(Router);

@@ -16,8 +16,7 @@ describe('AnswerOptionListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AnswerOptionListComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), AnswerOptionListComponent],
       providers: [
         {
           provide: NotificationService,

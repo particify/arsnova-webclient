@@ -22,8 +22,7 @@ describe('RequestPasswordResetComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [RequestPasswordResetComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), RequestPasswordResetComponent],
       providers: [
         {
           provide: UserService,

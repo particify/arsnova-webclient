@@ -21,13 +21,50 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { DrawerService } from '@app/core/services/util/drawer.service';
 import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
 import { PageTitleService } from '@app/core/services/util/page-title.service';
+import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
+import { FlexModule } from '@angular/flex-layout';
+import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { TextOverflowClipComponent } from '../../../standalone/text-overflow-clip/text-overflow-clip.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { SplitButtonComponent } from '../../../standalone/split-button/split-button.component';
+import { MenuItemDetailsComponent } from '../../../standalone/menu-item-details/menu-item-details.component';
+import { MatDivider } from '@angular/material/divider';
+import { HotkeyDirective } from '../../directives/hotkey.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatBadge } from '@angular/material/badge';
+import { NgClass } from '@angular/common';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   providers: [CustomPageTitleStrategy],
-  standalone: false,
+  imports: [
+    MatToolbar,
+    FlexModule,
+    MatToolbarRow,
+    ExtensionPointComponent,
+    ExtendedModule,
+    TextOverflowClipComponent,
+    MatIcon,
+    MatIconButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatButton,
+    SplitButtonComponent,
+    MenuItemDetailsComponent,
+    MatDivider,
+    HotkeyDirective,
+    MatTooltip,
+    MatBadge,
+    NgClass,
+    TranslocoPipe,
+  ],
 })
 export class HeaderComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);

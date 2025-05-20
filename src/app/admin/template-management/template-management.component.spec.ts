@@ -33,11 +33,11 @@ describe('TemplateManagementComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TemplateManagementComponent],
       imports: [
         BrowserAnimationsModule,
         getTranslocoModule(),
         TemplateLanguageSelectionComponent,
+        TemplateManagementComponent,
       ],
       providers: [
         {

@@ -30,8 +30,7 @@ describe('ReportManagementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ReportManagementComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), ReportManagementComponent],
       providers: [
         {
           provide: ViolationReportService,

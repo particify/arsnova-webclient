@@ -13,8 +13,7 @@ describe('ExportComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ExportComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), ExportComponent],
       providers: [
         {
           provide: MatDialogRef,

@@ -7,7 +7,17 @@ import {
 } from '@app/core/services/util/notification.service';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { FlexModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 const MAX_ANSWER_OPTIONS = 12;
 
@@ -15,7 +25,17 @@ const MAX_ANSWER_OPTIONS = 12;
   selector: 'app-create-answer-option',
   templateUrl: './create-answer-option.component.html',
   styleUrls: ['./create-answer-option.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatIconButton,
+    MatSuffix,
+    MatIcon,
+    TranslocoPipe,
+  ],
 })
 export class CreateAnswerOptionComponent extends FormComponent {
   private translateService = inject(TranslocoService);

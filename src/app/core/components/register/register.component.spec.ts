@@ -21,8 +21,7 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RegisterComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), RegisterComponent],
       providers: [
         {
           provide: UserService,

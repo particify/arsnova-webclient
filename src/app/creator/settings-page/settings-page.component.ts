@@ -3,12 +3,12 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { Room } from '@app/core/models/room';
 import { Router } from '@angular/router';
 import { EventService } from '@app/core/services/util/event.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { Location } from '@angular/common';
+import { Location, AsyncPipe } from '@angular/common';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -17,6 +17,21 @@ import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { AutofocusDirective } from '../../core/directives/autofocus.directive';
+import { FlexModule } from '@angular/flex-layout';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { HotkeyDirective } from '../../core/directives/hotkey.directive';
+import { SettingsPanelHeaderComponent } from '../../standalone/settings-panel-header/settings-panel-header.component';
+import { RoomComponent } from '../settings/room/room.component';
+import { CommentSettingsComponent } from '../settings/comment-settings/comment-settings.component';
+import { AccessComponent } from '../settings/access/access.component';
+import { AnnouncementSettingsComponent } from '../settings/announcement-settings/announcement-settings.component';
+import { A11yIntroPipe } from '../../core/pipes/a11y-intro.pipe';
 
 export interface Settings {
   name: string;
@@ -42,7 +57,23 @@ export class UpdateEvent {
   selector: 'app-settings-page',
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss'],
-  standalone: false,
+  imports: [
+    AutofocusDirective,
+    FlexModule,
+    LoadingIndicatorComponent,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    HotkeyDirective,
+    SettingsPanelHeaderComponent,
+    RoomComponent,
+    CommentSettingsComponent,
+    AccessComponent,
+    AnnouncementSettingsComponent,
+    AsyncPipe,
+    A11yIntroPipe,
+    TranslocoPipe,
+  ],
 })
 export class SettingsPageComponent implements OnInit {
   protected roomService = inject(RoomService);

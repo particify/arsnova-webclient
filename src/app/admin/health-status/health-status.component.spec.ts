@@ -8,7 +8,7 @@ describe('HealthStatusComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HealthStatusComponent],
+      imports: [HealthStatusComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HealthStatusComponent);

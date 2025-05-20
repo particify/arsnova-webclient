@@ -38,7 +38,6 @@ describe('RoomComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [RoomComponent],
       providers: [
         {
           provide: NotificationService,
@@ -73,7 +72,7 @@ describe('RoomComponent', () => {
           useValue: mockFocusModeService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), RoomComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

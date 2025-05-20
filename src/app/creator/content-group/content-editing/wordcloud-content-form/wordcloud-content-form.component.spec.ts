@@ -11,14 +11,13 @@ describe('WordcloudContentFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [WordcloudContentFormComponent],
       providers: [
         {
           provide: NotificationService,
           useClass: MockNotificationService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), WordcloudContentFormComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()

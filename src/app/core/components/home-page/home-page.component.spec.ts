@@ -20,7 +20,6 @@ import { ApiConfig } from '@app/core/models/api-config';
 @Component({
   selector: 'lib-extension-point',
   template: '<svg>Particify</svg>',
-  standalone: false,
 })
 class LibExtensionPointStubComponent {
   @Input({ required: true }) extensionId!: string;
@@ -42,8 +41,11 @@ describe('HomePageComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [HomePageComponent, LibExtensionPointStubComponent],
-      imports: [getTranslocoModule()],
+      imports: [
+        getTranslocoModule(),
+        HomePageComponent,
+        LibExtensionPointStubComponent,
+      ],
       providers: [
         {
           provide: EventService,

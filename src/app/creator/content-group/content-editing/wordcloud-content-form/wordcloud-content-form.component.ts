@@ -3,12 +3,15 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 const MAX_KEYWORDS = 10;
 
@@ -22,7 +25,7 @@ const MAX_KEYWORDS = 10;
       useExisting: WordcloudContentFormComponent,
     },
   ],
-  standalone: false,
+  imports: [MatFormField, MatLabel, MatInput, FormsModule, TranslocoPipe],
 })
 export class WordcloudContentFormComponent
   extends FormComponent

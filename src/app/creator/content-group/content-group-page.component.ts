@@ -8,7 +8,13 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
 import {
@@ -36,7 +42,7 @@ import {
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { CreateContentGroupTemplateComponent } from '@app/creator/content-group/_dialogs/create-content-group-template/create-content-group-template.component';
 import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   Observable,
   Subject,
@@ -49,6 +55,24 @@ import {
   filter,
 } from 'rxjs';
 import { ContentGroupPageService } from './content-group-page.service';
+import { FlexModule } from '@angular/flex-layout';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { HotkeyDirective } from '../../core/directives/hotkey.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { ExtensionPointComponent } from '../../../../projects/extension-point/src/lib/extension-point.component';
+import { TrackInteractionDirective } from '../../core/directives/track-interaction.directive';
+import { FeatureFlagDirective } from '../../core/directives/feature-flag.directive';
+import { MatDivider } from '@angular/material/divider';
+import { ContentGroupInfoComponent } from '../../standalone/content-group-info/content-group-info.component';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { ContentListComponent } from './content-list/content-list.component';
+import { MatCard } from '@angular/material/card';
+import { BackButtonComponent } from '../../standalone/back-button/back-button.component';
 
 const STATS_REFRESH_INTERVAL = 10000;
 const STATS_REFRESH_LIMIT = 60;
@@ -68,7 +92,32 @@ export interface ContentStats {
   selector: 'app-content-group-page',
   templateUrl: './content-group-page.component.html',
   styleUrls: ['./content-group-page.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    LoadingIndicatorComponent,
+    MatButton,
+    HotkeyDirective,
+    RouterLink,
+    MatIcon,
+    MatIconButton,
+    MatTooltip,
+    NgClass,
+    ExtendedModule,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    ExtensionPointComponent,
+    TrackInteractionDirective,
+    FeatureFlagDirective,
+    MatDivider,
+    ContentGroupInfoComponent,
+    MatProgressBar,
+    ContentListComponent,
+    MatCard,
+    RouterOutlet,
+    BackButtonComponent,
+    TranslocoPipe,
+  ],
 })
 export class ContentGroupPageComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

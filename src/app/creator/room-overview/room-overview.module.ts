@@ -15,7 +15,6 @@ import { LiveFeedbackCardComponent } from '@app/standalone/feature-card/live-fee
 import { CommentsCardComponent } from '@app/standalone/feature-card/comments-card/comments-card.component';
 
 @NgModule({
-  declarations: [RoomOverviewPageComponent],
   imports: [
     CommonModule,
     RoomOverviewRoutingModule,
@@ -29,6 +28,7 @@ import { CommentsCardComponent } from '@app/standalone/feature-card/comments-car
     RenderedTextComponent,
     LiveFeedbackCardComponent,
     CommentsCardComponent,
+    RoomOverviewPageComponent,
   ],
 })
 export class RoomOverviewModule {}

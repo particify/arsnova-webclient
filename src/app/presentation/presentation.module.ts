@@ -17,11 +17,6 @@ import { ContentPresentationMenuComponent } from '@app/standalone/content-presen
 import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
 
 @NgModule({
-  declarations: [
-    ControlBarComponent,
-    PresentationComponent,
-    KeyButtonBarComponent,
-  ],
   imports: [
     extensions,
     PresentationRoutingModule,
@@ -35,6 +30,9 @@ import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-f
     ContentPresentationMenuComponent,
     CommentFilterComponent,
     PublishContentGroupDialogComponent,
+    ControlBarComponent,
+    PresentationComponent,
+    KeyButtonBarComponent,
   ],
   providers: [provideTranslocoScope('creator'), FocusModeService],
 })

@@ -58,8 +58,6 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
     NavBarComponent,
     DetailRadioGroupComponent,
     LanguageContextDirective,
-  ],
-  declarations: [
     RoomComponent,
     AccessComponent,
     CommentSettingsComponent,

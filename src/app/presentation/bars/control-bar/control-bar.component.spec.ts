@@ -155,8 +155,12 @@ describe('ControlBarComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ControlBarComponent, SplitShortIdPipe],
-      imports: [getTranslocoModule(), MatMenuModule],
+      imports: [
+        getTranslocoModule(),
+        MatMenuModule,
+        ControlBarComponent,
+        SplitShortIdPipe,
+      ],
       providers: [
         {
           provide: RoomStatsService,

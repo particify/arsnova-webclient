@@ -8,10 +8,7 @@ import {
 } from '@angular/core';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 
-@Directive({
-  selector: '[appFeatureFlag]',
-  standalone: false,
-})
+@Directive({ selector: '[appFeatureFlag]' })
 export class FeatureFlagDirective implements OnInit {
   private featureFlagService = inject(FeatureFlagService);
   private templateRef = inject<TemplateRef<unknown>>(TemplateRef);

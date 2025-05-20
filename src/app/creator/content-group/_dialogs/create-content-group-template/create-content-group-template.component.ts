@@ -1,5 +1,11 @@
 import { Component, ViewChild, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -7,13 +13,28 @@ import {
 import { TemplateService } from '@app/creator/_services/template.service';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FlexModule } from '@angular/flex-layout';
+import { ContentGroupTemplateEditingComponent as ContentGroupTemplateEditingComponent_1 } from '../../../../standalone/content-group-template-editing/content-group-template-editing.component';
+import { MatButton } from '@angular/material/button';
+import { LoadingButtonComponent } from '../../../../standalone/loading-button/loading-button.component';
 
 @Component({
   selector: 'app-create-content-group-template',
   templateUrl: './create-content-group-template.component.html',
   styleUrls: ['./create-content-group-template.component.scss'],
-  standalone: false,
+  imports: [
+    MatDialogTitle,
+    CdkScrollable,
+    MatDialogContent,
+    FlexModule,
+    ContentGroupTemplateEditingComponent_1,
+    MatDialogActions,
+    MatButton,
+    LoadingButtonComponent,
+    TranslocoPipe,
+  ],
 })
 export class CreateContentGroupTemplateComponent extends FormComponent {
   private dialogRef =

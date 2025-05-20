@@ -1,6 +1,14 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { ActivatedRoute } from '@angular/router';
+import { FlexModule } from '@angular/flex-layout';
+import { AdminPageHeaderComponent } from '../admin-page-header/admin-page-header.component';
+import { ExtensionPointComponent } from '../../../../projects/extension-point/src/lib/extension-point.component';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatCard } from '@angular/material/card';
+import { EntityPropertiesComponent } from '../entity-properties/entity-properties.component';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 export class AdminStats {
   userProfile: object;
@@ -46,7 +54,17 @@ export class AdminStats {
   selector: 'app-system-statistics',
   templateUrl: './system-statistics.component.html',
   styleUrls: ['../admin-styles.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    AdminPageHeaderComponent,
+    ExtensionPointComponent,
+    LoadingIndicatorComponent,
+    MatTabGroup,
+    MatTab,
+    MatCard,
+    EntityPropertiesComponent,
+    TranslocoPipe,
+  ],
 })
 export class SystemStatisticsComponent implements OnInit {
   protected systemInfoService = inject(SystemInfoService);

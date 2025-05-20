@@ -16,8 +16,11 @@ describe('ChoiceContentFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ChoiceContentFormComponent],
-      imports: [getTranslocoModule(), MatButtonModule],
+      imports: [
+        getTranslocoModule(),
+        MatButtonModule,
+        ChoiceContentFormComponent,
+      ],
       providers: [
         {
           provide: ContentService,

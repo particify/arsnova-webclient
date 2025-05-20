@@ -34,7 +34,7 @@ describe('RedeemTokenComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RedeemTokenComponent],
+      imports: [RedeemTokenComponent],
       providers: [
         {
           provide: Router,

@@ -15,8 +15,7 @@ describe('HotkeysComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [HotkeysComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), HotkeysComponent],
       providers: [
         {
           provide: MAT_DIALOG_DATA,

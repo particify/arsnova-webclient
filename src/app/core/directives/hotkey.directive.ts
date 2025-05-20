@@ -20,10 +20,7 @@ export enum HotkeyAction {
 
 const NON_TEXT_INPUT_TYPES = ['button', 'checkbox', 'radio'];
 
-@Directive({
-  selector: '[appHotkey]',
-  standalone: false,
-})
+@Directive({ selector: '[appHotkey]' })
 export class HotkeyDirective implements OnDestroy, OnChanges {
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private hotkeyService = inject(HotkeyService);

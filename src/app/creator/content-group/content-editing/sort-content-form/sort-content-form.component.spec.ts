@@ -15,8 +15,7 @@ describe('SortContentFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SortContentFormComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), SortContentFormComponent],
       providers: [
         {
           provide: ContentService,

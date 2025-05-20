@@ -14,7 +14,6 @@ import { CommentComponent } from '@app/standalone/comment/comment.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @NgModule({
-  declarations: [CommentsPageComponent, CommentListBarExtensionComponent],
   imports: [
     CommentsRoutingModule,
     ExtensionPointModule,
@@ -26,6 +25,8 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
     CommentListAddButtonComponent,
     CommentComponent,
     LoadingIndicatorComponent,
+    CommentsPageComponent,
+    CommentListBarExtensionComponent,
   ],
 })
 export class CommentsModule {}

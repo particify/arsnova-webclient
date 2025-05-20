@@ -8,7 +8,7 @@ describe('FormHeaderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FormHeaderComponent],
+      imports: [FormHeaderComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

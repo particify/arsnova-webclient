@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { TemplateService } from '@app/admin/template-management/template.service';
 import { TemplateTag } from '@app/core/models/template-tag';
@@ -9,8 +9,21 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { forkJoin } from 'rxjs';
+import { FlexModule } from '@angular/flex-layout';
+import { AdminPageHeaderComponent } from '../admin-page-header/admin-page-header.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { TemplateLanguageSelectionComponent } from '../../standalone/template-language-selection/template-language-selection.component';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { MatActionList, MatListItem } from '@angular/material/list';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { NgStyle } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
 
 enum FILTER {
   ALL = 'all',
@@ -22,7 +35,26 @@ enum FILTER {
   selector: 'app-template-management',
   templateUrl: './template-management.component.html',
   styleUrls: ['./template-management.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    AdminPageHeaderComponent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelect,
+    MatOption,
+    TemplateLanguageSelectionComponent,
+    LoadingIndicatorComponent,
+    MatActionList,
+    MatListItem,
+    MatIconButton,
+    MatIcon,
+    NgStyle,
+    ExtendedModule,
+    TranslocoPipe,
+  ],
 })
 export class TemplateManagementComponent
   extends FormComponent

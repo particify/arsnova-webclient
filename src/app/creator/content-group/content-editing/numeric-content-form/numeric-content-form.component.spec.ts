@@ -11,14 +11,13 @@ describe('NumericContentFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [NumericContentFormComponent],
       providers: [
         {
           provide: NotificationService,
           useClass: MockNotificationService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), NumericContentFormComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()

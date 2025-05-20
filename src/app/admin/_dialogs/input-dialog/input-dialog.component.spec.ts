@@ -29,8 +29,7 @@ describe('InputDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InputDialogComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), InputDialogComponent],
       providers: [
         {
           provide: MatDialogRef,

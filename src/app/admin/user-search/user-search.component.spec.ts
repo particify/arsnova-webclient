@@ -16,7 +16,7 @@ describe('UserSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserSearchComponent],
+      imports: [UserSearchComponent],
       providers: [
         {
           provide: UserService,

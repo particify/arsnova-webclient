@@ -43,7 +43,6 @@ describe('CommentSettingsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CommentSettingsComponent],
       providers: [
         {
           provide: MatDialog,
@@ -78,7 +77,7 @@ describe('CommentSettingsComponent', () => {
           useClass: MockEventService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), CommentSettingsComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

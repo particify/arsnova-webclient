@@ -25,8 +25,11 @@ describe('CommentListBarExtensionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CommentListBarExtensionComponent],
-      imports: [getTranslocoModule(), MatMenuModule],
+      imports: [
+        getTranslocoModule(),
+        MatMenuModule,
+        CommentListBarExtensionComponent,
+      ],
       providers: [
         {
           provide: DialogService,

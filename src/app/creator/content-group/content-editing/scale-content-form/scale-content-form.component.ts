@@ -10,6 +10,14 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { MatList, MatListItem } from '@angular/material/list';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-scale-content-form',
@@ -21,7 +29,19 @@ import { ContentType } from '@app/core/models/content-type.enum';
       useExisting: ScaleContentFormComponent,
     },
   ],
-  standalone: false,
+  imports: [
+    MatCheckbox,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    TranslocoDirective,
+    MatList,
+    MatListItem,
+    FlexModule,
+    TranslocoPipe,
+  ],
 })
 export class ScaleContentFormComponent
   extends FormComponent

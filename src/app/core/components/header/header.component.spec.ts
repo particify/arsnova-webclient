@@ -74,7 +74,6 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [HeaderComponent],
       imports: [
         BrowserAnimationsModule,
         ReactiveFormsModule,
@@ -82,6 +81,7 @@ describe('HeaderComponent', () => {
         MatMenuModule,
         getTranslocoModule(),
         HttpClientTestingModule,
+        HeaderComponent,
       ],
       providers: [
         {

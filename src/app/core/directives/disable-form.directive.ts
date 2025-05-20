@@ -1,10 +1,7 @@
 import { Directive, ElementRef, OnInit, inject } from '@angular/core';
 import { FormService } from '@app/core/services/util/form.service';
 
-@Directive({
-  selector: '[appDisableForm]',
-  standalone: false,
-})
+@Directive({ selector: '[appDisableForm]' })
 export class DisableFormDirective implements OnInit {
   private elementRef = inject(ElementRef);
   private formService = inject(FormService);

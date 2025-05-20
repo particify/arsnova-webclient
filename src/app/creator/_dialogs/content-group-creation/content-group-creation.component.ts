@@ -3,12 +3,14 @@ import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
+  MatDialogContent,
+  MatDialogActions,
 } from '@angular/material/dialog';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   ContentGroup,
@@ -18,6 +20,14 @@ import {
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
 import { DetailedRadioGroup } from '@app/standalone/detail-radio-group/detail-radio-group.component';
+import { FormsModule } from '@angular/forms';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FlexModule } from '@angular/flex-layout';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { DetailRadioGroupComponent } from '../../../standalone/detail-radio-group/detail-radio-group.component';
+import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
+import { MatButton } from '@angular/material/button';
 
 interface DialogData {
   roomId?: string;
@@ -28,7 +38,21 @@ interface DialogData {
   selector: 'app-content-group-creation',
   templateUrl: './content-group-creation.component.html',
   styleUrl: './content-group-creation.component.scss',
-  standalone: false,
+  imports: [
+    FormsModule,
+    CdkScrollable,
+    MatDialogContent,
+    FlexModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatHint,
+    DetailRadioGroupComponent,
+    MatDialogActions,
+    LoadingButtonComponent,
+    MatButton,
+    TranslocoPipe,
+  ],
 })
 export class ContentGroupCreationComponent extends FormComponent {
   dialogRef = inject<MatDialogRef<ContentGroupCreationComponent>>(MatDialogRef);

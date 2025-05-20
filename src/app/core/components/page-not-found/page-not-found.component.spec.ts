@@ -9,7 +9,7 @@ describe('PageNotFoundComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PageNotFoundComponent],
+      imports: [PageNotFoundComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

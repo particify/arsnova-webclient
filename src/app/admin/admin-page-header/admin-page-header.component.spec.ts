@@ -9,8 +9,7 @@ describe('AdminPageHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AdminPageHeaderComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), AdminPageHeaderComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminPageHeaderComponent);

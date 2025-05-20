@@ -29,8 +29,7 @@ describe('UserActivationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserActivationComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), UserActivationComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         {

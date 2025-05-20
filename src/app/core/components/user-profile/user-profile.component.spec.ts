@@ -59,8 +59,7 @@ describe('UserProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserProfileComponent, A11yIntroPipe],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), UserProfileComponent, A11yIntroPipe],
       providers: [
         {
           provide: Router,

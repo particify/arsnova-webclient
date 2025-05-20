@@ -26,8 +26,7 @@ describe('CreateContentGroupTemplateComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateContentGroupTemplateComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), CreateContentGroupTemplateComponent],
       providers: [
         {
           provide: NotificationService,

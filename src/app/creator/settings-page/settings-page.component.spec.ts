@@ -26,7 +26,6 @@ describe('SettingsPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SettingsPageComponent, A11yIntroPipe],
       providers: [
         {
           provide: RoomService,
@@ -49,7 +48,7 @@ describe('SettingsPageComponent', () => {
           useClass: MockNotificationService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), SettingsPageComponent, A11yIntroPipe],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

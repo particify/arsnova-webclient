@@ -40,8 +40,7 @@ describe('RoomCreateComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [RoomCreateComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), RoomCreateComponent],
       providers: [
         {
           provide: NotificationService,

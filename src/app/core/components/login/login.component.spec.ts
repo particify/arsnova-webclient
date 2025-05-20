@@ -45,8 +45,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [LoginComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), LoginComponent],
       providers: [
         {
           provide: AuthenticationService,

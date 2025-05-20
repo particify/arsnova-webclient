@@ -36,8 +36,7 @@ describe('UpdateInfoComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UpdateInfoComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), UpdateInfoComponent],
       providers: [
         {
           provide: GlobalStorageService,

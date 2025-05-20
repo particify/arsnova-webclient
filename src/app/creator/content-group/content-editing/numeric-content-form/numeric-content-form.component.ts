@@ -3,12 +3,18 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { FlexModule } from '@angular/flex-layout';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-seperator.pipe';
 
 const MAX_VALUE = 1_000_000_000_000_000; // Maximum value is up (or down) to one quadrillion
 
@@ -22,7 +28,16 @@ const MAX_VALUE = 1_000_000_000_000_000; // Maximum value is up (or down) to one
       useExisting: NumericContentFormComponent,
     },
   ],
-  standalone: false,
+  imports: [
+    FlexModule,
+    MatCheckbox,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    LocalizeDecimalSeperatorPipe,
+    TranslocoPipe,
+  ],
 })
 export class NumericContentFormComponent
   extends FormComponent

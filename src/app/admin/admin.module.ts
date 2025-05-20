@@ -38,8 +38,6 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
     TemplateLanguageSelectionComponent,
     NavigationDrawerComponent,
     LoadingIndicatorComponent,
-  ],
-  declarations: [
     AdminHomeComponent,
     SummaryBarComponent,
     SystemStatusComponent,

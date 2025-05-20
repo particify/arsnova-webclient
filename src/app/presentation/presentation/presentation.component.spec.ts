@@ -52,8 +52,7 @@ describe('PresentationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PresentationComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), PresentationComponent],
       providers: [
         {
           provide: RoomStatsService,

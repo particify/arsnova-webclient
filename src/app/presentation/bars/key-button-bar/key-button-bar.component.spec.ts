@@ -10,8 +10,7 @@ describe('KeyButtonBarComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [KeyButtonBarComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), KeyButtonBarComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {

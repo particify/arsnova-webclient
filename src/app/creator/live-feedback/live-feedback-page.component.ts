@@ -7,12 +7,44 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormService } from '@app/core/services/util/form.service';
 import { Message } from '@stomp/stompjs';
 import { takeUntil } from 'rxjs';
+import { AutofocusDirective } from '../../core/directives/autofocus.directive';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { BaseCardComponent } from '../../standalone/base-card/base-card.component';
+import { FlexModule } from '@angular/flex-layout';
+import { LiveFeedbackComponent } from '../../standalone/live-feedback/live-feedback.component';
+import { NgClass, AsyncPipe } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { MatButton } from '@angular/material/button';
+import { TrackInteractionDirective } from '../../core/directives/track-interaction.directive';
+import { DisableFormDirective } from '../../core/directives/disable-form.directive';
+import { HotkeyDirective } from '../../core/directives/hotkey.directive';
+import { AnswerCountComponent } from '../../standalone/answer-count/answer-count.component';
+import { LoadingButtonComponent } from '../../standalone/loading-button/loading-button.component';
+import { A11yIntroPipe } from '../../core/pipes/a11y-intro.pipe';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
   styleUrls: ['./live-feedback-page.component.scss'],
-  standalone: false,
+  imports: [
+    AutofocusDirective,
+    LoadingIndicatorComponent,
+    BaseCardComponent,
+    FlexModule,
+    LiveFeedbackComponent,
+    NgClass,
+    ExtendedModule,
+    MatButton,
+    TrackInteractionDirective,
+    DisableFormDirective,
+    HotkeyDirective,
+    AnswerCountComponent,
+    LoadingButtonComponent,
+    AsyncPipe,
+    A11yIntroPipe,
+    TranslocoPipe,
+  ],
 })
 export class LiveFeedbackPageComponent
   extends AbstractLiveFeedbackPageComponent

@@ -4,8 +4,7 @@ import { CoreModule } from '@app/core/core.module';
 import { EntityPropertiesComponent } from './entity-properties/entity-properties.component';
 
 @NgModule({
-  imports: [CoreModule, MatTreeModule],
-  declarations: [EntityPropertiesComponent],
+  imports: [CoreModule, MatTreeModule, EntityPropertiesComponent],
   exports: [EntityPropertiesComponent],
 })
 export class SharedAdminModule {}

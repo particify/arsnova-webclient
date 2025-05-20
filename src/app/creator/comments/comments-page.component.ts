@@ -1,4 +1,4 @@
-import { Location } from '@angular/common';
+import { Location, AsyncPipe } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentSettings } from '@app/core/models/comment-settings';
@@ -11,6 +11,20 @@ import {
 import { Message } from '@stomp/stompjs';
 import { Observable, takeUntil } from 'rxjs';
 import { FormService } from '@app/core/services/util/form.service';
+import { FlexModule } from '@angular/flex-layout';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { AutofocusDirective } from '../../core/directives/autofocus.directive';
+import { CommentListBarComponent } from '../../standalone/comment-list-bar/comment-list-bar.component';
+import { CommentListBarExtensionComponent } from './comment-list-bar-extension/comment-list-bar-extension.component';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { CommentSettingsHintComponent } from '../../standalone/comment-settings-hint/comment-settings-hint.component';
+import { CommentListHintComponent } from '../../standalone/comment-list-hint/comment-list-hint.component';
+import { CommentComponent } from '../../standalone/comment/comment.component';
+import { CommentListAddButtonComponent } from '../../standalone/comment-list-add-button/comment-list-add-button.component';
+import { CommentListFloatingButtonsComponent } from '../../standalone/comment-list-floating-buttons/comment-list-floating-buttons.component';
+import { CounterBracesPipe } from '../../core/pipes/counter-braces.pipe';
+import { A11yIntroPipe } from '../../core/pipes/a11y-intro.pipe';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 const TAB_GROUP_HEIGHT = 48;
 
@@ -18,7 +32,24 @@ const TAB_GROUP_HEIGHT = 48;
   selector: 'app-comments-page',
   templateUrl: './comments-page.component.html',
   styleUrls: ['../../common/styles/comments-page.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    MatTabGroup,
+    AutofocusDirective,
+    MatTab,
+    CommentListBarComponent,
+    CommentListBarExtensionComponent,
+    LoadingIndicatorComponent,
+    CommentSettingsHintComponent,
+    CommentListHintComponent,
+    CommentComponent,
+    CommentListAddButtonComponent,
+    CommentListFloatingButtonsComponent,
+    AsyncPipe,
+    CounterBracesPipe,
+    A11yIntroPipe,
+    TranslocoPipe,
+  ],
 })
 export class CommentsPageComponent
   extends AbstractCommentsPageComponent

@@ -30,8 +30,7 @@ describe('ContentGroupCreationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentGroupCreationComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), ContentGroupCreationComponent],
       providers: [
         {
           provide: NotificationService,

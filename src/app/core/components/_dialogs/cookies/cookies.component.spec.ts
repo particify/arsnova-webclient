@@ -44,8 +44,7 @@ describe('CookiesComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CookiesComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), CookiesComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         {

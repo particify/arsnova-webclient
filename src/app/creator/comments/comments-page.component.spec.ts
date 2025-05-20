@@ -72,8 +72,12 @@ describe('CommentsPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CommentsPageComponent],
-      imports: [CoreModule, getTranslocoModule(), BrowserAnimationsModule],
+      imports: [
+        CoreModule,
+        getTranslocoModule(),
+        BrowserAnimationsModule,
+        CommentsPageComponent,
+      ],
       providers: [
         {
           provide: CommentService,

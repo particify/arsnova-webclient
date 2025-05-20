@@ -15,8 +15,7 @@ describe('PrioritizationContentFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PrioritizationContentFormComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), PrioritizationContentFormComponent],
       providers: [
         {
           provide: ContentService,

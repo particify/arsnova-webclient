@@ -16,8 +16,11 @@ describe('ShortAnswerContentFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ShortAnswerContentFormComponent],
-      imports: [getTranslocoModule(), MatButtonModule],
+      imports: [
+        getTranslocoModule(),
+        MatButtonModule,
+        ShortAnswerContentFormComponent,
+      ],
       providers: [
         {
           provide: ContentService,

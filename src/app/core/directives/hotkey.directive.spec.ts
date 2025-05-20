@@ -17,7 +17,6 @@ import { HotkeyDirective } from './hotkey.directive';
   >
     Hotkey Button
   </button>`,
-  standalone: false,
 })
 class TestComponent {
   @ViewChild('button') button!: HTMLButtonElement;
@@ -34,7 +33,7 @@ describe('HotkeyDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      declarations: [HotkeyDirective, TestComponent],
+      imports: [HotkeyDirective, TestComponent],
       providers: [
         {
           provide: HotkeyService,

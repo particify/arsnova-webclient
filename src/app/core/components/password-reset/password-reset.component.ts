@@ -4,6 +4,8 @@ import {
   FormGroupDirective,
   NgForm,
   Validators,
+  FormsModule,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UserService } from '@app/core/services/http/user.service';
@@ -11,12 +13,18 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { Router } from '@angular/router';
 import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
+import { FlexModule } from '@angular/flex-layout';
+import { MatCard } from '@angular/material/card';
+import { PasswordEntryComponent as PasswordEntryComponent_1 } from '../password-entry/password-entry.component';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -36,7 +44,19 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
   styleUrls: ['./password-reset.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    MatCard,
+    FormsModule,
+    PasswordEntryComponent_1,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    MatError,
+    LoadingButtonComponent,
+    TranslocoPipe,
+  ],
 })
 export class PasswordResetComponent extends FormComponent implements OnInit {
   private translationService = inject(TranslocoService);

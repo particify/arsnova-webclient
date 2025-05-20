@@ -67,8 +67,12 @@ describe('RoomListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [RoomListComponent, SplitShortIdPipe],
-      imports: [getTranslocoModule(), MatMenuModule],
+      imports: [
+        getTranslocoModule(),
+        MatMenuModule,
+        RoomListComponent,
+        SplitShortIdPipe,
+      ],
       providers: [
         {
           provide: RoomService,

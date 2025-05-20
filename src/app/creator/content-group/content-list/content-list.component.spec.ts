@@ -103,7 +103,6 @@ describe('ContentListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentListComponent, A11yIntroPipe, A11yRenderedBodyPipe],
       providers: [
         {
           provide: ContentService,
@@ -150,7 +149,13 @@ describe('ContentListComponent', () => {
           useValue: activatedRouteStub,
         },
       ],
-      imports: [getTranslocoModule(), MatMenuModule],
+      imports: [
+        getTranslocoModule(),
+        MatMenuModule,
+        ContentListComponent,
+        A11yIntroPipe,
+        A11yRenderedBodyPipe,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
     fixture = TestBed.createComponent(ContentListComponent);

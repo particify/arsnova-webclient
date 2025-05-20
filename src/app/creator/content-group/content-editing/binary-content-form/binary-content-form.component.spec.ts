@@ -10,9 +10,8 @@ describe('BinaryContentFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [BinaryContentFormComponent],
       providers: [],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), BinaryContentFormComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()

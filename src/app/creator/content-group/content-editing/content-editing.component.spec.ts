@@ -81,7 +81,6 @@ describe('ContentEditingComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentEditingComponent, A11yIntroPipe],
       providers: [
         {
           provide: DialogService,
@@ -133,7 +132,12 @@ describe('ContentEditingComponent', () => {
         },
         ContentGroupPageService,
       ],
-      imports: [getTranslocoModule(), MatMenuModule],
+      imports: [
+        getTranslocoModule(),
+        MatMenuModule,
+        ContentEditingComponent,
+        A11yIntroPipe,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

@@ -28,7 +28,6 @@ describe('AnnouncementSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AnnouncementSettingsComponent],
       providers: [
         {
           provide: NotificationService,
@@ -43,7 +42,7 @@ describe('AnnouncementSettingsComponent', () => {
           useValue: dialogService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), AnnouncementSettingsComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

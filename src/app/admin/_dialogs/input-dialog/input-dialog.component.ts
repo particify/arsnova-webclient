@@ -1,13 +1,30 @@
 import { Component, EventEmitter, inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  FormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 import { FormService } from '@app/core/services/util/form.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { SearchBarComponent } from '../../search-bar/search-bar.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FlexModule } from '@angular/flex-layout';
+import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
+import { MatButton } from '@angular/material/button';
 
 export interface DialogData {
   inputName: string;
@@ -19,7 +36,21 @@ export interface DialogData {
 @Component({
   selector: 'app-input-dialog',
   templateUrl: './input-dialog.component.html',
-  standalone: false,
+  imports: [
+    FormsModule,
+    CdkScrollable,
+    MatDialogContent,
+    SearchBarComponent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    FlexModule,
+    MatDialogActions,
+    LoadingButtonComponent,
+    MatButton,
+    TranslocoPipe,
+  ],
 })
 export class InputDialogComponent extends UserSearchComponent {
   private dialogRef = inject<MatDialogRef<InputDialogComponent>>(MatDialogRef);

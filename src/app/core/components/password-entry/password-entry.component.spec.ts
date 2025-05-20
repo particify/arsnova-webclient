@@ -11,8 +11,7 @@ describe('PasswordEntryComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [PasswordEntryComponent],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), PasswordEntryComponent],
       providers: [
         {
           provide: NotificationService,

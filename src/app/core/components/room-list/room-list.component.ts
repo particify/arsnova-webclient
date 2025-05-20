@@ -10,8 +10,8 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
-import { Router } from '@angular/router';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { Router, RouterLink } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
@@ -33,6 +33,29 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
 import { ExtensionFactory } from '@projects/extension-point/src/lib/extension-factory';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { FlexModule } from '@angular/flex-layout';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import {
+  MatButton,
+  MatFabButton,
+  MatIconButton,
+} from '@angular/material/button';
+import { HotkeyDirective } from '../../directives/hotkey.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { NgClass } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { MatPrefix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatActionList, MatListItem, MatList } from '@angular/material/list';
+import { TextOverflowClipComponent } from '../../../standalone/text-overflow-clip/text-overflow-clip.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ListBadgeComponent } from '../../../standalone/list-badge/list-badge.component';
+import { MatBadge } from '@angular/material/badge';
+import { TrackInteractionDirective } from '../../directives/track-interaction.directive';
+import { SplitShortIdPipe } from '../../pipes/split-short-id.pipe';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
 
@@ -46,7 +69,36 @@ interface RoomDataView {
   selector: 'app-room-list',
   templateUrl: './room-list.component.html',
   styleUrls: ['./room-list.component.scss'],
-  standalone: false,
+  imports: [
+    LoadingIndicatorComponent,
+    ExtensionPointComponent,
+    FlexModule,
+    MatCard,
+    MatButton,
+    HotkeyDirective,
+    MatIcon,
+    MatMenuTrigger,
+    NgClass,
+    ExtendedModule,
+    MatPrefix,
+    MatInput,
+    MatFabButton,
+    MatMenu,
+    MatMenuItem,
+    RouterLink,
+    MatActionList,
+    MatListItem,
+    TextOverflowClipComponent,
+    MatTooltip,
+    ListBadgeComponent,
+    MatIconButton,
+    MatCardContent,
+    MatList,
+    MatBadge,
+    TrackInteractionDirective,
+    SplitShortIdPipe,
+    TranslocoPipe,
+  ],
 })
 export class RoomListComponent implements OnInit, OnDestroy {
   private roomService = inject(RoomService);

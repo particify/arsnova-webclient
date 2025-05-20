@@ -11,7 +11,6 @@ import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @NgModule({
-  declarations: [LiveFeedbackPageComponent],
   imports: [
     CommonModule,
     CoreModule,
@@ -21,6 +20,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     LoadingIndicatorComponent,
     AnswerCountComponent,
     LoadingButtonComponent,
+    LiveFeedbackPageComponent,
   ],
 })
 export class LiveFeedbackModule {}

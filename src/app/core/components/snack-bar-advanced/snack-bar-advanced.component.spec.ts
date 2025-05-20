@@ -14,7 +14,7 @@ describe('SnackBarAdvancedComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SnackBarAdvancedComponent],
+      imports: [SnackBarAdvancedComponent],
       providers: [
         {
           provide: MAT_SNACK_BAR_DATA,

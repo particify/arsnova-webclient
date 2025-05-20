@@ -11,7 +11,7 @@ describe('ExtensionPointComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ExtensionPointComponent],
+      imports: [ExtensionPointComponent],
       providers: [
         ExtensionFactory,
         {

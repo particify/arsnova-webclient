@@ -6,8 +6,14 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
-import { TranslocoService } from '@jsverse/transloco';
+import {
+  UntypedFormControl,
+  ValidatorFn,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -15,6 +21,20 @@ import {
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import { FormComponent } from '@app/standalone/form/form.component';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+  MatError,
+  MatHint,
+} from '@angular/material/form-field';
+import { NgClass } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { FlexModule } from '@angular/flex-layout';
 
 enum Strength {
   WEAK = 1,
@@ -40,7 +60,23 @@ const PATTERNS: RegExp[] = [
   selector: 'app-password-entry',
   templateUrl: './password-entry.component.html',
   styleUrls: ['./password-entry.component.scss'],
-  standalone: false,
+  imports: [
+    MatFormField,
+    NgClass,
+    ExtendedModule,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconButton,
+    MatSuffix,
+    MatTooltip,
+    MatIcon,
+    MatError,
+    FlexModule,
+    MatHint,
+    TranslocoPipe,
+  ],
 })
 export class PasswordEntryComponent
   extends FormComponent

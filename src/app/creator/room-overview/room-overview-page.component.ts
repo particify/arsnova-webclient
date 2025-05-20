@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
@@ -15,12 +15,46 @@ import { GroupType } from '@app/core/models/content-group';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { FlexModule } from '@angular/flex-layout';
+import { AutofocusDirective } from '../../core/directives/autofocus.directive';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { CommentsCardComponent } from '../../standalone/feature-card/comments-card/comments-card.component';
+import { LiveFeedbackCardComponent } from '../../standalone/feature-card/live-feedback-card/live-feedback-card.component';
+import { FeatureCardComponent } from '../../standalone/feature-card/feature-card.component';
+import { MatButton } from '@angular/material/button';
+import { HotkeyDirective } from '../../core/directives/hotkey.directive';
+import { MatIcon } from '@angular/material/icon';
+import { FeatureFlagDirective } from '../../core/directives/feature-flag.directive';
+import { MatCard } from '@angular/material/card';
+import { MatRipple } from '@angular/material/core';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ContentGroupsComponent } from '../../standalone/content-groups/content-groups.component';
+import { AsyncPipe } from '@angular/common';
+import { A11yIntroPipe } from '../../core/pipes/a11y-intro.pipe';
 
 @Component({
   selector: 'app-creator-overview',
   templateUrl: './room-overview-page.component.html',
   styleUrls: ['./room-overview-page.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    AutofocusDirective,
+    LoadingIndicatorComponent,
+    CommentsCardComponent,
+    LiveFeedbackCardComponent,
+    FeatureCardComponent,
+    MatButton,
+    HotkeyDirective,
+    MatIcon,
+    FeatureFlagDirective,
+    MatCard,
+    MatRipple,
+    MatTooltip,
+    ContentGroupsComponent,
+    AsyncPipe,
+    A11yIntroPipe,
+    TranslocoPipe,
+  ],
 })
 export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent

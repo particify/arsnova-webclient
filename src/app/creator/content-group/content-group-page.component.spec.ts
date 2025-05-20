@@ -129,12 +129,14 @@ describe('ContentGroupPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
+      imports: [
+        CoreModule,
+        getTranslocoModule(),
+        BrowserAnimationsModule,
         ContentGroupPageComponent,
         A11yIntroPipe,
         A11yRenderedBodyPipe,
       ],
-      imports: [CoreModule, getTranslocoModule(), BrowserAnimationsModule],
       providers: [
         {
           provide: ContentService,

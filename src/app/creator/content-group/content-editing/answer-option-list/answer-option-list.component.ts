@@ -6,13 +6,38 @@ import {
 } from '@app/core/services/util/notification.service';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-base.component';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { MatList, MatListItem } from '@angular/material/list';
+import { CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { FlexModule } from '@angular/flex-layout';
+import { MatIcon } from '@angular/material/icon';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-answer-option-list',
   templateUrl: './answer-option-list.component.html',
   styleUrls: ['./answer-option-list.component.scss'],
-  standalone: false,
+  imports: [
+    MatList,
+    CdkDropList,
+    MatListItem,
+    CdkDrag,
+    FlexModule,
+    CdkDragHandle,
+    MatIcon,
+    MatCheckbox,
+    FormsModule,
+    MatFormField,
+    MatInput,
+    MatIconButton,
+    MatTooltip,
+    TranslocoPipe,
+  ],
 })
 export class AnswerOptionListComponent
   extends DragDropBaseComponent

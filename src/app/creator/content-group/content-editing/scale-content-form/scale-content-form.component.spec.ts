@@ -21,7 +21,6 @@ describe('ScaleContentFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ScaleContentFormComponent],
       providers: [
         {
           provide: LikertScaleService,
@@ -32,7 +31,7 @@ describe('ScaleContentFormComponent', () => {
           useValue: mockLangService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), ScaleContentFormComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()

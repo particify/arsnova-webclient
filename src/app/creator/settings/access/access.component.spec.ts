@@ -79,7 +79,6 @@ describe('AccessComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [AccessComponent],
       providers: [
         {
           provide: NotificationService,
@@ -110,7 +109,7 @@ describe('AccessComponent', () => {
           useValue: mockAccessTokenService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), AccessComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

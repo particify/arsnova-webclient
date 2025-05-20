@@ -20,8 +20,7 @@ describe('UserHomeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserHomeComponent, A11yIntroPipe],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), UserHomeComponent, A11yIntroPipe],
       providers: [
         {
           provide: AuthenticationService,

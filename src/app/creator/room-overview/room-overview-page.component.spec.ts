@@ -72,11 +72,6 @@ describe('RoomOverviewPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        RoomOverviewPageComponent,
-        A11yIntroPipe,
-        SplitShortIdPipe,
-      ],
       providers: [
         {
           provide: RoomStatsService,
@@ -111,7 +106,12 @@ describe('RoomOverviewPageComponent', () => {
           useValue: mockContentService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [
+        getTranslocoModule(),
+        RoomOverviewPageComponent,
+        A11yIntroPipe,
+        SplitShortIdPipe,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

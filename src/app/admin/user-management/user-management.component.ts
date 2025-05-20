@@ -4,19 +4,39 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { AdminPageHeaderComponent } from '../admin-page-header/admin-page-header.component';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { MatCard } from '@angular/material/card';
+import { FlexModule } from '@angular/flex-layout';
+import { EntityPropertiesComponent } from '../entity-properties/entity-properties.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { LoadingButtonComponent } from '../../standalone/loading-button/loading-button.component';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['../admin-styles.scss'],
-  standalone: false,
+  imports: [
+    AdminPageHeaderComponent,
+    SearchBarComponent,
+    LoadingIndicatorComponent,
+    MatCard,
+    FlexModule,
+    EntityPropertiesComponent,
+    MatButton,
+    MatIcon,
+    LoadingButtonComponent,
+    TranslocoPipe,
+  ],
 })
 export class UserManagementComponent
   extends UserSearchComponent

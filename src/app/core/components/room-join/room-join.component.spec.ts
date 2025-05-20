@@ -52,7 +52,6 @@ describe('RoomJoinComponent', () => {
     notificationService.showAdvanced.calls.reset();
 
     TestBed.configureTestingModule({
-      declarations: [RoomJoinComponent, SplitShortIdPipe, AutofocusDirective],
       imports: [
         BrowserAnimationsModule,
         ReactiveFormsModule,
@@ -63,6 +62,9 @@ describe('RoomJoinComponent', () => {
         FormsModule,
         getTranslocoModule(),
         HttpClientTestingModule,
+        RoomJoinComponent,
+        SplitShortIdPipe,
+        AutofocusDirective,
       ],
       providers: [
         {

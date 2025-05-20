@@ -16,7 +16,6 @@ describe('FlashcardContentFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FlashcardContentFormComponent],
       providers: [
         {
           provide: NotificationService,
@@ -27,7 +26,7 @@ describe('FlashcardContentFormComponent', () => {
           useClass: MockFormattingService,
         },
       ],
-      imports: [getTranslocoModule()],
+      imports: [getTranslocoModule(), FlashcardContentFormComponent],
       schemas: [NO_ERRORS_SCHEMA],
     })
       .compileComponents()
