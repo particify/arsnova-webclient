@@ -156,7 +156,6 @@ describe('AppComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AppComponent],
       providers: [
         {
           provide: ApiConfigService,
@@ -212,6 +211,7 @@ describe('AppComponent', () => {
         },
       ],
       imports: [
+        AppComponent,
         getTranslocoModule(),
         HttpClientTestingModule,
         BrowserAnimationsModule,

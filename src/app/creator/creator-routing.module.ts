@@ -28,9 +28,9 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () =>
-      import('./room-overview/room-overview.module').then(
-        (m) => m.RoomOverviewModule
+    loadComponent: () =>
+      import('./room-overview/room-overview-page.component').then(
+        (m) => m.RoomOverviewPageComponent
       ),
     resolve: {
       apiConfig: ApiConfigResolver,
@@ -60,8 +60,10 @@ const routes: Routes = [
   },
   {
     path: 'comments',
-    loadChildren: () =>
-      import('./comments/comments.module').then((m) => m.CommentsModule),
+    loadComponent: () =>
+      import('./comments/comments-page.component').then(
+        (m) => m.CommentsPageComponent
+      ),
     resolve: {
       commentSettings: CommentSettingsResolver,
     },
@@ -71,10 +73,25 @@ const routes: Routes = [
     },
   },
   {
+    path: 'comments/moderation',
+    loadComponent: () =>
+      import('./comments/comments-page.component').then(
+        (m) => m.CommentsPageComponent
+      ),
+    resolve: {
+      commentSettings: CommentSettingsResolver,
+    },
+    title: 'comments',
+    data: {
+      isModeration: true,
+      parentRoute: ParentRoute.ROOM,
+    },
+  },
+  {
     path: 'feedback',
-    loadChildren: () =>
-      import('./live-feedback/live-feedback.module').then(
-        (m) => m.LiveFeedbackModule
+    loadComponent: () =>
+      import('./live-feedback/live-feedback-page.component').then(
+        (m) => m.LiveFeedbackPageComponent
       ),
     title: 'live-feedback',
     data: {
