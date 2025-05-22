@@ -40,11 +40,7 @@
                 ></app-room-edit>
               }
               @case ('comments') {
-                <app-comment-settings
-                  [room]="room"
-                  [roomId]="room.id"
-                  (saveEvent)="saveRoom($event)"
-                ></app-comment-settings>
+                <app-comment-settings [roomId]="room.id"></app-comment-settings>
               }
               @case ('access') {
                 <app-access

@@ -11,24 +11,24 @@
         [data]="data"
         [dataChanged]="dataChanged"
         [fixedSize]="true"
-        [isClosed]="isClosed"
+        [isEnabled]="isEnabled"
         [type]="type"
       ></app-live-feedback>
       @if (!isModerator()) {
         <div
           fxLayout="row"
           fxLayoutAlign="center center"
-          [fxLayoutGap]="isClosed ? '10px' : '16px'"
+          [fxLayoutGap]="isEnabled ? '16px' : '10px'"
         >
           <div fxLayout="row">
             <div
               class="invisible-button button-container"
-              [ngClass]="{ 'visible-button': isClosed }"
+              [ngClass]="{ 'visible-button': !isEnabled }"
             >
-              @if (isClosed) {
+              @if (!isEnabled) {
                 <button
                   id="switch-button"
-                  [disabled]="!isClosed"
+                  [disabled]="isEnabled"
                   mat-stroked-button
                   class="bottom-button"
                   (click)="changeType()"
@@ -45,7 +45,7 @@
             </div>
             <div
               class="invisible-button button-container"
-              [ngClass]="{ 'visible-button': !isClosed }"
+              [ngClass]="{ 'visible-button': isEnabled }"
             >
               <app-answer-count
                 id="answer-count"
@@ -56,17 +56,17 @@
           <app-loading-button
             id="toggle-button"
             class="bottom-button"
-            [name]="isClosed ? 'creator.survey.start' : 'creator.survey.stop'"
+            [name]="isEnabled ? 'creator.survey.stop' : 'creator.survey.start'"
             (clicked)="toggle()"
             [useDirectives]="true"
             [hotkey]="toggleKey"
             [hotkeyTitle]="
-              (isClosed ? 'creator.survey.start' : 'creator.survey.stop')
+              (isEnabled ? 'creator.survey.stop' : 'creator.survey.start')
                 | transloco
             "
             [hotkeyAction]="HotkeyAction.FOCUS"
             trackInteraction="Survey toggled"
-            [trackName]="isClosed ? 'on' : 'off'"
+            [trackName]="isEnabled ? 'off' : 'on'"
           >
           </app-loading-button>
         </div>

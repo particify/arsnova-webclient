@@ -12,6 +12,7 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { Message } from '@stomp/stompjs';
 import { Room } from '@app/core/models/room';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 class MockFeedbackService {
   messageEvent = new EventEmitter<Message>();
@@ -33,6 +34,10 @@ class MockFeedbackService {
   getBarData(data: number[], sum: number): number[] {
     return data.map((d) => (d / sum) * 100);
   }
+
+  getMessages() {
+    return this.messageEvent;
+  }
 }
 
 class MockService {}
@@ -51,6 +56,17 @@ class MockAuthenticationService {
 }
 
 class MockWsFeedbackService {}
+
+class MockRoomSettingsService {
+  getByRoomId() {
+    return of({
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+    });
+  }
+}
 
 export default {
   component: LiveFeedbackPageComponent,
@@ -75,6 +91,10 @@ export default {
         {
           provide: WsFeedbackService,
           useClass: MockWsFeedbackService,
+        },
+        {
+          provide: RoomSettingsService,
+          useClass: MockRoomSettingsService,
         },
         {
           provide: ActivatedRoute,
@@ -109,7 +129,6 @@ export default {
 type Story = StoryObj<LiveFeedbackPageComponent>;
 
 const room = new Room();
-room.settings = { feedbackLocked: false };
 
 export const Participant: Story = {
   args: {

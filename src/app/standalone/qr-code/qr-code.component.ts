@@ -71,7 +71,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
     this.roomService.getCurrentRoomsMessageStream().subscribe((msg) => {
       this.userCount = JSON.parse(msg.body).UserCountChanged.userCount;
     });
-    this.focusModeService.updateOverviewState(this.room);
+    this.focusModeService.updateOverviewState();
   }
 
   initQrCode() {

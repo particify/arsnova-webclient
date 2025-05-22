@@ -19,7 +19,7 @@ type Story = StoryObj<LiveFeedbackComponent>;
 export const Feedback: Story = {
   args: {
     type: LiveFeedbackType.FEEDBACK,
-    isClosed: false,
+    isEnabled: true,
     fixedSize: false,
     data: [25, 45, 20, 10],
   },

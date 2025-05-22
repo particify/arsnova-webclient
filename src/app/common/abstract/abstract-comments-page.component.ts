@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, input } from '@angular/core';
 import { Comment } from '@app/core/models/comment';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -10,7 +10,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { map, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -25,6 +25,8 @@ import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CommentPeriod } from '@app/core/models/comment-period.enum';
 import { CreateCommentComponent } from '@app/standalone/_dialogs/create-comment/create-comment.component';
 import { CommentSettings } from '@app/core/models/comment-settings';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 export const itemRenderNumber = 20;
 
@@ -45,6 +47,38 @@ export class AbstractCommentsPageComponent {
   protected globalStorageService = inject(GlobalStorageService);
   protected commentSettingsService = inject(CommentSettingsService);
   protected authenticationService = inject(AuthenticationService);
+  protected roomSettingsService = inject(RoomSettingsService);
+  room = input.required<Room>();
+
+  thresholdEnabled = toSignal(
+    toObservable(this.room).pipe(
+      switchMap((r) =>
+        this.roomSettingsService
+          .getByRoomId(r.id)
+          .pipe(map((s) => s.commentThresholdEnabled))
+      )
+    )
+  );
+
+  threshold = toSignal(
+    toObservable(this.room).pipe(
+      switchMap((r) =>
+        this.roomSettingsService
+          .getByRoomId(r.id)
+          .pipe(map((s) => s.commentThreshold))
+      )
+    )
+  );
+
+  tags = toSignal(
+    toObservable(this.room).pipe(
+      switchMap((r) =>
+        this.roomSettingsService
+          .getByRoomId(r.id)
+          .pipe(map((s) => s.commentTags))
+      )
+    )
+  );
 
   protected destroyed$ = new Subject<void>();
 
@@ -53,7 +87,6 @@ export class AbstractCommentsPageComponent {
 
   // Route data input below
   @Input({ required: true }) viewRole!: UserRole;
-  @Input({ required: true }) room!: Room;
   @Input({ required: true }) commentSettings!: CommentSettings;
 
   isLoading = true;
@@ -86,8 +119,6 @@ export class AbstractCommentsPageComponent {
   readonly = false;
   directSend = false;
   fileUploadEnabled = false;
-  thresholdEnabled = false;
-  commentThreshold?: number;
 
   commentCounter = itemRenderNumber;
   freeze = false;
@@ -241,33 +272,21 @@ export class AbstractCommentsPageComponent {
     this.getDisplayComments();
   }
 
-  getThresholdSettings() {
-    if (this.room?.extensions?.comments) {
-      this.thresholdEnabled = !!this.room.extensions.comments.enableThreshold;
-    }
-    const threshold = this.room.extensions?.comments?.commentThreshold;
-    if (this.thresholdEnabled && threshold) {
-      this.commentThreshold = threshold;
-    }
-  }
-
   getCommentsWithThreshold() {
-    if (!this.thresholdEnabled) {
+    const threshold = this.threshold();
+    if (!this.thresholdEnabled() || !threshold) {
       return;
     }
     if (this.hideCommentsList) {
       this.filteredComments = this.filteredComments.filter(
-        (x) => this.commentThreshold && x.score >= this.commentThreshold
+        (x) => x.score >= threshold
       );
     } else {
-      this.comments = this.comments.filter(
-        (x) => this.commentThreshold && x.score >= this.commentThreshold
-      );
+      this.comments = this.comments.filter((x) => x.score >= threshold);
     }
   }
 
   getComments(): void {
-    this.getThresholdSettings();
     this.getCommentsWithThreshold();
     this.setTimePeriod(this.period);
     this.isLoading = false;
@@ -304,7 +323,7 @@ export class AbstractCommentsPageComponent {
 
   addNewComment(comment: Comment) {
     const c = new Comment();
-    c.roomId = this.room.id;
+    c.roomId = this.room().id;
     c.body = comment.body;
     c.id = comment.id;
     c.timestamp = comment.timestamp;
@@ -420,16 +439,12 @@ export class AbstractCommentsPageComponent {
   }
 
   openCreateDialog(): void {
-    let tags;
-    if (this.room.extensions?.comments?.tags) {
-      tags = this.room.extensions.comments.tags;
-    }
     this.dialog.open(CreateCommentComponent, {
       width: '400px',
       data: {
         userId: this.userId,
-        tags: tags,
-        roomId: this.room.id,
+        tags: this.tags(),
+        roomId: this.room().id,
         directSend: this.directSend,
         fileUploadEnabled: this.fileUploadEnabled,
         role: this.viewRole,
@@ -523,7 +538,7 @@ export class AbstractCommentsPageComponent {
 
   subscribeCommentStream() {
     this.wsCommentService
-      .getCommentStream(this.room.id)
+      .getCommentStream(this.room().id)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((message: Message) => {
         this.parseIncomingMessage(message);

@@ -1,10 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { RoomSummary } from '@app/core/models/room-summary';
-import { SurveyStarted } from '@app/core/models/events/survey-started';
 import { HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
-import { catchError, map, tap, switchMap } from 'rxjs/operators';
+import { catchError, tap, switchMap } from 'rxjs/operators';
 import {
   AuthenticationService,
   AUTH_HEADER_KEY,
@@ -17,10 +16,8 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
-import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { DefaultCache } from '@app/core/services/util/caching.service';
-import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -121,7 +118,6 @@ export class RoomService extends AbstractEntityService<Room> {
 
   getRoom(id: string): Observable<Room> {
     return this.getById(id).pipe(
-      map((room) => this.parseExtensions(room)),
       tap((room) => this.setRoomId(room)),
       catchError(this.handleError<Room>(`getRoom keyword=${id}`))
     );
@@ -214,60 +210,6 @@ export class RoomService extends AbstractEntityService<Room> {
           );
       })
     );
-  }
-
-  changeFeedbackLock(room: Room, isFeedbackLocked: boolean): Observable<Room> {
-    const changes: { feedbackLocked: boolean; settings: object } = {
-      feedbackLocked: isFeedbackLocked,
-      settings: room.settings,
-    };
-    room.settings['feedbackLocked'] = isFeedbackLocked;
-    return this.patchRoom(room.id, changes).pipe(
-      map((updatedRoom) => {
-        if (isFeedbackLocked) {
-          const event = new SurveyStarted();
-          this.eventService.broadcast(event.type);
-        }
-        const state = updatedRoom.settings.feedbackLocked
-          ? 'stopped'
-          : 'started';
-        const msg = this.translateService.translate('creator.survey.' + state);
-        this.notificationService.showAdvanced(
-          msg,
-          updatedRoom.settings.feedbackLocked
-            ? AdvancedSnackBarTypes.WARNING
-            : AdvancedSnackBarTypes.SUCCESS
-        );
-        return updatedRoom;
-      })
-    );
-  }
-
-  changeFeedbackType(
-    room: Room,
-    feedbackType: LiveFeedbackType
-  ): Observable<Room> {
-    const newType =
-      feedbackType === LiveFeedbackType.FEEDBACK
-        ? LiveFeedbackType.SURVEY
-        : LiveFeedbackType.FEEDBACK;
-    const feedbackExtension: { type: LiveFeedbackType } = { type: newType };
-    if (!room.extensions) {
-      room.extensions = {};
-      room.extensions.feedback = feedbackExtension;
-    } else {
-      room.extensions.feedback = feedbackExtension;
-    }
-    const changes: { extensions: object } = { extensions: room.extensions };
-    return this.patchRoom(room.id, changes);
-  }
-
-  parseExtensions(room: Room): Room {
-    if (room.extensions) {
-      const extensions = room.extensions;
-      room.extensions = extensions;
-    }
-    return room;
   }
 
   setRoomId(room: Room): void {

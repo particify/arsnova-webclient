@@ -1,28 +1,12 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  inject,
-} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { RoomService } from '@app/core/services/http/room.service';
-import { Router } from '@angular/router';
-import { CommentService } from '@app/core/services/http/comment.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { Room } from '@app/core/models/room';
 import { CommentSettings } from '@app/core/models/comment-settings';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { EventService } from '@app/core/services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { CommentExtensions } from '@app/core/models/room-extensions';
-import { take } from 'rxjs';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { FlexModule } from '@angular/flex-layout';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
@@ -37,7 +21,9 @@ import {
   MatChipInput,
 } from '@angular/material/chips';
 import { MatIcon } from '@angular/material/icon';
-import { UpdateEvent } from '@app/creator/settings/update-event';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AnnounceService } from '@app/core/services/util/announce.service';
 
 @Component({
   selector: 'app-comment-settings',
@@ -62,26 +48,17 @@ import { UpdateEvent } from '@app/creator/settings/update-event';
   ],
 })
 export class CommentSettingsComponent implements OnInit {
-  dialog = inject(MatDialog);
-  notificationService = inject(NotificationService);
-  translationService = inject(TranslocoService);
-  protected roomService = inject(RoomService);
-  router = inject(Router);
-  commentService = inject(CommentService);
-  commentSettingsService = inject(CommentSettingsService);
-  private liveAnnouncer = inject(LiveAnnouncer);
-  eventService = inject(EventService);
+  private notificationService = inject(NotificationService);
+  private translationService = inject(TranslocoService);
+  private commentSettingsService = inject(CommentSettingsService);
+  private announceService = inject(AnnounceService);
+  private roomSettingsService = inject(RoomSettingsService);
+  private destroyRef = inject(DestroyRef);
 
-  @Output() saveEvent: EventEmitter<UpdateEvent> =
-    new EventEmitter<UpdateEvent>();
-
-  @Input({ required: true }) room!: Room;
   @Input({ required: true }) roomId!: string;
 
-  commentExtension?: CommentExtensions;
   threshold = -50;
   enableThreshold = false;
-  enableTags = false;
   settings = new CommentSettings();
   tags: string[] = [];
   timestamp = new Date();
@@ -90,29 +67,22 @@ export class CommentSettingsComponent implements OnInit {
   isLoading = true;
 
   ngOnInit() {
-    if (!this.room.extensions) {
-      this.room.extensions = {};
-    }
-    if (!this.room.extensions.comments) {
-      this.room.extensions.comments = {};
-    }
-    this.commentExtension = this.room.extensions.comments as CommentExtensions;
-    this.threshold = this.commentExtension.commentThreshold ?? this.threshold;
-    this.enableThreshold =
-      this.commentExtension.enableThreshold ?? this.enableThreshold;
-
-    this.initTags();
+    this.roomSettingsService
+      .getByRoomId(this.roomId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((settings) => {
+        this.enableThreshold = settings.commentThresholdEnabled;
+        if (settings.commentThreshold) {
+          this.threshold = settings.commentThreshold;
+        }
+        if (settings.commentTags) {
+          this.tags = settings.commentTags;
+        }
+      });
     this.commentSettingsService.get(this.roomId).subscribe((settings) => {
       this.settings = settings;
       this.isLoading = false;
     });
-  }
-
-  initTags() {
-    this.enableTags = this.commentExtension?.enableTags ?? this.enableTags;
-    if (this.room.extensions?.comments?.tags) {
-      this.tags = this.room.extensions.comments.tags || [];
-    }
   }
 
   addTag() {
@@ -128,8 +98,7 @@ export class CommentSettingsComponent implements OnInit {
       } else {
         this.tags.push(this.tagName);
         this.tagName = '';
-        this.setTags();
-        this.saveChanges(true);
+        this.updateTags(true);
       }
     }
   }
@@ -140,28 +109,53 @@ export class CommentSettingsComponent implements OnInit {
 
   deleteTag(tag: string) {
     this.tags = this.tags.filter((o) => o !== tag);
-    this.setTags();
-    this.saveChanges(false);
+    this.updateTags(false);
   }
 
-  setTags() {
-    if (this.room.extensions?.comments) {
-      this.room.extensions.comments.tags = this.tags;
-    }
+  updateThresholdEnabled(thresholdEnabled: boolean) {
+    this.roomSettingsService
+      .updateCommentThresholdEnabled(this.roomId, thresholdEnabled)
+      .subscribe((settings) => {
+        this.enableThreshold = settings.commentThresholdEnabled!;
+        if (this.enableThreshold) {
+          this.threshold = settings.commentThreshold;
+        }
+      });
   }
 
-  updateCommentExtensions(enableTreshold?: boolean) {
-    this.enableThreshold = enableTreshold ?? this.enableThreshold;
-    const commentExtension: CommentExtensions = {
-      enableThreshold: this.enableThreshold,
-      commentThreshold: this.threshold,
-      enableTags: this.enableTags,
-      tags: this.tags,
-    };
-    if (this.room.extensions) {
-      this.room.extensions.comments = commentExtension;
-    }
-    this.saveChanges();
+  updateThreshold() {
+    this.roomSettingsService
+      .updateCommentThreshold(this.roomId, this.threshold)
+      .subscribe((settings) => {
+        this.threshold = settings.commentThreshold;
+        this.announceService.announce(
+          'creator.settings.a11y-threshold-changed',
+          {
+            value: this.threshold,
+          }
+        );
+      });
+  }
+
+  updateTags(addedTag: boolean) {
+    this.roomSettingsService
+      .updateCommentTags(this.roomId, this.tags)
+      .subscribe((settings) => {
+        if (settings.commentTags) {
+          this.tags = settings.commentTags;
+          const msg = this.translationService.translate(
+            addedTag
+              ? 'creator.settings.tag-added'
+              : 'creator.settings.tag-removed'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            addedTag
+              ? AdvancedSnackBarTypes.SUCCESS
+              : AdvancedSnackBarTypes.WARNING
+          );
+        }
+      });
   }
 
   updateCommentSettings(change: Partial<CommentSettings> = {}) {
@@ -182,30 +176,5 @@ export class CommentSettingsComponent implements OnInit {
   updateFileUploadEnabled(fileUploadEnabled: boolean) {
     this.settings.fileUploadEnabled = fileUploadEnabled;
     this.updateCommentSettings();
-  }
-
-  saveChanges(addedTag?: boolean) {
-    this.saveEvent.emit(new UpdateEvent(this.room, false));
-    if (addedTag !== undefined) {
-      const msg = this.translationService.translate(
-        addedTag ? 'creator.settings.tag-added' : 'creator.settings.tag-removed'
-      );
-      this.notificationService.showAdvanced(
-        msg,
-        addedTag ? AdvancedSnackBarTypes.SUCCESS : AdvancedSnackBarTypes.WARNING
-      );
-    }
-  }
-
-  announceThreshold() {
-    this.translationService
-      .selectTranslate('creator.settings.a11y-threshold-changed', {
-        value: this.threshold,
-      })
-      .pipe(take(1))
-      .subscribe((msg) => {
-        this.liveAnnouncer.clear();
-        this.liveAnnouncer.announce(msg);
-      });
   }
 }

@@ -21,6 +21,8 @@ import {
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { CommentSettings } from '@app/core/models/comment-settings';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 class MockService {}
 
@@ -126,6 +128,17 @@ class MockFocusModeService {
   }
 }
 
+class MockRoomSettingsService {
+  getByRoomId() {
+    return of({
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+    });
+  }
+}
+
 export default {
   component: RoomOverviewPageComponent,
   title: 'RoomOverviewPage',
@@ -166,6 +179,10 @@ export default {
           provide: FocusModeService,
           useClass: MockFocusModeService,
         },
+        {
+          provide: RoomSettingsService,
+          useClass: MockRoomSettingsService,
+        },
       ],
     }),
   ],
@@ -180,7 +197,6 @@ const room = new Room(
   'My awesome room',
   'This is my awesome room description.'
 );
-room.settings = { feedbackLocked: false };
 
 export const Participant: Story = {
   args: {

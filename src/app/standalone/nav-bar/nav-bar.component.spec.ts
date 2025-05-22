@@ -12,7 +12,6 @@ import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Room } from '@app/core/models/room';
 import { Injectable } from '@angular/core';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -32,6 +31,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { configureTestModule } from '@testing/test.setup';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 @Injectable()
 class MockContentGroupService {
@@ -56,13 +57,6 @@ describe('NavBarComponent', () => {
 
   const mockRoomStatsService = jasmine.createSpyObj(['getStats']);
   mockRoomStatsService.getStats.and.returnValue(of({}));
-
-  const mockFeedbackService = jasmine.createSpyObj([
-    'startSub',
-    'getMessages',
-    'emitMessage',
-  ]);
-  mockFeedbackService.getMessages.and.returnValue(of());
 
   const body = {
     UserCountChanged: {
@@ -93,6 +87,18 @@ describe('NavBarComponent', () => {
   ]);
   mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
 
+  const mockRoomSettingsService = jasmine.createSpyObj(RoomSettingsService, [
+    'getRoomSettingsStream',
+  ]);
+  mockRoomSettingsService.getRoomSettingsStream.and.returnValue(
+    of({
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+    })
+  );
+
   let loader: HarnessLoader;
   let overviewButton: MatButtonHarness;
   let commentsButton: MatButtonHarness;
@@ -113,9 +119,6 @@ describe('NavBarComponent', () => {
   mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
 
   const room = new Room();
-  room.settings = {
-    feedbackLocked: false,
-  };
   room.shortId = '12345678';
   const snapshot = new ActivatedRouteSnapshot();
   snapshot.data = {
@@ -148,10 +151,6 @@ describe('NavBarComponent', () => {
           useValue: mockRoomStatsService,
         },
         {
-          provide: FeedbackService,
-          useValue: mockFeedbackService,
-        },
-        {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
@@ -166,6 +165,10 @@ describe('NavBarComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
+        },
+        {
+          provide: RoomSettingsService,
+          useValue: mockRoomSettingsService,
         },
       ]
     ).compileComponents();
@@ -185,24 +188,36 @@ describe('NavBarComponent', () => {
 
   it('should create', () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: false,
-    };
     component.room = room;
     component.userRole = UserRole.EDITOR;
     component.viewRole = UserRole.PARTICIPANT;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('should have navigation buttons for room overview and comments', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.viewRole = UserRole.PARTICIPANT;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#overview-button' })
@@ -216,13 +231,30 @@ describe('NavBarComponent', () => {
 
   it('should NOT HAVE navigation button for feedback if not enabled and in role PARTICIPANT', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
+    mockRoomSettingsService.getRoomSettingsStream.and.returnValue(
+      of({
+        id: 'id',
+        roomId: 'roomid',
+        surveyEnabled: false,
+        surveyType: LiveFeedbackType.FEEDBACK,
+        focusModeEnabled: false,
+        commentThresholdEnabled: false,
+        commentThreshold: 0,
+      })
+    );
     fixture.detectChanges();
     const feedbackButtonElement =
       fixture.nativeElement.querySelector('#feedback-button');
@@ -231,13 +263,19 @@ describe('NavBarComponent', () => {
 
   it('should HAVE navigation button for feedback if locked in role OWNER', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     feedbackButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#feedback-button' })
@@ -247,9 +285,6 @@ describe('NavBarComponent', () => {
 
   it('should HAVE navigation button for series if existing', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.OWNER;
@@ -263,6 +298,15 @@ describe('NavBarComponent', () => {
         },
       ],
     };
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
     fixture.detectChanges();
     seriesButton = await loader.getHarness(
@@ -273,12 +317,18 @@ describe('NavBarComponent', () => {
 
   it('should HAVE a user counter if desktop device and creator', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.viewRole = UserRole.OWNER;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -288,12 +338,18 @@ describe('NavBarComponent', () => {
 
   it('should HAVE a user counter if desktop device and creator', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.viewRole = UserRole.OWNER;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -308,12 +364,18 @@ describe('NavBarComponent', () => {
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.viewRole = UserRole.OWNER;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -323,12 +385,18 @@ describe('NavBarComponent', () => {
 
   it('should NOT HAVE a user counter if participant', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.viewRole = UserRole.PARTICIPANT;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
       '#user-count-container'
@@ -339,13 +407,19 @@ describe('NavBarComponent', () => {
   it('should navigate to room overview when clicking on overview button', async () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#overview-button' })
@@ -357,13 +431,19 @@ describe('NavBarComponent', () => {
   it('should navigate to comments when clicking on comments button', async () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#comments-button' })
@@ -379,13 +459,19 @@ describe('NavBarComponent', () => {
   it('should navigate to feedback when clicking on feedback button', async () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#feedback-button' })
@@ -401,9 +487,6 @@ describe('NavBarComponent', () => {
   it('should navigate to series when clicking on series button and there is only one series', async () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.OWNER;
@@ -418,6 +501,15 @@ describe('NavBarComponent', () => {
       ],
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: false,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#series-button' })
@@ -433,9 +525,6 @@ describe('NavBarComponent', () => {
 
   it('should open menu when clicking on series button and there are multiple series', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.OWNER;
@@ -455,6 +544,15 @@ describe('NavBarComponent', () => {
       ],
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     seriesButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#series-button' })
@@ -470,9 +568,6 @@ describe('NavBarComponent', () => {
   it('should navigate to series when clicking on series menu item', async () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.OWNER;
@@ -492,6 +587,15 @@ describe('NavBarComponent', () => {
       ],
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     seriesButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#series-button' })
@@ -514,9 +618,6 @@ describe('NavBarComponent', () => {
 
   it('should display news indicator badge for series button for participants when series has been published', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.PARTICIPANT;
@@ -550,6 +651,15 @@ describe('NavBarComponent', () => {
         data: newStats,
       },
     };
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     eventService.broadcast('PublicDataChanged', statsEvent);
     fixture.detectChanges();
@@ -559,9 +669,6 @@ describe('NavBarComponent', () => {
 
   it('should display news indicator badge for series button for participants when series has new published contents', async () => {
     const room = new Room();
-    room.settings = {
-      feedbackLocked: true,
-    };
     room.shortId = '12345678';
     component.room = room;
     component.userRole = UserRole.PARTICIPANT;
@@ -576,6 +683,15 @@ describe('NavBarComponent', () => {
       ],
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
+    component.roomSettings = {
+      id: 'id',
+      roomId: 'roomid',
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+      commentThreshold: 0,
+    };
     fixture.detectChanges();
     const entity = new ContentGroup(
       'room-id-1111',

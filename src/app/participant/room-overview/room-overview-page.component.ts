@@ -24,9 +24,8 @@ import { FeatureCardComponent } from '@app/standalone/feature-card/feature-card.
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { CommentsCardComponent } from '@app/standalone/feature-card/comments-card/comments-card.component';
 import { LiveFeedbackCardComponent } from '@app/standalone/feature-card/live-feedback-card/live-feedback-card.component';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 @Component({
   selector: 'app-participant-overview',
@@ -57,7 +56,7 @@ export class RoomOverviewPageComponent
   protected globalStorageService = inject(GlobalStorageService);
   protected commentSettingsService = inject(CommentSettingsService);
   protected focusModeService = inject(FocusModeService);
-  private feedbackService = inject(FeedbackService);
+  private roomSettingsService = inject(RoomSettingsService);
 
   // Route data input below
   @Input({ required: true }) commentSettings!: CommentSettings;
@@ -74,28 +73,30 @@ export class RoomOverviewPageComponent
 
   ngOnInit() {
     window.scroll(0, 0);
-    this.focusModeEnabled = this.room.focusModeEnabled;
     this.eventService
       .on<DataChanged<RoomStats>>('PublicDataChanged')
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => this.initializeStats(false));
     this.initializeStats(false);
-    this.feedbackEnabled = !this.room.settings.feedbackLocked;
+    this.roomSettingsService
+      .getByRoomId(this.room.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((settings) => {
+        this.focusModeEnabled = settings.focusModeEnabled;
+        this.feedbackEnabled = settings.surveyEnabled;
+        this.roomSettingsService
+          .getRoomSettingsStream(this.room.id, settings.id)
+          .pipe(takeUntil(this.destroyed$))
+          .subscribe((settings) => {
+            if (settings.surveyEnabled !== undefined) {
+              this.feedbackEnabled = settings.surveyEnabled;
+            }
+          });
+      });
     this.commentsEnabled = !this.commentSettings.disabled;
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.feedbackService
-      .getMessages()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((message) => {
-        const type = JSON.parse(message.body).type;
-        if (type === FeedbackMessageType.STARTED) {
-          this.feedbackEnabled = true;
-        } else if (type === FeedbackMessageType.STOPPED) {
-          this.feedbackEnabled = false;
-        }
-      });
     this.commentSettingsService
       .getSettingsStream()
       .pipe(takeUntil(this.destroyed$))

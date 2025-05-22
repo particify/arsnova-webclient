@@ -1,10 +1,13 @@
-<app-control-bar
-  [room]="room"
-  [userRole]="userRole"
-  [viewRole]="viewRole"
-  (activeFeature)="updateFeature($event)"
-  (activeGroup)="updateUrl($event)"
-></app-control-bar>
+@if (roomSettings) {
+  <app-control-bar
+    [room]="room"
+    [userRole]="userRole"
+    [viewRole]="viewRole"
+    (activeFeature)="updateFeature($event)"
+    (activeGroup)="updateUrl($event)"
+    [roomSettings]="roomSettings"
+  ></app-control-bar>
+}
 <div tabindex="-1" [appAutofocus] class="visually-hidden">
   {{ 'creator.presentation.a11y-welcome' | transloco }}
 </div>

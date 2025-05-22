@@ -99,14 +99,6 @@ export class LiveFeedbackPageComponent
       case FeedbackMessageType.RESET:
         this.updateFeedback([0, 0, 0, 0]);
         break;
-      case FeedbackMessageType.STARTED:
-        this.roomService.getRoom(this.room.id).subscribe((room) => {
-          this.type = this.feedbackService.getType(room);
-          this.isClosed = false;
-        });
-        break;
-      default:
-        this.isClosed = true;
     }
   }
 }

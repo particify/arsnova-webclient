@@ -348,7 +348,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
 
   updateStateChange() {
     this.focusModeService.updateContentState(
-      this.room,
       this.content.id,
       this.currentStep,
       this.contentGroup.id,

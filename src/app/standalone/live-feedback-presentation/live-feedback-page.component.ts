@@ -6,7 +6,6 @@ import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { Message } from '@stomp/stompjs';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { debounceTime, fromEvent, take, takeUntil } from 'rxjs';
-import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { CoreModule } from '@app/core/core.module';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AnswerCountComponent } from '@app/standalone/answer-count/answer-count.component';
@@ -43,7 +42,7 @@ export class LiveFeedbackPageComponent
     this.initData();
     this.translateService
       .selectTranslate(
-        this.isClosed ? 'creator.survey.start' : 'creator.survey.stop'
+        this.isEnabled ? 'creator.survey.stop' : 'creator.survey.start'
       )
       .pipe(take(1))
       .subscribe((t) => {
@@ -83,7 +82,7 @@ export class LiveFeedbackPageComponent
   }
 
   afterInitHook() {
-    this.focusModeService.updateFeedbackState(this.room, !this.isClosed);
+    this.focusModeService.updateFeedbackState(this.isEnabled);
     setTimeout(() => {
       this.initScale();
     });
@@ -103,24 +102,23 @@ export class LiveFeedbackPageComponent
   }
 
   changeType() {
-    this.roomService
-      .changeFeedbackType(this.room, this.type)
+    this.roomSettingsService
+      .updateFeedbackType(this.room.id, this.type)
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((room) => {
-        this.type =
-          room.extensions?.feedback?.type || LiveFeedbackType.FEEDBACK;
+      .subscribe((settings) => {
+        this.type = settings.surveyType;
       });
   }
 
   toggle() {
-    this.roomService
-      .changeFeedbackLock(this.room, !this.isClosed)
+    this.roomSettingsService
+      .updateSurveyEnabled(this.room.id, !this.isEnabled)
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((room) => {
-        this.loadConfig(room);
-        this.focusModeService.updateFeedbackState(this.room, !this.isClosed);
-        this.presentationService.updateFeedbackStarted(!this.isClosed);
-        if (this.isClosed) {
+      .subscribe((settings) => {
+        this.updateConfig(settings);
+        this.focusModeService.updateFeedbackState(settings.surveyEnabled);
+        this.presentationService.updateFeedbackStarted(settings.surveyEnabled);
+        if (settings.surveyEnabled) {
           this.updateFeedback([0, 0, 0, 0]);
           this.wsFeedbackService.reset(this.room.id);
         }

@@ -4,7 +4,9 @@ import { LiveFeedbackLabel } from '@app/core/models/live-feedback-label.enum';
 import { LiveFeedbackSurveyLabel } from '@app/core/models/live-feedback-survey-label.enum';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { Room } from '@app/core/models/room';
+import { RoomSettings } from '@app/core/models/room-settings';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import {
@@ -26,6 +28,7 @@ export class AbstractLiveFeedbackPageComponent {
   protected translateService = inject(TranslocoService);
   protected announceService = inject(AnnounceService);
   protected globalStorageService = inject(GlobalStorageService);
+  protected roomSettingsService = inject(RoomSettingsService);
 
   // Route data input below
   @Input({ required: true }) room!: Room;
@@ -33,7 +36,7 @@ export class AbstractLiveFeedbackPageComponent {
   destroyed$ = new Subject<void>();
   isLoading = true;
 
-  isClosed = false;
+  isEnabled = true;
   type: LiveFeedbackType = LiveFeedbackType.FEEDBACK;
   answerCount = 0;
   data: number[] = [];
@@ -48,7 +51,7 @@ export class AbstractLiveFeedbackPageComponent {
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.loadConfig(this.room);
+    this.loadConfig(true);
     this.feedbackService.startSub(this.room.id);
     this.feedbackService
       .getMessages()
@@ -56,17 +59,41 @@ export class AbstractLiveFeedbackPageComponent {
       .subscribe((message) => {
         this.parseIncomingMessage(message);
       });
-    this.feedbackService.get(this.room.id).subscribe((values: number[]) => {
-      this.updateFeedback(values);
-      this.isLoading = false;
-      this.afterInitHook();
-    });
+    this.feedbackService
+      .get(this.room.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((values: number[]) => {
+        this.updateFeedback(values);
+        this.isLoading = false;
+        this.afterInitHook();
+      });
   }
 
-  protected loadConfig(room: Room) {
-    this.room = room;
-    this.isClosed = room.settings.feedbackLocked;
-    this.type = this.feedbackService.getType(this.room);
+  protected loadConfig(initial = false) {
+    this.roomSettingsService
+      .getByRoomId(this.room.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((settings) => {
+        this.updateConfig(settings);
+        if (initial) {
+          this.roomSettingsService
+            .getRoomSettingsStream(this.room.id, settings.id)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((settings) => {
+              if (settings.surveyEnabled !== undefined) {
+                this.isEnabled = settings.surveyEnabled;
+              }
+              if (settings.surveyType !== undefined) {
+                this.type = settings.surveyType;
+              }
+            });
+        }
+      });
+  }
+
+  protected updateConfig(settings: RoomSettings) {
+    this.isEnabled = settings.surveyEnabled;
+    this.type = settings.surveyType;
   }
 
   protected updateFeedback(data: number[]) {

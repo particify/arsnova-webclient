@@ -38,7 +38,7 @@
             [outlinedCard]="outlinedCards"
             [isNew]="comment.id === newestComment.id"
             (click)="updateCurrentComment(comment)"
-            [tags]="this.room.extensions?.comments?.tags"
+            [tags]="tags()"
           >
           </app-comment>
         }

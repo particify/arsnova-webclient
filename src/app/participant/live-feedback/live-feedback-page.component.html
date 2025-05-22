@@ -11,7 +11,7 @@
         [data]="data"
         [dataChanged]="dataChanged"
         [fixedSize]="false"
-        [isClosed]="isClosed"
+        [isEnabled]="isEnabled"
         [type]="type"
       ></app-live-feedback>
       <div fxLayout="row" fxLayoutAlign="center">
@@ -21,7 +21,7 @@
   </app-base-card>
 }
 <div
-  [ngClass]="{ faded: isClosed }"
+  [ngClass]="{ faded: !isEnabled }"
   fxLayout="column"
   fxLayoutAlign="start center"
   class="answer-container"

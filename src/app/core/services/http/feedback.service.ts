@@ -5,8 +5,6 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Message } from '@stomp/stompjs';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
-import { Room } from '@app/core/models/room';
-import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -45,14 +43,6 @@ export class FeedbackService extends AbstractHttpService<number[]> {
     return this.http
       .get<number[]>(connectionUrl, httpOptions)
       .pipe(catchError(this.handleError<number[]>('get survey')));
-  }
-
-  getType(room: Room): LiveFeedbackType {
-    if (room.extensions?.feedback && room.extensions.feedback['type']) {
-      return room.extensions.feedback['type'];
-    } else {
-      return LiveFeedbackType.FEEDBACK;
-    }
   }
 
   emitMessage(message: Message) {

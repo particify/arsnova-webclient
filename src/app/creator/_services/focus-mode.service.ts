@@ -4,11 +4,12 @@ import { ContentFocusState } from '@app/core/models/events/remote/content-focus-
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
 import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { Room } from '@app/core/models/room';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AbstractFocusModeService } from '@app/common/abstract/abstract-focus-mode.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FocusModeService extends AbstractFocusModeService {
   private state$ = new BehaviorSubject<FocusEvent | null>(null);
 
@@ -26,12 +27,14 @@ export class FocusModeService extends AbstractFocusModeService {
     this.http.post(`api/room/${room}/focus-event`, newState).subscribe();
   }
 
-  init(room: Room) {
-    this.currentRoom = room;
-    this.focusModeEnabled$.next(room.focusModeEnabled);
-    if (room.focusModeEnabled) {
-      this.loadState();
-    }
+  init(roomId: string) {
+    this.roomId = roomId;
+    this.roomSettingsService.getByRoomId(roomId).subscribe((settings) => {
+      this.focusModeEnabled$.next(settings.focusModeEnabled);
+      if (settings.focusModeEnabled) {
+        this.loadState();
+      }
+    });
     this.subscribeToState();
     this.subscribeToRoomChanges();
   }
@@ -41,7 +44,6 @@ export class FocusModeService extends AbstractFocusModeService {
   }
 
   updateContentState(
-    room: Room,
     contentId: string,
     contentIndex: number,
     contentGroupId: string,
@@ -53,40 +55,38 @@ export class FocusModeService extends AbstractFocusModeService {
       contentGroupId,
       contentGroupName
     );
-    this.sendFeatureState(room, RoutingFeature.CONTENTS, state);
+    this.sendFeatureState(RoutingFeature.CONTENTS, state);
   }
 
-  updateFeedbackState(room: Room, started: boolean) {
+  updateFeedbackState(started: boolean) {
     this.sendFeatureState(
-      room,
       RoutingFeature.FEEDBACK,
       new FeedbackFocusState(started)
     );
   }
 
-  updateCommentState(room: Room, commentId: string) {
+  updateCommentState(commentId: string) {
     this.sendFeatureState(
-      room,
       RoutingFeature.COMMENTS,
       new CommentFocusState(commentId)
     );
   }
 
-  updateOverviewState(room: Room) {
-    this.sendFeatureState(room, RoutingFeature.OVERVIEW);
+  updateOverviewState() {
+    this.sendFeatureState(RoutingFeature.OVERVIEW);
   }
 
   private sendFeatureState(
-    room: Room,
     feature: RoutingFeature,
     state?: ContentFocusState | CommentFocusState | FeedbackFocusState
   ) {
     if (
       this.featureFlagService.isEnabled('FOCUS_MODE') &&
-      room.focusModeEnabled
+      this.focusModeEnabled &&
+      this.roomId
     ) {
       const newState = new FocusEvent(this.getFeatureKey(feature), state);
-      this.sendState(room.id, newState);
+      this.sendState(this.roomId, newState);
     }
   }
 }

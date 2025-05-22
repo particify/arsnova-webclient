@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { RoomService } from '@app/core/services/http/room.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { FeatureCardComponent } from '@app/standalone/feature-card/feature-card.component';
@@ -10,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexModule } from '@angular/flex-layout';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 @Component({
   selector: 'app-live-feedback-card',
@@ -24,7 +24,7 @@ import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-
   templateUrl: './live-feedback-card.component.html',
 })
 export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
-  private roomService = inject(RoomService);
+  private roomSettingsService = inject(RoomSettingsService);
   private feedbackService = inject(FeedbackService);
 
   private destroyed$ = new Subject<void>();
@@ -35,11 +35,16 @@ export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
   @Input() clickable = false;
   @Input() showControls = false;
 
-  feedbackEnabled = false;
+  feedbackEnabled = true;
   feedbackAnswers = 0;
 
   ngOnInit() {
-    this.feedbackEnabled = !this.room.settings.feedbackLocked;
+    this.roomSettingsService
+      .getByRoomId(this.room.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((settings) => {
+        this.feedbackEnabled = settings.surveyEnabled;
+      });
     this.feedbackService.get(this.room.id).subscribe((values) => {
       this.determineFeedbackAnswerCount(values);
     });
@@ -67,11 +72,11 @@ export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
   }
 
   toggleLiveFeedbackFeature() {
-    this.roomService
-      .changeFeedbackLock(this.room, this.feedbackEnabled)
+    this.roomSettingsService
+      .updateSurveyEnabled(this.room.id, !this.feedbackEnabled)
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((room) => {
-        this.feedbackEnabled = !room.settings.feedbackLocked;
+      .subscribe((settings) => {
+        this.feedbackEnabled = settings.surveyEnabled;
       });
   }
 }

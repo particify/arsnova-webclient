@@ -22,6 +22,8 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -87,6 +89,17 @@ describe('RoomOverviewPageComponent', () => {
   mockFeedbackService.get.and.returnValue(of([0, 0, 0, 0]));
   mockFeedbackService.getMessages.and.returnValue(of());
 
+  class MockRoomSettingsService {
+    getByRoomId() {
+      return of({
+        surveyEnabled: true,
+        surveyType: LiveFeedbackType.FEEDBACK,
+        focusModeEnabled: false,
+        commentThresholdEnabled: false,
+      });
+    }
+  }
+
   beforeEach(waitForAsync(() => {
     const testBed = configureTestModule(
       [
@@ -132,6 +145,10 @@ describe('RoomOverviewPageComponent', () => {
           provide: FeedbackService,
           useValue: mockFeedbackService,
         },
+        {
+          provide: RoomSettingsService,
+          useClass: MockRoomSettingsService,
+        },
         ContentPublishService,
       ]
     );
@@ -139,7 +156,6 @@ describe('RoomOverviewPageComponent', () => {
     fixture = testBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
     component.room = new Room();
-    component.room.settings = { feedbackLocked: false };
   }));
 
   it('should create', () => {

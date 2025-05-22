@@ -19,6 +19,8 @@ import { ControlBarComponent } from '@app/presentation/bars/control-bar/control-
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIcon } from '@angular/material/icon';
+import { RoomSettings } from '@app/core/models/room-settings';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 @Component({
   selector: 'app-presentation',
@@ -41,6 +43,7 @@ export class PresentationComponent implements OnInit, OnDestroy {
   private translateService = inject(TranslocoService);
   private presentationService = inject(PresentationService);
   private notificationService = inject(NotificationService);
+  private roomSettingsService = inject(RoomSettingsService);
 
   // Route data input below
   @Input({ required: true }) room!: Room;
@@ -48,6 +51,8 @@ export class PresentationComponent implements OnInit, OnDestroy {
   @Input({ required: true }) viewRole!: UserRole;
   lastGroup?: string;
   featureString?: string;
+
+  roomSettings?: RoomSettings;
 
   constructor() {
     const childRoute = this.route.snapshot?.firstChild?.firstChild;
@@ -58,21 +63,24 @@ export class PresentationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.room.focusModeEnabled) {
-      this.translateService
-        .selectTranslate(
-          'presentation.focus-mode-enabled-info',
-          undefined,
-          'creator'
-        )
-        .pipe(take(1))
-        .subscribe((msg) => {
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.INFO
-          );
-        });
-    }
+    this.roomSettingsService.getByRoomId(this.room.id).subscribe((settings) => {
+      this.roomSettings = settings;
+      if (this.roomSettings.focusModeEnabled) {
+        this.translateService
+          .selectTranslate(
+            'presentation.focus-mode-enabled-info',
+            undefined,
+            'creator'
+          )
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.INFO
+            );
+          });
+      }
+    });
     document.body.style.background = 'var(--surface)';
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)

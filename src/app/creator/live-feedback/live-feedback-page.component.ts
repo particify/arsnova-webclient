@@ -4,7 +4,6 @@ import {
   HotkeyAction,
   HotkeyDirective,
 } from '@app/core/directives/hotkey.directive';
-import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormService } from '@app/core/services/util/form.service';
@@ -73,12 +72,11 @@ export class LiveFeedbackPageComponent
 
   changeType() {
     this.formService.disableForm();
-    this.roomService
-      .changeFeedbackType(this.room, this.type)
+    this.roomSettingsService
+      .updateFeedbackType(this.room.id, this.type)
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((room) => {
-        this.type =
-          room.extensions?.feedback?.type || LiveFeedbackType.FEEDBACK;
+      .subscribe((settings) => {
+        this.type = settings.surveyType;
         this.announceType();
         this.formService.enableForm();
       });
@@ -86,13 +84,13 @@ export class LiveFeedbackPageComponent
 
   toggle() {
     this.formService.disableForm();
-    this.roomService
-      .changeFeedbackLock(this.room, !this.isClosed)
+    this.roomSettingsService
+      .updateSurveyEnabled(this.room.id, !this.isEnabled)
       .pipe(takeUntil(this.destroyed$))
       .subscribe(
-        (room) => {
-          this.loadConfig(room);
-          if (this.isClosed) {
+        (settings) => {
+          this.updateConfig(settings);
+          if (!this.isEnabled) {
             this.updateFeedback([0, 0, 0, 0]);
             this.wsFeedbackService.reset(this.room.id);
           }

@@ -16,6 +16,8 @@ import { FlexModule } from '@angular/flex-layout';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { RoomSettings } from '@app/core/models/room-settings';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 @Component({
   selector: 'app-participant-page',
@@ -39,6 +41,7 @@ export class ParticipantPageComponent implements OnInit {
   protected langService = inject(LanguageService);
   private focusModeService = inject(FocusModeService);
   private routingService = inject(RoutingService);
+  private roomSettingsService = inject(RoomSettingsService);
 
   focusModeEnabled = false;
 
@@ -46,6 +49,8 @@ export class ParticipantPageComponent implements OnInit {
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;
+
+  roomSettings?: RoomSettings;
 
   constructor() {
     const translateService = this.translateService;
@@ -61,11 +66,14 @@ export class ParticipantPageComponent implements OnInit {
     if (!feature) {
       return;
     }
-    this.focusModeService.init(this.room, feature);
+    this.focusModeService.init(this.room.id, feature);
     this.focusModeService
       .getFocusModeEnabled()
       .subscribe(
         (focusModeEnabled) => (this.focusModeEnabled = focusModeEnabled)
       );
+    this.roomSettingsService.getByRoomId(this.room.id).subscribe((settings) => {
+      this.roomSettings = settings;
+    });
   }
 }

@@ -20,6 +20,8 @@ import { configureTestModule } from '@testing/test.setup';
 import { RoomService } from '@app/core/services/http/room.service';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -68,6 +70,17 @@ describe('RoomOverviewPageComponent', () => {
   mockWsCommentService.getCommentStream.and.returnValue(of({}));
 
   const mockRoomService = jasmine.createSpyObj(['changeFeedbackLock']);
+
+  class MockRoomSettingsService {
+    getByRoomId() {
+      return of({
+        surveyEnabled: true,
+        surveyType: LiveFeedbackType.FEEDBACK,
+        focusModeEnabled: false,
+        commentThresholdEnabled: false,
+      });
+    }
+  }
 
   beforeEach(waitForAsync(() => {
     const testBed = configureTestModule(
@@ -118,13 +131,16 @@ describe('RoomOverviewPageComponent', () => {
           provide: RoomService,
           useValue: mockRoomService,
         },
+        {
+          provide: RoomSettingsService,
+          useClass: MockRoomSettingsService,
+        },
       ]
     );
     testBed.compileComponents();
     fixture = testBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
     component.room = new Room();
-    component.room.settings = { feedbackLocked: true };
     component.commentSettings = new CommentSettings();
   }));
 

@@ -7,8 +7,6 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { EventService } from '@app/core/services/util/event.service';
@@ -34,6 +32,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatButton } from '@angular/material/button';
 import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
+import { RoomSettings } from '@app/core/models/room-settings';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 export class NavBarItem {
   name: string;
@@ -78,7 +78,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   protected route = inject(ActivatedRoute);
   protected globalStorageService = inject(GlobalStorageService);
   protected roomStatsService = inject(RoomStatsService);
-  protected feedbackService = inject(FeedbackService);
+  protected roomSettingsService = inject(RoomSettingsService);
   protected contentGroupService = inject(ContentGroupService);
   protected eventService = inject(EventService);
   protected roomService = inject(RoomService);
@@ -88,6 +88,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;
   @Input({ required: true }) room!: Room;
+  @Input({ required: true }) roomSettings!: RoomSettings;
   destroyed$ = new Subject<void>();
   barItems: NavBarItem[] = [];
   features: NavBarItem[] = [
@@ -102,7 +103,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   groupName?: string;
   private changesSubscription?: Subscription;
   private statsChangesSubscription?: Subscription;
-  private feedbackSubscription?: Subscription;
   private commentSettingsSubscription?: Subscription;
   contentGroups: ContentGroup[] = [];
   private focusStateSubscription?: Subscription;
@@ -121,9 +121,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     if (this.statsChangesSubscription) {
       this.statsChangesSubscription.unsubscribe();
     }
-    if (this.feedbackSubscription) {
-      this.feedbackSubscription.unsubscribe();
-    }
     if (this.commentSettingsSubscription) {
       this.commentSettingsSubscription.unsubscribe();
     }
@@ -139,7 +136,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (
-      !this.room.settings.feedbackLocked ||
+      this.roomSettings.surveyEnabled ||
       this.viewRole !== UserRole.PARTICIPANT
     ) {
       this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
@@ -150,7 +147,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     ) {
       this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
     }
-    this.feedbackService.startSub(this.room.id);
     let group = this.routingService.seriesName;
     if (group === undefined) {
       group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
@@ -188,7 +184,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.parseUserCount(msg.body)
         );
       });
-      this.focusModeService.init(this.room);
+      this.focusModeService.init(this.room.id);
       this.focusModeService
         .getFocusModeEnabled()
         .pipe(takeUntil(this.destroyed$))
@@ -226,15 +222,18 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   subscribeToParticipantEvents() {
     if (this.viewRole === UserRole.PARTICIPANT) {
-      this.feedbackSubscription = this.feedbackService
-        .getMessages()
-        .subscribe((message) => {
-          const type = JSON.parse(message.body).type;
-          if (type === FeedbackMessageType.STARTED) {
+      this.roomSettingsService
+        .getRoomSettingsStream(this.room.id, this.roomSettings.id)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((settings) => {
+          const surveyEnabled = this.activeFeatures.includes(
+            RoutingFeature.FEEDBACK
+          );
+          if (!surveyEnabled && settings.surveyEnabled) {
             this.activeFeatures.push(RoutingFeature.FEEDBACK);
             this.getItems();
             this.toggleNews(RoutingFeature.FEEDBACK);
-          } else if (type === FeedbackMessageType.STOPPED) {
+          } else if (surveyEnabled && !settings.surveyEnabled) {
             const index = this.activeFeatures.indexOf(RoutingFeature.FEEDBACK);
             this.activeFeatures.splice(index, 1);
             this.getItems();
