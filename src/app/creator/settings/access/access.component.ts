@@ -29,24 +29,24 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { debounceTime, map, Subject, take, takeUntil } from 'rxjs';
 import { AccessTokenService } from '@app/core/services/http/access-token.service';
-import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FlexModule } from '@angular/flex-layout';
-import { HintComponent } from '../../../standalone/hint/hint.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { TrackInteractionDirective } from '../../../core/directives/track-interaction.directive';
+import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
 import { MatIcon } from '@angular/material/icon';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatList, MatListItem } from '@angular/material/list';
 import { NgClass } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
 import { MatChipListbox, MatChipOption } from '@angular/material/chips';
+import { UpdateEvent } from '@app/creator/settings/update-event';
 
 export interface Role {
   name: string;

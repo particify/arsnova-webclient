@@ -1,13 +1,5 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
 import { TextStatistic } from '@app/core/models/text-statistic';
 
@@ -18,12 +10,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [AnswerGridListComponent],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
     }),
   ],
 } as Meta;

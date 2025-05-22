@@ -1,20 +1,9 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-leaderboard/content-group-leaderboard.component';
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { of } from 'rxjs';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ThemeService } from '@app/core/theme/theme.service';
-import { MaterialCssVarsService } from 'angular-material-css-vars';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { Room } from '@app/core/models/room';
 import { ContentGroup } from '@app/core/models/content-group';
 
@@ -81,18 +70,6 @@ class MockContentGroupService {
   }
 }
 
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
-
-class MockMaterialCssVarsService {
-  setDarkTheme() {}
-  setPrimaryColor() {}
-  setAccentColor() {}
-  setWarnColor() {}
-}
-
 export default {
   component: ContentGroupLeaderboardComponent,
   title: 'ContentGroupLeaderboard',
@@ -105,21 +82,6 @@ export default {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
-        ThemeService,
-        {
-          provide: MaterialCssVarsService,
-          useClass: MockMaterialCssVarsService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

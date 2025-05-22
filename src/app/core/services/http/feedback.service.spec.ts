@@ -1,19 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-
 import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventService } from '@app/core/services/util/event.service';
-import {
-  MockEventService,
-  MockNotificationService,
-  MockTranslocoService,
-} from '@testing/test-helpers';
+import { MockTranslocoService } from '@testing/test-helpers';
 import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { Injectable } from '@angular/core';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { Room } from '@app/core/models/room';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
+import { configureTestModule } from '@testing/test.setup';
 
 @Injectable()
 class MockWsFeedbackService {}
@@ -21,29 +13,21 @@ class MockWsFeedbackService {}
 describe('FeedbackService', () => {
   let service: FeedbackService;
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
+    const testBed = configureTestModule(
+      [],
+      [
         FeedbackService,
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
         {
           provide: TranslocoService,
           useClass: MockTranslocoService,
         },
         {
-          provide: NotificationService,
-          useClass: MockNotificationService,
-        },
-        {
           provide: WsFeedbackService,
           useClass: MockWsFeedbackService,
         },
-      ],
-      imports: [HttpClientTestingModule],
-    });
-    service = TestBed.inject(FeedbackService);
+      ]
+    );
+    service = testBed.inject(FeedbackService);
   });
 
   it('should be created', () => {

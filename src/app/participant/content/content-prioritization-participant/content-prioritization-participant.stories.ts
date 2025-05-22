@@ -1,27 +1,11 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { importProvidersFrom, EventEmitter } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { LanguageService } from '@app/core/services/util/language.service';
 import {
   ContentGroup,
   GroupType,
   PublishingMode,
 } from '@app/core/models/content-group';
-import { ENVIRONMENT } from '@environments/environment-token';
-import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { ApiConfig } from '@app/core/models/api-config';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentType } from '@app/core/models/content-type.enum';
@@ -30,28 +14,9 @@ import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 
-class MockService {}
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
-
-class MockApiConfigService {
-  getApiConfig$() {
-    return of(new ApiConfig([], {}, {}));
-  }
-}
-
 class MockFormattingService {}
 
 class MockContentAnswerService {}
-
-class MockLangService {
-  langEmitter = new EventEmitter<string>();
-  ensureValidLang(lang: string): string {
-    return lang;
-  }
-}
 
 export default {
   component: ContentPrioritizationParticipantComponent,
@@ -61,18 +26,6 @@ export default {
     moduleMetadata({
       imports: [ContentPrioritizationParticipantComponent],
       providers: [
-        {
-          provide: NotificationService,
-          useClass: MockService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
         {
           provide: FormattingService,
           useClass: MockFormattingService,
@@ -114,21 +67,6 @@ export default {
             },
           },
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        {
-          provide: ApiConfigService,
-          useClass: MockApiConfigService,
-        },
-        {
-          provide: ENVIRONMENT,
-          useValue: { features: [] },
-        },
-        provideAnimations(),
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

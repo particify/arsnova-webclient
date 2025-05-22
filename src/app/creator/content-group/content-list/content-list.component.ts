@@ -40,10 +40,10 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatActionList, MatListItem } from '@angular/material/list';
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
-import { RenderedTextComponent } from '../../../standalone/rendered-text/rendered-text.component';
-import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { MatIconButton } from '@angular/material/button';
-import { TrackInteractionDirective } from '../../../core/directives/track-interaction.directive';
+import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import {
@@ -53,10 +53,10 @@ import {
   MatMenuContent,
 } from '@angular/material/menu';
 import { MatDivider } from '@angular/material/divider';
-import { HotkeyDirective } from '../../../core/directives/hotkey.directive';
-import { CountdownTimerComponent } from '../../../standalone/countdown-timer/countdown-timer.component';
-import { PulsatingCircleComponent } from '../../../standalone/pulsating-circle/pulsating-circle.component';
-import { A11yRenderedBodyPipe } from '../../../core/pipes/a11y-rendered-body.pipe';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
+import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 
 @Component({
   selector: 'app-content-list',

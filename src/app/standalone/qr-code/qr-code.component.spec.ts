@@ -1,10 +1,9 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, waitForAsync } from '@angular/core/testing';
 
 import { QrCodeComponent } from './qr-code.component';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { of } from 'rxjs';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
   MockFeatureFlagService,
@@ -16,6 +15,7 @@ import { RoomSummary, RoomSummaryStats } from '@app/core/models/room-summary';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { Room } from '@app/core/models/room';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('QrCodeComponent', () => {
   let component: QrCodeComponent;
@@ -82,9 +82,9 @@ describe('QrCodeComponent', () => {
   ]);
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [QrCodeComponent, ExtensionPointModule],
-      providers: [
+    const testBed = configureTestModule(
+      [QrCodeComponent, ExtensionPointModule],
+      [
         {
           provide: ApiConfigService,
           useValue: mockApiConfigService,
@@ -109,17 +109,14 @@ describe('QrCodeComponent', () => {
           provide: FeatureFlagService,
           useClass: MockFeatureFlagService,
         },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
+      ]
+    );
+    testBed.compileComponents();
     mockApiConfigService.getApiConfig$.and.returnValue(of(configWithJoinLink));
-    fixture = TestBed.createComponent(QrCodeComponent);
+    fixture = testBed.createComponent(QrCodeComponent);
     component = fixture.componentInstance;
     component.room = new Room();
-  });
+  }));
 
   it('should create', () => {
     fixture.detectChanges();

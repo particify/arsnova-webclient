@@ -16,6 +16,7 @@ import { ParticipantPageComponent } from '@app/participant/participant-page.comp
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { UserSettingsResolver } from '@app/core/resolver/user-settings.resolver';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 
 const routes: Routes = [
   {
@@ -128,6 +129,7 @@ const routes: Routes = [
               resolve: {
                 commentSettings: CommentSettingsResolver,
               },
+              providers: [CommentSettingsService],
               runGuardsAndResolvers: 'always',
               children: [
                 ...routes,

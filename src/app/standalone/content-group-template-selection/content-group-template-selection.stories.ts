@@ -1,31 +1,18 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
-
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { ContentGroupTemplateSelectionComponent } from './content-group-template-selection.component';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HttpClientModule } from '@angular/common/http';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { ActivatedRoute } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/add-template-button.component';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
-import { DialogService } from '@app/core/services/util/dialog.service';
 import { GroupType } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 
@@ -93,16 +80,6 @@ class MockTemplateService {
   }
 }
 
-class MockLangService {
-  getIsoLanguages() {
-    return of([
-      { code: 'en', nativeName: 'English', localizedName: 'Englisch' },
-      { code: 'de', nativeName: 'Deutsch', localizedName: 'German' },
-      { code: 'es', nativeName: 'español', localizedName: 'Spanish' },
-    ]);
-  }
-}
-
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
@@ -139,16 +116,11 @@ export default {
         AddTemplateButtonComponent,
         TemplateLanguageSelectionComponent,
         TemplateTagSelectionComponent,
-        BrowserAnimationsModule,
       ],
       providers: [
         {
           provide: BaseTemplateService,
           useClass: MockTemplateService,
-        },
-        {
-          provide: NotificationService,
-          useClass: MockService,
         },
         {
           provide: AuthenticationService,
@@ -163,10 +135,6 @@ export default {
           useClass: MockService,
         },
         {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
-        {
           provide: RoutingService,
           useClass: MockService,
         },
@@ -177,19 +145,9 @@ export default {
           },
         },
         {
-          provide: DialogService,
-          useClass: MockService,
-        },
-        {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

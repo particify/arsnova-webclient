@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject } from '@angular/core/testing';
 import {
   EventCategory,
   TrackingService,
 } from '@app/core/services/util/tracking.service';
 import { TrackInteractionDirective } from './track-interaction.directive';
+import { configureTestModule } from '@testing/test.setup';
 
 const TEST_TRACK_INTERACTION = 'UI action performed';
 const TEST_TRACK_NAME = 'test-track-name';
@@ -18,6 +19,7 @@ const TEST_TRACK_NAME = 'test-track-name';
   >
     Tracked Button
   </button>`,
+  imports: [TrackInteractionDirective],
 })
 class TestComponent {
   @ViewChild('button') button!: ElementRef<HTMLButtonElement>;
@@ -28,28 +30,24 @@ class TestComponent {
 describe('TrackInteractionDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let component: TestComponent;
-  const trackingService = jasmine.createSpyObj('TrackingService', ['addEvent']);
 
   beforeEach(() => {
-    fixture = TestBed.configureTestingModule({
-      imports: [TrackInteractionDirective, TestComponent],
-      providers: [
-        {
-          provide: TrackingService,
-          useValue: trackingService,
-        },
-      ],
-    }).createComponent(TestComponent);
+    const testBed = configureTestModule([TestComponent]);
+    fixture = testBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should trigger a tracking event', async () => {
-    component.button.nativeElement.click();
-    expect(trackingService.addEvent).toHaveBeenCalledWith(
-      EventCategory.UI_INTERACTION,
-      TEST_TRACK_INTERACTION,
-      TEST_TRACK_NAME
-    );
-  });
+  it('should trigger a tracking event', inject(
+    [TrackingService],
+    (service: TrackingService) => {
+      expect(service).toBeTruthy();
+      component.button.nativeElement.click();
+      expect(service.addEvent).toHaveBeenCalledWith(
+        EventCategory.UI_INTERACTION,
+        TEST_TRACK_INTERACTION,
+        TEST_TRACK_NAME
+      );
+    }
+  ));
 });

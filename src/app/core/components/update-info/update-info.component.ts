@@ -14,7 +14,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButton } from '@angular/material/button';
 import { TranslocoPipe } from '@jsverse/transloco';

@@ -1,30 +1,13 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
-
-import { importProvidersFrom, EventEmitter } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { Observable, of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TrackingService } from '@app/core/services/util/tracking.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomOverviewPageComponent } from '@app/participant/room-overview/room-overview-page.component';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
@@ -35,18 +18,12 @@ import {
   GroupType,
   PublishingMode,
 } from '@app/core/models/content-group';
-import { ENVIRONMENT } from '@environments/environment-token';
-import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { ApiConfig } from '@app/core/models/api-config';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { CommentSettings } from '@app/core/models/comment-settings';
 
 class MockService {}
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
+
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
@@ -57,17 +34,6 @@ class MockAuthenticationService {
         'token'
       )
     );
-  }
-}
-
-class MockHotkeyService {
-  registerHotkey() {}
-}
-
-class MockLangService {
-  langEmitter = new EventEmitter<string>();
-  ensureValidLang(lang: string): string {
-    return lang;
   }
 }
 
@@ -160,25 +126,13 @@ class MockFocusModeService {
   }
 }
 
-class MockEventService {
-  on() {
-    return of({});
-  }
-}
-
-class MockApiConfigService {
-  getApiConfig$() {
-    return of(new ApiConfig([], {}, {}));
-  }
-}
-
 export default {
   component: RoomOverviewPageComponent,
   title: 'RoomOverviewPage',
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [RoomOverviewPageComponent, BrowserAnimationsModule],
+      imports: [RoomOverviewPageComponent],
       providers: [
         {
           provide: RoomService,
@@ -187,30 +141,6 @@ export default {
         {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,
-        },
-        {
-          provide: NotificationService,
-          useClass: MockService,
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-        {
-          provide: HotkeyService,
-          useClass: MockHotkeyService,
-        },
-        {
-          provide: TrackingService,
-          useClass: MockService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: RoomStatsService,
@@ -229,10 +159,6 @@ export default {
           useClass: MockCommentSettingsService,
         },
         {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
           provide: ContentPublishService,
           useClass: MockService,
         },
@@ -240,20 +166,6 @@ export default {
           provide: FocusModeService,
           useClass: MockFocusModeService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        {
-          provide: ApiConfigService,
-          useClass: MockApiConfigService,
-        },
-        {
-          provide: ENVIRONMENT,
-          useValue: { features: [] },
-        },
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

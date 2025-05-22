@@ -1,8 +1,7 @@
 import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-seperator.pipe';
 
-import { TestBed } from '@angular/core/testing';
-
 import { TranslocoService } from '@jsverse/transloco';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('LocalizeDecimalSeperatorPipe', () => {
   const translateService = jasmine.createSpyObj('TranslocoService', [
@@ -11,15 +10,15 @@ describe('LocalizeDecimalSeperatorPipe', () => {
   translateService.getActiveLang.and.returnValue('de');
   let pipe: LocalizeDecimalSeperatorPipe;
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
+    configureTestModule(
+      [],
+      [
         {
           provide: TranslocoService,
           useValue: translateService,
         },
-      ],
-    });
-    TestBed.runInInjectionContext(() => {
+      ]
+    ).runInInjectionContext(() => {
       pipe = new LocalizeDecimalSeperatorPipe();
     });
   });

@@ -7,7 +7,7 @@ import { share } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { SystemHealth } from '@app/admin/_models/system-health';
 import { FlexModule } from '@angular/flex-layout';
-import { HealthStatusComponent } from '../health-status/health-status.component';
+import { HealthStatusComponent } from '@app/admin/health-status/health-status.component';
 import { AsyncPipe } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
 

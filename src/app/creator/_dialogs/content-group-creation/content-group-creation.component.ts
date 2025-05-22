@@ -19,14 +19,16 @@ import {
 } from '@app/core/models/content-group';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
-import { DetailedRadioGroup } from '@app/standalone/detail-radio-group/detail-radio-group.component';
+import {
+  DetailedRadioGroup,
+  DetailRadioGroupComponent,
+} from '@app/standalone/detail-radio-group/detail-radio-group.component';
 import { FormsModule } from '@angular/forms';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { FlexModule } from '@angular/flex-layout';
 import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { DetailRadioGroupComponent } from '../../../standalone/detail-radio-group/detail-radio-group.component';
-import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatButton } from '@angular/material/button';
 
 interface DialogData {

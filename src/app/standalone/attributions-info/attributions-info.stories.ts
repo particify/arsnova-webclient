@@ -1,14 +1,7 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { AttributionsInfoComponent } from './attributions-info.component';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HttpClientModule } from '@angular/common/http';
+
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
@@ -79,12 +72,6 @@ export default {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

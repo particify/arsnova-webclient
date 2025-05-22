@@ -19,7 +19,9 @@ export enum AdvancedSnackBarTypes {
   INFO = 'INFO',
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class NotificationService {
   snackBar = inject(MatSnackBar);
   private router = inject(Router);

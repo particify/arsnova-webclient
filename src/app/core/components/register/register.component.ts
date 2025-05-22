@@ -13,20 +13,22 @@ import {
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { Router, RouterLink } from '@angular/router';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import {
+  PasswordEntryComponent,
+  PasswordEntryComponent as PasswordEntryComponent_1,
+} from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
 import { ApiConfig } from '@app/core/models/api-config';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
-import { FormHeaderComponent } from '../form-header/form-header.component';
+import { FormHeaderComponent } from '@app/core/components/form-header/form-header.component';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AutofocusDirective } from '../../directives/autofocus.directive';
-import { PasswordEntryComponent as PasswordEntryComponent_1 } from '../password-entry/password-entry.component';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @Component({
   selector: 'app-register',

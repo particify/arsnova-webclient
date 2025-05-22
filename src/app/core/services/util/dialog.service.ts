@@ -30,7 +30,9 @@ export const DIALOG_SIZES: Readonly<Record<string, string>> = {
   max: '832px',
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class DialogService {
   dialog = inject(MatDialog);
   private trackingService = inject(TrackingService);

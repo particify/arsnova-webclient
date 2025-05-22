@@ -16,21 +16,21 @@ import { HintType } from '@app/core/models/hint-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { FlexModule } from '@angular/flex-layout';
-import { AutofocusDirective } from '../../core/directives/autofocus.directive';
-import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
-import { CommentsCardComponent } from '../../standalone/feature-card/comments-card/comments-card.component';
-import { LiveFeedbackCardComponent } from '../../standalone/feature-card/live-feedback-card/live-feedback-card.component';
-import { FeatureCardComponent } from '../../standalone/feature-card/feature-card.component';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { CommentsCardComponent } from '@app/standalone/feature-card/comments-card/comments-card.component';
+import { LiveFeedbackCardComponent } from '@app/standalone/feature-card/live-feedback-card/live-feedback-card.component';
+import { FeatureCardComponent } from '@app/standalone/feature-card/feature-card.component';
 import { MatButton } from '@angular/material/button';
-import { HotkeyDirective } from '../../core/directives/hotkey.directive';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
 import { MatIcon } from '@angular/material/icon';
-import { FeatureFlagDirective } from '../../core/directives/feature-flag.directive';
+import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directive';
 import { MatCard } from '@angular/material/card';
 import { MatRipple } from '@angular/material/core';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ContentGroupsComponent } from '../../standalone/content-groups/content-groups.component';
+import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
 import { AsyncPipe } from '@angular/common';
-import { A11yIntroPipe } from '../../core/pipes/a11y-intro.pipe';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 @Component({
   selector: 'app-creator-overview',

@@ -15,8 +15,8 @@ import {
 import { take } from 'rxjs';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ControlBarComponent } from '../bars/control-bar/control-bar.component';
-import { AutofocusDirective } from '../../core/directives/autofocus.directive';
+import { ControlBarComponent } from '@app/presentation/bars/control-bar/control-bar.component';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIcon } from '@angular/material/icon';
 

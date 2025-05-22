@@ -1,20 +1,20 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { AnswerListComponent } from './answer-list.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TextStatistic } from '@app/core/models/text-statistic';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('AnswerListComponent', () => {
   let component: AnswerListComponent;
   let fixture: ComponentFixture<AnswerListComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [getTranslocoModule(), AnswerListComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AnswerListComponent);
+    const testBed = configureTestModule([
+      getTranslocoModule(),
+      AnswerListComponent,
+    ]);
+    testBed.compileComponents();
+    fixture = testBed.createComponent(AnswerListComponent);
     component = fixture.componentInstance;
     component.answers = [
       new TextStatistic('ABC', 3),

@@ -33,17 +33,17 @@ import { ContentGroupPageService } from '@app/creator/content-group/content-grou
 import { FlexModule } from '@angular/flex-layout';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatSelectTrigger } from '@angular/material/select';
-import { HotkeyDirective } from '../../../core/directives/hotkey.directive';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
 import { MatIcon } from '@angular/material/icon';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatTabNav, MatTabLink, MatTabNavPanel } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
-import { AutofocusDirective } from '../../../core/directives/autofocus.directive';
-import { FormattingToolbarComponent } from '../../../standalone/formatting-toolbar/formatting-toolbar.component';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
+import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { MatInput } from '@angular/material/input';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Dir } from '@angular/cdk/bidi';
-import { HintComponent } from '../../../standalone/hint/hint.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatTooltip } from '@angular/material/tooltip';
 import { NgStyle, AsyncPipe } from '@angular/common';
@@ -57,11 +57,11 @@ import { WordcloudContentFormComponent } from './wordcloud-content-form/wordclou
 import { PrioritizationContentFormComponent } from './prioritization-content-form/prioritization-content-form.component';
 import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
 import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
-import { ContentPreviewComponent } from '../../../standalone/content-preview/content-preview.component';
+import { ContentPreviewComponent } from '@app/standalone/content-preview/content-preview.component';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
-import { A11yIntroPipe } from '../../../core/pipes/a11y-intro.pipe';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 interface ContentFormat {
   type: ContentType;

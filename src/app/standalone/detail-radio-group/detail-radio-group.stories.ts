@@ -1,17 +1,9 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import {
   DetailedRadioGroup,
   DetailRadioGroupComponent,
 } from '@app/standalone/detail-radio-group/detail-radio-group.component';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HttpClientModule } from '@angular/common/http';
 
 export default {
   component: DetailRadioGroupComponent,
@@ -20,12 +12,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [DetailRadioGroupComponent],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
     }),
   ],
 } as Meta;

@@ -19,11 +19,11 @@ import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
 import { FormService } from '@app/core/services/util/form.service';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { SearchBarComponent } from '../../search-bar/search-bar.component';
+import { SearchBarComponent } from '@app/admin/search-bar/search-bar.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FlexModule } from '@angular/flex-layout';
-import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatButton } from '@angular/material/button';
 
 export interface DialogData {

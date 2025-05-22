@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
-import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 
 @Component({
   selector: 'app-form-header',

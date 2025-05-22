@@ -1,14 +1,7 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { AnnouncementComponent } from '@app/standalone/announcement/announcement.component';
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+
 import { Announcement } from '@app/core/models/announcement';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -27,12 +20,6 @@ export default {
           provide: FormattingService,
           useClass: MockService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

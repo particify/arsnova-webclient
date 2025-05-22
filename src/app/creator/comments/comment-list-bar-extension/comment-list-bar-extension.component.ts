@@ -12,13 +12,13 @@ import {
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconButton } from '@angular/material/button';
-import { HotkeyDirective } from '../../../core/directives/hotkey.directive';
-import { TrackInteractionDirective } from '../../../core/directives/track-interaction.directive';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
+import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatDivider } from '@angular/material/divider';
-import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 
 @Component({
   selector: 'app-comment-list-bar-extension',

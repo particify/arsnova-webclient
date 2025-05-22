@@ -1,14 +1,6 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 
 export default {
   component: HintComponent,
@@ -17,12 +9,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [HintComponent],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
     }),
   ],
 } as Meta;

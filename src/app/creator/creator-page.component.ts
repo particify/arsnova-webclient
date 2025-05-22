@@ -9,10 +9,10 @@ import {
   MatDrawer,
   MatDrawerContent,
 } from '@angular/material/sidenav';
-import { ExtensionPointComponent } from '../../../projects/extension-point/src/lib/extension-point.component';
-import { NavBarComponent } from '../standalone/nav-bar/nav-bar.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { NavBarComponent } from '@app/standalone/nav-bar/nav-bar.component';
 import { RouterOutlet } from '@angular/router';
-import { FooterComponent } from '../standalone/footer/footer.component';
+import { FooterComponent } from '@app/standalone/footer/footer.component';
 
 @Component({
   selector: 'app-creator-page',

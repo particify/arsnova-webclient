@@ -23,7 +23,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Dir } from '@angular/cdk/bidi';
-import { HintComponent } from '../../../../standalone/hint/hint.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
 
 @Component({
   selector: 'app-flashcard-content-form',

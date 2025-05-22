@@ -1,25 +1,10 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
-
-import { importProvidersFrom, EventEmitter } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import { EventEmitter } from '@angular/core';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TrackingService } from '@app/core/services/util/tracking.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { LiveFeedbackPageComponent } from '@app/participant/live-feedback/live-feedback-page.component';
@@ -51,10 +36,7 @@ class MockFeedbackService {
 }
 
 class MockService {}
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
+
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
@@ -70,24 +52,13 @@ class MockAuthenticationService {
 
 class MockWsFeedbackService {}
 
-class MockHotkeyService {
-  registerHotkey() {}
-}
-
-class MockLangService {
-  langEmitter = new EventEmitter<string>();
-  ensureValidLang(lang: string): string {
-    return lang;
-  }
-}
-
 export default {
   component: LiveFeedbackPageComponent,
   title: 'LiveFeedbackPage',
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [LiveFeedbackPageComponent, BrowserAnimationsModule],
+      imports: [LiveFeedbackPageComponent],
       providers: [
         {
           provide: FeedbackService,
@@ -104,30 +75,6 @@ export default {
         {
           provide: WsFeedbackService,
           useClass: MockWsFeedbackService,
-        },
-        {
-          provide: NotificationService,
-          useClass: MockService,
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-        {
-          provide: HotkeyService,
-          useClass: MockHotkeyService,
-        },
-        {
-          provide: TrackingService,
-          useClass: MockService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
         },
         {
           provide: ActivatedRoute,
@@ -154,12 +101,6 @@ export default {
             },
           },
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

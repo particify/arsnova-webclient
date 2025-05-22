@@ -25,7 +25,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
-import { LoadingButtonComponent } from '../../../../standalone/loading-button/loading-button.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @Component({
   selector: 'app-user-activation',

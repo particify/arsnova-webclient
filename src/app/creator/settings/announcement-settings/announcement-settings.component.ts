@@ -23,14 +23,14 @@ import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { FormattingToolbarComponent } from '../../../standalone/formatting-toolbar/formatting-toolbar.component';
+import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Dir } from '@angular/cdk/bidi';
-import { RenderedTextComponent } from '../../../standalone/rendered-text/rendered-text.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { MatButton } from '@angular/material/button';
-import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
-import { AnnouncementComponent } from '../../../standalone/announcement/announcement.component';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { AnnouncementComponent } from '@app/standalone/announcement/announcement.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-announcement-settings',

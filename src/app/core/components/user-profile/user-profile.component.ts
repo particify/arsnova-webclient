@@ -16,21 +16,21 @@ import { UserSettings } from '@app/core/models/user-settings';
 import { Location, AsyncPipe } from '@angular/common';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { take } from 'rxjs';
-import { AutofocusDirective } from '../../directives/autofocus.directive';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { FlexModule } from '@angular/flex-layout';
 import {
   MatAccordion,
   MatExpansionPanel,
   MatExpansionPanelHeader,
 } from '@angular/material/expansion';
-import { SettingsPanelHeaderComponent } from '../../../standalone/settings-panel-header/settings-panel-header.component';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
-import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
-import { HintComponent } from '../../../standalone/hint/hint.component';
+import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { SettingsSlideToggleComponent } from '../../../standalone/settings-slide-toggle/settings-slide-toggle.component';
-import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 export class FormField {
   value: string;

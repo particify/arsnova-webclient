@@ -33,8 +33,8 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
 import { ExtensionFactory } from '@projects/extension-point/src/lib/extension-factory';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
-import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import {
@@ -42,7 +42,7 @@ import {
   MatFabButton,
   MatIconButton,
 } from '@angular/material/button';
-import { HotkeyDirective } from '../../directives/hotkey.directive';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { NgClass } from '@angular/common';
@@ -50,12 +50,12 @@ import { ExtendedModule } from '@angular/flex-layout/extended';
 import { MatPrefix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatActionList, MatListItem, MatList } from '@angular/material/list';
-import { TextOverflowClipComponent } from '../../../standalone/text-overflow-clip/text-overflow-clip.component';
+import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ListBadgeComponent } from '../../../standalone/list-badge/list-badge.component';
+import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 import { MatBadge } from '@angular/material/badge';
-import { TrackInteractionDirective } from '../../directives/track-interaction.directive';
-import { SplitShortIdPipe } from '../../pipes/split-short-id.pipe';
+import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
 

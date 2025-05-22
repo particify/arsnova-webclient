@@ -1,45 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 
 import { LiveFeedbackComponent } from './live-feedback.component';
-import { MockAnnounceService } from '@testing/test-helpers';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatIconHarness } from '@angular/material/icon/testing';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { By } from '@angular/platform-browser';
 import { EventEmitter } from '@angular/core';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('LiveFeedbackComponent', () => {
   let component: LiveFeedbackComponent;
   let fixture: ComponentFixture<LiveFeedbackComponent>;
 
-  const mockHotkeyService = jasmine.createSpyObj('HotkeyService', [
-    'registerHotkey',
-    'unregisterHotkey',
-  ]);
-
   let loader: HarnessLoader;
   let icon: MatIconHarness;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [LiveFeedbackComponent, getTranslocoModule()],
-      providers: [
-        {
-          provide: HotkeyService,
-          useValue: mockHotkeyService,
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockAnnounceService,
-        },
-      ],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(LiveFeedbackComponent);
+    fixture = configureTestModule([
+      LiveFeedbackComponent,
+      getTranslocoModule(),
+    ]).createComponent(LiveFeedbackComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
     component.dataChanged = new EventEmitter<number[]>();

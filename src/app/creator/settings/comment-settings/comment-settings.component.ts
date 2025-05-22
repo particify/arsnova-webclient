@@ -21,15 +21,14 @@ import { CommentSettings } from '@app/core/models/comment-settings';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '@app/core/services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { CommentExtensions } from '@app/core/models/room-extensions';
 import { take } from 'rxjs';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { FlexModule } from '@angular/flex-layout';
-import { SettingsSlideToggleComponent } from '../../../standalone/settings-slide-toggle/settings-slide-toggle.component';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
-import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import {
   MatChipGrid,
@@ -38,6 +37,7 @@ import {
   MatChipInput,
 } from '@angular/material/chips';
 import { MatIcon } from '@angular/material/icon';
+import { UpdateEvent } from '@app/creator/settings/update-event';
 
 @Component({
   selector: 'app-comment-settings',

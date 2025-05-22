@@ -13,11 +13,11 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
 import {
   NavButton,
   NavButtonSection,
+  NavigationDrawerComponent,
 } from '@app/standalone/navigation-drawer/navigation-drawer.component';
-import { NavigationDrawerComponent } from '../../standalone/navigation-drawer/navigation-drawer.component';
 import { FlexModule } from '@angular/flex-layout';
-import { ExtensionPointComponent } from '../../../../projects/extension-point/src/lib/extension-point.component';
-import { SummaryBarComponent } from '../summary-bar/summary-bar.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { SummaryBarComponent } from '@app/admin/summary-bar/summary-bar.component';
 @Component({
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',

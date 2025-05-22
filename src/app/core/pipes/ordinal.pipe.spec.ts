@@ -1,19 +1,19 @@
 import { TranslocoService } from '@jsverse/transloco';
 import { OrdinalPipe } from './ordinal.pipe';
-import { TestBed } from '@angular/core/testing';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('OrdinalPipe', () => {
   let translateService: TranslocoService;
   let pipe: OrdinalPipe;
   let translateSpy: jasmine.Spy;
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [getTranslocoModule()],
-      providers: [TranslocoService],
-    });
-    translateService = TestBed.inject(TranslocoService);
-    TestBed.runInInjectionContext(() => {
+    const testBed = configureTestModule(
+      [getTranslocoModule()],
+      [TranslocoService]
+    );
+    translateService = testBed.inject(TranslocoService);
+    testBed.runInInjectionContext(() => {
       pipe = new OrdinalPipe();
     });
     translateSpy = spyOn(translateService, 'translate');

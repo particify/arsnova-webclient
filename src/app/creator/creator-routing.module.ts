@@ -16,6 +16,7 @@ import { CreatorPageComponent } from '@app/creator/creator-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 
 const routes: Routes = [
   {
@@ -71,6 +72,7 @@ const routes: Routes = [
     data: {
       parentRoute: ParentRoute.ROOM,
     },
+    providers: [CommentSettingsService],
   },
   {
     path: 'comments/moderation',
@@ -86,6 +88,7 @@ const routes: Routes = [
       isModeration: true,
       parentRoute: ParentRoute.ROOM,
     },
+    providers: [CommentSettingsService],
   },
   {
     path: 'feedback',

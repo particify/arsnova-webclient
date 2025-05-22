@@ -1,24 +1,13 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { of } from 'rxjs';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ActivatedRoute } from '@angular/router';
-import { ThemeService } from '@app/core/theme/theme.service';
 import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { MaterialCssVarsService } from 'angular-material-css-vars';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 
 class MockContentGroupService {
   getCurrentLeaderboard() {
@@ -154,18 +143,6 @@ class MockContentService {
   }
 }
 
-class MockMaterialCssVarsService {
-  setDarkTheme() {}
-  setPrimaryColor() {}
-  setAccentColor() {}
-  setWarnColor() {}
-}
-
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
-
 export default {
   component: LeaderboardPageComponent,
   title: 'LeaderboardPage',
@@ -193,21 +170,6 @@ export default {
             },
           },
         },
-        ThemeService,
-        {
-          provide: MaterialCssVarsService,
-          useClass: MockMaterialCssVarsService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

@@ -2,10 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { FlexModule } from '@angular/flex-layout';
-import { AutofocusDirective } from '../../directives/autofocus.directive';
-import { RoomListComponent } from '../room-list/room-list.component';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
+import { RoomListComponent } from '@app/core/components/room-list/room-list.component';
 import { AsyncPipe } from '@angular/common';
-import { A11yIntroPipe } from '../../pipes/a11y-intro.pipe';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 @Component({
   selector: 'app-user-home',

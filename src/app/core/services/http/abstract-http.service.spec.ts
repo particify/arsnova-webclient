@@ -1,20 +1,10 @@
-import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, inject, tick } from '@angular/core/testing';
 import { AbstractHttpService, HttpMethod } from './abstract-http.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
-
-@Injectable()
-class MockEventService {}
-
-@Injectable()
-class MockNotificationService {}
+import { HttpTestingController } from '@angular/common/http/testing';
+import { configureTestModule } from '@testing/test.setup';
 
 @Injectable()
 class MockTranslocoService {
@@ -58,26 +48,17 @@ describe('AbstractHttpService', () => {
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
+    const testBed = configureTestModule(
+      [],
+      [
         TestHttpService,
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
-          provide: NotificationService,
-          useClass: MockNotificationService,
-        },
         {
           provide: TranslocoService,
           useClass: MockTranslocoService,
         },
-      ],
-      imports: [HttpClientTestingModule],
-    });
-
-    httpTestingController = TestBed.inject(HttpTestingController);
+      ]
+    );
+    httpTestingController = testBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

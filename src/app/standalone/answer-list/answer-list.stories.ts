@@ -1,13 +1,5 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 import { ActivatedRoute } from '@angular/router';
 import { TextStatistic } from '@app/core/models/text-statistic';
@@ -33,12 +25,6 @@ export default {
           provide: ActivatedRoute,
           useClass: MockActivatedRoute,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

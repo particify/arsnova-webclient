@@ -35,21 +35,23 @@ import {
 } from '@app/core/models/client-authentication-result';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import {
+  PasswordEntryComponent,
+  PasswordEntryComponent as PasswordEntryComponent_1,
+} from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
-import { FormHeaderComponent } from '../form-header/form-header.component';
+import { FormHeaderComponent } from '@app/core/components/form-header/form-header.component';
 import { MatButton } from '@angular/material/button';
-import { AutofocusDirective } from '../../directives/autofocus.directive';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { MatDivider } from '@angular/material/divider';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { PasswordEntryComponent as PasswordEntryComponent_1 } from '../password-entry/password-entry.component';
-import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
-import { LoadingIndicatorComponent } from '../../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 function setDefaultTrue(value: boolean | undefined): boolean {
   return value ?? true;

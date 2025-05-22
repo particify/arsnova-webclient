@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { catchError, of, shareReplay } from 'rxjs';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
-import { AdminPageHeaderComponent } from '../admin-page-header/admin-page-header.component';
-import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatCard } from '@angular/material/card';
 import {
   MatTable,
@@ -12,7 +12,7 @@ import {
   MatRowDef,
   MatRow,
 } from '@angular/material/table';
-import { HealthStatusComponent } from '../health-status/health-status.component';
+import { HealthStatusComponent } from '@app/admin/health-status/health-status.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { LowerCasePipe, JsonPipe, KeyValuePipe } from '@angular/common';

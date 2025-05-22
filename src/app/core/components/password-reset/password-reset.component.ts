@@ -16,15 +16,17 @@ import {
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { Router } from '@angular/router';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import {
+  PasswordEntryComponent,
+  PasswordEntryComponent as PasswordEntryComponent_1,
+} from '@app/core/components/password-entry/password-entry.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
-import { PasswordEntryComponent as PasswordEntryComponent_1 } from '../password-entry/password-entry.component';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { LoadingButtonComponent } from '../../../standalone/loading-button/loading-button.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(

@@ -18,7 +18,10 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { fromEvent, Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
-import { HotkeyAction } from '@app/core/directives/hotkey.directive';
+import {
+  HotkeyDirective,
+  HotkeyAction,
+} from '@app/core/directives/hotkey.directive';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { Content } from '@app/core/models/content';
@@ -35,20 +38,18 @@ import { CommentPresentationState } from '@app/core/models/events/comment-presen
 import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CommentPeriod } from '@app/core/models/comment-period.enum';
-import { ExtensionPointComponent } from '../../../../../projects/extension-point/src/lib/extension-point.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { FlexModule } from '@angular/flex-layout';
 import { NgClass } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
 import { MatRipple } from '@angular/material/core';
 import { MatTooltip } from '@angular/material/tooltip';
-import { HotkeyDirective } from '../../../core/directives/hotkey.directive';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
-import { KeyButtonBarComponent } from '../key-button-bar/key-button-bar.component';
-import { ContentPresentationMenuComponent as ContentPresentationMenuComponent_1 } from '../../../standalone/content-presentation-menu/content-presentation-menu.component';
-import { CommentFilterComponent } from '../../../standalone/comment-filter/comment-filter.component';
-import { SplitShortIdPipe } from '../../../core/pipes/split-short-id.pipe';
+import { KeyButtonBarComponent } from '@app/presentation/bars/key-button-bar/key-button-bar.component';
+import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -90,7 +91,7 @@ export class KeyNavBarItem extends NavBarItem {
     MatMenu,
     MatMenuItem,
     KeyButtonBarComponent,
-    ContentPresentationMenuComponent_1,
+    ContentPresentationMenuComponent,
     CommentFilterComponent,
     SplitShortIdPipe,
     TranslocoPipe,

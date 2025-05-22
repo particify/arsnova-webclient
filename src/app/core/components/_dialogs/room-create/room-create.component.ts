@@ -34,12 +34,12 @@ import { take } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { FlexModule } from '@angular/flex-layout';
-import { ExtensionPointComponent } from '../../../../../../projects/extension-point/src/lib/extension-point.component';
 import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { HintComponent } from '../../../../standalone/hint/hint.component';
-import { LoadingButtonComponent } from '../../../../standalone/loading-button/loading-button.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatButton } from '@angular/material/button';
+import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
 
 @Component({
   selector: 'app-room-create',

@@ -13,9 +13,9 @@ import {
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
-import { AdminPageHeaderComponent } from '../admin-page-header/admin-page-header.component';
+import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatCard } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';

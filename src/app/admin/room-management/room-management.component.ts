@@ -13,11 +13,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '@app/core/services/http/user.service';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
-import { AdminPageHeaderComponent } from '../admin-page-header/admin-page-header.component';
-import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
+import { SearchBarComponent } from '@app/admin/search-bar/search-bar.component';
 import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
-import { EntityPropertiesComponent } from '../entity-properties/entity-properties.component';
+import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 

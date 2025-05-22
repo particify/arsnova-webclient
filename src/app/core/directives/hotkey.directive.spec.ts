@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 import {
   HotkeyActionType,
   HotkeyModifier,
   HotkeyService,
 } from '@app/core/services/util/hotkey.service';
 import { HotkeyDirective } from './hotkey.directive';
+import { configureTestModule } from '@testing/test.setup';
 
 @Component({
   template: ` <button
@@ -17,6 +18,7 @@ import { HotkeyDirective } from './hotkey.directive';
   >
     Hotkey Button
   </button>`,
+  imports: [HotkeyDirective],
 })
 class TestComponent {
   @ViewChild('button') button!: HTMLButtonElement;
@@ -26,21 +28,12 @@ class TestComponent {
 
 describe('HotkeyDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
-  const hotkeyService = jasmine.createSpyObj('HotkeyService', [
-    'registerHotkey',
-    'unregisterHotkey',
-  ]);
+  let hotkeyService: HotkeyService;
 
   beforeEach(() => {
-    fixture = TestBed.configureTestingModule({
-      imports: [HotkeyDirective, TestComponent],
-      providers: [
-        {
-          provide: HotkeyService,
-          useValue: hotkeyService,
-        },
-      ],
-    }).createComponent(TestComponent);
+    const testBed = configureTestModule([HotkeyDirective, TestComponent]);
+    fixture = testBed.createComponent(TestComponent);
+    hotkeyService = testBed.inject(HotkeyService);
     fixture.detectChanges();
   });
 

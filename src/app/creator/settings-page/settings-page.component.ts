@@ -13,44 +13,33 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { HotkeyAction } from '@app/core/directives/hotkey.directive';
+import {
+  HotkeyAction,
+  HotkeyDirective,
+} from '@app/core/directives/hotkey.directive';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
-import { AutofocusDirective } from '../../core/directives/autofocus.directive';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { FlexModule } from '@angular/flex-layout';
-import { LoadingIndicatorComponent } from '../../standalone/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import {
   MatAccordion,
   MatExpansionPanel,
   MatExpansionPanelHeader,
 } from '@angular/material/expansion';
-import { HotkeyDirective } from '../../core/directives/hotkey.directive';
-import { SettingsPanelHeaderComponent } from '../../standalone/settings-panel-header/settings-panel-header.component';
-import { RoomComponent } from '../settings/room/room.component';
-import { CommentSettingsComponent } from '../settings/comment-settings/comment-settings.component';
-import { AccessComponent } from '../settings/access/access.component';
-import { AnnouncementSettingsComponent } from '../settings/announcement-settings/announcement-settings.component';
-import { A11yIntroPipe } from '../../core/pipes/a11y-intro.pipe';
+import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
+import { RoomComponent } from '@app/creator/settings/room/room.component';
+import { CommentSettingsComponent } from '@app/creator/settings/comment-settings/comment-settings.component';
+import { AccessComponent } from '@app/creator/settings/access/access.component';
+import { AnnouncementSettingsComponent } from '@app/creator/settings/announcement-settings/announcement-settings.component';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { UpdateEvent } from '@app/creator/settings/update-event';
 
 export interface Settings {
   name: string;
   icon: string;
   hotkey: string;
-}
-
-export class UpdateEvent {
-  room?: Room;
-  showSuccessInfo: boolean;
-  loadRoom: boolean;
-
-  constructor(room: Room | null, showSuccessInfo: boolean, loadRoom = false) {
-    if (room) {
-      this.room = room;
-    }
-    this.showSuccessInfo = showSuccessInfo;
-    this.loadRoom = loadRoom;
-  }
 }
 
 @Component({

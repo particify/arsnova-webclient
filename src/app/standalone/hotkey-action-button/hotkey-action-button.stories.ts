@@ -1,19 +1,6 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HotkeyActionButtonComponent } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-class MockHotkeyService {
-  registerHotkey() {}
-  unregisterHotkey() {}
-}
+import { HotkeyActionButtonComponent } from '@app/standalone/hotkey-action-button/hotkey-action-button.component';
 
 export default {
   component: HotkeyActionButtonComponent,
@@ -22,18 +9,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [HotkeyActionButtonComponent],
-      providers: [
-        {
-          provide: HotkeyService,
-          useClass: MockHotkeyService,
-        },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
     }),
   ],
 } as Meta;

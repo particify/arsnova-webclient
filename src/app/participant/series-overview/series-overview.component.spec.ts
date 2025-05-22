@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 import { SeriesOverviewComponent } from './series-overview.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ThemeService } from '@app/core/theme/theme.service';
@@ -12,12 +12,12 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 import { By } from '@angular/platform-browser';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { configureTestModule } from '@testing/test.setup';
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
@@ -58,13 +58,9 @@ describe('SeriesOverviewComponent', () => {
   ]);
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        getTranslocoModule(),
-        SeriesOverviewComponent,
-        RenderedTextComponent,
-      ],
-      providers: [
+    const testBed = configureTestModule(
+      [getTranslocoModule(), SeriesOverviewComponent, RenderedTextComponent],
+      [
         {
           provide: ThemeService,
           useClass: MockThemeService,
@@ -97,13 +93,10 @@ describe('SeriesOverviewComponent', () => {
           provide: ContentAnswerService,
           useValue: contentAnswerService,
         },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SeriesOverviewComponent);
+      ]
+    );
+    testBed.compileComponents();
+    fixture = testBed.createComponent(SeriesOverviewComponent);
     component = fixture.componentInstance;
     component.group = new ContentGroup();
     component.group.groupType = GroupType.MIXED;

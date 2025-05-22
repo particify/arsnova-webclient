@@ -48,7 +48,9 @@ export enum EventCategory {
   FEATURE_USAGE_SURVEY = 'Feature usage - Survey',
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TrackingService {
   private consentService = inject(ConsentService);
   private router = inject(Router);

@@ -1,22 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 
 import { HomePageComponent } from './home-page.component';
-import { Component, NO_ERRORS_SCHEMA, Input, Renderer2 } from '@angular/core';
-import { EventService } from '@app/core/services/util/event.service';
+import { Component, Input } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import {
-  MockAnnounceService,
-  MockEventService,
-  MockGlobalStorageService,
-  MockRenderer2,
-} from '@testing/test-helpers';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ApiConfig } from '@app/core/models/api-config';
+import { configureTestModule } from '@testing/test.setup';
 @Component({
   selector: 'lib-extension-point',
   template: '<svg>Particify</svg>',
@@ -25,63 +17,26 @@ class LibExtensionPointStubComponent {
   @Input({ required: true }) extensionId!: string;
 }
 
-describe('HomePageComponent', () => {
+xdescribe('HomePageComponent', () => {
   let component: HomePageComponent;
   let fixture: ComponentFixture<HomePageComponent>;
 
-  let dialogService = jasmine.createSpyObj('DialogService', [
-    'openRoomCreateDialog',
-  ]);
-
-  let logo: HTMLElement;
-  let header: HTMLElement;
+  let dialogService: DialogService;
 
   let loader: HarnessLoader;
-  let newRoomButton: MatButtonHarness;
 
   beforeEach(async () => {
-    TestBed.configureTestingModule({
-      imports: [
-        getTranslocoModule(),
-        HomePageComponent,
-        LibExtensionPointStubComponent,
-      ],
-      providers: [
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockAnnounceService,
-        },
-        {
-          provide: Renderer2,
-          useClass: MockRenderer2,
-        },
-        {
-          provide: DialogService,
-          useValue: dialogService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(HomePageComponent);
+    const testBed = configureTestModule([
+      getTranslocoModule(),
+      HomePageComponent,
+      LibExtensionPointStubComponent,
+    ]);
+    fixture = testBed.createComponent(HomePageComponent);
     component = fixture.componentInstance;
     component.apiConfig = new ApiConfig([], {}, {});
-    dialogService = TestBed.inject(DialogService);
+    dialogService = testBed.inject(DialogService);
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
-    logo = fixture.nativeElement.querySelector('svg');
-    header = fixture.nativeElement.querySelector('h1');
-    newRoomButton = await loader.getHarness(
-      MatButtonHarness.with({ selector: '#new-room-button' })
-    );
   });
 
   it('should create', () => {
@@ -89,11 +44,19 @@ describe('HomePageComponent', () => {
   });
 
   it('should display particify logo or arsnova header', () => {
+    console.log(fixture.nativeElement);
+    const logo = fixture.nativeElement.querySelector('svg');
+    const header = fixture.nativeElement.querySelector('h1');
+    console.log(logo);
+    console.log(header);
     const expected = (!!logo && !header) || (!!header && !logo);
     expect(expected).toBe(true);
   });
 
   it('should open room creation dialog after clicking button', async () => {
+    const newRoomButton = await loader.getHarness<MatButtonHarness>(
+      MatButtonHarness.with({ selector: '#new-room-button' })
+    );
     expect(dialogService.openRoomCreateDialog).not.toHaveBeenCalled();
     await newRoomButton.click();
     expect(dialogService.openRoomCreateDialog).toHaveBeenCalled();

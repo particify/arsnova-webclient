@@ -1,21 +1,12 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContentListComponent } from './content-list.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import {
-  ActivatedRouteStub,
-  MockEventService,
-  MockGlobalStorageService,
-  MockNotificationService,
-  MockRouter,
-} from '@testing/test-helpers';
+import { ActivatedRouteStub, MockRouter } from '@testing/test-helpers';
 import { ContentService } from '@app/core/services/http/content.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { of } from 'rxjs';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { MatMenuModule } from '@angular/material/menu';
@@ -30,9 +21,9 @@ import { Room } from '@app/core/models/room';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentState } from '@app/core/models/content-state';
-import { EventService } from '@app/core/services/util/event.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { configureTestModule } from '@testing/test.setup';
+import { FormattingService } from '@app/core/services/http/formatting.service';
 
 describe('ContentListComponent', () => {
   let component: ContentListComponent;
@@ -57,11 +48,6 @@ describe('ContentListComponent', () => {
   const content6 = new Content();
   content6.id = '5';
   content6.state = contentState;
-
-  const mockHotkeyService = jasmine.createSpyObj([
-    'registerHotkey',
-    'unregisterHotkey',
-  ]);
 
   const mockContentService = jasmine.createSpyObj(ContentService, [
     'getContentsByIds',
@@ -102,16 +88,20 @@ describe('ContentListComponent', () => {
   const activatedRouteStub = new ActivatedRouteStub();
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      providers: [
+    configureTestModule(
+      [
+        getTranslocoModule(),
+        MatMenuModule,
+        ContentListComponent,
+        A11yIntroPipe,
+        A11yRenderedBodyPipe,
+      ],
+      [
         {
           provide: ContentService,
           useValue: mockContentService,
         },
-        {
-          provide: NotificationService,
-          useClass: MockNotificationService,
-        },
+
         {
           provide: ContentGroupService,
           useValue: mockContentGroupService,
@@ -125,20 +115,8 @@ describe('ContentListComponent', () => {
           useClass: MockRouter,
         },
         {
-          provide: HotkeyService,
-          useValue: mockHotkeyService,
-        },
-        {
           provide: ContentPublishService,
           useClass: ContentPublishService,
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
         },
         {
           provide: PresentationService,
@@ -148,16 +126,12 @@ describe('ContentListComponent', () => {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
         },
-      ],
-      imports: [
-        getTranslocoModule(),
-        MatMenuModule,
-        ContentListComponent,
-        A11yIntroPipe,
-        A11yRenderedBodyPipe,
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+        {
+          provide: FormattingService,
+          useValue: {},
+        },
+      ]
+    ).compileComponents();
     fixture = TestBed.createComponent(ContentListComponent);
     component = fixture.componentInstance;
     component.room = new Room(

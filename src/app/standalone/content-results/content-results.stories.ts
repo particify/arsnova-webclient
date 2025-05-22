@@ -1,33 +1,12 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
-
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { of } from 'rxjs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ContentService } from '@app/core/services/http/content.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { DialogService } from '@app/core/services/util/dialog.service';
 import { ActivatedRoute } from '@angular/router';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentState } from '@app/core/models/content-state';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { ENVIRONMENT } from '@environments/environment-token';
-import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { ApiConfig } from '@app/core/models/api-config';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { ThemeService } from '@app/core/theme/theme.service';
-import { MaterialCssVarsService } from 'angular-material-css-vars';
-import { TrackingService } from '@app/core/services/util/tracking.service';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentType } from '@app/core/models/content-type.enum';
 import {
@@ -42,7 +21,6 @@ import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { Content } from '@app/core/models/content';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
@@ -270,9 +248,6 @@ class MockContentAnswerService {
     return answers;
   }
 }
-
-class MockService {}
-
 class MockPresentationService {
   updateMultipleRoundState() {}
 
@@ -293,46 +268,10 @@ class MockPresentationService {
   }
 }
 
-class MockApiConfigService {
-  getApiConfig$() {
-    return of(new ApiConfig([], {}, {}));
-  }
-}
-
-class MockLangService {
-  ensureValidLang(): string {
-    return 'en';
-  }
-}
-
-class MockHotkeyService {
-  registerHotkey() {}
-}
-
-class MockMaterialCssVarsService {
-  setDarkTheme() {}
-  setPrimaryColor() {}
-  setAccentColor() {}
-  setWarnColor() {}
-}
-
 class MockFormattingService {
   postString(text: string) {
     return of(text);
   }
-}
-
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
-
-class MockAnnounceService {
-  announce() {}
-}
-
-class MockTrackingService {
-  addEvent() {}
 }
 
 export default {
@@ -341,57 +280,25 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [ContentResultsComponent, BrowserAnimationsModule],
+      imports: [ContentResultsComponent],
       providers: [
         {
           provide: ContentService,
           useClass: MockContentService,
         },
         {
-          provide: DialogService,
-          useClass: MockService,
-        },
-        {
           provide: PresentationService,
           useClass: MockPresentationService,
         },
-        {
-          provide: AnnounceService,
-          useClass: MockAnnounceService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
+
         {
           provide: FormattingService,
           useClass: MockFormattingService,
         },
         {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-        {
-          provide: HotkeyService,
-          useClass: MockHotkeyService,
-        },
-        {
-          provide: MaterialCssVarsService,
-          useClass: MockMaterialCssVarsService,
-        },
-        {
-          provide: TrackingService,
-          useClass: MockTrackingService,
-        },
-        {
           provide: ContentAnswerService,
           useClass: MockContentAnswerService,
         },
-        {
-          provide: NotificationService,
-          useClass: MockService,
-        },
-        ThemeService,
         LikertScaleService,
         {
           provide: ActivatedRoute,
@@ -409,20 +316,6 @@ export default {
             },
           },
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        {
-          provide: ApiConfigService,
-          useClass: MockApiConfigService,
-        },
-        {
-          provide: ENVIRONMENT,
-          useValue: { features: [] },
-        },
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

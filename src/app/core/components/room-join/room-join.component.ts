@@ -22,11 +22,11 @@ import {
   MatSuffix,
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { HotkeyDirective } from '../../directives/hotkey.directive';
-import { AutofocusDirective } from '../../directives/autofocus.directive';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { SplitShortIdPipe } from '../../pipes/split-short-id.pipe';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 
 @Component({
   selector: 'app-room-join',

@@ -11,14 +11,16 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TemplateService } from '@app/creator/_services/template.service';
-import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
+import {
+  ContentGroupTemplateEditingComponent,
+  ContentGroupTemplateEditingComponent as ContentGroupTemplateEditingComponent_1,
+} from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { FlexModule } from '@angular/flex-layout';
-import { ContentGroupTemplateEditingComponent as ContentGroupTemplateEditingComponent_1 } from '../../../../standalone/content-group-template-editing/content-group-template-editing.component';
 import { MatButton } from '@angular/material/button';
-import { LoadingButtonComponent } from '../../../../standalone/loading-button/loading-button.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @Component({
   selector: 'app-create-content-group-template',

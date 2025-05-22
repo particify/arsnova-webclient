@@ -9,16 +9,11 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { EventService } from '@app/core/services/util/event.service';
-import {
-  MockEventService,
-  MockNotificationService,
-} from '@testing/test-helpers';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('LanguageService', () => {
+  let testBed: TestBed;
   let langService: LanguageService;
 
   const translateService = jasmine.createSpyObj('TranslocoService', [
@@ -33,9 +28,9 @@ describe('LanguageService', () => {
   ]);
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, getTranslocoModule()],
-      providers: [
+    testBed = configureTestModule(
+      [getTranslocoModule()],
+      [
         LanguageService,
         {
           provide: TranslocoService,
@@ -45,26 +40,18 @@ describe('LanguageService', () => {
           provide: GlobalStorageService,
           useValue: globalStorageService,
         },
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
-          provide: NotificationService,
-          useClass: MockNotificationService,
-        },
         { provide: BROWSER_LANG, useValue: 'unsupported' },
-      ],
-    });
+      ]
+    );
   });
 
   it('should be created', () => {
-    langService = TestBed.inject(LanguageService);
+    langService = testBed.inject(LanguageService);
     expect(langService).toBeTruthy();
   });
 
   it('should use english as fallback if language stored in global storage is not supported and browser lang too', () => {
-    langService = TestBed.inject(LanguageService);
+    langService = testBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
@@ -74,7 +61,7 @@ describe('LanguageService', () => {
   });
 
   it('should use english as fallback if no language stored in global storage and browser lang is not supported', () => {
-    langService = TestBed.inject(LanguageService);
+    langService = testBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
@@ -94,7 +81,7 @@ describe('LanguageService', () => {
   });
 
   it('should use language stored in global storage if supported', () => {
-    langService = TestBed.inject(LanguageService);
+    langService = testBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
@@ -104,7 +91,7 @@ describe('LanguageService', () => {
   });
 
   it('should use language stored in global storage if supported even if not officially', () => {
-    langService = TestBed.inject(LanguageService);
+    langService = testBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
     globalStorageService.getItem
       .withArgs(STORAGE_KEYS.LANGUAGE)
@@ -132,9 +119,9 @@ describe('LanguageService', () => {
     langService.init();
     expect(setLangSpy).toHaveBeenCalledWith('de');
   });
-});
 
-function overrideBrowserLang(lang: string) {
-  TestBed.overrideProvider(BROWSER_LANG, { useValue: lang });
-  return TestBed.inject(LanguageService);
-}
+  function overrideBrowserLang(lang: string) {
+    testBed.overrideProvider(BROWSER_LANG, { useValue: lang });
+    return testBed.inject(LanguageService);
+  }
+});

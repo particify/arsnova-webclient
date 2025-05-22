@@ -1,20 +1,16 @@
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
 import {
   NavButton,
   NavButtonSection,
   NavigationDrawerComponent,
 } from './navigation-drawer.component';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+
 import {
-  applicationConfig,
   componentWrapperDecorator,
   Meta,
   moduleMetadata,
   StoryObj,
 } from '@storybook/angular';
 import { ActivatedRoute } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export default {
   component: NavigationDrawerComponent,
@@ -22,7 +18,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [NavigationDrawerComponent, BrowserAnimationsModule],
+      imports: [NavigationDrawerComponent],
       providers: [
         {
           provide: ActivatedRoute,
@@ -32,12 +28,7 @@ export default {
         },
       ],
     }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
-    }),
+
     componentWrapperDecorator(
       (story) =>
         `<div style="width: 100%; height: 64px" class="primary-background">This is a header</div>

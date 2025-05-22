@@ -1,17 +1,7 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.component';
-import { RouterTestingModule } from '@angular/router/testing';
 import { ConsentService } from '@app/core/services/util/consent.service';
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 
@@ -28,11 +18,7 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [
-        FooterLinksComponent,
-        RouterTestingModule,
-        BrowserAnimationsModule,
-      ],
+      imports: [FooterLinksComponent],
       providers: [
         {
           provide: ConsentService,
@@ -42,12 +28,6 @@ export default {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

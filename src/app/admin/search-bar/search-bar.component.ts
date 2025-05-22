@@ -21,7 +21,7 @@ import {
   MatAutocomplete,
   MatOption,
 } from '@angular/material/autocomplete';
-import { DisableFormDirective } from '../../core/directives/disable-form.directive';
+import { DisableFormDirective } from '@app/core/directives/disable-form.directive';
 import { MatIcon } from '@angular/material/icon';
 import { NgClass } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
