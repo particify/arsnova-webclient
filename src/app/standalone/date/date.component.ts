@@ -15,7 +15,12 @@ const TIME_UPDATE_INTERVAL = 60000;
 export class DateComponent implements OnDestroy {
   private translateService = inject(TranslocoService);
 
-  @Input({ required: true }) timestamp!: Date;
+  @Input({
+    required: true,
+    transform: (value: string | Date) =>
+      typeof value === 'string' ? new Date(value) : value,
+  })
+  timestamp!: Date;
   @Input() responsive = false;
 
   refreshCounter = 0;

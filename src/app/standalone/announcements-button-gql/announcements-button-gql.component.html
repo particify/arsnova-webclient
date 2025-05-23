@@ -1,0 +1,19 @@
+<button
+  mat-icon-button
+  (click)="showAnnouncements()"
+  [matTooltip]="
+    (newAnnouncementCount() > 0
+      ? 'announcement.new-announcements'
+      : 'announcement.announcements'
+    ) | transloco
+  "
+  appHotkey="a"
+>
+  <mat-icon
+    matBadge="{{ newAnnouncementCount() }}"
+    matBadgeColor="accent"
+    [matBadgeHidden]="newAnnouncementCount() === 0"
+  >
+    notifications
+  </mat-icon>
+</button>

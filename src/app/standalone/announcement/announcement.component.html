@@ -1,6 +1,6 @@
 <mat-card [ngClass]="{ disabled: editMode }" appearance="outlined">
   <div fxLayout="row" fxLayoutAlign="space-between start">
-    <h3 class="title">{{ announcement.title }}</h3>
+    <h3 class="title">{{ title }}</h3>
     @if (!!label) {
       <div
         fxLayoutAlign="center center"
@@ -34,18 +34,16 @@
   </div>
   <p class="subtitle">
     <app-date
-      [timestamp]="
-        announcement.updateTimestamp || announcement.creationTimestamp
-      "
+      [timestamp]="updatedAt || createdAt"
       [responsive]="true"
     ></app-date>
-    @if (announcement.updateTimestamp) {
+    @if (updatedAt) {
       <span>&nbsp;({{ 'announcement.edited' | transloco }})</span>
     }
   </p>
   <app-rendered-text
-    [rawText]="announcement.body"
-    [renderedText]="announcement.renderedBody"
+    [rawText]="body"
+    [renderedText]="bodyRendered"
     [markdownFeatureset]="markdownFeatureset"
   ></app-rendered-text>
   <div fxLayoutAlign="start">

@@ -162,27 +162,11 @@
         @if (isDev) {
           <app-dev-error-indicator />
         }
-        @if (announcementState) {
-          <button
-            mat-icon-button
-            (click)="showNews()"
-            class="icon-badge"
-            [matTooltip]="
-              (announcementState.new > 0
-                ? 'announcement.new-announcements'
-                : 'announcement.announcements'
-              ) | transloco
-            "
-            appHotkey="a"
-          >
-            <mat-icon
-              matBadge="{{ announcementState.new }}"
-              matBadgeColor="accent"
-              [matBadgeHidden]="announcementState.new === 0"
-            >
-              notifications
-            </mat-icon>
-          </button>
+        @if (auth) {
+          <app-announcements-button
+            [role]="role"
+            [auth]="auth"
+          ></app-announcements-button>
         }
         <button
           mat-icon-button

@@ -355,6 +355,111 @@ export type UserQueryInput = {
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type AnnouncementsMetaForCurrentUserQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type AnnouncementsMetaForCurrentUserQuery = {
+  __typename?: 'Query';
+  announcementsMetaForCurrentUser?: {
+    __typename?: 'AnnouncementsMeta';
+    count: number;
+    readAt?: string | null;
+  } | null;
+};
+
+export type AnnoucentmentsByRoomIdQueryVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type AnnoucentmentsByRoomIdQuery = {
+  __typename?: 'Query';
+  announcementsByRoomId?: {
+    __typename?: 'AnnouncementConnection';
+    edges: Array<{
+      __typename?: 'AnnouncementEdge';
+      node: {
+        __typename?: 'Announcement';
+        id: string;
+        body: string;
+        bodyRendered?: string | null;
+        createdAt: string;
+        updatedAt?: string | null;
+        title: string;
+      };
+    } | null>;
+  } | null;
+};
+
+export type AnnouncementsForCurrentUserQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type AnnouncementsForCurrentUserQuery = {
+  __typename?: 'Query';
+  announcementsForCurrentUser?: {
+    __typename?: 'AnnouncementConnection';
+    edges: Array<{
+      __typename?: 'AnnouncementEdge';
+      node: {
+        __typename?: 'Announcement';
+        body: string;
+        bodyRendered?: string | null;
+        createdAt: string;
+        updatedAt?: string | null;
+        id: string;
+        title: string;
+        room?: { __typename?: 'Room'; id: string; name: string } | null;
+      };
+    } | null>;
+  } | null;
+};
+
+export type CreateAnnouncementMutationVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+  title: Scalars['String']['input'];
+  body: Scalars['String']['input'];
+}>;
+
+export type CreateAnnouncementMutation = {
+  __typename?: 'Mutation';
+  createAnnouncement: {
+    __typename?: 'Announcement';
+    body: string;
+    bodyRendered?: string | null;
+    createdAt: string;
+    title: string;
+    id: string;
+  };
+};
+
+export type UpdateAnnouncementMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+  body?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UpdateAnnouncementMutation = {
+  __typename?: 'Mutation';
+  updateAnnouncement: {
+    __typename?: 'Announcement';
+    body: string;
+    bodyRendered?: string | null;
+    updatedAt?: string | null;
+    title: string;
+    id: string;
+  };
+};
+
+export type DeleteAnnouncementMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteAnnouncementMutation = {
+  __typename?: 'Mutation';
+  deleteAnnouncement: string;
+};
+
 export type RoomDetailsFragmentFragment = {
   __typename?: 'Room';
   id: string;
@@ -604,6 +709,161 @@ export const UserFragmentFragmentDoc = gql`
     username
   }
 `;
+export const AnnouncementsMetaForCurrentUserDocument = gql`
+  query AnnouncementsMetaForCurrentUser {
+    announcementsMetaForCurrentUser {
+      count
+      readAt
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AnnouncementsMetaForCurrentUserGql extends Apollo.Query<
+  AnnouncementsMetaForCurrentUserQuery,
+  AnnouncementsMetaForCurrentUserQueryVariables
+> {
+  document = AnnouncementsMetaForCurrentUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AnnoucentmentsByRoomIdDocument = gql`
+  query AnnoucentmentsByRoomId($roomId: UUID!) {
+    announcementsByRoomId(roomId: $roomId) {
+      edges {
+        node {
+          id
+          body
+          bodyRendered
+          createdAt
+          updatedAt
+          title
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AnnoucentmentsByRoomIdGql extends Apollo.Query<
+  AnnoucentmentsByRoomIdQuery,
+  AnnoucentmentsByRoomIdQueryVariables
+> {
+  document = AnnoucentmentsByRoomIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AnnouncementsForCurrentUserDocument = gql`
+  query AnnouncementsForCurrentUser {
+    announcementsForCurrentUser {
+      edges {
+        node {
+          body
+          bodyRendered
+          createdAt
+          updatedAt
+          id
+          title
+          room {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AnnouncementsForCurrentUserGql extends Apollo.Query<
+  AnnouncementsForCurrentUserQuery,
+  AnnouncementsForCurrentUserQueryVariables
+> {
+  document = AnnouncementsForCurrentUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateAnnouncementDocument = gql`
+  mutation CreateAnnouncement($roomId: UUID!, $title: String!, $body: String!) {
+    createAnnouncement(input: { roomId: $roomId, title: $title, body: $body }) {
+      body
+      bodyRendered
+      createdAt
+      title
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateAnnouncementGql extends Apollo.Mutation<
+  CreateAnnouncementMutation,
+  CreateAnnouncementMutationVariables
+> {
+  document = CreateAnnouncementDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateAnnouncementDocument = gql`
+  mutation UpdateAnnouncement($id: ID!, $title: String, $body: String) {
+    updateAnnouncement(input: { id: $id, title: $title, body: $body }) {
+      body
+      bodyRendered
+      updatedAt
+      title
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateAnnouncementGql extends Apollo.Mutation<
+  UpdateAnnouncementMutation,
+  UpdateAnnouncementMutationVariables
+> {
+  document = UpdateAnnouncementDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteAnnouncementDocument = gql`
+  mutation DeleteAnnouncement($id: ID!) {
+    deleteAnnouncement(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteAnnouncementGql extends Apollo.Mutation<
+  DeleteAnnouncementMutation,
+  DeleteAnnouncementMutationVariables
+> {
+  document = DeleteAnnouncementDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const RoomByIdDocument = gql`
   query RoomById($id: ID!) {
     roomById(id: $id) {
