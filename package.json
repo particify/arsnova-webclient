@@ -49,7 +49,7 @@
     "jwt-decode": "4.0.0",
     "katex": "0.16.22",
     "lru-cache": "11.1.0",
-    "ng-qrcode": "19.0.1",
+    "ng-qrcode": "19.1.0",
     "prismjs": "1.30.0",
     "rxjs": "7.8.2",
     "tslib": "2.8.1",
