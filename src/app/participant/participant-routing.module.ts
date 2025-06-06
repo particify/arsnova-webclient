@@ -69,7 +69,6 @@ const routes: Routes = [
     },
     resolve: {
       contentGroup: ContentGroupResolver,
-      settings: UserSettingsResolver,
     },
     title: 'series',
   },
