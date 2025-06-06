@@ -18,7 +18,7 @@
           style="width: 50%"
           data-testid="page-title"
         >
-          @if (title() !== room.name) {
+          @if (isRoomSubRoute()) {
             <div
               class="room-name ellipsis"
               [ngStyle.lt-xl]="
