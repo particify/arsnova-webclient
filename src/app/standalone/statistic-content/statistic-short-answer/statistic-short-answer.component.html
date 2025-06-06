@@ -13,13 +13,15 @@
       </div>
     }
     <div fxLayout="column" fxLayoutGap="16px">
-      @if (answersVisible && isPresentation) {
-        <app-correct-answer-results
-          [answerCounts]="[getAnswerCount()]"
-          [correctAnswerCounts]="[getCorrectAnswerCount()]"
-          [abstentionCounts]="[abstentionCount]"
-          [show]="showCorrect"
-        ></app-correct-answer-results>
+      @if (answersVisible) {
+        @if (isPresentation) {
+          <app-correct-answer-results
+            [answerCounts]="[getAnswerCount()]"
+            [correctAnswerCounts]="[getCorrectAnswerCount()]"
+            [abstentionCounts]="[abstentionCount]"
+            [show]="showCorrect"
+          ></app-correct-answer-results>
+        }
         @if (showModeration) {
           <app-answer-list
             [answers]="answerList"
