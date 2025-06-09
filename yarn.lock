@@ -2366,17 +2366,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/material-symbols-outlined@npm:5.2.11":
-  version: 5.2.11
-  resolution: "@fontsource/material-symbols-outlined@npm:5.2.11"
-  checksum: 10c0/cb8630f25395a09a93e7336bb911b1c5c21648822313fb0d1a564c7b9af51ba4765a2f2069f22c682e08106e02d85d28f3afb54313e22c91a6f6eabdbbe3cbb0
+"@fontsource/material-symbols-outlined@npm:5.2.12":
+  version: 5.2.12
+  resolution: "@fontsource/material-symbols-outlined@npm:5.2.12"
+  checksum: 10c0/ef7fd5e0813d2a0923a8a9d9f8e43687c4fc65713cc6275c378617e67f691c5acfc925176ffa5c89b4e1759b30232f4a497bea4577bab758f98b078a66ed937c
   languageName: node
   linkType: hard
 
-"@fontsource/roboto@npm:5.2.5":
-  version: 5.2.5
-  resolution: "@fontsource/roboto@npm:5.2.5"
-  checksum: 10c0/b254985468a3ba78323d66b0725af1b2dc60dbacc82a907c0f67ccc659cc30c52b66bbadd3f2afdea53971ddae60c96e582efbcaee2db52886201c3f56b830a8
+"@fontsource/roboto@npm:5.2.6":
+  version: 5.2.6
+  resolution: "@fontsource/roboto@npm:5.2.6"
+  checksum: 10c0/a2fbadf2f3b8ebb859e7b13ad82d25e8b43901c30ad93b08095c201617fcfded279d99e64a7b110614d2a1b5bca77631df7d009abf1ad6c6a4df301ceb330a51
   languageName: node
   linkType: hard
 
@@ -5615,8 +5615,8 @@ __metadata:
     "@angular/router": "npm:19.2.14"
     "@angular/service-worker": "npm:19.2.14"
     "@eslint/js": "npm:9.28.0"
-    "@fontsource/material-symbols-outlined": "npm:5.2.11"
-    "@fontsource/roboto": "npm:5.2.5"
+    "@fontsource/material-symbols-outlined": "npm:5.2.12"
+    "@fontsource/roboto": "npm:5.2.6"
     "@jsverse/transloco": "npm:7.6.1"
     "@playwright/test": "npm:1.52.0"
     "@stomp/rx-stomp": "npm:2.0.1"
