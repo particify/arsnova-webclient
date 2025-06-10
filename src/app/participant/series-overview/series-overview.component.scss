@@ -40,8 +40,8 @@ $icon-container-size: 40px;
   border-radius: 4px;
   border: 1px solid var(--border);
 
-  --mdc-list-list-item-hover-state-layer-color: var(--surface);
-  --mdc-list-list-item-focus-state-layer-color: var(--surface);
+  --mat-list-list-item-hover-state-layer-color: var(--surface);
+  --mat-list-list-item-focus-state-layer-color: var(--surface);
 
   &:not(:last-of-type) {
     margin-bottom: 8px;

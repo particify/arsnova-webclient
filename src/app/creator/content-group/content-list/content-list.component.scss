@@ -9,8 +9,8 @@ $item-height: 90px;
 }
 
 .content-box {
-  --mdc-list-list-item-hover-state-layer-color: var(--surface);
-  --mdc-list-list-item-focus-state-layer-color: var(--surface);
+  --mat-list-list-item-hover-state-layer-color: var(--surface);
+  --mat-list-list-item-focus-state-layer-color: var(--surface);
 
   border-style: solid;
   border-width: 1px;

@@ -1,17 +1,17 @@
 .wrong {
-  --mdc-outlined-text-field-disabled-outline-color: var(--warn);
-  --mdc-outlined-text-field-disabled-label-text-color: var(--warn);
+  --mat-form-field-outlined-disabled-outline-color: var(--warn);
+  --mat-form-field-outlined-disabled-label-text-color: var(--warn);
 
   color: var(--warn);
 }
 
 .correct {
-  --mdc-outlined-text-field-disabled-outline-color: var(--success);
-  --mdc-outlined-text-field-disabled-label-text-color: var(--success);
+  --mat-form-field-outlined-disabled-outline-color: var(--success);
+  --mat-form-field-outlined-disabled-label-text-color: var(--success);
 
   color: var(--success);
 }
 
 .form-field-indication {
-  --mdc-outlined-text-field-disabled-input-text-color: var(--on-surface);
+  --mat-form-field-outlined-disabled-input-text-color: var(--on-surface);
 }

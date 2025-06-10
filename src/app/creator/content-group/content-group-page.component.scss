@@ -5,7 +5,7 @@ $action-card-max-width: 1000px;
 
 .trigger-text {
   margin-top: 2px;
-  font-size: var(--mdc-text-button-label-text-size);
+  font-size: var(--mat-button-text-label-text-size);
 }
 
 .state-option {
@@ -48,7 +48,7 @@ $action-card-max-width: 1000px;
   .group-container {
     background-color: var(--surface);
     box-shadow: var(
-      --mdc-elevated-card-container-elevation,
+      --mat-card-elevated-container-elevation,
       var(--mat-sys-level1)
     );
     padding: $spacing-2;

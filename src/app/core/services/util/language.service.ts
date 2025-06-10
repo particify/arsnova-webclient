@@ -1,9 +1,9 @@
-import { DOCUMENT } from '@angular/common';
 import {
   EventEmitter,
   Injectable,
   InjectionToken,
   inject,
+  DOCUMENT,
 } from '@angular/core';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { Language } from '@app/core/models/language';
