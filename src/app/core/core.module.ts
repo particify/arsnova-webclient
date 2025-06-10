@@ -50,7 +50,7 @@ import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-s
 import { DurationPipe } from '@app/core/pipes/duration.pipe';
 
 @NgModule({
-  declarations: [
+  imports: [
     // Pipes
     SplitShortIdPipe,
     CounterBracesPipe,
@@ -60,7 +60,6 @@ import { DurationPipe } from '@app/core/pipes/duration.pipe';
     A11yRenderedBodyPipe,
     LocalizeDecimalSeperatorPipe,
     DurationPipe,
-
     // Directives
     HotkeyDirective,
     TrackInteractionDirective,
@@ -75,7 +74,6 @@ import { DurationPipe } from '@app/core/pipes/duration.pipe';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-
     // Material
     MatAutocompleteModule,
     MatBadgeModule,
@@ -105,7 +103,6 @@ import { DurationPipe } from '@app/core/pipes/duration.pipe';
     MatTooltipModule,
     MatSidenavModule,
     MatRippleModule,
-
     // Pipes
     SplitShortIdPipe,
     CounterBracesPipe,
@@ -115,14 +112,12 @@ import { DurationPipe } from '@app/core/pipes/duration.pipe';
     A11yRenderedBodyPipe,
     LocalizeDecimalSeperatorPipe,
     DurationPipe,
-
     // Directives
     HotkeyDirective,
     TrackInteractionDirective,
     FeatureFlagDirective,
     AutofocusDirective,
     DisableFormDirective,
-
     // 3rd party
     TranslocoModule,
   ],

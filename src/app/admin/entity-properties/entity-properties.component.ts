@@ -1,13 +1,32 @@
 import { Component, Input, OnChanges, inject } from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
+import {
+  MatTreeNestedDataSource,
+  MatTree,
+  MatTreeNodeDef,
+  MatTreeNode,
+  MatTreeNodeToggle,
+  MatNestedTreeNode,
+  MatTreeNodeOutlet,
+} from '@angular/material/tree';
 import { TranslocoService } from '@jsverse/transloco';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-entity-properties',
   templateUrl: './entity-properties.component.html',
   styleUrls: ['./entity-properties.component.scss'],
-  standalone: false,
+  imports: [
+    MatTree,
+    MatTreeNodeDef,
+    MatTreeNode,
+    MatTreeNodeToggle,
+    MatIconButton,
+    MatNestedTreeNode,
+    MatIcon,
+    MatTreeNodeOutlet,
+  ],
 })
 export class EntityPropertiesComponent implements OnChanges {
   private translateService = inject(TranslocoService);

@@ -6,10 +6,7 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { Subject, takeUntil } from 'rxjs';
 
-@Component({
-  template: '',
-  standalone: false,
-})
+@Component({ template: '' })
 export class RedeemTokenComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private routingService = inject(RoutingService);

@@ -15,7 +15,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
@@ -25,18 +25,71 @@ import { ContentGroupStatistics } from '@app/core/models/content-group-statistic
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-base.component';
-import { CdkDragDrop, CdkDragSortEvent } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  CdkDragSortEvent,
+  CdkDropList,
+  CdkDrag,
+} from '@angular/cdk/drag-drop';
 import { ContentStats } from '@app/creator/content-group/content-group-page.component';
 import { Observable, tap } from 'rxjs';
 import { RoundState } from '@app/core/models/events/round-state';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FlexModule } from '@angular/flex-layout';
+import { MatActionList, MatListItem } from '@angular/material/list';
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { MatIconButton } from '@angular/material/button';
+import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatMenuTrigger,
+  MatMenu,
+  MatMenuItem,
+  MatMenuContent,
+} from '@angular/material/menu';
+import { MatDivider } from '@angular/material/divider';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
+import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 
 @Component({
   selector: 'app-content-list',
   templateUrl: './content-list.component.html',
   styleUrls: ['./content-list.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    MatActionList,
+    CdkDropList,
+    NgClass,
+    ExtendedModule,
+    MatListItem,
+    CdkDrag,
+    RouterLink,
+    NgStyle,
+    RenderedTextComponent,
+    NgTemplateOutlet,
+    ExtensionPointComponent,
+    MatIconButton,
+    TrackInteractionDirective,
+    MatTooltip,
+    MatIcon,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatDivider,
+    MatMenuContent,
+    HotkeyDirective,
+    CountdownTimerComponent,
+    PulsatingCircleComponent,
+    A11yRenderedBodyPipe,
+    TranslocoPipe,
+  ],
 })
 export class ContentListComponent
   extends DragDropBaseComponent

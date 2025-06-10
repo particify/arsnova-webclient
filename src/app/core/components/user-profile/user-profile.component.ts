@@ -5,7 +5,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { UserService } from '@app/core/services/http/user.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Router } from '@angular/router';
@@ -13,9 +13,24 @@ import { User } from '@app/core/models/user';
 import { Person } from '@app/core/models/person';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { UserSettings } from '@app/core/models/user-settings';
-import { Location } from '@angular/common';
+import { Location, AsyncPipe } from '@angular/common';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { take } from 'rxjs';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
+import { FlexModule } from '@angular/flex-layout';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { HintComponent } from '@app/standalone/hint/hint.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 
 export class FormField {
   value: string;
@@ -33,7 +48,23 @@ export class FormField {
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
-  standalone: false,
+  imports: [
+    AutofocusDirective,
+    FlexModule,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    SettingsPanelHeaderComponent,
+    LoadingIndicatorComponent,
+    ExtensionPointComponent,
+    HintComponent,
+    MatButton,
+    MatIcon,
+    SettingsSlideToggleComponent,
+    AsyncPipe,
+    A11yIntroPipe,
+    TranslocoPipe,
+  ],
 })
 export class UserProfileComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);

@@ -1,14 +1,12 @@
-import { TestBed } from '@angular/core/testing';
 import { ContentGroup, PublishingMode } from '@app/core/models/content-group';
 import { ContentPublishService } from './content-publish.service';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('PublishContentService', () => {
   let service: ContentPublishService;
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [ContentPublishService],
-    });
-    service = TestBed.inject(ContentPublishService);
+    const testBed = configureTestModule([], [ContentPublishService]);
+    service = testBed.inject(ContentPublishService);
   });
 
   it('should be created', () => {

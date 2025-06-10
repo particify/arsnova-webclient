@@ -9,22 +9,51 @@ import {
 import { Room } from '@app/core/models/room';
 import { Announcement } from '@app/core/models/announcement';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
-import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup, MatTab } from '@angular/material/tabs';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { FlexModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { Dir } from '@angular/cdk/bidi';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { MatButton } from '@angular/material/button';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { AnnouncementComponent } from '@app/standalone/announcement/announcement.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-announcement-settings',
   templateUrl: './announcement-settings.component.html',
   styleUrls: ['./announcement-settings.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatTabGroup,
+    MatTab,
+    FormattingToolbarComponent,
+    CdkTextareaAutosize,
+    Dir,
+    RenderedTextComponent,
+    MatButton,
+    LoadingButtonComponent,
+    AnnouncementComponent,
+    LoadingIndicatorComponent,
+    TranslocoPipe,
+  ],
 })
 export class AnnouncementSettingsComponent
   extends FormComponent

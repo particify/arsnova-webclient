@@ -1,24 +1,12 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { ContentGroupsComponent } from './content-groups.component';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { RouterTestingModule } from '@angular/router/testing';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
 
-class MockGlobalStorageService {}
 class MockRoutingService {}
-class MockService {}
 class MockContentGroupService {
   private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
     [GroupType.MIXED, 'dashboard'],
@@ -37,13 +25,9 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [ContentGroupsComponent, RouterTestingModule],
+      imports: [ContentGroupsComponent],
       providers: [
         ContentPublishService,
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
         {
           provide: RoutingService,
           useClass: MockRoutingService,
@@ -52,16 +36,6 @@ export default {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
-        {
-          provide: NotificationService,
-          useClass: MockService,
-        },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

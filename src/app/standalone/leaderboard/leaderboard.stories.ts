@@ -1,31 +1,8 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
-import { ThemeService } from '@app/core/theme/theme.service';
-import { MaterialCssVarsService } from 'angular-material-css-vars';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
-
-class MockMaterialCssVarsService {
-  setDarkTheme() {}
-  setPrimaryColor() {}
-  setAccentColor() {}
-  setWarnColor() {}
-}
 
 export default {
   component: LeaderboardComponent,
@@ -34,23 +11,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [LeaderboardComponent, OrdinalPipe],
-      providers: [
-        ThemeService,
-        {
-          provide: MaterialCssVarsService,
-          useClass: MockMaterialCssVarsService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
     }),
   ],
 } as Meta;

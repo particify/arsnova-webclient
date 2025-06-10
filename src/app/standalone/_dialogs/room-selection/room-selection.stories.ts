@@ -1,14 +1,7 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+
 import { RoomSelectionComponent } from '@app/standalone/_dialogs/room-selection/room-selection.component';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
@@ -79,12 +72,6 @@ export default {
           provide: MAT_DIALOG_DATA,
           useValue: { memberships: [] },
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

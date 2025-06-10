@@ -1,24 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
 import { FormattingToolbarComponent } from './formatting-toolbar.component';
 import { MatIconModule } from '@angular/material/icon';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('FormattingToolbarComponent', () => {
   let component: FormattingToolbarComponent;
   let fixture: ComponentFixture<FormattingToolbarComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        FormattingToolbarComponent,
-        MatIconModule,
-        getTranslocoModule(),
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(FormattingToolbarComponent);
+    const testBed = configureTestModule([
+      FormattingToolbarComponent,
+      MatIconModule,
+      getTranslocoModule(),
+    ]);
+    testBed.compileComponents();
+    fixture = testBed.createComponent(FormattingToolbarComponent);
     component = fixture.componentInstance;
     component.inputElement = document.createElement('textarea');
     fixture.detectChanges();

@@ -1,4 +1,3 @@
-import { TestBed } from '@angular/core/testing';
 import { UpdateService } from './update.service';
 import { Observable, Subject } from 'rxjs';
 import {
@@ -7,13 +6,11 @@ import {
   VersionReadyEvent,
 } from '@angular/service-worker';
 import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { UpdateImportance, VersionInfo } from '@app/core/models/version-info';
 import { Injectable } from '@angular/core';
-import { MockEventService } from '@testing/test-helpers';
+import { configureTestModule } from '@testing/test.setup';
 
 class MockDialogService {
   public openUpdateInfoDialog = jasmine
@@ -40,17 +37,13 @@ describe('UpdateService', () => {
     'getItem',
     'removeItem',
   ]);
-  const notificationService = jasmine.createSpyObj('NotificationService', [
-    'showAdvanced',
-  ]);
+
   const window = jasmine.createSpyObj('Window', ['reload']);
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
-      ],
-      providers: [
+    const testBed = configureTestModule(
+      [ServiceWorkerModule.register('ngsw-worker.js', { enabled: false })],
+      [
         UpdateService,
         {
           provide: SwUpdate,
@@ -65,10 +58,6 @@ describe('UpdateService', () => {
           useClass: MockDialogService,
         },
         {
-          provide: NotificationService,
-          useValue: notificationService,
-        },
-        {
           provide: Window,
           useValue: window,
         },
@@ -76,15 +65,11 @@ describe('UpdateService', () => {
           provide: TranslocoService,
           useValue: translateService,
         },
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-      ],
-    });
-    service = TestBed.inject(UpdateService);
-    translateService = TestBed.inject(TranslocoService);
-    dialogService = TestBed.inject(DialogService);
+      ]
+    );
+    service = testBed.inject(UpdateService);
+    translateService = testBed.inject(TranslocoService);
+    dialogService = testBed.inject(DialogService);
   });
 
   it('should be created', () => {

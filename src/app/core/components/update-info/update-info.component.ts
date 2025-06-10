@@ -1,5 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import { VersionReadyEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
 import { VersionInfo } from '@app/core/models/version-info';
@@ -8,6 +13,11 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { FlexModule } from '@angular/flex-layout';
+import { MatButton } from '@angular/material/button';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 interface DialogData {
   afterUpdate: boolean;
@@ -20,7 +30,15 @@ interface DialogData {
   selector: 'app-update-info',
   templateUrl: './update-info.component.html',
   styleUrls: ['./update-info.component.scss'],
-  standalone: false,
+  imports: [
+    CdkScrollable,
+    MatDialogContent,
+    LoadingIndicatorComponent,
+    MatDialogActions,
+    FlexModule,
+    MatButton,
+    TranslocoPipe,
+  ],
 })
 export class UpdateInfoComponent implements OnInit {
   dialogRef = inject<MatDialogRef<UpdateInfoComponent>>(MatDialogRef);

@@ -11,7 +11,12 @@ import { TrackingService } from '@app/core/services/util/tracking.service';
 import { UpdateService } from '@app/core/services/util/update.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { LanguageService } from '@app/core/services/util/language.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { RoomService } from '@app/core/services/http/room.service';
 import { DrawerService } from '@app/core/services/util/drawer.service';
@@ -31,12 +36,14 @@ import { AuthProvider } from '@app/core/models/auth-provider';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { UiConfig } from '@app/core/models/api-config';
 import { UiService } from '@app/core/services/util/ui.service';
+import { CoreModule } from './core/core.module';
+import { FooterLinksComponent } from './standalone/footer-links/footer-links.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: false,
+  imports: [CoreModule, FooterLinksComponent, RouterOutlet],
 })
 export class AppComponent implements OnInit, AfterViewInit {
   private languageService = inject(LanguageService);
@@ -58,7 +65,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   constructor() {
     const themeService = this.themeService;
-
     this.currentTheme = themeService.getCurrentTheme();
     this.themes = this.themeService.getThemes();
     this.langs = this.languageService.getLangs();

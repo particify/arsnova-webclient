@@ -1,21 +1,9 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
-
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { ContentGroupTemplateComponent } from './content-group-template.component';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HttpClientModule } from '@angular/common/http';
 import { ContentGroupTemplate } from '@app/core/models/content-group-template';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { DialogService } from '@app/core/services/util/dialog.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { GroupType } from '@app/core/models/content-group';
 
@@ -46,15 +34,7 @@ export default {
           useClass: MockService,
         },
         {
-          provide: NotificationService,
-          useClass: MockService,
-        },
-        {
           provide: RoomMembershipService,
-          useClass: MockService,
-        },
-        {
-          provide: GlobalStorageService,
           useClass: MockService,
         },
         {
@@ -62,19 +42,9 @@ export default {
           useClass: MockService,
         },
         {
-          provide: DialogService,
-          useClass: MockService,
-        },
-        {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

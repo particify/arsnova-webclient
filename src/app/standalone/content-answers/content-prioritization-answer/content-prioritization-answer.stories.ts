@@ -1,14 +1,7 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ContentPrioritizationAnswerComponent } from './content-prioritization-answer.component';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HttpClientModule } from '@angular/common/http';
+
 import { AnswerOption } from '@app/core/models/answer-option';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -28,12 +21,6 @@ export default {
           provide: FormattingService,
           useClass: MockFormattingService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

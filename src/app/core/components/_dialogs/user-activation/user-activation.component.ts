@@ -4,18 +4,47 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { UserService } from '@app/core/services/http/user.service';
-import { UntypedFormControl, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslocoService } from '@jsverse/transloco';
+import {
+  UntypedFormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FlexModule } from '@angular/flex-layout';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @Component({
   selector: 'app-user-activation',
   templateUrl: './user-activation.component.html',
   styleUrls: ['./user-activation.component.scss'],
-  standalone: false,
+  imports: [
+    CdkScrollable,
+    MatDialogContent,
+    FormsModule,
+    FlexModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    MatButton,
+    MatDialogActions,
+    LoadingButtonComponent,
+    TranslocoPipe,
+  ],
 })
 export class UserActivationComponent extends FormComponent implements OnInit {
   data = inject(MAT_DIALOG_DATA);

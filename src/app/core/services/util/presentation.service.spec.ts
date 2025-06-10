@@ -1,7 +1,8 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { inject } from '@angular/core/testing';
 import { PresentationService } from './presentation.service';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('PresentationService', () => {
   const contentService = jasmine.createSpyObj(ContentService, ['getContent']);
@@ -10,13 +11,14 @@ describe('PresentationService', () => {
     'startContent',
   ]);
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
+    configureTestModule(
+      [],
+      [
         PresentationService,
         { provide: ContentService, useValue: contentService },
         { provide: ContentGroupService, useValue: contentGroupService },
-      ],
-    });
+      ]
+    );
   });
 
   it('should be created', inject(

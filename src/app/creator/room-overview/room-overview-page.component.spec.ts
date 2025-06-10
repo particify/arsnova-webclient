@@ -1,21 +1,11 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, waitForAsync } from '@angular/core/testing';
 
 import { RoomOverviewPageComponent } from './room-overview-page.component';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import {
-  MockEventService,
-  MockGlobalStorageService,
-  MockNotificationService,
-  MockRouter,
-} from '@testing/test-helpers';
-import { EventService } from '@app/core/services/util/event.service';
+import { MockRouter } from '@testing/test-helpers';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Router } from '@angular/router';
-import { DialogService } from '@app/core/services/util/dialog.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
@@ -24,6 +14,14 @@ import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoomStats } from '@app/core/models/room-stats';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { CommentService } from '@app/core/services/http/comment.service';
+import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
+import { configureTestModule } from '@testing/test.setup';
+import { RoomService } from '@app/core/services/http/room.service';
+import { FeedbackService } from '@app/core/services/http/feedback.service';
+import { CommentSettings } from '@app/core/models/comment-settings';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -59,10 +57,6 @@ describe('RoomOverviewPageComponent', () => {
     new Map<GroupType, string>()
   );
 
-  const mockDialogService = jasmine.createSpyObj('DialogService', [
-    'openContentGroupCreationDialog',
-  ]);
-
   const mockContentService = jasmine.createSpyObj(ContentService, [
     'getTypeIcons',
   ]);
@@ -70,37 +64,45 @@ describe('RoomOverviewPageComponent', () => {
     new Map<ContentType, string>()
   );
 
+  const mockCommentSettingsService = jasmine.createSpyObj([
+    'getSettingsStream',
+    'get',
+  ]);
+  mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
+  mockCommentSettingsService.get.and.returnValue(of(new CommentSettings()));
+
+  const mockCommentService = jasmine.createSpyObj(['countByRoomId']);
+  mockCommentService.countByRoomId.and.returnValue(of(0));
+
+  const mockWsCommentService = jasmine.createSpyObj(['getCommentStream']);
+  mockWsCommentService.getCommentStream.and.returnValue(of({}));
+
+  const mockRoomService = jasmine.createSpyObj(['changeFeedbackLock']);
+
+  const mockFeedbackService = jasmine.createSpyObj([
+    'get',
+    'startSub',
+    'getMessages',
+  ]);
+  mockFeedbackService.get.and.returnValue(of([0, 0, 0, 0]));
+  mockFeedbackService.getMessages.and.returnValue(of());
+
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [
+    const testBed = configureTestModule(
+      [
+        getTranslocoModule(),
         RoomOverviewPageComponent,
         A11yIntroPipe,
         SplitShortIdPipe,
       ],
-      providers: [
+      [
         {
           provide: RoomStatsService,
           useValue: mockRoomStatsService,
         },
         {
-          provide: NotificationService,
-          useClass: MockNotificationService,
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
           provide: ContentGroupService,
           useValue: mockContentGroupService,
-        },
-        {
-          provide: DialogService,
-          useValue: mockDialogService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
         },
         {
           provide: Router,
@@ -110,18 +112,35 @@ describe('RoomOverviewPageComponent', () => {
           provide: ContentService,
           useValue: mockContentService,
         },
-      ],
-      imports: [getTranslocoModule()],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(RoomOverviewPageComponent);
+        {
+          provide: CommentSettingsService,
+          useValue: mockCommentSettingsService,
+        },
+        {
+          provide: CommentService,
+          useValue: mockCommentService,
+        },
+        {
+          provide: WsCommentService,
+          useValue: mockWsCommentService,
+        },
+        {
+          provide: RoomService,
+          useValue: mockRoomService,
+        },
+        {
+          provide: FeedbackService,
+          useValue: mockFeedbackService,
+        },
+        ContentPublishService,
+      ]
+    );
+    testBed.compileComponents();
+    fixture = testBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
     component.room = new Room();
     component.room.settings = { feedbackLocked: false };
-  });
+  }));
 
   it('should create', () => {
     fixture.detectChanges();

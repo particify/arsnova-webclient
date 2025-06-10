@@ -16,6 +16,8 @@ import { ContentShortAnswer } from '@app/core/models/content-short-answer';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentState } from '@app/core/models/content-state';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { FlexModule } from '@angular/flex-layout';
+import { DividerComponent } from '@app/standalone/divider/divider.component';
 
 @Component({
   selector: 'app-short-answer-content-form',
@@ -26,7 +28,12 @@ import { ContentType } from '@app/core/models/content-type.enum';
       useExisting: ShortAnswerContentFormComponent,
     },
   ],
-  standalone: false,
+  imports: [
+    FlexModule,
+    DividerComponent,
+    AnswerOptionListComponent,
+    CreateAnswerOptionComponent,
+  ],
 })
 export class ShortAnswerContentFormComponent
   extends FormComponent

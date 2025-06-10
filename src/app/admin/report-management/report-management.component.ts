@@ -10,14 +10,31 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
+import { FlexModule } from '@angular/flex-layout';
+import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { MatCard } from '@angular/material/card';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-report-management',
   templateUrl: './report-management.component.html',
   styleUrl: '../admin-styles.scss',
-  standalone: false,
+  imports: [
+    FlexModule,
+    AdminPageHeaderComponent,
+    MatTabGroup,
+    MatTab,
+    LoadingIndicatorComponent,
+    MatCard,
+    MatButton,
+    MatIcon,
+    TranslocoPipe,
+  ],
 })
 export class ReportManagementComponent implements OnInit {
   private violationReportService = inject(ViolationReportService);

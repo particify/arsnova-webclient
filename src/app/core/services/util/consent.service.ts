@@ -43,7 +43,9 @@ const httpOptions = {
   headers: new HttpHeaders({}),
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ConsentService extends AbstractHttpService<ConsentSettings> {
   dialog = inject(MatDialog);
   private globalStorageService = inject(GlobalStorageService);

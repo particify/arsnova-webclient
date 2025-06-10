@@ -7,18 +7,34 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '@app/core/services/http/user.service';
 import { FormService } from '@app/core/services/util/form.service';
 import { take } from 'rxjs';
+import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
+import { SearchBarComponent } from '@app/admin/search-bar/search-bar.component';
+import { MatCard } from '@angular/material/card';
+import { FlexModule } from '@angular/flex-layout';
+import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-room-management',
   templateUrl: './room-management.component.html',
   styleUrls: ['../admin-styles.scss'],
-  standalone: false,
+  imports: [
+    AdminPageHeaderComponent,
+    SearchBarComponent,
+    MatCard,
+    FlexModule,
+    EntityPropertiesComponent,
+    MatButton,
+    MatIcon,
+    TranslocoPipe,
+  ],
 })
 export class RoomManagementComponent {
   protected adminService = inject(AdminService);

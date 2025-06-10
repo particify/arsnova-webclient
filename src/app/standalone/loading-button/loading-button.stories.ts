@@ -1,13 +1,6 @@
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
 import { LoadingButtonComponent } from './loading-button.component';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 
 export default {
@@ -17,12 +10,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [LoadingButtonComponent],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
     }),
   ],
   argTypes: {

@@ -16,6 +16,8 @@ import { AnswerOptionListComponent } from '@app/creator/content-group/content-ed
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { ContentType } from '@app/core/models/content-type.enum';
+import { FlexModule } from '@angular/flex-layout';
+import { DividerComponent } from '@app/standalone/divider/divider.component';
 
 @Component({
   selector: 'app-prioritization-content-form',
@@ -26,7 +28,12 @@ import { ContentType } from '@app/core/models/content-type.enum';
       useExisting: PrioritizationContentFormComponent,
     },
   ],
-  standalone: false,
+  imports: [
+    FlexModule,
+    DividerComponent,
+    AnswerOptionListComponent,
+    CreateAnswerOptionComponent,
+  ],
 })
 export class PrioritizationContentFormComponent
   extends FormComponent

@@ -2,16 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RoomJoinComponent } from './room-join.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificationService } from '@app/core/services/util/notification.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { EventService } from '@app/core/services/util/event.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import {
-  ActivatedRouteStub,
-  MockEventService,
-  MockGlobalStorageService,
-} from '@testing/test-helpers';
+import { ActivatedRouteStub } from '@testing/test-helpers';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
@@ -24,8 +16,9 @@ import { MatInputHarness } from '@angular/material/input/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
+import { configureTestModule } from '@testing/test.setup';
+import { NotificationService } from '@app/core/services/util/notification.service';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({});
@@ -51,9 +44,8 @@ describe('RoomJoinComponent', () => {
     router.navigate.calls.reset();
     notificationService.showAdvanced.calls.reset();
 
-    TestBed.configureTestingModule({
-      declarations: [RoomJoinComponent, SplitShortIdPipe, AutofocusDirective],
-      imports: [
+    configureTestModule(
+      [
         BrowserAnimationsModule,
         ReactiveFormsModule,
         MatFormFieldModule,
@@ -62,24 +54,14 @@ describe('RoomJoinComponent', () => {
         MatIconModule,
         FormsModule,
         getTranslocoModule(),
-        HttpClientTestingModule,
+        RoomJoinComponent,
+        SplitShortIdPipe,
+        AutofocusDirective,
       ],
-      providers: [
+      [
         {
           provide: Router,
           useValue: router,
-        },
-        {
-          provide: NotificationService,
-          useValue: notificationService,
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
         },
         {
           provide: AuthenticationService,
@@ -89,9 +71,12 @@ describe('RoomJoinComponent', () => {
           provide: ActivatedRoute,
           useValue: activatedRoute,
         },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+        {
+          provide: NotificationService,
+          useValue: notificationService,
+        },
+      ]
+    ).compileComponents();
 
     fixture = TestBed.createComponent(RoomJoinComponent);
     component = fixture.componentInstance;

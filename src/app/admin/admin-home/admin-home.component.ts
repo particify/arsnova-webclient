@@ -1,10 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { catchError, map, Observable, of, shareReplay } from 'rxjs';
 import { LanguageService } from '@app/core/services/util/language.service';
@@ -13,12 +13,23 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
 import {
   NavButton,
   NavButtonSection,
+  NavigationDrawerComponent,
 } from '@app/standalone/navigation-drawer/navigation-drawer.component';
+import { FlexModule } from '@angular/flex-layout';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { SummaryBarComponent } from '@app/admin/summary-bar/summary-bar.component';
 @Component({
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.scss'],
-  standalone: false,
+  imports: [
+    NavigationDrawerComponent,
+    FlexModule,
+    ExtensionPointComponent,
+    SummaryBarComponent,
+    RouterOutlet,
+    TranslocoPipe,
+  ],
 })
 export class AdminHomeComponent implements OnInit {
   protected langService = inject(LanguageService);

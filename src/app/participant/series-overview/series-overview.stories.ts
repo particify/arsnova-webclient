@@ -1,28 +1,11 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
-
-import { importProvidersFrom, EventEmitter } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
-import { TrackingService } from '@app/core/services/util/tracking.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
@@ -32,12 +15,8 @@ import {
   PublishingMode,
 } from '@app/core/models/content-group';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { ENVIRONMENT } from '@environments/environment-token';
-import { ApiConfigService } from '@app/core/services/http/api-config.service';
-import { ApiConfig } from '@app/core/models/api-config';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { SeriesOverviewComponent } from '@app/participant/series-overview/series-overview.component';
-import { ThemeService } from '@app/core/theme/theme.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { Content } from '@app/core/models/content';
@@ -52,13 +31,9 @@ import { ContentScale } from '@app/core/models/content-scale';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
 import { ContentState } from '@app/core/models/content-state';
-import { MaterialCssVarsService } from 'angular-material-css-vars';
 
 class MockService {}
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
+
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
@@ -69,17 +44,6 @@ class MockAuthenticationService {
         'token'
       )
     );
-  }
-}
-
-class MockHotkeyService {
-  registerHotkey() {}
-}
-
-class MockLangService {
-  langEmitter = new EventEmitter<string>();
-  ensureValidLang(lang: string): string {
-    return lang;
   }
 }
 
@@ -276,21 +240,9 @@ class MockFocusModeService {
   }
 }
 
-class MockEventService {
-  on() {
-    return of({});
-  }
-}
-
 class MockRoutingService {
   getRoomJoinUrl() {
     return 'join-url';
-  }
-}
-
-class MockApiConfigService {
-  getApiConfig$() {
-    return of(new ApiConfig([], {}, {}));
   }
 }
 
@@ -318,20 +270,13 @@ class MockContentAnswerService {
   }
 }
 
-class MockMaterialCssVarsService {
-  setDarkTheme() {}
-  setPrimaryColor() {}
-  setAccentColor() {}
-  setWarnColor() {}
-}
-
 export default {
   component: SeriesOverviewComponent,
   title: 'ParticipantSeriesOverview',
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [SeriesOverviewComponent, BrowserAnimationsModule],
+      imports: [SeriesOverviewComponent],
       providers: [
         {
           provide: RoomService,
@@ -342,36 +287,8 @@ export default {
           useClass: MockAuthenticationService,
         },
         {
-          provide: NotificationService,
-          useClass: MockService,
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-        {
-          provide: HotkeyService,
-          useClass: MockHotkeyService,
-        },
-        {
-          provide: TrackingService,
-          useClass: MockService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
-        {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
-        },
-        {
-          provide: EventService,
-          useClass: MockEventService,
         },
         {
           provide: ContentPublishService,
@@ -388,11 +305,6 @@ export default {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
-        },
-        ThemeService,
-        {
-          provide: MaterialCssVarsService,
-          useClass: MockMaterialCssVarsService,
         },
         {
           provide: ContentCarouselService,
@@ -425,24 +337,6 @@ export default {
             },
           },
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        {
-          provide: AuthenticationService,
-          useClass: MockAuthenticationService,
-        },
-        {
-          provide: ApiConfigService,
-          useClass: MockApiConfigService,
-        },
-        {
-          provide: ENVIRONMENT,
-          useValue: { features: [] },
-        },
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

@@ -1,14 +1,7 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ContentChoiceAnswerComponent } from './content-choice-answer.component';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HttpClientModule } from '@angular/common/http';
+
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
@@ -16,14 +9,8 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ActivatedRoute } from '@angular/router';
-import { LanguageService } from '@app/core/services/util/language.service';
 
 class MockFormattingService {}
-class MockLangService {
-  ensureValidLang(lang: string): string {
-    return lang;
-  }
-}
 
 export default {
   component: ContentChoiceAnswerComponent,
@@ -47,16 +34,6 @@ export default {
             },
           },
         },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

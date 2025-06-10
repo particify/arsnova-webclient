@@ -1,13 +1,5 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HttpClientModule } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
@@ -61,12 +53,6 @@ export default {
           provide: AuthenticationService,
           useClass: MockAuthenticationService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

@@ -6,16 +6,12 @@ import {
   Router,
 } from '@angular/router';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import {
-  ActivatedRouteStub,
-  MockGlobalStorageService,
-} from '@testing/test-helpers';
+import { ActivatedRouteStub } from '@testing/test-helpers';
 import { of } from 'rxjs';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { Room } from '@app/core/models/room';
-import { NO_ERRORS_SCHEMA, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
@@ -35,6 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { configureTestModule } from '@testing/test.setup';
 
 @Injectable()
 class MockContentGroupService {
@@ -135,8 +132,8 @@ describe('NavBarComponent', () => {
   (activatedRouteStub as { [key: string]: any })['children'] = {};
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
+    configureTestModule(
+      [
         getTranslocoModule(),
         BrowserAnimationsModule,
         ReactiveFormsModule,
@@ -144,9 +141,8 @@ describe('NavBarComponent', () => {
         RouterTestingModule.withRoutes([]),
         NavBarComponent,
       ],
-      providers: [
+      [
         RoutingService,
-        EventService,
         {
           provide: RoomStatsService,
           useValue: mockRoomStatsService,
@@ -160,10 +156,6 @@ describe('NavBarComponent', () => {
           useClass: MockContentGroupService,
         },
         {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-        {
           provide: RoomService,
           useValue: mockRoomService,
         },
@@ -175,9 +167,8 @@ describe('NavBarComponent', () => {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
         },
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+      ]
+    ).compileComponents();
   }));
 
   beforeEach(() => {

@@ -61,7 +61,9 @@ const excludedElementTypes = new Map<string, (el: Element) => boolean>([
   ['SELECT', () => true],
 ]);
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class HotkeyService {
   private eventManager = inject(EventManager);
   private dialogService = inject(DialogService);

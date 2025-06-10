@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import {
@@ -15,12 +15,23 @@ import {
 import { take } from 'rxjs';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { ControlBarComponent } from '@app/presentation/bars/control-bar/control-bar.component';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
+import { FlexModule } from '@angular/flex-layout';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-presentation',
   templateUrl: './presentation.component.html',
   styleUrl: './presentation.component.scss',
-  standalone: false,
+  imports: [
+    ControlBarComponent,
+    AutofocusDirective,
+    FlexModule,
+    RouterOutlet,
+    MatIcon,
+    TranslocoPipe,
+  ],
 })
 export class PresentationComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

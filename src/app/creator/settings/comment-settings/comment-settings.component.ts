@@ -11,7 +11,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { Router } from '@angular/router';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -21,15 +21,45 @@ import { CommentSettings } from '@app/core/models/comment-settings';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { EventService } from '@app/core/services/util/event.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { UpdateEvent } from '@app/creator/settings-page/settings-page.component';
 import { CommentExtensions } from '@app/core/models/room-extensions';
 import { take } from 'rxjs';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { FlexModule } from '@angular/flex-layout';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import {
+  MatChipGrid,
+  MatChipRow,
+  MatChipRemove,
+  MatChipInput,
+} from '@angular/material/chips';
+import { MatIcon } from '@angular/material/icon';
+import { UpdateEvent } from '@app/creator/settings/update-event';
 
 @Component({
   selector: 'app-comment-settings',
   templateUrl: './comment-settings.component.html',
   styleUrls: ['./comment-settings.component.scss'],
-  standalone: false,
+  imports: [
+    LoadingIndicatorComponent,
+    FlexModule,
+    SettingsSlideToggleComponent,
+    MatSlider,
+    MatSliderThumb,
+    FormsModule,
+    ExtensionPointComponent,
+    MatFormField,
+    MatLabel,
+    MatChipGrid,
+    MatChipRow,
+    MatIcon,
+    MatChipRemove,
+    MatChipInput,
+    TranslocoPipe,
+  ],
 })
 export class CommentSettingsComponent implements OnInit {
   dialog = inject(MatDialog);

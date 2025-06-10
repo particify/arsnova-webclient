@@ -18,8 +18,11 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { fromEvent, Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
-import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { TranslocoService } from '@jsverse/transloco';
+import {
+  HotkeyDirective,
+  HotkeyAction,
+} from '@app/core/directives/hotkey.directive';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { Content } from '@app/core/models/content';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -35,6 +38,18 @@ import { CommentPresentationState } from '@app/core/models/events/comment-presen
 import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { CommentPeriod } from '@app/core/models/comment-period.enum';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { FlexModule } from '@angular/flex-layout';
+import { NgClass } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { MatRipple } from '@angular/material/core';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { KeyButtonBarComponent } from '@app/presentation/bars/key-button-bar/key-button-bar.component';
+import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
+import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -62,7 +77,25 @@ export class KeyNavBarItem extends NavBarItem {
   selector: 'app-control-bar',
   templateUrl: './control-bar.component.html',
   styleUrls: ['./control-bar.component.scss'],
-  standalone: false,
+  imports: [
+    ExtensionPointComponent,
+    FlexModule,
+    NgClass,
+    ExtendedModule,
+    MatRipple,
+    MatTooltip,
+    HotkeyDirective,
+    MatIcon,
+    MatButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    KeyButtonBarComponent,
+    ContentPresentationMenuComponent,
+    CommentFilterComponent,
+    SplitShortIdPipe,
+    TranslocoPipe,
+  ],
 })
 export class ControlBarComponent
   extends NavBarComponent

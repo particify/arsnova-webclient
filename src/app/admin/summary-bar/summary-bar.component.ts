@@ -6,12 +6,16 @@ import {
 import { share } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { SystemHealth } from '@app/admin/_models/system-health';
+import { FlexModule } from '@angular/flex-layout';
+import { HealthStatusComponent } from '@app/admin/health-status/health-status.component';
+import { AsyncPipe } from '@angular/common';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-admin-summary-bar',
   templateUrl: './summary-bar.component.html',
   styleUrls: ['./summary-bar.component.scss'],
-  standalone: false,
+  imports: [FlexModule, HealthStatusComponent, AsyncPipe, TranslocoPipe],
 })
 export class SummaryBarComponent {
   protected systemInfoService = inject(SystemInfoService);

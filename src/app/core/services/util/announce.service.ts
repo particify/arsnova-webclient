@@ -3,7 +3,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { take } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AnnounceService {
   private translateService = inject(TranslocoService);
   private liveAnnouncer = inject(LiveAnnouncer);

@@ -22,6 +22,13 @@ import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { completeLoginGuard } from '@app/core/guards/complete-login.guard';
+import { provideTranslocoScope } from '@jsverse/transloco';
+import { DialogService } from './core/services/util/dialog.service';
+import { FocusModeService } from './creator/_services/focus-mode.service';
+import { TemplateService as CreatorTemplateService } from './creator/_services/template.service';
+import { TemplateService as AdminTemplateService } from '@app/admin/template-management/template.service';
+import { AdminService } from './core/services/http/admin.service';
+import { ContentCarouselService } from './core/services/util/content-carousel.service';
 
 const routes: Routes = [
   {
@@ -145,20 +152,35 @@ const routes: Routes = [
   },
   {
     path: 'admin',
+    providers: [
+      provideTranslocoScope('admin'),
+      AdminService,
+      AdminTemplateService,
+      DialogService,
+    ],
     loadChildren: () =>
-      import('./admin/admin.module').then((m) => m.AdminModule),
+      import('./admin/admin-routing.module').then((m) => m.AdminRoutingModule),
     title: 'admin',
   },
   {
     path: 'edit',
+    providers: [
+      provideTranslocoScope('creator'),
+      DialogService,
+      FocusModeService,
+      CreatorTemplateService,
+    ],
     loadChildren: () =>
-      import('./creator/creator.module').then((m) => m.CreatorModule),
+      import('./creator/creator-routing.module').then(
+        (m) => m.CreatorRoutingModule
+      ),
   },
   {
     path: 'p',
+    providers: [provideTranslocoScope('participant'), ContentCarouselService],
     loadChildren: () =>
-      import('./participant/participant.module').then(
-        (m) => m.ParticipantModule
+      import('./participant/participant-routing.module').then(
+        (m) => m.ParticipantRoutingModule
       ),
     data: {
       skipConsent: true,
@@ -170,9 +192,10 @@ const routes: Routes = [
   },
   {
     path: 'present',
+    providers: [provideTranslocoScope('creator'), FocusModeService],
     loadChildren: () =>
-      import('./presentation/presentation.module').then(
-        (m) => m.PresentationModule
+      import('./presentation/presentation-routing.module').then(
+        (m) => m.PresentationRoutingModule
       ),
     title: 'presentation-mode',
   },

@@ -186,7 +186,9 @@ const APP_PREFIX = 'ARS';
 /**
  * Provides a unified API for handling persistant and non-persistant application state.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class GlobalStorageService {
   private eventService = inject(EventService);
 

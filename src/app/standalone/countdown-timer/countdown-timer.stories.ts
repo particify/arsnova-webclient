@@ -1,13 +1,5 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 
 export default {
   component: CountdownTimerComponent,
@@ -16,12 +8,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [CountdownTimerComponent],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
     }),
   ],
 } as Meta;

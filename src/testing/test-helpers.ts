@@ -1,6 +1,4 @@
-import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { BroadcastEvent } from '@app/core/services/util/event.service';
+import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
 import {
   ActivatedRouteSnapshot,
   convertToParamMap,
@@ -9,8 +7,6 @@ import {
   Params,
 } from '@angular/router';
 import { Theme } from '@app/core/theme/theme.service';
-
-// SERVICES - UTIL
 
 // TranslateModule
 
@@ -29,42 +25,6 @@ export class MockTranslocoService {
   setActiveLang(lang: string) {
     this.currentLang = lang;
   }
-}
-
-// EventService
-
-export class MockEventService {
-  private _eventBus = new Subject<BroadcastEvent>();
-  focusOnInput = false;
-
-  broadcast = jasmine.createSpy('BroadcastSpy').and.returnValue({});
-
-  on<T>(key: any): Observable<T> {
-    return this._eventBus.asObservable().pipe(
-      filter((event) => event.key === key),
-      map((event) => <T>event.data)
-    );
-  }
-}
-
-// AnnounceService
-
-export class MockAnnounceService {
-  announce() {}
-}
-
-// GlobalStorageService
-
-export class MockGlobalStorageService {
-  getItem(): any {
-    return undefined;
-  }
-
-  setItem() {}
-
-  removeItem() {}
-
-  handleConsentChange() {}
 }
 
 // Renderer
@@ -131,14 +91,6 @@ export class MockRouter {
   createUrlTree() {}
 
   serializeUrl() {}
-}
-
-// NotificationService
-
-export class MockNotificationService {
-  show() {}
-
-  showAdvanced() {}
 }
 
 // ThemeService

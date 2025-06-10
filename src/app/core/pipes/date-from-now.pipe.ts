@@ -3,10 +3,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/de';
 
-@Pipe({
-  name: 'dateFromNow',
-  standalone: false,
-})
+@Pipe({ name: 'dateFromNow' })
 export class DateFromNowPipe implements PipeTransform {
   /* The refresh parameter is not used but forces rerendering when changed. */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -6,7 +6,7 @@ import { Extension } from '@ext-point/extension';
 // provide it as Extension for dependency injection. This way, the module can
 // be easily replaced with an alternative implementation.
 @NgModule({
-  declarations: [AppLogoComponent],
+  imports: [AppLogoComponent],
   exports: [AppLogoComponent],
   providers: [{ provide: Extension, useClass: AppLogoComponent, multi: true }],
 })

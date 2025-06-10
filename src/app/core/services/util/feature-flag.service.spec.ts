@@ -1,7 +1,8 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { inject } from '@angular/core/testing';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { ENVIRONMENT } from '@environments/environment-token';
+import { configureTestModule } from '@testing/test.setup';
 import { of } from 'rxjs';
 
 describe('FeatureFlagService', () => {
@@ -20,8 +21,9 @@ describe('FeatureFlagService', () => {
     );
 
     beforeEach(() => {
-      TestBed.configureTestingModule({
-        providers: [
+      configureTestModule(
+        [],
+        [
           FeatureFlagService,
           {
             provide: ENVIRONMENT,
@@ -31,8 +33,8 @@ describe('FeatureFlagService', () => {
             provide: ApiConfigService,
             useValue: apiConfigSpy,
           },
-        ],
-      });
+        ]
+      );
     });
 
     it('should be created', inject(
@@ -83,8 +85,9 @@ describe('FeatureFlagService', () => {
     );
 
     beforeEach(() => {
-      TestBed.configureTestingModule({
-        providers: [
+      configureTestModule(
+        [],
+        [
           FeatureFlagService,
           {
             provide: ENVIRONMENT,
@@ -94,8 +97,8 @@ describe('FeatureFlagService', () => {
             provide: ApiConfigService,
             useValue: apiConfigSpy,
           },
-        ],
-      });
+        ]
+      );
     });
 
     it('should be created', inject(

@@ -5,8 +5,7 @@ import { ExtensionFactory } from './extension-factory';
 import { ExtensionRouteProvider, RouteMountPoint } from './extension-route';
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [ExtensionPointComponent],
+  imports: [CommonModule, ExtensionPointComponent],
   exports: [ExtensionPointComponent],
 })
 export class ExtensionPointModule {

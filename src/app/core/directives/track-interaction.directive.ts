@@ -11,10 +11,7 @@ import {
   TrackingService,
 } from '@app/core/services/util/tracking.service';
 
-@Directive({
-  selector: '[appTrackInteraction]',
-  standalone: false,
-})
+@Directive({ selector: '[appTrackInteraction]' })
 export class TrackInteractionDirective implements OnInit, OnDestroy {
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private trackingService = inject(TrackingService);

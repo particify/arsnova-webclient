@@ -1,14 +1,7 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+
 import { GroupType } from '@app/core/models/content-group';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 
@@ -36,12 +29,6 @@ export default {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

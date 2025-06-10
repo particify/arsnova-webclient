@@ -10,14 +10,19 @@ import {
   inject,
 } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import { UntypedFormControl, Validators } from '@angular/forms';
-import { TranslocoService } from '@jsverse/transloco';
+import {
+  UntypedFormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   AuthenticationProvider,
@@ -30,10 +35,23 @@ import {
 } from '@app/core/models/client-authentication-result';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import {
+  PasswordEntryComponent,
+  PasswordEntryComponent as PasswordEntryComponent_1,
+} from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
+import { FlexModule } from '@angular/flex-layout';
+import { MatCard } from '@angular/material/card';
+import { FormHeaderComponent } from '@app/core/components/form-header/form-header.component';
+import { MatButton } from '@angular/material/button';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
+import { MatDivider } from '@angular/material/divider';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 function setDefaultTrue(value: boolean | undefined): boolean {
   return value ?? true;
@@ -43,7 +61,25 @@ function setDefaultTrue(value: boolean | undefined): boolean {
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    MatCard,
+    FormHeaderComponent,
+    MatButton,
+    AutofocusDirective,
+    MatDivider,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    MatError,
+    PasswordEntryComponent_1,
+    RouterLink,
+    LoadingButtonComponent,
+    LoadingIndicatorComponent,
+    TranslocoPipe,
+  ],
 })
 export class LoginComponent
   extends FormComponent

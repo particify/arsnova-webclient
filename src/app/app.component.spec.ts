@@ -1,12 +1,10 @@
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { TrackingService } from '@app/core/services/util/tracking.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ConsentService } from '@app/core/services/util/consent.service';
 import { UpdateService } from '@app/core/services/util/update.service';
 import { UpdateImportance } from '@app/core/models/version-info';
@@ -39,14 +37,16 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { By } from '@angular/platform-browser';
+import { configureTestModule } from '@testing/test.setup';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   // let's you access the debug elements to gain control over injected services etc.
   let fixture: ComponentFixture<AppComponent>;
 
+  let trackingService: TrackingService;
+
   const updateService = jasmine.createSpyObj('UpdateService', ['handleUpdate']);
-  const trackingService = jasmine.createSpyObj('TrackingService', ['init']);
   const testApiConfig = {
     ui: {
       tracking: {
@@ -127,10 +127,12 @@ describe('AppComponent', () => {
   const authenticationService = jasmine.createSpyObj('AuthenticationService', [
     'getAuthenticationChanges',
     'logout',
+    'hasAdminRole',
   ]);
   authenticationService.getAuthenticationChanges.and.returnValue(
     of({ loginId: 'test@test.de' })
   );
+  authenticationService.hasAdminRole.and.returnValue(false);
 
   const notificationService = jasmine.createSpyObj('NotificationService', [
     'showAdvanced',
@@ -155,16 +157,17 @@ describe('AppComponent', () => {
   let langMenuItems: MatMenuItemHarness[];
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      providers: [
+    const testBed = configureTestModule(
+      [
+        AppComponent,
+        getTranslocoModule(),
+        BrowserAnimationsModule,
+        MatMenuModule,
+      ],
+      [
         {
           provide: ApiConfigService,
           useValue: apiConfigService,
-        },
-        {
-          provide: TrackingService,
-          useValue: trackingService,
         },
         {
           provide: ConsentService,
@@ -210,19 +213,13 @@ describe('AppComponent', () => {
           provide: ActivatedRoute,
           useValue: activatedRoute,
         },
-      ],
-      imports: [
-        getTranslocoModule(),
-        HttpClientTestingModule,
-        BrowserAnimationsModule,
-        MatMenuModule,
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    });
-    fixture = TestBed.createComponent(AppComponent);
+      ]
+    );
+    fixture = testBed.createComponent(AppComponent);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
-    routerSpy = TestBed.inject(Router);
+    routerSpy = testBed.inject(Router);
+    trackingService = testBed.inject(TrackingService);
     fixture.detectChanges();
   }));
 

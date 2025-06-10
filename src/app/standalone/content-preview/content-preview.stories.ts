@@ -1,13 +1,6 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { ContentPreviewComponent } from './content-preview.component';
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
@@ -24,7 +17,6 @@ import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { ContentPrioritization } from '@app/core/models/content-prioritization';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
 import { ActivatedRoute } from '@angular/router';
-import { LanguageService } from '@app/core/services/util/language.service';
 
 class MockService {}
 
@@ -37,12 +29,6 @@ class MockFormattingService {
 class MockContentAnswerService {
   shuffleAnswerOptions(options: AnswerOption[]) {
     return options;
-  }
-}
-
-class MockLangService {
-  ensureValidLang(lang: string): string {
-    return lang;
   }
 }
 
@@ -80,16 +66,6 @@ export default {
             },
           },
         },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

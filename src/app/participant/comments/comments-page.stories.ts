@@ -1,33 +1,17 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
-
-import { importProvidersFrom, EventEmitter } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from '@app/transloco-root.module';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { of } from 'rxjs';
 import { CommentsPageComponent } from '@app/participant/comments/comments-page.component';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { Comment } from '@app/core/models/comment';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { NotificationService } from '@app/core/services/util/notification.service';
-import { AnnounceService } from '@app/core/services/util/announce.service';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { VoteService } from '@app/core/services/http/vote.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
-import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { TrackingService } from '@app/core/services/util/tracking.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DialogService } from '@app/core/services/util/dialog.service';
-import { LanguageService } from '@app/core/services/util/language.service';
 import { Room } from '@app/core/models/room';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -51,10 +35,6 @@ class MockCommentService {
 }
 
 class MockService {}
-class MockGlobalStorageService {
-  getItem() {}
-  setItem() {}
-}
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
@@ -88,24 +68,13 @@ class MockCommentSettingsService {
   }
 }
 
-class MockHotkeyService {
-  registerHotkey() {}
-}
-
-class MockLangService {
-  langEmitter = new EventEmitter<string>();
-  ensureValidLang(lang: string): string {
-    return lang;
-  }
-}
-
 export default {
   component: CommentsPageComponent,
   title: 'CommentsPage',
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      imports: [CommentsPageComponent, BrowserAnimationsModule],
+      imports: [CommentsPageComponent],
       providers: [
         {
           provide: CommentService,
@@ -120,18 +89,6 @@ export default {
           useClass: MockWsCommentService,
         },
         {
-          provide: NotificationService,
-          useClass: MockService,
-        },
-        {
-          provide: AnnounceService,
-          useClass: MockService,
-        },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-        {
           provide: CommentSettingsService,
           useClass: MockCommentSettingsService,
         },
@@ -144,27 +101,9 @@ export default {
           useClass: MockFocusModeService,
         },
         {
-          provide: HotkeyService,
-          useClass: MockHotkeyService,
-        },
-        {
           provide: TrackingService,
           useClass: MockService,
         },
-        {
-          provide: DialogService,
-          useClass: MockService,
-        },
-        {
-          provide: LanguageService,
-          useClass: MockLangService,
-        },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

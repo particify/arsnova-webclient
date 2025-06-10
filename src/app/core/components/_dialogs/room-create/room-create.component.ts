@@ -7,9 +7,14 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { EventService } from '@app/core/services/util/event.service';
 import {
   GlobalStorageService,
@@ -26,11 +31,35 @@ import {
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FlexModule } from '@angular/flex-layout';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { HintComponent } from '@app/standalone/hint/hint.component';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { MatButton } from '@angular/material/button';
+import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
 
 @Component({
   selector: 'app-room-create',
   templateUrl: './room-create.component.html',
-  standalone: false,
+  imports: [
+    FormsModule,
+    CdkScrollable,
+    MatDialogContent,
+    FlexModule,
+    ExtensionPointComponent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatHint,
+    HintComponent,
+    MatDialogActions,
+    LoadingButtonComponent,
+    MatButton,
+    TranslocoPipe,
+  ],
 })
 export class RoomCreateComponent extends FormComponent implements OnInit {
   private roomService = inject(RoomService);

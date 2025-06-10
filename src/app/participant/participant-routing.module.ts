@@ -16,6 +16,7 @@ import { ParticipantPageComponent } from '@app/participant/participant-page.comp
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { UserSettingsResolver } from '@app/core/resolver/user-settings.resolver';
+import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 
 const routes: Routes = [
   {
@@ -29,9 +30,9 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () =>
-      import('./room-overview/room-overview.module').then(
-        (m) => m.RoomOverviewModule
+    loadComponent: () =>
+      import('./room-overview/room-overview-page.component').then(
+        (m) => m.RoomOverviewPageComponent
       ),
     data: {
       parentRoute: ParentRoute.USER,
@@ -41,8 +42,10 @@ const routes: Routes = [
   },
   {
     path: 'comments',
-    loadChildren: () =>
-      import('./comments/comments.module').then((m) => m.CommentsModule),
+    loadComponent: () =>
+      import('./comments/comments-page.component').then(
+        (m) => m.CommentsPageComponent
+      ),
     data: {
       parentRoute: ParentRoute.ROOM,
       feature: RoutingFeature.COMMENTS,
@@ -51,9 +54,9 @@ const routes: Routes = [
   },
   {
     path: 'feedback',
-    loadChildren: () =>
-      import('./live-feedback/live-feedback.module').then(
-        (m) => m.LiveFeedbackModule
+    loadComponent: () =>
+      import('./live-feedback/live-feedback-page.component').then(
+        (m) => m.LiveFeedbackPageComponent
       ),
     data: {
       parentRoute: ParentRoute.ROOM,
@@ -126,6 +129,7 @@ const routes: Routes = [
               resolve: {
                 commentSettings: CommentSettingsResolver,
               },
+              providers: [CommentSettingsService],
               runGuardsAndResolvers: 'always',
               children: [
                 ...routes,

@@ -1,8 +1,19 @@
 import { Component, inject } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MatDialogContent,
+  MatDialogActions,
+} from '@angular/material/dialog';
 
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ExportFileType } from '@app/core/models/export-file-type';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FlexModule } from '@angular/flex-layout';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatButton } from '@angular/material/button';
 
 const charsets = ['UTF-8', 'UTF-16LE'] as const;
 
@@ -15,7 +26,19 @@ export interface ExportOptions {
 
 @Component({
   templateUrl: './export.component.html',
-  standalone: false,
+  imports: [
+    CdkScrollable,
+    MatDialogContent,
+    FlexModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    MatDialogActions,
+    MatButton,
+    TranslocoPipe,
+  ],
 })
 export class ExportComponent {
   protected translateService = inject(TranslocoService);

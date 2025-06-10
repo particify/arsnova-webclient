@@ -1,11 +1,9 @@
-import { TestBed, inject } from '@angular/core/testing';
-
+import { inject } from '@angular/core/testing';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { MockGlobalStorageService } from '@testing/test-helpers';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { GlobalStorageService } from '@app/core/services/util/global-storage.service';
 import { ApiConfig } from '@app/core/models/api-config';
+import { configureTestModule } from '@testing/test.setup';
 
 class MockLocation {
   back = jasmine.createSpy('BackSpy');
@@ -19,8 +17,9 @@ describe('RoutingService', () => {
   ]);
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
+    configureTestModule(
+      [],
+      [
         RoutingService,
         {
           provide: Router,
@@ -30,12 +29,8 @@ describe('RoutingService', () => {
           provide: Location,
           useClass: MockLocation,
         },
-        {
-          provide: GlobalStorageService,
-          useClass: MockGlobalStorageService,
-        },
-      ],
-    });
+      ]
+    );
   });
 
   it('should be created', inject(

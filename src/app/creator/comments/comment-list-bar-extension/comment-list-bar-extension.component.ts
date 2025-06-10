@@ -9,7 +9,16 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { FlexModule } from '@angular/flex-layout';
+import { MatIconButton } from '@angular/material/button';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
+import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { MatDivider } from '@angular/material/divider';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 
 @Component({
   selector: 'app-comment-list-bar-extension',
@@ -17,7 +26,20 @@ import { TranslocoService } from '@jsverse/transloco';
   styleUrls: [
     '../../../standalone/comment-list-bar/comment-list-bar.component.scss',
   ],
-  standalone: false,
+  imports: [
+    FlexModule,
+    MatIconButton,
+    HotkeyDirective,
+    TrackInteractionDirective,
+    MatTooltip,
+    MatIcon,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatDivider,
+    ExtensionPointComponent,
+    TranslocoPipe,
+  ],
 })
 export class CommentListBarExtensionComponent {
   private translateService = inject(TranslocoService);

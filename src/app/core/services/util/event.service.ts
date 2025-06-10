@@ -7,7 +7,9 @@ export interface BroadcastEvent {
   data?: any;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class EventService {
   private _eventBus: Subject<BroadcastEvent>;
 

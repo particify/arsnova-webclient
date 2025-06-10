@@ -1,6 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { UntypedFormControl, Validators } from '@angular/forms';
-import { TranslocoService } from '@jsverse/transloco';
+import {
+  UntypedFormControl,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
@@ -11,12 +16,28 @@ import { PasswordResetErrorStateMatcher } from '@app/core/components/password-re
 import { Router } from '@angular/router';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
+import { FlexModule } from '@angular/flex-layout';
+import { MatCard } from '@angular/material/card';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 
 @Component({
   selector: 'app-request-password-reset',
   templateUrl: './request-password-reset.component.html',
   styleUrls: ['./request-password-reset.component.scss'],
-  standalone: false,
+  imports: [
+    FlexModule,
+    MatCard,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    MatError,
+    LoadingButtonComponent,
+    TranslocoPipe,
+  ],
 })
 export class RequestPasswordResetComponent
   extends FormComponent

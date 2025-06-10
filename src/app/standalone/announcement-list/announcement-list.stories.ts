@@ -1,14 +1,5 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
@@ -79,7 +70,6 @@ export default {
         AnnouncementListComponent,
         AnnouncementComponent,
         LoadingIndicatorComponent,
-        BrowserAnimationsModule,
       ],
       providers: [
         {
@@ -102,12 +92,6 @@ export default {
           provide: FormattingService,
           useClass: MockService,
         },
-      ],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
       ],
     }),
   ],

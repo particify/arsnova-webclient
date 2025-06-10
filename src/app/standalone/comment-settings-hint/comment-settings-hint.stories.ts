@@ -1,13 +1,5 @@
-import {
-  applicationConfig,
-  Meta,
-  moduleMetadata,
-  StoryObj,
-} from '@storybook/angular';
+import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { CommentSettingsHintComponent } from './comment-settings-hint.component';
-import { HttpClientModule } from '@angular/common/http';
-import { importProvidersFrom } from '@angular/core';
-import { TranslocoRootModule } from '@app/transloco-root.module';
 
 export default {
   component: CommentSettingsHintComponent,
@@ -16,12 +8,6 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [CommentSettingsHintComponent],
-    }),
-    applicationConfig({
-      providers: [
-        importProvidersFrom(TranslocoRootModule),
-        importProvidersFrom(HttpClientModule),
-      ],
     }),
   ],
 } as Meta;
