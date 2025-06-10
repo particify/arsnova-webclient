@@ -21,6 +21,7 @@ export class ExtensionFactory {
 
   extensions: { [key: string]: Extension } = {};
 
+  // eslint-disable-next-line @angular-eslint/prefer-inject
   constructor(@Inject(Extension) @Optional() extensions: Extension[]) {
     const featureFlagService = this.featureFlagService;
 
