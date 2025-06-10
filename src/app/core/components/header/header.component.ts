@@ -1,4 +1,4 @@
-import { Component, OnInit, Signal, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Router } from '@angular/router';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
@@ -54,11 +54,7 @@ export class HeaderComponent implements OnInit {
   showOverlayLink = false;
   announcementState?: AnnouncementState;
   room?: Room;
-  title: Signal<string>;
-
-  constructor() {
-    this.title = this.pageTitleService.getTitle();
-  }
+  title = this.pageTitleService.getTitle();
 
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
@@ -157,5 +153,9 @@ export class HeaderComponent implements OnInit {
         this.announcementState.readTimestamp = newReadTimestamp;
       }
     });
+  }
+
+  isRoomSubRoute() {
+    return this.router.url.split('/').pop() !== this.room?.shortId;
   }
 }
