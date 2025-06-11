@@ -37,7 +37,7 @@ body {
   width: 100%;
   height: 100%;
 
-  --mdc-theme-text-primary-on-background: var(--on-background);
+  --mat-theme-text-primary-on-background: var(--on-background);
 }
 
 [tabindex] {
@@ -283,7 +283,7 @@ textarea {
 // Dialogs
 
 .mat-mdc-dialog-surface {
-  --mdc-dialog-container-color: var(--dialog);
+  --mat-dialog-container-color: var(--dialog);
 }
 
 .mat-mdc-dialog-actions {
@@ -502,7 +502,7 @@ div {
 // Choice answer buttons
 
 .answer-radio-button .mdc-radio {
-  --mdc-radio-unselected-icon-color: var(--grey);
+  --mat-radio-unselected-icon-color: var(--grey);
   --mat-radio-ripple-color: transparent;
   --mat-radio-checked-ripple-color: transparent;
 }
@@ -535,25 +535,31 @@ div {
 }
 
 .answer-checkbox .mdc-checkbox {
-  --mdc-checkbox-unselected-icon-color: var(--grey);
-  --mdc-checkbox-unselected-hover-state-layer-color: transparent;
-  --mdc-checkbox-unselected-pressed-state-layer-color: transparent;
+  --mat-checkbox-unselected-icon-color: var(--grey);
+  --mat-checkbox-unselected-hover-state-layer-color: transparent;
+  --mat-checkbox-unselected-pressed-state-layer-color: transparent;
 }
 
 // Mat slide toggle
 
 .theme-dark .mat-mdc-slide-toggle.mat-accent {
-  --mdc-switch-selected-focus-state-layer-color: var(--palette-accent-600);
-  --mdc-switch-selected-handle-color: var(--palette-accent-900);
-  --mdc-switch-selected-hover-state-layer-color: var(--palette-accent-600);
-  --mdc-switch-selected-pressed-state-layer-color: var(--palette-accent-600);
-  --mdc-switch-selected-focus-handle-color: var(--palette-accent-900);
-  --mdc-switch-selected-hover-handle-color: var(--palette-accent-900);
-  --mdc-switch-selected-pressed-handle-color: var(--palette-accent-900);
-  --mdc-switch-selected-focus-track-color: var(--palette-accent-300);
-  --mdc-switch-selected-hover-track-color: var(--palette-accent-300);
-  --mdc-switch-selected-pressed-track-color: var(--palette-accent-300);
-  --mdc-switch-selected-track-color: var(--palette-accent-300);
+  --mat-slide-toggle-selected-focus-state-layer-color: var(
+    --palette-accent-600
+  );
+  --mat-slide-toggle-selected-handle-color: var(--palette-accent-900);
+  --mat-slide-toggle-selected-hover-state-layer-color: var(
+    --palette-accent-600
+  );
+  --mat-slide-toggle-selected-pressed-state-layer-color: var(
+    --palette-accent-600
+  );
+  --mat-slide-toggle-selected-focus-handle-color: var(--palette-accent-900);
+  --mat-slide-toggle-selected-hover-handle-color: var(--palette-accent-900);
+  --mat-slide-toggle-selected-pressed-handle-color: var(--palette-accent-900);
+  --mat-slide-toggle-selected-focus-track-color: var(--palette-accent-300);
+  --mat-slide-toggle-selected-hover-track-color: var(--palette-accent-300);
+  --mat-slide-toggle-selected-pressed-track-color: var(--palette-accent-300);
+  --mat-slide-toggle-selected-track-color: var(--palette-accent-300);
 }
 
 // Mat Select
@@ -637,7 +643,7 @@ div {
   padding: 8px !important;
 
   &:not(.mat-primary, .mat-accent, .mat-warn) {
-    --mdc-icon-button-icon-color: var(--on-surface);
+    --mat-icon-button-icon-color: var(--on-surface);
   }
 }
 
@@ -656,7 +662,7 @@ div {
   ) {
   opacity: 0.8;
 
-  --mdc-text-button-label-text-color: var(--on-surface);
+  --mat-button-text-label-text-color: var(--on-surface);
 
   &:hover {
     opacity: 1;
@@ -862,7 +868,7 @@ div {
 
 .mat-mdc-snack-bar-container {
   --mat-snack-bar-button-color: var(--surface);
-  --mdc-snackbar-supporting-text-color: var(--surface);
+  --mat-snackbar-supporting-text-color: var(--surface);
 }
 
 .presentation-snack-bar {

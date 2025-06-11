@@ -20,7 +20,7 @@ span {
 }
 
 .mat-mdc-progress-spinner {
-  --mdc-circular-progress-active-indicator-color: var(
-    --mdc-snackbar-supporting-text-color
+  --mat-progress-spinner-active-indicator-color: var(
+    --mat-snackbar-supporting-text-color
   );
 }

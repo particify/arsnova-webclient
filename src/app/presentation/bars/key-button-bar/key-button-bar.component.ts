@@ -1,5 +1,5 @@
-import { DOCUMENT, NgClass } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, Input, inject, DOCUMENT } from '@angular/core';
 import { KeyNavBarItem } from '@app/presentation/bars/control-bar/control-bar.component';
 import { FlexModule } from '@angular/flex-layout';
 import { ExtendedModule } from '@angular/flex-layout/extended';

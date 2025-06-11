@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, DOCUMENT } from '@angular/core';
 import { MatDialogRef, MatDialogState } from '@angular/material/dialog';
 import { EventManager } from '@angular/platform-browser';
 import { environment } from '@environments/environment';

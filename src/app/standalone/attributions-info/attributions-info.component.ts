@@ -19,20 +19,20 @@ export class AttributionsInfoComponent {
   private contentGroupService = inject(ContentGroupService);
 
   contents = rxResource({
-    request: () => ({ contentGroup: this.contentGroup() }),
-    loader: ({ request }) =>
+    params: () => ({ contentGroup: this.contentGroup() }),
+    stream: ({ params }) =>
       this.contentService.getContentsByIds(
-        request.contentGroup.roomId,
-        request.contentGroup.contentIds
+        params.contentGroup.roomId,
+        params.contentGroup.contentIds
       ),
   });
 
   attributions = rxResource({
-    request: () => ({ contentGroup: this.contentGroup() }),
-    loader: ({ request }) =>
+    params: () => ({ contentGroup: this.contentGroup() }),
+    stream: ({ params }) =>
       this.contentGroupService.getAttributions(
-        request.contentGroup.roomId,
-        request.contentGroup.id
+        params.contentGroup.roomId,
+        params.contentGroup.id
       ),
   });
 

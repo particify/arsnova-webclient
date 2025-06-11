@@ -37,7 +37,7 @@ form {
 
 .fixed-height {
   max-height: calc(
-    100% - var(--mdc-protected-button-container-height) - $spacing-2
+    100% - var(--mat-button-protected-container-height) - $spacing-2
   );
 }
 
