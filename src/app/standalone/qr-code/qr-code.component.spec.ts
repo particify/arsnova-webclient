@@ -16,6 +16,7 @@ import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { Room } from '@app/core/models/room';
 import { configureTestModule } from '@testing/test.setup';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 describe('QrCodeComponent', () => {
   let component: QrCodeComponent;
@@ -41,26 +42,6 @@ describe('QrCodeComponent', () => {
     },
   };
 
-  const mockRoutingService = jasmine.createSpyObj(RoutingService, [
-    'getRoomJoinUrl',
-    'removeProtocolFromUrl',
-  ]);
-  mockRoutingService.getRoomJoinUrl
-    .withArgs('https://partici.fi/')
-    .and.returnValue('https://partici.fi/12345678');
-  mockRoutingService.getRoomJoinUrl
-    .withArgs(undefined)
-    .and.returnValue(document.baseURI + 'p/12345678');
-  mockRoutingService.removeProtocolFromUrl
-    .withArgs('http://localhost:9876/')
-    .and.returnValue('localhost:9876/');
-  mockRoutingService.removeProtocolFromUrl
-    .withArgs('http://localhost:9876')
-    .and.returnValue('localhost:9876');
-  mockRoutingService.removeProtocolFromUrl
-    .withArgs('https://partici.fi/12345678')
-    .and.returnValue('partici.fi/12345678');
-
   const roomSummary = new RoomSummary();
   roomSummary.stats = new RoomSummaryStats();
   roomSummary.stats.roomUserCount = 0;
@@ -81,6 +62,12 @@ describe('QrCodeComponent', () => {
     'updateOverviewState',
   ]);
 
+  const snapshot = new ActivatedRouteSnapshot();
+  snapshot.params = { ['shortId']: '12345678' };
+  snapshot.data = {};
+
+  let routingService: RoutingService;
+
   beforeEach(waitForAsync(() => {
     const testBed = configureTestModule(
       [QrCodeComponent, ExtensionPointModule],
@@ -93,10 +80,7 @@ describe('QrCodeComponent', () => {
           provide: ThemeService,
           useClass: MockThemeService,
         },
-        {
-          provide: RoutingService,
-          useValue: mockRoutingService,
-        },
+        RoutingService,
         {
           provide: RoomService,
           useValue: mockRoomService,
@@ -115,6 +99,8 @@ describe('QrCodeComponent', () => {
     mockApiConfigService.getApiConfig$.and.returnValue(of(configWithJoinLink));
     fixture = testBed.createComponent(QrCodeComponent);
     component = fixture.componentInstance;
+    routingService = testBed.inject(RoutingService);
+    routingService.getRoomUrlData(snapshot);
     component.room = new Room();
   }));
 
@@ -146,7 +132,7 @@ describe('QrCodeComponent', () => {
       of(configWithoutJoinLink)
     );
     fixture.detectChanges();
-    expect(component.url).toBe('http://localhost:9876/p/12345678');
+    expect(component.url).toBe(`${window.location.href}p/12345678`);
   });
 
   it('should use correct qr url if config for join link is NOT set', () => {
@@ -154,7 +140,7 @@ describe('QrCodeComponent', () => {
       of(configWithoutJoinLink)
     );
     fixture.detectChanges();
-    expect(component.qrUrl).toBe('http://localhost:9876/p/12345678?entry=qr');
+    expect(component.qrUrl).toBe(`${window.location.href}p/12345678?entry=qr`);
   });
 
   it('should use correct display url if config for join link is NOT set', () => {
@@ -162,6 +148,8 @@ describe('QrCodeComponent', () => {
       of(configWithoutJoinLink)
     );
     fixture.detectChanges();
-    expect(component.displayUrl).toBe('localhost:9876');
+    expect(component.displayUrl).toBe(
+      routingService.removeProtocolFromUrl(window.location.href)
+    );
   });
 });
