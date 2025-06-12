@@ -43,7 +43,7 @@
     }
     <span class="fill-remaining-space"></span>
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-      @if (!!role && !hasRole(UserRole.PARTICIPANT)) {
+      @if (!!role && !hasRole(UserRole.PARTICIPANT) && room) {
         <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
           <div class="mobile-action-container">
             @if (!isPreview) {
@@ -77,6 +77,11 @@
                 <mat-icon>settings</mat-icon>
                 <span>{{ 'header.room-settings' | transloco }}</span>
               </button>
+              <app-share-room
+                [roomName]="room.name"
+                [disabled]="isPreview"
+                [useMenuButton]="true"
+              ></app-share-room>
             }
           </mat-menu>
           <div
@@ -96,6 +101,10 @@
                   | transloco
               }}
             </button>
+            <app-share-room
+              [roomName]="room.name"
+              [disabled]="isPreview"
+            ></app-share-room>
             @if (hasRole(UserRole.OWNER) || hasRole(UserRole.EDITOR)) {
               <button
                 [disabled]="isPreview"

@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { EventService } from '@app/core/services/util/event.service';
-import { DialogService } from '@app/core/services/util/dialog.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ExtensionFactory } from '@projects/extension-point/src/public-api';
@@ -37,6 +36,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatBadge } from '@angular/material/badge';
 import { NgClass } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { ShareRoomComponent } from '@app/standalone/share-room/share-room.component';
 
 @Component({
   selector: 'app-header',
@@ -64,13 +64,13 @@ import { TranslocoPipe } from '@jsverse/transloco';
     MatBadge,
     NgClass,
     TranslocoPipe,
+    ShareRoomComponent,
   ],
 })
 export class HeaderComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);
   router = inject(Router);
   eventService = inject(EventService);
-  private dialogService = inject(DialogService);
   private routingService = inject(RoutingService);
   private extensionFactory = inject(ExtensionFactory);
   private dialog = inject(MatDialog);
@@ -117,9 +117,9 @@ export class HeaderComponent implements OnInit {
           }
         }
       });
-    this.roomService
-      .getCurrentRoomStream()
-      .subscribe((room) => (this.room = room));
+    this.roomService.getCurrentRoomStream().subscribe((room) => {
+      this.room = room;
+    });
     this.isPreview = this.routingService.isPreview;
     this.routingService.getIsPreview().subscribe((isPreview) => {
       this.isPreview = isPreview;

@@ -27,6 +27,10 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { configureTestModule } from '@testing/test.setup';
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { LocalFileService } from '@app/core/services/util/local-file.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ApiConfig } from '@app/core/models/api-config';
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
@@ -45,6 +49,10 @@ class MockRoutingService {
 
   getRole() {
     return of({});
+  }
+
+  getRoomJoinUrl() {
+    return 'awesome-url/p/12345678';
   }
 }
 
@@ -67,6 +75,13 @@ describe('HeaderComponent', () => {
   let loader: HarnessLoader;
   let userButton: MatButtonHarness;
 
+  const mockApiConfigService = jasmine.createSpyObj(ApiConfigService, [
+    'getApiConfig$',
+  ]);
+  mockApiConfigService.getApiConfig$.and.returnValue(
+    of(new ApiConfig([], {}, {}))
+  );
+
   beforeEach(async () => {
     const testBed = configureTestModule(
       [
@@ -74,6 +89,7 @@ describe('HeaderComponent', () => {
         ReactiveFormsModule,
         MatButtonModule,
         MatMenuModule,
+        MatTooltipModule,
         getTranslocoModule(),
         HeaderComponent,
       ],
@@ -110,6 +126,7 @@ describe('HeaderComponent', () => {
           provide: FeatureFlagService,
           useClass: MockFeatureFlagService,
         },
+        LocalFileService,
       ]
     );
     testBed.compileComponents();

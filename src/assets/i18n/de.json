@@ -621,5 +621,14 @@
     "two": "",
     "few": "",
     "other": "."
+  },
+  "share": {
+    "share": "Teilen",
+    "share-room-with-participants": "Raum mit Teilnehmenden teilen",
+    "link": "Link",
+    "copy": "Kopieren",
+    "copied": "Kopiert!",
+    "download-qr-code": "QR-Code herunterladen",
+    "present-qr-code": "QR-Code präsentieren"
   }
 }

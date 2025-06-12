@@ -839,15 +839,13 @@ div {
   }
 }
 
-.mat-mdc-menu-panel.mat-mdc-menu-panel.wider-panel {
-  max-width: 500px;
+.mat-mdc-menu-panel.wider-panel {
+  background-color: var(--dialog);
+  padding: $spacing-2 $spacing-3;
+  min-width: 400px;
 
-  @media (max-width: 520px) {
-    // full width - app padding
-    max-width: 92%;
-
-    // app padding
-    margin-left: 4%;
+  @include xs {
+    min-width: calc(100vw - $spacing-2 * 2);
   }
 }
 

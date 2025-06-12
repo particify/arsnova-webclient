@@ -150,13 +150,14 @@ export class RoutingService {
     return this.isPreview$;
   }
 
-  navToPresentation(newTab = false) {
+  navToPresentation(newTab = false, showHome = false) {
     if (!this.fullCurrentRoute) {
       return;
     }
-    const url = this.fullCurrentRoute.includes('/settings')
-      ? this.getPresentationHomeUrl()
-      : this.getPresentationUrl(this.fullCurrentRoute);
+    const url =
+      this.fullCurrentRoute.includes('/settings') || showHome
+        ? this.getPresentationHomeUrl()
+        : this.getPresentationUrl(this.fullCurrentRoute);
     if (newTab) {
       window.open(url, '_blank');
     } else {
