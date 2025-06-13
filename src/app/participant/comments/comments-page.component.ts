@@ -47,7 +47,7 @@ export class CommentsPageComponent
 
   ngOnInit(): void {
     this.publicComments$ = this.commentService
-      .getAckComments(this.room.id)
+      .getAckComments(this.room().id)
       .pipe(takeUntil(this.destroyed$));
     this.activeComments$ = this.publicComments$;
     this.load();
@@ -70,7 +70,7 @@ export class CommentsPageComponent
   afterCommentsLoadedHook() {
     if (this.userId) {
       this.voteService
-        .getByRoomIdAndUserID(this.room.id, this.userId)
+        .getByRoomIdAndUserID(this.room().id, this.userId)
         .pipe(takeUntil(this.destroyed$))
         .subscribe((votes) => {
           for (const v of votes) {

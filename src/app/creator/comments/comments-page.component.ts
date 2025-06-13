@@ -67,9 +67,9 @@ export class CommentsPageComponent
   moderationCounter = 0;
 
   ngOnInit(): void {
-    this.publicComments$ = this.commentService.getAckComments(this.room.id);
+    this.publicComments$ = this.commentService.getAckComments(this.room().id);
     this.moderationComments$ = this.commentService.getRejectedComments(
-      this.room.id
+      this.room().id
     );
     this.activeComments$ = this.isModeration
       ? this.moderationComments$
@@ -84,7 +84,7 @@ export class CommentsPageComponent
 
   getModerationCounter() {
     this.commentService
-      .countByRoomId(this.room.id, false)
+      .countByRoomId(this.room().id, false)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((commentCounter) => {
         this.moderationCounter = commentCounter;
@@ -93,7 +93,7 @@ export class CommentsPageComponent
 
   getPublicCounter() {
     this.commentService
-      .countByRoomId(this.room.id, true)
+      .countByRoomId(this.room().id, true)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((commentCounter) => {
         this.publicCounter = commentCounter;
@@ -107,7 +107,7 @@ export class CommentsPageComponent
 
   subscribeModeratorStream() {
     this.wsCommentService
-      .getModeratorCommentStream(this.room.id)
+      .getModeratorCommentStream(this.room().id)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((message: Message) => {
         this.parseIncomingModeratorMessage(message);
@@ -172,7 +172,7 @@ export class CommentsPageComponent
 
   toggleReadonly() {
     const commentSettings = new CommentSettings(
-      this.room.id,
+      this.room().id,
       this.directSend,
       this.fileUploadEnabled,
       this.disabled,
@@ -192,7 +192,7 @@ export class CommentsPageComponent
 
   updateUrl() {
     const role = this.routingService.getRoleRoute(this.viewRole);
-    const url = [role, this.room.shortId, 'comments'];
+    const url = [role, this.room().shortId, 'comments'];
     if (this.isModeration) {
       url.push('moderation');
     }
@@ -215,7 +215,7 @@ export class CommentsPageComponent
 
   activateComments() {
     const settings = new CommentSettings(
-      this.room.id,
+      this.room().id,
       this.directSend,
       this.fileUploadEnabled,
       false,

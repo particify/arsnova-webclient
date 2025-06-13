@@ -64,7 +64,7 @@ export class CommentsPageComponent
   protected hotkeyRefs: symbol[] = [];
 
   ngOnInit(): void {
-    this.publicComments$ = this.commentService.getAckComments(this.room.id);
+    this.publicComments$ = this.commentService.getAckComments(this.room().id);
     this.activeComments$ = this.publicComments$;
     this.load();
     this.registerHotkeys();
@@ -125,7 +125,7 @@ export class CommentsPageComponent
 
   afterCommentsLoadedHook(): void {
     if (this.comments.length === 0) {
-      this.focusModeService.updateCommentState(this.room, 'NO_COMMENTS_YET');
+      this.focusModeService.updateCommentState('NO_COMMENTS_YET');
     }
     this.subscribeToPresentationEvents();
   }
@@ -190,7 +190,7 @@ export class CommentsPageComponent
     );
     this.presentationService.updateCommentState(commentPresentationState);
 
-    this.focusModeService.updateCommentState(this.room, comment.id);
+    this.focusModeService.updateCommentState(comment.id);
     if (!this.isLoading) {
       this.scrollToComment(index);
       this.announceCommentPresentation(index);
@@ -232,7 +232,7 @@ export class CommentsPageComponent
 
   activateComments() {
     const settings = new CommentSettings(
-      this.room.id,
+      this.room().id,
       this.directSend,
       this.fileUploadEnabled,
       false,
@@ -257,7 +257,7 @@ export class CommentsPageComponent
 
   toggleReadonly() {
     const commentSettings = new CommentSettings(
-      this.room.id,
+      this.room().id,
       this.directSend,
       this.fileUploadEnabled,
       this.disabled,

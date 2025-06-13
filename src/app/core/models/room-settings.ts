@@ -1,3 +1,12 @@
+import { LiveFeedbackType } from './live-feedback-type.enum';
+
 export interface RoomSettings {
-  feedbackLocked: boolean;
+  id: string;
+  roomId: string;
+  surveyEnabled: boolean;
+  surveyType: LiveFeedbackType;
+  focusModeEnabled: boolean;
+  commentThresholdEnabled: boolean;
+  commentThreshold: number;
+  commentTags?: string[];
 }

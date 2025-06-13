@@ -1,4 +1,4 @@
-<div class="survey-container" [ngClass]="{ faded: isClosed }">
+<div class="survey-container" [ngClass]="{ faded: !isEnabled }">
   @for (data of displayData; track data; let i = $index) {
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px">
       @if (type === LiveFeedbackType.FEEDBACK) {
@@ -31,8 +31,8 @@
 </div>
 <div
   class="text invisible"
-  [attr.aria-hidden]="!isClosed"
-  [ngClass]="{ visible: isClosed }"
+  [attr.aria-hidden]="isEnabled"
+  [ngClass]="{ visible: !isEnabled }"
 >
   <span class="hint">
     {{ 'survey.is-stopped' | transloco }}

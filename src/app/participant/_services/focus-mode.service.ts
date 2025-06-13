@@ -7,7 +7,6 @@ import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { Room } from '@app/core/models/room';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 import {
@@ -29,44 +28,45 @@ export class FocusModeService extends AbstractFocusModeService {
 
   private contentStateUpdated$ = new Subject<ContentFocusState>();
   private commentStateUpdated$ = new Subject<CommentFocusState>();
-  private focusModeEnabled = false;
 
   private currentFeature?: RoutingFeature;
   private wsConnectionState?: RxStompState;
 
-  init(room: Room, currentFeature: RoutingFeature) {
+  init(roomId: string, currentFeature: RoutingFeature) {
     if (!this.featureFlagService.isEnabled('FOCUS_MODE')) {
       return;
     }
-    this.currentRoom = room;
-    this.focusModeEnabled = this.currentRoom.focusModeEnabled;
-    this.focusModeEnabled$.next(this.focusModeEnabled);
-    this.currentFeature = currentFeature;
-    if (room.focusModeEnabled) {
-      this.loadState();
-    }
-    this.subscribeToState();
-    this.subscribeToRoomChanges();
-    this.subscribeToWsConnectionState();
-    this.focusModeEnabled$
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((focusModeEnabled) => {
-        if (this.focusModeEnabled === focusModeEnabled) {
-          return;
-        }
-        this.focusModeEnabled = focusModeEnabled;
-        if (focusModeEnabled) {
-          this.evaluateNewState();
-        } else {
-          const msg = this.translateService.translate(
-            'participant.focus-mode.stopped'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.INFO
-          );
-        }
-      });
+    this.roomId = roomId;
+    this.roomSettingsService.getByRoomId(roomId).subscribe((settings) => {
+      this.focusModeEnabled = settings.focusModeEnabled;
+      this.focusModeEnabled$.next(this.focusModeEnabled);
+      if (this.focusModeEnabled) {
+        this.loadState();
+      }
+      this.currentFeature = currentFeature;
+      this.subscribeToState();
+      this.subscribeToRoomChanges();
+      this.subscribeToWsConnectionState();
+      this.focusModeEnabled$
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((focusModeEnabled) => {
+          if (this.focusModeEnabled === focusModeEnabled) {
+            return;
+          }
+          this.focusModeEnabled = focusModeEnabled;
+          if (focusModeEnabled) {
+            this.evaluateNewState();
+          } else {
+            const msg = this.translateService.translate(
+              'participant.focus-mode.stopped'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.INFO
+            );
+          }
+        });
+    });
   }
 
   private subscribeToWsConnectionState() {
@@ -102,7 +102,7 @@ export class FocusModeService extends AbstractFocusModeService {
   }
 
   protected handleState(state?: FocusEvent, initial = false) {
-    if (this.currentRoom?.focusModeEnabled) {
+    if (this.focusModeEnabled) {
       this.evaluateNewState(state, initial);
     }
   }

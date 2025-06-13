@@ -16,7 +16,7 @@
         <app-settings-slide-toggle
           label="creator.settings.threshold"
           [isChecked]="enableThreshold"
-          (toggleEvent)="updateCommentExtensions($event)"
+          (toggleEvent)="updateThresholdEnabled($event)"
           [disabled]="settings.disabled"
         ></app-settings-slide-toggle>
         @if (enableThreshold) {
@@ -25,7 +25,7 @@
               ><input
                 matSliderThumb
                 [(ngModel)]="threshold"
-                (change)="updateCommentExtensions(); announceThreshold()"
+                (change)="updateThreshold()"
                 [disabled]="settings.disabled"
             /></mat-slider>
             <p class="threshold-value">&nbsp;{{ threshold }}</p>
@@ -84,8 +84,3 @@
     </div>
   </div>
 }
-
-<lib-extension-point
-  extensionId="archive-list"
-  [extensionData]="{ room: room }"
-></lib-extension-point>

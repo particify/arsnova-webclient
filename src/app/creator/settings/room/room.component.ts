@@ -25,7 +25,7 @@ import { HintType } from '@app/core/models/hint-type.enum';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { MatTabChangeEvent, MatTabGroup, MatTab } from '@angular/material/tabs';
-import { take } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -43,6 +43,7 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { UpdateEvent } from '@app/creator/settings/update-event';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
 @Component({
   selector: 'app-room-edit',
@@ -81,6 +82,7 @@ export class RoomComponent extends FormComponent implements OnInit {
   private dialogService = inject(DialogService);
   private formattingService = inject(FormattingService);
   private focusModeService = inject(FocusModeService);
+  protected roomSettingsService = inject(RoomSettingsService);
 
   @Output() saveEvent: EventEmitter<UpdateEvent> =
     new EventEmitter<UpdateEvent>();
@@ -96,7 +98,12 @@ export class RoomComponent extends FormComponent implements OnInit {
   focusModeEnabled = false;
 
   ngOnInit(): void {
-    this.focusModeEnabled = this.editRoom.focusModeEnabled;
+    this.roomSettingsService
+      .getByRoomId(this.editRoom.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((settings) => {
+        this.focusModeEnabled = settings.focusModeEnabled;
+      });
   }
 
   deleteRoom(): void {
@@ -140,14 +147,13 @@ export class RoomComponent extends FormComponent implements OnInit {
   }
 
   toggleFocusMode(focusModeEnabled: boolean) {
-    const changes: { focusModeEnabled: boolean } = {
-      focusModeEnabled: focusModeEnabled,
-    };
-    this.roomService.patchRoom(this.editRoom.id, changes).subscribe((room) => {
-      this.editRoom.focusModeEnabled = room.focusModeEnabled;
-      if (focusModeEnabled) {
-        this.focusModeService.updateOverviewState(this.editRoom);
-      }
-    });
+    this.roomSettingsService
+      .updateFocusModeEnabled(this.editRoom.id, focusModeEnabled)
+      .subscribe((settings) => {
+        this.focusModeEnabled = settings.focusModeEnabled;
+        if (settings.focusModeEnabled) {
+          this.focusModeService.updateOverviewState();
+        }
+      });
   }
 }

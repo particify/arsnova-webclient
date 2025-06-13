@@ -17,7 +17,7 @@
           [period]="period"
           [navBarExists]="!focusModeEnabled"
           [showAddButton]="true"
-          [categories]="this.room.extensions?.comments?.tags"
+          [categories]="tags()"
           [selectedCategory]="currentTag"
           [searchInput]="searchInput"
           (searchInputChanged)="searchComments($event)"
@@ -57,7 +57,7 @@
             [parseVote]="getVote(comment)"
             [userId]="userId"
             (clickedOnTag)="selectTag($event)"
-            [tags]="this.room.extensions?.comments?.tags"
+            [tags]="tags()"
           >
           </app-comment>
         }

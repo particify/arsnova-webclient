@@ -17,6 +17,8 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { Room } from '@app/core/models/room';
 import { CommentSettings } from '@app/core/models/comment-settings';
 import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 
 class MockCommentService {
   getAckComments() {
@@ -69,6 +71,17 @@ class MockCommentSettingsService {
   }
 }
 
+class MockRoomSettingsService {
+  getByRoomId() {
+    return of({
+      surveyEnabled: true,
+      surveyType: LiveFeedbackType.FEEDBACK,
+      focusModeEnabled: false,
+      commentThresholdEnabled: false,
+    });
+  }
+}
+
 export default {
   component: CommentsPageComponent,
   title: 'CommentsPage',
@@ -113,6 +126,10 @@ export default {
         {
           provide: ContentGroupService,
           useClass: MockService,
+        },
+        {
+          provide: RoomSettingsService,
+          useClass: MockRoomSettingsService,
         },
       ],
     }),

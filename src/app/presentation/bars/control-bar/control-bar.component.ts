@@ -208,25 +208,11 @@ export class ControlBarComponent
       lastSort && lastSort !== CommentSort.VOTEASC
         ? lastSort
         : CommentSort.TIME;
-    this.commentCategories = this.room.extensions?.comments?.tags;
-    this.route.data.subscribe((data) => {
-      this.surveyStarted = !data.room.settings.feedbackLocked;
-      this.setSurveyState();
-      if (this.groupName && this.contentGroups.length > 0) {
-        const group = this.contentGroups.find((g) => g.name === this.groupName);
-        if (group) {
-          this.group = group;
-          this.determineGroupControls();
-        }
-        if (
-          this.isActiveFeature(RoutingFeature.CONTENTS) &&
-          this.group &&
-          this.isGroupLocked(this.group)
-        ) {
-          this.publishContentGroup(this.group);
-        }
-      }
-    });
+    this.commentCategories = this.roomSettings.commentTags;
+    this.setSurveyState(this.roomSettings.surveyEnabled);
+    if (this.groupName && this.contentGroups.length > 0) {
+      this.setContentGroupState();
+    }
     this.subscribeToStates();
     this.subscribeToEvents();
     setTimeout(() => {
@@ -311,6 +297,15 @@ export class ControlBarComponent
       .subscribe((state) => {
         this.evaluateCommentState(state);
       });
+    this.focusModeService.init(this.room.id);
+    this.focusModeService
+      .getFocusModeEnabled()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((focusModeEnabled) => {
+        setTimeout(() => {
+          this.focusModeEnabled = focusModeEnabled;
+        }, 300);
+      });
   }
 
   subscribeToEvents() {
@@ -319,8 +314,7 @@ export class ControlBarComponent
       .getFeedbackStarted()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((started) => {
-        this.surveyStarted = started;
-        this.setSurveyState();
+        this.setSurveyState(started);
       });
     this.presentationService
       .getCommentZoomChanges()
@@ -366,10 +360,26 @@ export class ControlBarComponent
     return url.replace(/^https?:\/\//, '');
   }
 
-  setSurveyState() {
+  setSurveyState(started: boolean) {
+    this.surveyStarted = started;
     this.surveyItems[0].name = this.surveyStarted ? 'stop' : 'start';
     this.surveyItems[0].icon = this.surveyStarted ? 'stop' : 'play_arrow';
     this.surveyItems[1].disabled = this.surveyStarted;
+  }
+
+  setContentGroupState() {
+    const group = this.contentGroups.find((g) => g.name === this.groupName);
+    if (group) {
+      this.group = group;
+      this.determineGroupControls();
+    }
+    if (
+      this.isActiveFeature(RoutingFeature.CONTENTS) &&
+      this.group &&
+      this.isGroupLocked(this.group)
+    ) {
+      this.publishContentGroup(this.group);
+    }
   }
 
   setArrowsState(state: PresentationStepPosition) {

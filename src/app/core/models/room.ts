@@ -1,6 +1,3 @@
-import { RoomExtensions } from './room-extensions';
-import { RoomSettings } from './room-settings';
-
 // TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
 export class Room {
   id!: string;
@@ -12,12 +9,9 @@ export class Room {
   description: string;
   renderedDescription!: string;
   passwordProtected = false;
-  focusModeEnabled = false;
   closed: boolean;
-  settings!: RoomSettings;
   language?: string;
   lmsCourseId?: string;
-  extensions?: RoomExtensions;
 
   constructor(
     ownerId = '',
@@ -25,8 +19,7 @@ export class Room {
     abbreviation = '',
     name = '',
     description = '',
-    closed = false,
-    extensions: RoomExtensions = {}
+    closed = false
   ) {
     this.ownerId = ownerId;
     this.shortId = shortId;
@@ -34,6 +27,5 @@ export class Room {
     this.name = name;
     this.description = description;
     this.closed = closed;
-    this.extensions = extensions;
   }
 }

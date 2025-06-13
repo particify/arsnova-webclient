@@ -43,7 +43,7 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
   private announceService = inject(AnnounceService);
 
   @Input() type = LiveFeedbackType.FEEDBACK;
-  @Input() isClosed = false;
+  @Input() isEnabled = true;
   @Input() fixedSize = false;
   @Input() data: number[] = [0, 0, 0, 0];
   @Input({ required: true }) dataChanged!: EventEmitter<number[]>;
@@ -74,7 +74,7 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
         this.hotkeyService.registerHotkey(
           {
             key: '5',
-            action: () => !this.isClosed && this.announceStatus(),
+            action: () => !this.isEnabled && this.announceStatus(),
             actionTitle: t,
           },
           this.hotkeyRefs
@@ -101,7 +101,7 @@ export class LiveFeedbackComponent implements OnInit, OnDestroy {
     const labels =
       this.translateService.translate<Record<string, string>>(typeLabels);
     const status = this.translateService.translate(
-      this.isClosed ? 'survey.a11y-stopped' : 'survey.a11y-started'
+      this.isEnabled ? 'survey.a11y-started' : 'survey.a11y-stopped'
     );
     const summary = this.translateService.translate('survey.a11y-status', {
       status: status,

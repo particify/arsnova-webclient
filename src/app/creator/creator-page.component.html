@@ -7,11 +7,14 @@
       ></lib-extension-point>
       <mat-drawer mode="side" opened [disableClose]="true">
         <div fxLayout="column" fxLayoutAlign="space-between" fxFill>
-          <app-nav-bar
-            [userRole]="userRole"
-            [viewRole]="viewRole"
-            [room]="room"
-          ></app-nav-bar>
+          @if (roomSettings) {
+            <app-nav-bar
+              [userRole]="userRole"
+              [viewRole]="viewRole"
+              [room]="room"
+              [roomSettings]="roomSettings"
+            ></app-nav-bar>
+          }
         </div>
       </mat-drawer>
       <mat-drawer-content

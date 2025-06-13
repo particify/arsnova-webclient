@@ -23,10 +23,7 @@ import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum
 import { Membership } from '@app/core/models/membership';
 import { Room } from '@app/core/models/room';
 import { RoomStats } from '@app/core/models/room-stats';
-import {
-  RoundStatistics,
-  TextRoundStatistics,
-} from '@app/core/models/round-statistics';
+import { TextRoundStatistics } from '@app/core/models/round-statistics';
 import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
 import { TextAnswer } from '@app/core/models/text-answer';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -73,7 +70,6 @@ export class MockApi {
     await this.page.route('*/**/room/~12345678', async (route) => {
       const room = new Room('ownerId', '12345678', '', 'My room');
       room.id = 'roomId';
-      room.settings = { feedbackLocked: true };
       room.language = lang;
       await route.fulfill({ status: 200, json: room });
     });

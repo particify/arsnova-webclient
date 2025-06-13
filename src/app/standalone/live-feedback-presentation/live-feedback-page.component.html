@@ -15,7 +15,7 @@
       id="live-feedback"
       [data]="data"
       [dataChanged]="dataChanged"
-      [isClosed]="isClosed"
+      [isEnabled]="isEnabled"
       [type]="type"
     ></app-live-feedback>
   }
@@ -26,7 +26,7 @@
     >
       <app-answer-count
         id="answer-count"
-        tabindex="{{ !isClosed ? '0' : '-1' }}"
+        tabindex="{{ isEnabled ? '0' : '-1' }}"
         [count]="answerCount"
         [biggerFont]="true"
       ></app-answer-count>
