@@ -1,1 +1,79 @@
-{}
+{
+  "cookies": {
+    "not": "ne",
+    "settings-saved": "Vaše nastavení bylo uloženo.",
+    "a11y-accept": "Souhlas s používáním všech souborů cookie.",
+    "category-statistics": "Statistika",
+    "category-statistics-desc": "Statistické soubory cookie nám pomáhají vylepšovat aplikaci tím, že nám poskytují přehled o tom, jak je naše aplikace používána."
+  },
+  "footer": {
+    "dsgvo": "Ochrana údajů",
+    "imprint": "Otisk",
+    "accessibility": "Přístupnost",
+    "privacy-policy": "Zásady ochrany osobních údajů",
+    "cookie-settings": "Nastavení pro soubory cookie",
+    "by": "poháněno "
+  },
+  "header": {
+    "a11y-sidenav-message": "Nyní se nacházíte v hlavní nabídce.",
+    "a11y-disable-dark-mode": "Vypnutí tmavého režimu",
+    "a11y-enable-dark-mode": "Povolení tmavého režimu",
+    "account-deleted": "Váš účet byl smazán.",
+    "admin-area": "Administrace",
+    "account-settings": "Nastavení účtu",
+    "help": "Nápověda",
+    "language": "Jazyk",
+    "add-translation": "Přidat překlad",
+    "logged-out": "Byli jste odhlášeni.",
+    "login": "Přihlášení",
+    "logout": "Odhlášení",
+    "menu": "Hlavní nabídka",
+    "preview": "Náhled",
+    "presentation-mode": "Režim prezentace",
+    "templates": "Šablony",
+    "editing-view": "Upravit",
+    "a11y-switch-role": "Přepnutím role zobrazíte pohled účastníků.",
+    "guest-account": "Účet hosta",
+    "dark-mode": "Tmavý režim",
+    "room-settings": "Nastavení místnosti",
+    "not-logged-in": "Nejste přihlášeni",
+    "my-rooms": "Moje místnosti",
+    "news": "Jsou k dispozici noviny",
+    "a11y-switch-back": "Přepněte se zpět do zobrazení pro správce."
+  },
+  "home-page": {
+    "a11y-user-message": "Nyní se nacházíte na uživatelské stránce.",
+    "a11y-update-available": "K dispozici je nová verze. Nejnovější změny zobrazíte stisknutím klávesy Tab. Aktualizaci provedete opětovným stisknutím klávesy Tab.",
+    "a11y-close": "Zavřít dialogové okno a vrátit se na předchozí stránku.",
+    "a11y-welcome-message": "Vítejte na stránkách {{title}}. Chcete-li se připojit do místnosti, zadejte její osmimístné identifikační číslo."
+  },
+  "login": {
+    "authentication-expired": "Přihlaste se prosím znovu.",
+    "welcome": "Vítejte zpět!",
+    "not-registered": "Ještě nemáte účet?",
+    "password-reset": "Zapomněli jste své heslo?",
+    "register": "Registrace",
+    "or": "nebo"
+  },
+  "password-reset": {
+    "key": "Ověřovací kód",
+    "key-required": "Požadovaný ověřovací kód",
+    "new-password-successful": "Vaše nové heslo bylo nastaveno.",
+    "reset-password": "Obnovení hesla",
+    "set-new-password-button": "Nastavení hesla",
+    "forgot-password": "Pošleme vám e-mail s žádostí o obnovení hesla.",
+    "set-new-password": "Byl vám zaslán kód, pomocí kterého si můžete nastavit nové heslo.",
+    "your-email": "Vaše e-mailová adresa: ",
+    "reset-successful": "Požadavek na reset hesla byl odeslán. Zkontrolujte si prosím svou poštu.",
+    "request-failed": "Něco se pokazilo. Zkontrolujte prosím zadané hodnoty."
+  },
+  "register": {
+    "already-registered": "Máte již účet?",
+    "accept": "Souhlasím s ",
+    "accept-2": ".",
+    "please-accept": "Při registraci musíte souhlasit s podmínkami používání.",
+    "register-unsuccessful": "Zkontrolujte prosím své údaje.",
+    "register": "Registrace",
+    "terms": "podmínkami použití"
+  }
+}
