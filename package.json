@@ -41,7 +41,7 @@
     "@stomp/stompjs": "7.1.1",
     "angular-material-css-vars": "9.0.1",
     "backoff-rxjs": "7.0.0",
-    "chart.js": "4.4.9",
+    "chart.js": "4.5.0",
     "chartjs-plugin-datalabels": "2.2.0",
     "d3-cloud": "1.2.7",
     "dayjs": "1.11.13",
