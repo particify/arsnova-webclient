@@ -170,12 +170,15 @@
                 : 'announcement.announcements'
               ) | transloco
             "
-            matBadge="{{ announcementState.new }}"
-            matBadgeColor="accent"
-            [matBadgeHidden]="announcementState.new === 0"
             appHotkey="a"
           >
-            <mat-icon> notifications </mat-icon>
+            <mat-icon
+              matBadge="{{ announcementState.new }}"
+              matBadgeColor="accent"
+              [matBadgeHidden]="announcementState.new === 0"
+            >
+              notifications
+            </mat-icon>
           </button>
         }
         <button
