@@ -20,7 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthProvider } from '@app/core/models/auth-provider';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -31,6 +31,17 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiConfig } from '@app/core/models/api-config';
+import { ErrorHandler } from '@angular/core';
+
+class MockErrorHandler {
+  get uiErrorCount$(): Observable<number> {
+    return of(0);
+  }
+
+  get httpErrorCount$(): Observable<number> {
+    return of(0);
+  }
+}
 
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
@@ -94,6 +105,10 @@ describe('HeaderComponent', () => {
         HeaderComponent,
       ],
       [
+        {
+          provide: ErrorHandler,
+          useClass: MockErrorHandler,
+        },
         {
           provide: Router,
           useClass: MockRouter,

@@ -159,6 +159,9 @@
         ></mat-divider>
       }
       <div fxLayoutGap="16px" fxLayoutAlign="center center">
+        @if (isDev) {
+          <app-dev-error-indicator />
+        }
         @if (announcementState) {
           <button
             mat-icon-button
