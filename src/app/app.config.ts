@@ -6,7 +6,7 @@ import {
   inject,
   provideAppInitializer,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AuthenticationInterceptor } from '@app/core/interceptors/authentication.interceptor';
 import { ServerTimeInterceptor } from '@app/core/interceptors/server-time.interceptor';
 import { DefaultHeaderInterceptor } from '@app/core/interceptors/default-header.interceptor';
@@ -67,10 +67,9 @@ import { getBrowserLang } from '@jsverse/transloco';
 import { extensions } from '@environments/extensions';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { CoreModule } from '@angular/flex-layout';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { provideServiceWorker } from '@angular/service-worker';
 import { TranslocoRootModule } from '@app/transloco-root.module';
 import { MaterialCssVarsModule } from 'angular-material-css-vars';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppErrorHandler } from '@app/app-error-handler';
 import { ENVIRONMENT } from '@environments/environment-token';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -91,7 +90,11 @@ if (environment.production) {
 
 export const AppConfig: ApplicationConfig = {
   providers: [
+    provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
     {
       provide: ErrorHandler,
       useClass: AppErrorHandler,
@@ -198,11 +201,6 @@ export const AppConfig: ApplicationConfig = {
       ExtensionPointModule.forRoot(),
       AppRoutingModule,
       CoreModule,
-      BrowserModule,
-      BrowserAnimationsModule,
-      ServiceWorkerModule.register('ngsw-worker.js', {
-        enabled: environment.production,
-      }),
       TranslocoRootModule,
       MaterialCssVarsModule.forRoot({
         isAutoContrast: true,
