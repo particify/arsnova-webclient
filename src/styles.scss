@@ -653,13 +653,13 @@ div {
 }
 
 .mat-mdc-button:not(
-    [disabled],
-    .nav-button,
-    .mat-primary,
-    .mat-accent,
-    .mat-warn,
-    .mat-mdc-snack-bar-action
-  ) {
+  [disabled],
+  .nav-button,
+  .mat-primary,
+  .mat-accent,
+  .mat-warn,
+  .mat-mdc-snack-bar-action
+) {
   opacity: 0.8;
 
   --mat-button-text-label-text-color: var(--on-surface);
