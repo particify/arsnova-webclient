@@ -38,7 +38,7 @@ export class AppErrorHandler implements ErrorHandler {
       );
       this._httpErrorCount$.next(this._httpErrorCount$.getValue() + 1);
     }
-    throw error;
+    console.error(error);
   }
 
   get uiErrorCount$(): Observable<number> {

@@ -59,6 +59,7 @@ export class TrackingService {
   private translateService = inject(TranslocoService);
   private themeService = inject(ThemeService);
   private globalStorageService = inject(GlobalStorageService);
+  private appErrorHandler = inject(ErrorHandler) as AppErrorHandler;
   private _window = window as Record<string, any>;
 
   _paq: any[];
@@ -69,13 +70,9 @@ export class TrackingService {
   firstAuth = true;
   pingSubscription?: Subscription;
   specialRooms = new Map<string, string>();
-  appErrorHandler: AppErrorHandler;
 
   constructor() {
-    const errorHandler = inject(ErrorHandler);
     const _window = this._window;
-
-    this.appErrorHandler = errorHandler as AppErrorHandler;
     _window['_paq'] = _window['_paq'] || [];
     this._paq = _window['_paq'] as any[];
     this.consentService
