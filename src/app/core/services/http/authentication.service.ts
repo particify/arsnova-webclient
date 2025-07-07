@@ -30,6 +30,7 @@ import { ApiConfigService } from './api-config.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { environment } from '@environments/environment';
 import { AuthProvider } from '@app/core/models/auth-provider';
+import { Apollo } from 'apollo-angular';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -50,6 +51,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   private apiConfigService = inject(ApiConfigService);
   private routingService = inject(RoutingService);
   private router = inject(Router);
+  private apollo = inject(Apollo, { optional: true });
 
   private readonly ADMIN_ROLE: string = 'ADMIN';
   private popupDimensions = [500, 500];
@@ -84,11 +86,12 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * Initialize authentication at startup.
    */
   init() {
-    if (!environment.production) {
-      this.getAuthenticationChanges().subscribe((auth) => {
+    this.getAuthenticationChanges().subscribe((auth) => {
+      if (!environment.production) {
         console.log('Authentication changed', auth);
-      });
-    }
+      }
+      this.apollo?.client.clearStore();
+    });
 
     this.apiConfigService.getApiConfig$().subscribe((config) => {
       const popupDimensions = /^([0-9]+)x([0-9]+)$/.exec(
