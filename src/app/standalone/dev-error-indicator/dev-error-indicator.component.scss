@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+
+:host:empty {
+  // prevent gap for empty item in flexbox
+  display: none;
+}
+
+.error {
+  @include mat.badge-overrides(
+    (
+      background-color: var(--warn),
+    )
+  );
+}
+
+.warning {
+  @include mat.badge-overrides(
+    (
+      background-color: var(--warn-soft),
+    )
+  );
+}

@@ -37,6 +37,9 @@ import { MatBadge } from '@angular/material/badge';
 import { NgClass } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ShareRoomComponent } from '@app/standalone/share-room/share-room.component';
+import { DevErrorIndicatorComponent } from '@app/standalone/dev-error-indicator/dev-error-indicator.component';
+import { ENVIRONMENT } from '@environments/environment-token';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -65,6 +68,7 @@ import { ShareRoomComponent } from '@app/standalone/share-room/share-room.compon
     NgClass,
     TranslocoPipe,
     ShareRoomComponent,
+    DevErrorIndicatorComponent,
   ],
 })
 export class HeaderComponent implements OnInit {
@@ -78,6 +82,7 @@ export class HeaderComponent implements OnInit {
   private roomService = inject(RoomService);
   private drawerService = inject(DrawerService);
   private pageTitleService = inject(PageTitleService);
+  private env = inject<typeof environment>(ENVIRONMENT);
 
   auth?: ClientAuthentication;
 
@@ -92,6 +97,7 @@ export class HeaderComponent implements OnInit {
   announcementState?: AnnouncementState;
   room?: Room;
   title = this.pageTitleService.getTitle();
+  isDev = !this.env.production;
 
   ngOnInit() {
     this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
