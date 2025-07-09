@@ -20,6 +20,7 @@ import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FlexModule } from '@angular/flex-layout';
+import { AnnouncementState } from '@app/core/models/announcement-state';
 
 @Component({
   selector: 'app-announcement-list',
@@ -43,7 +44,7 @@ import { FlexModule } from '@angular/flex-layout';
   ],
 })
 export class AnnouncementListComponent implements OnInit {
-  data = inject(MAT_DIALOG_DATA);
+  data: { state: AnnouncementState } = inject(MAT_DIALOG_DATA);
   private dialogRef =
     inject<MatDialogRef<AnnouncementListComponent>>(MatDialogRef);
   private authService = inject(AuthenticationService);
@@ -89,15 +90,18 @@ export class AnnouncementListComponent implements OnInit {
 
   getLabel(announcement: UserAnnouncement) {
     const readTimestamp = this.data.state.readTimestamp;
-    if (!readTimestamp || readTimestamp < announcement.creationTimestamp) {
+    if (
+      !readTimestamp ||
+      readTimestamp < new Date(announcement.creationTimestamp)
+    ) {
       return 'new';
-    } else if (readTimestamp < announcement.updateTimestamp) {
+    } else if (readTimestamp < new Date(announcement.updateTimestamp)) {
       return 'edited';
     }
     return;
   }
 
   close() {
-    this.dialogRef.close(this.newReadTimestamp.toDateString());
+    this.dialogRef.close(this.newReadTimestamp);
   }
 }

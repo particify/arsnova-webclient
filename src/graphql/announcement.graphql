@@ -1,0 +1,64 @@
+query AnnouncementsMetaForCurrentUser {
+  announcementsMetaForCurrentUser {
+    count
+    readAt
+  }
+}
+
+query AnnoucentmentsByRoomId($roomId: UUID!) {
+  announcementsByRoomId(roomId: $roomId) {
+    edges {
+      node {
+        id
+        body
+        bodyRendered
+        createdAt
+        updatedAt
+        title
+      }
+    }
+  }
+}
+
+query AnnouncementsForCurrentUser {
+  announcementsForCurrentUser {
+    edges {
+      node {
+        body
+        bodyRendered
+        createdAt
+        updatedAt
+        id
+        title
+        room {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+mutation CreateAnnouncement($roomId: UUID!, $title: String!, $body: String!) {
+  createAnnouncement(input: { roomId: $roomId, title: $title, body: $body }) {
+    body
+    bodyRendered
+    createdAt
+    title
+    id
+  }
+}
+
+mutation UpdateAnnouncement($id: ID!, $title: String, $body: String) {
+  updateAnnouncement(input: { id: $id, title: $title, body: $body }) {
+    body
+    bodyRendered
+    updatedAt
+    title
+    id
+  }
+}
+
+mutation DeleteAnnouncement($id: ID!) {
+  deleteAnnouncement(id: $id)
+}

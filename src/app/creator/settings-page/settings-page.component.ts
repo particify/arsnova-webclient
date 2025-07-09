@@ -35,6 +35,8 @@ import { AccessComponent } from '@app/creator/settings/access/access.component';
 import { AnnouncementSettingsComponent } from '@app/creator/settings/announcement-settings/announcement-settings.component';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { UpdateEvent } from '@app/creator/settings/update-event';
+import { environment } from '@environments/environment';
+import { AnnouncementSettingsGqlComponent } from '@app/creator/settings/announcement-settings-gql/announcement-settings-gql.component';
 
 export interface Settings {
   name: string;
@@ -58,7 +60,9 @@ export interface Settings {
     RoomComponent,
     CommentSettingsComponent,
     AccessComponent,
-    AnnouncementSettingsComponent,
+    environment.graphql
+      ? AnnouncementSettingsGqlComponent
+      : AnnouncementSettingsComponent,
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
