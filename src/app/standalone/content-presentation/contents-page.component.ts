@@ -194,6 +194,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
 
   private toggleLeaderboard() {
     this.showLeaderboard = !this.showLeaderboard;
+    this.presentationService.updateLeaderboardDisplayed(this.showLeaderboard);
   }
 
   ngOnDestroy() {

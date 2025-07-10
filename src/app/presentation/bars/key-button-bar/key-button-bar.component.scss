@@ -1,6 +1,5 @@
 @use '../control-bar/control-bar.component';
 
-.disabled {
-  color: var(--on-surface-light);
-  pointer-events: none;
+.highlighted {
+  opacity: 1;
 }

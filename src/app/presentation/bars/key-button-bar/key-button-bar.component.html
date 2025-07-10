@@ -10,7 +10,10 @@
       fxLayout="column"
       fxLayoutAlign="center center"
       class="action-button"
-      [ngClass]="{ disabled: item.disabled }"
+      [ngClass]="{
+        disabled: item.disabled,
+        'primary highlighted': item.highlighted,
+      }"
       (click)="sendKeyEvent(item.key)"
       [matTooltip]="
         ('creator.control-bar.' + item.name | transloco) +

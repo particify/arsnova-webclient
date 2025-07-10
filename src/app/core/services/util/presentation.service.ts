@@ -47,6 +47,7 @@ export class PresentationService {
   private roundStateChanged = new Subject<RoundState>();
   private countdownChanged = new Subject<Content>();
   private wordcloudVisualizationCHanged = new Subject<boolean>();
+  private leaderboardDisplayed = new Subject<boolean>();
 
   private currentContent?: Content;
 
@@ -226,5 +227,13 @@ export class PresentationService {
 
   getWordcloudVisualizationChanged(): Observable<boolean> {
     return this.wordcloudVisualizationCHanged;
+  }
+
+  updateLeaderboardDisplayed(displayLeaderboard: boolean) {
+    this.leaderboardDisplayed.next(displayLeaderboard);
+  }
+
+  getLeaderboardDisplayed(): Observable<boolean> {
+    return this.leaderboardDisplayed;
   }
 }

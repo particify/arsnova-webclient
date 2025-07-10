@@ -55,13 +55,15 @@ export class KeyNavBarItem extends NavBarItem {
   key: string;
   displayKey: string;
   disabled: boolean;
+  highlighted: boolean;
 
   constructor(
     name: string,
     icon: string,
     url: string,
     key: string,
-    disabled = false
+    disabled = false,
+    highlighted = false
   ) {
     super(name, icon, url, false);
     const keyInfo = HotkeyService.getKeyDisplayInfo(key);
@@ -70,6 +72,7 @@ export class KeyNavBarItem extends NavBarItem {
       ? 'creator.control-bar.' + keyInfo.keyName
       : keyInfo.keySymbol;
     this.disabled = disabled;
+    this.highlighted = highlighted;
   }
 }
 
@@ -296,6 +299,21 @@ export class ControlBarComponent
       .pipe(takeUntil(this.destroyed$))
       .subscribe((state) => {
         this.evaluateCommentState(state);
+      });
+    this.presentationService
+      .getLeaderboardDisplayed()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((leaderboardDisplayed) => {
+        const leaderboardItemIndex = this.getIndexOfGroupItem('leaderboard');
+        if (leaderboardItemIndex > -1) {
+          this.groupItems[leaderboardItemIndex].highlighted =
+            leaderboardDisplayed;
+          this.groupItems.forEach((g) => {
+            if (g.name !== 'leaderboard') {
+              g.disabled = leaderboardDisplayed;
+            }
+          });
+        }
       });
     this.focusModeService.init(this.room.id);
     this.focusModeService
