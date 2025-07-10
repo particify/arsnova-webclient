@@ -109,6 +109,7 @@
               fxLayout="column"
               fxLayoutAlign="center center"
               class="action-button more-button"
+              [ngClass]="{ disabled: !content }"
               #moreMenuTrigger="matMenuTrigger"
               [matMenuTriggerFor]="
                 moreMenuComponent ? moreMenuComponent.moreMenu : hideMenu
@@ -121,7 +122,9 @@
                 moreItem.displayKey +
                 ')'
               "
+              [matTooltipDisabled]="!content"
               [appHotkey]="moreItem.key"
+              [appHotkeyDisabled]="!content"
               [appHotkeyAction]="HotkeyAction.CLICK"
               [appHotkeyTitle]="
                 'creator.control-bar.' + moreItem.name | transloco
@@ -139,12 +142,12 @@
                 [contentIndex]="contentIndex"
                 [publishingMode]="group?.publishingMode"
               ></app-content-presentation-menu>
+              <div class="bar-divider"></div>
+              <app-key-button-bar
+                [items]="arrowItems"
+                [withText]="false"
+              ></app-key-button-bar>
             }
-            <div class="bar-divider"></div>
-            <app-key-button-bar
-              [items]="arrowItems"
-              [withText]="false"
-            ></app-key-button-bar>
           </div>
         }
         @if (isActiveFeature('comments')) {

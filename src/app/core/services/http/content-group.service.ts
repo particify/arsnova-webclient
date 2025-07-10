@@ -388,7 +388,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     );
   }
 
-  private isContentScorable(content: Content): boolean {
+  isContentScorable(content: Content): boolean {
     const scorableFormats = [
       ContentType.CHOICE,
       ContentType.BINARY,

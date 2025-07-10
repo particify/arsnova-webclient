@@ -50,6 +50,7 @@ import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { KeyButtonBarComponent } from '@app/presentation/bars/key-button-bar/key-button-bar.component';
 import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
+import { ContentType } from '@app/core/models/content-type.enum';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -361,8 +362,17 @@ export class ControlBarComponent
         STORAGE_KEYS.LAST_INDEX,
         this.contentIndex
       );
-      this.setArrowsState(this.contentStepState);
+      if (this.group && this.group.contentIds?.length > 1) {
+        this.setArrowsState(this.contentStepState);
+      } else {
+        this.setArrowItemsState(true, true);
+      }
     }
+    this.groupItems.forEach((item) => {
+      item.disabled = false;
+      item.highlighted = false;
+    });
+    this.determineGroupControls();
   }
 
   evaluateCommentState(state?: CommentPresentationState) {
@@ -389,7 +399,6 @@ export class ControlBarComponent
     const group = this.contentGroups.find((g) => g.name === this.groupName);
     if (group) {
       this.group = group;
-      this.determineGroupControls();
     }
     if (
       this.isActiveFeature(RoutingFeature.CONTENTS) &&
@@ -501,6 +510,15 @@ export class ControlBarComponent
   }
 
   private determineGroupControls(): void {
+    this.determineContentControlCorrect();
+    this.determineContentControlLeaderboard();
+    if (!this.content || this.content.format === ContentType.SLIDE) {
+      this.groupItems.forEach((g) => (g.disabled = true));
+    }
+  }
+
+  private determineContentControlCorrect() {
+    const correctItemIndex = this.getIndexOfGroupItem('correct');
     if (
       this.group &&
       ![GroupType.SURVEY, GroupType.FLASHCARDS].includes(this.group.groupType)
@@ -509,13 +527,24 @@ export class ControlBarComponent
         this.groupItems.push(
           new KeyNavBarItem('correct', 'check_circle', '', 'c')
         );
+      } else {
+        if (
+          this.content &&
+          !this.contentGroupService.isContentScorable(this.content)
+        ) {
+          this.groupItems[correctItemIndex].disabled = true;
+        } else {
+          this.groupItems[correctItemIndex].disabled = false;
+        }
       }
     } else {
-      const correctItemIndex = this.getIndexOfGroupItem('correct');
       if (correctItemIndex > -1) {
         this.groupItems.splice(correctItemIndex, 1);
       }
     }
+  }
+
+  private determineContentControlLeaderboard() {
     if (this.group?.leaderboardEnabled) {
       if (this.getIndexOfGroupItem('leaderboard') === -1) {
         this.groupItems.push(
@@ -545,7 +574,6 @@ export class ControlBarComponent
 
   updateGroup(contentGroup: ContentGroup) {
     this.setGroup(contentGroup);
-    this.determineGroupControls();
     this.activeGroup.emit(this.groupName);
   }
 
