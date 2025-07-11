@@ -212,6 +212,7 @@
     "to-publish-content": "to publish content",
     "publish-current-content": "Publish current content",
     "seconds-to-answer": "Seconds to answer",
+    "weight": "Weight",
     "enable-live-mode-to-use-timer": "To set a timer for content, activate the live mode in the question series settings.",
     "timer-only-enabled-in-live-mode": "Timer can only be used in live mode. Live mode can be enabled in question series settings.",
     "group-not-published": "Group is not published.",

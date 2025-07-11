@@ -149,6 +149,34 @@
                 >
                   {{ 'creator.content.abstentions-allowed' | transloco }}
                 </mat-checkbox>
+                @if (contentGroup.groupType === GroupType.QUIZ) {
+                  <div
+                    fxLayout="row"
+                    fxLayout.xs="row-reverse"
+                    fxLayoutGap="1em"
+                    fxLayoutAlign="start center"
+                  >
+                    <label
+                      [ngStyle]="{
+                        opacity: !formDisabled ? 1 : 0.5,
+                      }"
+                      >{{ 'creator.content.weight' | transloco }}</label
+                    >
+                    <mat-form-field
+                      appearance="outline"
+                      class="no-field-hint initial-width minimal-number-input smaller-select-input"
+                    >
+                      <input
+                        [(ngModel)]="weight"
+                        [disabled]="isAnswered || formDisabled"
+                        matInput
+                        type="number"
+                        max="5"
+                        min="1"
+                      />
+                    </mat-form-field>
+                  </div>
+                }
                 <div
                   fxLayout="row"
                   fxLayout.xs="row-reverse"

@@ -14,6 +14,7 @@ export class Content {
   abstentionsAllowed = true;
   state!: ContentState;
   duration?: number;
+  weight?: number;
 
   constructor(
     roomId: string = '',
@@ -21,7 +22,8 @@ export class Content {
     body: string = '',
     groups: string[] = [],
     format: ContentType = ContentType.TEXT,
-    duration?: number
+    duration?: number,
+    weight?: number
   ) {
     this.roomId = roomId;
     this.subject = subject;
@@ -29,5 +31,6 @@ export class Content {
     this.groups = groups;
     this.format = format;
     this.duration = duration;
+    this.weight = weight;
   }
 }

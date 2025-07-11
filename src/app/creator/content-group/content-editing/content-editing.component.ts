@@ -150,6 +150,7 @@ export class ContentEditingComponent
   HintType = HintType;
   abstentionsAllowed = true;
   duration?: number;
+  weight = 1;
   isLoading = true;
   created = false;
   isAnswered = false;
@@ -196,6 +197,7 @@ export class ContentEditingComponent
     this.question = this.content.body;
     this.abstentionsAllowed = !!this.content?.abstentionsAllowed;
     this.duration = this.content.duration || undefined;
+    this.weight = this.content.weight || 1;
     this.isEditMode = true;
     const format = this.formats.find(
       (c) => c.name === this.content?.format.toLowerCase()
@@ -235,6 +237,7 @@ export class ContentEditingComponent
     this.content.body = this.question;
     this.content.abstentionsAllowed = this.abstentionsAllowed;
     this.content.duration = this.duration;
+    this.content.weight = this.weight;
     return true;
   }
 
