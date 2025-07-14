@@ -421,7 +421,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result) {
           const msg = this.translateService.translate(
-            'creator.content.all-answers-deleted'
+            'creator.content.results-have-been-reset'
           );
           this.notificationService.showAdvanced(
             msg,
