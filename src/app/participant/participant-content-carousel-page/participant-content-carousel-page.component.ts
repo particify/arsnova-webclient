@@ -413,7 +413,8 @@ export class ParticipantContentCarouselPageComponent
   nextContent() {
     if (
       this.currentStep !== undefined &&
-      this.currentStep < this.contents.length - 1
+      this.currentStep < this.contents.length - 1 &&
+      !this.isFinished
     ) {
       this.stepper.next();
     } else {

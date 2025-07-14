@@ -394,9 +394,10 @@
                       }
                     </div>
                     @if (
-                      (contentGroup.publishingMode !== PublishingMode.LIVE ||
+                      ((contentGroup.publishingMode !== PublishingMode.LIVE ||
                         lastContent) &&
-                      contentGroup.groupType === GroupType.QUIZ
+                        contentGroup.groupType === GroupType.QUIZ) ||
+                      finished
                     ) {
                       <ng-template
                         [ngTemplateOutlet]="nextButton"
@@ -423,7 +424,7 @@
 <ng-template #nextButton>
   <button type="button" mat-raised-button color="primary" (click)="next.emit()">
     {{
-      (lastContent
+      (lastContent || finished
         ? 'participant.answer.go-to-overview'
         : 'participant.answer.next-content'
       ) | transloco
