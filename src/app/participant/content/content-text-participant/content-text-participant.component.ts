@@ -15,7 +15,6 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 @Component({
   selector: 'app-content-text-participant',
   templateUrl: './content-text-participant.component.html',
-  styleUrls: ['./content-text-participant.component.scss'],
   imports: [FlexModule, FormsModule, ContentTextAnswerComponent],
   providers: [provideTranslocoScope('participant')],
 })
