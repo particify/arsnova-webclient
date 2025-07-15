@@ -13,11 +13,10 @@ app-leaderboard-page {
 }
 
 .step-info {
-  color: var(--on-surface);
+  color: var(--on-surface-light);
   position: fixed;
   top: $spacing-3;
   right: $spacing-3;
-  opacity: 0.7;
   font-size: $l-font-size;
 }
 

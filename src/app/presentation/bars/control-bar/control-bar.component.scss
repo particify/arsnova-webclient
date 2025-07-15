@@ -66,7 +66,7 @@ $logo-width: 120px;
 }
 
 .nav-button:not(.active-nav-button) {
-  opacity: 0.7;
+  color: var(--on-surface-light);
 }
 
 .feature-container {
@@ -75,7 +75,7 @@ $logo-width: 120px;
   background-color: var(--surface);
 
   > *:not(.bar-divider, .disabled) {
-    opacity: 0.8;
+    color: var(--on-surface-light);
   }
 }
 
@@ -173,9 +173,8 @@ $logo-width: 120px;
   position: fixed;
   top: $spacing-3;
   left: $spacing-3;
-  color: var(--on-surface);
+  color: var(--on-surface-light);
   font-size: $l-font-size;
-  opacity: 0.7;
 }
 
 @include gt-xl {

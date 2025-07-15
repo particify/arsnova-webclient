@@ -33,7 +33,7 @@
 
 .mat-icon {
   min-width: 18px;
-  opacity: 0.6;
+  color: var(--on-surface-light);
 }
 
 .mat-mdc-button {
@@ -55,7 +55,7 @@
   color: var(--on-surface);
 
   &:nth-child(2) {
-    opacity: 0.7;
+    color: var(--on-surface-light);
     font-size: $xs-font-size;
   }
 }

@@ -42,13 +42,14 @@
   border-radius: 0;
   height: auto !important;
 
-  &:not(.current) {
-    opacity: 0.7 !important;
-    color: var(--on-surface);
-  }
-
   .mat-icon {
     margin-right: 0;
+  }
+}
+
+.item:not(.mat-primary) {
+  .mat-icon {
+    color: var(--on-surface-light);
   }
 }
 
