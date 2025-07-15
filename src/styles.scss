@@ -888,6 +888,12 @@ div {
   }
 }
 
+.rendered-text {
+  strong {
+    font-weight: $font-weight-extra-bold;
+  }
+}
+
 app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
   width: 100%;
 }
