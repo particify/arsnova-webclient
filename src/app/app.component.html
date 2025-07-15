@@ -119,13 +119,13 @@
           <div class="button-container" fxLayout="column" fxLayoutGap="8px">
             @if (auth && !isGuest()) {
               <button id="logout-btn" mat-button (click)="logout()">
-                <mat-icon>exit_to_app</mat-icon>
+                <mat-icon>logout</mat-icon>
                 {{ 'header.logout' | transloco }}
               </button>
             }
             @if (!auth || isGuest()) {
               <button id="login-btn" mat-button (click)="navToLogin()">
-                <mat-icon>exit_to_app</mat-icon>
+                <mat-icon>login</mat-icon>
                 {{ 'header.login' | transloco }}
               </button>
             }
