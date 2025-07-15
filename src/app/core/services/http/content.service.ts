@@ -234,7 +234,7 @@ export class ContentService extends AbstractEntityService<Content> {
   showDeleteAllAnswersDialog(contentGroup: ContentGroup): Observable<string> {
     const dialogRef = this.dialogService.openDeleteDialog(
       'content-answers',
-      'creator.dialog.really-delete-all-answers',
+      'creator.dialog.really-reset-group-results',
       undefined,
       undefined,
       () => this.deleteAllAnswersOfContentGroup(contentGroup)
