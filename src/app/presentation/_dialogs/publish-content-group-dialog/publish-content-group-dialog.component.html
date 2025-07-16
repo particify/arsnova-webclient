@@ -2,13 +2,13 @@
   <div mat-dialog-content>
     <h3>
       {{
-        (isLive()
+        (isLive
           ? 'creator.dialog.want-publish-group'
           : 'creator.dialog.how-to-publish-group'
         ) | transloco
       }}
     </h3>
-    @if (isLive()) {
+    @if (isLive) {
       <p>
         {{ 'creator.content.group-is-hidden-for-participants' | transloco }}
       </p>
