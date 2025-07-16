@@ -69,12 +69,17 @@ $logo-width: 120px;
   color: var(--on-surface-light);
 }
 
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .feature-container {
   min-height: $bar-height;
   border-radius: 8px;
   background-color: var(--surface);
 
-  > *:not(.bar-divider, .disabled) {
+  > *:not(.bar-divider, .disabled, .highlighted) {
     color: var(--on-surface-light);
   }
 }
