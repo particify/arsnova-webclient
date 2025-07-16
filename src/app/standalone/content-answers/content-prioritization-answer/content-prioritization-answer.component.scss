@@ -13,6 +13,10 @@
     border-bottom: 1px solid var(--grey-light);
   }
 
+  &:first-of-type {
+    padding-top: 0;
+  }
+
   &:last-of-type {
     margin-bottom: 1em;
   }

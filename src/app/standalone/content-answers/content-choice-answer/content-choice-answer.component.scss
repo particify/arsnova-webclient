@@ -20,12 +20,8 @@
     border-color: var(--grey-light);
   }
 
-  &:last-of-type {
-    margin-bottom: 16px;
-  }
-
   &:first-of-type {
-    margin-top: 8px;
+    margin-top: 0;
   }
 }
 

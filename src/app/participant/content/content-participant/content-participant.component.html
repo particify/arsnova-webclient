@@ -225,102 +225,29 @@
                   @if (
                     [ContentType.SLIDE, ContentType.FLASHCARD].indexOf(
                       content.format
-                    ) === -1
+                    ) === -1 && !answeringLocked
                   ) {
-                    <div fxFill>
+                    <div fxFill [ngClass]="{ invisible: alreadySent }">
                       <div
-                        fxLayout="row"
-                        fxLayoutAlign="center center"
-                        fxLayoutGap="1em"
-                        [ngClass]="{
-                          visible: alreadySent || answeringLocked,
-                          invisible: !alreadySent && !answeringLocked,
-                        }"
-                        class="primary info-container"
+                        fxLayoutAlign="center"
+                        fxLayoutGap="10px"
+                        style="margin-top: 20px"
                       >
-                        @if (alreadySent) {
-                          <div
-                            fxLayout="row"
-                            fxLayoutAlign="start center"
-                            fxLayoutGap="16px"
+                        @if (content.abstentionsAllowed) {
+                          <button
+                            mat-button
+                            [disabled]="alreadySent"
+                            class="abstain"
+                            type="button"
+                            (click)="submitAnswerEvent($event, 'abstention')"
                           >
-                            <div>
-                              @if (!hasAbstained && !content.duration) {
-                                <p class="primary">
-                                  {{
-                                    'participant.answer.has-voted' | transloco
-                                  }}
-                                </p>
-                              } @else if (
-                                !hasAbstained &&
-                                answer &&
-                                answer.durationMs &&
-                                content.state.answeringEndTime
-                              ) {
-                                <p class="primary">
-                                  {{
-                                    'participant.answer.answered-in-time'
-                                      | transloco
-                                        : {
-                                            duration: (
-                                              answer.durationMs / 1000
-                                            ).toFixed(2),
-                                          }
-                                  }}
-                                </p>
-                              } @else if (hasAbstained) {
-                                <p class="primary">
-                                  {{
-                                    'participant.answer.has-abstained'
-                                      | transloco
-                                  }}
-                                </p>
-                              }
-                            </div>
-                            @if (
-                              (contentGroup.publishingMode !==
-                                PublishingMode.LIVE ||
-                                lastContent) &&
-                              contentGroup.groupType === GroupType.QUIZ
-                            ) {
-                              <ng-template
-                                [ngTemplateOutlet]="nextButton"
-                              ></ng-template>
-                            }
-                          </div>
-                        } @else if (answeringLocked) {
-                          <div>
-                            <p>
-                              {{
-                                'participant.answer.not-answered-in-time'
-                                  | transloco
-                              }}
-                            </p>
-                          </div>
+                            {{ 'participant.answer.abstain' | transloco }}
+                          </button>
                         }
-                      </div>
-                      <div [ngClass]="{ invisible: alreadySent }">
-                        @if (!answeringLocked) {
-                          <div fxLayoutAlign="center" fxLayoutGap="10px">
-                            @if (content.abstentionsAllowed) {
-                              <button
-                                mat-button
-                                [disabled]="alreadySent"
-                                class="abstain"
-                                type="button"
-                                (click)="
-                                  submitAnswerEvent($event, 'abstention')
-                                "
-                              >
-                                {{ 'participant.answer.abstain' | transloco }}
-                              </button>
-                            }
-                            <app-loading-button
-                              [disabled]="alreadySent"
-                              name="participant.answer.submit"
-                            ></app-loading-button>
-                          </div>
-                        }
+                        <app-loading-button
+                          [disabled]="alreadySent"
+                          name="participant.answer.submit"
+                        ></app-loading-button>
                       </div>
                     </div>
                   }
@@ -420,6 +347,73 @@
                   <ng-template [ngTemplateOutlet]="nextButton"></ng-template>
                 }
               </div>
+            } @else {
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="1em"
+                [ngClass]="{
+                  visible: alreadySent || answeringLocked,
+                  invisible: !alreadySent && !answeringLocked,
+                }"
+                class="primary info-container"
+                style="margin-top: 20px"
+              >
+                @if (alreadySent) {
+                  <div
+                    fxLayout="row"
+                    fxLayoutAlign="start center"
+                    fxLayoutGap="16px"
+                  >
+                    <div>
+                      @if (!hasAbstained && !content.duration) {
+                        <p class="primary">
+                          {{ 'participant.answer.has-voted' | transloco }}
+                        </p>
+                      } @else if (
+                        !hasAbstained &&
+                        answer &&
+                        answer.durationMs &&
+                        content.state.answeringEndTime
+                      ) {
+                        <p class="primary">
+                          {{
+                            'participant.answer.answered-in-time'
+                              | transloco
+                                : {
+                                    duration: (
+                                      answer.durationMs / 1000
+                                    ).toFixed(2),
+                                  }
+                          }}
+                        </p>
+                      } @else if (hasAbstained) {
+                        <p class="primary">
+                          {{ 'participant.answer.has-abstained' | transloco }}
+                        </p>
+                      }
+                    </div>
+                    @if (
+                      ((contentGroup.publishingMode !== PublishingMode.LIVE ||
+                        lastContent) &&
+                        contentGroup.groupType === GroupType.QUIZ) ||
+                      finished
+                    ) {
+                      <ng-template
+                        [ngTemplateOutlet]="nextButton"
+                      ></ng-template>
+                    }
+                  </div>
+                } @else if (answeringLocked) {
+                  <div>
+                    <p>
+                      {{
+                        'participant.answer.not-answered-in-time' | transloco
+                      }}
+                    </p>
+                  </div>
+                }
+              </div>
             }
           </mat-tab-nav-panel>
         </div>
@@ -430,7 +424,7 @@
 <ng-template #nextButton>
   <button type="button" mat-raised-button color="primary" (click)="next.emit()">
     {{
-      (lastContent
+      (lastContent || finished
         ? 'participant.answer.go-to-overview'
         : 'participant.answer.next-content'
       ) | transloco

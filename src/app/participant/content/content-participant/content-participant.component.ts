@@ -149,6 +149,7 @@ export class ContentParticipantComponent
   @Input() hasAbstained = false;
   @Input() answerResult?: AnswerResultType;
   @Input() activeTab?: string;
+  @Input() finished = false;
   @Output() answerChanged = new EventEmitter<AnswerResultType>();
   @Output() next = new EventEmitter<void>();
   @Output() answerReset = new EventEmitter<string>();

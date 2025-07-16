@@ -47,16 +47,16 @@
   </form>
 </mat-list>
 @if (!isDisabled) {
-  <div tabindex="0" fxLayoutAlign="center" style="margin-bottom: 16px">
+  <div tabindex="0" fxLayoutAlign="center">
     @if (pointsLeft >= 0) {
-      <p>
+      <span>
         <b>{{ pointsLeft }}</b> {{ 'answer.points-left' | transloco }}
-      </p>
+      </span>
     }
     @if (pointsLeft < 0) {
-      <p>
+      <span>
         <b>{{ -1 * pointsLeft }}</b> {{ 'answer.points-too-much' | transloco }}
-      </p>
+      </span>
     }
   </div>
 }

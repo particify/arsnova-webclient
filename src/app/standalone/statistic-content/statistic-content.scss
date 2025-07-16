@@ -20,7 +20,7 @@
   color: var(--on-surface);
   padding: 0 16px;
 
-  &.all-animations {
+  &.all-animations:not(:last-of-type) {
     margin-bottom: 10px;
   }
 }
