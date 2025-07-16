@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
 import {
@@ -21,7 +21,10 @@ import { provideTranslocoScope } from '@jsverse/transloco';
   imports: [CoreModule, LoadingButtonComponent],
   providers: [provideTranslocoScope('creator')],
 })
-export class PublishContentGroupDialogComponent extends FormComponent {
+export class PublishContentGroupDialogComponent
+  extends FormComponent
+  implements OnInit
+{
   dialogRef =
     inject<MatDialogRef<PublishContentGroupDialogComponent>>(MatDialogRef);
   private data = inject<{
@@ -34,23 +37,31 @@ export class PublishContentGroupDialogComponent extends FormComponent {
 
   publishingModes = PUBLISHING_MODE_ITEMS;
   selectedMode?: PublishingModeItem;
+  isLive = false;
 
   constructor() {
     super();
-    this.publishingModes = PUBLISHING_MODE_ITEMS;
-    this.selectedMode = this.publishingModes[0];
+  }
+
+  ngOnInit(): void {
+    this.isLive = this.contentPublishService.isGroupLive(
+      this.data.contentGroup
+    );
+    if (!this.isLive) {
+      this.selectedMode = this.publishingModes[0];
+    }
   }
 
   updatePublishingMode(): void {
-    if (!this.selectedMode) {
+    if (!this.selectedMode && !this.isLive) {
       return;
     }
     this.disableForm();
     const changes: { published: boolean; publishingMode?: PublishingMode } = {
       published: true,
     };
-    if (!this.isLive()) {
-      changes.publishingMode = this.selectedMode.type;
+    if (!this.isLive) {
+      changes.publishingMode = this.selectedMode?.type;
     }
     this.contentGroupService
       .patchContentGroup(this.data.contentGroup, changes)
@@ -64,9 +75,5 @@ export class PublishContentGroupDialogComponent extends FormComponent {
 
   close(publishingMode?: PublishingMode) {
     this.dialogRef.close(publishingMode);
-  }
-
-  isLive(): boolean {
-    return this.contentPublishService.isGroupLive(this.data.contentGroup);
   }
 }
