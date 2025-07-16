@@ -2,7 +2,6 @@
   <form (ngSubmit)="joinRoom(roomCode.value)">
     <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
       <mat-form-field
-        (keyup.enter)="onEnter(roomCode.value)"
         appearance="outline"
         class="no-field-hint"
         floatLabel="always"
@@ -37,7 +36,6 @@
           class="join-button"
           type="submit"
           role="button"
-          (click)="joinRoom(roomCode.value)"
           [attr.aria-label]="'home-page.a11y-join-button' | transloco"
           matSuffix
         >

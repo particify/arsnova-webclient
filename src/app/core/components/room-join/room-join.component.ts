@@ -63,10 +63,6 @@ export class RoomJoinComponent {
   ]);
   matcher = new FormErrorStateMatcher();
 
-  onEnter(shortId: string) {
-    this.joinRoom(shortId);
-  }
-
   joinRoom(shortId: string): void {
     shortId = shortId.replace(/[\s]/g, '');
     if (
@@ -123,7 +119,12 @@ export class RoomJoinComponent {
       inputField.selectionEnd &&
       inputField.selectionStart &&
       inputField.selectionEnd > inputField.selectionStart;
-    if (ins && !selection && inputField.value.length >= 9) {
+    if (
+      ins &&
+      !selection &&
+      inputField.value.length >= 9 &&
+      event.inputType !== 'insertLineBreak'
+    ) {
       event.preventDefault();
     }
   }
