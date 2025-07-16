@@ -14,7 +14,6 @@ import { provideTranslocoScope } from '@jsverse/transloco';
   providers: [provideTranslocoScope('creator')],
   selector: 'app-formatting-toolbar',
   templateUrl: './formatting-toolbar.component.html',
-  styleUrls: ['./formatting-toolbar.component.scss'],
 })
 export class FormattingToolbarComponent {
   @Input({ required: true }) inputElement!: HTMLTextAreaElement;

@@ -145,7 +145,7 @@ ul {
 @mixin hint-base {
   font-size: 16px;
   font-weight: $font-weight-bold;
-  opacity: 0.7;
+  color: var(--on-surface-light);
 }
 
 .hint {
@@ -643,7 +643,7 @@ div {
   padding: 8px !important;
 
   &:not(.mat-primary, .mat-accent, .mat-warn) {
-    --mat-icon-button-icon-color: var(--on-surface);
+    --mat-icon-button-icon-color: var(--on-surface-light);
   }
 }
 
@@ -859,7 +859,7 @@ div {
 
 .mat-mdc-menu-item:not([disabled])
   > .mat-icon:not(.mat-primary, .mat-warn, .icon-important) {
-  opacity: 0.7;
+  color: var(--on-surface-light);
 }
 
 // Snackbar

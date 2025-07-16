@@ -62,7 +62,7 @@ button {
 
 .subheader {
   margin-top: 0;
-  opacity: 0.6;
+  color: var(--on-surface-light);
   font-size: $s-font-size;
   padding: 0 $drawer-header-padding;
 }
@@ -81,7 +81,7 @@ button {
 
   &:not(.primary-variant) {
     .mat-icon {
-      opacity: 0.6;
+      color: var(--on-surface-light);
     }
   }
 }

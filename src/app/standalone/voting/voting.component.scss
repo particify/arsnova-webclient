@@ -4,7 +4,7 @@
   font-size: 40px;
 
   &:not(.green, .red) {
-    opacity: 0.6;
+    color: var(--on-surface-light);
   }
 }
 
