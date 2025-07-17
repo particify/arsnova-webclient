@@ -325,8 +325,8 @@
     "show-flashcard-back": "Mostra il retro della flashcard",
     "hide-flashcard-back": "Nascondi il retro della Flashcard",
     "answer-deleted": "La risposta è stata eliminata.",
-    "show-wordcloud-list": "Mostra le risposte come elenco",
-    "show-wordcloud": "Mostra le risposte come wordcloud",
+    "show-wordcloud-list": "Mostra come elenco",
+    "show-wordcloud": "Mostra come wordcloud",
     "ban-answer": "Risposta al divieto",
     "answer-banned": "La risposta è stata vietata.",
     "delete-answer": "Elimina la risposta"

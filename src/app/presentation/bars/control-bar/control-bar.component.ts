@@ -51,6 +51,10 @@ import { KeyButtonBarComponent } from '@app/presentation/bars/key-button-bar/key
 import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { ContentType } from '@app/core/models/content-type.enum';
+import {
+  ToggleButtonBarComponent,
+  ToggleButtonOption,
+} from '@app/standalone/toggle-button-bar/toggle-button-bar.component';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -99,6 +103,7 @@ export class KeyNavBarItem extends NavBarItem {
     CommentFilterComponent,
     SplitShortIdPipe,
     TranslocoPipe,
+    ToggleButtonBarComponent,
   ],
 })
 export class ControlBarComponent
@@ -172,6 +177,28 @@ export class ControlBarComponent
   HotkeyAction = HotkeyAction;
 
   private hotkeyRefs: symbol[] = [];
+
+  activeWordcloudVisualiation =
+    this.presentationService.activeWordcloudVisualization;
+
+  buttons: ToggleButtonOption[] = [
+    {
+      id: 'cloud',
+      icon: 'cloud',
+      tooltip: this.translateService.translate(
+        'creator.statistic.show-wordcloud'
+      ),
+    },
+    {
+      id: 'list',
+      icon: 'grid_view',
+      tooltip: this.translateService.translate(
+        'creator.statistic.show-wordcloud-list'
+      ),
+    },
+  ];
+
+  ContentType = ContentType;
 
   constructor() {
     super();
@@ -655,5 +682,13 @@ export class ControlBarComponent
           this.hotkeyService.registerHotkey(h, this.hotkeyRefs)
         )
     );
+  }
+
+  setActiveWordcloudVisualiation(viewId: string) {
+    this.presentationService.setActiveWordcloudVizualization(viewId);
+  }
+
+  isWordcloudVisualiationActive(id: string): boolean {
+    return this.activeWordcloudVisualiation() === id;
   }
 }

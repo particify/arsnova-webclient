@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { ContentGroup } from '@app/core/models/content-group';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
@@ -50,6 +50,10 @@ export class PresentationService {
   private leaderboardDisplayed = new Subject<boolean>();
 
   private currentContent?: Content;
+
+  private _activeWordcloudVisualization = signal<string>('cloud');
+  activeWordcloudVisualization =
+    this._activeWordcloudVisualization.asReadonly();
 
   getScale(factor = 1) {
     const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;
@@ -149,6 +153,10 @@ export class PresentationService {
 
   updateMultipleRoundState(state: boolean) {
     this.multipleRoundState$.next(state);
+  }
+
+  setActiveWordcloudVizualization(visualization: string) {
+    this._activeWordcloudVisualization.set(visualization);
   }
 
   // Events

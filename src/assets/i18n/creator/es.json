@@ -381,8 +381,8 @@
     "hide-flashcard-back": "Ocultar la parte trasera de la tarjeta",
     "delete-answer": "Eliminar respuesta",
     "answer-deleted": "La respuesta ha sido eliminada.",
-    "show-wordcloud-list": "Mostrar respuestas como lista",
-    "show-wordcloud": "Mostrar respuestas como nube de palabras",
+    "show-wordcloud-list": "Mostrar lista",
+    "show-wordcloud": "Mostrar nube de palabras",
     "ban-answer": "Bloquear respuesta",
     "answer-banned": "La respuesta ha sido bloqueada."
   },

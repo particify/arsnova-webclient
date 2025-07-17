@@ -10,19 +10,20 @@
     }
   </div>
   @if (answersVisible) {
-    <div>
+    @if (showList) {
+      <app-answer-grid-list [answers]="answerList"></app-answer-grid-list>
+    } @else {
       @if (!showModeration) {
         <app-wordcloud
           [wordWeights]="wordWeights"
           [rotateWords]="rotateWords"
         ></app-wordcloud>
-      }
-      @if (showModeration) {
+      } @else {
         <app-answer-list
           [answers]="answerList"
           (deleteClicked)="banAnswer($event)"
         ></app-answer-list>
       }
-    </div>
+    }
   }
 </div>

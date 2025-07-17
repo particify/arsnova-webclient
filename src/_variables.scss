@@ -50,6 +50,10 @@ $screen-md-max: 1279px;
 $screen-lg-min: 1280px;
 $screen-xl-min: 1600px;
 
+// Buttons
+
+$icon-button-size: 40px;
+
 @mixin xs {
   @media (max-width: $screen-xs-max) {
     @content;

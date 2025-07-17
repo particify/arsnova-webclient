@@ -172,6 +172,7 @@
         <app-statistic-wordcloud
           [content]="content"
           [showModeration]="showWordcloudModeration"
+          [showList]="activeWordcloudVisualiation() === 'list'"
           [directShow]="directShow"
           [settings]="settings"
           (updateCounterEvent)="updateCounter($event)"
