@@ -7,13 +7,10 @@ $step-button-count: 5;
   overflow: hidden;
 }
 
-.step-padding {
-  padding: $spacing;
-}
-
 .fixed-width-container {
-  width: 100%;
+  width: calc(100vw - $spacing-2 * 2);
   max-width: $card-width;
+  padding: $spacing;
 }
 
 .inner-container {
