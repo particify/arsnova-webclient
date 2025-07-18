@@ -3,7 +3,6 @@
   class="container"
   [ngClass]="{
     'fixed-width-container': fixedWitdth,
-    'step-padding': showSteps,
   }"
   (touchstart)="swipe($event, 'start')"
   (touchend)="swipe($event, 'end')"
