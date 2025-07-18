@@ -31,6 +31,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
 import { AsyncPipe } from '@angular/common';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
+import { GlobalHintsComponent } from '@app/standalone/global-hints/global-hints.component';
 
 @Component({
   selector: 'app-creator-overview',
@@ -54,6 +56,8 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
+    DisabledIfReadonlyDirective,
+    GlobalHintsComponent,
   ],
 })
 export class RoomOverviewPageComponent

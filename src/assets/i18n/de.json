@@ -250,7 +250,8 @@
     "something-went-wrong": "Es ist etwas schief gegangen.",
     "http-too-many-requests": "Zu viele Anfragen aus deinem Netzwerk.",
     "establishing-connection": "Verbindung wird aufgebaut …",
-    "invalid-request": "Deine Anfrage ist ungültig."
+    "invalid-request": "Deine Anfrage ist ungültig.",
+    "action-not-allowed": "Aktion nicht erlaubt."
   },
   "title": {
     "register": "Registrieren",
@@ -614,7 +615,8 @@
   "general": {
     "a11y-remove-filter": "Filter entfernen",
     "not-specified": "Nicht festegelegt",
-    "anonymous": "Anonym"
+    "anonymous": "Anonym",
+    "read-only-mode-active": "Nur-Lesen-Modus: Die Erstellungs- und Bearbeitungsfunktionalität ist eingeschränkt."
   },
   "ordinal": {
     "one": "",

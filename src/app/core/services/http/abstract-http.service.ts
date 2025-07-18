@@ -110,6 +110,9 @@ export abstract class AbstractHttpService<T> {
         case 400:
           message = badRequestMessage || 'errors.invalid-request';
           break;
+        case 403:
+          message = 'errors.action-not-allowed';
+          break;
         case 429:
           message = 'errors.http-too-many-requests';
           break;

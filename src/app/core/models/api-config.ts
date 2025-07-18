@@ -29,6 +29,7 @@ export class ApiConfig {
   constructor(
     public authenticationProviders: AuthenticationProvider[],
     public features: { [featureName: string]: Feature },
-    public ui: UiConfig
+    public ui: UiConfig,
+    public readOnly: boolean
   ) {}
 }

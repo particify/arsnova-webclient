@@ -250,7 +250,8 @@
     "something-went-wrong": "Something went wrong.",
     "http-too-many-requests": "Too many requests from your network.",
     "establishing-connection": "Establishing connection …",
-    "invalid-request": "Your request is invalid."
+    "invalid-request": "Your request is invalid.",
+    "action-not-allowed": "Action not allowed."
   },
   "title": {
     "register": "Register",
@@ -614,7 +615,8 @@
   "general": {
     "a11y-remove-filter": "Remove filter",
     "not-specified": "Not specified",
-    "anonymous": "Anonymous"
+    "anonymous": "Anonymous",
+    "read-only-mode-active": "Read-only mode: The creation and editing functionality is limited."
   },
   "ordinal": {
     "one": "st",

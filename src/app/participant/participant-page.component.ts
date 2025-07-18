@@ -18,6 +18,7 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomSettings } from '@app/core/models/room-settings';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { GlobalHintsComponent } from '@app/standalone/global-hints/global-hints.component';
 
 @Component({
   selector: 'app-participant-page',
@@ -34,6 +35,7 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
     NgClass,
     RouterOutlet,
     FooterComponent,
+    GlobalHintsComponent,
   ],
 })
 export class ParticipantPageComponent implements OnInit {

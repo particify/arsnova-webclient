@@ -90,7 +90,7 @@ describe('HeaderComponent', () => {
     'getApiConfig$',
   ]);
   mockApiConfigService.getApiConfig$.and.returnValue(
-    of(new ApiConfig([], {}, {}))
+    of(new ApiConfig([], {}, {}, false))
   );
 
   beforeEach(async () => {

@@ -16,6 +16,7 @@ import { CommentListHintComponent } from '@app/standalone/comment-list-hint/comm
 import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-hint/comment-settings-hint.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CommentListBarComponent } from '@app/standalone/comment-list-bar/comment-list-bar.component';
+import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 
 @Component({
   selector: 'app-comments-page',
@@ -30,6 +31,7 @@ import { CommentListBarComponent } from '@app/standalone/comment-list-bar/commen
     CommentComponent,
     CommentListAddButtonComponent,
     CommentListFloatingButtonsComponent,
+    DisabledIfReadonlyDirective,
   ],
   providers: [provideTranslocoScope('participant')],
 })

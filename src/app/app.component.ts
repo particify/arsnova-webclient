@@ -38,12 +38,18 @@ import { UiConfig } from '@app/core/models/api-config';
 import { UiService } from '@app/core/services/util/ui.service';
 import { CoreModule } from './core/core.module';
 import { FooterLinksComponent } from './standalone/footer-links/footer-links.component';
+import { GlobalHintsComponent } from './standalone/global-hints/global-hints.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [CoreModule, FooterLinksComponent, RouterOutlet],
+  imports: [
+    CoreModule,
+    FooterLinksComponent,
+    RouterOutlet,
+    GlobalHintsComponent,
+  ],
 })
 export class AppComponent implements OnInit, AfterViewInit {
   private languageService = inject(LanguageService);

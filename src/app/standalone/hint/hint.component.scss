@@ -1,17 +1,25 @@
-.mat-icon {
-  margin-right: 0.5em;
-}
-
-p {
-  margin: 0;
-}
-
-// Hint types
+@use '../../../variables' as *;
 
 .warning {
-  color: var(--warn-soft);
+  border-color: var(--warn-soft);
+
+  mat-icon {
+    color: var(--warn-soft);
+  }
 }
 
 .info {
-  color: var(--grey);
+  border-color: var(--grey);
+
+  mat-icon {
+    color: var(--grey);
+  }
+}
+
+.border {
+  width: 100%;
+  padding: $spacing-2;
+  border-radius: $border-radius;
+  border-width: 1px;
+  border-style: solid;
 }
