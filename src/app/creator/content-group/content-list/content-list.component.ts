@@ -116,7 +116,7 @@ export class ContentListComponent
   @Input() attributionsExist = false;
   @Input() contentStats = new Map<string, ContentStats>();
   @Input() selectedContentIndex?: number;
-  @Output() hasStartedContentChanged = new EventEmitter<boolean>();
+  @Output() startedContentIndexChanged = new EventEmitter<number | undefined>();
 
   currentGroupIndex?: number;
   contentTypes: string[] = Object.values(ContentType);
@@ -591,7 +591,7 @@ export class ContentListComponent
 
   setStartedContent(index?: number): void {
     this.startedContentIndex = index;
-    this.hasStartedContentChanged.emit(this.startedContentIndex !== undefined);
+    this.startedContentIndexChanged.emit(this.startedContentIndex);
   }
 
   hasFormatRounds(format: ContentType): boolean {

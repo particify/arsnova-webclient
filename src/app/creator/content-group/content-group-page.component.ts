@@ -570,10 +570,13 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleActiveContentChanged(isStarted: boolean): void {
-    this.isContentStarted = isStarted;
-    if (isStarted) {
+  handleActiveContentChanged(index?: number): void {
+    this.isContentStarted = index !== undefined;
+    if (this.isContentStarted) {
       this.startRefreshingStats();
+      if (this.selectedContentIndex !== index) {
+        this.router.navigate(['.', index! + 1], { relativeTo: this.route });
+      }
     }
   }
 
