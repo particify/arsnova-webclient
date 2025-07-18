@@ -16,7 +16,6 @@ export class DateComponent implements OnDestroy {
   private translateService = inject(TranslocoService);
 
   @Input({ required: true }) timestamp!: Date;
-  @Input() responsive = false;
 
   refreshCounter = 0;
   destroyed$ = new Subject<void>();

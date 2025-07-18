@@ -43,18 +43,13 @@
 
 .score-creator {
   margin: 0 8px;
-  opacity: 0.8;
 
   &:not(.on-secondary) {
-    color: var(--on-surface);
+    color: var(--on-surface-light);
   }
 
-  @media (min-width: 1920px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 1919px) {
-    font-size: 18px;
+  @include xs {
+    font-size: $s-font-size;
   }
 }
 
@@ -63,21 +58,10 @@
   color: var(--on-surface);
   overflow-wrap: anywhere;
   hyphens: auto;
-  min-height: 2em;
   line-height: 150%;
 
-  @media (min-width: 1920px) {
-    font-size: 22px;
-  }
-
-  @media (max-width: 1919px) {
-    @media (min-width: 768px) {
-      font-size: 18px;
-    }
-
-    @media (max-width: 767px) {
-      font-size: 16px;
-    }
+  @include xs {
+    font-size: $s-font-size;
   }
 }
 
@@ -88,7 +72,7 @@
 .comment-actions {
   align-items: center;
   height: 40px;
-  margin-bottom: 8px;
+  margin-bottom: $spacing;
 }
 
 .highlighted {
@@ -101,24 +85,37 @@
 
 .comment-tags {
   max-width: 140px;
-  margin-top: 12px;
+  margin-top: $spacing;
 }
 
-.mat-mdc-chip {
+.mat-mdc-standard-chip {
   cursor: pointer;
+  margin: 0 0 0 $spacing;
+
+  --mat-chip-label-text-color: var(--on-surface);
+
+  font-size: $s-font-size;
+
+  --mat-chip-label-text-size: $s-font-size;
+
+  @include xs {
+    --mat-chip-label-text-size: $xs-font-size;
+
+    font-size: $xs-font-size;
+  }
 }
 
 .vote-icon {
-  font-size: 18px;
-  height: 18px;
-  width: 18px;
+  font-size: $m-font-size;
+  height: $m-font-size;
+  width: $m-font-size;
   opacity: 0.3;
 
   @media (max-width: 767px) {
-    margin-left: 0.5em;
+    margin-left: $spacing;
   }
 
   @media (min-width: 767px) {
-    margin-left: 1em;
+    margin-left: $spacing-2;
   }
 }

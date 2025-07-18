@@ -37,7 +37,6 @@
       [timestamp]="
         announcement.updateTimestamp || announcement.creationTimestamp
       "
-      [responsive]="true"
     ></app-date>
     @if (announcement.updateTimestamp) {
       <span>&nbsp;({{ 'announcement.edited' | transloco }})</span>
