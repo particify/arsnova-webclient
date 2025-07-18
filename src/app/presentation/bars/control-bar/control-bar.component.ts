@@ -171,6 +171,9 @@ export class ControlBarComponent
   buttonHovered = false;
   HotkeyAction = HotkeyAction;
 
+  private contentResultsDisplayed = false;
+  private contentCorrectResultsDisplayed = false;
+
   private hotkeyRefs: symbol[] = [];
 
   constructor() {
@@ -315,6 +318,20 @@ export class ControlBarComponent
             }
           });
         }
+      });
+    this.presentationService
+      .getResultsDisplayed()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((resultsDisplayed) => {
+        this.contentResultsDisplayed = resultsDisplayed;
+        this.determineResultsItemHighlighted();
+      });
+    this.presentationService
+      .getCorrectResultsDisplayed()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((correctResultsDisplayed) => {
+        this.contentCorrectResultsDisplayed = correctResultsDisplayed;
+        this.determineCorrectItemHighlighted();
       });
     this.focusModeService.init(this.room.id);
     this.focusModeService
@@ -510,6 +527,7 @@ export class ControlBarComponent
   }
 
   private determineGroupControls(): void {
+    this.determineResultsItemHighlighted();
     this.determineContentControlCorrect();
     this.determineContentControlLeaderboard();
     if (!this.content || this.content.format === ContentType.SLIDE) {
@@ -537,6 +555,7 @@ export class ControlBarComponent
           this.groupItems[correctItemIndex].disabled = false;
         }
       }
+      this.determineCorrectItemHighlighted();
     } else {
       if (correctItemIndex > -1) {
         this.groupItems.splice(correctItemIndex, 1);
@@ -558,6 +577,26 @@ export class ControlBarComponent
     }
   }
 
+  private determineResultsItemHighlighted() {
+    setTimeout(() => {
+      const resultsItemIndex = this.getIndexOfGroupItem('results');
+      if (resultsItemIndex > -1) {
+        this.groupItems[resultsItemIndex].highlighted =
+          this.contentResultsDisplayed;
+      }
+    });
+  }
+
+  private determineCorrectItemHighlighted() {
+    setTimeout(() => {
+      const correctResultsItemIndex = this.getIndexOfGroupItem('correct');
+      if (correctResultsItemIndex > -1) {
+        this.groupItems[correctResultsItemIndex].highlighted =
+          this.contentCorrectResultsDisplayed;
+      }
+    });
+  }
+
   private getIndexOfGroupItem(name: string): number {
     return this.groupItems.map((i) => i.name).indexOf(name);
   }
@@ -573,6 +612,8 @@ export class ControlBarComponent
   }
 
   updateGroup(contentGroup: ContentGroup) {
+    this.contentResultsDisplayed = false;
+    this.contentCorrectResultsDisplayed = false;
     this.setGroup(contentGroup);
     this.activeGroup.emit(this.groupName);
   }

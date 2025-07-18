@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  inject,
   Input,
   Output,
   ViewChild,
@@ -14,6 +15,7 @@ import { ContentResultsComponent } from '@app/standalone/content-results/content
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 
 @Component({
   selector: 'app-content-stepper',
@@ -29,6 +31,8 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
   styleUrl: './content-stepper.component.scss',
 })
 export class ContentStepperComponent implements AfterViewInit {
+  private presentationService = inject(PresentationService);
+
   @ViewChild(StepperComponent) stepper!: StepperComponent;
 
   @Input({ required: true }) contents!: Content[];
@@ -51,6 +55,8 @@ export class ContentStepperComponent implements AfterViewInit {
 
   updateIndex(index: number) {
     this.currentStep = index;
+    this.presentationService.updateResultsDisplayed(false);
+    this.presentationService.updateCorrectResultsDisplayed(false);
     setTimeout(() => {
       this.indexChanged.emit(index);
     }, 300);
