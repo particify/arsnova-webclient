@@ -5,4 +5,5 @@ export interface ContentGroupStatistics {
   groupName: string;
   contentCount: number;
   groupType: GroupType;
+  published: boolean;
 }
