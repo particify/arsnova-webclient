@@ -11,7 +11,7 @@ $less-visible: 0.7;
 
 .border-container {
   border-radius: 8px;
-  border: $border-witdth solid var(--grey-light);
+  border: $border-witdth solid var(--grey-lighter);
   padding: $border-container-padding;
 
   &.presentation-container-padding {

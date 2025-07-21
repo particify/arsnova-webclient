@@ -8,7 +8,7 @@
   border-radius: 5px;
 
   &:not(.primary-border-color) {
-    border-color: var(--grey-light);
+    border-color: var(--grey-lighter);
   }
 
   &:not(:first-of-type) {

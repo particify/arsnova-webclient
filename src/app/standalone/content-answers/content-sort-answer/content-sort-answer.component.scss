@@ -7,7 +7,7 @@ $option-padding: 0;
   margin-top: cwo.$option-padding-full;
   cursor: grabbing;
   padding: $option-padding cwo.$option-padding-full;
-  border: 2px solid var(--grey-light);
+  border: 2px solid var(--grey-lighter);
   border-radius: 4px;
 
   &:first-of-type {

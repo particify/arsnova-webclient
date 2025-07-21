@@ -44,8 +44,6 @@ $light-theme: mat.m2-define-light-theme(
   --on-background: #212121;
   --on-surface: #212121;
   --on-surface-light: #626262;
-  --table-a: #e0e0e0;
-  --table-b: #eee;
   --border: #e0e0e0;
   --green: #43a047;
   --red: #e53935;
@@ -54,7 +52,8 @@ $light-theme: mat.m2-define-light-theme(
   --blue-light: #1e88e5;
   --blue: #3949ab;
   --grey: #9e9e9e;
-  --grey-light: #e0e0e0;
+  --grey-lighter: #e0e0e0;
+  --grey-light: #eee;
   --black: #212121;
   --bar-blue: #027db9;
   --bar-yellow: #ffca28;

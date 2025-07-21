@@ -30,8 +30,6 @@ $dark-theme: mat.m2-define-dark-theme(
   --on-background: #fcfcfc;
   --on-surface: #fcfcfc;
   --on-surface-light: #b0b0b0;
-  --table-a: #424242;
-  --table-b: #505050;
   --border: #595959;
   --green: #81c784;
   --red: #e57373;
@@ -40,7 +38,8 @@ $dark-theme: mat.m2-define-dark-theme(
   --blue-light: #64b5f6;
   --blue: #7986cb;
   --grey: #aaa;
-  --grey-light: #444;
+  --grey-lighter: #444;
+  --grey-light: #363636;
   --black: #000;
   --bar-blue: #027db9;
   --bar-yellow: #ffca28;
