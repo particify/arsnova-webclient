@@ -48,6 +48,8 @@ export class PresentationService {
   private countdownChanged = new Subject<Content>();
   private wordcloudVisualizationCHanged = new Subject<boolean>();
   private leaderboardDisplayed = new Subject<boolean>();
+  private resultsDisplayed = new Subject<boolean>();
+  private correctResultsDisplayed = new Subject<boolean>();
 
   private currentContent?: Content;
 
@@ -243,5 +245,21 @@ export class PresentationService {
 
   getLeaderboardDisplayed(): Observable<boolean> {
     return this.leaderboardDisplayed;
+  }
+
+  updateResultsDisplayed(displayResults: boolean) {
+    this.resultsDisplayed.next(displayResults);
+  }
+
+  getResultsDisplayed(): Observable<boolean> {
+    return this.resultsDisplayed;
+  }
+
+  updateCorrectResultsDisplayed(displayCorrectResults: boolean) {
+    this.correctResultsDisplayed.next(displayCorrectResults);
+  }
+
+  getCorrectResultsDisplayed(): Observable<boolean> {
+    return this.correctResultsDisplayed;
   }
 }

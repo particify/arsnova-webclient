@@ -4,7 +4,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   SimpleChanges,
   ViewChild,
   inject,
@@ -69,7 +68,7 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
     LanguageContextDirective,
   ],
 })
-export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
+export class ContentResultsComponent implements OnDestroy, OnChanges {
   private announceService = inject(AnnounceService);
   private presentationService = inject(PresentationService);
   private contentService = inject(ContentService);
@@ -141,10 +140,15 @@ export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
         this.isLoading = false;
       });
     }
-  }
-
-  ngOnInit(): void {
-    this.initData();
+    if (
+      changes.active?.previousValue === false &&
+      changes.active?.currentValue === true
+    ) {
+      this.presentationService.updateResultsDisplayed(this.answersVisible);
+      this.presentationService.updateCorrectResultsDisplayed(
+        this.correctVisible
+      );
+    }
   }
 
   private initData() {
@@ -152,6 +156,9 @@ export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
     this.checkIfSurvey();
     if (this.directShow) {
       this.answersVisible = true;
+      if (this.active) {
+        this.presentationService.updateResultsDisplayed(true);
+      }
     }
     this.roundsToDisplay = this.content.state.round - 1;
     this.multipleRounds = this.roundsToDisplay > 0;
@@ -230,6 +237,7 @@ export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
     }
     this.toggleAnswersInChildComponents();
     this.announceAnswers();
+    this.presentationService.updateResultsDisplayed(this.answersVisible);
   }
 
   toggleAnswersInChildComponents() {
@@ -281,6 +289,9 @@ export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
           break;
       }
       this.correctVisible = !this.correctVisible;
+      this.presentationService.updateCorrectResultsDisplayed(
+        this.correctVisible
+      );
     }
   }
 
