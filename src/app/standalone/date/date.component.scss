@@ -1,9 +1,9 @@
-.responsive {
-  @media (min-width: 1920px) {
-    font-size: 16px;
-  }
+@use '../../../variables' as *;
 
-  @media (max-width: 1919px) {
-    font-size: 14px;
+.date {
+  font-size: $s-font-size;
+
+  @include xs {
+    font-size: $xs-font-size;
   }
 }

@@ -54,10 +54,7 @@
   >
     <div fxLayout="row" class="comment-actions">
       <div class="date light">
-        <app-date
-          [timestamp]="comment.timestamp"
-          [responsive]="true"
-        ></app-date>
+        <app-date [timestamp]="comment.timestamp"></app-date>
       </div>
       <span class="fill-remaining-space"></span>
 
@@ -208,7 +205,7 @@
           <span aria-hidden="true">{{ comment.body.trim() }}</span>
         </div>
         @if (showTag) {
-          <div class="comment-tags light">
+          <div class="comment-tags">
             <mat-chip-listbox>
               <mat-chip-option
                 (click)="this.clickedOnTag.emit(comment.tag)"

@@ -1,7 +1,16 @@
+@use '../../../variables' as *;
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .voting-icon {
-  width: 40px;
-  height: 40px;
-  font-size: 40px;
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+  line-height: 32px;
 
   &:not(.green, .red) {
     color: var(--on-surface-light);
@@ -10,12 +19,11 @@
 
 .score {
   text-align: center;
-  font-size: 18px;
-  opacity: 0.8;
+  color: var(--on-surface-light);
 }
 
 .vote-container {
-  margin-left: 8px;
+  margin-left: $spacing;
 
   & > button {
     padding: 0 !important;
