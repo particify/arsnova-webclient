@@ -125,6 +125,9 @@ export class ContentResultsComponent implements OnInit, OnDestroy, OnChanges {
   flashcardContent!: ContentFlashcard;
   numericContent!: ContentNumeric;
 
+  activeWordcloudVisualiation =
+    this.presentationService.activeWordcloudVisualization;
+
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();

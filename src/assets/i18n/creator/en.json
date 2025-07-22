@@ -384,8 +384,8 @@
     "hide-flashcard-back": "Hide the back of the flashcard",
     "delete-answer": "Delete answer",
     "answer-deleted": "The answer has been deleted.",
-    "show-wordcloud-list": "Show answers as list",
-    "show-wordcloud": "Show answers as wordcloud",
+    "show-wordcloud-list": "Show list",
+    "show-wordcloud": "Show wordcloud",
     "ban-answer": "Ban answer",
     "answer-banned": "The answer has been banned."
   },

@@ -13,6 +13,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { NgClass } from '@angular/common';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
 
 @Component({
   selector: 'app-statistic-wordcloud',
@@ -24,6 +25,7 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
     WordcloudComponent,
     AnswerListComponent,
     TranslocoPipe,
+    AnswerGridListComponent,
   ],
 })
 export class StatisticWordcloudComponent
@@ -33,11 +35,9 @@ export class StatisticWordcloudComponent
   private presentationService = inject(PresentationService);
 
   @Input() showModeration = false;
-
+  @Input() showList = false;
   wordWeights: WordCloudItem[] = [];
-
   answerList: TextStatistic[] = [];
-
   rotateWords?: boolean;
 
   afterInit() {

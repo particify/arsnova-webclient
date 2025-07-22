@@ -384,8 +384,8 @@
     "hide-flashcard-back": "Verstecke die Rückseite",
     "delete-answer": "Antwort löschen",
     "answer-deleted": "Die Antwort wurde gelöscht.",
-    "show-wordcloud-list": "Zeige die Antworten als Liste",
-    "show-wordcloud": "Zeige die Antworten als Wortwolke",
+    "show-wordcloud-list": "Als Liste anzeigen",
+    "show-wordcloud": "Als Wortwolke anzeigen",
     "ban-answer": "Antwort verbannen",
     "answer-banned": "Die Antwort wurde gebannt."
   },

@@ -643,9 +643,9 @@ div {
 // Buttons
 
 .mat-mdc-icon-button.mat-mdc-button-base {
-  height: 40px !important;
-  width: 40px !important;
-  padding: 8px !important;
+  height: $icon-button-size !important;
+  width: $icon-button-size !important;
+  padding: $spacing !important;
 
   &:not(.mat-primary, .mat-accent, .mat-warn) {
     --mat-icon-button-icon-color: var(--on-surface-light);
@@ -653,8 +653,8 @@ div {
 }
 
 .mat-mdc-icon-button .mat-mdc-button-touch-target {
-  height: 40px !important;
-  width: 40px !important;
+  height: $icon-button-size !important;
+  width: $icon-button-size !important;
 }
 
 .mat-mdc-button:not(

@@ -5,6 +5,22 @@
 @if (currentRouteIndex > -1) {
   <span class="code">{{ joinUrl || (room.shortId | splitShortId) }}</span>
 }
+@if (isActiveFeature('series')) {
+  <div
+    class="view-switcher presentation-feature-controls"
+    [ngClass]="{
+      visible:
+        barVisible && content && content.format === ContentType.WORDCLOUD,
+    }"
+  >
+    <app-toggle-button-bar
+      [buttons]="buttons"
+      [activeButtonId]="activeWordcloudVisualiation()"
+      (activeButtonChange)="setActiveWordcloudVisualiation($event)"
+    >
+    </app-toggle-button-bar>
+  </div>
+}
 <div class="bar-container">
   <div
     class="bar bar-hidden"

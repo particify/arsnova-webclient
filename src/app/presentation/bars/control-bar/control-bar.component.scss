@@ -206,3 +206,19 @@ $logo-width: 120px;
 .locked-group {
   flex-direction: row-reverse !important;
 }
+
+.view-switcher {
+  position: fixed;
+  left: -$spacing-3;
+  transition: left 300ms;
+  transform: translateY(-50%);
+  top: 50%;
+
+  &.visible {
+    left: $spacing-3;
+  }
+
+  &:not(.visible) {
+    left: - calc($spacing-3 + $icon-button-size / 2);
+  }
+}

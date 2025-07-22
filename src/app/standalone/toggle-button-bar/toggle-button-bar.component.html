@@ -1,0 +1,15 @@
+<div fxLayout="column" fxLayoutGap="8px" class="toggle-button-bar">
+  @for (button of buttons(); track button.id) {
+    <button
+      mat-icon-button
+      [matTooltip]="button.tooltip"
+      [matTooltipPosition]="'after'"
+      (click)="onToggle(button.id)"
+      [ngClass]="{ active: isActive(button.id) }"
+    >
+      <mat-icon>
+        {{ button.icon }}
+      </mat-icon>
+    </button>
+  }
+</div>
