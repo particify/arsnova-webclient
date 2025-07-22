@@ -1,16 +1,28 @@
+@use '../../../../variables' as *;
+
 .container {
-  height: 100%;
+  gap: $spacing-6;
 }
 
 .heading {
-  height: 40%;
+  margin-top: $spacing-7;
+  gap: calc($spacing / 2);
 }
 
 .logo-container {
-  max-width: 300px;
-  height: 65px;
+  height: 56px;
 }
 
-.mat-mdc-button {
-  margin-top: 20%;
+@include xs {
+  .heading {
+    margin-top: $spacing-5;
+  }
+
+  .logo-container {
+    height: 48px;
+  }
+
+  .container {
+    gap: $spacing-5;
+  }
 }

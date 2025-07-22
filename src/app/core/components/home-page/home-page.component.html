@@ -6,32 +6,29 @@
   {{ 'home-page.a11y-welcome-message' | transloco: { title: getAppTitle() } }}
 </div>
 <div fxLayout="column" class="container">
-  <div class="heading" fxLayout="column" fxLayoutAlign="center center">
+  <div class="heading" fxLayout="column" fxLayoutAlign="start center">
     <div class="logo-container">
       <lib-extension-point extensionId="app-logo"></lib-extension-point>
     </div>
     <lib-extension-point extensionId="branding-title"></lib-extension-point>
   </div>
   <div fxLayout="row" fxLayoutAlign="center">
-    <div fxLayout="row" fxLayoutAlign="center">
-      <div fxLayout="column" fxLayoutAlign="center center" fxFill>
-        <app-room-join
-          [appTitle]="getAppTitle()"
-          [focusInput]="deviceType === 'desktop'"
-        ></app-room-join>
-        <button
-          id="new-room-button"
-          mat-button
-          class="mat-button-classic"
-          (click)="openCreateRoomDialog()"
-          appHotkey="2"
-          [appHotkeyTitle]="'home-page.create-room' | transloco"
-          appDisabledIfReadonly
-        >
-          <mat-icon>add</mat-icon>
-          {{ 'home-page.create-room' | transloco }}
-        </button>
-      </div>
+    <div class="container" fxLayout="column" fxLayoutAlign="start center">
+      <app-room-join
+        [appTitle]="getAppTitle()"
+        [focusInput]="deviceType === 'desktop'"
+      ></app-room-join>
+      <button
+        id="new-room-button"
+        mat-button
+        (click)="openCreateRoomDialog()"
+        appHotkey="2"
+        [appHotkeyTitle]="'home-page.create-room' | transloco"
+        appDisabledIfReadonly
+      >
+        <mat-icon>add</mat-icon>
+        {{ 'home-page.create-room' | transloco }}
+      </button>
     </div>
   </div>
   <lib-extension-point extensionId="home-info"></lib-extension-point>
