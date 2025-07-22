@@ -13,6 +13,7 @@ import { MatButton } from '@angular/material/button';
 import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
 import { MatIcon } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 
 @Component({
   selector: 'app-home-page',
@@ -27,6 +28,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
     HotkeyDirective,
     MatIcon,
     TranslocoPipe,
+    DisabledIfReadonlyDirective,
   ],
 })
 export class HomePageComponent {

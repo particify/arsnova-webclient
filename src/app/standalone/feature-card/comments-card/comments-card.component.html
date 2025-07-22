@@ -32,6 +32,7 @@
           (commentSettings?.disabled ? 'var(--play)' : 'var(--warn)')
         "
         (click)="toggleCommentFeature()"
+        appDisabledIfReadonly
       >
         <mat-icon>{{
           commentSettings?.disabled ? 'lock_open' : 'lock'

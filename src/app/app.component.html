@@ -181,6 +181,9 @@
         id="scroll_container"
         [ngClass]="{ 'standalone-container': isStandalone || isAdmin }"
       >
+        @if (!isAdmin && !isRoom) {
+          <app-global-hints></app-global-hints>
+        }
         <router-outlet></router-outlet>
       </div>
       @if (!isAdmin && !isRoom && !isStandalone) {

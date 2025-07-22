@@ -33,7 +33,7 @@ xdescribe('HomePageComponent', () => {
     ]);
     fixture = testBed.createComponent(HomePageComponent);
     component = fixture.componentInstance;
-    component.apiConfig = new ApiConfig([], {}, {});
+    component.apiConfig = new ApiConfig([], {}, {}, false);
     dialogService = testBed.inject(DialogService);
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();

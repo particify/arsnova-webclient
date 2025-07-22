@@ -1,0 +1,19 @@
+@use '../../../variables' as *;
+
+:host:empty {
+  display: none;
+}
+
+:host-context {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: $card-width;
+  margin: auto;
+}
+
+app-hint {
+  width: 100%;
+  margin-bottom: $spacing-2;
+}

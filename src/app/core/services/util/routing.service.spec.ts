@@ -48,6 +48,7 @@ describe('RoutingService', () => {
         authenticationProviders: [],
         features: {},
         ui: { links: {} },
+        readOnly: false,
       };
       const route = service.getRoute(url, config);
       expect(route).toBe(document.baseURI + 'segment1/segment2');
@@ -62,6 +63,7 @@ describe('RoutingService', () => {
         authenticationProviders: [],
         features: {},
         ui: { links: { join: { url: 'https://short/' } } },
+        readOnly: false,
       };
       const route = service.getRoute(url, config);
       expect(route).toBe('https://short/segment1/segment2');

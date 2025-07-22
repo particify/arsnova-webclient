@@ -56,6 +56,7 @@ import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.compon
 import { MatBadge } from '@angular/material/badge';
 import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
+import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
 
@@ -98,6 +99,7 @@ interface RoomDataView {
     TrackInteractionDirective,
     SplitShortIdPipe,
     TranslocoPipe,
+    DisabledIfReadonlyDirective,
   ],
 })
 export class RoomListComponent implements OnInit, OnDestroy {

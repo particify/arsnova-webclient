@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,7 +25,7 @@ export const HINTS: Hint[] = [
 ];
 
 @Component({
-  imports: [FlexModule, MatIconModule, TranslocoModule],
+  imports: [FlexModule, MatIconModule, TranslocoModule, NgClass],
   selector: 'app-hint',
   templateUrl: './hint.component.html',
   styleUrls: ['./hint.component.scss'],
@@ -32,6 +33,7 @@ export const HINTS: Hint[] = [
 export class HintComponent implements OnInit {
   @Input() text?: string;
   @Input() type: HintType = HintType.WARNING;
+  @Input() showBorder = false;
 
   hint: Hint = HINTS[0];
 

@@ -26,6 +26,7 @@
           (click)="openCreateRoomDialog()"
           appHotkey="2"
           [appHotkeyTitle]="'home-page.create-room' | transloco"
+          appDisabledIfReadonly
         >
           <mat-icon>add</mat-icon>
           {{ 'home-page.create-room' | transloco }}

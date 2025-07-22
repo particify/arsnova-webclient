@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FlexModule } from '@angular/flex-layout';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 
 @Component({
   selector: 'app-live-feedback-card',
@@ -20,6 +21,7 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
     MatIconModule,
     MatButtonModule,
     FlexModule,
+    DisabledIfReadonlyDirective,
   ],
   templateUrl: './live-feedback-card.component.html',
 })

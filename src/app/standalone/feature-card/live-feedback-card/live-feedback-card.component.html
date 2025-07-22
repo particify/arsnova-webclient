@@ -28,6 +28,7 @@
         "
         [style]="'color: ' + (feedbackEnabled ? 'var(--warn)' : 'var(--play)')"
         (click)="toggleLiveFeedbackFeature()"
+        appDisabledIfReadonly
       >
         <mat-icon>{{
           feedbackEnabled ? 'stop_circle' : 'play_circle'

@@ -27,7 +27,7 @@ class MockMaterialCssVarsService {
 
 class MockApiConfigService {
   getApiConfig$() {
-    return of(new ApiConfig([], {}, {}));
+    return of(new ApiConfig([], {}, {}, false));
   }
 }
 

@@ -74,6 +74,11 @@ body {
   opacity: 0.5;
 }
 
+.disabled-interaction {
+  pointer-events: none;
+  cursor: default;
+}
+
 // Headings & Texts
 
 h1,
@@ -128,7 +133,7 @@ ul {
 }
 
 .smaller-text {
-  font-size: smaller;
+  font-size: $s-font-size;
   margin-bottom: 0;
 }
 

@@ -1,11 +1,17 @@
-<div fxFlex="nogrow" fxLayout="row" fxLayoutAlign="start center">
-  <mat-icon fxFlex="noshrink" class="{{ hint.class }}">{{
-    hint.icon
-  }}</mat-icon>
+<div
+  fxLayout="row"
+  fxLayoutGap="8px"
+  fxLayoutAlign="start center"
+  class="{{ hint.class }}"
+  [ngClass]="{ border: showBorder }"
+>
+  <div fxLayoutAlign="center center">
+    <mat-icon>{{ hint.icon }}</mat-icon>
+  </div>
   @if (text) {
-    <p class="smaller-text">
+    <span class="smaller-text">
       {{ text | transloco }}
-    </p>
+    </span>
   } @else {
     <ng-content></ng-content>
   }

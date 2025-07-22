@@ -16,6 +16,7 @@ import { CommentSettings } from '@app/core/models/comment-settings';
 import { CommentService } from '@app/core/services/http/comment.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { Message } from '@stomp/stompjs';
+import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 
 @Component({
   selector: 'app-comments-card',
@@ -26,6 +27,7 @@ import { Message } from '@stomp/stompjs';
     MatIconModule,
     MatButtonModule,
     FlexModule,
+    DisabledIfReadonlyDirective,
   ],
   templateUrl: './comments-card.component.html',
 })
