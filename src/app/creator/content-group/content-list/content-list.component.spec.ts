@@ -148,6 +148,7 @@ describe('ContentListComponent', () => {
         groupName: 'name',
         contentCount: 0,
         groupType: GroupType.MIXED,
+        published: false,
       },
     ];
   }));

@@ -267,6 +267,7 @@ export class ContentListComponent
             groupName: group.name,
             contentCount: 0,
             groupType: group.groupType,
+            published: group.published,
           };
           this.contentGroupStats.push(groupStats);
           this.useContentInOtherGroup(contentId, groupStats, action);

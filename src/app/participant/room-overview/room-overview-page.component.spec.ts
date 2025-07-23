@@ -162,6 +162,7 @@ describe('RoomOverviewPageComponent', () => {
         groupName: 'groupName',
         contentCount: 5,
         groupType: GroupType.MIXED,
+        published: false,
       },
     ];
     const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
@@ -178,6 +179,7 @@ describe('RoomOverviewPageComponent', () => {
         groupName: 'groupName',
         contentCount: 5,
         groupType: GroupType.MIXED,
+        published: false,
       },
     ];
     const roomStats = new RoomStats(groupStats, 0, 0, 0, 0);
