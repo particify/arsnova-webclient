@@ -507,10 +507,6 @@
     "all-comments-deleted": "Tutti i messaggi sono stati cancellati.",
     "banned-comments-deleted": "L'elenco dei moderatori è stato eliminato.",
     "next": "Messaggio successivo",
-    "previous": "Messaggio precedente",
-    "archive": "Archivio",
-    "q-and-a-enabled": "La sezione domande e risposte è stata attivata.",
-    "activate-q-and-a": "Abilita domande e risposte",
-    "unlock-creation": "Creazione dello sblocco"
+    "previous": "Messaggio precedente"
   }
 }

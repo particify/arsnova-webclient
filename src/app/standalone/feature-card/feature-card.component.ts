@@ -17,6 +17,6 @@ export class FeatureCardComponent {
   @Input() clickable = false;
   @Input() fillFeatureAction = false;
   @Input() countHint?: string;
-  @Input() state?: boolean;
+  @Input() color?: string;
   @Input() stateText?: string;
 }

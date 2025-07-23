@@ -245,9 +245,7 @@ export class CommentsPageComponent
         this.formService.enableForm();
         this.isLoading = true;
         this.load(true);
-        const msg = this.translateService.translate(
-          'creator.comment-list.q-and-a-enabled'
-        );
+        const msg = this.translateService.translate('comment-list.qna-started');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.SUCCESS

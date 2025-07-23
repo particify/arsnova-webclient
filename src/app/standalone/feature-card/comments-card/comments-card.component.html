@@ -7,10 +7,20 @@
         | transloco: { count: commentCounter })
       : undefined
   "
-  [state]="!commentSettings?.disabled"
+  [color]="
+    commentSettings?.disabled
+      ? 'var(--warn)'
+      : commentSettings?.readonly
+        ? 'var(--warn-soft)'
+        : 'var(--play)'
+  "
   [stateText]="
-    (commentSettings?.disabled ? 'room-page.locked' : 'room-page.open')
-      | transloco
+    (commentSettings?.disabled
+      ? 'room-page.stopped'
+      : commentSettings?.readonly
+        ? 'room-page.paused'
+        : 'room-page.started'
+    ) | transloco
   "
   [clickable]="clickable"
   icon="question_answer"
@@ -19,25 +29,41 @@
 >
   @if (showControls) {
     <ng-container featureAction>
-      <button
-        mat-icon-button
-        [matTooltip]="
-          (commentSettings?.disabled
-            ? 'creator.room-page.open-comments'
-            : 'creator.room-page.lock-comments'
-          ) | transloco
-        "
-        [style]="
-          'color: ' +
-          (commentSettings?.disabled ? 'var(--play)' : 'var(--warn)')
-        "
-        (click)="toggleCommentFeature()"
-        appDisabledIfReadonly
-      >
-        <mat-icon>{{
-          commentSettings?.disabled ? 'lock_open' : 'lock'
-        }}</mat-icon>
-      </button>
+      <div fxLayout="row" fxLayoutGap="8px">
+        @if (commentSettings?.disabled || commentSettings?.readonly) {
+          <button
+            mat-icon-button
+            [matTooltip]="'creator.room-page.start' | transloco"
+            [style]="'color: var(--play)'"
+            (click)="enableComments()"
+            appDisabledIfReadonly
+          >
+            <mat-icon>play_circle</mat-icon>
+          </button>
+        }
+        @if (!commentSettings?.readonly && !commentSettings?.disabled) {
+          <button
+            mat-icon-button
+            [matTooltip]="'creator.room-page.pause' | transloco"
+            [style]="'color: var(--warn-soft)'"
+            (click)="pauseComments()"
+            appDisabledIfReadonly
+          >
+            <mat-icon>pause_circle</mat-icon>
+          </button>
+        }
+        @if (!commentSettings?.disabled) {
+          <button
+            mat-icon-button
+            [matTooltip]="'creator.room-page.stop' | transloco"
+            [style]="'color: var(--warn)'"
+            (click)="disableComments()"
+            appDisabledIfReadonly
+          >
+            <mat-icon>stop_circle</mat-icon>
+          </button>
+        }
+      </div>
     </ng-container>
   }
 </app-feature-card>

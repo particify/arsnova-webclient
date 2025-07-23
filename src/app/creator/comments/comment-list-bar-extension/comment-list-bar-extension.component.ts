@@ -52,6 +52,7 @@ export class CommentListBarExtensionComponent {
   @Input() isModeration = false;
   @Input() comments: Comment[] = [];
   @Input() readonly = false;
+  @Input() disabled = false;
   @Input({ required: true }) viewRole!: UserRole;
 
   @Output() createCommentClicked = new EventEmitter<void>();

@@ -5,14 +5,16 @@
     (click)="toggleReadonly()"
     matTooltip="{{
       'creator.comment-list.' +
-        (readonly ? 'allow-creation' : 'dont-allow-creation') | transloco
+        (readonly || disabled ? 'start-qna' : 'pause-qna') | transloco
     }}"
     appHotkey="5"
     appTrackInteraction="Comments readonly state toggled"
-    appTrackName="{{ readonly ? 'off' : 'on' }}"
+    appTrackName="{{ readonly || disabled ? 'off' : 'on' }}"
     data-testid="toggle-readonly-button"
   >
-    <mat-icon class="bar-icon">{{ readonly ? 'lock_open' : 'lock' }}</mat-icon>
+    <mat-icon class="bar-icon">{{
+      readonly || disabled ? 'play_circle' : 'pause_circle'
+    }}</mat-icon>
   </button>
 
   <button

@@ -48,9 +48,12 @@
           [isModeration]="isModeration"
           [comments]="comments"
           [readonly]="readonly"
+          [disabled]="disabled"
           [viewRole]="viewRole"
           (createCommentClicked)="openCreateDialog()"
-          (toggleReadonlyClicked)="toggleReadonly()"
+          (toggleReadonlyClicked)="
+            disabled || readonly ? activateComments() : pauseComments()
+          "
           (resetCommentsClicked)="resetComments()"
         ></app-comment-list-bar-extension>
       </app-comment-list-bar>
@@ -62,7 +65,9 @@
       [disabled]="disabled"
       [readonly]="readonly"
       [showToggleButton]="true"
-      (toggleButtonClicked)="disabled ? activateComments() : toggleReadonly()"
+      (toggleButtonClicked)="
+        disabled || readonly ? activateComments() : pauseComments()
+      "
     ></app-comment-settings-hint>
     @if (!isLoading && !disabled) {
       <app-comment-list-hint
