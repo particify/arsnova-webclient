@@ -102,7 +102,9 @@
     "focus-mode-enabled": "El modo de enfoque está activo en esta sala. Su vista se sincronizará con la presentación.",
     "comments-description": "Haga una pregunta o escriba un comentario.",
     "live-feedback-description": "Dé su opinión al instante con un solo clic.",
-    "content-groups-description": "Participe en cuestionarios, encuestas y más."
+    "content-groups-description": "Participe en cuestionarios, encuestas y más.",
+    "no-interactions-available": "Actualmente, no se dispone de interacciones.",
+    "welcome-to": "Bienvenido a"
   },
   "statistic": {
     "answer-statistic": "Estadísticas de respuestas",

@@ -104,7 +104,9 @@
     "focus-mode-enabled": "In diesem Raum ist der Fokus-Modus aktiv. Deine Ansicht wird mit der Präsentation synchronisiert.",
     "comments-description": "Stelle eine Frage oder schreibe einen Kommentar.",
     "live-feedback-description": "Gib sofortiges Feedback mit einem Klick.",
-    "content-groups-description": "Mache mit bei Quizzes, Umfragen und mehr."
+    "content-groups-description": "Mache mit bei Quizzes, Umfragen und mehr.",
+    "no-interactions-available": "Aktuell sind keine Interaktionen verfügbar.",
+    "welcome-to": "Willkommen bei"
   },
   "statistic": {
     "answer-statistic": "Antwortstatistik",

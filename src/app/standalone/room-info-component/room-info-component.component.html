@@ -1,0 +1,31 @@
+<mat-card
+  class="login-card"
+  fxLayout="column"
+  fxLayoutAlign="start"
+  fxLayoutGap="32px"
+>
+  <div fxLayoutAlign="center" class="logo-container">
+    <lib-extension-point extensionId="branding-logo">
+      <lib-extension-point extensionId="app-logo"></lib-extension-point>
+    </lib-extension-point>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="12px">
+    <span>{{ 'participant.room-page.welcome-to' | transloco }}</span>
+    <span class="room-name">
+      {{ name() }}
+    </span>
+    <span style="color: var(--on-surface-light)">
+      {{ shortId() | splitShortId }}
+    </span>
+  </div>
+  <div fxLayoutAlign="center">
+    <app-hint
+      [text]="
+        focusModeEnabled()
+          ? 'participant.room-page.focus-mode-enabled'
+          : 'participant.room-page.no-interactions-available'
+      "
+      [type]="HintType.INFO"
+    ></app-hint>
+  </div>
+</mat-card>

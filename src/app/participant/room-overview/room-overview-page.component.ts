@@ -12,7 +12,6 @@ import { HintType } from '@app/core/models/hint-type.enum';
 import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
-import { HintComponent } from '@app/standalone/hint/hint.component';
 import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
 import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -26,6 +25,7 @@ import { CommentsCardComponent } from '@app/standalone/feature-card/comments-car
 import { LiveFeedbackCardComponent } from '@app/standalone/feature-card/live-feedback-card/live-feedback-card.component';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { RoomInfoComponentComponent } from '@app/standalone/room-info-component/room-info-component.component';
 
 @Component({
   selector: 'app-participant-overview',
@@ -37,7 +37,6 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
     LoadingIndicatorComponent,
     MatCard,
     ContentGroupsComponent,
-    HintComponent,
     ExtensionPointModule,
     AsyncPipe,
     TranslocoPipe,
@@ -46,6 +45,7 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
     CommentsCardComponent,
     LiveFeedbackCardComponent,
     LanguageContextDirective,
+    RoomInfoComponentComponent,
   ],
 })
 export class RoomOverviewPageComponent
