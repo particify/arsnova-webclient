@@ -42,6 +42,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular-devkit/architect@npm:0.2001.2":
+  version: 0.2001.2
+  resolution: "@angular-devkit/architect@npm:0.2001.2"
+  dependencies:
+    "@angular-devkit/core": "npm:20.1.2"
+    rxjs: "npm:7.8.2"
+  checksum: 10c0/e07767f4a68a4fb9adeb0f83569cf2e8cefacbf4457990c51783a07dea2486ca99f5bd1643530c76a35d4dc913b873a1cc6a386b2629ba756cc3cf23d5161522
+  languageName: node
+  linkType: hard
+
 "@angular-devkit/build-angular@npm:*":
   version: 20.1.1
   resolution: "@angular-devkit/build-angular@npm:20.1.1"
@@ -205,6 +215,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular-devkit/core@npm:20.1.2":
+  version: 20.1.2
+  resolution: "@angular-devkit/core@npm:20.1.2"
+  dependencies:
+    ajv: "npm:8.17.1"
+    ajv-formats: "npm:3.0.1"
+    jsonc-parser: "npm:3.3.1"
+    picomatch: "npm:4.0.2"
+    rxjs: "npm:7.8.2"
+    source-map: "npm:0.7.4"
+  peerDependencies:
+    chokidar: ^4.0.0
+  peerDependenciesMeta:
+    chokidar:
+      optional: true
+  checksum: 10c0/d11f166d25fe94d9c5e34876460989064da2639db3dad44161cdfb3ef39fdd0a08b91e9129ab71316d3c257c52f7e047d082aafd6efe58ecc43e74558bad69af
+  languageName: node
+  linkType: hard
+
 "@angular-devkit/schematics@npm:20.0.6":
   version: 20.0.6
   resolution: "@angular-devkit/schematics@npm:20.0.6"
@@ -337,7 +366,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/build@npm:20.1.1, @angular/build@npm:^20.0.1":
+"@angular/build@npm:20.1.1":
   version: 20.1.1
   resolution: "@angular/build@npm:20.1.1"
   dependencies:
@@ -414,6 +443,86 @@ __metadata:
     vitest:
       optional: true
   checksum: 10c0/8f86b937091927c5dbd64ed30a4e002f1f01bf910e09f0d5b72a360320344241e09620b46c101fe82664fb621846a37ab6e94bbd56b6819daa8b71e5840de020
+  languageName: node
+  linkType: hard
+
+"@angular/build@npm:^20.0.1":
+  version: 20.1.2
+  resolution: "@angular/build@npm:20.1.2"
+  dependencies:
+    "@ampproject/remapping": "npm:2.3.0"
+    "@angular-devkit/architect": "npm:0.2001.2"
+    "@babel/core": "npm:7.27.7"
+    "@babel/helper-annotate-as-pure": "npm:7.27.3"
+    "@babel/helper-split-export-declaration": "npm:7.24.7"
+    "@inquirer/confirm": "npm:5.1.13"
+    "@vitejs/plugin-basic-ssl": "npm:2.1.0"
+    beasties: "npm:0.3.4"
+    browserslist: "npm:^4.23.0"
+    esbuild: "npm:0.25.5"
+    https-proxy-agent: "npm:7.0.6"
+    istanbul-lib-instrument: "npm:6.0.3"
+    jsonc-parser: "npm:3.3.1"
+    listr2: "npm:8.3.3"
+    lmdb: "npm:3.4.1"
+    magic-string: "npm:0.30.17"
+    mrmime: "npm:2.0.1"
+    parse5-html-rewriting-stream: "npm:7.1.0"
+    picomatch: "npm:4.0.2"
+    piscina: "npm:5.1.2"
+    rollup: "npm:4.44.1"
+    sass: "npm:1.89.2"
+    semver: "npm:7.7.2"
+    source-map-support: "npm:0.5.21"
+    tinyglobby: "npm:0.2.14"
+    vite: "npm:7.0.0"
+    watchpack: "npm:2.4.4"
+  peerDependencies:
+    "@angular/compiler": ^20.0.0
+    "@angular/compiler-cli": ^20.0.0
+    "@angular/core": ^20.0.0
+    "@angular/localize": ^20.0.0
+    "@angular/platform-browser": ^20.0.0
+    "@angular/platform-server": ^20.0.0
+    "@angular/service-worker": ^20.0.0
+    "@angular/ssr": ^20.1.2
+    karma: ^6.4.0
+    less: ^4.2.0
+    ng-packagr: ^20.0.0
+    postcss: ^8.4.0
+    tailwindcss: ^2.0.0 || ^3.0.0 || ^4.0.0
+    tslib: ^2.3.0
+    typescript: ">=5.8 <5.9"
+    vitest: ^3.1.1
+  dependenciesMeta:
+    lmdb:
+      optional: true
+  peerDependenciesMeta:
+    "@angular/core":
+      optional: true
+    "@angular/localize":
+      optional: true
+    "@angular/platform-browser":
+      optional: true
+    "@angular/platform-server":
+      optional: true
+    "@angular/service-worker":
+      optional: true
+    "@angular/ssr":
+      optional: true
+    karma:
+      optional: true
+    less:
+      optional: true
+    ng-packagr:
+      optional: true
+    postcss:
+      optional: true
+    tailwindcss:
+      optional: true
+    vitest:
+      optional: true
+  checksum: 10c0/c6a232ab15b7ea9d1ff22efa26f13a1d0974ddf6fcae592b0fd1afa7585f006acf9f8ff550a048334f891e3ccbebee16e10bb0a828cf52b046c3dd9574a36da2
   languageName: node
   linkType: hard
 
