@@ -321,8 +321,9 @@
     "a11y-select-time-1w": "Zeige alle Beiträge der letzten 7 Tage an",
     "a11y-select-time-all": "Zeige alle Beiträge an",
     "add-comment": "Beitrag verfassen",
-    "creation-allowed": "Das Erstellen von Beiträgen ist jetzt erlaubt.",
-    "creation-not-allowed": "Das Erstellen von Beiträgen ist jetzt nicht mehr möglich.",
+    "qna-started": "Die Q&A wurde gestartet.",
+    "qna-stopped": "Die Q&A wurde gestoppt.",
+    "qna-paused": "Die Q&A wurde pausiert.",
     "creation-currently-not-allowed": "Das Erstellen neuer Beiträge ist zurzeit nicht erlaubt.",
     "comment-deleted": "Der Beitrag wurde gelöscht.",
     "filter-comments": "Beiträge filtern",
@@ -346,7 +347,7 @@
     "sort-voteasc": "Niedrige Bewertung",
     "sort-time": "Neueste",
     "there-are-new-posts": "Es gibt neue Beiträge",
-    "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert.",
+    "comments-are-not-enabled": "Der Q&A-Bereich ist nicht aktiviert für Teilnehmende.",
     "no-categories-in-this-room": "In diesem Raum gibt es keine Kategorien"
   },
   "comment-page": {
@@ -449,10 +450,9 @@
     "copy-url": "Link kopieren",
     "url-copied": "Direktlink wurde in die Zwischenablage kopiert.",
     "go-to-feature": "Gehe zu {{feature}}",
-    "open": "Offen",
-    "locked": "Gesperrt",
     "started": "Gestartet",
-    "stopped": "Gestoppt"
+    "stopped": "Gestoppt",
+    "paused": "Pausiert"
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",

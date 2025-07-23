@@ -39,10 +39,14 @@ test.describe('Q&A settings', () => {
     const p = await context.newPage();
     const participantCommentPage = new ParticipantCommentsPage(p, baseURL);
     await participantCommentPage.goto(shortId);
-    await expect(p.getByText('The Q&A section is not enabled.')).toBeVisible();
+    await expect(
+      p.getByText('The Q&A section is not enabled for participants.')
+    ).toBeVisible();
     await commentsPage.goto(shortId);
     await commentsPage.enableComments();
-    await expect(p.getByText('The Q&A section is not enabled.')).toBeHidden();
+    await expect(
+      p.getByText('The Q&A section is not enabled for participants.')
+    ).toBeHidden();
     await context.close();
   });
 

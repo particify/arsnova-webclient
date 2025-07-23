@@ -29,11 +29,9 @@
           @if (countHint) {
             <span class="smaller-font lighter">{{ countHint }}</span>
           }
-          <span
-            class="smaller-font"
-            [style]="'color: ' + (state ? 'var(--play)' : 'var(--warn)')"
-            >{{ stateText }}</span
-          >
+          <span class="smaller-font" [style]="'color: ' + color">{{
+            stateText
+          }}</span>
         </div>
       </div>
       <span class="smaller-font lighter">

@@ -320,8 +320,9 @@
     "a11y-select-time-1w": "Mostrar todas las publicaciones de la última semana",
     "a11y-select-time-all": "Mostrar todas las publicaciones",
     "add-comment": "Dejar una publicación",
-    "creation-allowed": "Ahora se permite crear publicaciones.",
-    "creation-not-allowed": "Ya no es posible crear publicaciones.",
+    "qna-started": "Las preguntas y respuestas se han iniciado.",
+    "qna-stopped": "Las preguntas y respuestas se han finalizado.",
+    "qna-paused": "Las preguntas y respuestas se han pausado.",
     "creation-currently-not-allowed": "Actualmente no se permite la creación de publicaciones.",
     "comment-deleted": "La publicación ha sido eliminada.",
     "filter-comments": "Filtrar publicaciones",
@@ -345,7 +346,7 @@
     "sort-voteasc": "Peor clasificación",
     "sort-time": "Última",
     "there-are-new-posts": "Hay nuevas publicaciones",
-    "comments-are-not-enabled": "La sección de preguntas y respuestas no está habilitada.",
+    "comments-are-not-enabled": "La sección de preguntas y respuestas no está habilitada para los participantes..",
     "no-categories-in-this-room": "No hay categorías en esta sala"
   },
   "comment-page": {
@@ -448,10 +449,9 @@
     "copy-url": "Copiar dirección",
     "url-copied": "El enlace de la sala se ha copiado al portapapeles.",
     "go-to-feature": "Ir a {{feature}}",
-    "open": "Abra",
-    "locked": "Cerrado",
     "started": "Iniciado",
-    "stopped": "Detenido"
+    "stopped": "Detenido",
+    "paused": "Pausado"
   },
   "statistic": {
     "a11y-message-overview": "Ahora estás en la vista general de estadísticas.",

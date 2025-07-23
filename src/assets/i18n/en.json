@@ -321,8 +321,9 @@
     "a11y-select-time-1w": "Show all posts of the last week",
     "a11y-select-time-all": "Show all posts",
     "add-comment": "Write a post",
-    "creation-allowed": "Creating posts is now allowed.",
-    "creation-not-allowed": "Creating posts is now no longer possible.",
+    "qna-started": "Q&A has been started.",
+    "qna-stopped": "Q&A has been stopped.",
+    "qna-paused": "Q&A has been paused.",
     "creation-currently-not-allowed": "The creation of posts is currently not allowed.",
     "comment-deleted": "The post has been deleted.",
     "filter-comments": "Filter posts",
@@ -346,7 +347,7 @@
     "sort-voteasc": "Worst rating",
     "sort-time": "Recent",
     "there-are-new-posts": "There are new posts",
-    "comments-are-not-enabled": "The Q&A section is not enabled.",
+    "comments-are-not-enabled": "The Q&A section is not enabled for participants.",
     "no-categories-in-this-room": "There are no categories in this room"
   },
   "comment-page": {
@@ -449,10 +450,9 @@
     "copy-url": "Copy address",
     "url-copied": "Room link was copied to the clipboard.",
     "go-to-feature": "Go to {{feature}}",
-    "open": "Open",
-    "locked": "Locked",
     "started": "Started",
-    "stopped": "Stopped"
+    "stopped": "Stopped",
+    "paused": "Paused"
   },
   "statistic": {
     "a11y-message-overview": "You are now on the statistics overview.",

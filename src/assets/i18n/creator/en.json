@@ -1,7 +1,7 @@
 {
   "comment-list": {
-    "allow-creation": "Allow the creation of new posts",
-    "dont-allow-creation": "Forbid the creation of new posts",
+    "start-qna": "Start Q&A",
+    "pause-qna": "Pause Q&A",
     "more-options": "More options",
     "moderation": "Moderation",
     "public-list": "Public",
@@ -12,11 +12,7 @@
     "all-comments-deleted": "All posts have been deleted.",
     "banned-comments-deleted": "The moderation list has been deleted.",
     "next": "Next post",
-    "previous": "Previous post",
-    "archive": "Archive",
-    "q-and-a-enabled": "The Q&A section has been enabled.",
-    "activate-q-and-a": "Enable Q&A",
-    "unlock-creation": "Unlock creation"
+    "previous": "Previous post"
   },
   "comment-page": {
     "a11y-message-moderation": "You are now on the moderation page.",
@@ -283,10 +279,7 @@
     "answer-count": "{{count}} answers",
     "start": "Start",
     "stop": "Stop",
-    "open-comments": "Open Q&A",
-    "lock-comments": "Lock Q&A",
-    "comments-opened": "Q&A has been opened.",
-    "comments-locked": "Q&A has been locked."
+    "pause": "Pause"
   },
   "settings": {
     "a11y-message": "You are now in the room settings.",

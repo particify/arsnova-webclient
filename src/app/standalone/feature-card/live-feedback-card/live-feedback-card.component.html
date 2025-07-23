@@ -7,7 +7,7 @@
         | transloco: { count: feedbackAnswers })
       : undefined
   "
-  [state]="feedbackEnabled"
+  [color]="feedbackEnabled ? 'var(--play)' : 'var(--warn)'"
   [stateText]="
     (feedbackEnabled ? 'room-page.started' : 'room-page.stopped') | transloco
   "

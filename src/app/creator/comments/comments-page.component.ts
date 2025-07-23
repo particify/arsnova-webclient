@@ -170,7 +170,7 @@ export class CommentsPageComponent
     this.checkIfActiveComment(id);
   }
 
-  toggleReadonly() {
+  pauseComments() {
     const commentSettings = new CommentSettings(
       this.room().id,
       this.directSend,
@@ -219,18 +219,17 @@ export class CommentsPageComponent
       this.directSend,
       this.fileUploadEnabled,
       false,
-      this.readonly
+      false
     );
     this.commentSettingsService
       .update(settings)
       .subscribe((updatedSettings) => {
         this.disabled = updatedSettings.disabled;
+        this.readonly = updatedSettings.readonly;
         this.formService.enableForm();
         this.isLoading = true;
         this.load(true);
-        const msg = this.translateService.translate(
-          'creator.comment-list.q-and-a-enabled'
-        );
+        const msg = this.translateService.translate('comment-list.qna-started');
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.SUCCESS

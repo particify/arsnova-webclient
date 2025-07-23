@@ -6,7 +6,7 @@ import { FeatureCardComponent } from '@app/standalone/feature-card/feature-card.
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FlexModule } from '@angular/flex-layout';
+import { FlexLayoutModule, FlexModule } from '@angular/flex-layout';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -27,6 +27,7 @@ import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-re
     MatIconModule,
     MatButtonModule,
     FlexModule,
+    FlexLayoutModule,
     DisabledIfReadonlyDirective,
   ],
   templateUrl: './comments-card.component.html',
@@ -81,21 +82,47 @@ export class CommentsCardComponent implements OnDestroy, OnInit {
     this.destroyed$.complete();
   }
 
-  toggleCommentFeature() {
+  enableComments() {
     if (this.commentSettings) {
       const settings = this.commentSettings;
-      settings.disabled = !settings.disabled;
+      settings.disabled = false;
+      settings.readonly = false;
       this.commentSettingsService.update(settings).subscribe((settings) => {
         this.commentSettings = settings;
-        const state = settings.disabled ? 'comments-locked' : 'comments-opened';
-        const msg = this.translateService.translate(
-          'creator.room-page.' + state
-        );
+        const msg = this.translateService.translate('comment-list.qna-started');
         this.notificationService.showAdvanced(
           msg,
-          settings.disabled
-            ? AdvancedSnackBarTypes.WARNING
-            : AdvancedSnackBarTypes.SUCCESS
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      });
+    }
+  }
+
+  pauseComments() {
+    if (this.commentSettings) {
+      const settings = this.commentSettings;
+      settings.readonly = true;
+      this.commentSettingsService.update(settings).subscribe((settings) => {
+        this.commentSettings = settings;
+        const msg = this.translateService.translate('comment-list.qna-paused');
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      });
+    }
+  }
+
+  disableComments() {
+    if (this.commentSettings) {
+      const settings = this.commentSettings;
+      settings.disabled = true;
+      this.commentSettingsService.update(settings).subscribe((settings) => {
+        this.commentSettings = settings;
+        const msg = this.translateService.translate('comment-list.qna-stopped');
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
         );
       });
     }

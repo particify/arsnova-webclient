@@ -14,11 +14,7 @@
     </p>
     @if ((disabled || readonly) && showToggleButton) {
       <app-loading-button
-        [name]="
-          disabled
-            ? 'creator.comment-list.activate-q-and-a'
-            : 'creator.comment-list.unlock-creation'
-        "
+        [name]="'creator.comment-list.start-qna'"
         (clicked)="toggleSettings()"
       ></app-loading-button>
     }

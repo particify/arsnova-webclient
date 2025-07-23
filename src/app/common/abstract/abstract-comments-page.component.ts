@@ -526,13 +526,11 @@ export class AbstractCommentsPageComponent {
   }
 
   showReadonlyStateNotification() {
-    const state = this.readonly ? 'not-allowed' : 'allowed';
+    const state = this.readonly ? 'paused' : 'started';
     const type = this.readonly
       ? AdvancedSnackBarTypes.WARNING
       : AdvancedSnackBarTypes.SUCCESS;
-    const msg = this.translateService.translate(
-      'comment-list.creation-' + state
-    );
+    const msg = this.translateService.translate('comment-list.qna-' + state);
     this.notificationService.showAdvanced(msg, type);
   }
 

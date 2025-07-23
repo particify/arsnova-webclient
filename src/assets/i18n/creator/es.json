@@ -12,11 +12,7 @@
     "all-comments-deleted": "Se han eliminado todas las publicaciones.",
     "banned-comments-deleted": "Se ha eliminado la lista de moderación.",
     "next": "Siguiente publicación",
-    "previous": "Anterior publicación",
-    "archive": "Archivo",
-    "q-and-a-enabled": "La sección Q&A ha sido habilitada.",
-    "activate-q-and-a": "Habilitar Q&A",
-    "unlock-creation": "Desbloquear creación"
+    "previous": "Anterior publicación"
   },
   "comment-page": {
     "a11y-message-moderation": "Ahora estás en la página de moderación.",
@@ -280,10 +276,7 @@
     "answer-count": "{{count}} respuestas",
     "start": "Iniciar",
     "stop": "Detener",
-    "open-comments": "Abrir preguntas y respuestas",
-    "lock-comments": "Cerrar preguntas y respuestas",
-    "comments-opened": "Las preguntas y respuestas se han abierto.",
-    "comments-locked": "Las preguntas y respuestas se han cerrado."
+    "pause": "Pausar"
   },
   "settings": {
     "a11y-message": "Ahora estás en la configuración de la sala.",
