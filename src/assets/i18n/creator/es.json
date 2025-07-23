@@ -1,7 +1,5 @@
 {
   "comment-list": {
-    "allow-creation": "Permite la creación de nuevas publicaciones",
-    "dont-allow-creation": "Prohibir la creación de nuevas publicaciones",
     "more-options": "Más opciones",
     "moderation": "Moderación",
     "public-list": "Público",

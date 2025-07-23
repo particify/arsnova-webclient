@@ -495,8 +495,6 @@
     "a11y-message-answer": "Ora sei nella pagina delle risposte al messaggio."
   },
   "comment-list": {
-    "allow-creation": "Consentire la creazione di nuovi messaggi",
-    "dont-allow-creation": "Vietare la creazione di nuovi messaggi",
     "more-options": "Altre opzioni",
     "moderation": "Moderatore",
     "public-list": "Pubblico",

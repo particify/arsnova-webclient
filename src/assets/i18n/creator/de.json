@@ -12,8 +12,7 @@
     "all-comments-deleted": "Alle Beiträge wurden gelöscht.",
     "banned-comments-deleted": "Die Moderationsliste wurde gelöscht.",
     "next": "Nächster Beitrag",
-    "previous": "Vorheriger Beitrag",
-    "archive": "Archiv"
+    "previous": "Vorheriger Beitrag"
   },
   "comment-page": {
     "a11y-message-moderation": "Du befindest dich jetzt auf der Moderations-Seite.",
