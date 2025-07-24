@@ -1,4 +1,4 @@
-@if (dataSource) {
+@if (dataSource && leaderboardItems.length > 0) {
   <div [ngClass]="{ 'table-container-with-limited-height': allowScrolling }">
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="position">
@@ -56,9 +56,8 @@
       ></tr>
     </table>
   </div>
-}
-<div fxLayoutAlign="center center">
-  @if (leaderboardItems.length === 0) {
+} @else {
+  <div fxLayoutAlign="center center">
     <span class="hint">{{ 'content.no-leaderboard-entries' | transloco }}</span>
-  }
-</div>
+  </div>
+}
