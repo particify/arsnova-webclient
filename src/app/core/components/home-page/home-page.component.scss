@@ -1,11 +1,11 @@
 @use '../../../../variables' as *;
 
 .container {
-  gap: $spacing-6;
+  gap: $spacing-7;
 }
 
 .heading {
-  margin-top: $spacing-7;
+  margin-top: $spacing-8;
   gap: calc($spacing / 2);
 }
 
@@ -15,7 +15,7 @@
 
 @include xs {
   .heading {
-    margin-top: $spacing-5;
+    margin-top: $spacing-6;
   }
 
   .logo-container {
@@ -23,6 +23,6 @@
   }
 
   .container {
-    gap: $spacing-5;
+    gap: $spacing-6;
   }
 }
