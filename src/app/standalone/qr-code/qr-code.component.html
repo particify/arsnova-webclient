@@ -24,7 +24,10 @@
         fxLayoutGap.xs="0.25em"
       >
         @if (showIcon) {
-          <lib-extension-point extensionId="branding-logo">
+          <lib-extension-point
+            extensionId="branding-logo"
+            [extensionData]="{ presentationSize: true }"
+          >
             <mat-icon color="primary" class="web-icon disabled"
               >language</mat-icon
             >
