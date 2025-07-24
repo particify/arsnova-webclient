@@ -12,7 +12,10 @@
     <app-loading-indicator></app-loading-indicator>
   } @else {
     @if (room) {
-      @if (room.description) {
+      @if (
+        room.description &&
+        (commentsEnabled || feedbackEnabled || contentGroups.length > 0)
+      ) {
         <mat-card>
           <app-rendered-text
             [rawText]="room.description.trim()"
@@ -88,6 +91,7 @@
           style="max-width: 100%"
           [name]="room.name"
           [shortId]="room.shortId"
+          [description]="room.renderedDescription"
           [focusModeEnabled]="focusModeEnabled"
         ></app-room-info-component>
       }

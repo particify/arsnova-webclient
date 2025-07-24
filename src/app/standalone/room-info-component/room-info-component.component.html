@@ -1,23 +1,32 @@
 <mat-card
-  class="login-card"
+  class="card"
   fxLayout="column"
   fxLayoutAlign="start"
-  fxLayoutGap="32px"
+  [ngClass]="{ 'bigger-card': description() }"
 >
   <div fxLayoutAlign="center" class="logo-container">
     <lib-extension-point extensionId="branding-logo">
       <lib-extension-point extensionId="app-logo"></lib-extension-point>
     </lib-extension-point>
   </div>
-  <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="12px">
-    <span>{{ 'participant.room-page.welcome-to' | transloco }}</span>
-    <span class="room-name">
-      {{ name() }}
-    </span>
-    <span style="color: var(--on-surface-light)">
-      {{ shortId() | splitShortId }}
-    </span>
+  <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="16px">
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="12px">
+      <span>{{ 'participant.room-page.welcome-to' | transloco }}</span>
+      <span class="room-name">
+        {{ name() }}
+      </span>
+      <span style="color: var(--on-surface-light)">
+        {{ shortId() | splitShortId }}
+      </span>
+    </div>
   </div>
+  @if (description()) {
+    <div fxLayout="row" fxLayoutAlign="center" class="description">
+      <div>
+        <app-rendered-text [renderedText]="description()"></app-rendered-text>
+      </div>
+    </div>
+  }
   <div fxLayoutAlign="center">
     <app-hint
       [text]="
