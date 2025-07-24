@@ -11,14 +11,7 @@
   @if (isLoading) {
     <app-loading-indicator></app-loading-indicator>
   } @else {
-    @if (focusModeEnabled) {
-      <mat-card>
-        <app-hint
-          text="participant.room-page.focus-mode-enabled"
-          [type]="HintType.INFO"
-        ></app-hint>
-      </mat-card>
-    } @else if (room) {
+    @if (room) {
       @if (room.description) {
         <mat-card>
           <app-rendered-text
@@ -29,61 +22,74 @@
           ></app-rendered-text>
         </mat-card>
       }
-      @if (commentsEnabled || feedbackEnabled) {
-        <div
-          fxFill
-          [ngClass]="{
-            'overview-row-container': commentsEnabled && feedbackEnabled,
-          }"
-        >
-          @if (commentsEnabled) {
-            <app-comments-card
-              class="feature-row-item"
-              [room]="room"
-              [description]="
-                'participant.room-page.comments-description' | transloco
-              "
-              [clickable]="true"
-            >
-            </app-comments-card>
-          }
-          @if (feedbackEnabled) {
-            <app-live-feedback-card
-              class="feature-row-item"
-              [room]="room"
-              [description]="
-                'participant.room-page.live-feedback-description' | transloco
-              "
-              [clickable]="true"
-            >
-            </app-live-feedback-card>
-          }
-        </div>
+      @if (!focusModeEnabled) {
+        @if (commentsEnabled || feedbackEnabled) {
+          <div
+            fxFill
+            [ngClass]="{
+              'overview-row-container': commentsEnabled && feedbackEnabled,
+            }"
+          >
+            @if (commentsEnabled) {
+              <app-comments-card
+                class="feature-row-item"
+                [room]="room"
+                [description]="
+                  'participant.room-page.comments-description' | transloco
+                "
+                [clickable]="true"
+              >
+              </app-comments-card>
+            }
+            @if (feedbackEnabled) {
+              <app-live-feedback-card
+                class="feature-row-item"
+                [room]="room"
+                [description]="
+                  'participant.room-page.live-feedback-description' | transloco
+                "
+                [clickable]="true"
+              >
+              </app-live-feedback-card>
+            }
+          </div>
+        }
+        @if (contentGroups && contentGroups.length > 0) {
+          <app-feature-card
+            class="feature-column-item"
+            [ngClass]="{ disabled: focusModeEnabled }"
+            [feature]="'content.groups' | transloco"
+            [description]="
+              'participant.room-page.content-groups-description' | transloco
+            "
+            icon="equalizer"
+            [fillFeatureAction]="true"
+          >
+            <ng-container featureActionFill>
+              <div fxLayout="column" fxLayoutGap="8px">
+                @for (contentGroup of contentGroups; track contentGroup) {
+                  <app-content-groups
+                    [contentGroup]="contentGroup"
+                    [role]="viewRole"
+                    [shortId]="room.shortId"
+                    [showRipple]="true"
+                  ></app-content-groups>
+                }
+              </div>
+            </ng-container>
+          </app-feature-card>
+        }
       }
-      @if (contentGroups && contentGroups.length > 0) {
-        <app-feature-card
-          class="feature-column-item"
-          [ngClass]="{ disabled: focusModeEnabled }"
-          [feature]="'content.groups' | transloco"
-          [description]="
-            'participant.room-page.content-groups-description' | transloco
-          "
-          icon="equalizer"
-          [fillFeatureAction]="true"
-        >
-          <ng-container featureActionFill>
-            <div fxLayout="column" fxLayoutGap="8px">
-              @for (contentGroup of contentGroups; track contentGroup) {
-                <app-content-groups
-                  [contentGroup]="contentGroup"
-                  [role]="viewRole"
-                  [shortId]="room.shortId"
-                  [showRipple]="true"
-                ></app-content-groups>
-              }
-            </div>
-          </ng-container>
-        </app-feature-card>
+      @if (
+        (!commentsEnabled && !feedbackEnabled && contentGroups.length === 0) ||
+        focusModeEnabled
+      ) {
+        <app-room-info-component
+          style="max-width: 100%"
+          [name]="room.name"
+          [shortId]="room.shortId"
+          [focusModeEnabled]="focusModeEnabled"
+        ></app-room-info-component>
       }
     }
   }

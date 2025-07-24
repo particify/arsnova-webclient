@@ -1,0 +1,11 @@
+@use '../../../variables' as *;
+
+.logo-container {
+  margin-top: $spacing-2;
+  height: 32px;
+}
+
+.room-name {
+  font-size: $l-font-size;
+  font-weight: $font-weight-bold;
+}

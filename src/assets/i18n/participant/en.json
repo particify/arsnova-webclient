@@ -104,7 +104,9 @@
     "focus-mode-enabled": "Focus mode is active in this room. Your view will be synchronized with the presentation.",
     "comments-description": "Ask a question or write a comment.",
     "live-feedback-description": "Give instant feedback with one click.",
-    "content-groups-description": "Participate in quizzes, surveys and more."
+    "content-groups-description": "Participate in quizzes, surveys and more.",
+    "no-interactions-available": "Currently, no interactions are available.",
+    "welcome-to": "Welcome to"
   },
   "statistic": {
     "answer-statistic": "Answer statistics",
