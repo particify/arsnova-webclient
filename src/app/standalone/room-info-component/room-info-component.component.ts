@@ -6,6 +6,8 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-room-info-component',
@@ -16,6 +18,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
     HintComponent,
     SplitShortIdPipe,
     TranslocoPipe,
+    RenderedTextComponent,
+    NgClass,
   ],
   templateUrl: './room-info-component.component.html',
   styleUrl: './room-info-component.component.scss',
@@ -23,6 +27,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 export class RoomInfoComponentComponent {
   name = input.required<string>();
   shortId = input.required<string>();
+  description = input<string>();
   focusModeEnabled = input<boolean>(false);
 
   HintType = HintType;

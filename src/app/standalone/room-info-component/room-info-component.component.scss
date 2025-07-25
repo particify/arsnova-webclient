@@ -1,5 +1,15 @@
 @use '../../../variables' as *;
 
+.card {
+  max-width: 100%;
+  padding: $spacing-5;
+  gap: $spacing-5;
+
+  &:not(.bigger-card) {
+    width: $smaller-card-width;
+  }
+}
+
 .logo-container {
   margin-top: $spacing-2;
   height: 32px;
@@ -8,4 +18,8 @@
 .room-name {
   font-size: $l-font-size;
   font-weight: $font-weight-bold;
+}
+
+.description {
+  margin: -$spacing-2 0;
 }
