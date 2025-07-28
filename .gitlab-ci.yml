@@ -59,7 +59,7 @@ storybook:
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE != "schedule"
-  allow_failure: true
+  allow_failure: false
   script:
     - yarn build-storybook
   artifacts:
