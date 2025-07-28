@@ -18,4 +18,8 @@ export class DevErrorIndicatorComponent {
   uiErrorCount = toSignal(this.uiErrorCount$, { initialValue: 0 });
   httpErrorCount = toSignal(this.httpErrorCount$, { initialValue: 0 });
   errorCount = computed(() => this.uiErrorCount() + this.httpErrorCount());
+
+  reset() {
+    this.errorHandler.reset();
+  }
 }
