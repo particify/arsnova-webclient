@@ -49,6 +49,7 @@ class MockRoomStatsService {
             groupName: 'Mixed series',
             contentCount: 5,
             groupType: GroupType.MIXED,
+            published: true,
           },
         ],
         42,
