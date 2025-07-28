@@ -504,6 +504,40 @@ div {
   padding: 5px 0 0;
 }
 
+// Mat slide toggle
+
+.theme-dark .mat-mdc-slide-toggle.mat-accent {
+  --mat-slide-toggle-selected-focus-state-layer-color: var(
+    --palette-accent-600
+  );
+  --mat-slide-toggle-selected-handle-color: var(--palette-accent-900);
+  --mat-slide-toggle-selected-hover-state-layer-color: var(
+    --palette-accent-600
+  );
+  --mat-slide-toggle-selected-pressed-state-layer-color: var(
+    --palette-accent-600
+  );
+  --mat-slide-toggle-selected-focus-handle-color: var(--palette-accent-900);
+  --mat-slide-toggle-selected-hover-handle-color: var(--palette-accent-900);
+  --mat-slide-toggle-selected-pressed-handle-color: var(--palette-accent-900);
+  --mat-slide-toggle-selected-focus-track-color: var(--palette-accent-300);
+  --mat-slide-toggle-selected-hover-track-color: var(--palette-accent-300);
+  --mat-slide-toggle-selected-pressed-track-color: var(--palette-accent-300);
+  --mat-slide-toggle-selected-track-color: var(--palette-accent-300);
+}
+
+mat-slide-toggle .mat-internal-form-field {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: $spacing-2;
+
+  label {
+    margin-left: 0;
+  }
+}
+
 // Choice answer buttons
 
 .answer-radio-button .mdc-radio {
@@ -543,28 +577,6 @@ div {
   --mat-checkbox-unselected-icon-color: var(--grey);
   --mat-checkbox-unselected-hover-state-layer-color: transparent;
   --mat-checkbox-unselected-pressed-state-layer-color: transparent;
-}
-
-// Mat slide toggle
-
-.theme-dark .mat-mdc-slide-toggle.mat-accent {
-  --mat-slide-toggle-selected-focus-state-layer-color: var(
-    --palette-accent-600
-  );
-  --mat-slide-toggle-selected-handle-color: var(--palette-accent-900);
-  --mat-slide-toggle-selected-hover-state-layer-color: var(
-    --palette-accent-600
-  );
-  --mat-slide-toggle-selected-pressed-state-layer-color: var(
-    --palette-accent-600
-  );
-  --mat-slide-toggle-selected-focus-handle-color: var(--palette-accent-900);
-  --mat-slide-toggle-selected-hover-handle-color: var(--palette-accent-900);
-  --mat-slide-toggle-selected-pressed-handle-color: var(--palette-accent-900);
-  --mat-slide-toggle-selected-focus-track-color: var(--palette-accent-300);
-  --mat-slide-toggle-selected-hover-track-color: var(--palette-accent-300);
-  --mat-slide-toggle-selected-pressed-track-color: var(--palette-accent-300);
-  --mat-slide-toggle-selected-track-color: var(--palette-accent-300);
 }
 
 // Mat Select
