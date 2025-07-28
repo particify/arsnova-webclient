@@ -1,5 +1,9 @@
-<div fxFill>
-  <div fxFill fxLayout="column" fxLayoutAlign="space-between">
+<div fxLayout="row" fxLayoutGap="20px" fxFill>
+  <div
+    class="editing-container"
+    fxLayout="column"
+    fxLayoutAlign="space-between"
+  >
     <div class="fixed-height" fxLayout="column" fxLayoutGap="16px">
       <div fxLayout="row wrap" fxLayoutAlign="space-between start">
         <mat-form-field
@@ -64,12 +68,12 @@
         </nav>
       </div>
       <div
-        style="flex: 1; overflow: auto; padding-bottom: 4px"
+        style="flex: 1; overflow: auto; padding-bottom: 12px"
         fxLayout="column"
         fxLayoutGap="12px"
       >
-        <mat-tab-nav-panel #tabPanel>
-          <div [attr.hidden]="isPreview || null">
+        <mat-tab-nav-panel #tabPanel fxLayout="column" fxLayoutGap="20px">
+          <div [attr.hidden]="isPreview || null" class="content-attributes">
             <form fxLayout="column" fxLayoutGap="12px">
               <div
                 fxLayout="row wrap"
@@ -131,89 +135,6 @@
                 ></app-hint>
               }
             </form>
-            @if (
-              selectedFormat &&
-              !['slide', 'flashcard'].includes(selectedFormat.name)
-            ) {
-              <div
-                class="settings-container"
-                fxLayout="row"
-                fxLayout.xs="column-reverse"
-                fxLayoutAlign="space-between center"
-                fxLayoutAlign.xs="start start"
-                fxLayoutGap="1em"
-              >
-                <mat-checkbox
-                  [disabled]="formDisabled"
-                  [(ngModel)]="abstentionsAllowed"
-                >
-                  {{ 'creator.content.abstentions-allowed' | transloco }}
-                </mat-checkbox>
-                @if (contentGroup.groupType === GroupType.QUIZ) {
-                  <div
-                    fxLayout="row"
-                    fxLayout.xs="row-reverse"
-                    fxLayoutGap="1em"
-                    fxLayoutAlign="start center"
-                  >
-                    <label
-                      [ngStyle]="{
-                        opacity: !formDisabled ? 1 : 0.5,
-                      }"
-                      >{{ 'creator.content.weight' | transloco }}</label
-                    >
-                    <mat-form-field
-                      appearance="outline"
-                      class="no-field-hint initial-width minimal-number-input smaller-select-input"
-                    >
-                      <input
-                        [(ngModel)]="weight"
-                        [disabled]="isAnswered || formDisabled"
-                        matInput
-                        type="number"
-                        max="5"
-                        min="1"
-                      />
-                    </mat-form-field>
-                  </div>
-                }
-                <div
-                  fxLayout="row"
-                  fxLayout.xs="row-reverse"
-                  fxLayoutGap="1em"
-                  fxLayoutAlign="start center"
-                  [matTooltip]="
-                    (content?.duration
-                      ? 'creator.content.timer-only-enabled-in-live-mode'
-                      : 'creator.content.enable-live-mode-to-use-timer'
-                    ) | transloco
-                  "
-                  [matTooltipDisabled]="isLiveMode()"
-                >
-                  <label
-                    [ngStyle]="{
-                      opacity: isLiveMode() && !formDisabled ? 1 : 0.5,
-                    }"
-                    >{{
-                      'creator.content.seconds-to-answer' | transloco
-                    }}</label
-                  >
-                  <mat-form-field
-                    appearance="outline"
-                    class="no-field-hint initial-width minimal-number-input smaller-select-input"
-                  >
-                    <input
-                      [(ngModel)]="duration"
-                      [disabled]="isAnswered || !isLiveMode() || formDisabled"
-                      matInput
-                      type="number"
-                      max="600"
-                      min="10"
-                    />
-                  </mat-form-field>
-                </div>
-              </div>
-            }
             @if (!isLoading && selectedFormat) {
               @switch (selectedFormat.type) {
                 @case (ContentType.CHOICE) {
@@ -221,10 +142,8 @@
                     [content]="content"
                     [isAnswered]="isAnswered"
                     [isEditMode]="isEditMode"
-                    [correctAnswerSelection]="
-                      contentGroup.groupType === GroupType.MIXED
-                    "
-                    [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                    [correctAnswers]="correctAnswer"
+                    [multipleCorrectAnswers]="multiple"
                   >
                   </app-choice-content-form>
                 }
@@ -234,6 +153,7 @@
                     [isAnswered]="isAnswered"
                     [isEditMode]="isEditMode"
                     [language]="room.language"
+                    [neutralOption]="neutralOption"
                   >
                   </app-scale-content-form>
                 }
@@ -241,10 +161,7 @@
                   <app-binary-content-form
                     [isEditMode]="isEditMode"
                     [content]="content"
-                    [answerSelection]="
-                      contentGroup.groupType !== GroupType.SURVEY
-                    "
-                    [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                    [correctAnswer]="correctAnswer"
                   >
                   </app-binary-content-form>
                 }
@@ -288,7 +205,7 @@
                       contentGroup.groupType === GroupType.MIXED
                     "
                     [isAnswered]="isAnswered"
-                    [isQuiz]="contentGroup.groupType === GroupType.QUIZ"
+                    [correctAnswer]="correctAnswer"
                   >
                   </app-numeric-content-form>
                 }
@@ -303,6 +220,18 @@
               }
             }
           </div>
+          @if (
+            selectedFormat &&
+            !['slide', 'flashcard'].includes(selectedFormat.name)
+          ) {
+            <div
+              [attr.hidden]="isPreview || null"
+              class="settings-container-mobile"
+            >
+              <mat-divider></mat-divider>
+              <ng-template [ngTemplateOutlet]="settings"></ng-template>
+            </div>
+          }
           @if (isPreview && content) {
             <app-content-preview
               [content]="content"
@@ -329,4 +258,122 @@
       ></app-loading-button>
     </div>
   </div>
+  @if (
+    selectedFormat && !['slide', 'flashcard'].includes(selectedFormat.name)
+  ) {
+    <div class="settings-container-desktop">
+      <mat-divider [vertical]="true"></mat-divider>
+      <div style="width: 100%" fxLayout="column" fxLayoutGap="20px">
+        <ng-template [ngTemplateOutlet]="settings"></ng-template>
+      </div>
+    </div>
+  }
 </div>
+<ng-template #settings>
+  <app-settings-slide-toggle
+    [label]="'creator.content.abstentions'"
+    [isChecked]="abstentionsAllowed"
+    [disabled]="formDisabled || isPreview"
+    (toggleEvent)="abstentionsAllowed = $event"
+  ></app-settings-slide-toggle>
+  @if (contentGroup.groupType === GroupType.QUIZ) {
+    <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-between center">
+      <label
+        [ngStyle]="{
+          opacity: !formDisabled && !isPreview ? 1 : 0.5,
+        }"
+      >
+        <div fxLayout="column" fxLayoutGap="4px" class="numeric-input-label">
+          <span> {{ 'creator.content.weight' | transloco }}</span>
+          <span> {{ 'creator.content.weight-info' | transloco }}</span>
+        </div>
+      </label>
+      <mat-form-field
+        appearance="outline"
+        class="no-field-hint initial-width number-input-small"
+      >
+        <input
+          [(ngModel)]="weight"
+          [disabled]="isAnswered || formDisabled || isPreview"
+          matInput
+          type="number"
+          max="5"
+          min="1"
+        />
+      </mat-form-field>
+    </div>
+  }
+  <div
+    fxLayout="row"
+    fxLayoutGap="16px"
+    fxLayoutAlign="space-between center"
+    [matTooltip]="
+      (content?.duration
+        ? 'creator.content.timer-only-enabled-in-live-mode'
+        : 'creator.content.enable-live-mode-to-use-timer'
+      ) | transloco
+    "
+    [matTooltipDisabled]="isLiveMode()"
+  >
+    <label
+      [ngStyle]="{
+        opacity: isLiveMode() && !formDisabled && !isPreview ? 1 : 0.5,
+      }"
+    >
+      <div fxLayout="column" fxLayoutGap="4px" class="numeric-input-label">
+        <span> {{ 'creator.content.timer' | transloco }}</span>
+        <span> {{ 'creator.content.timer-info' | transloco }}</span>
+      </div></label
+    >
+    <mat-form-field
+      appearance="outline"
+      class="no-field-hint initial-width number-input-small"
+    >
+      <input
+        [(ngModel)]="duration"
+        [disabled]="isAnswered || !isLiveMode() || formDisabled || isPreview"
+        matInput
+        type="number"
+        max="600"
+        min="10"
+      />
+      <span
+        matTextSuffix
+        [ngClass]="{
+          disabled: isAnswered || !isLiveMode() || formDisabled || isPreview,
+        }"
+        >s</span
+      >
+    </mat-form-field>
+  </div>
+  @if (
+    contentGroup.groupType === GroupType.MIXED &&
+    this.selectedFormat &&
+    [ContentType.CHOICE, ContentType.BINARY, ContentType.NUMERIC].includes(
+      this.selectedFormat.type
+    )
+  ) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.define-correct-answer'"
+      [isChecked]="correctAnswer"
+      [disabled]="(isEditMode && isAnswered) || formDisabled || isPreview"
+      (toggleEvent)="correctAnswer = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if (selectedFormat?.type === ContentType.CHOICE) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.multiple-answers'"
+      [isChecked]="multiple"
+      [disabled]="formDisabled || isPreview"
+      (toggleEvent)="multiple = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if (selectedFormat?.type === ContentType.SCALE) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.offer-neutral-option'"
+      [isChecked]="neutralOption"
+      [disabled]="(isEditMode && isAnswered) || formDisabled || isPreview"
+      (toggleEvent)="neutralOption = $event"
+    ></app-settings-slide-toggle>
+  }
+</ng-template>

@@ -462,14 +462,10 @@ div {
   height: 0;
 }
 
-.minimal-number-input .mat-mdc-form-field-infix {
-  width: 48px;
-}
-
 .number-input-small .mat-mdc-form-field-infix {
   min-height: unset;
   padding: 6px 0 10px !important;
-  width: 42px;
+  width: 32px;
 }
 
 .smaller-select-input .mat-mdc-form-field-infix {

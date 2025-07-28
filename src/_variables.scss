@@ -53,6 +53,7 @@ $screen-sm-max: 999px;
 $screen-md-min: 1000px;
 $screen-md-max: 1279px;
 $screen-lg-min: 1280px;
+$screen-lg-max: 1599px;
 $screen-xl-min: 1600px;
 
 // Buttons
@@ -91,6 +92,12 @@ $icon-button-size: 40px;
 
 @mixin gt-lg {
   @media (min-width: $screen-lg-min) {
+    @content;
+  }
+}
+
+@mixin lt-xl {
+  @media (max-width: $screen-lg-max) {
     @content;
   }
 }

@@ -1,5 +1,6 @@
-@if (answerSelection) {
-  <form fxLayout="column" fxLayoutAlign="start">
+@if (correctAnswer) {
+  <form fxLayout="column" fxLayoutGap="16px">
+    <span>{{ 'creator.content.correct-answer' | transloco }}</span>
     <mat-radio-group
       [disabled]="formDisabled"
       [(ngModel)]="currentOption"

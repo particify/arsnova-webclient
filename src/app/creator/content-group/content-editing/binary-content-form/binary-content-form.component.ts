@@ -11,7 +11,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 enum BINARY_OPTION {
-  NEITHER = 'neither',
   YES = 'yes',
   NO = 'no',
 }
@@ -42,10 +41,9 @@ export class BinaryContentFormComponent
 
   @Input() content?: Content;
   @Input() isEditMode = false;
-  @Input() answerSelection = false;
-  @Input() isQuiz = false;
+  @Input() correctAnswer = false;
   options: BINARY_OPTION[] = Object.values(BINARY_OPTION);
-  currentOption = BINARY_OPTION.NEITHER;
+  currentOption?: BINARY_OPTION;
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.BINARY) {
@@ -55,13 +53,8 @@ export class BinaryContentFormComponent
         this.currentOption =
           correctOptions[0] === 0 ? BINARY_OPTION.YES : BINARY_OPTION.NO;
       }
-    } else {
-      this.currentOption = this.isQuiz
-        ? BINARY_OPTION.YES
-        : BINARY_OPTION.NEITHER;
-    }
-    if (this.answerSelection && this.isQuiz) {
-      this.options.splice(0, 1);
+    } else if (this.correctAnswer) {
+      this.currentOption = BINARY_OPTION.YES;
     }
   }
 
@@ -70,7 +63,7 @@ export class BinaryContentFormComponent
       this.content = new ContentChoice();
       this.content.format = ContentType.BINARY;
     }
-    if (this.currentOption !== BINARY_OPTION.NEITHER) {
+    if (this.correctAnswer) {
       const index = this.currentOption === BINARY_OPTION.YES ? 0 : 1;
       (this.content as ContentChoice).correctOptionIndexes = [index];
     } else {
@@ -78,13 +71,11 @@ export class BinaryContentFormComponent
     }
     const options: AnswerOption[] = [];
     this.options.forEach((val) => {
-      if (val !== BINARY_OPTION.NEITHER) {
-        options.push(
-          new AnswerOption(
-            this.translateService.translate('creator.content.' + val)
-          )
-        );
-      }
+      options.push(
+        new AnswerOption(
+          this.translateService.translate('creator.content.' + val)
+        )
+      );
     });
     (this.content as ContentChoice).options = options;
     return this.content;

@@ -103,10 +103,10 @@
     "format-prioritization-description": "I partecipanti possono assegnare un certo numero di punti alle opzioni di risposta.",
     "format-short_answer": "Risposta breve",
     "format-short_answer-description": "I partecipanti possono rispondere inserendo un testo. Vengono definite una o più risposte corrette.",
-    "multiple-answers-allowed": "Consenti di selezionare più risposte",
-    "no-correct-answer": "Non impostare le risposte corrette",
+    "multiple-answers": "Selezionare più opzioni",
+    "define-correct-answer": "Impostare le risposte corrette",
     "format-not-supported": "Questo formato non è attualmente supportato.",
-    "abstentions-allowed": "Consenti le astensioni",
+    "abstentions": "Astensioni",
     "offer-neutral-option": "Offri un'opzione neutra",
     "answer-template": "Modello di risposta",
     "group-settings": "Impostazioni",
@@ -159,7 +159,7 @@
     "content-is-locked": "Il Contenuto è bloccato",
     "to-publish-content": "pubblicare il contenuto",
     "publish-current-content": "Pubblicare il contenuto attuale",
-    "seconds-to-answer": "Secondi per rispondere",
+    "timer": "Timer",
     "enable-live-mode-to-use-timer": "Per impostare un timer per i contenuti, attiva la modalità live nelle impostazioni della serie di domande.",
     "timer-only-enabled-in-live-mode": "Il timer può essere utilizzato solo in modalità live. La modalità live può essere attivata nelle impostazioni della Serie di domande.",
     "group-not-published": "Il gruppo non viene pubblicato.",
@@ -201,7 +201,7 @@
     "a11y-content-group-info": "Ora ti trovi nella tua serie di domande {{name}} che contiene {{contentCount}} i contenuti.",
     "a11y-leaderboard-page-info": "Ora sei nella pagina della classifica.",
     "back-to-series": "Torna alla serie di domande",
-    "weight": "Ponderazione"
+    "weight": "Peso"
   },
   "survey": {
     "a11y-stop-survey": "Interrompe il Feedback in tempo reale.",

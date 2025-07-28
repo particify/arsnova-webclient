@@ -44,7 +44,6 @@ import { MatInput } from '@angular/material/input';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Dir } from '@angular/cdk/bidi';
 import { HintComponent } from '@app/standalone/hint/hint.component';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { MatTooltip } from '@angular/material/tooltip';
 import { NgStyle, AsyncPipe } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
@@ -62,6 +61,11 @@ import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { CoreModule } from '@app/core/core.module';
+import { ContentChoice } from '@app/core/models/content-choice';
+import { ContentNumeric } from '@app/core/models/content-numeric';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
+import { ContentScale } from '@app/core/models/content-scale';
 
 interface ContentFormat {
   type: ContentType;
@@ -92,7 +96,6 @@ interface ContentFormat {
     CdkTextareaAutosize,
     Dir,
     HintComponent,
-    MatCheckbox,
     MatTooltip,
     NgStyle,
     ExtendedModule,
@@ -112,6 +115,8 @@ interface ContentFormat {
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
+    CoreModule,
+    SettingsSlideToggleComponent,
   ],
 })
 export class ContentEditingComponent
@@ -155,6 +160,9 @@ export class ContentEditingComponent
   created = false;
   isAnswered = false;
   GroupType = GroupType;
+  multiple = false;
+  correctAnswer = true;
+  neutralOption = true;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.content?.previousValue && changes.content?.currentValue) {
@@ -182,6 +190,7 @@ export class ContentEditingComponent
     if (this.isEditMode) {
       this.initData();
     } else {
+      this.correctAnswer = this.contentGroup.groupType !== GroupType.SURVEY;
       this.isLoading = false;
     }
 
@@ -219,6 +228,24 @@ export class ContentEditingComponent
           this.isAnswered = answer.roundStatistics[0].answerCount > 0;
           this.isLoading = false;
         });
+      this.determineContentSettings();
+    }
+  }
+
+  private determineContentSettings() {
+    if (
+      this.selectedFormat?.type === ContentType.CHOICE ||
+      this.selectedFormat?.type === ContentType.BINARY
+    ) {
+      this.multiple = (this.content as ContentChoice).multiple;
+      this.correctAnswer =
+        (this.content as ContentChoice).correctOptionIndexes &&
+        (this.content as ContentChoice).correctOptionIndexes.length > 0;
+    } else if (this.selectedFormat?.type === ContentType.NUMERIC) {
+      this.correctAnswer =
+        (this.content as ContentNumeric).correctNumber !== undefined;
+    } else if (this.selectedFormat?.type === ContentType.SCALE) {
+      this.neutralOption = (this.content as ContentScale).optionCount % 2 !== 0;
     }
   }
 

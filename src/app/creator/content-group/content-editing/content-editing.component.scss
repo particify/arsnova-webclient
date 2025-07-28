@@ -41,11 +41,87 @@ form {
   );
 }
 
-.button-container,
-.settings-container {
+.button-container {
   margin-top: $spacing-2;
 }
 
-.flashcard-container {
+.flashcard-container,
+.settings-container {
   margin-top: $spacing-3;
+}
+
+.full-width-toggle {
+  width: 100%;
+}
+
+.numeric-input-label {
+  font-size: $s-font-size;
+
+  :first-child {
+    font-weight: $font-weight-bold;
+  }
+
+  :last-child {
+    color: var(--on-surface-light);
+  }
+}
+
+input[type='number'] {
+  appearance: textfield;
+  text-align: center;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.editing-container {
+  height: 100%;
+  min-height: 100%;
+}
+
+@include lt-xl {
+  .settings-container-desktop {
+    display: none;
+  }
+
+  .settings-container-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+    overflow: hidden;
+  }
+
+  .editing-container {
+    width: 100%;
+  }
+}
+
+@include gt-xl {
+  .settings-container-mobile {
+    display: none;
+  }
+
+  .settings-container-desktop {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-3;
+    overflow: visible;
+    width: min(35%, 400px);
+  }
+
+  .editing-container {
+    width: 65%;
+    min-width: calc(100% - 400px);
+  }
+}
+
+app-settings-slide-toggle {
+  --settings-slide-toggle-font-size: #{$s-font-size};
+}
+
+.content-attributes {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
 }
