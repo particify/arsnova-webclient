@@ -30,7 +30,7 @@
   },
   "answer": {
     "a11y-current-text": "Contenuto {{index}}. Questa è una domanda aperta. Per accedere al Contenuto e alla risposta premere il tasto tab.",
-    "a11y-current-slide": "Contenuto {{index}}}. Questa è una Diapositiva. Naviga con la scheda verso il Contenuto.",
+    "a11y-current-slide": "Contenuto {{index}}. Questa è una Diapositiva. Naviga con la scheda verso il Contenuto.",
     "a11y-message": "Ora puoi rispondere ai contenuti della serie di domande {{group}}.",
     "a11y-current-multiple": "Contenuto {{index}}. Si tratta di un contenuto a scelta multipla. Per andare al contenuto e alle risposte, premi il tasto tab e seleziona una risposta con il tasto spazio.",
     "a11y-current-single": "Contenuto {{index}}. Si tratta di un contenuto a scelta singola. Per accedere al contenuto e alle risposte, premi il tasto tabulazione, seleziona una risposta e premi i tasti freccia.",
@@ -101,7 +101,12 @@
     "a11y-statistics": "Apre le statistiche della serie di domande.",
     "a11y-live-feedback-disabled": "Il Feedback in tempo reale non è attualmente attivo.",
     "no-contents": "Non ci sono ancora contenuti.",
-    "focus-mode-enabled": "In questa Camera è attiva la Modalità Focus. La tua visualizzazione sarà sincronizzata con la presentazione."
+    "focus-mode-enabled": "In questa Camera è attiva la Modalità Focus. La tua visualizzazione sarà sincronizzata con la presentazione.",
+    "welcome-to": "Benvenuto a",
+    "no-interactions-available": "Attualmente non sono disponibili interazioni.",
+    "content-groups-description": "Partecipa a quiz, sondaggi e altro ancora.",
+    "comments-description": "Fai una domanda o scrivi un commento.",
+    "live-feedback-description": "Fornisci un feedback immediato con un solo clic."
   },
   "statistic": {
     "answer-statistic": "Statistiche di risposta",

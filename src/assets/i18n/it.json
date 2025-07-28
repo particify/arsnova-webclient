@@ -25,7 +25,11 @@
     "live-feedback": "Feedback in tempo reale",
     "comments": "Domande e risposte",
     "copy-url": "Indirizzo di copia",
-    "url-copied": "Il link della stanza è stato copiato negli appunti."
+    "url-copied": "Il link della stanza è stato copiato negli appunti.",
+    "stopped": "Interrotto",
+    "go-to-feature": "Vai a {{feature}}",
+    "started": "Avviato",
+    "paused": "In pausa"
   },
   "statistic": {
     "a11y-message-overview": "Ora sei nella panoramica delle statistiche.",
@@ -279,7 +283,8 @@
     "room-not-found": "Non è stato trovato spazio per questo numero.",
     "something-went-wrong": "Qualcosa è andato storto.",
     "establishing-connection": "Stabilire la connessione …",
-    "invalid-request": "La tua richiesta non è valida."
+    "invalid-request": "La tua richiesta non è valida.",
+    "action-not-allowed": "Azione non consentita."
   },
   "title": {
     "user": "Le mie stanze",
@@ -362,8 +367,11 @@
     "sort-votedesc": "Valutazione migliore",
     "sort-voteasc": "Valutazione peggiore",
     "there-are-new-posts": "Ci sono nuovi post",
-    "comments-are-not-enabled": "La sezione Q&A non è abilitata.",
-    "no-categories-in-this-room": "Non ci sono categorie in questa stanza"
+    "comments-are-not-enabled": "La sezione Domande e Risposte non è abilitata per i partecipanti.",
+    "no-categories-in-this-room": "Non ci sono categorie in questa stanza",
+    "qna-started": "Le Domande e Risposte sono state avviate.",
+    "qna-stopped": "Le Domande e Risposte sono state interrotte.",
+    "qna-paused": "Le Domande e Risposte sono state messe in pausa."
   },
   "comment-page": {
     "a11y-text-textForOneVote": "Un voto.",
@@ -510,7 +518,8 @@
   "general": {
     "not-specified": "Non specificato",
     "a11y-remove-filter": "Rimuovi il filtro",
-    "anonymous": "Anonimo"
+    "anonymous": "Anonimo",
+    "read-only-mode-active": "Modalità di sola lettura: Le funzionalità di creazione e modifica sono limitate."
   },
   "sidebar": {
     "a11y-switch-to-feature": "Passa a {{feature}}.",
@@ -610,9 +619,18 @@
     "time-is-up": "Il tempo è scaduto"
   },
   "ordinal": {
-    "one": "st",
-    "two": "nd",
-    "few": "rd",
+    "one": "",
+    "two": "",
+    "few": "",
     "other": "Il"
+  },
+  "share": {
+    "share": "Condividi",
+    "share-room-with-participants": "Stanza condivisa con i partecipanti",
+    "copied": "Copiato!",
+    "download-qr-code": "Scarica il codice QR",
+    "present-qr-code": "Presenta il codice QR",
+    "link": "Link",
+    "copy": "Copia"
   }
 }

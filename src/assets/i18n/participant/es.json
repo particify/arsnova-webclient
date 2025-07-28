@@ -5,7 +5,7 @@
     "a11y-current-single": "Contenido {{index}}. Este es un contenido de opción única. Para ir al contenido y las respuestas, presiona la tecla Tab y selecciona una respuesta con las teclas de flecha.",
     "a11y-current-text": "Contenido {{index}}. Esta es una pregunta abierta. Para ir al contenido y la respuesta, presiona la tecla Tab.",
     "a11y-current-slide": "Contenido {{index}}. Esto es una diapositiva. Navega con la tecla Tab para ir al contenido.",
-    "a11y-current-flashcard": "Contenido {{index}}. Esto es una tarjeta didáctica. Navega con la tecla Tab para ir al contenido y presiona la tecla Espacio para ver el reverso.",
+    "a11y-current-flashcard": "Contenido {{index}}. Esto es una tarjeta didáctica. Navega con la tecla Tab para ir al contenido y presiona la tecla Espacio para ver la respuesta.",
     "a11y-current-sort": "Contenido {{index}}. Este es un contenido de ordenamiento. Para ir al contenido y las respuestas, presiona la tecla Tab y muévete hacia arriba y hacia abajo con las teclas de flecha.",
     "a11y-current-prioritization": "Contenido {{index}}. Este es un contenido de priorización. Para ir al contenido y las opciones de respuesta, presiona la tecla Tab.",
     "a11y-current-binary": "Contenido {{index}}. Este es un contenido de sí/no. Para ir al contenido y las respuestas, presiona la tecla Tab y selecciona una respuesta con las teclas de flecha.",
@@ -39,7 +39,9 @@
     "not-answered-in-time": "No ha contestado a tiempo.",
     "answered-in-time": "Has contestado en {{duration}} segundos.",
     "go-to-overview": "Ir al resumen",
-    "next-content": "Contenido siguiente"
+    "next-content": "Contenido siguiente",
+    "a11y-current-numeric": "Contenido {{index}}. Contenido Encontrar el número. Para ir al contenido y a la entrada de la respuesta pulsa la tecla tabulador.",
+    "a11y-current-short_answer": "Contenido {{index}}. Contenido de la Respuesta corta. Para ir al contenido y a la entrada de la respuesta pulsa la tecla tabulador."
   },
   "content": {
     "thanks-for-participation": "¡Gracias por tu participación!",

@@ -10,7 +10,9 @@
     "all-comments-deleted": "Se han eliminado todas las publicaciones.",
     "banned-comments-deleted": "Se ha eliminado la lista de moderación.",
     "next": "Siguiente publicación",
-    "previous": "Anterior publicación"
+    "previous": "Anterior publicación",
+    "start-qna": "Inicio Preguntas y respuestas",
+    "pause-qna": "Pausa Preguntas y respuestas"
   },
   "comment-page": {
     "a11y-message-moderation": "Ahora estás en la página de moderación.",
@@ -179,7 +181,7 @@
     "select-correct-number-in-defined-range": "La respuesta correcta debe encontrarse dentro del intervalo definido.",
     "import-failed": "El formato del archivo no es válido.",
     "publish-correct-answers-info": "Los participantes pueden ver las respuestas correctas después de haber contestado.",
-    "group-progress-info": "Por término medio, {{percent}} por ciento de las respuestas son correctas.",
+    "group-progress-info": "Por término medio, {{percent}}% de las respuestas son correctas. {{abstentions}}% se han abstenido.",
     "enable-leaderboard-info": "Los participantes toman parte en el concurso utilizando un seudónimo y pueden compararse en una tabla de clasificación.",
     "lock": "Bloquear",
     "enable-live-mode-to-use-timer": "Para establecer un temporizador para el contenido, active el modo en directo en los ajustes de la serie de preguntas.",
@@ -191,7 +193,7 @@
     "to-publish-content": "para publicar el contenido",
     "publish-current-content": "Publicar contenidos actuales",
     "seconds-to-answer": "Segundos para responder",
-    "weight": "Peso",
+    "weight": "Ponderación",
     "group-not-published": "El grupo no se publica.",
     "answering-is-locked": "Contestación bloqueada",
     "reset-answers-to-disable-setting": "Reinicie los resultados de esta serie de preguntas para desactivar este ajuste.",
@@ -237,7 +239,9 @@
     "publishing-mode-description-all": "Todos los contenidos se publican para los participantes.",
     "publishing-mode-description-up-to": "Se publica todo hasta el contenido seleccionado para los participantes.",
     "format-short_answer-description": "Los participantes responden con una entrada de texto. Se definen una o varias respuestas correctas.",
-    "back-to-series": "Volver a la serie de preguntas"
+    "back-to-series": "Volver a la serie de preguntas",
+    "a11y-content-group-info": "Ahora estás en la Serie de preguntas {{name}} que contiene {{contentCount}} contenidos.",
+    "a11y-leaderboard-page-info": "Estás en la página de Clasificación."
   },
   "survey": {
     "a11y-stop-survey": "Detiene la retroalimentación en vivo.",
@@ -274,7 +278,8 @@
     "answer-count": "{{count}} respuestas",
     "start": "Iniciar",
     "stop": "Detener",
-    "pause": "Pausar"
+    "pause": "Pausar",
+    "a11y-create-series-type": "Crea series de preguntas del tipo {{type}}."
   },
   "settings": {
     "a11y-message": "Ahora estás en la configuración de la sala.",

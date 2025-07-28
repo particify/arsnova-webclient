@@ -198,7 +198,10 @@
     "publishing-modes-not-available-in-live-mode": "Questa impostazione non è disponibile in modalità live.",
     "live": "In diretta",
     "publishing-index-info-live": "Pubblicato fino al contenuto {{index}}. Avvia il contenuto successivo per pubblicarlo.",
-    "a11y-content-group-info": "Ora ti trovi nella tua serie di domande {{name}} che contiene {{contentCount}} i contenuti."
+    "a11y-content-group-info": "Ora ti trovi nella tua serie di domande {{name}} che contiene {{contentCount}} i contenuti.",
+    "a11y-leaderboard-page-info": "Ora sei nella pagina della classifica.",
+    "back-to-series": "Torna alla serie di domande",
+    "weight": "Ponderazione"
   },
   "survey": {
     "a11y-stop-survey": "Interrompe il Feedback in tempo reale.",
@@ -223,12 +226,20 @@
     "create-content-group": "Crea una serie di domande",
     "use-template": "Usa il modello",
     "group-locked": "La serie di domande non viene rilasciata",
-    "content-groups-description": "Crea quiz, sondaggi, brainstorming e molto altro. Scegli il tipo giusto o crea un mix di tutti i formati. Se non vuoi partire da zero, consulta i modelli.",
+    "content-groups-description": "Crea quiz, sondaggi, brainstorming e molto altro ancora. Se non vuoi partire da zero, dai un'occhiata ai modelli.",
     "content-group-created": "La tua serie di domande è stata creata.",
     "public-stream": "Domande e risposte",
     "room-loading-error": "Non è stato possibile caricare la Camera",
     "room-settings": "Amministrazione della Camera",
-    "no-content-groups": "Non ci sono serie di domande."
+    "no-content-groups": "Non ci sono serie di domande.",
+    "a11y-create-series-type": "Crea una serie di domande del tipo {{type}}.",
+    "live-feedback-description": "Ottieni un feedback in tempo reale su un sondaggio spontaneo.",
+    "comment-count": "{{count}} Messaggi",
+    "pause": "Pausa",
+    "comments-description": "Lascia che i partecipanti dicano la loro in forma anonima nelle Domande e Risposte.",
+    "start": "Inizio",
+    "answer-count": "{{count}} risposte",
+    "stop": "Stop"
   },
   "settings": {
     "a11y-message": "Ora sei nelle impostazioni della Camera.",
@@ -505,6 +516,8 @@
     "all-comments-deleted": "Tutti i messaggi sono stati cancellati.",
     "banned-comments-deleted": "L'elenco dei moderatori è stato eliminato.",
     "next": "Messaggio successivo",
-    "previous": "Messaggio precedente"
+    "previous": "Messaggio precedente",
+    "start-qna": "Iniziare le Domande e Risposte",
+    "pause-qna": "Pausa Domande e risposte"
   }
 }

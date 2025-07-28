@@ -250,7 +250,8 @@
     "something-went-wrong": "Algo salió mal.",
     "http-too-many-requests": "Demasiadas solicitudes desde tu red.",
     "establishing-connection": "Estableciendo conexión …",
-    "invalid-request": "Su solicitud no es válida."
+    "invalid-request": "Su solicitud no es válida.",
+    "action-not-allowed": "Acción no permitida."
   },
   "title": {
     "register": "Registrarse",
@@ -614,12 +615,22 @@
   "general": {
     "a11y-remove-filter": "Quitar filtro",
     "not-specified": "No especificado",
-    "anonymous": "Anónimo"
+    "anonymous": "Anónimo",
+    "read-only-mode-active": "Modo sólo lectura: La funcionalidad de creación y edición es limitada."
   },
   "ordinal": {
     "one": "",
     "two": "",
     "few": "",
     "other": "°"
+  },
+  "share": {
+    "share-room-with-participants": "Compartir Sala con los Participantes",
+    "share": "Comparte",
+    "copied": "¡Copiado!",
+    "download-qr-code": "Descargar código QR",
+    "present-qr-code": "Presentar código QR",
+    "link": "Enlace",
+    "copy": "Copiar"
   }
 }
