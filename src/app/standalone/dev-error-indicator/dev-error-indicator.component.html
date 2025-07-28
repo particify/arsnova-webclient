@@ -1,10 +1,12 @@
-@if (errorCount()) {
+@if (uiErrorCount()) {
   <!-- using button for visual consistency -->
   <button matIconButton>
-    @if (uiErrorCount()) {
-      <mat-icon [matBadge]="errorCount()" class="error">report</mat-icon>
-    } @else {
-      <mat-icon [matBadge]="errorCount()" class="warning">warning</mat-icon>
-    }
+    <mat-icon
+      [matBadge]="uiErrorCount()"
+      matTooltip="UI errors"
+      (click)="reset()"
+      class="error"
+      >report</mat-icon
+    >
   </button>
 }

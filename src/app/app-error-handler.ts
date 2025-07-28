@@ -48,4 +48,11 @@ export class AppErrorHandler implements ErrorHandler {
   get httpErrorCount$(): Observable<number> {
     return this._httpErrorCount$;
   }
+
+  reset() {
+    this._uiErrorCount$.next(0);
+    this._httpErrorCount$.next(0);
+    this.storage.removeItem(STORAGE_KEYS.UI_ERROR_COUNT);
+    this.storage.removeItem(STORAGE_KEYS.HTTP_ERROR_COUNT);
+  }
 }
