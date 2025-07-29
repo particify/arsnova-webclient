@@ -15,6 +15,10 @@ import { ContentForm } from '@app/creator/content-group/content-editing/content-
 import { FormsModule } from '@angular/forms';
 import { FlexModule } from '@angular/flex-layout';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 
 enum BINARY_OPTION {
   YES = 'yes',
@@ -44,6 +48,7 @@ export class BinaryContentFormComponent
   implements OnChanges, ContentForm
 {
   private translateService = inject(TranslocoService);
+  private notificationService = inject(NotificationService);
 
   @Input() content?: Content;
   @Input() isEditMode = false;
@@ -52,16 +57,18 @@ export class BinaryContentFormComponent
   currentOption?: BINARY_OPTION;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.content?.currentValue) {
-      if (this.content?.format === ContentType.BINARY) {
-        const correctOptions = (this.content as ContentChoice)
-          .correctOptionIndexes;
-        if (correctOptions) {
-          this.currentOption =
-            correctOptions[0] === 0 ? BINARY_OPTION.YES : BINARY_OPTION.NO;
+    if (changes.content) {
+      if (changes.content.currentValue) {
+        if (this.content?.format === ContentType.BINARY) {
+          const correctOptions = (this.content as ContentChoice)
+            .correctOptionIndexes;
+          if (correctOptions) {
+            this.currentOption =
+              correctOptions[0] === 0 ? BINARY_OPTION.YES : BINARY_OPTION.NO;
+          }
         }
-      } else if (this.correctAnswer) {
-        this.currentOption = BINARY_OPTION.YES;
+      } else {
+        this.currentOption = undefined;
       }
     }
   }
@@ -72,8 +79,19 @@ export class BinaryContentFormComponent
       this.content.format = ContentType.BINARY;
     }
     if (this.correctAnswer) {
-      const index = this.currentOption === BINARY_OPTION.YES ? 0 : 1;
-      (this.content as ContentChoice).correctOptionIndexes = [index];
+      if (this.currentOption) {
+        const index = this.currentOption === BINARY_OPTION.YES ? 0 : 1;
+        (this.content as ContentChoice).correctOptionIndexes = [index];
+      } else {
+        const msg = this.translateService.translate(
+          'creator.content.select-one'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+        return;
+      }
     } else {
       (this.content as ContentChoice).correctOptionIndexes = [];
     }
