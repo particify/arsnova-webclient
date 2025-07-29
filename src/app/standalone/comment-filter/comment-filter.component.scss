@@ -3,3 +3,9 @@
 .extra-padding {
   padding: 0 $spacing-2;
 }
+
+.standard-button {
+  height: 100%;
+  opacity: 1;
+  color: var(--on-surface-light);
+}
