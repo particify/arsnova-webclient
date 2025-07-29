@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
   ViewChild,
   inject,
@@ -31,7 +30,7 @@ import { FlexModule } from '@angular/flex-layout';
 })
 export class ChoiceContentFormComponent
   extends FormComponent
-  implements OnInit, OnChanges, ContentForm
+  implements OnChanges, ContentForm
 {
   private contentService = inject(ContentService);
 
@@ -48,20 +47,17 @@ export class ChoiceContentFormComponent
 
   displayAnswers: DisplayAnswer[] = [];
 
-  ngOnInit(): void {
-    if (this.content?.format === ContentType.CHOICE) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.content?.currentValue &&
+      this.content?.format === ContentType.CHOICE
+    ) {
       this.initContentForEditing();
     }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.correctAnswers) {
-      this.displayAnswers.forEach((val) => (val.correct = false));
-    } else if (
-      !changes.multipleCorrectAnswers &&
-      !changes.content?.currentValue
-    ) {
+    if (changes.content && !changes.content.currentValue) {
       this.displayAnswers = [];
+    } else if (changes.correctAnswers && !changes.correctAnswers.currentValue) {
+      this.displayAnswers.forEach((val) => (val.correct = false));
     }
   }
 

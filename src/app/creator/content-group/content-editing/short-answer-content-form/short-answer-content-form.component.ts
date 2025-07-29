@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -37,7 +36,7 @@ import { DividerComponent } from '@app/standalone/divider/divider.component';
 })
 export class ShortAnswerContentFormComponent
   extends FormComponent
-  implements OnInit, OnChanges, ContentForm
+  implements OnChanges, ContentForm
 {
   @ViewChild(CreateAnswerOptionComponent)
   answerCreation!: CreateAnswerOptionComponent;
@@ -50,14 +49,12 @@ export class ShortAnswerContentFormComponent
 
   displayAnswers: DisplayAnswer[] = [];
 
-  ngOnInit(): void {
-    if (this.content?.format === ContentType.SHORT_ANSWER) {
-      this.initContentForEditing();
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes.content?.currentValue) {
+    if (changes.content?.currentValue) {
+      if (this.content?.format === ContentType.SHORT_ANSWER) {
+        this.initContentForEditing();
+      }
+    } else {
       this.displayAnswers = [];
     }
   }

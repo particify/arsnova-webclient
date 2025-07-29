@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
   inject,
 } from '@angular/core';
@@ -47,7 +46,7 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
 })
 export class FlashcardContentFormComponent
   extends FormComponent
-  implements OnInit, OnChanges, ContentForm
+  implements OnChanges, ContentForm
 {
   private notificationService = inject(NotificationService);
   private translationService = inject(TranslocoService);
@@ -60,14 +59,12 @@ export class FlashcardContentFormComponent
   textContainsImage = false;
   HintType = HintType;
 
-  ngOnInit(): void {
-    if (this.content?.format === ContentType.FLASHCARD) {
-      this.answer = (this.content as ContentFlashcard).additionalText;
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes.content.currentValue) {
+    if (changes.content?.currentValue) {
+      if (this.content?.format === ContentType.FLASHCARD) {
+        this.answer = (this.content as ContentFlashcard).additionalText;
+      }
+    } else {
       this.answer = '';
     }
   }

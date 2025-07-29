@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -29,7 +35,7 @@ const MAX_KEYWORDS = 10;
 })
 export class WordcloudContentFormComponent
   extends FormComponent
-  implements OnInit, ContentForm
+  implements OnChanges, ContentForm
 {
   private notificationService = inject(NotificationService);
   private translateService = inject(TranslocoService);
@@ -39,8 +45,11 @@ export class WordcloudContentFormComponent
 
   maxAnswers = 3;
 
-  ngOnInit(): void {
-    if (this.content?.format === ContentType.WORDCLOUD) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.content?.currentValue &&
+      this.content?.format === ContentType.WORDCLOUD
+    ) {
       this.maxAnswers = (this.content as ContentWordcloud).maxAnswers;
     }
   }

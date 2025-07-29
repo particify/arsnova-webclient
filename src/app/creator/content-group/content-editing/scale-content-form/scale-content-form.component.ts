@@ -69,17 +69,17 @@ export class ScaleContentFormComponent
   answerLabels: string[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.neutralOption) {
-      this.updateOptionLabels();
-    }
-  }
-
-  ngOnInit(): void {
-    if (this.content?.format === ContentType.SCALE) {
+    if (
+      changes.content?.currentValue &&
+      this.content?.format === ContentType.SCALE
+    ) {
       const scaleContent = this.content as ContentScale;
       this.selectedTemplate = scaleContent.optionTemplate;
     }
     this.updateOptionLabels();
+  }
+
+  ngOnInit(): void {
     this.language = this.languageService.ensureValidLang(this.language);
   }
 

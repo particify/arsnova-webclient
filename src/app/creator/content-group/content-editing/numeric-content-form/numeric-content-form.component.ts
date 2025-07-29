@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -39,7 +45,7 @@ const MAX_VALUE = 1_000_000_000_000_000; // Maximum value is up (or down) to one
 })
 export class NumericContentFormComponent
   extends FormComponent
-  implements OnInit, ContentForm
+  implements OnChanges, ContentForm
 {
   private notificationService = inject(NotificationService);
   private translateService = inject(TranslocoService);
@@ -55,8 +61,11 @@ export class NumericContentFormComponent
   correctNumber?: number;
   tolerance?: number;
 
-  ngOnInit(): void {
-    if (this.content?.format === ContentType.NUMERIC) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.content?.currentValue &&
+      this.content?.format === ContentType.NUMERIC
+    ) {
       const content = this.content as ContentNumeric;
       this.minimum = content.minNumber;
       this.maximum = content.maxNumber;
