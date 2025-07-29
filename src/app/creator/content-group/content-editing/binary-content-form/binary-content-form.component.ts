@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -35,7 +41,7 @@ enum BINARY_OPTION {
 })
 export class BinaryContentFormComponent
   extends FormComponent
-  implements OnInit, ContentForm
+  implements OnChanges, ContentForm
 {
   private translateService = inject(TranslocoService);
 
@@ -45,16 +51,18 @@ export class BinaryContentFormComponent
   options: BINARY_OPTION[] = Object.values(BINARY_OPTION);
   currentOption?: BINARY_OPTION;
 
-  ngOnInit(): void {
-    if (this.content?.format === ContentType.BINARY) {
-      const correctOptions = (this.content as ContentChoice)
-        .correctOptionIndexes;
-      if (correctOptions) {
-        this.currentOption =
-          correctOptions[0] === 0 ? BINARY_OPTION.YES : BINARY_OPTION.NO;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.content?.currentValue) {
+      if (this.content?.format === ContentType.BINARY) {
+        const correctOptions = (this.content as ContentChoice)
+          .correctOptionIndexes;
+        if (correctOptions) {
+          this.currentOption =
+            correctOptions[0] === 0 ? BINARY_OPTION.YES : BINARY_OPTION.NO;
+        }
+      } else if (this.correctAnswer) {
+        this.currentOption = BINARY_OPTION.YES;
       }
-    } else if (this.correctAnswer) {
-      this.currentOption = BINARY_OPTION.YES;
     }
   }
 

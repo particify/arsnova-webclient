@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
   ViewChild,
   inject,
@@ -37,7 +36,7 @@ import { DividerComponent } from '@app/standalone/divider/divider.component';
 })
 export class SortContentFormComponent
   extends FormComponent
-  implements OnInit, OnChanges, ContentForm
+  implements OnChanges, ContentForm
 {
   private contentService = inject(ContentService);
 
@@ -52,17 +51,15 @@ export class SortContentFormComponent
 
   displayAnswers: DisplayAnswer[] = [];
 
-  ngOnInit(): void {
-    if (this.content?.format === ContentType.SORT) {
-      const content = this.content as ContentChoice;
-      this.displayAnswers = this.contentService.getAnswerOptions(
-        content.options
-      );
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes.content.currentValue) {
+    if (changes.content?.currentValue) {
+      if (this.content?.format === ContentType.SORT) {
+        const content = this.content as ContentChoice;
+        this.displayAnswers = this.contentService.getAnswerOptions(
+          content.options
+        );
+      }
+    } else {
       this.displayAnswers = [];
     }
   }
