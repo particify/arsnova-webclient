@@ -174,18 +174,11 @@ $logo-width: 120px;
   background-color: var(--on-surface);
 }
 
-.code {
-  position: fixed;
-  top: $spacing-3;
-  left: $spacing-3;
-  color: var(--on-surface-light);
-  font-size: $l-font-size;
-}
-
-@include gt-xl {
-  .code {
-    font-size: $xl-font-size;
-  }
+app-share-overlay {
+  position: absolute;
+  left: 0;
+  bottom: $bar-height + ($bar-padding * 2);
+  z-index: 3;
 }
 
 .no-padding {

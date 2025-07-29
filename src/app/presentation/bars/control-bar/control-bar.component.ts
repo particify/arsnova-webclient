@@ -14,7 +14,6 @@ import {
 import { STORAGE_KEYS } from '@app/core/services/util/global-storage.service';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { map, take, takeUntil, throttleTime } from 'rxjs/operators';
-import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { fromEvent, Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
@@ -49,12 +48,16 @@ import { MatButton } from '@angular/material/button';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { KeyButtonBarComponent } from '@app/presentation/bars/key-button-bar/key-button-bar.component';
 import { CommentFilterComponent } from '@app/standalone/comment-filter/comment-filter.component';
-import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { ContentType } from '@app/core/models/content-type.enum';
 import {
   ToggleButtonBarComponent,
   ToggleButtonOption,
 } from '@app/standalone/toggle-button-bar/toggle-button-bar.component';
+import { ShareOverlayComponent } from '@app/standalone/share-overlay/share-overlay.component';
+import {
+  EventCategory,
+  TrackingService,
+} from '@app/core/services/util/tracking.service';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -101,22 +104,22 @@ export class KeyNavBarItem extends NavBarItem {
     KeyButtonBarComponent,
     ContentPresentationMenuComponent,
     CommentFilterComponent,
-    SplitShortIdPipe,
     TranslocoPipe,
     ToggleButtonBarComponent,
+    ShareOverlayComponent,
   ],
 })
 export class ControlBarComponent
   extends NavBarComponent
   implements OnInit, OnDestroy
 {
-  protected apiConfigService = inject(ApiConfigService);
   private announceService = inject(AnnounceService);
   private hotkeyService = inject(HotkeyService);
   private translateService = inject(TranslocoService);
   private dialogService = inject(DialogService);
   private notificationService = inject(NotificationService);
   private presentationService = inject(PresentationService);
+  private trackingService = inject(TrackingService);
 
   @ViewChild(ContentPresentationMenuComponent)
   moreMenuComponent!: ContentPresentationMenuComponent;
@@ -132,7 +135,6 @@ export class ControlBarComponent
   contentStepState = PresentationStepPosition.START;
   commentStepState = PresentationStepPosition.START;
   menuOpen = false;
-  joinUrl?: string;
   currentCommentZoom = 100;
   currentCommentSort?: CommentSort;
   currentCommentFilter?: CommentFilter;
@@ -184,6 +186,8 @@ export class ControlBarComponent
   activeWordcloudVisualiation =
     this.presentationService.activeWordcloudVisualization;
 
+  showShareOverlay = false;
+
   buttons: ToggleButtonOption[] = [
     {
       id: 'cloud',
@@ -209,6 +213,9 @@ export class ControlBarComponent
     this.currentCommentPeriod =
       this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||
       CommentPeriod.ALL;
+    this.showShareOverlay = this.globalStorageService.getItem(
+      STORAGE_KEYS.SHOW_SHARE_OVERLAY
+    );
   }
 
   ngOnDestroy() {
@@ -252,16 +259,6 @@ export class ControlBarComponent
     setTimeout(() => {
       this.sendControlBarState();
     }, 300);
-    this.apiConfigService
-      .getApiConfig$()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((config) => {
-        if (config.ui.links?.join) {
-          this.joinUrl =
-            this.removeProtocolFromString(config.ui.links.join.url) +
-            this.room.shortId;
-        }
-      });
     this.isLoading = false;
     this.subscribeToMouseEvents();
   }
@@ -701,7 +698,14 @@ export class ControlBarComponent
 
   private registerHotkeys() {
     const actions: Record<string, () => void> = {
-      share: () => this.updateFeature(undefined),
+      share: () => {
+        this.toggleShareOverview();
+        this.trackingService.addEvent(
+          EventCategory.UI_INTERACTION,
+          'Toggle share overlay',
+          this.showShareOverlay ? 'on' : 'off'
+        );
+      },
       fullscreen: () => this.toggleFullscreen(),
       exit: () => this.exitPresentation(),
     };
@@ -731,5 +735,13 @@ export class ControlBarComponent
 
   isWordcloudVisualiationActive(id: string): boolean {
     return this.activeWordcloudVisualiation() === id;
+  }
+
+  toggleShareOverview() {
+    this.showShareOverlay = !this.showShareOverlay;
+    this.globalStorageService.setItem(
+      STORAGE_KEYS.SHOW_SHARE_OVERLAY,
+      this.showShareOverlay
+    );
   }
 }
