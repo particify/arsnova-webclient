@@ -1,10 +1,16 @@
+@use '../../../variables' as *;
+
 .slide-toggle-header {
-  font-weight: bold;
-  margin-bottom: 4px;
+  color: var(--on-surface);
+  font-weight: var(
+    --settings-slide-toggle-header-font-weight,
+    $font-weight-bold
+  );
+  font-size: var(--settings-slide-toggle-font-size, $m-font-size);
 }
 
 .slide-toggle-description {
-  margin-top: 0;
+  font-size: var(--settings-slide-toggle-font-size, $m-font-size);
   color: var(--on-surface-light);
 }
 

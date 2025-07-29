@@ -75,7 +75,7 @@
         <app-loading-indicator></app-loading-indicator>
       }
       @if (!isLoading) {
-        <div>
+        <div fxLayout="column" fxLayoutGap="24px">
           <span>{{ 'user-profile.preferences-description' | transloco }}</span>
           <app-settings-slide-toggle
             label="user-profile.visualization-unit-percent"

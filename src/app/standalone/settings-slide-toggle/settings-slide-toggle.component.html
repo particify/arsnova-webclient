@@ -1,21 +1,23 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px">
-  <div id="toggle-{{ label }}" [ngClass]="{ disabled: disabled }">
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <p class="slide-toggle-header">
-        {{ label | transloco }}
-      </p>
-      <ng-content>
-        <!-- Used by extensions -->
-      </ng-content>
-    </div>
-    <p class="slide-toggle-description">
-      {{ label + '-info' | transloco }}
-    </p>
-  </div>
   <mat-slide-toggle
+    fxFill
     [(ngModel)]="isChecked"
     (change)="toggle($event)"
     [disabled]="disabled"
-    aria-labelledby="toggle-{{ label }}"
-  ></mat-slide-toggle>
+    labelPosition="before"
+  >
+    <div [ngClass]="{ disabled: disabled }" fxLayout="column" fxLayoutGap="6px">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span class="slide-toggle-header">
+          {{ label | transloco }}
+        </span>
+        <ng-content>
+          <!-- Used by extensions -->
+        </ng-content>
+      </div>
+      <span class="slide-toggle-description">
+        {{ label + '-info' | transloco }}
+      </span>
+    </div>
+  </mat-slide-toggle>
 </div>
