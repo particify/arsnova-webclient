@@ -1,15 +1,5 @@
 <div fxLayout="column" fxLayoutGap="1em">
   <div>
-    @if (correctAnswerSelection) {
-      <mat-checkbox
-        [disabled]="formDisabled || isAnswered"
-        [(ngModel)]="noCorrect"
-      >
-        {{ 'creator.content.no-correct-answer' | transloco }}
-      </mat-checkbox>
-    }
-  </div>
-  <div>
     <span>{{ 'creator.content.range' | transloco }}</span>
     <div fxLayout="row" fxLayoutGap="1em">
       <mat-form-field appearance="outline" class="no-field-hint initial-width">
@@ -32,7 +22,7 @@
       </mat-form-field>
     </div>
   </div>
-  @if (isQuiz || correctAnswerSelection) {
+  @if (correctAnswer) {
     <div fxLayout="column">
       <span>{{ 'creator.content.correct-answer' | transloco }}</span>
       <div fxLayout="column" fxLayoutGap="0.5em">
@@ -46,7 +36,7 @@
             }}</mat-label>
             <input
               matInput
-              [disabled]="formDisabled || noCorrect || isAnswered"
+              [disabled]="formDisabled || isAnswered"
               type="number"
               [(ngModel)]="correctNumber"
             />
@@ -60,13 +50,13 @@
             }}</mat-label>
             <input
               matInput
-              [disabled]="formDisabled || noCorrect || isAnswered"
+              [disabled]="formDisabled || isAnswered"
               type="number"
               [(ngModel)]="tolerance"
             />
           </mat-form-field>
         </div>
-        @if (!noCorrect && !!tolerance && !!correctNumber) {
+        @if (!!tolerance && !!correctNumber) {
           <span class="range-hint">{{
             'creator.content.all-answers-between-are-correct'
               | transloco

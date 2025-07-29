@@ -10,7 +10,6 @@ import { ContentForm } from '@app/creator/content-group/content-editing/content-
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { FlexModule } from '@angular/flex-layout';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -30,7 +29,6 @@ const MAX_VALUE = 1_000_000_000_000_000; // Maximum value is up (or down) to one
   ],
   imports: [
     FlexModule,
-    MatCheckbox,
     FormsModule,
     MatFormField,
     MatLabel,
@@ -49,10 +47,9 @@ export class NumericContentFormComponent
   @Input() content?: Content;
   @Input() isEditMode = false;
   @Input() correctAnswerSelection = false;
-  @Input() isQuiz = false;
   @Input() isAnswered = false;
+  @Input() correctAnswer = true;
 
-  noCorrect = false;
   minimum = 1;
   maximum = 100;
   correctNumber?: number;
@@ -65,10 +62,6 @@ export class NumericContentFormComponent
       this.maximum = content.maxNumber;
       this.correctNumber = content.correctNumber;
       this.tolerance = content.tolerance || undefined;
-      this.noCorrect = content.correctNumber === undefined;
-    }
-    if (!this.correctAnswerSelection) {
-      this.noCorrect = !this.isQuiz;
     }
   }
 
@@ -115,7 +108,7 @@ export class NumericContentFormComponent
         { maxRange: MAX_VALUE }
       );
     } else if (
-      !this.noCorrect &&
+      this.correctAnswer &&
       (this.correctNumber === undefined || this.isCorrectOutOfRange())
     ) {
       errMsg = this.translateService.translate(
@@ -144,7 +137,7 @@ export class NumericContentFormComponent
     }
     content.minNumber = this.minimum;
     content.maxNumber = this.maximum;
-    if (this.noCorrect) {
+    if (!this.correctAnswer) {
       content.correctNumber = undefined;
       content.tolerance = 0;
     } else {

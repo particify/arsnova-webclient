@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import {
   LikertScaleTemplate,
   LIKERT_SCALE_TEMPLATES,
@@ -10,7 +17,6 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
 import { LanguageService } from '@app/core/services/util/language.service';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
@@ -30,7 +36,6 @@ import { FlexModule } from '@angular/flex-layout';
     },
   ],
   imports: [
-    MatCheckbox,
     FormsModule,
     MatFormField,
     MatLabel,
@@ -45,7 +50,7 @@ import { FlexModule } from '@angular/flex-layout';
 })
 export class ScaleContentFormComponent
   extends FormComponent
-  implements OnInit, ContentForm
+  implements OnInit, OnChanges, ContentForm
 {
   private likertScaleService = inject(LikertScaleService);
   private languageService = inject(LanguageService);
@@ -54,20 +59,25 @@ export class ScaleContentFormComponent
   @Input() isAnswered = false;
   @Input() isEditMode = false;
   @Input() language?: string;
+  @Input() neutralOption = true;
 
   templates = LIKERT_SCALE_TEMPLATES;
   templateLabels = LIKERT_SCALE_TEMPLATES.map(
     (t) => 'creator.option-template.' + t.toLowerCase().replace(/_/g, '-')
   );
   selectedTemplate = LikertScaleTemplate.AGREEMENT;
-  neutralOption = true;
   answerLabels: string[] = [];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.neutralOption) {
+      this.updateOptionLabels();
+    }
+  }
 
   ngOnInit(): void {
     if (this.content?.format === ContentType.SCALE) {
       const scaleContent = this.content as ContentScale;
       this.selectedTemplate = scaleContent.optionTemplate;
-      this.neutralOption = scaleContent.optionCount % 2 !== 0;
     }
     this.updateOptionLabels();
     this.language = this.languageService.ensureValidLang(this.language);

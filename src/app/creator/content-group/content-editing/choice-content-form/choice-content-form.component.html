@@ -1,36 +1,11 @@
 <div fxLayout="column" fxLayoutGap="10px">
-  <div fxLayout="column">
-    <mat-checkbox
-      [disabled]="formDisabled"
-      [checked]="multipleCorrectAnswers"
-      (change)="changeMultiple($event)"
-      name="multiple"
-    >
-      <span>{{ 'creator.content.multiple-answers-allowed' | transloco }}</span>
-    </mat-checkbox>
-    @if (correctAnswerSelection) {
-      <mat-checkbox
-        [disabled]="formDisabled"
-        [checked]="noCorrectAnswers"
-        (change)="changeNoCorrect($event)"
-        name="noCorrect"
-      >
-        <span>{{ 'creator.content.no-correct-answer' | transloco }}</span>
-      </mat-checkbox>
-    }
-  </div>
-  <div>
-    @if (displayAnswers.length > 0) {
-      <app-divider></app-divider>
-    }
-    <app-answer-option-list
-      [answers]="displayAnswers"
-      [hasCorrectAnswers]="!noCorrectAnswers"
-      [hasMultipleCorrectAnswers]="multipleCorrectAnswers"
-      [allowDeletion]="!isEditMode || !isAnswered"
-      [disabled]="formDisabled"
-    ></app-answer-option-list>
-  </div>
+  <app-answer-option-list
+    [answers]="displayAnswers"
+    [hasCorrectAnswers]="correctAnswers"
+    [hasMultipleCorrectAnswers]="multipleCorrectAnswers"
+    [allowDeletion]="!isEditMode || !isAnswered"
+    [disabled]="formDisabled"
+  ></app-answer-option-list>
   @if (!isEditMode || !isAnswered) {
     <app-create-answer-option
       [answers]="displayAnswers"

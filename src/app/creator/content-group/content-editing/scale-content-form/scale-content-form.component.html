@@ -1,43 +1,29 @@
-<div>
-  <mat-checkbox
-    [(ngModel)]="neutralOption"
-    (ngModelChange)="updateOptionLabels()"
+<mat-form-field
+  appearance="outline"
+  class="no-field-hint"
+  style="margin-top: 10px"
+>
+  <mat-label>{{ 'creator.content.answer-template' | transloco }}</mat-label>
+  <mat-select
+    [(value)]="selectedTemplate"
+    (selectionChange)="updateOptionLabels()"
     [disabled]="(isEditMode && isAnswered) || formDisabled"
-    >{{ 'creator.content.offer-neutral-option' | transloco }}</mat-checkbox
   >
-  <div style="padding: 0 16px">
-    <div>
-      <mat-form-field
-        appearance="outline"
-        class="no-field-hint"
-        style="margin-top: 10px"
-      >
-        <mat-label>{{
-          'creator.content.answer-template' | transloco
-        }}</mat-label>
-        <mat-select
-          [(value)]="selectedTemplate"
-          (selectionChange)="updateOptionLabels()"
-          [disabled]="(isEditMode && isAnswered) || formDisabled"
-        >
-          @for (template of templates; track template; let i = $index) {
-            <mat-option [value]="template">{{
-              templateLabels[i] | transloco
-            }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-list *transloco="let t; lang: language">
-        @for (answerLabel of answerLabels; track answerLabel) {
-          <mat-list-item class="bottom-border">
-            <div fxLayout="row">
-              <p>{{ t(answerLabel) }}</p>
-            </div>
-          </mat-list-item>
-        }
-      </mat-list>
-    </div>
-  </div>
+    @for (template of templates; track template; let i = $index) {
+      <mat-option [value]="template">{{
+        templateLabels[i] | transloco
+      }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<div>
+  <mat-list *transloco="let t; lang: language">
+    @for (answerLabel of answerLabels; track answerLabel) {
+      <mat-list-item class="bottom-border">
+        <div fxLayout="row">
+          <p>{{ t(answerLabel) }}</p>
+        </div>
+      </mat-list-item>
+    }
+  </mat-list>
 </div>
