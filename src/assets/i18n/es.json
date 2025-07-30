@@ -449,7 +449,7 @@
     "comments": "Preguntas y respuestas",
     "copy-url": "Copiar dirección",
     "url-copied": "El enlace de la sala se ha copiado al portapapeles.",
-    "go-to-feature": "Ir a {{feature}}",
+    "go-to-feature": "Abrir {{feature}}",
     "started": "Iniciado",
     "stopped": "Detenido",
     "paused": "Pausado"

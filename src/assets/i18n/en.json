@@ -449,7 +449,7 @@
     "comments": "Q&A",
     "copy-url": "Copy address",
     "url-copied": "Room link was copied to the clipboard.",
-    "go-to-feature": "Go to {{feature}}",
+    "go-to-feature": "Open {{feature}}",
     "started": "Started",
     "stopped": "Stopped",
     "paused": "Paused"

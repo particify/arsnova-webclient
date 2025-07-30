@@ -449,7 +449,7 @@
     "comments": "Q&A",
     "copy-url": "Link kopieren",
     "url-copied": "Direktlink wurde in die Zwischenablage kopiert.",
-    "go-to-feature": "Gehe zu {{feature}}",
+    "go-to-feature": "{{feature}} öffnen",
     "started": "Gestartet",
     "stopped": "Gestoppt",
     "paused": "Pausiert"

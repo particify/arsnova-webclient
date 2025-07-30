@@ -27,7 +27,7 @@
     "copy-url": "Indirizzo di copia",
     "url-copied": "Il link della stanza è stato copiato negli appunti.",
     "stopped": "Interrotto",
-    "go-to-feature": "Vai a {{feature}}",
+    "go-to-feature": "Apri {{feature}}",
     "started": "Avviato",
     "paused": "In pausa"
   },
