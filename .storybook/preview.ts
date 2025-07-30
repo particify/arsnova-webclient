@@ -54,6 +54,11 @@ class MockLangService {
         name: 'Español',
         category: LanguageCategory.COMMUNITY,
       },
+      {
+        key: 'it',
+        name: 'Italiano',
+        category: LanguageCategory.COMMUNITY,
+      },
     ];
   }
   init() {}
@@ -62,6 +67,7 @@ class MockLangService {
       { code: 'en', nativeName: 'English', localizedName: 'Englisch' },
       { code: 'de', nativeName: 'Deutsch', localizedName: 'German' },
       { code: 'es', nativeName: 'español', localizedName: 'Spanish' },
+      { code: 'it', nativeName: 'italiano', localizedName: 'Italian' },
     ]);
   }
 }
