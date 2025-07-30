@@ -38,6 +38,7 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   HOTKEY_COUNT: Symbol(),
   UI_ERROR_COUNT: Symbol(),
   HTTP_ERROR_COUNT: Symbol(),
+  SHOW_SHARE_OVERLAY: Symbol(),
 };
 
 /**
@@ -163,6 +164,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
     key: STORAGE_KEYS.HTTP_ERROR_COUNT,
     name: 'HTTP_ERROR_COUNT',
     category: StorageItemCategory.STATISTICS,
+    backend: StorageBackend.SESSIONSTORAGE,
+  },
+  {
+    key: STORAGE_KEYS.SHOW_SHARE_OVERLAY,
+    name: 'SHOW_SHARE_OVERLAY',
+    category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.SESSIONSTORAGE,
   },
 ];

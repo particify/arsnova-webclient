@@ -2,9 +2,6 @@
   extensionId="remote"
   [extensionData]="{ isPresentation: true }"
 ></lib-extension-point>
-@if (currentRouteIndex > -1) {
-  <span class="code">{{ joinUrl || (room.shortId | splitShortId) }}</span>
-}
 @if (isActiveFeature('series')) {
   <div
     class="view-switcher presentation-feature-controls"
@@ -20,6 +17,14 @@
     >
     </app-toggle-button-bar>
   </div>
+}
+@if (currentRouteIndex > -1 && showShareOverlay) {
+  <app-share-overlay
+    [shortId]="room.shortId"
+    [room]="room"
+    (expandClicked)="updateFeature()"
+    (closeClicked)="toggleShareOverview()"
+  ></app-share-overlay>
 }
 <div class="bar-container">
   <div

@@ -1,0 +1,38 @@
+<div class="overlay-container">
+  <div class="button-container">
+    <button
+      mat-mini-fab
+      color="undefined"
+      (click)="expandClicked.emit()"
+      appTrackInteraction="Open full screen share view"
+    >
+      <mat-icon>open_in_full</mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      color="undefined"
+      (click)="closeClicked.emit()"
+      appTrackInteraction="Close share overlay"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="info-container">
+    <div class="text-container">
+      @if (shortener()) {
+        <span>{{ joinUrl() }}</span>
+      } @else {
+        <span>{{ shortId() | splitShortId }}</span>
+      }
+    </div>
+    <qr-code
+      id="qr-code"
+      [size]="qrSize"
+      [value]="url() + '?entry=qr-overlay'"
+      [errorCorrectionLevel]="'M'"
+      [lightColor]="bgColor"
+      [darkColor]="fgColor"
+      [margin]="0"
+    ></qr-code>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+@use '../../../variables' as *;
+
+.info-container {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-1;
+  color: var(--on-surface);
+  font-size: $l-font-size;
+  font-weight: $font-weight-bold;
+}
+
+.overlay-container {
+  background-color: var(--surface);
+  padding: $spacing-3;
+  border-radius: $border-radius;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+
+  .button-container {
+    position: absolute;
+    right: $spacing-3;
+    top: $spacing-3;
+    display: none;
+    flex-direction: row;
+    gap: $spacing-3;
+    z-index: 2;
+
+    button {
+      background-color: var(--surface);
+      color: var(--on-surface);
+    }
+  }
+
+  &:hover {
+    .info-container {
+      opacity: 0.6;
+    }
+
+    .button-container {
+      display: flex;
+    }
+  }
+}
+
+@include gt-xl {
+  .text-container {
+    font-size: $xl-font-size;
+  }
+}
