@@ -201,7 +201,13 @@
     "a11y-content-group-info": "Ora ti trovi nella tua serie di domande {{name}} che contiene {{contentCount}} i contenuti.",
     "a11y-leaderboard-page-info": "Ora sei nella pagina della classifica.",
     "back-to-series": "Torna alla serie di domande",
-    "weight": "Peso"
+    "weight": "Peso",
+    "define-correct-answer-info": "Questa domanda ha una risposta corretta.",
+    "abstentions-info": "I partecipanti possono astenersi da questa domanda.",
+    "timer-info": "Stabilisci un limite di tempo per rispondere.",
+    "weight-info": "I punti vengono moltiplicati per questo fattore.",
+    "multiple-answers-info": "I partecipanti possono selezionare una o più opzioni.",
+    "offer-neutral-option-info": "Usa un'opzione neutra nel modello di risposta."
   },
   "survey": {
     "a11y-stop-survey": "Interrompe il Feedback in tempo reale.",

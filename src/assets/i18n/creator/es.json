@@ -241,7 +241,13 @@
     "format-short_answer-description": "Los participantes responden con una entrada de texto. Se definen una o varias respuestas correctas.",
     "back-to-series": "Volver a la serie de preguntas",
     "a11y-content-group-info": "Ahora estás en la Serie de preguntas {{name}} que contiene {{contentCount}} contenidos.",
-    "a11y-leaderboard-page-info": "Estás en la página de Clasificación."
+    "a11y-leaderboard-page-info": "Estás en la página de Clasificación.",
+    "multiple-answers-info": "Los Participantes pueden seleccionar una o varias opciones.",
+    "define-correct-answer-info": "Esta pregunta tiene una respuesta correcta.",
+    "abstentions-info": "Los Participantes pueden abstenerse en esta pregunta.",
+    "offer-neutral-option-info": "Utiliza una opción neutra en la plantilla de respuesta.",
+    "weight-info": "Los puntos se multiplican por este factor.",
+    "timer-info": "Establece un límite de tiempo para responder."
   },
   "survey": {
     "a11y-stop-survey": "Detiene la retroalimentación en vivo.",
