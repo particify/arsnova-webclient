@@ -39,6 +39,11 @@ export class LanguageService extends AbstractHttpService<void> {
       name: 'Español',
       category: LanguageCategory.COMMUNITY,
     },
+    {
+      key: 'it',
+      name: 'Italiano',
+      category: LanguageCategory.COMMUNITY,
+    },
   ];
 
   constructor() {
