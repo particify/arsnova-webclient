@@ -190,7 +190,7 @@ export class ContentEditingComponent
     if (this.isEditMode) {
       this.initData();
     } else {
-      this.correctAnswer = this.contentGroup.groupType !== GroupType.SURVEY;
+      this.correctAnswer = this.contentGroup.groupType === GroupType.QUIZ;
       this.isLoading = false;
     }
 
