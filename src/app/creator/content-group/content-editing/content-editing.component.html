@@ -270,41 +270,37 @@
   }
 </div>
 <ng-template #settings>
-  <app-settings-slide-toggle
-    [label]="'creator.content.abstentions'"
-    [isChecked]="abstentionsAllowed"
-    [disabled]="formDisabled || isPreview"
-    (toggleEvent)="abstentionsAllowed = $event"
-  ></app-settings-slide-toggle>
-  @if (contentGroup.groupType === GroupType.QUIZ) {
-    <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-between center">
-      <label
-        [ngStyle]="{
-          opacity: !formDisabled && !isPreview ? 1 : 0.5,
-        }"
-      >
-        <div fxLayout="column" fxLayoutGap="4px" class="numeric-input-label">
-          <span> {{ 'creator.content.weight' | transloco }}</span>
-          <span> {{ 'creator.content.weight-info' | transloco }}</span>
-        </div>
-      </label>
-      <div>
-        <mat-form-field
-          appearance="outline"
-          class="no-field-hint initial-width number-input-small"
-        >
-          <input
-            [(ngModel)]="weight"
-            [disabled]="isAnswered || formDisabled || isPreview"
-            matInput
-            type="number"
-            max="5"
-            min="1"
-          />
-        </mat-form-field>
-      </div>
-    </div>
+  @if (selectedFormat?.type === ContentType.CHOICE) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.select-multiple-options'"
+      [isChecked]="multiple"
+      [disabled]="formDisabled || isPreview"
+      (toggleEvent)="multiple = $event"
+    ></app-settings-slide-toggle>
   }
+  @if (
+    contentGroup.groupType === GroupType.MIXED &&
+    this.selectedFormat &&
+    [ContentType.CHOICE, ContentType.BINARY, ContentType.NUMERIC].includes(
+      this.selectedFormat.type
+    )
+  ) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.set-correct-answer'"
+      [isChecked]="correctAnswer"
+      [disabled]="(isEditMode && isAnswered) || formDisabled || isPreview"
+      (toggleEvent)="correctAnswer = $event"
+    ></app-settings-slide-toggle>
+  }
+  @if (selectedFormat?.type === ContentType.SCALE) {
+    <app-settings-slide-toggle
+      [label]="'creator.content.offer-neutral-option'"
+      [isChecked]="neutralOption"
+      [disabled]="(isEditMode && isAnswered) || formDisabled || isPreview"
+      (toggleEvent)="neutralOption = $event"
+    ></app-settings-slide-toggle>
+  }
+
   <div
     fxLayout="row"
     fxLayoutGap="16px"
@@ -350,34 +346,39 @@
       </mat-form-field>
     </div>
   </div>
-  @if (
-    contentGroup.groupType === GroupType.MIXED &&
-    this.selectedFormat &&
-    [ContentType.CHOICE, ContentType.BINARY, ContentType.NUMERIC].includes(
-      this.selectedFormat.type
-    )
-  ) {
-    <app-settings-slide-toggle
-      [label]="'creator.content.set-correct-answer'"
-      [isChecked]="correctAnswer"
-      [disabled]="(isEditMode && isAnswered) || formDisabled || isPreview"
-      (toggleEvent)="correctAnswer = $event"
-    ></app-settings-slide-toggle>
+  @if (contentGroup.groupType === GroupType.QUIZ) {
+    <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-between center">
+      <label
+        [ngStyle]="{
+          opacity: !formDisabled && !isPreview ? 1 : 0.5,
+        }"
+      >
+        <div fxLayout="column" fxLayoutGap="4px" class="numeric-input-label">
+          <span> {{ 'creator.content.weight' | transloco }}</span>
+          <span> {{ 'creator.content.weight-info' | transloco }}</span>
+        </div>
+      </label>
+      <div>
+        <mat-form-field
+          appearance="outline"
+          class="no-field-hint initial-width number-input-small"
+        >
+          <input
+            [(ngModel)]="weight"
+            [disabled]="isAnswered || formDisabled || isPreview"
+            matInput
+            type="number"
+            max="5"
+            min="1"
+          />
+        </mat-form-field>
+      </div>
+    </div>
   }
-  @if (selectedFormat?.type === ContentType.CHOICE) {
-    <app-settings-slide-toggle
-      [label]="'creator.content.select-multiple-options'"
-      [isChecked]="multiple"
-      [disabled]="formDisabled || isPreview"
-      (toggleEvent)="multiple = $event"
-    ></app-settings-slide-toggle>
-  }
-  @if (selectedFormat?.type === ContentType.SCALE) {
-    <app-settings-slide-toggle
-      [label]="'creator.content.offer-neutral-option'"
-      [isChecked]="neutralOption"
-      [disabled]="(isEditMode && isAnswered) || formDisabled || isPreview"
-      (toggleEvent)="neutralOption = $event"
-    ></app-settings-slide-toggle>
-  }
+  <app-settings-slide-toggle
+    [label]="'creator.content.abstentions'"
+    [isChecked]="abstentionsAllowed"
+    [disabled]="formDisabled || isPreview"
+    (toggleEvent)="abstentionsAllowed = $event"
+  ></app-settings-slide-toggle>
 </ng-template>
