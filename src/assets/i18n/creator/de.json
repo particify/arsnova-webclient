@@ -46,7 +46,6 @@
     "a11y-enter-flashcard-answer": "Gib hier die Antwort ein. Hinweis: In diesem Textfeld wird Textformatierung mit markdown unterstützt.",
     "a11y-add-answer": "Erstelle die eingegebene Antwort.",
     "a11y-answer-checkbox": "Lege hier mit der Leertaste fest ob die Antwort {{answer}} richtig oder falsch ist.",
-    "a11y-delete-option": "Lösche die Antwort {{answer}}.",
     "a11y-updated": "Deine Änderungen wurden gespeichert.",
     "a11y-aborted": "Du hast die Bearbeitung abgebrochen.",
     "a11y-answer-marked-correct": "Du hast die Antwort als richtig markiert",
