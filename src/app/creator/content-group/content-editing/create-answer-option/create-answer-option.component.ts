@@ -69,7 +69,7 @@ export class CreateAnswerOptionComponent extends FormComponent {
       this.answerInput.nativeElement.focus();
     } else {
       const msg = this.translateService.translate(
-        'creator.content.max-answers',
+        'creator.content.max-options',
         { max: MAX_ANSWER_OPTIONS }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
@@ -79,7 +79,7 @@ export class CreateAnswerOptionComponent extends FormComponent {
   isFormValid(): boolean {
     if (this.newAnswer.length > 0) {
       const msg = this.translateService.translate(
-        'creator.content.unsaved-answer'
+        'creator.content.unsaved-option'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
@@ -93,7 +93,7 @@ export class CreateAnswerOptionComponent extends FormComponent {
       this.answers.map((o) => o.answerOption.label).indexOf(this.newAnswer) >= 0
     ) {
       const msg = this.translateService.translate(
-        'creator.content.same-answer'
+        'creator.content.same-option'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return true;

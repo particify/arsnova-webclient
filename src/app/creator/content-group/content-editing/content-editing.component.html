@@ -358,7 +358,7 @@
     )
   ) {
     <app-settings-slide-toggle
-      [label]="'creator.content.define-correct-answer'"
+      [label]="'creator.content.set-correct-answer'"
       [isChecked]="correctAnswer"
       [disabled]="(isEditMode && isAnswered) || formDisabled || isPreview"
       (toggleEvent)="correctAnswer = $event"
@@ -366,7 +366,7 @@
   }
   @if (selectedFormat?.type === ContentType.CHOICE) {
     <app-settings-slide-toggle
-      [label]="'creator.content.multiple-answers'"
+      [label]="'creator.content.select-multiple-options'"
       [isChecked]="multiple"
       [disabled]="formDisabled || isPreview"
       (toggleEvent)="multiple = $event"

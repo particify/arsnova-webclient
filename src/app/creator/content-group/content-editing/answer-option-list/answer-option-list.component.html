@@ -63,12 +63,12 @@
           <button
             mat-icon-button
             [attr.aria-label]="
-              'creator.content.a11y-delete-answer'
+              'creator.content.a11y-delete-option'
                 | transloco: { answer: answer.answerOption.label }
             "
             class="delete"
             (click)="deleteAnswer(i)"
-            matTooltip="{{ 'creator.content.delete-answer' | transloco }}"
+            matTooltip="{{ 'creator.content.delete-option' | transloco }}"
           >
             <mat-icon>clear</mat-icon>
           </button>
