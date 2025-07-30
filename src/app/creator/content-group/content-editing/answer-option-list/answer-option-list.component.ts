@@ -92,7 +92,7 @@ export class AnswerOptionListComponent
   getMinimumAnswerMessage(): string {
     return this.minimumAnswerCount === 1
       ? 'creator.content.need-answer'
-      : 'creator.content.need-answers';
+      : 'creator.content.need-options';
   }
 
   switchValue(index: number) {
@@ -120,9 +120,9 @@ export class AnswerOptionListComponent
 
   deleteAnswer(index: number) {
     this.answers.splice(index, 1);
-    this.announceService.announce('creator.content.a11y-answer-deleted');
+    this.announceService.announce('creator.content.a11y-option-deleted');
     const msg = this.translateService.translate(
-      'creator.content.answer-deleted'
+      'creator.content.option-deleted'
     );
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
   }
@@ -139,7 +139,7 @@ export class AnswerOptionListComponent
         'creator.content.no-empty-fields-allowed'
       );
     } else if (this.checkForDuplicates(labels)) {
-      msg = this.translateService.translate('creator.content.same-answer');
+      msg = this.translateService.translate('creator.content.same-option');
     }
     if (msg) {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
