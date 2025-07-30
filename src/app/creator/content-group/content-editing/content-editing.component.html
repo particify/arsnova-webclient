@@ -288,20 +288,21 @@
           <span> {{ 'creator.content.weight-info' | transloco }}</span>
         </div>
       </label>
-      <mat-form-field
-        appearance="outline"
-        fxFlex="noshrink"
-        class="no-field-hint initial-width number-input-small"
-      >
-        <input
-          [(ngModel)]="weight"
-          [disabled]="isAnswered || formDisabled || isPreview"
-          matInput
-          type="number"
-          max="5"
-          min="1"
-        />
-      </mat-form-field>
+      <div>
+        <mat-form-field
+          appearance="outline"
+          class="no-field-hint initial-width number-input-small"
+        >
+          <input
+            [(ngModel)]="weight"
+            [disabled]="isAnswered || formDisabled || isPreview"
+            matInput
+            type="number"
+            max="5"
+            min="1"
+          />
+        </mat-form-field>
+      </div>
     </div>
   }
   <div
@@ -326,27 +327,28 @@
         <span> {{ 'creator.content.timer-info' | transloco }}</span>
       </div></label
     >
-    <mat-form-field
-      appearance="outline"
-      fxFlex="noshrink"
-      class="no-field-hint initial-width number-input-small"
-    >
-      <input
-        [(ngModel)]="duration"
-        [disabled]="isAnswered || !isLiveMode() || formDisabled || isPreview"
-        matInput
-        type="number"
-        max="600"
-        min="10"
-      />
-      <span
-        matTextSuffix
-        [ngClass]="{
-          disabled: isAnswered || !isLiveMode() || formDisabled || isPreview,
-        }"
-        >s</span
+    <div>
+      <mat-form-field
+        appearance="outline"
+        class="no-field-hint initial-width number-input-small"
       >
-    </mat-form-field>
+        <input
+          [(ngModel)]="duration"
+          [disabled]="isAnswered || !isLiveMode() || formDisabled || isPreview"
+          matInput
+          type="number"
+          max="600"
+          min="10"
+        />
+        <span
+          matTextSuffix
+          [ngClass]="{
+            disabled: isAnswered || !isLiveMode() || formDisabled || isPreview,
+          }"
+          >s</span
+        >
+      </mat-form-field>
+    </div>
   </div>
   @if (
     contentGroup.groupType === GroupType.MIXED &&
