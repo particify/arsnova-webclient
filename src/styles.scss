@@ -451,7 +451,7 @@ div {
 .mat-mdc-text-field-wrapper.mdc-text-field--outlined
   .mat-mdc-form-field-infix
   input {
-  padding-top: 4px;
+  padding-top: 2px;
 }
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
@@ -489,6 +489,11 @@ div {
   padding: 8px 0 !important;
   min-height: unset;
   max-height: 36px;
+}
+
+.smaller-input .mat-mdc-form-field-infix {
+  padding: $spacing-1 0 !important;
+  min-height: 48px;
 }
 
 .surface-input .mat-mdc-text-field-wrapper,

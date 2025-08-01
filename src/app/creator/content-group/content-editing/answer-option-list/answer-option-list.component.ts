@@ -1,4 +1,14 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  QueryList,
+  SimpleChanges,
+  ViewChildren,
+  inject,
+} from '@angular/core';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import {
   AdvancedSnackBarTypes,
@@ -15,8 +25,11 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { MatIconButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
+import { AnswerOption } from '@app/core/models/answer-option';
+
+const MAX_ANSWER_OPTIONS = 12;
 
 @Component({
   selector: 'app-answer-option-list',
@@ -37,11 +50,12 @@ import { MatTooltip } from '@angular/material/tooltip';
     MatIconButton,
     MatTooltip,
     TranslocoPipe,
+    MatButton,
   ],
 })
 export class AnswerOptionListComponent
   extends DragDropBaseComponent
-  implements OnInit
+  implements OnInit, OnChanges
 {
   private announceService = inject(AnnounceService);
   private notificationService = inject(NotificationService);
@@ -56,7 +70,19 @@ export class AnswerOptionListComponent
   @Input() minimumAnswerCount = 2;
   @Input() lengthLimit = 500;
 
+  @ViewChildren('optionInput') optionInputs!: QueryList<
+    ElementRef<HTMLInputElement>
+  >;
+
   isAnswerEdit = -1;
+  isAdding = false;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.answers?.currentValue.length === 0) {
+      this.initMinimumAnswerOptions();
+    }
+  }
+
   ngOnInit(): void {
     if (this.sortable) {
       this.updateDragDropList();
@@ -116,6 +142,7 @@ export class AnswerOptionListComponent
 
   leaveEditMode(): void {
     this.isAnswerEdit = -1;
+    console.log('leave.. ', this.isAnswerEdit);
   }
 
   deleteAnswer(index: number) {
@@ -125,6 +152,50 @@ export class AnswerOptionListComponent
       'creator.content.option-deleted'
     );
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+  }
+
+  addOption() {
+    if (this.answers.length < MAX_ANSWER_OPTIONS) {
+      this.isAdding = true;
+      this.answers.push(new DisplayAnswer(new AnswerOption(''), false));
+      setTimeout(() => {
+        this.focusInput(this.answers.length - 1);
+      });
+      setTimeout(() => {
+        this.isAdding = false;
+      }, 100);
+    } else {
+      const msg = this.translateService.translate(
+        'creator.content.max-options',
+        { max: MAX_ANSWER_OPTIONS }
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
+    }
+  }
+
+  goToNext(index: number) {
+    if (this.isAdding) {
+      return;
+    }
+    if (index < this.answers.length - 1) {
+      this.focusInput(index + 1);
+    } else {
+      this.addOption();
+    }
+  }
+
+  private focusInput(index: number) {
+    const inputs = this.optionInputs.toArray();
+    if (inputs.length) {
+      const input = inputs[index];
+      input.nativeElement.focus();
+    }
+  }
+
+  private initMinimumAnswerOptions() {
+    for (let i = 0; i < this.minimumAnswerCount; i++) {
+      this.answers.push(new DisplayAnswer(new AnswerOption(''), false));
+    }
   }
 
   private updateDragDropList() {

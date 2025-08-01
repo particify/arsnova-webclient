@@ -6,7 +6,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
-import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
 import { Content } from '@app/core/models/content';
 import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
@@ -15,31 +14,24 @@ import { ContentShortAnswer } from '@app/core/models/content-short-answer';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentState } from '@app/core/models/content-state';
 import { ContentType } from '@app/core/models/content-type.enum';
-import { FlexModule } from '@angular/flex-layout';
-import { DividerComponent } from '@app/standalone/divider/divider.component';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-short-answer-content-form',
   templateUrl: './short-answer-content-form.component.html',
+  styleUrl: '../content-editing.component.scss',
   providers: [
     {
       provide: 'ContentForm',
       useExisting: ShortAnswerContentFormComponent,
     },
   ],
-  imports: [
-    FlexModule,
-    DividerComponent,
-    AnswerOptionListComponent,
-    CreateAnswerOptionComponent,
-  ],
+  imports: [AnswerOptionListComponent, TranslocoPipe],
 })
 export class ShortAnswerContentFormComponent
   extends FormComponent
   implements OnChanges, ContentForm
 {
-  @ViewChild(CreateAnswerOptionComponent)
-  answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
   answerList!: AnswerOptionListComponent;
 
@@ -60,12 +52,11 @@ export class ShortAnswerContentFormComponent
   }
 
   getContent(): Content | undefined {
-    if (!this.answerCreation || this.answerCreation.isFormValid()) {
-      if (this.answerList.isListValid(false, false)) {
-        this.prepareContent();
-        return this.content;
-      }
+    if (this.answerList.isListValid(false, false)) {
+      this.prepareContent();
+      return this.content;
     }
+
     return;
   }
 

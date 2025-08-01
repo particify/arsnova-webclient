@@ -5,7 +5,6 @@ import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { ContentGroupRoutingModule } from './content-group-routing.module';
 import { ContentGroupPageComponent } from './content-group-page.component';
 import { ContentListComponent } from './content-list/content-list.component';
-import { CreateAnswerOptionComponent } from './content-editing/create-answer-option/create-answer-option.component';
 import { PrioritizationContentFormComponent } from './content-editing/prioritization-content-form/prioritization-content-form.component';
 import { ContentPreviewComponent } from '@app/standalone/content-preview/content-preview.component';
 import { SortContentFormComponent } from './content-editing/sort-content-form/sort-content-form.component';
@@ -81,7 +80,6 @@ import { ContentGroupPageService } from './content-group-page.service';
     BackButtonComponent,
     ContentGroupPageComponent,
     ContentListComponent,
-    CreateAnswerOptionComponent,
     PrioritizationContentFormComponent,
     SortContentFormComponent,
     FlashcardContentFormComponent,

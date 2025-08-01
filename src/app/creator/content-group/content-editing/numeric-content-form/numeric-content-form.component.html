@@ -1,6 +1,6 @@
-<div fxLayout="column" fxLayoutGap="1em">
-  <div>
-    <span>{{ 'creator.content.range' | transloco }}</span>
+<div class="format-container">
+  <div class="format-container">
+    <span class="section-label">{{ 'creator.content.range' | transloco }}</span>
     <div fxLayout="row" fxLayoutGap="1em">
       <mat-form-field appearance="outline" class="no-field-hint initial-width">
         <mat-label>{{ 'creator.content.minimum' | transloco }}</mat-label>
@@ -23,10 +23,12 @@
     </div>
   </div>
   @if (correctAnswer) {
-    <div fxLayout="column">
-      <span>{{ 'creator.content.correct-answer' | transloco }}</span>
-      <div fxLayout="column" fxLayoutGap="0.5em">
-        <div fxLayout="row" fxLayoutGap="1em">
+    <div class="format-container">
+      <span class="section-label">{{
+        'creator.content.correct-answer' | transloco
+      }}</span>
+      <div fxLayout="column" fxLayoutGap="8px">
+        <div fxLayout="row" fxLayoutGap="16px">
           <mat-form-field
             appearance="outline"
             class="no-field-hint initial-width"

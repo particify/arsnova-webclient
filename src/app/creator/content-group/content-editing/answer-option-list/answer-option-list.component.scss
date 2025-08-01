@@ -1,44 +1,11 @@
+@use '../../../../../variables' as *;
+
 .mat-mdc-list-item {
-  min-height: 52px;
   padding: 0;
-}
-
-.edit-input {
-  height: 50px;
-  margin-left: 8px;
-  margin-top: -16px;
-
-  input {
-    padding-bottom: 20px;
-  }
-}
-
-.delete {
-  margin-left: 8px;
-  opacity: 0.3;
-}
-
-@mixin button-hover {
-  opacity: 0.6;
-}
-
-@media (hover: none) {
-  .delete {
-    @include button-hover;
-  }
-}
-
-.delete:hover,
-.delete:focus-within {
-  @include button-hover;
 }
 
 .cdk-drop-list-dragging {
   cursor: grabbing;
-}
-
-.cdk-drag-preview {
-  padding: 16px;
 }
 
 .cdk-drag-placeholder {
@@ -50,6 +17,11 @@
 }
 
 .drag-icon {
-  margin-right: 16px;
+  color: var(--on-surface-light);
+  padding: $spacing;
   cursor: grabbing;
+}
+
+.smaller-input {
+  background-color: var(--surface);
 }

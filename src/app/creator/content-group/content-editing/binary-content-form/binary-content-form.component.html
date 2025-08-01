@@ -1,6 +1,9 @@
 @if (correctAnswer) {
-  <form fxLayout="column" fxLayoutGap="16px">
-    <span>{{ 'creator.content.correct-answer' | transloco }}</span>
+  <form class="format-container">
+    <span class="section-label">{{
+      'creator.content.correct-answer' | transloco
+    }}</span>
+
     <mat-radio-group
       [disabled]="formDisabled"
       [(ngModel)]="currentOption"
