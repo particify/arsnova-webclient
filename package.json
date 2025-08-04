@@ -65,7 +65,7 @@
     "@angular/compiler-cli": "20.1.4",
     "@angular/language-service": "20.1.4",
     "@eslint/js": "9.32.0",
-    "@playwright/test": "1.54.1",
+    "@playwright/test": "1.54.2",
     "@storybook/addon-docs": "9.0.18",
     "@storybook/angular": "9.0.18",
     "@types/d3-cloud": "^1.2.5",
