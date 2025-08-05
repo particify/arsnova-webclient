@@ -89,7 +89,17 @@
     "enable-leaderboard-info": "Les participants participent au quiz en utilisant un pseudonyme et peuvent se comparer dans un classement.",
     "copy-content-to-group": "Copier",
     "move-content-to-group": "Déplacer",
-    "copied-to-content-group": "Le contenu a été déplacé vers {{series}}"
+    "copied-to-content-group": "Le contenu a été déplacé vers {{series}}",
+    "default-group": "Quiz",
+    "more-options": "Plus d'options",
+    "new-content-group": "Nouvelle série de questions",
+    "use-as-template": "Utiliser comme modèle",
+    "create-template-not-possible": "Connecte-toi pour créer des modèles.",
+    "content-has-been-duplicated": "Le contenu a été dupliqué.",
+    "content-group-created": "Une nouvelle série de questions a été créée.",
+    "content-group-name-restriction": "Ce nom n'est pas disponible.",
+    "export-content-group": "Exporter",
+    "content-group-name": "Nom"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
