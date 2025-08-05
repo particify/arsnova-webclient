@@ -2,5 +2,8 @@
   "comment-list": {
     "more-options": "Plus d'options",
     "moderation": "Modération"
+  },
+  "content": {
+    "contents": "Contenus"
   }
 }
