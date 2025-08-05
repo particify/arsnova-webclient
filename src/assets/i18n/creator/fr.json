@@ -3,9 +3,23 @@
     "more-options": "Plus d'options",
     "moderation": "Modération",
     "start-qna": "Commencer les Q&R",
-    "pause-qna": "Pause Q&R"
+    "pause-qna": "Mettre en pause les Q&R",
+    "public-list": "Public",
+    "settings": "Paramètres",
+    "delete-banned-comments": "Supprimer la liste",
+    "all-comments-deleted": "Tous les messages ont été supprimés.",
+    "banned-comments-deleted": "La liste de modération a été supprimée.",
+    "next": "Article suivant",
+    "previous": "Article précédent",
+    "export-comments": "Exporter",
+    "delete-all-comments": "Tout supprimer"
   },
   "content": {
     "contents": "Contenus"
+  },
+  "comment-page": {
+    "a11y-message-moderation": "Vous êtes sur la page de modération.",
+    "a11y-message-answer": "Vous êtes sur la page de réponse aux publications.",
+    "a11y-comment-has-been": "L'article a été {{status}}"
   }
 }
