@@ -31,10 +31,11 @@
     "a11y-answer-marked-wrong": "Vous avez marqué la réponse comme étant fausse",
     "a11y-content-created": "Votre contenu a été sauvegardé. Vous pouvez maintenant créer un nouveau contenu.",
     "a11y-preview-header": "Vous trouverez ci-dessous votre contenu du point de vue des participants.",
-    "a11y-content-item-selected": "Contenu {{index}} de {{length}}: {{body}}",
+    "a11y-content-item-selected": "Contenu {{index}} de {{length}} : {{body}}",
     "a11y-add-to-this-content-group": "Ajoute ce contenu à la série de questions {{name}}",
     "a11y-new-content-group": "Ajouter ce contenu à une nouvelle série de questions",
-    "a11y-back-in-creation": "Vous êtes maintenant de retour dans la création de contenu."
+    "a11y-back-in-creation": "Vous êtes maintenant de retour dans la création de contenu.",
+    "a11y-sort-answer": "Position {{index}} sur {{length}} :{{answer}}."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
