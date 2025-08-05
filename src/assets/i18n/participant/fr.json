@@ -28,7 +28,7 @@
     "results": "Résultats",
     "my-answer": "Ma réponse",
     "a11y-current-text": "{{index}}. C'est une question ouverte. Pour aller vers le contenu et le champ de réponse, appuyez sur la touche tab.",
-    "a11y-current-slide": "{{index}}. Il s'agit d'une diapo. Naviguez avec la touche tab pour accéder au contenu.",
+    "a11y-current-slide": "Contenu {{index}}. Il s'agit d'une diapositive. Navigue avec l'onglet vers le contenu.",
     "group-not-available": "Cette série de questions n'est pas disponible",
     "state-changed": "Le contenu a été mis à jour.",
     "load": "Charger",
@@ -64,13 +64,24 @@
     "new-round-started": "Un nouvelle partie a commencée.",
     "leaderboard-duration": "Durée",
     "contents": "Contenus",
-    "leaderboard-name": "Nom"
+    "leaderboard-name": "Nom",
+    "hide-answer": "Cacher la réponse",
+    "leaderboard-points": "Points",
+    "answered-correctly": "Réponse correcte",
+    "partially-answered-correctly": "Réponse partiellement correcte",
+    "answered-incorrectly": "Réponse incorrecte",
+    "show-answer": "Montrer la réponse"
   },
   "room-page": {
     "a11y-statistics": "Ouvre les statistiques pour la série de questions.",
     "focus-mode-enabled": "Le mode focus est activé dans cette pièce. Votre vue va être synchronisée avec la présentation.",
     "a11y-live-feedback-disabled": "Le feedback en direct est actuellement inactif.",
-    "no-contents": "Il n'y a pas encore de contenu."
+    "no-contents": "Il n'y a pas encore de contenu.",
+    "comments-description": "Pose une question ou écris un commentaire.",
+    "content-groups-description": "Participe à des quiz, des enquêtes et plus encore.",
+    "no-interactions-available": "Actuellement, aucune interaction n'est disponible.",
+    "welcome-to": "Bienvenue à",
+    "live-feedback-description": "Fais un retour/remarque en un clic."
   },
   "comment-page": {
     "search-box-input-description": "Ici vous pouvez chercher des posts.",
