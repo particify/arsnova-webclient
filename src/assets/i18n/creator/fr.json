@@ -112,7 +112,8 @@
     "format-binary": "Oui / Non",
     "format-scale-description": "L'une des réponses prédéfinies peut être sélectionnée.",
     "format-binary-description": "On peut répondre à cette question par \"Oui\" ou \"Non\".",
-    "format-text-description": "Les participants peuvent répondre à la question par une saisie de texte."
+    "format-text-description": "Les participant·es peuvent répondre à la question en écrivant du texte.",
+    "format-slide-description": "Les diapositives sont utilisées pour présenter les informations."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
