@@ -2,7 +2,8 @@
   "comment-list": {
     "more-options": "Plus d'options",
     "moderation": "Modération",
-    "start-qna": "Commencer les questions et réponses"
+    "start-qna": "Commencer les Q&R",
+    "pause-qna": "Pause Q&R"
   },
   "content": {
     "contents": "Contenus"
