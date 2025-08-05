@@ -24,11 +24,12 @@
     "a11y-answer-checkbox": "Utilisez la barre d'espace pour déterminer si la réponse {{answer}} est vrai ou fausse.",
     "a11y-delete-answer": "Supprimer la réponse {{answer}}.",
     "a11y-updated": "Vos modifications ont été enregistrées.",
-    "a11y-answer-added": "La réponse a été ajoutée, reviens en arrière pour supprimer, éditer ou marquer la réponse comme correcte ou incorrecte.",
+    "a11y-answer-added": "La réponse a été ajoutée, revenez en arrière pour supprimer, éditer ou marquer la réponse comme correcte ou incorrecte.",
     "a11y-answer-deleted": "La réponse a été supprimée",
     "a11y-aborted": "Vous avez annulé l'édition.",
     "a11y-answer-marked-correct": "Vous avez noté la réponse comme étant correcte",
-    "a11y-answer-marked-wrong": "Vous avez marqué la réponse comme étant fausse"
+    "a11y-answer-marked-wrong": "Vous avez marqué la réponse comme étant fausse",
+    "a11y-content-created": "Ton contenu a été sauvegardé. Tu peux maintenant créer un nouveau contenu."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
