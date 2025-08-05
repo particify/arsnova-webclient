@@ -107,9 +107,12 @@
     "format-flashcard": "Support visuel",
     "format-scale": "Échelle de Likert",
     "format-sort": "Trier",
-    "format-choice-description": "Les participants peuvent choisir parmi plusieurs options de réponse.",
+    "format-choice-description": "Les participant·es peuvent choisir parmi plusieurs réponses.",
     "format": "Format",
-    "format-binary": "Oui / Non"
+    "format-binary": "Oui / Non",
+    "format-scale-description": "L'une des réponses prédéfinies peut être sélectionnée.",
+    "format-binary-description": "On peut répondre à cette question par \"Oui\" ou \"Non\".",
+    "format-text-description": "Les participants peuvent répondre à la question par une saisie de texte."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
