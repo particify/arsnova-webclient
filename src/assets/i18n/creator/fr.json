@@ -66,7 +66,7 @@
     "answer-no": "\"Non\"",
     "results-have-been-reset": "Les résultats de cette série de questions ont été réinitialisés.",
     "publish-statistics-info": "Les participants peuvent consulter les résultats après avoir répondu.",
-    "publish-answers": "Publier les réponses",
+    "publish-answers": "Afficher les réponses",
     "dont-publish-answers": "Cacher les réponses",
     "answer": "Réponse",
     "add-option": "Ajouter une option",
@@ -78,7 +78,17 @@
     "max-options": "Il y a un maximum de {{max}} options.",
     "publish-statistics": "Publier des statistiques",
     "save": "Enregistrer",
-    "need-answer": "Veuillez entrer une réponse."
+    "need-answer": "Veuillez entrer une réponse.",
+    "moved-to-content-group": "Le contenu a été déplacé sur {{series}}.",
+    "enable-leaderboard": "Activer le classement",
+    "delete-content": "Supprimer",
+    "publish-correct-answers-info": "Les participants peuvent consulter les bonnes réponses après avoir répondu.",
+    "duplicate-content": "Dupliquer",
+    "edit-content": "Modifier",
+    "publish-correct-answers": "Afficher les bonnes réponses",
+    "enable-leaderboard-info": "Les participants participent au quiz en utilisant un pseudonyme et peuvent se comparer dans un classement.",
+    "copy-content-to-group": "Copier",
+    "move-content-to-group": "Déplacer"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
