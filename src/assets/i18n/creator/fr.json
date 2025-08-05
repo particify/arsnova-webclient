@@ -35,7 +35,8 @@
     "a11y-add-to-this-content-group": "Ajoute ce contenu à la série de questions {{name}}",
     "a11y-new-content-group": "Ajouter ce contenu à une nouvelle série de questions",
     "a11y-back-in-creation": "Vous êtes maintenant de retour dans la création de contenu.",
-    "a11y-sort-answer": "Position {{index}} sur {{length}} :{{answer}}."
+    "a11y-sort-answer": "Position {{index}} sur {{length}} : {{answer}}.",
+    "a11y-content-group-info": "Tu es maintenant dans ta série de questions {{name}} qui contient {{contentCount}} contents."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
