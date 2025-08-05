@@ -7,19 +7,47 @@
     "public-list": "Public",
     "settings": "Paramètres",
     "delete-banned-comments": "Supprimer la liste",
-    "all-comments-deleted": "Tous les messages ont été supprimés.",
+    "all-comments-deleted": "Toutes les questions ont été supprimées.",
     "banned-comments-deleted": "La liste de modération a été supprimée.",
-    "next": "Article suivant",
-    "previous": "Article précédent",
+    "next": "Question suivante",
+    "previous": "Question précédente",
     "export-comments": "Exporter",
     "delete-all-comments": "Tout supprimer"
   },
   "content": {
-    "contents": "Contenus"
+    "contents": "Contenus",
+    "a11y-content-create-message": "Vous pouvez maintenant créer un nouveau contenu.",
+    "a11y-content-edit-message": "Vous pouvez maintenant éditer votre contenu.",
+    "a11y-enter-body": "Saisissez le contenu ici. Note : ce champ texte prend en charge la mise en forme Markdown.",
+    "a11y-enter-flashcard-answer": "Entrez la réponse ici. Note : ce champ texte prend en charge la mise en forme Markdown.",
+    "a11y-add-answer": "Créer la réponse saisie.",
+    "a11y-answer-checkbox": "Utilisez la barre d'espace pour déterminer si la réponse {{answer}} est vrai ou fausse.",
+    "a11y-delete-answer": "Supprimer la réponse {{answer}}.",
+    "a11y-updated": "Tes modifications ont été enregistrées."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
-    "a11y-message-answer": "Vous êtes sur la page de réponse aux publications.",
-    "a11y-comment-has-been": "L'article a été {{status}}"
+    "a11y-message-answer": "Vous êtes sur la page de réponse aux questions.",
+    "a11y-comment-has-been": "La question a été {{status}}",
+    "a11y-banned": "interdite.",
+    "answer": "Répondre",
+    "a11y-rejected": "déplacée dans les questions publiques.",
+    "your-answer": "Votre réponse",
+    "enter-answer": "Entrez votre réponse ici",
+    "edit-answer": "Modifier",
+    "mark-favorite": "Marquer comme favorite",
+    "mark-wrong": "Marqué comme incorrect",
+    "mark-not-correct": "Marquer comme incorrect",
+    "mark-not-favorite": "Retirer des favorites",
+    "mark-not-wrong": "Marquer comme non incorrect",
+    "reject": "Publier dans la liste publique",
+    "save-answer": "Enregistrer",
+    "delete-answer": "Supprimer",
+    "answer-deleted": "La réponse a été supprimée.",
+    "delete": "Supprimer",
+    "mark-correct": "Marquer comme correct",
+    "banish": "Bannir de la liste publique",
+    "show-actions": "Afficher les options",
+    "comment-answered": "La réponse a été envoyée."
   }
 }
