@@ -115,7 +115,8 @@
     "QUIZ": "Quiz",
     "SURVEY": "Sondage",
     "SHORT_ANSWER": "Réponse courte",
-    "FLASHCARDS": "Flashcards"
+    "FLASHCARDS": "Flashcards",
+    "countByGroupType": "Nombre par type de série de questions"
   },
   "dialog": {
     "really-delete-account-admin": "Voulez-vous supprimer de façon définitive ce compte et toutes les salles ?",
