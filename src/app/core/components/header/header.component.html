@@ -73,15 +73,15 @@
               {{ 'header.preview' | transloco }}
             </button>
             @if (hasRole(UserRole.OWNER)) {
-              <button mat-menu-item tabindex="0" (click)="goToSettings()">
-                <mat-icon>settings</mat-icon>
-                <span>{{ 'header.room-settings' | transloco }}</span>
-              </button>
               <app-share-room
                 [roomName]="room.name"
                 [disabled]="isPreview"
                 [useMenuButton]="true"
               ></app-share-room>
+              <button mat-menu-item tabindex="0" (click)="goToSettings()">
+                <mat-icon>settings</mat-icon>
+                <span>{{ 'header.room-settings' | transloco }}</span>
+              </button>
             }
           </mat-menu>
           <div
