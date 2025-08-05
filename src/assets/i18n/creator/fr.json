@@ -88,7 +88,8 @@
     "publish-correct-answers": "Afficher les bonnes réponses",
     "enable-leaderboard-info": "Les participants participent au quiz en utilisant un pseudonyme et peuvent se comparer dans un classement.",
     "copy-content-to-group": "Copier",
-    "move-content-to-group": "Déplacer"
+    "move-content-to-group": "Déplacer",
+    "copied-to-content-group": "Le contenu a été déplacé vers {{series}}"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
