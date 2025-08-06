@@ -205,6 +205,14 @@ export class ContentEditingComponent
           this.isAnswered = false;
         }
       });
+    this.contentGroupService
+      .getContentGroupUpdated()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((group) => {
+        if (group.id === this.contentGroup.id) {
+          this.contentGroup = group;
+        }
+      });
   }
 
   private initData() {
