@@ -11,6 +11,8 @@
     "a11y-functional": "Accepter l'utilisation des cookies fonctionnels.",
     "a11y-statistics": "Accepter l'utilisation des cookies à des fins statistiques.",
     "intro": "Nous utilisons les cookies et des technologies similaires pour vous reconnaître lorsque vous revenez sur notre site web et vous autorise à accéder à vos données et réglages. Nous utilisons aussi ces technologies dans un but de statistiques.",
-    "update-later": "Vous pouvez consulter et modifier ces préférences à tout moment via le menu de protection des données."
+    "update-later": "Vous pouvez consulter et modifier ces préférences à tout moment via le menu de protection des données.",
+    "category-essential": "Essentiel",
+    "category-essential-desc": "Certains cookies sont nécessaires au bon fonctionnement de l'application. Il s'agit, par exemple, des données d'authentification après la signature."
   }
 }
