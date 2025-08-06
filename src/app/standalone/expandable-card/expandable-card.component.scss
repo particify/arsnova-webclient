@@ -1,0 +1,51 @@
+@use '../../../variables' as *;
+
+.content-wrapper {
+  overflow: hidden;
+}
+
+.description-card {
+  user-select: none;
+  padding: 0 $spacing-2;
+  overflow: hidden;
+}
+
+.expandable-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-2;
+
+  .content-wrapper {
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: $spacing-2;
+      height: $spacing-3;
+      width: 100%;
+      background: linear-gradient(to bottom, transparent, var(--surface));
+    }
+  }
+
+  &.expanded {
+    height: auto;
+
+    .content-wrapper::after {
+      display: none;
+    }
+  }
+
+  &:not(.expanded) {
+    padding-bottom: $spacing-2;
+  }
+
+  .expand-icon {
+    color: var(--grey);
+    margin-top: $spacing-4;
+    transition: transform 200ms;
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<mat-card
+  class="description-card"
+  [class.expandable-card]="isExpandable"
+  [class.expanded]="expanded"
+  [ngStyle]="{
+    height: isExpandable && !expanded ? COLLAPSED_HEIGHT + 'px' : 'unset',
+  }"
+  (click)="toggleExpanded()"
+>
+  <div class="content-wrapper" #contentWrapper>
+    <ng-content></ng-content>
+  </div>
+  @if (isExpandable && !isLoading) {
+    <div>
+      <mat-icon class="expand-icon" [class.rotated]="expanded"
+        >expand_more</mat-icon
+      >
+    </div>
+  }
+</mat-card>
