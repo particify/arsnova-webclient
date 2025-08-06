@@ -3,8 +3,7 @@
   [description]="description"
   [countHint]="
     showCount && commentCounter !== undefined
-      ? ('creator.room-page.comment-count'
-        | transloco: { count: commentCounter })
+      ? ('room-page.comment-count' | transloco: { count: commentCounter })
       : undefined
   "
   [color]="

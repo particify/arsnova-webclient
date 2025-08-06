@@ -237,11 +237,9 @@
     "no-content-groups": "Non ci sono serie di domande.",
     "a11y-create-series-type": "Crea una serie di domande del tipo {{type}}.",
     "live-feedback-description": "Ottieni un feedback in tempo reale su un sondaggio spontaneo.",
-    "comment-count": "{{count}} Messaggi",
     "pause": "Pausa",
     "comments-description": "Lascia che i partecipanti dicano la loro in forma anonima nelle Domande e Risposte.",
     "start": "Inizio",
-    "answer-count": "{{count}} risposte",
     "stop": "Stop"
   },
   "settings": {

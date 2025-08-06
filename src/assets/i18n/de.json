@@ -452,7 +452,9 @@
     "go-to-feature": "{{feature}} öffnen",
     "started": "Gestartet",
     "stopped": "Gestoppt",
-    "paused": "Pausiert"
+    "paused": "Pausiert",
+    "comment-count": "{{count}} Beiträge",
+    "answer-count": "{{count}} Antworten"
   },
   "statistic": {
     "a11y-message-overview": "Du befindest dich jetzt auf der Statistikübersicht.",
