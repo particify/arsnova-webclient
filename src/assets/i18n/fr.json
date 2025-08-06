@@ -68,6 +68,19 @@
     "a11y-room-join": "Entrez maintenant le numéro du salon que vous souhaitez rejoindre.",
     "a11y-update-available": "Une nouvelle version est disponible. Pour obtenir les dernières modifications, appuie sur la touche tabulation. Pour effectuer la mise à jour, appuie à nouveau sur la touche tabulation.",
     "a11y-update-made": "Vous utilisez la dernière version de {{title}}. Pour obtenir les dernières modifications, appuyez sur la touche tabulation. Pour fermer la boîte de dialogue, appuyez à nouveau sur la touche tabulation.",
-    "a11y-update": "Effectue la mise à jour et ferme la boîte de dialogue. La page sera alors rechargée."
+    "a11y-update": "Effectue la mise à jour et ferme la boîte de dialogue. La page sera actualisée.",
+    "hot-fix-update": "Nous avons apporté quelques améliorations mineures et corrigé des bugs.",
+    "a11y-close": "Ferme le dialogue et retourne à la dernière page.",
+    "update-made": "Nouvelle version !",
+    "update-available": "Mise à jour disponible",
+    "see-news": "Une liste détaillée des modifications se trouve dans notre ",
+    "exactly-8": "Un numéro de salon a exactement 8 chiffres.",
+    "created-2": "\" a été créé.",
+    "only-numbers": "Un numéro de salon contient uniquement des chiffres.",
+    "room-id": "N° salon.",
+    "news": "nouveautés",
+    "important-changes": "Les principaux changements sont",
+    "create-room": "Créer un salon",
+    "created-1": "Le salon \""
   }
 }
