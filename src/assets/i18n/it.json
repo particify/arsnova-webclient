@@ -29,7 +29,9 @@
     "stopped": "Interrotto",
     "go-to-feature": "Apri {{feature}}",
     "started": "Avviato",
-    "paused": "In pausa"
+    "paused": "In pausa",
+    "answer-count": "{{count}} risposte",
+    "comment-count": "{{count}} Messaggi"
   },
   "statistic": {
     "a11y-message-overview": "Ora sei nella panoramica delle statistiche.",

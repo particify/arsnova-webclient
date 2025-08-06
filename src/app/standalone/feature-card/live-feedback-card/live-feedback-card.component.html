@@ -3,8 +3,7 @@
   [description]="description"
   [countHint]="
     showCount && feedbackAnswers !== undefined
-      ? ('creator.room-page.answer-count'
-        | transloco: { count: feedbackAnswers })
+      ? ('room-page.answer-count' | transloco: { count: feedbackAnswers })
       : undefined
   "
   [color]="feedbackEnabled ? 'var(--play)' : 'var(--warn)'"

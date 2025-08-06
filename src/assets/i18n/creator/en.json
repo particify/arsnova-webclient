@@ -278,8 +278,6 @@
     "content-groups-description": "Create quizzes, surveys, brainstormings and much more. If you don't want to start from scratch, have a look at the templates.",
     "comments-description": "Let participants have their say anonymously in the Q&A.",
     "live-feedback-description": "Get real-time feedback on a spontaneous poll.",
-    "comment-count": "{{count}} posts",
-    "answer-count": "{{count}} answers",
     "start": "Start",
     "stop": "Stop",
     "pause": "Pause"

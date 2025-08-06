@@ -277,8 +277,6 @@
     "content-groups-description": "Crea cuestionarios, encuestas, lluvias de ideas y mucho más. Si no quieres empezar de cero, consulta las plantillas.",
     "comments-description": "Deje que los participantes expresen su opinión de forma anónima en las preguntas y respuestas.",
     "live-feedback-description": "Obtenga respuestas en tiempo real en una encuesta espontánea.",
-    "comment-count": "{{count}} publicaciones",
-    "answer-count": "{{count}} respuestas",
     "start": "Iniciar",
     "stop": "Detener",
     "pause": "Pausar",

@@ -277,8 +277,6 @@
     "content-groups-description": "Erstelle Quizzes, Umfragen, Brainstormings und vieles mehr. Wenn du nicht bei Null anfangen willst, schau dir die Vorlagen an.",
     "comments-description": "Lasse die Teilnehmenden anonym zu Wort kommen.",
     "live-feedback-description": "Erhalte Echtzeit-Feedback zu einer spontanen Umfrage.",
-    "comment-count": "{{count}} Beiträge",
-    "answer-count": "{{count}} Antworten",
     "start": "Starten",
     "stop": "Stoppen",
     "pause": "Pausieren"
