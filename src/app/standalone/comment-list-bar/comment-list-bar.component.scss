@@ -22,7 +22,7 @@
 .bar-container-fixed {
   position: fixed;
   box-shadow: 0 4px 2px -2px rgb(0 0 0 / 10%);
-  padding: min(16px, 4vw) 0;
+  padding: $spacing-2;
   top: $bar-height;
 
   .inner-bar-container {
