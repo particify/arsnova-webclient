@@ -115,7 +115,8 @@
     "format-text-description": "Les participant·es peuvent répondre à la question en écrivant du texte.",
     "format-slide-description": "Les diapos sont utilisées pour présenter les informations.",
     "format-sort-description": "Les participants peuvent répondre au contenu en triant les réponses.",
-    "format-numeric-description": "Une fourchette numérique est définie dans laquelle les participants peuvent répondre."
+    "format-numeric-description": "Une échelle numérique est définie dans laquelle les participants peuvent répondre.",
+    "format-wordcloud": "Nuage de mots"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
