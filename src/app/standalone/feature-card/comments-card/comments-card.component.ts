@@ -57,6 +57,12 @@ export class CommentsCardComponent implements OnDestroy, OnInit {
       .subscribe((settings) => {
         this.commentSettings = settings;
       });
+    this.commentSettingsService
+      .getSettingsStream()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((settings) => {
+        this.commentSettings = settings;
+      });
     if (this.showCount) {
       this.commentService
         .countByRoomId(this.room.id, true)
