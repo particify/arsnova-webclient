@@ -66,6 +66,7 @@
     "a11y-join-input": "Vous pouvez entrer la clé du salon que vous souhaitez rejoindre. Votre professeur·e vous indiquera le nmuéro du salon.",
     "a11y-user-message": "Vous êtes maintenant sur la page utilisateur.",
     "a11y-room-join": "Entrez maintenant le numéro du salon que vous souhaitez rejoindre.",
-    "a11y-update-available": "Une nouvelle version est disponible. Pour obtenir les dernières modifications, appuie sur la touche de tabulation. Pour effectuer la mise à jour, appuie à nouveau sur la touche de tabulation."
+    "a11y-update-available": "Une nouvelle version est disponible. Pour obtenir les dernières modifications, appuie sur la touche tabulation. Pour effectuer la mise à jour, appuie à nouveau sur la touche tabulation.",
+    "a11y-update-made": "Tu utilises actuellement la dernière version de {{title}}. Pour obtenir les dernières modifications, appuie sur la touche de tabulation. Pour fermer la boîte de dialogue, appuie à nouveau sur la touche de tabulation."
   }
 }
