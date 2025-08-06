@@ -10,6 +10,7 @@
     "a11y-accept-selected": "Accepter l'utilisation des cookies sélectionnés. Vous avez accepté les cookies fonctionnels {{functional}}. Vous avez accepté les cookies statistiques {{statistic}}.",
     "a11y-functional": "Accepter l'utilisation des cookies fonctionnels.",
     "a11y-statistics": "Accepter l'utilisation des cookies à des fins statistiques.",
-    "intro": "Nous utilisons les cookies et les technologies similaires pour vous reconnaître lorsque vous revenez sur notre site web et vous autoriser à acceder à vos données et réglages.. Nous utilisons aussi ces technologies dans un but statistique."
+    "intro": "Nous utilisons les cookies et des technologies similaires pour vous reconnaître lorsque vous revenez sur notre site web et vous autorise à accéder à vos données et réglages. Nous utilisons aussi ces technologies dans un but de statistiques.",
+    "update-later": "Vous pouvez consulter et modifier ces préférences à tout moment via le menu de protection des données."
   }
 }
