@@ -13,6 +13,56 @@
     "intro": "Nous utilisons les cookies et des technologies similaires pour vous reconnaître lorsque vous revenez sur notre site web et vous autorise à accéder à vos données et réglages. Nous utilisons aussi ces technologies dans un but de statistiques.",
     "update-later": "Vous pouvez consulter et modifier ces préférences à tout moment via le menu de protection des données.",
     "category-essential": "Essentiel",
-    "category-essential-desc": "Certains cookies sont nécessaires au bon fonctionnement de l'application. Il s'agit, par exemple, des données d'authentification après la signature."
+    "category-essential-desc": "Certains cookies sont nécessaires au bon fonctionnement de l'application. Par exemple, des données d'authentification une fois connecté.",
+    "category-functional": "Fonctionnel",
+    "category-functional-desc": "Les cookies fonctionnels rendent l'application plus conviviale en permettant de sauvegarder localement les paramètres (par exemple le thème sélectionné).",
+    "category-statistics-desc": "Les cookies statistiques nous aident à améliorer l'application en nous donnant un aperçu de la façon dont notre application est utilisée.",
+    "category-statistics": "Statistiques",
+    "not": "pas",
+    "settings-saved": "Vos paramètres ont été enregistrés."
+  },
+  "footer": {
+    "dsgvo": "Protection des données",
+    "powered-by": "Audience Response System par ",
+    "by": "développé par ",
+    "cookie-settings": "Paramètres des cookies",
+    "imprint": "Impression",
+    "privacy-policy": "Politique de confidentialité",
+    "accessibility": "Accessibilité"
+  },
+  "header": {
+    "a11y-enable-dark-mode": "Activer le mode sombre",
+    "a11y-disable-dark-mode": "Désactiver le mode sombre",
+    "templates": "Modèles",
+    "account-settings": "Paramètres du compte",
+    "guest-account": "Compte invité",
+    "help": "Aide",
+    "language": "Langue",
+    "add-translation": "Ajouter une traduction",
+    "login": "S'identifier",
+    "logout": "Déconnexion",
+    "dark-mode": "Mode sombre",
+    "menu": "Menu principal",
+    "preview": "Aperçu",
+    "present": "Présenter",
+    "presentation-mode": "Mode de présentation",
+    "not-logged-in": "Non connecté",
+    "admin-area": "Administration",
+    "a11y-room": "Ouvrez le menu utilisateur. Vous pouvez y consulter les salles auxquelles vous avez participé ou vous déconnectez de votre compte. Vous trouverez également un lien vers une page d'aide et des paramètres pour modifier la langue et l'affichage.",
+    "a11y-switch-role": "Changer de rôle pour voir le point de vue des participants.",
+    "a11y-switch-back": "Retourner à la vue administrateur.",
+    "a11y-sidenav-message": "Vous êtes maintenant dans le menu principal.",
+    "account-deleted": "Votre compte a été supprimé.",
+    "my-rooms": "Mes salons",
+    "news": "Il y a des nouveautés",
+    "editing-view": "Éditer",
+    "room-settings": "Paramètre du salon",
+    "present-description": "Présenter",
+    "logged-out": "Vous avez été déconnecté."
+  },
+  "home-page": {
+    "a11y-welcome-message": "Bienvenue sur {{title}}. Saisis un numéro de salle à huit chiffres pour rejoindre une salle.",
+    "a11y-join-button": "Entrez dans le salon avec son numéro.",
+    "a11y-join-input": "Vous pouvez entrer la clé du salon que vous souhaitez rejoindre. Votre professeur·e vous indiquera le nmuéro du salon."
   }
 }
