@@ -1,6 +1,10 @@
 <app-feature-card
   [feature]="'room-page.comments' | transloco"
-  [description]="description"
+  [description]="
+    !!pausedDescription && commentSettings?.readonly
+      ? pausedDescription
+      : description
+  "
   [countHint]="
     showCount && commentCounter !== undefined
       ? ('room-page.comment-count' | transloco: { count: commentCounter })

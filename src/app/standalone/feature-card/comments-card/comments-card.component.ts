@@ -43,6 +43,7 @@ export class CommentsCardComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) description!: string;
+  @Input() pausedDescription?: string;
   @Input() showCount = false;
   @Input() clickable = false;
   @Input() showControls = false;
