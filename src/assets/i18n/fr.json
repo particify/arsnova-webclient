@@ -61,8 +61,11 @@
     "logged-out": "Vous avez été déconnecté."
   },
   "home-page": {
-    "a11y-welcome-message": "Bienvenue sur {{title}}. Saisis un numéro de salle à huit chiffres pour rejoindre une salle.",
+    "a11y-welcome-message": "Bienvenue sur {{title}}. Saisis un numéro à huit chiffres pour rejoindre un salon.",
     "a11y-join-button": "Entrez dans le salon avec son numéro.",
-    "a11y-join-input": "Vous pouvez entrer la clé du salon que vous souhaitez rejoindre. Votre professeur·e vous indiquera le nmuéro du salon."
+    "a11y-join-input": "Vous pouvez entrer la clé du salon que vous souhaitez rejoindre. Votre professeur·e vous indiquera le nmuéro du salon.",
+    "a11y-user-message": "Vous êtes maintenant sur la page utilisateur.",
+    "a11y-room-join": "Entrez maintenant le numéro du salon que vous souhaitez rejoindre.",
+    "a11y-update-available": "Une nouvelle version est disponible. Pour obtenir les dernières modifications, appuie sur la touche de tabulation. Pour effectuer la mise à jour, appuie à nouveau sur la touche de tabulation."
   }
 }
