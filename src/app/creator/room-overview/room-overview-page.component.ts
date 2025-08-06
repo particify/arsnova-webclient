@@ -33,6 +33,8 @@ import { AsyncPipe } from '@angular/common';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 import { GlobalHintsComponent } from '@app/standalone/global-hints/global-hints.component';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { ExpandableCardComponent } from '@app/standalone/expandable-card/expandable-card.component';
 
 @Component({
   selector: 'app-creator-overview',
@@ -58,6 +60,8 @@ import { GlobalHintsComponent } from '@app/standalone/global-hints/global-hints.
     TranslocoPipe,
     DisabledIfReadonlyDirective,
     GlobalHintsComponent,
+    RenderedTextComponent,
+    ExpandableCardComponent,
   ],
 })
 export class RoomOverviewPageComponent

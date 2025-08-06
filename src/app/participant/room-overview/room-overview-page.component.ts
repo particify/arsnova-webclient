@@ -13,7 +13,6 @@ import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
-import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AsyncPipe } from '@angular/common';
 import { CoreModule } from '@app/core/core.module';
@@ -26,6 +25,7 @@ import { LiveFeedbackCardComponent } from '@app/standalone/feature-card/live-fee
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { RoomInfoComponentComponent } from '@app/standalone/room-info-component/room-info-component.component';
+import { ExpandableCardComponent } from '@app/standalone/expandable-card/expandable-card.component';
 
 @Component({
   selector: 'app-participant-overview',
@@ -35,7 +35,6 @@ import { RoomInfoComponentComponent } from '@app/standalone/room-info-component/
     FlexModule,
     CoreModule,
     LoadingIndicatorComponent,
-    MatCard,
     ContentGroupsComponent,
     ExtensionPointModule,
     AsyncPipe,
@@ -46,6 +45,7 @@ import { RoomInfoComponentComponent } from '@app/standalone/room-info-component/
     LiveFeedbackCardComponent,
     LanguageContextDirective,
     RoomInfoComponentComponent,
+    ExpandableCardComponent,
   ],
 })
 export class RoomOverviewPageComponent

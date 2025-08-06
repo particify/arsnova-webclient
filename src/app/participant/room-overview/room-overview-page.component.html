@@ -16,14 +16,14 @@
         room.description &&
         (commentsEnabled || feedbackEnabled || contentGroups.length > 0)
       ) {
-        <mat-card>
+        <app-expandable-card>
           <app-rendered-text
             [rawText]="room.description.trim()"
             [renderedText]="room.renderedDescription"
             appLangContext
             appDirContext
           ></app-rendered-text>
-        </mat-card>
+        </app-expandable-card>
       }
       @if (!focusModeEnabled) {
         @if (commentsEnabled || feedbackEnabled) {
