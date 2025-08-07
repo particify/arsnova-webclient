@@ -4,11 +4,13 @@ import { CreatorCommentsPage } from '@e2e/fixtures/creator/comments';
 import { ParticipantCommentsPage } from '@e2e/fixtures/participant/comments';
 import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
+import { RoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
 
 test.describe('Q&A', () => {
   let header: Header;
   let roomSettings: RoomSettingsPage;
   let commentsPage: CreatorCommentsPage;
+  let roomOverview: RoomOverviewPage;
 
   let shortId: string;
 
@@ -17,11 +19,14 @@ test.describe('Q&A', () => {
     header = new Header(page);
     roomSettings = new RoomSettingsPage(page, baseURL);
     commentsPage = new CreatorCommentsPage(page, baseURL);
+    roomOverview = new RoomOverviewPage(page, baseURL);
     // Go to home
     const homePage = new HomePage(page, baseURL);
     await homePage.goto();
     // Create room
     shortId = await homePage.createRoom('My room');
+    await page.waitForURL(/edit/);
+    await roomOverview.startComments();
   });
 
   test.afterEach(async () => {
@@ -53,9 +58,7 @@ test.describe('Q&A', () => {
     await expect(
       page.getByText('creation of posts is currently not allowed')
     ).toBeVisible();
-    await expect(
-      page.getByRole('button', { name: 'unlock creation' })
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Start Q&A' })).toBeVisible();
     await expect(
       p.getByText('creation of posts is currently not allowed')
     ).toBeVisible();

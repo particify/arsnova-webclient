@@ -36,7 +36,6 @@ test.describe('create room with question series', () => {
   test('create question series with contents of all types and publish it', async ({
     page,
   }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My single choice content',
       ['a', 'b', 'c', 'd'],
@@ -58,9 +57,11 @@ test.describe('create room with question series', () => {
       'emoji',
       false
     );
-    await contentCreation.createBinaryContent('My binary content', 'No');
+    await contentCreation.createBinaryContent('My binary content', 'No', true);
     await contentCreation.createBinaryContent(
-      'My binary content with no correct answer'
+      'My binary content with no correct answer',
+      undefined,
+      true
     );
     await contentCreation.createTextContent('My text content');
     await contentCreation.createWordcloudContent('My wordcloud content');
@@ -75,13 +76,21 @@ test.describe('create room with question series', () => {
       ['a', 'b', 'c', 'd']
     );
     await contentCreation.createNumericContent(
+      'My numeric content',
+      -50,
+      50,
+      undefined,
+      undefined,
+      true
+    );
+    await contentCreation.createNumericContent(
       'My numeric content with correct answer and tolerance',
       -50,
       50,
       42,
-      2
+      2,
+      true
     );
-    await contentCreation.createNumericContent('My numeric content', -50, 50);
     await contentCreation.createShortAnswerContent('My short answer content', [
       'abc',
     ]);
@@ -98,7 +107,6 @@ test.describe('create room with question series', () => {
   });
 
   test('create question series with a duplicated content', async ({ page }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -109,13 +117,16 @@ test.describe('create room with question series', () => {
   });
 
   test('create two question series with copied contents', async ({ page }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
       ['b']
     );
-    await contentCreation.createBinaryContent('My binary content');
+    await contentCreation.createBinaryContent(
+      'My binary content',
+      undefined,
+      true
+    );
     await contentGroupOverview.copyContentToNewGroup(
       'My choice content',
       0,
@@ -128,13 +139,16 @@ test.describe('create room with question series', () => {
   });
 
   test('create two question series with moved contents', async ({ page }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
       ['b']
     );
-    await contentCreation.createBinaryContent('My binary content');
+    await contentCreation.createBinaryContent(
+      'My binary content',
+      undefined,
+      true
+    );
     await contentCreation.createShortAnswerContent('My short answer content', [
       'abc',
     ]);
@@ -178,7 +192,6 @@ test.describe('create room with question series', () => {
   });
 
   test('use range publishing mode', async ({ page }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createTextContent('My text content');
     await contentCreation.createTextContent('Another text content');
     await expect(page.getByText('published up to here')).toBeHidden();

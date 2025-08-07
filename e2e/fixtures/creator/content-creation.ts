@@ -6,8 +6,8 @@ export class ContentCreationPage {
   private readonly newAnswerInput: Locator;
   private readonly formatSelection: Locator;
   private readonly formatOption: Locator;
-  private readonly multipleCheckbox: Locator;
-  private readonly correctOptionsCheckbox: Locator;
+  private readonly multipleToggle: Locator;
+  private readonly correctOptionsToggle: Locator;
 
   constructor(
     public readonly page: Page,
@@ -18,14 +18,14 @@ export class ContentCreationPage {
       exact: true,
     });
     this.contentBodyInput = page.getByRole('textbox', { name: 'Content' });
-    this.newAnswerInput = page.getByLabel('Add answer');
+    this.newAnswerInput = page.getByLabel('Add option');
     this.formatSelection = page.getByTestId('format-selection');
     this.formatOption = page.getByRole('option');
-    this.multipleCheckbox = this.page.getByRole('checkbox', {
-      name: 'multiple answers',
+    this.multipleToggle = this.page.getByRole('switch', {
+      name: 'select multiple options',
     });
-    this.correctOptionsCheckbox = this.page.getByRole('checkbox', {
-      name: 'not set correct answers',
+    this.correctOptionsToggle = this.page.getByRole('switch', {
+      name: 'set correct answer',
     });
   }
 
@@ -42,12 +42,12 @@ export class ContentCreationPage {
     multiple = false,
     mixed = true
   ) {
-    await this.selectFormat('Multiple-Choice');
+    await this.selectFormat('Multiple choice');
     await this.contentBodyInput.fill(body);
     if (mixed) {
-      await this.correctOptionsCheckbox.setChecked(!correctOptions);
+      await this.correctOptionsToggle.setChecked(!!correctOptions);
     }
-    await this.multipleCheckbox.setChecked(multiple);
+    await this.multipleToggle.setChecked(multiple);
     for (const option of answerOptions) {
       await this.newAnswerInput.fill(option);
       await this.page.keyboard.press('Enter');
@@ -68,16 +68,25 @@ export class ContentCreationPage {
     await this.selectFormat('Likert');
     await this.contentBodyInput.fill(body);
     if (neutralOption === false) {
-      await this.page.getByText('offer neutral option').click();
+      await this.page
+        .getByRole('switch', { name: 'offer neutral option' })
+        .click();
     }
-    await this.page.getByLabel('answer template').click();
+    await this.page.getByRole('combobox', { name: 'answer template' }).click();
     await this.page.getByRole('option', { name: template }).click();
     await this.submitContent();
   }
 
-  async createBinaryContent(body: string, correctOption?: string) {
+  async createBinaryContent(
+    body: string,
+    correctOption?: string,
+    mixed = false
+  ) {
     await this.selectFormat('Yes / No');
     await this.contentBodyInput.fill(body);
+    if (mixed) {
+      await this.correctOptionsToggle.setChecked(!!correctOption);
+    }
     if (correctOption !== undefined) {
       await this.page
         .getByText('“' + correctOption + '”', { exact: true })
@@ -138,19 +147,25 @@ export class ContentCreationPage {
     min: number,
     max: number,
     correct?: number,
-    tolerance?: number
+    tolerance?: number,
+    mixed = false
   ) {
     await this.selectFormat('Find the number');
     await this.contentBodyInput.fill(body);
     await this.page.getByLabel('minimum').fill(min.toString());
     await this.page.getByLabel('maximum').fill(max.toString());
+    if (mixed) {
+      await this.correctOptionsToggle.setChecked(correct !== undefined);
+    }
     if (correct !== undefined) {
       await this.page
         .getByLabel('Correct answer', { exact: true })
         .fill(correct.toString());
     }
     if (tolerance !== undefined) {
-      await this.page.getByLabel('tolerance').fill(tolerance.toString());
+      await this.page
+        .getByLabel('Tolerance (optional)', { exact: true })
+        .fill(tolerance.toString());
     }
     await this.submitContent();
   }

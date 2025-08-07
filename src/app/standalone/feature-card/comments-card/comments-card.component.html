@@ -36,6 +36,7 @@
             [style]="'color: var(--play)'"
             (click)="enableComments()"
             appDisabledIfReadonly
+            data-testid="start-comments"
           >
             <mat-icon>play_circle</mat-icon>
           </button>
@@ -47,6 +48,7 @@
             [style]="'color: var(--warn-soft)'"
             (click)="pauseComments()"
             appDisabledIfReadonly
+            data-testid="pause-comments"
           >
             <mat-icon>pause_circle</mat-icon>
           </button>
@@ -58,6 +60,7 @@
             [style]="'color: var(--warn)'"
             (click)="disableComments()"
             appDisabledIfReadonly
+            data-testid="stop-comments"
           >
             <mat-icon>stop_circle</mat-icon>
           </button>

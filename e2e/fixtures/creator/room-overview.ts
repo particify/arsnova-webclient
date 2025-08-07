@@ -12,7 +12,7 @@ export class RoomOverviewPage {
     private readonly baseURL: string | undefined
   ) {
     this.commentsButton = page.getByRole('button', {
-      name: 'Go to Q&A',
+      name: 'Open Q&A',
     });
     this.createSeriesButton = page.getByText('create question series');
     this.questionSeriesNameInput = page.getByLabel(
@@ -22,12 +22,17 @@ export class RoomOverviewPage {
       name: 'create',
     });
     this.liveFeedbackButton = page.getByRole('button', {
-      name: 'Go to Live Feedback',
+      name: 'Open Live Feedback',
     });
   }
 
   async goto(shortId: string) {
     await this.page.goto(`${this.baseURL}/edit/${shortId}`);
+  }
+
+  async startComments() {
+    await this.commentsButton.hover();
+    await this.page.getByTestId('start-comments').click();
   }
 
   async goToComments() {

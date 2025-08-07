@@ -35,7 +35,6 @@ test.describe('Presentation of a question series', () => {
 
   test('should publish series with confirmation dialog', async ({ page }) => {
     await roomOverviewPage.createQuestionSeries('My quiz', 'Quiz');
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -57,7 +56,6 @@ test.describe('Presentation of a question series', () => {
     page,
   }) => {
     await roomOverviewPage.createQuestionSeries('My question series', 'Mixed');
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -78,7 +76,6 @@ test.describe('Presentation of a question series', () => {
     page,
   }) => {
     await roomOverviewPage.createQuestionSeries('My survey', 'Survey');
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -102,7 +99,6 @@ test.describe('Presentation of a question series', () => {
     page,
   }) => {
     await roomOverviewPage.createQuestionSeries('My survey', 'Survey');
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -132,7 +128,6 @@ test.describe('Presentation of a question series', () => {
 
   test('should go to content edit', async ({ page }) => {
     await roomOverviewPage.createQuestionSeries('My quiz', 'Quiz');
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -148,7 +143,6 @@ test.describe('Presentation of a question series', () => {
 
   test('should go to display settings', async ({ page }) => {
     await roomOverviewPage.createQuestionSeries('My quiz', 'Quiz');
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
