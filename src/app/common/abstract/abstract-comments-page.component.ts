@@ -31,7 +31,7 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
 export const itemRenderNumber = 20;
 
 export const BAR_PADDING = 16;
-const APP_PADDING = 0.04;
+const APP_PADDING = innerWidth < 600 ? 16 : 24;
 @Component({
   template: '',
   standalone: false,
@@ -107,7 +107,7 @@ export class AbstractCommentsPageComponent {
   currentTag?: string;
 
   scroll = false;
-  scrollStart = innerWidth * APP_PADDING - BAR_PADDING;
+  scrollStart = APP_PADDING - BAR_PADDING;
   scrollExtended = false;
   isScrollStart = false;
   scrollExtendedMax = 500;
