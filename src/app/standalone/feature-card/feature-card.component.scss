@@ -1,8 +1,26 @@
 @use '../../../variables' as *;
 
 .feature-header {
-  font-size: $m-font-size;
+  font-size: $s-font-size;
   font-weight: $font-weight-bold;
+}
+
+.feature-icon {
+  width: $m-font-size;
+  height: $m-font-size;
+  font-size: $m-font-size;
+}
+
+@include gt-xl {
+  .feature-header {
+    font-size: $m-font-size;
+  }
+
+  .feature-icon {
+    width: $l-font-size;
+    height: $l-font-size;
+    font-size: $l-font-size;
+  }
 }
 
 .smaller-font {

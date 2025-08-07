@@ -58,8 +58,9 @@
 }
 
 .title {
-  font-weight: normal;
+  font-weight: $font-weight-bold;
   font-size: $s-font-size;
+  color: var(--on-surface);
 }
 
 .room-name {
