@@ -116,7 +116,12 @@
     "format-slide-description": "Les diapos sont utilisées pour présenter les informations.",
     "format-sort-description": "Les participants peuvent répondre au contenu en triant les réponses.",
     "format-numeric-description": "Une échelle numérique est définie dans laquelle les participants peuvent répondre.",
-    "format-wordcloud": "Nuage de mots"
+    "format-wordcloud": "Nuage de mots",
+    "reset-banned-answers": "Réinitialiser les mots-clés interdits",
+    "banned-keywords-reset": "Les mots-clés interdits ont été réinitialisés.",
+    "start-new-round": "Commencer un nouveau tour",
+    "preferences": "Paramètres d'affichage",
+    "starting-new-round-not-possible": "Actuellement, seuls deux tours peuvent être lancés. Une fois que les réponses ont été supprimées, vous pouvez relancer second tour."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",

@@ -69,7 +69,7 @@
     "a11y-update-available": "Une nouvelle version est disponible. Pour obtenir les dernières modifications, appuie sur la touche tabulation. Pour effectuer la mise à jour, appuie à nouveau sur la touche tabulation.",
     "a11y-update-made": "Vous utilisez la dernière version de {{title}}. Pour obtenir les dernières modifications, appuyez sur la touche tabulation. Pour fermer la boîte de dialogue, appuyez à nouveau sur la touche tabulation.",
     "a11y-update": "Effectue la mise à jour et ferme la boîte de dialogue. La page sera actualisée.",
-    "hot-fix-update": "Nous avons apporté quelques améliorations mineures et corrigé des bugs.",
+    "hot-fix-update": "Nous avons apporté quelques améliorations mineures et correction de bugs.",
     "a11y-close": "Ferme le dialogue et retourne à la dernière page.",
     "update-made": "Nouvelle version !",
     "update-available": "Mise à jour disponible",
@@ -81,6 +81,44 @@
     "news": "nouveautés",
     "important-changes": "Les principaux changements sont",
     "create-room": "Créer un salon",
-    "created-1": "Le salon \""
+    "created-1": "Le salon \"",
+    "update-successful": "Mise à jour installée avec succès.",
+    "example": "Ex : ",
+    "enter-room-number": "Entrez le numéro du salon",
+    "update": "Mise à jour"
+  },
+  "password": {
+    "password": "Mot de passe",
+    "password-too-short": "Utilisez au moins 8 caractères",
+    "password-too-weak": "Utilisez un mot de passe fort",
+    "unsuccessful": "Vérifiez votre mot de passe.",
+    "hide-password": "Cacher le mot de passe",
+    "new-password": "Nouveau mot de passe",
+    "password-required": "Mot de passe requis",
+    "show-password": "Afficher le mot de passe",
+    "password-okay": "Mot de passe suffisant",
+    "password-strong": "Mot de passe fort"
+  },
+  "login": {
+    "a11y-sso-login": "Vous serez redirigé vers {{provider}} pour vous connecter.",
+    "a11y-reset-pw": "Accédez à un formulaire pour réinitialiser votre mot de passe.",
+    "a11y-register": "Allez à l'enregistrement pour créer un nouveau compte utilisateur.",
+    "email": "Adresse e-mail",
+    "email-invalid": "Adresse e-mail invalide",
+    "email-required": "Adresse e-mail obligatoire",
+    "input-incorrect": "Vérifiez votre saisie.",
+    "inputs-incorrect": "Vérifiez vos saisies.",
+    "login": "Se connecter",
+    "login-with": "Se connecter avec",
+    "username": "Identifiant"
+  },
+  "room-list": {
+    "no-rooms": "Vous n'avez pas encore créé de salon.",
+    "room-successfully-removed": "Le salon a bien été supprimé de la liste.",
+    "room-successfully-deleted": "Le salon a bien été supprimé.",
+    "panel-delete-room": "Supprimer le salon",
+    "canceled-remove": "Processus annulé.",
+    "room-settings": "Paramètres",
+    "more-options": "Plus d'options"
   }
 }
