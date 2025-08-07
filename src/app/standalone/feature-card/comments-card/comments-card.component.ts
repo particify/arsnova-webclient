@@ -43,6 +43,7 @@ export class CommentsCardComponent implements OnDestroy, OnInit {
 
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) description!: string;
+  @Input() pausedDescription?: string;
   @Input() showCount = false;
   @Input() clickable = false;
   @Input() showControls = false;
@@ -53,6 +54,12 @@ export class CommentsCardComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.commentSettingsService
       .get(this.room.id)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((settings) => {
+        this.commentSettings = settings;
+      });
+    this.commentSettingsService
+      .getSettingsStream()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((settings) => {
         this.commentSettings = settings;
