@@ -11,11 +11,20 @@
   </div>
   @if (isLoading) {
     <app-loading-indicator></app-loading-indicator>
-  }
-  @if (!isLoading && room) {
+  } @else if (room) {
     <div class="overview-container">
       <app-global-hints></app-global-hints>
       <div fxLayout="column" fxLayoutGap="16px" fxLayoutGap.lt-md="12px">
+        @if (room.description) {
+          <app-expandable-card>
+            <app-rendered-text
+              [rawText]="room.description.trim()"
+              [renderedText]="room.renderedDescription"
+              appLangContext
+              appDirContext
+            ></app-rendered-text>
+          </app-expandable-card>
+        }
         <div class="overview-row-container">
           <app-comments-card
             class="feature-row-item"
