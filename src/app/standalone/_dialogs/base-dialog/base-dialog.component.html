@@ -19,7 +19,11 @@
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end">
   @if (data.abortLabel) {
-    <button mat-button (click)="dialogRef.close()">
+    <button
+      mat-button
+      (click)="dialogRef.close()"
+      data-testid="dialog-abort-button"
+    >
       {{ data.abortLabel | transloco }}
     </button>
   }
