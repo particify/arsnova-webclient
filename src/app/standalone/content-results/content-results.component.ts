@@ -178,7 +178,7 @@ export class ContentResultsComponent implements OnDestroy, OnChanges {
         .getRoundStateChanges()
         .pipe(takeUntil(this.destroyed$))
         .subscribe((roundData) => {
-          if (this.contentIndex - 1 === roundData.contentIndex) {
+          if (this.contentIndex === roundData.contentIndex) {
             this.changeRound(roundData.round);
             this.multipleRounds = roundData.round > 0;
           }
