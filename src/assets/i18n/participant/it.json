@@ -106,7 +106,8 @@
     "no-interactions-available": "Attualmente non sono disponibili interazioni.",
     "content-groups-description": "Partecipa a quiz, sondaggi e altro ancora.",
     "comments-description": "Fai una domanda o scrivi un commento.",
-    "live-feedback-description": "Fornisci un feedback immediato con un solo clic."
+    "live-feedback-description": "Fornisci un feedback immediato con un solo clic.",
+    "comments-description-paused": "Visualizza i messaggi esistenti e votali."
   },
   "statistic": {
     "answer-statistic": "Statistiche di risposta",

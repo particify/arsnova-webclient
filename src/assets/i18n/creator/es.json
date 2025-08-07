@@ -243,7 +243,11 @@
     "abstentions-info": "Los Participantes pueden abstenerse en esta pregunta.",
     "offer-neutral-option-info": "Utiliza una opción neutra en la plantilla de respuesta.",
     "weight-info": "Los puntos se multiplican por este factor.",
-    "timer-info": "Establece un límite de tiempo para responder."
+    "timer-info": "Establece un límite de tiempo para responder.",
+    "answers": "Respuestas",
+    "order": "Encarga",
+    "answer-options": "Opciones de respuesta",
+    "items-for-prioritization": "Elementos para la Priorización"
   },
   "survey": {
     "a11y-stop-survey": "Detiene la retroalimentación en vivo.",

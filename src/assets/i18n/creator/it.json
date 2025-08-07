@@ -46,7 +46,7 @@
     "reset": "Azzeramento",
     "reset-all": "Tutte le voci sono state ripristinate.",
     "same-option": "Non è consentita la stessa etichetta di opzione.",
-    "select-one": "Seleziona 1 risposta corretta.",
+    "select-one": "Seleziona un'opzione corretta.",
     "submitted": "Il tuo contenuto è stato salvato.",
     "yes": "Sì / No",
     "no": "No",
@@ -203,7 +203,11 @@
     "timer-info": "Stabilisci un limite di tempo per rispondere.",
     "weight-info": "I punti vengono moltiplicati per questo fattore.",
     "select-multiple-options-info": "I partecipanti possono selezionare una o più opzioni.",
-    "offer-neutral-option-info": "Usa un'opzione neutra nel modello di risposta."
+    "offer-neutral-option-info": "Usa un'opzione neutra nel modello di risposta.",
+    "order": "Ordine",
+    "answer-options": "Opzioni di risposta",
+    "items-for-prioritization": "Priorità alle traduzioni",
+    "answers": "Risposte"
   },
   "survey": {
     "a11y-stop-survey": "Interrompe il Feedback in tempo reale.",
