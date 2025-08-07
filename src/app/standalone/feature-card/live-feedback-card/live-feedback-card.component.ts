@@ -11,6 +11,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
+import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 
 @Component({
   selector: 'app-live-feedback-card',
@@ -28,6 +29,7 @@ import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-re
 export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
   private roomSettingsService = inject(RoomSettingsService);
   private feedbackService = inject(FeedbackService);
+  protected wsFeedbackService = inject(WsFeedbackService);
 
   private destroyed$ = new Subject<void>();
 
@@ -59,6 +61,8 @@ export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
           const msg = JSON.parse(message.body);
           if (msg.type === FeedbackMessageType.CHANGED) {
             this.determineFeedbackAnswerCount(msg.payload.values);
+          } else if (msg.type === FeedbackMessageType.RESET) {
+            this.feedbackAnswers = 0;
           }
         });
     }
@@ -79,6 +83,9 @@ export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((settings) => {
         this.feedbackEnabled = settings.surveyEnabled;
+        if (!this.feedbackEnabled) {
+          this.wsFeedbackService.reset(this.room.id);
+        }
       });
   }
 }
