@@ -20,13 +20,11 @@
   }
 }
 
-@include xs {
-  .group-name {
-    font-size: $s-font-size;
-  }
+.group-name {
+  font-size: $s-font-size;
 }
 
-@include gt-xs {
+@include gt-xl {
   .group-name {
     font-size: $m-font-size;
   }
