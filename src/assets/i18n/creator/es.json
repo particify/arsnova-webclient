@@ -46,7 +46,6 @@
     "a11y-enter-flashcard-answer": "Ingresa aquí la respuesta. Nota: Este campo de texto admite formato de texto con markdown.",
     "a11y-add-answer": "Crea la respuesta ingresada.",
     "a11y-answer-checkbox": "Usa la barra espaciadora para determinar si la respuesta {{answer}} es correcta o incorrecta.",
-    "a11y-delete-answer": "Eliminar respuesta {{answer}}.",
     "a11y-updated": "Tus cambios han sido guardados.",
     "a11y-aborted": "Has cancelado la edición.",
     "a11y-answer-marked-correct": "Has marcado la respuesta como correcta",

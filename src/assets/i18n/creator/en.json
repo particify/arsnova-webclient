@@ -46,7 +46,6 @@
     "a11y-enter-flashcard-answer": "Enter the answer here. Note: This text field supports text formatting with markdown.",
     "a11y-add-answer": "Create the entered answer.",
     "a11y-answer-checkbox": "Use the space bar to determine whether the answer {{answer}} is right or wrong.",
-    "a11y-delete-answer": "Delete answer {{answer}}.",
     "a11y-updated": "Your changes has been saved.",
     "a11y-aborted": "You have cancelled the editing.",
     "a11y-answer-marked-correct": "You have marked the answer as correct",
