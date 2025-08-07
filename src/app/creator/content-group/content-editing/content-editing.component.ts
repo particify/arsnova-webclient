@@ -66,6 +66,7 @@ import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentNumeric } from '@app/core/models/content-numeric';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { ContentScale } from '@app/core/models/content-scale';
+import { takeUntil } from 'rxjs';
 
 interface ContentFormat {
   type: ContentType;
@@ -193,10 +194,25 @@ export class ContentEditingComponent
       this.correctAnswer = this.contentGroup.groupType === GroupType.QUIZ;
       this.isLoading = false;
     }
-
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
+    this.contentService
+      .getAnswersDeleted()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((contentId) => {
+        if (contentId === this.content?.id) {
+          this.isAnswered = false;
+        }
+      });
+    this.contentGroupService
+      .getContentGroupUpdated()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((group) => {
+        if (group.id === this.contentGroup.id) {
+          this.contentGroup = group;
+        }
+      });
   }
 
   private initData() {

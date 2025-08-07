@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import {
@@ -45,6 +45,8 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
   private globalStorageService = inject(GlobalStorageService);
   private roomStatsService = inject(RoomStatsService);
   private dialog = inject(MatDialog);
+
+  private contentGroupUpdated = new Subject<ContentGroup>();
 
   typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
     [GroupType.MIXED, 'dashboard'],
@@ -148,6 +150,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
 
   updateGroup(contentGroup: ContentGroup): Observable<ContentGroup> {
     return this.putEntity(contentGroup, contentGroup.roomId).pipe(
+      tap((g) => this.contentGroupUpdated.next(g)),
       catchError(
         this.handleError<ContentGroup>(
           `updateGroup, ${contentGroup.roomId}, ${contentGroup.name}, ${ContentGroup}`
@@ -161,6 +164,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     changes: object
   ): Observable<ContentGroup> {
     return this.patchEntity(group.id, changes, group.roomId).pipe(
+      tap((g) => this.contentGroupUpdated.next(g)),
       catchError(this.handleError<any>('patchContentGroup'))
     );
   }
@@ -471,5 +475,9 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
 
   calculateStatsCount(stats: AnswerStatisticsSummary[]): number {
     return stats.map((stats) => stats.count).reduce((a, b) => a + b);
+  }
+
+  getContentGroupUpdated(): Observable<ContentGroup> {
+    return this.contentGroupUpdated;
   }
 }
