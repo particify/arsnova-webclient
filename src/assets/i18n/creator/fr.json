@@ -22,7 +22,6 @@
     "a11y-enter-flashcard-answer": "Entrez la réponse ici. Note : ce champ texte prend en charge la mise en forme Markdown.",
     "a11y-add-answer": "Créer la réponse saisie.",
     "a11y-answer-checkbox": "Utilisez la barre d'espace pour déterminer si la réponse {{answer}} est vrai ou fausse.",
-    "a11y-delete-answer": "Supprimer la réponse {{answer}}.",
     "a11y-updated": "Vos modifications ont été enregistrées.",
     "a11y-answer-added": "La réponse a été ajoutée, revenez en arrière pour supprimer, éditer ou marquer la réponse comme correcte ou incorrecte.",
     "a11y-answer-deleted": "La réponse a été supprimée",
