@@ -125,3 +125,14 @@ app-settings-slide-toggle {
   flex-direction: column;
   gap: $spacing-2;
 }
+
+.format-container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.section-label {
+  font-size: $s-font-size;
+  color: var(--on-surface-light);
+}

@@ -1,79 +1,102 @@
-<mat-list
-  cdkDropList
-  [cdkDropListData]="answers"
-  (cdkDropListDropped)="drop($event.previousIndex, $event.currentIndex)"
-  [cdkDropListDisabled]="disabled || !sortable"
->
-  @for (answer of answers; track answer; let i = $index) {
-    <mat-list-item cdkDrag>
-      <div fxLayout="row" fxLayoutAlign="center center" class="full-width">
-        @if (sortable) {
-          <div
-            cdkDragHandle
-            tabindex="0"
-            (keyup)="moveAnswer($event, i)"
-            #sortListItem
-            [attr.aria-label]="
-              'creator.content.a11y-sort-answer'
-                | transloco
-                  : {
-                      index: i + 1,
-                      length: answers.length,
-                      answer: answer.answerOption.label,
-                    }
-            "
+<div fxLayout="column" fxLayoutGap="12px">
+  <mat-list
+    cdkDropList
+    [cdkDropListData]="answers"
+    (cdkDropListDropped)="drop($event.previousIndex, $event.currentIndex)"
+    [cdkDropListDisabled]="disabled || !sortable"
+    fxLayout="column"
+    fxLayoutGap="12px"
+    class="drag-boundary"
+  >
+    @for (answer of answers; track answer; let i = $index) {
+      <mat-list-item cdkDrag cdkDragBoundary=".drag-boundary">
+        <div
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          fxLayoutGap="8px"
+          class="full-width"
+        >
+          @if (sortable) {
+            <div
+              cdkDragHandle
+              tabindex="0"
+              (keyup)="moveAnswer($event, i)"
+              #sortListItem
+              [attr.aria-label]="
+                'creator.content.a11y-sort-answer'
+                  | transloco
+                    : {
+                        index: i + 1,
+                        length: answers.length,
+                        answer: answer.answerOption.label,
+                      }
+              "
+            >
+              @if (allowDeletion) {
+                <mat-icon class="drag-icon"> drag_handle </mat-icon>
+              }
+            </div>
+          }
+          @if (hasCorrectAnswers) {
+            <mat-checkbox
+              id="answer-{{ i }}"
+              [disabled]="disabled"
+              color="primary"
+              (ngModelChange)="switchValue(i)"
+              [(ngModel)]="answer.correct"
+              [checked]="answer.correct"
+              name="{{ answer.answerOption.label }}"
+              [attr.aria-label]="
+                'creator.content.a11y-answer-checkbox'
+                  | transloco: { answer: answer.answerOption.label }
+              "
+              [attr.data-testid]="'answer-' + i"
+            >
+            </mat-checkbox>
+          }
+          <mat-form-field
+            appearance="outline"
+            class="no-field-hint smaller-input"
           >
-            @if (allowDeletion) {
-              <mat-icon class="drag-icon"> drag_handle </mat-icon>
-            }
-          </div>
-        }
-        @if (hasCorrectAnswers) {
-          <mat-checkbox
-            id="answer-{{ i }}"
-            [disabled]="disabled"
-            (ngModelChange)="switchValue(i)"
-            [(ngModel)]="answer.correct"
-            [checked]="answer.correct"
-            name="{{ answer.answerOption.label }}"
-            [attr.aria-label]="
-              'creator.content.a11y-answer-checkbox'
-                | transloco: { answer: answer.answerOption.label }
-            "
-            [attr.data-testid]="'answer-' + i"
-          >
-          </mat-checkbox>
-        }
-        <form fxLayout="row" class="full-width">
-          <mat-form-field class="edit-input surface-input no-field-hint">
             <input
               id="answerEdit-{{ i }}"
-              name="answerEdit"
+              #optionInput
+              [placeholder]="
+                'creator.content.option' | transloco: { index: i + 1 }
+              "
               matInput
               [disabled]="disabled"
               [(ngModel)]="answer.answerOption.label"
               (focus)="goInEditMode(i)"
               (blur)="leaveEditMode()"
+              (keyup.enter)="goToNext(i)"
               autocomplete="off"
               [maxLength]="lengthLimit"
             />
           </mat-form-field>
-        </form>
-        @if (allowDeletion) {
-          <button
-            mat-icon-button
-            [attr.aria-label]="
-              'creator.content.a11y-delete-option'
-                | transloco: { answer: answer.answerOption.label }
-            "
-            class="delete"
-            (click)="deleteAnswer(i)"
-            matTooltip="{{ 'creator.content.delete-option' | transloco }}"
-          >
-            <mat-icon>clear</mat-icon>
-          </button>
-        }
-      </div>
-    </mat-list-item>
-  }
-</mat-list>
+          @if (allowDeletion) {
+            <button
+              [disabled]="answers.length <= minimumAnswerCount"
+              mat-icon-button
+              class="delete"
+              (click)="deleteAnswer(i)"
+              matTooltip="{{ 'creator.content.delete-option' | transloco }}"
+            >
+              <mat-icon>clear</mat-icon>
+            </button>
+          }
+        </div>
+      </mat-list-item>
+    }
+  </mat-list>
+  <div fxLayoutAlign="center">
+    <button
+      [disabled]="!allowDeletion"
+      mat-stroked-button
+      (click)="addOption()"
+    >
+      <mat-icon>add</mat-icon>
+      <span>{{ 'creator.content.add-option' | transloco }}</span>
+    </button>
+  </div>
+</div>

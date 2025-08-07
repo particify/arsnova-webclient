@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
-import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
 import { Content } from '@app/core/models/content';
 import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -16,17 +15,19 @@ import { ContentForm } from '@app/creator/content-group/content-editing/content-
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { FlexModule } from '@angular/flex-layout';
+import { CoreModule } from '@app/core/core.module';
 
 @Component({
   selector: 'app-choice-content-form',
   templateUrl: './choice-content-form.component.html',
+  styleUrl: '../content-editing.component.scss',
   providers: [
     {
       provide: 'ContentForm',
       useExisting: ChoiceContentFormComponent,
     },
   ],
-  imports: [FlexModule, AnswerOptionListComponent, CreateAnswerOptionComponent],
+  imports: [FlexModule, AnswerOptionListComponent, CoreModule],
 })
 export class ChoiceContentFormComponent
   extends FormComponent
@@ -34,8 +35,6 @@ export class ChoiceContentFormComponent
 {
   private contentService = inject(ContentService);
 
-  @ViewChild(CreateAnswerOptionComponent)
-  answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
   answerList!: AnswerOptionListComponent;
 
@@ -62,16 +61,14 @@ export class ChoiceContentFormComponent
   }
 
   getContent(): Content | undefined {
-    if (!this.answerCreation || this.answerCreation.isFormValid()) {
-      if (
-        this.answerList.isListValid(
-          this.correctAnswers,
-          this.multipleCorrectAnswers
-        )
-      ) {
-        this.prepareContent();
-        return this.content;
-      }
+    if (
+      this.answerList.isListValid(
+        this.correctAnswers,
+        this.multipleCorrectAnswers
+      )
+    ) {
+      this.prepareContent();
+      return this.content;
     }
     return;
   }

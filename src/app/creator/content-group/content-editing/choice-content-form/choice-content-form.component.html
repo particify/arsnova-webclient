@@ -1,4 +1,7 @@
-<div fxLayout="column" fxLayoutGap="10px">
+<div class="format-container">
+  <span class="section-label">{{
+    'creator.content.answer-options' | transloco
+  }}</span>
   <app-answer-option-list
     [answers]="displayAnswers"
     [hasCorrectAnswers]="correctAnswers"
@@ -6,9 +9,4 @@
     [allowDeletion]="!isEditMode || !isAnswered"
     [disabled]="formDisabled"
   ></app-answer-option-list>
-  @if (!isEditMode || !isAnswered) {
-    <app-create-answer-option
-      [answers]="displayAnswers"
-    ></app-create-answer-option>
-  }
 </div>

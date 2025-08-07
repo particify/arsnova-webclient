@@ -11,28 +11,22 @@ import { ContentType } from '@app/core/models/content-type.enum';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { Content } from '@app/core/models/content';
-import { CreateAnswerOptionComponent } from '@app/creator/content-group/content-editing/create-answer-option/create-answer-option.component';
 import { AnswerOptionListComponent } from '@app/creator/content-group/content-editing/answer-option-list/answer-option-list.component';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentForm } from '@app/creator/content-group/content-editing/content-form';
-import { FlexModule } from '@angular/flex-layout';
-import { DividerComponent } from '@app/standalone/divider/divider.component';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-sort-content-form',
   templateUrl: './sort-content-form.component.html',
+  styleUrl: '../content-editing.component.scss',
   providers: [
     {
       provide: 'ContentForm',
       useExisting: SortContentFormComponent,
     },
   ],
-  imports: [
-    FlexModule,
-    DividerComponent,
-    AnswerOptionListComponent,
-    CreateAnswerOptionComponent,
-  ],
+  imports: [AnswerOptionListComponent, TranslocoPipe],
 })
 export class SortContentFormComponent
   extends FormComponent
@@ -40,8 +34,6 @@ export class SortContentFormComponent
 {
   private contentService = inject(ContentService);
 
-  @ViewChild(CreateAnswerOptionComponent)
-  answerCreation!: CreateAnswerOptionComponent;
   @ViewChild(AnswerOptionListComponent)
   answerList!: AnswerOptionListComponent;
 
@@ -65,11 +57,9 @@ export class SortContentFormComponent
   }
 
   getContent(): Content | undefined {
-    if (!this.answerCreation || this.answerCreation.isFormValid()) {
-      if (this.answerList.isListValid(false, false)) {
-        this.prepareContent();
-        return this.content;
-      }
+    if (this.answerList.isListValid(false, false)) {
+      this.prepareContent();
+      return this.content;
     }
     return;
   }

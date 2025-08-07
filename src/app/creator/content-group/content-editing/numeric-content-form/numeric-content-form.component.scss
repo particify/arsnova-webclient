@@ -1,8 +1,5 @@
 @use '../../../../../variables' as *;
-
-.mat-mdc-form-field {
-  margin-top: 1em;
-}
+@use '../content-editing.component';
 
 .range-hint {
   font-size: $s-font-size;

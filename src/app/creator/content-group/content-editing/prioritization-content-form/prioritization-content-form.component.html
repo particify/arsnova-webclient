@@ -1,19 +1,12 @@
-<div fxLayout="column" fxLayoutGap="10px">
-  <div>
-    @if (displayAnswers.length > 0) {
-      <app-divider></app-divider>
-    }
-    <app-answer-option-list
-      [answers]="displayAnswers"
-      [hasCorrectAnswers]="false"
-      [hasMultipleCorrectAnswers]="false"
-      [allowDeletion]="!isEditMode || !isAnswered"
-      [disabled]="formDisabled"
-    ></app-answer-option-list>
-  </div>
-  @if (!isEditMode || !isAnswered) {
-    <app-create-answer-option
-      [answers]="displayAnswers"
-    ></app-create-answer-option>
-  }
+<div class="format-container">
+  <span class="section-label">{{
+    'creator.content.items-for-prioritization' | transloco
+  }}</span>
+  <app-answer-option-list
+    [answers]="displayAnswers"
+    [hasCorrectAnswers]="false"
+    [hasMultipleCorrectAnswers]="false"
+    [allowDeletion]="!isEditMode || !isAnswered"
+    [disabled]="formDisabled"
+  ></app-answer-option-list>
 </div>
