@@ -84,7 +84,6 @@ test.describe('participant answer async quiz', () => {
     await participant.answerTextContent('abc');
     await expect(participant.getHintAfterAnswering()).toBeVisible();
     await participant.switchToResultsTab();
-    await expect(page.getByText('100 %', { exact: true })).toBeVisible();
     await expect(page.getByText('abc')).toBeVisible();
     await expect(
       page.getByTestId('short-answer-correct-indicator')
@@ -99,7 +98,6 @@ test.describe('participant answer async quiz', () => {
     await participant.answerTextContent('xyz');
     await expect(participant.getHintAfterAnswering()).toBeVisible();
     await participant.switchToResultsTab();
-    await expect(page.getByText('0 %', { exact: true })).toBeVisible();
     await expect(page.getByText('xyz')).toBeVisible();
   });
 

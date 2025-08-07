@@ -35,7 +35,6 @@ test.describe('create room for survey', () => {
   test('create question series with contents of all survey types', async ({
     page,
   }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -62,7 +61,6 @@ test.describe('create room for survey', () => {
   });
 
   test('enable live mode', async ({ page }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createBinaryContent('My binary content');
     await contentCreation.createBinaryContent('Another binary content');
     await contentGroupOverview.publishContentGroup();

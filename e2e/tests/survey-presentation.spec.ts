@@ -29,7 +29,6 @@ test.describe('Presentation of a survey', () => {
     shortId = await homePage.createRoom('My room');
     await page.waitForURL(/edit/);
     await roomOverviewPage.createQuestionSeries('My survey', 'Survey');
-    await contentGroupOverview.createContent();
   });
 
   test.afterEach(async () => {

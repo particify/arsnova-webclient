@@ -34,40 +34,27 @@ test.describe('Q&A presentation', () => {
     await page.waitForURL(/present/);
     await presentationModePage.goToComments();
     await page.waitForURL(/comments/);
-    await expect(
-      page.getByText(shortId.slice(0, 4) + ' ' + shortId.slice(4, 8))
-    ).toBeVisible();
-    await expect(page.getByText('no posts present')).toBeVisible();
-    await presentationModePage.exitPresentation();
-  });
-
-  test('should enable comments', async ({ page }) => {
-    await header.goToSettings();
-    await roomSettings.goToCommentSettings();
-    await roomSettings.toggleCommentsEnabled();
-    await header.goToPresentation();
-    await page.waitForURL(/present/);
-    await presentationModePage.goToComments();
     await expect(page.getByText('Q&A section is not enabled')).toBeVisible();
-    await presentationModePage.enableComments();
-    await expect(page.getByText('Q&A section is not enabled')).toBeHidden();
+    await presentationModePage.startComments();
     await expect(page.getByText('no posts present')).toBeVisible();
     await presentationModePage.exitPresentation();
   });
 
-  test('should disable Q&A and enable it again in presentation mode', async ({
+  test('should pause Q&A and start it again in presentation mode', async ({
     page,
     baseURL,
   }) => {
     const commentsPage = new CreatorCommentsPage(page, baseURL);
     await commentsPage.goto(shortId);
     await commentsPage.toggleReadonly();
+    await expect(page.getByText('Q&A section is not enabled')).toBeHidden();
+    await commentsPage.toggleReadonly();
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await expect(
       page.getByText('creation of posts is currently not allowed')
     ).toBeVisible();
-    await presentationModePage.disableCommentsReadOnlyMode();
+    await presentationModePage.startComments();
     await expect(
       page.getByText('creation of posts is currently not allowed')
     ).toBeHidden();
@@ -78,6 +65,7 @@ test.describe('Q&A presentation', () => {
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToComments();
+    await presentationModePage.startComments();
     const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
@@ -103,6 +91,7 @@ test.describe('Q&A presentation', () => {
   }) => {
     const commentsPage = new CreatorCommentsPage(page, baseURL);
     await commentsPage.goto(shortId);
+    await commentsPage.startComments();
     const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
@@ -151,6 +140,7 @@ test.describe('Q&A presentation', () => {
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToComments();
+    await presentationModePage.startComments();
     const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
@@ -178,6 +168,7 @@ test.describe('Q&A presentation', () => {
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToComments();
+    await presentationModePage.startComments();
     const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();

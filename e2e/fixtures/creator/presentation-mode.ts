@@ -59,9 +59,9 @@ export class PresentationModePage {
     await Promise.all([
       this.page.waitForResponse(
         (res) =>
-          res.url().includes('/content/?ids=') &&
+          res.url().includes('/contentgroup/') &&
           res.ok() &&
-          res.request().method() === 'GET'
+          res.request().method() === 'PATCH'
       ),
       this.page.getByRole('button', { name: 'Publish' }).click(),
     ]);
@@ -160,12 +160,8 @@ export class PresentationModePage {
 
   // Comments
 
-  async enableComments() {
-    await this.page.getByRole('button', { name: 'Enable Q&A' }).click();
-  }
-
-  async disableCommentsReadOnlyMode() {
-    await this.page.getByRole('button', { name: 'Unlock creation' }).click();
+  async startComments() {
+    await this.page.getByRole('button', { name: 'Start Q&A' }).click();
   }
 
   async filterComments(filter: string) {

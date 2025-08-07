@@ -36,7 +36,6 @@ test.describe('create room for quiz', () => {
   test('create quiz series with contents for all quiz types and publish it', async ({
     page,
   }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -70,7 +69,6 @@ test.describe('create room for quiz', () => {
   });
 
   test('disable live mode', async ({ page }) => {
-    await contentGroupOverview.createContent();
     await contentCreation.createBinaryContent('My binary content', 'No');
     await contentCreation.createBinaryContent('Another binary content', 'Yes');
     await expect(page.getByText('published up to here')).toBeVisible();

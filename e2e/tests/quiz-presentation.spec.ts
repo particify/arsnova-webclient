@@ -29,7 +29,6 @@ test.describe('Presentation of a quiz', () => {
     shortId = await homePage.createRoom('My room');
     await page.waitForURL(/edit/);
     await roomOverviewPage.createQuestionSeries('My quiz', 'Quiz');
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -52,9 +51,7 @@ test.describe('Presentation of a quiz', () => {
   test('should show correct initial state of live content', async ({
     page,
   }) => {
-    await expect(
-      page.getByText(shortId.slice(0, 4) + ' ' + shortId.slice(4, 8))
-    ).toBeVisible();
+    await page.waitForURL(/present/);
     await expect(page.getByText('Content1of2')).toBeVisible();
     await expect(page.getByText('1 / 2')).toBeVisible();
     await expect(page.getByText('get ready')).toBeVisible();

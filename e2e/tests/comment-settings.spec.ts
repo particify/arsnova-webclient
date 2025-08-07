@@ -31,9 +31,6 @@ test.describe('Q&A settings', () => {
   });
 
   test('should enable Q&A', async ({ baseURL }) => {
-    await roomSettings.goto(shortId);
-    await roomSettings.goToCommentSettings();
-    await roomSettings.toggleCommentsEnabled();
     const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
@@ -43,7 +40,7 @@ test.describe('Q&A settings', () => {
       p.getByText('The Q&A section is not enabled for participants.')
     ).toBeVisible();
     await commentsPage.goto(shortId);
-    await commentsPage.enableComments();
+    await commentsPage.startComments();
     await expect(
       p.getByText('The Q&A section is not enabled for participants.')
     ).toBeHidden();
@@ -59,6 +56,7 @@ test.describe('Q&A settings', () => {
 
   test('should export comments', async ({ page }) => {
     await commentsPage.goto(shortId);
+    await commentsPage.startComments();
     await commentsPage.createPost('This is my first post.');
     await commentsPage.createPost('This is my second post.');
     const downloadPromise = page.waitForEvent('download');
@@ -70,6 +68,7 @@ test.describe('Q&A settings', () => {
 
   test('should delete all comments', async ({ page }) => {
     await commentsPage.goto(shortId);
+    await commentsPage.startComments();
     await commentsPage.createPost('This is my first post.');
     await commentsPage.createPost('This is my second post.');
     await commentsPage.openCommentsMoreMenu();
@@ -85,6 +84,7 @@ test.describe('Q&A settings', () => {
   }) => {
     await roomSettings.goto(shortId);
     await roomSettings.goToCommentSettings();
+    await roomSettings.toggleCommentsEnabled();
     await roomSettings.toggleDirectSend();
     const browser = await chromium.launch();
     const context = await browser.newContext();

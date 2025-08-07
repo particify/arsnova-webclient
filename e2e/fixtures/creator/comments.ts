@@ -62,8 +62,8 @@ export class CreatorCommentsPage {
     await this.readonlyToggleButton.click();
   }
 
-  async enableComments() {
-    await this.page.getByRole('button', { name: 'Enable Q&A' }).click();
+  async startComments() {
+    await this.page.getByRole('button', { name: 'Start Q&A' }).click();
   }
 
   async openMoreMenu(commentIndex: number) {

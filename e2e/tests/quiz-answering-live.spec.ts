@@ -27,7 +27,6 @@ test.describe('live quiz with MC and short answer content', () => {
     await page.waitForURL(/edit/);
     await roomOverviewPage.createQuestionSeries('My quiz', 'Quiz');
     await expect(page).toHaveTitle(/My quiz/);
-    await contentGroupOverview.createContent();
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
