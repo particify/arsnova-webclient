@@ -129,7 +129,21 @@
     "format-short_answer": "Réponse courte",
     "answers": "Réponses",
     "order": "Ordre",
-    "select-multiple-options": "Sélectionne plusieurs options"
+    "select-multiple-options": "Sélectionnez plusieurs options",
+    "format-not-supported": "Ce format n'est actuellement pas pris en charge.",
+    "group-settings": "Paramètres",
+    "answer-template": "Modèle de réponse",
+    "abstentions": "Abstentions",
+    "abstentions-info": "Les participants peuvent s'abstenir de répondre à cette question.",
+    "offer-neutral-option-info": "Utilise une option neutre dans le modèle de réponse.",
+    "max-keywords-out-of-range": "La limite des mots-clés doit être comprise entre {{min}} et {{max}}.",
+    "offer-neutral-option": "Proposer une option neutre",
+    "select-multiple-options-info": "Les participants peuvent sélectionner plusieurs options.",
+    "set-correct-answer": "Définir la bonne réponse",
+    "set-correct-answer-info": "Définis une réponse correcte pour cette question.",
+    "import-failed": "L'importation a échoué en raison d'un format de fichier non valide.",
+    "max-keywords": "Mots clés par réponse",
+    "import-successful": "Votre contenu a été importé."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
