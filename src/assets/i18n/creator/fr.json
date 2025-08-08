@@ -154,7 +154,20 @@
     "format-prioritization-description": "Les participants peuvent attribuer un certain nombre de points aux options de réponse.",
     "attribution-info-slide": "Diapositive d'information sur l'attribution",
     "format-prioritization": "Priorisation",
-    "format-wordcloud-description": "Les participants peuvent répondre à l'aide de mots-clés. La fréquence des réponses donnera plus de place dans le nuage de mots."
+    "format-wordcloud-description": "Les participants peuvent répondre à l'aide de mots-clés. La fréquence des réponses donnera plus de place dans le nuage de mots.",
+    "range": "Portée",
+    "optional-tolerance": "Tolérance (facultatif)",
+    "all-answers-between-are-correct": "Toutes les réponses entre {{min}} et {{max}} sont correctes.",
+    "numeric-minimum-has-to-be-lower-than-maximum": "Le minimum doit être plus petit que le maximum.",
+    "numeric-minimum-too-large": "Le minimum ne doit pas être inférieur à {{min}}.",
+    "attributions": "Attributions",
+    "content": "Contenu",
+    "attributions-subheader": "Les contenus suivants sont basés sur des modèles publiés sous licence Creative Commons.",
+    "minimum": "Minimum",
+    "correct-answer": "Réponse correcte",
+    "numeric-maximum-too-large": "Le maximum ne doit pas être supérieur à {{max}}.",
+    "numeric-range-too-large": "La portée ne doit pas être supérieure à {{maxRange}}.",
+    "maximum": "Maximum"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",

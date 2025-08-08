@@ -120,5 +120,8 @@
     "canceled-remove": "Processus annulé.",
     "room-settings": "Paramètres",
     "more-options": "Plus d'options"
+  },
+  "content": {
+    "content": "Contenu"
   }
 }
