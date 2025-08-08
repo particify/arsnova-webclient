@@ -120,7 +120,15 @@
     "banned-keywords-reset": "Les mots-clés interdits ont été réinitialisés.",
     "start-new-round": "Commencer un nouveau tour",
     "preferences": "Paramètres d'affichage",
-    "starting-new-round-not-possible": "Actuellement, seuls deux tours peuvent être lancés. Une fois que les réponses ont été supprimées, vous pouvez relancer second tour."
+    "starting-new-round-not-possible": "Actuellement, seuls deux tours peuvent être lancés. Une fois que les réponses ont été supprimées, vous pouvez relancer second tour.",
+    "md-info": "Dans ce champ de saisie, le formatage du texte avec Markdown est pris en charge.",
+    "format-flashcard-description": "Avec les flashcards, les participants peuvent apprendre avec le recto et le verso.",
+    "answer-options": "Options de réponse",
+    "items-for-prioritization": "Éléments à prioriser",
+    "format-short_answer-description": "Les participants peuvent répondre par une saisie de texte. Une ou plusieurs réponses correctes sont définies.",
+    "format-short_answer": "Réponse courte",
+    "answers": "Réponses",
+    "order": "Ordre"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
