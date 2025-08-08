@@ -170,7 +170,10 @@
     "maximum": "Maximum",
     "publishing-mode": "Mode publication",
     "select-correct-number-in-defined-range": "La bonne réponse doit se situer dans la fourchette définie.",
-    "edit-publishing": "Éditer la publication"
+    "edit-publishing": "Modifier la publication",
+    "publishing-mode-description-all": "Tous les contenus sont publiés à l'intention des participants.",
+    "publishing-mode-up-to": "Portée",
+    "publishing-mode-all": "Tout"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
