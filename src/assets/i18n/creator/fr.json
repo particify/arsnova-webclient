@@ -176,11 +176,13 @@
     "publishing-mode-all": "Tout",
     "publishing-mode-description-up-to": "Tous les contenus, jusqu'à celui sélectionné, seront publiés aux participant·es.",
     "group-type-description-mixed": "Utilisez ce type pour mixer questions de quiz et sondages.",
-    "group-type-description-quiz": "Laisse les participants s'affronter en utilisant des surnoms.",
+    "group-type-description-quiz": "Laissez les participants s'affronter en utilisant des surnoms.",
     "group-type-mixed": "Mixte",
     "group-type-quiz": "Quiz",
     "group-type-survey": "Sondage",
-    "group-type-flashcards": "Flashcards"
+    "group-type-flashcards": "Flashcards",
+    "group-type-description-survey": "Recueille des commentaires et feedback de la part des participant·es.",
+    "group-type-description-flashcards": "Fournis aux participants des flashcards ou des diapositives pour qu'ils puissent s'entraîner."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
