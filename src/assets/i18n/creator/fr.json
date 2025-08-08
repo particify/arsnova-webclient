@@ -128,7 +128,8 @@
     "format-short_answer-description": "Les participants peuvent répondre par une saisie de texte. Une ou plusieurs réponses correctes sont définies.",
     "format-short_answer": "Réponse courte",
     "answers": "Réponses",
-    "order": "Ordre"
+    "order": "Ordre",
+    "select-multiple-options": "Sélectionne plusieurs options"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
