@@ -122,6 +122,10 @@
     "more-options": "Plus d'options"
   },
   "content": {
-    "content": "Contenu"
+    "content": "Contenu",
+    "group-type-mixed": "Mixte",
+    "group-type-quiz": "Quiz",
+    "group-type-survey": "Sondage",
+    "group-type-flashcards": "Flashcards"
   }
 }

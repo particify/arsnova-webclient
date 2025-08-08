@@ -171,9 +171,16 @@
     "publishing-mode": "Mode publication",
     "select-correct-number-in-defined-range": "La bonne réponse doit se situer dans la fourchette définie.",
     "edit-publishing": "Modifier la publication",
-    "publishing-mode-description-all": "Tous les contenus sont publiés à l'intention des participants.",
+    "publishing-mode-description-all": "Tous les contenus sont publiés à l'intention des participant·es.",
     "publishing-mode-up-to": "Portée",
-    "publishing-mode-all": "Tout"
+    "publishing-mode-all": "Tout",
+    "publishing-mode-description-up-to": "Tous les contenus, jusqu'à celui sélectionné, seront publiés aux participant·es.",
+    "group-type-description-mixed": "Utilisez ce type pour mixer questions de quiz et sondages.",
+    "group-type-description-quiz": "Laisse les participants s'affronter en utilisant des surnoms.",
+    "group-type-mixed": "Mixte",
+    "group-type-quiz": "Quiz",
+    "group-type-survey": "Sondage",
+    "group-type-flashcards": "Flashcards"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
