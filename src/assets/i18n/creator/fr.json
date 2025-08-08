@@ -167,7 +167,10 @@
     "correct-answer": "Réponse correcte",
     "numeric-maximum-too-large": "Le maximum ne doit pas être supérieur à {{max}}.",
     "numeric-range-too-large": "La portée ne doit pas être supérieure à {{maxRange}}.",
-    "maximum": "Maximum"
+    "maximum": "Maximum",
+    "publishing-mode": "Mode publication",
+    "select-correct-number-in-defined-range": "La bonne réponse doit se situer dans la fourchette définie.",
+    "edit-publishing": "Éditer la publication"
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
