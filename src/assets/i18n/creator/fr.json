@@ -182,7 +182,14 @@
     "group-type-survey": "Sondage",
     "group-type-flashcards": "Flashcards",
     "group-type-description-survey": "Recueille des commentaires et feedback de la part des participant·es.",
-    "group-type-description-flashcards": "Fournis aux participants des flashcards ou des diapositives pour qu'ils puissent s'entraîner."
+    "group-type-description-flashcards": "Fournis aux participants des flashcards ou des diapositives pour pouvoir s'entraîner.",
+    "to-publish-content": "pour publier du contenu",
+    "timer": "Chronomètre",
+    "content-is-locked": "Le contenu est verrouillé",
+    "weight": "Poids",
+    "publish-current-content": "Publier le contenu actuel",
+    "timer-info": "Fixe une limite de temps pour répondre.",
+    "weight-info": "Les points sont multipliés par ce facteur."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
