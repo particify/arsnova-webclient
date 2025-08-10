@@ -189,7 +189,8 @@
     "weight": "Poids",
     "publish-current-content": "Publier le contenu actuel",
     "timer-info": "Fixe une limite de temps pour répondre.",
-    "weight-info": "Les points sont multipliés par ce facteur."
+    "weight-info": "Les points sont multipliés par ce facteur.",
+    "enable-live-mode-to-use-timer": "Pour définir un minuteur pour le contenu, active le mode en direct dans les paramètres de la série de questions."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
