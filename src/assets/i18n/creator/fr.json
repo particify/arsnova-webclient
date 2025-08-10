@@ -304,7 +304,23 @@
     "a11y-room-name": "Donnez un nouveau nom au salon ici.",
     "a11y-save-changes": "Sauvegardez les changements du salon.",
     "a11y-collapse-settings": "Laissez les paramètres {{name}} ou naviguez avec tabulation dans les paramètres.",
-    "user-not-found": "Aucun utilisateur n'a été trouvé avec ce nom d'utilisateur.",
-    "a11y-delete-moderator": "Supprimer le modérateur {{loginId}}"
+    "user-not-found": "Aucun utilisateur n'a été trouvé avec ce nom.",
+    "a11y-delete-moderator": "Supprimer le modérateur {{loginId}}",
+    "disabled-for-guests": "Vous ne pouvez pas attribuer de droits d'accès avec un compte invité.",
+    "editor": "Éditeur",
+    "you": "Vous",
+    "tag-removed": "La catégorie a été supprimée.",
+    "moderator": "Modérateur",
+    "owner": "Administrateur",
+    "add-user": "Ajouter un utilisateur",
+    "invite-user": "Inviter",
+    "new-tag": "Nouvelle catégorie",
+    "tag-added": "La catégorie a été ajoutée.",
+    "no-users": "Pas encore d'utilisateur",
+    "participant": "Participant·e",
+    "user-removed": "L'utilisateur a été supprimé.",
+    "role": "Rôle",
+    "access": "Droits d'accès",
+    "direct-send": "Messages visibles immédiatement"
   }
 }
