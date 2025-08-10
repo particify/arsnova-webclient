@@ -264,7 +264,11 @@
     "group-locked": "La série de questions n'est pas publiée",
     "no-content-groups": "Il n'y a pas de séries de questions.",
     "content-groups-description": "Crée des quiz, des sondages, des brainstormings et bien plus encore. Si tu ne veux pas partir de zéro, regarde les modèles.",
-    "comments-description": "Laisse les participants s'exprimer de manière anonyme dans les questions-réponses."
+    "comments-description": "Laisse les participants s'exprimer de manière anonyme dans les questions/réponses.",
+    "live-feedback-description": "Obtenez une réaction en direct dans un sondage spontané.",
+    "start": "Démarrer",
+    "stop": "Arrêter",
+    "pause": "Pause"
   },
   "survey": {
     "stopped": "Les réactions en direct sont arrêtées.",
@@ -280,5 +284,27 @@
     "change-type": "Changer le type",
     "a11y-selected-type": "Vous avez sélectionné le type {{type}}.",
     "stop": "Arrêter"
+  },
+  "settings": {
+    "general": "Salon",
+    "user-invited": "L'invitation a été envoyée par mail.",
+    "a11y-comments": "Vous êtes maintenant dans les paramètres des questions/réponses.",
+    "login-id": "Utilisateur",
+    "email": "E-mail",
+    "user-added": "L'utilisateur a été ajouté.",
+    "a11y-message": "Vous êtes maintenant dans les paramètres du salon.",
+    "a11y-room": "Vous êtes maintenant dans les paramètres généraux du salon. Vous pouvez modifier le nom ou la description du salon ainsi que le supprimer.",
+    "a11y-categories": "Vous êtes maintenant dans l'administration des catégories. Vous pouvez ajouter ou supprimer des catégories.",
+    "a11y-threshold-changed": "Vous avez fixé le seuil à {{valeue}}.",
+    "a11y-delete-room": "Supprime votre salon",
+    "a11y-room-description": "Entrez la description du salon.",
+    "a11y-announcement-description": "Entrez votre annonce ici.",
+    "a11y-expand-settings": "Allez dans les paramètres {{name}}.",
+    "a11y-access": "Vous êtes maintenant sur la gestion des droits. Vous pouvez ajouter ou supprimer des modérateurs ou bien mettre un mot de passe pour le salon.",
+    "a11y-room-name": "Donnez un nouveau nom au salon ici.",
+    "a11y-save-changes": "Sauvegardez les changements du salon.",
+    "a11y-collapse-settings": "Laissez les paramètres {{name}} ou naviguez avec tabulation dans les paramètres.",
+    "user-not-found": "Aucun utilisateur n'a été trouvé avec ce nom d'utilisateur.",
+    "a11y-delete-moderator": "Supprimer le modérateur {{loginId}}"
   }
 }
