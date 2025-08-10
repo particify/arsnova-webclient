@@ -209,8 +209,20 @@
     "locked": "Verrouillé",
     "publish-info": "Les participants ne peuvent voir que les séries de questions publiées.",
     "live-mode": "Présentation en direct",
-    "group-is-hidden-for-participants": "La série de questions est cachée pour les participants.",
-    "publishing-modes-not-available-in-live-mode": "Ce paramètre n'est pas disponible lors d'une présentation en direct."
+    "group-is-hidden-for-participants": "La série de questions est cachée pour les participant·es.",
+    "publishing-modes-not-available-in-live-mode": "Ce paramètre n'est pas disponible lors d'une présentation en direct.",
+    "back-to-series": "Retour à la série de questions",
+    "answering-finished": "Terminé",
+    "reset-answers-to-disable-setting": "Réinitialise les résultats de cette série de questions pour désactiver ce paramètre.",
+    "reset-group-results": "Réinitialiser les résultats",
+    "stop-content-to-delete-answers": "Arrête le contenu pour supprimer les réponses.",
+    "stop-active-content-to-start": "Arrête le contenu actuel pour démarrer ce contenu.",
+    "starting-multiple-rounds-not-available-for-content-type": "Les tours multiples ne sont pas pris en charge pour ce format de contenu. Supprime les réponses pour redémarrer le contenu.",
+    "publishing-index-info": "Publié jusqu'au contenu {{index}}. Utilise la touche de contrôle avec les touches fléchées pour éditer la publication.",
+    "publishing-index-info-live": "Publié jusqu'au contenu {{index}}. Lance le contenu suivant pour le publier.",
+    "live": "En direct",
+    "content-started": "Le contenu a démarré.",
+    "content-stopped": "Le contenu est arrêté."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
@@ -236,5 +248,23 @@
     "banish": "Bannir de la liste publique",
     "show-actions": "Afficher les options",
     "comment-answered": "La réponse a été envoyée."
+  },
+  "room-page": {
+    "a11y-settings": "Navigue vers les paramètres où tu peux gérer la salle et ses messages et ajouter des modérateurs ou des catégories."
+  },
+  "survey": {
+    "stopped": "Les réactions en direct sont arrêtées.",
+    "a11y-type-survey": "Sondage",
+    "a11y-change-type": "Change le type de réactions en direct.",
+    "start": "Démarrer",
+    "a11y-start": "démarrer",
+    "a11y-stop-survey": "Arrêter les réactions en direct.",
+    "a11y-start-survey": "Démarrer les réactions en direct.",
+    "a11y-stop": "arrêter",
+    "a11y-type-feedback": "Réaction",
+    "started": "Les réactions en direct ont démarré.",
+    "change-type": "Changer le type",
+    "a11y-selected-type": "Vous avez sélectionné le type {{type}}.",
+    "stop": "Arrêter"
   }
 }
