@@ -250,7 +250,19 @@
     "comment-answered": "La réponse a été envoyée."
   },
   "room-page": {
-    "a11y-settings": "Navigue vers les paramètres où tu peux gérer la salle et ses messages et ajouter des modérateurs ou des catégories."
+    "a11y-settings": "Navigue vers les paramètres dans lesquels vous pouvez gérer le salon, ses messages et ajouter des modérateurs ou des catégories.",
+    "public-stream": "Questions/Réponses",
+    "content-group-created": "Votre série de questions a été créée.",
+    "room-settings": "Administration du salon",
+    "room-loading-error": "Le salon n'a pas pu être chargé",
+    "a11y-moderator-message": "Vous êtes maintenant dans le salon {{room}}, que vous modérez.",
+    "create-content-group": "Créer une série de questions",
+    "use-template": "Utiliser le modèle",
+    "a11y-create-series-type": "Crée une série de questions de type {{type}}.",
+    "a11y-create-content": "Ouvre un formulaire pour créer de nouveaux contenus.",
+    "create-content": "Créer du contenu",
+    "group-locked": "La série de questions n'est pas diffusée",
+    "no-content-groups": "Il n'y a pas de séries de questions."
   },
   "survey": {
     "stopped": "Les réactions en direct sont arrêtées.",
