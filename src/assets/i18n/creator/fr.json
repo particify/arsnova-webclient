@@ -347,9 +347,11 @@
     "enter-room-name": "Entrez un nom",
     "enter-room-description": "Entrez une description ici",
     "threshold-info": "Si une valeur seuil est définie, seuls les messages ayant reçu une note plus élevée sont affichés.",
-    "direct-send-info": "Si ce paramètre est désactivé, un modérateur ou le conférencier doit activer les nouveaux messages avant qu'ils ne deviennent publiquement visibles.",
+    "direct-send-info": "Si ce paramètre est désactivé, un modérateur ou le présentateur doit activer les nouveaux messages avant qu'ils ne deviennent visibles publiquement.",
     "timestamp": "Horodatage",
     "delete-token": "Supprimer le jeton",
-    "token-deleted": "Le jeton a été supprimé."
+    "token-deleted": "Le jeton a été supprimé.",
+    "announcements": "Annonces",
+    "announcements-info": "Avec les annonces, tu peux informer les participants des dates et des nouveautés."
   }
 }
