@@ -199,7 +199,7 @@
     "group-not-published": "Le groupe n'est pas publié.",
     "answer-count": "{{count}} réponse",
     "answer-correct": "{{percentage}} correct",
-    "live-mode-info": "Les contenus sont présentés en direct et démarrés et arrêtés manuellement ou avec une minuterie. Une fois que tu navigues vers le contenu suivant dans la présentation, il est publié.",
+    "live-mode-info": "Les contenus sont présentés en direct et démarrés/arrêtés manuellement ou avec un chrono. Lorsque vous vous allez au contenu suivant de la présentation, il est publié.",
     "to-start-content": "pour commencer le contenu",
     "published-up-to-here": "Publié jusqu'ici",
     "answers-count": "{{count}} réponses",
@@ -208,7 +208,9 @@
     "group-progress-info": "En moyenne, {{percent}}% des réponses sont correctes. {{abstentions}}% se sont abstenus.",
     "locked": "Verrouillé",
     "publish-info": "Les participants ne peuvent voir que les séries de questions publiées.",
-    "live-mode": "Présentation en direct"
+    "live-mode": "Présentation en direct",
+    "group-is-hidden-for-participants": "La série de questions est cachée pour les participants.",
+    "publishing-modes-not-available-in-live-mode": "Ce paramètre n'est pas disponible lors d'une présentation en direct."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",
