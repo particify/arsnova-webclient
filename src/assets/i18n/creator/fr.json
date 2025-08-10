@@ -263,7 +263,8 @@
     "create-content": "Créer du contenu",
     "group-locked": "La série de questions n'est pas publiée",
     "no-content-groups": "Il n'y a pas de séries de questions.",
-    "content-groups-description": "Crée des quiz, des enquêtes, des brainstormings et bien plus encore. Choisis le bon type ou crée un mélange de tous les formats. Si tu ne veux pas partir de zéro, regarde les modèles."
+    "content-groups-description": "Crée des quiz, des sondages, des brainstormings et bien plus encore. Si tu ne veux pas partir de zéro, regarde les modèles.",
+    "comments-description": "Laisse les participants s'exprimer de manière anonyme dans les questions-réponses."
   },
   "survey": {
     "stopped": "Les réactions en direct sont arrêtées.",
