@@ -73,6 +73,20 @@
               autocomplete="off"
               [maxLength]="lengthLimit"
             />
+            @if (
+              isAnswerEdit === i &&
+              optionInput.value.length >= lengthLimit * 0.9
+            ) {
+              <span
+                class="remaining-length-hint"
+                [ngClass]="{
+                  'limit-reached': optionInput.value.length === lengthLimit,
+                }"
+                matTextSuffix
+              >
+                {{ lengthLimit - optionInput.value.length }}
+              </span>
+            }
           </mat-form-field>
           @if (allowDeletion) {
             <button

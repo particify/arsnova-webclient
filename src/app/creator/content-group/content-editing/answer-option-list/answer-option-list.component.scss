@@ -25,3 +25,13 @@
 .smaller-input {
   background-color: var(--surface);
 }
+
+.remaining-length-hint {
+  color: var(--on-surface-light);
+  font-size: $xs-font-size;
+  margin-left: $spacing-1;
+}
+
+.limit-reached {
+  color: var(--warn);
+}
