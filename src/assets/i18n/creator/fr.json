@@ -352,6 +352,19 @@
     "delete-token": "Supprimer le jeton",
     "token-deleted": "Le jeton a été supprimé.",
     "announcements": "Annonces",
-    "announcements-info": "Avec les annonces, tu peux informer les participants des dates et des nouveautés."
+    "announcements-info": "Avec les annonces, vous pouvez informer les participants des dates et des nouveautés.",
+    "focus-mode-info": "Guide en direct les participant·es vers le salon. Vos actions en mode présentation sont synchronisées avec ce que voient les participant·es.",
+    "hotkey-general": "Paramètres du salon",
+    "hotkey-comments": "Paramètres des Questions/Réponses",
+    "focus-mode": "Mode suivi",
+    "hotkey-access": "Gestion des droits d'accès",
+    "hotkey-announcements": "Gestion des annonces"
+  },
+  "room": {
+    "room-name": "Nom du salon",
+    "preview": "Prévisualisation"
+  },
+  "statistic": {
+    "a11y-message-type-info": "Contenu {{index}}. Navigue vers le contenu à l'aide de la touche de tabulation."
   }
 }
