@@ -484,11 +484,18 @@
   "option-template": {
     "quality": "Qualité",
     "probability": "Probabilité",
-    "difficulty": "Difficultés",
+    "difficulty": "Difficulté",
     "agreement": "Accord",
     "intensity": "Intensité",
     "frequency": "Fréquence",
     "level": "Niveau",
-    "importance": "Importance"
+    "importance": "Importance",
+    "pace": "Rythme",
+    "emoji": "Emoji",
+    "plus-minus": "Plus/Moins",
+    "points": "Points"
+  },
+  "formatting": {
+    "bold": "En gras"
   }
 }
