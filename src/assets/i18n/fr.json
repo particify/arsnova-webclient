@@ -147,7 +147,8 @@
     "a11y-participant-role": "Participant·e",
     "visited-rooms": "Salles visitées",
     "load-rooms": "Charger la salle",
-    "hide-guest-rooms": "Cacher"
+    "hide-guest-rooms": "Cacher",
+    "a11y-join-room": "Entre dans la pièce {{room}} avec le numéro {{id}} dans le rôle {{role}}."
   },
   "content": {
     "content": "Contenu",
@@ -253,7 +254,12 @@
     "delete-account-info": "Si vous supprimez votre compte, toutes les salles que vous avez créées seront supprimées.",
     "preferences-description": "Vous pouvez configurer ici, les paramètres d'affichages utilisés dans vos salles.",
     "username": "ID utilisateur",
-    "visualization-unit-percent-info": "Les résultats aux questions à choix unique et aux questions de Likert sont affichés en pourcentage."
+    "visualization-unit-percent-info": "Les résultats aux questions à choix unique et à l'échelle de Likert sont affichés en pourcentage.",
+    "answers-below-chart-info": "Les options de réponse sont affichées directement sous le tableau plutôt que sous forme de liste.",
+    "answers-below-chart": "Montre les options de réponse sous les tableaux",
+    "show-results-directly-info": "Les résultats du contenu sont affichés directement lorsqu'ils sont présentés.",
+    "rotate-wordcloud-items": "Faire pivoter les mots dans le nuage de mots",
+    "rotate-wordcloud-items-info": "Certains mots dans les nuages de mots sont tournés de 90 degrés."
   },
   "dialog": {
     "sure": "Êtes-vous sûr ?",
