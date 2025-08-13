@@ -148,7 +148,8 @@
     "visited-rooms": "Salles visitées",
     "load-rooms": "Charger la salle",
     "hide-guest-rooms": "Cacher",
-    "a11y-join-room": "Entre dans la pièce {{room}} avec le numéro {{id}} dans le rôle {{role}}."
+    "a11y-join-room": "Entre dans la salle {{room}} avec le numéro {{id}} avec le rôle {{role}}.",
+    "a11y-list-summary": "Ta liste de chambres contient {{count}} chambres. Cherche dans la liste ou navigue dans tes salles avec Tab."
   },
   "content": {
     "content": "Contenu",
