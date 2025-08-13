@@ -121,12 +121,17 @@
                   cdkAutosizeMinRows="3"
                   matInput
                   cdkTextareaAutosize
-                  maxlength="2000"
+                  [maxlength]="questionMaxLength"
                   name="questionInput"
                   appHotkey="c"
                   [appHotkeyTitle]="'creator.content.body' | transloco"
                   dir="auto"
                 ></textarea>
+                @if (questionInput.value.length >= questionMaxLength * 0.9) {
+                  <mat-hint align="end"
+                    >{{ questionInput.value.length }} / {{ questionMaxLength }}
+                  </mat-hint>
+                }
               </mat-form-field>
               @if (textContainsImage) {
                 <app-hint

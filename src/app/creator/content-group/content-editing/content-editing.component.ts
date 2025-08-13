@@ -164,6 +164,7 @@ export class ContentEditingComponent
   multiple = false;
   correctAnswer = true;
   neutralOption = true;
+  questionMaxLength = 2000;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.content?.previousValue && changes.content?.currentValue) {

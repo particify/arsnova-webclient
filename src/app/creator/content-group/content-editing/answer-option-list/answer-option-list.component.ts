@@ -23,11 +23,12 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatIcon } from '@angular/material/icon';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
-import { MatFormField } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { AnswerOption } from '@app/core/models/answer-option';
+import { NgClass } from '@angular/common';
 
 const MAX_ANSWER_OPTIONS = 12;
 
@@ -45,12 +46,13 @@ const MAX_ANSWER_OPTIONS = 12;
     MatIcon,
     MatCheckbox,
     FormsModule,
-    MatFormField,
+    MatFormFieldModule,
     MatInput,
     MatIconButton,
     MatTooltip,
     TranslocoPipe,
     MatButton,
+    NgClass,
   ],
 })
 export class AnswerOptionListComponent
