@@ -37,7 +37,7 @@
     "please-select-number-from-range": "Veuillez sélectionnée un nombre compris dans les seuils.",
     "not-answered-in-time": "Vous n'avez pas répondu à temps.",
     "answered-in-time": "Vous avez répondu en {{duration}} secondes.",
-    "a11y-current-flashcard": "{{index}}. C'est une carte mémoire. Naviguez à l'aide de la touche tab et appuyez sur la touche espace pour la retourner.",
+    "a11y-current-flashcard": "Contenu {{index}}. C'est une flashcard. Naviguez à l'aide de la touche Tab et appuyez sur la touche espace pour aficher la réponse.",
     "go-to-overview": "Aller à la vue d'ensemble",
     "a11y-current-short_answer": "Contenu {{index}}. Il s'agit d'un contenu avec réponse courte. Pour passer au contenu et à la saisie de la réponse, appuie sur la touche de tabulation.",
     "a11y-current-numeric": "Contenu {{index}}. Il s'agit d'un contenu de recherche du numéro. Pour passer au contenu et à la saisie de la réponse, appuie sur la touche de tabulation.",
@@ -81,7 +81,8 @@
     "content-groups-description": "Participe à des quiz, des enquêtes et plus encore.",
     "no-interactions-available": "Actuellement, aucune interaction n'est disponible.",
     "welcome-to": "Bienvenue à",
-    "live-feedback-description": "Fais un retour/remarque en un clic."
+    "live-feedback-description": "Envoie une réaction en un clic.",
+    "comments-description-paused": "Regarder les questions existantes et votez pour elles."
   },
   "comment-page": {
     "search-box-input-description": "Ici vous pouvez chercher des posts.",
