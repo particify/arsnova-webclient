@@ -25,6 +25,7 @@ import { MatInput } from '@angular/material/input';
 import { FlexModule } from '@angular/flex-layout';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatButton } from '@angular/material/button';
+import { AdminService } from '@app/core/services/http/admin.service';
 
 export interface DialogData {
   inputName: string;
@@ -51,6 +52,7 @@ export interface DialogData {
     MatButton,
     TranslocoPipe,
   ],
+  providers: [AdminService],
 })
 export class InputDialogComponent extends UserSearchComponent {
   private dialogRef = inject<MatDialogRef<InputDialogComponent>>(MatDialogRef);
