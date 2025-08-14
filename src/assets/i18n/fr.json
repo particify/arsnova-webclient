@@ -151,7 +151,15 @@
     "a11y-join-room": "Entre dans la salle {{room}} avec le numéro {{id}} avec le rôle {{role}}.",
     "a11y-list-summary": "Votre liste de salles contient {{count}} salles. Cherchez dans la liste ou naviguez dans vos salles avec Tab.",
     "a11y-more-options": "Afficher plus d'options pour cette salle",
-    "a11y-import-options": "Ouvre un menu dans lequel tu peux transférer des chambres créées en tant qu'invité ou importer des chambres d'un autre système ARSnova."
+    "a11y-import-options": "Ouvre un menu permettant de transférer des pièces créées en tant qu'invité ou d'importer des salles d'un autre système ARSnova.",
+    "filter": "Vous pouvez filtrer la liste des salles ici.",
+    "transferred-successfully": "Votre salle a été transférée.",
+    "active-info": "Il y a {{userCount}} personnes dans la salle.",
+    "room-duplicated": "Votre salle a été dupliquée.",
+    "transfer-no-rooms": "Aucune salle n'a été trouvé pendant le transfert.",
+    "added-successfully": "La salle a été ajoutée à votre liste.",
+    "rooms-from-guest": "Salles de compte invité",
+    "transfer-rooms-from-guest": "Transférer les salles que vous avez créées ou visitées sans être connecté."
   },
   "content": {
     "content": "Contenu",
