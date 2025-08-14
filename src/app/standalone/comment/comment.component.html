@@ -5,8 +5,7 @@
   id="comment-card"
   [appearance]="outlinedCard ? 'outlined' : 'raised'"
   [ngClass]="{
-    'highlighted secondary-background on-secondary':
-      comment.highlighted && !isSimpleView,
+    highlighted: comment.highlighted && !isSimpleView,
     'presentation-comment': isSimpleView,
     'primary-shadow-always border-color-transparent':
       comment.highlighted && isSimpleView,
@@ -232,11 +231,7 @@
       @if (isEditor) {
         <div fxLayout="row" fxLayoutAlign="start end">
           <mat-icon class="vote-icon">thumb_up</mat-icon>
-          <span
-            class="score-creator"
-            [ngClass]="{ 'on-secondary': comment.highlighted }"
-            >{{ comment.score }}</span
-          >
+          <span class="score-creator">{{ comment.score }}</span>
         </div>
       }
     </div>

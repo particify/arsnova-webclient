@@ -2,14 +2,10 @@
 
 #comment-card {
   margin-bottom: 10px;
-  transition: background-color 0.5s linear;
+  transition: border-color 300ms linear;
 
   &:not(.presentation-comment) {
     max-width: $card-width;
-  }
-
-  &:not(.highlighted) {
-    background-color: var(--surface);
   }
 }
 
@@ -43,10 +39,7 @@
 
 .score-creator {
   margin: 0 8px;
-
-  &:not(.on-secondary) {
-    color: var(--on-surface-light);
-  }
+  color: var(--on-surface-light);
 
   @include xs {
     font-size: $s-font-size;
@@ -76,7 +69,11 @@
 }
 
 .highlighted {
+  $highlighted-border-width: 4px;
+
   transition: background-color 1s linear;
+  padding: $spacing-2 - $highlighted-border-width;
+  border: $highlighted-border-width solid var(--palette-accent-500);
 }
 
 .border-color-transparent {
