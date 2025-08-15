@@ -28,7 +28,7 @@ import { MatInput } from '@angular/material/input';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { AnswerOption } from '@app/core/models/answer-option';
-import { NgClass } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 
 const MAX_ANSWER_OPTIONS = 12;
 
@@ -53,6 +53,7 @@ const MAX_ANSWER_OPTIONS = 12;
     TranslocoPipe,
     MatButton,
     NgClass,
+    TitleCasePipe,
   ],
 })
 export class AnswerOptionListComponent
@@ -71,6 +72,8 @@ export class AnswerOptionListComponent
   @Input() sortable = false;
   @Input() minimumAnswerCount = 2;
   @Input() lengthLimit = 500;
+  @Input() optionLabel = 'option';
+  @Input() optionLabels = 'options';
 
   @ViewChildren('optionInput') optionInputs!: QueryList<
     ElementRef<HTMLInputElement>
@@ -96,9 +99,7 @@ export class AnswerOptionListComponent
     hasMultipleCorrectOptions: boolean
   ): boolean {
     let msg: string | undefined;
-    if (!this.hasMinimumOptionCount()) {
-      msg = this.translateService.translate(this.getMinimumAnswerMessage());
-    } else if (!this.areLabelsValid()) {
+    if (!this.areLabelsValid()) {
       return false;
     } else if (hasCorrectOptions) {
       if (hasMultipleCorrectOptions && !this.hasMoreCorrectOptions(0)) {
@@ -115,12 +116,6 @@ export class AnswerOptionListComponent
       return false;
     }
     return true;
-  }
-
-  getMinimumAnswerMessage(): string {
-    return this.minimumAnswerCount === 1
-      ? 'creator.content.need-answer'
-      : 'creator.content.need-options';
   }
 
   switchValue(index: number) {
@@ -149,9 +144,13 @@ export class AnswerOptionListComponent
 
   deleteAnswer(index: number) {
     this.answers.splice(index, 1);
-    this.announceService.announce('creator.content.a11y-option-deleted');
     const msg = this.translateService.translate(
-      'creator.content.option-deleted'
+      'creator.content.option-deleted',
+      {
+        label: new TitleCasePipe().transform(
+          this.translateService.translate('creator.content.' + this.optionLabel)
+        ),
+      }
     );
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
   }
@@ -169,7 +168,12 @@ export class AnswerOptionListComponent
     } else {
       const msg = this.translateService.translate(
         'creator.content.max-options',
-        { max: MAX_ANSWER_OPTIONS }
+        {
+          max: MAX_ANSWER_OPTIONS,
+          label: this.translateService.translate(
+            'creator.content.' + this.optionLabel
+          ),
+        }
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.FAILED);
     }
@@ -212,7 +216,11 @@ export class AnswerOptionListComponent
         'creator.content.no-empty-fields-allowed'
       );
     } else if (this.checkForDuplicates(labels)) {
-      msg = this.translateService.translate('creator.content.same-option');
+      msg = this.translateService.translate('creator.content.same-option', {
+        label: this.translateService.translate(
+          'creator.content.' + this.optionLabel
+        ),
+      });
     }
     if (msg) {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
@@ -226,10 +234,6 @@ export class AnswerOptionListComponent
       labels.filter((answer, index) => labels.indexOf(answer) != index).length >
       0
     );
-  }
-
-  private hasMinimumOptionCount(): boolean {
-    return this.answers.length >= this.minimumAnswerCount;
   }
 
   private hasMoreCorrectOptions(count: number): boolean {

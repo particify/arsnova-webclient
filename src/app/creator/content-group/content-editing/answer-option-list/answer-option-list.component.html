@@ -62,7 +62,13 @@
               id="answerEdit-{{ i }}"
               #optionInput
               [placeholder]="
-                'creator.content.option' | transloco: { index: i + 1 }
+                'creator.content.option-with-index'
+                  | transloco
+                    : {
+                        index: i + 1,
+                        label: 'creator.content.' + optionLabel | transloco,
+                      }
+                  | titlecase
               "
               matInput
               [disabled]="disabled"
@@ -94,7 +100,11 @@
               mat-icon-button
               class="delete"
               (click)="deleteAnswer(i)"
-              matTooltip="{{ 'creator.content.delete-option' | transloco }}"
+              matTooltip="{{
+                'creator.content.delete-option'
+                  | transloco
+                    : { label: 'creator.content.' + optionLabel | transloco }
+              }}"
             >
               <mat-icon>clear</mat-icon>
             </button>
@@ -110,7 +120,10 @@
       (click)="addOption()"
     >
       <mat-icon>add</mat-icon>
-      <span>{{ 'creator.content.add-option' | transloco }}</span>
+      <span>{{
+        'creator.content.add-option'
+          | transloco: { label: 'creator.content.' + optionLabel | transloco }
+      }}</span>
     </button>
   </div>
 </div>
