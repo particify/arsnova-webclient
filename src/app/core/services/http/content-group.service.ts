@@ -350,20 +350,20 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
         return [
           ContentType.CHOICE,
           ContentType.BINARY,
+          ContentType.NUMERIC,
           ContentType.SHORT_ANSWER,
           ContentType.SORT,
-          ContentType.NUMERIC,
           ContentType.SLIDE,
         ];
       case GroupType.SURVEY:
         return [
           ContentType.CHOICE,
-          ContentType.SCALE,
-          ContentType.BINARY,
           ContentType.TEXT,
+          ContentType.SCALE,
           ContentType.WORDCLOUD,
-          ContentType.PRIORITIZATION,
+          ContentType.BINARY,
           ContentType.NUMERIC,
+          ContentType.PRIORITIZATION,
           ContentType.SLIDE,
         ];
       default:
