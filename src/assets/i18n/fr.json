@@ -281,7 +281,10 @@
     "create-room": "Créer salle",
     "remove": "Supprimer",
     "update": "Mettre à jour",
-    "select-room": "Choisir une salle"
+    "select-room": "Choisir une salle",
+    "a11y-comment-presentation": "Le post {{comment}} est maintenant affiché en mode plein écran. Appuie sur la touche Echap pour fermer la boîte de dialogue et revenir à la page des questions et réponses.",
+    "a11y-update": "Sauvegarde les modifications et ferme la boîte de dialogue.",
+    "a11y-create-room": "Créer un nouveau salon."
   },
   "title": {
     "presentation": "Présenter le contenu",
@@ -329,7 +332,7 @@
     "key-required": "Saisissez le code de vérification.",
     "didnt-get": "Code non reçu ?",
     "sent-again": "Le code de vérification a été envoyé à nouveau",
-    "verification-info": "Si tu n'as pas encore reçu de code de vérification, vérifie à nouveau tes e-mails dans quelques minutes et assure-toi qu'ils n'ont pas été filtrés comme spam."
+    "verification-info": "Si vous n'avez pas encore reçu de code de vérification, vérifiez à nouveau vos mails dans quelques minutes et vérifiez vos spams."
   },
   "hotkeys": {
     "press": "Presser",
