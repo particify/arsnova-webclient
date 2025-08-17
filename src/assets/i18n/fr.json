@@ -547,7 +547,7 @@
   "templates": {
     "language": "Langue",
     "publish-template": "Publier le modèle",
-    "publish-template-info": "Partage ton modèle avec d'autres personnes sous une licence libre.",
+    "publish-template-info": "Partagez votre modèle avec d'autres personnes sous une licence libre.",
     "no-special-characters-allowed": "Aucun caractère spécial n'est autorisé.",
     "tags": "Tags",
     "create-new-tag": "Créer un nouveau tag",
@@ -555,6 +555,14 @@
     "select-tags": "Sélectionnez des tag pour filtrer les modèles",
     "name": "Nom",
     "tag-removed": "Le tag {{tag}} a été supprimé.",
-    "description": "Description"
+    "description": "Description",
+    "please-fill-attribution": "Merci d'indiquer une attribution.",
+    "license": "Licence",
+    "attribution": "Attribution",
+    "license-description-cc0-1-0": "Permet à d'autres personnes de distribuer, de remixer, d'adapter et de construire à partir du modèle sans conditions.",
+    "optional": "optionnel",
+    "please-fill-description": "Merci de saisir une description.",
+    "please-fill-tags": "Choisissez au moins un tag.",
+    "please-fill-name": "Saisissez un nom, s'il vous plaît."
   }
 }
