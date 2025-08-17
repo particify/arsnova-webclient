@@ -500,12 +500,20 @@
     "frequency-negative-1": "Rarement",
     "intensity-negative-1": "Légèrement",
     "frequency-positive-1": "Souvent",
-    "frequency-positive-2": "Toujours",
+    "frequency-positive-2": "Tout le temps",
     "agreement-positive-2": "Complètement d'accord",
     "agreement-negative-1": "Plus pas d'accord",
     "agreement-neutral": "Ni d'accord ou en désaccord",
     "agreement-positive-1": "Plutôt d'accord",
-    "intensity-negative-2": "Pas du tout"
+    "intensity-negative-2": "Pas du tout",
+    "quality-negative-1": "Pauvre",
+    "quality-neutral": "Moyenne",
+    "quality-positive-1": "Bien",
+    "quality-positive-2": "Très bien",
+    "probability-negative-2": "Absolument pas",
+    "probability-neutral": "Possiblement",
+    "quality-negative-2": "Très mauvais",
+    "probability-negative-1": "Probablement pas"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Passe à {{feature}}.",
