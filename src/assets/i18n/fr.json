@@ -440,6 +440,14 @@
   },
   "room-page": {
     "a11y-room-message": "Vous êtes maintenant dans la salle {{name}}.",
-    "a11y-content-groups": "Dans cette salle, il y a {{count}} séries de questions. Tabule entre elles et appuie sur Entrée pour accéder à la série de questions."
+    "a11y-content-groups": "Dans cette salle, il y a {{count}} séries de questions. Appuyez sur Tab pour naviguer entre elles et appuyez sur Entrée pour y accéder.",
+    "a11y-no-content-groups": "Il n'y a pas encore de contenu dans cette salle.",
+    "live-feedback": "Réactions en direct",
+    "copy-url": "Copier l'adresse",
+    "comments": "Questions/Réponses",
+    "url-copied": "Le lien de la pièce a été copié dans le presse-papiers.",
+    "a11y-enter-content-group": "Ouvre le groupe de contenu {{name}}.",
+    "a11y-copy-url": "Copier le lien vers la pièce dans le presse-papiers",
+    "answer-statistics": "Statistiques"
   }
 }
