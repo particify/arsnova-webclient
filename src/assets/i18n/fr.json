@@ -511,9 +511,18 @@
     "quality-positive-1": "Bien",
     "quality-positive-2": "Très bien",
     "probability-negative-2": "Absolument pas",
-    "probability-neutral": "Possiblement",
+    "probability-neutral": "Potentiellement",
     "quality-negative-2": "Très mauvais",
-    "probability-negative-1": "Probablement pas"
+    "probability-negative-1": "Probablement pas",
+    "level-negative-1": "Assez faible",
+    "level-positive-1": "Assez élevé",
+    "level-positive-2": "Très élevé",
+    "importance-negative-2": "Pas du tout important",
+    "importance-negative-1": "Légèrement important",
+    "probability-positive-2": "Définitivement",
+    "level-negative-2": "Très faible",
+    "level-neutral": "Moyenne",
+    "probability-positive-1": "Probablement"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Passe à {{feature}}.",
