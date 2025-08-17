@@ -325,7 +325,11 @@
     "key-incorrect": "Code de vérification incorrect.",
     "reset-button": "Envoyer à nouveau",
     "cancel": "Annuler",
-    "a11y-key-input": "Saisis le code de vérification que tu as reçu par e-mail."
+    "a11y-key-input": "Saisissez le code de vérification que vous avez reçu par e-mail.",
+    "key-required": "Saisissez le code de vérification.",
+    "didnt-get": "Code non reçu ?",
+    "sent-again": "Le code de vérification a été envoyé à nouveau",
+    "verification-info": "Si tu n'as pas encore reçu de code de vérification, vérifie à nouveau tes e-mails dans quelques minutes et assure-toi qu'ils n'ont pas été filtrés comme spam."
   },
   "hotkeys": {
     "press": "Presser",
