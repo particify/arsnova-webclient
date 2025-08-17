@@ -460,6 +460,14 @@
     "a11y-message-overview": "Voici la vue d'ensemble des statistiques.",
     "a11y-choice-result": "Le contenu a été correctement répondu par {{percent}}%.",
     "a11y-content-result": "Le contenu {{content}} a été répondu par {{count}} personnes jusqu'à présent, {{abstentions}} personnes se sont abstenues.",
-    "a11y-go-to-statistic": "Appuie sur la touche Entrée pour passer à l'évaluation du contenu."
+    "a11y-go-to-statistic": "Appuyez sur Entrée pour passer à l'évaluation du contenu.",
+    "a11y-multiple-round-counts": "{{countRoundA}} réponses au 1er tour, {{countRoundB}} réponses au 2e tour",
+    "a11y-single-round-count": "{{count}} réponses",
+    "a11y-text-evaluation": "{{count}} personnes ont répondu par {{answer}}.",
+    "a11y-no-more-answers": "Il n'y a plus de réponses. Appuie sur la flèche droite pour passer à la suivante.",
+    "a11y-type-likert": "Échelle de Likert",
+    "a11y-type-choice": "Choix",
+    "a11y-type-text": "Texte",
+    "a11y-choice-evaluation": "Réponse {{label}} : {{answer}}."
   }
 }
