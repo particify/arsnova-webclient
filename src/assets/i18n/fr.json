@@ -324,7 +324,8 @@
     "key": "Code de vérification",
     "key-incorrect": "Code de vérification incorrect.",
     "reset-button": "Envoyer à nouveau",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "a11y-key-input": "Saisis le code de vérification que tu as reçu par e-mail."
   },
   "hotkeys": {
     "press": "Presser",
