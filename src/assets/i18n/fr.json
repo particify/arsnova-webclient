@@ -424,6 +424,10 @@
   },
   "survey": {
     "a11y-message": "Vous êtes maintenant en mode réaction en direct.",
-    "a11y-status": "Actuellement, l'enquête est {{status}}. {{state0}} pour cent ont choisi la réponse {{answer0}}, {{state1}} pour cent ont choisi la réponse {{answer1}}, {{state2}} pour cent ont choisi la réponse {{answer2}}, {{state3}} pour cent ont choisi la réponse {{answer3}}."
+    "a11y-status": "Actuellement, le sondage est {{status}}. {{state0}}% ont choisi la réponse {{answer0}}, {{state1}}% ont choisi la réponse {{answer1}}, {{state2}} % ont choisi la réponse {{answer2}}, {{state3}}% ont choisi la réponse {{answer3}}.",
+    "a11y-stopped": "arrêté",
+    "feeling-very-good": "Bien",
+    "a11y-started": "démarré",
+    "is-stopped": "Le sondage s'est arrêté."
   }
 }
