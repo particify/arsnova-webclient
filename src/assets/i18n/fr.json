@@ -471,11 +471,18 @@
     "a11y-choice-evaluation": "Réponse {{label}} : {{answer}}.",
     "abstentions": "Abstentions",
     "abstention": "Abstention",
-    "show-correct": "Afficher les bonnes réponses",
+    "show-correct": "Affiche les bonnes réponses",
     "a11y-wrong": "La réponse est fausse.",
     "a11y-correct": "La réponse est correcte.",
     "content": "Contenu",
     "a11y-no-more-questions": "Il n'y a plus de contenu disponible.",
-    "answers": "Réponses"
+    "answers": "Réponses",
+    "show-absolute": "Afficher les résultats en absolu",
+    "show-percentage": "Afficher les résultats en pourcentage",
+    "other-combinations": "Autre",
+    "answer": "Réponse",
+    "no-answers": "Il n'y a pas de réponse.",
+    "points": "Points",
+    "mean": "Signification"
   }
 }
