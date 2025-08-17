@@ -483,6 +483,35 @@
     "answer": "Réponse",
     "no-answers": "Il n'y a pas de réponse.",
     "points": "Points",
-    "mean": "Signification"
+    "mean": "Moyenne",
+    "standardDeviation": "Écart-type",
+    "median": "Médiane",
+    "maximum": "Maximum",
+    "variance": "Écart",
+    "minimum": "Minimum"
+  },
+  "option-template": {
+    "intensity-positive-1": "Tout à fait",
+    "intensity-positive-2": "Extrêmement",
+    "frequency-neutral": "Parfois",
+    "frequency-negative-2": "Jamais",
+    "agreement-negative-2": "Pas du tout d'accord",
+    "intensity-neutral": "Moyennement",
+    "frequency-negative-1": "Rarement",
+    "intensity-negative-1": "Légèrement",
+    "frequency-positive-1": "Souvent",
+    "frequency-positive-2": "Toujours",
+    "agreement-positive-2": "Complètement d'accord",
+    "agreement-negative-1": "Plus pas d'accord",
+    "agreement-neutral": "Ni d'accord ou en désaccord",
+    "agreement-positive-1": "Plutôt d'accord",
+    "intensity-negative-2": "Pas du tout"
+  },
+  "sidebar": {
+    "a11y-switch-to-feature": "Passe à {{feature}}.",
+    "overview": "Vue d'ensemble",
+    "comments": "Questions/Réponses",
+    "series": "Série de questions",
+    "feedback": "Réactions en direct"
   }
 }
