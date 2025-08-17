@@ -464,10 +464,18 @@
     "a11y-multiple-round-counts": "{{countRoundA}} réponses au 1er tour, {{countRoundB}} réponses au 2e tour",
     "a11y-single-round-count": "{{count}} réponses",
     "a11y-text-evaluation": "{{count}} personnes ont répondu par {{answer}}.",
-    "a11y-no-more-answers": "Il n'y a plus de réponses. Appuie sur la flèche droite pour passer à la suivante.",
+    "a11y-no-more-answers": "Il n'y a plus de réponses. Appuyez sur la flèche droite pour passer à la suivante.",
     "a11y-type-likert": "Échelle de Likert",
     "a11y-type-choice": "Choix",
     "a11y-type-text": "Texte",
-    "a11y-choice-evaluation": "Réponse {{label}} : {{answer}}."
+    "a11y-choice-evaluation": "Réponse {{label}} : {{answer}}.",
+    "abstentions": "Abstentions",
+    "abstention": "Abstention",
+    "show-correct": "Afficher les bonnes réponses",
+    "a11y-wrong": "La réponse est fausse.",
+    "a11y-correct": "La réponse est correcte.",
+    "content": "Contenu",
+    "a11y-no-more-questions": "Il n'y a plus de contenu disponible.",
+    "answers": "Réponses"
   }
 }
