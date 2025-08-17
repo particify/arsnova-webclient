@@ -445,9 +445,20 @@
     "live-feedback": "Réactions en direct",
     "copy-url": "Copier l'adresse",
     "comments": "Questions/Réponses",
-    "url-copied": "Le lien de la pièce a été copié dans le presse-papiers.",
+    "url-copied": "Le lien de la pièce a été copié.",
     "a11y-enter-content-group": "Ouvre le groupe de contenu {{name}}.",
     "a11y-copy-url": "Copier le lien vers la pièce dans le presse-papiers",
-    "answer-statistics": "Statistiques"
+    "answer-statistics": "Statistiques",
+    "started": "Démarré",
+    "stopped": "Arrêté",
+    "paused": "En pause",
+    "comment-count": "{{count}} questions",
+    "answer-count": "{{count}} réponses",
+    "go-to-feature": "Ouvrir {{feature}}"
+  },
+  "statistic": {
+    "a11y-message-overview": "Voici la vue d'ensemble des statistiques.",
+    "a11y-choice-result": "Le contenu a été correctement répondu par {{percent}} pour cent.",
+    "a11y-content-result": "Le contenu {{content}} a été répondu par {{count}} personnes jusqu'à présent, {{abstentions}} personnes se sont abstenues."
   }
 }
