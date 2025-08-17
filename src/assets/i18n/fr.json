@@ -564,6 +564,26 @@
     "please-fill-description": "Merci de saisir une description.",
     "please-fill-tags": "Choisissez au moins un tag.",
     "please-fill-name": "Saisissez un nom, s'il vous plaît.",
-    "license-description-cc-by-4-0": "Permet à d'autres personnes de distribuer, de remixer, d'adapter et de construire à partir du modèle, à condition que l'attribution soit faite au créateur."
+    "license-description-cc-by-4-0": "Permet à d'autres de diffuser, de réutiliser et d'adapter à partir de ce modèle, à condition de citer le créateur.",
+    "back": "Retour",
+    "no-templates-found": "Pas de modèle trouvé.",
+    "template-added": "Le modèle a été ajouté.",
+    "preview": "Prévisualiser",
+    "licensed-under": "Licence sous",
+    "by": "par",
+    "use": "Utilise",
+    "license-description-cc-by-nc-4-0": "Permet à d'autres de diffuser, de réutiliser et d'adapter à partir de ce modèle, à des fins non commerciales et à condition sur l'auteur soit cité.",
+    "license-description-cc-by-nc-sa-4-0": "Permet à d'autres de diffuser, de réutiliser et d'adapter à partir de ce modèle à des fins non commerciales et à condition sur l'auteur soit cité. Les modèles basés sur ce modèle doivent faire l'objet d'une licence identique.",
+    "is-ai-generated": "Ce modèle a été créé avec l'aide de l'IA.",
+    "license-description-cc-by-sa-4-0": "Permet à d'autres de diffuser, de réutiliser et d'adapter à partir de ce modèle à condition sur l'auteur soit cité. Les modèles basés sur ce modèle doivent faire l'objet d'une licence identique.",
+    "my-templates": "Mes modèles",
+    "ai-generated-hint": "Créé avec l'aide de l'IA",
+    "create": "Créer",
+    "template-published": "Votre modèle a été publié.",
+    "public-templates": "Modèles publics",
+    "previous-content": "Contenu précédent",
+    "template-link-copied": "Lien vers le modèle copié dans le presse-papiers.",
+    "next-content": "Contenu suivant",
+    "copy-template-link": "Copier le lien vers le modèle"
   }
 }
