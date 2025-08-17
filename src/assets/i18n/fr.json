@@ -426,8 +426,20 @@
     "a11y-message": "Vous êtes maintenant en mode réaction en direct.",
     "a11y-status": "Actuellement, le sondage est {{status}}. {{state0}}% ont choisi la réponse {{answer0}}, {{state1}}% ont choisi la réponse {{answer1}}, {{state2}} % ont choisi la réponse {{answer2}}, {{state3}}% ont choisi la réponse {{answer3}}.",
     "a11y-stopped": "arrêté",
-    "feeling-very-good": "Bien",
+    "feeling-very-good": "Super bien",
     "a11y-started": "démarré",
-    "is-stopped": "Le sondage s'est arrêté."
+    "is-stopped": "Le sondage s'est arrêté.",
+    "C": "C",
+    "feeling-bad": "Mal",
+    "B": "B",
+    "D": "D",
+    "A": "A",
+    "status-summary": "Résumé de l'état",
+    "feeling-good": "Bien",
+    "feeling-not-so-good": "Pas si bien"
+  },
+  "room-page": {
+    "a11y-room-message": "Vous êtes maintenant dans la salle {{name}}.",
+    "a11y-content-groups": "Dans cette salle, il y a {{count}} séries de questions. Tabule entre elles et appuie sur Entrée pour accéder à la série de questions."
   }
 }
