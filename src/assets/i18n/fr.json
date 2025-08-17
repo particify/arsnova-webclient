@@ -182,7 +182,15 @@
     "leaderboard": "Classent",
     "no-leaderboard-entries": "Pas de résultat pour le moment.",
     "content-count": "{{count}} contenus",
-    "join-quiz": "Rejoindre quiz"
+    "join-quiz": "Rejoindre quiz",
+    "rounds-displayed": "Les tours {{rounds}} sont affichés",
+    "enter-alias-for-participation": "Entrez un pseudo pour votre participation",
+    "content-not-published": "Contenu non publié",
+    "contents-will-be-published-gradually": "Le contenu sera publié progressivement",
+    "answer-correct-to-get-points": "Répondez correctement pour gagner des points",
+    "answer-fast-to-get-more-points": "Répondez rapidement pour gagner plus de points",
+    "round-displayed": "Le tour {{rounds}} est affiché",
+    "a11y-wordcloud-info": "Mots clés utilisés par fréquence dans l'ordre décroissant."
   },
   "comment-list": {
     "qna-started": "Les questions/réponses ont démarré.",
@@ -213,14 +221,28 @@
     "filter-categories": "Catégories",
     "search-comments": "Chercher questions",
     "search-comments-with-count": "Chercher les questions {{count}}",
-    "creation-currently-not-allowed": "Il n'est pas possible de poser de question pour le moment."
+    "creation-currently-not-allowed": "Il n'est pas possible de poser de question pour le moment.",
+    "filter-time": "Période de temps",
+    "a11y-filter-wrong": "Marquer toutes les questions comme fausses",
+    "a11y-select-time-3h": "Afficher toutes les questions des 3 dernières heures",
+    "a11y-select-time-1d": "Afficher toutes les questions du dernier jour",
+    "a11y-select-time-1w": "Afficher toutes les questions de la semaine écoulée",
+    "a11y-filter-answer": "Marquer toutes les questions comme répondues",
+    "a11y-select-time-1h": "Afficher toutes les questions de l'heure passée",
+    "a11y-sort-time": "Trier les questions par heure",
+    "a11y-sort-voteasc": "Trier les questions par ordre décroissant de votes",
+    "a11y-sort-votedesc": "Trier les questions par ordre croissant de votes",
+    "a11y-filter-favorite": "Marquer toutes les questions comme favorites",
+    "a11y-filter-correct": "Marquer tous les questions sélectionnées comme correctes"
   },
   "answer": {
     "add-points": "Ajouter 10 points",
     "word": "Mot-clé",
     "points-left": "Points restants",
     "your-answer": "Votre réponse",
-    "remove-points": "Retirer 10 points"
+    "remove-points": "Retirer 10 points",
+    "points-too-much": "Points attribués en trop",
+    "select-a-number-between": "Choisis un nombre entre {{min}} et {{max}}"
   },
   "comment-page": {
     "comment-sent": "Votre question a été publiée.",
@@ -235,7 +257,20 @@
     "tag": "Catégorie",
     "comment-sent-to-moderator": "Votre question est vérifiée par un modérateur.",
     "a11y-text-textForVotes": "Votes.",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "a11y-send": "Envoyez vos questions et fermer la fenêtre.",
+    "a11y-text-grade": "Cette question a été marquée comme favorité.",
+    "a11y-text-correct": "Cette question a été marquée comme correcte.",
+    "a11y-tag": "Sélectionnez une catégorie, si vous souhaitez trier cette question.",
+    "new-comment": "Une nouvelle question avec le contenu, {{ comment }}, a été posée.",
+    "no-comments": "Aucune question présentée.",
+    "no-comments-found": "Aucune question trouvée.",
+    "a11y-text-answer": "Cette question a été marquée, répondue.",
+    "a11y-entered-answer": "La réponse de cette question est : {{answer}}.",
+    "a11y-text-wrong": "Cette question a été marquée comme incorrecte.",
+    "a11y-select-tag": "Sélectionne la catégorie {{tag}}.",
+    "go-to-answer": "Voir la réponse",
+    "comment": "Le post {{ comment }} a été posé à {{ time }} et a actuellement {{ votes }}. {{correct}} {{wrong}} {{favorite}} {{answer}}"
   },
   "password-reset": {
     "forgot-password": "Nous vous envoyons un mail pour réinitialiser votre mot de passe.",
@@ -354,7 +389,8 @@
     "keys": "Raccourci clavier",
     "display-overview": "Afficher les raccourcis clavier",
     "overview-title": "Raccourcis clavier",
-    "a11y-help-key-announcement": "Appuie sur {{helpKey}} pour obtenir une liste de raccourcis clavier."
+    "a11y-help-key-announcement": "Appuyez sur {{helpKey}} pour afficher la liste des raccourcis clavier.",
+    "input-field": "champ de saisie"
   },
   "keys": {
     "ctrl": "Ctrl",
