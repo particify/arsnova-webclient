@@ -282,9 +282,19 @@
     "remove": "Supprimer",
     "update": "Mettre à jour",
     "select-room": "Choisir une salle",
-    "a11y-comment-presentation": "Le post {{comment}} est maintenant affiché en mode plein écran. Appuie sur la touche Echap pour fermer la boîte de dialogue et revenir à la page des questions et réponses.",
+    "a11y-comment-presentation": "La question {{comment}} est maintenant affichée en mode plein écran. Appuyez sur la touche Echap, pour fermer la boîte de dialogue et revenir à la page des questions/réponses.",
     "a11y-update": "Sauvegarde les modifications et ferme la boîte de dialogue.",
-    "a11y-create-room": "Créer un nouveau salon."
+    "a11y-create-room": "Créer un nouveau salon.",
+    "not-logged-in": "Vous n'êtes pas connecté. La salle sera créée avec un compte invité.",
+    "no-empty-name": "Saisissez un nom.",
+    "translation-server": "Aller sur le serveur de traduction",
+    "really-cancel-room-membership": "Voulez-vous vraiment supprimer cette salle de votre liste ? Si vous aviez donné des permissions d'accès, elles seront aussi supprimées.",
+    "really-delete-room": "Voulez-vous vraiment supprimer cette salle ? Cette action est irréversible.",
+    "really-delete-template": "Voulez-vous vraiment supprimer ce modèle ?",
+    "really-delete-account": "Voulez-vous supprimer, de manière irréversible, votre compte et toutes les salles ?",
+    "community-lang": "Cette langue est mise à jour par la communauté. Il peut dont être incomplet ou obsolète.",
+    "you-are-using-community-lang": "Vous utilisez une traduction de la communauté",
+    "contribute-to-lang": "Vous pouvez contribuer à la traduction en suivant ce lien : "
   },
   "title": {
     "presentation": "Présenter le contenu",
@@ -299,7 +309,9 @@
     "settings": "Paramètres",
     "admin": "Administration",
     "presentation-mode": "Présentation",
-    "account": "Mon compte"
+    "account": "Mon compte",
+    "request-pw-reset": "Mot de passe réinitialisé",
+    "pw-reset": "Définir un nouveau mot de passe"
   },
   "comment-export": {
     "answer": "Réponse",
@@ -308,7 +320,8 @@
     "favorite": "Favori",
     "presented": "Présenté",
     "correct/wrong": "Correct/Faux",
-    "score": "Sore"
+    "score": "Sore",
+    "timestamp": "Horodatage"
   },
   "register": {
     "register": "S'enregistrer",
@@ -340,7 +353,8 @@
     "action": "Action",
     "keys": "Raccourci clavier",
     "display-overview": "Afficher les raccourcis clavier",
-    "overview-title": "Raccourcis clavier"
+    "overview-title": "Raccourcis clavier",
+    "a11y-help-key-announcement": "Appuie sur {{helpKey}} pour obtenir une liste de raccourcis clavier."
   },
   "keys": {
     "ctrl": "Ctrl",
@@ -358,5 +372,14 @@
     "all-rooms": "Toutes les salles",
     "no-announcements": "Il n'y a pas d'annonce.",
     "filter": "Filtrer"
+  },
+  "errors": {
+    "invalid-request": "Votre demande est invalide.",
+    "not-authorized": "Vous n'êtes pas autorisé à consulter cette page.",
+    "room-not-found": "Aucune salle n'a été trouvée avec ce numéro.",
+    "something-went-wrong": "Une erreur s'est produite.",
+    "http-too-many-requests": "Il y a trop de demandes émanant de votre réseau.",
+    "establishing-connection": "Connexion en-cours …",
+    "action-not-allowed": "Action non autorisée."
   }
 }
