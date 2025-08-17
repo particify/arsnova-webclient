@@ -458,7 +458,8 @@
   },
   "statistic": {
     "a11y-message-overview": "Voici la vue d'ensemble des statistiques.",
-    "a11y-choice-result": "Le contenu a été correctement répondu par {{percent}} pour cent.",
-    "a11y-content-result": "Le contenu {{content}} a été répondu par {{count}} personnes jusqu'à présent, {{abstentions}} personnes se sont abstenues."
+    "a11y-choice-result": "Le contenu a été correctement répondu par {{percent}}%.",
+    "a11y-content-result": "Le contenu {{content}} a été répondu par {{count}} personnes jusqu'à présent, {{abstentions}} personnes se sont abstenues.",
+    "a11y-go-to-statistic": "Appuie sur la touche Entrée pour passer à l'évaluation du contenu."
   }
 }
