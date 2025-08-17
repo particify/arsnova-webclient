@@ -292,7 +292,7 @@
     "show-results-directly": "Montrer directement les résultats",
     "account-settings": "Paramètres du compte",
     "first-name": "Prénom",
-    "last-name": "Nom",
+    "last-name": "Nom de famille",
     "mail": "E-mail",
     "organization": "Organisation",
     "department": "Département",
@@ -517,12 +517,25 @@
     "level-negative-1": "Assez faible",
     "level-positive-1": "Assez élevé",
     "level-positive-2": "Très élevé",
-    "importance-negative-2": "Pas du tout important",
-    "importance-negative-1": "Légèrement important",
+    "importance-negative-2": "Pas important",
+    "importance-negative-1": "Peu important",
     "probability-positive-2": "Définitivement",
     "level-negative-2": "Très faible",
     "level-neutral": "Moyenne",
-    "probability-positive-1": "Probablement"
+    "probability-positive-1": "Probablement",
+    "importance-neutral": "Moyennement important",
+    "difficulty-negative-2": "Très facile",
+    "difficulty-negative-1": "Assez facile",
+    "difficulty-neutral": "Moyenne",
+    "difficulty-positive-1": "Assez difficile",
+    "importance-positive-1": "Assez important",
+    "importance-positive-2": "Extrêmement important",
+    "difficulty-positive-2": "Très difficile",
+    "pace-negative-2": "Très lent",
+    "pace-negative-1": "Un peu lent",
+    "pace-neutral": "Moyenne",
+    "pace-positive-1": "Un peu rapide",
+    "pace-positive-2": "Très rapide"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Passe à {{feature}}.",
@@ -530,5 +543,18 @@
     "comments": "Questions/Réponses",
     "series": "Série de questions",
     "feedback": "Réactions en direct"
+  },
+  "templates": {
+    "language": "Langue",
+    "publish-template": "Publier le modèle",
+    "publish-template-info": "Partage ton modèle avec d'autres personnes sous une licence libre.",
+    "no-special-characters-allowed": "Aucun caractère spécial n'est autorisé.",
+    "tags": "Tags",
+    "create-new-tag": "Créer un nouveau tag",
+    "remove-tag": "Supprimer tag {{tag}}",
+    "select-tags": "Sélectionnez des tag pour filtrer les modèles",
+    "name": "Nom",
+    "tag-removed": "Le tag {{tag}} a été supprimé.",
+    "description": "Description"
   }
 }
