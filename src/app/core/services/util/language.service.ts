@@ -11,6 +11,7 @@ import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { Observable } from 'rxjs';
 import { IsoLanguage } from '@app/core/models/iso-language';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
+import dayjs from 'dayjs';
 
 export const BROWSER_LANG = new InjectionToken<string>('BROWSER_LANG');
 
@@ -46,6 +47,13 @@ export class LanguageService extends AbstractHttpService<void> {
     },
   ];
 
+  private localeImports: Record<string, () => Promise<any>> = {
+    de: () => import('dayjs/locale/de'),
+    en: () => import('dayjs/locale/en'),
+    es: () => import('dayjs/locale/es'),
+    it: () => import('dayjs/locale/it'),
+  };
+
   constructor() {
     super('/language');
   }
@@ -67,6 +75,19 @@ export class LanguageService extends AbstractHttpService<void> {
       }
     }
     this.setLang(key);
+    this.loadDayJsLocales(key);
+  }
+
+  private loadDayJsLocales(key: string) {
+    this.langs.forEach((lang) => {
+      const localeImport = this.localeImports[lang.key];
+      if (localeImport) {
+        localeImport();
+      } else {
+        console.error(`No import path defined for locale "${lang.key}"`);
+      }
+    });
+    dayjs.locale(key);
   }
 
   setLang(key: string) {

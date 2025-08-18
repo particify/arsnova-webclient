@@ -1,8 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import dayjs from 'dayjs';
-import 'dayjs/locale/de';
-import 'dayjs/locale/es';
-import 'dayjs/locale/it';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 @Pipe({ name: 'dateFormat' })
