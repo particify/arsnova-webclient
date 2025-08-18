@@ -41,6 +41,11 @@ export class LanguageService extends AbstractHttpService<void> {
       category: LanguageCategory.COMMUNITY,
     },
     {
+      key: 'fr',
+      name: 'Français',
+      category: LanguageCategory.COMMUNITY,
+    },
+    {
       key: 'it',
       name: 'Italiano',
       category: LanguageCategory.COMMUNITY,
@@ -51,6 +56,7 @@ export class LanguageService extends AbstractHttpService<void> {
     de: () => import('dayjs/locale/de'),
     en: () => import('dayjs/locale/en'),
     es: () => import('dayjs/locale/es'),
+    fr: () => import('dayjs/locale/fr'),
     it: () => import('dayjs/locale/it'),
   };
 
