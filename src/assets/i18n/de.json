@@ -130,7 +130,8 @@
     "set-new-password": "Setze ein neues Passwort mit deinem Verifizierungs-Code.",
     "set-new-password-button": "Setze Passwort",
     "request-failed": "Es ist etwas schief gegangen, bitte überprüfe deine Eingabe.",
-    "your-email": "Deine E-Mail-Adresse: "
+    "your-email": "Deine E-Mail-Adresse: ",
+    "back-to-login": "Zurück zum Login"
   },
   "register": {
     "register": "Registrieren",
@@ -580,7 +581,7 @@
     "use": "Verwenden",
     "template-added": "Die Vorlage wurde hinzugefügt.",
     "preview": "Vorschau",
-    "back": "Zurück",
+    "back-to-templates": "Zurück zu den Vorlagen",
     "previous-content": "Vorheriger Inhalt",
     "next-content": "Nächster Inhalt",
     "copy-template-link": "Link zu Vorlage kopieren",
@@ -618,7 +619,8 @@
     "a11y-remove-filter": "Filter entfernen",
     "not-specified": "Nicht festegelegt",
     "anonymous": "Anonym",
-    "read-only-mode-active": "Nur-Lesen-Modus: Die Erstellungs- und Bearbeitungsfunktionalität ist eingeschränkt."
+    "read-only-mode-active": "Nur-Lesen-Modus: Die Erstellungs- und Bearbeitungsfunktionalität ist eingeschränkt.",
+    "back": "Zurück"
   },
   "ordinal": {
     "one": "",

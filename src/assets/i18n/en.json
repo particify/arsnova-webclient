@@ -130,7 +130,8 @@
     "set-new-password": "You have been sent a code with which you can set your new password.",
     "set-new-password-button": "Set password",
     "request-failed": "Something has gone wrong. Please check your input.",
-    "your-email": "Your email address: "
+    "your-email": "Your email address: ",
+    "back-to-login": "Back to login"
   },
   "register": {
     "register": "Register",
@@ -580,7 +581,7 @@
     "use": "Use",
     "template-added": "The template has been added.",
     "preview": "Preview",
-    "back": "Back",
+    "back-to-templates": "Back to templates",
     "previous-content": "Previous content",
     "next-content": "Next content",
     "copy-template-link": "Copy link to template",
@@ -618,7 +619,8 @@
     "a11y-remove-filter": "Remove filter",
     "not-specified": "Not specified",
     "anonymous": "Anonymous",
-    "read-only-mode-active": "Read-only mode: The creation and editing functionality is limited."
+    "read-only-mode-active": "Read-only mode: The creation and editing functionality is limited.",
+    "back": "Back"
   },
   "ordinal": {
     "one": "st",
