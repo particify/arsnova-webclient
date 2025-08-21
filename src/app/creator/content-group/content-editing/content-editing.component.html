@@ -124,8 +124,12 @@
                       : 'creator.content.a11y-enter-body'
                     ) | transloco
                   "
-                  cdkAutosizeMaxRows="8"
-                  cdkAutosizeMinRows="3"
+                  [cdkAutosizeMaxRows]="
+                    this.selectedFormat?.type === ContentType.SLIDE ? 24 : 8
+                  "
+                  [cdkAutosizeMinRows]="
+                    this.selectedFormat?.type === ContentType.SLIDE ? 6 : 3
+                  "
                   matInput
                   cdkTextareaAutosize
                   [maxlength]="questionMaxLength"
