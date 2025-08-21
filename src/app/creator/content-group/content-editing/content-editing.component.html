@@ -1,6 +1,13 @@
 <div fxLayout="row" fxLayoutGap="20px" fxFill>
   <div
-    class="editing-container"
+    [class]="
+      this.selectedFormat &&
+      [ContentType.SLIDE, ContentType.FLASHCARD].includes(
+        this.selectedFormat.type
+      )
+        ? 'full-width'
+        : 'editing-container'
+    "
     fxLayout="column"
     fxLayoutAlign="space-between"
   >
