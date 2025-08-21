@@ -400,8 +400,15 @@ div {
 
 // Mat Tab
 
-.mat-mdc-tab:not(.mat-mdc-tab-disabled) .mdc-tab__text-label {
-  color: var(--on-surface) !important;
+.mat-mdc-tab-group,
+.mat-mdc-tab-nav-bar {
+  @include mat.tabs-overrides(
+    (
+      inactive-label-text-color: var(--on-surface-light),
+      inactive-hover-label-text-color: var(--on-surface),
+      inactive-focus-label-text-color: var(--on-surface),
+    )
+  );
 }
 
 @media (min-width: 768px) {
