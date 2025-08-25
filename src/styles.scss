@@ -209,10 +209,6 @@ ul {
   @extend %secondary-background;
 }
 
-.on-secondary * {
-  @extend %on-secondary;
-}
-
 .theme-dark .on-primary-variant {
   color: var(--palette-primary-contrast-200);
 }
@@ -755,19 +751,16 @@ mat-slide-toggle .mat-internal-form-field {
 
 // Card
 
-.mat-mdc-card {
+mat-card {
   width: calc(100vw - $spacing-2 * 2);
   max-width: $card-width;
-  padding: 1em;
+  padding: $spacing-2;
   color: var(--on-surface);
-
-  &:not(.secondary-background) {
-    background-color: var(--surface) !important;
-  }
+  background-color: var(--surface);
 }
 
 @include gt-xs {
-  .mat-mdc-card {
+  mat-card {
     width: calc(100vw - $spacing-4 * 2);
   }
 }
