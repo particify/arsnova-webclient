@@ -2,8 +2,10 @@ import {
   Component,
   DestroyRef,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   ViewChild,
   inject,
 } from '@angular/core';
@@ -38,7 +40,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
@@ -83,7 +85,7 @@ function setDefaultTrue(value: boolean | undefined): boolean {
   providers: [provideTranslocoScope('participant')],
 })
 export class ParticipantContentCarouselPageComponent
-  implements OnInit, OnDestroy
+  implements OnInit, OnDestroy, OnChanges
 {
   private contentService = inject(ContentService);
   protected translateService = inject(TranslocoService);
@@ -137,7 +139,6 @@ export class ParticipantContentCarouselPageComponent
   displaySnackBar = false;
   focusModeEnabled = false;
   lockedContentId?: string;
-  routeChangedSubscription?: Subscription;
 
   isFinished = false;
   isPureInfoSeries = false;
@@ -148,12 +149,21 @@ export class ParticipantContentCarouselPageComponent
   GroupType = GroupType;
   alias?: RoomUserAlias;
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (
+      changes.contentGroup?.previousValue &&
+      changes.contentGroup.previousValue.id !==
+        changes.contentGroup.currentValue.id
+    ) {
+      this.isLoading = true;
+      this.contentCarouselService.setLastContentAnswered(false);
+      this.initGroup();
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
-    if (this.routeChangedSubscription) {
-      this.routeChangedSubscription.unsubscribe();
-    }
     this.contentCarouselService.setLastContentAnswered(false);
   }
 
@@ -167,24 +177,47 @@ export class ParticipantContentCarouselPageComponent
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
+    this.initGroup();
+    this.focusModeService
+      .getContentState()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => {
+        this.evaluateNewContentState(state);
+      });
+    this.routingService
+      .getRouteChanges()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((route) => {
+        if (this.showOverview && route.params['contentIndex']) {
+          this.showOverview = false;
+          this.initStepper(route.params['contentIndex'] - 1);
+        }
+      });
+  }
+
+  initGroup() {
     if (this.contentGroup.leaderboardEnabled) {
       this.roomUserAliasService
         .generateAlias(this.contentGroup.roomId)
+        .pipe(takeUntil(this.destroyed$))
         .subscribe((alias) => {
           this.alias = alias;
         });
-      this.roomUserAliasService.getCurrentAlias().subscribe((alias) => {
-        if (this.alias) {
-          if (alias) {
-            this.alias.id = alias.id;
-            if (alias.alias) {
-              this.alias.alias = alias.alias;
+      this.roomUserAliasService
+        .getCurrentAlias()
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((alias) => {
+          if (this.alias) {
+            if (alias) {
+              this.alias.id = alias.id;
+              if (alias.alias) {
+                this.alias.alias = alias.alias;
+              }
             }
+          } else {
+            this.alias = alias;
           }
-        } else {
-          this.alias = alias;
-        }
-      });
+        });
     }
     this.getContents(this.contentIndex ? this.contentIndex - 1 : undefined);
     this.loadAttributions();
@@ -192,30 +225,6 @@ export class ParticipantContentCarouselPageComponent
       .getChangesStreamForEntity(this.contentGroup)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((e) => this.handleStateEvent(e));
-    this.focusModeService
-      .getContentState()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((state) => {
-        this.evaluateNewContentState(state);
-      });
-    this.routeChangedSubscription = this.routingService
-      .getRouteChanges()
-      .subscribe((route) => {
-        const newGroup = route.params['seriesName'];
-        if (newGroup && newGroup !== this.contentGroup.name) {
-          this.router
-            .navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(['..', newGroup], {
-                relativeTo: this.route,
-              });
-            });
-        }
-        if (this.showOverview && route.params['contentIndex']) {
-          this.showOverview = false;
-          this.initStepper(route.params['contentIndex'] - 1);
-        }
-      });
   }
 
   evaluateNewContentState(state: ContentFocusState) {
@@ -466,34 +475,40 @@ export class ParticipantContentCarouselPageComponent
   }
 
   getAnswers(lastContentIndex?: number) {
-    this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
-      this.userId = auth.userId;
-      this.contentGroupService
-        .getAnswerStats(
-          this.contentGroup.roomId,
-          this.contentGroup.id,
-          this.userId
-        )
-        .subscribe({
-          next: (resultOverview) => {
-            this.contents.forEach((c, i) => {
-              this.answerResults.set(i, resultOverview.answerResults[i].state);
-            });
-            this.finishLoading();
-            this.checkIfLastContentExists(lastContentIndex);
-          },
-          error: () => {
-            this.finishLoading();
-            const msg = this.translateService.translate(
-              'participant.answer.group-not-available'
-            );
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-          },
-        });
-    });
+    this.authenticationService
+      .getCurrentAuthentication()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((auth) => {
+        this.userId = auth.userId;
+        this.contentGroupService
+          .getAnswerStats(
+            this.contentGroup.roomId,
+            this.contentGroup.id,
+            this.userId
+          )
+          .subscribe({
+            next: (resultOverview) => {
+              this.contents.forEach((c, i) => {
+                this.answerResults.set(
+                  i,
+                  resultOverview.answerResults[i].state
+                );
+              });
+              this.finishLoading();
+              this.checkIfLastContentExists(lastContentIndex);
+            },
+            error: () => {
+              this.finishLoading();
+              const msg = this.translateService.translate(
+                'participant.answer.group-not-available'
+              );
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.WARNING
+              );
+            },
+          });
+      });
   }
 
   handleStateEvent(changedEvent: EntityChanged<ContentGroup>) {
