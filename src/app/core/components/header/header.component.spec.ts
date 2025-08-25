@@ -31,7 +31,7 @@ import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ApiConfig } from '@app/core/models/api-config';
-import { ErrorHandler } from '@angular/core';
+import { ErrorHandler, signal } from '@angular/core';
 
 class MockErrorHandler {
   get uiErrorCount$(): Observable<number> {
@@ -64,6 +64,10 @@ class MockRoutingService {
 
   getRoomJoinUrl() {
     return 'awesome-url/p/12345678';
+  }
+
+  isHome() {
+    return signal<boolean>(true);
   }
 }
 

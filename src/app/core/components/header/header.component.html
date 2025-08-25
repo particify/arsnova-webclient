@@ -1,6 +1,6 @@
 <mat-toolbar class="mat-elevation-z2" fxLayoutAlign="center">
   <mat-toolbar-row fxLayoutAlign="start center">
-    @if (router.url === '/') {
+    @if (isHome()) {
       <lib-extension-point
         extensionId="branding-logo"
         [extensionData]="{ headerPlacement: true }"
@@ -37,7 +37,7 @@
             [text]="title()"
           ></app-text-overflow-clip>
         </div>
-      } @else if (router.url !== '/') {
+      } @else if (!isHome()) {
         <span class="title" data-testid="page-title">{{ title() }}</span>
       }
     }

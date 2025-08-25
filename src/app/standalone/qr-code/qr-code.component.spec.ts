@@ -100,7 +100,7 @@ describe('QrCodeComponent', () => {
     fixture = testBed.createComponent(QrCodeComponent);
     component = fixture.componentInstance;
     routingService = testBed.inject(RoutingService);
-    routingService.getRoomUrlData(snapshot);
+    routingService.getUrlData(snapshot);
     component.room = new Room();
   }));
 

@@ -97,6 +97,7 @@ export class HeaderComponent implements OnInit {
   announcementState?: AnnouncementState;
   room?: Room;
   title = this.pageTitleService.getTitle();
+  isHome = this.routingService.isHome();
   isDev = !this.env.production;
 
   ngOnInit() {

@@ -1,4 +1,10 @@
-import { EventEmitter, Injectable, inject } from '@angular/core';
+import {
+  EventEmitter,
+  Injectable,
+  Signal,
+  inject,
+  signal,
+} from '@angular/core';
 import { ActivatedRouteSnapshot, ActivationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter, map } from 'rxjs/operators';
@@ -35,6 +41,7 @@ export class RoutingService {
   routeEvent = new EventEmitter<ActivatedRouteSnapshot>();
   seriesName?: string;
   showFooterLinks$ = new BehaviorSubject<boolean>(false);
+  private readonly isHomeRoute = signal<boolean>(true);
 
   constructor() {
     this.location.onUrlChange((url) => {
@@ -52,14 +59,15 @@ export class RoutingService {
       .subscribe((event) => {
         const snapshot = event.snapshot;
         if (snapshot.component) {
-          this.getRoomUrlData(snapshot);
+          this.getUrlData(snapshot);
           this.getRoutes(snapshot);
           this.showFooterLinks$.next(snapshot.data.showFooterLinks);
         }
       });
   }
 
-  getRoomUrlData(route: ActivatedRouteSnapshot) {
+  getUrlData(route: ActivatedRouteSnapshot) {
+    this.isHomeRoute.set(route.title === 'home');
     this.role = route.data.userRole;
     const series = route.params['seriesName'];
     if (series || route.data.room?.id !== this.roomId) {
@@ -223,5 +231,9 @@ export class RoutingService {
 
   getRoutingFeature(): RoutingFeature | undefined {
     return this.routingFeature;
+  }
+
+  isHome(): Signal<boolean> {
+    return this.isHomeRoute.asReadonly();
   }
 }
