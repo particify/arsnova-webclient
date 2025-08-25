@@ -11,6 +11,8 @@
   height: $xl-font-size;
   width: $xl-font-size;
   border-radius: $border-radius;
+  background-color: var(--on-surface);
+  color: var(--surface);
 }
 
 .disabled {

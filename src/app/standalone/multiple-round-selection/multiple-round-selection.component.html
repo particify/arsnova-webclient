@@ -2,6 +2,7 @@
   <button
     class="round-button"
     mat-fab
+    color="undefined"
     extended
     [matMenuTriggerFor]="roundMenu"
     [matTooltip]="
@@ -13,7 +14,7 @@
       @for (roundItem of [0, 1]; track roundItem; let i = $index) {
         <div
           [ngClass]="{ disabled: round !== i && round !== 2 }"
-          class="round-legend primary-background"
+          class="round-legend"
           fxLayoutAlign="center center"
         >
           <span class="round-number">{{ i + 1 }}</span>
