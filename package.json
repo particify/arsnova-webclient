@@ -69,7 +69,7 @@
     "@storybook/addon-docs": "9.0.18",
     "@storybook/angular": "9.0.18",
     "@types/d3-cloud": "^1.2.5",
-    "@types/jasmine": "5.1.8",
+    "@types/jasmine": "5.1.9",
     "@types/jasminewd2": "2.0.13",
     "@types/node": "22.16.5",
     "@types/wordcloud": "1.2.2",
