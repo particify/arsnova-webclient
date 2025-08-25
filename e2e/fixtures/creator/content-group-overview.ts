@@ -220,7 +220,7 @@ export class ContentGroupOverviewPage {
         await this.page.getByRole('button', { name: 'delete' }).click(),
       ]);
     } else {
-      await this.page.getByRole('button', { name: 'cancel' }).click();
+      await this.page.getByTestId('dialog-abort-button').click();
     }
   }
 }

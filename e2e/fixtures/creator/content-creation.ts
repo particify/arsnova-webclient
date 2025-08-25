@@ -3,7 +3,6 @@ import { Locator, Page } from '@playwright/test';
 export class ContentCreationPage {
   private readonly createContentButton: Locator;
   private readonly contentBodyInput: Locator;
-  private readonly newAnswerInput: Locator;
   private readonly formatSelection: Locator;
   private readonly formatOption: Locator;
   private readonly multipleToggle: Locator;
@@ -18,7 +17,6 @@ export class ContentCreationPage {
       exact: true,
     });
     this.contentBodyInput = page.getByRole('textbox', { name: 'Content' });
-    this.newAnswerInput = page.getByLabel('Add option');
     this.formatSelection = page.getByTestId('format-selection');
     this.formatOption = page.getByRole('option');
     this.multipleToggle = this.page.getByRole('switch', {
@@ -48,16 +46,36 @@ export class ContentCreationPage {
       await this.correctOptionsToggle.setChecked(!!correctOptions);
     }
     await this.multipleToggle.setChecked(multiple);
-    for (const option of answerOptions) {
-      await this.newAnswerInput.fill(option);
-      await this.page.keyboard.press('Enter');
-      if (correctOptions !== undefined && correctOptions.includes(option)) {
-        await this.page
-          .getByTestId('answer-' + answerOptions.indexOf(option))
-          .click();
+    await this.fillAnswerOptions(answerOptions, correctOptions);
+    await this.submitContent();
+  }
+
+  async fillAnswerOptions(options: string[], correctOptions?: string[]) {
+    for (const [index, option] of options.entries()) {
+      const optionInput = this.page.getByPlaceholder('option ' + (index + 1));
+      if (optionInput) {
+        await optionInput.fill(option);
+      } else {
+        await this.page.getByRole('button', { name: 'Add option' }).click();
+        const optionInput = this.page.getByPlaceholder('option' + (index + 1));
+        if (optionInput) {
+          await optionInput.fill(option);
+        }
+      }
+      await this.page.waitForTimeout(50);
+      if (index < options.length - 1) {
+        await this.page.keyboard.press('Enter');
       }
     }
-    await this.submitContent();
+    if (correctOptions !== undefined) {
+      for (const option of correctOptions) {
+        if (correctOptions.includes(option)) {
+          await this.page
+            .getByTestId('answer-' + options.indexOf(option))
+            .click();
+        }
+      }
+    }
   }
 
   async createLikertContent(
@@ -115,30 +133,21 @@ export class ContentCreationPage {
   async createPrioritizationContent(body: string, answerOptions: string[]) {
     await this.selectFormat('Prioritization');
     await this.contentBodyInput.fill(body);
-    for (const option of answerOptions) {
-      await this.newAnswerInput.fill(option);
-      await this.page.keyboard.press('Enter');
-    }
+    await this.fillAnswerOptions(answerOptions);
     await this.submitContent();
   }
 
   async createShortAnswerContent(body: string, correctOptions: string[]) {
     await this.selectFormat('Short answer');
     await this.contentBodyInput.fill(body);
-    for (const option of correctOptions) {
-      await this.newAnswerInput.fill(option);
-      await this.page.keyboard.press('Enter');
-    }
+    await this.fillAnswerOptions(correctOptions);
     await this.submitContent();
   }
 
   async createSortContent(body: string, answerOptions: string[]) {
     await this.selectFormat('Sort');
     await this.contentBodyInput.fill(body);
-    for (const option of answerOptions) {
-      await this.newAnswerInput.fill(option);
-      await this.page.keyboard.press('Enter');
-    }
+    await this.fillAnswerOptions(answerOptions);
     await this.submitContent();
   }
 
