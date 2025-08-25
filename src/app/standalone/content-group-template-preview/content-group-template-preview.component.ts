@@ -28,6 +28,7 @@ import { EditContentGroupTemplateComponent } from '@app/standalone/_dialogs/edit
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
+import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
 
 @Component({
   imports: [
@@ -37,6 +38,7 @@ import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/co
     AddTemplateButtonComponent,
     ClipboardModule,
     ContentGroupInfoComponent,
+    BackButtonComponent,
   ],
   selector: 'app-content-group-template-preview',
   templateUrl: './content-group-template-preview.component.html',
