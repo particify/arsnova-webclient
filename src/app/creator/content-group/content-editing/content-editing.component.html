@@ -1,6 +1,13 @@
 <div fxLayout="row" fxLayoutGap="20px" fxFill>
   <div
-    class="editing-container"
+    [class]="
+      this.selectedFormat &&
+      [ContentType.SLIDE, ContentType.FLASHCARD].includes(
+        this.selectedFormat.type
+      )
+        ? 'full-width'
+        : 'editing-container'
+    "
     fxLayout="column"
     fxLayoutAlign="space-between"
   >
@@ -117,8 +124,12 @@
                       : 'creator.content.a11y-enter-body'
                     ) | transloco
                   "
-                  cdkAutosizeMaxRows="8"
-                  cdkAutosizeMinRows="3"
+                  [cdkAutosizeMaxRows]="
+                    this.selectedFormat?.type === ContentType.SLIDE ? 24 : 8
+                  "
+                  [cdkAutosizeMinRows]="
+                    this.selectedFormat?.type === ContentType.SLIDE ? 6 : 3
+                  "
                   matInput
                   cdkTextareaAutosize
                   [maxlength]="questionMaxLength"
