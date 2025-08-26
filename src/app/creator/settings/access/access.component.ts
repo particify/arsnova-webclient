@@ -124,18 +124,18 @@ export class AccessComponent
       .isLoginIdEmailAddress()
       .subscribe((loginIdIsEmail) => {
         this.loginIdIsEmail = loginIdIsEmail;
-        this.usernameFormControl.valueChanges
-          .pipe(
-            map(() => this.changesMade()),
-            debounceTime(500),
-            takeUntil(this.formSubscription)
-          )
-          .subscribe(() => {
-            this.newModeratorId = undefined;
-            if (this.loginIdIsEmail && this.loginId) {
-              this.getUser();
-            }
-          });
+      });
+    this.usernameFormControl.valueChanges
+      .pipe(
+        map(() => this.changesMade()),
+        debounceTime(500),
+        takeUntil(this.formSubscription)
+      )
+      .subscribe(() => {
+        this.newModeratorId = undefined;
+        if (this.loginIdIsEmail && this.loginId) {
+          this.getUser();
+        }
       });
   }
 
