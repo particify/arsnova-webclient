@@ -177,7 +177,8 @@
     "reset-password": "Reimpostare la password",
     "reset-successful": "La password è stata reimpostata. Controlla la tua posta elettronica.",
     "request-failed": "Qualcosa è andato storto. Controlla il tuo inserimento.",
-    "your-email": "Il tuo indirizzo e-mail: "
+    "your-email": "Il tuo indirizzo e-mail: ",
+    "back-to-login": "Torna al login"
   },
   "user-profile": {
     "account-settings": "Impostazioni dell'account",
@@ -521,7 +522,8 @@
     "not-specified": "Non specificato",
     "a11y-remove-filter": "Rimuovi il filtro",
     "anonymous": "Anonimo",
-    "read-only-mode-active": "Modalità di sola lettura: Le funzionalità di creazione e modifica sono limitate."
+    "read-only-mode-active": "Modalità di sola lettura: Le funzionalità di creazione e modifica sono limitate.",
+    "back": "Indietro"
   },
   "sidebar": {
     "a11y-switch-to-feature": "Passa a {{feature}}.",

@@ -130,7 +130,8 @@
     "set-new-password": "Se te ha enviado un código con el que puedes establecer tu nueva contraseña.",
     "set-new-password-button": "Establecer contraseña",
     "request-failed": "Algo ha salido mal. Por favor, verifica tu entrada.",
-    "your-email": "Tu dirección de correo electrónico: "
+    "your-email": "Tu dirección de correo electrónico: ",
+    "back-to-login": "Volver al inicio de sesión"
   },
   "register": {
     "register": "Registrar",
@@ -618,7 +619,8 @@
     "a11y-remove-filter": "Quitar filtro",
     "not-specified": "No especificado",
     "anonymous": "Anónimo",
-    "read-only-mode-active": "Modo sólo lectura: La funcionalidad de creación y edición es limitada."
+    "read-only-mode-active": "Modo sólo lectura: La funcionalidad de creación y edición es limitada.",
+    "back": "Atrás"
   },
   "ordinal": {
     "one": "",
