@@ -7,7 +7,7 @@
     <div
       class="answer primary-shadow-focus"
       cdkDrag
-      [cdkDragStartDelay]="50"
+      [cdkDragStartDelay]="{ touch: 200, mouse: 20 }"
       [cdkDragPreviewClass]="'primary-shadow-always'"
       [ngClass]="{ 'no-grab': disabled }"
       tabindex="0"

@@ -18,7 +18,7 @@
             disableRipple
             cdkDrag
             cdkDragBoundary=".list-container"
-            [cdkDragStartDelay]="50"
+            [cdkDragStartDelay]="{ touch: 200, mouse: 20 }"
             (cdkDragDropped)="
               dropContent($event.previousIndex, $event.currentIndex)
             "
