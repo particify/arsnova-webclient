@@ -286,7 +286,8 @@
     "your-email": "Votre adrese mail : ",
     "reset-successful": "Mot de passe réinitialisé. Merci de vérifier vos mails.",
     "set-new-password": "Vous avez reçu un mail avec un code pour créer un nouveau mot de passe.",
-    "request-failed": "Quelque chose n'a pas fonctionné. Vérifiez vos saisies."
+    "request-failed": "Quelque chose n'a pas fonctionné. Vérifiez vos saisies.",
+    "back-to-login": "Retour au login"
   },
   "user-profile": {
     "show-results-directly": "Montrer directement les résultats",
@@ -630,7 +631,8 @@
     "not-specified": "Non spécifié",
     "anonymous": "Anonyme",
     "read-only-mode-active": "Mode lecture seule : Les fonctionnalités de création et d'édition sont limitées.",
-    "a11y-remove-filter": "Supprimer le filtre"
+    "a11y-remove-filter": "Supprimer le filtre",
+    "back": "Retour"
   },
   "timer": {
     "time-is-up": "Le temps est écoulé"
