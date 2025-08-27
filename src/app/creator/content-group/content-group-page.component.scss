@@ -90,6 +90,7 @@ $action-card-max-width: 1200px;
     max-width: $action-card-max-width;
     padding: $spacing-4;
     margin-bottom: $spacing-4;
+    background-color: var(--surface);
   }
 
   .page-container {
