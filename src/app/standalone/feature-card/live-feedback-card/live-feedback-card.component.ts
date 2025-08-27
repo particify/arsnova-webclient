@@ -38,17 +38,19 @@ export class LiveFeedbackCardComponent implements OnDestroy, OnInit {
   @Input() showCount = false;
   @Input() clickable = false;
   @Input() showControls = false;
+  @Input() feedbackEnabled?: boolean;
 
-  feedbackEnabled = true;
   feedbackAnswers = 0;
 
   ngOnInit() {
-    this.roomSettingsService
-      .getByRoomId(this.room.id)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((settings) => {
-        this.feedbackEnabled = settings.surveyEnabled;
-      });
+    if (this.feedbackEnabled === undefined) {
+      this.roomSettingsService
+        .getByRoomId(this.room.id)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((settings) => {
+          this.feedbackEnabled = settings.surveyEnabled;
+        });
+    }
     this.feedbackService.get(this.room.id).subscribe((values) => {
       this.determineFeedbackAnswerCount(values);
     });
