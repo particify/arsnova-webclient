@@ -17,7 +17,7 @@
   transition: border-color 300ms;
 
   &:not(.correct-answer, .wrong-answer, .primary-border-color) {
-    border-color: var(--grey-lighter);
+    border-color: var(--border);
   }
 
   &:first-of-type {
