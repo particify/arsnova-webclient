@@ -229,6 +229,7 @@ $item-height: 90px;
 // Live mode
 
 .live-info {
+  color: var(--play);
   font-size: $xs-font-size;
   line-height: 100%;
   padding-top: calc($spacing / 4);
