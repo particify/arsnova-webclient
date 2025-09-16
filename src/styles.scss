@@ -38,6 +38,12 @@ body {
   height: 100%;
 
   --mat-theme-text-primary-on-background: var(--on-background);
+  @include mat.card-overrides(
+    (
+      elevated-container-color: var(--surface),
+      outlined-container-color: var(--surface),
+    )
+  );
 }
 
 [tabindex] {
@@ -756,7 +762,6 @@ mat-card {
   max-width: $card-width;
   padding: $spacing-2;
   color: var(--on-surface);
-  background-color: var(--surface);
 }
 
 @include gt-xs {
