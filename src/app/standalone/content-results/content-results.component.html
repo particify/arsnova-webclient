@@ -19,36 +19,38 @@
       appLangContext
       appDirContext
     ></app-rendered-text>
+
+    @if (isPresentation && format !== ContentType.SLIDE) {
+      <button
+        (click)="toggleAnswers()"
+        matTooltip="{{
+          (answersVisible
+            ? 'creator.statistic.hide-results'
+            : 'creator.statistic.show-results'
+          ) | transloco
+        }}"
+        appHotkey=" "
+        [appHotkeyAction]="HotkeyAction.CLICK"
+        [appHotkeyDisabled]="!active"
+        appTrackInteraction="Content results visibility toggled"
+        [appTrackName]="answersVisible ? 'on' : 'off'"
+        hidden
+      ></button>
+    }
     @if ([ContentType.SLIDE, ContentType.FLASHCARD].indexOf(format) === -1) {
       @if (isPresentation) {
-        <div hidden>
-          @if (!survey) {
-            <button
-              (click)="toggleCorrect()"
-              matTooltip="{{ 'statistic.show-correct' | transloco }}"
-              appHotkey="c"
-              [appHotkeyAction]="HotkeyAction.CLICK"
-              [appHotkeyDisabled]="!active"
-              appTrackInteraction="Correct content answer options visibility toggled"
-              [appTrackName]="correctVisible ? 'on' : 'off'"
-            ></button>
-          }
-
+        @if (!survey) {
           <button
-            (click)="toggleAnswers()"
-            matTooltip="{{
-              (answersVisible
-                ? 'creator.statistic.hide-results'
-                : 'creator.statistic.show-results'
-              ) | transloco
-            }}"
-            appHotkey=" "
+            (click)="toggleCorrect()"
+            matTooltip="{{ 'statistic.show-correct' | transloco }}"
+            appHotkey="c"
             [appHotkeyAction]="HotkeyAction.CLICK"
             [appHotkeyDisabled]="!active"
-            appTrackInteraction="Content results visibility toggled"
-            [appTrackName]="answersVisible ? 'on' : 'off'"
+            appTrackInteraction="Correct content answer options visibility toggled"
+            [appTrackName]="correctVisible ? 'on' : 'off'"
+            hidden
           ></button>
-        </div>
+        }
       }
       <div
         [style]="format !== ContentType.WORDCLOUD ? 'position: relative' : ''"
