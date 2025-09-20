@@ -73,9 +73,9 @@
     "@types/jasminewd2": "2.0.13",
     "@types/node": "22.18.6",
     "@types/wordcloud": "1.2.2",
-    "@typescript-eslint/eslint-plugin": "8.41.0",
-    "@typescript-eslint/parser": "8.41.0",
-    "@typescript-eslint/utils": "8.41.0",
+    "@typescript-eslint/eslint-plugin": "8.44.0",
+    "@typescript-eslint/parser": "8.44.0",
+    "@typescript-eslint/utils": "8.44.0",
     "css-loader": "7.1.2",
     "eslint": "9.36.0",
     "eslint-import-resolver-typescript": "4.4.4",
@@ -98,6 +98,6 @@
     "stylelint-config-standard-scss": "15.0.1",
     "ts-node": "10.9.2",
     "typescript": "5.9.2",
-    "typescript-eslint": "8.41.0"
+    "typescript-eslint": "8.44.0"
   }
 }
