@@ -1,9 +1,9 @@
 @use '@angular/material' as mat;
-@use 'app/core/theme/app-theme';
+@use '../src/app/core/theme/app-theme';
 @use 'sass:map';
 @use '../src/styles';
-@use 'app/core/theme/dark-theme/dark-theme';
-@use 'app/core/theme/light-theme/light-theme';
+@use '../src/app/core/theme/dark-theme/dark-theme';
+@use '../src/app/core/theme/light-theme/light-theme';
 @use '../src/variables' as *;
 @use '../src/util';
 
