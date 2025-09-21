@@ -3990,30 +3990,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsverse/transloco-utils@npm:^7.0.0":
-  version: 7.0.2
-  resolution: "@jsverse/transloco-utils@npm:7.0.2"
+"@jsverse/transloco-utils@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "@jsverse/transloco-utils@npm:8.0.1"
   dependencies:
     cosmiconfig: "npm:^8.1.3"
     tslib: "npm:^2.3.0"
-  checksum: 10c0/63eead81376238765dd8342911f948ac2b1b88b4498acf1f7bb1b4a7965b805f26b95d9962ff706cfe2a09e9fda6aee8ab8d7e11e092a691a0e3649c0edab83f
+  checksum: 10c0/7074337c61ab544b6ce524a7e633f4b83b7b02b827eaa240af9fd404851ad4dfcc5e2600e2cd82d6230e193bc4a9ec539c29f94b41497ca8cdee01f600b69415
   languageName: node
   linkType: hard
 
-"@jsverse/transloco@npm:7.6.1":
-  version: 7.6.1
-  resolution: "@jsverse/transloco@npm:7.6.1"
+"@jsverse/transloco@npm:8.0.1":
+  version: 8.0.1
+  resolution: "@jsverse/transloco@npm:8.0.1"
   dependencies:
-    "@jsverse/transloco-utils": "npm:^7.0.0"
-    fs-extra: "npm:^11.0.0"
-    glob: "npm:^10.0.0"
-    lodash.kebabcase: "npm:^4.1.1"
-    ora: "npm:^5.4.1"
-    replace-in-file: "npm:^7.0.1"
+    "@jsverse/transloco-utils": "npm:^8.0.1"
+    "@jsverse/utils": "npm:1.0.0-beta.5"
     tslib: "npm:^2.2.0"
   peerDependencies:
     "@angular/core": ">=16.0.0"
-  checksum: 10c0/0927bdaf73cef1d2a335584b8b56644c2e823a6d136399d349d69717d51a72475bc93874b46c804bfe29fd2195da279b1e26d755f98209d6fff14330f3595002
+    rxjs: ">=6.0.0"
+  checksum: 10c0/a3ad601754052013d7d37c370d3d37aa01c133a6ff3beeb9c3365912d65be8e9ce83aa4d876eff223fb8276284afad01670ca83f4018341dd1240a781832dbd8
+  languageName: node
+  linkType: hard
+
+"@jsverse/utils@npm:1.0.0-beta.5":
+  version: 1.0.0-beta.5
+  resolution: "@jsverse/utils@npm:1.0.0-beta.5"
+  checksum: 10c0/caa2fca550a56a7f5311de5c298d47295d279781b91551a8ab86032dbc57eac9f32d5592356ef2d13803a582a7fe5e9241dd63b87bd0c151af04ccc4d05c127d
   languageName: node
   linkType: hard
 
@@ -6777,7 +6781,7 @@ __metadata:
     "@graphql-codegen/typescript": "npm:^4.1.6"
     "@graphql-codegen/typescript-apollo-angular": "npm:^4.0.0"
     "@graphql-codegen/typescript-operations": "npm:^4.6.0"
-    "@jsverse/transloco": "npm:7.6.1"
+    "@jsverse/transloco": "npm:8.0.1"
     "@playwright/test": "npm:1.55.0"
     "@stomp/rx-stomp": "npm:2.1.0"
     "@stomp/stompjs": "npm:7.2.0"
@@ -9962,17 +9966,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^11.0.0":
-  version: 11.3.2
-  resolution: "fs-extra@npm:11.3.2"
-  dependencies:
-    graceful-fs: "npm:^4.2.0"
-    jsonfile: "npm:^6.0.1"
-    universalify: "npm:^2.0.0"
-  checksum: 10c0/f5d629e1bb646d5dedb4d8b24c5aad3deb8cc1d5438979d6f237146cd10e113b49a949ae1b54212c2fbc98e2d0995f38009a9a1d0520f0287943335e65fe919b
-  languageName: node
-  linkType: hard
-
 "fs-extra@npm:^8.1.0":
   version: 8.1.0
   resolution: "fs-extra@npm:8.1.0"
@@ -10185,7 +10178,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^10.0.0, glob@npm:^10.2.2":
+"glob@npm:^10.2.2":
   version: 10.4.5
   resolution: "glob@npm:10.4.5"
   dependencies:
@@ -10212,19 +10205,6 @@ __metadata:
     once: "npm:^1.3.0"
     path-is-absolute: "npm:^1.0.0"
   checksum: 10c0/65676153e2b0c9095100fe7f25a778bf45608eeb32c6048cf307f579649bcc30353277b3b898a3792602c65764e5baa4f643714dfbdfd64ea271d210c7a425fe
-  languageName: node
-  linkType: hard
-
-"glob@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "glob@npm:8.1.0"
-  dependencies:
-    fs.realpath: "npm:^1.0.0"
-    inflight: "npm:^1.0.4"
-    inherits: "npm:2"
-    minimatch: "npm:^5.0.1"
-    once: "npm:^1.3.0"
-  checksum: 10c0/cb0b5cab17a59c57299376abe5646c7070f8acb89df5595b492dba3bfb43d301a46c01e5695f01154e6553168207cb60d4eaf07d3be4bc3eb9b0457c5c561d0f
   languageName: node
   linkType: hard
 
@@ -12167,13 +12147,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.kebabcase@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "lodash.kebabcase@npm:4.1.1"
-  checksum: 10c0/da5d8f41dbb5bc723d4bf9203d5096ca8da804d6aec3d2b56457156ba6c8d999ff448d347ebd97490da853cb36696ea4da09a431499f1ee8deb17b094ecf4e33
-  languageName: node
-  linkType: hard
-
 "lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
@@ -12623,15 +12596,6 @@ __metadata:
   dependencies:
     brace-expansion: "npm:^1.1.7"
   checksum: 10c0/0262810a8fc2e72cca45d6fd86bd349eee435eb95ac6aa45c9ea2180e7ee875ef44c32b55b5973ceabe95ea12682f6e3725cbb63d7a2d1da3ae1163c8b210311
-  languageName: node
-  linkType: hard
-
-"minimatch@npm:^5.0.1":
-  version: 5.1.6
-  resolution: "minimatch@npm:5.1.6"
-  dependencies:
-    brace-expansion: "npm:^2.0.1"
-  checksum: 10c0/3defdfd230914f22a8da203747c42ee3c405c39d4d37ffda284dac5e45b7e1f6c49aa8be606509002898e73091ff2a3bbfc59c2c6c71d4660609f63aa92f98e3
   languageName: node
   linkType: hard
 
@@ -14451,19 +14415,6 @@ __metadata:
     lodash: "npm:^4.17.21"
     strip-ansi: "npm:^6.0.1"
   checksum: 10c0/24a9fae4cc50e731d059742d1b3eec163dc9e3872b12010d120c3fcbd622765d9cda41f79a1bbb4bf63c1d3442f18a08f6e1642cb5d7ebf092a0ce3f7a3bd143
-  languageName: node
-  linkType: hard
-
-"replace-in-file@npm:^7.0.1":
-  version: 7.2.0
-  resolution: "replace-in-file@npm:7.2.0"
-  dependencies:
-    chalk: "npm:^4.1.2"
-    glob: "npm:^8.1.0"
-    yargs: "npm:^17.7.2"
-  bin:
-    replace-in-file: bin/cli.js
-  checksum: 10c0/8779b98dcb4d7afccef357edbe38490b6588ef5f59f38d62de1d5854d3f42a9e087af7c4a018004d96e4c0f24a6bbf12109e8349417aba770d1e7ac1980f2177
   languageName: node
   linkType: hard
 
@@ -17898,7 +17849,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.0.0, yargs@npm:^17.7.2":
+"yargs@npm:^17.0.0":
   version: 17.7.2
   resolution: "yargs@npm:17.7.2"
   dependencies:
