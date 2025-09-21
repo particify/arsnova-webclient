@@ -12,20 +12,19 @@
     <app-loading-indicator></app-loading-indicator>
   } @else {
     @if (room) {
-      @if (
-        room.description &&
-        (commentsEnabled || feedbackEnabled || contentGroups.length > 0)
-      ) {
-        <app-expandable-card>
-          <app-rendered-text
-            [rawText]="room.description.trim()"
-            [renderedText]="room.renderedDescription"
-            appLangContext
-            appDirContext
-          ></app-rendered-text>
-        </app-expandable-card>
-      }
+      @let anyFeatureEnabled =
+        commentsEnabled || feedbackEnabled || contentGroups.length > 0;
       @if (!focusModeEnabled) {
+        @if (room.description && anyFeatureEnabled) {
+          <app-expandable-card>
+            <app-rendered-text
+              [rawText]="room.description.trim()"
+              [renderedText]="room.renderedDescription"
+              appLangContext
+              appDirContext
+            ></app-rendered-text>
+          </app-expandable-card>
+        }
         @if (commentsEnabled || feedbackEnabled) {
           <div
             fxFill
@@ -90,10 +89,7 @@
           </app-feature-card>
         }
       }
-      @if (
-        (!commentsEnabled && !feedbackEnabled && contentGroups.length === 0) ||
-        focusModeEnabled
-      ) {
+      @if (!anyFeatureEnabled || focusModeEnabled) {
         <app-room-info-component
           style="max-width: 100%"
           [name]="room.name"
