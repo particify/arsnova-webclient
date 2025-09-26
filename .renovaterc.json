@@ -2,5 +2,36 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>particify/dev/devops/renovate-dependency-bot//presets/default"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["ng-packagr", "typescript"],
+      "matchPackagePrefixes": ["@angular/", "@angular-devkit/"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "extends": ["schedule:monthly"],
+      "matchPackageNames": ["eslint-plugin-jsdoc"]
+    },
+    {
+      "groupName": "angular",
+      "matchPackageNames": ["ng-packagr"],
+      "matchPackagePrefixes": ["@angular/", "@angular-devkit/"]
+    },
+    {
+      "groupName": "apollo/graphql-codegen",
+      "matchPackageNames": ["apollo-angular"],
+      "matchPackagePrefixes": ["@apollo/", "@graphql-codegen/"]
+    },
+    {
+      "groupName": "eslint",
+      "matchPackageNames": ["eslint", "typescript-eslint"],
+      "matchPackagePrefixes": ["@angular-eslint/", "@eslint/", "eslint-"]
+    },
+    {
+      "groupName": "stomp",
+      "matchPackagePrefixes": ["@stomp/"]
+    }
   ]
 }
