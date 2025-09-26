@@ -20,8 +20,8 @@
       "matchPackagePrefixes": ["@angular/", "@angular-devkit/"]
     },
     {
-      "groupName": "apollo/graphql-codegen",
-      "matchPackageNames": ["apollo-angular"],
+      "groupName": "apollo/graphql",
+      "matchPackageNames": ["apollo-angular", "graphql"],
       "matchPackagePrefixes": ["@apollo/", "@graphql-codegen/"]
     },
     {
