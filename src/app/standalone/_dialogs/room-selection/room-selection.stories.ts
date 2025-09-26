@@ -7,20 +7,20 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { of } from 'rxjs';
 import { Membership } from '@app/core/models/membership';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomSummary } from '@app/core/models/room-summary';
+import { RoomRole } from '@gql/generated/graphql';
 
 const membership1 = new Membership();
 membership1.lastVisit = new Date().toDateString();
-membership1.primaryRole = UserRole.EDITOR;
-membership1.roles = [UserRole.EDITOR];
+membership1.primaryRole = RoomRole.Editor;
+membership1.roles = [RoomRole.Editor];
 membership1.roomId = 'roomId1';
 membership1.roomShortId = '11111111';
 
 const membership2 = new Membership();
 membership2.lastVisit = new Date().toDateString();
-membership2.primaryRole = UserRole.EDITOR;
-membership2.roles = [UserRole.EDITOR];
+membership2.primaryRole = RoomRole.Editor;
+membership2.roles = [RoomRole.Editor];
 membership2.roomId = 'roomId2';
 membership2.roomShortId = '22222222';
 
