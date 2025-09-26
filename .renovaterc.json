@@ -11,6 +11,11 @@
       "enabled": false
     },
     {
+      "matchPackageNames": ["ng-packagr", "typescript"],
+      "matchPackagePrefixes": ["@angular/", "@angular-devkit/"],
+      "minimumReleaseAge": 0
+    },
+    {
       "extends": ["schedule:monthly"],
       "matchPackageNames": ["eslint-plugin-jsdoc"]
     },
