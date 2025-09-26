@@ -37,14 +37,18 @@ announcement.renderedBody =
 
 export const AnnouncementOwner: Story = {
   args: {
-    announcement: announcement,
+    title: announcement.title,
+    body: announcement.body,
+    bodyRendered: announcement.renderedBody,
     role: UserRole.OWNER,
   },
 };
 
 export const AnnouncementParticipant: Story = {
   args: {
-    announcement: announcement,
+    title: announcement.title,
+    body: announcement.body,
+    bodyRendered: announcement.renderedBody,
     role: UserRole.PARTICIPANT,
     roomName: 'Awesome room',
   },
