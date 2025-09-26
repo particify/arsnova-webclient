@@ -100,23 +100,19 @@
           }
         },
         "storybook": {
-          "builder": "@storybook/angular:start-storybook",
+          "builder": "@analogjs/storybook-angular:start-storybook",
           "options": {
-            "configDir": ".storybook",
-            "browserTarget": "arsnova-webclient:build",
             "compodoc": false,
             "port": 6006,
-            "styles": ["src/fonts.scss", ".storybook/custom-styles.scss"]
+            "styles": ["../src/fonts.scss", "./custom-styles.scss"]
           }
         },
         "build-storybook": {
-          "builder": "@storybook/angular:build-storybook",
+          "builder": "@analogjs/storybook-angular:build-storybook",
           "options": {
-            "configDir": ".storybook",
-            "browserTarget": "arsnova-webclient:build",
             "compodoc": false,
             "outputDir": "dist/storybook/arsnova-webclient",
-            "styles": ["src/fonts.scss", ".storybook/custom-styles.scss"]
+            "styles": ["../src/fonts.scss", "./custom-styles.scss"]
           }
         }
       }
