@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { ContentGroupCreationComponent } from '@app/creator/_dialogs/content-group-creation/content-group-creation.component';
 import { RoomCreateComponent } from '@app/core/components/_dialogs/room-create/room-create.component';
+import { RoomCreateGqlComponent } from '@app/standalone/_dialogs/room-create-gql/room-create-gql.component';
 import { UserActivationComponent } from '@app/core/components//_dialogs/user-activation/user-activation.component';
 import { UpdateInfoComponent } from '@app/core/components/update-info/update-info.component';
 import { VersionInfo } from '@app/core/models/version-info';
@@ -114,6 +115,21 @@ export class DialogService {
     navigateAfterCreation = true
   ): MatDialogRef<RoomCreateComponent> {
     return this.openDialog(RoomCreateComponent, {
+      width: DIALOG_SIZES.xsmall,
+      data: {
+        prefilledName: prefilledName,
+        roomId: roomId,
+        navigateAfterCreation: navigateAfterCreation,
+      },
+    });
+  }
+
+  openRoomCreateGqlDialog(
+    prefilledName?: string,
+    roomId?: string,
+    navigateAfterCreation = true
+  ): MatDialogRef<RoomCreateGqlComponent> {
+    return this.openDialog(RoomCreateGqlComponent, {
       width: DIALOG_SIZES.xsmall,
       data: {
         prefilledName: prefilledName,

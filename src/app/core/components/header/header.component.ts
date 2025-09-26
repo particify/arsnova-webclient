@@ -7,14 +7,6 @@ import { EventService } from '@app/core/services/util/event.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ExtensionFactory } from '@projects/extension-point/src/public-api';
-import { MatDialog } from '@angular/material/dialog';
-import { AnnouncementListComponent } from '@app/standalone/announcement-list/announcement-list.component';
-import { AnnouncementService } from '@app/core/services/http/announcement.service';
-import { AnnouncementState } from '@app/core/models/announcement-state';
-import {
-  ChangeType,
-  EntityChangeNotification,
-} from '@app/core/models/events/entity-change-notification';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { DrawerService } from '@app/core/services/util/drawer.service';
@@ -32,14 +24,14 @@ import { SplitButtonComponent } from '@app/standalone/split-button/split-button.
 import { MenuItemDetailsComponent } from '@app/standalone/menu-item-details/menu-item-details.component';
 import { MatDivider } from '@angular/material/divider';
 import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatBadge } from '@angular/material/badge';
 import { NgClass } from '@angular/common';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ShareRoomComponent } from '@app/standalone/share-room/share-room.component';
 import { DevErrorIndicatorComponent } from '@app/standalone/dev-error-indicator/dev-error-indicator.component';
 import { ENVIRONMENT } from '@environments/environment-token';
 import { environment } from '@environments/environment';
+import { AnnouncementsButtonComponent } from '@app/standalone/announcements-button/announcements-button.component';
+import { AnnouncementsButtonGqlComponent } from '@app/standalone/announcements-button-gql/announcements-button-gql.component';
 
 @Component({
   selector: 'app-header',
@@ -63,12 +55,13 @@ import { environment } from '@environments/environment';
     MenuItemDetailsComponent,
     MatDivider,
     HotkeyDirective,
-    MatTooltip,
-    MatBadge,
     NgClass,
     TranslocoPipe,
     ShareRoomComponent,
     DevErrorIndicatorComponent,
+    environment.graphql
+      ? AnnouncementsButtonGqlComponent
+      : AnnouncementsButtonComponent,
   ],
 })
 export class HeaderComponent implements OnInit {
@@ -77,8 +70,6 @@ export class HeaderComponent implements OnInit {
   eventService = inject(EventService);
   private routingService = inject(RoutingService);
   private extensionFactory = inject(ExtensionFactory);
-  private dialog = inject(MatDialog);
-  private announcementService = inject(AnnouncementService);
   private roomService = inject(RoomService);
   private drawerService = inject(DrawerService);
   private pageTitleService = inject(PageTitleService);
@@ -94,7 +85,6 @@ export class HeaderComponent implements OnInit {
   userCharacter?: string;
   openPresentationDirectly = false;
   showOverlayLink = false;
-  announcementState?: AnnouncementState;
   room?: Room;
   title = this.pageTitleService.getTitle();
   isHome = this.routingService.isHome();
@@ -106,24 +96,7 @@ export class HeaderComponent implements OnInit {
       this.userCharacter = this.auth?.displayId
         ?.slice(0, 1)
         .toLocaleUpperCase();
-      this.getAnnouncementState();
     });
-    this.eventService
-      .on('EntityChangeNotification')
-      .subscribe((notification) => {
-        if (this.role !== UserRole.OWNER) {
-          const entityType = (notification as EntityChangeNotification).payload
-            .entityType;
-          const changeType = (notification as EntityChangeNotification).payload
-            .changeType;
-          if (
-            entityType === 'Announcement' &&
-            [ChangeType.CREATE, ChangeType.UPDATE].includes(changeType)
-          ) {
-            this.getAnnouncementState();
-          }
-        }
-      });
     this.roomService.getCurrentRoomStream().subscribe((room) => {
       this.room = room;
     });
@@ -143,18 +116,6 @@ export class HeaderComponent implements OnInit {
 
   toggleDrawer(): void {
     this.drawerService.toggleDrawer();
-  }
-
-  getAnnouncementState() {
-    if (this.auth) {
-      this.announcementService
-        .getStateByUserId(this.auth.userId)
-        .subscribe((state) => {
-          this.announcementState = state;
-        });
-    } else {
-      this.announcementState = undefined;
-    }
   }
 
   hasRole(role: UserRole): boolean {
@@ -181,22 +142,6 @@ export class HeaderComponent implements OnInit {
 
   goToSettings() {
     this.routingService.navToSettings();
-  }
-
-  showNews() {
-    const dialogRef = this.dialog.open(AnnouncementListComponent, {
-      panelClass: 'dialog-margin',
-      width: '90%',
-      maxWidth: '872px',
-      data: {
-        state: this.announcementState,
-      },
-    });
-    dialogRef.afterClosed().subscribe((newReadTimestamp) => {
-      if (this.announcementState) {
-        this.announcementState.readTimestamp = newReadTimestamp;
-      }
-    });
   }
 
   isRoomSubRoute() {

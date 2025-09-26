@@ -6,7 +6,6 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { Room } from '@app/core/models/room';
 import { Announcement } from '@app/core/models/announcement';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
@@ -67,7 +66,7 @@ export class AnnouncementSettingsComponent
   @ViewChild('inputTabs') inputTabs!: MatTabGroup;
   @ViewChild('titleInput') titleInput!: ElementRef;
 
-  @Input({ required: true }) room!: Room;
+  @Input({ required: true }) roomId!: string;
 
   title = '';
   body = '';
@@ -82,7 +81,7 @@ export class AnnouncementSettingsComponent
 
   ngOnInit(): void {
     this.announcementService
-      .getByRoomId(this.room.id)
+      .getByRoomId(this.roomId)
       .subscribe((announcements) => {
         this.announcements = announcements.sort((a, b) => {
           return (
@@ -94,13 +93,17 @@ export class AnnouncementSettingsComponent
       });
   }
 
-  delete(announcement: Announcement) {
+  delete(id: string) {
+    const announcement = this.announcements.find((a) => a.id === id);
+    if (!announcement) {
+      return;
+    }
     const dialogRef = this.dialogService.openDeleteDialog(
       'announcement',
       'creator.dialog.really-delete-announcement',
       announcement.title,
       undefined,
-      () => this.announcementService.delete(this.room.id, announcement.id)
+      () => this.announcementService.delete(this.roomId, announcement.id)
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -133,7 +136,7 @@ export class AnnouncementSettingsComponent
     if (this.editId) {
       this.disableForm();
       this.announcementService
-        .update(this.room.id, this.editId, this.title, this.body)
+        .update(this.roomId, this.editId, this.title, this.body)
         .subscribe(
           (announcement) => {
             const index = this.announcements
@@ -157,7 +160,7 @@ export class AnnouncementSettingsComponent
     } else {
       this.disableForm();
       this.announcementService
-        .add(this.room.id, this.title, this.body)
+        .add(this.roomId, this.title, this.body)
         .subscribe(
           (announcement) => {
             this.announcements.unshift(announcement);
@@ -178,7 +181,11 @@ export class AnnouncementSettingsComponent
     }
   }
 
-  edit(announcement: Announcement) {
+  edit(id: string) {
+    const announcement = this.announcements.find((a) => a.id === id);
+    if (!announcement) {
+      return;
+    }
     if (!this.title && !this.body) {
       this.editId = announcement.id;
       this.title = announcement.title;
@@ -194,7 +201,7 @@ export class AnnouncementSettingsComponent
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
           this.resetInputs();
-          this.edit(announcement);
+          this.edit(announcement.id);
         }
       });
     }

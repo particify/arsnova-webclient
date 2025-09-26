@@ -19,7 +19,7 @@ import {
   AUTH_SCHEME,
 } from './http/authentication.service';
 import { Membership } from '@app/core/models/membership';
-import { UserRole } from '@app/core/models/user-roles.enum';
+import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
 import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { Room } from '@app/core/models/room';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
@@ -32,6 +32,7 @@ import { MembershipsChanged } from '@app/core/models/events/memberships-changed'
 export class RoomMembershipService extends AbstractHttpService<Membership> {
   protected wsConnector = inject(WsConnectorService);
   protected authenticationService = inject(AuthenticationService);
+  private roomMembershipByShortIdGql = inject(RoomMembershipByShortIdGql);
 
   serviceApiUrl = {
     byUser: '/by-user',
@@ -126,8 +127,8 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
     const membership = new Membership();
     membership.roomId = roomId;
     membership.roomShortId = roomShortId;
-    membership.roles = [UserRole.OWNER];
-    membership.primaryRole = UserRole.OWNER;
+    membership.roles = [RoomRole.Owner];
+    membership.primaryRole = RoomRole.Owner;
     this.newOwnerships.unshift(membership);
   }
 
@@ -173,7 +174,7 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   /**
    * Returns the user's primary (most powerful) role for a room.
    */
-  getPrimaryRoleByRoom(roomShortId: string): Observable<UserRole> {
+  getPrimaryRoleByRoom(roomShortId: string): Observable<RoomRole> {
     return this.getMembershipByRoom(roomShortId).pipe(
       map((m) => this.selectPrimaryRole(m.roles))
     );
@@ -182,17 +183,17 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   /**
    * Select the user's primary (most powerful) role from an array of roles.
    */
-  selectPrimaryRole(roles: UserRole[]) {
+  selectPrimaryRole(roles: RoomRole[]) {
     return roles.reduce(
       (acc, value) => (this.isRoleSubstitutable(value, acc) ? value : acc),
-      UserRole.NONE
+      RoomRole.None
     );
   }
 
   /**
    * Checks if the user has the exact given role for the given room.
    */
-  hasRoleForRoom(roomShortId: string, role: UserRole): Observable<boolean> {
+  hasRoleForRoom(roomShortId: string, role: RoomRole): Observable<boolean> {
     return this.getMembershipByRoom(roomShortId).pipe(
       map((membership) => membership.roles.indexOf(role) !== -1)
     );
@@ -204,7 +205,7 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
    */
   hasAccessForRoom(
     roomShortId: string,
-    requestedRole: UserRole
+    requestedRole: RoomRole
   ): Observable<boolean> {
     return this.getMembershipByRoom(roomShortId).pipe(
       map((membership) =>
@@ -214,23 +215,45 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
   }
 
   /**
+   * Checks if the user has the permissions of the given role for the given
+   * room.
+   */
+  hasAccessForRoomGql(
+    roomShortId: string,
+    requestedRole: RoomRole
+  ): Observable<boolean> {
+    return this.roomMembershipByShortIdGql
+      .fetch({ shortId: roomShortId })
+      .pipe(
+        map((r) =>
+          r.data.roomMembershipByShortId
+            ? this.isRoleSubstitutable(
+                r.data.roomMembershipByShortId?.role,
+                requestedRole
+              )
+            : false
+        )
+      );
+  }
+
+  /**
    * Checks if the first given role's permissions are a superset of the
    * substitution role's.
    */
-  isRoleSubstitutable(checkedRole: UserRole, substitution: UserRole) {
-    if (checkedRole === substitution || substitution === UserRole.NONE) {
+  isRoleSubstitutable(checkedRole: RoomRole, substitution: RoomRole) {
+    if (checkedRole === substitution || substitution === RoomRole.None) {
       return true;
     }
     switch (checkedRole) {
-      case UserRole.OWNER:
+      case RoomRole.Owner:
         return true;
-      case UserRole.EDITOR:
+      case RoomRole.Editor:
         return (
-          [UserRole.MODERATOR, UserRole.PARTICIPANT].indexOf(substitution) !==
+          [RoomRole.Moderator, RoomRole.Participant].indexOf(substitution) !==
           -1
         );
-      case UserRole.MODERATOR:
-        return substitution === UserRole.PARTICIPANT;
+      case RoomRole.Moderator:
+        return substitution === RoomRole.Participant;
       default:
         return false;
     }

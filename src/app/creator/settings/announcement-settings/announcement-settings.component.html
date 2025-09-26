@@ -93,7 +93,12 @@
     >
       @for (announcement of announcements; track announcement) {
         <app-announcement
-          [announcement]="announcement"
+          [id]="announcement.id"
+          [title]="announcement.title"
+          [body]="announcement.body"
+          [bodyRendered]="announcement.renderedBody"
+          [createdAt]="announcement.creationTimestamp"
+          [updatedAt]="announcement.updateTimestamp"
           [role]="UserRole.OWNER"
           [editMode]="editId === announcement.id"
           (deleteEvent)="delete($event)"

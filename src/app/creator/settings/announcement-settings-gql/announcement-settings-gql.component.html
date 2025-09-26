@@ -1,0 +1,120 @@
+<div fxLayout="column" fxLayoutGap="1em">
+  <p class="info" tabindex="0">
+    {{ 'creator.settings.announcements-info' | transloco }}
+  </p>
+  <form fxLayout="column" fxLayoutGap="1em">
+    <mat-form-field class="input-block no-field-hint" appearance="outline">
+      <mat-label>{{ 'creator.announcement.title' | transloco }}</mat-label>
+      <input
+        #titleInput
+        [disabled]="formDisabled"
+        [(ngModel)]="title"
+        matInput
+        name="title"
+      />
+    </mat-form-field>
+    <div class="relative">
+      <mat-tab-group
+        #inputTabs
+        [dynamicHeight]="true"
+        animationDuration="0"
+        (selectedTabChange)="tabChanged($event)"
+      >
+        <mat-tab label="{{ 'creator.announcement.body' | transloco }}">
+          @if (!renderPreview) {
+            <app-formatting-toolbar
+              class="tab-group-formatting-bar-mobile"
+              [inputElement]="bodyInput"
+              [disabled]="formDisabled"
+              (valueChanged)="body = $event"
+            ></app-formatting-toolbar>
+          }
+          <mat-form-field
+            id="body-input"
+            class="input-block no-field-hint"
+            appearance="outline"
+          >
+            <textarea
+              #bodyInput
+              [disabled]="formDisabled"
+              [(ngModel)]="body"
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="3"
+              cdkAutosizeMaxRows="5"
+              name="body"
+              [placeholder]="'creator.announcement.enter-body' | transloco"
+              aria-labelledby="body-description"
+              dir="auto"
+            ></textarea>
+          </mat-form-field>
+        </mat-tab>
+        <mat-tab
+          label="{{ 'creator.room.preview' | transloco }}"
+          [disabled]="!body"
+        >
+          <div>
+            <app-rendered-text
+              [rawText]="bodyInput.value"
+              [dynamic]="renderPreview"
+              [markdownFeatureset]="markdownFeatureset"
+            ></app-rendered-text>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+      @if (!renderPreview) {
+        <app-formatting-toolbar
+          class="tab-group-formatting-bar"
+          [inputElement]="bodyInput"
+          [disabled]="formDisabled"
+          (valueChanged)="body = $event"
+        ></app-formatting-toolbar>
+      }
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
+      @if (editId) {
+        <button mat-stroked-button (click)="reset()">
+          {{ 'creator.announcement.cancel' | transloco }}
+        </button>
+      }
+      <app-loading-button
+        [name]="
+          editId ? 'creator.announcement.save' : 'creator.announcement.create'
+        "
+        (clicked)="save()"
+      ></app-loading-button>
+    </div>
+  </form>
+  @if (!isLoading()) {
+    <div
+      fxLayout="column"
+      fxLayoutGap="1em"
+      class="announcement-list-container"
+    >
+      @for (announcement of announcements(); track announcement) {
+        <app-announcement
+          [id]="announcement.id"
+          [title]="announcement.title"
+          [body]="announcement.body"
+          [bodyRendered]="announcement.bodyRendered ?? announcement.body"
+          [createdAt]="announcement.createdAt"
+          [updatedAt]="announcement.updatedAt ?? undefined"
+          [role]="UserRole.OWNER"
+          [editMode]="editId === announcement.id"
+          (deleteEvent)="delete($event)"
+          (editEvent)="edit($event)"
+          tabindex="0"
+        ></app-announcement>
+      }
+    </div>
+  }
+  @if (isLoading()) {
+    <app-loading-indicator></app-loading-indicator>
+  }
+</div>
+
+<div class="visually-hidden">
+  <div id="body-description">
+    {{ 'creator.settings.a11y-announcement-description' | transloco }}
+  </div>
+</div>

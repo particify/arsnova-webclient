@@ -156,6 +156,9 @@ export abstract class AbstractHttpService<T> {
   }
 
   private getBaseUrl(roomId?: string): string {
-    return this.apiUrl.base + (roomId ? this.apiUrl.room + '/' + roomId : '');
+    return (
+      this.apiUrl.base +
+      (roomId ? this.apiUrl.room + '/' + roomId.replaceAll('-', '') : '')
+    );
   }
 }

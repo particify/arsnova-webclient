@@ -12,6 +12,10 @@ import { PresentationComponent } from './presentation/presentation.component';
 import { QrCodeComponent } from '@app/standalone/qr-code/qr-code.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
+import { environment } from '@environments/environment';
+import { roomGqlResolver } from '@app/core/resolver/room-gql.resolver';
+import { roomViewUserRoleGqlResolver } from '@app/core/resolver/room-view-user-role-gql.resolver';
+import { AuthenticationGqlGuard } from '@app/core/guards/authentication-gql.guard';
 
 const routes: Routes = [
   {
@@ -82,7 +86,9 @@ const routes: Routes = [
         {
           path: ':shortId',
           component: PresentationComponent,
-          canActivate: [AuthenticationGuard],
+          canActivate: [
+            environment.graphql ? AuthenticationGqlGuard : AuthenticationGuard,
+          ],
           data: {
             requiredRole: UserRole.EDITOR,
             isPresentation: true,
@@ -91,10 +97,15 @@ const routes: Routes = [
             showHotkeyActionButtons: true,
             showCard: false,
           },
-          resolve: {
-            room: RoomResolver,
-            viewRole: RoomViewUserRoleResolver,
-          },
+          resolve: environment.graphql
+            ? {
+                room: roomGqlResolver,
+                viewRole: roomViewUserRoleGqlResolver,
+              }
+            : {
+                room: RoomResolver,
+                viewRole: RoomViewUserRoleResolver,
+              },
           runGuardsAndResolvers: 'always',
           children: [
             {

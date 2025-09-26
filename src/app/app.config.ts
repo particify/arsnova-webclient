@@ -15,6 +15,7 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
+import { AuthenticationGqlGuard } from '@app/core/guards/authentication-gql.guard';
 import { DemoRoomGuard } from '@app/core/guards/demo-room.guard';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -83,6 +84,7 @@ import {
 } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { AppRoutingModule } from './app-routing.module';
+import { apolloProvider } from '@app/apollo-provider';
 
 if (environment.production) {
   enableProdMode();
@@ -103,6 +105,7 @@ export const AppConfig: ApplicationConfig = {
       provide: ENVIRONMENT,
       useValue: environment,
     },
+    environment.graphql ? apolloProvider : [],
     provideAppInitializer(() => {
       const initializerFn = initAuthenticationService(
         inject(AuthenticationService)
@@ -143,6 +146,7 @@ export const AppConfig: ApplicationConfig = {
     DialogService,
     AuthenticationService,
     AuthenticationGuard,
+    AuthenticationGqlGuard,
     DemoRoomGuard,
     RoomMembershipService,
     EventService,

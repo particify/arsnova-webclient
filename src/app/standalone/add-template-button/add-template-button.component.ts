@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { Membership } from '@app/core/models/membership';
 import { Room } from '@app/core/models/room';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -41,7 +40,7 @@ export class AddTemplateButtonComponent extends FormComponent {
 
   useTemplate(): void {
     if (this.room) {
-      this.setRoute(UserRole.EDITOR, this.room.shortId);
+      this.setRoute(this.room.shortId);
       this.createTemplate(this.room.id);
     } else {
       this.membershipService
@@ -58,7 +57,7 @@ export class AddTemplateButtonComponent extends FormComponent {
             );
             dialogRef.afterClosed().subscribe((room) => {
               if (room) {
-                this.setRoute(UserRole.EDITOR, room.shortId);
+                this.setRoute(room.shortId);
                 this.createTemplate(room.id, false);
               }
             });
@@ -94,8 +93,8 @@ export class AddTemplateButtonComponent extends FormComponent {
       });
   }
 
-  private setRoute(role: UserRole, shortId: string): void {
-    this.routeAfterSuccess = [this.routingService.getRoleRoute(role), shortId];
+  private setRoute(shortId: string): void {
+    this.routeAfterSuccess = ['edit', shortId];
   }
 
   private openRoomSelectionDialog(memberships: Membership[]): void {
@@ -107,10 +106,7 @@ export class AddTemplateButtonComponent extends FormComponent {
     });
     dialogRef.afterClosed().subscribe((membership?: Membership) => {
       if (membership) {
-        this.setRoute(
-          this.membershipService.selectPrimaryRole(membership.roles),
-          membership.roomShortId
-        );
+        this.setRoute(membership.roomShortId);
         this.createTemplate(membership.roomId);
       }
     });

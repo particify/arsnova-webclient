@@ -9,7 +9,7 @@ export default eslintTypescript.config(
   eslint.configs.recommended,
   ...eslintTypescript.configs.recommended,
   {
-    ignores: ['**/*.d.ts', 'dist/**'],
+    ignores: ['**/*.d.ts', 'dist/**', 'src/graphql/generated/**'],
   },
   {
     plugins: {

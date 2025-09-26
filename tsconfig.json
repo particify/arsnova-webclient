@@ -22,6 +22,7 @@
     "lib": ["ES2022", "dom"],
     "paths": {
       "@app/*": ["./app/*"],
+      "@gql/*": ["./graphql/*"],
       "@testing/*": ["./testing/*"],
       "@environments/*": ["./environments/*"],
       "@projects/*": ["../projects/*"],

@@ -7,7 +7,7 @@
       <mat-label>{{ 'announcement.filter' | transloco }}</mat-label>
       <mat-select
         [(value)]="selectedRoomId"
-        (selectionChange)="filter()"
+        (selectionChange)="(true)"
         [disabled]="announcements.length === 0"
       >
         <mat-option value="">{{
@@ -29,7 +29,12 @@
       }
       @for (announcement of displayAnnouncements; track announcement) {
         <app-announcement
-          [announcement]="announcement"
+          [id]="announcement.id"
+          [title]="announcement.title"
+          [body]="announcement.body"
+          [bodyRendered]="announcement.renderedBody"
+          [createdAt]="announcement.creationTimestamp"
+          [updatedAt]="announcement.updateTimestamp"
           [roomName]="announcement.roomName"
           [label]="getLabel(announcement)"
           tabindex="0"

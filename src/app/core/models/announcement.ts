@@ -6,8 +6,8 @@ export class Announcement {
   title: string;
   body: string;
   renderedBody!: string;
-  creationTimestamp!: Date;
-  updateTimestamp!: Date;
+  creationTimestamp!: string;
+  updateTimestamp!: string;
 
   constructor(roomId: string, title: string, body: string) {
     this.roomId = roomId;

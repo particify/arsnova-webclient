@@ -9,7 +9,7 @@
     "logLevel": "debug"
   },
   "/api": {
-    "target": "http://arsnova-proxy",
+    "target": "http://apisix:9080",
     "secure": false,
     "logLevel": "debug"
   }

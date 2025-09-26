@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Announcement } from '@app/core/models/announcement';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -33,21 +32,26 @@ import { MatCard } from '@angular/material/card';
   ],
 })
 export class AnnouncementComponent {
-  @Input({ required: true }) announcement!: Announcement;
+  @Input({ required: true }) id!: string;
+  @Input({ required: true }) title!: string;
+  @Input({ required: true }) body!: string;
+  @Input({ required: true }) createdAt!: string;
+  @Input() updatedAt?: string;
+  @Input() bodyRendered?: string;
   @Input() role?: UserRole;
   @Input() roomName?: string;
   @Input() label?: string;
   @Input() editMode = false;
-  @Output() deleteEvent = new EventEmitter<Announcement>();
-  @Output() editEvent = new EventEmitter<Announcement>();
+  @Output() deleteEvent = new EventEmitter<string>();
+  @Output() editEvent = new EventEmitter<string>();
 
   markdownFeatureset = MarkdownFeatureset.SIMPLE;
 
   delete() {
-    this.deleteEvent.emit(this.announcement);
+    this.deleteEvent.emit(this.id);
   }
 
   edit() {
-    this.editEvent.emit(this.announcement);
+    this.editEvent.emit(this.id);
   }
 }
