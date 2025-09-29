@@ -184,7 +184,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.parseUserCount(msg.body)
         );
       });
-      this.focusModeService.init(this.room.id);
       this.focusModeService
         .getFocusModeEnabled()
         .pipe(takeUntil(this.destroyed$))

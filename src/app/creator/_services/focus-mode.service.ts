@@ -27,18 +27,6 @@ export class FocusModeService extends AbstractFocusModeService {
     this.http.post(`api/room/${room}/focus-event`, newState).subscribe();
   }
 
-  init(roomId: string) {
-    this.roomId = roomId;
-    this.roomSettingsService.getByRoomId(roomId).subscribe((settings) => {
-      this.focusModeEnabled$.next(settings.focusModeEnabled);
-      if (settings.focusModeEnabled) {
-        this.loadState();
-      }
-    });
-    this.subscribeToState();
-    this.subscribeToRoomChanges();
-  }
-
   getState(): Observable<FocusEvent | null> {
     return this.state$;
   }
