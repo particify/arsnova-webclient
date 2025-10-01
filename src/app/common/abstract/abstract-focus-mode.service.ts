@@ -8,14 +8,18 @@ import {
   map,
   Observable,
   of,
+  pairwise,
+  shareReplay,
+  startWith,
   Subject,
   switchMap,
   takeUntil,
-  tap,
 } from 'rxjs';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { RxStompState } from '@stomp/rx-stomp';
 
 @Injectable()
 export abstract class AbstractFocusModeService implements OnDestroy {
@@ -27,16 +31,27 @@ export abstract class AbstractFocusModeService implements OnDestroy {
 
   destroyed$ = new Subject<void>();
 
-  protected roomId?: string;
-  protected roomId$ = this.roomService.getCurrentRoomStream().pipe(
+  private readonly wsReconnect$ = this.wsConnector.getConnectionState().pipe(
+    takeUntil(this.destroyed$),
+    filter((state) => [RxStompState.OPEN, RxStompState.CLOSED].includes(state)),
+    startWith(undefined),
+    pairwise(),
+    filter(([prev, cur]) => cur === RxStompState.OPEN && cur !== prev),
+    map(() => {
+      // We are not interested in the actual value.
+      return;
+    })
+  );
+
+  protected readonly roomId$ = this.roomService.getCurrentRoomStream().pipe(
     takeUntil(this.destroyed$),
     filter((r) => !!r),
     map((r) => r.id),
-    tap((id) => (this.roomId = id))
+    shareReplay()
   );
+  protected readonly roomId = toSignal(this.roomId$);
 
-  protected focusModeEnabled = false;
-  protected focusModeEnabled$ = this.roomId$.pipe(
+  protected readonly focusModeEnabled$ = this.roomId$.pipe(
     switchMap((roomId) =>
       this.roomSettingsService
         .getByRoomId(roomId)
@@ -50,45 +65,41 @@ export abstract class AbstractFocusModeService implements OnDestroy {
         )
     ),
     map((s) => s.focusModeEnabled),
-    tap((enabled) => (this.focusModeEnabled = enabled))
+    shareReplay()
   );
+  protected readonly focusModeEnabled = toSignal(this.focusModeEnabled$);
 
-  constructor() {
-    this.loadState();
-    this.subscribeToState();
-  }
+  /** Helper Observable for state to enable it conditionally and trigger reloads. */
+  private readonly reloadState$ = this.focusModeEnabled$.pipe(
+    switchMap((enabled) => (enabled ? this.wsReconnect$ : of()))
+  );
+  /** Emits focus mode state initially and after changes if focus mode is enabled. Reemits state after WebSocket reconnects. */
+  protected readonly state$ = this.reloadState$.pipe(
+    switchMap(() =>
+      this.roomId$.pipe(
+        switchMap((roomId) =>
+          this.http
+            .get<FocusEvent>(`api/room/${roomId}/focus-event`)
+            .pipe(
+              switchMap((e) =>
+                concat(
+                  of(e),
+                  this.wsConnector
+                    .getWatcher(`/topic/${roomId}.focus.state.stream`)
+                    .pipe(map((msg) => JSON.parse(msg.body) as FocusEvent))
+                )
+              )
+            )
+        ),
+        shareReplay()
+      )
+    )
+  );
 
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-
-  protected loadState() {
-    this.roomId$
-      .pipe(
-        switchMap((id) =>
-          this.http.get<FocusEvent>(`api/room/${id}/focus-event`)
-        )
-      )
-      .subscribe((state) => {
-        this.handleState(state, true);
-      });
-  }
-
-  protected subscribeToState() {
-    this.roomId$
-      .pipe(
-        switchMap((id) =>
-          this.wsConnector.getWatcher(`/topic/${id}.focus.state.stream`)
-        )
-      )
-      .subscribe((msg) => {
-        const state = JSON.parse(msg.body);
-        this.handleState(state);
-      });
-  }
-
-  protected abstract handleState(state?: FocusEvent, initial?: boolean): void;
 
   getFocusModeEnabled(): Observable<boolean> {
     return this.focusModeEnabled$;

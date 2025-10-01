@@ -4,19 +4,13 @@ import { ContentFocusState } from '@app/core/models/events/remote/content-focus-
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
 import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AbstractFocusModeService } from '@app/common/abstract/abstract-focus-mode.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FocusModeService extends AbstractFocusModeService {
-  private state$ = new BehaviorSubject<FocusEvent | null>(null);
-
-  protected handleState(state: FocusEvent) {
-    this.state$.next(state);
-  }
-
   private getFeatureKey(feature: RoutingFeature): string {
     return Object.keys(RoutingFeature)[
       Object.values(RoutingFeature).indexOf(feature)
@@ -27,7 +21,7 @@ export class FocusModeService extends AbstractFocusModeService {
     this.http.post(`api/room/${room}/focus-event`, newState).subscribe();
   }
 
-  getState(): Observable<FocusEvent | null> {
+  getState(): Observable<FocusEvent> {
     return this.state$;
   }
 
@@ -68,13 +62,14 @@ export class FocusModeService extends AbstractFocusModeService {
     feature: RoutingFeature,
     state?: ContentFocusState | CommentFocusState | FeedbackFocusState
   ) {
+    const roomId = this.roomId();
     if (
       this.featureFlagService.isEnabled('FOCUS_MODE') &&
-      this.focusModeEnabled &&
-      this.roomId
+      this.focusModeEnabled() &&
+      roomId
     ) {
       const newState = new FocusEvent(this.getFeatureKey(feature), state);
-      this.sendState(this.roomId, newState);
+      this.sendState(roomId, newState);
     }
   }
 }
