@@ -154,6 +154,10 @@ export class RoutingService {
     return this.role$;
   }
 
+  getViewRole(): UserRole | undefined {
+    return this.viewRole;
+  }
+
   getIsPreview(): EventEmitter<boolean> {
     return this.isPreview$;
   }

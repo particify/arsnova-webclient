@@ -39,13 +39,7 @@ export class FocusModeService extends AbstractFocusModeService {
     this.roomId = roomId;
     this.roomSettingsService.getByRoomId(roomId).subscribe((settings) => {
       this.focusModeEnabled = settings.focusModeEnabled;
-      this.focusModeEnabled$.next(this.focusModeEnabled);
-      if (this.focusModeEnabled) {
-        this.loadState();
-      }
       this.currentFeature = currentFeature;
-      this.subscribeToState();
-      this.subscribeToRoomChanges();
       this.subscribeToWsConnectionState();
       this.focusModeEnabled$
         .pipe(takeUntil(this.destroyed$))
@@ -108,6 +102,9 @@ export class FocusModeService extends AbstractFocusModeService {
   }
 
   private evaluateNewState(state?: FocusEvent, initial = false) {
+    if (this.routingService.getViewRole() != UserRole.PARTICIPANT) {
+      return;
+    }
     if (!state) {
       this.navigateToFeature(RoutingFeature.OVERVIEW);
       return;
