@@ -4,7 +4,7 @@ import { ContentFocusState } from '@app/core/models/events/remote/content-focus-
 import { FeedbackFocusState } from '@app/core/models/events/remote/feedback-focus-state';
 import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { first, Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { AbstractFocusModeService } from '@app/common/abstract/abstract-focus-mode.service';
 
 @Injectable({
@@ -62,7 +62,7 @@ export class FocusModeService extends AbstractFocusModeService {
     feature: RoutingFeature,
     state?: ContentFocusState | CommentFocusState | FeedbackFocusState
   ) {
-    this.focusModeEnabled$.pipe(first()).subscribe((enabled) => {
+    this.focusModeEnabled$.pipe(take(1)).subscribe((enabled) => {
       const roomId = this.roomId();
       if (
         this.featureFlagService.isEnabled('FOCUS_MODE') &&

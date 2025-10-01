@@ -66,7 +66,7 @@ export abstract class AbstractFocusModeService implements OnDestroy {
     ),
     map((s) => s.focusModeEnabled),
     filter((e) => e !== undefined),
-    shareReplay()
+    shareReplay(1)
   );
   protected readonly focusModeEnabled = toSignal(this.focusModeEnabled$);
 
@@ -92,7 +92,7 @@ export abstract class AbstractFocusModeService implements OnDestroy {
               )
             )
         ),
-        shareReplay()
+        shareReplay(1)
       )
     )
   );
