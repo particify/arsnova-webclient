@@ -76,6 +76,7 @@
               (focus)="goInEditMode(i)"
               (blur)="leaveEditMode()"
               (keyup.enter)="goToNext(i)"
+              (keyup.backspace)="removeEmptyOption(i)"
               autocomplete="off"
               [maxLength]="lengthLimit"
             />

@@ -193,6 +193,17 @@ export class AnswerOptionListComponent
     }
   }
 
+  removeEmptyOption(index: number) {
+    if (
+      this.allowDeletion &&
+      this.answers.length > this.minimumAnswerCount &&
+      this.answers[index].answerOption.label === ''
+    ) {
+      this.deleteAnswer(index);
+      this.focusInput(index > 0 ? index - 1 : 1);
+    }
+  }
+
   private focusInput(index: number) {
     const inputs = this.optionInputs.toArray();
     if (inputs.length) {
