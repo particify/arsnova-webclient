@@ -75,8 +75,8 @@
               [(ngModel)]="answer.answerOption.label"
               (focus)="goInEditMode(i)"
               (blur)="leaveEditMode()"
-              (keyup.enter)="goToNext(i)"
-              (keyup.backspace)="removeEmptyOption(i)"
+              (keydown.enter)="goToNext(i)"
+              (keydown.backspace)="removeEmptyOption($event, i)"
               autocomplete="off"
               [maxLength]="lengthLimit"
             />

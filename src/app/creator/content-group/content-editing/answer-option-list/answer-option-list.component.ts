@@ -192,12 +192,13 @@ export class AnswerOptionListComponent
     }
   }
 
-  removeEmptyOption(index: number) {
+  removeEmptyOption(event: Event, index: number) {
     if (
       this.allowDeletion &&
       this.answers.length > this.minimumAnswerCount &&
       this.answers[index].answerOption.label === ''
     ) {
+      event.preventDefault();
       this.deleteAnswer(index);
       this.focusInput(index > 0 ? index - 1 : 1);
     }
