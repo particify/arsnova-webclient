@@ -156,6 +156,9 @@ export class AnswerOptionListComponent
   }
 
   addOption() {
+    if (!this.allowDeletion) {
+      return;
+    }
     if (this.answers.length < MAX_ANSWER_OPTIONS) {
       this.isAdding = true;
       this.answers.push(new DisplayAnswer(new AnswerOption(''), false));
