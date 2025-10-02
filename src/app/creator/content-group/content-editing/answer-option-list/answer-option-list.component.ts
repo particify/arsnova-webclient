@@ -139,7 +139,6 @@ export class AnswerOptionListComponent
 
   leaveEditMode(): void {
     this.isAnswerEdit = -1;
-    console.log('leave.. ', this.isAnswerEdit);
   }
 
   deleteAnswer(index: number) {
