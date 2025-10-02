@@ -12,7 +12,6 @@
               i < dataSource.data.length - 1 &&
               dataSource.data[i + 1].position === element.position,
           }"
-          [ngStyle]="{ color: element.color }"
         >
           {{
             i > 0 && dataSource.data[i - 1].position === element.position
@@ -42,7 +41,6 @@
           [ngClass]="{
             'bold-text bg-dark': element.userAlias?.id === aliasId,
           }"
-          [ngStyle]="{ color: element.color }"
         >
           <span
             >{{ element.score }}
