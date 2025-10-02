@@ -16,7 +16,7 @@
           fxLayoutGap="8px"
           class="full-width"
         >
-          @if (sortable) {
+          @if (sortable && allowDeletion) {
             <div
               cdkDragHandle
               tabindex="0"
@@ -32,9 +32,7 @@
                       }
               "
             >
-              @if (allowDeletion) {
-                <mat-icon class="drag-icon"> drag_handle </mat-icon>
-              }
+              <mat-icon class="drag-icon">drag_handle</mat-icon>
             </div>
           }
           @if (hasCorrectAnswers) {
