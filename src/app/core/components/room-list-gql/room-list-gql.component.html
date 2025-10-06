@@ -1,77 +1,73 @@
-@if (isLoading()) {
-  <app-loading-indicator></app-loading-indicator>
-} @else {
-  <lib-extension-point
-    extensionId="external-instance-hint"
-  ></lib-extension-point>
+<lib-extension-point extensionId="external-instance-hint"></lib-extension-point>
 
-  <div fxLayout="column" fxLayoutGap="10px">
-    <lib-extension-point
-      extensionId="lms-course-room-list"
-      [extensionData]="{ userId: auth().userId, excludeRoomIds: roomIds }"
-    ></lib-extension-point>
-    <div>
-      <mat-card class="account-memberships">
+<div fxLayout="column" fxLayoutGap="10px">
+  <lib-extension-point
+    extensionId="lms-course-room-list"
+    [extensionData]="{ userId: auth().userId, excludeRoomIds: roomIds }"
+  ></lib-extension-point>
+  <div>
+    <mat-card class="account-memberships">
+      <div
+        fxFill
+        fxLayout="row wrap"
+        fxLayoutAlign="space-between center"
+        class="header-container"
+      >
+        <div fxLayout="row" fxLayoutGap="10px" class="button-container">
+          <button
+            mat-raised-button
+            color="primary"
+            class="desktop-buttons"
+            (click)="openCreateRoomDialog()"
+            id="create-room-button"
+            appHotkey="2"
+            [appHotkeyTitle]="'home-page.create-room' | transloco"
+          >
+            <mat-icon class="add-icon">add</mat-icon>
+            <span>{{ 'home-page.create-room' | transloco }}</span>
+          </button>
+        </div>
+        <div class="search-container full-width-container">
+          <mat-icon matPrefix class="search-icon">search</mat-icon>
+          <input
+            [disabled]="noRooms()"
+            matInput
+            class="search-input full-width-search"
+            #search
+            placeholder="{{ 'room-list.filter-message' | transloco }}"
+            aria-labelledby="filter-rooms"
+          />
+        </div>
+      </div>
+      <button
+        mat-fab
+        color="primary"
+        class="mobile-add mobile-buttons"
+        aria-labelledby="add-room"
+        (click)="openCreateRoomDialog()"
+      >
+        <mat-icon class="add-icon">add</mat-icon>
+      </button>
+      @if (isLoading()) {
+        <app-loading-indicator></app-loading-indicator>
+      } @else {
         <div
           fxFill
-          fxLayout="row wrap"
-          fxLayoutAlign="space-between center"
-          class="header-container"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+          tabindex="0"
+          id="room-list"
+          [ngClass]="{ 'visually-hidden': !noRooms() }"
         >
-          <div fxLayout="row" fxLayoutGap="10px" class="button-container">
-            <button
-              mat-raised-button
-              color="primary"
-              class="desktop-buttons"
-              (click)="openCreateRoomDialog()"
-              id="create-room-button"
-              appHotkey="2"
-              [appHotkeyTitle]="'home-page.create-room' | transloco"
-            >
-              <mat-icon class="add-icon">add</mat-icon>
-              <span>{{ 'home-page.create-room' | transloco }}</span>
-            </button>
-          </div>
-          <div class="search-container full-width-container">
-            <mat-icon matPrefix class="search-icon">search</mat-icon>
-            <input
-              [disabled]="noRooms()"
-              matInput
-              class="search-input full-width-search"
-              #search
-              placeholder="{{ 'room-list.filter-message' | transloco }}"
-              aria-labelledby="filter-rooms"
-            />
-          </div>
+          <h3 class="hint">
+            {{
+              noRooms()
+                ? ('room-list.no-rooms' | transloco)
+                : ('room-list.a11y-list-summary'
+                  | transloco: { count: rooms().length })
+            }}
+          </h3>
         </div>
-        <button
-          mat-fab
-          color="primary"
-          class="mobile-add mobile-buttons"
-          aria-labelledby="add-room"
-          (click)="openCreateRoomDialog()"
-        >
-          <mat-icon class="add-icon">add</mat-icon>
-        </button>
-        @if (!isLoading()) {
-          <div
-            fxFill
-            fxLayout="column"
-            fxLayoutAlign="center center"
-            tabindex="0"
-            id="room-list"
-            [ngClass]="{ 'visually-hidden': !noRooms() }"
-          >
-            <h3 class="hint">
-              {{
-                noRooms()
-                  ? ('room-list.no-rooms' | transloco)
-                  : ('room-list.a11y-list-summary'
-                    | transloco: { count: rooms().length })
-              }}
-            </h3>
-          </div>
-        }
         @if (search.value && rooms().length === 0 && !noRooms()) {
           <div fxLayout="column" fxLayoutAlign="center center">
             <h3 class="hint">{{ 'room-list.no-rooms-found' | transloco }}</h3>
@@ -270,10 +266,10 @@
             {{ 'Load more' | transloco }}
           </button>
         }
-      </mat-card>
-    </div>
+      }
+    </mat-card>
   </div>
-}
+</div>
 
 <div class="visually-hidden">
   <div id="filter-rooms">{{ 'room-list.filter' | transloco }}</div>
