@@ -42,7 +42,7 @@
     "@stomp/rx-stomp": "2.1.0",
     "@stomp/stompjs": "7.2.0",
     "angular-material-css-vars": "9.1.1",
-    "apollo-angular": "^11.0.0",
+    "apollo-angular": "12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906",
     "backoff-rxjs": "7.0.0",
     "chart.js": "4.5.0",
     "chartjs-plugin-datalabels": "2.2.0",
