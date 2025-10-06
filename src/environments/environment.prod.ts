@@ -8,5 +8,5 @@ export const environment = {
     commitHash: '$VERSION_COMMIT_HASH',
     commitDate: '$VERSION_COMMIT_DATE',
   },
-  features: ['extension-app-logo'],
+  features: ['CONTENT_GROUP_TEMPLATES', 'FOCUS_MODE', 'extension-app-logo'],
 };

@@ -51,7 +51,7 @@ export class RoomSettingsService extends AbstractEntityService<RoomSettings> {
   getRoomSettingsStream(
     roomId: string,
     roomSettingsId: string
-  ): Observable<RoomSettings> {
+  ): Observable<Partial<RoomSettings>> {
     return this.wsConnector
       .getWatcher(
         `/topic/${roomId}.roomsettings-${roomSettingsId}.changes.stream`

@@ -357,7 +357,6 @@ export class ControlBarComponent
         this.contentCorrectResultsDisplayed = correctResultsDisplayed;
         this.determineCorrectItemHighlighted();
       });
-    this.focusModeService.init(this.room.id);
     this.focusModeService
       .getFocusModeEnabled()
       .pipe(takeUntil(this.destroyed$))

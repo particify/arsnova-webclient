@@ -68,7 +68,7 @@ export class ParticipantPageComponent implements OnInit {
     if (!feature) {
       return;
     }
-    this.focusModeService.init(this.room.id, feature);
+    this.focusModeService.init();
     this.focusModeService
       .getFocusModeEnabled()
       .subscribe(

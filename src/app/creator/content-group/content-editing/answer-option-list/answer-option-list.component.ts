@@ -139,7 +139,6 @@ export class AnswerOptionListComponent
 
   leaveEditMode(): void {
     this.isAnswerEdit = -1;
-    console.log('leave.. ', this.isAnswerEdit);
   }
 
   deleteAnswer(index: number) {
@@ -156,6 +155,9 @@ export class AnswerOptionListComponent
   }
 
   addOption() {
+    if (!this.allowDeletion) {
+      return;
+    }
     if (this.answers.length < MAX_ANSWER_OPTIONS) {
       this.isAdding = true;
       this.answers.push(new DisplayAnswer(new AnswerOption(''), false));
@@ -187,6 +189,18 @@ export class AnswerOptionListComponent
       this.focusInput(index + 1);
     } else {
       this.addOption();
+    }
+  }
+
+  removeEmptyOption(event: Event, index: number) {
+    if (
+      this.allowDeletion &&
+      this.answers.length > this.minimumAnswerCount &&
+      this.answers[index].answerOption.label === ''
+    ) {
+      event.preventDefault();
+      this.deleteAnswer(index);
+      this.focusInput(index > 0 ? index - 1 : 1);
     }
   }
 
