@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
 import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
-import { map, of } from 'rxjs';
+import { filter, map, of } from 'rxjs';
 
 /**
  * This resolver selects the room user role for views based on the required role
@@ -30,9 +30,15 @@ export const roomViewUserRoleGqlResolver: ResolveFn<RoomRole> = (
   if (roomMembershipService.isRoleSubstitutable(viewRole, RoomRole.Moderator)) {
     return roomMembershipByShortIdGql
       .fetch({
-        shortId: route.params['shortId'],
+        variables: {
+          shortId: route.params['shortId'],
+        },
       })
-      .pipe(map((r) => r.data.roomMembershipByShortId?.role ?? RoomRole.None));
+      .pipe(
+        map((r) => r.data),
+        filter((data) => !!data),
+        map((data) => data.roomMembershipByShortId?.role ?? RoomRole.None)
+      );
   }
 
   throw Error(`No room view found for '${route.data['requiredRole']}'.`);
