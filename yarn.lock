@@ -6851,17 +6851,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-angular@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "apollo-angular@npm:11.0.0"
+"apollo-angular@npm:12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906":
+  version: 12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906
+  resolution: "apollo-angular@npm:12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906"
   dependencies:
     tslib: "npm:^2.6.2"
   peerDependencies:
     "@angular/core": ^18.0.0 || ^19.0.0 || ^20.0.0
-    "@apollo/client": ^3.13.1
+    "@apollo/client": ^4.0.1
     graphql: ^16.0.0
-    rxjs: ^6.0.0 || ^7.0.0
-  checksum: 10c0/314aac6c2142d2d6305e626d8f5d9451f4a198b0c2dfdf91f7da8be7fdff8858a05864a4332dd9a79319803969667678cc2ec77c58fecfb17a59aea149cd2ab6
+    rxjs: ^7.3.0
+  checksum: 10c0/c115fa8af2f5d869c68a6893a2ecf5030088bc932c88c2eeb08b32712aaf9aead60aa3d8dc92ee7af6c4f3e97482ca9417bbe66e658881d476f6e6ec8b3eba7a
   languageName: node
   linkType: hard
 
@@ -7037,7 +7037,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:8.44.0"
     "@typescript-eslint/utils": "npm:8.44.0"
     angular-material-css-vars: "npm:9.1.1"
-    apollo-angular: "npm:^11.0.0"
+    apollo-angular: "npm:12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906"
     backoff-rxjs: "npm:7.0.0"
     chart.js: "npm:4.5.0"
     chartjs-plugin-datalabels: "npm:2.2.0"

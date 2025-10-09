@@ -40,8 +40,9 @@ export class AnnouncementsButtonGqlComponent {
 
   private announcementsMeta = toSignal(
     this.announcementsMetaForCurrentUserGql.fetch().pipe(
-      filter((r) => !!r.data),
-      map((r) => r.data.announcementsMetaForCurrentUser)
+      map((r) => r.data),
+      filter((data) => !!data),
+      map((data) => data.announcementsMetaForCurrentUser)
     )
   );
   localAnnouncementMeta = linkedSignal(() => this.announcementsMeta());

@@ -1,23 +1,35 @@
 import { inject } from '@angular/core';
-import { from, InMemoryCache } from '@apollo/client/core';
-import { onError } from '@apollo/client/link/error';
+import {
+  ApolloLink,
+  CombinedGraphQLErrors,
+  InMemoryCache,
+  ServerError,
+} from '@apollo/client/core';
+import { ErrorLink } from '@apollo/client/link/error';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 
-const errorLink = onError(({ operation, response, forward }) => {
-  if (response) {
-    console.error('GQL data error');
+const errorLink = new ErrorLink(({ error, operation, forward }) => {
+  if (CombinedGraphQLErrors.is(error)) {
+    error.errors.forEach(({ message }) =>
+      console.log(`GraphQL error: ${message}`)
+    );
     forward(operation);
-  } else {
-    console.error('GQL network error');
+  } else if (ServerError.is(error)) {
+    console.log(`Server error: ${error.message}`);
+  } else if (error) {
+    console.log(`Other error: ${error.message}`);
   }
 });
 
 export const apolloProvider = provideApollo(() => {
   const httpLink = inject(HttpLink);
   return {
-    link: from([errorLink, httpLink.create({ uri: '/api/graphql' })]),
+    link: ApolloLink.from([
+      errorLink,
+      httpLink.create({ uri: '/api/graphql' }),
+    ]),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {

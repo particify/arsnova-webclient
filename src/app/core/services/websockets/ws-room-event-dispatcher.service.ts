@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { IMessage } from '@stomp/stompjs';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import {
   ModeratorDataChanged,
   PublicDataChanged,
@@ -36,9 +36,11 @@ export class WsRoomEventDispatcherService {
     if (room) {
       const role$ = environment.graphql
         ? this.roomMembershipByShortIdGql
-            .fetch({ shortId: room.shortId })
+            .fetch({ variables: { shortId: room.shortId } })
             .pipe(
-              map((r) => r.data.roomMembershipByShortId?.role ?? RoomRole.None)
+              map((r) => r.data),
+              filter((data) => !!data),
+              map((data) => data.roomMembershipByShortId?.role ?? RoomRole.None)
             )
         : this.roomMembershipService.getPrimaryRoleByRoom(room.shortId);
       this.registerChangesMetaListener(room);

@@ -87,12 +87,12 @@ export class RoomListGqlComponent implements AfterViewInit, OnInit {
   private searchInput =
     viewChild.required<ElementRef<HTMLInputElement>>('search');
 
-  private roomsQueryRef = this.roomMembershipsGql.watch(undefined, {
+  private roomsQueryRef = this.roomMembershipsGql.watch({
     errorPolicy: 'all',
   });
   private roomsResult = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
-      filter((r) => !!r.data),
+      filter((r) => r.dataState === 'complete'),
       map((r) => r.data.roomMemberships),
       catchError(() => of())
     )
@@ -106,6 +106,7 @@ export class RoomListGqlComponent implements AfterViewInit, OnInit {
   );
   noRooms = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
+      filter((r) => r.dataState === 'complete'),
       first(),
       map((r) => r.data.roomMemberships?.edges.length === 0),
       catchError(() => of(false))
@@ -119,7 +120,7 @@ export class RoomListGqlComponent implements AfterViewInit, OnInit {
   );
   errors = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
-      map((r) => r.errors),
+      map((r) => r.error),
       catchError(() => of(true))
     )
   );
@@ -233,7 +234,7 @@ export class RoomListGqlComponent implements AfterViewInit, OnInit {
       const query = shortId ? { shortId: shortId } : { name: search };
       this.roomsQueryRef.options.variables = { query };
     } else {
-      this.roomsQueryRef.options.variables = undefined;
+      this.roomsQueryRef.options.variables = {};
     }
     this.roomsQueryRef.refetch();
   }
