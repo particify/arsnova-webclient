@@ -36,7 +36,7 @@ import {
   UpdateAnnouncementGql,
 } from '@gql/generated/graphql';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, of, switchMap } from 'rxjs';
+import { catchError, filter, of, switchMap } from 'rxjs';
 import { QueryRef } from 'apollo-angular';
 
 @Component({
@@ -80,10 +80,11 @@ export class AnnouncementSettingsGqlComponent extends FormComponent {
   private announcementResult = toSignal(
     toObservable(this.roomId).pipe(
       switchMap((roomId) => {
-        const ref = this.announcementsByRoomId.watch({ roomId });
+        const ref = this.announcementsByRoomId.watch({ variables: { roomId } });
         this.announcementsQueryRef = ref;
         return ref.valueChanges;
       }),
+      filter((r) => r.dataState === 'complete'),
       catchError(() => of())
     )
   );
@@ -124,23 +125,21 @@ export class AnnouncementSettingsGqlComponent extends FormComponent {
       announcement.title,
       undefined,
       () =>
-        this.deleteAnnouncement.mutate(
-          { id: announcement.id },
-          {
-            update: (cache, { data }) => {
-              if (data) {
-                const cacheId = cache.identify({
-                  __typename: 'Announcement',
-                  id: data.deleteAnnouncement,
-                });
-                if (cacheId) {
-                  cache.evict({ id: cacheId });
-                  cache.gc();
-                }
+        this.deleteAnnouncement.mutate({
+          variables: { id: announcement.id },
+          update: (cache, { data }) => {
+            if (data) {
+              const cacheId = cache.identify({
+                __typename: 'Announcement',
+                id: data.deleteAnnouncement,
+              });
+              if (cacheId) {
+                cache.evict({ id: cacheId });
+                cache.gc();
               }
-            },
-          }
-        )
+            }
+          },
+        })
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -171,7 +170,9 @@ export class AnnouncementSettingsGqlComponent extends FormComponent {
     this.disableForm();
     if (this.editId) {
       this.updateAnnouncement
-        .mutate({ id: this.editId, title: this.title, body: this.body })
+        .mutate({
+          variables: { id: this.editId, title: this.title, body: this.body },
+        })
         .subscribe((r) => {
           if (r.data) {
             this.announcementsQueryRef?.refetch();
@@ -185,16 +186,18 @@ export class AnnouncementSettingsGqlComponent extends FormComponent {
             this.reset();
             this.enableForm();
           }
-          if (r.errors) {
+          if (r.error) {
             this.enableForm();
           }
         });
     } else {
       this.createAnnouncement
         .mutate({
-          roomId: this.roomId(),
-          title: this.title,
-          body: this.body,
+          variables: {
+            roomId: this.roomId(),
+            title: this.title,
+            body: this.body,
+          },
         })
         .subscribe((r) => {
           if (r.data) {
@@ -209,7 +212,7 @@ export class AnnouncementSettingsGqlComponent extends FormComponent {
             this.reset();
             this.enableForm();
           }
-          if (r.errors) {
+          if (r.error) {
             this.enableForm();
           }
         });

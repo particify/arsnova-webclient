@@ -59,7 +59,7 @@ export class AuthenticationGqlGuard implements CanActivate {
         } else {
           /* Route requires a specific role */
           return this.joinRoomGql
-            .mutate({ shortId: route.params.shortId })
+            .mutate({ variables: { shortId: route.params.shortId } })
             .pipe(
               map((r) => r.data?.joinRoom.role),
               map((role) => {

@@ -11,7 +11,7 @@ export const roomGqlResolver: ResolveFn<Room> = (
   const roomService = inject(RoomService);
   const shortId = route.params['shortId'];
   const room = inject(JoinRoomGql)
-    .mutate({ shortId: shortId })
+    .mutate({ variables: { shortId: shortId } })
     .pipe(
       map((r) => r.data?.joinRoom.room),
       filter((roomData) => !!roomData),

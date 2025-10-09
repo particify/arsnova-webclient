@@ -150,7 +150,9 @@ export class RoomCreateGqlComponent extends FormComponent implements OnInit {
     if (this.createDuplication && this.data.roomId) {
       this.disableForm();
       this.duplicateRoomGql
-        .mutate({ id: this.data.roomId, newName: this.newRoom.name })
+        .mutate({
+          variables: { id: this.data.roomId, newName: this.newRoom.name },
+        })
         .subscribe({
           next: (r) => {
             if (!r.data) {
@@ -173,31 +175,33 @@ export class RoomCreateGqlComponent extends FormComponent implements OnInit {
     this.newRoom.description = '';
     this.newRoom.ownerId = auth.userId;
     this.disableForm();
-    this.createRoomGql.mutate({ name: this.newRoom.name }).subscribe({
-      next: (r) => {
-        if (!r.data) {
-          return;
-        }
-        const roomData = r.data.createRoom;
-        const room = new Room();
-        room.id = roomData.id;
-        room.shortId = roomData.shortId;
-        room.name = this.newRoom.name;
-        const msg1 = this.translateService.translate('home-page.created-1');
-        const msg2 = this.translateService.translate('home-page.created-2');
-        this.notification.showAdvanced(
-          msg1 + this.newRoom.name + msg2,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-        const event = new RoomCreated(roomData.id, roomData.shortId);
-        this.eventService.broadcast(event.type, event.payload);
-        if (this.data.navigateAfterCreation) {
-          this.router.navigate(['edit', roomData.shortId]);
-        }
-        this.closeDialog(this.newRoom);
-      },
-      error: () => this.enableForm(),
-    });
+    this.createRoomGql
+      .mutate({ variables: { name: this.newRoom.name } })
+      .subscribe({
+        next: (r) => {
+          if (!r.data) {
+            return;
+          }
+          const roomData = r.data.createRoom;
+          const room = new Room();
+          room.id = roomData.id;
+          room.shortId = roomData.shortId;
+          room.name = this.newRoom.name;
+          const msg1 = this.translateService.translate('home-page.created-1');
+          const msg2 = this.translateService.translate('home-page.created-2');
+          this.notification.showAdvanced(
+            msg1 + this.newRoom.name + msg2,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          const event = new RoomCreated(roomData.id, roomData.shortId);
+          this.eventService.broadcast(event.type, event.payload);
+          if (this.data.navigateAfterCreation) {
+            this.router.navigate(['edit', roomData.shortId]);
+          }
+          this.closeDialog(this.newRoom);
+        },
+        error: () => this.enableForm(),
+      });
   }
 
   closeDialog(room?: Room): void {

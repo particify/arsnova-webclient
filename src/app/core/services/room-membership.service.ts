@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
+  filter,
   first,
   map,
   shareReplay,
@@ -223,12 +224,14 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
     requestedRole: RoomRole
   ): Observable<boolean> {
     return this.roomMembershipByShortIdGql
-      .fetch({ shortId: roomShortId })
+      .fetch({ variables: { shortId: roomShortId } })
       .pipe(
-        map((r) =>
-          r.data.roomMembershipByShortId
+        map((r) => r.data),
+        filter((data) => !!data),
+        map((data) =>
+          data.roomMembershipByShortId
             ? this.isRoleSubstitutable(
-                r.data.roomMembershipByShortId?.role,
+                data.roomMembershipByShortId?.role,
                 requestedRole
               )
             : false

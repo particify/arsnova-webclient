@@ -6,7 +6,7 @@ import {
   MatDialogContent,
   MatDialogActions,
 } from '@angular/material/dialog';
-import { take } from 'rxjs';
+import { filter, take } from 'rxjs';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MatButton } from '@angular/material/button';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -49,7 +49,9 @@ export class AnnouncementListGqlComponent implements OnInit {
   selectedRoomId = signal<string>('');
 
   private announcementsResult = toSignal(
-    this.announcementsByUser.watch().valueChanges
+    this.announcementsByUser
+      .watch()
+      .valueChanges.pipe(filter((r) => r.dataState === 'complete'))
   );
 
   isLoading = computed(() => this.announcementsResult()?.loading ?? true);
