@@ -17,7 +17,6 @@ import {
   MatDialogActions,
 } from '@angular/material/dialog';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@app/core/services/util/event.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -47,12 +46,12 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   ],
 })
 export class UserActivationComponent extends FormComponent implements OnInit {
-  data = inject(MAT_DIALOG_DATA);
-  userService = inject(UserService);
-  notificationService = inject(NotificationService);
-  dialogRef = inject<MatDialogRef<UserActivationComponent>>(MatDialogRef);
+  private data = inject(MAT_DIALOG_DATA);
+  private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
+  private dialogRef =
+    inject<MatDialogRef<UserActivationComponent>>(MatDialogRef);
   private translationService = inject(TranslocoService);
-  eventService = inject(EventService);
 
   readonly dialogId = 'activate-user';
 

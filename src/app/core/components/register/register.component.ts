@@ -1,4 +1,12 @@
-import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  InputSignal,
+  OnInit,
+  computed,
+  inject,
+  input,
+  viewChild,
+} from '@angular/core';
 import {
   UntypedFormControl,
   Validators,
@@ -11,12 +19,8 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@app/core/services/util/event.service';
 import { Router, RouterLink } from '@angular/router';
-import {
-  PasswordEntryComponent,
-  PasswordEntryComponent as PasswordEntryComponent_1,
-} from '@app/core/components/password-entry/password-entry.component';
+import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ApiConfig } from '@app/core/models/api-config';
@@ -44,7 +48,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     AutofocusDirective,
     ReactiveFormsModule,
     MatError,
-    PasswordEntryComponent_1,
+    PasswordEntryComponent,
     MatCheckbox,
     LoadingButtonComponent,
     RouterLink,
@@ -53,27 +57,24 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 })
 export class RegisterComponent extends FormComponent implements OnInit {
   private translationService = inject(TranslocoService);
-  userService = inject(UserService);
-  notificationService = inject(NotificationService);
-  eventService = inject(EventService);
+  private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
-
-  @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
+  private passwordEntry = viewChild.required(PasswordEntryComponent);
 
   // Route data input below
-  @Input({ required: true }) apiConfig!: ApiConfig;
+  apiConfig = input<ApiConfig>() as InputSignal<ApiConfig>;
 
   usernameFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
   deviceWidth = innerWidth;
-  acceptToS = false;
-  linkOfToS?: string;
-  accountServiceTitle!: string;
+  acceptTos = false;
+  linkOfTos = computed(() => this.apiConfig().ui.links?.tos?.url);
+  accountServiceTitle = computed(
+    () => this.apiConfig().ui.registration?.service || 'ARSnova'
+  );
 
   ngOnInit(): void {
-    this.accountServiceTitle =
-      this.apiConfig.ui.registration?.service || 'ARSnova';
-    this.linkOfToS = this.apiConfig.ui.links?.tos?.url;
     this.setFormControl(this.usernameFormControl);
     this.usernameFormControl.clearValidators();
   }
@@ -87,7 +88,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
   }
 
   register(username: string): void {
-    const password = this.passwordEntry.getPassword();
+    const password = this.passwordEntry().getPassword();
     if (this.validateForm()) {
       this.disableForm();
       this.userService.register(username, password).subscribe({
@@ -119,17 +120,17 @@ export class RegisterComponent extends FormComponent implements OnInit {
   }
 
   validateForm(): boolean {
-    const password = this.passwordEntry.getPassword();
+    const password = this.passwordEntry().getPassword();
     const usernameError =
       this.usernameFormControl.hasError('required') ||
       this.usernameFormControl.hasError('email');
-    if (!usernameError && password && this.acceptToS) {
+    if (!usernameError && password && this.acceptTos) {
       return true;
     }
     if (!password) {
       const msg = this.translationService.translate('password.unsuccessful');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    } else if (!this.acceptToS) {
+    } else if (!this.acceptTos) {
       const msg = this.translationService.translate('register.please-accept');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     } else {
