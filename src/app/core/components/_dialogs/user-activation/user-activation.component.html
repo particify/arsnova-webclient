@@ -1,6 +1,6 @@
 <div mat-dialog-content>
   <form
-    (ngSubmit)="login(userActivationKey.value)"
+    (ngSubmit)="verify(verificationCode.value)"
     fxLayout="column"
     fxLayoutAlign="space-around"
     fxLayoutGap="10px"
@@ -9,9 +9,9 @@
       <mat-label>{{ 'user-activation.key' | transloco }}</mat-label>
       <input
         matInput
-        #userActivationKey
+        #verificationCode
         type="text"
-        [formControl]="activationKeyFormControl"
+        [formControl]="verificationCodeFormControl"
         name="activation-key"
         aria-labelledby="key-input"
       />
@@ -27,7 +27,7 @@
       color="accent"
       class="reset"
       (click)="
-        resetActivation(); $event.preventDefault(); $event.stopPropagation()
+        resetVerification(); $event.preventDefault(); $event.stopPropagation()
       "
     >
       {{ 'user-activation.reset-button' | transloco }}
@@ -38,7 +38,7 @@
   <app-loading-button
     name="user-activation.activate"
     [isDialog]="true"
-    (clicked)="login(userActivationKey.value)"
+    (clicked)="verify(verificationCode.value)"
   ></app-loading-button>
   <button mat-button (click)="cancel()">
     {{ 'user-activation.cancel' | transloco }}

@@ -34,6 +34,8 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 import { ClaimUnverifiedUserGql } from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { UserActivationComponent } from '@app/core/components/_dialogs/user-activation/user-activation.component';
 
 @Component({
   selector: 'app-register',
@@ -63,6 +65,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
   private claimUnverifiedUserGql = inject(ClaimUnverifiedUserGql);
   private notificationService = inject(NotificationService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
   private passwordEntry = viewChild.required(PasswordEntryComponent);
 
   // Route data input below
@@ -109,9 +112,6 @@ export class RegisterComponent extends FormComponent implements OnInit {
         .subscribe({
           next: () => {
             this.enableForm();
-            this.router.navigateByUrl('login', {
-              state: { data: { username: username, password: password } },
-            });
             const msg = this.translationService.translate(
               'register.register-successful'
             );
@@ -119,6 +119,16 @@ export class RegisterComponent extends FormComponent implements OnInit {
               msg,
               AdvancedSnackBarTypes.SUCCESS
             );
+            this.dialog
+              .open(UserActivationComponent)
+              .afterClosed()
+              .subscribe((result: { success: boolean }) => {
+                if (result.success) {
+                  this.authenticationService.reloadUser().subscribe(() => {
+                    this.router.navigateByUrl('user');
+                  });
+                }
+              });
           },
           error: () => {
             this.enableForm();
