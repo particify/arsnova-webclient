@@ -13,7 +13,6 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -32,6 +31,9 @@ import { MatInput } from '@angular/material/input';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { ClaimUnverifiedUserGql } from '@gql/generated/graphql';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -57,7 +59,8 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 })
 export class RegisterComponent extends FormComponent implements OnInit {
   private translationService = inject(TranslocoService);
-  private userService = inject(UserService);
+  private authenticationService = inject(AuthenticationService);
+  private claimUnverifiedUserGql = inject(ClaimUnverifiedUserGql);
   private notificationService = inject(NotificationService);
   private router = inject(Router);
   private passwordEntry = viewChild.required(PasswordEntryComponent);
@@ -91,31 +94,43 @@ export class RegisterComponent extends FormComponent implements OnInit {
     const password = this.passwordEntry().getPassword();
     if (this.validateForm()) {
       this.disableForm();
-      this.userService.register(username, password).subscribe({
-        complete: () => {
-          this.enableForm();
-          this.router.navigateByUrl('login', {
-            state: { data: { username: username, password: password } },
-          });
-          const msg = this.translationService.translate(
-            'register.register-successful'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        },
-        error: () => {
-          this.enableForm();
-          const msg = this.translationService.translate(
-            'register.register-request-error'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.FAILED
-          );
-        },
-      });
+      this.authenticationService
+        .requireAuthentication()
+        .pipe(
+          switchMap((a) => {
+            if (!a || a.verified) {
+              throw new Error('Guest account expected.');
+            }
+            return this.claimUnverifiedUserGql.mutate({
+              variables: { mailAddress: username, password },
+            });
+          })
+        )
+        .subscribe({
+          next: () => {
+            this.enableForm();
+            this.router.navigateByUrl('login', {
+              state: { data: { username: username, password: password } },
+            });
+            const msg = this.translationService.translate(
+              'register.register-successful'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          },
+          error: () => {
+            this.enableForm();
+            const msg = this.translationService.translate(
+              'register.register-request-error'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.FAILED
+            );
+          },
+        });
     }
   }
 
