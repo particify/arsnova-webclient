@@ -1,4 +1,5 @@
 <div fxLayout="column" fxFill>
+  <app-global-hints-container></app-global-hints-container>
   <mat-drawer-container>
     <mat-drawer #mainDrawer position="end" mode="over" [autoFocus]="true">
       <div
@@ -181,9 +182,6 @@
         id="scroll_container"
         [ngClass]="{ 'standalone-container': isStandalone || isAdmin }"
       >
-        @if (!isAdmin && !isRoom) {
-          <app-global-hints></app-global-hints>
-        }
         <router-outlet></router-outlet>
       </div>
       @if (!isAdmin && !isRoom && !isStandalone) {
