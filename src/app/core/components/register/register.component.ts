@@ -19,7 +19,6 @@ import {
 } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { take } from 'rxjs';
 import { ApiConfig } from '@app/core/models/api-config';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
@@ -89,63 +88,56 @@ export class RegisterComponent extends FormComponent implements OnInit {
 
   register(username: string): void {
     const password = this.passwordEntry.getPassword();
-    if (
-      !this.usernameFormControl.hasError('required') &&
-      !this.usernameFormControl.hasError('email') &&
-      password
-    ) {
-      if (this.acceptToS) {
-        this.disableForm();
-        this.userService.register(username, password).subscribe(
-          () => {
-            this.enableForm();
-            this.router.navigateByUrl('login', {
-              state: { data: { username: username, password: password } },
-            });
-            this.translationService
-              .selectTranslate('register.register-successful')
-              .pipe(take(1))
-              .subscribe((message) => {
-                this.notificationService.showAdvanced(
-                  message,
-                  AdvancedSnackBarTypes.SUCCESS
-                );
-              });
-          },
-          () => {
-            this.enableForm();
-            this.translationService
-              .selectTranslate('register.register-request-error')
-              .pipe(take(1))
-              .subscribe((message) => {
-                this.notificationService.showAdvanced(
-                  message,
-                  AdvancedSnackBarTypes.FAILED
-                );
-              });
-          }
-        );
-      } else {
-        this.translationService
-          .selectTranslate('register.please-accept')
-          .pipe(take(1))
-          .subscribe((message) => {
-            this.notificationService.showAdvanced(
-              message,
-              AdvancedSnackBarTypes.WARNING
-            );
+    if (this.validateForm()) {
+      this.disableForm();
+      this.userService.register(username, password).subscribe({
+        complete: () => {
+          this.enableForm();
+          this.router.navigateByUrl('login', {
+            state: { data: { username: username, password: password } },
           });
-      }
-    } else {
-      this.translationService
-        .selectTranslate('register.register-unsuccessful')
-        .pipe(take(1))
-        .subscribe((message) => {
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.WARNING
+          const msg = this.translationService.translate(
+            'register.register-successful'
           );
-        });
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        },
+        error: () => {
+          this.enableForm();
+          const msg = this.translationService.translate(
+            'register.register-request-error'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.FAILED
+          );
+        },
+      });
     }
+  }
+
+  validateForm(): boolean {
+    const password = this.passwordEntry.getPassword();
+    const usernameError =
+      this.usernameFormControl.hasError('required') ||
+      this.usernameFormControl.hasError('email');
+    if (!usernameError && password && this.acceptToS) {
+      return true;
+    }
+    if (!password) {
+      const msg = this.translationService.translate('password.unsuccessful');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    } else if (!this.acceptToS) {
+      const msg = this.translationService.translate('register.please-accept');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    } else {
+      const msg = this.translationService.translate(
+        'register.register-unsuccessful'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    }
+    return false;
   }
 }
