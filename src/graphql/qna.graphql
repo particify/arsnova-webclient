@@ -1,0 +1,282 @@
+fragment PostDetails on Post {
+  id
+  body
+  correct
+  favorite
+  createdAt
+  tags {
+    name
+    id
+  }
+  replies {
+    ...ReplyDetails
+  }
+  score
+  userVote
+  moderationState
+}
+
+fragment ReplyDetails on Reply {
+  id
+  body
+  bodyRendered
+  createdAt
+}
+
+query QnasByRoomId($roomId: UUID!) {
+  qnasByRoomId(roomId: $roomId) {
+    edges {
+      node {
+        id
+        topic
+        state
+        autoPublish
+        threshold
+        activePost {
+          id
+          body
+          createdAt
+        }
+        tags {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+mutation StartQna($id: ID!) {
+  startQna(id: $id) {
+    id
+    state
+  }
+}
+
+mutation PauseQna($id: ID!) {
+  pauseQna(id: $id) {
+    id
+    state
+  }
+}
+
+mutation StopQna($id: ID!) {
+  stopQna(id: $id) {
+    id
+    state
+  }
+}
+
+mutation UpdateQnaAutoPublish($id: ID!, $autoPublish: Boolean!) {
+  updateQnaAutoPublish(id: $id, autoPublish: $autoPublish) {
+    id
+    autoPublish
+  }
+}
+
+mutation UpdateQnaThreshold($id: ID!, $threshold: Int) {
+  updateQnaThreshold(id: $id, threshold: $threshold) {
+    id
+    threshold
+  }
+}
+
+mutation UpdateQnaActivePostId($id: ID!, $activePostId: UUID) {
+  updateQnaActivePostId(id: $id, activePostId: $activePostId) {
+    id
+    activePost {
+      id
+      body
+      createdAt
+    }
+  }
+}
+
+query QnaPostsByQnaId($query: PostQueryInput, $cursor: String) {
+  qnaPostsByQnaId(query: $query, first: 20, after: $cursor) {
+    edges {
+      node {
+        ...PostDetails
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+query QnaPostCountsByQnaId($qnaId: UUID!) {
+  qnaPostCountsByQnaId(qnaId: $qnaId) {
+    accepted
+    rejected
+  }
+}
+
+subscription QnaPostCountSummary($qnaId: UUID!) {
+  qnaPostCountSummary(qnaId: $qnaId) {
+    accepted
+    rejected
+  }
+}
+
+mutation CreateQnaPost($qnaId: UUID!, $body: String!, $tagIds: [UUID!]) {
+  createQnaPost(input: { qnaId: $qnaId, body: $body, tagIds: $tagIds }) {
+    id
+    body
+    correct
+    favorite
+    createdAt
+    tags {
+      id
+      name
+    }
+    score
+    userVote
+  }
+}
+
+mutation UpdateQnaPostFavorite($id: ID!, $favorite: Boolean!) {
+  updateQnaPostFavorite(id: $id, favorite: $favorite) {
+    id
+    favorite
+  }
+}
+
+mutation UpdateQnaPostCorrect($id: ID!, $correct: CorrectState!) {
+  updateQnaPostCorrect(id: $id, correct: $correct) {
+    id
+    correct
+  }
+}
+
+mutation AcceptQnaPost($id: ID!) {
+  acceptQnaPost(id: $id) {
+    id
+    moderationState
+  }
+}
+
+mutation RejectQnaPost($id: ID!) {
+  rejectQnaPost(id: $id) {
+    id
+    moderationState
+  }
+}
+
+mutation DeleteQnaPost($id: ID!) {
+  deleteQnaPost(id: $id)
+}
+
+mutation DeleteQnaPosts($qnaId: UUID!, $moderationState: ModerationState) {
+  deleteQnaPostsByQnaId(qnaId: $qnaId, moderationState: $moderationState)
+}
+
+mutation CreateQnaTag($qnaId: UUID!, $name: String!) {
+  createQnaTag(input: { qnaId: $qnaId, name: $name }) {
+    id
+    name
+  }
+}
+
+mutation DeleteQnaTag($id: ID!) {
+  deleteQnaTag(id: $id)
+}
+
+mutation CreateQnaReply($postId: UUID!, $body: String!) {
+  createQnaReply(input: { postId: $postId, body: $body }) {
+    ...ReplyDetails
+  }
+}
+
+mutation UpdateQnaReply($postId: UUID!, $body: String!) {
+  updateQnaReply(input: { postId: $postId, body: $body }) {
+    id
+    body
+  }
+}
+
+mutation DeleteQnaReply($id: ID!) {
+  deleteQnaReply(id: $id)
+}
+
+mutation VoteQnaPost($postId: UUID!, $value: Int!) {
+  voteQnaPost(input: { postId: $postId, value: $value }) {
+    id
+    score
+    userVote
+  }
+}
+
+subscription QnaStateChanged($roomId: UUID!) {
+  qnaStateChanged(roomId: $roomId) {
+    id
+    state
+  }
+}
+
+subscription ActiveQnaPostUpdated($roomId: UUID!) {
+  activeQnaPostUpdated(roomId: $roomId) {
+    id
+    activePost {
+      id
+    }
+  }
+}
+
+subscription QnaPostCreated($qnaId: UUID!) {
+  qnaPostCreated(qnaId: $qnaId) {
+    id
+  }
+}
+
+subscription QnaPostDeleted($qnaId: UUID!) {
+  qnaPostDeleted(qnaId: $qnaId) {
+    id
+  }
+}
+
+subscription QnaPostAccepted($qnaId: UUID!) {
+  qnaPostAccepted(qnaId: $qnaId) {
+    id
+  }
+}
+
+subscription QnaPostRejected($qnaId: UUID!) {
+  qnaPostRejected(qnaId: $qnaId) {
+    id
+  }
+}
+
+subscription QnaPostReplied($qnaId: UUID!) {
+  qnaPostReplied(qnaId: $qnaId) {
+    postId
+    reply {
+      ...ReplyDetails
+    }
+  }
+}
+
+subscription QnaPostMarkedFavorite($qnaId: UUID!) {
+  qnaPostMarkedFavorite(qnaId: $qnaId) {
+    id
+    favorite
+  }
+}
+
+subscription QnaPostMarkedCorrect($qnaId: UUID!) {
+  qnaPostMarkedCorrect(qnaId: $qnaId) {
+    id
+    correct
+  }
+}
+
+subscription QnaPostVoted($qnaId: UUID!) {
+  qnaPostVoted(qnaId: $qnaId) {
+    id
+    score
+  }
+}

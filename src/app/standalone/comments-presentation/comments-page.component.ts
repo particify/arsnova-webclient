@@ -8,11 +8,10 @@ import {
   OnInit,
   ViewChild,
   inject,
+  DestroyRef,
+  effect,
 } from '@angular/core';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
-import { Comment } from '@app/core/models/comment';
-import { CommentSettings } from '@app/core/models/comment-settings';
-import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -21,7 +20,7 @@ import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.serv
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { provideTranslocoScope } from '@jsverse/transloco';
-import { take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
 import { PresentCommentComponent } from '@app/standalone/present-comment/present-comment.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -29,6 +28,12 @@ import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-h
 import { CommentListHintComponent } from '@app/standalone/comment-list-hint/comment-list-hint.component';
 import { CommentComponent } from '@app/standalone/comment/comment.component';
 import { FormService } from '@app/core/services/util/form.service';
+import {
+  Post,
+  StartQnaGql,
+  UpdateQnaActivePostIdGql,
+} from '@gql/generated/graphql';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-comments-presentation',
@@ -55,6 +60,9 @@ export class CommentsPageComponent
   private presentationService = inject(PresentationService);
   protected focusModeService = inject(FocusModeService);
   private formService = inject(FormService);
+  private startQna = inject(StartQnaGql);
+  private setActivePostId = inject(UpdateQnaActivePostIdGql);
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild('commentList') commentListRef!: ElementRef;
 
@@ -63,71 +71,77 @@ export class CommentsPageComponent
 
   protected hotkeyRefs: symbol[] = [];
 
+  constructor() {
+    super();
+    effect(() => {
+      if (this.posts()) {
+        this.initializeActivePost(this.posts(), this.activePost()?.id);
+      }
+    });
+  }
+
   ngOnInit(): void {
-    this.publicComments$ = this.commentService.getAckComments(this.room().id);
-    this.activeComments$ = this.publicComments$;
-    this.load();
     this.registerHotkeys();
+    this.subscribeToPresentationEvents();
   }
 
   ngOnDestroy(): void {
-    this.destroy();
     this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
   }
 
   subscribeToPresentationEvents() {
-    if (!this.activeComment) {
-      this.goToFirstComment();
-    }
-
     this.presentationService
       .getCommentSortChanges()
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((sort) => {
-        this.sortComments(sort as CommentSort);
-        this.goToFirstComment();
+        this.sort(sort);
       });
     this.presentationService
       .getCommentFilterChanges()
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((filter) => {
-        this.filterComments(filter);
-        this.goToFirstComment();
+        this.selectFlagFilter(filter);
+      });
+    this.presentationService
+      .getCommentFilterRemoved()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((filter) => {
+        this.removeFlagFilter(filter);
       });
     this.presentationService
       .getCommentPeriodChanges()
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((period) => {
-        this.setTimePeriod(period);
-        this.goToFirstComment();
+        this.setPeriod(period);
       });
     this.presentationService
       .getCommentCategoryChanges()
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((category) => {
-        this.selectTag(category);
-        this.goToFirstComment();
+        this.selectFilterTag(category);
       });
   }
 
-  goToFirstComment() {
-    if (this.displayComments.length > 0) {
-      setTimeout(() => {
-        this.updateCurrentComment(this.displayComments[0]);
-      }, 300);
+  private initializeActivePost(posts: Post[], activePostId?: string) {
+    if (
+      posts.length > 0 &&
+      (!activePostId || !posts.some((p) => p.id === activePostId))
+    ) {
+      this.updateCurrentComment(posts[0].id);
     } else {
-      if (this.activeComment?.highlighted) {
-        this.commentService.lowlight(this.activeComment).subscribe();
+      if (activePostId) {
+        this.evaluateActivePost(
+          activePostId,
+          posts.map((p) => p.id).indexOf(activePostId)
+        );
       }
-      this.activeComment = undefined;
     }
   }
 
   afterCommentsLoadedHook(): void {
-    if (this.comments.length === 0) {
+    if (this.posts().length === 0) {
       this.focusModeService.updateCommentState('NO_COMMENTS_YET');
     }
-    this.subscribeToPresentationEvents();
   }
 
   registerHotkeys() {
@@ -161,40 +175,54 @@ export class CommentsPageComponent
     this.checkScroll(this.commentListRef.nativeElement);
   }
 
-  getIndexOfComment(comment: Comment): number {
-    return Math.max(this.displayComments.indexOf(comment), 0);
+  toggleActivePost(postId: string) {
+    this.updateCurrentComment(
+      this.activePost()?.id === postId ? undefined : postId
+    );
   }
 
-  getCurrentIndex(): number | undefined {
-    if (this.activeComment) {
-      return this.getIndexOfComment(this.activeComment);
+  updateCurrentComment(postId?: string) {
+    const qnaId = this.qnaId();
+    if (qnaId) {
+      this.setActivePostId
+        .mutate({
+          variables: {
+            id: qnaId,
+            activePostId: postId,
+          },
+        })
+        .subscribe({
+          next: (r) => {
+            this.evaluateActivePost(
+              r.data?.updateQnaActivePostId.activePost?.id
+            );
+          },
+        });
     }
   }
 
-  updateCurrentComment(comment: Comment, idChanged = false) {
-    if (!idChanged) {
-      if (comment.highlighted) {
-        this.commentService.lowlight(comment).subscribe();
-      } else {
-        if (this.activeComment?.highlighted) {
-          this.commentService.lowlight(this.activeComment).subscribe();
-        }
-        this.commentService.highlight(comment).subscribe();
-      }
+  private getPostIndex(postId: string) {
+    return this.posts()
+      .map((p) => p.id)
+      .indexOf(postId);
+  }
+
+  private evaluateActivePost(postId?: string, index?: number) {
+    if (!postId) {
+      return;
     }
-    this.activeComment = comment;
-    const index = this.getIndexOfComment(comment);
+    if (!index) {
+      index = this.getPostIndex(postId);
+    }
     const commentPresentationState = new CommentPresentationState(
-      this.presentationService.getStepState(index, this.comments.length),
-      comment.id
+      this.presentationService.getStepState(index, this.posts().length),
+      postId
     );
     this.presentationService.updateCommentState(commentPresentationState);
-
-    this.focusModeService.updateCommentState(comment.id);
-    if (!this.isLoading) {
+    this.focusModeService.updateCommentState(postId);
+    setTimeout(() => {
       this.scrollToComment(index);
-      this.announceCommentPresentation(index);
-    }
+    });
   }
 
   getCommentElements() {
@@ -208,63 +236,48 @@ export class CommentsPageComponent
     });
   }
 
-  announceCommentPresentation(index: number) {
-    this.announceService.announce('creator.presentation.a11y-present-comment', {
-      comment: this.displayComments[index].body,
-    });
-  }
-
   nextComment() {
-    const index = this.getCurrentIndex();
-    if (index !== undefined && index < this.displayComments.length - 1) {
-      const nextComment = this.displayComments[index + 1];
-      this.updateCurrentComment(nextComment);
+    const activePostId = this.activePost()?.id;
+    if (!activePostId) {
+      return;
+    }
+    const index = this.getPostIndex(activePostId);
+    if (index < this.posts().length - 1) {
+      this.updateCurrentComment(this.posts()[index + 1].id);
     }
   }
 
   prevComment() {
-    const index = this.getCurrentIndex();
-    if (index !== undefined && index > 0) {
-      const prevComment = this.displayComments[index - 1];
-      this.updateCurrentComment(prevComment);
+    const activePostId = this.activePost()?.id;
+    if (!activePostId) {
+      return;
+    }
+    const index = this.getPostIndex(activePostId);
+    if (index > 0) {
+      this.updateCurrentComment(this.posts()[index - 1].id);
     }
   }
 
-  activateComments() {
-    const settings = new CommentSettings(
-      this.room().id,
-      this.directSend,
-      this.fileUploadEnabled,
-      false,
-      this.readonly
-    );
-    this.commentSettingsService
-      .update(settings)
-      .subscribe((updatedSettings) => {
-        this.disabled = updatedSettings.disabled;
-        this.formService.enableForm();
-        this.isLoading = true;
-        this.load(true);
-        const msg = this.translateService.translate('comment-list.qna-started');
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-      });
-  }
-
-  toggleReadonly() {
-    const commentSettings = new CommentSettings(
-      this.room().id,
-      this.directSend,
-      this.fileUploadEnabled,
-      this.disabled,
-      !this.readonly
-    );
-    this.commentSettingsService.update(commentSettings).subscribe(() => {
-      this.readonly = !this.readonly;
-      this.formService.enableForm();
-      this.showReadonlyStateNotification();
-    });
+  enableComments() {
+    const id = this.qnaId();
+    if (id) {
+      this.formService.disableForm();
+      this.startQna
+        .mutate({
+          variables: { id: id },
+        })
+        .subscribe((r) => {
+          if (r.data) {
+            this.formService.enableForm();
+            const msg = this.translateService.translate(
+              'comment-list.qna-started'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          }
+        });
+    }
   }
 }

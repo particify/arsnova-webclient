@@ -27,7 +27,6 @@ import { SeriesCreated } from '@app/core/models/events/series-created';
 import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { RoomService } from '@app/core/services/http/room.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
 import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
@@ -40,7 +39,11 @@ import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { RoomSettings } from '@app/core/models/room-settings';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
-import { RoomStatsByIdGql } from '@gql/generated/graphql';
+import {
+  QnaState,
+  QnaStateChangedGql,
+  RoomStatsByIdGql,
+} from '@gql/generated/graphql';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 export class NavBarItem {
@@ -90,15 +93,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
   protected contentGroupService = inject(ContentGroupService);
   protected eventService = inject(EventService);
   protected roomService = inject(RoomService);
-  protected commentSettingsService = inject(CommentSettingsService);
   protected focusModeService = inject(FocusModeService);
   private readonly roomStatsByIdGql = inject(RoomStatsByIdGql);
+  private readonly qnaStateChanged = inject(QnaStateChangedGql);
 
   readonly roomId = input.required<string>();
+  readonly qnaEnabled = input<boolean>();
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;
-  @Input({ required: true }) room!: Room;
   @Input({ required: true }) roomSettings!: RoomSettings;
+  room = input.required<Room>();
   destroyed$ = new Subject<void>();
   barItems: NavBarItem[] = [];
   features: NavBarItem[] = [
@@ -113,9 +117,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   groupName?: string;
   private changesSubscription?: Subscription;
   private statsChangesSubscription?: Subscription;
-  private commentSettingsSubscription?: Subscription;
   contentGroups: ContentGroup[] = [];
-  private focusStateSubscription?: Subscription;
   isLoading = true;
 
   userCount = toSignal(
@@ -136,12 +138,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     if (this.statsChangesSubscription) {
       this.statsChangesSubscription.unsubscribe();
     }
-    if (this.commentSettingsSubscription) {
-      this.commentSettingsSubscription.unsubscribe();
-    }
-    if (this.focusStateSubscription) {
-      this.focusStateSubscription.unsubscribe();
-    }
     this.destroyed$.next();
     this.destroyed$.complete();
   }
@@ -153,10 +149,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     ) {
       this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
     }
-    if (
-      !this.route.children[0]?.snapshot.data.commentSettings?.disabled ||
-      this.viewRole !== UserRole.PARTICIPANT
-    ) {
+    if (this.qnaEnabled() || this.viewRole !== UserRole.PARTICIPANT) {
       this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
     }
     let group = this.routingService.seriesName;
@@ -166,7 +159,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.setGroupInSessionStorage(group);
     }
     this.roomStatsService
-      .getStats(this.room.id, this.viewRole !== UserRole.PARTICIPANT)
+      .getStats(this.room().id, this.viewRole !== UserRole.PARTICIPANT)
       .subscribe((stats) => {
         if (stats.groupStats) {
           this.groupName = group || stats.groupStats[0].groupName;
@@ -215,7 +208,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   subscribeToParticipantEvents() {
     if (this.viewRole === UserRole.PARTICIPANT) {
       this.roomSettingsService
-        .getRoomSettingsStream(this.room.id, this.roomSettings.id)
+        .getRoomSettingsStream(this.room().id, this.roomSettings.id)
         .pipe(takeUntil(this.destroyed$))
         .subscribe((settings) => {
           const surveyEnabled = this.activeFeatures.includes(
@@ -231,23 +224,23 @@ export class NavBarComponent implements OnInit, OnDestroy {
             this.getItems();
           }
         });
-      this.commentSettingsSubscription = this.commentSettingsService
-        .getSettingsStream()
-        .subscribe((settings) => {
-          const commentsDisabled = settings.disabled;
-          const isCommentFeatureActive = this.activeFeatures.includes(
-            RoutingFeature.COMMENTS
-          );
-          // Remove comment feature if disabled now enabled before
-          if (commentsDisabled && isCommentFeatureActive) {
-            const index = this.activeFeatures.indexOf(RoutingFeature.COMMENTS);
-            this.activeFeatures.splice(index, 1);
-            this.getItems();
-            // Add comment feature if enabled now and disabled before
-          } else if (!commentsDisabled && !isCommentFeatureActive) {
-            this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
-            this.getItems();
-            this.toggleNews(RoutingFeature.COMMENTS);
+      this.qnaStateChanged
+        .subscribe({ variables: { roomId: this.roomId() } })
+        .subscribe((r) => {
+          if (r.data?.qnaStateChanged?.state === QnaState.Started) {
+            if (!this.activeFeatures.includes(RoutingFeature.COMMENTS)) {
+              this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
+              this.getItems();
+              this.toggleNews(RoutingFeature.COMMENTS);
+            }
+          } else if (r.data?.qnaStateChanged?.state === QnaState.Stopped) {
+            if (this.activeFeatures.includes(RoutingFeature.COMMENTS)) {
+              const index = this.activeFeatures.indexOf(
+                RoutingFeature.COMMENTS
+              );
+              this.activeFeatures.splice(index, 1);
+              this.getItems();
+            }
           }
         });
     }
@@ -272,7 +265,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       .on<typeof createdEvent.payload>(createdEvent.type)
       .subscribe((group) => {
         this.roomStatsService
-          .getStats(this.room.id, true)
+          .getStats(this.room().id, true)
           .subscribe((stats) => {
             this.groupName = group.name;
             this.addContentFeatureItem();
@@ -284,7 +277,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       .on<typeof deletedEvent.payload>(deletedEvent.type)
       .subscribe(() => {
         this.roomStatsService
-          .getStats(this.room.id, true)
+          .getStats(this.room().id, true)
           .subscribe((stats) => {
             if (!stats.groupStats) {
               this.removeContentFeatureItem();
@@ -360,7 +353,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           ? UserRole.PARTICIPANT
           : undefined
       ),
-      this.room.shortId,
+      this.room().shortId,
     ];
   }
 
@@ -375,7 +368,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     const route = [
       this.routingService.getRoleRoute(this.viewRole),
-      this.room.shortId,
+      this.room().shortId,
     ];
     if (item.name !== RoutingFeature.OVERVIEW) {
       route.push(item.name);
@@ -409,7 +402,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.contentGroupService
         .getByIds(
           groupStats.map((stats) => stats.id),
-          { roomId: this.room.id }
+          { roomId: this.room().id }
         )
         .subscribe((groups) => {
           for (const group of groups) {

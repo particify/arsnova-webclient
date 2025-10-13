@@ -6,13 +6,11 @@ import {
 } from '@projects/extension-point/src/lib/extension-route';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
-import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
 import { CreatorPageComponent } from '@app/creator/creator-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
 import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
@@ -67,14 +65,10 @@ const routes: Routes = [
       import('./comments/comments-page.component').then(
         (m) => m.CommentsPageComponent
       ),
-    resolve: {
-      commentSettings: CommentSettingsResolver,
-    },
     title: 'comments',
     data: {
       parentRoute: ParentRoute.ROOM,
     },
-    providers: [CommentSettingsService],
   },
   {
     path: 'comments/moderation',
@@ -82,15 +76,11 @@ const routes: Routes = [
       import('./comments/comments-page.component').then(
         (m) => m.CommentsPageComponent
       ),
-    resolve: {
-      commentSettings: CommentSettingsResolver,
-    },
     title: 'comments',
     data: {
       isModeration: true,
       parentRoute: ParentRoute.ROOM,
     },
-    providers: [CommentSettingsService],
   },
   {
     path: 'feedback',

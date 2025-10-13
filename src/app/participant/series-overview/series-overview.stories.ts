@@ -319,12 +319,6 @@ export default {
                   description: 'This is my awesome room description.',
                   settings: {},
                 },
-                commentSettings: {
-                  directSend: true,
-                  fileUploadEnabled: false,
-                  disabled: false,
-                  readonly: false,
-                },
               },
             },
           },

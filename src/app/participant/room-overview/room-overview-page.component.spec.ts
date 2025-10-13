@@ -5,15 +5,12 @@ import { MockFeatureFlagService } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { RoomStats } from '@app/core/models/room-stats';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
-import { CommentSettings } from '@app/core/models/comment-settings';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
-import { CommentService } from '@app/core/services/http/comment.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import { configureTestModule } from '@testing/test.setup';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -21,6 +18,7 @@ import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -50,20 +48,11 @@ describe('RoomOverviewPageComponent', () => {
     new ContentGroup('roomId', 'name', [], true),
   ]);
 
-  const mockCommentSettingsService = jasmine.createSpyObj([
-    'getSettingsStream',
-  ]);
-
-  mockCommentSettingsService.getSettingsStream.and.returnValue(of({}));
-
   const mockFocusModeService = jasmine.createSpyObj(['getFocusModeEnabled']);
   mockFocusModeService.getFocusModeEnabled.and.returnValue(of(true));
 
   const mockFeedbackService = jasmine.createSpyObj(['startSub', 'getMessages']);
   mockFeedbackService.getMessages.and.returnValue(of());
-
-  const mockCommentService = jasmine.createSpyObj(['countByRoomId']);
-  mockCommentService.countByRoomId.and.returnValue(of(0));
 
   const mockWsCommentService = jasmine.createSpyObj(['getCommentStream']);
   mockWsCommentService.getCommentStream.and.returnValue(of({}));
@@ -98,10 +87,6 @@ describe('RoomOverviewPageComponent', () => {
           useValue: mockContentGroupService,
         },
         {
-          provide: CommentSettingsService,
-          useValue: mockCommentSettingsService,
-        },
-        {
           provide: ContentPublishService,
           useClass: ContentPublishService,
         },
@@ -116,10 +101,6 @@ describe('RoomOverviewPageComponent', () => {
         {
           provide: FeedbackService,
           useValue: mockFeedbackService,
-        },
-        {
-          provide: CommentService,
-          useValue: mockCommentService,
         },
         {
           provide: WsCommentService,
@@ -137,10 +118,10 @@ describe('RoomOverviewPageComponent', () => {
     );
     testBed.compileComponents();
     fixture = testBed.createComponent(RoomOverviewPageComponent);
-    component = fixture.componentInstance;
-    fixture.componentRef.setInput('roomId', '1234');
+    fixture.componentRef.setInput('roomId', 'roomId');
     fixture.componentRef.setInput('shortId', '12345678');
-    fixture.componentRef.setInput('commentSettings', new CommentSettings());
+    fixture.componentRef.setInput('viewRole', UserRole.PARTICIPANT);
+    component = fixture.componentInstance;
   }));
 
   it('should create', () => {

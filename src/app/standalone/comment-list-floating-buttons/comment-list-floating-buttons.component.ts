@@ -27,7 +27,6 @@ export class CommentListFloatingButtonsComponent implements OnInit {
   @Input() navBarExists = false;
 
   @Output() scrollTopClicked = new EventEmitter<void>();
-  @Output() loadAndScrollClicked = new EventEmitter<void>();
   @Output() createClicked = new EventEmitter<void>();
 
   onInit = false;
@@ -38,10 +37,6 @@ export class CommentListFloatingButtonsComponent implements OnInit {
 
   scrollTop() {
     this.scrollTopClicked.emit();
-  }
-
-  loadAndScroll() {
-    this.loadAndScrollClicked.emit();
   }
 
   create() {

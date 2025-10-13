@@ -5,13 +5,13 @@
   id="comment-card"
   [appearance]="outlinedCard ? 'outlined' : 'raised'"
   [ngClass]="{
-    highlighted: comment.highlighted && !isSimpleView,
+    highlighted: post.id === activePostId && !isSimpleView,
     'presentation-comment': isSimpleView,
     'primary-shadow-always border-color-transparent':
-      comment.highlighted && isSimpleView,
+      post.id === activePostId && isSimpleView,
   }"
-  [@slide]="isNew ? slideAnimationState : null"
-  (@slide.done)="changeSlideState()"
+  [@slide]
+  [@.disabled]="!animate || isInitialized"
   data-testid="comment-card"
 >
   <div
@@ -26,92 +26,94 @@
           : {
               time:
                 language === 'de'
-                  ? (comment.timestamp | date: ' HH:mm ')
-                  : (comment.timestamp | date: 'h:mm a'),
+                  ? (post.createdAt | date: ' HH:mm ')
+                  : (post.createdAt | date: 'h:mm a'),
               votes:
-                comment.score === 1
+                post.score === 1
                   ? ('comment-page.a11y-text-textForOneVote' | transloco)
-                  : comment.score +
+                  : post.score +
                     ('comment-page.a11y-text-textForVotes' | transloco),
-              comment: comment.body.trim(),
+              comment: post.body.trim(),
               correct:
-                comment.correct === 1
+                post.correct === CorrectState.Correct
                   ? ('comment-page.a11y-text-correct' | transloco)
                   : '',
               wrong:
-                comment.correct === 2
+                post.correct === CorrectState.Wrong
                   ? ('comment-page.a11y-text-wrong' | transloco)
                   : '',
-              favorite: comment.favorite
+              favorite: post.favorite
                 ? ('comment-page.a11y-text-grade' | transloco)
                 : '',
-              answer: comment.answer
-                ? ('comment-page.a11y-text-answer' | transloco)
-                : '',
+              answer:
+                post.replies && post.replies.length > 0
+                  ? ('comment-page.a11y-text-answer' | transloco)
+                  : '',
             }
     }}"
   >
     <div fxLayout="row" class="comment-actions">
       <div class="date light">
-        <app-date [timestamp]="comment.timestamp"></app-date>
+        <app-date [timestamp]="post.createdAt"></app-date>
       </div>
       <span class="fill-remaining-space"></span>
 
-      @if (comment.correct === 1) {
+      @if (post.correct === CorrectState.Correct) {
         <button
           mat-icon-button
           [disabled]="!isEditor || isSimpleView"
-          (click)="markCorrect(1)"
+          (click)="setCorrect(CorrectState.Unset)"
           [matTooltip]="'creator.comment-page.mark-not-correct' | transloco"
           data-testid="comment-correct-button"
         >
           <mat-icon class="green">check_circle </mat-icon>
         </button>
       }
-      @if (comment.correct === 2) {
+      @if (post.correct === CorrectState.Wrong) {
         <button
           mat-icon-button
           [disabled]="!isEditor || isSimpleView"
-          (click)="markCorrect(2)"
+          (click)="setCorrect(CorrectState.Unset)"
           [matTooltip]="'creator.comment-page.mark-not-wrong' | transloco"
           data-testid="comment-wrong-button"
         >
           <mat-icon class="red">cancel </mat-icon>
         </button>
       }
-      @if (comment.favorite) {
+      @if (post.favorite) {
         <button
           mat-icon-button
           [disabled]="!isEditor || isSimpleView"
-          (click)="setFavorite()"
+          (click)="markFavorite()"
           [matTooltip]="'creator.comment-page.mark-not-favorite' | transloco"
           data-testid="comment-favorite-button"
         >
           <mat-icon class="yellow">grade </mat-icon>
         </button>
       }
-      @if (comment.answer && !inAnswerView) {
+      @if (post.replies && post.replies.length > 0 && !inReplyView) {
         <button
           mat-icon-button
-          (click)="answerComment()"
+          (click)="replyComment()"
           [matTooltip]="'comment-page.go-to-answer' | transloco"
           data-testid="comment-answer-button"
         >
           <mat-icon class="blue">comment </mat-icon>
         </button>
       }
+
       @if (isModeration) {
         <button
           mat-icon-button
           color="primary"
-          (click)="setAck()"
-          [matTooltip]="'creator.comment-page.reject' | transloco"
+          (click)="accept()"
+          [matTooltip]="'creator.comment-page.banish' | transloco"
           data-testid="release-comment-button"
         >
           <mat-icon>lock_open</mat-icon>
         </button>
       }
-      @if (isEditor && !inAnswerView && !isSimpleView && !archived) {
+      @if (isEditor && !inReplyView && !isSimpleView) {
         <button
           mat-icon-button
           [matMenuTriggerFor]="actionsMenu"
@@ -121,50 +123,39 @@
           <mat-icon>more_horiz </mat-icon>
         </button>
       }
-      @if (isEditor && archived) {
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="deleteComment()"
-          [matTooltip]="'creator.comment-page.delete' | transloco"
-        >
-          <mat-icon>delete </mat-icon>
-        </button>
-      }
       <mat-menu #actionsMenu="matMenu" xPosition="before">
-        <button mat-menu-item (click)="answerComment()">
+        <button mat-menu-item (click)="replyComment()">
           <mat-icon class="blue icon-important">comment</mat-icon>
           <span>{{
-            (!comment.answer
-              ? 'creator.comment-page.answer'
-              : 'comment-page.go-to-answer'
+            (post.replies && post.replies.length > 0
+              ? 'comment-page.go-to-answer'
+              : 'creator.comment-page.answer'
             ) | transloco
           }}</span>
         </button>
-
-        <button mat-menu-item (click)="markCorrect(1)">
+        <button mat-menu-item (click)="setCorrect(CorrectState.Correct)">
           <mat-icon class="green icon-important">check_circle</mat-icon>
           <span>{{
-            (comment.correct !== 1
+            (post.correct !== CorrectState.Correct
               ? 'creator.comment-page.mark-correct'
               : 'creator.comment-page.mark-not-correct'
             ) | transloco
           }}</span>
         </button>
 
-        <button mat-menu-item (click)="markCorrect(2)">
+        <button mat-menu-item (click)="setCorrect(CorrectState.Wrong)">
           <mat-icon class="red icon-important">cancel</mat-icon>
           <span>{{
-            (comment.correct !== 2
+            (post.correct !== CorrectState.Wrong
               ? 'creator.comment-page.mark-wrong'
               : 'creator.comment-page.mark-not-wrong'
             ) | transloco
           }}</span>
         </button>
-        <button mat-menu-item (click)="setFavorite()">
+        <button mat-menu-item (click)="markFavorite()">
           <mat-icon class="yellow icon-important">grade</mat-icon>
           <span>{{
-            (!comment.favorite
+            (!post.favorite
               ? 'creator.comment-page.mark-favorite'
               : 'creator.comment-page.mark-not-favorite'
             ) | transloco
@@ -177,12 +168,15 @@
           </button>
         }
         @if (!isModeration) {
-          <button mat-menu-item (click)="setAck()">
+          <button
+            mat-menu-item
+            (click)="post.moderationState !== 'ACCEPTED' ? accept() : reject()"
+          >
             <mat-icon color="primary">{{
-              comment.ack ? 'gavel' : 'lock_open'
+              post.moderationState !== 'ACCEPTED' ? 'lock_open' : 'gavel'
             }}</mat-icon>
             <span>{{
-              (comment.ack
+              (post.moderationState === 'ACCEPTED'
                 ? 'creator.comment-page.banish'
                 : 'creator.comment-page.reject'
               ) | transloco
@@ -201,48 +195,41 @@
           appDirContext
           (click)="openPresentDialog()"
         >
-          <span aria-hidden="true">{{ comment.body.trim() }}</span>
+          <span aria-hidden="true">{{ post.body.trim() }}</span>
         </div>
-        @if (showTag) {
+        @if (post.tags && post.tags.length > 0) {
           <div class="comment-tags">
             <mat-chip-listbox>
               <mat-chip-option
-                (click)="this.clickedOnTag.emit(comment.tag)"
+                (click)="this.clickedOnTag.emit(post.tags[0].id)"
                 appTrackInteraction="Comments filtered"
                 appTrackName="toggle-category"
                 [selectable]="false"
               >
-                {{ comment.tag }}
+                {{ post.tags[0].name }}
               </mat-chip-option>
             </mat-chip-listbox>
           </div>
-        }
-        @if (fileUploadEnabled) {
-          <lib-extension-point
-            extensionId="attachment-list"
-            [extensionData]="extensionData"
-          ></lib-extension-point>
         }
       </div>
       <span
         class="fill-remaining-space click"
         (click)="openPresentDialog()"
       ></span>
+      <span class="fill-remaining-space click"></span>
       @if (isEditor) {
         <div fxLayout="row" fxLayoutAlign="start end">
           <mat-icon class="vote-icon">thumb_up</mat-icon>
-          <span class="score-creator">{{ comment.score }}</span>
+          <span class="score-creator">{{ post.score }}</span>
         </div>
       }
     </div>
   </div>
-  @if (!isEditor && userId && parseVote) {
+  @if (!isEditor && post.score !== null) {
     <app-voting
-      [userId]="userId"
-      [parseVote]="parseVote"
-      [score]="comment.score"
-      [roomId]="comment.roomId"
-      [commentId]="comment.id"
+      [userVote]="post.userVote || undefined"
+      [score]="post.score"
+      [postId]="post.id"
     ></app-voting>
   }
 </mat-card>

@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, inject, input } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { LanguageService } from '@app/core/services/util/language.service';
@@ -18,7 +25,10 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomSettings } from '@app/core/models/room-settings';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { QnasByRoomIdGql, QnaState } from '@gql/generated/graphql';
+import { catchError, map, of, switchMap } from 'rxjs';
+import { onlyCompleteData } from 'apollo-angular';
 
 @Component({
   selector: 'app-participant-page',
@@ -38,11 +48,12 @@ import { toSignal } from '@angular/core/rxjs-interop';
   ],
 })
 export class ParticipantPageComponent implements OnInit {
-  protected translateService = inject(TranslocoService);
-  protected langService = inject(LanguageService);
-  private focusModeService = inject(FocusModeService);
-  private routingService = inject(RoutingService);
-  private roomSettingsService = inject(RoomSettingsService);
+  protected readonly translateService = inject(TranslocoService);
+  protected readonly langService = inject(LanguageService);
+  private readonly focusModeService = inject(FocusModeService);
+  private readonly routingService = inject(RoutingService);
+  private readonly roomSettingsService = inject(RoomSettingsService);
+  private readonly qnasByRoomId = inject(QnasByRoomIdGql);
 
   // Route data input below
   roomId = input.required<string>();
@@ -52,6 +63,28 @@ export class ParticipantPageComponent implements OnInit {
 
   roomSettings?: RoomSettings;
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
+
+  qnaResult = toSignal(
+    toObservable(this.roomId).pipe(
+      switchMap((roomId) => {
+        return this.qnasByRoomId.watch({
+          variables: {
+            roomId,
+          },
+        }).valueChanges;
+      }),
+      onlyCompleteData(),
+      map((r) => r.data.qnasByRoomId),
+      catchError(() => of())
+    )
+  );
+
+  qnaEnabled = computed(() => {
+    const qna = this.qnaResult();
+    if (qna?.edges && qna.edges[0]) {
+      return qna.edges[0]?.node.state !== QnaState.Stopped;
+    }
+  });
 
   constructor() {
     const translateService = this.translateService;

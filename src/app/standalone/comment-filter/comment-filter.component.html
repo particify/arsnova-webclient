@@ -18,12 +18,15 @@
     data-testid="comments-filter-button"
   >
     {{
-      selectedCategory ??
-        (currentFilter
-          ? 'comment-list.filter-' + currentFilter
-          : period !== CommentPeriod.ALL
-            ? 'comment-list.select-' + period
-            : 'comment-list.filter-all') | transloco
+      ((selectedFlags.length > 0
+        ? 'comment-list.filter-' + selectedFlags[0]
+        : period !== undefined
+          ? 'comment-list.select-' + getPeriodString(period)
+          : 'comment-list.filter-all'
+      ) | transloco) +
+        (selectedFlags.length > 1
+          ? ' (+' + (selectedFlags.length - 1) + ')'
+          : '')
     }}
     <mat-icon>filter_alt</mat-icon>
   </button>
@@ -41,13 +44,13 @@
   >
     <mat-icon
       [ngClass]="{
-        'yellow icon-important': currentFilter === CommentFilter.FAVORITE,
+        'yellow icon-important': selectedFlags.includes(CommentFilter.FAVORITE),
       }"
       >grade</mat-icon
     >
     <span
       [ngClass]="{
-        'selected-menu-item': currentFilter === CommentFilter.FAVORITE,
+        'selected-menu-item': selectedFlags.includes(CommentFilter.FAVORITE),
       }"
       >{{ 'comment-list.filter-favorite' | transloco }}</span
     >
@@ -62,13 +65,13 @@
   >
     <mat-icon
       [ngClass]="{
-        'blue icon-important': currentFilter === CommentFilter.ANSWERED,
+        'blue icon-important': selectedFlags.includes(CommentFilter.ANSWERED),
       }"
       >comment</mat-icon
     >
     <span
       [ngClass]="{
-        'selected-menu-item': currentFilter === CommentFilter.ANSWERED,
+        'selected-menu-item': selectedFlags.includes(CommentFilter.ANSWERED),
       }"
       >{{ 'comment-list.filter-answered' | transloco }}</span
     >
@@ -83,13 +86,13 @@
   >
     <mat-icon
       [ngClass]="{
-        'green icon-important': currentFilter === CommentFilter.CORRECT,
+        'green icon-important': selectedFlags.includes(CommentFilter.CORRECT),
       }"
       >check_circle</mat-icon
     >
     <span
       [ngClass]="{
-        'selected-menu-item': currentFilter === CommentFilter.CORRECT,
+        'selected-menu-item': selectedFlags.includes(CommentFilter.CORRECT),
       }"
       >{{ 'comment-list.filter-correct' | transloco }}</span
     >
@@ -104,13 +107,13 @@
   >
     <mat-icon
       [ngClass]="{
-        'red icon-important': currentFilter === CommentFilter.WRONG,
+        'red icon-important': selectedFlags.includes(CommentFilter.WRONG),
       }"
       >cancel</mat-icon
     >
     <span
       [ngClass]="{
-        'selected-menu-item': currentFilter === CommentFilter.WRONG,
+        'selected-menu-item': selectedFlags.includes(CommentFilter.WRONG),
       }"
       >{{ 'comment-list.filter-wrong' | transloco }}</span
     >
@@ -120,7 +123,7 @@
     <mat-icon>access_time</mat-icon>
     <span
       [ngClass]="{
-        'selected-menu-item': period !== CommentPeriod.ALL,
+        'selected-menu-item': period !== undefined,
       }"
       >{{ 'comment-list.filter-time' | transloco }}</span
     >
@@ -128,17 +131,17 @@
 
   <div
     [matTooltip]="'comment-list.no-categories-in-this-room' | transloco"
-    [matTooltipDisabled]="!!categories"
+    [matTooltipDisabled]="!!tags()"
   >
     <button
-      [disabled]="!categories"
+      [disabled]="!tags().length"
       mat-menu-item
       [matMenuTriggerFor]="categoriesMenu"
     >
       <mat-icon>sell</mat-icon>
       <span
         [ngClass]="{
-          'selected-menu-item': selectedCategory,
+          'selected-menu-item': selectedTags && selectedTags.length > 0,
         }"
         >{{ 'comment-list.filter-categories' | transloco }}</span
       >
@@ -147,17 +150,17 @@
 </mat-menu>
 
 <mat-menu #timeMenu="matMenu">
-  @for (periodItem of periodsList; track periodItem) {
+  @for (period of periods; track period) {
     <div>
       <button
         mat-menu-item
-        (click)="setTimePeriod(periodItem)"
-        [attr.aria-label]="'comment-list.a11y-select-' + periodItem | transloco"
+        (click)="emitTimeRange(period)"
+        [attr.aria-label]="'comment-list.a11y-select-' + period | transloco"
         appTrackInteraction="Comments filtered (period)"
-        [appTrackName]="periodItem"
+        [appTrackName]="period"
       >
-        <span [ngClass]="{ 'selected-menu-item': periodItem === period }">{{
-          'comment-list.select-' + periodItem | transloco
+        <span [ngClass]="{ 'selected-menu-item': isPeriodSelected(period) }">{{
+          'comment-list.select-' + period | transloco
         }}</span>
       </button>
     </div>
@@ -165,19 +168,19 @@
 </mat-menu>
 
 <mat-menu #categoriesMenu="matMenu">
-  @for (category of categories; track category) {
+  @for (tag of tags(); track tag) {
     <div>
       <button
         mat-menu-item
-        (click)="selectCategory(category)"
+        (click)="selectTag(tag)"
         appTrackInteraction="Comments filtered (category)"
-        [appTrackName]="category"
+        [appTrackName]="tag.name"
       >
         <span
           [ngClass]="{
-            'selected-menu-item': selectedCategory === category,
+            'selected-menu-item': isSelected(tag.id),
           }"
-          >{{ category }}</span
+          >{{ tag.name }}</span
         >
       </button>
     </div>

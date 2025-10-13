@@ -1,7 +1,14 @@
-import { Component, Input, Pipe, PipeTransform, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  Pipe,
+  PipeTransform,
+  inject,
+  signal,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { Vote } from '@app/core/models/vote';
-import { VoteService } from '@app/core/services/http/vote.service';
+import { VoteQnaPostGql } from '@gql/generated/graphql';
 import { provideTranslocoScope } from '@jsverse/transloco';
 
 @Pipe({ name: 'voteAction', pure: true, standalone: true })
@@ -22,60 +29,27 @@ export class VoteAction implements PipeTransform {
   selector: 'app-voting',
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VotingComponent {
-  private voteService = inject(VoteService);
+  private readonly votePost = inject(VoteQnaPostGql);
 
-  @Input() score?: number;
-  @Input({ required: true }) userId!: string;
-  @Input({ required: true }) roomId!: string;
-  @Input({ required: true }) commentId!: string;
-  @Input()
-  set parseVote(vote: Vote) {
-    if (vote.vote !== 0) {
-      this.currentVote = vote.vote;
-    }
-  }
+  readonly score = input<number | undefined>(0);
+  readonly postId = input.required<string>();
+  readonly userVote = input<number | undefined>(0);
 
-  currentVote?: number;
-  currentVoteString = '';
+  userVoteString = signal('');
 
   voteComment(vote: number) {
-    const voteString = vote.toString();
-    let subscription;
-    if (this.currentVote !== vote) {
-      if (vote === 1) {
-        subscription = this.voteService.voteUp(
-          this.roomId,
-          this.commentId,
-          this.userId
-        );
-      } else {
-        subscription = this.voteService.voteDown(
-          this.roomId,
-          this.commentId,
-          this.userId
-        );
-      }
-      this.currentVote = vote;
-      this.currentVoteString = voteString;
-    } else {
-      subscription = this.voteService.deleteVote(
-        this.roomId,
-        this.commentId,
-        this.userId
-      );
-      this.currentVote = 0;
-      this.currentVoteString = '0';
-    }
-    subscription.subscribe(() => {
-      this.resetVotingAnimation();
-    });
-  }
-
-  resetVotingAnimation() {
-    setTimeout(() => {
-      this.currentVoteString = '';
-    }, 1000);
+    this.userVoteString.set((this.userVote() !== vote ? vote : 0).toString());
+    this.votePost
+      .mutate({ variables: { postId: this.postId(), value: vote } })
+      .subscribe({
+        next: () => {
+          setTimeout(() => {
+            this.userVoteString.set('');
+          }, 1000);
+        },
+      });
   }
 }

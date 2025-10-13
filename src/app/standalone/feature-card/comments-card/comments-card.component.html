@@ -1,30 +1,23 @@
 <app-feature-card
   [feature]="'room-page.comments' | transloco"
   [description]="
-    !!pausedDescription && commentSettings?.readonly
+    !!pausedDescription && state() === QnaState.Paused
       ? pausedDescription
       : description
   "
   [countHint]="
-    showCount && commentCounter !== undefined
-      ? ('room-page.comment-count' | transloco: { count: commentCounter })
+    showCount
+      ? ('room-page.comment-count' | transloco: { count: counts().accepted })
       : undefined
   "
   [color]="
-    commentSettings?.disabled
-      ? 'var(--warn)'
-      : commentSettings?.readonly
+    state() === QnaState.Started
+      ? 'var(--play)'
+      : state() === QnaState.Paused
         ? 'var(--warn-soft)'
-        : 'var(--play)'
+        : 'var(--warn)'
   "
-  [stateText]="
-    (commentSettings?.disabled
-      ? 'room-page.stopped'
-      : commentSettings?.readonly
-        ? 'room-page.paused'
-        : 'room-page.started'
-    ) | transloco
-  "
+  [stateText]="'room-page.' + state().toLowerCase() | transloco"
   [clickable]="clickable"
   icon="question_answer"
   url="comments"
@@ -33,7 +26,7 @@
   @if (showControls) {
     <ng-container featureAction>
       <div fxLayout="row" fxLayoutGap="8px">
-        @if (commentSettings?.disabled || commentSettings?.readonly) {
+        @if (state() !== QnaState.Started) {
           <button
             mat-icon-button
             [matTooltip]="'creator.room-page.start' | transloco"
@@ -45,7 +38,7 @@
             <mat-icon>play_circle</mat-icon>
           </button>
         }
-        @if (!commentSettings?.readonly && !commentSettings?.disabled) {
+        @if (state() === QnaState.Started) {
           <button
             mat-icon-button
             [matTooltip]="'creator.room-page.pause' | transloco"
@@ -57,7 +50,7 @@
             <mat-icon>pause_circle</mat-icon>
           </button>
         }
-        @if (!commentSettings?.disabled) {
+        @if (state() === QnaState.Started || state() === QnaState.Paused) {
           <button
             mat-icon-button
             [matTooltip]="'creator.room-page.stop' | transloco"

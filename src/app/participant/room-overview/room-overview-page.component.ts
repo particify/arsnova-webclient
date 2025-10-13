@@ -1,10 +1,10 @@
-import { Component, OnInit, inject, input } from '@angular/core';
+import { Component, OnInit, inject, computed } from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { catchError, filter, map, of, switchMap } from 'rxjs';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -16,7 +16,6 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { AsyncPipe } from '@angular/common';
 import { CoreModule } from '@app/core/core.module';
 import { FlexModule } from '@angular/flex-layout';
-import { CommentSettings } from '@app/core/models/comment-settings';
 import { FeatureCardComponent } from '@app/standalone/feature-card/feature-card.component';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { CommentsCardComponent } from '@app/standalone/feature-card/comments-card/comments-card.component';
@@ -25,7 +24,12 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { RoomInfoComponentComponent } from '@app/standalone/room-info-component/room-info-component.component';
 import { ExpandableCardComponent } from '@app/standalone/expandable-card/expandable-card.component';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { QnasByRoomIdGql, QnaState } from '@gql/generated/graphql';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-participant-overview',
@@ -52,17 +56,34 @@ export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent
   implements OnInit
 {
-  protected readonly translateService = inject(TranslocoService);
-  protected readonly globalStorageService = inject(GlobalStorageService);
-  protected readonly commentSettingsService = inject(CommentSettingsService);
-  protected readonly focusModeService = inject(FocusModeService);
-  private readonly roomSettingsService = inject(RoomSettingsService);
+  protected translateService = inject(TranslocoService);
+  protected globalStorageService = inject(GlobalStorageService);
+  private qnasByRoomId = inject(QnasByRoomIdGql);
+  protected focusModeService = inject(FocusModeService);
+  private roomSettingsService = inject(RoomSettingsService);
 
-  // Route data input below
-  readonly commentSettings = input.required<CommentSettings>();
+  qnaResult = toSignal(
+    toObservable(this.roomId).pipe(
+      switchMap((roomId) => {
+        return this.qnasByRoomId.watch({
+          variables: {
+            roomId,
+          },
+        }).valueChanges;
+      }),
+      filter((r) => r.dataState === 'complete'),
+      map((r) => r.data.qnasByRoomId),
+      catchError(() => of())
+    )
+  );
 
   feedbackEnabled = false;
-  commentsEnabled = false;
+  commentsEnabled = computed(() => {
+    const qna = this.qnaResult();
+    if (qna?.edges && qna.edges[0]) {
+      return qna.edges[0]?.node.state !== QnaState.Stopped;
+    }
+  });
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
   readonly HintType = HintType;
 
@@ -87,16 +108,9 @@ export class RoomOverviewPageComponent
             }
           });
       });
-    this.commentsEnabled = !this.commentSettings().disabled;
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.commentSettingsService
-      .getSettingsStream()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((settings) => {
-        this.commentsEnabled = !settings.disabled;
-      });
   }
 
   setGroupDataInGlobalStorage() {

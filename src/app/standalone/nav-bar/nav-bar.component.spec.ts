@@ -28,7 +28,6 @@ import {
 } from '@angular/material/menu/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { configureTestModule } from '@testing/test.setup';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
@@ -159,10 +158,6 @@ describe('NavBarComponent', () => {
           useValue: mockRoomService,
         },
         {
-          provide: CommentSettingsService,
-          useValue: mockCommentSettingsService,
-        },
-        {
           provide: ActivatedRoute,
           useValue: activatedRouteStub,
         },
@@ -189,7 +184,7 @@ describe('NavBarComponent', () => {
   it('should create', () => {
     const room = new Room();
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.EDITOR;
     component.viewRole = UserRole.PARTICIPANT;
     component.roomSettings = {
@@ -197,8 +192,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     expect(component).toBeTruthy();
@@ -208,15 +201,14 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
+    fixture.componentRef.setInput('qnaEnabled', true);
     component.viewRole = UserRole.PARTICIPANT;
     component.roomSettings = {
       id: 'id',
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
@@ -233,7 +225,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     component.roomSettings = {
@@ -241,8 +233,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     mockRoomSettingsService.getRoomSettingsStream.and.returnValue(
       of({
@@ -264,7 +254,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
@@ -272,8 +262,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     feedbackButton = await loader.getHarness(
@@ -286,7 +274,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     const stats = {
@@ -303,8 +291,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     mockRoomStatsService.getStats.and.returnValue(of(stats));
     fixture.detectChanges();
@@ -318,36 +304,13 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
       id: 'id',
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
-    };
-    fixture.detectChanges();
-    const userCounter = fixture.nativeElement.querySelector(
-      '#user-count-container'
-    );
-    expect(getComputedStyle(userCounter).display).not.toBe('none');
-  });
-
-  it('should HAVE a user counter if desktop device and creator', async () => {
-    const room = new Room();
-    room.shortId = '12345678';
-    fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
-    component.viewRole = UserRole.OWNER;
-    component.roomSettings = {
-      id: 'id',
-      roomId: 'roomid',
-      surveyEnabled: false,
-      surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
@@ -365,15 +328,13 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
       id: 'id',
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
@@ -386,15 +347,13 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.viewRole = UserRole.PARTICIPANT;
     component.roomSettings = {
       id: 'id',
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     const userCounter = fixture.nativeElement.querySelector(
@@ -408,16 +367,13 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
-    component.userRole = UserRole.OWNER;
+    fixture.componentRef.setInput('room', room);
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
       id: 'id',
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
@@ -432,7 +388,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
@@ -440,8 +396,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
@@ -460,7 +414,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
@@ -468,8 +422,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
@@ -488,8 +440,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
-    component.userRole = UserRole.OWNER;
+    fixture.componentRef.setInput('room', room);
     component.viewRole = UserRole.OWNER;
     const stats = {
       groupStats: [
@@ -506,8 +457,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     overviewButton = await loader.getHarness(
@@ -526,7 +475,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     const stats = {
@@ -549,8 +498,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     seriesButton = await loader.getHarness(
@@ -569,7 +516,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
     const stats = {
@@ -592,8 +539,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     seriesButton = await loader.getHarness(
@@ -619,7 +564,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     const stats = {
@@ -656,8 +601,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     eventService.broadcast('PublicDataChanged', statsEvent);
@@ -670,7 +613,7 @@ describe('NavBarComponent', () => {
     const room = new Room();
     room.shortId = '12345678';
     fixture.componentRef.setInput('roomId', '1234');
-    component.room = room;
+    fixture.componentRef.setInput('room', room);
     component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
     const stats = {
@@ -688,8 +631,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      commentThresholdEnabled: false,
-      commentThreshold: 0,
     };
     fixture.detectChanges();
     const entity = new ContentGroup(

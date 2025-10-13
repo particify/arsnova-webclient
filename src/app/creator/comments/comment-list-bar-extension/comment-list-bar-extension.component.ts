@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Comment } from '@app/core/models/comment';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { CommentService } from '@app/core/services/http/comment.service';
@@ -18,7 +17,12 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { MatDivider } from '@angular/material/divider';
-import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import {
+  DeleteQnaPostsGql,
+  ModerationState,
+  Post,
+  QnaState,
+} from '@gql/generated/graphql';
 
 @Component({
   selector: 'app-comment-list-bar-extension',
@@ -37,7 +41,6 @@ import { ExtensionPointComponent } from '@projects/extension-point/src/lib/exten
     MatMenu,
     MatMenuItem,
     MatDivider,
-    ExtensionPointComponent,
     TranslocoPipe,
   ],
 })
@@ -47,19 +50,26 @@ export class CommentListBarExtensionComponent {
   private commentService = inject(CommentService);
   private notificationService = inject(NotificationService);
   private router = inject(Router);
+  private deletePosts = inject(DeleteQnaPostsGql);
 
   @Input({ required: true }) room!: Room;
+  @Input({ required: true }) qnaId?: string;
   @Input() isModeration = false;
-  @Input() comments: Comment[] = [];
-  @Input() readonly = false;
-  @Input() disabled = false;
+  @Input() posts: Post[] = [];
+  @Input() state = QnaState.Stopped;
   @Input({ required: true }) viewRole!: UserRole;
 
   @Output() createCommentClicked = new EventEmitter<void>();
   @Output() toggleReadonlyClicked = new EventEmitter<void>();
-  @Output() resetCommentsClicked = new EventEmitter<void>();
+  @Output() postsDeleted = new EventEmitter<void>();
+
+  QnaState = QnaState;
 
   openDeleteCommentsDialog(): void {
+    const qnaId = this.qnaId;
+    if (!qnaId) {
+      return;
+    }
     const dialogRef = this.dialogService.openDeleteDialog(
       'comments',
       'creator.dialog.' +
@@ -69,44 +79,38 @@ export class CommentListBarExtensionComponent {
       undefined,
       undefined,
       () =>
-        this.isModeration
-          ? this.commentService.deleteCommentsById(
-              this.room.id,
-              this.comments.map((c) => c.id)
-            )
-          : this.commentService.deleteCommentsByRoomId(this.room.id)
+        this.deletePosts.mutate({
+          variables: {
+            qnaId: qnaId,
+            moderationState: this.isModeration
+              ? ModerationState.Rejected
+              : null,
+          },
+        })
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.deleteComments();
+        this.postsDeleted.emit();
+        this.showDeletedNotification();
       }
     });
   }
 
-  deleteComments(): void {
-    if (this.isModeration) {
-      const msg = this.translateService.translate(
-        'creator.comment-list.banned-comments-deleted'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    } else {
-      const msg = this.translateService.translate(
-        'creator.comment-list.all-comments-deleted'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-    }
+  showDeletedNotification(): void {
+    const msg = this.translateService.translate(
+      this.isModeration
+        ? 'creator.comment-list.banned-comments-deleted'
+        : 'creator.comment-list.all-comments-deleted'
+    );
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
   }
 
   onExport(): void {
-    this.commentService.export(this.comments, this.room);
+    this.commentService.export(this.posts, this.room);
   }
 
   navToSettings() {
     this.router.navigate(['edit', this.room.shortId, 'settings', 'comments']);
-  }
-
-  resetComments() {
-    this.resetCommentsClicked.emit();
   }
 
   create() {

@@ -2,10 +2,7 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ActivatedRoute } from '@angular/router';
 import { CommentComponent } from '@app/standalone/comment/comment.component';
-import { Comment } from '@app/core/models/comment';
-import { CommentService } from '@app/core/services/http/comment.service';
-
-class MockCommentService {}
+import { ModerationState, Post } from '@gql/generated/graphql';
 
 export default {
   component: CommentComponent,
@@ -25,10 +22,6 @@ export default {
             },
           },
         },
-        {
-          provide: CommentService,
-          useClass: MockCommentService,
-        },
       ],
     }),
   ],
@@ -36,29 +29,38 @@ export default {
 
 type Story = StoryObj<CommentComponent>;
 
-const standardComment = new Comment();
-standardComment.id = 'commentId1';
-standardComment.roomId = 'roomId';
-standardComment.body = 'This is a comment body';
-standardComment.timestamp = new Date();
+const standardComment: Post = {
+  id: 'postId1',
+  body: 'This is a comment body',
+  createdAt: new Date().toDateString(),
+  favorite: false,
+  score: 42,
+  moderationState: ModerationState.Approved,
+  tags: [],
+  replies: [],
+};
 
 export const StandardComment: Story = {
   args: {
-    comment: standardComment,
+    post: standardComment,
     isEditor: true,
   },
 };
 
-const favoriteComment = new Comment();
-favoriteComment.id = 'commentId2';
-favoriteComment.roomId = 'roomId';
-favoriteComment.body = 'This is a another comment which is a favorite';
-favoriteComment.timestamp = new Date();
-favoriteComment.favorite = true;
+const favoriteComment: Post = {
+  id: 'postId2',
+  body: 'This is a favorite comment',
+  createdAt: new Date().toDateString(),
+  favorite: true,
+  score: 99,
+  moderationState: ModerationState.Approved,
+  tags: [],
+  replies: [],
+};
 
 export const FavoriteComment: Story = {
   args: {
-    comment: favoriteComment,
+    post: favoriteComment,
     isEditor: true,
   },
 };

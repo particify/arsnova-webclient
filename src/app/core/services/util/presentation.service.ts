@@ -10,7 +10,6 @@ import { Content } from '@app/core/models/content';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
-import { CommentPeriod } from '@app/core/models/comment-period.enum';
 
 const SCALE_FACTOR = 1080;
 const MIN_SCALE = 1;
@@ -40,8 +39,9 @@ export class PresentationService {
 
   private commentSortChanged = new Subject<CommentSort>();
   private commentFilterChanged = new Subject<CommentFilter>();
+  private commentFilterRemoved = new Subject<CommentFilter>();
   private commentCategoryChanged = new Subject<string>();
-  private commentPeriodChanged = new Subject<CommentPeriod>();
+  private commentPeriodChanged = new Subject<number | undefined>();
   private commentZoomChanged = new Subject<number>();
   private contentGroupUpdated = new Subject<ContentGroup>();
   private roundStateChanged = new Subject<RoundState>();
@@ -179,6 +179,14 @@ export class PresentationService {
     this.commentFilterChanged.next(filter);
   }
 
+  getCommentFilterRemoved(): Observable<CommentFilter> {
+    return this.commentFilterRemoved;
+  }
+
+  updateCommentFilterRemoved(filter: CommentFilter) {
+    this.commentFilterRemoved.next(filter);
+  }
+
   getCommentCategoryChanges(): Observable<string> {
     return this.commentCategoryChanged;
   }
@@ -187,11 +195,11 @@ export class PresentationService {
     this.commentCategoryChanged.next(category);
   }
 
-  getCommentPeriodChanges(): Observable<CommentPeriod> {
+  getCommentPeriodChanges(): Observable<number | undefined> {
     return this.commentPeriodChanged;
   }
 
-  updateCommentPeriod(period: CommentPeriod) {
+  updateCommentPeriod(period?: number) {
     this.commentPeriodChanged.next(period);
   }
 

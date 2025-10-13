@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Comment } from '@app/core/models/comment';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -10,25 +9,21 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { Subject, take } from 'rxjs';
-import { CommentService } from '@app/core/services/http/comment.service';
-import { UserRole } from '@app/core/models/user-roles.enum';
+import { take } from 'rxjs';
 import { CoreModule } from '@app/core/core.module';
-import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { FormComponent } from '@app/standalone/form/form.component';
+import { CreateQnaPostGql, Tag } from '@gql/generated/graphql';
 
 export interface DialogData {
-  userId: string;
-  tags: string[];
+  qnaId: string;
+  tags: Tag[];
   roomId: string;
-  directSend: boolean;
-  fileUploadEnabled: boolean;
-  role: UserRole;
+  autoPublish: boolean;
 }
 
 @Component({
-  imports: [CoreModule, ExtensionPointModule, LoadingButtonComponent],
+  imports: [CoreModule, LoadingButtonComponent],
   selector: 'app-submit-comment',
   templateUrl: './create-comment.component.html',
 })
@@ -37,70 +32,24 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
   private translateService = inject(TranslocoService);
   data = inject<DialogData>(MAT_DIALOG_DATA);
   private globalStorageService = inject(GlobalStorageService);
-  private commentService = inject(CommentService);
   private notificationService = inject(NotificationService);
+  private createPost = inject(CreateQnaPostGql);
 
   readonly dialogId = 'create-comment';
 
-  selectedTag?: string;
-  eventsSubject = new Subject<string | void>();
-  eventsWrapper: any;
+  selectedTag?: Tag;
 
   ngOnInit() {
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.eventsWrapper = {
-      eventsSubject: this.eventsSubject,
-      role: this.data.role,
-      userId: this.data.userId,
-    };
   }
 
-  onNoClick(): void {
-    this.eventsSubject.next();
-    this.dialogRef.close();
-  }
-
-  updateTag(tag: string) {
+  updateTag(tag?: Tag) {
     this.selectedTag = tag;
   }
 
-  send(comment: Comment): void {
-    let message: string;
-    this.disableForm();
-    this.commentService.addComment(comment).subscribe(
-      (newComment) => {
-        this.eventsSubject.next(newComment.id);
-        if (this.data.directSend) {
-          this.translateService
-            .selectTranslate('comment-page.comment-sent')
-            .pipe(take(1))
-            .subscribe((msg) => {
-              message = msg;
-            });
-          comment.ack = true;
-        } else {
-          this.translateService
-            .selectTranslate('comment-page.comment-sent-to-moderator')
-            .pipe(take(1))
-            .subscribe((msg) => {
-              message = msg;
-            });
-        }
-        this.notificationService.showAdvanced(
-          message,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-        this.dialogRef.close(true);
-      },
-      () => {
-        this.enableForm();
-      }
-    );
-  }
-
-  closeDialog(body?: string) {
+  addPost(body?: string): void {
     body = body?.trim();
     if (!body) {
       this.translateService
@@ -114,13 +63,31 @@ export class CreateCommentComponent extends FormComponent implements OnInit {
         });
       return;
     }
-    const comment = new Comment();
-    comment.roomId = this.data.roomId;
-    comment.body = body;
-    comment.creatorId = this.data.userId;
-    if (this.selectedTag) {
-      comment.tag = this.selectedTag;
-    }
-    this.send(comment);
+    this.disableForm();
+    this.createPost
+      .mutate({
+        variables: {
+          qnaId: this.data.qnaId,
+          body: body,
+          tagIds: this.selectedTag ? [this.selectedTag.id] : null,
+        },
+      })
+      .subscribe({
+        next: () => {
+          const msg = this.translateService.translate(
+            this.data.autoPublish
+              ? 'comment-page.comment-sent'
+              : 'comment-page.comment-sent-to-moderator'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          this.dialogRef.close(true);
+        },
+        error: () => {
+          this.enableForm();
+        },
+      });
   }
 }

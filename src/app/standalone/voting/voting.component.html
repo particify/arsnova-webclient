@@ -3,27 +3,27 @@
   fxLayoutAlign="center"
   class="vote-container"
   [ngClass]="
-    { '1': 'vote-up', '-1': 'vote-down', '0': 'reset' }[currentVoteString]
+    { '1': 'vote-up', '-1': 'vote-down', '0': 'reset' }[userVoteString()]
   "
 >
   <button
     mat-icon-button
     (click)="voteComment(1)"
-    [matTooltip]="currentVote | voteAction: 'up' | transloco"
-    [attr.aria-label]="currentVote | voteAction: 'up' | transloco"
+    [matTooltip]="userVote() | voteAction: 'up' | transloco"
+    [attr.aria-label]="userVote() | voteAction: 'up' | transloco"
   >
-    <mat-icon class="voting-icon" [ngClass]="{ green: currentVote === 1 }"
+    <mat-icon class="voting-icon" [ngClass]="{ green: userVote() === 1 }"
       >keyboard_arrow_up</mat-icon
     >
   </button>
-  <span class="score">{{ score }}</span>
+  <span class="score">{{ score() }}</span>
   <button
     mat-icon-button
     (click)="voteComment(-1)"
-    [matTooltip]="currentVote | voteAction: 'down' | transloco"
-    [attr.aria-label]="currentVote | voteAction: 'down' | transloco"
+    [matTooltip]="userVote() | voteAction: 'down' | transloco"
+    [attr.aria-label]="userVote() | voteAction: 'down' | transloco"
   >
-    <mat-icon class="voting-icon" [ngClass]="{ red: currentVote === -1 }"
+    <mat-icon class="voting-icon" [ngClass]="{ red: userVote() === -1 }"
       >keyboard_arrow_down</mat-icon
     >
   </button>

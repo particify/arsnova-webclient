@@ -5,9 +5,7 @@ import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomOverviewPageComponent } from '@app/participant/room-overview/room-overview-page.component';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
-import { CommentService } from '@app/core/services/http/comment.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
@@ -19,7 +17,6 @@ import {
 } from '@app/core/models/content-group';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { CommentSettings } from '@app/core/models/comment-settings';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 
@@ -52,16 +49,6 @@ class MockRoomStatsService {
     );
   }
 }
-
-class MockCommentService {
-  countByRoomId() {
-    return of(42);
-  }
-  getUpdatedCommentCountWithMessage(count: number) {
-    return count;
-  }
-}
-
 class MockContentGroupService {
   private typeIcons: Map<GroupType, string> = new Map<GroupType, string>([
     [GroupType.MIXED, 'dashboard'],
@@ -106,12 +93,6 @@ class MockContentGroupService {
   }
 }
 
-class MockCommentSettingsService {
-  getSettingsStream() {
-    return of({});
-  }
-}
-
 class MockFocusModeService {
   getFocusModeEnabled() {
     return of(false);
@@ -152,16 +133,8 @@ export default {
           useClass: MockRoomStatsService,
         },
         {
-          provide: CommentService,
-          useClass: MockCommentService,
-        },
-        {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
-        },
-        {
-          provide: CommentSettingsService,
-          useClass: MockCommentSettingsService,
         },
         {
           provide: ContentPublishService,
@@ -194,6 +167,5 @@ export const Participant: Story = {
   args: {
     room: room,
     viewRole: UserRole.PARTICIPANT,
-    commentSettings: new CommentSettings(),
   },
 };

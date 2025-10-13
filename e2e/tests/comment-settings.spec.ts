@@ -85,7 +85,7 @@ test.describe('Q&A settings', () => {
     await roomSettings.goto(shortId);
     await roomSettings.goToCommentSettings();
     await roomSettings.toggleCommentsEnabled();
-    await roomSettings.toggleDirectSend();
+    await roomSettings.toggleAutoPublish();
     const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();

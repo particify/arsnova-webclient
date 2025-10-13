@@ -6,6 +6,7 @@ import {
   Output,
   ViewChild,
   inject,
+  input,
 } from '@angular/core';
 import {
   NavBarComponent,
@@ -36,7 +37,6 @@ import { PresentationStepPosition } from '@app/core/models/events/presentation-s
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { ContentPresentationMenuComponent } from '@app/standalone/content-presentation-menu/content-presentation-menu.component';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
-import { CommentPeriod } from '@app/core/models/comment-period.enum';
 import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { FlexModule } from '@angular/flex-layout';
 import { NgClass } from '@angular/common';
@@ -58,6 +58,7 @@ import {
   EventCategory,
   TrackingService,
 } from '@app/core/services/util/tracking.service';
+import { Tag } from '@gql/generated/graphql';
 
 export class KeyNavBarItem extends NavBarItem {
   key: string;
@@ -126,6 +127,8 @@ export class ControlBarComponent
   @Output() activeFeature: EventEmitter<string> = new EventEmitter<string>();
   @Output() activeGroup: EventEmitter<string> = new EventEmitter<string>();
 
+  roomId = input.required<string>();
+
   isLoading = true;
   destroyed$ = new Subject<void>();
   destroyed = false;
@@ -137,10 +140,9 @@ export class ControlBarComponent
   menuOpen = false;
   currentCommentZoom = 100;
   currentCommentSort?: CommentSort;
-  currentCommentFilter?: CommentFilter;
-  currentCommentPeriod: CommentPeriod;
-  currentCommentCategory?: string;
-  commentCategories?: string[];
+  currentCommentFilterFlags: CommentFilter[] = [];
+  currentCommentPeriod?: number;
+  currentCommentTags: Tag[] = [];
   commentSortTypes = [CommentSort.TIME, CommentSort.VOTEDESC];
   contentIndex = 0;
   content?: Content;
@@ -212,7 +214,7 @@ export class ControlBarComponent
     this.afterMouseMoved();
     this.currentCommentPeriod =
       this.globalStorageService.getItem(STORAGE_KEYS.COMMENT_TIME_FILTER) ||
-      CommentPeriod.ALL;
+      undefined;
     this.showShareOverlay = this.globalStorageService.getItem(
       STORAGE_KEYS.SHOW_SHARE_OVERLAY
     );
@@ -249,7 +251,6 @@ export class ControlBarComponent
       lastSort && lastSort !== CommentSort.VOTEASC
         ? lastSort
         : CommentSort.TIME;
-    this.commentCategories = this.roomSettings.commentTags;
     this.setSurveyState(this.roomSettings.surveyEnabled);
     if (this.groupName && this.contentGroups.length > 0) {
       this.setContentGroupState();
@@ -533,7 +534,7 @@ export class ControlBarComponent
       if (this.inFullscreen) {
         this.exitFullscreen();
       }
-      this.router.navigateByUrl(`edit/${this.room.shortId}`);
+      this.router.navigateByUrl(`edit/${this.room().shortId}`);
     }
   }
 
@@ -673,19 +674,26 @@ export class ControlBarComponent
     this.presentationService.updateCommentSort(this.currentCommentSort);
   }
 
-  changeCommentFilter(filter: CommentFilter) {
-    this.currentCommentFilter = filter;
-    this.presentationService.updateCommentFilter(this.currentCommentFilter);
+  addCommentFilter(filter: CommentFilter) {
+    this.currentCommentFilterFlags.push(filter);
+    this.presentationService.updateCommentFilter(filter);
   }
 
-  changeCommentCategory(category: string) {
-    this.currentCommentCategory = category;
-    this.presentationService.updateCommentCategory(this.currentCommentCategory);
+  removeCommentFilter(filter: CommentFilter) {
+    this.currentCommentFilterFlags = this.currentCommentFilterFlags.filter(
+      (f) => f !== filter
+    );
+    this.presentationService.updateCommentFilterRemoved(filter);
   }
 
-  changeCommentPeriod(period: CommentPeriod) {
+  changeCommentTag(tag: Tag) {
+    this.currentCommentTags.push(tag);
+    this.presentationService.updateCommentCategory(tag.id);
+  }
+
+  changeCommentPeriod(period?: number) {
     this.currentCommentPeriod = period;
-    this.presentationService.updateCommentPeriod(this.currentCommentPeriod);
+    this.presentationService.updateCommentPeriod(period);
   }
 
   private registerHotkeys() {

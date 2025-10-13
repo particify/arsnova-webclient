@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormService } from '@app/core/services/util/form.service';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { QnaState } from '@gql/generated/graphql';
 import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 
 @Component({
@@ -24,11 +25,12 @@ import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 export class CommentSettingsHintComponent {
   private formService = inject(FormService);
 
-  @Input() disabled = false;
-  @Input() readonly = false;
+  @Input() state = QnaState.Stopped;
   @Input() showToggleButton = false;
 
   @Output() toggleButtonClicked = new EventEmitter<void>();
+
+  QnaState = QnaState;
 
   toggleSettings() {
     this.formService.disableForm();

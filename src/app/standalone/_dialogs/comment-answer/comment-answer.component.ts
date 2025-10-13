@@ -1,7 +1,5 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
-import { CommentService } from '@app/core/services/http/comment.service';
-import { Comment } from '@app/core/models/comment';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -16,8 +14,13 @@ import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/f
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { take } from 'rxjs';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
+import {
+  CreateQnaReplyGql,
+  DeleteQnaReplyGql,
+  Post,
+  UpdateQnaReplyGql,
+} from '@gql/generated/graphql';
 
 @Component({
   imports: [
@@ -36,16 +39,18 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
 export class CommentAnswerComponent extends FormComponent {
   private notificationService = inject(NotificationService);
   private translateService = inject(TranslocoService);
-  protected commentService = inject(CommentService);
   private dialogService = inject(DialogService);
+  private createReply = inject(CreateQnaReplyGql);
+  private updateReply = inject(UpdateQnaReplyGql);
+  private deleteReply = inject(DeleteQnaReplyGql);
   dialogRef = inject<MatDialogRef<CommentAnswerComponent>>(MatDialogRef);
   data = inject(MAT_DIALOG_DATA);
 
   readonly dialogId = 'comment-answer';
   @ViewChild('answerInput') answerInput!: ElementRef;
 
-  comment: Comment;
-  answer: string;
+  post: Post;
+  bodyInput?: string;
   edit = false;
   isEditor: boolean;
   MarkdownFeatureset = MarkdownFeatureset;
@@ -53,8 +58,10 @@ export class CommentAnswerComponent extends FormComponent {
 
   constructor() {
     super();
-    this.comment = this.data.comment;
-    this.answer = this.comment.answer;
+    this.post = this.data.post;
+    if (this.post.replies && this.post.replies.length > 0) {
+      this.bodyInput = this.post.replies[0].body;
+    }
     this.isEditor = !!this.data.isEditor;
   }
 
@@ -66,25 +73,79 @@ export class CommentAnswerComponent extends FormComponent {
   }
 
   saveAnswer() {
+    if (!this.bodyInput) {
+      const msg = this.translateService.translate(
+        'creator.comment-page.please-enter-reply'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+      return;
+    }
     this.disableForm();
-    this.commentService.answer(this.comment, this.answer).subscribe(
-      () => {
-        this.translateService
-          .selectTranslate('creator.comment-page.comment-answered')
-          .pipe(take(1))
-          .subscribe((msg) => {
+    if (this.post.replies && this.post.replies.length < 0) {
+      this.updateReply
+        .mutate({ variables: { postId: this.post.id, body: this.bodyInput } })
+        .subscribe({
+          next: () => {
+            const msg = this.translateService.translate(
+              'creator.comment-page.comment-answered'
+            );
             this.notificationService.showAdvanced(
               msg,
               AdvancedSnackBarTypes.SUCCESS
             );
-          });
-        this.edit = false;
-        this.enableForm();
-      },
-      () => {
-        this.enableForm();
-      }
-    );
+            this.edit = false;
+            this.enableForm();
+          },
+          error: () => this.enableForm(),
+        });
+    } else {
+      this.createReply
+        .mutate({
+          variables: { postId: this.post.id, body: this.bodyInput },
+          update: (cache, result) => {
+            const cacheId = cache.identify({
+              __typename: 'Post',
+              id: this.post.id,
+            });
+            if (cacheId) {
+              cache.modify({
+                id: cacheId,
+                fields: {
+                  replies() {
+                    return [result.data?.createQnaReply];
+                  },
+                },
+              });
+            }
+          },
+        })
+        .subscribe({
+          next: (result) => {
+            const msg = this.translateService.translate(
+              'creator.comment-page.comment-answered'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+            const reply = result.data?.createQnaReply;
+            if (reply) {
+              this.post = {
+                id: this.post.id,
+                body: this.post.body,
+                moderationState: this.post.moderationState,
+                createdAt: this.post.createdAt,
+                score: this.post.score,
+                userVote: this.post.userVote,
+                replies: [reply],
+              };
+            }
+            this.edit = false;
+            this.enableForm();
+          },
+          error: () => this.enableForm(),
+        });
+    }
   }
 
   deleteAnswer() {
@@ -93,11 +154,30 @@ export class CommentAnswerComponent extends FormComponent {
       'creator.dialog.really-delete-answer',
       undefined,
       undefined,
-      () => this.commentService.answer(this.comment, '')
+      () =>
+        this.deleteReply.mutate({
+          variables: { id: this.post.id },
+          update: (cache) => {
+            const cacheId = cache.identify({
+              __typename: 'Post',
+              id: this.post.id,
+            });
+            if (cacheId) {
+              cache.modify({
+                id: cacheId,
+                fields: {
+                  replies() {
+                    return [];
+                  },
+                },
+              });
+            }
+          },
+        })
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.answer = '';
+        this.bodyInput = '';
         const msg = this.translateService.translate(
           'creator.comment-page.answer-deleted'
         );

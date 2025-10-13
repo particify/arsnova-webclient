@@ -125,14 +125,47 @@ export type AnnouncementsMeta = {
   readAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export enum CorrectState {
+  Correct = 'CORRECT',
+  Unset = 'UNSET',
+  Wrong = 'WRONG',
+}
+
 export type CreateAnnouncementInput = {
   body: Scalars['String']['input'];
   roomId: Scalars['UUID']['input'];
   title: Scalars['String']['input'];
 };
 
+export type CreatePostInput = {
+  body: Scalars['String']['input'];
+  qnaId: Scalars['UUID']['input'];
+  tagIds?: InputMaybe<Array<Scalars['UUID']['input']>>;
+};
+
+export type CreateQnaInput = {
+  roomId: Scalars['UUID']['input'];
+  topic?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateReplyEvent = {
+  __typename?: 'CreateReplyEvent';
+  postId: Scalars['ID']['output'];
+  reply: Reply;
+};
+
+export type CreateReplyInput = {
+  body: Scalars['String']['input'];
+  postId: Scalars['UUID']['input'];
+};
+
 export type CreateRoomInput = {
   name: Scalars['String']['input'];
+};
+
+export type CreateTagInput = {
+  name: Scalars['String']['input'];
+  qnaId: Scalars['UUID']['input'];
 };
 
 export type DuplicateRoomInput = {
@@ -145,8 +178,15 @@ export type JoinRoomInput = {
   shortId?: InputMaybe<Scalars['ID']['input']>;
 };
 
+export enum ModerationState {
+  Accepted = 'ACCEPTED',
+  Pending = 'PENDING',
+  Rejected = 'REJECTED',
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
+  acceptQnaPost: Post;
   adminCreateUser: AdminUser;
   adminDeleteRoomById: Scalars['UUID']['output'];
   adminDeleteUserById: Scalars['UUID']['output'];
@@ -154,8 +194,15 @@ export type Mutation = {
   adminVerifyUserById: AdminUser;
   claimUnverifiedUser?: Maybe<User>;
   createAnnouncement: Announcement;
+  createQnaPost: Post;
+  createQnaReply: Reply;
+  createQnaTag: Tag;
   createRoom: Room;
   deleteAnnouncement: Scalars['ID']['output'];
+  deleteQnaPost: Scalars['ID']['output'];
+  deleteQnaPostsByQnaId: Scalars['Int']['output'];
+  deleteQnaReply: Scalars['ID']['output'];
+  deleteQnaTag: Scalars['ID']['output'];
   deleteRoom: Scalars['UUID']['output'];
   deleteUser?: Maybe<Scalars['UUID']['output']>;
   duplicateDemoRoom: Room;
@@ -163,12 +210,22 @@ export type Mutation = {
   grantRoomRole: RoomMember;
   grantRoomRoleByInvitation: RoomMember;
   joinRoom: RoomMembership;
+  pauseQna: Qna;
+  rejectQnaPost: Post;
   requestUserPasswordReset?: Maybe<Scalars['Boolean']['output']>;
   resendVerificationMail?: Maybe<Scalars['Boolean']['output']>;
   resetUserPassword?: Maybe<User>;
   revokeRoomMembership: RoomMembership;
   revokeRoomRole: RoomMember;
+  startQna: Qna;
+  stopQna: Qna;
   updateAnnouncement: Announcement;
+  updateQnaActivePostId: Qna;
+  updateQnaAutoPublish: Qna;
+  updateQnaPostCorrect: Post;
+  updateQnaPostFavorite: Post;
+  updateQnaReply: Reply;
+  updateQnaThreshold: Qna;
   updateRoomDescription: Room;
   updateRoomFocusMode: Room;
   updateRoomLanguage: Room;
@@ -180,6 +237,11 @@ export type Mutation = {
   updateUserUiSettings?: Maybe<UserUiSettings>;
   verifyUserMailAddress?: Maybe<User>;
   verifyUserMailAddressUnauthenticated?: Maybe<User>;
+  voteQnaPost: Post;
+};
+
+export type MutationAcceptQnaPostArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type MutationAdminCreateUserArgs = {
@@ -212,11 +274,40 @@ export type MutationCreateAnnouncementArgs = {
   input: CreateAnnouncementInput;
 };
 
+export type MutationCreateQnaPostArgs = {
+  input: CreatePostInput;
+};
+
+export type MutationCreateQnaReplyArgs = {
+  input: CreateReplyInput;
+};
+
+export type MutationCreateQnaTagArgs = {
+  input?: InputMaybe<CreateTagInput>;
+};
+
 export type MutationCreateRoomArgs = {
   input: CreateRoomInput;
 };
 
 export type MutationDeleteAnnouncementArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteQnaPostArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteQnaPostsByQnaIdArgs = {
+  moderationState?: InputMaybe<ModerationState>;
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type MutationDeleteQnaReplyArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteQnaTagArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -244,6 +335,14 @@ export type MutationJoinRoomArgs = {
   input: JoinRoomInput;
 };
 
+export type MutationPauseQnaArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationRejectQnaPostArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationRequestUserPasswordResetArgs = {
   mailAddress: Scalars['String']['input'];
 };
@@ -263,8 +362,45 @@ export type MutationRevokeRoomRoleArgs = {
   userId: Scalars['UUID']['input'];
 };
 
+export type MutationStartQnaArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationStopQnaArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationUpdateAnnouncementArgs = {
   input?: InputMaybe<UpdateAnnouncementInput>;
+};
+
+export type MutationUpdateQnaActivePostIdArgs = {
+  activePostId?: InputMaybe<Scalars['UUID']['input']>;
+  id: Scalars['ID']['input'];
+};
+
+export type MutationUpdateQnaAutoPublishArgs = {
+  autoPublish: Scalars['Boolean']['input'];
+  id: Scalars['ID']['input'];
+};
+
+export type MutationUpdateQnaPostCorrectArgs = {
+  correct: CorrectState;
+  id: Scalars['ID']['input'];
+};
+
+export type MutationUpdateQnaPostFavoriteArgs = {
+  favorite: Scalars['Boolean']['input'];
+  id: Scalars['ID']['input'];
+};
+
+export type MutationUpdateQnaReplyArgs = {
+  input: UpdateReplyInput;
+};
+
+export type MutationUpdateQnaThresholdArgs = {
+  id: Scalars['ID']['input'];
+  threshold?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type MutationUpdateRoomDescriptionArgs = {
@@ -319,6 +455,10 @@ export type MutationVerifyUserMailAddressUnauthenticatedArgs = {
   verificationCode: Scalars['String']['input'];
 };
 
+export type MutationVoteQnaPostArgs = {
+  input?: InputMaybe<VoteInput>;
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']['output']>;
@@ -326,6 +466,86 @@ export type PageInfo = {
   hasPreviousPage: Scalars['Boolean']['output'];
   startCursor?: Maybe<Scalars['String']['output']>;
 };
+
+export type Post = {
+  __typename?: 'Post';
+  body: Scalars['String']['output'];
+  correct?: Maybe<CorrectState>;
+  createdAt: Scalars['DateTime']['output'];
+  favorite?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
+  moderationState: ModerationState;
+  replies?: Maybe<Array<Reply>>;
+  score?: Maybe<Scalars['Int']['output']>;
+  tags?: Maybe<Array<Tag>>;
+  userVote?: Maybe<Scalars['Int']['output']>;
+};
+
+export type PostConnection = {
+  __typename?: 'PostConnection';
+  edges?: Maybe<Array<Maybe<PostEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export type PostCountSummary = {
+  __typename?: 'PostCountSummary';
+  accepted: Scalars['Int']['output'];
+  rejected: Scalars['Int']['output'];
+};
+
+export type PostEdge = {
+  __typename?: 'PostEdge';
+  cursor: Scalars['String']['output'];
+  node: Post;
+};
+
+export type PostQueryInput = {
+  correct?: InputMaybe<CorrectState>;
+  favorite?: InputMaybe<Scalars['Boolean']['input']>;
+  moderationState?: InputMaybe<ModerationState>;
+  period?: InputMaybe<Scalars['Int']['input']>;
+  qnaId: Scalars['UUID']['input'];
+  replied?: InputMaybe<Scalars['Boolean']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sortOrder?: InputMaybe<PostSortOrder>;
+  tagIds?: InputMaybe<Array<Scalars['UUID']['input']>>;
+};
+
+export enum PostSortOrder {
+  HighestScore = 'HIGHEST_SCORE',
+  LowestScore = 'LOWEST_SCORE',
+  Newest = 'NEWEST',
+}
+
+export type Qna = {
+  __typename?: 'Qna';
+  activePost?: Maybe<Post>;
+  autoPublish?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
+  roomId: Scalars['UUID']['output'];
+  state?: Maybe<QnaState>;
+  tags?: Maybe<Array<Tag>>;
+  threshold?: Maybe<Scalars['Int']['output']>;
+  topic?: Maybe<Scalars['String']['output']>;
+};
+
+export type QnaConnection = {
+  __typename?: 'QnaConnection';
+  edges?: Maybe<Array<Maybe<QnaEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export type QnaEdge = {
+  __typename?: 'QnaEdge';
+  cursor: Scalars['String']['output'];
+  node: Qna;
+};
+
+export enum QnaState {
+  Paused = 'PAUSED',
+  Started = 'STARTED',
+  Stopped = 'STOPPED',
+}
 
 export type Query = {
   __typename?: 'Query';
@@ -341,6 +561,9 @@ export type Query = {
   announcementsForCurrentUser?: Maybe<AnnouncementConnection>;
   announcementsMetaForCurrentUser?: Maybe<AnnouncementsMeta>;
   currentUser?: Maybe<User>;
+  qnaPostCountsByQnaId?: Maybe<PostCountSummary>;
+  qnaPostsByQnaId?: Maybe<PostConnection>;
+  qnasByRoomId?: Maybe<QnaConnection>;
   roomById?: Maybe<Room>;
   roomByShortId?: Maybe<Room>;
   roomManagingMembersByRoomId?: Maybe<Array<RoomMember>>;
@@ -396,6 +619,26 @@ export type QueryAnnouncementsForCurrentUserArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type QueryQnaPostCountsByQnaIdArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type QueryQnaPostsByQnaIdArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  query?: InputMaybe<PostQueryInput>;
+};
+
+export type QueryQnasByRoomIdArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  roomId: Scalars['UUID']['input'];
+};
+
 export type QueryRoomByIdArgs = {
   id: Scalars['ID']['input'];
 };
@@ -442,6 +685,14 @@ export type QueryRoomsByUserIdArgs = {
 
 export type QueryUserByDisplayIdArgs = {
   displayId: Scalars['ID']['input'];
+};
+
+export type Reply = {
+  __typename?: 'Reply';
+  body: Scalars['String']['output'];
+  bodyRendered?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type Room = {
@@ -519,10 +770,80 @@ export type RoomStats = {
   id: Scalars['ID']['output'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  activeQnaPostUpdated?: Maybe<Qna>;
+  qnaPostAccepted: Post;
+  qnaPostCountSummary: PostCountSummary;
+  qnaPostCreated: Post;
+  qnaPostDeleted: Post;
+  qnaPostMarkedCorrect: Post;
+  qnaPostMarkedFavorite: Post;
+  qnaPostRejected: Post;
+  qnaPostReplied: CreateReplyEvent;
+  qnaPostVoted: Post;
+  qnaStateChanged?: Maybe<Qna>;
+};
+
+export type SubscriptionActiveQnaPostUpdatedArgs = {
+  roomId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostAcceptedArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostCountSummaryArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostCreatedArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostDeletedArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostMarkedCorrectArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostMarkedFavoriteArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostRejectedArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostRepliedArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaPostVotedArgs = {
+  qnaId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQnaStateChangedArgs = {
+  roomId: Scalars['UUID']['input'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type UpdateAnnouncementInput = {
   body?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateReplyInput = {
+  body: Scalars['String']['input'];
+  postId: Scalars['UUID']['input'];
 };
 
 export type UpdateUserDetailsInput = {
@@ -555,6 +876,11 @@ export type UserUiSettings = {
   contentVisualizationUnitPercent?: Maybe<Scalars['Boolean']['output']>;
   rotateWordcloudItems?: Maybe<Scalars['Boolean']['output']>;
   showContentResultsDirectly?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type VoteInput = {
+  postId: Scalars['UUID']['input'];
+  value: Scalars['Int']['input'];
 };
 
 export type AdminUserDetailsFragment = {
@@ -936,6 +1262,486 @@ export type DeleteAnnouncementMutationVariables = Exact<{
 export type DeleteAnnouncementMutation = {
   __typename?: 'Mutation';
   deleteAnnouncement: string;
+};
+
+export type PostDetailsFragment = {
+  __typename?: 'Post';
+  id: string;
+  body: string;
+  correct?: CorrectState | null;
+  favorite?: boolean | null;
+  createdAt: string;
+  score?: number | null;
+  userVote?: number | null;
+  moderationState: ModerationState;
+  tags?: Array<{ __typename?: 'Tag'; name: string; id: string }> | null;
+  replies?: Array<{
+    __typename?: 'Reply';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    createdAt: string;
+  }> | null;
+};
+
+export type ReplyDetailsFragment = {
+  __typename?: 'Reply';
+  id: string;
+  body: string;
+  bodyRendered?: string | null;
+  createdAt: string;
+};
+
+export type QnasByRoomIdQueryVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type QnasByRoomIdQuery = {
+  __typename?: 'Query';
+  qnasByRoomId?: {
+    __typename?: 'QnaConnection';
+    edges?: Array<{
+      __typename?: 'QnaEdge';
+      node: {
+        __typename?: 'Qna';
+        id: string;
+        topic?: string | null;
+        state?: QnaState | null;
+        autoPublish?: boolean | null;
+        threshold?: number | null;
+        activePost?: {
+          __typename?: 'Post';
+          id: string;
+          body: string;
+          createdAt: string;
+        } | null;
+        tags?: Array<{ __typename?: 'Tag'; id: string; name: string }> | null;
+      };
+    } | null> | null;
+  } | null;
+};
+
+export type StartQnaMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type StartQnaMutation = {
+  __typename?: 'Mutation';
+  startQna: { __typename?: 'Qna'; id: string; state?: QnaState | null };
+};
+
+export type PauseQnaMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type PauseQnaMutation = {
+  __typename?: 'Mutation';
+  pauseQna: { __typename?: 'Qna'; id: string; state?: QnaState | null };
+};
+
+export type StopQnaMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type StopQnaMutation = {
+  __typename?: 'Mutation';
+  stopQna: { __typename?: 'Qna'; id: string; state?: QnaState | null };
+};
+
+export type UpdateQnaAutoPublishMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  autoPublish: Scalars['Boolean']['input'];
+}>;
+
+export type UpdateQnaAutoPublishMutation = {
+  __typename?: 'Mutation';
+  updateQnaAutoPublish: {
+    __typename?: 'Qna';
+    id: string;
+    autoPublish?: boolean | null;
+  };
+};
+
+export type UpdateQnaThresholdMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  threshold?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type UpdateQnaThresholdMutation = {
+  __typename?: 'Mutation';
+  updateQnaThreshold: {
+    __typename?: 'Qna';
+    id: string;
+    threshold?: number | null;
+  };
+};
+
+export type UpdateQnaActivePostIdMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  activePostId?: InputMaybe<Scalars['UUID']['input']>;
+}>;
+
+export type UpdateQnaActivePostIdMutation = {
+  __typename?: 'Mutation';
+  updateQnaActivePostId: {
+    __typename?: 'Qna';
+    id: string;
+    activePost?: {
+      __typename?: 'Post';
+      id: string;
+      body: string;
+      createdAt: string;
+    } | null;
+  };
+};
+
+export type QnaPostsByQnaIdQueryVariables = Exact<{
+  query?: InputMaybe<PostQueryInput>;
+  cursor?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type QnaPostsByQnaIdQuery = {
+  __typename?: 'Query';
+  qnaPostsByQnaId?: {
+    __typename?: 'PostConnection';
+    edges?: Array<{
+      __typename?: 'PostEdge';
+      cursor: string;
+      node: {
+        __typename?: 'Post';
+        id: string;
+        body: string;
+        correct?: CorrectState | null;
+        favorite?: boolean | null;
+        createdAt: string;
+        score?: number | null;
+        userVote?: number | null;
+        moderationState: ModerationState;
+        tags?: Array<{ __typename?: 'Tag'; name: string; id: string }> | null;
+        replies?: Array<{
+          __typename?: 'Reply';
+          id: string;
+          body: string;
+          bodyRendered?: string | null;
+          createdAt: string;
+        }> | null;
+      };
+    } | null> | null;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      endCursor?: string | null;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+    };
+  } | null;
+};
+
+export type QnaPostCountsByQnaIdQueryVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostCountsByQnaIdQuery = {
+  __typename?: 'Query';
+  qnaPostCountsByQnaId?: {
+    __typename?: 'PostCountSummary';
+    accepted: number;
+    rejected: number;
+  } | null;
+};
+
+export type QnaPostCountSummarySubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostCountSummarySubscription = {
+  __typename?: 'Subscription';
+  qnaPostCountSummary: {
+    __typename?: 'PostCountSummary';
+    accepted: number;
+    rejected: number;
+  };
+};
+
+export type CreateQnaPostMutationVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+  body: Scalars['String']['input'];
+  tagIds?: InputMaybe<
+    Array<Scalars['UUID']['input']> | Scalars['UUID']['input']
+  >;
+}>;
+
+export type CreateQnaPostMutation = {
+  __typename?: 'Mutation';
+  createQnaPost: {
+    __typename?: 'Post';
+    id: string;
+    body: string;
+    correct?: CorrectState | null;
+    favorite?: boolean | null;
+    createdAt: string;
+    score?: number | null;
+    userVote?: number | null;
+    tags?: Array<{ __typename?: 'Tag'; id: string; name: string }> | null;
+  };
+};
+
+export type UpdateQnaPostFavoriteMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  favorite: Scalars['Boolean']['input'];
+}>;
+
+export type UpdateQnaPostFavoriteMutation = {
+  __typename?: 'Mutation';
+  updateQnaPostFavorite: {
+    __typename?: 'Post';
+    id: string;
+    favorite?: boolean | null;
+  };
+};
+
+export type UpdateQnaPostCorrectMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  correct: CorrectState;
+}>;
+
+export type UpdateQnaPostCorrectMutation = {
+  __typename?: 'Mutation';
+  updateQnaPostCorrect: {
+    __typename?: 'Post';
+    id: string;
+    correct?: CorrectState | null;
+  };
+};
+
+export type AcceptQnaPostMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type AcceptQnaPostMutation = {
+  __typename?: 'Mutation';
+  acceptQnaPost: {
+    __typename?: 'Post';
+    id: string;
+    moderationState: ModerationState;
+  };
+};
+
+export type RejectQnaPostMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type RejectQnaPostMutation = {
+  __typename?: 'Mutation';
+  rejectQnaPost: {
+    __typename?: 'Post';
+    id: string;
+    moderationState: ModerationState;
+  };
+};
+
+export type DeleteQnaPostMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteQnaPostMutation = {
+  __typename?: 'Mutation';
+  deleteQnaPost: string;
+};
+
+export type DeleteQnaPostsMutationVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+  moderationState?: InputMaybe<ModerationState>;
+}>;
+
+export type DeleteQnaPostsMutation = {
+  __typename?: 'Mutation';
+  deleteQnaPostsByQnaId: number;
+};
+
+export type CreateQnaTagMutationVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+  name: Scalars['String']['input'];
+}>;
+
+export type CreateQnaTagMutation = {
+  __typename?: 'Mutation';
+  createQnaTag: { __typename?: 'Tag'; id: string; name: string };
+};
+
+export type DeleteQnaTagMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteQnaTagMutation = {
+  __typename?: 'Mutation';
+  deleteQnaTag: string;
+};
+
+export type CreateQnaReplyMutationVariables = Exact<{
+  postId: Scalars['UUID']['input'];
+  body: Scalars['String']['input'];
+}>;
+
+export type CreateQnaReplyMutation = {
+  __typename?: 'Mutation';
+  createQnaReply: {
+    __typename?: 'Reply';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    createdAt: string;
+  };
+};
+
+export type UpdateQnaReplyMutationVariables = Exact<{
+  postId: Scalars['UUID']['input'];
+  body: Scalars['String']['input'];
+}>;
+
+export type UpdateQnaReplyMutation = {
+  __typename?: 'Mutation';
+  updateQnaReply: { __typename?: 'Reply'; id: string; body: string };
+};
+
+export type DeleteQnaReplyMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteQnaReplyMutation = {
+  __typename?: 'Mutation';
+  deleteQnaReply: string;
+};
+
+export type VoteQnaPostMutationVariables = Exact<{
+  postId: Scalars['UUID']['input'];
+  value: Scalars['Int']['input'];
+}>;
+
+export type VoteQnaPostMutation = {
+  __typename?: 'Mutation';
+  voteQnaPost: {
+    __typename?: 'Post';
+    id: string;
+    score?: number | null;
+    userVote?: number | null;
+  };
+};
+
+export type QnaStateChangedSubscriptionVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type QnaStateChangedSubscription = {
+  __typename?: 'Subscription';
+  qnaStateChanged?: {
+    __typename?: 'Qna';
+    id: string;
+    state?: QnaState | null;
+  } | null;
+};
+
+export type ActiveQnaPostUpdatedSubscriptionVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type ActiveQnaPostUpdatedSubscription = {
+  __typename?: 'Subscription';
+  activeQnaPostUpdated?: {
+    __typename?: 'Qna';
+    id: string;
+    activePost?: { __typename?: 'Post'; id: string } | null;
+  } | null;
+};
+
+export type QnaPostCreatedSubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostCreatedSubscription = {
+  __typename?: 'Subscription';
+  qnaPostCreated: { __typename?: 'Post'; id: string };
+};
+
+export type QnaPostDeletedSubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostDeletedSubscription = {
+  __typename?: 'Subscription';
+  qnaPostDeleted: { __typename?: 'Post'; id: string };
+};
+
+export type QnaPostAcceptedSubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostAcceptedSubscription = {
+  __typename?: 'Subscription';
+  qnaPostAccepted: { __typename?: 'Post'; id: string };
+};
+
+export type QnaPostRejectedSubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostRejectedSubscription = {
+  __typename?: 'Subscription';
+  qnaPostRejected: { __typename?: 'Post'; id: string };
+};
+
+export type QnaPostRepliedSubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostRepliedSubscription = {
+  __typename?: 'Subscription';
+  qnaPostReplied: {
+    __typename?: 'CreateReplyEvent';
+    postId: string;
+    reply: {
+      __typename?: 'Reply';
+      id: string;
+      body: string;
+      bodyRendered?: string | null;
+      createdAt: string;
+    };
+  };
+};
+
+export type QnaPostMarkedFavoriteSubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostMarkedFavoriteSubscription = {
+  __typename?: 'Subscription';
+  qnaPostMarkedFavorite: {
+    __typename?: 'Post';
+    id: string;
+    favorite?: boolean | null;
+  };
+};
+
+export type QnaPostMarkedCorrectSubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostMarkedCorrectSubscription = {
+  __typename?: 'Subscription';
+  qnaPostMarkedCorrect: {
+    __typename?: 'Post';
+    id: string;
+    correct?: CorrectState | null;
+  };
+};
+
+export type QnaPostVotedSubscriptionVariables = Exact<{
+  qnaId: Scalars['UUID']['input'];
+}>;
+
+export type QnaPostVotedSubscription = {
+  __typename?: 'Subscription';
+  qnaPostVoted: { __typename?: 'Post'; id: string; score?: number | null };
 };
 
 export type RoomDetailsFragmentFragment = {
@@ -1605,7 +2411,7 @@ export type UpdateUserMailAddressMutation = {
   updateUserMailAddress?: {
     __typename?: 'User';
     id: string;
-    verified: boolean;
+    unverifiedMailAddress?: string | null;
   } | null;
 };
 
@@ -1651,6 +2457,34 @@ export const AdminRoomDetailsFragmentDoc = gql`
     updatedBy
     updatedAt
   }
+`;
+export const ReplyDetailsFragmentDoc = gql`
+  fragment ReplyDetails on Reply {
+    id
+    body
+    bodyRendered
+    createdAt
+  }
+`;
+export const PostDetailsFragmentDoc = gql`
+  fragment PostDetails on Post {
+    id
+    body
+    correct
+    favorite
+    createdAt
+    tags {
+      name
+      id
+    }
+    replies {
+      ...ReplyDetails
+    }
+    score
+    userVote
+    moderationState
+  }
+  ${ReplyDetailsFragmentDoc}
 `;
 export const RoomDetailsFragmentFragmentDoc = gql`
   fragment RoomDetailsFragment on Room {
@@ -2095,6 +2929,762 @@ export class DeleteAnnouncementGql extends Apollo.Mutation<
   DeleteAnnouncementMutationVariables
 > {
   document = DeleteAnnouncementDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnasByRoomIdDocument = gql`
+  query QnasByRoomId($roomId: UUID!) {
+    qnasByRoomId(roomId: $roomId) {
+      edges {
+        node {
+          id
+          topic
+          state
+          autoPublish
+          threshold
+          activePost {
+            id
+            body
+            createdAt
+          }
+          tags {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnasByRoomIdGql extends Apollo.Query<
+  QnasByRoomIdQuery,
+  QnasByRoomIdQueryVariables
+> {
+  document = QnasByRoomIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const StartQnaDocument = gql`
+  mutation StartQna($id: ID!) {
+    startQna(id: $id) {
+      id
+      state
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class StartQnaGql extends Apollo.Mutation<
+  StartQnaMutation,
+  StartQnaMutationVariables
+> {
+  document = StartQnaDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const PauseQnaDocument = gql`
+  mutation PauseQna($id: ID!) {
+    pauseQna(id: $id) {
+      id
+      state
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PauseQnaGql extends Apollo.Mutation<
+  PauseQnaMutation,
+  PauseQnaMutationVariables
+> {
+  document = PauseQnaDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const StopQnaDocument = gql`
+  mutation StopQna($id: ID!) {
+    stopQna(id: $id) {
+      id
+      state
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class StopQnaGql extends Apollo.Mutation<
+  StopQnaMutation,
+  StopQnaMutationVariables
+> {
+  document = StopQnaDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQnaAutoPublishDocument = gql`
+  mutation UpdateQnaAutoPublish($id: ID!, $autoPublish: Boolean!) {
+    updateQnaAutoPublish(id: $id, autoPublish: $autoPublish) {
+      id
+      autoPublish
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQnaAutoPublishGql extends Apollo.Mutation<
+  UpdateQnaAutoPublishMutation,
+  UpdateQnaAutoPublishMutationVariables
+> {
+  document = UpdateQnaAutoPublishDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQnaThresholdDocument = gql`
+  mutation UpdateQnaThreshold($id: ID!, $threshold: Int) {
+    updateQnaThreshold(id: $id, threshold: $threshold) {
+      id
+      threshold
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQnaThresholdGql extends Apollo.Mutation<
+  UpdateQnaThresholdMutation,
+  UpdateQnaThresholdMutationVariables
+> {
+  document = UpdateQnaThresholdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQnaActivePostIdDocument = gql`
+  mutation UpdateQnaActivePostId($id: ID!, $activePostId: UUID) {
+    updateQnaActivePostId(id: $id, activePostId: $activePostId) {
+      id
+      activePost {
+        id
+        body
+        createdAt
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQnaActivePostIdGql extends Apollo.Mutation<
+  UpdateQnaActivePostIdMutation,
+  UpdateQnaActivePostIdMutationVariables
+> {
+  document = UpdateQnaActivePostIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostsByQnaIdDocument = gql`
+  query QnaPostsByQnaId($query: PostQueryInput, $cursor: String) {
+    qnaPostsByQnaId(query: $query, first: 20, after: $cursor) {
+      edges {
+        node {
+          ...PostDetails
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+  ${PostDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostsByQnaIdGql extends Apollo.Query<
+  QnaPostsByQnaIdQuery,
+  QnaPostsByQnaIdQueryVariables
+> {
+  document = QnaPostsByQnaIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostCountsByQnaIdDocument = gql`
+  query QnaPostCountsByQnaId($qnaId: UUID!) {
+    qnaPostCountsByQnaId(qnaId: $qnaId) {
+      accepted
+      rejected
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostCountsByQnaIdGql extends Apollo.Query<
+  QnaPostCountsByQnaIdQuery,
+  QnaPostCountsByQnaIdQueryVariables
+> {
+  document = QnaPostCountsByQnaIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostCountSummaryDocument = gql`
+  subscription QnaPostCountSummary($qnaId: UUID!) {
+    qnaPostCountSummary(qnaId: $qnaId) {
+      accepted
+      rejected
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostCountSummaryGql extends Apollo.Subscription<
+  QnaPostCountSummarySubscription,
+  QnaPostCountSummarySubscriptionVariables
+> {
+  document = QnaPostCountSummaryDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQnaPostDocument = gql`
+  mutation CreateQnaPost($qnaId: UUID!, $body: String!, $tagIds: [UUID!]) {
+    createQnaPost(input: { qnaId: $qnaId, body: $body, tagIds: $tagIds }) {
+      id
+      body
+      correct
+      favorite
+      createdAt
+      tags {
+        id
+        name
+      }
+      score
+      userVote
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQnaPostGql extends Apollo.Mutation<
+  CreateQnaPostMutation,
+  CreateQnaPostMutationVariables
+> {
+  document = CreateQnaPostDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQnaPostFavoriteDocument = gql`
+  mutation UpdateQnaPostFavorite($id: ID!, $favorite: Boolean!) {
+    updateQnaPostFavorite(id: $id, favorite: $favorite) {
+      id
+      favorite
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQnaPostFavoriteGql extends Apollo.Mutation<
+  UpdateQnaPostFavoriteMutation,
+  UpdateQnaPostFavoriteMutationVariables
+> {
+  document = UpdateQnaPostFavoriteDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQnaPostCorrectDocument = gql`
+  mutation UpdateQnaPostCorrect($id: ID!, $correct: CorrectState!) {
+    updateQnaPostCorrect(id: $id, correct: $correct) {
+      id
+      correct
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQnaPostCorrectGql extends Apollo.Mutation<
+  UpdateQnaPostCorrectMutation,
+  UpdateQnaPostCorrectMutationVariables
+> {
+  document = UpdateQnaPostCorrectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AcceptQnaPostDocument = gql`
+  mutation AcceptQnaPost($id: ID!) {
+    acceptQnaPost(id: $id) {
+      id
+      moderationState
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AcceptQnaPostGql extends Apollo.Mutation<
+  AcceptQnaPostMutation,
+  AcceptQnaPostMutationVariables
+> {
+  document = AcceptQnaPostDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RejectQnaPostDocument = gql`
+  mutation RejectQnaPost($id: ID!) {
+    rejectQnaPost(id: $id) {
+      id
+      moderationState
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RejectQnaPostGql extends Apollo.Mutation<
+  RejectQnaPostMutation,
+  RejectQnaPostMutationVariables
+> {
+  document = RejectQnaPostDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteQnaPostDocument = gql`
+  mutation DeleteQnaPost($id: ID!) {
+    deleteQnaPost(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteQnaPostGql extends Apollo.Mutation<
+  DeleteQnaPostMutation,
+  DeleteQnaPostMutationVariables
+> {
+  document = DeleteQnaPostDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteQnaPostsDocument = gql`
+  mutation DeleteQnaPosts($qnaId: UUID!, $moderationState: ModerationState) {
+    deleteQnaPostsByQnaId(qnaId: $qnaId, moderationState: $moderationState)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteQnaPostsGql extends Apollo.Mutation<
+  DeleteQnaPostsMutation,
+  DeleteQnaPostsMutationVariables
+> {
+  document = DeleteQnaPostsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQnaTagDocument = gql`
+  mutation CreateQnaTag($qnaId: UUID!, $name: String!) {
+    createQnaTag(input: { qnaId: $qnaId, name: $name }) {
+      id
+      name
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQnaTagGql extends Apollo.Mutation<
+  CreateQnaTagMutation,
+  CreateQnaTagMutationVariables
+> {
+  document = CreateQnaTagDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteQnaTagDocument = gql`
+  mutation DeleteQnaTag($id: ID!) {
+    deleteQnaTag(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteQnaTagGql extends Apollo.Mutation<
+  DeleteQnaTagMutation,
+  DeleteQnaTagMutationVariables
+> {
+  document = DeleteQnaTagDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQnaReplyDocument = gql`
+  mutation CreateQnaReply($postId: UUID!, $body: String!) {
+    createQnaReply(input: { postId: $postId, body: $body }) {
+      ...ReplyDetails
+    }
+  }
+  ${ReplyDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQnaReplyGql extends Apollo.Mutation<
+  CreateQnaReplyMutation,
+  CreateQnaReplyMutationVariables
+> {
+  document = CreateQnaReplyDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQnaReplyDocument = gql`
+  mutation UpdateQnaReply($postId: UUID!, $body: String!) {
+    updateQnaReply(input: { postId: $postId, body: $body }) {
+      id
+      body
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQnaReplyGql extends Apollo.Mutation<
+  UpdateQnaReplyMutation,
+  UpdateQnaReplyMutationVariables
+> {
+  document = UpdateQnaReplyDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteQnaReplyDocument = gql`
+  mutation DeleteQnaReply($id: ID!) {
+    deleteQnaReply(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteQnaReplyGql extends Apollo.Mutation<
+  DeleteQnaReplyMutation,
+  DeleteQnaReplyMutationVariables
+> {
+  document = DeleteQnaReplyDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const VoteQnaPostDocument = gql`
+  mutation VoteQnaPost($postId: UUID!, $value: Int!) {
+    voteQnaPost(input: { postId: $postId, value: $value }) {
+      id
+      score
+      userVote
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class VoteQnaPostGql extends Apollo.Mutation<
+  VoteQnaPostMutation,
+  VoteQnaPostMutationVariables
+> {
+  document = VoteQnaPostDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaStateChangedDocument = gql`
+  subscription QnaStateChanged($roomId: UUID!) {
+    qnaStateChanged(roomId: $roomId) {
+      id
+      state
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaStateChangedGql extends Apollo.Subscription<
+  QnaStateChangedSubscription,
+  QnaStateChangedSubscriptionVariables
+> {
+  document = QnaStateChangedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ActiveQnaPostUpdatedDocument = gql`
+  subscription ActiveQnaPostUpdated($roomId: UUID!) {
+    activeQnaPostUpdated(roomId: $roomId) {
+      id
+      activePost {
+        id
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ActiveQnaPostUpdatedGql extends Apollo.Subscription<
+  ActiveQnaPostUpdatedSubscription,
+  ActiveQnaPostUpdatedSubscriptionVariables
+> {
+  document = ActiveQnaPostUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostCreatedDocument = gql`
+  subscription QnaPostCreated($qnaId: UUID!) {
+    qnaPostCreated(qnaId: $qnaId) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostCreatedGql extends Apollo.Subscription<
+  QnaPostCreatedSubscription,
+  QnaPostCreatedSubscriptionVariables
+> {
+  document = QnaPostCreatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostDeletedDocument = gql`
+  subscription QnaPostDeleted($qnaId: UUID!) {
+    qnaPostDeleted(qnaId: $qnaId) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostDeletedGql extends Apollo.Subscription<
+  QnaPostDeletedSubscription,
+  QnaPostDeletedSubscriptionVariables
+> {
+  document = QnaPostDeletedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostAcceptedDocument = gql`
+  subscription QnaPostAccepted($qnaId: UUID!) {
+    qnaPostAccepted(qnaId: $qnaId) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostAcceptedGql extends Apollo.Subscription<
+  QnaPostAcceptedSubscription,
+  QnaPostAcceptedSubscriptionVariables
+> {
+  document = QnaPostAcceptedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostRejectedDocument = gql`
+  subscription QnaPostRejected($qnaId: UUID!) {
+    qnaPostRejected(qnaId: $qnaId) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostRejectedGql extends Apollo.Subscription<
+  QnaPostRejectedSubscription,
+  QnaPostRejectedSubscriptionVariables
+> {
+  document = QnaPostRejectedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostRepliedDocument = gql`
+  subscription QnaPostReplied($qnaId: UUID!) {
+    qnaPostReplied(qnaId: $qnaId) {
+      postId
+      reply {
+        ...ReplyDetails
+      }
+    }
+  }
+  ${ReplyDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostRepliedGql extends Apollo.Subscription<
+  QnaPostRepliedSubscription,
+  QnaPostRepliedSubscriptionVariables
+> {
+  document = QnaPostRepliedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostMarkedFavoriteDocument = gql`
+  subscription QnaPostMarkedFavorite($qnaId: UUID!) {
+    qnaPostMarkedFavorite(qnaId: $qnaId) {
+      id
+      favorite
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostMarkedFavoriteGql extends Apollo.Subscription<
+  QnaPostMarkedFavoriteSubscription,
+  QnaPostMarkedFavoriteSubscriptionVariables
+> {
+  document = QnaPostMarkedFavoriteDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostMarkedCorrectDocument = gql`
+  subscription QnaPostMarkedCorrect($qnaId: UUID!) {
+    qnaPostMarkedCorrect(qnaId: $qnaId) {
+      id
+      correct
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostMarkedCorrectGql extends Apollo.Subscription<
+  QnaPostMarkedCorrectSubscription,
+  QnaPostMarkedCorrectSubscriptionVariables
+> {
+  document = QnaPostMarkedCorrectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QnaPostVotedDocument = gql`
+  subscription QnaPostVoted($qnaId: UUID!) {
+    qnaPostVoted(qnaId: $qnaId) {
+      id
+      score
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QnaPostVotedGql extends Apollo.Subscription<
+  QnaPostVotedSubscription,
+  QnaPostVotedSubscriptionVariables
+> {
+  document = QnaPostVotedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -2998,7 +4588,7 @@ export const UpdateUserMailAddressDocument = gql`
   mutation UpdateUserMailAddress($mailAddress: String!, $password: String!) {
     updateUserMailAddress(mailAddress: $mailAddress, password: $password) {
       id
-      verified
+      unverifiedMailAddress
     }
   }
 `;

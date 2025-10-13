@@ -66,7 +66,7 @@ export class RoomSettingsPage {
     await this.page.getByLabel('enable the Q&A section').click();
   }
 
-  async toggleDirectSend() {
+  async toggleAutoPublish() {
     await this.page
       .getByLabel('moderator or the lecturer must activate new posts')
       .click();

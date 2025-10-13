@@ -1,10 +1,8 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { CommentService } from '@app/core/services/http/comment.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CreateCommentComponent } from './create-comment.component';
 
-class MockCommentService {}
 class MockMatDialogRef {}
 
 export default {
@@ -15,10 +13,6 @@ export default {
     moduleMetadata({
       imports: [CreateCommentComponent],
       providers: [
-        {
-          provide: CommentService,
-          useClass: MockCommentService,
-        },
         {
           provide: MatDialogRef,
           useClass: MockMatDialogRef,
