@@ -32,7 +32,12 @@
     {
       "groupName": "eslint",
       "matchPackageNames": ["eslint", "typescript-eslint"],
-      "matchPackagePrefixes": ["@angular-eslint/", "@eslint/", "eslint-"]
+      "matchPackagePrefixes": [
+        "@angular-eslint/",
+        "@eslint/",
+        "@typescript-eslint/",
+        "eslint-"
+      ]
     },
     {
       "groupName": "stomp",
