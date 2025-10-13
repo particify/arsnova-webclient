@@ -6851,9 +6851,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-angular@npm:12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906":
-  version: 12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906
-  resolution: "apollo-angular@npm:12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906"
+"apollo-angular@npm:12.0.0":
+  version: 12.0.0
+  resolution: "apollo-angular@npm:12.0.0"
   dependencies:
     tslib: "npm:^2.6.2"
   peerDependencies:
@@ -6861,7 +6861,7 @@ __metadata:
     "@apollo/client": ^4.0.1
     graphql: ^16.0.0
     rxjs: ^7.3.0
-  checksum: 10c0/c115fa8af2f5d869c68a6893a2ecf5030088bc932c88c2eeb08b32712aaf9aead60aa3d8dc92ee7af6c4f3e97482ca9417bbe66e658881d476f6e6ec8b3eba7a
+  checksum: 10c0/e65c5d605ef59f0ae73ff783933cf12c2c80346481ffafe7d6077a964c678893f89f96ae7573ae9b6e9230746a1958f19a4eb9d7908bf6d3b2cf545b53236abe
   languageName: node
   linkType: hard
 
@@ -7037,7 +7037,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:8.44.0"
     "@typescript-eslint/utils": "npm:8.44.0"
     angular-material-css-vars: "npm:9.1.1"
-    apollo-angular: "npm:12.0.0-alpha-20250922033952-84d3fb552850c03e10b2a2db9c6c8ac78f124906"
+    apollo-angular: "npm:12.0.0"
     backoff-rxjs: "npm:7.0.0"
     chart.js: "npm:4.5.0"
     chartjs-plugin-datalabels: "npm:2.2.0"
