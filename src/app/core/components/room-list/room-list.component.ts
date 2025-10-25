@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomRole } from '@gql/generated/graphql';
 import { RoomService } from '@app/core/services/http/room.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -115,14 +115,14 @@ export class RoomListComponent implements OnInit, OnDestroy {
   private extensionFactory = inject(ExtensionFactory);
   private routingService = inject(RoutingService);
 
-  @Input({ required: true }) auth!: ClientAuthentication;
+  @Input({ required: true }) auth!: AuthenticatedUser;
   showGuestAccountControls = false;
   isGuest = false;
   rooms: RoomDataView[] = [];
   roomIds: string[] = [];
   displayRooms: RoomDataView[] = [];
   roomsFromGuest: RoomDataView[] = [];
-  guestAuth$: Observable<ClientAuthentication>;
+  guestAuth$: Observable<AuthenticatedUser>;
   showRoomsFromGuest = false;
   isLoading = true;
   sub?: Subscription;

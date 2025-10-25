@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RoomService } from '@app/core/services/http/room.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { CoreModule } from '@app/core/core.module';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.component';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -23,14 +23,9 @@ class MockConsentService {
   }
 }
 class MockAuthenticationService {
-  getAuthenticationChanges() {
+  getAuthenticatedUserChanges() {
     return of(
-      new ClientAuthentication(
-        'userId',
-        'loginId',
-        AuthProvider.ARSNOVA,
-        'token'
-      )
+      new AuthenticatedUser('userId', 'loginId', AuthProvider.ARSNOVA, 'token')
     );
   }
   hasAdminRole() {

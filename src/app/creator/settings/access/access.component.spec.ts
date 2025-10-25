@@ -11,7 +11,7 @@ import { Room } from '@app/core/models/room';
 import { ModeratorService } from '@app/core/services/http/moderator.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { of } from 'rxjs';
 import { Moderator } from '@app/core/models/moderator';
@@ -56,9 +56,7 @@ xdescribe('AccessComponent', () => {
     ['getCurrentAuthentication', 'isLoginIdEmailAddress']
   );
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(
-    of(
-      new ClientAuthentication('1111', 'a@b.cd', AuthProvider.ARSNOVA, 'token')
-    )
+    of(new AuthenticatedUser('1111', 'a@b.cd', AuthProvider.ARSNOVA, 'token'))
   );
   mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
 

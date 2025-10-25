@@ -27,7 +27,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
@@ -81,7 +81,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   isStandalone = false;
   isAdmin = false;
   isRoom = false;
-  auth?: ClientAuthentication;
+  auth?: AuthenticatedUser;
   userCharacter?: string;
   uiConfig?: UiConfig;
   currentLang?: string;
@@ -108,12 +108,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.roomService.getCurrentRoomStream().subscribe((room) => {
       this.isRoom = !!room;
     });
-    this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
-      this.auth = auth;
-      this.userCharacter = this.auth?.displayId
-        ?.slice(0, 1)
-        .toLocaleUpperCase();
-    });
+    this.authenticationService
+      .getAuthenticatedUserChanges()
+      .subscribe((auth) => {
+        this.auth = auth;
+        this.userCharacter = this.auth?.displayId
+          ?.slice(0, 1)
+          .toLocaleUpperCase();
+      });
     this.currentLang = this.translationService.getActiveLang();
     this.contentGroupTemplatesActive = this.featureFlagService.isEnabled(
       'CONTENT_GROUP_TEMPLATES'

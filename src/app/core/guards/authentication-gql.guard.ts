@@ -19,7 +19,7 @@ import { RoomMembershipService } from '@app/core/services/room-membership.servic
 import { environment } from '@environments/environment';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 
 @Injectable()
 export class AuthenticationGqlGuard implements CanActivate {
@@ -96,7 +96,7 @@ export class AuthenticationGqlGuard implements CanActivate {
       );
   }
 
-  handleAccessDenied(auth?: ClientAuthentication, url?: string) {
+  handleAccessDenied(auth?: AuthenticatedUser, url?: string) {
     this.translateService
       .selectTranslate('errors.not-authorized')
       .pipe(take(1))

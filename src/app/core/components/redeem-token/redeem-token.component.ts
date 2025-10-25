@@ -26,7 +26,7 @@ export class RedeemTokenComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authenticationService
-      .getAuthenticationChanges()
+      .getAuthenticatedUserChanges()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
         if (!!auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {

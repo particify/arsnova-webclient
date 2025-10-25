@@ -18,7 +18,7 @@ import {
   AnswerResultType,
 } from '@app/core/models/answer-result';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Router } from '@angular/router';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
@@ -108,7 +108,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     gold: '',
   };
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  auth!: ClientAuthentication;
+  auth!: AuthenticatedUser;
   private resultOverview!: AnswerResultOverview;
   private quizAnswerTypes = [AnswerResultType.CORRECT, AnswerResultType.WRONG];
 

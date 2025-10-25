@@ -7,7 +7,7 @@ import {
 import { UserService } from '@app/core/services/http/user.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Router } from '@angular/router';
 import { User } from '@app/core/models/user';
 import { Person } from '@app/core/models/person';
@@ -78,7 +78,7 @@ export class UserProfileComponent implements OnInit {
   // Route data input below
   @Input() accountSettingsName?: string;
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  auth!: ClientAuthentication;
+  auth!: AuthenticatedUser;
   user!: User;
   formFields: FormField[] = [];
   isGuest = false;

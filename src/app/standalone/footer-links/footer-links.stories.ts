@@ -2,7 +2,7 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.component';
 import { ConsentService } from '@app/core/services/util/consent.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthProvider } from '@app/core/models/auth-provider';
 
 class MockConsentService {}
@@ -37,7 +37,7 @@ type Story = StoryObj<FooterLinksComponent>;
 
 export const FooterLinks: Story = {
   args: {
-    auth: new ClientAuthentication(
+    auth: new AuthenticatedUser(
       'userId',
       'loginId',
       AuthProvider.ARSNOVA,

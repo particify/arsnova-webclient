@@ -16,7 +16,7 @@ import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { GroupType } from '@app/core/models/content-group';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthProvider } from '@app/core/models/auth-provider';
 
 class MockService {}
@@ -89,12 +89,7 @@ class MockContentGroupService {
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
-      new ClientAuthentication(
-        'userId',
-        'loginId',
-        AuthProvider.ARSNOVA,
-        'token'
-      )
+      new AuthenticatedUser('userId', 'loginId', AuthProvider.ARSNOVA, 'token')
     );
   }
 }

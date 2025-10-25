@@ -8,7 +8,7 @@ import { AddTemplateButtonComponent } from '@app/standalone/add-template-button/
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
@@ -83,12 +83,7 @@ class MockTemplateService {
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
-      new ClientAuthentication(
-        'userId',
-        'loginid',
-        AuthProvider.ARSNOVA,
-        'token'
-      )
+      new AuthenticatedUser('userId', 'loginid', AuthProvider.ARSNOVA, 'token')
     );
   }
 }

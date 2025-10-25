@@ -4,7 +4,7 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { ARSRxStompConfig } from '@app/rx-stomp.config';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 
 const defaultMessageHeaders = {
   'content-type': 'application/json',
@@ -23,8 +23,8 @@ export class WsConnectorService {
 
     this.client = new RxStomp();
     authService
-      .getAuthenticationChanges()
-      .subscribe(async (auth: ClientAuthentication) => {
+      .getAuthenticatedUserChanges()
+      .subscribe(async (auth: AuthenticatedUser) => {
         await this.client.deactivate();
 
         if (auth && auth.userId) {

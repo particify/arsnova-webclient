@@ -8,7 +8,7 @@ import {
   OnInit,
   viewChild,
 } from '@angular/core';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { fromEvent, of } from 'rxjs';
@@ -83,7 +83,7 @@ export class RoomListGqlComponent implements AfterViewInit, OnInit {
   private routingService = inject(RoutingService);
   private translateService = inject(TranslocoService);
 
-  auth = input.required<ClientAuthentication>();
+  auth = input.required<AuthenticatedUser>();
   private searchInput =
     viewChild.required<ElementRef<HTMLInputElement>>('search');
 

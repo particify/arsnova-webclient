@@ -1,6 +1,6 @@
 import { AuthProvider } from './auth-provider';
 
-export class ClientAuthentication {
+export class AuthenticatedUser {
   userId: string;
   displayId?: string;
   displayName?: string;

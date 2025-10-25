@@ -2,7 +2,7 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { Observable, of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
@@ -23,12 +23,7 @@ class MockRoomUserAliasService {
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
-      new ClientAuthentication(
-        'userId',
-        'loginid',
-        AuthProvider.ARSNOVA,
-        'token'
-      )
+      new AuthenticatedUser('userId', 'loginid', AuthProvider.ARSNOVA, 'token')
     );
   }
 }

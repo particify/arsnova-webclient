@@ -17,6 +17,7 @@ export const STORAGECONFIG_PROVIDER_TOKEN: InjectionToken<StorageItem[]> =
  * that only predefined item configurations can be used.
  */
 export const STORAGE_KEYS: { [key: string]: symbol } = {
+  ACCESS_TOKEN: Symbol(),
   USER: Symbol(),
   COOKIE_CONSENT: Symbol(),
   GUEST_TOKEN: Symbol(),
@@ -45,6 +46,12 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
  * Define configurations for globally accessible variables.
  */
 export const STORAGE_CONFIG: StorageItem[] = [
+  {
+    key: STORAGE_KEYS.ACCESS_TOKEN,
+    name: 'ACCESS_TOKEN',
+    category: StorageItemCategory.REQUIRED,
+    backend: StorageBackend.LOCALSTORAGE,
+  },
   {
     key: STORAGE_KEYS.USER,
     name: 'USER',

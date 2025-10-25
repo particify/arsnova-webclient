@@ -38,11 +38,11 @@ export function configureTestModule(
     })
   );
   const authenticationService = jasmine.createSpyObj('AuthenticationService', [
-    'getAuthenticationChanges',
+    'getAuthenticatedUserChanges',
     'logout',
     'hasAdminRole',
   ]);
-  authenticationService.getAuthenticationChanges.and.returnValue(
+  authenticationService.getAuthenticatedUserChanges.and.returnValue(
     of({ loginId: 'test@test.de' })
   );
   authenticationService.hasAdminRole.and.returnValue(false);

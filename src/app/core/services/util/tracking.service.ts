@@ -8,7 +8,7 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { EventService } from './event.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Subscription, timer } from 'rxjs';
 import { environment } from '@environments/environment';
 import { ConsentChangedEvent } from '@app/core/models/events/consent-changed';
@@ -66,7 +66,7 @@ export class TrackingService {
   loaded = false;
   consentGiven?: boolean;
   uiConfig: any;
-  previousAuth?: ClientAuthentication;
+  previousAuth?: AuthenticatedUser;
   firstAuth = true;
   pingSubscription?: Subscription;
   specialRooms = new Map<string, string>();
@@ -201,29 +201,31 @@ export class TrackingService {
   }
 
   setupTrackingSubscriptions() {
-    this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
-      if (auth) {
-        if (!this.previousAuth || auth.userId !== this.previousAuth.userId) {
-          this.setVisitDimension(
-            VisitDimension.AUTH_PROVIDER,
-            auth.authProvider.toString().toLowerCase()
-          );
-          if (!this.firstAuth) {
-            this.addEvent(
-              EventCategory.ACCOUNT,
-              'User logged in',
+    this.authenticationService
+      .getAuthenticatedUserChanges()
+      .subscribe((auth) => {
+        if (auth) {
+          if (!this.previousAuth || auth.userId !== this.previousAuth.userId) {
+            this.setVisitDimension(
+              VisitDimension.AUTH_PROVIDER,
               auth.authProvider.toString().toLowerCase()
             );
+            if (!this.firstAuth) {
+              this.addEvent(
+                EventCategory.ACCOUNT,
+                'User logged in',
+                auth.authProvider.toString().toLowerCase()
+              );
+            }
+          }
+        } else {
+          if (this.previousAuth) {
+            this.addEvent(EventCategory.ACCOUNT, 'User logged out');
           }
         }
-      } else {
-        if (this.previousAuth) {
-          this.addEvent(EventCategory.ACCOUNT, 'User logged out');
-        }
-      }
-      this.previousAuth = auth;
-      this.firstAuth = false;
-    });
+        this.previousAuth = auth;
+        this.firstAuth = false;
+      });
     this.eventService.on<any>('UpdateInstalled').subscribe((e) => {
       if (e.oldHash) {
         const updateTo = e.newHash

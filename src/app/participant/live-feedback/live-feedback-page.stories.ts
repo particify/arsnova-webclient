@@ -3,7 +3,7 @@ import { EventEmitter } from '@angular/core';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
@@ -45,12 +45,7 @@ class MockService {}
 class MockAuthenticationService {
   getCurrentAuthentication() {
     return of(
-      new ClientAuthentication(
-        'userId',
-        'loginid',
-        AuthProvider.ARSNOVA,
-        'token'
-      )
+      new AuthenticatedUser('userId', 'loginid', AuthProvider.ARSNOVA, 'token')
     );
   }
 }

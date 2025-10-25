@@ -27,7 +27,7 @@ import {
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import {
   MatMenuHarness,
@@ -125,11 +125,11 @@ describe('AppComponent', () => {
   roomService.getCurrentRoomStream.and.returnValue(of(new Room()));
 
   const authenticationService = jasmine.createSpyObj('AuthenticationService', [
-    'getAuthenticationChanges',
+    'getAuthenticatedUserChanges',
     'logout',
     'hasAdminRole',
   ]);
-  authenticationService.getAuthenticationChanges.and.returnValue(
+  authenticationService.getAuthenticatedUserChanges.and.returnValue(
     of({ loginId: 'test@test.de' })
   );
   authenticationService.hasAdminRole.and.returnValue(false);
@@ -252,7 +252,7 @@ describe('AppComponent', () => {
   });
 
   it('should display following items no matter if logged in or not:', async () => {
-    component.auth = new ClientAuthentication(
+    component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
       AuthProvider.ARSNOVA,
@@ -320,7 +320,7 @@ describe('AppComponent', () => {
   // # If logged in
 
   it('should display following items for user if logged in:', async () => {
-    component.auth = new ClientAuthentication(
+    component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
       AuthProvider.ARSNOVA,
@@ -346,7 +346,7 @@ describe('AppComponent', () => {
   });
 
   it('should navigate to user home when clicking my rooms button', async () => {
-    component.auth = new ClientAuthentication(
+    component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
       AuthProvider.ARSNOVA,
@@ -361,7 +361,7 @@ describe('AppComponent', () => {
   });
 
   it('should navigate to user home when clicking my rooms button', async () => {
-    component.auth = new ClientAuthentication(
+    component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
       AuthProvider.ARSNOVA,
@@ -376,7 +376,7 @@ describe('AppComponent', () => {
   });
 
   it('should call logout function and navigate to home when clicking logout button', async () => {
-    component.auth = new ClientAuthentication(
+    component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
       AuthProvider.ARSNOVA,
@@ -396,7 +396,7 @@ describe('AppComponent', () => {
   });
 
   it('should call logout function and navigate to home when clicking logout button', async () => {
-    component.auth = new ClientAuthentication(
+    component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
       AuthProvider.ARSNOVA,

@@ -20,7 +20,7 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import {
@@ -81,7 +81,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
 
   emptyInputs = false;
   newRoom = new Room();
-  auth?: ClientAuthentication;
+  auth?: AuthenticatedUser;
   HintType = HintType;
   anonymousProvider?: AuthenticationProvider;
   createDuplication = false;
@@ -108,7 +108,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     this.emptyInputs = false;
   }
 
-  handleAuth(auth: ClientAuthentication) {
+  handleAuth(auth: AuthenticatedUser) {
     this.auth = auth;
     if (!this.canCreateRoom(auth)) {
       this.dialogRef.close();
@@ -116,7 +116,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     }
   }
 
-  canCreateRoom(auth: ClientAuthentication): boolean {
+  canCreateRoom(auth: AuthenticatedUser): boolean {
     return (
       (this.anonymousProvider &&
         this.anonymousProvider.allowedRoles.includes(
@@ -138,7 +138,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     }
   }
 
-  private addRoom(auth: ClientAuthentication) {
+  private addRoom(auth: AuthenticatedUser) {
     this.newRoom.name = this.newRoom.name.trim();
     if (!this.newRoom.name) {
       this.emptyInputs = true;

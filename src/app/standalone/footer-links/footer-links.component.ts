@@ -9,7 +9,7 @@ import {
 import { RouterModule } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { UiConfig } from '@app/core/models/api-config';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ConsentService } from '@app/core/services/util/consent.service';
 
@@ -23,7 +23,7 @@ export class FooterLinksComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);
   private consentService = inject(ConsentService);
 
-  @Input() auth?: ClientAuthentication;
+  @Input() auth?: AuthenticatedUser;
   @Input({ required: true }) uiConfig!: UiConfig;
   @Input() showHelp = false;
   @Input() showJoinLink = false;

@@ -23,7 +23,7 @@ import { NotificationService } from '@app/core/services/util/notification.servic
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({});
 
-  getAuthenticationChanges() {
+  getAuthenticatedUserChanges() {
     return this.auth$$.asObservable();
   }
 }
