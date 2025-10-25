@@ -3,6 +3,12 @@ fragment UserFragment on User {
   username
 }
 
+query CurrentUser {
+  currentUser {
+    ...UserFragment
+  }
+}
+
 query UserById($id: ID!) {
   userById(id: $id) {
     ...UserFragment

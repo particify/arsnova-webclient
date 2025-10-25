@@ -155,6 +155,7 @@ export type Query = {
   announcementsByUserId?: Maybe<AnnouncementConnection>;
   announcementsForCurrentUser?: Maybe<AnnouncementConnection>;
   announcementsMetaForCurrentUser?: Maybe<AnnouncementsMeta>;
+  currentUser?: Maybe<User>;
   roomById?: Maybe<Room>;
   roomByShortId?: Maybe<Room>;
   roomManagingMembersByRoomId?: Maybe<Array<RoomMember>>;
@@ -651,6 +652,13 @@ export type UserFragmentFragment = {
   username: string;
 };
 
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
+
+export type CurrentUserQuery = {
+  __typename?: 'Query';
+  currentUser?: { __typename?: 'User'; id: string; username: string } | null;
+};
+
 export type UserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1075,6 +1083,28 @@ export class DuplicateRoomGql extends Apollo.Mutation<
   DuplicateRoomMutationVariables
 > {
   document = DuplicateRoomDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CurrentUserDocument = gql`
+  query CurrentUser {
+    currentUser {
+      ...UserFragment
+    }
+  }
+  ${UserFragmentFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CurrentUserGql extends Apollo.Query<
+  CurrentUserQuery,
+  CurrentUserQueryVariables
+> {
+  document = CurrentUserDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
