@@ -2860,13 +2860,13 @@ __metadata:
   linkType: hard
 
 "@graphql-codegen/client-preset@npm:^5.0.0":
-  version: 5.1.0
-  resolution: "@graphql-codegen/client-preset@npm:5.1.0"
+  version: 5.1.1
+  resolution: "@graphql-codegen/client-preset@npm:5.1.1"
   dependencies:
     "@babel/helper-plugin-utils": "npm:^7.20.2"
     "@babel/template": "npm:^7.20.7"
     "@graphql-codegen/add": "npm:^6.0.0"
-    "@graphql-codegen/gql-tag-operations": "npm:5.0.2"
+    "@graphql-codegen/gql-tag-operations": "npm:5.0.3"
     "@graphql-codegen/plugin-helpers": "npm:^6.0.0"
     "@graphql-codegen/typed-document-node": "npm:^6.0.2"
     "@graphql-codegen/typescript": "npm:^5.0.2"
@@ -2882,7 +2882,7 @@ __metadata:
   peerDependenciesMeta:
     graphql-sock:
       optional: true
-  checksum: 10c0/b94b2e3a4651c6438829fd6f38ecd6acae447061471029f3c8bce156ab585b9f60f9d173d560649ab3d0d10fdf1f55a82a3b7f70ce2345a0ddf38222aaf6cc69
+  checksum: 10c0/761374c6a6960a1b1efcd0ce80523b4120897105db138bbd5125b19972b4d2654cf4a57f3e8c5d37f2124b53d57802e64d21e62e64badea488862449343251f5
   languageName: node
   linkType: hard
 
@@ -2900,9 +2900,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/gql-tag-operations@npm:5.0.2":
-  version: 5.0.2
-  resolution: "@graphql-codegen/gql-tag-operations@npm:5.0.2"
+"@graphql-codegen/gql-tag-operations@npm:5.0.3":
+  version: 5.0.3
+  resolution: "@graphql-codegen/gql-tag-operations@npm:5.0.3"
   dependencies:
     "@graphql-codegen/plugin-helpers": "npm:^6.0.0"
     "@graphql-codegen/visitor-plugin-common": "npm:6.1.0"
@@ -2911,7 +2911,7 @@ __metadata:
     tslib: "npm:~2.6.0"
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 10c0/a4d8245d6292f99742e81baface3c47c8669c2a2ec44f31bd0fadae57df6cffbb51dbcdbd5dd61a9245e0cfc9c48ed7dcde1589f12ee0b59bae612339ed9976a
+  checksum: 10c0/e62a00c8204b080f1587824d40142e6f485c0fe72991094d539ca52e1d77a0937d4dc1ee4566b13b5421b56de7551a9daf504db4f99366a5b268219b8c01020d
   languageName: node
   linkType: hard
 
