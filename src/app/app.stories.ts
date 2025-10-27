@@ -24,9 +24,7 @@ class MockConsentService {
 }
 class MockAuthenticationService {
   getAuthenticatedUserChanges() {
-    return of(
-      new AuthenticatedUser('userId', 'loginId', AuthProvider.ARSNOVA, 'token')
-    );
+    return of(new AuthenticatedUser('userId', 'loginId', AuthProvider.ARSNOVA));
   }
   hasAdminRole() {
     return true;

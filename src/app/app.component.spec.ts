@@ -255,8 +255,7 @@ describe('AppComponent', () => {
     component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
-      AuthProvider.ARSNOVA,
-      'token'
+      AuthProvider.ARSNOVA
     );
     fixture.detectChanges();
     langBtn = await loader.getHarness(
@@ -323,8 +322,7 @@ describe('AppComponent', () => {
     component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
-      AuthProvider.ARSNOVA,
-      'token'
+      AuthProvider.ARSNOVA
     );
     fixture.detectChanges();
     accountSettingsBtn = await loader.getHarness(
@@ -349,8 +347,7 @@ describe('AppComponent', () => {
     component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
-      AuthProvider.ARSNOVA,
-      'token'
+      AuthProvider.ARSNOVA
     );
     fixture.detectChanges();
     myRoomsBtn = await loader.getHarness(
@@ -364,8 +361,7 @@ describe('AppComponent', () => {
     component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
-      AuthProvider.ARSNOVA,
-      'token'
+      AuthProvider.ARSNOVA
     );
     fixture.detectChanges();
     templatesBtn = await loader.getHarness(
@@ -379,8 +375,7 @@ describe('AppComponent', () => {
     component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
-      AuthProvider.ARSNOVA,
-      'token'
+      AuthProvider.ARSNOVA
     );
     fixture.detectChanges();
     logoutBtn = await loader.getHarness(
@@ -399,8 +394,7 @@ describe('AppComponent', () => {
     component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
-      AuthProvider.ARSNOVA,
-      'token'
+      AuthProvider.ARSNOVA
     );
     fixture.detectChanges();
     logoutBtn = await loader.getHarness(

@@ -377,8 +377,12 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     return !!this.globalStorageService.getItem(STORAGE_KEYS.USER);
   }
 
-  hasAdminRole(auth: AuthenticatedUser) {
-    const decodedToken = jwtDecode<Jwt>(auth.token);
+  hasAdminRole() {
+    const token = this.accessToken();
+    if (!token) {
+      return false;
+    }
+    const decodedToken = jwtDecode<Jwt>(token);
     return decodedToken.roles.some((role) => role === this.ADMIN_ROLE);
   }
 
@@ -450,12 +454,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
             }),
             map(
               (u) =>
-                new AuthenticatedUser(
-                  u!.id,
-                  u!.username,
-                  AuthProvider.ARSNOVA,
-                  auth.accessToken
-                )
+                new AuthenticatedUser(u!.id, u!.username, AuthProvider.ARSNOVA)
             ),
             tap((au) =>
               this.globalStorageService.setItem(STORAGE_KEYS.USER, au)

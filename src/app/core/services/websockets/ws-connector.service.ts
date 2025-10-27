@@ -1,10 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, effect, inject } from '@angular/core';
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ARSRxStompConfig } from '@app/rx-stomp.config';
 import { Observable } from 'rxjs';
 import { IMessage } from '@stomp/stompjs';
-import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 
 const defaultMessageHeaders = {
   'content-type': 'application/json',
@@ -22,20 +21,18 @@ export class WsConnectorService {
     const authService = this.authService;
 
     this.client = new RxStomp();
-    authService
-      .getAuthenticatedUserChanges()
-      .subscribe(async (auth: AuthenticatedUser) => {
-        await this.client.deactivate();
-
-        if (auth && auth.userId) {
-          const copiedConf = ARSRxStompConfig;
-          if (copiedConf?.connectHeaders) {
-            copiedConf.connectHeaders.token = auth.token;
-          }
-          this.client.configure(copiedConf);
-          this.client.activate();
+    effect(async () => {
+      await this.client.deactivate();
+      const token = authService.accessToken();
+      if (token) {
+        const copiedConf = ARSRxStompConfig;
+        if (copiedConf?.connectHeaders) {
+          copiedConf.connectHeaders.token = token;
         }
-      });
+        this.client.configure(copiedConf);
+        this.client.activate();
+      }
+    });
   }
 
   public send(destination: string, body: string): void {

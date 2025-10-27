@@ -56,7 +56,7 @@ xdescribe('AccessComponent', () => {
     ['getCurrentAuthentication', 'isLoginIdEmailAddress']
   );
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(
-    of(new AuthenticatedUser('1111', 'a@b.cd', AuthProvider.ARSNOVA, 'token'))
+    of(new AuthenticatedUser('1111', 'a@b.cd', AuthProvider.ARSNOVA))
   );
   mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
 

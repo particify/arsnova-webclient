@@ -6,17 +6,10 @@ export class AuthenticatedUser {
   displayName?: string;
   loginId: string;
   authProvider: AuthProvider;
-  token: string;
 
-  constructor(
-    userId: string,
-    loginId: string,
-    authProvider: AuthProvider,
-    token: string
-  ) {
+  constructor(userId: string, loginId: string, authProvider: AuthProvider) {
     this.userId = userId;
     this.loginId = loginId;
     this.authProvider = authProvider;
-    this.token = token;
   }
 }

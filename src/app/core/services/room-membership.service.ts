@@ -21,7 +21,6 @@ import {
 } from './http/authentication.service';
 import { Membership } from '@app/core/models/membership';
 import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
-import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Room } from '@app/core/models/room';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
 
@@ -147,15 +146,6 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
    */
   getCurrentMemberships(): Observable<Membership[]> {
     return this.memberships$$.pipe(switchAll(), first());
-  }
-
-  /**
-   * Returns the guest user's current memberships.
-   */
-  getMembershipsForAuthentication(
-    authentication: AuthenticatedUser
-  ): Observable<Membership[]> {
-    return this.fetchMemberships(authentication.userId, authentication.token);
   }
 
   /**

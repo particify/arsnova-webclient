@@ -165,8 +165,7 @@ describe('HeaderComponent', () => {
     component.auth = new AuthenticatedUser(
       '1234',
       'a@b.cd',
-      AuthProvider.ARSNOVA,
-      'token'
+      AuthProvider.ARSNOVA
     );
     userButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#menu-button' })
