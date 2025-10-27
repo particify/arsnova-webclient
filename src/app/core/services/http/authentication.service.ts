@@ -166,16 +166,27 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
       this.serviceApiUrl.login + providerPath
     );
 
-    return this.handleLoginResponse(
-      this.http.post<ClientAuthentication>(
-        connectionUrl,
-        {
-          loginId: loginId,
-          password: password,
-        },
-        this.httpOptions
-      ),
-      this.isLoggedIn()
+    const token$ = this.challengeService.authenticateByChallenge();
+    return token$.pipe(
+      switchMap((token) => {
+        const httpHeaders = this.httpOptions.headers.set(
+          AUTH_HEADER_KEY,
+          `${AUTH_SCHEME} ${token}`
+        );
+        return this.handleLoginResponse(
+          this.http.post<ClientAuthentication>(
+            connectionUrl,
+            {
+              loginId,
+              password,
+            },
+            {
+              headers: httpHeaders,
+            }
+          ),
+          this.isLoggedIn()
+        );
+      })
     );
   }
 
