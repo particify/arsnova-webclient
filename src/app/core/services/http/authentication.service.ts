@@ -31,6 +31,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { environment } from '@environments/environment';
 import { AuthProvider } from '@app/core/models/auth-provider';
 import { Apollo } from 'apollo-angular';
+import { ChallengeService } from '@app/core/services/challenge.service';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -50,6 +51,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   private globalStorageService = inject(GlobalStorageService);
   private apiConfigService = inject(ApiConfigService);
   private routingService = inject(RoutingService);
+  private challengeService = inject(ChallengeService);
   private router = inject(Router);
   private apollo = inject(Apollo, { optional: true });
 
@@ -164,16 +166,27 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
       this.serviceApiUrl.login + providerPath
     );
 
-    return this.handleLoginResponse(
-      this.http.post<ClientAuthentication>(
-        connectionUrl,
-        {
-          loginId: loginId,
-          password: password,
-        },
-        this.httpOptions
-      ),
-      this.isLoggedIn()
+    const token$ = this.challengeService.authenticateByChallenge();
+    return token$.pipe(
+      switchMap((token) => {
+        const httpHeaders = this.httpOptions.headers.set(
+          AUTH_HEADER_KEY,
+          `${AUTH_SCHEME} ${token}`
+        );
+        return this.handleLoginResponse(
+          this.http.post<ClientAuthentication>(
+            connectionUrl,
+            {
+              loginId,
+              password,
+            },
+            {
+              headers: httpHeaders,
+            }
+          ),
+          this.isLoggedIn()
+        );
+      })
     );
   }
 
@@ -274,13 +287,19 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
           result.status === AuthenticationStatus.INVALID_CREDENTIALS
         ) {
           /* Create new guest account */
-          const loginResult$ = this.handleLoginResponse(
-            this.http.post<ClientAuthentication>(
-              connectionUrl,
-              payload,
-              this.httpOptions
-            )
-          ).pipe(
+          const token$ = this.challengeService.authenticateByChallenge();
+          const loginResult$ = token$.pipe(
+            switchMap((token) => {
+              const httpHeaders = this.httpOptions.headers.set(
+                AUTH_HEADER_KEY,
+                `${AUTH_SCHEME} ${token}`
+              );
+              return this.handleLoginResponse(
+                this.http.post<ClientAuthentication>(connectionUrl, payload, {
+                  headers: httpHeaders,
+                })
+              );
+            }),
             tap((loginResult) => {
               if (loginResult.status === AuthenticationStatus.SUCCESS) {
                 this.globalStorageService.setItem(

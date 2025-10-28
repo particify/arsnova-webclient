@@ -166,6 +166,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@altcha/crypto@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@altcha/crypto@npm:0.0.1"
+  checksum: 10c0/686cfb4a2ab536bcc041cff0acaff97862f4bd27570f63306ad9c948ba8d579c76770088542b1056784b43e5daa9417ba2346ebece00f234cd6aade839e06fa9
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:2.3.0, @ampproject/remapping@npm:^2.2.0, @ampproject/remapping@npm:^2.3.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -4934,6 +4941,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/rollup-linux-x64-gnu@npm:4.18.0":
+  version: 4.18.0
+  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.18.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
 "@rollup/rollup-linux-x64-gnu@npm:4.52.3":
   version: 4.52.3
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.52.3"
@@ -6630,6 +6644,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"altcha@npm:2.2.4":
+  version: 2.2.4
+  resolution: "altcha@npm:2.2.4"
+  dependencies:
+    "@altcha/crypto": "npm:^0.0.1"
+    "@rollup/rollup-linux-x64-gnu": "npm:4.18.0"
+  dependenciesMeta:
+    "@rollup/rollup-linux-x64-gnu":
+      optional: true
+  checksum: 10c0/e69221bab0faffe6a18705bb74541c8ef841840496c5cdc88402a4b873aa24b2b83ef0fc816ebc7b7c2a8fef16f0918afa0079ea0b5e1bf7dd3d3f2aa48ef85a
+  languageName: node
+  linkType: hard
+
 "angular-material-css-vars@npm:9.1.1":
   version: 9.1.1
   resolution: "angular-material-css-vars@npm:9.1.1"
@@ -6894,6 +6921,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:8.44.0"
     "@typescript-eslint/parser": "npm:8.44.0"
     "@typescript-eslint/utils": "npm:8.44.0"
+    altcha: "npm:2.2.4"
     angular-material-css-vars: "npm:9.1.1"
     apollo-angular: "npm:12.0.0"
     backoff-rxjs: "npm:7.0.0"
