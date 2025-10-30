@@ -19,7 +19,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Room } from '@app/core/models/room';
@@ -162,11 +161,7 @@ describe('HeaderComponent', () => {
   // # If logged in
 
   it('should display user menu button if logged in', async () => {
-    component.auth = new AuthenticatedUser(
-      '1234',
-      'a@b.cd',
-      AuthProvider.ARSNOVA
-    );
+    component.auth = new AuthenticatedUser('1234', true, 'a@b.cd');
     userButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#menu-button' })
     );

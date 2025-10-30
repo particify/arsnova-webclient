@@ -4,7 +4,6 @@ import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.service';
 import { LiveFeedbackPageComponent } from '@app/participant/live-feedback/live-feedback-page.component';
@@ -44,9 +43,7 @@ class MockService {}
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
-    return of(
-      new AuthenticatedUser('userId', 'loginid', AuthProvider.ARSNOVA, 'token')
-    );
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
 }
 

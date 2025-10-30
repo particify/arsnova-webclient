@@ -17,7 +17,6 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { GroupType } from '@app/core/models/content-group';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 
 class MockService {}
 
@@ -88,9 +87,7 @@ class MockContentGroupService {
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
-    return of(
-      new AuthenticatedUser('userId', 'loginId', AuthProvider.ARSNOVA, 'token')
-    );
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
 }
 

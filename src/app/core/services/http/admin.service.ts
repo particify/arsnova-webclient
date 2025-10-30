@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { Room } from '@app/core/models/room';
 import { User } from '@app/core/models/user';
 import { UserService } from './user.service';
-import { AuthProvider } from '@app/core/models/auth-provider';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -63,7 +62,7 @@ export class AdminService extends AbstractHttpService<void> {
     const connectionUrl = this.userService.buildUri('/');
     const body = {
       loginId: loginId,
-      authProvider: AuthProvider.ARSNOVA,
+      authProvider: 'ARSNOVA',
     };
     return this.http
       .post<User>(connectionUrl, body, httpOptions)

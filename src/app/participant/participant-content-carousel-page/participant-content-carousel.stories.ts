@@ -3,7 +3,6 @@ import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoomService } from '@app/core/services/http/room.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -40,9 +39,7 @@ import { Room } from '@app/core/models/room';
 class MockService {}
 class MockAuthenticationService {
   getCurrentAuthentication() {
-    return of(
-      new AuthenticatedUser('userId', 'loginid', AuthProvider.ARSNOVA, 'token')
-    );
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
 }
 

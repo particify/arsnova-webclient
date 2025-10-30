@@ -9,7 +9,6 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { TemplateTagSelectionComponent } from '@app/standalone/template-tag-selection/template-tag-selection.component';
 import { TemplateLanguageSelectionComponent } from '@app/standalone/template-language-selection/template-language-selection.component';
@@ -82,9 +81,7 @@ class MockTemplateService {
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
-    return of(
-      new AuthenticatedUser('userId', 'loginid', AuthProvider.ARSNOVA, 'token')
-    );
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
 }
 

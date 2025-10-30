@@ -21,7 +21,6 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import {
   AuthenticationProvider,
@@ -122,7 +121,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
         this.anonymousProvider.allowedRoles.includes(
           AuthenticationProviderRole.MODERATOR
         )) ||
-      (auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST)
+      auth.verified
     );
   }
 

@@ -18,7 +18,6 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 
@@ -119,7 +118,7 @@ export class AuthenticationGuard implements CanActivate {
           msg,
           AdvancedSnackBarTypes.WARNING
         );
-        if (url && auth?.authProvider === AuthProvider.ARSNOVA_GUEST) {
+        if (url && !auth?.verified) {
           this.routingService.setRedirect(url);
           this.router.navigate(['login']);
         } else {

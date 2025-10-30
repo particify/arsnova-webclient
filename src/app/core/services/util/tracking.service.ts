@@ -208,13 +208,13 @@ export class TrackingService {
           if (!this.previousAuth || auth.userId !== this.previousAuth.userId) {
             this.setVisitDimension(
               VisitDimension.AUTH_PROVIDER,
-              auth.authProvider.toString().toLowerCase()
+              auth.verified ? 'arsnova' : 'arsnova_guest'
             );
             if (!this.firstAuth) {
               this.addEvent(
                 EventCategory.ACCOUNT,
                 'User logged in',
-                auth.authProvider.toString().toLowerCase()
+                auth.verified ? 'arsnova' : 'arsnova_guest'
               );
             }
           }

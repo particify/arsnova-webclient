@@ -17,7 +17,6 @@ import {
 } from '@testing/test-helpers';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
-import { AuthProvider } from './core/models/auth-provider';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Theme, ThemeService } from '@app/core/theme/theme.service';
 import {
@@ -72,7 +71,7 @@ describe('AppComponent', () => {
         },
       ],
     },
-    authenticationProvider: [] as AuthProvider[],
+    authenticationProvider: [],
     features: {},
   };
   const apiConfigService = jasmine.createSpyObj('ApiConfigService', [
@@ -252,11 +251,7 @@ describe('AppComponent', () => {
   });
 
   it('should display following items no matter if logged in or not:', async () => {
-    component.auth = new AuthenticatedUser(
-      '1234',
-      'a@b.cd',
-      AuthProvider.ARSNOVA
-    );
+    component.auth = new AuthenticatedUser('1234', true, 'a@b.cd');
     fixture.detectChanges();
     langBtn = await loader.getHarness(
       MatButtonHarness.with({ selector: '#lang-btn' })
@@ -319,11 +314,7 @@ describe('AppComponent', () => {
   // # If logged in
 
   it('should display following items for user if logged in:', async () => {
-    component.auth = new AuthenticatedUser(
-      '1234',
-      'a@b.cd',
-      AuthProvider.ARSNOVA
-    );
+    component.auth = new AuthenticatedUser('1234', true, 'a@b.cd');
     fixture.detectChanges();
     accountSettingsBtn = await loader.getHarness(
       MatButtonHarness.with({ selector: '#account-settings-btn' })
@@ -344,11 +335,7 @@ describe('AppComponent', () => {
   });
 
   it('should navigate to user home when clicking my rooms button', async () => {
-    component.auth = new AuthenticatedUser(
-      '1234',
-      'a@b.cd',
-      AuthProvider.ARSNOVA
-    );
+    component.auth = new AuthenticatedUser('1234', true, 'a@b.cd');
     fixture.detectChanges();
     myRoomsBtn = await loader.getHarness(
       MatButtonHarness.with({ selector: '#my-rooms-btn' })
@@ -358,11 +345,7 @@ describe('AppComponent', () => {
   });
 
   it('should navigate to user home when clicking my rooms button', async () => {
-    component.auth = new AuthenticatedUser(
-      '1234',
-      'a@b.cd',
-      AuthProvider.ARSNOVA
-    );
+    component.auth = new AuthenticatedUser('1234', true, 'a@b.cd');
     fixture.detectChanges();
     templatesBtn = await loader.getHarness(
       MatButtonHarness.with({ selector: '#templates-btn' })
@@ -372,11 +355,7 @@ describe('AppComponent', () => {
   });
 
   it('should call logout function and navigate to home when clicking logout button', async () => {
-    component.auth = new AuthenticatedUser(
-      '1234',
-      'a@b.cd',
-      AuthProvider.ARSNOVA
-    );
+    component.auth = new AuthenticatedUser('1234', true, 'a@b.cd');
     fixture.detectChanges();
     logoutBtn = await loader.getHarness(
       MatButtonHarness.with({ selector: '#logout-btn' })
@@ -391,11 +370,7 @@ describe('AppComponent', () => {
   });
 
   it('should call logout function and navigate to home when clicking logout button', async () => {
-    component.auth = new AuthenticatedUser(
-      '1234',
-      'a@b.cd',
-      AuthProvider.ARSNOVA
-    );
+    component.auth = new AuthenticatedUser('1234', true, 'a@b.cd');
     fixture.detectChanges();
     logoutBtn = await loader.getHarness(
       MatButtonHarness.with({ selector: '#logout-btn' })

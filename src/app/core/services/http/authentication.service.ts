@@ -29,7 +29,6 @@ import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.serv
 import { ApiConfigService } from './api-config.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { environment } from '@environments/environment';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { Apollo } from 'apollo-angular';
 import { ChallengeService } from '@app/core/services/challenge.service';
 import { Authentication } from '@app/core/models/authentication';
@@ -440,7 +439,12 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
             }),
             map(
               (u) =>
-                new AuthenticatedUser(u!.id, u!.username, AuthProvider.ARSNOVA)
+                new AuthenticatedUser(
+                  u!.id,
+                  u!.verified,
+                  u!.displayId ?? undefined,
+                  u!.displayName ?? undefined
+                )
             ),
             tap((au) =>
               this.globalStorageService.setItem(STORAGE_KEYS.USER, au)

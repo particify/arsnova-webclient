@@ -15,7 +15,6 @@ import {
   AuthenticationProviderRole,
   AuthenticationProviderType,
 } from '@app/core/models/api-config';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomCreated } from '@app/core/models/events/room-created';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -119,7 +118,7 @@ export class RoomCreateGqlComponent extends FormComponent implements OnInit {
         this.anonymousProvider.allowedRoles.includes(
           AuthenticationProviderRole.MODERATOR
         )) ||
-      (auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST)
+      auth.verified
     );
   }
 

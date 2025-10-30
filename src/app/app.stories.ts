@@ -11,7 +11,6 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { CoreModule } from '@app/core/core.module';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { FooterLinksComponent } from '@app/standalone/footer-links/footer-links.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DrawerService } from '@app/core/services/util/drawer.service';
@@ -24,7 +23,7 @@ class MockConsentService {
 }
 class MockAuthenticationService {
   getAuthenticatedUserChanges() {
-    return of(new AuthenticatedUser('userId', 'loginId', AuthProvider.ARSNOVA));
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
   hasAdminRole() {
     return true;

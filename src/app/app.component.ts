@@ -32,7 +32,6 @@ import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { UiConfig } from '@app/core/models/api-config';
 import { UiService } from '@app/core/services/util/ui.service';
@@ -196,6 +195,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   isGuest(): boolean {
-    return this.auth?.authProvider === AuthProvider.ARSNOVA_GUEST;
+    return !this.auth?.verified;
   }
 }

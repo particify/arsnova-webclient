@@ -15,7 +15,6 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { Content } from '@app/core/models/content';
 import {
   ContentGroup,
@@ -207,7 +206,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
-        this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+        this.isGuest = !auth.verified;
       });
     this.contentGroupPageService
       .getCreatedContent()

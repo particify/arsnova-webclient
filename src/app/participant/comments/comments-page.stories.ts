@@ -9,7 +9,6 @@ import { CommentSettingsService } from '@app/core/services/http/comment-settings
 import { VoteService } from '@app/core/services/http/vote.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { Room } from '@app/core/models/room';
@@ -39,9 +38,7 @@ class MockCommentService {
 class MockService {}
 class MockAuthenticationService {
   getCurrentAuthentication() {
-    return of(
-      new AuthenticatedUser('userId', 'loginid', AuthProvider.ARSNOVA, 'token')
-    );
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
 }
 class MockFocusModeService {

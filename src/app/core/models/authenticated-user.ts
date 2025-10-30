@@ -1,15 +1,18 @@
-import { AuthProvider } from './auth-provider';
-
 export class AuthenticatedUser {
   userId: string;
+  verified: boolean;
   displayId?: string;
   displayName?: string;
-  loginId: string;
-  authProvider: AuthProvider;
 
-  constructor(userId: string, loginId: string, authProvider: AuthProvider) {
+  constructor(
+    userId: string,
+    verified: boolean,
+    displayId: string | undefined,
+    displayName?: string
+  ) {
     this.userId = userId;
-    this.loginId = loginId;
-    this.authProvider = authProvider;
+    this.verified = verified;
+    this.displayId = displayId;
+    this.displayName = displayName;
   }
 }

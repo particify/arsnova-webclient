@@ -27,7 +27,7 @@
         }
       </mat-form-field>
     </lib-extension-point>
-    @if (!auth || auth.authProvider === 'ARSNOVA_GUEST') {
+    @if (!auth?.verified) {
       <app-hint
         [type]="HintType.WARNING"
         text="dialog.not-logged-in"

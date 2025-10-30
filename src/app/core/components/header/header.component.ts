@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Router } from '@angular/router';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { EventService } from '@app/core/services/util/event.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -125,7 +124,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isGuest(): boolean {
-    return !this.auth || this.auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+    return !this.auth?.verified;
   }
 
   presentCurrentView(shouldOpen = this.openPresentationDirectly) {

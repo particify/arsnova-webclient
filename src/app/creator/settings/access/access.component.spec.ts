@@ -12,7 +12,6 @@ import { ModeratorService } from '@app/core/services/http/moderator.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { of } from 'rxjs';
 import { Moderator } from '@app/core/models/moderator';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -48,7 +47,7 @@ xdescribe('AccessComponent', () => {
     'getUserByDisplayId',
   ]);
   mockUserService.getUserData.and.returnValue(
-    of([new User('1111', 'a@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
+    of([new User('1111', 'a@b.cd', 'ARSNOVA', '0', new Person())])
   );
 
   const mockAuthenticationService = jasmine.createSpyObj(
@@ -56,7 +55,7 @@ xdescribe('AccessComponent', () => {
     ['getCurrentAuthentication', 'isLoginIdEmailAddress']
   );
   mockAuthenticationService.getCurrentAuthentication.and.returnValue(
-    of(new AuthenticatedUser('1111', 'a@b.cd', AuthProvider.ARSNOVA))
+    of(new AuthenticatedUser('1111', true, 'a@b.cd'))
   );
   mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
 
@@ -147,7 +146,7 @@ xdescribe('AccessComponent', () => {
   it('should add moderator to room if user was found with entered login id', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
     mockUserService.getUserByDisplayId.and.returnValue(
-      of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
+      of([new User('2222', 'b@b.cd', 'ARSNOVA', '0', new Person())])
     );
     fixture = testBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
@@ -195,7 +194,7 @@ xdescribe('AccessComponent', () => {
   it('should invite moderator to room if user was not found with entered login id after another user was added', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(true));
     mockUserService.getUserByDisplayId.and.returnValue(
-      of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
+      of([new User('2222', 'b@b.cd', 'ARSNOVA', '0', new Person())])
     );
     fixture = testBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
@@ -229,7 +228,7 @@ xdescribe('AccessComponent', () => {
   it('should show error notification if SSO is used and user was not found with entered login id after another user was added', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(false));
     mockUserService.getUserByDisplayId.and.returnValue(
-      of([new User('2222', 'b@b.cd', AuthProvider.ARSNOVA, '0', new Person())])
+      of([new User('2222', 'b@b.cd', 'ARSNOVA', '0', new Person())])
     );
     fixture = testBed.createComponent(AccessComponent);
     component = fixture.componentInstance;
@@ -265,9 +264,7 @@ xdescribe('AccessComponent', () => {
   it('should add moderator to room if SSO is used and user was found with entered username', async () => {
     mockAuthenticationService.isLoginIdEmailAddress.and.returnValue(of(false));
     mockUserService.getUserByDisplayId.and.returnValue(
-      of([
-        new User('3333', 'username', AuthProvider.ARSNOVA, '0', new Person()),
-      ])
+      of([new User('3333', 'username', 'ARSNOVA', '0', new Person())])
     );
     fixture = testBed.createComponent(AccessComponent);
     component = fixture.componentInstance;

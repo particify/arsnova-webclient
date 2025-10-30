@@ -28,7 +28,6 @@ import {
 } from 'rxjs/operators';
 import { RoomSummary } from '@app/core/models/room-summary';
 import { RoomDeleted } from '@app/core/models/events/room-deleted';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { ExtensionFactory } from '@projects/extension-point/src/lib/extension-factory';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -137,7 +136,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadRoomDataViews();
-    if (this.auth.authProvider === AuthProvider.ARSNOVA_GUEST) {
+    if (!this.auth.verified) {
       this.isGuest = true;
     }
     this.showImportMenu = !!this.extensionFactory.getExtension('import-token');
