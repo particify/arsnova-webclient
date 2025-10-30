@@ -2,8 +2,7 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { Observable, of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { AuthProvider } from '@app/core/models/auth-provider';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AnnouncementListComponent } from '@app/standalone/announcement-list/announcement-list.component';
 import { UserAnnouncement } from '@app/core/models/user-announcement';
 import { AnnouncementService } from '@app/core/services/http/announcement.service';
@@ -49,14 +48,7 @@ class MockAnnouncementService {
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
-    return of(
-      new ClientAuthentication(
-        'userId',
-        'loginid',
-        AuthProvider.ARSNOVA,
-        'token'
-      )
-    );
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
 }
 

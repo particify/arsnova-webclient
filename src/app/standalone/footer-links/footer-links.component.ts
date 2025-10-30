@@ -9,7 +9,6 @@ import {
 import { RouterModule } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { UiConfig } from '@app/core/models/api-config';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ConsentService } from '@app/core/services/util/consent.service';
 
@@ -23,7 +22,6 @@ export class FooterLinksComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);
   private consentService = inject(ConsentService);
 
-  @Input() auth?: ClientAuthentication;
   @Input({ required: true }) uiConfig!: UiConfig;
   @Input() showHelp = false;
   @Input() showJoinLink = false;
@@ -42,7 +40,7 @@ export class FooterLinksComponent implements OnInit {
   }
 
   isAdminRole(): boolean {
-    return !!this.auth && this.authenticationService.hasAdminRole(this.auth);
+    return this.authenticationService.hasAdminRole();
   }
 
   sendClickedEvent(): void {

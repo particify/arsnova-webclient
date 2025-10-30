@@ -1,8 +1,7 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { Observable, of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { AuthProvider } from '@app/core/models/auth-provider';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomOverviewPageComponent } from '@app/participant/room-overview/room-overview-page.component';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
@@ -28,14 +27,7 @@ class MockService {}
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
-    return of(
-      new ClientAuthentication(
-        'userId',
-        'loginid',
-        AuthProvider.ARSNOVA,
-        'token'
-      )
-    );
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
 }
 

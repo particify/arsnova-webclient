@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, Signal, inject, signal } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, timer } from 'rxjs';
@@ -19,7 +19,7 @@ import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import {
   AuthenticationStatus,
   ClientAuthenticationResult,
@@ -29,9 +29,10 @@ import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.serv
 import { ApiConfigService } from './api-config.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { environment } from '@environments/environment';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { Apollo } from 'apollo-angular';
 import { ChallengeService } from '@app/core/services/challenge.service';
+import { Authentication } from '@app/core/models/authentication';
+import { CurrentUserGql } from '@gql/generated/graphql';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -47,13 +48,14 @@ interface Jwt {
  * Handles app-wide user authentication.
  */
 @Injectable()
-export class AuthenticationService extends AbstractHttpService<ClientAuthentication> {
+export class AuthenticationService extends AbstractHttpService<AuthenticatedUser> {
   private globalStorageService = inject(GlobalStorageService);
   private apiConfigService = inject(ApiConfigService);
   private routingService = inject(RoutingService);
   private challengeService = inject(ChallengeService);
   private router = inject(Router);
   private apollo = inject(Apollo, { optional: true });
+  private currentUserGql = inject(CurrentUserGql);
 
   private readonly ADMIN_ROLE: string = 'ADMIN';
   private popupDimensions = [500, 500];
@@ -63,34 +65,46 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * Higher-order Observable which provides a stream of changes to
    * authentication including those which have pending requests.
    */
-  private auth$$: BehaviorSubject<Observable<ClientAuthentication>>;
+  private auth$$: BehaviorSubject<Observable<AuthenticatedUser>>;
+
+  private readonly _accessToken = signal<string | undefined>(undefined);
+  get accessToken(): Signal<string | undefined> {
+    return this._accessToken;
+  }
 
   private httpOptions = {
     headers: new HttpHeaders({}),
   };
 
   serviceApiUrl = {
-    guest: '/guest',
     login: '/login',
-    registered: '/registered',
+    logout: '/logout',
+    refresh: '/refresh',
+    guest: '/guest-account',
     sso: '/sso',
   };
 
   constructor() {
     super('/auth');
-    const savedAuth: ClientAuthentication = this.globalStorageService.getItem(
+    const savedAuth: string = this.globalStorageService.getItem(
+      STORAGE_KEYS.ACCESS_TOKEN
+    );
+    if (savedAuth) {
+      this._accessToken.set(savedAuth);
+    }
+    const savedUser: AuthenticatedUser = this.globalStorageService.getItem(
       STORAGE_KEYS.USER
     );
-    this.auth$$ = new BehaviorSubject(of(savedAuth));
+    this.auth$$ = new BehaviorSubject(of(savedUser));
   }
 
   /**
    * Initialize authentication at startup.
    */
   init() {
-    this.getAuthenticationChanges().subscribe((auth) => {
+    this.getAuthenticatedUserChanges().subscribe((auth) => {
       if (!environment.production) {
-        console.log('Authentication changed', auth);
+        console.log('Authenticated user changed', auth);
       }
       this.apollo?.client.clearStore();
     });
@@ -121,14 +135,14 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   /**
    * Returns the changes to authentication as a stream.
    */
-  getAuthenticationChanges(): Observable<ClientAuthentication> {
+  getAuthenticatedUserChanges(): Observable<AuthenticatedUser> {
     return this.auth$$.pipe(switchAll());
   }
 
   /**
    * Returns the current authentication.
    */
-  getCurrentAuthentication(): Observable<ClientAuthentication> {
+  getCurrentAuthentication(): Observable<AuthenticatedUser> {
     return this.auth$$.pipe(switchAll(), first());
   }
 
@@ -136,7 +150,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * Returns the current authentication. If no authentication is available, a
    * login as guest is performed.
    */
-  requireAuthentication(): Observable<ClientAuthentication | undefined> {
+  requireAuthentication(): Observable<AuthenticatedUser | undefined> {
     return this.auth$$.pipe(
       switchAll(),
       first(),
@@ -151,21 +165,19 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   }
 
   /**
-   * Authenticates a user using loginId (username or email) and password.
+   * Authenticates a user using username (email) and password.
    */
   login(
-    loginId: string,
+    username: string,
     password: string,
-    providerId = 'user-db'
+    providerId?: string
   ): Observable<ClientAuthenticationResult> {
-    const providerPath =
-      providerId === 'user-db'
-        ? this.serviceApiUrl.registered
-        : '/' + providerId;
-    const connectionUrl: string = this.buildUri(
-      this.serviceApiUrl.login + providerPath
-    );
-
+    if (providerId !== 'user-db') {
+      throw new Error(
+        'Provider handling for username/password login not yet implemented.'
+      );
+    }
+    const connectionUrl: string = this.buildUri(this.serviceApiUrl.login);
     const token$ = this.challengeService.authenticateByChallenge();
     return token$.pipe(
       switchMap((token) => {
@@ -174,10 +186,10 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
           `${AUTH_SCHEME} ${token}`
         );
         return this.handleLoginResponse(
-          this.http.post<ClientAuthentication>(
+          this.http.post<Authentication>(
             connectionUrl,
             {
-              loginId,
+              username,
               password,
             },
             {
@@ -194,63 +206,17 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * Sends a refresh request using current authentication to extend the
    * validity.
    */
-  refreshLogin(): Observable<ClientAuthenticationResult | null> {
-    // Load user authentication from local data store if available
-    const savedAuth: ClientAuthentication = this.globalStorageService.getItem(
-      STORAGE_KEYS.USER
-    );
-    const guestToken: string = this.globalStorageService.getItem(
-      STORAGE_KEYS.GUEST_TOKEN
-    );
-    const token: string = savedAuth?.token || guestToken;
-    const guest = token === guestToken;
-    if (!token) {
-      return of(null);
-    }
-
-    const connectionUrl: string = this.buildUri(
-      this.serviceApiUrl.login + '?refresh=true'
-    );
-    const loginHttpHeaders = this.httpOptions.headers.set(
-      AUTH_HEADER_KEY,
-      `${AUTH_SCHEME} ${token}`
-    );
-    const auth$ = this.http.post<ClientAuthentication>(
-      connectionUrl,
-      {},
-      { headers: loginHttpHeaders }
-    );
-    return this.handleLoginResponse(auth$).pipe(
-      tap((result) => {
-        if (result.status === AuthenticationStatus.INVALID_CREDENTIALS) {
-          console.error('Could not refresh authentication (expired).');
-          if (!guest) {
-            if (this.router.url.startsWith('/embed')) {
-              this.router.navigate(['embed', 'external-login']);
-            } else {
-              this.handleUnauthorizedError();
-            }
-          }
-        } else if (result.status === AuthenticationStatus.UNKNOWN_ERROR) {
-          console.error('Could not refresh authentication.');
-          // Restore authentication from existing credentials if refreshing
-          // fails. It does not matter here that the token might have expired.
-          this.auth$$.next(of(savedAuth));
-        } else if (result.status === AuthenticationStatus.SUCCESS && guest) {
-          this.globalStorageService.setItem(
-            STORAGE_KEYS.GUEST_TOKEN,
-            result.authentication?.token
-          );
-        }
-      })
-    );
+  refreshLogin(): Observable<Authentication> {
+    return this.http
+      .post<Authentication>(this.buildUri(this.serviceApiUrl.refresh), {})
+      .pipe(tap((a) => this.handleAuthenticationResponse(a)));
   }
 
   /**
    * Fetches guest authentication data withouth changing the local
    * authentication state.
    */
-  fetchGuestAuthentication(): Observable<ClientAuthentication> {
+  fetchGuestAuthentication(): Observable<AuthenticatedUser> {
     const token = this.getGuestToken();
     const httpHeaders = this.httpOptions.headers.set(
       AUTH_HEADER_KEY,
@@ -259,7 +225,7 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     const connectionUrl: string = this.buildUri(
       this.serviceApiUrl.login + this.serviceApiUrl.guest
     );
-    return this.http.post<ClientAuthentication>(connectionUrl, null, {
+    return this.http.post<AuthenticatedUser>(connectionUrl, null, {
       headers: httpHeaders,
     });
   }
@@ -268,55 +234,43 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     return this.globalStorageService.getItem(STORAGE_KEYS.GUEST_TOKEN);
   }
 
-  /**
-   * Authenticates a guest user using existing credentials or creates a new
-   * guest account.
-   */
   loginGuest(): Observable<ClientAuthenticationResult> {
-    const connectionUrl: string = this.buildUri(
-      this.serviceApiUrl.login + this.serviceApiUrl.guest
+    // Use legacy guest token as refresh token
+    const guestToken = this.globalStorageService.getItem(
+      STORAGE_KEYS.GUEST_TOKEN
     );
-    /* The global storage service is not used for guestToken because it is a legacy item. */
-    const guestLoginId = localStorage.getItem('guestToken');
-    const payload = guestLoginId ? { loginId: guestLoginId } : null;
-    return this.refreshLogin().pipe(
-      switchMap((result) => {
-        localStorage.removeItem('guestToken');
-        if (
-          !result ||
-          result.status === AuthenticationStatus.INVALID_CREDENTIALS
-        ) {
-          /* Create new guest account */
-          const token$ = this.challengeService.authenticateByChallenge();
-          const loginResult$ = token$.pipe(
-            switchMap((token) => {
-              const httpHeaders = this.httpOptions.headers.set(
-                AUTH_HEADER_KEY,
-                `${AUTH_SCHEME} ${token}`
-              );
-              return this.handleLoginResponse(
-                this.http.post<ClientAuthentication>(connectionUrl, payload, {
-                  headers: httpHeaders,
-                })
-              );
-            }),
-            tap((loginResult) => {
-              if (loginResult.status === AuthenticationStatus.SUCCESS) {
-                this.globalStorageService.setItem(
-                  STORAGE_KEYS.GUEST_TOKEN,
-                  loginResult.authentication?.token
-                );
-              }
-            })
-          );
+    if (guestToken) {
+      this.globalStorageService.setItem(STORAGE_KEYS.ACCESS_TOKEN, guestToken);
+      return this.handleLoginResponse(this.refreshLogin()).pipe(
+        tap(() =>
+          this.globalStorageService.removeItem(STORAGE_KEYS.GUEST_TOKEN)
+        )
+      );
+    }
+    return this.createGuestAccount();
+  }
 
-          return loginResult$;
-        }
-
-        /* Return existing account */
-        return of(result);
+  private createGuestAccount(): Observable<ClientAuthenticationResult> {
+    const token$ = this.challengeService.authenticateByChallenge();
+    const loginResult$ = token$.pipe(
+      switchMap((token) => {
+        const httpHeaders = this.httpOptions.headers.set(
+          AUTH_HEADER_KEY,
+          `${AUTH_SCHEME} ${token}`
+        );
+        return this.handleLoginResponse(
+          this.http.post<Authentication>(
+            this.buildUri(this.serviceApiUrl.guest),
+            {},
+            {
+              headers: httpHeaders,
+            }
+          )
+        );
       })
     );
+
+    return loginResult$;
   }
 
   /**
@@ -327,13 +281,13 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   loginViaSso(providerId: string): Observable<ClientAuthenticationResult> {
     const ssoUrl = this.buildUri(this.serviceApiUrl.sso + '/' + providerId);
-    const loginUrl = this.buildUri(this.serviceApiUrl.login + '?refresh=true');
+    const refreshUrl = this.buildUri(this.serviceApiUrl.refresh);
     const popup = this.openSsoPopup(ssoUrl);
     const auth$ = timer(0, 500).pipe(
       map(() => popup?.closed),
       filter((closed) => closed || false),
       concatMap(() =>
-        this.http.post<ClientAuthentication>(loginUrl, null, {
+        this.http.post<Authentication>(refreshUrl, null, {
           withCredentials: true,
         })
       ),
@@ -352,8 +306,8 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    */
   completeLogin() {
     const restoreGuestLogin = this.isLoggedIn();
-    const loginUrl = this.buildUri(this.serviceApiUrl.login + '?refresh=true');
-    const auth$ = this.http.post<ClientAuthentication>(loginUrl, null, {
+    const refreshUrl = this.buildUri(this.serviceApiUrl.refresh);
+    const auth$ = this.http.post<Authentication>(refreshUrl, null, {
       withCredentials: true,
     });
     return this.handleLoginResponse(auth$, restoreGuestLogin);
@@ -363,26 +317,31 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
    * Resets the local authentication state.
    */
   logout() {
+    this.http
+      .post(this.buildUri(this.serviceApiUrl.logout), {})
+      .pipe(
+        catchError((e) => {
+          if (e.status === 401) {
+            // 401 is expected when authentication is already expired.
+            return of(undefined);
+          }
+          throw e;
+        })
+      )
+      .subscribe(() => {
+        this.logoutLocally();
+
+        // FIXME: This is currently needed to assign null
+        // This should be refactored at some point
+        // eslint-disable-next-line
+        // @ts-ignore
+        this.auth$$.next(of(null));
+      });
+  }
+
+  private logoutLocally() {
+    this.globalStorageService.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
     this.globalStorageService.removeItem(STORAGE_KEYS.USER);
-    this.getCurrentAuthentication().subscribe((auth) => {
-      // FIXME: This is currently needed to assign null
-      // This should be refactored at some point
-      // eslint-disable-next-line
-      // @ts-ignore
-      this.auth$$.next(of(null));
-      if (
-        this.singleLogoutEnabled &&
-        [AuthProvider.OIDC, AuthProvider.SAML].includes(auth.authProvider)
-      ) {
-        const url = this.buildUri(
-          `${this.serviceApiUrl.sso}/${auth.authProvider.toLowerCase()}/logout`
-        );
-        const popup = this.openSsoPopup(url);
-        if (!popup) {
-          location.href = url;
-        }
-      }
-    });
   }
 
   private openSsoPopup(url: string): Window | null {
@@ -403,8 +362,12 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     return !!this.globalStorageService.getItem(STORAGE_KEYS.USER);
   }
 
-  hasAdminRole(auth: ClientAuthentication) {
-    const decodedToken = jwtDecode<Jwt>(auth.token);
+  hasAdminRole() {
+    const token = this.accessToken();
+    if (!token) {
+      return false;
+    }
+    const decodedToken = jwtDecode<Jwt>(token);
     return decodedToken.roles.some((role) => role === this.ADMIN_ROLE);
   }
 
@@ -423,42 +386,77 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
   }
 
   /**
-   * Resets the local authentication state and redirects to the login page.
+   * First tries to refresh the authentication. If this fails,
+   * resets the local authentication state and redirects to the login page.
    * Furthermore, the current route is stored so it can be restored after
    * login.
    */
   handleUnauthorizedError() {
-    this.logout();
-    this.routingService.setRedirect(undefined, true);
-    this.router.navigateByUrl('login');
-    this.translateService
-      .selectTranslate('login.authentication-expired')
-      .pipe(take(1))
-      .subscribe((msg) => {
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
+    this.refreshLogin().subscribe({
+      error: () => {
+        this.logoutLocally();
+        this.routingService.setRedirect(undefined, true);
+        this.router.navigateByUrl('login');
+        this.translateService
+          .selectTranslate('login.authentication-expired')
+          .pipe(take(1))
+          .subscribe((msg) => {
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          });
+      },
+    });
+  }
+
+  private handleAuthenticationResponse(auth: Authentication) {
+    this._accessToken.set(auth.accessToken);
+    this.globalStorageService.setItem(
+      STORAGE_KEYS.ACCESS_TOKEN,
+      auth.accessToken
+    );
   }
 
   /**
    * Updates the local authentication state based on the server response.
    */
   private handleLoginResponse(
-    clientAuthentication$: Observable<ClientAuthentication>,
+    clientAuthentication$: Observable<Authentication>,
     restoreGuestOnFailure?: boolean
   ): Observable<ClientAuthenticationResult> {
     const auth$ = clientAuthentication$.pipe(
-      map((auth) => {
+      switchMap((auth) => {
         if (auth) {
-          this.globalStorageService.setItem(STORAGE_KEYS.USER, auth);
-
-          return new ClientAuthenticationResult(auth);
+          // If authenticated, transform response by fetching user, building AuthenticatedUser and wrapping it in a ClientAuthenticationResult.
+          this.handleAuthenticationResponse(auth);
+          return this.currentUserGql.fetch().pipe(
+            map((r) => r.data?.currentUser),
+            tap((u) => {
+              if (!u) {
+                throw new Error();
+              }
+            }),
+            map(
+              (u) =>
+                new AuthenticatedUser(
+                  u!.id,
+                  u!.verified,
+                  u!.displayId ?? undefined,
+                  u!.displayName ?? undefined
+                )
+            ),
+            tap((au) =>
+              this.globalStorageService.setItem(STORAGE_KEYS.USER, au)
+            ),
+            map((au) => new ClientAuthenticationResult(au))
+          );
         } else {
-          return new ClientAuthenticationResult(
-            undefined,
-            AuthenticationStatus.UNKNOWN_ERROR
+          return of(
+            new ClientAuthenticationResult(
+              undefined,
+              AuthenticationStatus.UNKNOWN_ERROR
+            )
           );
         }
       }),
@@ -491,8 +489,13 @@ export class AuthenticationService extends AbstractHttpService<ClientAuthenticat
     /* Publish authentication (w/o result meta data) */
     this.auth$$.next(
       auth$.pipe(
-        map((result) => result.authentication as ClientAuthentication),
-        tap((auth) => restoreGuestOnFailure && !auth && this.loginGuest())
+        map((result) => result.authentication as AuthenticatedUser),
+        tap(
+          (auth) =>
+            restoreGuestOnFailure &&
+            !auth &&
+            this.handleLoginResponse(this.refreshLogin())
+        )
       )
     );
 

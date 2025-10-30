@@ -9,7 +9,7 @@ import { MatBadge } from '@angular/material/badge';
 import { MatTooltip } from '@angular/material/tooltip';
 import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
 import { AnnouncementState } from '@app/core/models/announcement-state';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MatDialog } from '@angular/material/dialog';
@@ -36,7 +36,7 @@ export class AnnouncementsButtonGqlComponent {
     AnnouncementsMetaForCurrentUserGql
   );
   readonly role = input<UserRole>();
-  readonly auth = input<ClientAuthentication>();
+  readonly auth = input<AuthenticatedUser>();
 
   private announcementsMeta = toSignal(
     this.announcementsMetaForCurrentUserGql.fetch().pipe(

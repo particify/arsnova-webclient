@@ -3,7 +3,7 @@ import { MatBadge } from '@angular/material/badge';
 import { MatTooltip } from '@angular/material/tooltip';
 import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
 import { AnnouncementState } from '@app/core/models/announcement-state';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import {
   ChangeType,
   EntityChangeNotification,
@@ -25,7 +25,7 @@ export class AnnouncementsButtonComponent implements OnInit {
   private announcementService = inject(AnnouncementService);
   private dialog = inject(MatDialog);
   readonly role = input<UserRole>();
-  readonly auth = input<ClientAuthentication>();
+  readonly auth = input<AuthenticatedUser>();
 
   announcementState?: AnnouncementState;
 

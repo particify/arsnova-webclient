@@ -155,6 +155,7 @@ export type Query = {
   announcementsByUserId?: Maybe<AnnouncementConnection>;
   announcementsForCurrentUser?: Maybe<AnnouncementConnection>;
   announcementsMetaForCurrentUser?: Maybe<AnnouncementsMeta>;
+  currentUser?: Maybe<User>;
   roomById?: Maybe<Room>;
   roomByShortId?: Maybe<Room>;
   roomManagingMembersByRoomId?: Maybe<Array<RoomMember>>;
@@ -163,8 +164,6 @@ export type Query = {
   roomMemberships?: Maybe<RoomMembershipConnection>;
   rooms?: Maybe<RoomConnection>;
   roomsByUserId?: Maybe<RoomMembershipConnection>;
-  userById?: Maybe<User>;
-  users?: Maybe<UserConnection>;
 };
 
 export type QueryAnnouncementsByRoomIdArgs = {
@@ -232,18 +231,6 @@ export type QueryRoomsByUserIdArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   userId: Scalars['UUID']['input'];
-};
-
-export type QueryUserByIdArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-};
-
-export type QueryUsersArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  user: UserQueryInput;
 };
 
 export type Room = {
@@ -332,27 +319,10 @@ export type UpdateRoomInput = {
 
 export type User = {
   __typename?: 'User';
-  givenName?: Maybe<Scalars['String']['output']>;
+  displayId?: Maybe<Scalars['String']['output']>;
+  displayName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  mailAddress?: Maybe<Scalars['String']['output']>;
-  surname?: Maybe<Scalars['String']['output']>;
-  username: Scalars['String']['output'];
-};
-
-export type UserConnection = {
-  __typename?: 'UserConnection';
-  edges: Array<Maybe<UserEdge>>;
-  pageInfo: PageInfo;
-};
-
-export type UserEdge = {
-  __typename?: 'UserEdge';
-  cursor: Scalars['String']['output'];
-  node: User;
-};
-
-export type UserQueryInput = {
-  username?: InputMaybe<Scalars['String']['input']>;
+  verified: Scalars['Boolean']['output'];
 };
 
 export type AnnouncementsMetaForCurrentUserQueryVariables = Exact<{
@@ -645,42 +615,16 @@ export type DuplicateRoomMutation = {
   duplicateRoom: { __typename?: 'Room'; id: string; shortId: string };
 };
 
-export type UserFragmentFragment = {
-  __typename?: 'User';
-  id: string;
-  username: string;
-};
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
-export type UserByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type UserByIdQuery = {
+export type CurrentUserQuery = {
   __typename?: 'Query';
-  userById?: { __typename?: 'User'; id: string; username: string } | null;
-};
-
-export type UsersQueryVariables = Exact<{
-  query: UserQueryInput;
-  cursor?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-export type UsersQuery = {
-  __typename?: 'Query';
-  users?: {
-    __typename?: 'UserConnection';
-    edges: Array<{
-      __typename?: 'UserEdge';
-      cursor: string;
-      node: { __typename?: 'User'; id: string; username: string };
-    } | null>;
-    pageInfo: {
-      __typename?: 'PageInfo';
-      endCursor?: string | null;
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-      startCursor?: string | null;
-    };
+  currentUser?: {
+    __typename?: 'User';
+    id: string;
+    verified: boolean;
+    displayId?: string | null;
+    displayName?: string | null;
   } | null;
 };
 
@@ -701,12 +645,6 @@ export const RoomMembershipFragmentFragmentDoc = gql`
       name
     }
     role
-  }
-`;
-export const UserFragmentFragmentDoc = gql`
-  fragment UserFragment on User {
-    id
-    username
   }
 `;
 export const AnnouncementsMetaForCurrentUserDocument = gql`
@@ -1080,53 +1018,25 @@ export class DuplicateRoomGql extends Apollo.Mutation<
     super(apollo);
   }
 }
-export const UserByIdDocument = gql`
-  query UserById($id: ID!) {
-    userById(id: $id) {
-      ...UserFragment
+export const CurrentUserDocument = gql`
+  query CurrentUser {
+    currentUser {
+      id
+      verified
+      displayId
+      displayName
     }
   }
-  ${UserFragmentFragmentDoc}
 `;
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserByIdGql extends Apollo.Query<
-  UserByIdQuery,
-  UserByIdQueryVariables
+export class CurrentUserGql extends Apollo.Query<
+  CurrentUserQuery,
+  CurrentUserQueryVariables
 > {
-  document = UserByIdDocument;
-
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const UsersDocument = gql`
-  query Users($query: UserQueryInput!, $cursor: String) {
-    users(user: $query, first: 10, after: $cursor) {
-      edges {
-        node {
-          ...UserFragment
-        }
-        cursor
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-        hasPreviousPage
-        startCursor
-      }
-    }
-  }
-  ${UserFragmentFragmentDoc}
-`;
-
-@Injectable({
-  providedIn: 'root',
-})
-export class UsersGql extends Apollo.Query<UsersQuery, UsersQueryVariables> {
-  document = UsersDocument;
+  document = CurrentUserDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

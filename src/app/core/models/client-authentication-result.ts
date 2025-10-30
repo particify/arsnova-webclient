@@ -1,4 +1,4 @@
-import { ClientAuthentication } from './client-authentication';
+import { AuthenticatedUser } from './authenticated-user';
 
 export enum AuthenticationStatus {
   SUCCESS = 'SUCCESS',
@@ -9,7 +9,7 @@ export enum AuthenticationStatus {
 
 export class ClientAuthenticationResult {
   constructor(
-    public authentication?: ClientAuthentication,
+    public authentication?: AuthenticatedUser,
     public status: AuthenticationStatus = AuthenticationStatus.SUCCESS
   ) {}
 }

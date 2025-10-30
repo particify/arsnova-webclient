@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -26,10 +25,10 @@ export class RedeemTokenComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authenticationService
-      .getAuthenticationChanges()
+      .getAuthenticatedUserChanges()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
-        if (!!auth && auth.authProvider !== AuthProvider.ARSNOVA_GUEST) {
+        if (!!auth && auth.verified) {
           this.roomMembershipService
             .requestMembership(this.roomId, this.token)
             .subscribe(() => {

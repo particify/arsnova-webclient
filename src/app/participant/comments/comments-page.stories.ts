@@ -8,8 +8,7 @@ import { WsCommentService } from '@app/core/services/websockets/ws-comment.servi
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { VoteService } from '@app/core/services/http/vote.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { AuthProvider } from '@app/core/models/auth-provider';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { Room } from '@app/core/models/room';
@@ -39,14 +38,7 @@ class MockCommentService {
 class MockService {}
 class MockAuthenticationService {
   getCurrentAuthentication() {
-    return of(
-      new ClientAuthentication(
-        'userId',
-        'loginid',
-        AuthProvider.ARSNOVA,
-        'token'
-      )
-    );
+    return of(new AuthenticatedUser('userId', true, 'displayId'));
   }
 }
 class MockFocusModeService {

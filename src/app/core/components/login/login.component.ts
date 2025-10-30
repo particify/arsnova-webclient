@@ -33,7 +33,6 @@ import {
   AuthenticationStatus,
   ClientAuthenticationResult,
 } from '@app/core/models/client-authentication-result';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
   PasswordEntryComponent,
@@ -137,7 +136,7 @@ export class LoginComponent
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
       if (
         this.authenticationService.isLoggedIn() &&
-        auth?.authProvider !== AuthProvider.ARSNOVA_GUEST &&
+        auth?.verified &&
         this.navigateIfAlreadyLoggedIn
       ) {
         this.router.navigateByUrl('user');

@@ -1,14 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { RoomSummary } from '@app/core/models/room-summary';
-import { HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
-import { catchError, tap, switchMap } from 'rxjs/operators';
-import {
-  AuthenticationService,
-  AUTH_HEADER_KEY,
-  AUTH_SCHEME,
-} from './authentication.service';
+import { catchError, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import {
   GlobalStorageService,
@@ -19,21 +13,15 @@ import { IMessage } from '@stomp/stompjs';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { DefaultCache } from '@app/core/services/util/caching.service';
 
-const httpOptions = {
-  headers: new HttpHeaders({}),
-};
-
 @Injectable()
 export class RoomService extends AbstractEntityService<Room> {
   private ws = inject(WsConnectorService);
-  private authService = inject(AuthenticationService);
   private globalStorageService = inject(GlobalStorageService);
   private feedbackService = inject(FeedbackService);
 
   serviceApiUrl = {
     duplicate: '/duplicate',
     generateRandomData: '/generate-random-data',
-    transfer: '/transfer',
     v2Import: '/import/v2/room',
     summary: '/_view/room/summary',
   };
@@ -182,34 +170,6 @@ export class RoomService extends AbstractEntityService<Room> {
     return this.http
       .post<void>(connectionUrl, null)
       .pipe(catchError(this.handleError<void>(`generateRandomData`)));
-  }
-
-  importv2Room(json: JSON): Observable<Room> {
-    const connectionUrl = this.buildForeignUri(this.serviceApiUrl.v2Import);
-    return this.http
-      .post<Room>(connectionUrl, json, httpOptions)
-      .pipe(catchError(this.handleError<Room>(`importv2Room, json: ${json}`)));
-  }
-
-  transferRoomThroughToken(id: string, authToken: string): Observable<Room> {
-    const auth$ = this.authService.getCurrentAuthentication();
-    const httpHeaders = new HttpHeaders().set(
-      AUTH_HEADER_KEY,
-      `${AUTH_SCHEME} ${authToken}`
-    );
-    return auth$.pipe(
-      switchMap((auth) => {
-        const connectionUrl = this.buildForeignUri(
-          `${this.serviceApiUrl.transfer}?newOwnerToken=${auth.token}`,
-          id
-        );
-        return this.http
-          .post<Room>(connectionUrl, {}, { headers: httpHeaders })
-          .pipe(
-            catchError(this.handleError<Room>(`transferRoomFromGuest ${id}`))
-          );
-      })
-    );
   }
 
   setRoomId(room: Room): void {

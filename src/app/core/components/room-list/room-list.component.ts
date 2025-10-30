@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomRole } from '@gql/generated/graphql';
 import { RoomService } from '@app/core/services/http/room.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -25,18 +25,15 @@ import {
   switchMap,
   take,
   takeUntil,
-  tap,
 } from 'rxjs/operators';
 import { RoomSummary } from '@app/core/models/room-summary';
 import { RoomDeleted } from '@app/core/models/events/room-deleted';
-import { AuthProvider } from '@app/core/models/auth-provider';
-import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
 import { ExtensionFactory } from '@projects/extension-point/src/lib/extension-factory';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { FlexModule } from '@angular/flex-layout';
-import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatCard } from '@angular/material/card';
 import {
   MatButton,
   MatFabButton,
@@ -49,12 +46,10 @@ import { NgClass } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
 import { MatPrefix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { MatActionList, MatListItem, MatList } from '@angular/material/list';
+import { MatActionList, MatListItem } from '@angular/material/list';
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
-import { MatBadge } from '@angular/material/badge';
-import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 
@@ -63,7 +58,6 @@ const ACTIVE_ROOM_THRESHOLD = 15;
 interface RoomDataView {
   summary: RoomSummary;
   membership: Membership;
-  transferred: boolean;
 }
 
 @Component({
@@ -93,10 +87,6 @@ interface RoomDataView {
     MatTooltip,
     ListBadgeComponent,
     MatIconButton,
-    MatCardContent,
-    MatList,
-    MatBadge,
-    TrackInteractionDirective,
     SplitShortIdPipe,
     TranslocoPipe,
     DisabledIfReadonlyDirective,
@@ -115,14 +105,13 @@ export class RoomListComponent implements OnInit, OnDestroy {
   private extensionFactory = inject(ExtensionFactory);
   private routingService = inject(RoutingService);
 
-  @Input({ required: true }) auth!: ClientAuthentication;
-  showGuestAccountControls = false;
+  @Input({ required: true }) auth!: AuthenticatedUser;
   isGuest = false;
   rooms: RoomDataView[] = [];
   roomIds: string[] = [];
   displayRooms: RoomDataView[] = [];
   roomsFromGuest: RoomDataView[] = [];
-  guestAuth$: Observable<ClientAuthentication>;
+  guestAuth$: Observable<AuthenticatedUser>;
   showRoomsFromGuest = false;
   isLoading = true;
   sub?: Subscription;
@@ -147,15 +136,10 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadRoomDataViews();
-    if (this.auth.authProvider === AuthProvider.ARSNOVA_GUEST) {
+    if (!this.auth.verified) {
       this.isGuest = true;
-    } else {
-      this.showGuestAccountControls =
-        !!this.authenticationService.getGuestToken();
     }
-    this.showImportMenu =
-      this.showGuestAccountControls ||
-      !!this.extensionFactory.getExtension('import-token');
+    this.showImportMenu = !!this.extensionFactory.getExtension('import-token');
     this.sub = this.eventService.on<any>('RoomDeleted').subscribe((payload) => {
       this.rooms = this.rooms.filter((r) => r.summary.id !== payload.id);
     });
@@ -206,42 +190,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
   }
 
   getGuestRooms() {
-    this.getRoomDataViewsForGuest().subscribe((guestRooms) => {
-      if (guestRooms && guestRooms.length > 0) {
-        this.roomsFromGuest = guestRooms;
-        this.showRoomsFromGuest = true;
-        setTimeout(() => {
-          document
-            .getElementById('guest-rooms')
-            ?.scrollIntoView({ behavior: 'smooth' });
-        }, 50);
-      } else if (this.isLoading) {
-        this.translateService
-          .selectTranslate('room-list.transfer-no-rooms')
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-          });
-      }
-    });
-  }
-
-  getRoomDataViewsForGuest(): Observable<RoomDataView[]> {
-    const memberships$ = this.guestAuth$.pipe(
-      switchMap((auth) => {
-        return this.roomMembershipService.getMembershipsForAuthentication(auth);
-      }),
-      map((memberships) => {
-        const ids = this.rooms.map((r) => r.membership.roomId);
-        return memberships.filter((m) => ids.indexOf(m.roomId) === -1);
-      }),
-      shareReplay()
-    );
-
-    return this.createRoomDataViewsFromMemberships(memberships$);
+    throw Error('Obsolete');
   }
 
   private createRoomDataViewsFromMemberships(
@@ -384,62 +333,6 @@ export class RoomListComponent implements OnInit, OnDestroy {
     } else {
       this.setDisplayedRooms(this.rooms);
     }
-  }
-
-  emitTransferChanges(roomDataView: RoomDataView) {
-    roomDataView.transferred = true;
-    const event = new MembershipsChanged();
-    this.eventService.broadcast(event.type, event.payload);
-    if (this.roomsFromGuest.filter((room) => !room.transferred).length === 0) {
-      this.showRoomsFromGuest = false;
-    }
-  }
-
-  transferRoomFromGuest(roomDataView: RoomDataView) {
-    this.guestAuth$
-      .pipe(
-        switchMap((auth) =>
-          this.roomService.transferRoomThroughToken(
-            roomDataView.membership.roomId,
-            auth.token
-          )
-        ),
-        tap(() =>
-          this.translateService
-            .selectTranslate('room-list.transferred-successfully')
-            .pipe(take(1))
-            .subscribe((msg) =>
-              this.notificationService.showAdvanced(
-                msg,
-                AdvancedSnackBarTypes.SUCCESS
-              )
-            )
-        )
-      )
-      .subscribe(() => {
-        this.emitTransferChanges(roomDataView);
-      });
-  }
-
-  addRoomFromGuest(roomDataView: RoomDataView) {
-    this.roomMembershipService
-      .requestMembership(roomDataView.membership.roomShortId)
-      .pipe(
-        tap(() =>
-          this.translateService
-            .selectTranslate('room-list.added-successfully')
-            .pipe(take(1))
-            .subscribe((msg) =>
-              this.notificationService.showAdvanced(
-                msg,
-                AdvancedSnackBarTypes.SUCCESS
-              )
-            )
-        )
-      )
-      .subscribe(() => {
-        this.emitTransferChanges(roomDataView);
-      });
   }
 
   updateLastAccess(shortId: string) {

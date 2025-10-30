@@ -18,8 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { AuthProvider } from '@app/core/models/auth-provider';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Room } from '@app/core/models/room';
@@ -46,7 +45,7 @@ class MockErrorHandler {
 export class MockAuthenticationService {
   private auth$$ = new BehaviorSubject<any>({ loginId: 'test@test.de' });
 
-  getAuthenticationChanges() {
+  getAuthenticatedUserChanges() {
     return this.auth$$.asObservable();
   }
 }
@@ -162,12 +161,7 @@ describe('HeaderComponent', () => {
   // # If logged in
 
   it('should display user menu button if logged in', async () => {
-    component.auth = new ClientAuthentication(
-      '1234',
-      'a@b.cd',
-      AuthProvider.ARSNOVA,
-      'token'
-    );
+    component.auth = new AuthenticatedUser('1234', true, 'a@b.cd');
     userButton = await loader.getHarness(
       MatButtonHarness.with({ selector: '#menu-button' })
     );

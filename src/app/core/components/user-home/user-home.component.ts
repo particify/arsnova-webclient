@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { FlexModule } from '@angular/flex-layout';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
@@ -25,7 +25,7 @@ export class UserHomeComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);
 
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  auth!: ClientAuthentication;
+  auth!: AuthenticatedUser;
 
   ngOnInit() {
     this.authenticationService

@@ -7,11 +7,10 @@ import {
 import { UserService } from '@app/core/services/http/user.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Router } from '@angular/router';
 import { User } from '@app/core/models/user';
 import { Person } from '@app/core/models/person';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { UserSettings } from '@app/core/models/user-settings';
 import { Location, AsyncPipe } from '@angular/common';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -78,7 +77,7 @@ export class UserProfileComponent implements OnInit {
   // Route data input below
   @Input() accountSettingsName?: string;
   // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  auth!: ClientAuthentication;
+  auth!: AuthenticatedUser;
   user!: User;
   formFields: FormField[] = [];
   isGuest = false;
@@ -91,7 +90,7 @@ export class UserProfileComponent implements OnInit {
   ngOnInit(): void {
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
       this.auth = auth;
-      this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+      this.isGuest = !auth.verified;
       this.userService
         .getById(this.auth.userId, { view: 'owner' })
         .subscribe((user) => {

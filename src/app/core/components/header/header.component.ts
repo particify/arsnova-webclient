@@ -1,8 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Router } from '@angular/router';
-import { ClientAuthentication } from '@app/core/models/client-authentication';
-import { AuthProvider } from '@app/core/models/auth-provider';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { EventService } from '@app/core/services/util/event.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
@@ -75,7 +74,7 @@ export class HeaderComponent implements OnInit {
   private pageTitleService = inject(PageTitleService);
   private env = inject<typeof environment>(ENVIRONMENT);
 
-  auth?: ClientAuthentication;
+  auth?: AuthenticatedUser;
 
   role?: UserRole;
   UserRole: typeof UserRole = UserRole;
@@ -91,12 +90,14 @@ export class HeaderComponent implements OnInit {
   isDev = !this.env.production;
 
   ngOnInit() {
-    this.authenticationService.getAuthenticationChanges().subscribe((auth) => {
-      this.auth = auth;
-      this.userCharacter = this.auth?.displayId
-        ?.slice(0, 1)
-        .toLocaleUpperCase();
-    });
+    this.authenticationService
+      .getAuthenticatedUserChanges()
+      .subscribe((auth) => {
+        this.auth = auth;
+        this.userCharacter = this.auth?.displayId
+          ?.slice(0, 1)
+          .toLocaleUpperCase();
+      });
     this.roomService.getCurrentRoomStream().subscribe((room) => {
       this.room = room;
     });
@@ -123,7 +124,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isGuest(): boolean {
-    return !this.auth || this.auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+    return !this.auth?.verified;
   }
 
   presentCurrentView(shouldOpen = this.openPresentationDirectly) {

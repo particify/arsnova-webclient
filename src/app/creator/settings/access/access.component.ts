@@ -26,7 +26,6 @@ import { UserService } from '@app/core/services/http/user.service';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { AuthProvider } from '@app/core/models/auth-provider';
 import { debounceTime, map, Subject, take, takeUntil } from 'rxjs';
 import { AccessTokenService } from '@app/core/services/http/access-token.service';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -152,7 +151,7 @@ export class AccessComponent
 
   getModerators() {
     this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
-      this.isGuest = auth.authProvider === AuthProvider.ARSNOVA_GUEST;
+      this.isGuest = !auth.verified;
       if (this.isGuest) {
         this.usernameFormControl.disable();
       }
