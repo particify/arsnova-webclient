@@ -318,40 +318,26 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * Resets the local authentication state.
    */
   logout() {
-    this.getCurrentAuthentication().subscribe((auth) => {
-      this.http
-        .post(this.buildUri(this.serviceApiUrl.logout), {})
-        .pipe(
-          catchError((e) => {
-            if (e.status === 401) {
-              // 401 is expected when authentication is already expired.
-              return of(undefined);
-            }
-            throw e;
-          })
-        )
-        .subscribe(() => {
-          this.logoutLocally();
-
-          // FIXME: This is currently needed to assign null
-          // This should be refactored at some point
-          // eslint-disable-next-line
-          // @ts-ignore
-          this.auth$$.next(of(null));
-          if (
-            this.singleLogoutEnabled &&
-            [AuthProvider.OIDC, AuthProvider.SAML].includes(auth.authProvider)
-          ) {
-            const url = this.buildUri(
-              `${this.serviceApiUrl.sso}/${auth.authProvider.toLowerCase()}/logout`
-            );
-            const popup = this.openSsoPopup(url);
-            if (!popup) {
-              location.href = url;
-            }
+    this.http
+      .post(this.buildUri(this.serviceApiUrl.logout), {})
+      .pipe(
+        catchError((e) => {
+          if (e.status === 401) {
+            // 401 is expected when authentication is already expired.
+            return of(undefined);
           }
-        });
-    });
+          throw e;
+        })
+      )
+      .subscribe(() => {
+        this.logoutLocally();
+
+        // FIXME: This is currently needed to assign null
+        // This should be refactored at some point
+        // eslint-disable-next-line
+        // @ts-ignore
+        this.auth$$.next(of(null));
+      });
   }
 
   private logoutLocally() {
