@@ -10,16 +10,13 @@ import { EntityChangeNotification } from '@app/core/models/events/entity-change-
 import { Room } from '@app/core/models/room';
 import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
 import { RoomService } from '@app/core/services/http/room.service';
-import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { WsConnectorService } from './ws-connector.service';
-import { environment } from '@environments/environment';
 
 @Injectable()
 export class WsRoomEventDispatcherService {
   private wsConnector = inject(WsConnectorService);
   private eventService = inject(EventService);
-  private roomMembershipService = inject(RoomMembershipService);
   private roomService = inject(RoomService);
   private roomMembershipByShortIdGql = inject(RoomMembershipByShortIdGql);
 
@@ -34,15 +31,13 @@ export class WsRoomEventDispatcherService {
   private handleRoomChange(room?: Room) {
     this.roomChanged$.next();
     if (room) {
-      const role$ = environment.graphql
-        ? this.roomMembershipByShortIdGql
-            .fetch({ variables: { shortId: room.shortId } })
-            .pipe(
-              map((r) => r.data),
-              filter((data) => !!data),
-              map((data) => data.roomMembershipByShortId?.role ?? RoomRole.None)
-            )
-        : this.roomMembershipService.getPrimaryRoleByRoom(room.shortId);
+      const role$ = this.roomMembershipByShortIdGql
+        .fetch({ variables: { shortId: room.shortId } })
+        .pipe(
+          map((r) => r.data),
+          filter((data) => !!data),
+          map((data) => data.roomMembershipByShortId?.role ?? RoomRole.None)
+        );
       this.registerChangesMetaListener(room);
       role$.subscribe((role) => this.registerDataChangeListener(room, role));
     }

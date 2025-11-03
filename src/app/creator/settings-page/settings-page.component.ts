@@ -32,11 +32,9 @@ import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-hea
 import { RoomComponent } from '@app/creator/settings/room/room.component';
 import { CommentSettingsComponent } from '@app/creator/settings/comment-settings/comment-settings.component';
 import { AccessComponent } from '@app/creator/settings/access/access.component';
-import { AnnouncementSettingsComponent } from '@app/creator/settings/announcement-settings/announcement-settings.component';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { UpdateEvent } from '@app/creator/settings/update-event';
-import { environment } from '@environments/environment';
-import { AnnouncementSettingsGqlComponent } from '@app/creator/settings/announcement-settings-gql/announcement-settings-gql.component';
+import { AnnouncementSettingsComponent } from '@app/creator/settings/announcement-settings/announcement-settings.component';
 
 export interface Settings {
   name: string;
@@ -60,9 +58,7 @@ export interface Settings {
     RoomComponent,
     CommentSettingsComponent,
     AccessComponent,
-    environment.graphql
-      ? AnnouncementSettingsGqlComponent
-      : AnnouncementSettingsComponent,
+    AnnouncementSettingsComponent,
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,

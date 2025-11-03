@@ -1,80 +1,77 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { RoomService } from '@app/core/services/http/room.service';
-import { Room } from '@app/core/models/room';
-import { RoomCreated } from '@app/core/models/events/room-created';
-import { Router } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
-import {
-  MatDialogRef,
   MAT_DIALOG_DATA,
-  MatDialogContent,
   MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
 } from '@angular/material/dialog';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@app/core/services/util/event.service';
-import {
-  GlobalStorageService,
-  STORAGE_KEYS,
-} from '@app/core/services/util/global-storage.service';
-import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { Router } from '@angular/router';
 import {
   AuthenticationProvider,
   AuthenticationProviderRole,
   AuthenticationProviderType,
 } from '@app/core/models/api-config';
+import { AuthenticatedUser } from '@app/core/models/authenticated-user';
+import { RoomCreated } from '@app/core/models/events/room-created';
 import { HintType } from '@app/core/models/hint-type.enum';
+import { Room } from '@app/core/models/room';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { EventService } from '@app/core/services/util/event.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { take } from 'rxjs';
-import { FormsModule } from '@angular/forms';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { FlexModule } from '@angular/flex-layout';
-import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { MatButton } from '@angular/material/button';
-import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
+import { CreateRoomGql, DuplicateRoomGql } from '@gql/generated/graphql';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-room-create',
   templateUrl: './room-create.component.html',
   imports: [
+    ExtensionPointModule,
     FormsModule,
-    CdkScrollable,
-    MatDialogContent,
-    FlexModule,
-    ExtensionPointComponent,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatHint,
     HintComponent,
-    MatDialogActions,
     LoadingButtonComponent,
     MatButton,
+    MatDialogActions,
+    MatDialogContent,
+    MatFormField,
+    MatHint,
+    MatInput,
+    MatLabel,
     TranslocoPipe,
   ],
 })
 export class RoomCreateComponent extends FormComponent implements OnInit {
-  private roomService = inject(RoomService);
-  private router = inject(Router);
-  private notification = inject(NotificationService);
-  dialogRef = inject<MatDialogRef<RoomCreateComponent>>(MatDialogRef);
-  private translateService = inject(TranslocoService);
-  private authenticationService = inject(AuthenticationService);
-  eventService = inject(EventService);
-  private globalStorageService = inject(GlobalStorageService);
   private apiConfigService = inject(ApiConfigService);
-  private data = inject<{
+  private authenticationService = inject(AuthenticationService);
+  private dialogRef = inject(MatDialogRef<RoomCreateComponent>);
+  private eventService = inject(EventService);
+  private globalStorageService = inject(GlobalStorageService);
+  private notification = inject(NotificationService);
+  private createRoomGql = inject(CreateRoomGql);
+  private duplicateRoomGql = inject(DuplicateRoomGql);
+  private router = inject(Router);
+  private translateService = inject(TranslocoService);
+  private data: {
     prefilledName?: string;
     roomId?: string;
     navigateAfterCreation: boolean;
-  }>(MAT_DIALOG_DATA);
+  } = inject(MAT_DIALOG_DATA);
 
   readonly dialogId = 'create-room';
 
@@ -151,44 +148,59 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     }
     if (this.createDuplication && this.data.roomId) {
       this.disableForm();
-      this.roomService
-        .duplicateRoom(this.data.roomId, false, this.newRoom.name)
-        .subscribe(
-          (room) => {
-            this.dialogRef.close(room.name);
-            const event = new RoomCreated(room.id, room.shortId);
+      this.duplicateRoomGql
+        .mutate({
+          variables: { id: this.data.roomId, newName: this.newRoom.name },
+        })
+        .subscribe({
+          next: (r) => {
+            if (!r.data) {
+              return;
+            }
+            const roomData = r.data.duplicateRoom;
+            this.dialogRef.close(this.newRoom.name);
+            const event = new RoomCreated(roomData.id, roomData.shortId);
             this.eventService.broadcast(event.type, event.payload);
             const msg = this.translateService.translate(
               'room-list.room-duplicated'
             );
             this.notification.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
           },
-          () => this.enableForm()
-        );
+          error: () => this.enableForm(),
+        });
       return;
     }
     this.newRoom.abbreviation = '00000000';
     this.newRoom.description = '';
     this.newRoom.ownerId = auth.userId;
     this.disableForm();
-    this.roomService.addRoom(this.newRoom).subscribe(
-      (room) => {
-        this.newRoom = room;
-        const msg1 = this.translateService.translate('home-page.created-1');
-        const msg2 = this.translateService.translate('home-page.created-2');
-        this.notification.showAdvanced(
-          msg1 + this.newRoom.name + msg2,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-        const event = new RoomCreated(room.id, room.shortId);
-        this.eventService.broadcast(event.type, event.payload);
-        if (this.data.navigateAfterCreation) {
-          this.router.navigate(['edit', room.shortId]);
-        }
-        this.closeDialog(this.newRoom);
-      },
-      () => this.enableForm()
-    );
+    this.createRoomGql
+      .mutate({ variables: { name: this.newRoom.name } })
+      .subscribe({
+        next: (r) => {
+          if (!r.data) {
+            return;
+          }
+          const roomData = r.data.createRoom;
+          const room = new Room();
+          room.id = roomData.id;
+          room.shortId = roomData.shortId;
+          room.name = this.newRoom.name;
+          const msg1 = this.translateService.translate('home-page.created-1');
+          const msg2 = this.translateService.translate('home-page.created-2');
+          this.notification.showAdvanced(
+            msg1 + this.newRoom.name + msg2,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          const event = new RoomCreated(roomData.id, roomData.shortId);
+          this.eventService.broadcast(event.type, event.payload);
+          if (this.data.navigateAfterCreation) {
+            this.router.navigate(['edit', roomData.shortId]);
+          }
+          this.closeDialog(this.newRoom);
+        },
+        error: () => this.enableForm(),
+      });
   }
 
   closeDialog(room?: Room): void {

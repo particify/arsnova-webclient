@@ -30,7 +30,6 @@ import { DevErrorIndicatorComponent } from '@app/standalone/dev-error-indicator/
 import { ENVIRONMENT } from '@environments/environment-token';
 import { environment } from '@environments/environment';
 import { AnnouncementsButtonComponent } from '@app/standalone/announcements-button/announcements-button.component';
-import { AnnouncementsButtonGqlComponent } from '@app/standalone/announcements-button-gql/announcements-button-gql.component';
 
 @Component({
   selector: 'app-header',
@@ -58,9 +57,7 @@ import { AnnouncementsButtonGqlComponent } from '@app/standalone/announcements-b
     TranslocoPipe,
     ShareRoomComponent,
     DevErrorIndicatorComponent,
-    environment.graphql
-      ? AnnouncementsButtonGqlComponent
-      : AnnouncementsButtonComponent,
+    AnnouncementsButtonComponent,
   ],
 })
 export class HeaderComponent implements OnInit {

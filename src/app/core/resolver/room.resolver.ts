@@ -1,17 +1,22 @@
-import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
-import { tap } from 'rxjs/operators';
+import { JoinRoomGql } from '@gql/generated/graphql';
+import { filter, map, tap } from 'rxjs';
 
-@Injectable()
-export class RoomResolver implements Resolve<Room> {
-  private roomService = inject(RoomService);
-
-  resolve(route: ActivatedRouteSnapshot): Observable<Room> {
-    return this.roomService
-      .getRoomByShortId(route.params['shortId'])
-      .pipe(tap((room) => this.roomService.joinRoom(room)));
-  }
-}
+export const roomResolver: ResolveFn<Room> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const roomService = inject(RoomService);
+  const shortId = route.params['shortId'];
+  const room = inject(JoinRoomGql)
+    .mutate({ variables: { shortId: shortId } })
+    .pipe(
+      map((r) => r.data?.joinRoom.room),
+      filter((roomData) => !!roomData),
+      map((roomData) => Room.fromGql(roomData)),
+      tap((room) => roomService.joinRoom(room))
+    );
+  return room;
+};

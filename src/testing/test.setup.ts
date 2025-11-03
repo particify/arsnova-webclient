@@ -15,7 +15,6 @@ import { of } from 'rxjs';
 import { ActivatedRouteStub } from './test-helpers';
 import { ActivatedRoute } from '@angular/router';
 import { apolloProvider } from '@app/apollo-provider';
-import { environment } from '@environments/environment';
 
 export function configureTestModule(
   extraImports: any[] = [],
@@ -83,7 +82,7 @@ export function configureTestModule(
         provide: ActivatedRoute,
         useValue: activatedRoute,
       },
-      environment.graphql ? apolloProvider : [],
+      apolloProvider,
       ...extraProviders,
     ],
     schemas: [NO_ERRORS_SCHEMA],
