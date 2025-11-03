@@ -15,6 +15,15 @@ fragment RoomMembershipFragment on RoomMembership {
   role
 }
 
+fragment RoomMember on RoomMember {
+  user {
+    id
+    displayId
+    displayName
+  }
+  role
+}
+
 query RoomIdByShortId($shortId: String!) {
   roomMembershipByShortId(shortId: $shortId) {
     room {
@@ -114,4 +123,30 @@ mutation DuplicateRoom($id: ID!, $newName: String!) {
     id
     shortId
   }
+}
+
+query RoomManagingMembersByRoomId($roomId: UUID!) {
+  roomManagingMembersByRoomId(roomId: $roomId) {
+    ...RoomMember
+  }
+}
+
+mutation GrantRoomRole($roomId: UUID!, $userId: UUID!, $role: RoomRole!) {
+  grantRoomRole(roomId: $roomId, userId: $userId, role: $role)
+}
+
+mutation GrantRoomRoleByInvitation(
+  $roomId: UUID!
+  $mailAddress: String!
+  $role: RoomRole!
+) {
+  grantRoomRoleByInvitation(
+    roomId: $roomId
+    mailAddress: $mailAddress
+    role: $role
+  )
+}
+
+mutation RevokeRoomRole($roomId: UUID!, $userId: UUID!) {
+  revokeRoomRole(roomId: $roomId, userId: $userId)
 }

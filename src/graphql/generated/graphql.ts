@@ -94,6 +94,7 @@ export type Mutation = {
   duplicateDemoRoom: Room;
   duplicateRoom: Room;
   grantRoomRole: Scalars['Boolean']['output'];
+  grantRoomRoleByInvitation: Scalars['Boolean']['output'];
   joinRoom: RoomMembership;
   revokeRoomRole: Scalars['Boolean']['output'];
   updateAnnouncement: Announcement;
@@ -133,6 +134,12 @@ export type MutationGrantRoomRoleArgs = {
   role: RoomRole;
   roomId: Scalars['UUID']['input'];
   userId: Scalars['UUID']['input'];
+};
+
+export type MutationGrantRoomRoleByInvitationArgs = {
+  mailAddress: Scalars['String']['input'];
+  role: RoomRole;
+  roomId: Scalars['UUID']['input'];
 };
 
 export type MutationJoinRoomArgs = {
@@ -192,6 +199,7 @@ export type Query = {
   roomMemberships?: Maybe<RoomMembershipConnection>;
   rooms?: Maybe<RoomConnection>;
   roomsByUserId?: Maybe<RoomMembershipConnection>;
+  userByDisplayId?: Maybe<User>;
 };
 
 export type QueryAnnouncementsByRoomIdArgs = {
@@ -261,6 +269,10 @@ export type QueryRoomsByUserIdArgs = {
   userId: Scalars['UUID']['input'];
 };
 
+export type QueryUserByDisplayIdArgs = {
+  displayId: Scalars['ID']['input'];
+};
+
 export type Room = {
   __typename?: 'Room';
   description?: Maybe<Scalars['String']['output']>;
@@ -285,7 +297,7 @@ export type RoomEdge = {
 export type RoomMember = {
   __typename?: 'RoomMember';
   role?: Maybe<RoomRole>;
-  user?: Maybe<User>;
+  user: User;
 };
 
 export type RoomMembership = {
@@ -478,6 +490,17 @@ export type RoomMembershipFragmentFragment = {
   room: { __typename?: 'Room'; id: string; shortId: string; name: string };
 };
 
+export type RoomMemberFragment = {
+  __typename?: 'RoomMember';
+  role?: RoomRole | null;
+  user: {
+    __typename?: 'User';
+    id: string;
+    displayId?: string | null;
+    displayName?: string | null;
+  };
+};
+
 export type RoomIdByShortIdQueryVariables = Exact<{
   shortId: Scalars['String']['input'];
 }>;
@@ -660,11 +683,76 @@ export type DuplicateRoomMutation = {
   duplicateRoom: { __typename?: 'Room'; id: string; shortId: string };
 };
 
+export type RoomManagingMembersByRoomIdQueryVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type RoomManagingMembersByRoomIdQuery = {
+  __typename?: 'Query';
+  roomManagingMembersByRoomId?: Array<{
+    __typename?: 'RoomMember';
+    role?: RoomRole | null;
+    user: {
+      __typename?: 'User';
+      id: string;
+      displayId?: string | null;
+      displayName?: string | null;
+    };
+  }> | null;
+};
+
+export type GrantRoomRoleMutationVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+  userId: Scalars['UUID']['input'];
+  role: RoomRole;
+}>;
+
+export type GrantRoomRoleMutation = {
+  __typename?: 'Mutation';
+  grantRoomRole: boolean;
+};
+
+export type GrantRoomRoleByInvitationMutationVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+  mailAddress: Scalars['String']['input'];
+  role: RoomRole;
+}>;
+
+export type GrantRoomRoleByInvitationMutation = {
+  __typename?: 'Mutation';
+  grantRoomRoleByInvitation: boolean;
+};
+
+export type RevokeRoomRoleMutationVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+  userId: Scalars['UUID']['input'];
+}>;
+
+export type RevokeRoomRoleMutation = {
+  __typename?: 'Mutation';
+  revokeRoomRole: boolean;
+};
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CurrentUserQuery = {
   __typename?: 'Query';
   currentUser?: {
+    __typename?: 'User';
+    id: string;
+    verified: boolean;
+    displayId?: string | null;
+    displayName?: string | null;
+  } | null;
+};
+
+export type UserByDisplayIdQueryVariables = Exact<{
+  displayId: Scalars['ID']['input'];
+}>;
+
+export type UserByDisplayIdQuery = {
+  __typename?: 'Query';
+  userByDisplayId?: {
     __typename?: 'User';
     id: string;
     verified: boolean;
@@ -707,6 +795,16 @@ export const RoomMembershipFragmentFragmentDoc = gql`
       id
       shortId
       name
+    }
+    role
+  }
+`;
+export const RoomMemberFragmentDoc = gql`
+  fragment RoomMember on RoomMember {
+    user {
+      id
+      displayId
+      displayName
     }
     role
   }
@@ -1105,6 +1203,93 @@ export class DuplicateRoomGql extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const RoomManagingMembersByRoomIdDocument = gql`
+  query RoomManagingMembersByRoomId($roomId: UUID!) {
+    roomManagingMembersByRoomId(roomId: $roomId) {
+      ...RoomMember
+    }
+  }
+  ${RoomMemberFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomManagingMembersByRoomIdGql extends Apollo.Query<
+  RoomManagingMembersByRoomIdQuery,
+  RoomManagingMembersByRoomIdQueryVariables
+> {
+  document = RoomManagingMembersByRoomIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GrantRoomRoleDocument = gql`
+  mutation GrantRoomRole($roomId: UUID!, $userId: UUID!, $role: RoomRole!) {
+    grantRoomRole(roomId: $roomId, userId: $userId, role: $role)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GrantRoomRoleGql extends Apollo.Mutation<
+  GrantRoomRoleMutation,
+  GrantRoomRoleMutationVariables
+> {
+  document = GrantRoomRoleDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GrantRoomRoleByInvitationDocument = gql`
+  mutation GrantRoomRoleByInvitation(
+    $roomId: UUID!
+    $mailAddress: String!
+    $role: RoomRole!
+  ) {
+    grantRoomRoleByInvitation(
+      roomId: $roomId
+      mailAddress: $mailAddress
+      role: $role
+    )
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GrantRoomRoleByInvitationGql extends Apollo.Mutation<
+  GrantRoomRoleByInvitationMutation,
+  GrantRoomRoleByInvitationMutationVariables
+> {
+  document = GrantRoomRoleByInvitationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RevokeRoomRoleDocument = gql`
+  mutation RevokeRoomRole($roomId: UUID!, $userId: UUID!) {
+    revokeRoomRole(roomId: $roomId, userId: $userId)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RevokeRoomRoleGql extends Apollo.Mutation<
+  RevokeRoomRoleMutation,
+  RevokeRoomRoleMutationVariables
+> {
+  document = RevokeRoomRoleDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const CurrentUserDocument = gql`
   query CurrentUser {
     currentUser {
@@ -1124,6 +1309,30 @@ export class CurrentUserGql extends Apollo.Query<
   CurrentUserQueryVariables
 > {
   document = CurrentUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UserByDisplayIdDocument = gql`
+  query UserByDisplayId($displayId: ID!) {
+    userByDisplayId(displayId: $displayId) {
+      id
+      verified
+      displayId
+      displayName
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UserByDisplayIdGql extends Apollo.Query<
+  UserByDisplayIdQuery,
+  UserByDisplayIdQueryVariables
+> {
+  document = UserByDisplayIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

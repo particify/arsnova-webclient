@@ -1,19 +1,17 @@
 import {
+  AfterViewInit,
   Component,
-  EventEmitter,
-  Input,
+  DestroyRef,
+  Injector,
   OnDestroy,
-  OnInit,
-  Output,
   inject,
+  input,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { ModeratorService } from '@app/core/services/http/moderator.service';
-import { Moderator } from '@app/core/models/moderator';
 import {
   UntypedFormControl,
   Validators,
@@ -23,11 +21,18 @@ import {
 import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { UserService } from '@app/core/services/http/user.service';
-import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { debounceTime, map, Subject, take, takeUntil } from 'rxjs';
-import { AccessTokenService } from '@app/core/services/http/access-token.service';
+import {
+  catchError,
+  debounceTime,
+  filter,
+  map,
+  of,
+  shareReplay,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { FlexModule } from '@angular/flex-layout';
@@ -45,7 +50,16 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { NgClass } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
 import { MatChipListbox, MatChipOption } from '@angular/material/chips';
-import { UpdateEvent } from '@app/creator/settings/update-event';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import {
+  GrantRoomRoleByInvitationGql,
+  GrantRoomRoleGql,
+  RevokeRoomRoleGql,
+  RoomManagingMembersByRoomIdGql,
+  RoomMemberFragment,
+  RoomRole,
+  UserByDisplayIdGql,
+} from '@gql/generated/graphql';
 
 export interface Role {
   name: string;
@@ -83,42 +97,74 @@ export interface Role {
 })
 export class AccessComponent
   extends FormComponent
-  implements OnInit, OnDestroy
+  implements AfterViewInit, OnDestroy
 {
+  private injector = inject(Injector);
+  private destroyRef = inject(DestroyRef);
   private dialogService = inject(DialogService);
   notificationService = inject(NotificationService);
   translationService = inject(TranslocoService);
-  protected moderatorService = inject(ModeratorService);
   protected userService = inject(UserService);
   eventService = inject(EventService);
   private authenticationService = inject(AuthenticationService);
-  private accessTokenService = inject(AccessTokenService);
+  private membersByRoomIdGql = inject(RoomManagingMembersByRoomIdGql);
+  private userByDisplayId = inject(UserByDisplayIdGql);
+  private grantRoomRoleGql = inject(GrantRoomRoleGql);
+  private grantRoomRoleByInvitationGql = inject(GrantRoomRoleByInvitationGql);
+  private revokeRoomRoleGql = inject(RevokeRoomRoleGql);
 
-  @Output() saveEvent: EventEmitter<UpdateEvent> =
-    new EventEmitter<UpdateEvent>();
-
-  @Input({ required: true }) room!: Room;
-  moderators: Moderator[] = [];
+  roomId = input.required<string>();
   userIds: string[] = [];
-  newModeratorId?: string;
+  newMemberId?: string;
   loginId = '';
-  isLoading = true;
-  selectedRole = UserRole.MODERATOR;
-  UserRole: typeof UserRole = UserRole;
-  roles: UserRole[] = [UserRole.MODERATOR];
+  selectedRole = RoomRole.Moderator;
+  RoomRole: typeof RoomRole = RoomRole;
+  roles: RoomRole[] = [RoomRole.Moderator];
   isGuest = false;
   loginIdIsEmail = false;
 
   usernameFormControl = new UntypedFormControl('', [Validators.email]);
-  formSubscription = new Subject<void>();
   currentInputIsChecked = true;
 
   HintType = HintType;
 
-  ngOnInit() {
+  private readonly afterViewInit$ = new Subject<void>();
+  private readonly membersQueryRef$ = this.afterViewInit$.pipe(
+    map(() =>
+      this.membersByRoomIdGql.watch({ variables: { roomId: this.roomId() } })
+    ),
+    shareReplay(1)
+  );
+  readonly isLoading = toSignal(
+    this.membersQueryRef$.pipe(
+      switchMap((ref) => ref.valueChanges),
+      map((r) => r.loading),
+      catchError(() => of(false))
+    )
+  );
+  readonly errors = toSignal(
+    this.membersQueryRef$.pipe(
+      switchMap((ref) => ref.valueChanges),
+      map((r) => r.error),
+      catchError(() => of(true))
+    )
+  );
+  readonly members = toSignal(
+    this.membersQueryRef$.pipe(
+      switchMap((ref) => ref.valueChanges),
+      filter((r) => r.dataState === 'complete'),
+      map((r) => r.data.roomManagingMembersByRoomId ?? []),
+      map((m) => m.toSorted((a) => (a.role === RoomRole.Owner ? -1 : 1))),
+      catchError(() => of())
+    ),
+    { initialValue: [], injector: this.injector }
+  );
+
+  ngAfterViewInit() {
+    this.afterViewInit$.next();
+    this.afterViewInit$.complete();
     this.setFormControl(this.usernameFormControl);
     this.selectedRole = this.roles[0];
-    this.getModerators();
     this.authenticationService
       .isLoginIdEmailAddress()
       .subscribe((loginIdIsEmail) => {
@@ -128,19 +174,14 @@ export class AccessComponent
       .pipe(
         map(() => this.changesMade()),
         debounceTime(500),
-        takeUntil(this.formSubscription)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
-        this.newModeratorId = undefined;
+        this.newMemberId = undefined;
         if (this.loginIdIsEmail && this.loginId) {
           this.getUser();
         }
       });
-  }
-
-  ngOnDestroy() {
-    this.formSubscription.next();
-    this.formSubscription.unsubscribe();
   }
 
   changesMade() {
@@ -149,83 +190,47 @@ export class AccessComponent
     }
   }
 
-  getModerators() {
-    this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
-      this.isGuest = !auth.verified;
-      if (this.isGuest) {
-        this.usernameFormControl.disable();
-      }
-      this.moderatorService.get(this.room.id).subscribe((moderators) => {
-        moderators.forEach((moderator) => {
-          this.userIds.push(moderator.userId);
-        });
-        this.userService.getUserData(this.userIds).subscribe((users) => {
-          users.forEach((user) => {
-            this.moderators.push(
-              new Moderator(
-                user.id,
-                user.person.displayId,
-                moderators.find((m) => m.userId === user.id)?.role
-              )
-            );
-          });
-          if (this.isGuest) {
-            this.translationService
-              .selectTranslate('creator.settings.you')
-              .pipe(take(1))
-              .subscribe((msg) => {
-                this.moderators[0].displayId = msg;
-              });
-          }
-          this.moderators = this.moderators.sort((a) => {
-            return a.role === UserRole.OWNER ? -1 : 1;
-          });
-          this.isLoading = false;
-        });
-      });
-    });
-  }
-
   getUser() {
-    this.userService.getUserByDisplayId(this.loginId).subscribe((list) => {
-      const userFound = list.length > 0;
-      this.currentInputIsChecked = true;
-      if (userFound) {
-        this.newModeratorId = list[0].id;
-        if (!this.loginIdIsEmail) {
-          this.addModerator();
+    this.userByDisplayId
+      .fetch({ variables: { displayId: this.loginId } })
+      .pipe(map((r) => r.data?.userByDisplayId))
+      .subscribe((u) => {
+        this.currentInputIsChecked = true;
+        if (u) {
+          this.newMemberId = u.id;
+          if (!this.loginIdIsEmail) {
+            this.addModerator();
+          }
+        } else if (!this.loginIdIsEmail) {
+          const msg = this.translationService.translate(
+            'creator.settings.user-not-found'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.FAILED
+          );
         }
-      } else if (!this.loginIdIsEmail) {
-        const msg = this.translationService.translate(
-          'creator.settings.user-not-found'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.FAILED
-        );
-      }
-    });
+      });
   }
 
   addModerator() {
-    if (!this.loginIdIsEmail && !this.newModeratorId) {
+    if (!this.loginIdIsEmail && !this.newMemberId) {
       this.getUser();
       return;
     }
-    if (this.newModeratorId) {
+    if (this.newMemberId) {
       this.disableForm();
-      this.moderatorService
-        .add(this.room.id, this.newModeratorId, this.selectedRole)
+      this.grantRoomRoleGql
+        .mutate({
+          variables: {
+            roomId: this.roomId(),
+            userId: this.newMemberId,
+            role: this.selectedRole,
+          },
+        })
         .subscribe({
           next: () => {
-            this.saveEvent.emit(new UpdateEvent(null, false, true));
-            this.moderators.push(
-              new Moderator(
-                this.newModeratorId,
-                this.loginId,
-                this.selectedRole
-              )
-            );
+            this.membersQueryRef$.subscribe((ref) => ref.refetch());
             const msg = this.translationService.translate(
               'creator.settings.user-added'
             );
@@ -246,8 +251,14 @@ export class AccessComponent
   }
 
   inviteModerator() {
-    this.accessTokenService
-      .invite(this.room.id, this.selectedRole, this.loginId)
+    this.grantRoomRoleByInvitationGql
+      .mutate({
+        variables: {
+          roomId: this.roomId(),
+          mailAddress: this.loginId,
+          role: this.selectedRole,
+        },
+      })
       .subscribe(() => {
         const msg = this.translationService.translate(
           'creator.settings.user-invited'
@@ -260,17 +271,28 @@ export class AccessComponent
       });
   }
 
-  removeModerator(moderator: Moderator): void {
+  removeModerator(member: RoomMemberFragment): void {
     const dialogRef = this.dialogService.openDeleteDialog(
       'room-moderator',
       'creator.dialog.really-delete-user-rights',
-      moderator.displayId,
+      member.user.displayId ?? member.user.id,
       'dialog.remove',
-      () => this.moderatorService.delete(this.room.id, moderator.userId)
+      () =>
+        this.revokeRoomRoleGql.mutate({
+          variables: { roomId: this.roomId(), userId: member.user?.id },
+          update: (cache, { data }) => {
+            if (data?.revokeRoomRole) {
+              const cacheId = cache.identify(member);
+              if (cacheId) {
+                cache.evict({ id: cacheId });
+                cache.gc();
+              }
+            }
+          },
+        })
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.saveEvent.emit(new UpdateEvent(null, false, true));
         const msg = this.translationService.translate(
           'creator.settings.user-removed'
         );
@@ -278,16 +300,15 @@ export class AccessComponent
           msg,
           AdvancedSnackBarTypes.WARNING
         );
-        this.moderators.splice(this.moderators.indexOf(moderator), 1);
       }
     });
   }
 
   canBeAdded(): boolean {
-    return !!this.newModeratorId || !this.loginIdIsEmail;
+    return !!this.newMemberId || !this.loginIdIsEmail;
   }
 
-  updateSelectedRole(role: UserRole) {
+  updateSelectedRole(role: RoomRole) {
     this.selectedRole = role;
   }
 }

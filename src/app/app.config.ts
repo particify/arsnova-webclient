@@ -28,7 +28,6 @@ import {
 } from '@app/core/services/util/language.service';
 import { UserService } from '@app/core/services/http/user.service';
 import { VoteService } from '@app/core/services/http/vote.service';
-import { ModeratorService } from '@app/core/services/http/moderator.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
@@ -53,7 +52,6 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { DemoService } from '@app/core/services/demo.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { AccessTokenService } from '@app/core/services/http/access-token.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -152,7 +150,6 @@ export const AppConfig: ApplicationConfig = {
     LanguageService,
     UserService,
     VoteService,
-    ModeratorService,
     CommentSettingsService,
     ContentGroupService,
     WsCommentService,
@@ -177,7 +174,6 @@ export const AppConfig: ApplicationConfig = {
     WsRoomEventDispatcherService,
     HotkeyService,
     PresentationService,
-    AccessTokenService,
     RemoteService,
     CommentSettingsResolver,
     ContentPublishService,

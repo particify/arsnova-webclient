@@ -35,7 +35,7 @@
     </mat-form-field>
 
     <div fxFlex>
-      @if (!isLoading) {
+      @if (!isLoading()) {
         <lib-extension-point
           extensionId="role-selection"
           [extensionData]="{ disabled: isGuest }"
@@ -101,17 +101,11 @@
       {{ 'creator.settings.add-user' | transloco }}
     </button>
   </div>
-  @if (isLoading) {
+  @if (isLoading()) {
     <app-loading-indicator></app-loading-indicator>
-  }
-  @if (!isLoading && moderators.length === 0) {
-    <p>
-      {{ 'creator.settings.no-users' | transloco }}
-    </p>
-  }
-  @if (!isLoading && moderators.length > 0) {
+  } @else {
     <mat-list>
-      @for (moderator of moderators; track moderator; let i = $index) {
+      @for (member of members(); track member.user.id; let i = $index) {
         <mat-list-item class="bottom-border">
           <div fxFill fxLayout="row wrap" fxLayoutAlign="space-between">
             <div
@@ -123,13 +117,13 @@
                 class="user-character-container"
                 fxLayoutAlign="center center"
                 [ngClass]="{
-                  'role-moderator': moderator.role === UserRole.MODERATOR,
-                  'primary-variant': moderator.role === UserRole.OWNER,
-                  'secondary-variant': moderator.role === UserRole.EDITOR,
+                  'role-moderator': member.role === RoomRole.Moderator,
+                  'primary-variant': member.role === RoomRole.Owner,
+                  'secondary-variant': member.role === RoomRole.Editor,
                 }"
               >
                 <p class="user-character">
-                  {{ moderator.displayId.toLocaleUpperCase().slice(0, 1) }}
+                  {{ member.user.displayId?.toLocaleUpperCase()?.slice(0, 1) }}
                 </p>
               </div>
               <div
@@ -138,28 +132,26 @@
                 fxLayoutAlign="start center"
               >
                 <p class="login-id" tabindex="0">
-                  {{ moderator.displayId }}
+                  {{ member.user.displayId }}
                 </p>
                 <mat-chip-listbox class="role-chip">
                   <mat-chip-option selectable="false">{{
-                    'creator.settings.' +
-                      moderator.role.toLocaleString().toLocaleLowerCase()
-                      | transloco
+                    'creator.settings.' + member.role?.toLowerCase() | transloco
                   }}</mat-chip-option>
                 </mat-chip-listbox>
               </div>
             </div>
             <div fxLayout="row" fxLayoutAlign="center center">
-              @if (moderator.role !== UserRole.OWNER) {
+              @if (member.role !== RoomRole.Owner) {
                 <button
                   mat-icon-button
                   color="warn"
                   class="close"
-                  (click)="removeModerator(moderator)"
+                  (click)="removeModerator(member)"
                   fxFlex
                   attr.aria-label="{{
                     'creator.settings.a11y-delete-moderator'
-                      | transloco: { loginId: moderator.displayId }
+                      | transloco: { loginId: member.user.displayId }
                   }}"
                 >
                   <mat-icon>close</mat-icon>
@@ -172,7 +164,3 @@
     </mat-list>
   }
 </div>
-<lib-extension-point
-  extensionId="room-password-settings"
-  [extensionData]="{ room: room }"
-></lib-extension-point>
