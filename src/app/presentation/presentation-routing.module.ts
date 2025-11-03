@@ -9,7 +9,8 @@ import { PresentationComponent } from './presentation/presentation.component';
 import { QrCodeComponent } from '@app/standalone/qr-code/qr-code.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
-import { roomResolver } from '@app/core/resolver/room.resolver';
+import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
+import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 
@@ -92,7 +93,8 @@ const routes: Routes = [
             showCard: false,
           },
           resolve: {
-            room: roomResolver,
+            room: legacyRoomResolver,
+            roomIdResolver,
             viewRole: roomViewUserRoleResolver,
           },
           runGuardsAndResolvers: 'always',

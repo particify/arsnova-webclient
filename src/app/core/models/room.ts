@@ -1,6 +1,13 @@
 import { Room as RoomGql } from '@gql/generated/graphql';
 
 // TODO: non-null assertion operator is used here temporaly. We need to find good structure for our models.
+/**
+ * Legacy type which was used by the v3 API.
+ * While the v3 API is no longer used for rooms, some components still use it internally.
+ * It should not be used for new components.
+ *
+ * @deprecated
+ */
 export class Room {
   id!: string;
   revision!: string;
@@ -31,9 +38,9 @@ export class Room {
     this.closed = closed;
   }
 
-  static fromGql(roomData: RoomGql) {
+  static fromGql(roomData: RoomGql, legacyIdPattern = false) {
     const room = new Room();
-    room.id = roomData.id.replaceAll('-', '');
+    room.id = legacyIdPattern ? roomData.id.replaceAll('-', '') : roomData.id;
     room.shortId = roomData.shortId;
     room.name = roomData.name;
     room.description = roomData.description ?? '';

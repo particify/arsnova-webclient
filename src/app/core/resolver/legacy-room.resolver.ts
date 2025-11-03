@@ -5,7 +5,13 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { JoinRoomGql } from '@gql/generated/graphql';
 import { filter, map, tap } from 'rxjs';
 
-export const roomResolver: ResolveFn<Room> = (
+/**
+ * A resolver that returns the current Room using the legacy UUID pattern for the ID.
+ * Use only for code that uses the old backend.
+ *
+ * @deprecated
+ */
+export const legacyRoomResolver: ResolveFn<Room> = (
   route: ActivatedRouteSnapshot
 ) => {
   const roomService = inject(RoomService);
@@ -15,7 +21,7 @@ export const roomResolver: ResolveFn<Room> = (
     .pipe(
       map((r) => r.data?.joinRoom.room),
       filter((roomData) => !!roomData),
-      map((roomData) => Room.fromGql(roomData)),
+      map((roomData) => Room.fromGql(roomData, true)),
       tap((room) => roomService.joinRoom(room))
     );
   return room;

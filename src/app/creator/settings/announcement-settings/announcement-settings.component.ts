@@ -70,11 +70,7 @@ export class AnnouncementSettingsComponent extends FormComponent {
   private createAnnouncement = inject(CreateAnnouncementGql);
   private deleteAnnouncement = inject(DeleteAnnouncementGql);
   private updateAnnouncement = inject(UpdateAnnouncementGql);
-  roomId = input.required<string, string>({
-    transform: (value: string) => {
-      return `${value.slice(0, 8)}-${value.slice(8, 12)}-${value.slice(12, 16)}-${value.slice(16, 20)}-${value.slice(20)}`;
-    },
-  });
+  roomId = input.required<string>();
 
   private announcementsQueryRef?: QueryRef<any, Exact<{ roomId: string }>>;
   private announcementResult = toSignal(

@@ -75,6 +75,7 @@ export class SettingsPageComponent implements OnInit {
   private formService = inject(FormService);
 
   // Route data input below
+  @Input({ required: true }) roomId!: string;
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) userRole!: UserRole;
   @Input() settingsName?: string;

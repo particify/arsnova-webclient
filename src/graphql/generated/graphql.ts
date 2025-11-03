@@ -445,6 +445,18 @@ export type RoomMembershipFragmentFragment = {
   room: { __typename?: 'Room'; id: string; shortId: string; name: string };
 };
 
+export type RoomIdByShortIdQueryVariables = Exact<{
+  shortId: Scalars['String']['input'];
+}>;
+
+export type RoomIdByShortIdQuery = {
+  __typename?: 'Query';
+  roomMembershipByShortId?: {
+    __typename?: 'RoomMembership';
+    room: { __typename?: 'Room'; id: string };
+  } | null;
+};
+
 export type RoomByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -797,6 +809,29 @@ export class DeleteAnnouncementGql extends Apollo.Mutation<
   DeleteAnnouncementMutationVariables
 > {
   document = DeleteAnnouncementDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RoomIdByShortIdDocument = gql`
+  query RoomIdByShortId($shortId: String!) {
+    roomMembershipByShortId(shortId: $shortId) {
+      room {
+        id
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomIdByShortIdGql extends Apollo.Query<
+  RoomIdByShortIdQuery,
+  RoomIdByShortIdQueryVariables
+> {
+  document = RoomIdByShortIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

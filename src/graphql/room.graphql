@@ -15,6 +15,14 @@ fragment RoomMembershipFragment on RoomMembership {
   role
 }
 
+query RoomIdByShortId($shortId: String!) {
+  roomMembershipByShortId(shortId: $shortId) {
+    room {
+      id
+    }
+  }
+}
+
 query RoomById($id: ID!) {
   roomById(id: $id) {
     ...RoomDetailsFragment

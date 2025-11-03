@@ -6,7 +6,8 @@ import {
 } from '@projects/extension-point/src/lib/extension-route';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
-import { roomResolver } from '@app/core/resolver/room.resolver';
+import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
+import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { roomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
@@ -119,7 +120,8 @@ const routes: Routes = [
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.PARTICIPANT },
           resolve: {
-            room: roomResolver,
+            room: legacyRoomResolver,
+            roomId: roomIdResolver,
             viewRole: roomViewUserRoleResolver,
             userRole: roomUserRoleResolver,
           },
