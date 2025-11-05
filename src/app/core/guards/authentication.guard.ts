@@ -6,18 +6,17 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { RoomRole } from '@gql/generated/graphql';
+import { JoinRoomGql, RoomRole } from '@gql/generated/graphql';
 import { TranslocoService } from '@jsverse/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
-import { HttpErrorResponse } from '@angular/common/http';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 
@@ -30,6 +29,7 @@ export class AuthenticationGuard implements CanActivate {
   private translateService = inject(TranslocoService);
   private routingService = inject(RoutingService);
   private router = inject(Router);
+  private joinRoomGql = inject(JoinRoomGql);
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -57,42 +57,28 @@ export class AuthenticationGuard implements CanActivate {
           return of(true);
         } else {
           /* Route requires a specific role */
-          return this.roomMembershipService
-            .hasAccessForRoom(route.params.shortId, viewRole)
+          return this.joinRoomGql
+            .mutate({ variables: { shortId: route.params.shortId } })
             .pipe(
-              switchMap((hasAccess) => {
-                if (hasAccess) {
-                  return of(true);
-                }
-
-                if (viewRole === RoomRole.Participant) {
-                  /* First time access / not a member yet -> request membership */
-                  return this.roomMembershipService
-                    .requestMembership(route.params.shortId)
-                    .pipe(
-                      map(() => true),
-                      catchError((e) => {
-                        if (e instanceof HttpErrorResponse) {
-                          if (e.status === 403) {
-                            this.handleAccessDenied(auth, state.url);
-                          } else if (e.status === 404) {
-                            this.handleRoomNotFound();
-                          } else {
-                            this.handleUnknownError();
-                          }
-                        }
-                        return of(false);
-                      })
-                    );
-                } else {
-                  if (environment.debugOverrideRoomRole) {
-                    /* DEBUG: Override role handling */
-                    return of(true);
-                  }
-
+              map((r) => r.data?.joinRoom.role),
+              map((role) => {
+                if (!role) {
+                  /* This should not happen unless there is an issue with the route configuration */
                   this.handleAccessDenied(auth, state.url);
-                  return of(false);
+                  return false;
                 }
+                if (
+                  this.roomMembershipService.isRoleSubstitutable(
+                    role,
+                    viewRole
+                  ) ||
+                  environment.debugOverrideRoomRole
+                ) {
+                  return true;
+                }
+
+                this.handleAccessDenied(auth, state.url);
+                return false;
               })
             );
         }

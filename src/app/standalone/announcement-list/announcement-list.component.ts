@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -6,20 +6,18 @@ import {
   MatDialogContent,
   MatDialogActions,
 } from '@angular/material/dialog';
-import { AnnouncementService } from '@app/core/services/http/announcement.service';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { UserAnnouncement } from '@app/core/models/user-announcement';
-import { take } from 'rxjs';
+import { filter, take } from 'rxjs';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MatButton } from '@angular/material/button';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { AnnouncementComponent } from '@app/standalone/announcement/announcement.component';
-import { KeyValuePipe } from '@angular/common';
 import { MatDivider } from '@angular/material/divider';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FlexModule } from '@angular/flex-layout';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AnnouncementsForCurrentUserGql } from '@gql/generated/graphql';
 import { AnnouncementState } from '@app/core/models/announcement-state';
 
 @Component({
@@ -39,7 +37,6 @@ import { AnnouncementState } from '@app/core/models/announcement-state';
     LoadingIndicatorComponent,
     MatDialogActions,
     MatButton,
-    KeyValuePipe,
     TranslocoPipe,
   ],
 })
@@ -47,55 +44,64 @@ export class AnnouncementListComponent implements OnInit {
   data: { state: AnnouncementState } = inject(MAT_DIALOG_DATA);
   private dialogRef =
     inject<MatDialogRef<AnnouncementListComponent>>(MatDialogRef);
-  private authService = inject(AuthenticationService);
-  private announcementService = inject(AnnouncementService);
+  private announcementsByUser = inject(AnnouncementsForCurrentUserGql);
 
-  announcements: UserAnnouncement[] = [];
-  displayAnnouncements: UserAnnouncement[] = [];
-  announcementRooms = new Map<string, string>();
-  selectedRoomId = '';
+  selectedRoomId = signal<string>('');
+
+  private announcementsResult = toSignal(
+    this.announcementsByUser
+      .watch()
+      .valueChanges.pipe(filter((r) => r.dataState === 'complete'))
+  );
+
+  isLoading = computed(() => this.announcementsResult()?.loading ?? true);
+
+  announcements = computed(() => {
+    const all =
+      this.announcementsResult()
+        ?.data?.announcementsForCurrentUser?.edges?.map((e) => e?.node)
+        .filter((n) => !!n) ?? [];
+
+    const roomId = this.selectedRoomId();
+
+    return roomId ? all.filter((a) => a.room?.id === roomId) : all;
+  });
+
+  rooms = computed(() => {
+    const all =
+      this.announcementsResult()
+        ?.data?.announcementsForCurrentUser?.edges?.map((e) => e?.node)
+        .filter((n) => !!n) ?? [];
+
+    return Array.from(
+      all
+        .reduce((map, a) => {
+          const id = a.room?.id;
+          if (id && !map.has(id)) {
+            map.set(id, { id, name: a.room!.name });
+          }
+          return map;
+        }, new Map<string, { id: string; name: string }>())
+        .values()
+    );
+  });
+
   newReadTimestamp = new Date();
-  isLoading = true;
 
   ngOnInit(): void {
-    this.authService.getCurrentAuthentication().subscribe((auth) => {
-      this.announcementService
-        .getByUserId(auth.userId)
-        .subscribe((announcements) => {
-          this.announcements = announcements;
-          this.announcements.forEach((a) => {
-            this.announcementRooms.set(a.roomId, a.roomName);
-          });
-          this.displayAnnouncements = announcements;
-          this.data.state.new = 0;
-          this.newReadTimestamp = new Date();
-          this.isLoading = false;
-        });
-    });
+    this.data.state.new = 0;
+    this.newReadTimestamp = new Date();
     this.dialogRef
       .beforeClosed()
       .pipe(take(1))
       .subscribe(() => this.close());
   }
 
-  filter() {
-    if (this.selectedRoomId) {
-      this.displayAnnouncements = this.announcements.filter(
-        (a) => a.roomId === this.selectedRoomId
-      );
-    } else {
-      this.displayAnnouncements = this.announcements;
-    }
-  }
-
-  getLabel(announcement: UserAnnouncement) {
+  getLabel(createdAt: string, updatedAt?: string) {
     const readTimestamp = this.data.state.readTimestamp;
-    if (
-      !readTimestamp ||
-      readTimestamp < new Date(announcement.creationTimestamp)
-    ) {
+    if (!readTimestamp || new Date(readTimestamp) < new Date(createdAt)) {
       return 'new';
-    } else if (readTimestamp < new Date(announcement.updateTimestamp)) {
+    } else if (updatedAt && new Date(readTimestamp) < new Date(updatedAt)) {
       return 'edited';
     }
     return;

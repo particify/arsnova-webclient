@@ -1,101 +1,74 @@
-@if (isLoading) {
-  <app-loading-indicator></app-loading-indicator>
-}
+<lib-extension-point extensionId="external-instance-hint"></lib-extension-point>
 
-@if (!isLoading) {
+<div fxLayout="column" fxLayoutGap="10px">
   <lib-extension-point
-    extensionId="external-instance-hint"
+    extensionId="lms-course-room-list"
+    [extensionData]="{ userId: auth().userId, excludeRoomIds: roomIds }"
   ></lib-extension-point>
-}
-
-@if (!isLoading) {
-  <div fxLayout="column" fxLayoutGap="10px">
-    <lib-extension-point
-      extensionId="lms-course-room-list"
-      [extensionData]="{ userId: auth.userId, excludeRoomIds: roomIds }"
-    ></lib-extension-point>
-    <div>
-      <mat-card class="account-memberships">
+  <div>
+    <mat-card class="account-memberships">
+      <div
+        fxFill
+        fxLayout="row wrap"
+        fxLayoutAlign="space-between center"
+        class="header-container"
+      >
+        <div fxLayout="row" fxLayoutGap="10px" class="button-container">
+          <button
+            mat-raised-button
+            color="primary"
+            class="desktop-buttons"
+            (click)="openCreateRoomDialog()"
+            id="create-room-button"
+            appHotkey="2"
+            [appHotkeyTitle]="'home-page.create-room' | transloco"
+          >
+            <mat-icon class="add-icon">add</mat-icon>
+            <span>{{ 'home-page.create-room' | transloco }}</span>
+          </button>
+        </div>
+        <div class="search-container full-width-container">
+          <mat-icon matPrefix class="search-icon">search</mat-icon>
+          <input
+            [disabled]="noRooms()"
+            matInput
+            class="search-input full-width-search"
+            #search
+            placeholder="{{ 'room-list.filter-message' | transloco }}"
+            aria-labelledby="filter-rooms"
+          />
+        </div>
+      </div>
+      <button
+        mat-fab
+        color="primary"
+        class="mobile-add mobile-buttons"
+        aria-labelledby="add-room"
+        (click)="openCreateRoomDialog()"
+      >
+        <mat-icon class="add-icon">add</mat-icon>
+      </button>
+      @if (isLoading()) {
+        <app-loading-indicator></app-loading-indicator>
+      } @else {
         <div
           fxFill
-          fxLayout="row wrap"
-          fxLayoutAlign="space-between center"
-          class="header-container"
+          fxLayout="column"
+          fxLayoutAlign="center center"
+          tabindex="0"
+          id="room-list"
+          [ngClass]="{ 'visually-hidden': !noRooms() }"
         >
-          <div fxLayout="row" fxLayoutGap="10px" class="button-container">
-            <button
-              mat-raised-button
-              color="primary"
-              class="desktop-buttons"
-              (click)="openCreateRoomDialog()"
-              id="create-room-button"
-              appHotkey="2"
-              [appHotkeyTitle]="'home-page.create-room' | transloco"
-              appDisabledIfReadonly
-            >
-              <mat-icon class="add-icon">add</mat-icon>
-              <span>{{ 'home-page.create-room' | transloco }}</span>
-            </button>
-            @if (showImportMenu) {
-              <button
-                mat-button
-                [matMenuTriggerFor]="more"
-                aria-labelledby="import-options"
-              >
-                <mat-icon class="add-icon">file_upload</mat-icon>
-                <span>{{ 'room-list.import' | transloco }}</span>
-              </button>
-            }
-          </div>
-          <div
-            class="search-container"
-            [ngClass]="{ 'full-width-container': !showImportMenu }"
-          >
-            <mat-icon matPrefix class="search-icon">search</mat-icon>
-            <input
-              [disabled]="rooms.length === 0"
-              matInput
-              class="search-input"
-              [ngClass]="{ 'full-width-search': !showImportMenu }"
-              #search
-              (keyup)="filterRooms(search.value)"
-              placeholder="{{ 'room-list.filter-message' | transloco }}"
-              aria-labelledby="filter-rooms"
-            />
-          </div>
+          <h3 class="hint">
+            {{
+              noRooms()
+                ? ('room-list.no-rooms' | transloco)
+                : ('room-list.a11y-list-summary'
+                  | transloco: { count: rooms().length })
+            }}
+          </h3>
         </div>
-        <button
-          mat-fab
-          color="primary"
-          class="mobile-add mobile-buttons"
-          aria-labelledby="add-room"
-          (click)="openCreateRoomDialog()"
-        >
-          <mat-icon class="add-icon">add</mat-icon>
-        </button>
-        <mat-menu #more="matMenu" xPosition="before">
-          <lib-extension-point extensionId="import-token"></lib-extension-point>
-        </mat-menu>
-        @if (!isLoading) {
-          <div
-            fxFill
-            fxLayout="column"
-            fxLayoutAlign="center center"
-            tabindex="0"
-            id="room-list"
-            [ngClass]="{ 'visually-hidden': rooms.length > 0 }"
-          >
-            <h3 class="hint">
-              {{
-                rooms.length === 0
-                  ? ('room-list.no-rooms' | transloco)
-                  : ('room-list.a11y-list-summary'
-                    | transloco: { count: rooms.length })
-              }}
-            </h3>
-          </div>
-        }
-        @if (displayRooms.length === 0 && rooms.length > 0) {
+        @if (search.value && rooms().length === 0 && !noRooms()) {
           <div fxLayout="column" fxLayoutAlign="center center">
             <h3 class="hint">{{ 'room-list.no-rooms-found' | transloco }}</h3>
             <button
@@ -108,17 +81,16 @@
             </button>
           </div>
         }
-        @if (rooms.length > 0) {
+        @if (errors()) {
+          <p>Error</p>
+        } @else if (rooms().length > 0) {
           <mat-action-list>
-            @for (room of displayRooms; track room; let i = $index) {
+            @for (roomWithRole of rooms(); track roomWithRole; let i = $index) {
               <button
                 disableRipple
                 mat-list-item
                 (click)="
-                  setCurrentRoom(
-                    room.summary.shortId,
-                    room.membership.primaryRole
-                  )
+                  setCurrentRoom(roomWithRole.room.shortId, roomWithRole.role)
                 "
                 class="bottom-border full-width-list-item"
               >
@@ -132,22 +104,24 @@
                       'room-list.a11y-join-room'
                         | transloco
                           : {
-                              room: room.summary.name,
-                              id: room.summary.shortId,
-                              role: roles.get(room.membership.primaryRole),
+                              room: roomWithRole.room.name,
+                              id: roomWithRole.room.shortId,
+                              role: roles.get(roomWithRole.role),
                             }
                     }}"
                   >
                     <app-text-overflow-clip
                       class="ellipsis"
-                      [text]="room.summary.name"
+                      [text]="roomWithRole.room.name"
                     ></app-text-overflow-clip>
                     <div
                       fxLayout="row"
                       fxLayoutAlign="center center"
                       fxLayoutGap="1em"
                     >
-                      @if (isRoomActive(room.summary.stats.roomUserCount)) {
+                      @if (
+                        isRoomActive(roomWithRole.stats?.roomUserCount ?? 0)
+                      ) {
                         <div
                           fxLayoutAlign="center"
                           class="active-label primary"
@@ -155,24 +129,25 @@
                             'room-list.active-info'
                               | transloco
                                 : {
-                                    userCount: room.summary.stats.roomUserCount,
+                                    userCount:
+                                      roomWithRole.stats?.roomUserCount ?? 0,
                                   }
                           "
                         >
                           <span>{{ 'room-list.active' | transloco }}</span>
                         </div>
                       }
-                      @if (room.summary.stats.ackCommentCount) {
+                      @if (roomWithRole.stats?.ackCommentCount ?? 0) {
                         <app-list-badge
-                          [count]="room.summary.stats.ackCommentCount"
+                          [count]="roomWithRole.stats?.ackCommentCount ?? 0"
                         ></app-list-badge>
                       }
                       <p class="short-id">
-                        {{ room.summary.shortId | splitShortId }}
+                        {{ roomWithRole.room.shortId | splitShortId }}
                       </p>
                       <div>
-                        @switch (room.membership.primaryRole) {
-                          @case (creatorRole) {
+                        @switch (roomWithRole.role) {
+                          @case (RoomRole.Owner) {
                             <mat-icon
                               mat-list-icon
                               matTooltip="{{
@@ -183,7 +158,7 @@
                               record_voice_over
                             </mat-icon>
                           }
-                          @case (participantRole) {
+                          @case (RoomRole.Participant) {
                             <mat-icon
                               mat-list-icon
                               matTooltip="{{
@@ -196,7 +171,7 @@
                               people
                             </mat-icon>
                           }
-                          @case (executiveModeratorRole) {
+                          @case (RoomRole.Moderator) {
                             <mat-icon
                               mat-list-icon
                               matTooltip="{{
@@ -209,7 +184,7 @@
                               gavel
                             </mat-icon>
                           }
-                          @case (editorRole) {
+                          @case (RoomRole.Editor) {
                             <mat-icon
                               mat-list-icon
                               matTooltip="{{
@@ -237,13 +212,13 @@
                     </button>
                     <mat-menu #moreActions="matMenu" xPosition="before">
                       @if (
-                        [creatorRole, editorRole].includes(
-                          room.membership.primaryRole
+                        [RoomRole.Owner, RoomRole.Editor].includes(
+                          roomWithRole.role
                         )
                       ) {
                         <button
                           mat-menu-item
-                          (click)="navToSettings(room.summary.shortId)"
+                          (click)="navToSettings(roomWithRole.room.shortId)"
                         >
                           <mat-icon>settings</mat-icon>
                           <span>
@@ -251,11 +226,14 @@
                           >
                         </button>
                       }
-                      @if (room.membership.primaryRole === creatorRole) {
+                      @if (roomWithRole.role === RoomRole.Owner) {
                         <button
                           mat-menu-item
                           (click)="
-                            duplicateRoom(room.summary.id, room.summary.name)
+                            duplicateRoom(
+                              roomWithRole.room.id,
+                              roomWithRole.room.name
+                            )
                           "
                         >
                           <mat-icon>dynamic_feed</mat-icon>
@@ -266,12 +244,12 @@
                       }
                       <button
                         mat-menu-item
-                        (click)="openDeleteRoomDialog(room)"
+                        (click)="openDeleteRoomDialog(roomWithRole)"
                       >
                         <mat-icon color="warn">delete_forever</mat-icon>
                         <span>
                           {{
-                            (room.membership.primaryRole !== creatorRole
+                            (roomWithRole.role !== RoomRole.Owner
                               ? 'room-list.panel-remove-room'
                               : 'room-list.panel-delete-room'
                             ) | transloco
@@ -284,16 +262,16 @@
               </button>
             }
           </mat-action-list>
+          <button mat-flat-button (click)="fetchMore()" [hidden]="!hasMore()">
+            {{ 'Load more' | transloco }}
+          </button>
         }
-      </mat-card>
-    </div>
+      }
+    </mat-card>
   </div>
-}
+</div>
 
 <div class="visually-hidden">
   <div id="filter-rooms">{{ 'room-list.filter' | transloco }}</div>
-  <div id="import-options">
-    {{ 'room-list.a11y-import-options' | transloco }}
-  </div>
   <div id="more-options">{{ 'room-list.a11y-more-options' | transloco }}</div>
 </div>

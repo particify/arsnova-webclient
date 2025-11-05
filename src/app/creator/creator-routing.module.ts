@@ -4,12 +4,8 @@ import {
   ExtensionRouteProvider,
   RouteMountPoint,
 } from '@projects/extension-point/src/lib/extension-route';
-import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
-import { RoomResolver } from '@app/core/resolver/room.resolver';
-import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
-import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
 import { CreatorPageComponent } from '@app/creator/creator-page.component';
@@ -17,11 +13,10 @@ import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { environment } from '@environments/environment';
-import { roomGqlResolver } from '@app/core/resolver/room-gql.resolver';
-import { roomViewUserRoleGqlResolver } from '@app/core/resolver/room-view-user-role-gql.resolver';
-import { roomUserRoleGqlResolver } from '@app/core/resolver/room-user-role-gql.resolver';
-import { AuthenticationGqlGuard } from '@app/core/guards/authentication-gql.guard';
+import { roomResolver } from '@app/core/resolver/room.resolver';
+import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
+import { roomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
+import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 
 const routes: Routes = [
   {
@@ -140,21 +135,13 @@ const routes: Routes = [
         {
           path: ':shortId',
           component: CreatorPageComponent,
-          canActivate: [
-            environment.graphql ? AuthenticationGqlGuard : AuthenticationGuard,
-          ],
+          canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.MODERATOR },
-          resolve: environment.graphql
-            ? {
-                room: roomGqlResolver,
-                viewRole: roomViewUserRoleGqlResolver,
-                userRole: roomUserRoleGqlResolver,
-              }
-            : {
-                room: RoomResolver,
-                viewRole: RoomViewUserRoleResolver,
-                userRole: RoomUserRoleResolver,
-              },
+          resolve: {
+            room: roomResolver,
+            viewRole: roomViewUserRoleResolver,
+            userRole: roomUserRoleResolver,
+          },
           runGuardsAndResolvers: 'always',
           children: [
             ...routes,

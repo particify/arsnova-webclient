@@ -1,20 +1,17 @@
-import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { RoomRole } from '@gql/generated/graphql';
-import { RoomMembershipService } from '@app/core/services/room-membership.service';
-import { environment } from '@environments/environment.prod';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
+import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
+import { filter, map } from 'rxjs';
 
-@Injectable()
-export class RoomUserRoleResolver implements Resolve<RoomRole> {
-  private roomMembershipService = inject(RoomMembershipService);
-
-  resolve(route: ActivatedRouteSnapshot): Observable<RoomRole> {
-    return environment.debugOverrideRoomRole
-      ? /* DEBUG: Override role handling */
-        of(RoomRole.Owner)
-      : this.roomMembershipService.getPrimaryRoleByRoom(
-          route.params['shortId']
-        );
-  }
-}
+export const roomUserRoleResolver: ResolveFn<RoomRole> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const shortId = route.params['shortId'];
+  return inject(RoomMembershipByShortIdGql)
+    .fetch({ variables: { shortId: shortId } })
+    .pipe(
+      map((r) => r.data),
+      filter((data) => !!data),
+      map((data) => data.roomMembershipByShortId?.role ?? RoomRole.None)
+    );
+};

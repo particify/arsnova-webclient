@@ -4,18 +4,14 @@ import {
   ExtensionRouteProvider,
   RouteMountPoint,
 } from '@projects/extension-point/src/lib/extension-route';
-import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { RoomResolver } from '@app/core/resolver/room.resolver';
-import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { PresentationComponent } from './presentation/presentation.component';
 import { QrCodeComponent } from '@app/standalone/qr-code/qr-code.component';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
-import { environment } from '@environments/environment';
-import { roomGqlResolver } from '@app/core/resolver/room-gql.resolver';
-import { roomViewUserRoleGqlResolver } from '@app/core/resolver/room-view-user-role-gql.resolver';
-import { AuthenticationGqlGuard } from '@app/core/guards/authentication-gql.guard';
+import { roomResolver } from '@app/core/resolver/room.resolver';
+import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
+import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 
 const routes: Routes = [
   {
@@ -86,9 +82,7 @@ const routes: Routes = [
         {
           path: ':shortId',
           component: PresentationComponent,
-          canActivate: [
-            environment.graphql ? AuthenticationGqlGuard : AuthenticationGuard,
-          ],
+          canActivate: [AuthenticationGuard],
           data: {
             requiredRole: UserRole.EDITOR,
             isPresentation: true,
@@ -97,15 +91,10 @@ const routes: Routes = [
             showHotkeyActionButtons: true,
             showCard: false,
           },
-          resolve: environment.graphql
-            ? {
-                room: roomGqlResolver,
-                viewRole: roomViewUserRoleGqlResolver,
-              }
-            : {
-                room: RoomResolver,
-                viewRole: RoomViewUserRoleResolver,
-              },
+          resolve: {
+            room: roomResolver,
+            viewRole: roomViewUserRoleResolver,
+          },
           runGuardsAndResolvers: 'always',
           children: [
             {

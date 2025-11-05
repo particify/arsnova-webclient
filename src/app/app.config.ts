@@ -15,7 +15,6 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
-import { AuthenticationGqlGuard } from '@app/core/guards/authentication-gql.guard';
 import { DemoRoomGuard } from '@app/core/guards/demo-room.guard';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { EventService } from '@app/core/services/util/event.service';
@@ -40,11 +39,8 @@ import {
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
-import { RoomResolver } from '@app/core/resolver/room.resolver';
 import { ContentResolver } from '@app/core/resolver/content.resolver';
 import { CommentResolver } from '@app/core/resolver/comment.resolver';
-import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
-import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -105,7 +101,7 @@ export const AppConfig: ApplicationConfig = {
       provide: ENVIRONMENT,
       useValue: environment,
     },
-    environment.graphql ? apolloProvider : [],
+    apolloProvider,
     provideAppInitializer(() => {
       const initializerFn = initAuthenticationService(
         inject(AuthenticationService)
@@ -146,7 +142,6 @@ export const AppConfig: ApplicationConfig = {
     DialogService,
     AuthenticationService,
     AuthenticationGuard,
-    AuthenticationGqlGuard,
     DemoRoomGuard,
     RoomMembershipService,
     EventService,
@@ -167,11 +162,8 @@ export const AppConfig: ApplicationConfig = {
     TrackingService,
     ThemeService,
     ApiConfigResolver,
-    RoomResolver,
     ContentResolver,
     CommentResolver,
-    RoomViewUserRoleResolver,
-    RoomUserRoleResolver,
     AnnounceService,
     SystemInfoService,
     FormattingService,

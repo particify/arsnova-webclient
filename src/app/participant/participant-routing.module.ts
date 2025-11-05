@@ -6,14 +6,10 @@ import {
 } from '@projects/extension-point/src/lib/extension-route';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
-import { RoomResolver } from '@app/core/resolver/room.resolver';
-import { roomGqlResolver } from '@app/core/resolver/room-gql.resolver';
-import { RoomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
-import { roomViewUserRoleGqlResolver } from '@app/core/resolver/room-view-user-role-gql.resolver';
+import { roomResolver } from '@app/core/resolver/room.resolver';
+import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
-import { AuthenticationGqlGuard } from '@app/core/guards/authentication-gql.guard';
-import { RoomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
-import { roomUserRoleGqlResolver } from '@app/core/resolver/room-user-role-gql.resolver';
+import { roomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ParticipantPageComponent } from '@app/participant/participant-page.component';
@@ -21,7 +17,6 @@ import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { UserSettingsResolver } from '@app/core/resolver/user-settings.resolver';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { environment } from '@environments/environment';
 
 const routes: Routes = [
   {
@@ -121,21 +116,13 @@ const routes: Routes = [
         {
           path: ':shortId',
           component: ParticipantPageComponent,
-          canActivate: [
-            environment.graphql ? AuthenticationGqlGuard : AuthenticationGuard,
-          ],
+          canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.PARTICIPANT },
-          resolve: environment.graphql
-            ? {
-                room: roomGqlResolver,
-                viewRole: roomViewUserRoleGqlResolver,
-                userRole: roomUserRoleGqlResolver,
-              }
-            : {
-                room: RoomResolver,
-                viewRole: RoomViewUserRoleResolver,
-                userRole: RoomUserRoleResolver,
-              },
+          resolve: {
+            room: roomResolver,
+            viewRole: roomViewUserRoleResolver,
+            userRole: roomUserRoleResolver,
+          },
           runGuardsAndResolvers: 'always',
           children: [
             {

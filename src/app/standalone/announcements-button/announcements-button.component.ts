@@ -1,75 +1,70 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  linkedSignal,
+} from '@angular/core';
 import { MatBadge } from '@angular/material/badge';
 import { MatTooltip } from '@angular/material/tooltip';
 import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
 import { AnnouncementState } from '@app/core/models/announcement-state';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import {
-  ChangeType,
-  EntityChangeNotification,
-} from '@app/core/models/events/entity-change-notification';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { AnnouncementService } from '@app/core/services/http/announcement.service';
-import { EventService } from '@app/core/services/util/event.service';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { AnnouncementListComponent } from '@app/standalone/announcement-list/announcement-list.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AnnouncementsMetaForCurrentUserGql } from '@gql/generated/graphql';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AnnouncementListComponent } from '@app/standalone/announcement-list/announcement-list.component';
+import { filter, map } from 'rxjs';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-announcements-button',
-  imports: [HotkeyDirective, MatTooltip, MatBadge, TranslocoPipe],
+  imports: [
+    HotkeyDirective,
+    MatTooltip,
+    MatBadge,
+    TranslocoPipe,
+    MatIconButton,
+  ],
   templateUrl: './announcements-button.component.html',
 })
-export class AnnouncementsButtonComponent implements OnInit {
-  private eventService = inject(EventService);
-  private announcementService = inject(AnnouncementService);
+export class AnnouncementsButtonComponent {
   private dialog = inject(MatDialog);
+  private announcementsMetaForCurrentUserGql = inject(
+    AnnouncementsMetaForCurrentUserGql
+  );
   readonly role = input<UserRole>();
   readonly auth = input<AuthenticatedUser>();
 
-  announcementState?: AnnouncementState;
-
-  ngOnInit() {
-    this.eventService
-      .on('EntityChangeNotification')
-      .subscribe((notification) => {
-        if (this.role() !== UserRole.OWNER) {
-          const entityType = (notification as EntityChangeNotification).payload
-            .entityType;
-          const changeType = (notification as EntityChangeNotification).payload
-            .changeType;
-          if (
-            entityType === 'Announcement' &&
-            [ChangeType.CREATE, ChangeType.UPDATE].includes(changeType)
-          ) {
-            const userId = this.auth()?.userId;
-            if (userId) {
-              this.announcementService
-                .getStateByUserId(userId)
-                .subscribe((state) => {
-                  this.announcementState = state;
-                });
-            } else {
-              this.announcementState = undefined;
-            }
-          }
-        }
-      });
-  }
+  private announcementsMeta = toSignal(
+    this.announcementsMetaForCurrentUserGql.fetch().pipe(
+      map((r) => r.data),
+      filter((data) => !!data),
+      map((data) => data.announcementsMetaForCurrentUser)
+    )
+  );
+  localAnnouncementMeta = linkedSignal(() => this.announcementsMeta());
+  newAnnouncementCount = computed(
+    () => this.localAnnouncementMeta()?.count ?? 0
+  );
 
   showAnnouncements() {
+    const readAt = this.localAnnouncementMeta()?.readAt;
+    const state = new AnnouncementState();
+    state.new = this.newAnnouncementCount();
+    state.readTimestamp = readAt ? new Date(readAt) : new Date();
     const dialogRef = this.dialog.open(AnnouncementListComponent, {
       panelClass: 'dialog-margin',
       width: '90%',
       maxWidth: '872px',
       data: {
-        state: this.announcementState,
+        state: state,
       },
     });
     dialogRef.afterClosed().subscribe((newReadTimestamp) => {
-      if (this.announcementState) {
-        this.announcementState.readTimestamp = newReadTimestamp;
-      }
+      this.localAnnouncementMeta.set({ readAt: newReadTimestamp, count: 0 });
     });
   }
 }

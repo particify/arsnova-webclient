@@ -6,43 +6,48 @@
     <mat-form-field appearance="outline" class="no-field-hint">
       <mat-label>{{ 'announcement.filter' | transloco }}</mat-label>
       <mat-select
-        [(value)]="selectedRoomId"
-        (selectionChange)="(true)"
-        [disabled]="announcements.length === 0"
+        [value]="selectedRoomId()"
+        (selectionChange)="selectedRoomId.set($event.value)"
+        [disabled]="announcements().length === 0"
       >
         <mat-option value="">{{
           'announcement.all-rooms' | transloco
         }}</mat-option>
         <mat-divider></mat-divider>
-        @for (room of announcementRooms | keyvalue; track room) {
-          <mat-option value="{{ room.key }}">{{ room.value }}</mat-option>
+        @for (room of rooms(); track room) {
+          <mat-option [value]="room.id">{{ room.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
   </div>
-  @if (!isLoading) {
+  @if (!isLoading()) {
     <mat-dialog-content fxLayout="column" fxLayoutGap="10px">
-      @if (announcements.length === 0) {
+      @if (announcements().length === 0) {
         <p class="hint-sm">
           {{ 'announcement.no-announcements' | transloco }}
         </p>
       }
-      @for (announcement of displayAnnouncements; track announcement) {
+      @for (announcement of announcements(); track announcement) {
         <app-announcement
           [id]="announcement.id"
           [title]="announcement.title"
           [body]="announcement.body"
-          [bodyRendered]="announcement.renderedBody"
-          [createdAt]="announcement.creationTimestamp"
-          [updatedAt]="announcement.updateTimestamp"
-          [roomName]="announcement.roomName"
-          [label]="getLabel(announcement)"
+          [bodyRendered]="announcement.bodyRendered ?? announcement.body"
+          [createdAt]="announcement.createdAt"
+          [updatedAt]="announcement.updatedAt ?? undefined"
+          [roomName]="announcement.room?.name"
+          [label]="
+            getLabel(
+              announcement.createdAt,
+              announcement.updatedAt ?? undefined
+            )
+          "
           tabindex="0"
         ></app-announcement>
       }
     </mat-dialog-content>
   }
-  @if (isLoading) {
+  @if (isLoading()) {
     <app-loading-indicator></app-loading-indicator>
   }
   <div

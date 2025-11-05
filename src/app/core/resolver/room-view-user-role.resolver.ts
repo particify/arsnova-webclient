@@ -1,43 +1,45 @@
-import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { RoomRole } from '@gql/generated/graphql';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
+import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
+import { filter, map, of } from 'rxjs';
 
 /**
  * This resolver selects the room user role for views based on the required role
  * for routing and the user's room role.
  */
-@Injectable()
-export class RoomViewUserRoleResolver implements Resolve<RoomRole> {
-  private roomMembershipService = inject(RoomMembershipService);
+export const roomViewUserRoleResolver: ResolveFn<RoomRole> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const viewRole = route.data['requiredRole'] as RoomRole;
+  const roomMembershipService = inject(RoomMembershipService);
+  const roomMembershipByShortIdGql = inject(RoomMembershipByShortIdGql);
 
-  resolve(route: ActivatedRouteSnapshot): Observable<RoomRole> {
-    const viewRole = route.data['requiredRole'] as RoomRole;
-
-    /* Ignore the user's real role, always use PARTICIPANT role for view. */
-    if (viewRole === RoomRole.Participant) {
-      return of(RoomRole.Participant);
-    }
-
-    if (environment.debugOverrideRoomRole) {
-      /* DEBUG: Override role handling */
-      return of(RoomRole.Owner);
-    }
-
-    /* Use the user's real role for moderation. */
-    if (
-      this.roomMembershipService.isRoleSubstitutable(
-        viewRole,
-        RoomRole.Moderator
-      )
-    ) {
-      return this.roomMembershipService.getPrimaryRoleByRoom(
-        route.params['shortId']
-      );
-    }
-
-    throw Error(`No room view found for '${route.data['requiredRole']}'.`);
+  /* Ignore the user's real role, always use PARTICIPANT role for view. */
+  if (viewRole === RoomRole.Participant) {
+    return of(RoomRole.Participant);
   }
-}
+
+  if (environment.debugOverrideRoomRole) {
+    /* DEBUG: Override role handling */
+    return of(RoomRole.Owner);
+  }
+
+  /* Use the user's real role for moderation. */
+  if (roomMembershipService.isRoleSubstitutable(viewRole, RoomRole.Moderator)) {
+    return roomMembershipByShortIdGql
+      .fetch({
+        variables: {
+          shortId: route.params['shortId'],
+        },
+      })
+      .pipe(
+        map((r) => r.data),
+        filter((data) => !!data),
+        map((data) => data.roomMembershipByShortId?.role ?? RoomRole.None)
+      );
+  }
+
+  throw Error(`No room view found for '${route.data['requiredRole']}'.`);
+};
