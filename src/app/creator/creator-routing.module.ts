@@ -13,7 +13,8 @@ import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
 import { ContentGroupTemplatePreviewComponent } from '@app/standalone/content-group-template-preview/content-group-template-preview.component';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { roomResolver } from '@app/core/resolver/room.resolver';
+import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
+import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { roomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
@@ -138,7 +139,8 @@ const routes: Routes = [
           canActivate: [AuthenticationGuard],
           data: { requiredRole: UserRole.MODERATOR },
           resolve: {
-            room: roomResolver,
+            room: legacyRoomResolver,
+            roomId: roomIdResolver,
             viewRole: roomViewUserRoleResolver,
             userRole: roomUserRoleResolver,
           },
