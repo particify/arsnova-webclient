@@ -32,11 +32,8 @@
             @switch (setting.name) {
               @case ('general') {
                 <app-room-edit
-                  [editRoom]="room"
-                  [name]="room.name"
-                  [description]="room.description"
+                  [roomId]="roomId"
                   [isCreator]="isOwner()"
-                  (saveEvent)="saveRoom($event)"
                 ></app-room-edit>
               }
               @case ('comments') {

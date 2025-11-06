@@ -55,6 +55,14 @@ query Rooms($room: RoomQueryInput!, $cursor: String) {
   }
 }
 
+query RoomWithSettingsById($id: ID!) {
+  roomById(id: $id) {
+    ...RoomDetailsFragment
+    language
+    focusModeEnabled
+  }
+}
+
 query RoomMembershipByShortId($shortId: String!) {
   roomMembershipByShortId(shortId: $shortId) {
     ...RoomMembershipFragment
@@ -118,10 +126,51 @@ mutation CreateRoom($name: String!) {
   }
 }
 
+mutation DeleteRoom($id: ID!) {
+  deleteRoom(id: $id)
+}
+
 mutation DuplicateRoom($id: ID!, $newName: String!) {
   duplicateRoom(input: { id: $id, newName: $newName }) {
     id
     shortId
+  }
+}
+
+# Using one combined mutation because of the existing component behavior.
+# This should be split up later with settings UX improvements.
+mutation UpdateRoomDetails(
+  $id: ID!
+  $name: String!
+  $description: String!
+  $languageCode: String
+) {
+  updateRoomName(id: $id, name: $name) {
+    id
+    name
+  }
+  updateRoomDescription(id: $id, description: $description) {
+    id
+    description
+    descriptionRendered
+  }
+  updateRoomLanguage(id: $id, languageCode: $languageCode) {
+    id
+    language
+  }
+}
+
+mutation UpdateRoomLanguage($id: ID!, $languageCode: String!) {
+  updateRoomLanguage(id: $id, languageCode: $languageCode) {
+    id
+    language
+  }
+}
+
+mutation UpdateRoomFocusMode($id: ID!, $enabled: Boolean!) {
+  updateRoomFocusMode(id: $id, enabled: $enabled) {
+    id
+    focusModeEnabled
   }
 }
 

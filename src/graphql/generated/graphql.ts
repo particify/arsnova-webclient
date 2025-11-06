@@ -98,10 +98,10 @@ export type Mutation = {
   joinRoom: RoomMembership;
   revokeRoomRole: Scalars['Boolean']['output'];
   updateAnnouncement: Announcement;
-  updateRoom: Room;
-  updateUserDetails?: Maybe<Scalars['Boolean']['output']>;
-  updateUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
-  updateUserPassword?: Maybe<Scalars['Boolean']['output']>;
+  updateRoomDescription: Room;
+  updateRoomFocusMode: Room;
+  updateRoomLanguage: Room;
+  updateRoomName: Room;
   verifyUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -155,8 +155,24 @@ export type MutationUpdateAnnouncementArgs = {
   input?: InputMaybe<UpdateAnnouncementInput>;
 };
 
-export type MutationUpdateRoomArgs = {
-  input: UpdateRoomInput;
+export type MutationUpdateRoomDescriptionArgs = {
+  description: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+};
+
+export type MutationUpdateRoomFocusModeArgs = {
+  enabled: Scalars['Boolean']['input'];
+  id: Scalars['ID']['input'];
+};
+
+export type MutationUpdateRoomLanguageArgs = {
+  id: Scalars['ID']['input'];
+  languageCode?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationUpdateRoomNameArgs = {
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type MutationUpdateUserDetailsArgs = {
@@ -277,7 +293,9 @@ export type Room = {
   __typename?: 'Room';
   description?: Maybe<Scalars['String']['output']>;
   descriptionRendered?: Maybe<Scalars['String']['output']>;
+  focusModeEnabled?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
+  language?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   shortId: Scalars['ID']['output'];
 };
@@ -349,12 +367,6 @@ export type UpdateAnnouncementInput = {
   body?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   title?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateRoomInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserDetailsInput = {
@@ -560,6 +572,24 @@ export type RoomsQuery = {
   } | null;
 };
 
+export type RoomWithSettingsByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type RoomWithSettingsByIdQuery = {
+  __typename?: 'Query';
+  roomById?: {
+    __typename?: 'Room';
+    language?: string | null;
+    focusModeEnabled?: boolean | null;
+    id: string;
+    shortId: string;
+    name: string;
+    description?: string | null;
+    descriptionRendered?: string | null;
+  } | null;
+};
+
 export type RoomMembershipByShortIdQueryVariables = Exact<{
   shortId: Scalars['String']['input'];
 }>;
@@ -673,6 +703,15 @@ export type CreateRoomMutation = {
   createRoom: { __typename?: 'Room'; id: string; shortId: string };
 };
 
+export type DeleteRoomMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteRoomMutation = {
+  __typename?: 'Mutation';
+  deleteRoom: boolean;
+};
+
 export type DuplicateRoomMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   newName: Scalars['String']['input'];
@@ -681,6 +720,57 @@ export type DuplicateRoomMutationVariables = Exact<{
 export type DuplicateRoomMutation = {
   __typename?: 'Mutation';
   duplicateRoom: { __typename?: 'Room'; id: string; shortId: string };
+};
+
+export type UpdateRoomDetailsMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  languageCode?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UpdateRoomDetailsMutation = {
+  __typename?: 'Mutation';
+  updateRoomName: { __typename?: 'Room'; id: string; name: string };
+  updateRoomDescription: {
+    __typename?: 'Room';
+    id: string;
+    description?: string | null;
+    descriptionRendered?: string | null;
+  };
+  updateRoomLanguage: {
+    __typename?: 'Room';
+    id: string;
+    language?: string | null;
+  };
+};
+
+export type UpdateRoomLanguageMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  languageCode: Scalars['String']['input'];
+}>;
+
+export type UpdateRoomLanguageMutation = {
+  __typename?: 'Mutation';
+  updateRoomLanguage: {
+    __typename?: 'Room';
+    id: string;
+    language?: string | null;
+  };
+};
+
+export type UpdateRoomFocusModeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  enabled: Scalars['Boolean']['input'];
+}>;
+
+export type UpdateRoomFocusModeMutation = {
+  __typename?: 'Mutation';
+  updateRoomFocusMode: {
+    __typename?: 'Room';
+    id: string;
+    focusModeEnabled?: boolean | null;
+  };
 };
 
 export type RoomManagingMembersByRoomIdQueryVariables = Exact<{
@@ -1039,6 +1129,30 @@ export class RoomsGql extends Apollo.Query<RoomsQuery, RoomsQueryVariables> {
     super(apollo);
   }
 }
+export const RoomWithSettingsByIdDocument = gql`
+  query RoomWithSettingsById($id: ID!) {
+    roomById(id: $id) {
+      ...RoomDetailsFragment
+      language
+      focusModeEnabled
+    }
+  }
+  ${RoomDetailsFragmentFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomWithSettingsByIdGql extends Apollo.Query<
+  RoomWithSettingsByIdQuery,
+  RoomWithSettingsByIdQueryVariables
+> {
+  document = RoomWithSettingsByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const RoomMembershipByShortIdDocument = gql`
   query RoomMembershipByShortId($shortId: String!) {
     roomMembershipByShortId(shortId: $shortId) {
@@ -1181,6 +1295,25 @@ export class CreateRoomGql extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const DeleteRoomDocument = gql`
+  mutation DeleteRoom($id: ID!) {
+    deleteRoom(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteRoomGql extends Apollo.Mutation<
+  DeleteRoomMutation,
+  DeleteRoomMutationVariables
+> {
+  document = DeleteRoomDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const DuplicateRoomDocument = gql`
   mutation DuplicateRoom($id: ID!, $newName: String!) {
     duplicateRoom(input: { id: $id, newName: $newName }) {
@@ -1198,6 +1331,86 @@ export class DuplicateRoomGql extends Apollo.Mutation<
   DuplicateRoomMutationVariables
 > {
   document = DuplicateRoomDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateRoomDetailsDocument = gql`
+  mutation UpdateRoomDetails(
+    $id: ID!
+    $name: String!
+    $description: String!
+    $languageCode: String
+  ) {
+    updateRoomName(id: $id, name: $name) {
+      id
+      name
+    }
+    updateRoomDescription(id: $id, description: $description) {
+      id
+      description
+      descriptionRendered
+    }
+    updateRoomLanguage(id: $id, languageCode: $languageCode) {
+      id
+      language
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateRoomDetailsGql extends Apollo.Mutation<
+  UpdateRoomDetailsMutation,
+  UpdateRoomDetailsMutationVariables
+> {
+  document = UpdateRoomDetailsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateRoomLanguageDocument = gql`
+  mutation UpdateRoomLanguage($id: ID!, $languageCode: String!) {
+    updateRoomLanguage(id: $id, languageCode: $languageCode) {
+      id
+      language
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateRoomLanguageGql extends Apollo.Mutation<
+  UpdateRoomLanguageMutation,
+  UpdateRoomLanguageMutationVariables
+> {
+  document = UpdateRoomLanguageDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateRoomFocusModeDocument = gql`
+  mutation UpdateRoomFocusMode($id: ID!, $enabled: Boolean!) {
+    updateRoomFocusMode(id: $id, enabled: $enabled) {
+      id
+      focusModeEnabled
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateRoomFocusModeGql extends Apollo.Mutation<
+  UpdateRoomFocusModeMutation,
+  UpdateRoomFocusModeMutationVariables
+> {
+  document = UpdateRoomFocusModeDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
