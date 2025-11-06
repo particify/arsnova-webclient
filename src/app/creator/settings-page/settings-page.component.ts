@@ -10,16 +10,10 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { Location, AsyncPipe } from '@angular/common';
 import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
-import {
   HotkeyAction,
   HotkeyDirective,
 } from '@app/core/directives/hotkey.directive';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { FormService } from '@app/core/services/util/form.service';
-import { take } from 'rxjs';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { FlexModule } from '@angular/flex-layout';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -33,7 +27,6 @@ import { RoomComponent } from '@app/creator/settings/room/room.component';
 import { CommentSettingsComponent } from '@app/creator/settings/comment-settings/comment-settings.component';
 import { AccessComponent } from '@app/creator/settings/access/access.component';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
-import { UpdateEvent } from '@app/creator/settings/update-event';
 import { AnnouncementSettingsComponent } from '@app/creator/settings/announcement-settings/announcement-settings.component';
 import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 
@@ -73,8 +66,6 @@ export class SettingsPageComponent implements OnInit {
   private globalStorageService = inject(GlobalStorageService);
   private router = inject(Router);
   private location = inject(Location);
-  private notificationService = inject(NotificationService);
-  private formService = inject(FormService);
 
   // Route data input below
   @Input({ required: true }) roomId!: string;
@@ -118,36 +109,6 @@ export class SettingsPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentRoute = this.settingsName || this.settings[0].name;
-  }
-
-  saveRoom(updateEvent: UpdateEvent) {
-    if (!updateEvent.loadRoom && updateEvent.room) {
-      this.formService.disableForm();
-      this.roomService.updateRoom(updateEvent.room).subscribe(
-        (room) => {
-          this.room = room;
-          if (updateEvent.showSuccessInfo) {
-            this.translateService
-              .selectTranslate('creator.settings.changes-successful')
-              .pipe(take(1))
-              .subscribe((msg) => {
-                this.notificationService.showAdvanced(
-                  msg,
-                  AdvancedSnackBarTypes.SUCCESS
-                );
-              });
-          }
-          this.formService.enableForm();
-        },
-        () => {
-          this.formService.enableForm();
-        }
-      );
-    } else {
-      this.roomService.getRoom(this.room.id).subscribe((room) => {
-        this.room = room;
-      });
-    }
   }
 
   updateUrl(settingsName: string) {
