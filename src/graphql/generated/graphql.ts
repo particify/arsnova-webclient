@@ -85,10 +85,12 @@ export type JoinRoomInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  claimUnverifiedUser?: Maybe<Scalars['Boolean']['output']>;
   createAnnouncement: Announcement;
   createRoom: Room;
   deleteAnnouncement: Scalars['ID']['output'];
   deleteRoom: Scalars['Boolean']['output'];
+  deleteUser?: Maybe<Scalars['Boolean']['output']>;
   duplicateDemoRoom: Room;
   duplicateRoom: Room;
   grantRoomRole: Scalars['Boolean']['output'];
@@ -96,6 +98,15 @@ export type Mutation = {
   revokeRoomRole: Scalars['Boolean']['output'];
   updateAnnouncement: Announcement;
   updateRoom: Room;
+  updateUserDetails?: Maybe<Scalars['Boolean']['output']>;
+  updateUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
+  updateUserPassword?: Maybe<Scalars['Boolean']['output']>;
+  verifyUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type MutationClaimUnverifiedUserArgs = {
+  mailAddress: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type MutationCreateAnnouncementArgs = {
@@ -139,6 +150,23 @@ export type MutationUpdateAnnouncementArgs = {
 
 export type MutationUpdateRoomArgs = {
   input: UpdateRoomInput;
+};
+
+export type MutationUpdateUserDetailsArgs = {
+  input: UpdateUserDetailsInput;
+};
+
+export type MutationUpdateUserMailAddressArgs = {
+  mailAddress: Scalars['String']['input'];
+};
+
+export type MutationUpdateUserPasswordArgs = {
+  newPassword: Scalars['String']['input'];
+  oldPassword: Scalars['String']['input'];
+};
+
+export type MutationVerifyUserMailAddressArgs = {
+  verificationCode: Scalars['String']['input'];
 };
 
 export type PageInfo = {
@@ -315,6 +343,11 @@ export type UpdateRoomInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateUserDetailsInput = {
+  givenName?: InputMaybe<Scalars['String']['input']>;
+  surname?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -638,6 +671,25 @@ export type CurrentUserQuery = {
     displayId?: string | null;
     displayName?: string | null;
   } | null;
+};
+
+export type ClaimUnverifiedUserMutationVariables = Exact<{
+  mailAddress: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+export type ClaimUnverifiedUserMutation = {
+  __typename?: 'Mutation';
+  claimUnverifiedUser?: boolean | null;
+};
+
+export type VerifyUserMailAddressMutationVariables = Exact<{
+  verificationCode: Scalars['String']['input'];
+}>;
+
+export type VerifyUserMailAddressMutation = {
+  __typename?: 'Mutation';
+  verifyUserMailAddress?: boolean | null;
 };
 
 export const RoomDetailsFragmentFragmentDoc = gql`
@@ -1072,6 +1124,44 @@ export class CurrentUserGql extends Apollo.Query<
   CurrentUserQueryVariables
 > {
   document = CurrentUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ClaimUnverifiedUserDocument = gql`
+  mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
+    claimUnverifiedUser(mailAddress: $mailAddress, password: $password)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ClaimUnverifiedUserGql extends Apollo.Mutation<
+  ClaimUnverifiedUserMutation,
+  ClaimUnverifiedUserMutationVariables
+> {
+  document = ClaimUnverifiedUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const VerifyUserMailAddressDocument = gql`
+  mutation VerifyUserMailAddress($verificationCode: String!) {
+    verifyUserMailAddress(verificationCode: $verificationCode)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class VerifyUserMailAddressGql extends Apollo.Mutation<
+  VerifyUserMailAddressMutation,
+  VerifyUserMailAddressMutationVariables
+> {
+  document = VerifyUserMailAddressDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

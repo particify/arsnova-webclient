@@ -14,10 +14,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import {
-  AdvancedSnackBarTypes,
-  NotificationService,
-} from '@app/core/services/util/notification.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -141,13 +138,9 @@ export class PasswordEntryComponent
   }
 
   getPassword(): string {
-    if (this.strength >= Strength.OKAY || !this.checkStrength) {
-      return this.password;
-    } else {
-      const msg = this.translationService.translate('password.unsuccessful');
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      return '';
-    }
+    return this.strength >= Strength.OKAY || !this.checkStrength
+      ? this.password
+      : '';
   }
 
   validatePasswordStrength(): ValidatorFn {

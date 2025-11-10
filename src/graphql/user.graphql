@@ -6,3 +6,11 @@ query CurrentUser {
     displayName
   }
 }
+
+mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
+  claimUnverifiedUser(mailAddress: $mailAddress, password: $password)
+}
+
+mutation VerifyUserMailAddress($verificationCode: String!) {
+  verifyUserMailAddress(verificationCode: $verificationCode)
+}

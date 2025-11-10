@@ -1,25 +1,27 @@
-import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  InputSignal,
+  OnInit,
+  computed,
+  inject,
+  input,
+  viewChild,
+} from '@angular/core';
 import {
   UntypedFormControl,
   Validators,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@app/core/services/util/event.service';
 import { Router, RouterLink } from '@angular/router';
-import {
-  PasswordEntryComponent,
-  PasswordEntryComponent as PasswordEntryComponent_1,
-} from '@app/core/components/password-entry/password-entry.component';
+import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { take } from 'rxjs';
 import { ApiConfig } from '@app/core/models/api-config';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
@@ -29,6 +31,11 @@ import { MatInput } from '@angular/material/input';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { ClaimUnverifiedUserGql } from '@gql/generated/graphql';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { UserActivationComponent } from '@app/core/components/_dialogs/user-activation/user-activation.component';
 
 @Component({
   selector: 'app-register',
@@ -45,7 +52,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
     AutofocusDirective,
     ReactiveFormsModule,
     MatError,
-    PasswordEntryComponent_1,
+    PasswordEntryComponent,
     MatCheckbox,
     LoadingButtonComponent,
     RouterLink,
@@ -54,27 +61,26 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 })
 export class RegisterComponent extends FormComponent implements OnInit {
   private translationService = inject(TranslocoService);
-  userService = inject(UserService);
-  notificationService = inject(NotificationService);
-  eventService = inject(EventService);
+  private authenticationService = inject(AuthenticationService);
+  private claimUnverifiedUserGql = inject(ClaimUnverifiedUserGql);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
-
-  @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
+  private dialog = inject(MatDialog);
+  private passwordEntry = viewChild.required(PasswordEntryComponent);
 
   // Route data input below
-  @Input({ required: true }) apiConfig!: ApiConfig;
+  apiConfig = input<ApiConfig>() as InputSignal<ApiConfig>;
 
   usernameFormControl = new UntypedFormControl();
   matcher = new FormErrorStateMatcher();
   deviceWidth = innerWidth;
-  acceptToS = false;
-  linkOfToS?: string;
-  accountServiceTitle!: string;
+  acceptTos = false;
+  linkOfTos = computed(() => this.apiConfig().ui.links?.tos?.url);
+  accountServiceTitle = computed(
+    () => this.apiConfig().ui.registration?.service || 'ARSnova'
+  );
 
   ngOnInit(): void {
-    this.accountServiceTitle =
-      this.apiConfig.ui.registration?.service || 'ARSnova';
-    this.linkOfToS = this.apiConfig.ui.links?.tos?.url;
     this.setFormControl(this.usernameFormControl);
     this.usernameFormControl.clearValidators();
   }
@@ -88,64 +94,76 @@ export class RegisterComponent extends FormComponent implements OnInit {
   }
 
   register(username: string): void {
-    const password = this.passwordEntry.getPassword();
-    if (
-      !this.usernameFormControl.hasError('required') &&
-      !this.usernameFormControl.hasError('email') &&
-      password
-    ) {
-      if (this.acceptToS) {
-        this.disableForm();
-        this.userService.register(username, password).subscribe(
-          () => {
-            this.enableForm();
-            this.router.navigateByUrl('login', {
-              state: { data: { username: username, password: password } },
+    const password = this.passwordEntry().getPassword();
+    if (this.validateForm()) {
+      this.disableForm();
+      this.authenticationService
+        .requireAuthentication()
+        .pipe(
+          switchMap((a) => {
+            if (!a || a.verified) {
+              throw new Error('Guest account expected.');
+            }
+            return this.claimUnverifiedUserGql.mutate({
+              variables: { mailAddress: username, password },
             });
-            this.translationService
-              .selectTranslate('register.register-successful')
-              .pipe(take(1))
-              .subscribe((message) => {
-                this.notificationService.showAdvanced(
-                  message,
-                  AdvancedSnackBarTypes.SUCCESS
-                );
+          })
+        )
+        .subscribe({
+          next: () => {
+            this.enableForm();
+            const msg = this.translationService.translate(
+              'register.register-successful'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+            this.dialog
+              .open(UserActivationComponent)
+              .afterClosed()
+              .subscribe((result: { success: boolean }) => {
+                if (result.success) {
+                  this.authenticationService.reloadUser().subscribe(() => {
+                    this.router.navigateByUrl('user');
+                  });
+                }
               });
           },
-          () => {
+          error: () => {
             this.enableForm();
-            this.translationService
-              .selectTranslate('register.register-request-error')
-              .pipe(take(1))
-              .subscribe((message) => {
-                this.notificationService.showAdvanced(
-                  message,
-                  AdvancedSnackBarTypes.FAILED
-                );
-              });
-          }
-        );
-      } else {
-        this.translationService
-          .selectTranslate('register.please-accept')
-          .pipe(take(1))
-          .subscribe((message) => {
-            this.notificationService.showAdvanced(
-              message,
-              AdvancedSnackBarTypes.WARNING
+            const msg = this.translationService.translate(
+              'register.register-request-error'
             );
-          });
-      }
-    } else {
-      this.translationService
-        .selectTranslate('register.register-unsuccessful')
-        .pipe(take(1))
-        .subscribe((message) => {
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.WARNING
-          );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.FAILED
+            );
+          },
         });
     }
+  }
+
+  validateForm(): boolean {
+    const password = this.passwordEntry().getPassword();
+    const usernameError =
+      this.usernameFormControl.hasError('required') ||
+      this.usernameFormControl.hasError('email');
+    if (!usernameError && password && this.acceptTos) {
+      return true;
+    }
+    if (!password) {
+      const msg = this.translationService.translate('password.unsuccessful');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    } else if (!this.acceptTos) {
+      const msg = this.translationService.translate('register.please-accept');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    } else {
+      const msg = this.translationService.translate(
+        'register.register-unsuccessful'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+    }
+    return false;
   }
 }
