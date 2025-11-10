@@ -1,4 +1,11 @@
-import { Component, inject, input, linkedSignal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -70,7 +77,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
     TranslocoPipe,
   ],
 })
-export class RoomComponent extends FormComponent {
+export class RoomComponent extends FormComponent implements AfterViewInit {
   notificationService = inject(NotificationService);
   translationService = inject(TranslocoService);
   protected roomService = inject(RoomService);
@@ -93,13 +100,14 @@ export class RoomComponent extends FormComponent {
   textContainsImage = false;
   readonly HintType = HintType;
 
+  private readonly roomResult$ = toObservable(this.roomId).pipe(
+    switchMap((id) => this.roomWithSettingsByIdGql.fetch({ variables: { id } }))
+  );
+  readonly isLoadingOrError = toSignal(
+    this.roomResult$.pipe(map((r) => !r.data?.roomById))
+  );
   private readonly room = toSignal(
-    toObservable(this.roomId).pipe(
-      switchMap((id) =>
-        this.roomWithSettingsByIdGql.fetch({ variables: { id } })
-      ),
-      map((r) => r.data?.roomById)
-    )
+    this.roomResult$.pipe(map((r) => r.data?.roomById))
   );
   readonly name = linkedSignal(() => this.room()?.name ?? '');
   readonly description = linkedSignal(() => this.room()?.description ?? '');
@@ -107,6 +115,19 @@ export class RoomComponent extends FormComponent {
   readonly focusModeEnabled = linkedSignal(
     () => this.room()?.focusModeEnabled ?? false
   );
+
+  constructor() {
+    super();
+    effect(() => {
+      if (!this.isLoadingOrError()) {
+        this.enableForm();
+      }
+    });
+  }
+
+  ngAfterViewInit() {
+    this.disableForm();
+  }
 
   deleteRoom(): void {
     const dialogRef = this.dialogService.openDeleteDialog(
