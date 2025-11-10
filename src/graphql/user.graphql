@@ -7,6 +7,15 @@ query CurrentUser {
   }
 }
 
+query UserByDisplayId($displayId: ID!) {
+  userByDisplayId(displayId: $displayId) {
+    id
+    verified
+    displayId
+    displayName
+  }
+}
+
 mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
   claimUnverifiedUser(mailAddress: $mailAddress, password: $password)
 }

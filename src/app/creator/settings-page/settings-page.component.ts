@@ -35,6 +35,7 @@ import { AccessComponent } from '@app/creator/settings/access/access.component';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { UpdateEvent } from '@app/creator/settings/update-event';
 import { AnnouncementSettingsComponent } from '@app/creator/settings/announcement-settings/announcement-settings.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 
 export interface Settings {
   name: string;
@@ -62,6 +63,7 @@ export interface Settings {
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
+    ExtensionPointComponent,
   ],
 })
 export class SettingsPageComponent implements OnInit {

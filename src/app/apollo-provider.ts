@@ -43,6 +43,9 @@ export const apolloProvider = provideApollo(() => {
             questionnaireContents: relayStylePagination(),
           },
         },
+        RoomMember: {
+          keyFields: ['user', ['id']],
+        },
       },
     }),
     devtools: {
