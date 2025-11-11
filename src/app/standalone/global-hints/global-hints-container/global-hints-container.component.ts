@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   effect,
   ElementRef,
@@ -13,6 +14,7 @@ import { GlobalHintComponent } from '@app/standalone/global-hints/global-hint/gl
   imports: [GlobalHintComponent],
   templateUrl: './global-hints-container.component.html',
   styleUrls: ['./global-hints-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GlobalHintsContainerComponent {
   private service = inject(GlobalHintsService);
