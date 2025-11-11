@@ -1,4 +1,9 @@
-import { Component, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from '@angular/core';
 import { GlobalHint } from '@app/standalone/global-hints/global-hint';
 import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
 import { CoreModule } from '@app/core/core.module';
@@ -8,6 +13,7 @@ import { CoreModule } from '@app/core/core.module';
   templateUrl: './global-hint.component.html',
   styleUrls: ['./global-hint.component.scss'],
   imports: [CoreModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GlobalHintComponent {
   hint = input.required<GlobalHint>();
