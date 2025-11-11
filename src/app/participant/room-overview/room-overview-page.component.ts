@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, inject, input } from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { takeUntil } from 'rxjs';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
@@ -26,6 +25,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { RoomInfoComponentComponent } from '@app/standalone/room-info-component/room-info-component.component';
 import { ExpandableCardComponent } from '@app/standalone/expandable-card/expandable-card.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-participant-overview',
@@ -50,62 +50,57 @@ import { ExpandableCardComponent } from '@app/standalone/expandable-card/expanda
 })
 export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent
-  implements OnInit, OnDestroy
+  implements OnInit
 {
-  protected translateService = inject(TranslocoService);
-  protected globalStorageService = inject(GlobalStorageService);
-  protected commentSettingsService = inject(CommentSettingsService);
-  protected focusModeService = inject(FocusModeService);
-  private roomSettingsService = inject(RoomSettingsService);
+  protected readonly translateService = inject(TranslocoService);
+  protected readonly globalStorageService = inject(GlobalStorageService);
+  protected readonly commentSettingsService = inject(CommentSettingsService);
+  protected readonly focusModeService = inject(FocusModeService);
+  private readonly roomSettingsService = inject(RoomSettingsService);
 
   // Route data input below
-  @Input({ required: true }) commentSettings!: CommentSettings;
+  readonly commentSettings = input.required<CommentSettings>();
 
   feedbackEnabled = false;
   commentsEnabled = false;
   focusModeEnabled = false;
-  HintType = HintType;
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
+  readonly HintType = HintType;
 
   ngOnInit() {
     window.scroll(0, 0);
     this.eventService
       .on<DataChanged<RoomStats>>('PublicDataChanged')
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.initializeStats(false));
     this.initializeStats(false);
     this.roomSettingsService
-      .getByRoomId(this.room.id)
-      .pipe(takeUntil(this.destroyed$))
+      .getByRoomId(this.roomId())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((settings) => {
         this.focusModeEnabled = settings.focusModeEnabled;
         this.feedbackEnabled = settings.surveyEnabled;
         this.roomSettingsService
-          .getRoomSettingsStream(this.room.id, settings.id)
-          .pipe(takeUntil(this.destroyed$))
+          .getRoomSettingsStream(this.roomId(), settings.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((settings) => {
             if (settings.surveyEnabled !== undefined) {
               this.feedbackEnabled = settings.surveyEnabled;
             }
           });
       });
-    this.commentsEnabled = !this.commentSettings.disabled;
+    this.commentsEnabled = !this.commentSettings().disabled;
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
     this.commentSettingsService
       .getSettingsStream()
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((settings) => {
         this.commentsEnabled = !settings.disabled;
       });
     this.focusModeService
       .getFocusModeEnabled()
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
         (focusModeEnabled) => (this.focusModeEnabled = focusModeEnabled)
       );

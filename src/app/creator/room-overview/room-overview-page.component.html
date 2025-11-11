@@ -5,20 +5,20 @@
         ? 'creator.room-page.a11y-moderator-message'
         : 'room-page.a11y-room-message'
       )
-        | a11yIntro: { room: room.name, key: room.shortId }
+        | a11yIntro: { room: room.name, key: shortId() }
         | async
     }}
   </div>
-  @if (isLoading) {
+  @if (isLoading()) {
     <app-loading-indicator></app-loading-indicator>
-  } @else if (room) {
+  } @else if (room()) {
     <div class="overview-container">
       <div fxLayout="column" fxLayoutGap="16px" fxLayoutGap.lt-md="12px">
-        @if (room.description) {
+        @if (description()) {
           <app-expandable-card>
             <app-rendered-text
-              [rawText]="room.description.trim()"
-              [renderedText]="room.renderedDescription"
+              [rawText]="description()"
+              [renderedText]="descriptionRendered()"
               appLangContext
               appDirContext
             ></app-rendered-text>
@@ -27,7 +27,7 @@
         <div class="overview-row-container">
           <app-comments-card
             class="feature-row-item"
-            [room]="room"
+            [room]="legacyRoom()"
             [description]="'creator.room-page.comments-description' | transloco"
             [showCount]="true"
             [showControls]="true"
@@ -35,7 +35,7 @@
           </app-comments-card>
           <app-live-feedback-card
             class="feature-row-item"
-            [room]="room"
+            [room]="legacyRoom()"
             [description]="
               'creator.room-page.live-feedback-description' | transloco
             "
@@ -86,84 +86,95 @@
                   </button>
                 </div>
               }
-              @if (contentGroups.length === 0) {
-                <div class="group-types-container">
-                  @for (type of groupTypes.keys(); track type; let i = $index) {
-                    <mat-card
-                      class="type-card"
-                      appearance="outlined"
-                      tabindex="0"
-                      role="button"
-                      (click)="openCreateContentGroupDialog(type)"
-                      (keyup.enter)="openCreateContentGroupDialog(type)"
-                      matRipple
-                      [attr.aria-label]="
-                        'creator.room-page.a11y-create-series-type'
-                          | transloco
-                            : {
-                                type:
-                                  'creator.content.group-type-' +
-                                    type.toLowerCase() | transloco,
-                              }
-                      "
-                      appDisabledIfReadonly
-                    >
-                      <div fxLayout="column" fxLayoutGap="8px">
-                        <div
-                          fxLayout="row"
-                          fxLayoutAlign="start center"
-                          fxLayoutGap="8px"
-                        >
-                          <mat-icon
-                            [style]="
-                              'color: ' + 'var(--' + type.toLowerCase() + ')'
-                            "
-                            >{{ groupTypes.get(type) }}</mat-icon
+              @if (isLoadingGroups()) {
+                <app-loading-indicator></app-loading-indicator>
+              } @else {
+                @if (contentGroups.length === 0) {
+                  <div class="group-types-container">
+                    @for (
+                      type of groupTypes.keys();
+                      track type;
+                      let i = $index
+                    ) {
+                      <mat-card
+                        class="type-card"
+                        appearance="outlined"
+                        tabindex="0"
+                        role="button"
+                        (click)="openCreateContentGroupDialog(type)"
+                        (keyup.enter)="openCreateContentGroupDialog(type)"
+                        matRipple
+                        [attr.aria-label]="
+                          'creator.room-page.a11y-create-series-type'
+                            | transloco
+                              : {
+                                  type:
+                                    'creator.content.group-type-' +
+                                      type.toLowerCase() | transloco,
+                                }
+                        "
+                        appDisabledIfReadonly
+                      >
+                        <div fxLayout="column" fxLayoutGap="8px">
+                          <div
+                            fxLayout="row"
+                            fxLayoutAlign="start center"
+                            fxLayoutGap="8px"
                           >
-                          <span class="group-type">{{
-                            'creator.content.group-type-' + type.toLowerCase()
-                              | transloco
-                          }}</span>
-                        </div>
-                        <span class="group-type-description">{{
-                          'creator.content.group-type-description-' +
-                            type.toLowerCase() | transloco
-                        }}</span>
-                        <mat-icon class="add-group-type-icon primary">
-                          add
-                        </mat-icon>
-                        <div fxLayout="row" fxLayoutGap="4px">
-                          @for (
-                            format of groupContentFormatIcons.get(type)?.keys();
-                            track format
-                          ) {
                             <mat-icon
-                              class="content-type-icon"
-                              [matTooltip]="
-                                'creator.content.format-' + format.toLowerCase()
-                                  | transloco
+                              [style]="
+                                'color: ' + 'var(--' + type.toLowerCase() + ')'
                               "
-                              >{{
-                                groupContentFormatIcons.get(type)?.get(format)
-                              }}</mat-icon
+                              >{{ groupTypes.get(type) }}</mat-icon
                             >
-                          }
+                            <span class="group-type">{{
+                              'creator.content.group-type-' + type.toLowerCase()
+                                | transloco
+                            }}</span>
+                          </div>
+                          <span class="group-type-description">{{
+                            'creator.content.group-type-description-' +
+                              type.toLowerCase() | transloco
+                          }}</span>
+                          <mat-icon class="add-group-type-icon primary">
+                            add
+                          </mat-icon>
+                          <div fxLayout="row" fxLayoutGap="4px">
+                            @for (
+                              format of groupContentFormatIcons
+                                .get(type)
+                                ?.keys();
+                              track format
+                            ) {
+                              <mat-icon
+                                class="content-type-icon"
+                                [matTooltip]="
+                                  'creator.content.format-' +
+                                    format.toLowerCase() | transloco
+                                "
+                                >{{
+                                  groupContentFormatIcons.get(type)?.get(format)
+                                }}</mat-icon
+                              >
+                            }
+                          </div>
                         </div>
-                      </div>
-                    </mat-card>
-                  }
-                </div>
-              }
-              @if (room && contentGroups.length > 0) {
-                <div fxLayout="column" fxLayoutGap="8px">
-                  @for (contentGroup of contentGroups; track contentGroup) {
-                    <app-content-groups
-                      [contentGroup]="contentGroup"
-                      [role]="viewRole"
-                      [shortId]="room.shortId"
-                    ></app-content-groups>
-                  }
-                </div>
+                      </mat-card>
+                    }
+                  </div>
+                }
+                @let _shortId = shortId();
+                @if (_shortId && contentGroups.length > 0) {
+                  <div fxLayout="column" fxLayoutGap="8px">
+                    @for (contentGroup of contentGroups; track contentGroup) {
+                      <app-content-groups
+                        [contentGroup]="contentGroup"
+                        [role]="viewRole()"
+                        [shortId]="_shortId"
+                      ></app-content-groups>
+                    }
+                  </div>
+                }
               }
             </div>
           </ng-container>

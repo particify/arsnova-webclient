@@ -8,18 +8,19 @@
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
     {{ 'room-page.a11y-room-message' | a11yIntro: { name: room.name } | async }}
   </div>
-  @if (isLoading) {
+  @if (isLoading()) {
     <app-loading-indicator></app-loading-indicator>
   } @else {
-    @if (room) {
+    @let _shortId = shortId();
+    @if (_shortId) {
       @let anyFeatureEnabled =
         commentsEnabled || feedbackEnabled || contentGroups.length > 0;
       @if (!focusModeEnabled) {
-        @if (room.description && anyFeatureEnabled) {
+        @if (description() && anyFeatureEnabled) {
           <app-expandable-card>
             <app-rendered-text
-              [rawText]="room.description.trim()"
-              [renderedText]="room.renderedDescription"
+              [rawText]="description()"
+              [renderedText]="descriptionRendered()"
               appLangContext
               appDirContext
             ></app-rendered-text>
@@ -35,7 +36,7 @@
             @if (commentsEnabled) {
               <app-comments-card
                 class="feature-row-item"
-                [room]="room"
+                [room]="legacyRoom()"
                 [description]="
                   'participant.room-page.comments-description' | transloco
                 "
@@ -51,7 +52,7 @@
             @if (feedbackEnabled) {
               <app-live-feedback-card
                 class="feature-row-item"
-                [room]="room"
+                [room]="legacyRoom()"
                 [description]="
                   'participant.room-page.live-feedback-description' | transloco
                 "
@@ -63,7 +64,9 @@
             }
           </div>
         }
-        @if (contentGroups && contentGroups.length > 0) {
+        @if (isLoadingGroups()) {
+          <app-loading-indicator></app-loading-indicator>
+        } @else if (contentGroups && contentGroups.length > 0) {
           <app-feature-card
             class="feature-column-item"
             [ngClass]="{ disabled: focusModeEnabled }"
@@ -79,8 +82,8 @@
                 @for (contentGroup of contentGroups; track contentGroup) {
                   <app-content-groups
                     [contentGroup]="contentGroup"
-                    [role]="viewRole"
-                    [shortId]="room.shortId"
+                    [role]="viewRole()"
+                    [shortId]="_shortId"
                     [showRipple]="true"
                   ></app-content-groups>
                 }
@@ -93,8 +96,8 @@
         <app-room-info-component
           style="max-width: 100%"
           [name]="room.name"
-          [shortId]="room.shortId"
-          [description]="room.renderedDescription"
+          [shortId]="_shortId"
+          [description]="descriptionRendered()"
           [focusModeEnabled]="focusModeEnabled"
         ></app-room-info-component>
       }
