@@ -1,0 +1,66 @@
+@use '../../../../variables' as *;
+
+.global-hint {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-2;
+  font-size: $s-font-size;
+  color: var(--on-surface);
+
+  &.warning {
+    background-color: var(--warn-soft-variant);
+
+    .hint-icon {
+      color: var(--warn-soft);
+    }
+  }
+
+  &.info {
+    background-color: var(--info-variant);
+
+    .hint-icon {
+      color: var(--info);
+    }
+  }
+
+  :host-context(.theme-dark) {
+    .warning,
+    .info {
+      background-color: var(--background);
+    }
+  }
+
+  &.custom {
+    background: var(--on-surface);
+    color: var(--surface);
+
+    button {
+      color: var(--surface);
+      border-color: var(--surface);
+      white-space: nowrap;
+    }
+  }
+
+  mat-icon {
+    width: $xl-font-size;
+  }
+}
+
+@include xs {
+  .global-hint {
+    justify-content: space-between;
+  }
+}
+
+@include gt-xs {
+  .global-hint {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .close {
+    position: absolute;
+    right: $spacing-2;
+  }
+}

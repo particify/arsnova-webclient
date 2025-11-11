@@ -1,0 +1,7 @@
+@if (hints().length > 0) {
+  <div #globalHints class="global-hints-container">
+    @for (hint of hints(); track hint.id) {
+      <app-global-hint [hint]="hint" />
+    }
+  </div>
+}

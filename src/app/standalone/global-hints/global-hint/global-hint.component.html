@@ -1,0 +1,16 @@
+<div class="global-hint" [class]="hint().type">
+  @if (hint().icon) {
+    <mat-icon fxHide.xs class="hint-icon">{{ hint().icon }}</mat-icon>
+  }
+  <span class="message">{{ hint().message }}</span>
+  @if (hint().action && hint().actionLabel) {
+    <button mat-stroked-button (click)="doAction()">
+      {{ hint().actionLabel }}
+    </button>
+  }
+  @if (hint().dismissible) {
+    <button mat-icon-button class="close" (click)="dismiss()">
+      <mat-icon>close_small</mat-icon>
+    </button>
+  }
+</div>

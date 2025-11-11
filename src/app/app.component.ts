@@ -37,7 +37,9 @@ import { UiConfig } from '@app/core/models/api-config';
 import { UiService } from '@app/core/services/util/ui.service';
 import { CoreModule } from './core/core.module';
 import { FooterLinksComponent } from './standalone/footer-links/footer-links.component';
-import { GlobalHintsComponent } from './standalone/global-hints/global-hints.component';
+import { GlobalHintsContainerComponent } from './standalone/global-hints/global-hints-container/global-hints-container.component';
+import { GlobalHintsService } from './standalone/global-hints/global-hints.service';
+import { GlobalHintType } from './standalone/global-hints/global-hint';
 
 @Component({
   selector: 'app-root',
@@ -47,7 +49,7 @@ import { GlobalHintsComponent } from './standalone/global-hints/global-hints.com
     CoreModule,
     FooterLinksComponent,
     RouterOutlet,
-    GlobalHintsComponent,
+    GlobalHintsContainerComponent,
   ],
 })
 export class AppComponent implements OnInit, AfterViewInit {
@@ -67,6 +69,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private dialog = inject(MatDialog);
   private featureFlagService = inject(FeatureFlagService);
   private uiService = inject(UiService);
+  private globalHintsService = inject(GlobalHintsService);
 
   constructor() {
     const themeService = this.themeService;
@@ -103,6 +106,17 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.translateUrl = config.ui.links?.translate?.url;
       this.trackingService.init(config.ui);
       this.updateService.handleUpdate(config.ui.versions);
+      if (config.readOnly) {
+        const msg = this.translationService.translate(
+          'general.read-only-mode-active'
+        );
+        this.globalHintsService.addHint({
+          id: 'readonly-hint',
+          type: GlobalHintType.WARNING,
+          message: msg,
+          icon: 'warning',
+        });
+      }
     });
     this.roomService.getCurrentRoomStream().subscribe((room) => {
       this.isRoom = !!room;
