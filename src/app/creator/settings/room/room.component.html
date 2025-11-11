@@ -94,7 +94,7 @@
     <app-template-language-selection
       [defaultLang]="editRoom.language"
       [allowNoneSelection]="true"
-      (selectedLangChanged)="editRoom.language = $event"
+      (selectedLangChange)="editRoom.language = $event?.code"
     ></app-template-language-selection>
     <app-settings-slide-toggle
       *appFeatureFlag="'FOCUS_MODE'"
