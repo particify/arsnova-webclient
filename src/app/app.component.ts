@@ -241,6 +241,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   isGuest(): boolean {
-    return !this.auth?.verified;
+    return !!this.auth && !this.auth.verified;
   }
 }
