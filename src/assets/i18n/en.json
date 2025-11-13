@@ -143,7 +143,9 @@
     "accept-2": ".",
     "terms": "terms of use",
     "please-accept": "You must agree to the terms of use to register.",
-    "info": "Create your {{accountService}} account"
+    "info": "Create your {{accountService}} account",
+    "claim-guest-account-hint": "Do you like our tool? Transfer your data to your own account and use all the features.",
+    "create-account": "Create account"
   },
   "user-profile": {
     "a11y-message": "You are now in the account page.",

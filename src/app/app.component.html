@@ -11,8 +11,9 @@
       >
         <div>
           <div
-            fxLayout="row"
-            fxLayoutAlign="space-between center"
+            fxLayout="column"
+            fxLayoutAlign="start space-between"
+            fxLayoutGap="16px"
             class="user-container"
           >
             <div fxFill fxLayout="row" fxLayoutAlign="space-between center">
@@ -162,14 +163,39 @@
             }
           </mat-menu>
         </div>
-        @if (uiConfig) {
-          <app-footer-links
-            [uiConfig]="uiConfig"
-            [showHelp]="true"
-            [showJoinLink]="router.url !== ''"
-            (inAppLinkClicked)="closeDrawer()"
-          ></app-footer-links>
-        }
+        <div>
+          @if (isGuest() && allowRegister) {
+            <div class="claim-hint">
+              <lib-extension-point
+                extensionId="claim-hint"
+                (extensionEvent)="closeDrawer()"
+              >
+                <div fxLayout="column" fxLayoutGap="12px">
+                  <span>{{
+                    'register.claim-guest-account-hint' | transloco
+                  }}</span>
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    [routerLink]="'register'"
+                    (click)="closeDrawer()"
+                  >
+                    <mat-icon>person_add</mat-icon>
+                    {{ 'register.create-account' | transloco }}
+                  </button>
+                </div>
+              </lib-extension-point>
+            </div>
+          }
+          @if (uiConfig) {
+            <app-footer-links
+              [uiConfig]="uiConfig"
+              [showHelp]="true"
+              [showJoinLink]="router.url !== ''"
+              (inAppLinkClicked)="closeDrawer()"
+            ></app-footer-links>
+          }
+        </div>
       </div>
     </mat-drawer>
     <mat-drawer-content fxLayout="column">

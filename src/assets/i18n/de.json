@@ -143,7 +143,9 @@
     "accept-2": " zu.",
     "terms": "Nutzungsbedingungen",
     "please-accept": "Du musst die Nutzungsbedingungen akzeptieren, um dich zu registrieren.",
-    "info": "Erstelle ein {{accountService}}-Konto"
+    "info": "Erstelle ein {{accountService}}-Konto",
+    "claim-guest-account-hint": "Dir gefällt unser Tool? Übertrage deine Daten in einen eigenen Account und nutze alle Funktionen.",
+    "create-account": "Account erstellen"
   },
   "user-profile": {
     "a11y-message": "Du befindest dich jetzt auf der Account-Seite.",
