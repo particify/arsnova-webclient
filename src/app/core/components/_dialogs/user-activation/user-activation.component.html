@@ -40,7 +40,7 @@
     [isDialog]="true"
     (clicked)="verify(verificationCode.value)"
   ></app-loading-button>
-  <button mat-button (click)="cancel()">
+  <button mat-button (click)="close()">
     {{ 'user-activation.cancel' | transloco }}
   </button>
 </div>

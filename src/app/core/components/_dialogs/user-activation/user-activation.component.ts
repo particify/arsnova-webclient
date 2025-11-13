@@ -25,6 +25,7 @@ import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { VerifyUserMailAddressGql } from '@gql/generated/graphql';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
 @Component({
   selector: 'app-user-activation',
@@ -53,6 +54,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   private dialogRef =
     inject<MatDialogRef<UserActivationComponent>>(MatDialogRef);
   private translationService = inject(TranslocoService);
+  private authenticationService = inject(AuthenticationService);
 
   readonly dialogId = 'activate-user';
 
@@ -77,10 +79,20 @@ export class UserActivationComponent extends FormComponent implements OnInit {
         .mutate({ variables: { verificationCode } })
         .subscribe({
           next: (r) => {
-            this.enableForm();
             if (r.data?.verifyUserMailAddress) {
-              this.dialogRef.close({ success: true });
+              this.authenticationService.refreshLogin().subscribe({
+                next: () => {
+                  this.notificationService.showAdvanced(
+                    this.translationService.translate(
+                      'user-activation.account-verified'
+                    ),
+                    AdvancedSnackBarTypes.SUCCESS
+                  );
+                  this.close({ success: true });
+                },
+              });
             } else {
+              this.enableForm();
               this.notificationService.showAdvanced(
                 this.translationService.translate(
                   'user-activation.key-incorrect'
@@ -109,7 +121,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
     });
   }
 
-  cancel() {
-    this.dialogRef.close();
+  close(result?: { success: boolean }) {
+    this.dialogRef.close(result);
   }
 }

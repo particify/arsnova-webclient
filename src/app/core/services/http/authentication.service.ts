@@ -56,6 +56,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
   private router = inject(Router);
   private apollo = inject(Apollo, { optional: true });
   private currentUserGql = inject(CurrentUserGql);
+  private currentUserQueryRef = this.currentUserGql.watch();
 
   private readonly ADMIN_ROLE: string = 'ADMIN';
   private popupDimensions = [500, 500];
@@ -216,7 +217,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * Sends a refresh request using current authentication to extend the
    * validity and reloads the user.
    */
-  reloadUser(): Observable<AuthenticatedUser | undefined> {
+  refreshAndReloadUser(): Observable<AuthenticatedUser | undefined> {
     return this.handleLoginResponse(this.refreshLogin()).pipe(
       map((r) => r.authentication)
     );
@@ -428,6 +429,10 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     );
   }
 
+  refetchCurrentUser() {
+    return this.currentUserQueryRef.refetch();
+  }
+
   /**
    * Updates the local authentication state based on the server response.
    */
@@ -440,22 +445,23 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
         if (auth) {
           // If authenticated, transform response by fetching user, building AuthenticatedUser and wrapping it in a ClientAuthenticationResult.
           this.handleAuthenticationResponse(auth);
-          return this.currentUserGql.fetch().pipe(
+          return this.currentUserQueryRef.valueChanges.pipe(
+            filter((r) => r.dataState === 'complete'),
             map((r) => r.data?.currentUser),
             tap((u) => {
               if (!u) {
                 throw new Error();
               }
             }),
-            map(
-              (u) =>
-                new AuthenticatedUser(
-                  u!.id,
-                  u!.verified,
-                  u!.displayId ?? undefined,
-                  u!.displayName ?? undefined
-                )
-            ),
+            map((u) => {
+              return new AuthenticatedUser(
+                u!.id,
+                u!.verified,
+                u!.displayId ?? undefined,
+                u!.displayName ?? undefined,
+                u!.unverifiedMailAddress ?? undefined
+              );
+            }),
             tap((au) =>
               this.globalStorageService.setItem(STORAGE_KEYS.USER, au)
             ),

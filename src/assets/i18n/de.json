@@ -211,7 +211,10 @@
     "reset-button": "Erneut senden",
     "sent-again": "Der Verifizierungscode wurde erneut gesendet.",
     "cancel": "Abbrechen",
-    "verification-info": "Solltest du noch keinen Verifizierungscode erhalten haben, prüfe bitte in wenigen Minuten noch einmal deine E-Mails und stelle sicher, dass dieser nicht im Spam-Ordner gelandet ist."
+    "verification-info": "Solltest du noch keinen Verifizierungscode erhalten haben, prüfe bitte in wenigen Minuten noch einmal deine E-Mails und stelle sicher, dass dieser nicht im Spam-Ordner gelandet ist.",
+    "account-verified": "Dein Account wurde verifiziert.",
+    "verify-mail-to-use-all-features": "Fast geschafft! Bestätige deine E-Mail-Adresse, um alle Funktionen zu nutzen.",
+    "verify-mail": "E-Mail bestätigen"
   },
   "dialog": {
     "a11y-update": "Speichert die Änderungen und schließt den Dialog.",

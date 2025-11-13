@@ -36,7 +36,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 import { CreateRoomGql, DuplicateRoomGql } from '@gql/generated/graphql';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
-import { take } from 'rxjs';
+import { first, take } from 'rxjs';
 
 @Component({
   selector: 'app-room-create',
@@ -90,14 +90,19 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
-    this.apiConfigService.getApiConfig$().subscribe((config) => {
-      this.anonymousProvider = config.authenticationProviders.filter(
-        (p) => p.type === AuthenticationProviderType.ANONYMOUS
-      )[0];
-      this.authenticationService
-        .getCurrentAuthentication()
-        .subscribe((auth) => this.handleAuth(auth));
-    });
+    this.apiConfigService
+      .getApiConfig$()
+      .pipe(first())
+      .subscribe((config) => {
+        this.anonymousProvider = config.authenticationProviders.filter(
+          (p) => p.type === AuthenticationProviderType.ANONYMOUS
+        )[0];
+        this.authenticationService
+          .getCurrentAuthentication()
+          .subscribe((auth) => {
+            this.handleAuth(auth);
+          });
+      });
   }
 
   resetEmptyInputs(): void {
@@ -126,11 +131,14 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     if (this.auth) {
       this.addRoom(this.auth);
     } else {
-      this.authenticationService.loginGuest().subscribe((result) => {
-        if (result.authentication) {
-          this.addRoom(result.authentication);
-        }
-      });
+      this.authenticationService
+        .loginGuest()
+        .pipe(first())
+        .subscribe((result) => {
+          if (result.authentication) {
+            this.addRoom(result.authentication);
+          }
+        });
     }
   }
 
