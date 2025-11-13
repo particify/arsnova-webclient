@@ -20,7 +20,7 @@
     </mat-form-field>
     <app-template-language-selection
       fxFlex
-      (selectedLangChanged)="loadTags($event)"
+      (selectedLangChange)="loadTags($event?.code)"
     ></app-template-language-selection>
   </div>
   @if (isLoading) {

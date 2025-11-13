@@ -118,7 +118,10 @@ export class ContentGroupTemplateSelectionComponent
     return url;
   }
 
-  updateLanguage(lang: string): void {
+  updateLanguage(lang?: string): void {
+    if (!lang) {
+      return;
+    }
     this.selectedLang = lang;
     this.langChanged.emit(this.selectedLang);
   }

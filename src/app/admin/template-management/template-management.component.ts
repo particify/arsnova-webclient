@@ -80,7 +80,10 @@ export class TemplateManagementComponent
     });
   }
 
-  loadTags(lang: string): void {
+  loadTags(lang?: string): void {
+    if (!lang) {
+      return;
+    }
     this.isLoading = true;
     forkJoin([
       this.templateService.getTemplateTags(lang, false),

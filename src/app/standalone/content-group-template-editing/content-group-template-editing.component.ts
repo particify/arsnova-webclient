@@ -94,7 +94,10 @@ export class ContentGroupTemplateEditingComponent
     return key.toLowerCase().replaceAll(/\./g, '-');
   }
 
-  updateLanguage(lang: string): void {
+  updateLanguage(lang?: string): void {
+    if (!lang) {
+      return;
+    }
     this.selectedLang = lang;
     this.langChanged.emit(this.selectedLang);
   }
