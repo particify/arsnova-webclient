@@ -107,14 +107,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.trackingService.init(config.ui);
       this.updateService.handleUpdate(config.ui.versions);
       if (config.readOnly) {
-        const msg = this.translationService.translate(
-          'general.read-only-mode-active'
-        );
         this.globalHintsService.addHint({
           id: 'readonly-hint',
           type: GlobalHintType.WARNING,
-          message: msg,
+          message: 'general.read-only-mode-active',
           icon: 'warning',
+          translate: true,
         });
       }
     });

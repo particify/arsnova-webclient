@@ -2,10 +2,14 @@
   @if (hint().icon) {
     <mat-icon fxHide.xs class="hint-icon">{{ hint().icon }}</mat-icon>
   }
-  <span class="message">{{ hint().message }}</span>
+  <span class="message">{{
+    hint().translate ? (hint().message | transloco) : hint().message
+  }}</span>
   @if (hint().action && hint().actionLabel) {
     <button mat-stroked-button (click)="doAction()">
-      {{ hint().actionLabel }}
+      {{
+        hint().translate ? (hint().actionLabel | transloco) : hint().actionLabel
+      }}
     </button>
   }
   @if (hint().dismissible) {
