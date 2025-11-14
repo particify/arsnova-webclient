@@ -216,7 +216,12 @@
     "verification-info": "If you have not yet received a verification code, please check your e-mails again in a few minutes and make sure that it has not been filtered out as spam.",
     "account-verified": "Account has been verified.",
     "verify-mail-to-use-all-features": "Almost done! Verify your e-mail address to use all features.",
-    "verify-mail": "Verify e-mail"
+    "verify-mail": "Verify e-mail",
+    "verify-mail-address": "Verify e-mail address",
+    "complete-verification": "Complete verification",
+    "verification-successful": "Verification successful",
+    "verification-failed": "Verification failed",
+    "verification-link-expired": "The verification link has expired."
   },
   "dialog": {
     "a11y-update": "Save the changes and close the dialog.",
@@ -254,6 +259,7 @@
   "title": {
     "register": "Register",
     "login": "Login",
+    "verify-mail-address": "E-mail verification",
     "request-pw-reset": "Password reset",
     "pw-reset": "Set new password",
     "user": "My rooms",

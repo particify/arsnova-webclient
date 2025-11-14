@@ -24,3 +24,13 @@ mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
 mutation VerifyUserMailAddress($verificationCode: String!) {
   verifyUserMailAddress(verificationCode: $verificationCode)
 }
+
+mutation VerifyUserMailAddressUnauthenticated(
+  $verificationCode: String!
+  $userId: UUID!
+) {
+  verifyUserMailAddressUnauthenticated(
+    verificationCode: $verificationCode
+    userId: $userId
+  )
+}
