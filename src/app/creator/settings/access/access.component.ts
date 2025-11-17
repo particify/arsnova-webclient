@@ -30,7 +30,6 @@ import {
   map,
   of,
   shareReplay,
-  Subject,
   switchMap,
 } from 'rxjs';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -50,7 +49,11 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { NgClass } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
 import { MatChipListbox, MatChipOption } from '@angular/material/chips';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import {
   GrantRoomRoleByInvitationGql,
   GrantRoomRoleGql,
@@ -128,11 +131,8 @@ export class AccessComponent
 
   HintType = HintType;
 
-  private readonly afterViewInit$ = new Subject<void>();
-  private readonly membersQueryRef$ = this.afterViewInit$.pipe(
-    map(() =>
-      this.membersByRoomIdGql.watch({ variables: { roomId: this.roomId() } })
-    ),
+  private readonly membersQueryRef$ = toObservable(this.roomId).pipe(
+    map((roomId) => this.membersByRoomIdGql.watch({ variables: { roomId } })),
     shareReplay(1)
   );
   readonly isLoading = toSignal(
@@ -161,8 +161,6 @@ export class AccessComponent
   );
 
   ngAfterViewInit() {
-    this.afterViewInit$.next();
-    this.afterViewInit$.complete();
     this.setFormControl(this.usernameFormControl);
     this.selectedRole = this.roles[0];
     this.authenticationService
