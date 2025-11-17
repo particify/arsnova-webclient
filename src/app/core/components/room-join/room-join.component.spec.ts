@@ -14,7 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { configureTestModule } from '@testing/test.setup';
@@ -36,6 +36,7 @@ describe('RoomJoinComponent', () => {
     'showAdvanced',
   ]);
   const router = jasmine.createSpyObj('Router', ['navigate']);
+  router.events = of(undefined);
   let loader: HarnessLoader;
   let joinButton: MatButtonHarness;
   let inputField: MatInputHarness;
