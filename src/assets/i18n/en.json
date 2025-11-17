@@ -221,7 +221,12 @@
     "complete-verification": "Complete verification",
     "verification-successful": "Verification successful",
     "verification-failed": "Verification failed",
-    "verification-link-expired": "The verification link has expired."
+    "verification-link-expired": "The verification link has expired.",
+    "accept-invitation": "Accept invitation",
+    "accept-invitation-info": "Complete the account creation process to accept the invitation.",
+    "account-registration": "Register account",
+    "create-account": "Create account",
+    "invitation-link-expired": "The invitation link has expired."
   },
   "dialog": {
     "a11y-update": "Save the changes and close the dialog.",
@@ -260,6 +265,7 @@
     "register": "Register",
     "login": "Login",
     "verify-mail-address": "E-mail verification",
+    "accept-invitation": "Accept invitation",
     "request-pw-reset": "Password reset",
     "pw-reset": "Set new password",
     "user": "My rooms",

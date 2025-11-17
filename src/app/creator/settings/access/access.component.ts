@@ -191,7 +191,10 @@ export class AccessComponent
   getUser() {
     this.userByDisplayId
       .fetch({ variables: { displayId: this.loginId } })
-      .pipe(map((r) => r.data?.userByDisplayId))
+      .pipe(
+        map((r) => r.data?.userByDisplayId),
+        catchError(() => of(undefined))
+      )
       .subscribe((u) => {
         this.currentInputIsChecked = true;
         if (u) {
@@ -226,8 +229,13 @@ export class AccessComponent
             role: this.selectedRole,
           },
         })
+        .pipe(catchError(() => of(undefined)))
         .subscribe({
-          next: () => {
+          complete: () => this.enableForm(),
+          next: (r) => {
+            if (!r?.data?.grantRoomRole) {
+              return;
+            }
             this.membersQueryRef$.subscribe((ref) => ref.refetch());
             const msg = this.translationService.translate(
               'creator.settings.user-added'
@@ -237,10 +245,6 @@ export class AccessComponent
               AdvancedSnackBarTypes.SUCCESS
             );
             this.loginId = '';
-            this.enableForm();
-          },
-          error: () => {
-            this.enableForm();
           },
         });
     } else {
@@ -257,15 +261,22 @@ export class AccessComponent
           role: this.selectedRole,
         },
       })
-      .subscribe(() => {
-        const msg = this.translationService.translate(
-          'creator.settings.user-invited'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-        this.loginId = '';
+      .subscribe({
+        complete: () => this.enableForm(),
+        next: (r) => {
+          if (!r.data?.grantRoomRoleByInvitation) {
+            return;
+          }
+          this.membersQueryRef$.subscribe((ref) => ref.refetch());
+          const msg = this.translationService.translate(
+            'creator.settings.user-invited'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          this.loginId = '';
+        },
       });
   }
 

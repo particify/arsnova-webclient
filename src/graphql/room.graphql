@@ -20,6 +20,7 @@ fragment RoomMember on RoomMember {
     id
     displayId
     displayName
+    verified
   }
   role
 }

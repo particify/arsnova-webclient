@@ -221,7 +221,12 @@
     "complete-verification": "Verifizierung abschließen",
     "verification-successful": "Verifizierung erfolgreich",
     "verification-failed": "Verifizierung fehlgeschlagen",
-    "verification-link-expired": "Der Verifizierungslink ist abgelaufen."
+    "verification-link-expired": "Der Verifizierungslink ist abgelaufen.",
+    "accept-invitation": "Einladung annehmen",
+    "accept-invitation-info": "Schließe die Account-Erstellung ab, um die Einladung anzunehmen.",
+    "account-registration": "Account registrieren",
+    "create-account": "Account erstellen",
+    "invitation-link-expired": "Der Einladungslink ist abgelaufen."
   },
   "dialog": {
     "a11y-update": "Speichert die Änderungen und schließt den Dialog.",
@@ -260,6 +265,7 @@
     "register": "Registrieren",
     "login": "Anmelden",
     "verify-mail-address": "E-Mail-Verifizierung",
+    "accept-invitation": "Einladung annehmen",
     "request-pw-reset": "Passwort zurücksetzen",
     "pw-reset": "Neues Passwort festlegen",
     "user": "Meine Räume",
