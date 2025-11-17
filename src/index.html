@@ -23,8 +23,46 @@
       type="image/png"
     />
     <link href="assets/app.webmanifest" rel="manifest" />
+    <style>
+      #splash-screen {
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        background: #fdfdfd;
+        align-items: center;
+        justify-content: center;
+        display: none;
+        z-index: 999;
+      }
+      .logo-wrapper {
+        width: max(64px, 5vw);
+        height: max(64px, 5vw);
+
+        img {
+          height: 100%;
+          width: 100%;
+        }
+      }
+      #splash-screen.fade-out {
+        opacity: 0;
+        transition: opacity 200ms ease-out;
+      }
+    </style>
   </head>
   <body>
+    <div id="splash-screen">
+      <div class="logo-wrapper">
+        <img src="/assets/icons/180x180.png" />
+      </div>
+    </div>
+    <script>
+      const splash = document.getElementById('splash-screen');
+      if (navigator.serviceWorker?.controller?.state !== 'activated') {
+        splash.style.display = 'flex';
+      } else {
+        splash.remove();
+      }
+    </script>
     <app-root></app-root>
     <noscript
       >Please enable JavaScript to continue using this application.</noscript
