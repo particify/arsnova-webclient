@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { of } from 'rxjs';
 import { ContentGroup, GroupType } from '@app/core/models/content-group';
-import { Room } from '@app/core/models/room';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
 import { RoomStats } from '@app/core/models/room-stats';
@@ -24,6 +23,7 @@ import { CommentSettings } from '@app/core/models/comment-settings';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
+import { UserRole } from '@app/core/models/user-roles.enum';
 
 describe('RoomOverviewPageComponent', () => {
   let component: RoomOverviewPageComponent;
@@ -155,7 +155,8 @@ describe('RoomOverviewPageComponent', () => {
     testBed.compileComponents();
     fixture = testBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
-    component.room = new Room();
+    fixture.componentRef.setInput('roomId', '1234');
+    fixture.componentRef.setInput('userRole', UserRole.EDITOR);
   }));
 
   it('should create', () => {

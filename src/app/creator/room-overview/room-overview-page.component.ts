@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -10,7 +10,6 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
 import { DataChanged } from '@app/core/models/events/data-changed';
 import { RoomStats } from '@app/core/models/room-stats';
-import { takeUntil } from 'rxjs';
 import { GroupType } from '@app/core/models/content-group';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -34,6 +33,7 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { ExpandableCardComponent } from '@app/standalone/expandable-card/expandable-card.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-creator-overview',
@@ -64,20 +64,25 @@ import { ExpandableCardComponent } from '@app/standalone/expandable-card/expanda
 })
 export class RoomOverviewPageComponent
   extends AbstractRoomOverviewPageComponent
-  implements OnInit, OnDestroy
+  implements OnInit
 {
-  protected router = inject(Router);
-  protected translateService = inject(TranslocoService);
-  protected dialogService = inject(DialogService);
-  protected globalStorageService = inject(GlobalStorageService);
-  private contentService = inject(ContentService);
+  protected readonly router = inject(Router);
+  protected readonly translateService = inject(TranslocoService);
+  protected readonly dialogService = inject(DialogService);
+  protected readonly globalStorageService = inject(GlobalStorageService);
+  private readonly contentService = inject(ContentService);
 
   // Route data input below
-  @Input({ required: true }) userRole!: UserRole;
+  readonly userRole = input.required<UserRole>();
+
+  readonly isModerator = computed(() => this.userRole() === UserRole.MODERATOR);
 
   groupTypes: Map<GroupType, string>;
-  groupContentFormatIcons: Map<GroupType, Map<ContentType, string>> = new Map();
-  hintType = HintType.INFO;
+  readonly groupContentFormatIcons = new Map<
+    GroupType,
+    Map<ContentType, string>
+  >();
+  readonly hintType = HintType.INFO;
 
   constructor() {
     super();
@@ -105,14 +110,9 @@ export class RoomOverviewPageComponent
     );
     this.eventService
       .on<DataChanged<RoomStats>>('ModeratorDataChanged')
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.initializeStats(true));
     this.initializeStats(true);
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   setGroupDataInGlobalStorage() {
@@ -124,20 +124,16 @@ export class RoomOverviewPageComponent
 
   openCreateContentGroupDialog(type = GroupType.MIXED) {
     this.dialogService
-      .openContentGroupCreationDialog(this.room.id, type)
+      .openContentGroupCreationDialog(this.legacyRoom().id, type)
       .afterClosed()
       .subscribe((name) => {
         if (name) {
-          this.router.navigate(['edit', this.room.shortId, 'series', name]);
+          this.router.navigate(['edit', this.shortId(), 'series', name]);
         }
       });
   }
 
   navigateToTemplateSelection() {
-    this.router.navigate(['edit', this.room.shortId, 'templates']);
-  }
-
-  isModerator(): boolean {
-    return this.userRole === UserRole.MODERATOR;
+    this.router.navigate(['edit', this.shortId(), 'templates']);
   }
 }

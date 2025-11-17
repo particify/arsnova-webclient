@@ -4,7 +4,6 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MockFeatureFlagService } from '@testing/test-helpers';
 import { of } from 'rxjs';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { Room } from '@app/core/models/room';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -140,8 +139,8 @@ describe('RoomOverviewPageComponent', () => {
     testBed.compileComponents();
     fixture = testBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
-    component.room = new Room();
-    component.commentSettings = new CommentSettings();
+    fixture.componentRef.setInput('roomId', '1234');
+    fixture.componentRef.setInput('commentSettings', new CommentSettings());
   }));
 
   it('should create', () => {
