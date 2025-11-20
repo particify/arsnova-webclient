@@ -30,11 +30,11 @@
 
 .button-container {
   padding: 8px;
-}
 
-.mat-icon {
-  min-width: 18px;
-  color: var(--on-surface-light);
+  .mat-icon {
+    min-width: 18px;
+    color: var(--on-surface-light);
+  }
 }
 
 .mat-mdc-button {
@@ -72,9 +72,19 @@
 
   &:not(.primary-variant) {
     background-color: var(--grey-lighter);
+    color: var(--on-surface);
   }
 }
 
 .user-info {
   line-height: 1.5;
+}
+
+.claim-hint {
+  padding: $spacing-1;
+  margin: $spacing-2;
+  border-radius: $spacing;
+  border: 2px solid var(--palette-primary-200);
+  font-size: $s-font-size;
+  color: var(--on-surface-light);
 }

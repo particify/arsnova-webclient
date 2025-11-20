@@ -16,6 +16,7 @@ import {
   NavigationEnd,
   Router,
   RouterOutlet,
+  RouterLink,
 } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -41,6 +42,7 @@ import { GlobalHintsContainerComponent } from './standalone/global-hints/global-
 import { GlobalHintsService } from './standalone/global-hints/global-hints.service';
 import { GlobalHintType } from './standalone/global-hints/global-hint';
 import { DialogService } from './core/services/util/dialog.service';
+import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -51,6 +53,8 @@ import { DialogService } from './core/services/util/dialog.service';
     FooterLinksComponent,
     RouterOutlet,
     GlobalHintsContainerComponent,
+    ExtensionPointComponent,
+    RouterLink,
   ],
 })
 export class AppComponent implements OnInit, AfterViewInit {
@@ -94,6 +98,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   currentTheme?: string;
   themes: string[] = [];
   contentGroupTemplatesActive = false;
+  allowRegister = false;
 
   ngOnInit(): void {
     this.languageService.init();
@@ -117,6 +122,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           translate: true,
         });
       }
+      this.allowRegister = !config.ui.registrationDisabled;
     });
     this.roomService.getCurrentRoomStream().subscribe((room) => {
       this.isRoom = !!room;
@@ -235,6 +241,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   isGuest(): boolean {
-    return !this.auth?.verified;
+    return !!this.auth && !this.auth.verified;
   }
 }
