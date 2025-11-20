@@ -12,4 +12,5 @@ export interface GlobalHint {
   actionLabel?: string;
   action?: () => void;
   dismissible?: boolean;
+  translate?: boolean;
 }

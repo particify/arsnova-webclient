@@ -379,6 +379,7 @@ export type User = {
   displayId?: Maybe<Scalars['String']['output']>;
   displayName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
   verified: Scalars['Boolean']['output'];
 };
 
@@ -833,6 +834,7 @@ export type CurrentUserQuery = {
     verified: boolean;
     displayId?: string | null;
     displayName?: string | null;
+    unverifiedMailAddress?: string | null;
   } | null;
 };
 
@@ -1510,6 +1512,7 @@ export const CurrentUserDocument = gql`
       verified
       displayId
       displayName
+      unverifiedMailAddress
     }
   }
 `;

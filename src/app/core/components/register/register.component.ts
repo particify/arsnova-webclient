@@ -33,9 +33,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { ClaimUnverifiedUserGql } from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { switchMap } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import { UserActivationComponent } from '@app/core/components/_dialogs/user-activation/user-activation.component';
+import { first, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -65,7 +63,6 @@ export class RegisterComponent extends FormComponent implements OnInit {
   private claimUnverifiedUserGql = inject(ClaimUnverifiedUserGql);
   private notificationService = inject(NotificationService);
   private router = inject(Router);
-  private dialog = inject(MatDialog);
   private passwordEntry = viewChild.required(PasswordEntryComponent);
 
   // Route data input below
@@ -100,6 +97,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
       this.authenticationService
         .requireAuthentication()
         .pipe(
+          first(),
           switchMap((a) => {
             if (!a || a.verified) {
               throw new Error('Guest account expected.');
@@ -112,6 +110,9 @@ export class RegisterComponent extends FormComponent implements OnInit {
         .subscribe({
           next: () => {
             this.enableForm();
+            this.router.navigate(['user'], {
+              queryParams: { startVerification: true },
+            });
             const msg = this.translationService.translate(
               'register.register-successful'
             );
@@ -119,16 +120,6 @@ export class RegisterComponent extends FormComponent implements OnInit {
               msg,
               AdvancedSnackBarTypes.SUCCESS
             );
-            this.dialog
-              .open(UserActivationComponent)
-              .afterClosed()
-              .subscribe((result: { success: boolean }) => {
-                if (result.success) {
-                  this.authenticationService.reloadUser().subscribe(() => {
-                    this.router.navigateByUrl('user');
-                  });
-                }
-              });
           },
           error: () => {
             this.enableForm();

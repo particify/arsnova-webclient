@@ -40,6 +40,7 @@ import { FooterLinksComponent } from './standalone/footer-links/footer-links.com
 import { GlobalHintsContainerComponent } from './standalone/global-hints/global-hints-container/global-hints-container.component';
 import { GlobalHintsService } from './standalone/global-hints/global-hints.service';
 import { GlobalHintType } from './standalone/global-hints/global-hint';
+import { DialogService } from './core/services/util/dialog.service';
 
 @Component({
   selector: 'app-root',
@@ -70,6 +71,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private featureFlagService = inject(FeatureFlagService);
   private uiService = inject(UiService);
   private globalHintsService = inject(GlobalHintsService);
+  private dialogService = inject(DialogService);
 
   constructor() {
     const themeService = this.themeService;
@@ -107,14 +109,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.trackingService.init(config.ui);
       this.updateService.handleUpdate(config.ui.versions);
       if (config.readOnly) {
-        const msg = this.translationService.translate(
-          'general.read-only-mode-active'
-        );
         this.globalHintsService.addHint({
           id: 'readonly-hint',
           type: GlobalHintType.WARNING,
-          message: msg,
+          message: 'general.read-only-mode-active',
           icon: 'warning',
+          translate: true,
         });
       }
     });
@@ -128,12 +128,38 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.userCharacter = this.auth?.displayId
           ?.slice(0, 1)
           .toLocaleUpperCase();
+        if (auth && auth.unverifiedMailAddress && !auth.verified) {
+          this.globalHintsService.addHint({
+            id: 'verify-hint',
+            type: GlobalHintType.CUSTOM,
+            icon: 'verified',
+            message: 'user-activation.verify-mail-to-use-all-features',
+            action: () => this.openVerifyDialog(),
+            actionLabel: 'user-activation.verify-mail',
+            dismissible: true,
+            translate: true,
+          });
+        }
       });
     this.currentLang = this.translationService.getActiveLang();
     this.contentGroupTemplatesActive = this.featureFlagService.isEnabled(
       'CONTENT_GROUP_TEMPLATES'
     );
     this.uiService.setScrollbarWidthVariable();
+  }
+
+  openVerifyDialog() {
+    if (this.auth) {
+      const dialogRef = this.dialogService.openUserActivationDialog(
+        this.auth.userId
+      );
+      dialogRef.afterClosed().subscribe((result?: { success: boolean }) => {
+        this.authenticationService.refetchCurrentUser();
+        if (result?.success) {
+          this.globalHintsService.removeHint('verify-hint');
+        }
+      });
+    }
   }
 
   ngAfterViewInit(): void {

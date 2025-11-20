@@ -4,6 +4,7 @@ query CurrentUser {
     verified
     displayId
     displayName
+    unverifiedMailAddress
   }
 }
 
