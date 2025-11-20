@@ -1,0 +1,21 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFill>
+  <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
+    <app-form-header
+      [text]="'user-activation.verify-mail-address' | transloco"
+    ></app-form-header>
+    @if (expired()) {
+      <app-hint
+        ><p>
+          {{ 'user-activation.verification-link-expired' | transloco }}
+        </p></app-hint
+      >
+    } @else {
+      <app-loading-button
+        name="user-activation.complete-verification"
+        class="full-width"
+        [fullWidth]="true"
+        (clicked)="verify()"
+      ></app-loading-button>
+    }
+  </mat-card>
+</div>

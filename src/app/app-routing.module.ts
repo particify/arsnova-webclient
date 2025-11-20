@@ -29,6 +29,7 @@ import { TemplateService as CreatorTemplateService } from './creator/_services/t
 import { TemplateService as AdminTemplateService } from '@app/admin/template-management/template.service';
 import { AdminService } from './core/services/http/admin.service';
 import { ContentCarouselService } from './core/services/util/content-carousel.service';
+import { VerifyUserComponent } from '@app/standalone/verify-user/verify-user.component';
 
 const routes: Routes = [
   {
@@ -64,6 +65,15 @@ const routes: Routes = [
     title: 'register',
     data: {
       parentRoute: ParentRoute.LOGIN,
+      showFooterLinks: true,
+    },
+  },
+  {
+    path: 'user/:userId/verify',
+    component: VerifyUserComponent,
+    title: 'verify-mail-address',
+    data: {
+      parentRoute: ParentRoute.HOME,
       showFooterLinks: true,
     },
   },

@@ -103,6 +103,7 @@ export type Mutation = {
   updateRoomLanguage: Room;
   updateRoomName: Room;
   verifyUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
+  verifyUserMailAddressUnauthenticated?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type MutationClaimUnverifiedUserArgs = {
@@ -189,6 +190,11 @@ export type MutationUpdateUserPasswordArgs = {
 };
 
 export type MutationVerifyUserMailAddressArgs = {
+  verificationCode: Scalars['String']['input'];
+};
+
+export type MutationVerifyUserMailAddressUnauthenticatedArgs = {
+  userId: Scalars['UUID']['input'];
   verificationCode: Scalars['String']['input'];
 };
 
@@ -870,6 +876,16 @@ export type VerifyUserMailAddressMutationVariables = Exact<{
 export type VerifyUserMailAddressMutation = {
   __typename?: 'Mutation';
   verifyUserMailAddress?: boolean | null;
+};
+
+export type VerifyUserMailAddressUnauthenticatedMutationVariables = Exact<{
+  verificationCode: Scalars['String']['input'];
+  userId: Scalars['UUID']['input'];
+}>;
+
+export type VerifyUserMailAddressUnauthenticatedMutation = {
+  __typename?: 'Mutation';
+  verifyUserMailAddressUnauthenticated?: boolean | null;
 };
 
 export const RoomDetailsFragmentFragmentDoc = gql`
@@ -1587,6 +1603,31 @@ export class VerifyUserMailAddressGql extends Apollo.Mutation<
   VerifyUserMailAddressMutationVariables
 > {
   document = VerifyUserMailAddressDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const VerifyUserMailAddressUnauthenticatedDocument = gql`
+  mutation VerifyUserMailAddressUnauthenticated(
+    $verificationCode: String!
+    $userId: UUID!
+  ) {
+    verifyUserMailAddressUnauthenticated(
+      verificationCode: $verificationCode
+      userId: $userId
+    )
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class VerifyUserMailAddressUnauthenticatedGql extends Apollo.Mutation<
+  VerifyUserMailAddressUnauthenticatedMutation,
+  VerifyUserMailAddressUnauthenticatedMutationVariables
+> {
+  document = VerifyUserMailAddressUnauthenticatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -216,7 +216,12 @@
     "verification-info": "Solltest du noch keinen Verifizierungscode erhalten haben, prüfe bitte in wenigen Minuten noch einmal deine E-Mails und stelle sicher, dass dieser nicht im Spam-Ordner gelandet ist.",
     "account-verified": "Dein Account wurde verifiziert.",
     "verify-mail-to-use-all-features": "Fast geschafft! Bestätige deine E-Mail-Adresse, um alle Funktionen zu nutzen.",
-    "verify-mail": "E-Mail bestätigen"
+    "verify-mail": "E-Mail bestätigen",
+    "verify-mail-address": "E-Mail-Adresse verifizieren",
+    "complete-verification": "Verifizierung abschließen",
+    "verification-successful": "Verifizierung erfolgreich",
+    "verification-failed": "Verifizierung fehlgeschlagen",
+    "verification-link-expired": "Der Verifizierungslink ist abgelaufen."
   },
   "dialog": {
     "a11y-update": "Speichert die Änderungen und schließt den Dialog.",
@@ -254,6 +259,7 @@
   "title": {
     "register": "Registrieren",
     "login": "Anmelden",
+    "verify-mail-address": "E-Mail-Verifizierung",
     "request-pw-reset": "Passwort zurücksetzen",
     "pw-reset": "Neues Passwort festlegen",
     "user": "Meine Räume",
