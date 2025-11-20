@@ -15,7 +15,7 @@ import {
 } from '@app/core/services/http/authentication.service';
 import { Observable } from 'rxjs';
 
-const API_LOGIN_URI_PATTERN = /^\/api\/auth\/login\/[^?].*/;
+const REFRESH_URI = '/api/auth/refresh';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -33,7 +33,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       new URL(req.url, location.origin).origin === location.origin &&
       (token || tokenOverride) &&
       !req.withCredentials &&
-      !API_LOGIN_URI_PATTERN.test(req.url)
+      req.url !== REFRESH_URI
     ) {
       const authReq = tokenOverride
         ? req
