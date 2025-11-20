@@ -26,7 +26,7 @@ import { ThemeService } from '@app/core/theme/theme.service';
   styleUrl: './share-overlay.component.scss',
 })
 export class ShareOverlayComponent {
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onResize() {
     this.setQrSize();
   }
