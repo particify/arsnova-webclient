@@ -28,6 +28,7 @@
           }}"
           appHotkey="1"
           [appHotkeyTitle]="'home-page.enter-room-number' | transloco"
+          [disabled]="isLoading"
         />
         <button
           id="join-button"
@@ -38,8 +39,16 @@
           role="button"
           [attr.aria-label]="'home-page.a11y-join-button' | transloco"
           matSuffix
+          [disabled]="isLoading"
         >
-          <mat-icon>arrow_forward</mat-icon>
+          @if (isLoading) {
+            <app-loading-indicator
+              [size]="20"
+              [disabled]="true"
+            ></app-loading-indicator>
+          } @else {
+            <mat-icon>arrow_forward</mat-icon>
+          }
         </button>
       </mat-form-field>
     </div>

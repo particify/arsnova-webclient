@@ -1,5 +1,5 @@
 import { Component, Input, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationError, Router } from '@angular/router';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import {
   UntypedFormControl,
@@ -27,6 +27,7 @@ import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-room-join',
@@ -46,6 +47,7 @@ import { SplitShortIdPipe } from '@app/core/pipes/split-short-id.pipe';
     MatIcon,
     SplitShortIdPipe,
     TranslocoPipe,
+    LoadingIndicatorComponent,
   ],
 })
 export class RoomJoinComponent {
@@ -63,6 +65,16 @@ export class RoomJoinComponent {
   ]);
   matcher = new FormErrorStateMatcher();
 
+  isLoading = false;
+
+  constructor() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationError) {
+        this.isLoading = false;
+      }
+    });
+  }
+
   joinRoom(shortId: string): void {
     shortId = shortId.replace(/[\s]/g, '');
     if (
@@ -76,7 +88,7 @@ export class RoomJoinComponent {
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return;
     }
-
+    this.isLoading = true;
     this.navigate(shortId);
   }
 
