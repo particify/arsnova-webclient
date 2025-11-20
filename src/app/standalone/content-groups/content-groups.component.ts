@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,7 +36,6 @@ import {
     TranslocoModule,
     TextOverflowClipComponent,
     ContentGroupInfoComponent,
-    CommonModule,
     MatButtonModule,
     MatRippleModule,
   ],
