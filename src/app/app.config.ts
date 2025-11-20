@@ -79,6 +79,7 @@ import {
 import { environment } from '@environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { apolloProvider } from '@app/apollo-provider';
+import { hideSplashscreenInitializer } from './hide-splashscreen';
 
 if (environment.production) {
   enableProdMode();
@@ -119,6 +120,7 @@ export const AppConfig: ApplicationConfig = {
       );
       return initializerFn();
     }),
+    provideAppInitializer(() => hideSplashscreenInitializer()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
