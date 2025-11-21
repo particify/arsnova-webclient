@@ -72,7 +72,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
 import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
 import { STEPPER_ANIMATION_DURATION } from '@app/standalone/stepper/stepper.component';
-import { UserSettings } from '@app/core/models/user-settings';
+import { UserUiSettings } from '@gql/generated/graphql';
 
 interface ContentActionTab {
   route: string;
@@ -137,7 +137,7 @@ export class ContentParticipantComponent
   @Input({ required: true }) content!: Content;
   @Input({ required: true }) contentGroup!: ContentGroup;
   @Input({ required: true }) userId!: string;
-  @Input({ required: true }) settings!: UserSettings;
+  @Input({ required: true }) settings!: UserUiSettings;
   @Input() lastContent = false;
   @Input() active = false;
   @Input({ required: true }) index!: number;

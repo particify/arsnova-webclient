@@ -47,7 +47,7 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
         url,
         {
           properties: {
-            creatorId: userId,
+            creatorId: userId.replaceAll('-', ''),
             round: -1,
           },
           externalFilters: {
@@ -73,7 +73,7 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
         {
           properties: {
             contentId: contentId,
-            creatorId: userId,
+            creatorId: userId.replaceAll('-', ''),
           },
           externalFilters: {},
         },
@@ -101,7 +101,7 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
         {
           properties: {
             contentId: contentId,
-            creatorId: userId,
+            creatorId: userId.replaceAll('-', ''),
           },
           externalFilters: {},
         },

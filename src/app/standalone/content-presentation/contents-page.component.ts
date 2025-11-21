@@ -5,6 +5,8 @@ import {
   OnDestroy,
   OnInit,
   inject,
+  input,
+  linkedSignal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -22,8 +24,7 @@ import {
   CARD_WIDTH,
   PresentationService,
 } from '@app/core/services/util/presentation.service';
-import { UserService } from '@app/core/services/http/user.service';
-import { UserSettings } from '@app/core/models/user-settings';
+import { UserUiSettings } from '@gql/generated/graphql';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
@@ -73,7 +74,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   private location = inject(Location);
   private router = inject(Router);
   private presentationService = inject(PresentationService);
-  private userService = inject(UserService);
   private focusModeService = inject(FocusModeService);
   private contentPublishService = inject(ContentPublishService);
   private eventService = inject(EventService);
@@ -90,6 +90,11 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   @Input() seriesName!: string;
   @Input() contentIndex?: number;
 
+  settings = input.required<UserUiSettings>();
+
+  showContentResultsDirectly = linkedSignal(
+    () => this.settings().showContentResultsDirectly
+  );
   destroyed$ = new Subject<void>();
 
   contents?: Content[];
@@ -102,7 +107,6 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   content!: Content;
   contentGroup!: ContentGroup;
   canAnswerContent = false;
-  settings = new UserSettings();
   attributions: ContentLicenseAttribution[] = [];
   stepCount = 0;
   endDate?: Date;
@@ -122,14 +126,10 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
       this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) ||
       this.seriesName;
     this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.seriesName);
-    this.userService.getCurrentUsersSettings().subscribe((settings) => {
-      this.settings = settings;
-      if (this.showResults) {
-        this.settings.showContentResultsDirectly = true;
-      }
-
-      this.initGroup(true);
-    });
+    if (this.showResults) {
+      this.showContentResultsDirectly.set(true);
+    }
+    this.initGroup(true);
     this.eventService
       .on<boolean>('ControlBarVisible')
       .subscribe((isVisible) => {

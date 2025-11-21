@@ -263,7 +263,7 @@ export class ContentGroupService extends AbstractEntityService<ContentGroup> {
     userId: string
   ): Observable<AnswerResultOverview> {
     const connectionUrl = this.buildUri(
-      `/${groupId}/stats/user/${userId}`,
+      `/${groupId}/stats/user/${userId.replaceAll('-', '')}`,
       roomId
     );
     return this.http

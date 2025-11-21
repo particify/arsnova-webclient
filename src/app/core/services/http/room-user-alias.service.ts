@@ -23,7 +23,11 @@ export class RoomUserAliasService extends AbstractEntityService<RoomUserAlias> {
     changes: object
   ): Observable<RoomUserAlias> {
     const connectionUrl = this.buildUri('/', roomId);
-    const body = { ...changes, roomId: roomId, userId: userId };
+    const body = {
+      ...changes,
+      roomId: roomId,
+      userId: userId.replaceAll('-', ''),
+    };
     return this.http
       .post<RoomUserAlias>(connectionUrl, body)
       .pipe(tap((alias) => this.currentAlias$.next(alias)));

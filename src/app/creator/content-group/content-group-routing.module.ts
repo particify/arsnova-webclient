@@ -6,7 +6,7 @@ import { ContentResultsComponent } from '@app/standalone/content-results/content
 import { ContentResolver } from '@app/core/resolver/content.resolver';
 import { ContentEditingComponent } from './content-editing/content-editing.component';
 import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-leaderboard/content-group-leaderboard.component';
-import { UserSettingsResolver } from '@app/core/resolver/user-settings.resolver';
+import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
 import { AttributionsInfoComponent } from '@app/standalone/attributions-info/attributions-info.component';
 
 const routes: Routes = [
@@ -54,7 +54,7 @@ const routes: Routes = [
     },
     resolve: {
       content: ContentResolver,
-      settings: UserSettingsResolver,
+      settings: userSettingsResolver,
     },
   },
 ];

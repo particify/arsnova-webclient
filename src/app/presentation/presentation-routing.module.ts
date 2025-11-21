@@ -13,6 +13,7 @@ import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
 import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
+import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
 
 const routes: Routes = [
   {
@@ -54,6 +55,7 @@ const routes: Routes = [
     data: { extendedView: true },
     resolve: {
       contentGroup: ContentGroupResolver,
+      settings: userSettingsResolver,
     },
   },
   {
@@ -65,6 +67,7 @@ const routes: Routes = [
     data: { extendedView: true },
     resolve: {
       contentGroup: ContentGroupResolver,
+      settings: userSettingsResolver,
     },
   },
   {

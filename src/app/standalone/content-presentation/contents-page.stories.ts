@@ -29,8 +29,6 @@ import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { ContentsPageComponent } from '@app/standalone/content-presentation/contents-page.component';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { UserService } from '@app/core/services/http/user.service';
-import { UserSettings } from '@app/core/models/user-settings';
 import { RoundStatistics } from '@app/core/models/round-statistics';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { Room } from '@app/core/models/room';
@@ -215,12 +213,6 @@ class MockContentPublishService {
   }
 }
 
-class MockUserService {
-  getCurrentUsersSettings() {
-    return of(new UserSettings(false, true, true));
-  }
-}
-
 class MockContentAnswerService {
   getAnswers() {
     return of([]);
@@ -266,10 +258,6 @@ export default {
         {
           provide: ContentService,
           useClass: MockContentService,
-        },
-        {
-          provide: UserService,
-          useClass: MockUserService,
         },
         {
           provide: ContentAnswerService,

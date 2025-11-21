@@ -17,14 +17,14 @@
                 [content]="content"
                 [directShow]="
                   currentStep === i &&
-                  settings.showContentResultsDirectly &&
+                  !!settings.showContentResultsDirectly &&
                   !isLiveMode
                 "
                 [active]="currentStep === i"
                 [contentIndex]="i"
                 [isPresentation]="hideControls"
                 [indexChanged]="indexChanged"
-                [settings]="settings"
+                [(settings)]="settings"
                 [language]="language"
               >
               </app-content-results>

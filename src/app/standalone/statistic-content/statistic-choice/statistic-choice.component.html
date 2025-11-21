@@ -21,7 +21,7 @@
           'normal-chart': !isPresentation && answersVisible,
           'presentation-chart': isPresentation && answersVisible,
           'no-bottom-margin':
-            settings.contentAnswersDirectlyBelowChart && isPresentation,
+            contentAnswersDirectlyBelowChart() && isPresentation,
         }"
       >
         <canvas
@@ -32,9 +32,7 @@
       </div>
     </div>
   }
-  @if (
-    !isLoading && isPresentation && settings.contentAnswersDirectlyBelowChart
-  ) {
+  @if (!isLoading && isPresentation && contentAnswersDirectlyBelowChart()) {
     <div fxLayout="row" fxLayoutAlign="space-between">
       @for (a of options; track a; let i = $index) {
         <div fxLayout="column" fxLayoutAlign="start center">
@@ -64,10 +62,7 @@
       }
     </div>
   }
-  @if (
-    (!isLoading && !settings.contentAnswersDirectlyBelowChart) ||
-    !isPresentation
-  ) {
+  @if ((!isLoading && !contentAnswersDirectlyBelowChart()) || !isPresentation) {
     <div role="list">
       @for (a of options; track a; let i = $index) {
         <div

@@ -3,8 +3,8 @@ import {
   OnInit,
   Input,
   OnDestroy,
-  EventEmitter,
   inject,
+  effect,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
@@ -57,7 +57,6 @@ export class StatisticSortComponent
   private contentAnswerService = inject(ContentAnswerService);
 
   @Input({ required: true }) content!: ContentChoice;
-  @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
   @Input() showCorrect = false;
 
@@ -82,6 +81,12 @@ export class StatisticSortComponent
     this.surface = this.themeService.getColor('surface');
     this.green = this.themeService.getColor('green');
     this.grey = this.themeService.getColor('grey');
+    effect(() => {
+      this.contentVisualizationUnitPercent();
+      if (this.chart) {
+        this.chart.update();
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -112,14 +117,6 @@ export class StatisticSortComponent
         if (stats) {
           this.updateData(stats);
           this.updateChart();
-        }
-      });
-    this.visualizationUnitChanged
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((isUnitPercent) => {
-        this.settings.contentVisualizationUnitPercent = isUnitPercent;
-        if (this.chart) {
-          this.chart.update();
         }
       });
   }
