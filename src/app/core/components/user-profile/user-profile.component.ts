@@ -1,20 +1,21 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  computed,
+  inject,
+  linkedSignal,
+} from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { UserService } from '@app/core/services/http/user.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Router } from '@angular/router';
-import { User } from '@app/core/models/user';
-import { Person } from '@app/core/models/person';
-import { UserSettings } from '@app/core/models/user-settings';
 import { Location, AsyncPipe } from '@angular/common';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { take } from 'rxjs';
+import { filter, take } from 'rxjs';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { FlexModule } from '@angular/flex-layout';
 import {
@@ -30,18 +31,12 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
-
-export class FormField {
-  value: string;
-  name: string;
-  label: string;
-
-  constructor(value: string, name: string, label: string) {
-    this.value = value;
-    this.name = name;
-    this.label = label;
-  }
-}
+import {
+  CurrentUserWithSettingsGql,
+  DeleteUserGql,
+  UpdateUserSettingsGql,
+} from '@gql/generated/graphql';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-profile',
@@ -65,62 +60,46 @@ export class FormField {
     TranslocoPipe,
   ],
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent {
   private authenticationService = inject(AuthenticationService);
-  private userService = inject(UserService);
   private translationService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
   private dialogService = inject(DialogService);
   private router = inject(Router);
   private location = inject(Location);
 
+  private currentUserGql = inject(CurrentUserWithSettingsGql);
+  private deleteUser = inject(DeleteUserGql);
+  private updateUserSettings = inject(UpdateUserSettingsGql);
+
+  userResult = toSignal(
+    this.currentUserGql
+      .watch()
+      .valueChanges.pipe(filter((r) => r.dataState === 'complete'))
+  );
+
+  user = computed(() => this.userResult()?.data.currentUser);
+
+  isLoading = computed(() => this.userResult()?.loading);
+  verified = computed(() => this.user()?.verified);
+  displayId = computed(() => this.user()?.displayId);
+  contentVisualizationUnitPercent = linkedSignal(
+    () => this.user()?.uiSettings?.contentVisualizationUnitPercent ?? true
+  );
+  contentAnswersDirectlyBelowChart = linkedSignal(
+    () => this.user()?.uiSettings?.contentAnswersDirectlyBelowChart ?? false
+  );
+  showContentResultsDirectly = linkedSignal(
+    () => this.user()?.uiSettings?.showContentResultsDirectly ?? false
+  );
+  rotateWordcloudItems = linkedSignal(
+    () => this.user()?.uiSettings?.rotateWordcloudItems ?? true
+  );
+
   // Route data input below
   @Input() accountSettingsName?: string;
-  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  auth!: AuthenticatedUser;
-  user!: User;
-  formFields: FormField[] = [];
-  isGuest = false;
-  isLoading = true;
-
-  settings = new UserSettings();
 
   HintType = HintType;
-
-  ngOnInit(): void {
-    this.authenticationService.getCurrentAuthentication().subscribe((auth) => {
-      this.auth = auth;
-      this.isGuest = !auth.verified;
-      this.userService
-        .getById(this.auth.userId, { view: 'owner' })
-        .subscribe((user) => {
-          this.user = user;
-          if (this.user.settings) {
-            this.settings = this.user.settings;
-          }
-          this.formFields = [
-            new FormField(
-              this.user.person?.firstName,
-              'firstName',
-              'first-name'
-            ),
-            new FormField(this.user.person?.lastName, 'lastName', 'last-name'),
-            new FormField(
-              this.user.person?.organization,
-              'organization',
-              'organization'
-            ),
-            new FormField(
-              this.user.person?.department,
-              'department',
-              'department'
-            ),
-            new FormField(this.user.person?.mail, 'mail', 'mail'),
-          ];
-          this.isLoading = false;
-        });
-    });
-  }
 
   deleteAccount() {
     const dialogRef = this.dialogService.openDeleteDialog(
@@ -128,7 +107,7 @@ export class UserProfileComponent implements OnInit {
       'dialog.really-delete-account',
       undefined,
       undefined,
-      () => this.userService.delete(this.auth.userId)
+      () => this.deleteUser.mutate()
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -151,23 +130,18 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  updatePerson(field: FormField) {
-    const person = this.user.person || new Person();
-    person[field.name as keyof Person] = field.value;
-    this.updateUser('person', person);
-  }
-
-  updateSettings(value: boolean, propertyName: string) {
-    this.settings[propertyName as keyof UserSettings] = value;
-    this.updateUser('settings', this.settings);
-  }
-
-  updateUser(propertyName: string, value: object) {
-    const changes: { [key: string]: object } = {};
-    changes[propertyName] = value;
-    this.userService.updateUser(this.user.id, changes).subscribe((user) => {
-      this.user = user;
-    });
+  updateSettings() {
+    const settings = {
+      contentVisualizationUnitPercent: this.contentVisualizationUnitPercent(),
+      contentAnswersDirectlyBelowChart: this.contentAnswersDirectlyBelowChart(),
+      showContentResultsDirectly: this.showContentResultsDirectly(),
+      rotateWordcloudItems: this.rotateWordcloudItems(),
+    };
+    this.updateUserSettings
+      .mutate({
+        variables: settings,
+      })
+      .subscribe();
   }
 
   updatePage(page: string) {

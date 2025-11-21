@@ -47,7 +47,7 @@ export type Announcement = {
 
 export type AnnouncementConnection = {
   __typename?: 'AnnouncementConnection';
-  edges: Array<Maybe<AnnouncementEdge>>;
+  edges?: Maybe<Array<Maybe<AnnouncementEdge>>>;
   pageInfo: PageInfo;
 };
 
@@ -106,6 +106,7 @@ export type Mutation = {
   updateUserDetails?: Maybe<Scalars['Boolean']['output']>;
   updateUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
   updateUserPassword?: Maybe<Scalars['Boolean']['output']>;
+  updateUserUiSettings?: Maybe<Scalars['Boolean']['output']>;
   verifyUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
   verifyUserMailAddressUnauthenticated?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -195,6 +196,10 @@ export type MutationUpdateUserMailAddressArgs = {
 export type MutationUpdateUserPasswordArgs = {
   newPassword: Scalars['String']['input'];
   oldPassword: Scalars['String']['input'];
+};
+
+export type MutationUpdateUserUiSettingsArgs = {
+  input: UpdateUserUiSettingsInput;
 };
 
 export type MutationVerifyUserMailAddressArgs = {
@@ -317,7 +322,7 @@ export type Room = {
 
 export type RoomConnection = {
   __typename?: 'RoomConnection';
-  edges: Array<Maybe<RoomEdge>>;
+  edges?: Maybe<Array<Maybe<RoomEdge>>>;
   pageInfo: PageInfo;
 };
 
@@ -343,7 +348,7 @@ export type RoomMembership = {
 
 export type RoomMembershipConnection = {
   __typename?: 'RoomMembershipConnection';
-  edges: Array<Maybe<RoomMembershipEdge>>;
+  edges?: Maybe<Array<Maybe<RoomMembershipEdge>>>;
   pageInfo: PageInfo;
 };
 
@@ -389,13 +394,29 @@ export type UpdateUserDetailsInput = {
   surname?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateUserUiSettingsInput = {
+  contentAnswersDirectlyBelowChart?: InputMaybe<Scalars['Boolean']['input']>;
+  contentVisualizationUnitPercent?: InputMaybe<Scalars['Boolean']['input']>;
+  rotateWordcloudItems?: InputMaybe<Scalars['Boolean']['input']>;
+  showContentResultsDirectly?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type User = {
   __typename?: 'User';
   displayId?: Maybe<Scalars['String']['output']>;
   displayName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  uiSettings?: Maybe<UserUiSettings>;
   unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
   verified: Scalars['Boolean']['output'];
+};
+
+export type UserUiSettings = {
+  __typename?: 'UserUiSettings';
+  contentAnswersDirectlyBelowChart?: Maybe<Scalars['Boolean']['output']>;
+  contentVisualizationUnitPercent?: Maybe<Scalars['Boolean']['output']>;
+  rotateWordcloudItems?: Maybe<Scalars['Boolean']['output']>;
+  showContentResultsDirectly?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type AnnouncementsMetaForCurrentUserQueryVariables = Exact<{
@@ -419,7 +440,7 @@ export type AnnoucentmentsByRoomIdQuery = {
   __typename?: 'Query';
   announcementsByRoomId?: {
     __typename?: 'AnnouncementConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'AnnouncementEdge';
       node: {
         __typename?: 'Announcement';
@@ -430,7 +451,7 @@ export type AnnoucentmentsByRoomIdQuery = {
         updatedAt?: string | null;
         title: string;
       };
-    } | null>;
+    } | null> | null;
   } | null;
 };
 
@@ -442,7 +463,7 @@ export type AnnouncementsForCurrentUserQuery = {
   __typename?: 'Query';
   announcementsForCurrentUser?: {
     __typename?: 'AnnouncementConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'AnnouncementEdge';
       node: {
         __typename?: 'Announcement';
@@ -454,7 +475,7 @@ export type AnnouncementsForCurrentUserQuery = {
         title: string;
         room?: { __typename?: 'Room'; id: string; name: string } | null;
       };
-    } | null>;
+    } | null> | null;
   } | null;
 };
 
@@ -567,7 +588,7 @@ export type RoomsQuery = {
   __typename?: 'Query';
   rooms?: {
     __typename?: 'RoomConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'RoomEdge';
       cursor: string;
       node: {
@@ -578,7 +599,7 @@ export type RoomsQuery = {
         description?: string | null;
         descriptionRendered?: string | null;
       };
-    } | null>;
+    } | null> | null;
     pageInfo: {
       __typename?: 'PageInfo';
       endCursor?: string | null;
@@ -629,7 +650,7 @@ export type RoomMembershipsQuery = {
   __typename?: 'Query';
   roomMemberships?: {
     __typename?: 'RoomMembershipConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'RoomMembershipEdge';
       cursor: string;
       node: {
@@ -648,7 +669,7 @@ export type RoomMembershipsQuery = {
           name: string;
         };
       };
-    } | null>;
+    } | null> | null;
     pageInfo: {
       __typename?: 'PageInfo';
       endCursor?: string | null;
@@ -668,7 +689,7 @@ export type RoomsByUserIdQuery = {
   __typename?: 'Query';
   roomsByUserId?: {
     __typename?: 'RoomMembershipConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'RoomMembershipEdge';
       cursor: string;
       node: {
@@ -687,7 +708,7 @@ export type RoomsByUserIdQuery = {
           name: string;
         };
       };
-    } | null>;
+    } | null> | null;
     pageInfo: {
       __typename?: 'PageInfo';
       endCursor?: string | null;
@@ -879,6 +900,29 @@ export type UserByDisplayIdQuery = {
   } | null;
 };
 
+export type CurrentUserWithSettingsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type CurrentUserWithSettingsQuery = {
+  __typename?: 'Query';
+  currentUser?: {
+    __typename?: 'User';
+    id: string;
+    verified: boolean;
+    displayId?: string | null;
+    displayName?: string | null;
+    unverifiedMailAddress?: string | null;
+    uiSettings?: {
+      __typename?: 'UserUiSettings';
+      contentAnswersDirectlyBelowChart?: boolean | null;
+      contentVisualizationUnitPercent?: boolean | null;
+      showContentResultsDirectly?: boolean | null;
+      rotateWordcloudItems?: boolean | null;
+    } | null;
+  } | null;
+};
+
 export type ClaimUnverifiedUserMutationVariables = Exact<{
   mailAddress: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -907,6 +951,25 @@ export type VerifyUserMailAddressUnauthenticatedMutationVariables = Exact<{
 export type VerifyUserMailAddressUnauthenticatedMutation = {
   __typename?: 'Mutation';
   verifyUserMailAddressUnauthenticated?: boolean | null;
+};
+
+export type DeleteUserMutationVariables = Exact<{ [key: string]: never }>;
+
+export type DeleteUserMutation = {
+  __typename?: 'Mutation';
+  deleteUser?: boolean | null;
+};
+
+export type UpdateUserSettingsMutationVariables = Exact<{
+  contentAnswersDirectlyBelowChart?: InputMaybe<Scalars['Boolean']['input']>;
+  contentVisualizationUnitPercent?: InputMaybe<Scalars['Boolean']['input']>;
+  showContentResultsDirectly?: InputMaybe<Scalars['Boolean']['input']>;
+  rotateWordcloudItems?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type UpdateUserSettingsMutation = {
+  __typename?: 'Mutation';
+  updateUserUiSettings?: boolean | null;
 };
 
 export const RoomDetailsFragmentFragmentDoc = gql`
@@ -1611,6 +1674,37 @@ export class UserByDisplayIdGql extends Apollo.Query<
     super(apollo);
   }
 }
+export const CurrentUserWithSettingsDocument = gql`
+  query CurrentUserWithSettings {
+    currentUser {
+      id
+      verified
+      displayId
+      displayName
+      unverifiedMailAddress
+      uiSettings {
+        contentAnswersDirectlyBelowChart
+        contentVisualizationUnitPercent
+        showContentResultsDirectly
+        rotateWordcloudItems
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CurrentUserWithSettingsGql extends Apollo.Query<
+  CurrentUserWithSettingsQuery,
+  CurrentUserWithSettingsQueryVariables
+> {
+  document = CurrentUserWithSettingsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const ClaimUnverifiedUserDocument = gql`
   mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
     claimUnverifiedUser(mailAddress: $mailAddress, password: $password)
@@ -1671,6 +1765,56 @@ export class VerifyUserMailAddressUnauthenticatedGql extends Apollo.Mutation<
   VerifyUserMailAddressUnauthenticatedMutationVariables
 > {
   document = VerifyUserMailAddressUnauthenticatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DeleteUserDocument = gql`
+  mutation DeleteUser {
+    deleteUser
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeleteUserGql extends Apollo.Mutation<
+  DeleteUserMutation,
+  DeleteUserMutationVariables
+> {
+  document = DeleteUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateUserSettingsDocument = gql`
+  mutation UpdateUserSettings(
+    $contentAnswersDirectlyBelowChart: Boolean
+    $contentVisualizationUnitPercent: Boolean
+    $showContentResultsDirectly: Boolean
+    $rotateWordcloudItems: Boolean
+  ) {
+    updateUserUiSettings(
+      input: {
+        contentAnswersDirectlyBelowChart: $contentAnswersDirectlyBelowChart
+        contentVisualizationUnitPercent: $contentVisualizationUnitPercent
+        showContentResultsDirectly: $showContentResultsDirectly
+        rotateWordcloudItems: $rotateWordcloudItems
+      }
+    )
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateUserSettingsGql extends Apollo.Mutation<
+  UpdateUserSettingsMutation,
+  UpdateUserSettingsMutationVariables
+> {
+  document = UpdateUserSettingsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

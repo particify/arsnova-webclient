@@ -14,10 +14,9 @@
           [icon]="'manage_accounts'"
         ></app-settings-panel-header>
       </mat-expansion-panel-header>
-      @if (isLoading) {
+      @if (isLoading()) {
         <app-loading-indicator></app-loading-indicator>
-      }
-      @if (!isLoading) {
+      } @else {
         <div>
           <lib-extension-point
             extensionId="profile-subscription"
@@ -25,13 +24,9 @@
           <lib-extension-point
             extensionId="external-instance-hint"
           ></lib-extension-point>
-          @if (!isGuest) {
+          @if (verified()) {
             <p class="username">
-              {{
-                ('user-profile.username' | transloco) +
-                  ': ' +
-                  user.person.displayId
-              }}
+              {{ ('user-profile.username' | transloco) + ': ' + displayId() }}
             </p>
           } @else {
             <app-hint
@@ -71,35 +66,36 @@
           [icon]="'settings_suggest'"
         ></app-settings-panel-header>
       </mat-expansion-panel-header>
-      @if (isLoading) {
+      @if (isLoading()) {
         <app-loading-indicator></app-loading-indicator>
-      }
-      @if (!isLoading) {
+      } @else {
         <div fxLayout="column" fxLayoutGap="24px">
           <span>{{ 'user-profile.preferences-description' | transloco }}</span>
           <app-settings-slide-toggle
             label="user-profile.visualization-unit-percent"
-            [isChecked]="settings.contentVisualizationUnitPercent"
+            [isChecked]="contentVisualizationUnitPercent()"
             (toggleEvent)="
-              updateSettings($event, 'contentVisualizationUnitPercent')
+              contentVisualizationUnitPercent.set($event); updateSettings()
             "
           ></app-settings-slide-toggle>
           <app-settings-slide-toggle
             label="user-profile.answers-below-chart"
-            [isChecked]="settings.contentAnswersDirectlyBelowChart"
+            [isChecked]="contentAnswersDirectlyBelowChart()"
             (toggleEvent)="
-              updateSettings($event, 'contentAnswersDirectlyBelowChart')
+              contentAnswersDirectlyBelowChart.set($event); updateSettings()
             "
           ></app-settings-slide-toggle>
           <app-settings-slide-toggle
             label="user-profile.show-results-directly"
-            [isChecked]="settings.showContentResultsDirectly"
-            (toggleEvent)="updateSettings($event, 'showContentResultsDirectly')"
+            [isChecked]="showContentResultsDirectly()"
+            (toggleEvent)="
+              showContentResultsDirectly.set($event); updateSettings()
+            "
           ></app-settings-slide-toggle>
           <app-settings-slide-toggle
             label="user-profile.rotate-wordcloud-items"
-            [isChecked]="settings.rotateWordcloudItems"
-            (toggleEvent)="updateSettings($event, 'rotateWordcloudItems')"
+            [isChecked]="rotateWordcloudItems()"
+            (toggleEvent)="rotateWordcloudItems.set($event); updateSettings()"
           ></app-settings-slide-toggle>
           <lib-extension-point extensionId="user-quota"></lib-extension-point>
         </div>
