@@ -89,19 +89,23 @@ export type Mutation = {
   createAnnouncement: Announcement;
   createRoom: Room;
   deleteAnnouncement: Scalars['ID']['output'];
-  deleteRoom: Scalars['Boolean']['output'];
+  deleteRoom: Scalars['UUID']['output'];
   deleteUser?: Maybe<Scalars['Boolean']['output']>;
   duplicateDemoRoom: Room;
   duplicateRoom: Room;
   grantRoomRole: Scalars['Boolean']['output'];
   grantRoomRoleByInvitation: Scalars['Boolean']['output'];
   joinRoom: RoomMembership;
+  revokeRoomMembership: Scalars['UUID']['output'];
   revokeRoomRole: Scalars['Boolean']['output'];
   updateAnnouncement: Announcement;
   updateRoomDescription: Room;
   updateRoomFocusMode: Room;
   updateRoomLanguage: Room;
   updateRoomName: Room;
+  updateUserDetails?: Maybe<Scalars['Boolean']['output']>;
+  updateUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
+  updateUserPassword?: Maybe<Scalars['Boolean']['output']>;
   verifyUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
   verifyUserMailAddressUnauthenticated?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -145,6 +149,10 @@ export type MutationGrantRoomRoleByInvitationArgs = {
 
 export type MutationJoinRoomArgs = {
   input: JoinRoomInput;
+};
+
+export type MutationRevokeRoomMembershipArgs = {
+  roomId: Scalars['UUID']['input'];
 };
 
 export type MutationRevokeRoomRoleArgs = {
@@ -718,7 +726,7 @@ export type DeleteRoomMutationVariables = Exact<{
 
 export type DeleteRoomMutation = {
   __typename?: 'Mutation';
-  deleteRoom: boolean;
+  deleteRoom: string;
 };
 
 export type DuplicateRoomMutationVariables = Exact<{
@@ -831,6 +839,15 @@ export type RevokeRoomRoleMutationVariables = Exact<{
 export type RevokeRoomRoleMutation = {
   __typename?: 'Mutation';
   revokeRoomRole: boolean;
+};
+
+export type RevokeRoomMembershipMutationVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type RevokeRoomMembershipMutation = {
+  __typename?: 'Mutation';
+  revokeRoomMembership: string;
 };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
@@ -1521,6 +1538,25 @@ export class RevokeRoomRoleGql extends Apollo.Mutation<
   RevokeRoomRoleMutationVariables
 > {
   document = RevokeRoomRoleDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RevokeRoomMembershipDocument = gql`
+  mutation RevokeRoomMembership($roomId: UUID!) {
+    revokeRoomMembership(roomId: $roomId)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RevokeRoomMembershipGql extends Apollo.Mutation<
+  RevokeRoomMembershipMutation,
+  RevokeRoomMembershipMutationVariables
+> {
+  document = RevokeRoomMembershipDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
