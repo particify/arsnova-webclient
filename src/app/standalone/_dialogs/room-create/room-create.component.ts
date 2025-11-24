@@ -109,7 +109,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     this.emptyInputs = false;
   }
 
-  handleAuth(auth: AuthenticatedUser) {
+  handleAuth(auth?: AuthenticatedUser) {
     this.auth = auth;
     if (!this.canCreateRoom(auth)) {
       this.dialogRef.close();
@@ -117,13 +117,13 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     }
   }
 
-  canCreateRoom(auth: AuthenticatedUser): boolean {
+  canCreateRoom(auth?: AuthenticatedUser): boolean {
     return (
       (this.anonymousProvider &&
         this.anonymousProvider.allowedRoles.includes(
           AuthenticationProviderRole.MODERATOR
         )) ||
-      auth.verified
+      !!auth?.verified
     );
   }
 
