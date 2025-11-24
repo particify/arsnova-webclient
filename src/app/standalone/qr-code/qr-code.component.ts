@@ -32,7 +32,7 @@ export class QrCodeComponent implements OnInit, OnDestroy {
   private roomService = inject(RoomService);
   private focusModeService = inject(FocusModeService);
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onResize() {
     this.setQRSize();
   }
