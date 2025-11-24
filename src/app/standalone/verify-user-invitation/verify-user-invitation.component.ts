@@ -60,6 +60,9 @@ export class VerifyUserInvitationComponent extends FormComponent {
   );
   readonly tosAccepted = model(false);
   readonly tosLink = computed(() => this.apiConfig().ui.links?.tos?.url);
+  readonly accountServiceTitle = computed(
+    () => this.apiConfig().ui.registration?.service || 'ARSnova'
+  );
 
   verify(): void {
     if (!this.validateForm()) {

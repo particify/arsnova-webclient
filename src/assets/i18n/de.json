@@ -223,8 +223,7 @@
     "verification-failed": "Verifizierung fehlgeschlagen",
     "verification-link-expired": "Der Verifizierungslink ist abgelaufen.",
     "accept-invitation": "Einladung annehmen",
-    "accept-invitation-info": "Schließe die Account-Erstellung ab, um die Einladung anzunehmen.",
-    "account-registration": "Account registrieren",
+    "accept-invitation-info": "Wähle ein Passwort für deinen Account, um die Einladung anzunehmen.",
     "create-account": "Account erstellen",
     "invitation-link-expired": "Der Einladungslink ist abgelaufen."
   },

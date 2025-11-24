@@ -223,8 +223,7 @@
     "verification-failed": "Verification failed",
     "verification-link-expired": "The verification link has expired.",
     "accept-invitation": "Accept invitation",
-    "accept-invitation-info": "Complete the account creation process to accept the invitation.",
-    "account-registration": "Register account",
+    "accept-invitation-info": "Choose a password for your account to accept the invitation.",
     "create-account": "Create account",
     "invitation-link-expired": "The invitation link has expired."
   },
