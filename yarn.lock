@@ -183,17 +183,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@analogjs/storybook-angular@npm:1.21.3":
-  version: 1.21.3
-  resolution: "@analogjs/storybook-angular@npm:1.21.3"
+"@analogjs/storybook-angular@npm:2.1.0":
+  version: 2.1.0
+  resolution: "@analogjs/storybook-angular@npm:2.1.0"
   dependencies:
-    "@storybook/builder-vite": "npm:>=8.6.0 || ^9.0.0"
+    "@storybook/builder-vite": "npm:^10.0.0"
   peerDependencies:
     "@analogjs/vite-plugin-angular": "*"
-    "@storybook/angular": ">=8.6.0 || ^9.0.0"
-    storybook: ">=8.6.0 || ^9.0.0"
+    "@storybook/angular": ^10.0.0
+    storybook: ^10.0.0
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 10c0/a3785010613b587aaef9d8f34499d472e8d2563f18f27e19a26e521b8781d250dbe3b46c435994b7c73d34428e73d391eaa6e89ef5bd869ea3a5cabbdcd30782
+  checksum: 10c0/16a1487387964b977fb529296764e1a106cb2775f4105dd0ac11c76bbfe166b337b51718b0639fba742b7b40c899c0299d3bec1422d6fbc17d9420a71ad421b4
   languageName: node
   linkType: hard
 
@@ -6214,16 +6214,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/builder-vite@npm:>=8.6.0 || ^9.0.0":
-  version: 9.1.15
-  resolution: "@storybook/builder-vite@npm:9.1.15"
+"@storybook/builder-vite@npm:^10.0.0":
+  version: 10.0.8
+  resolution: "@storybook/builder-vite@npm:10.0.8"
   dependencies:
-    "@storybook/csf-plugin": "npm:9.1.15"
+    "@storybook/csf-plugin": "npm:10.0.8"
     ts-dedent: "npm:^2.0.0"
   peerDependencies:
-    storybook: ^9.1.15
+    storybook: ^10.0.8
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 10c0/90a1a0d5988641b32cbbc112c3342269744d7ca1d5620055db72bc52cb939fbb2614e47be2981fef54f31e01d3907f4bcc93d46f22a8033da9d43138d148f64f
+  checksum: 10c0/12aae758e00caeee4d983fb2a2029ce897a138e9879a1ac12beb1651891c5dd9bcc05ecaeb344b34608bcdaea24b37abe54a6d5515d3338e73bf6523431ebe78
   languageName: node
   linkType: hard
 
@@ -6290,14 +6290,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/csf-plugin@npm:9.1.15":
-  version: 9.1.15
-  resolution: "@storybook/csf-plugin@npm:9.1.15"
+"@storybook/csf-plugin@npm:10.0.8":
+  version: 10.0.8
+  resolution: "@storybook/csf-plugin@npm:10.0.8"
   dependencies:
-    unplugin: "npm:^1.3.1"
+    unplugin: "npm:^2.3.5"
   peerDependencies:
-    storybook: ^9.1.15
-  checksum: 10c0/b9483228bdaf6e7f1e2941ebff31122e58af5fe128a4efc06ccdbfa5a5ac6dff411813029761d784d34a2af384d47c4c958adf607c59d7d8863b5c1281f76312
+    esbuild: "*"
+    rollup: "*"
+    storybook: ^10.0.8
+    vite: "*"
+    webpack: "*"
+  peerDependenciesMeta:
+    esbuild:
+      optional: true
+    rollup:
+      optional: true
+    vite:
+      optional: true
+    webpack:
+      optional: true
+  checksum: 10c0/f915c158da53f4357774731ad0663c2edffece95d601ad9fca49c56e97a161b089af05d940bfd12407d8170e0015f330396d049985201a5c5aeb274c0c6fdabe
   languageName: node
   linkType: hard
 
@@ -7908,7 +7921,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "arsnova-webclient@workspace:."
   dependencies:
-    "@analogjs/storybook-angular": "npm:1.21.3"
+    "@analogjs/storybook-angular": "npm:2.1.0"
     "@angular-eslint/builder": "npm:20.3.0"
     "@angular-eslint/eslint-plugin": "npm:20.3.0"
     "@angular-eslint/eslint-plugin-template": "npm:20.3.0"
