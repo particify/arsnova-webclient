@@ -204,19 +204,8 @@ export class RoomListComponent implements AfterViewInit, OnInit {
           msg,
           AdvancedSnackBarTypes.WARNING
         );
-      } else {
-        this.roomDeletionCanceled();
       }
     });
-  }
-
-  roomDeletionCanceled() {
-    this.translateService
-      .selectTranslate('room-list.canceled-remove')
-      .pipe(take(1))
-      .subscribe((msg) => {
-        this.notificationService.show(msg);
-      });
   }
 
   roleToString(role: RoomRole): string {

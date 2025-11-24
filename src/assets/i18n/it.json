@@ -209,7 +209,6 @@
     "filter": "Qui puoi filtrare l'elenco delle stanze.",
     "filter-message": "Stanze di ricerca",
     "no-rooms-found": "Nessuna stanza trovata.",
-    "canceled-remove": "Processo annullato.",
     "participant-role": "Partecipante",
     "import": "Importazione",
     "a11y-join-room": "Entra nella stanza {{room}} con il numero {{id}} nel ruolo {{role}}.",
