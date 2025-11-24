@@ -4799,27 +4799,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsverse/transloco-utils@npm:^8.0.1":
-  version: 8.1.0
-  resolution: "@jsverse/transloco-utils@npm:8.1.0"
+"@jsverse/transloco-utils@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "@jsverse/transloco-utils@npm:8.2.0"
   dependencies:
     cosmiconfig: "npm:^8.1.3"
     tslib: "npm:^2.3.0"
-  checksum: 10c0/5fcfd3438e786d24b631c120994ded3f0bd1e56f259519c4a910ed7aec061a8e65bd2c3306be3918f1883e86f625f8a3939c436c4c787f50b345be847366747d
+  checksum: 10c0/0ba43ff4b21b89b70878a581395d8a2640c6ba768dc94e61340f86c228fd8c6732bbbc04418999d7b5945852c3a6366564a8fa416527eacc9e3a479416f8747f
   languageName: node
   linkType: hard
 
-"@jsverse/transloco@npm:8.0.1":
-  version: 8.0.1
-  resolution: "@jsverse/transloco@npm:8.0.1"
+"@jsverse/transloco@npm:8.2.0":
+  version: 8.2.0
+  resolution: "@jsverse/transloco@npm:8.2.0"
   dependencies:
-    "@jsverse/transloco-utils": "npm:^8.0.1"
+    "@jsverse/transloco-utils": "npm:^8.2.0"
     "@jsverse/utils": "npm:1.0.0-beta.5"
     tslib: "npm:^2.2.0"
   peerDependencies:
     "@angular/core": ">=16.0.0"
     rxjs: ">=6.0.0"
-  checksum: 10c0/a3ad601754052013d7d37c370d3d37aa01c133a6ff3beeb9c3365912d65be8e9ce83aa4d876eff223fb8276284afad01670ca83f4018341dd1240a781832dbd8
+  checksum: 10c0/ce805abe7659e124ccd73cb71f0dc5bbeb239e38a06fee3251069fce7a1b88263de5a77bd67c334cf5ff91382f14846253261bb31cfca3b49184cc0b98b72b15
   languageName: node
   linkType: hard
 
@@ -7936,7 +7936,7 @@ __metadata:
     "@graphql-codegen/typescript": "npm:^5.0.0"
     "@graphql-codegen/typescript-apollo-angular": "npm:^4.0.0"
     "@graphql-codegen/typescript-operations": "npm:^5.0.0"
-    "@jsverse/transloco": "npm:8.0.1"
+    "@jsverse/transloco": "npm:8.2.0"
     "@playwright/test": "npm:1.55.0"
     "@stomp/rx-stomp": "npm:2.1.0"
     "@stomp/stompjs": "npm:7.2.0"
