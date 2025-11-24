@@ -107,7 +107,12 @@
     <mat-list>
       @for (member of members(); track member.user.id; let i = $index) {
         <mat-list-item class="bottom-border">
-          <div fxFill fxLayout="row wrap" fxLayoutAlign="space-between">
+          <div
+            fxFill
+            fxLayout="row wrap"
+            fxLayoutAlign="space-between"
+            [class.unverified]="!member.user.verified"
+          >
             <div
               fxLayout="row"
               fxLayoutGap="16px"
@@ -133,6 +138,9 @@
               >
                 <p class="login-id" tabindex="0">
                   {{ member.user.displayId }}
+                  @if (!member.user.verified) {
+                    ({{ 'creator.settings.unverified' | transloco }})
+                  }
                 </p>
                 <mat-chip-listbox class="role-chip">
                   <mat-chip-option selectable="false">{{

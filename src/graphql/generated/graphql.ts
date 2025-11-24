@@ -194,6 +194,7 @@ export type MutationVerifyUserMailAddressArgs = {
 };
 
 export type MutationVerifyUserMailAddressUnauthenticatedArgs = {
+  password?: InputMaybe<Scalars['String']['input']>;
   userId: Scalars['UUID']['input'];
   verificationCode: Scalars['String']['input'];
 };
@@ -517,6 +518,7 @@ export type RoomMemberFragment = {
     id: string;
     displayId?: string | null;
     displayName?: string | null;
+    verified: boolean;
   };
 };
 
@@ -794,6 +796,7 @@ export type RoomManagingMembersByRoomIdQuery = {
       id: string;
       displayId?: string | null;
       displayName?: string | null;
+      verified: boolean;
     };
   }> | null;
 };
@@ -881,6 +884,7 @@ export type VerifyUserMailAddressMutation = {
 export type VerifyUserMailAddressUnauthenticatedMutationVariables = Exact<{
   verificationCode: Scalars['String']['input'];
   userId: Scalars['UUID']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type VerifyUserMailAddressUnauthenticatedMutation = {
@@ -913,6 +917,7 @@ export const RoomMemberFragmentDoc = gql`
       id
       displayId
       displayName
+      verified
     }
     role
   }
@@ -1612,10 +1617,12 @@ export const VerifyUserMailAddressUnauthenticatedDocument = gql`
   mutation VerifyUserMailAddressUnauthenticated(
     $verificationCode: String!
     $userId: UUID!
+    $password: String
   ) {
     verifyUserMailAddressUnauthenticated(
       verificationCode: $verificationCode
       userId: $userId
+      password: $password
     )
   }
 `;

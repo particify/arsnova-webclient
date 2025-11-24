@@ -1,0 +1,47 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxFill>
+  <mat-card class="login-card" fxLayout="column" fxLayoutAlign="center center">
+    <app-form-header
+      [text]="
+        'register.info' | transloco: { accountService: accountServiceTitle() }
+      "
+    ></app-form-header>
+    @if (expired()) {
+      <app-hint
+        ><span>
+          {{ 'user-activation.invitation-link-expired' | transloco }}
+        </span></app-hint
+      >
+    } @else {
+      <form
+        class="full-width"
+        fxLayout="column"
+        fxLayoutAlign="space-around"
+        fxLayoutGap="20px"
+      >
+        <span>{{ 'user-activation.accept-invitation-info' | transloco }}</span>
+        <div fxLayout="column" fxLayoutGap="10px">
+          <app-password-entry
+            [checkStrength]="true"
+            [isNew]="true"
+          ></app-password-entry>
+          <mat-checkbox
+            [(ngModel)]="tosAccepted"
+            [disabled]="formDisabled"
+            name="accept"
+          >
+            {{ 'register.accept' | transloco
+            }}<a href="{{ tosLink() }}" target="_blank">{{
+              'register.terms' | transloco
+            }}</a
+            >{{ 'register.accept-2' | transloco }}
+          </mat-checkbox>
+        </div>
+        <app-loading-button
+          name="user-activation.create-account"
+          [fullWidth]="true"
+          (clicked)="verify()"
+        ></app-loading-button>
+      </form>
+    }
+  </mat-card>
+</div>

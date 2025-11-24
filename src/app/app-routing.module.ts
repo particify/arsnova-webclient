@@ -30,6 +30,7 @@ import { TemplateService as AdminTemplateService } from '@app/admin/template-man
 import { AdminService } from './core/services/http/admin.service';
 import { ContentCarouselService } from './core/services/util/content-carousel.service';
 import { VerifyUserComponent } from '@app/standalone/verify-user/verify-user.component';
+import { VerifyUserInvitationComponent } from '@app/standalone/verify-user-invitation/verify-user-invitation.component';
 
 const routes: Routes = [
   {
@@ -72,6 +73,15 @@ const routes: Routes = [
     path: 'user/:userId/verify',
     component: VerifyUserComponent,
     title: 'verify-mail-address',
+    data: {
+      parentRoute: ParentRoute.HOME,
+      showFooterLinks: true,
+    },
+  },
+  {
+    path: 'user/:userId/accept-invitation',
+    component: VerifyUserInvitationComponent,
+    title: 'accept-invitation',
     data: {
       parentRoute: ParentRoute.HOME,
       showFooterLinks: true,

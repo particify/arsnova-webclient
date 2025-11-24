@@ -326,6 +326,7 @@
     "tag-added": "Category has been added.",
     "tag-removed": "Category has been removed.",
     "no-users": "No users yet",
+    "unverified": "unverified",
     "direct-send": "Posts visible immediately",
     "tag-error": "This category does already exists.",
     "tags": "Categories",

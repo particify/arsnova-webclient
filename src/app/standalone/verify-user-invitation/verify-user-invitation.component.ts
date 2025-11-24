@@ -1,9 +1,20 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  model,
+  viewChild,
+} from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
 import { MatCard } from '@angular/material/card';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import { FormHeaderComponent } from '@app/core/components/form-header/form-header.component';
+import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { ApiConfig } from '@app/core/models/api-config';
 import { ChallengeService } from '@app/core/services/challenge.service';
 import {
   AdvancedSnackBarTypes,
@@ -22,19 +33,24 @@ const EXPIRES_FALLBACK_OFFSET = 3600;
   imports: [
     FlexLayoutModule,
     FormHeaderComponent,
+    FormsModule,
     HintComponent,
     LoadingButtonComponent,
     MatCard,
+    MatCheckbox,
+    PasswordEntryComponent,
     TranslocoPipe,
   ],
-  templateUrl: 'verify-user.component.html',
+  templateUrl: 'verify-user-invitation.component.html',
 })
-export class VerifyUserComponent extends FormComponent {
+export class VerifyUserInvitationComponent extends FormComponent {
   private readonly challengeService = inject(ChallengeService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly translationService = inject(TranslocoService);
   private readonly verifyGql = inject(VerifyUserMailAddressUnauthenticatedGql);
+  private readonly passwordEntry = viewChild.required(PasswordEntryComponent);
+  readonly apiConfig = input.required<ApiConfig>();
   readonly userId = input.required<string>();
   readonly code = input.required<string>();
   readonly expires = input<number>(
@@ -43,8 +59,16 @@ export class VerifyUserComponent extends FormComponent {
   readonly expired = computed(
     () => this.expires() <= new Date().getTime() / 1000
   );
+  readonly tosAccepted = model(false);
+  readonly tosLink = computed(() => this.apiConfig().ui.links?.tos?.url);
+  readonly accountServiceTitle = computed(
+    () => this.apiConfig().ui.registration?.service || 'ARSnova'
+  );
 
   verify(): void {
+    if (!this.validateForm()) {
+      return;
+    }
     this.disableForm();
     this.challengeService
       .authenticateByChallenge()
@@ -55,6 +79,7 @@ export class VerifyUserComponent extends FormComponent {
             variables: {
               verificationCode: this.code(),
               userId: this.userId(),
+              password: this.passwordEntry().getPassword(),
             },
             context: {
               headers: new HttpHeaders({ Authorization: `Bearer ${t}` }),
@@ -83,5 +108,23 @@ export class VerifyUserComponent extends FormComponent {
           }
         },
       });
+  }
+
+  private validateForm(): boolean {
+    if (!this.passwordEntry().getPassword()) {
+      this.notificationService.showAdvanced(
+        this.translationService.translate('password.unsuccessful'),
+        AdvancedSnackBarTypes.WARNING
+      );
+      return false;
+    }
+    if (!this.tosAccepted()) {
+      this.notificationService.showAdvanced(
+        this.translationService.translate('register.please-accept'),
+        AdvancedSnackBarTypes.WARNING
+      );
+      return false;
+    }
+    return true;
   }
 }
