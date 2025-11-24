@@ -6,7 +6,6 @@ import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
-  HttpResponse,
 } from '@angular/common/http';
 import {
   AuthenticationService,
@@ -15,7 +14,7 @@ import {
 } from '@app/core/services/http/authentication.service';
 import { Observable } from 'rxjs';
 
-const API_LOGIN_URI_PATTERN = /^\/api\/auth\/login\/[^?].*/;
+const REFRESH_URI = '/api/auth/refresh';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -31,32 +30,19 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     const token = this.token();
     if (
       new URL(req.url, location.origin).origin === location.origin &&
-      (token || tokenOverride) &&
+      token &&
+      !tokenOverride &&
       !req.withCredentials &&
-      !API_LOGIN_URI_PATTERN.test(req.url)
+      req.url !== REFRESH_URI
     ) {
-      const authReq = tokenOverride
-        ? req
-        : req.clone({
-            headers: req.headers.set(
-              AUTH_HEADER_KEY,
-              `${AUTH_SCHEME} ${token}`
-            ),
-          });
+      const authReq = req.clone({
+        headers: req.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`),
+      });
 
       return next.handle(authReq).pipe(
         tap({
-          next: (event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-              // Possible to do something with the response here
-            }
-          },
           error: (err: any) => {
-            if (
-              err instanceof HttpErrorResponse &&
-              err.status === 401 &&
-              !tokenOverride
-            ) {
+            if (err instanceof HttpErrorResponse && err.status === 401) {
               this.authenticationService.handleUnauthorizedError();
             }
           },
