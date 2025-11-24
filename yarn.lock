@@ -6142,14 +6142,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stomp/rx-stomp@npm:2.1.0":
-  version: 2.1.0
-  resolution: "@stomp/rx-stomp@npm:2.1.0"
+"@stomp/rx-stomp@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@stomp/rx-stomp@npm:2.2.0"
   peerDependencies:
     "@stomp/stompjs": ^7.2.0
     rxjs: ^7.2.0
     uuid: ">=9.0.0 <12.0.0"
-  checksum: 10c0/45562598aa5daef3df3ce19bf21ff6ec14734cf466006253fdfae79f1f33b4837c96a094a59e62a0d918b99a95f92575d0c017ace7e4eef79335919cf3f9a21e
+  checksum: 10c0/839515968a4506743297c8d90fb9c6d19ef1832ad554b96ba3517625d4e363b3cf5cfd964c77505528271a7b33ccd711bef41925badf298eb60652e3088e726c
   languageName: node
   linkType: hard
 
@@ -7938,7 +7938,7 @@ __metadata:
     "@graphql-codegen/typescript-operations": "npm:^5.0.0"
     "@jsverse/transloco": "npm:8.2.0"
     "@playwright/test": "npm:1.55.0"
-    "@stomp/rx-stomp": "npm:2.1.0"
+    "@stomp/rx-stomp": "npm:2.2.0"
     "@stomp/stompjs": "npm:7.2.0"
     "@storybook/addon-docs": "npm:10.0.8"
     "@storybook/angular": "npm:10.0.8"
