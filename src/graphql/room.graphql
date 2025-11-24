@@ -199,3 +199,7 @@ mutation GrantRoomRoleByInvitation(
 mutation RevokeRoomRole($roomId: UUID!, $userId: UUID!) {
   revokeRoomRole(roomId: $roomId, userId: $userId)
 }
+
+mutation RevokeRoomMembership($roomId: UUID!) {
+  revokeRoomMembership(roomId: $roomId)
+}

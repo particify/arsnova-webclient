@@ -9,7 +9,6 @@ import {
   viewChild,
 } from '@angular/core';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
-import { RoomService } from '@app/core/services/http/room.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { fromEvent, of } from 'rxjs';
 import {
@@ -31,11 +30,12 @@ import { RoomDeleted } from '@app/core/models/events/room-deleted';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
+  DeleteRoomGql,
+  RevokeRoomMembershipGql,
   RoomMembership,
   RoomMembershipsGql,
   RoomRole,
 } from '@gql/generated/graphql';
-import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { CoreModule } from '@app/core/core.module';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
 import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
@@ -77,11 +77,11 @@ export class RoomListComponent implements AfterViewInit, OnInit {
   private eventService = inject(EventService);
   private notificationService = inject(NotificationService);
   private roomMembershipsGql = inject(RoomMembershipsGql);
-  private roomMembershipService = inject(RoomMembershipService);
-  private roomService = inject(RoomService);
   private router = inject(Router);
   private routingService = inject(RoutingService);
   private translateService = inject(TranslocoService);
+  private deleteRoom = inject(DeleteRoomGql);
+  private revokeMembership = inject(RevokeRoomMembershipGql);
 
   auth = input.required<AuthenticatedUser>();
   private searchInput =
@@ -180,13 +180,16 @@ export class RoomListComponent implements AfterViewInit, OnInit {
       undefined,
       () =>
         isOwner
-          ? this.roomService.deleteRoom(roomMembership.room.id)
-          : this.roomMembershipService.cancelMembership(
-              roomMembership.room.shortId
-            )
+          ? this.deleteRoom.mutate({
+              variables: { id: roomMembership.room.id },
+            })
+          : this.revokeMembership.mutate({
+              variables: { roomId: roomMembership.room.id },
+            })
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.roomsQueryRef.refetch();
         let msg: string;
         if (isOwner) {
           msg = this.translateService.translate(
@@ -199,7 +202,6 @@ export class RoomListComponent implements AfterViewInit, OnInit {
             'room-list.room-successfully-removed'
           );
         }
-        // this.removeRoomFromList(room);
         this.notificationService.showAdvanced(
           msg,
           AdvancedSnackBarTypes.WARNING
