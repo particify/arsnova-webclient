@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import {
   Component,
   computed,
@@ -73,12 +74,15 @@ export class VerifyUserInvitationComponent extends FormComponent {
       .authenticateByChallenge()
       .pipe(
         first(),
-        switchMap(() => {
+        switchMap((t) => {
           return this.verifyGql.mutate({
             variables: {
               verificationCode: this.code(),
               userId: this.userId(),
               password: this.passwordEntry().getPassword(),
+            },
+            context: {
+              headers: new HttpHeaders({ Authorization: `Bearer ${t}` }),
             },
           });
         })

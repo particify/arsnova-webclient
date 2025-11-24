@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, computed, inject, input } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
@@ -49,11 +50,14 @@ export class VerifyUserComponent extends FormComponent {
       .authenticateByChallenge()
       .pipe(
         first(),
-        switchMap(() => {
+        switchMap((t) => {
           return this.verifyGql.mutate({
             variables: {
               verificationCode: this.code(),
               userId: this.userId(),
+            },
+            context: {
+              headers: new HttpHeaders({ Authorization: `Bearer ${t}` }),
             },
           });
         })
