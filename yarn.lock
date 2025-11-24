@@ -7967,7 +7967,7 @@ __metadata:
     eslint-plugin-storybook: "npm:10.0.8"
     graphql: "npm:^16.10.0"
     is-docker: "npm:4.0.0"
-    jasmine-core: "npm:5.10.0"
+    jasmine-core: "npm:5.12.1"
     jasmine-spec-reporter: "npm:7.0.0"
     jwt-decode: "npm:4.0.0"
     karma: "npm:6.4.4"
@@ -12743,10 +12743,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jasmine-core@npm:5.10.0":
-  version: 5.10.0
-  resolution: "jasmine-core@npm:5.10.0"
-  checksum: 10c0/0826b723817aa428516b31e9321c1932e8317764235163e26f536e2033040df13b3b13f2eaa4d840b8b47fb92dab4ff06b2ab37487ed447d62ec7edbb43c1e61
+"jasmine-core@npm:5.12.1":
+  version: 5.12.1
+  resolution: "jasmine-core@npm:5.12.1"
+  checksum: 10c0/35d83a91176e68960b4aa62d9a18bbeabed09cec42a138a70125a1952c0df6849d721d7e032101a3bd2ef17f1244fac166aaca8353cac7aa221831e005b84760
   languageName: node
   linkType: hard
 
