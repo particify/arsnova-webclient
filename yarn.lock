@@ -7368,17 +7368,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"angular-material-css-vars@npm:9.1.1":
-  version: 9.1.1
-  resolution: "angular-material-css-vars@npm:9.1.1"
+"angular-material-css-vars@npm:10.0.0":
+  version: 10.0.0
+  resolution: "angular-material-css-vars@npm:10.0.0"
   dependencies:
     "@ctrl/tinycolor": "npm:^4.0.0"
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/common": ">=20"
-    "@angular/core": ">=20"
-    "@angular/material": ">=20"
-  checksum: 10c0/c30e9e39cfc1b4a1393fe86e5a12a20a452812bd6e730f30193a48f0d3da8b2468258c5ba22353f0b8120585ffab771a8b5413fa814dcbf27052bb7c0ce31c2c
+    "@angular/common": ">=21"
+    "@angular/core": ">=21"
+    "@angular/material": ">=21"
+  checksum: 10c0/81f284cbf521dde27f6d5ec8de79475db4512ec7af3a5e8a5a167095778e706ca42c61cf13bccc4824f3af3709ea10009e3c91c3bea66c74ef60b2eab1be582a
   languageName: node
   linkType: hard
 
@@ -7633,7 +7633,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:8.44.0"
     "@typescript-eslint/utils": "npm:8.44.0"
     altcha: "npm:2.2.4"
-    angular-material-css-vars: "npm:9.1.1"
+    angular-material-css-vars: "npm:10.0.0"
     apollo-angular: "npm:12.0.0"
     backoff-rxjs: "npm:7.0.0"
     chart.js: "npm:4.5.0"
