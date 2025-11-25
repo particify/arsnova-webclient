@@ -1,10 +1,11 @@
 import {
   Component,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  effect,
   inject,
+  input,
 } from '@angular/core';
 import {
   BarController,
@@ -63,10 +64,11 @@ export class StatisticChoiceComponent
   protected presentationService = inject(PresentationService);
 
   @Input({ required: true }) content!: ContentChoice;
-  @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
   @Input() isSurvey = false;
   @Input() showCorrect = false;
+
+  contentAnswersDirectlyBelowChart = input.required<boolean>();
 
   chart?: Chart;
   chartId = '';
@@ -88,6 +90,16 @@ export class StatisticChoiceComponent
   ContentType: typeof ContentType = ContentType;
   roundStats?: RoundStatistics[];
   answerLabelWidth?: string;
+
+  constructor() {
+    super();
+    effect(() => {
+      this.contentVisualizationUnitPercent();
+      if (this.chart) {
+        this.chart.update();
+      }
+    });
+  }
 
   ngOnDestroy() {
     this.destroyed$.next();
@@ -133,14 +145,6 @@ export class StatisticChoiceComponent
         const stats = JSON.parse(msg.body).payload.stats;
         this.updateData(stats);
         this.updateChart();
-      });
-    this.visualizationUnitChanged
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((isUnitPercent) => {
-        this.settings.contentVisualizationUnitPercent = isUnitPercent;
-        if (this.chart) {
-          this.chart.update();
-        }
       });
   }
 
@@ -255,7 +259,7 @@ export class StatisticChoiceComponent
             type: 'category',
             ticks: {
               display:
-                !this.settings.contentAnswersDirectlyBelowChart ||
+                !this.contentAnswersDirectlyBelowChart() ||
                 !this.isPresentation,
             },
             grid: gridConfig,

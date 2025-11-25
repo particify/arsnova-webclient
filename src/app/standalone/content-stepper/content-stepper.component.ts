@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
-import { UserSettings } from '@app/core/models/user-settings';
+import { UserUiSettings } from '@gql/generated/graphql';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
@@ -36,7 +36,7 @@ export class ContentStepperComponent implements AfterViewInit {
   @ViewChild(StepperComponent) stepper!: StepperComponent;
 
   @Input({ required: true }) contents!: Content[];
-  @Input({ required: true }) settings!: UserSettings;
+  @Input({ required: true }) settings!: UserUiSettings;
   @Input({ required: true }) startIndex!: number;
   @Input() hideControls = false;
   @Input() showStepInfo = true;

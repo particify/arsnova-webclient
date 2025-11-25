@@ -1,14 +1,23 @@
-import { Injectable, inject } from '@angular/core';
-import { Resolve } from '@angular/router';
-import { Observable } from 'rxjs';
-import { UserSettings } from '@app/core/models/user-settings';
-import { UserService } from '@app/core/services/http/user.service';
+import { inject } from '@angular/core';
+import { ResolveFn } from '@angular/router';
+import { map } from 'rxjs';
+import {
+  CurrentUserWithSettingsGql,
+  UserUiSettings,
+} from '@gql/generated/graphql';
 
-@Injectable({ providedIn: 'root' })
-export class UserSettingsResolver implements Resolve<UserSettings> {
-  private userService = inject(UserService);
-
-  resolve(): Observable<UserSettings> {
-    return this.userService.getCurrentUsersSettings();
-  }
-}
+export const userSettingsResolver: ResolveFn<UserUiSettings> = () => {
+  return inject(CurrentUserWithSettingsGql)
+    .fetch()
+    .pipe(
+      map(
+        (r) =>
+          r.data?.currentUser?.uiSettings ?? {
+            contentVisualizationUnitPercent: true,
+            contentAnswersDirectlyBelowChart: false,
+            showContentResultsDirectly: false,
+            rotateWordcloudItems: true,
+          }
+      )
+    );
+};

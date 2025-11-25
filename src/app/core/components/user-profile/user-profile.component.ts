@@ -140,6 +140,22 @@ export class UserProfileComponent {
     this.updateUserSettings
       .mutate({
         variables: settings,
+        update: (cache) => {
+          const cacheId = cache.identify({
+            __typename: 'User',
+            id: this.user()?.id,
+          });
+          if (cacheId) {
+            cache.modify({
+              id: cacheId,
+              fields: {
+                uiSettings() {
+                  return settings;
+                },
+              },
+            });
+          }
+        },
       })
       .subscribe();
   }

@@ -1,5 +1,4 @@
 import { Person } from './person';
-import { UserSettings } from './user-settings';
 
 export class User {
   id: string;
@@ -7,7 +6,6 @@ export class User {
   authProvider: string;
   revision: string;
   person: Person;
-  settings: UserSettings;
   account: UserAccount;
 
   constructor(
@@ -16,7 +14,6 @@ export class User {
     authProvider: string,
     revision: string,
     person: Person,
-    settings: UserSettings = new UserSettings(),
     account: UserAccount = new UserAccount()
   ) {
     this.id = id;
@@ -24,7 +21,6 @@ export class User {
     this.authProvider = authProvider;
     this.revision = revision;
     this.person = person;
-    this.settings = settings;
     this.account = account;
   }
 }

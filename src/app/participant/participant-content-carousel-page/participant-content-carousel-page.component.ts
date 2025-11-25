@@ -61,7 +61,7 @@ import { ContentWaitingComponent } from '@app/standalone/content-waiting/content
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Room } from '@app/core/models/room';
-import { UserSettings } from '@app/core/models/user-settings';
+import { UserUiSettings } from '@gql/generated/graphql';
 
 function setDefaultTrue(value: boolean | undefined): boolean {
   return value ?? true;
@@ -110,7 +110,7 @@ export class ParticipantContentCarouselPageComponent
   // Route data input below
   @Input({ required: true }) contentGroup!: ContentGroup;
   @Input({ required: true }) room!: Room;
-  @Input({ required: true }) settings!: UserSettings;
+  @Input({ required: true }) settings!: UserUiSettings;
   @Input() activeTab?: string;
   @Input() contentIndex?: number;
   @Input({

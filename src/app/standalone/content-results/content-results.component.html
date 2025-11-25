@@ -80,7 +80,7 @@
                   (click)="toggleVisualizationUnit()"
                   [matTooltip]="
                     'statistic.' +
-                      (settings.contentVisualizationUnitPercent
+                      (!!settings().contentVisualizationUnitPercent
                         ? 'show-absolute'
                         : 'show-percentage') | transloco
                   "
@@ -89,7 +89,7 @@
                   [appHotkeyDisabled]="!active"
                   appTrackInteraction="Percentage as chart visualization unit toggled"
                   [appTrackName]="
-                    settings.contentVisualizationUnitPercent ? 'on' : 'off'
+                    !!settings().contentVisualizationUnitPercent ? 'on' : 'off'
                   "
                 >
                   <mat-icon>percent</mat-icon>
@@ -133,8 +133,12 @@
           [isSurvey]="survey"
           [isPresentation]="isPresentation"
           [active]="active"
-          [settings]="settings"
-          [visualizationUnitChanged]="visualizationUnitChanged"
+          [contentVisualizationUnitPercent]="
+            !!settings().contentVisualizationUnitPercent
+          "
+          [contentAnswersDirectlyBelowChart]="
+            !!settings().contentAnswersDirectlyBelowChart
+          "
         ></app-statistic-choice>
       }
       @if (format === ContentType.SCALE) {
@@ -145,8 +149,12 @@
           [isSurvey]="true"
           [isPresentation]="isPresentation"
           [active]="active"
-          [settings]="settings"
-          [visualizationUnitChanged]="visualizationUnitChanged"
+          [contentVisualizationUnitPercent]="
+            !!settings().contentVisualizationUnitPercent
+          "
+          [contentAnswersDirectlyBelowChart]="
+            !!settings().contentAnswersDirectlyBelowChart
+          "
           [language]="language"
         ></app-statistic-scale>
       }
@@ -167,8 +175,9 @@
           [directShow]="directShow"
           (updateCounterEvent)="updateCounter($event)"
           [active]="active"
-          [settings]="settings"
-          [visualizationUnitChanged]="visualizationUnitChanged"
+          [contentVisualizationUnitPercent]="
+            !!settings().contentVisualizationUnitPercent
+          "
         ></app-statistic-sort>
       }
       @if (format === ContentType.WORDCLOUD) {
@@ -177,7 +186,7 @@
           [showModeration]="showWordcloudModeration"
           [showList]="activeWordcloudVisualiation() === 'list'"
           [directShow]="directShow"
-          [settings]="settings"
+          [rotateWordcloudItems]="!!settings().rotateWordcloudItems"
           (updateCounterEvent)="updateCounter($event)"
         ></app-statistic-wordcloud>
       }
@@ -185,13 +194,17 @@
         <app-statistic-prioritization
           [content]="prioritizationContent"
           [directShow]="directShow"
-          [settings]="settings"
           [indexChanged]="indexChanged"
           [isPresentation]="isPresentation"
           [active]="active"
           (updateCounterEvent)="updateCounter($event)"
           [isCreator]="!isParticipant"
-          [visualizationUnitChanged]="visualizationUnitChanged"
+          [contentVisualizationUnitPercent]="
+            !!settings().contentVisualizationUnitPercent
+          "
+          [contentAnswersDirectlyBelowChart]="
+            !!settings().contentAnswersDirectlyBelowChart
+          "
         ></app-statistic-prioritization>
       }
       @if (format === ContentType.NUMERIC) {
@@ -202,8 +215,9 @@
           [showCorrect]="showCorrect"
           (updateCounterEvent)="updateCounter($event)"
           [active]="active"
-          [settings]="settings"
-          [visualizationUnitChanged]="visualizationUnitChanged"
+          [contentVisualizationUnitPercent]="
+            !!settings().contentVisualizationUnitPercent
+          "
         ></app-statistic-numeric>
       }
       @if (format === ContentType.SHORT_ANSWER) {

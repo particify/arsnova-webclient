@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  input,
+} from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
@@ -36,6 +43,7 @@ export class StatisticWordcloudComponent
 
   @Input() showModeration = false;
   @Input() showList = false;
+  rotateWordcloudItems = input.required<boolean>();
   wordWeights: WordCloudItem[] = [];
   answerList: TextStatistic[] = [];
   rotateWords?: boolean;
@@ -51,7 +59,7 @@ export class StatisticWordcloudComponent
     this.contentService.getAnswerBanned().subscribe((answer) => {
       this.filterAnswers(answer);
     });
-    this.rotateWords = this.settings.rotateWordcloudItems;
+    this.rotateWords = this.rotateWordcloudItems();
     this.presentationService.updateWordcloudVisualization(this.rotateWords);
     this.presentationService
       .getWordcloudVisualizationChanged()

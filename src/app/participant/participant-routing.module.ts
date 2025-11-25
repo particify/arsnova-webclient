@@ -16,7 +16,7 @@ import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.res
 import { ParticipantPageComponent } from '@app/participant/participant-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
-import { UserSettingsResolver } from '@app/core/resolver/user-settings.resolver';
+import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 
 const routes: Routes = [
@@ -73,7 +73,7 @@ const routes: Routes = [
     },
     resolve: {
       contentGroup: ContentGroupResolver,
-      settings: UserSettingsResolver,
+      settings: userSettingsResolver,
     },
     title: 'series',
   },
@@ -85,7 +85,7 @@ const routes: Routes = [
     },
     resolve: {
       contentGroup: ContentGroupResolver,
-      settings: UserSettingsResolver,
+      settings: userSettingsResolver,
     },
     title: 'series',
   },
@@ -97,7 +97,7 @@ const routes: Routes = [
     },
     resolve: {
       contentGroup: ContentGroupResolver,
-      settings: UserSettingsResolver,
+      settings: userSettingsResolver,
     },
     title: 'series',
   },

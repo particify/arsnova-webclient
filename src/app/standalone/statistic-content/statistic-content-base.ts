@@ -5,13 +5,13 @@ import {
   OnInit,
   Output,
   inject,
+  input,
 } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 import { Content } from '@app/core/models/content';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { TextAnswer } from '@app/core/models/text-answer';
-import { UserSettings } from '@app/core/models/user-settings';
 import { TranslocoService } from '@jsverse/transloco';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
@@ -29,7 +29,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
     new EventEmitter<AnswerResponseCounts>();
   @Input() isPresentation = false;
   @Input() active = false;
-  @Input() settings: UserSettings = new UserSettings();
+  contentVisualizationUnitPercent = input<boolean>();
 
   destroyed$ = new Subject<void>();
   isLoading = true;
@@ -86,7 +86,7 @@ export abstract class StatisticContentBaseComponent implements OnInit {
   getDataLabel(value: number, roundData: number[], count?: number): string {
     let label: string;
     const total = count ?? this.getSum(roundData);
-    if (this.settings.contentVisualizationUnitPercent) {
+    if (this.contentVisualizationUnitPercent()) {
       value = total ? (value / total) * 100 : 0;
       label = this.getLabelWithPercentageSign(value.toFixed(0));
     } else {

@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  model,
 } from '@angular/core';
 import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
 import { StatisticTextComponent } from '@app/standalone/statistic-content/statistic-text/statistic-text.component';
@@ -18,7 +19,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
 import { StatisticWordcloudComponent } from '@app/standalone/statistic-content/statistic-wordcloud/statistic-wordcloud.component';
 import { StatisticScaleComponent } from '@app/standalone/statistic-content/statistic-scale/statistic-scale.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { UserSettings } from '@app/core/models/user-settings';
+import { UserUiSettings } from '@gql/generated/graphql';
 import { StatisticPrioritizationComponent } from '@app/standalone/statistic-content/statistic-prioritization/statistic-prioritization.component';
 import { Content } from '@app/core/models/content';
 import { ContentFlashcard } from '@app/core/models/content-flashcard';
@@ -91,7 +92,6 @@ export class ContentResultsComponent implements OnDestroy, OnChanges {
   destroyed$: Subject<void> = new Subject();
 
   @Input({ required: true }) content!: Content;
-  @Input({ required: true }) settings!: UserSettings;
   @Input() directShow = false;
   @Input() active = false;
   @Input() contentIndex = 0;
@@ -101,6 +101,8 @@ export class ContentResultsComponent implements OnDestroy, OnChanges {
   @Input() isStandalone = true;
   @Input() isParticipant = false;
   @Input() language?: string;
+
+  settings = model.required<UserUiSettings>();
 
   answersVisible = false;
   correctVisible = false;
@@ -115,8 +117,6 @@ export class ContentResultsComponent implements OnDestroy, OnChanges {
   roundsToDisplay = 0;
   showWordcloudModeration = false;
   allowingUnitChange = false;
-
-  visualizationUnitChanged = new EventEmitter<boolean>();
 
   // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
   choiceContent!: ContentChoice;
@@ -296,11 +296,10 @@ export class ContentResultsComponent implements OnDestroy, OnChanges {
   }
 
   toggleVisualizationUnit() {
-    this.settings.contentVisualizationUnitPercent =
-      !this.settings.contentVisualizationUnitPercent;
-    this.visualizationUnitChanged.emit(
-      this.settings.contentVisualizationUnitPercent
-    );
+    const settings = { ...this.settings() };
+    settings.contentVisualizationUnitPercent =
+      !settings.contentVisualizationUnitPercent;
+    this.settings.update(() => settings);
   }
 
   toggleWordcloudView() {

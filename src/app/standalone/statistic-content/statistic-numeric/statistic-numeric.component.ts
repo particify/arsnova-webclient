@@ -1,9 +1,9 @@
 import {
   Component,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  effect,
   inject,
 } from '@angular/core';
 import {
@@ -65,7 +65,6 @@ export class StatisticNumericComponent
   protected presentationService = inject(PresentationService);
 
   @Input({ required: true }) content!: ContentNumeric;
-  @Input({ required: true }) visualizationUnitChanged!: EventEmitter<boolean>;
   @Input() directShow = false;
   @Input() showCorrect = false;
 
@@ -92,6 +91,16 @@ export class StatisticNumericComponent
     'maximum',
   ];
 
+  constructor() {
+    super();
+    effect(() => {
+      this.contentVisualizationUnitPercent();
+      if (this.chart) {
+        this.chart.update();
+      }
+    });
+  }
+
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
@@ -116,14 +125,6 @@ export class StatisticNumericComponent
         const stats = JSON.parse(msg.body).payload.stats;
         this.updateData(stats);
         this.updateChart();
-      });
-    this.visualizationUnitChanged
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((isUnitPercent) => {
-        this.settings.contentVisualizationUnitPercent = isUnitPercent;
-        if (this.chart) {
-          this.chart.update();
-        }
       });
   }
 

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { AbstractEntityService } from './abstract-entity.service';
@@ -6,11 +6,6 @@ import { User } from '@app/core/models/user';
 import { AccountCreated } from '@app/core/models/events/account-created';
 import { AccountDeleted } from '@app/core/models/events/account-deleted';
 import { catchError, map, tap } from 'rxjs/operators';
-import { UserSettings } from '@app/core/models/user-settings';
-import {
-  GlobalStorageService,
-  STORAGE_KEYS,
-} from '@app/core/services/util/global-storage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({}),
@@ -18,8 +13,6 @@ const httpOptions = {
 
 @Injectable()
 export class UserService extends AbstractEntityService<User> {
-  private globalStorageService = inject(GlobalStorageService);
-
   serviceApiUrl = {
     register: '/register',
     activate: '/activate',
@@ -122,14 +115,6 @@ export class UserService extends AbstractEntityService<User> {
         externalFilters: {},
       })
       .pipe(catchError(this.handleError('getUserId', [])));
-  }
-
-  getCurrentUsersSettings(): Observable<UserSettings> {
-    const userId = this.globalStorageService.getItem(STORAGE_KEYS.USER).userId;
-    return this.getById(userId, { view: 'owner' }).pipe(
-      map((u) => u.settings ?? new UserSettings()),
-      catchError(this.handleError<UserSettings>('getUserSettings'))
-    );
   }
 
   getUserData(userIds: string[]): Observable<User[]> {
