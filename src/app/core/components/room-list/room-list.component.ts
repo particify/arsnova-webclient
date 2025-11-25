@@ -101,14 +101,14 @@ export class RoomListComponent implements AfterViewInit, OnInit {
   rooms = computed(
     () =>
       this.roomsResult()
-        ?.edges.filter((e) => !!e)
+        ?.edges?.filter((e) => !!e)
         .map((e) => e.node) ?? []
   );
   noRooms = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
       filter((r) => r.dataState === 'complete'),
       first(),
-      map((r) => r.data.roomMemberships?.edges.length === 0),
+      map((r) => r.data.roomMemberships?.edges?.length === 0),
       catchError(() => of(false))
     )
   );

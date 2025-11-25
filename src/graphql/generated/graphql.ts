@@ -47,7 +47,7 @@ export type Announcement = {
 
 export type AnnouncementConnection = {
   __typename?: 'AnnouncementConnection';
-  edges: Array<Maybe<AnnouncementEdge>>;
+  edges?: Maybe<Array<Maybe<AnnouncementEdge>>>;
   pageInfo: PageInfo;
 };
 
@@ -317,7 +317,7 @@ export type Room = {
 
 export type RoomConnection = {
   __typename?: 'RoomConnection';
-  edges: Array<Maybe<RoomEdge>>;
+  edges?: Maybe<Array<Maybe<RoomEdge>>>;
   pageInfo: PageInfo;
 };
 
@@ -343,7 +343,7 @@ export type RoomMembership = {
 
 export type RoomMembershipConnection = {
   __typename?: 'RoomMembershipConnection';
-  edges: Array<Maybe<RoomMembershipEdge>>;
+  edges?: Maybe<Array<Maybe<RoomMembershipEdge>>>;
   pageInfo: PageInfo;
 };
 
@@ -419,7 +419,7 @@ export type AnnoucentmentsByRoomIdQuery = {
   __typename?: 'Query';
   announcementsByRoomId?: {
     __typename?: 'AnnouncementConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'AnnouncementEdge';
       node: {
         __typename?: 'Announcement';
@@ -430,7 +430,7 @@ export type AnnoucentmentsByRoomIdQuery = {
         updatedAt?: string | null;
         title: string;
       };
-    } | null>;
+    } | null> | null;
   } | null;
 };
 
@@ -442,7 +442,7 @@ export type AnnouncementsForCurrentUserQuery = {
   __typename?: 'Query';
   announcementsForCurrentUser?: {
     __typename?: 'AnnouncementConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'AnnouncementEdge';
       node: {
         __typename?: 'Announcement';
@@ -454,7 +454,7 @@ export type AnnouncementsForCurrentUserQuery = {
         title: string;
         room?: { __typename?: 'Room'; id: string; name: string } | null;
       };
-    } | null>;
+    } | null> | null;
   } | null;
 };
 
@@ -567,7 +567,7 @@ export type RoomsQuery = {
   __typename?: 'Query';
   rooms?: {
     __typename?: 'RoomConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'RoomEdge';
       cursor: string;
       node: {
@@ -578,7 +578,7 @@ export type RoomsQuery = {
         description?: string | null;
         descriptionRendered?: string | null;
       };
-    } | null>;
+    } | null> | null;
     pageInfo: {
       __typename?: 'PageInfo';
       endCursor?: string | null;
@@ -629,7 +629,7 @@ export type RoomMembershipsQuery = {
   __typename?: 'Query';
   roomMemberships?: {
     __typename?: 'RoomMembershipConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'RoomMembershipEdge';
       cursor: string;
       node: {
@@ -648,7 +648,7 @@ export type RoomMembershipsQuery = {
           name: string;
         };
       };
-    } | null>;
+    } | null> | null;
     pageInfo: {
       __typename?: 'PageInfo';
       endCursor?: string | null;
@@ -668,7 +668,7 @@ export type RoomsByUserIdQuery = {
   __typename?: 'Query';
   roomsByUserId?: {
     __typename?: 'RoomMembershipConnection';
-    edges: Array<{
+    edges?: Array<{
       __typename?: 'RoomMembershipEdge';
       cursor: string;
       node: {
@@ -687,7 +687,7 @@ export type RoomsByUserIdQuery = {
           name: string;
         };
       };
-    } | null>;
+    } | null> | null;
     pageInfo: {
       __typename?: 'PageInfo';
       endCursor?: string | null;
