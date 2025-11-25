@@ -17,6 +17,22 @@ query UserByDisplayId($displayId: ID!) {
   }
 }
 
+query CurrentUserWithSettings {
+  currentUser {
+    id
+    verified
+    displayId
+    displayName
+    unverifiedMailAddress
+    uiSettings {
+      contentAnswersDirectlyBelowChart
+      contentVisualizationUnitPercent
+      showContentResultsDirectly
+      rotateWordcloudItems
+    }
+  }
+}
+
 mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
   claimUnverifiedUser(mailAddress: $mailAddress, password: $password)
 }
@@ -34,5 +50,25 @@ mutation VerifyUserMailAddressUnauthenticated(
     verificationCode: $verificationCode
     userId: $userId
     password: $password
+  )
+}
+
+mutation DeleteUser {
+  deleteUser
+}
+
+mutation UpdateUserSettings(
+  $contentAnswersDirectlyBelowChart: Boolean
+  $contentVisualizationUnitPercent: Boolean
+  $showContentResultsDirectly: Boolean
+  $rotateWordcloudItems: Boolean
+) {
+  updateUserUiSettings(
+    input: {
+      contentAnswersDirectlyBelowChart: $contentAnswersDirectlyBelowChart
+      contentVisualizationUnitPercent: $contentVisualizationUnitPercent
+      showContentResultsDirectly: $showContentResultsDirectly
+      rotateWordcloudItems: $rotateWordcloudItems
+    }
   )
 }

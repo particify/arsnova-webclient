@@ -1,10 +1,21 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormField } from '@app/core/components/user-profile/user-profile.component';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FlexModule } from '@angular/flex-layout';
 import { MatInput } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
+
+export class FormField {
+  value: string;
+  name: string;
+  label: string;
+
+  constructor(value: string, name: string, label: string) {
+    this.value = value;
+    this.name = name;
+    this.label = label;
+  }
+}
 
 @Component({
   selector: 'app-user-form-field',
