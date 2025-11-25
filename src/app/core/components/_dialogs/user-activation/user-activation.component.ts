@@ -3,7 +3,6 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { UserService } from '@app/core/services/http/user.service';
 import {
   UntypedFormControl,
   Validators,
@@ -11,7 +10,6 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import {
-  MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogContent,
   MatDialogActions,
@@ -24,7 +22,10 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { VerifyUserMailAddressGql } from '@gql/generated/graphql';
+import {
+  ResendVerificationMailGql,
+  VerifyUserMailAddressGql,
+} from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
 @Component({
@@ -47,16 +48,16 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
   ],
 })
 export class UserActivationComponent extends FormComponent implements OnInit {
-  private data = inject(MAT_DIALOG_DATA);
-  private userService = inject(UserService);
   private verifyUserMailAddressGql = inject(VerifyUserMailAddressGql);
   private notificationService = inject(NotificationService);
   private dialogRef =
     inject<MatDialogRef<UserActivationComponent>>(MatDialogRef);
   private translationService = inject(TranslocoService);
   private authenticationService = inject(AuthenticationService);
+  private resendMail = inject(ResendVerificationMailGql);
 
-  readonly dialogId = 'activate-user';
+  resendCooldownSeconds = 0;
+  resendCooldownInterval?: ReturnType<typeof setInterval>;
 
   verificationCodeFormControl = new UntypedFormControl('', [
     Validators.required,
@@ -112,13 +113,24 @@ export class UserActivationComponent extends FormComponent implements OnInit {
     }
   }
 
-  resetVerification(): void {
-    this.userService.resetActivation(this.data.trim()).subscribe(() => {
+  resendVerificationMail(): void {
+    this.resendMail.mutate().subscribe(() => {
+      this.startResendCooldown();
       this.notificationService.showAdvanced(
         this.translationService.translate('user-activation.sent-again'),
-        AdvancedSnackBarTypes.WARNING
+        AdvancedSnackBarTypes.SUCCESS
       );
     });
+  }
+
+  startResendCooldown() {
+    this.resendCooldownSeconds = 90;
+    this.resendCooldownInterval = setInterval(() => {
+      this.resendCooldownSeconds--;
+      if (this.resendCooldownSeconds <= 0) {
+        clearInterval(this.resendCooldownInterval);
+      }
+    }, 1000);
   }
 
   close(result?: { success: boolean }) {

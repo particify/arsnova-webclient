@@ -26,11 +26,17 @@
       mat-button
       color="accent"
       class="reset"
-      (click)="
-        resetVerification(); $event.preventDefault(); $event.stopPropagation()
-      "
+      (click)="resendVerificationMail()"
+      [disabled]="!!resendCooldownSeconds"
     >
-      {{ 'user-activation.reset-button' | transloco }}
+      @if (resendCooldownSeconds) {
+        {{
+          'user-activation.send-again-in-seconds'
+            | transloco: { seconds: resendCooldownSeconds }
+        }}
+      } @else {
+        {{ 'user-activation.reset-button' | transloco }}
+      }
     </button>
   </div>
 </div>

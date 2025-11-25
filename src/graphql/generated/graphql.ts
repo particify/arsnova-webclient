@@ -97,6 +97,7 @@ export type Mutation = {
   grantRoomRoleByInvitation: Scalars['Boolean']['output'];
   joinRoom: RoomMembership;
   requestUserPasswordReset?: Maybe<Scalars['Boolean']['output']>;
+  resendVerificationMail?: Maybe<Scalars['Boolean']['output']>;
   resetUserPassword?: Maybe<Scalars['Boolean']['output']>;
   revokeRoomMembership: Scalars['UUID']['output'];
   revokeRoomRole: Scalars['Boolean']['output'];
@@ -1033,6 +1034,15 @@ export type UpdateUserLanguageMutation = {
   updateUserLanguage?: boolean | null;
 };
 
+export type ResendVerificationMailMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type ResendVerificationMailMutation = {
+  __typename?: 'Mutation';
+  resendVerificationMail?: boolean | null;
+};
+
 export const RoomDetailsFragmentFragmentDoc = gql`
   fragment RoomDetailsFragment on Room {
     id
@@ -1965,6 +1975,25 @@ export class UpdateUserLanguageGql extends Apollo.Mutation<
   UpdateUserLanguageMutationVariables
 > {
   document = UpdateUserLanguageDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ResendVerificationMailDocument = gql`
+  mutation ResendVerificationMail {
+    resendVerificationMail
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResendVerificationMailGql extends Apollo.Mutation<
+  ResendVerificationMailMutation,
+  ResendVerificationMailMutationVariables
+> {
+  document = ResendVerificationMailDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
