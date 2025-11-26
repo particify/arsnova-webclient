@@ -72,3 +72,19 @@ mutation UpdateUserSettings(
     }
   )
 }
+
+mutation RequestUserPasswordReset($mailAddress: String!) {
+  requestUserPasswordReset(mailAddress: $mailAddress)
+}
+
+mutation resetUserPassword(
+  $mailAddress: String!
+  $password: String!
+  $verificationCode: String!
+) {
+  resetUserPassword(
+    mailAddress: $mailAddress
+    password: $password
+    verificationCode: $verificationCode
+  )
+}
