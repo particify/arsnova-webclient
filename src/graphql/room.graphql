@@ -33,6 +33,14 @@ query RoomIdByShortId($shortId: String!) {
   }
 }
 
+query RoomLanguageByShortId($shortId: String!) {
+  roomMembershipByShortId(shortId: $shortId) {
+    room {
+      language
+    }
+  }
+}
+
 query RoomById($id: ID!) {
   roomById(id: $id) {
     ...RoomDetailsFragment

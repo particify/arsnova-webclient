@@ -15,7 +15,7 @@
 <mat-card
   appearance="outlined"
   appLangContext
-  [dir]="language | languageDirection"
+  [dir]="language() | languageDirection"
 >
   <app-rendered-text
     tabindex="0"
@@ -37,7 +37,7 @@
       [dynamicRendering]="
         content.format === 'CHOICE' && renderAnswersDynamically
       "
-      [language]="language"
+      [language]="language()"
       [translateOptions]="content.format === 'SCALE'"
     ></app-content-choice-answer>
   }

@@ -91,6 +91,7 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   @Input() contentIndex?: number;
 
   settings = input.required<UserUiSettings>();
+  language = input.required<string>();
 
   showContentResultsDirectly = linkedSignal(
     () => this.settings().showContentResultsDirectly

@@ -7,6 +7,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  input,
 } from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -145,6 +146,7 @@ export class ContentEditingComponent
   @Input() contentId?: string;
   @Input() fixedHeight = false;
   @Input() content?: Content;
+  language = input.required<string>();
 
   question = '';
   ContentType = ContentType;

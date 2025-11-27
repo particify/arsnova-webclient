@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, input } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -6,7 +6,7 @@ import { AnswerOption } from '@app/core/models/answer-option';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { ContentScale } from '@app/core/models/content-scale';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
-import { TranslocoService, provideTranslocoScope } from '@jsverse/transloco';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
@@ -47,12 +47,11 @@ import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 export class ContentPreviewComponent implements OnInit {
   private answerService = inject(ContentAnswerService);
   private likertScaleService = inject(LikertScaleService);
-  private translateService = inject(TranslocoService);
 
   @Input({ required: true }) content!: Content;
   @Input() renderAnswersDynamically = true;
   @Input() showTitle = true;
-  @Input() language?: string;
+  language = input<string>();
 
   answerOptions: AnswerOption[] = [];
   answerOptionsWithPoints: AnswerWithPoints[] = [];

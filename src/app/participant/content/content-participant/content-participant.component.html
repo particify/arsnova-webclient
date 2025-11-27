@@ -110,7 +110,7 @@
                 (ngSubmit)="submitAnswerEvent($event, 'answer')"
                 id="answerForm"
                 appLangContext
-                [dir]="language | languageDirection"
+                [dir]="language() | languageDirection"
               >
                 <div>
                   @if (
@@ -127,7 +127,7 @@
                       [answerSubmitted]="answerSubmitted"
                       [statsPublished]="statsPublished"
                       [correctOptionsPublished]="correctOptionsPublished"
-                      [language]="room.language"
+                      [language]="language()"
                     >
                     </app-content-choice-participant>
                   }
@@ -141,7 +141,7 @@
                       (answerChanged)="forwardAnswerMessage($event)"
                       [answerSubmitted]="answerSubmitted"
                       [statsPublished]="statsPublished"
-                      [language]="room.language"
+                      [language]="language()"
                     >
                     </app-content-scale-participant>
                   }
@@ -281,7 +281,7 @@
                     [showCorrect]="correctOptionsPublished"
                     [isStandalone]="false"
                     [isParticipant]="true"
-                    [language]="room.language"
+                    [language]="language()"
                     [settings]="settings"
                   >
                   </app-content-results>
