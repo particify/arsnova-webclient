@@ -2,21 +2,18 @@ import { Component, Input, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
-import { Membership } from '@app/core/models/membership';
-import { Room } from '@app/core/models/room';
 import { BaseTemplateService } from '@app/core/services/http/base-template.service';
-import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomSelectionComponent } from '@app/standalone/_dialogs/room-selection/room-selection.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { Room, RoomMembershipsGql, RoomRole } from '@gql/generated/graphql';
 import { TranslocoService } from '@jsverse/transloco';
-import { takeUntil } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-template-button',
@@ -28,10 +25,9 @@ export class AddTemplateButtonComponent extends FormComponent {
   private translateService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
   private dialog = inject(MatDialog);
-  private membershipService = inject(RoomMembershipService);
   private router = inject(Router);
-  private routingService = inject(RoutingService);
   private dialogService = inject(DialogService);
+  private roomMembershipsGql = inject(RoomMembershipsGql);
 
   @Input({ required: true }) templateId!: string;
   @Input({ required: true }) templateName!: string;
@@ -43,25 +39,40 @@ export class AddTemplateButtonComponent extends FormComponent {
       this.setRoute(this.room.shortId);
       this.createTemplate(this.room.id);
     } else {
-      this.membershipService
-        .getCurrentMemberships()
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((memberships) => {
-          if (memberships.length > 0) {
-            this.openRoomSelectionDialog(memberships);
-          } else {
-            const dialogRef = this.dialogService.openRoomCreateDialog(
-              this.templateName,
-              undefined,
-              false
-            );
-            dialogRef.afterClosed().subscribe((room) => {
-              if (room) {
-                this.setRoute(room.shortId);
-                this.createTemplate(room.id, false);
-              }
-            });
-          }
+      this.disableForm();
+      this.roomMembershipsGql
+        .fetch({
+          variables: { query: { role: RoomRole.Owner } },
+          fetchPolicy: 'no-cache',
+        })
+        .pipe(
+          filter((r) => !!r.data?.roomMemberships?.edges),
+          map(
+            (r) =>
+              r.data?.roomMemberships?.edges
+                ?.map((e) => e?.node.room)
+                .filter((r) => !!r) ?? []
+          )
+        )
+        .subscribe({
+          complete: () => this.enableForm(),
+          next: (r) => {
+            if (r.length > 0) {
+              this.openRoomSelectionDialog(r);
+            } else {
+              const dialogRef = this.dialogService.openRoomCreateDialog(
+                this.templateName,
+                undefined,
+                false
+              );
+              dialogRef.afterClosed().subscribe((room) => {
+                if (room) {
+                  this.setRoute(room.shortId);
+                  this.createTemplate(room.id, false);
+                }
+              });
+            }
+          },
         });
     }
   }
@@ -97,17 +108,17 @@ export class AddTemplateButtonComponent extends FormComponent {
     this.routeAfterSuccess = ['edit', shortId];
   }
 
-  private openRoomSelectionDialog(memberships: Membership[]): void {
+  private openRoomSelectionDialog(rooms: Room[]): void {
     const dialogRef = this.dialog.open(RoomSelectionComponent, {
       width: '600px',
       data: {
-        memberships: memberships,
+        rooms: rooms,
       },
     });
-    dialogRef.afterClosed().subscribe((membership?: Membership) => {
-      if (membership) {
-        this.setRoute(membership.roomShortId);
-        this.createTemplate(membership.roomId);
+    dialogRef.afterClosed().subscribe((room?: Room) => {
+      if (room) {
+        this.setRoute(room.shortId);
+        this.createTemplate(room.id);
       }
     });
   }

@@ -34,11 +34,11 @@ export class BaseTemplateService extends AbstractHttpService<void> {
   ): Observable<void> {
     const connectionUrl = this.buildForeignUri(
       `/contentgroup/-/create-from-template`,
-      roomId
+      roomId.replaceAll('-', '')
     );
     return this.http.post<void>(connectionUrl, {
       id: templateId,
-      roomId: roomId,
+      roomId: roomId.replaceAll('-', ''),
     });
   }
 

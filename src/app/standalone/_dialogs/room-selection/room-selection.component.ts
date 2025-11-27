@@ -1,31 +1,25 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { RoomRole } from '@gql/generated/graphql';
-import { RoomService } from '@app/core/services/http/room.service';
-import { RoomSummary } from '@app/core/models/room-summary';
+import { Room } from '@gql/generated/graphql';
 import { CoreModule } from '@app/core/core.module';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContentGroupTemplateSelectionComponent } from '@app/standalone/content-group-template-selection/content-group-template-selection.component';
-import { Subject, takeUntil } from 'rxjs';
-import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { Membership } from '@app/core/models/membership';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-room-selection',
-  imports: [CoreModule, LoadingIndicatorComponent],
+  imports: [CoreModule],
   templateUrl: './room-selection.component.html',
 })
 export class RoomSelectionComponent implements OnInit, OnDestroy {
-  private roomService = inject(RoomService);
   private dialogRef =
     inject<MatDialogRef<ContentGroupTemplateSelectionComponent>>(MatDialogRef);
   private data = inject<{
-    memberships: Membership[];
+    rooms: Room[];
   }>(MAT_DIALOG_DATA);
 
   private destroyed$ = new Subject<void>();
   isLoading = true;
-  rooms: RoomSummary[] = [];
-  memberships: Membership[] = [];
+  rooms: Room[] = [];
 
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -33,24 +27,11 @@ export class RoomSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.memberships = this.data.memberships.filter((m) =>
-      m.roles.includes(RoomRole.Owner)
-    );
-    this.memberships = this.memberships.sort(
-      (a, b) =>
-        new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime()
-    );
-    this.roomService
-      .getRoomSummaries(this.memberships.map((m) => m.roomId))
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((rooms) => {
-        this.rooms = rooms;
-        this.isLoading = false;
-      });
+    this.rooms = this.data.rooms;
   }
 
   selectRoom(roomId: string): void {
-    const membership = this.memberships.find((m) => m.roomId === roomId);
-    this.dialogRef.close(membership);
+    const room = this.rooms.find((m) => m.id === roomId);
+    this.dialogRef.close(room);
   }
 }

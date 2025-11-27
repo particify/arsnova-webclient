@@ -361,6 +361,7 @@ export type RoomMembershipEdge = {
 export type RoomQueryInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<RoomRole>;
   shortId?: InputMaybe<Scalars['ID']['input']>;
 };
 

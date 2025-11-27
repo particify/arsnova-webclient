@@ -1,20 +1,15 @@
 <h2 mat-dialog-title>{{ 'dialog.select-room' | transloco }}</h2>
 <mat-dialog-content>
-  @if (isLoading) {
-    <app-loading-indicator></app-loading-indicator>
-  }
-  @if (!isLoading) {
-    <mat-action-list>
-      @for (room of rooms; track room) {
-        <mat-list-item (click)="selectRoom(room.id)">
-          <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="space-between">
-            <span class="ellipsis">{{ room.name }}</span>
-            <span style="opacity: 0.5">{{ '(' + room.shortId + ')' }}</span>
-          </div>
-        </mat-list-item>
-      }
-    </mat-action-list>
-  }
+  <mat-action-list>
+    @for (room of rooms; track room) {
+      <mat-list-item (click)="selectRoom(room.id)">
+        <div fxLayout="row" fxLayoutGap="1em" fxLayoutAlign="space-between">
+          <span class="ellipsis">{{ room.name }}</span>
+          <span style="opacity: 0.5">{{ '(' + room.shortId + ')' }}</span>
+        </div>
+      </mat-list-item>
+    }
+  </mat-action-list>
 </mat-dialog-content>
 <mat-dialog-actions fxLayoutAlign="end">
   <button mat-flat-button matDialogClose>
