@@ -18,6 +18,7 @@ import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
+import { languageResolver } from '@app/core/resolver/language.resolver';
 
 const routes: Routes = [
   {
@@ -124,6 +125,7 @@ const routes: Routes = [
             roomId: roomIdResolver,
             viewRole: roomViewUserRoleResolver,
             userRole: roomUserRoleResolver,
+            language: languageResolver,
           },
           runGuardsAndResolvers: 'always',
           children: [

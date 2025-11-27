@@ -168,7 +168,7 @@
                     [content]="content"
                     [isAnswered]="isAnswered"
                     [isEditMode]="isEditMode"
-                    [language]="room.language"
+                    [language]="language()"
                     [neutralOption]="neutralOption"
                   >
                   </app-scale-content-form>
@@ -251,7 +251,7 @@
           @if (isPreview && content) {
             <app-content-preview
               [content]="content"
-              [language]="room.language"
+              [language]="language()"
               [showTitle]="false"
             ></app-content-preview>
           }

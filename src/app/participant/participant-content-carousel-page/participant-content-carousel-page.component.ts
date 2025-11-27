@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  input,
 } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -121,6 +122,8 @@ export class ParticipantContentCarouselPageComponent
     transform: setDefaultTrue,
   })
   showStepper!: boolean;
+
+  language = input.required<string>();
 
   private destroyed$ = new Subject<void>();
 

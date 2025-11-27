@@ -563,6 +563,18 @@ export type RoomIdByShortIdQuery = {
   } | null;
 };
 
+export type RoomLanguageByShortIdQueryVariables = Exact<{
+  shortId: Scalars['String']['input'];
+}>;
+
+export type RoomLanguageByShortIdQuery = {
+  __typename?: 'Query';
+  roomMembershipByShortId?: {
+    __typename?: 'RoomMembership';
+    room: { __typename?: 'Room'; language?: string | null };
+  } | null;
+};
+
 export type RoomByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1175,6 +1187,29 @@ export class RoomIdByShortIdGql extends Apollo.Query<
   RoomIdByShortIdQueryVariables
 > {
   document = RoomIdByShortIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RoomLanguageByShortIdDocument = gql`
+  query RoomLanguageByShortId($shortId: String!) {
+    roomMembershipByShortId(shortId: $shortId) {
+      room {
+        language
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomLanguageByShortIdGql extends Apollo.Query<
+  RoomLanguageByShortIdQuery,
+  RoomLanguageByShortIdQueryVariables
+> {
+  document = RoomLanguageByShortIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

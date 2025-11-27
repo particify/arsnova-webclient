@@ -7,6 +7,7 @@ import {
   Output,
   SimpleChanges,
   inject,
+  input,
 } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Answer } from '@app/core/models/answer';
@@ -154,6 +155,8 @@ export class ContentParticipantComponent
   @Output() next = new EventEmitter<void>();
   @Output() answerReset = new EventEmitter<string>();
 
+  language = input.required<string>();
+
   private answerSubmitted$ = new Subject<string>();
   answer?: Answer;
   isLoading = true;
@@ -164,7 +167,6 @@ export class ContentParticipantComponent
   isMultiple = false;
   HotkeyAction = HotkeyAction;
   a11yMsg?: string;
-  language?: string;
 
   // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
   choiceContent!: ContentChoice;
@@ -214,7 +216,6 @@ export class ContentParticipantComponent
   }
 
   ngOnInit(): void {
-    this.language = this.room.language;
     if (this.active) {
       this.selectedRoute = this.activeTab || '';
       this.checkForCountdown();

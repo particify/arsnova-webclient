@@ -14,6 +14,7 @@ import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
+import { languageResolver } from '@app/core/resolver/language.resolver';
 
 const routes: Routes = [
   {
@@ -99,6 +100,7 @@ const routes: Routes = [
             room: legacyRoomResolver,
             roomIdResolver,
             viewRole: roomViewUserRoleResolver,
+            language: languageResolver,
           },
           runGuardsAndResolvers: 'always',
           children: [

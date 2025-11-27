@@ -1,12 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  inject,
-  Input,
-  input,
-  OnInit,
-} from '@angular/core';
-import { Room } from '@app/core/models/room';
+import { Directive, ElementRef, inject, input, OnInit } from '@angular/core';
 
 /**
  * This directive automatically sets the lang attribute based on the room's language. Optionally,
@@ -15,13 +7,13 @@ import { Room } from '@app/core/models/room';
 @Directive({ selector: '[appLangContext]', standalone: true })
 export class LanguageContextDirective implements OnInit {
   // Route data input below
-  @Input() room?: Room;
+  language = input<string>();
 
   private elementRef: ElementRef<HTMLElement> = inject(ElementRef);
   public appDirContext = input();
 
   ngOnInit(): void {
-    const lang = this.room?.language;
+    const lang = this.language();
     const el = this.elementRef.nativeElement;
     if (lang) {
       el.setAttribute('lang', lang);
