@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, inject, input, viewChild } from '@angular/core';
 import {
   UntypedFormControl,
   FormGroupDirective,
@@ -8,26 +8,24 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { UserService } from '@app/core/services/http/user.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { EventService } from '@app/core/services/util/event.service';
 import { Router } from '@angular/router';
-import {
-  PasswordEntryComponent,
-  PasswordEntryComponent as PasswordEntryComponent_1,
-} from '@app/core/components/password-entry/password-entry.component';
+import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
 import { FormComponent } from '@app/standalone/form/form.component';
-import { take } from 'rxjs';
+import { first, switchMap } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
+import { HttpHeaders } from '@angular/common/http';
+import { ChallengeService } from '@app/core/services/challenge.service';
+import { ResetUserPasswordGql } from '@gql/generated/graphql';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -51,7 +49,7 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
     FlexModule,
     MatCard,
     FormsModule,
-    PasswordEntryComponent_1,
+    PasswordEntryComponent,
     MatFormField,
     MatLabel,
     MatInput,
@@ -63,61 +61,75 @@ export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   ],
 })
 export class PasswordResetComponent extends FormComponent implements OnInit {
-  private translationService = inject(TranslocoService);
-  private userService = inject(UserService);
-  private notificationService = inject(NotificationService);
-  eventService = inject(EventService);
-  private router = inject(Router);
+  private readonly translationService = inject(TranslocoService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
+  private readonly challengeService = inject(ChallengeService);
+  private readonly resetPassword = inject(ResetUserPasswordGql);
 
-  @ViewChild(PasswordEntryComponent) passwordEntry!: PasswordEntryComponent;
+  passwordEntry = viewChild.required(PasswordEntryComponent);
 
   // Route data input below
-  @Input() email!: string;
+  email = input.required<string>();
 
   keyFormControl = new UntypedFormControl('', [Validators.required]);
   matcher = new PasswordResetErrorStateMatcher();
 
   deviceWidth = innerWidth;
-  isLoading = true;
 
   ngOnInit(): void {
     this.setFormControl(this.keyFormControl);
-    this.isLoading = false;
   }
 
-  setNewPassword(key: string) {
-    const password = this.passwordEntry.getPassword();
-    if (this.email !== '' && key !== '' && password) {
+  setNewPassword(code: string) {
+    const password = this.passwordEntry().getPassword();
+    if (this.email() !== '' && code !== '' && password) {
       this.disableForm();
-      this.userService.setNewPassword(this.email, key, password).subscribe(
-        () => {
-          this.translationService
-            .selectTranslate('password-reset.new-password-successful')
-            .pipe(take(1))
-            .subscribe((message) => {
+      this.challengeService
+        .authenticateByChallenge()
+        .pipe(
+          first(),
+          switchMap((t) => {
+            return this.resetPassword.mutate({
+              variables: {
+                mailAddress: this.email(),
+                password: password,
+                verificationCode: code,
+              },
+              context: {
+                headers: new HttpHeaders({ Authorization: `Bearer ${t}` }),
+              },
+            });
+          })
+        )
+        .subscribe({
+          complete: () => this.enableForm(),
+          next: (r) => {
+            if (r.data?.resetUserPassword) {
+              const msg = this.translationService.translate(
+                'password-reset.new-password-successful'
+              );
               this.notificationService.showAdvanced(
-                message,
+                msg,
                 AdvancedSnackBarTypes.SUCCESS
               );
-            });
-          this.router.navigateByUrl('login', {
-            state: { data: { username: this.email, password: password } },
-          });
-        },
-        () => {
-          this.enableForm();
-        }
-      );
-    } else {
-      this.translationService
-        .selectTranslate('login.inputs-incorrect')
-        .pipe(take(1))
-        .subscribe((message) => {
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.WARNING
-          );
+              this.router.navigateByUrl('login', {
+                state: { data: { username: this.email(), password: password } },
+              });
+            } else {
+              const msg = this.translationService.translate(
+                'password-reset.request-failed'
+              );
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.FAILED
+              );
+            }
+          },
         });
+    } else {
+      const msg = this.translationService.translate('login.inputs-incorrect');
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }
   }
 }

@@ -96,6 +96,8 @@ export type Mutation = {
   grantRoomRole: Scalars['Boolean']['output'];
   grantRoomRoleByInvitation: Scalars['Boolean']['output'];
   joinRoom: RoomMembership;
+  requestUserPasswordReset?: Maybe<Scalars['Boolean']['output']>;
+  resetUserPassword?: Maybe<Scalars['Boolean']['output']>;
   revokeRoomMembership: Scalars['UUID']['output'];
   revokeRoomRole: Scalars['Boolean']['output'];
   updateAnnouncement: Announcement;
@@ -150,6 +152,16 @@ export type MutationGrantRoomRoleByInvitationArgs = {
 
 export type MutationJoinRoomArgs = {
   input: JoinRoomInput;
+};
+
+export type MutationRequestUserPasswordResetArgs = {
+  mailAddress: Scalars['String']['input'];
+};
+
+export type MutationResetUserPasswordArgs = {
+  mailAddress: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  verificationCode: Scalars['String']['input'];
 };
 
 export type MutationRevokeRoomMembershipArgs = {
@@ -982,6 +994,26 @@ export type UpdateUserSettingsMutationVariables = Exact<{
 export type UpdateUserSettingsMutation = {
   __typename?: 'Mutation';
   updateUserUiSettings?: boolean | null;
+};
+
+export type RequestUserPasswordResetMutationVariables = Exact<{
+  mailAddress: Scalars['String']['input'];
+}>;
+
+export type RequestUserPasswordResetMutation = {
+  __typename?: 'Mutation';
+  requestUserPasswordReset?: boolean | null;
+};
+
+export type ResetUserPasswordMutationVariables = Exact<{
+  mailAddress: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  verificationCode: Scalars['String']['input'];
+}>;
+
+export type ResetUserPasswordMutation = {
+  __typename?: 'Mutation';
+  resetUserPassword?: boolean | null;
 };
 
 export const RoomDetailsFragmentFragmentDoc = gql`
@@ -1850,6 +1882,52 @@ export class UpdateUserSettingsGql extends Apollo.Mutation<
   UpdateUserSettingsMutationVariables
 > {
   document = UpdateUserSettingsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RequestUserPasswordResetDocument = gql`
+  mutation RequestUserPasswordReset($mailAddress: String!) {
+    requestUserPasswordReset(mailAddress: $mailAddress)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RequestUserPasswordResetGql extends Apollo.Mutation<
+  RequestUserPasswordResetMutation,
+  RequestUserPasswordResetMutationVariables
+> {
+  document = RequestUserPasswordResetDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ResetUserPasswordDocument = gql`
+  mutation resetUserPassword(
+    $mailAddress: String!
+    $password: String!
+    $verificationCode: String!
+  ) {
+    resetUserPassword(
+      mailAddress: $mailAddress
+      password: $password
+      verificationCode: $verificationCode
+    )
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResetUserPasswordGql extends Apollo.Mutation<
+  ResetUserPasswordMutation,
+  ResetUserPasswordMutationVariables
+> {
+  document = ResetUserPasswordDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
