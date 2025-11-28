@@ -205,7 +205,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
           if (this.data.navigateAfterCreation) {
             this.router.navigate(['edit', roomData.shortId]);
           }
-          this.closeDialog(this.newRoom);
+          this.closeDialog(room);
         },
         error: () => this.enableForm(),
       });

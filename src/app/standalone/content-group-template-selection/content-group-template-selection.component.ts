@@ -72,7 +72,7 @@ export class ContentGroupTemplateSelectionComponent
       .getCurrentAuthentication()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((auth) => {
-        this.creatorId = auth.userId;
+        this.creatorId = auth?.userId;
         if (this.tagIds) {
           this.tagIdsQueryParams = this.tagIds;
         } else {

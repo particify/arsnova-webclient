@@ -136,6 +136,7 @@ const routes: Routes = [
     path: 'templates/:templateId',
     component: ContentGroupTemplatePreviewComponent,
     title: 'templates',
+    canActivate: [AuthenticationGuard],
   },
 
   {
