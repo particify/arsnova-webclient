@@ -5,6 +5,7 @@ query CurrentUser {
     displayId
     displayName
     unverifiedMailAddress
+    language
   }
 }
 
@@ -87,4 +88,8 @@ mutation resetUserPassword(
     password: $password
     verificationCode: $verificationCode
   )
+}
+
+mutation updateUserLanguage($languageCode: String!) {
+  updateUserLanguage(languageCode: $languageCode)
 }

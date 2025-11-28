@@ -459,7 +459,8 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
                 u!.verified,
                 u!.displayId ?? undefined,
                 u!.displayName ?? undefined,
-                u!.unverifiedMailAddress ?? undefined
+                u!.unverifiedMailAddress ?? undefined,
+                u!.language ?? undefined
               );
             }),
             tap((au) =>

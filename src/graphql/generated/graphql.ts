@@ -106,6 +106,7 @@ export type Mutation = {
   updateRoomLanguage: Room;
   updateRoomName: Room;
   updateUserDetails?: Maybe<Scalars['Boolean']['output']>;
+  updateUserLanguage?: Maybe<Scalars['Boolean']['output']>;
   updateUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
   updateUserPassword?: Maybe<Scalars['Boolean']['output']>;
   updateUserUiSettings?: Maybe<Scalars['Boolean']['output']>;
@@ -199,6 +200,10 @@ export type MutationUpdateRoomNameArgs = {
 
 export type MutationUpdateUserDetailsArgs = {
   input: UpdateUserDetailsInput;
+};
+
+export type MutationUpdateUserLanguageArgs = {
+  languageCode: Scalars['String']['input'];
 };
 
 export type MutationUpdateUserMailAddressArgs = {
@@ -419,6 +424,7 @@ export type User = {
   displayId?: Maybe<Scalars['String']['output']>;
   displayName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  language?: Maybe<Scalars['String']['output']>;
   uiSettings?: Maybe<UserUiSettings>;
   unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
   verified: Scalars['Boolean']['output'];
@@ -907,6 +913,7 @@ export type CurrentUserQuery = {
     displayId?: string | null;
     displayName?: string | null;
     unverifiedMailAddress?: string | null;
+    language?: string | null;
   } | null;
 };
 
@@ -1015,6 +1022,15 @@ export type ResetUserPasswordMutationVariables = Exact<{
 export type ResetUserPasswordMutation = {
   __typename?: 'Mutation';
   resetUserPassword?: boolean | null;
+};
+
+export type UpdateUserLanguageMutationVariables = Exact<{
+  languageCode: Scalars['String']['input'];
+}>;
+
+export type UpdateUserLanguageMutation = {
+  __typename?: 'Mutation';
+  updateUserLanguage?: boolean | null;
 };
 
 export const RoomDetailsFragmentFragmentDoc = gql`
@@ -1701,6 +1717,7 @@ export const CurrentUserDocument = gql`
       displayId
       displayName
       unverifiedMailAddress
+      language
     }
   }
 `;
@@ -1929,6 +1946,25 @@ export class ResetUserPasswordGql extends Apollo.Mutation<
   ResetUserPasswordMutationVariables
 > {
   document = ResetUserPasswordDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateUserLanguageDocument = gql`
+  mutation updateUserLanguage($languageCode: String!) {
+    updateUserLanguage(languageCode: $languageCode)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateUserLanguageGql extends Apollo.Mutation<
+  UpdateUserLanguageMutation,
+  UpdateUserLanguageMutationVariables
+> {
+  document = UpdateUserLanguageDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
