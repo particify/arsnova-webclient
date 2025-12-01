@@ -129,7 +129,7 @@ xdescribe('AccessComponent', () => {
     await addButton.click();
     const op2 = controller.expectOne(GrantRoomRoleDocument);
     op2.flushData({
-      grantRoomRole: true,
+      grantRoomRole: { room: { id: '1234' }, user: { id: '2222' } },
     } satisfies GrantRoomRoleMutation);
   });
 
@@ -152,7 +152,7 @@ xdescribe('AccessComponent', () => {
     await inviteButton.click();
     const op2 = controller.expectOne(GrantRoomRoleByInvitationDocument);
     op2.flushData({
-      grantRoomRoleByInvitation: true,
+      grantRoomRoleByInvitation: { room: { id: '1234' }, user: { id: '2222' } },
     } satisfies GrantRoomRoleByInvitationMutation);
   });
 
@@ -175,7 +175,7 @@ xdescribe('AccessComponent', () => {
     await inviteButton.click();
     const op2 = controller.expectOne(GrantRoomRoleByInvitationDocument);
     op2.flushData({
-      grantRoomRoleByInvitation: true,
+      grantRoomRoleByInvitation: { room: { id: '1234' }, user: { id: '2222' } },
     } satisfies GrantRoomRoleByInvitationMutation);
     component.newMemberId = '';
     fixture.detectChanges();
@@ -190,7 +190,7 @@ xdescribe('AccessComponent', () => {
     await inviteButton.click();
     const op4 = controller.expectOne(GrantRoomRoleByInvitationDocument);
     op4.flushData({
-      grantRoomRoleByInvitation: true,
+      grantRoomRoleByInvitation: { room: { id: '1234' }, user: { id: '2222' } },
     } satisfies GrantRoomRoleByInvitationMutation);
   });
 
@@ -213,7 +213,7 @@ xdescribe('AccessComponent', () => {
     await addButton.click();
     const op2 = controller.expectOne(GrantRoomRoleDocument);
     op2.flushData({
-      grantRoomRole: true,
+      grantRoomRole: { room: { id: '1234' }, user: { id: '2222' } },
     } satisfies GrantRoomRoleMutation);
     component.newMemberId = '';
     fixture.detectChanges();
@@ -250,7 +250,7 @@ xdescribe('AccessComponent', () => {
     await addButton.click();
     const op2 = controller.expectOne(GrantRoomRoleDocument);
     op2.flushData({
-      grantRoomRole: true,
+      grantRoomRole: { room: { id: '1234' }, user: { id: '2222' } },
     } satisfies GrantRoomRoleMutation);
   });
 

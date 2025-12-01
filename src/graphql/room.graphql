@@ -190,7 +190,15 @@ query RoomManagingMembersByRoomId($roomId: UUID!) {
 }
 
 mutation GrantRoomRole($roomId: UUID!, $userId: UUID!, $role: RoomRole!) {
-  grantRoomRole(roomId: $roomId, userId: $userId, role: $role)
+  grantRoomRole(roomId: $roomId, userId: $userId, role: $role) {
+    room {
+      id
+    }
+    user {
+      id
+    }
+    role
+  }
 }
 
 mutation GrantRoomRoleByInvitation(
@@ -202,13 +210,32 @@ mutation GrantRoomRoleByInvitation(
     roomId: $roomId
     mailAddress: $mailAddress
     role: $role
-  )
+  ) {
+    room {
+      id
+    }
+    user {
+      id
+    }
+    role
+  }
 }
 
 mutation RevokeRoomRole($roomId: UUID!, $userId: UUID!) {
-  revokeRoomRole(roomId: $roomId, userId: $userId)
+  revokeRoomRole(roomId: $roomId, userId: $userId) {
+    room {
+      id
+    }
+    user {
+      id
+    }
+  }
 }
 
 mutation RevokeRoomMembership($roomId: UUID!) {
-  revokeRoomMembership(roomId: $roomId)
+  revokeRoomMembership(roomId: $roomId) {
+    room {
+      id
+    }
+  }
 }

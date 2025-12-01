@@ -35,11 +35,19 @@ query CurrentUserWithSettings {
 }
 
 mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
-  claimUnverifiedUser(mailAddress: $mailAddress, password: $password)
+  claimUnverifiedUser(mailAddress: $mailAddress, password: $password) {
+    id
+    displayId
+    unverifiedMailAddress
+  }
 }
 
 mutation VerifyUserMailAddress($verificationCode: String!) {
-  verifyUserMailAddress(verificationCode: $verificationCode)
+  verifyUserMailAddress(verificationCode: $verificationCode) {
+    id
+    displayId
+    unverifiedMailAddress
+  }
 }
 
 mutation VerifyUserMailAddressUnauthenticated(
@@ -51,7 +59,11 @@ mutation VerifyUserMailAddressUnauthenticated(
     verificationCode: $verificationCode
     userId: $userId
     password: $password
-  )
+  ) {
+    id
+    displayId
+    unverifiedMailAddress
+  }
 }
 
 mutation DeleteUser {
@@ -71,7 +83,12 @@ mutation UpdateUserSettings(
       showContentResultsDirectly: $showContentResultsDirectly
       rotateWordcloudItems: $rotateWordcloudItems
     }
-  )
+  ) {
+    contentAnswersDirectlyBelowChart
+    contentVisualizationUnitPercent
+    showContentResultsDirectly
+    rotateWordcloudItems
+  }
 }
 
 mutation RequestUserPasswordReset($mailAddress: String!) {
@@ -87,11 +104,16 @@ mutation resetUserPassword(
     mailAddress: $mailAddress
     password: $password
     verificationCode: $verificationCode
-  )
+  ) {
+    id
+  }
 }
 
 mutation updateUserLanguage($languageCode: String!) {
-  updateUserLanguage(languageCode: $languageCode)
+  updateUserLanguage(languageCode: $languageCode) {
+    id
+    language
+  }
 }
 
 mutation ResendVerificationMail {
