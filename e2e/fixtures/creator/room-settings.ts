@@ -20,11 +20,7 @@ export class RoomSettingsPage {
     await this.deleteRoomButton.click();
     await Promise.all([
       this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/api/room/') &&
-          res.ok() &&
-          res.ok() &&
-          res.request().method() === 'DELETE'
+        (res) => !!res.request().postData()?.includes('DeleteRoom') && res.ok()
       ),
       this.confirmDeleteRoomButton.click(),
     ]);

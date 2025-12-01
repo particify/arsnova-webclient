@@ -1,4 +1,3 @@
-import { Room } from '@app/core/models/room';
 import { Locator, Page } from '@playwright/test';
 
 export class HomePage {
@@ -40,12 +39,9 @@ export class HomePage {
     // Workaround for blocking LMS extension
     await this.page.waitForTimeout(500);
     const response$ = this.page.waitForResponse(
-      (res) =>
-        res.url().includes('/api/room/') &&
-        res.ok() &&
-        res.request().method() === 'POST'
+      (res) => !!res.request().postData()?.includes('CreateRoom') && res.ok()
     );
     await this.submitRoomCreationButton.click();
-    return ((await (await response$).json()) as Room).shortId;
+    return (await (await response$).json()).data.createRoom.shortId;
   }
 }

@@ -5,16 +5,14 @@ import { AnswerResultType } from '@app/core/models/answer-result';
 import { MockApi } from '@e2e/api/mock-api';
 import { Header } from '@e2e/fixtures/shared/header';
 
+const TEST_ROOM_ID = '3f9cecb56dbf45ccb6304af700d474b6';
+
 test.describe('participant choice answer option translation', () => {
   let mockApi: MockApi;
   test.beforeEach(async ({ page }) => {
     mockApi = new MockApi(page);
-    mockApi.mockMembershipParticipant();
-    mockApi.mockRoomSummaryParticipant();
-    mockApi.mockRequestMembership();
-    mockApi.mockRoomWithShortId();
-    mockApi.mockRoomSettings();
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My survey',
       ['content1', 'content2', 'content3'],
       GroupType.SURVEY,
@@ -25,9 +23,9 @@ test.describe('participant choice answer option translation', () => {
       0,
       false
     );
-    mockApi.mockFocusEvent();
-    mockApi.mockRoomStats('My survey', 3, GroupType.SURVEY);
-    mockApi.mockGroupStats(0, 0, 0, 0, [
+    mockApi.mockFocusEvent(TEST_ROOM_ID);
+    mockApi.mockRoomStats(TEST_ROOM_ID, 'My survey', 3, GroupType.SURVEY);
+    mockApi.mockGroupStats(TEST_ROOM_ID, 0, 0, 0, 0, [
       {
         contentId: 'content1',
         achievedPoints: 0,
@@ -50,21 +48,20 @@ test.describe('participant choice answer option translation', () => {
         duration: 0,
       },
     ]);
-    mockApi.mockAttributions();
-    mockApi.mockContentsSurvey();
-    mockApi.mockRoomAnswers();
+    mockApi.mockAttributions(TEST_ROOM_ID);
+    mockApi.mockContentsSurvey(TEST_ROOM_ID);
+    mockApi.mockRoomAnswers(TEST_ROOM_ID);
     mockApi.mockAnswers();
-  });
-
-  test.use({
-    locale: 'de',
   });
 
   test('answer likert content with german UI and change to english', async ({
     page,
     baseURL,
   }) => {
+    await page.goto(baseURL + '/p/12345678');
     const header = new Header(page);
+    await header.openMainMenu();
+    await header.changeLanguage('deutsch');
     const participant = new ParticipantContentGroupPage(page, baseURL);
     await participant.goto('12345678', 'My survey');
     await expect(page.getByText('stimme eher zu')).toBeVisible();
@@ -78,7 +75,12 @@ test.describe('participant choice answer option translation', () => {
     page,
     baseURL,
   }) => {
-    mockApi.mockRoomWithShortId('en');
+    mockApi.mockRoomLang('en');
+    await page.goto(baseURL + '/p/12345678');
+    const header = new Header(page);
+    await header.openMainMenu();
+    await header.changeLanguage('deutsch');
+    await page.reload();
     const participant = new ParticipantContentGroupPage(page, baseURL);
     await participant.goto('12345678', 'My survey');
     await expect(page.getByText('somewhat agree')).toBeVisible();
@@ -89,7 +91,7 @@ test.describe('participant choice answer option translation', () => {
     baseURL,
   }) => {
     const header = new Header(page);
-    mockApi.mockRoomWithShortId('de');
+    mockApi.mockRoomLang('de');
     const participant = new ParticipantContentGroupPage(page, baseURL);
     await participant.goto('12345678', 'My survey');
     await header.openMainMenu();
@@ -102,7 +104,7 @@ test.describe('participant choice answer option translation', () => {
     page,
     baseURL,
   }) => {
-    mockApi.mockRoomWithShortId('de');
+    mockApi.mockRoomLang('de');
     const participant = new ParticipantContentGroupPage(page, baseURL);
     await participant.goto('12345678', 'My survey', 3);
     await expect(page.getByText('answer 1')).toBeVisible();

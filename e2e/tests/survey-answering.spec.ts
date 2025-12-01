@@ -4,16 +4,15 @@ import { GroupType, PublishingMode } from '@app/core/models/content-group';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { MockApi } from '@e2e/api/mock-api';
 
+const TEST_ROOM_ID = '3f9cecb56dbf45ccb6304af700d474b6';
+
 test.describe('participant answer survey', () => {
   let mockApi: MockApi;
   test.beforeEach(async ({ page }) => {
     mockApi = new MockApi(page);
-    mockApi.mockMembershipParticipant();
-    mockApi.mockRoomSummaryParticipant();
-    mockApi.mockRequestMembership();
-    mockApi.mockRoomWithShortId();
-    mockApi.mockRoomSettings();
+    mockApi.mockRoomSettings(TEST_ROOM_ID);
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My survey',
       ['content1', 'content2', 'content3'],
       GroupType.SURVEY,
@@ -24,9 +23,9 @@ test.describe('participant answer survey', () => {
       0,
       false
     );
-    mockApi.mockFocusEvent();
-    mockApi.mockRoomStats('My survey', 3, GroupType.SURVEY);
-    mockApi.mockGroupStats(0, 0, 0, 0, [
+    mockApi.mockFocusEvent(TEST_ROOM_ID);
+    mockApi.mockRoomStats(TEST_ROOM_ID, 'My survey', 3, GroupType.SURVEY);
+    mockApi.mockGroupStats(TEST_ROOM_ID, 0, 0, 0, 0, [
       {
         contentId: 'content1',
         achievedPoints: 0,
@@ -49,9 +48,9 @@ test.describe('participant answer survey', () => {
         duration: 0,
       },
     ]);
-    mockApi.mockAttributions();
-    mockApi.mockContentsSurvey();
-    mockApi.mockRoomAnswers();
+    mockApi.mockAttributions(TEST_ROOM_ID);
+    mockApi.mockContentsSurvey(TEST_ROOM_ID);
+    mockApi.mockRoomAnswers(TEST_ROOM_ID);
     mockApi.mockAnswers();
     mockApi.mockContentAnswering();
   });
@@ -90,7 +89,7 @@ test.describe('participant answer survey', () => {
     await expect(page.getByText('My likert content')).toBeVisible();
     await participant.answerContent(['Somewhat agree']);
     await participant.answerTextContent('xyz');
-    mockApi.mockGroupStats(0, 0, 0, 0, [
+    mockApi.mockGroupStats(TEST_ROOM_ID, 0, 0, 0, 0, [
       {
         contentId: 'content1',
         achievedPoints: 0,
