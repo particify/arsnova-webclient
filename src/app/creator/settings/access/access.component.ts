@@ -63,6 +63,7 @@ import {
   RoomRole,
   UserByDisplayIdGql,
 } from '@gql/generated/graphql';
+import { ErrorClassification } from '@gql/helper/handle-operation-error';
 
 export interface Role {
   name: string;
@@ -191,26 +192,29 @@ export class AccessComponent
   getUser() {
     this.userByDisplayId
       .fetch({ variables: { displayId: this.loginId } })
-      .pipe(
-        map((r) => r.data?.userByDisplayId),
-        catchError(() => of(undefined))
-      )
-      .subscribe((u) => {
-        this.currentInputIsChecked = true;
-        if (u) {
-          this.newMemberId = u.id;
-          if (!this.loginIdIsEmail) {
-            this.addModerator();
+      .pipe(map((r) => r.data?.userByDisplayId))
+      .subscribe({
+        next: (u) => {
+          this.currentInputIsChecked = true;
+          if (u) {
+            this.newMemberId = u.id;
+            if (!this.loginIdIsEmail) {
+              this.addModerator();
+            }
           }
-        } else if (!this.loginIdIsEmail) {
-          const msg = this.translationService.translate(
-            'creator.settings.user-not-found'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.FAILED
-          );
-        }
+        },
+        error: (e) => {
+          if (!this.loginIdIsEmail) {
+            this.notificationService.showOnRequestClientError(e, {
+              [ErrorClassification.NotFound]: {
+                message: this.translationService.translate(
+                  'creator.settings.user-not-found'
+                ),
+                type: AdvancedSnackBarTypes.FAILED,
+              },
+            });
+          }
+        },
       });
   }
 
@@ -229,10 +233,9 @@ export class AccessComponent
             role: this.selectedRole,
           },
         })
-        .pipe(catchError(() => of(undefined)))
         .subscribe({
-          complete: () => this.enableForm(),
           next: (r) => {
+            this.enableForm();
             if (!r?.data?.grantRoomRole) {
               return;
             }
@@ -245,6 +248,17 @@ export class AccessComponent
               AdvancedSnackBarTypes.SUCCESS
             );
             this.loginId = '';
+          },
+          error: (e) => {
+            this.enableForm();
+            this.notificationService.showOnRequestClientError(e, {
+              [ErrorClassification.BadRequest]: {
+                message: this.translationService.translate(
+                  'errors.something-went-wrong'
+                ),
+                type: AdvancedSnackBarTypes.FAILED,
+              },
+            });
           },
         });
     } else {

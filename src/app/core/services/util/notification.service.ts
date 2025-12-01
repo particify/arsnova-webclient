@@ -10,6 +10,13 @@ import {
 } from '@app/core/components/snack-bar-advanced/snack-bar-advanced.component';
 import { Router } from '@angular/router';
 import { RoutingService } from './routing.service';
+import {
+  ErrorClassification,
+  ErrorHandlers,
+  FallbackHandler,
+  handleOperationErrors,
+} from '@gql/helper/handle-operation-error';
+import { TranslocoService } from '@jsverse/transloco';
 
 export enum AdvancedSnackBarTypes {
   SUCCESS = 'SUCCESS',
@@ -19,6 +26,22 @@ export enum AdvancedSnackBarTypes {
   INFO = 'INFO',
 }
 
+type Notification = {
+  message: string;
+  type: AdvancedSnackBarTypes;
+};
+
+type Notifications = Partial<
+  Record<ErrorClassification | FallbackHandler, Notification>
+>;
+
+const defaultErrorMessages = {
+  [ErrorClassification.BadRequest]: 'invalid-request',
+  [ErrorClassification.Forbidden]: 'action-not-allowed',
+  [ErrorClassification.InternalError]: 'something-went-wrong',
+  [ErrorClassification.NotFound]: 'not-found',
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -26,6 +49,7 @@ export class NotificationService {
   snackBar = inject(MatSnackBar);
   private router = inject(Router);
   private routingService = inject(RoutingService);
+  private translateService = inject(TranslocoService);
 
   public snackRef: any;
   isPresentation = false;
@@ -80,5 +104,26 @@ export class NotificationService {
       panelClass: this.isPresentation ? 'presentation-snack-bar' : '',
     });
     return this.snackRef;
+  }
+
+  showOnRequestClientError(
+    response: unknown,
+    notifications: Notifications = {}
+  ) {
+    const handlers: ErrorHandlers = {};
+    for (const key of Object.values(ErrorClassification)) {
+      const classification = key as ErrorClassification;
+      const notification = notifications[classification];
+      handlers[classification] = () =>
+        notification
+          ? this.showAdvanced(notification.message, notification.type)
+          : this.showAdvanced(
+              this.translateService.translate(
+                'errors.' + defaultErrorMessages[classification]
+              ),
+              AdvancedSnackBarTypes.FAILED
+            );
+    }
+    handleOperationErrors(response, handlers);
   }
 }
