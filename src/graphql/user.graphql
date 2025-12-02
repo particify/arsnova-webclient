@@ -93,3 +93,7 @@ mutation resetUserPassword(
 mutation updateUserLanguage($languageCode: String!) {
   updateUserLanguage(languageCode: $languageCode)
 }
+
+mutation ResendVerificationMail {
+  resendVerificationMail
+}

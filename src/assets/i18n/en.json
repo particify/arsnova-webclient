@@ -210,6 +210,7 @@
     "key-required": "Please enter the verification code.",
     "didnt-get": "Didn't get a code?",
     "reset-button": "Send again",
+    "send-again-in-seconds": "Send again in {{seconds}}",
     "sent-again": "Verification code sent again",
     "cancel": "Cancel",
     "verification-info": "If you have not yet received a verification code, please check your e-mails again in a few minutes and make sure that it has not been filtered out as spam.",

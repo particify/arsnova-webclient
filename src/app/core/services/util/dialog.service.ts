@@ -123,12 +123,9 @@ export class DialogService {
     });
   }
 
-  openUserActivationDialog(
-    username: string
-  ): MatDialogRef<UserActivationComponent> {
+  openUserActivationDialog(): MatDialogRef<UserActivationComponent> {
     return this.openDialog(UserActivationComponent, {
       width: DIALOG_SIZES.xsmall,
-      data: username,
     });
   }
 

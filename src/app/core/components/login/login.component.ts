@@ -194,14 +194,14 @@ export class LoginComponent
   }
 
   activateUser(): void {
-    const dialogRef = this.dialogService.openUserActivationDialog(
-      this.username
-    );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result && result.success) {
-        this.loginWithUsernamePassword();
-      }
-    });
+    this.dialogService
+      .openUserActivationDialog()
+      .afterClosed()
+      .subscribe((result) => {
+        if (result && result.success) {
+          this.loginWithUsernamePassword();
+        }
+      });
   }
 
   activateValidators() {

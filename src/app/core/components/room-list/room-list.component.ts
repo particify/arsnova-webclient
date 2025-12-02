@@ -4,11 +4,9 @@ import {
   computed,
   ElementRef,
   inject,
-  input,
   OnInit,
   viewChild,
 } from '@angular/core';
-import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { EventService } from '@app/core/services/util/event.service';
 import { fromEvent, of } from 'rxjs';
 import {
@@ -48,6 +46,7 @@ import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
 import { NgClass } from '@angular/common';
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
 
@@ -82,8 +81,8 @@ export class RoomListComponent implements AfterViewInit, OnInit {
   private translateService = inject(TranslocoService);
   private deleteRoom = inject(DeleteRoomGql);
   private revokeMembership = inject(RevokeRoomMembershipGql);
+  private authenticationService = inject(AuthenticationService);
 
-  auth = input.required<AuthenticatedUser>();
   private searchInput =
     viewChild.required<ElementRef<HTMLInputElement>>('search');
 
@@ -122,6 +121,12 @@ export class RoomListComponent implements AfterViewInit, OnInit {
     this.roomsQueryRef.valueChanges.pipe(
       map((r) => r.error),
       catchError(() => of(true))
+    )
+  );
+  readonly userId = toSignal(
+    this.authenticationService.getCurrentAuthentication().pipe(
+      first(),
+      map((u) => u.userId)
     )
   );
   RoomRole = RoomRole;
