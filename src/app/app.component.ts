@@ -43,6 +43,7 @@ import { GlobalHintsService } from './standalone/global-hints/global-hints.servi
 import { GlobalHintType } from './standalone/global-hints/global-hint';
 import { DialogService } from './core/services/util/dialog.service';
 import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
+import { UpdateUserLanguageGql } from '@gql/generated/graphql';
 
 @Component({
   selector: 'app-root',
@@ -76,6 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private uiService = inject(UiService);
   private globalHintsService = inject(GlobalHintsService);
   private dialogService = inject(DialogService);
+  private readonly updateUserLanguage = inject(UpdateUserLanguageGql);
 
   constructor() {
     const themeService = this.themeService;
@@ -83,6 +85,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.themes = this.themeService.getThemes();
     this.langs = this.languageService.getLangs();
   }
+
   @ViewChild('mainDrawer') drawer!: MatDrawer;
 
   title = 'ARSnova';
@@ -148,6 +151,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
       });
     this.currentLang = this.translationService.getActiveLang();
+    this.translationService.langChanges$.subscribe((key) => {
+      this.currentLang = key;
+    });
     this.contentGroupTemplatesActive = this.featureFlagService.isEnabled(
       'CONTENT_GROUP_TEMPLATES'
     );
@@ -218,7 +224,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   changeLanguage(lang: Language) {
     this.languageService.setLang(lang.key);
-    this.currentLang = lang.key;
 
     if (lang.category === LanguageCategory.COMMUNITY) {
       const data: { [key: string]: string } = {
@@ -237,6 +242,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         width: '400px',
         data: data,
       });
+    }
+    if (this.auth) {
+      this.updateUserLanguage
+        .mutate({ variables: { languageCode: lang.key } })
+        .subscribe();
     }
   }
 

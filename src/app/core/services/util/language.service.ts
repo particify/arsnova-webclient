@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { IsoLanguage } from '@app/core/models/iso-language';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
 import dayjs from 'dayjs';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
 
 export const BROWSER_LANG = new InjectionToken<string>('BROWSER_LANG');
 
@@ -22,6 +23,7 @@ export class LanguageService extends AbstractHttpService<void> {
   private globalStorageService = inject(GlobalStorageService);
   private document = inject<Document>(DOCUMENT);
   private browserLang = inject(BROWSER_LANG);
+  private authService = inject(AuthenticationService);
 
   public readonly langEmitter = new EventEmitter<string>();
   private langs: Language[] = [
@@ -62,6 +64,11 @@ export class LanguageService extends AbstractHttpService<void> {
 
   constructor() {
     super('/language');
+    this.authService.getAuthenticatedUserChanges().subscribe((u) => {
+      if (u?.language) {
+        this.setLang(u.language);
+      }
+    });
   }
 
   private getLangWithKey(key: string) {
