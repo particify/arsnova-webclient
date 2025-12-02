@@ -18,12 +18,10 @@ export class WsConnectorService {
   private client: RxStomp;
 
   constructor() {
-    const authService = this.authService;
-
     this.client = new RxStomp();
     effect(async () => {
+      const token = this.authService.accessToken();
       await this.client.deactivate();
-      const token = authService.accessToken();
       if (token) {
         const copiedConf = ARSRxStompConfig;
         if (copiedConf?.connectHeaders) {
