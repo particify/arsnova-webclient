@@ -4,25 +4,24 @@ import { GroupType, PublishingMode } from '@app/core/models/content-group';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { MockApi } from '@e2e/api/mock-api';
 
+const TEST_ROOM_ID = '3f9cecb56dbf45ccb6304af700d474b6';
+
 test.describe('participant answer async quiz', () => {
   let mockApi: MockApi;
   test.beforeEach(async ({ page }) => {
     mockApi = new MockApi(page);
-    mockApi.mockMembershipParticipant();
-    mockApi.mockRoomSummaryParticipant();
-    mockApi.mockRequestMembership();
-    mockApi.mockRoomWithShortId();
-    mockApi.mockRoomSettings();
+    mockApi.mockRoomSettings(TEST_ROOM_ID);
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My quiz',
       ['content1', 'content2'],
       GroupType.QUIZ
     );
-    mockApi.mockFocusEvent();
-    mockApi.mockRoomStats('My quiz', 2, GroupType.QUIZ);
-    mockApi.mockAliasGeneration('Funny fish');
-    mockApi.mockUserAlias();
-    mockApi.mockGroupStats(0, 2, 0, 1000, [
+    mockApi.mockFocusEvent(TEST_ROOM_ID);
+    mockApi.mockRoomStats(TEST_ROOM_ID, 'My quiz', 2, GroupType.QUIZ);
+    mockApi.mockAliasGeneration(TEST_ROOM_ID, 'Funny fish');
+    mockApi.mockUserAlias(TEST_ROOM_ID);
+    mockApi.mockGroupStats(TEST_ROOM_ID, 0, 2, 0, 1000, [
       {
         contentId: 'content1',
         achievedPoints: 0,
@@ -38,13 +37,13 @@ test.describe('participant answer async quiz', () => {
         duration: 0,
       },
     ]);
-    mockApi.mockAttributions();
-    mockApi.mockContentsQuiz();
-    mockApi.mockRoomAnswers();
+    mockApi.mockAttributions(TEST_ROOM_ID);
+    mockApi.mockContentsQuiz(TEST_ROOM_ID);
+    mockApi.mockRoomAnswers(TEST_ROOM_ID);
     mockApi.mockContentAnswering();
-    mockApi.mockCheckResult();
-    mockApi.mockCorrectChoiceIndexes();
-    mockApi.mockGroupLeaderboard(0, 'Funny fish');
+    mockApi.mockCheckResult(TEST_ROOM_ID);
+    mockApi.mockCorrectChoiceIndexes(TEST_ROOM_ID);
+    mockApi.mockGroupLeaderboard(TEST_ROOM_ID, 0, 'Funny fish');
   });
 
   test('answer contents partly correct and show overview', async ({
@@ -58,7 +57,7 @@ test.describe('participant answer async quiz', () => {
     await participant.answerContent(['b']);
     await participant.goToNextContent();
     await participant.answerTextContent('xyz');
-    mockApi.mockGroupStats(1, 2, 500, 1000, [
+    mockApi.mockGroupStats(TEST_ROOM_ID, 1, 2, 500, 1000, [
       {
         contentId: 'content1',
         achievedPoints: 500,
@@ -74,7 +73,7 @@ test.describe('participant answer async quiz', () => {
         duration: 0,
       },
     ]);
-    mockApi.mockGroupLeaderboard(500, 'Funny fish');
+    mockApi.mockGroupLeaderboard(TEST_ROOM_ID, 500, 'Funny fish');
     await participant.getGoToOverviewButton().click();
     await expect(page.getByText('you are in 1st place')).toBeVisible();
     await expect(page.getByText('500')).toBeVisible();
@@ -97,7 +96,7 @@ test.describe('participant answer async quiz', () => {
     await participant.answerContent(['c']);
     await participant.goToNextContent();
     await participant.answerTextContent('xyz');
-    mockApi.mockGroupStats(0, 2, 0, 1000, [
+    mockApi.mockGroupStats(TEST_ROOM_ID, 0, 2, 0, 1000, [
       {
         contentId: 'content1',
         achievedPoints: 0,
@@ -132,7 +131,7 @@ test.describe('participant answer async quiz', () => {
     await participant.answerContent(['b']);
     await participant.goToNextContent();
     await participant.answerTextContent('abc');
-    mockApi.mockGroupStats(2, 2, 1000, 1000, [
+    mockApi.mockGroupStats(TEST_ROOM_ID, 2, 2, 1000, 1000, [
       {
         contentId: 'content1',
         achievedPoints: 500,
@@ -148,7 +147,7 @@ test.describe('participant answer async quiz', () => {
         duration: 0,
       },
     ]);
-    mockApi.mockGroupLeaderboard(1000, 'Funny fish');
+    mockApi.mockGroupLeaderboard(TEST_ROOM_ID, 1000, 'Funny fish');
     await participant.getGoToOverviewButton().click();
     await expect(page.getByText('you are in 1st place')).toBeVisible();
     await expect(page.getByText('1000')).toBeVisible();
@@ -168,6 +167,7 @@ test.describe('participant answer async quiz', () => {
     baseURL,
   }) => {
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My quiz',
       ['content1', 'content2'],
       GroupType.QUIZ,
@@ -183,7 +183,7 @@ test.describe('participant answer async quiz', () => {
     await participant.answerContent(['b']);
     await participant.goToNextContent();
     await participant.answerTextContent('abc');
-    mockApi.mockGroupStats(2, 2, 1000, 1000, [
+    mockApi.mockGroupStats(TEST_ROOM_ID, 2, 2, 1000, 1000, [
       {
         contentId: 'content1',
         achievedPoints: 500,
@@ -217,6 +217,7 @@ test.describe('participant answer async quiz', () => {
     baseURL,
   }) => {
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My quiz',
       ['content1', 'content2'],
       GroupType.QUIZ,
@@ -233,7 +234,7 @@ test.describe('participant answer async quiz', () => {
     await participant.answerContent(['b']);
     await participant.goToNextContent();
     await participant.answerTextContent('abc');
-    mockApi.mockGroupStats(2, 2, 1000, 1000, [
+    mockApi.mockGroupStats(TEST_ROOM_ID, 2, 2, 1000, 1000, [
       {
         contentId: 'content1',
         achievedPoints: 0,
@@ -249,7 +250,7 @@ test.describe('participant answer async quiz', () => {
         duration: 0,
       },
     ]);
-    mockApi.mockGroupLeaderboard(1000, 'Funny fish');
+    mockApi.mockGroupLeaderboard(TEST_ROOM_ID, 1000, 'Funny fish');
     await participant.getGoToOverviewButton().click();
     await expect(page.getByText('you are in 1st place')).toBeHidden();
     await expect(page.getByText('100%')).toBeHidden();
@@ -265,6 +266,7 @@ test.describe('participant answer async quiz', () => {
     baseURL,
   }) => {
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My quiz',
       ['content1', 'content2'],
       GroupType.QUIZ,
@@ -278,7 +280,7 @@ test.describe('participant answer async quiz', () => {
     await participant.answerContent(['b']);
     await participant.goToNextContent();
     await participant.answerTextContent('abc');
-    mockApi.mockGroupStats(2, 2, 1000, 1000, [
+    mockApi.mockGroupStats(TEST_ROOM_ID, 2, 2, 1000, 1000, [
       {
         contentId: 'content1',
         achievedPoints: 0,
@@ -294,7 +296,7 @@ test.describe('participant answer async quiz', () => {
         duration: 0,
       },
     ]);
-    mockApi.mockGroupLeaderboard(1000, 'Funny fish');
+    mockApi.mockGroupLeaderboard(TEST_ROOM_ID, 1000, 'Funny fish');
     await participant.getGoToOverviewButton().click();
     await expect(page.getByText('you are in 1st place')).toBeVisible();
     await expect(page.getByText('thanks for your participation')).toBeHidden();

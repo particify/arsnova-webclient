@@ -50,14 +50,22 @@ export class ContentCreationPage {
     await this.submitContent();
   }
 
-  async fillAnswerOptions(options: string[], correctOptions?: string[]) {
+  async fillAnswerOptions(
+    options: string[],
+    correctOptions?: string[],
+    optionLabel = 'option'
+  ) {
     for (const [index, option] of options.entries()) {
-      const optionInput = this.page.getByPlaceholder('option ' + (index + 1));
+      const optionInput = this.page.getByPlaceholder(
+        optionLabel + ' ' + (index + 1)
+      );
       if (optionInput) {
         await optionInput.fill(option);
       } else {
         await this.page.getByRole('button', { name: 'Add option' }).click();
-        const optionInput = this.page.getByPlaceholder('option' + (index + 1));
+        const optionInput = this.page.getByPlaceholder(
+          optionLabel + (index + 1)
+        );
         if (optionInput) {
           await optionInput.fill(option);
         }
@@ -133,21 +141,21 @@ export class ContentCreationPage {
   async createPrioritizationContent(body: string, answerOptions: string[]) {
     await this.selectFormat('Prioritization');
     await this.contentBodyInput.fill(body);
-    await this.fillAnswerOptions(answerOptions);
+    await this.fillAnswerOptions(answerOptions, undefined, 'item');
     await this.submitContent();
   }
 
   async createShortAnswerContent(body: string, correctOptions: string[]) {
     await this.selectFormat('Short answer');
     await this.contentBodyInput.fill(body);
-    await this.fillAnswerOptions(correctOptions);
+    await this.fillAnswerOptions(correctOptions, undefined, 'answer');
     await this.submitContent();
   }
 
   async createSortContent(body: string, answerOptions: string[]) {
     await this.selectFormat('Sort');
     await this.contentBodyInput.fill(body);
-    await this.fillAnswerOptions(answerOptions);
+    await this.fillAnswerOptions(answerOptions, undefined, 'item');
     await this.submitContent();
   }
 

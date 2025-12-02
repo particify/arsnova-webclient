@@ -20,69 +20,43 @@ import { ContentShortAnswer } from '@app/core/models/content-short-answer';
 import { ContentState } from '@app/core/models/content-state';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
-import { Membership } from '@app/core/models/membership';
-import { Room } from '@app/core/models/room';
 import { RoomStats } from '@app/core/models/room-stats';
 import { TextRoundStatistics } from '@app/core/models/round-statistics';
 import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
 import { TextAnswer } from '@app/core/models/text-answer';
-import { UserRole } from '@app/core/models/user-roles.enum';
 import { Page } from '@playwright/test';
 
 export class MockApi {
   constructor(public readonly page: Page) {}
 
-  async mockMembershipParticipant() {
-    await this.page.route('*/**/_view/membership/by-user/**', async (route) => {
-      const membership = new Membership();
-      membership.roomId = 'roomId';
-      membership.roles = [UserRole.PARTICIPANT];
-      membership.roomShortId = '12345678';
-      await route.fulfill({ status: 200, json: [membership] });
-    });
-  }
-
-  async mockRoomSummaryParticipant() {
+  async mockRoomSettings(roomId: string) {
     await this.page.route(
-      '*/**/_view/room/summary/?ids=roomId',
+      `*/**/room/${roomId}/settings/roomId`,
       async (route) => {
-        const membership = new Membership();
-        membership.roomId = 'roomId';
-        membership.roles = [UserRole.PARTICIPANT];
-        membership.roomShortId = '12345678';
-        await route.fulfill({ status: 200, json: membership });
+        const settings = new CommentSettings(roomId);
+        settings.disabled = true;
+        await route.fulfill({ status: 200, json: settings });
       }
     );
   }
 
-  async mockRequestMembership() {
-    await this.page.route('*/**/room/~12345678/request-membership', (route) => {
-      const room = new Room('ownerId', '12345678', '', 'My room');
-      room.id = 'roomId';
-      route.fulfill({
-        status: 200,
-        json: room,
-      });
-    });
-  }
-
-  async mockRoomWithShortId(lang?: string) {
-    await this.page.route('*/**/room/~12345678', async (route) => {
-      const room = new Room('ownerId', '12345678', '', 'My room');
-      room.id = 'roomId';
-      room.language = lang;
-      await route.fulfill({ status: 200, json: room });
-    });
-  }
-
-  async mockRoomSettings() {
-    await this.page.route('*/**/room/roomId/settings/roomId', async (route) => {
-      const settings = new CommentSettings('roomId');
-      await route.fulfill({ status: 200, json: settings });
+  async mockRoomLang(lang?: string) {
+    await this.page.route('*/**/graphql', async (route) => {
+      const res = await route.fetch();
+      const json = await res.json();
+      const room = json?.data?.roomMembershipByShortId?.room;
+      if (room) {
+        room.language = lang;
+        json.data.roomMembershipByShortId.room = room;
+        await route.fulfill({ json });
+      } else {
+        await route.continue();
+      }
     });
   }
 
   async mockContentGroup(
+    roomId: string,
     name: string,
     contentIds: string[],
     groupType = GroupType.MIXED,
@@ -94,7 +68,7 @@ export class MockApi {
     leaderboardEnabled = true
   ) {
     const group = new ContentGroup(
-      'roomId',
+      roomId,
       name,
       contentIds,
       statisticsPublished,
@@ -107,22 +81,27 @@ export class MockApi {
     );
     group.id = 'groupId';
     await this.page.route(
-      '*/**/room/roomId/contentgroup/groupId',
+      `*/**/room/${roomId}/contentgroup/groupId`,
       async (route) => {
         await route.fulfill({ status: 200, json: group });
       }
     );
   }
 
-  async mockFocusEvent() {
-    await this.page.route('*/**/room/roomId/focus-event', async (route) => {
-      const settings = new CommentSettings('roomId');
+  async mockFocusEvent(roomId: string) {
+    await this.page.route(`*/**/room/${roomId}/focus-event`, async (route) => {
+      const settings = new CommentSettings(roomId);
       await route.fulfill({ status: 200, json: settings });
     });
   }
 
-  async mockRoomStats(name: string, contentCount: number, type: GroupType) {
-    await this.page.route('*/**/room/roomId/stats', async (route) => {
+  async mockRoomStats(
+    roomId: string,
+    name: string,
+    contentCount: number,
+    type: GroupType
+  ) {
+    await this.page.route(`*/**/room/${roomId}/stats`, async (route) => {
       const stats = new RoomStats(
         [
           {
@@ -130,6 +109,7 @@ export class MockApi {
             groupName: name,
             contentCount: contentCount,
             groupType: type,
+            published: true,
           },
         ],
         0,
@@ -141,9 +121,9 @@ export class MockApi {
     });
   }
 
-  async mockAliasGeneration(alias: string) {
+  async mockAliasGeneration(roomId: string, alias: string) {
     await this.page.route(
-      '*/**/room/roomId/user-alias/-/generate',
+      `*/**/room/${roomId}/user-alias/-/generate`,
       async (route) => {
         await route.fulfill({
           status: 200,
@@ -153,8 +133,8 @@ export class MockApi {
     );
   }
 
-  async mockUserAlias() {
-    await this.page.route('*/**/room/roomId/user-alias/', async (route) => {
+  async mockUserAlias(roomId: string) {
+    await this.page.route(`*/**/room/${roomId}/user-alias/`, async (route) => {
       await route.fulfill({
         status: 200,
         json: { id: 'aliasId', seed: 1 },
@@ -163,6 +143,7 @@ export class MockApi {
   }
 
   async mockGroupStats(
+    roomId: string,
     correctAnswerCount: number,
     scorableContentCount: number,
     archievedScore: number,
@@ -176,7 +157,7 @@ export class MockApi {
     stats.maxScore = maxScore;
     stats.answerResults = answerResults;
     await this.page.route(
-      '*/**/room/roomId/contentgroup/groupId/stats/user/**',
+      `*/**/room/${roomId}/contentgroup/groupId/stats/user/**`,
       async (route) => {
         await route.fulfill({
           status: 200,
@@ -187,6 +168,7 @@ export class MockApi {
   }
 
   async mockShortAnswerContentStats(
+    roomId: string,
     contentId: string,
     texts: string[],
     independentCounts: number[],
@@ -195,7 +177,7 @@ export class MockApi {
     round = 1
   ) {
     await this.page.route(
-      `*/**/room/roomId/content/${contentId}/stats`,
+      `*/**/room/${roomId}/content/${contentId}/stats`,
       async (route) => {
         const stats = new AnswerStatistics();
         stats.roundStatistics = [
@@ -216,9 +198,9 @@ export class MockApi {
     );
   }
 
-  async mockAttributions() {
+  async mockAttributions(roomId: string) {
     await this.page.route(
-      '*/**/room/roomId/contentgroup/groupId/attributions',
+      `*/**/room/${roomId}/contentgroup/groupId/attributions`,
       async (route) => {
         await route.fulfill({
           status: 200,
@@ -228,12 +210,12 @@ export class MockApi {
     );
   }
 
-  async mockContentsQuiz() {
+  async mockContentsQuiz(roomId: string) {
     await this.page.route(
-      '*/**/room/roomId/content/?ids=content1,content2',
+      `*/**/room/${roomId}/content/?ids=content1,content2`,
       async (route) => {
         const content1 = new ContentChoice(
-          'roomId',
+          roomId,
           undefined,
           'My choice content',
           [],
@@ -251,7 +233,7 @@ export class MockApi {
         content1.renderedBody = '<p>My choice content</p>';
         content1.state = new ContentState(1, undefined, true);
         const content2 = new ContentShortAnswer(
-          'roomId',
+          roomId,
           undefined,
           'My short answer content',
           [],
@@ -270,16 +252,16 @@ export class MockApi {
     );
   }
 
-  async mockContentsSurvey() {
+  async mockContentsSurvey(roomId: string) {
     await this.page.route(
-      '*/**/room/roomId/content/?ids=content1,content2,content3',
+      `*/**/room/${roomId}/content/?ids=content1,content2,content3`,
       async (route) => {
         const content1 = new ContentScale(LikertScaleTemplate.AGREEMENT, 5);
         content1.id = 'content1';
         content1.renderedBody = '<p>My likert content</p>';
         content1.state = new ContentState(1, undefined, true);
         const content2 = new Content(
-          'roomId',
+          roomId,
           undefined,
           'My open question content',
           [],
@@ -289,7 +271,7 @@ export class MockApi {
         content2.renderedBody = '<p>My open question content</p>';
         content2.state = new ContentState(1, undefined, true);
         const content3 = new ContentChoice(
-          'roomId',
+          roomId,
           undefined,
           'My choice content',
           undefined,
@@ -307,8 +289,8 @@ export class MockApi {
     );
   }
 
-  async mockRoomAnswers() {
-    await this.page.route('*/**/room/roomId/answer/find', async (route) => {
+  async mockRoomAnswers(roomId: string) {
+    await this.page.route(`*/**/room/${roomId}/answer/find`, async (route) => {
       await route.fulfill({
         status: 200,
         json: [],
@@ -364,9 +346,9 @@ export class MockApi {
     });
   }
 
-  async mockCheckResult() {
+  async mockCheckResult(roomId: string) {
     await this.page.route(
-      '*/**/room/roomId/answer/check-result',
+      `*/**/room/${roomId}/answer/check-result`,
       async (route, request) => {
         const postBody = request.postDataJSON();
         const answer = new ChoiceAnswer(
@@ -394,9 +376,9 @@ export class MockApi {
     );
   }
 
-  async mockCorrectChoiceIndexes() {
+  async mockCorrectChoiceIndexes(roomId: string) {
     await this.page.route(
-      '*/**/room/roomId/content/content1/correct-choice-indexes',
+      `*/**/room/${roomId}/content/content1/correct-choice-indexes`,
       async (route) => {
         await route.fulfill({
           status: 200,
@@ -406,9 +388,9 @@ export class MockApi {
     );
   }
 
-  async mockGroupLeaderboard(score: number, alias: string) {
+  async mockGroupLeaderboard(roomId: string, score: number, alias: string) {
     await this.page.route(
-      '*/**/room/roomId/contentgroup/groupId/leaderboard',
+      `*/**/room/${roomId}/contentgroup/groupId/leaderboard`,
       async (route) => {
         const userAlias = { id: 'aliasId', alias: alias, seed: 1 };
         await route.fulfill({

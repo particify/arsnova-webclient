@@ -4,25 +4,24 @@ import { GroupType } from '@app/core/models/content-group';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { MockApi } from '@e2e/api/mock-api';
 
+const TEST_ROOM_ID = '3f9cecb56dbf45ccb6304af700d474b6';
+
 test.describe('participant answer async quiz', () => {
   let mockApi: MockApi;
   test.beforeEach(async ({ page }) => {
     mockApi = new MockApi(page);
-    mockApi.mockMembershipParticipant();
-    mockApi.mockRoomSummaryParticipant();
-    mockApi.mockRequestMembership();
-    mockApi.mockRoomWithShortId();
-    mockApi.mockRoomSettings();
+    mockApi.mockRoomSettings(TEST_ROOM_ID);
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My quiz',
       ['content1', 'content2'],
       GroupType.QUIZ
     );
-    mockApi.mockFocusEvent();
-    mockApi.mockRoomStats('My quiz', 2, GroupType.QUIZ);
-    mockApi.mockAliasGeneration('Funny fish');
-    mockApi.mockUserAlias();
-    mockApi.mockGroupStats(0, 2, 0, 1000, [
+    mockApi.mockFocusEvent(TEST_ROOM_ID);
+    mockApi.mockRoomStats(TEST_ROOM_ID, 'My quiz', 2, GroupType.QUIZ);
+    mockApi.mockAliasGeneration(TEST_ROOM_ID, 'Funny fish');
+    mockApi.mockUserAlias(TEST_ROOM_ID);
+    mockApi.mockGroupStats(TEST_ROOM_ID, 0, 2, 0, 1000, [
       {
         contentId: 'content1',
         achievedPoints: 0,
@@ -38,13 +37,13 @@ test.describe('participant answer async quiz', () => {
         duration: 0,
       },
     ]);
-    mockApi.mockAttributions();
-    mockApi.mockContentsQuiz();
-    mockApi.mockRoomAnswers();
+    mockApi.mockAttributions(TEST_ROOM_ID);
+    mockApi.mockContentsQuiz(TEST_ROOM_ID);
+    mockApi.mockRoomAnswers(TEST_ROOM_ID);
     mockApi.mockContentAnswering();
-    mockApi.mockCheckResult();
-    mockApi.mockCorrectChoiceIndexes();
-    mockApi.mockGroupLeaderboard(0, 'Funny fish');
+    mockApi.mockCheckResult(TEST_ROOM_ID);
+    mockApi.mockCorrectChoiceIndexes(TEST_ROOM_ID);
+    mockApi.mockGroupLeaderboard(TEST_ROOM_ID, 0, 'Funny fish');
   });
 
   test('answer MC content correctly', async ({ page, baseURL }) => {
@@ -77,7 +76,13 @@ test.describe('participant answer async quiz', () => {
   });
 
   test('answer short answer content correctly', async ({ page, baseURL }) => {
-    mockApi.mockShortAnswerContentStats('content2', ['abc'], [1], 1);
+    mockApi.mockShortAnswerContentStats(
+      TEST_ROOM_ID,
+      'content2',
+      ['abc'],
+      [1],
+      1
+    );
     const participant = new ParticipantContentGroupPage(page, baseURL);
     await participant.goto('12345678', 'My quiz', 2);
     await participant.joinQuiz();
@@ -91,7 +96,13 @@ test.describe('participant answer async quiz', () => {
   });
 
   test('answer short answer content wrong', async ({ page, baseURL }) => {
-    mockApi.mockShortAnswerContentStats('content2', ['xyz'], [1], 1);
+    mockApi.mockShortAnswerContentStats(
+      TEST_ROOM_ID,
+      'content2',
+      ['xyz'],
+      [1],
+      1
+    );
     const participant = new ParticipantContentGroupPage(page, baseURL);
     await participant.goto('12345678', 'My quiz', 2);
     await participant.joinQuiz();
@@ -114,6 +125,7 @@ test.describe('participant answer async quiz', () => {
     baseURL,
   }) => {
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My quiz',
       ['content1', 'content2'],
       GroupType.QUIZ,
@@ -133,6 +145,7 @@ test.describe('participant answer async quiz', () => {
     baseURL,
   }) => {
     mockApi.mockContentGroup(
+      TEST_ROOM_ID,
       'My quiz',
       ['content1', 'content2'],
       GroupType.QUIZ,

@@ -134,8 +134,8 @@ test.describe('create room with question series', () => {
       'dashboard'
     );
     await page.goBack();
-    expect(page.getByText('Another question series')).toBeVisible();
-    expect(page.getByText('1 contents')).toBeVisible();
+    await expect(page.getByText('Another question series')).toBeVisible();
+    await expect(page.getByText('1 contents')).toBeVisible();
   });
 
   test('create two question series with moved contents', async ({ page }) => {
@@ -160,8 +160,8 @@ test.describe('create room with question series', () => {
     );
     expect(await contentGroupOverview.getContents()).toHaveLength(2);
     await page.goBack();
-    expect(page.getByText('Another question series')).toBeVisible();
-    expect(page.getByText('1 contents')).toBeVisible();
+    await expect(page.getByText('Another question series')).toBeVisible();
+    await expect(page.getByText('1 contents')).toBeVisible();
   });
 
   test('delete series', async ({ page }) => {
