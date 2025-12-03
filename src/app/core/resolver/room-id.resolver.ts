@@ -13,7 +13,7 @@ export const roomIdResolver: ResolveFn<string> = (
   return inject(RoomIdByShortIdGql)
     .fetch({ variables: { shortId: shortId } })
     .pipe(
-      map((r) => r.data?.roomMembershipByShortId?.room.id),
+      map((r) => r.data?.roomByShortId?.id),
       filter((id) => id !== undefined)
     );
 };

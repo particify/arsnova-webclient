@@ -4,13 +4,13 @@ fragment RoomDetailsFragment on Room {
   name
   description
   descriptionRendered
+  language
+  focusModeEnabled
 }
 
 fragment RoomMembership on RoomMembership {
   room {
-    id
-    shortId
-    name
+    ...RoomDetailsFragment
     stats {
       activeMemberCount
     }
@@ -29,23 +29,19 @@ fragment RoomMember on RoomMember {
 }
 
 query RoomIdByShortId($shortId: String!) {
-  roomMembershipByShortId(shortId: $shortId) {
-    room {
-      id
-    }
+  roomByShortId(shortId: $shortId) {
+    id
   }
 }
 
 query RoomLanguageByShortId($shortId: String!) {
-  roomMembershipByShortId(shortId: $shortId) {
-    room {
-      language
-    }
+  roomByShortId(shortId: $shortId) {
+    language
   }
 }
 
-query RoomById($id: ID!) {
-  roomById(id: $id) {
+query RoomByShortId($shortId: String!) {
+  roomByShortId(shortId: $shortId) {
     ...RoomDetailsFragment
   }
 }
@@ -64,14 +60,6 @@ query Rooms($room: RoomQueryInput!, $cursor: String) {
       hasPreviousPage
       startCursor
     }
-  }
-}
-
-query RoomWithSettingsById($id: ID!) {
-  roomById(id: $id) {
-    ...RoomDetailsFragment
-    language
-    focusModeEnabled
   }
 }
 

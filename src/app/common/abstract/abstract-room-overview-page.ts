@@ -13,7 +13,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { RoomByIdGql } from '@gql/generated/graphql';
+import { RoomByShortIdGql } from '@gql/generated/graphql';
 import {
   takeUntilDestroyed,
   toObservable,
@@ -30,26 +30,28 @@ export class AbstractRoomOverviewPageComponent {
   protected readonly roomStatsService = inject(RoomStatsService);
   protected readonly contentGroupService = inject(ContentGroupService);
   protected readonly eventService = inject(EventService);
-  protected readonly roomByIdGql = inject(RoomByIdGql);
+  protected readonly roomByShortIdGql = inject(RoomByShortIdGql);
 
   // Route data input below
   readonly viewRole = input.required<UserRole>();
   readonly roomId = input.required<string>();
+  readonly shortId = input.required<string>();
   // The old room structure is still used by child components.
   // Remove, once they have been updated to directly use GraphQL.
   // eslint-disable-next-line @angular-eslint/no-input-rename
   readonly legacyRoom = input.required<Room>({ alias: 'room' });
 
   private readonly roomResult = toSignal(
-    toObservable(this.roomId).pipe(
-      switchMap((id) => this.roomByIdGql.fetch({ variables: { id } }))
+    toObservable(this.shortId).pipe(
+      switchMap((shortId) =>
+        this.roomByShortIdGql.fetch({ variables: { shortId } })
+      )
     )
   );
   readonly isLoading = computed(
-    () => !this.roomResult()?.error && !this.roomResult()?.data?.roomById
+    () => !this.roomResult()?.error && !this.roomResult()?.data?.roomByShortId
   );
-  readonly room = computed(() => this.roomResult()?.data?.roomById);
-  readonly shortId = computed(() => this.room()?.shortId);
+  readonly room = computed(() => this.roomResult()?.data?.roomByShortId);
   readonly name = computed(() => this.room()?.name);
   readonly description = computed(() => this.room()?.description ?? '');
   readonly descriptionRendered = computed(

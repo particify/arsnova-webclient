@@ -1,8 +1,5 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
-import { RoomService } from '@app/core/services/http/room.service';
-import { Room } from '@app/core/models/room';
+import { Component, OnInit, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { EventService } from '@app/core/services/util/event.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
   GlobalStorageService,
@@ -28,7 +25,6 @@ import { CommentSettingsComponent } from '@app/creator/settings/comment-settings
 import { AccessComponent } from '@app/creator/settings/access/access.component';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { AnnouncementSettingsComponent } from '@app/creator/settings/announcement-settings/announcement-settings.component';
-import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 
 export interface Settings {
   name: string;
@@ -56,22 +52,19 @@ export interface Settings {
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
-    ExtensionPointComponent,
   ],
 })
 export class SettingsPageComponent implements OnInit {
-  protected roomService = inject(RoomService);
-  protected eventService = inject(EventService);
-  protected translateService = inject(TranslocoService);
-  private globalStorageService = inject(GlobalStorageService);
-  private router = inject(Router);
-  private location = inject(Location);
+  private readonly translateService = inject(TranslocoService);
+  private readonly globalStorageService = inject(GlobalStorageService);
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
   // Route data input below
-  @Input({ required: true }) roomId!: string;
-  @Input({ required: true }) room!: Room;
-  @Input({ required: true }) userRole!: UserRole;
-  @Input() settingsName?: string;
+  roomId = input.required<string>();
+  userRole = input.required<UserRole>();
+  settingsName = input<string>();
+  shortId = input.required<string>();
   settings: Settings[];
   isLoading = true;
   currentRoute?: string;
@@ -108,14 +101,14 @@ export class SettingsPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentRoute = this.settingsName || this.settings[0].name;
+    this.currentRoute = this.settingsName() || this.settings[0].name;
   }
 
   updateUrl(settingsName: string) {
     this.currentRoute = settingsName;
     const urlTree = this.router.createUrlTree([
       'edit',
-      this.room.shortId,
+      this.shortId(),
       'settings',
       this.currentRoute,
     ]);
@@ -123,6 +116,6 @@ export class SettingsPageComponent implements OnInit {
   }
 
   isOwner(): boolean {
-    return this.userRole === UserRole.OWNER;
+    return this.userRole() === UserRole.OWNER;
   }
 }
