@@ -258,7 +258,8 @@
     "http-too-many-requests": "Zu viele Anfragen aus deinem Netzwerk.",
     "establishing-connection": "Verbindung wird aufgebaut …",
     "invalid-request": "Deine Anfrage ist ungültig.",
-    "action-not-allowed": "Aktion nicht erlaubt."
+    "action-not-allowed": "Aktion nicht erlaubt.",
+    "not-found": "Nicht gefunden"
   },
   "title": {
     "register": "Registrieren",

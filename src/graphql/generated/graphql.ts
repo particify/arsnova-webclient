@@ -85,34 +85,34 @@ export type JoinRoomInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  claimUnverifiedUser?: Maybe<Scalars['Boolean']['output']>;
+  claimUnverifiedUser?: Maybe<User>;
   createAnnouncement: Announcement;
   createRoom: Room;
   deleteAnnouncement: Scalars['ID']['output'];
   deleteRoom: Scalars['UUID']['output'];
-  deleteUser?: Maybe<Scalars['Boolean']['output']>;
+  deleteUser?: Maybe<Scalars['UUID']['output']>;
   duplicateDemoRoom: Room;
   duplicateRoom: Room;
-  grantRoomRole: Scalars['Boolean']['output'];
-  grantRoomRoleByInvitation: Scalars['Boolean']['output'];
+  grantRoomRole: RoomMember;
+  grantRoomRoleByInvitation: RoomMember;
   joinRoom: RoomMembership;
   requestUserPasswordReset?: Maybe<Scalars['Boolean']['output']>;
   resendVerificationMail?: Maybe<Scalars['Boolean']['output']>;
-  resetUserPassword?: Maybe<Scalars['Boolean']['output']>;
-  revokeRoomMembership: Scalars['UUID']['output'];
-  revokeRoomRole: Scalars['Boolean']['output'];
+  resetUserPassword?: Maybe<User>;
+  revokeRoomMembership: RoomMembership;
+  revokeRoomRole: RoomMember;
   updateAnnouncement: Announcement;
   updateRoomDescription: Room;
   updateRoomFocusMode: Room;
   updateRoomLanguage: Room;
   updateRoomName: Room;
-  updateUserDetails?: Maybe<Scalars['Boolean']['output']>;
-  updateUserLanguage?: Maybe<Scalars['Boolean']['output']>;
-  updateUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
-  updateUserPassword?: Maybe<Scalars['Boolean']['output']>;
-  updateUserUiSettings?: Maybe<Scalars['Boolean']['output']>;
-  verifyUserMailAddress?: Maybe<Scalars['Boolean']['output']>;
-  verifyUserMailAddressUnauthenticated?: Maybe<Scalars['Boolean']['output']>;
+  updateUserDetails?: Maybe<User>;
+  updateUserLanguage?: Maybe<User>;
+  updateUserMailAddress?: Maybe<User>;
+  updateUserPassword?: Maybe<User>;
+  updateUserUiSettings?: Maybe<UserUiSettings>;
+  verifyUserMailAddress?: Maybe<User>;
+  verifyUserMailAddressUnauthenticated?: Maybe<User>;
 };
 
 export type MutationClaimUnverifiedUserArgs = {
@@ -353,6 +353,7 @@ export type RoomEdge = {
 export type RoomMember = {
   __typename?: 'RoomMember';
   role?: Maybe<RoomRole>;
+  room: Room;
   user: User;
 };
 
@@ -870,7 +871,12 @@ export type GrantRoomRoleMutationVariables = Exact<{
 
 export type GrantRoomRoleMutation = {
   __typename?: 'Mutation';
-  grantRoomRole: boolean;
+  grantRoomRole: {
+    __typename?: 'RoomMember';
+    role?: RoomRole | null;
+    room: { __typename?: 'Room'; id: string };
+    user: { __typename?: 'User'; id: string };
+  };
 };
 
 export type GrantRoomRoleByInvitationMutationVariables = Exact<{
@@ -881,7 +887,12 @@ export type GrantRoomRoleByInvitationMutationVariables = Exact<{
 
 export type GrantRoomRoleByInvitationMutation = {
   __typename?: 'Mutation';
-  grantRoomRoleByInvitation: boolean;
+  grantRoomRoleByInvitation: {
+    __typename?: 'RoomMember';
+    role?: RoomRole | null;
+    room: { __typename?: 'Room'; id: string };
+    user: { __typename?: 'User'; id: string };
+  };
 };
 
 export type RevokeRoomRoleMutationVariables = Exact<{
@@ -891,7 +902,11 @@ export type RevokeRoomRoleMutationVariables = Exact<{
 
 export type RevokeRoomRoleMutation = {
   __typename?: 'Mutation';
-  revokeRoomRole: boolean;
+  revokeRoomRole: {
+    __typename?: 'RoomMember';
+    room: { __typename?: 'Room'; id: string };
+    user: { __typename?: 'User'; id: string };
+  };
 };
 
 export type RevokeRoomMembershipMutationVariables = Exact<{
@@ -900,7 +915,10 @@ export type RevokeRoomMembershipMutationVariables = Exact<{
 
 export type RevokeRoomMembershipMutation = {
   __typename?: 'Mutation';
-  revokeRoomMembership: string;
+  revokeRoomMembership: {
+    __typename?: 'RoomMembership';
+    room: { __typename?: 'Room'; id: string };
+  };
 };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
@@ -963,7 +981,12 @@ export type ClaimUnverifiedUserMutationVariables = Exact<{
 
 export type ClaimUnverifiedUserMutation = {
   __typename?: 'Mutation';
-  claimUnverifiedUser?: boolean | null;
+  claimUnverifiedUser?: {
+    __typename?: 'User';
+    id: string;
+    displayId?: string | null;
+    unverifiedMailAddress?: string | null;
+  } | null;
 };
 
 export type VerifyUserMailAddressMutationVariables = Exact<{
@@ -972,7 +995,12 @@ export type VerifyUserMailAddressMutationVariables = Exact<{
 
 export type VerifyUserMailAddressMutation = {
   __typename?: 'Mutation';
-  verifyUserMailAddress?: boolean | null;
+  verifyUserMailAddress?: {
+    __typename?: 'User';
+    id: string;
+    displayId?: string | null;
+    unverifiedMailAddress?: string | null;
+  } | null;
 };
 
 export type VerifyUserMailAddressUnauthenticatedMutationVariables = Exact<{
@@ -983,14 +1011,19 @@ export type VerifyUserMailAddressUnauthenticatedMutationVariables = Exact<{
 
 export type VerifyUserMailAddressUnauthenticatedMutation = {
   __typename?: 'Mutation';
-  verifyUserMailAddressUnauthenticated?: boolean | null;
+  verifyUserMailAddressUnauthenticated?: {
+    __typename?: 'User';
+    id: string;
+    displayId?: string | null;
+    unverifiedMailAddress?: string | null;
+  } | null;
 };
 
 export type DeleteUserMutationVariables = Exact<{ [key: string]: never }>;
 
 export type DeleteUserMutation = {
   __typename?: 'Mutation';
-  deleteUser?: boolean | null;
+  deleteUser?: string | null;
 };
 
 export type UpdateUserSettingsMutationVariables = Exact<{
@@ -1002,7 +1035,13 @@ export type UpdateUserSettingsMutationVariables = Exact<{
 
 export type UpdateUserSettingsMutation = {
   __typename?: 'Mutation';
-  updateUserUiSettings?: boolean | null;
+  updateUserUiSettings?: {
+    __typename?: 'UserUiSettings';
+    contentAnswersDirectlyBelowChart?: boolean | null;
+    contentVisualizationUnitPercent?: boolean | null;
+    showContentResultsDirectly?: boolean | null;
+    rotateWordcloudItems?: boolean | null;
+  } | null;
 };
 
 export type RequestUserPasswordResetMutationVariables = Exact<{
@@ -1022,7 +1061,7 @@ export type ResetUserPasswordMutationVariables = Exact<{
 
 export type ResetUserPasswordMutation = {
   __typename?: 'Mutation';
-  resetUserPassword?: boolean | null;
+  resetUserPassword?: { __typename?: 'User'; id: string } | null;
 };
 
 export type UpdateUserLanguageMutationVariables = Exact<{
@@ -1031,7 +1070,11 @@ export type UpdateUserLanguageMutationVariables = Exact<{
 
 export type UpdateUserLanguageMutation = {
   __typename?: 'Mutation';
-  updateUserLanguage?: boolean | null;
+  updateUserLanguage?: {
+    __typename?: 'User';
+    id: string;
+    language?: string | null;
+  } | null;
 };
 
 export type ResendVerificationMailMutationVariables = Exact<{
@@ -1637,7 +1680,15 @@ export class RoomManagingMembersByRoomIdGql extends Apollo.Query<
 }
 export const GrantRoomRoleDocument = gql`
   mutation GrantRoomRole($roomId: UUID!, $userId: UUID!, $role: RoomRole!) {
-    grantRoomRole(roomId: $roomId, userId: $userId, role: $role)
+    grantRoomRole(roomId: $roomId, userId: $userId, role: $role) {
+      room {
+        id
+      }
+      user {
+        id
+      }
+      role
+    }
   }
 `;
 
@@ -1664,7 +1715,15 @@ export const GrantRoomRoleByInvitationDocument = gql`
       roomId: $roomId
       mailAddress: $mailAddress
       role: $role
-    )
+    ) {
+      room {
+        id
+      }
+      user {
+        id
+      }
+      role
+    }
   }
 `;
 
@@ -1683,7 +1742,14 @@ export class GrantRoomRoleByInvitationGql extends Apollo.Mutation<
 }
 export const RevokeRoomRoleDocument = gql`
   mutation RevokeRoomRole($roomId: UUID!, $userId: UUID!) {
-    revokeRoomRole(roomId: $roomId, userId: $userId)
+    revokeRoomRole(roomId: $roomId, userId: $userId) {
+      room {
+        id
+      }
+      user {
+        id
+      }
+    }
   }
 `;
 
@@ -1702,7 +1768,11 @@ export class RevokeRoomRoleGql extends Apollo.Mutation<
 }
 export const RevokeRoomMembershipDocument = gql`
   mutation RevokeRoomMembership($roomId: UUID!) {
-    revokeRoomMembership(roomId: $roomId)
+    revokeRoomMembership(roomId: $roomId) {
+      room {
+        id
+      }
+    }
   }
 `;
 
@@ -1802,7 +1872,11 @@ export class CurrentUserWithSettingsGql extends Apollo.Query<
 }
 export const ClaimUnverifiedUserDocument = gql`
   mutation ClaimUnverifiedUser($mailAddress: String!, $password: String!) {
-    claimUnverifiedUser(mailAddress: $mailAddress, password: $password)
+    claimUnverifiedUser(mailAddress: $mailAddress, password: $password) {
+      id
+      displayId
+      unverifiedMailAddress
+    }
   }
 `;
 
@@ -1821,7 +1895,11 @@ export class ClaimUnverifiedUserGql extends Apollo.Mutation<
 }
 export const VerifyUserMailAddressDocument = gql`
   mutation VerifyUserMailAddress($verificationCode: String!) {
-    verifyUserMailAddress(verificationCode: $verificationCode)
+    verifyUserMailAddress(verificationCode: $verificationCode) {
+      id
+      displayId
+      unverifiedMailAddress
+    }
   }
 `;
 
@@ -1848,7 +1926,11 @@ export const VerifyUserMailAddressUnauthenticatedDocument = gql`
       verificationCode: $verificationCode
       userId: $userId
       password: $password
-    )
+    ) {
+      id
+      displayId
+      unverifiedMailAddress
+    }
   }
 `;
 
@@ -1898,7 +1980,12 @@ export const UpdateUserSettingsDocument = gql`
         showContentResultsDirectly: $showContentResultsDirectly
         rotateWordcloudItems: $rotateWordcloudItems
       }
-    )
+    ) {
+      contentAnswersDirectlyBelowChart
+      contentVisualizationUnitPercent
+      showContentResultsDirectly
+      rotateWordcloudItems
+    }
   }
 `;
 
@@ -1944,7 +2031,9 @@ export const ResetUserPasswordDocument = gql`
       mailAddress: $mailAddress
       password: $password
       verificationCode: $verificationCode
-    )
+    ) {
+      id
+    }
   }
 `;
 
@@ -1963,7 +2052,10 @@ export class ResetUserPasswordGql extends Apollo.Mutation<
 }
 export const UpdateUserLanguageDocument = gql`
   mutation updateUserLanguage($languageCode: String!) {
-    updateUserLanguage(languageCode: $languageCode)
+    updateUserLanguage(languageCode: $languageCode) {
+      id
+      language
+    }
   }
 `;
 

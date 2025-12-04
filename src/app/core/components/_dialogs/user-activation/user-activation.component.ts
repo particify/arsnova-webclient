@@ -27,6 +27,7 @@ import {
   VerifyUserMailAddressGql,
 } from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { ErrorClassification } from '@gql/helper/handle-operation-error';
 
 @Component({
   selector: 'app-user-activation',
@@ -94,32 +95,33 @@ export class UserActivationComponent extends FormComponent implements OnInit {
               });
             } else {
               this.enableForm();
-              this.notificationService.showAdvanced(
-                this.translationService.translate(
-                  'user-activation.key-incorrect'
-                ),
-                AdvancedSnackBarTypes.WARNING
-              );
             }
           },
-          error: () => {
+          error: (e) => {
             this.enableForm();
-            this.notificationService.showAdvanced(
-              this.translationService.translate('errors.something-went-wrong'),
-              AdvancedSnackBarTypes.FAILED
-            );
+            this.notificationService.showOnRequestClientError(e, {
+              [ErrorClassification.BadRequest]: {
+                message: this.translationService.translate(
+                  'user-activation.key-incorrect'
+                ),
+                type: AdvancedSnackBarTypes.WARNING,
+              },
+            });
           },
         });
     }
   }
 
   resendVerificationMail(): void {
-    this.resendMail.mutate().subscribe(() => {
-      this.startResendCooldown();
-      this.notificationService.showAdvanced(
-        this.translationService.translate('user-activation.sent-again'),
-        AdvancedSnackBarTypes.SUCCESS
-      );
+    this.resendMail.mutate().subscribe({
+      next: () => {
+        this.startResendCooldown();
+        this.notificationService.showAdvanced(
+          this.translationService.translate('user-activation.sent-again'),
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      },
+      error: (e) => this.notificationService.showOnRequestClientError(e),
     });
   }
 

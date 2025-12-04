@@ -13,6 +13,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { HintComponent } from '@app/standalone/hint/hint.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { VerifyUserMailAddressUnauthenticatedGql } from '@gql/generated/graphql';
+import { ErrorClassification } from '@gql/helper/handle-operation-error';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { first, switchMap } from 'rxjs';
 
@@ -73,14 +74,18 @@ export class VerifyUserComponent extends FormComponent {
               ),
               AdvancedSnackBarTypes.SUCCESS
             );
-          } else {
-            this.notificationService.showAdvanced(
-              this.translationService.translate(
+          }
+        },
+        error: (e) => {
+          this.enableForm();
+          this.notificationService.showOnRequestClientError(e, {
+            [ErrorClassification.BadRequest]: {
+              message: this.translationService.translate(
                 'user-activation.verification-failed'
               ),
-              AdvancedSnackBarTypes.FAILED
-            );
-          }
+              type: AdvancedSnackBarTypes.FAILED,
+            },
+          });
         },
       });
   }
