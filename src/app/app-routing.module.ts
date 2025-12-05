@@ -27,7 +27,6 @@ import { DialogService } from './core/services/util/dialog.service';
 import { FocusModeService } from './creator/_services/focus-mode.service';
 import { TemplateService as CreatorTemplateService } from './creator/_services/template.service';
 import { TemplateService as AdminTemplateService } from '@app/admin/template-management/template.service';
-import { AdminService } from './core/services/http/admin.service';
 import { ContentCarouselService } from './core/services/util/content-carousel.service';
 import { VerifyUserComponent } from '@app/standalone/verify-user/verify-user.component';
 import { VerifyUserInvitationComponent } from '@app/standalone/verify-user-invitation/verify-user-invitation.component';
@@ -175,7 +174,6 @@ const routes: Routes = [
     path: 'admin',
     providers: [
       provideTranslocoScope('admin'),
-      AdminService,
       AdminTemplateService,
       DialogService,
     ],

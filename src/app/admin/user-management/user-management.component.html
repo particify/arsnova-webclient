@@ -1,35 +1,46 @@
 <app-admin-page-header
   headerText="user-management"
-  [buttonText]="addButtonText"
+  [buttonText]="showButton() ? 'add-account' : undefined"
   buttonIcon="add"
   (buttonClicked)="addAccount()"
 >
 </app-admin-page-header>
 
-<app-search-bar
-  label="{{ 'admin.admin-area.search-account-with-id' | transloco }}"
-  [results]="searchResults"
-  (inputChanged)="search($event)"
-  (inputCleared)="clear()"
-  (itemSelected)="getUser($event)"
-></app-search-bar>
+<mat-form-field appearance="outline">
+  <mat-label>{{
+    'admin.admin-area.search-account-with-id' | transloco
+  }}</mat-label>
+  <input matInput appDisableForm [formControl]="formControl" />
+  @if (formControl.value) {
+    <button matSuffix mat-icon-button class="clear-button" (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</mat-form-field>
 
-@if (isLoading) {
+@let _users = users();
+@if (isLoading()) {
   <app-loading-indicator></app-loading-indicator>
-}
-@if (user && !isLoading) {
-  <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
-    <app-entity-properties [entity]="user"></app-entity-properties>
-    <div fxLayoutAlign="space-between">
-      <button mat-stroked-button color="warn" (click)="deleteEntity()">
-        <mat-icon>delete</mat-icon>
-        {{ 'admin.admin-area.delete-user' | transloco }}
-      </button>
-      <app-loading-button
-        name="admin.admin-area.activate-user"
-        (clicked)="activateUser()"
-        [disabled]="user.account.activated || false"
-      ></app-loading-button>
-    </div>
-  </mat-card>
+} @else {
+  <div fxLayout="column" fxLayoutGap="16px">
+    @for (user of _users; track user) {
+      <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
+        <app-entity-properties [entity]="user"></app-entity-properties>
+        <div fxLayoutAlign="space-between">
+          <button mat-stroked-button color="warn" (click)="deleteUser(user.id)">
+            <mat-icon>delete</mat-icon>
+            {{ 'admin.admin-area.delete-user' | transloco }}
+          </button>
+          <app-loading-button
+            name="admin.admin-area.activate-user"
+            (clicked)="activateUser(user.id)"
+            [disabled]="!!user.username || !user.unverifiedMailAddress"
+          ></app-loading-button>
+        </div>
+      </mat-card>
+    }
+  </div>
+  @if (formControl.value && _users.length === 0) {
+    <span>{{ 'admin.admin-area.no-accounts-found' | transloco }}</span>
+  }
 }

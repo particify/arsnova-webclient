@@ -1,0 +1,92 @@
+fragment AdminUserDetails on AdminUser {
+  id
+  username
+  mailAddress
+  unverifiedMailAddress
+  uiSettings {
+    contentAnswersDirectlyBelowChart
+    contentVisualizationUnitPercent
+    showContentResultsDirectly
+    rotateWordcloudItems
+  }
+  language
+  verificationCode
+  verificationErrors
+  verificationExpiresAt
+}
+
+fragment AdminRoomDetails on AdminRoom {
+  id
+  shortId
+  name
+  description
+  descriptionRendered
+  language
+  focusModeEnabled
+  createdBy
+  createdAt
+  updatedBy
+  updatedAt
+  deletedBy
+  deletedAt
+}
+
+query AdminUserById($id: ID!) {
+  adminUserById(id: $id) {
+    ...AdminUserDetails
+  }
+}
+
+query AdminUsers($search: String, $exactSearchMode: Boolean, $cursor: String) {
+  adminUsers(
+    search: $search
+    exactSearchMode: $exactSearchMode
+    first: 10
+    after: $cursor
+  ) {
+    edges {
+      node {
+        ...AdminUserDetails
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+mutation AdminDeleteUserById($id: ID!) {
+  adminDeleteUserById(id: $id)
+}
+
+mutation AdminCreateUser($mailAddress: String!) {
+  adminCreateUser(mailAddress: $mailAddress) {
+    ...AdminUserDetails
+  }
+}
+
+mutation AdminVerifyUserById($id: ID!) {
+  adminVerifyUserById(id: $id) {
+    ...AdminUserDetails
+  }
+}
+
+query AdminRoom($id: ID, $shortId: Int) {
+  adminRoomByIdOrShortId(input: { id: $id, shortId: $shortId }) {
+    ...AdminRoomDetails
+  }
+}
+
+mutation AdminDeleteRoomById($id: ID!) {
+  adminDeleteRoomById(id: $id)
+}
+
+mutation AdminTransferRoom($roomId: ID!, $userId: ID!) {
+  adminTransferRoom(roomId: $roomId, userId: $userId) {
+    ...AdminRoomDetails
+  }
+}

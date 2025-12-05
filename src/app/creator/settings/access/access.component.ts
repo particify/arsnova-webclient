@@ -20,7 +20,6 @@ import {
 } from '@angular/forms';
 import { EventService } from '@app/core/services/util/event.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { UserService } from '@app/core/services/http/user.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
@@ -108,7 +107,6 @@ export class AccessComponent
   private dialogService = inject(DialogService);
   notificationService = inject(NotificationService);
   translationService = inject(TranslocoService);
-  protected userService = inject(UserService);
   eventService = inject(EventService);
   private authenticationService = inject(AuthenticationService);
   private membersByRoomIdGql = inject(RoomManagingMembersByRoomIdGql);

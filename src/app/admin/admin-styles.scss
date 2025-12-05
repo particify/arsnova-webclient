@@ -1,4 +1,10 @@
+@use '../../variables' as *;
+
 .mat-mdc-card {
   width: 100%;
   max-width: initial;
+}
+
+.clear-button {
+  margin-right: $spacing;
 }

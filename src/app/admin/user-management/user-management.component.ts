@@ -1,4 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  linkedSignal,
+} from '@angular/core';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -8,18 +15,32 @@ import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { UserSearchComponent } from '@app/admin/user-search/user-search.component';
-import { FormService } from '@app/core/services/util/form.service';
-import { take } from 'rxjs';
+import { catchError, debounceTime, filter, first, map, of } from 'rxjs';
 import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
-import { SearchBarComponent } from '@app/admin/search-bar/search-bar.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
-import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import {
+  AdminCreateUserGql,
+  AdminDeleteUserByIdGql,
+  AdminUserByIdGql,
+  AdminUsersGql,
+  AdminVerifyUserByIdGql,
+} from '@gql/generated/graphql';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { FormService } from '@app/core/services/util/form.service';
+import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AdminUtilService } from '@app/admin/admin-util.service';
 
 @Component({
   selector: 'app-user-management',
@@ -27,54 +48,127 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   styleUrls: ['../admin-styles.scss'],
   imports: [
     AdminPageHeaderComponent,
-    SearchBarComponent,
     LoadingIndicatorComponent,
     MatCard,
     FlexModule,
-    EntityPropertiesComponent,
     MatButton,
     MatIcon,
     LoadingButtonComponent,
     TranslocoPipe,
+    EntityPropertiesComponent,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    ReactiveFormsModule,
+    MatInput,
+    MatSuffix,
+    MatIconButton,
   ],
+  providers: [AdminUtilService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserManagementComponent
-  extends UserSearchComponent
-  implements OnInit
-{
-  protected dialogService = inject(DialogService);
-  protected notificationService = inject(NotificationService);
-  protected translateService = inject(TranslocoService);
-  protected apiConfigService = inject(ApiConfigService);
-  protected dialog = inject(MatDialog);
-  private formService = inject(FormService);
+export class UserManagementComponent {
+  private readonly dialogService = inject(DialogService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly apiConfigService = inject(ApiConfigService);
+  private readonly formService = inject(FormService);
+  private readonly dialog = inject(MatDialog);
+  private readonly adminUsers = inject(AdminUsersGql);
+  private readonly adminDeleteUser = inject(AdminDeleteUserByIdGql);
+  private readonly adminCreateUser = inject(AdminCreateUserGql);
+  private readonly adminVerifyUser = inject(AdminVerifyUserByIdGql);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly adminUtilService = inject(AdminUtilService);
+  private readonly adminUserById = inject(AdminUserByIdGql);
 
-  addButtonText?: string;
-  isLoading = false;
+  private readonly usersQueryRef = this.adminUsers.watch({
+    errorPolicy: 'all',
+  });
+  private readonly usersResult = toSignal(
+    this.usersQueryRef.valueChanges.pipe(
+      filter((r) => r.dataState === 'complete'),
+      map((r) => r.data.adminUsers),
+      catchError(() => of())
+    )
+  );
 
-  ngOnInit(): void {
-    this.apiConfigService.getApiConfig$().subscribe((config) => {
-      if (config.authenticationProviders.map((p) => p.id).includes('user-db')) {
-        this.addButtonText = 'add-account';
-      }
-    });
+  readonly isLoading = computed(
+    toSignal(
+      this.usersQueryRef.valueChanges.pipe(map((r) => r?.loading ?? false))
+    )
+  );
+  readonly usersFromSearch = computed(
+    () =>
+      this.usersResult()
+        ?.edges?.filter((e) => !!e)
+        .map((e) => e.node) ?? []
+  );
+  readonly users = linkedSignal(this.usersFromSearch);
+  readonly showButton = computed(
+    toSignal(
+      this.apiConfigService.getApiConfig$().pipe(
+        first(),
+        map(
+          (c) =>
+            !!c.authenticationProviders.map((p) => p.id).includes('user-db')
+        )
+      )
+    )
+  );
+  readonly formControl = new FormControl('');
+
+  constructor() {
+    this.formControl.valueChanges
+      .pipe(debounceTime(250), takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.search(value?.trim() ?? undefined);
+      });
   }
 
-  getUser(searchResult: string) {
-    this.isLoading = true;
-    const index = this.searchResults.indexOf(searchResult);
-    const id = this.users[index].id.replace(' ', '');
-    this.adminService.getUser(id).subscribe((user) => {
-      this.user = user;
-      this.isLoading = false;
-    });
-  }
-
-  deleteEntity() {
-    if (!this.user) {
-      return;
+  private search(search?: string) {
+    if (search && this.adminUtilService.isUuid(search)) {
+      this.usersQueryRef.options.variables.search = undefined;
+      this.adminUserById
+        .fetch({ variables: { id: search } })
+        .pipe(
+          first(),
+          map((r) => r.data?.adminUserById),
+          filter((r) => !!r)
+        )
+        .subscribe({
+          next: (u) => {
+            this.users.set([u]);
+          },
+          error: () => this.users.set([]),
+        });
+    } else if (search !== this.usersQueryRef.options.variables.search) {
+      this.users.update(() => this.usersFromSearch());
+      this.usersQueryRef.options.variables.search = search;
+      this.usersQueryRef.refetch();
     }
-    const confirmAction = this.userService.delete(this.user.id);
+  }
+
+  clear() {
+    this.formControl.setValue('');
+  }
+
+  deleteUser(id: string) {
+    const confirmAction = this.adminDeleteUser.mutate({
+      variables: { id },
+      update: (cache, result) => {
+        if (result.data?.adminDeleteUserById) {
+          const cacheId = cache.identify({
+            __typename: 'AdminUser',
+            id: id,
+          });
+          if (cacheId) {
+            cache.evict({ id: cacheId });
+            cache.gc();
+          }
+        }
+      },
+    });
     const dialogRef = this.dialogService.openDeleteDialog(
       'account-as-admin',
       'admin.dialog.really-delete-account-admin',
@@ -91,27 +185,18 @@ export class UserManagementComponent
           msg,
           AdvancedSnackBarTypes.WARNING
         );
-        this.clear();
       }
     });
   }
 
-  activateUser() {
-    if (!this.user) {
-      return;
-    }
+  activateUser(id: string) {
     this.formService.disableForm();
-    this.adminService.activateUser(this.user.id).subscribe(() => {
+    this.adminVerifyUser.mutate({ variables: { id } }).subscribe(() => {
       this.formService.enableForm();
-      this.translateService
-        .selectTranslate('admin.admin-area.user-activated')
-        .pipe(take(1))
-        .subscribe((message) =>
-          this.notificationService.showAdvanced(
-            message,
-            AdvancedSnackBarTypes.SUCCESS
-          )
-        );
+      const msg = this.translateService.translate(
+        'admin.admin-area.user-activated'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 
@@ -122,26 +207,31 @@ export class UserManagementComponent
         primaryAction: 'add-account',
       },
     });
-    dialogRef.componentInstance.clicked$.subscribe((loginId) => {
-      if (!loginId) {
+    dialogRef.componentInstance.clicked$.subscribe((mailAddress) => {
+      if (!mailAddress) {
         return;
       }
-      this.adminService.addAccount(loginId).subscribe(
-        () => {
-          this.formService.enableForm();
-          dialogRef.close();
-          this.translateService
-            .selectTranslate('admin.admin-area.account-added')
-            .pipe(take(1))
-            .subscribe((message) =>
-              this.notificationService.showAdvanced(
-                message,
-                AdvancedSnackBarTypes.SUCCESS
-              )
+      this.adminCreateUser
+        .mutate({
+          variables: { mailAddress },
+        })
+        .subscribe({
+          next: () => {
+            this.usersQueryRef.refetch();
+            this.formService.enableForm();
+            dialogRef.close();
+            const msg = this.translateService.translate(
+              'admin.admin-area.account-added'
             );
-        },
-        () => this.formService.enableForm()
-      );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          },
+          error: () => {
+            this.formService.enableForm();
+          },
+        });
     });
   }
 }

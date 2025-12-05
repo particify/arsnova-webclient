@@ -26,7 +26,6 @@ import {
   BROWSER_LANG,
   LanguageService,
 } from '@app/core/services/util/language.service';
-import { UserService } from '@app/core/services/http/user.service';
 import { VoteService } from '@app/core/services/http/vote.service';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
@@ -157,7 +156,6 @@ export const AppConfig: ApplicationConfig = {
     ContentService,
     ContentAnswerService,
     LanguageService,
-    UserService,
     VoteService,
     CommentSettingsService,
     ContentGroupService,

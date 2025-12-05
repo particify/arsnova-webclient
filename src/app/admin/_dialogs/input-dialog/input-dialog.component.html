@@ -1,23 +1,45 @@
 <form>
   <div mat-dialog-content>
     @if (useUserSearch) {
-      <app-search-bar
-        label="{{ 'admin.admin-area.' + inputName | transloco }}"
-        [results]="searchResults"
-        [showSuccessIndicator]="!!user"
-        (inputChanged)="search($event)"
-        (inputCleared)="clear()"
-        (itemSelected)="selectUser($event)"
-      ></app-search-bar>
-    } @else {
       <mat-form-field appearance="outline">
         <mat-label>{{ 'admin.admin-area.' + inputName | transloco }}</mat-label>
         <input
           matInput
-          [(ngModel)]="input"
+          appDisableForm
           [formControl]="formControl"
-          autocomplete="off"
+          [matAutocomplete]="auto"
+          #searchInput
         />
+        <mat-icon
+          [ngClass]="!!user ? 'check-icon' : 'search-icon'"
+          matIconPrefix
+          >{{ !!user ? 'check' : 'search' }}</mat-icon
+        >
+        @if (searchInput.value) {
+          <button
+            matSuffix
+            mat-icon-button
+            class="clear-button"
+            (click)="clear()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <mat-autocomplete #auto="matAutocomplete" panelWidth="350px">
+          @for (user of users(); track user) {
+            <mat-option
+              [value]="user.username"
+              (onSelectionChange)="selectUser(user)"
+            >
+              {{ user.username }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+    } @else {
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'admin.admin-area.' + inputName | transloco }}</mat-label>
+        <input matInput [formControl]="formControl" autocomplete="off" />
       </mat-form-field>
     }
   </div>
