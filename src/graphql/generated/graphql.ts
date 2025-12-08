@@ -336,6 +336,7 @@ export type Room = {
   language?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   shortId: Scalars['ID']['output'];
+  stats?: Maybe<RoomStats>;
 };
 
 export type RoomConnection = {
@@ -362,7 +363,6 @@ export type RoomMembership = {
   lastActivityAt: Scalars['DateTime']['output'];
   role: RoomRole;
   room: Room;
-  stats?: Maybe<RoomStats>;
 };
 
 export type RoomMembershipConnection = {
@@ -398,9 +398,7 @@ export enum RoomRole {
 
 export type RoomStats = {
   __typename?: 'RoomStats';
-  ackCommentCount?: Maybe<Scalars['Int']['output']>;
-  contentCount?: Maybe<Scalars['Int']['output']>;
-  roomUserCount?: Maybe<Scalars['Int']['output']>;
+  activeMemberCount?: Maybe<Scalars['Int']['output']>;
 };
 
 export type UpdateAnnouncementInput = {
@@ -554,10 +552,19 @@ export type RoomDetailsFragmentFragment = {
   descriptionRendered?: string | null;
 };
 
-export type RoomMembershipFragmentFragment = {
+export type RoomMembershipFragment = {
   __typename?: 'RoomMembership';
   role: RoomRole;
-  room: { __typename?: 'Room'; id: string; shortId: string; name: string };
+  room: {
+    __typename?: 'Room';
+    id: string;
+    shortId: string;
+    name: string;
+    stats?: {
+      __typename?: 'RoomStats';
+      activeMemberCount?: number | null;
+    } | null;
+  };
 };
 
 export type RoomMemberFragment = {
@@ -670,7 +677,16 @@ export type RoomMembershipByShortIdQuery = {
   roomMembershipByShortId?: {
     __typename?: 'RoomMembership';
     role: RoomRole;
-    room: { __typename?: 'Room'; id: string; shortId: string; name: string };
+    room: {
+      __typename?: 'Room';
+      id: string;
+      shortId: string;
+      name: string;
+      stats?: {
+        __typename?: 'RoomStats';
+        activeMemberCount?: number | null;
+      } | null;
+    };
   } | null;
 };
 
@@ -689,17 +705,15 @@ export type RoomMembershipsQuery = {
       node: {
         __typename?: 'RoomMembership';
         role: RoomRole;
-        stats?: {
-          __typename?: 'RoomStats';
-          roomUserCount?: number | null;
-          contentCount?: number | null;
-          ackCommentCount?: number | null;
-        } | null;
         room: {
           __typename?: 'Room';
           id: string;
           shortId: string;
           name: string;
+          stats?: {
+            __typename?: 'RoomStats';
+            activeMemberCount?: number | null;
+          } | null;
         };
       };
     } | null> | null;
@@ -728,17 +742,15 @@ export type RoomsByUserIdQuery = {
       node: {
         __typename?: 'RoomMembership';
         role: RoomRole;
-        stats?: {
-          __typename?: 'RoomStats';
-          roomUserCount?: number | null;
-          contentCount?: number | null;
-          ackCommentCount?: number | null;
-        } | null;
         room: {
           __typename?: 'Room';
           id: string;
           shortId: string;
           name: string;
+          stats?: {
+            __typename?: 'RoomStats';
+            activeMemberCount?: number | null;
+          } | null;
         };
       };
     } | null> | null;
@@ -761,7 +773,16 @@ export type JoinRoomMutation = {
   joinRoom: {
     __typename?: 'RoomMembership';
     role: RoomRole;
-    room: { __typename?: 'Room'; id: string; shortId: string; name: string };
+    room: {
+      __typename?: 'Room';
+      id: string;
+      shortId: string;
+      name: string;
+      stats?: {
+        __typename?: 'RoomStats';
+        activeMemberCount?: number | null;
+      } | null;
+    };
   };
 };
 
@@ -1095,12 +1116,15 @@ export const RoomDetailsFragmentFragmentDoc = gql`
     descriptionRendered
   }
 `;
-export const RoomMembershipFragmentFragmentDoc = gql`
-  fragment RoomMembershipFragment on RoomMembership {
+export const RoomMembershipFragmentDoc = gql`
+  fragment RoomMembership on RoomMembership {
     room {
       id
       shortId
       name
+      stats {
+        activeMemberCount
+      }
     }
     role
   }
@@ -1396,10 +1420,10 @@ export class RoomWithSettingsByIdGql extends Apollo.Query<
 export const RoomMembershipByShortIdDocument = gql`
   query RoomMembershipByShortId($shortId: String!) {
     roomMembershipByShortId(shortId: $shortId) {
-      ...RoomMembershipFragment
+      ...RoomMembership
     }
   }
-  ${RoomMembershipFragmentFragmentDoc}
+  ${RoomMembershipFragmentDoc}
 `;
 
 @Injectable({
@@ -1420,12 +1444,7 @@ export const RoomMembershipsDocument = gql`
     roomMemberships(query: $query, first: 10, after: $cursor) {
       edges {
         node {
-          ...RoomMembershipFragment
-          stats {
-            roomUserCount
-            contentCount
-            ackCommentCount
-          }
+          ...RoomMembership
         }
         cursor
       }
@@ -1437,7 +1456,7 @@ export const RoomMembershipsDocument = gql`
       }
     }
   }
-  ${RoomMembershipFragmentFragmentDoc}
+  ${RoomMembershipFragmentDoc}
 `;
 
 @Injectable({
@@ -1458,12 +1477,7 @@ export const RoomsByUserIdDocument = gql`
     roomsByUserId(userId: $userId, first: 10, after: $cursor) {
       edges {
         node {
-          ...RoomMembershipFragment
-          stats {
-            roomUserCount
-            contentCount
-            ackCommentCount
-          }
+          ...RoomMembership
         }
         cursor
       }
@@ -1475,7 +1489,7 @@ export const RoomsByUserIdDocument = gql`
       }
     }
   }
-  ${RoomMembershipFragmentFragmentDoc}
+  ${RoomMembershipFragmentDoc}
 `;
 
 @Injectable({
@@ -1494,10 +1508,10 @@ export class RoomsByUserIdGql extends Apollo.Query<
 export const JoinRoomDocument = gql`
   mutation JoinRoom($shortId: ID!) {
     joinRoom(input: { shortId: $shortId }) {
-      ...RoomMembershipFragment
+      ...RoomMembership
     }
   }
-  ${RoomMembershipFragmentFragmentDoc}
+  ${RoomMembershipFragmentDoc}
 `;
 
 @Injectable({
