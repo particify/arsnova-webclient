@@ -21,7 +21,6 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { configureTestModule } from '@testing/test.setup';

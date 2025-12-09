@@ -8,11 +8,16 @@ fragment RoomDetailsFragment on Room {
   focusModeEnabled
 }
 
+fragment RoomStats on RoomStats {
+  id
+  activeMemberCount
+}
+
 fragment RoomMembership on RoomMembership {
   room {
     ...RoomDetailsFragment
     stats {
-      activeMemberCount
+      ...RoomStats
     }
   }
   role
@@ -123,6 +128,14 @@ query RoomsByUserId($userId: UUID!, $cursor: String) {
       hasNextPage
       hasPreviousPage
       startCursor
+    }
+  }
+}
+
+query RoomStatsById($id: ID!) {
+  roomById(id: $id) {
+    stats {
+      ...RoomStats
     }
   }
 }

@@ -15,7 +15,6 @@ import {
   MockFeatureFlagService,
   MockRouter,
 } from '@testing/test-helpers';
-import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Theme, ThemeService } from '@app/core/theme/theme.service';

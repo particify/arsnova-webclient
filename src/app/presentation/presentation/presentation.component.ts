@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  input,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import {
   GlobalStorageService,
@@ -46,6 +53,7 @@ export class PresentationComponent implements OnInit, OnDestroy {
   private roomSettingsService = inject(RoomSettingsService);
 
   // Route data input below
+  roomId = input.required<string>();
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;

@@ -189,6 +189,7 @@ describe('NavBarComponent', () => {
 
   it('should create', () => {
     const room = new Room();
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.EDITOR;
     component.viewRole = UserRole.PARTICIPANT;
@@ -208,6 +209,7 @@ describe('NavBarComponent', () => {
   it('should have navigation buttons for room overview and comments', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.viewRole = UserRole.PARTICIPANT;
     component.roomSettings = {
@@ -233,6 +235,7 @@ describe('NavBarComponent', () => {
   it('should NOT HAVE navigation button for feedback if not enabled and in role PARTICIPANT', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
@@ -265,6 +268,7 @@ describe('NavBarComponent', () => {
   it('should HAVE navigation button for feedback if locked in role OWNER', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
@@ -287,6 +291,7 @@ describe('NavBarComponent', () => {
   it('should HAVE navigation button for series if existing', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
@@ -319,6 +324,7 @@ describe('NavBarComponent', () => {
   it('should HAVE a user counter if desktop device and creator', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
@@ -340,6 +346,7 @@ describe('NavBarComponent', () => {
   it('should HAVE a user counter if desktop device and creator', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
@@ -366,6 +373,7 @@ describe('NavBarComponent', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.viewRole = UserRole.OWNER;
     component.roomSettings = {
@@ -387,6 +395,7 @@ describe('NavBarComponent', () => {
   it('should NOT HAVE a user counter if participant', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.viewRole = UserRole.PARTICIPANT;
     component.roomSettings = {
@@ -409,6 +418,7 @@ describe('NavBarComponent', () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
@@ -433,6 +443,7 @@ describe('NavBarComponent', () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
@@ -461,6 +472,7 @@ describe('NavBarComponent', () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
@@ -489,6 +501,7 @@ describe('NavBarComponent', () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
@@ -527,6 +540,7 @@ describe('NavBarComponent', () => {
   it('should open menu when clicking on series button and there are multiple series', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
@@ -570,6 +584,7 @@ describe('NavBarComponent', () => {
     spyOn(router, 'navigate').and.stub();
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.OWNER;
     component.viewRole = UserRole.OWNER;
@@ -620,6 +635,7 @@ describe('NavBarComponent', () => {
   it('should display news indicator badge for series button for participants when series has been published', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
@@ -671,6 +687,7 @@ describe('NavBarComponent', () => {
   it('should display news indicator badge for series button for participants when series has new published contents', async () => {
     const room = new Room();
     room.shortId = '12345678';
+    fixture.componentRef.setInput('roomId', '1234');
     component.room = room;
     component.userRole = UserRole.PARTICIPANT;
     component.viewRole = UserRole.PARTICIPANT;
