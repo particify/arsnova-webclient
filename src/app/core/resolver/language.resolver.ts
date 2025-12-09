@@ -19,8 +19,7 @@ export const languageResolver: ResolveFn<string> = (
       .pipe(
         map(
           (r) =>
-            r.data?.roomMembershipByShortId?.room.language ??
-            translateService.getActiveLang()
+            r.data?.roomByShortId?.language ?? translateService.getActiveLang()
         )
       );
   }

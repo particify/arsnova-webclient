@@ -32,23 +32,22 @@
             @switch (setting.name) {
               @case ('general') {
                 <app-room-edit
-                  [roomId]="roomId"
+                  [roomId]="roomId()"
+                  [shortId]="shortId()"
                   [isCreator]="isOwner()"
                 ></app-room-edit>
               }
               @case ('comments') {
-                <app-comment-settings [roomId]="room.id"></app-comment-settings>
+                <app-comment-settings
+                  [roomId]="roomId()"
+                ></app-comment-settings>
               }
               @case ('access') {
-                <app-access [roomId]="roomId"></app-access>
-                <lib-extension-point
-                  extensionId="room-password-settings"
-                  [extensionData]="{ room: room }"
-                ></lib-extension-point>
+                <app-access [roomId]="roomId()"></app-access>
               }
               @case ('announcements') {
                 <app-announcement-settings
-                  [roomId]="roomId"
+                  [roomId]="roomId()"
                 ></app-announcement-settings>
               }
             }

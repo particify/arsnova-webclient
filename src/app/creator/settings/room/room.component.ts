@@ -11,10 +11,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { RoomService } from '@app/core/services/http/room.service';
 import { Router } from '@angular/router';
-import { EventService } from '@app/core/services/util/event.service';
-import { RoomDeleted } from '@app/core/models/events/room-deleted';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   FormattingService,
@@ -41,10 +38,10 @@ import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-tog
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import {
   DeleteRoomGql,
-  RoomWithSettingsByIdGql,
+  RoomByShortIdDocument,
+  RoomByShortIdGql,
   UpdateRoomDetailsGql,
   UpdateRoomFocusModeGql,
 } from '@gql/generated/graphql';
@@ -78,36 +75,34 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
   ],
 })
 export class RoomComponent extends FormComponent implements AfterViewInit {
-  notificationService = inject(NotificationService);
-  translationService = inject(TranslocoService);
-  protected roomService = inject(RoomService);
-  router = inject(Router);
-  eventService = inject(EventService);
-  protected translateService = inject(TranslocoService);
-  private dialogService = inject(DialogService);
-  private formattingService = inject(FormattingService);
-  private focusModeService = inject(FocusModeService);
-  protected roomSettingsService = inject(RoomSettingsService);
-  private roomWithSettingsByIdGql = inject(RoomWithSettingsByIdGql);
-  private updateRoomDetails = inject(UpdateRoomDetailsGql);
-  private updateRoomFocusModeGql = inject(UpdateRoomFocusModeGql);
-  private deleteRoomGql = inject(DeleteRoomGql);
+  private readonly notificationService = inject(NotificationService);
+  private readonly translationService = inject(TranslocoService);
+  private readonly router = inject(Router);
+  private readonly translateService = inject(TranslocoService);
+  private readonly dialogService = inject(DialogService);
+  private readonly formattingService = inject(FormattingService);
+  private readonly focusModeService = inject(FocusModeService);
+  private readonly roomByShortId = inject(RoomByShortIdGql);
+  private readonly updateRoomDetails = inject(UpdateRoomDetailsGql);
+  private readonly updateRoomFocusModeGql = inject(UpdateRoomFocusModeGql);
+  private readonly deleteRoomGql = inject(DeleteRoomGql);
 
   readonly roomId = input.required<string>();
+  readonly shortId = input.required<string>();
   readonly isCreator = input(false);
   readonly markdownFeatureset = MarkdownFeatureset.EXTENDED;
   renderPreview = false;
   textContainsImage = false;
   readonly HintType = HintType;
 
-  private readonly roomResult$ = toObservable(this.roomId).pipe(
-    switchMap((id) => this.roomWithSettingsByIdGql.fetch({ variables: { id } }))
+  private readonly roomResult$ = toObservable(this.shortId).pipe(
+    switchMap((shortId) => this.roomByShortId.fetch({ variables: { shortId } }))
   );
   readonly isLoadingOrError = toSignal(
-    this.roomResult$.pipe(map((r) => !r.data?.roomById))
+    this.roomResult$.pipe(map((r) => !r.data?.roomByShortId))
   );
   private readonly room = toSignal(
-    this.roomResult$.pipe(map((r) => r.data?.roomById))
+    this.roomResult$.pipe(map((r) => r.data?.roomByShortId))
   );
   readonly name = linkedSignal(() => this.room()?.name ?? '');
   readonly description = linkedSignal(() => this.room()?.description ?? '');
@@ -144,8 +139,6 @@ export class RoomComponent extends FormComponent implements AfterViewInit {
             this.translationService.translate('creator.settings.deleted'),
           AdvancedSnackBarTypes.WARNING
         );
-        const event = new RoomDeleted(this.roomId());
-        this.eventService.broadcast(event.type, event.payload);
         this.router.navigateByUrl('user');
       }
     });
@@ -162,6 +155,21 @@ export class RoomComponent extends FormComponent implements AfterViewInit {
             name: name,
             description: this.description() ?? '',
             languageCode: this.language(),
+          },
+          update: (cache) => {
+            const room = { ...this.room() };
+            if (room) {
+              room.name = name;
+              room.description = this.description() ?? '';
+              room.language = this.language() ?? null;
+              cache.writeQuery({
+                query: RoomByShortIdDocument,
+                variables: { shortId: room.shortId },
+                data: {
+                  roomByShortId: room,
+                },
+              });
+            }
           },
         })
         .subscribe({

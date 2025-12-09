@@ -12,24 +12,32 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { JoinRoomGql, RoomRole } from '@gql/generated/graphql';
+import {
+  JoinRoomGql,
+  RoomByShortIdDocument,
+  RoomMembershipByShortIdDocument,
+  RoomMembershipFragment,
+  RoomRole,
+} from '@gql/generated/graphql';
 import { TranslocoService } from '@jsverse/transloco';
 import { RoomService } from '@app/core/services/http/room.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { environment } from '@environments/environment';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
+import { Apollo } from 'apollo-angular';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-  private authenticationService = inject(AuthenticationService);
-  private roomMembershipService = inject(RoomMembershipService);
-  private roomService = inject(RoomService);
-  private notificationService = inject(NotificationService);
-  private translateService = inject(TranslocoService);
-  private routingService = inject(RoutingService);
-  private router = inject(Router);
-  private joinRoomGql = inject(JoinRoomGql);
+  private readonly authenticationService = inject(AuthenticationService);
+  private readonly roomMembershipService = inject(RoomMembershipService);
+  private readonly roomService = inject(RoomService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly routingService = inject(RoutingService);
+  private readonly router = inject(Router);
+  private readonly joinRoom = inject(JoinRoomGql);
+  private readonly apollo = inject(Apollo);
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -57,8 +65,41 @@ export class AuthenticationGuard implements CanActivate {
           return of(true);
         } else {
           /* Route requires a specific role */
-          return this.joinRoomGql
-            .mutate({ variables: { shortId: route.params.shortId } })
+          const shortId = route.params.shortId;
+          // Try to load room membership from apollo cache
+          const membership = this.apollo.client.cache.readQuery({
+            query: RoomMembershipByShortIdDocument,
+            variables: { shortId },
+          }) as { roomMembershipByShortId: RoomMembershipFragment } | undefined;
+          const role = membership?.roomMembershipByShortId.role;
+          // If membership was cached, check cached role for permission
+          if (role && this.hasRolePermission(role, viewRole)) {
+            return of(true);
+          }
+          // If no membership is available, join room
+          return this.joinRoom
+            .mutate({
+              variables: { shortId },
+              update: (cache, result) => {
+                const membership = result.data?.joinRoom;
+                if (membership) {
+                  cache.writeQuery({
+                    query: RoomByShortIdDocument,
+                    variables: { shortId },
+                    data: {
+                      roomByShortId: membership.room,
+                    },
+                  });
+                  cache.writeQuery({
+                    query: RoomMembershipByShortIdDocument,
+                    variables: { shortId },
+                    data: {
+                      roomMembershipByShortId: membership,
+                    },
+                  });
+                }
+              },
+            })
             .pipe(
               map((r) => r.data?.joinRoom.role),
               map((role) => {
@@ -67,13 +108,7 @@ export class AuthenticationGuard implements CanActivate {
                   this.handleAccessDenied(auth, state.url);
                   return false;
                 }
-                if (
-                  this.roomMembershipService.isRoleSubstitutable(
-                    role,
-                    viewRole
-                  ) ||
-                  environment.debugOverrideRoomRole
-                ) {
+                if (this.hasRolePermission(role, viewRole)) {
                   return true;
                 }
 
@@ -83,6 +118,13 @@ export class AuthenticationGuard implements CanActivate {
             );
         }
       })
+    );
+  }
+
+  private hasRolePermission(role: RoomRole, requiredRole: RoomRole) {
+    return (
+      this.roomMembershipService.isRoleSubstitutable(role, requiredRole) ||
+      environment.debugOverrideRoomRole
     );
   }
 

@@ -284,7 +284,7 @@ export type QueryRoomByIdArgs = {
 };
 
 export type QueryRoomByShortIdArgs = {
-  shortId: Scalars['ID']['input'];
+  shortId: Scalars['String']['input'];
 };
 
 export type QueryRoomManagingMembersByRoomIdArgs = {
@@ -550,6 +550,8 @@ export type RoomDetailsFragmentFragment = {
   name: string;
   description?: string | null;
   descriptionRendered?: string | null;
+  language?: string | null;
+  focusModeEnabled?: boolean | null;
 };
 
 export type RoomMembershipFragment = {
@@ -560,6 +562,10 @@ export type RoomMembershipFragment = {
     id: string;
     shortId: string;
     name: string;
+    description?: string | null;
+    descriptionRendered?: string | null;
+    language?: string | null;
+    focusModeEnabled?: boolean | null;
     stats?: {
       __typename?: 'RoomStats';
       activeMemberCount?: number | null;
@@ -585,10 +591,7 @@ export type RoomIdByShortIdQueryVariables = Exact<{
 
 export type RoomIdByShortIdQuery = {
   __typename?: 'Query';
-  roomMembershipByShortId?: {
-    __typename?: 'RoomMembership';
-    room: { __typename?: 'Room'; id: string };
-  } | null;
+  roomByShortId?: { __typename?: 'Room'; id: string } | null;
 };
 
 export type RoomLanguageByShortIdQueryVariables = Exact<{
@@ -597,25 +600,24 @@ export type RoomLanguageByShortIdQueryVariables = Exact<{
 
 export type RoomLanguageByShortIdQuery = {
   __typename?: 'Query';
-  roomMembershipByShortId?: {
-    __typename?: 'RoomMembership';
-    room: { __typename?: 'Room'; language?: string | null };
-  } | null;
+  roomByShortId?: { __typename?: 'Room'; language?: string | null } | null;
 };
 
-export type RoomByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+export type RoomByShortIdQueryVariables = Exact<{
+  shortId: Scalars['String']['input'];
 }>;
 
-export type RoomByIdQuery = {
+export type RoomByShortIdQuery = {
   __typename?: 'Query';
-  roomById?: {
+  roomByShortId?: {
     __typename?: 'Room';
     id: string;
     shortId: string;
     name: string;
     description?: string | null;
     descriptionRendered?: string | null;
+    language?: string | null;
+    focusModeEnabled?: boolean | null;
   } | null;
 };
 
@@ -638,6 +640,8 @@ export type RoomsQuery = {
         name: string;
         description?: string | null;
         descriptionRendered?: string | null;
+        language?: string | null;
+        focusModeEnabled?: boolean | null;
       };
     } | null> | null;
     pageInfo: {
@@ -647,24 +651,6 @@ export type RoomsQuery = {
       hasPreviousPage: boolean;
       startCursor?: string | null;
     };
-  } | null;
-};
-
-export type RoomWithSettingsByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type RoomWithSettingsByIdQuery = {
-  __typename?: 'Query';
-  roomById?: {
-    __typename?: 'Room';
-    language?: string | null;
-    focusModeEnabled?: boolean | null;
-    id: string;
-    shortId: string;
-    name: string;
-    description?: string | null;
-    descriptionRendered?: string | null;
   } | null;
 };
 
@@ -682,6 +668,10 @@ export type RoomMembershipByShortIdQuery = {
       id: string;
       shortId: string;
       name: string;
+      description?: string | null;
+      descriptionRendered?: string | null;
+      language?: string | null;
+      focusModeEnabled?: boolean | null;
       stats?: {
         __typename?: 'RoomStats';
         activeMemberCount?: number | null;
@@ -710,6 +700,10 @@ export type RoomMembershipsQuery = {
           id: string;
           shortId: string;
           name: string;
+          description?: string | null;
+          descriptionRendered?: string | null;
+          language?: string | null;
+          focusModeEnabled?: boolean | null;
           stats?: {
             __typename?: 'RoomStats';
             activeMemberCount?: number | null;
@@ -747,6 +741,10 @@ export type RoomsByUserIdQuery = {
           id: string;
           shortId: string;
           name: string;
+          description?: string | null;
+          descriptionRendered?: string | null;
+          language?: string | null;
+          focusModeEnabled?: boolean | null;
           stats?: {
             __typename?: 'RoomStats';
             activeMemberCount?: number | null;
@@ -778,6 +776,10 @@ export type JoinRoomMutation = {
       id: string;
       shortId: string;
       name: string;
+      description?: string | null;
+      descriptionRendered?: string | null;
+      language?: string | null;
+      focusModeEnabled?: boolean | null;
       stats?: {
         __typename?: 'RoomStats';
         activeMemberCount?: number | null;
@@ -1114,20 +1116,21 @@ export const RoomDetailsFragmentFragmentDoc = gql`
     name
     description
     descriptionRendered
+    language
+    focusModeEnabled
   }
 `;
 export const RoomMembershipFragmentDoc = gql`
   fragment RoomMembership on RoomMembership {
     room {
-      id
-      shortId
-      name
+      ...RoomDetailsFragment
       stats {
         activeMemberCount
       }
     }
     role
   }
+  ${RoomDetailsFragmentFragmentDoc}
 `;
 export const RoomMemberFragmentDoc = gql`
   fragment RoomMember on RoomMember {
@@ -1297,10 +1300,8 @@ export class DeleteAnnouncementGql extends Apollo.Mutation<
 }
 export const RoomIdByShortIdDocument = gql`
   query RoomIdByShortId($shortId: String!) {
-    roomMembershipByShortId(shortId: $shortId) {
-      room {
-        id
-      }
+    roomByShortId(shortId: $shortId) {
+      id
     }
   }
 `;
@@ -1320,10 +1321,8 @@ export class RoomIdByShortIdGql extends Apollo.Query<
 }
 export const RoomLanguageByShortIdDocument = gql`
   query RoomLanguageByShortId($shortId: String!) {
-    roomMembershipByShortId(shortId: $shortId) {
-      room {
-        language
-      }
+    roomByShortId(shortId: $shortId) {
+      language
     }
   }
 `;
@@ -1341,9 +1340,9 @@ export class RoomLanguageByShortIdGql extends Apollo.Query<
     super(apollo);
   }
 }
-export const RoomByIdDocument = gql`
-  query RoomById($id: ID!) {
-    roomById(id: $id) {
+export const RoomByShortIdDocument = gql`
+  query RoomByShortId($shortId: String!) {
+    roomByShortId(shortId: $shortId) {
       ...RoomDetailsFragment
     }
   }
@@ -1353,11 +1352,11 @@ export const RoomByIdDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-export class RoomByIdGql extends Apollo.Query<
-  RoomByIdQuery,
-  RoomByIdQueryVariables
+export class RoomByShortIdGql extends Apollo.Query<
+  RoomByShortIdQuery,
+  RoomByShortIdQueryVariables
 > {
-  document = RoomByIdDocument;
+  document = RoomByShortIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -1388,30 +1387,6 @@ export const RoomsDocument = gql`
 })
 export class RoomsGql extends Apollo.Query<RoomsQuery, RoomsQueryVariables> {
   document = RoomsDocument;
-
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
-export const RoomWithSettingsByIdDocument = gql`
-  query RoomWithSettingsById($id: ID!) {
-    roomById(id: $id) {
-      ...RoomDetailsFragment
-      language
-      focusModeEnabled
-    }
-  }
-  ${RoomDetailsFragmentFragmentDoc}
-`;
-
-@Injectable({
-  providedIn: 'root',
-})
-export class RoomWithSettingsByIdGql extends Apollo.Query<
-  RoomWithSettingsByIdQuery,
-  RoomWithSettingsByIdQueryVariables
-> {
-  document = RoomWithSettingsByIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

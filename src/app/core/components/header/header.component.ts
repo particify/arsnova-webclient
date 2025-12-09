@@ -6,7 +6,6 @@ import { EventService } from '@app/core/services/util/event.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ExtensionFactory } from '@projects/extension-point/src/public-api';
-import { Room } from '@app/core/models/room';
 import { RoomService } from '@app/core/services/http/room.service';
 import { DrawerService } from '@app/core/services/util/drawer.service';
 import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
@@ -30,6 +29,8 @@ import { DevErrorIndicatorComponent } from '@app/standalone/dev-error-indicator/
 import { ENVIRONMENT } from '@environments/environment-token';
 import { environment } from '@environments/environment';
 import { AnnouncementsButtonComponent } from '@app/standalone/announcements-button/announcements-button.component';
+import { Room, RoomByShortIdGql } from '@gql/generated/graphql';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -70,6 +71,7 @@ export class HeaderComponent implements OnInit {
   private drawerService = inject(DrawerService);
   private pageTitleService = inject(PageTitleService);
   private env = inject<typeof environment>(ENVIRONMENT);
+  private readonly roomByShortId = inject(RoomByShortIdGql);
 
   auth?: AuthenticatedUser;
 
@@ -95,8 +97,20 @@ export class HeaderComponent implements OnInit {
           ?.slice(0, 1)
           .toLocaleUpperCase();
       });
+
     this.roomService.getCurrentRoomStream().subscribe((room) => {
-      this.room = room;
+      if (!room) {
+        this.room = undefined;
+        return;
+      }
+      this.roomByShortId
+        .watch({ variables: { shortId: room.shortId } })
+        .valueChanges.pipe(
+          filter((r) => r.dataState === 'complete'),
+          map((r) => r.data?.roomByShortId),
+          filter((roomData) => !!roomData)
+        )
+        .subscribe((r) => (this.room = r));
     });
     this.isPreview = this.routingService.isPreview;
     this.routingService.getIsPreview().subscribe((isPreview) => {

@@ -156,6 +156,7 @@ describe('RoomOverviewPageComponent', () => {
     fixture = testBed.createComponent(RoomOverviewPageComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('roomId', '1234');
+    fixture.componentRef.setInput('shortId', '12345678');
     fixture.componentRef.setInput('userRole', UserRole.EDITOR);
   }));
 
