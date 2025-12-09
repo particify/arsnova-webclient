@@ -33,10 +33,10 @@ import {
   RoomMembership,
   RoomMembershipsGql,
   RoomRole,
+  RoomStats,
 } from '@gql/generated/graphql';
 import { CoreModule } from '@app/core/core.module';
 import { ExtensionPointModule } from '@projects/extension-point/src/public-api';
-import { ListBadgeComponent } from '@app/standalone/list-badge/list-badge.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatActionList } from '@angular/material/list';
 import { MatButton } from '@angular/material/button';
@@ -57,7 +57,6 @@ const ACTIVE_ROOM_THRESHOLD = 15;
   imports: [
     CoreModule,
     ExtensionPointModule,
-    ListBadgeComponent,
     LoadingIndicatorComponent,
     MatActionList,
     MatButton,
@@ -101,7 +100,12 @@ export class RoomListComponent implements AfterViewInit, OnInit {
     () =>
       this.roomsResult()
         ?.edges?.filter((e) => !!e)
-        .map((e) => e.node) ?? []
+        .map((e) => e.node)
+        .toSorted((a, b) => {
+          const aAboveThreshold = this.isRoomActive(a.room.stats);
+          const bAboveThreshold = this.isRoomActive(b.room.stats);
+          return +bAboveThreshold - +aAboveThreshold;
+        }) ?? []
   );
   noRooms = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
@@ -244,8 +248,8 @@ export class RoomListComponent implements AfterViewInit, OnInit {
     this.dialogService.openRoomCreateDialog();
   }
 
-  isRoomActive(userCount: number) {
-    return userCount >= ACTIVE_ROOM_THRESHOLD;
+  protected isRoomActive(stats?: RoomStats | null): boolean {
+    return (stats?.activeMemberCount ?? 0) >= ACTIVE_ROOM_THRESHOLD;
   }
 
   duplicateRoom(roomId: string, roomName: string) {

@@ -121,9 +121,7 @@
                       fxLayoutAlign="center center"
                       fxLayoutGap="1em"
                     >
-                      @if (
-                        isRoomActive(roomWithRole.stats?.roomUserCount ?? 0)
-                      ) {
+                      @if (isRoomActive(roomWithRole.room.stats)) {
                         <div
                           fxLayoutAlign="center"
                           class="active-label primary"
@@ -132,17 +130,13 @@
                               | transloco
                                 : {
                                     userCount:
-                                      roomWithRole.stats?.roomUserCount ?? 0,
+                                      roomWithRole.room.stats
+                                        ?.activeMemberCount ?? 0,
                                   }
                           "
                         >
                           <span>{{ 'room-list.active' | transloco }}</span>
                         </div>
-                      }
-                      @if (roomWithRole.stats?.ackCommentCount ?? 0) {
-                        <app-list-badge
-                          [count]="roomWithRole.stats?.ackCommentCount ?? 0"
-                        ></app-list-badge>
                       }
                       <p class="short-id">
                         {{ roomWithRole.room.shortId | splitShortId }}
