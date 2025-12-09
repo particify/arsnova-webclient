@@ -16,7 +16,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { MatMenuModule } from '@angular/material/menu';
-import { RoomService } from '@app/core/services/http/room.service';
+import { RoomMessage, RoomService } from '@app/core/services/http/room.service';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -63,8 +63,9 @@ describe('NavBarComponent', () => {
       userCount: 42,
     },
   };
-  const message = {
-    body: JSON.stringify(body),
+  const message: RoomMessage = {
+    roomId: '',
+    body: body,
   };
 
   const summaries = [

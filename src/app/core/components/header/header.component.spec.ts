@@ -83,9 +83,9 @@ describe('HeaderComponent', () => {
   ]);
   announcementService.getStateByUserId.and.returnValue(of({}));
   const roomService = jasmine.createSpyObj('RoomService', [
-    'getCurrentRoomStream',
+    'getCurrentRoomIdStream',
   ]);
-  roomService.getCurrentRoomStream.and.returnValue(of(new Room()));
+  roomService.getCurrentRoomIdStream.and.returnValue(of(undefined));
   let loader: HarnessLoader;
   let userButton: MatButtonHarness;
 

@@ -19,7 +19,7 @@ import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { SeriesCreated } from '@app/core/models/events/series-created';
 import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
-import { RoomService } from '@app/core/services/http/room.service';
+import { RoomMessage, RoomService } from '@app/core/services/http/room.service';
 import { IMessage } from '@stomp/stompjs';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
@@ -112,7 +112,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   focusFeature?: RoutingFeature;
   focusModeEnabled = false;
   private roomSub?: Subscription;
-  private roomWatch?: Observable<IMessage>;
+  private roomWatch?: Observable<RoomMessage>;
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {
@@ -180,8 +180,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.roomService.getRoomSummaries([this.room.id]).subscribe((summary) => {
         this.userCount = summary[0].stats.roomUserCount;
         this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
-        this.roomSub = this.roomWatch.subscribe((msg) =>
-          this.parseUserCount(msg.body)
+        this.roomSub = this.roomWatch.subscribe(
+          (msg) => (this.userCount = msg.body.UserCountChanged.userCount)
         );
       });
       this.focusModeService
@@ -205,10 +205,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         });
     }
     this.isLoading = false;
-  }
-
-  parseUserCount(body: string) {
-    this.userCount = JSON.parse(body).UserCountChanged.userCount;
   }
 
   setGroupInSessionStorage(group: string) {

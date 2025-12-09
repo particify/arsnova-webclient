@@ -119,9 +119,9 @@ describe('AppComponent', () => {
   themeService.getThemes.and.returnValue([Theme.LIGHT, Theme.DARK]);
 
   const roomService = jasmine.createSpyObj('RoomService', [
-    'getCurrentRoomStream',
+    'getCurrentRoomIdStream',
   ]);
-  roomService.getCurrentRoomStream.and.returnValue(of(new Room()));
+  roomService.getCurrentRoomIdStream.and.returnValue(of(undefined));
 
   const authenticationService = jasmine.createSpyObj('AuthenticationService', [
     'getAuthenticatedUserChanges',

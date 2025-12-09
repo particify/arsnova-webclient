@@ -21,8 +21,8 @@ export const legacyRoomResolver: ResolveFn<Room> = (
     .pipe(
       map((r) => r.data?.roomByShortId),
       filter((roomData) => !!roomData),
-      map((roomData) => Room.fromGql(roomData, true)),
-      tap((room) => roomService.joinRoom(room))
+      tap((room) => roomService.joinRoom(room.id)),
+      map((roomData) => Room.fromGql(roomData, true))
     );
   return room;
 };

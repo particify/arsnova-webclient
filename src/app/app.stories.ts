@@ -36,8 +36,8 @@ class MockRoutingService {
 }
 
 class MockRoomService {
-  getCurrentRoomStream() {
-    return of(null);
+  getCurrentRoomIdStream() {
+    return of(undefined);
   }
 }
 

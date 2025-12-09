@@ -40,6 +40,12 @@ query RoomLanguageByShortId($shortId: String!) {
   }
 }
 
+query RoomById($id: ID!) {
+  roomById(id: $id) {
+    ...RoomDetailsFragment
+  }
+}
+
 query RoomByShortId($shortId: String!) {
   roomByShortId(shortId: $shortId) {
     ...RoomDetailsFragment
@@ -63,8 +69,26 @@ query Rooms($room: RoomQueryInput!, $cursor: String) {
   }
 }
 
+query RoomMembershipById($roomId: UUID!) {
+  roomMembershipById(roomId: $roomId) {
+    ...RoomMembership
+  }
+}
+
 query RoomMembershipByShortId($shortId: String!) {
   roomMembershipByShortId(shortId: $shortId) {
+    ...RoomMembership
+  }
+}
+
+query RoomByShortId($shortId: String!) {
+  roomByShortId(shortId: $shortId) {
+    ...RoomDetailsFragment
+  }
+}
+
+query RoomMembershipById($roomId: UUID!) {
+  roomMembershipById(roomId: $roomId) {
     ...RoomMembership
   }
 }

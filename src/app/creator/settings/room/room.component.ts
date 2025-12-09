@@ -40,6 +40,7 @@ import { MatIcon } from '@angular/material/icon';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import {
   DeleteRoomGql,
+  RoomByIdDocument,
   RoomByShortIdDocument,
   RoomByShortIdGql,
   UpdateRoomDetailsGql,
@@ -162,6 +163,13 @@ export class RoomComponent extends FormComponent implements AfterViewInit {
               room.name = name;
               room.description = this.description() ?? '';
               room.language = this.language() ?? null;
+              cache.writeQuery({
+                query: RoomByIdDocument,
+                variables: { id: room.id },
+                data: {
+                  roomById: room,
+                },
+              });
               cache.writeQuery({
                 query: RoomByShortIdDocument,
                 variables: { shortId: room.shortId },
