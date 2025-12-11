@@ -25,7 +25,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { RoomInfoComponentComponent } from '@app/standalone/room-info-component/room-info-component.component';
 import { ExpandableCardComponent } from '@app/standalone/expandable-card/expandable-card.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-participant-overview',
@@ -63,7 +63,7 @@ export class RoomOverviewPageComponent
 
   feedbackEnabled = false;
   commentsEnabled = false;
-  focusModeEnabled = false;
+  focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
   readonly HintType = HintType;
 
   ngOnInit() {
@@ -77,7 +77,6 @@ export class RoomOverviewPageComponent
       .getByRoomId(this.roomId())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((settings) => {
-        this.focusModeEnabled = settings.focusModeEnabled;
         this.feedbackEnabled = settings.surveyEnabled;
         this.roomSettingsService
           .getRoomSettingsStream(this.roomId(), settings.id)
@@ -98,12 +97,6 @@ export class RoomOverviewPageComponent
       .subscribe((settings) => {
         this.commentsEnabled = !settings.disabled;
       });
-    this.focusModeService
-      .getFocusModeEnabled()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(
-        (focusModeEnabled) => (this.focusModeEnabled = focusModeEnabled)
-      );
   }
 
   setGroupDataInGlobalStorage() {

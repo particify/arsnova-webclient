@@ -95,7 +95,6 @@ describe('NavBarComponent', () => {
     of({
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
     })
   );
@@ -198,7 +197,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -217,7 +215,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -244,7 +241,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -254,7 +250,6 @@ describe('NavBarComponent', () => {
         roomId: 'roomid',
         surveyEnabled: false,
         surveyType: LiveFeedbackType.FEEDBACK,
-        focusModeEnabled: false,
         commentThresholdEnabled: false,
         commentThreshold: 0,
       })
@@ -277,7 +272,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -309,7 +303,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -332,7 +325,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -354,7 +346,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -381,7 +372,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -403,7 +393,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -427,7 +416,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -452,7 +440,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -481,7 +468,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -520,7 +506,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: false,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -564,7 +549,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -608,7 +592,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -673,7 +656,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };
@@ -706,7 +688,6 @@ describe('NavBarComponent', () => {
       roomId: 'roomid',
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
       commentThreshold: 0,
     };

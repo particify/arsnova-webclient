@@ -15,7 +15,7 @@
     @if (_shortId) {
       @let anyFeatureEnabled =
         commentsEnabled || feedbackEnabled || contentGroups.length > 0;
-      @if (!focusModeEnabled) {
+      @if (!focusModeEnabled()) {
         @if (description() && anyFeatureEnabled) {
           <app-expandable-card>
             <app-rendered-text
@@ -69,7 +69,7 @@
         } @else if (contentGroups && contentGroups.length > 0) {
           <app-feature-card
             class="feature-column-item"
-            [ngClass]="{ disabled: focusModeEnabled }"
+            [ngClass]="{ disabled: focusModeEnabled() }"
             [feature]="'content.groups' | transloco"
             [description]="
               'participant.room-page.content-groups-description' | transloco
@@ -92,13 +92,13 @@
           </app-feature-card>
         }
       }
-      @if (!anyFeatureEnabled || focusModeEnabled) {
+      @if (!anyFeatureEnabled || focusModeEnabled()) {
         <app-room-info-component
           style="max-width: 100%"
           [name]="room.name"
           [shortId]="_shortId"
           [description]="descriptionRendered()"
-          [focusModeEnabled]="focusModeEnabled"
+          [focusModeEnabled]="!!focusModeEnabled()"
         ></app-room-info-component>
       }
     }

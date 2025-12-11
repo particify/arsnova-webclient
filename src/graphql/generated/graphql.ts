@@ -629,6 +629,15 @@ export type RoomByIdQuery = {
   } | null;
 };
 
+export type RoomFocusModeEnabledByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type RoomFocusModeEnabledByIdQuery = {
+  __typename?: 'Query';
+  roomById?: { __typename?: 'Room'; focusModeEnabled?: boolean | null } | null;
+};
+
 export type RoomByShortIdQueryVariables = Exact<{
   shortId: Scalars['String']['input'];
 }>;
@@ -1437,6 +1446,27 @@ export class RoomByIdGql extends Apollo.Query<
   RoomByIdQueryVariables
 > {
   document = RoomByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RoomFocusModeEnabledByIdDocument = gql`
+  query RoomFocusModeEnabledById($id: ID!) {
+    roomById(id: $id) {
+      focusModeEnabled
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomFocusModeEnabledByIdGql extends Apollo.Query<
+  RoomFocusModeEnabledByIdQuery,
+  RoomFocusModeEnabledByIdQueryVariables
+> {
+  document = RoomFocusModeEnabledByIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

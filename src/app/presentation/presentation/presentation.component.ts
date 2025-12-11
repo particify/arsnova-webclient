@@ -19,7 +19,7 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { take } from 'rxjs';
+import { first } from 'rxjs';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ControlBarComponent } from '@app/presentation/bars/control-bar/control-bar.component';
@@ -28,6 +28,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatIcon } from '@angular/material/icon';
 import { RoomSettings } from '@app/core/models/room-settings';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 
 @Component({
   selector: 'app-presentation',
@@ -51,6 +52,7 @@ export class PresentationComponent implements OnInit, OnDestroy {
   private presentationService = inject(PresentationService);
   private notificationService = inject(NotificationService);
   private roomSettingsService = inject(RoomSettingsService);
+  private focusModeService = inject(FocusModeService);
 
   // Route data input below
   roomId = input.required<string>();
@@ -73,22 +75,21 @@ export class PresentationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.roomSettingsService.getByRoomId(this.room.id).subscribe((settings) => {
       this.roomSettings = settings;
-      if (this.roomSettings.focusModeEnabled) {
-        this.translateService
-          .selectTranslate(
-            'presentation.focus-mode-enabled-info',
-            undefined,
-            'creator'
-          )
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.INFO
-            );
-          });
-      }
     });
+    this.focusModeService
+      .getFocusModeEnabled()
+      .pipe(first())
+      .subscribe((focusModeEnabled) => {
+        if (focusModeEnabled) {
+          const msg = this.translateService.translate(
+            'creator.presentation.focus-mode-enabled-info'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.INFO
+          );
+        }
+      });
     document.body.style.background = 'var(--surface)';
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)

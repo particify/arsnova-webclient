@@ -98,16 +98,6 @@ export class RoomSettingsService extends AbstractEntityService<RoomSettings> {
     return this.patchEntityByRoomId(roomId, changes);
   }
 
-  updateFocusModeEnabled(
-    roomId: string,
-    focusModeEnabled: boolean
-  ): Observable<RoomSettings> {
-    const changes: { focusModeEnabled: boolean } = {
-      focusModeEnabled: focusModeEnabled,
-    };
-    return this.patchEntityByRoomId(roomId, changes);
-  }
-
   updateCommentThresholdEnabled(
     roomId: string,
     commentThresholdEnabled: boolean

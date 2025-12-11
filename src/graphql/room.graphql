@@ -51,6 +51,12 @@ query RoomById($id: ID!) {
   }
 }
 
+query RoomFocusModeEnabledById($id: ID!) {
+  roomById(id: $id) {
+    focusModeEnabled
+  }
+}
+
 query RoomByShortId($shortId: String!) {
   roomByShortId(shortId: $shortId) {
     ...RoomDetailsFragment

@@ -55,10 +55,6 @@ export class FocusModeService extends AbstractFocusModeService {
     return this.commentStateUpdated$;
   }
 
-  getFocusModeEnabled() {
-    return this.focusModeEnabled$;
-  }
-
   private handleStateTransition(stateTransition: (FocusEvent | undefined)[]) {
     const [prev, cur] = stateTransition;
     if (this.routingService.getViewRole() !== UserRole.PARTICIPANT) {
