@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { LanguageService } from '@app/core/services/util/language.service';
@@ -46,6 +46,7 @@ export class ParticipantPageComponent implements OnInit {
   focusModeEnabled = false;
 
   // Route data input below
+  roomId = input.required<string>();
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;

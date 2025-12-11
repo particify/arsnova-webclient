@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  input,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import {
@@ -10,7 +17,7 @@ import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentGroup } from '@app/core/models/content-group';
 import { EventService } from '@app/core/services/util/event.service';
-import { Observable, Subject, Subscription, map, takeUntil } from 'rxjs';
+import { Subject, Subscription, map, switchMap, takeUntil } from 'rxjs';
 import { EntityChanged } from '@app/core/models/events/entity-changed';
 import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
 import { DataChanged } from '@app/core/models/events/data-changed';
@@ -20,7 +27,6 @@ import { SeriesCreated } from '@app/core/models/events/series-created';
 import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { RoomService } from '@app/core/services/http/room.service';
-import { IMessage } from '@stomp/stompjs';
 import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
@@ -34,6 +40,8 @@ import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { RoomSettings } from '@app/core/models/room-settings';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { RoomStatsByIdGql } from '@gql/generated/graphql';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 export class NavBarItem {
   name: string;
@@ -84,7 +92,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
   protected roomService = inject(RoomService);
   protected commentSettingsService = inject(CommentSettingsService);
   protected focusModeService = inject(FocusModeService);
+  private readonly roomStatsByIdGql = inject(RoomStatsByIdGql);
 
+  readonly roomId = input.required<string>();
   @Input({ required: true }) userRole!: UserRole;
   @Input({ required: true }) viewRole!: UserRole;
   @Input({ required: true }) room!: Room;
@@ -108,11 +118,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private focusStateSubscription?: Subscription;
   isLoading = true;
 
-  userCount = 1;
+  userCount = toSignal(
+    toObservable(this.roomId).pipe(
+      switchMap(
+        (id) => this.roomStatsByIdGql.watch({ variables: { id } }).valueChanges
+      ),
+      map((s) => s.data?.roomById?.stats?.activeMemberCount)
+    )
+  );
   focusFeature?: RoutingFeature;
   focusModeEnabled = false;
-  private roomSub?: Subscription;
-  private roomWatch?: Observable<IMessage>;
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {
@@ -126,9 +141,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     if (this.focusStateSubscription) {
       this.focusStateSubscription.unsubscribe();
-    }
-    if (this.roomSub) {
-      this.roomSub.unsubscribe();
     }
     this.destroyed$.next();
     this.destroyed$.complete();
@@ -177,13 +189,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.subscribeToContentGroups();
     } else {
       this.subscribeToContentGroupEvents();
-      this.roomService.getRoomSummaries([this.room.id]).subscribe((summary) => {
-        this.userCount = summary[0].stats.roomUserCount;
-        this.roomWatch = this.roomService.getCurrentRoomsMessageStream();
-        this.roomSub = this.roomWatch.subscribe((msg) =>
-          this.parseUserCount(msg.body)
-        );
-      });
       this.focusModeService
         .getFocusModeEnabled()
         .pipe(takeUntil(this.destroyed$))
@@ -205,10 +210,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         });
     }
     this.isLoading = false;
-  }
-
-  parseUserCount(body: string) {
-    this.userCount = JSON.parse(body).UserCountChanged.userCount;
   }
 
   setGroupInSessionStorage(group: string) {

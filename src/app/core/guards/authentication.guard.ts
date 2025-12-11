@@ -14,7 +14,9 @@ import {
 } from '@app/core/services/util/notification.service';
 import {
   JoinRoomGql,
+  RoomByIdDocument,
   RoomByShortIdDocument,
+  RoomMembershipByIdDocument,
   RoomMembershipByShortIdDocument,
   RoomMembershipFragment,
   RoomRole,
@@ -80,23 +82,10 @@ export class AuthenticationGuard implements CanActivate {
           return this.joinRoom
             .mutate({
               variables: { shortId },
-              update: (cache, result) => {
+              update: (_, result) => {
                 const membership = result.data?.joinRoom;
                 if (membership) {
-                  cache.writeQuery({
-                    query: RoomByShortIdDocument,
-                    variables: { shortId },
-                    data: {
-                      roomByShortId: membership.room,
-                    },
-                  });
-                  cache.writeQuery({
-                    query: RoomMembershipByShortIdDocument,
-                    variables: { shortId },
-                    data: {
-                      roomMembershipByShortId: membership,
-                    },
-                  });
+                  this.updateMembershipCaches(membership);
                 }
               },
             })
@@ -126,6 +115,40 @@ export class AuthenticationGuard implements CanActivate {
       this.roomMembershipService.isRoleSubstitutable(role, requiredRole) ||
       environment.debugOverrideRoomRole
     );
+  }
+
+  private updateMembershipCaches(membership: RoomMembershipFragment) {
+    const cache = this.apollo.client.cache;
+    const roomId = membership.room.id;
+    const shortId = membership.room.shortId;
+    cache.writeQuery({
+      query: RoomByIdDocument,
+      variables: { id: roomId },
+      data: {
+        roomById: membership.room,
+      },
+    });
+    cache.writeQuery({
+      query: RoomByShortIdDocument,
+      variables: { shortId },
+      data: {
+        roomByShortId: membership.room,
+      },
+    });
+    cache.writeQuery({
+      query: RoomMembershipByIdDocument,
+      variables: { roomId },
+      data: {
+        roomMembershipById: membership,
+      },
+    });
+    cache.writeQuery({
+      query: RoomMembershipByShortIdDocument,
+      variables: { shortId },
+      data: {
+        roomMembershipByShortId: membership,
+      },
+    });
   }
 
   handleUnknownError() {

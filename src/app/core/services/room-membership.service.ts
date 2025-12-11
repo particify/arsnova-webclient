@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
-  filter,
   first,
   map,
   shareReplay,
@@ -20,7 +19,7 @@ import {
   AUTH_SCHEME,
 } from './http/authentication.service';
 import { Membership } from '@app/core/models/membership';
-import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
+import { RoomRole } from '@gql/generated/graphql';
 import { Room } from '@app/core/models/room';
 import { MembershipsChanged } from '@app/core/models/events/memberships-changed';
 
@@ -32,7 +31,6 @@ import { MembershipsChanged } from '@app/core/models/events/memberships-changed'
 export class RoomMembershipService extends AbstractHttpService<Membership> {
   protected wsConnector = inject(WsConnectorService);
   protected authenticationService = inject(AuthenticationService);
-  private roomMembershipByShortIdGql = inject(RoomMembershipByShortIdGql);
 
   serviceApiUrl = {
     byUser: '/by-user',
@@ -203,30 +201,6 @@ export class RoomMembershipService extends AbstractHttpService<Membership> {
         membership.roles.some((r) => this.isRoleSubstitutable(r, requestedRole))
       )
     );
-  }
-
-  /**
-   * Checks if the user has the permissions of the given role for the given
-   * room.
-   */
-  hasAccessForRoomGql(
-    roomShortId: string,
-    requestedRole: RoomRole
-  ): Observable<boolean> {
-    return this.roomMembershipByShortIdGql
-      .fetch({ variables: { shortId: roomShortId } })
-      .pipe(
-        map((r) => r.data),
-        filter((data) => !!data),
-        map((data) =>
-          data.roomMembershipByShortId
-            ? this.isRoleSubstitutable(
-                data.roomMembershipByShortId?.role,
-                requestedRole
-              )
-            : false
-        )
-      );
   }
 
   /**

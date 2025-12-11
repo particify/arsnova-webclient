@@ -19,26 +19,29 @@ export class CommentSettingsService extends AbstractCachingHttpService<CommentSe
   constructor() {
     super('/settings');
     const roomService = inject(RoomService);
-    roomService.getCurrentRoomStream().subscribe((room) => {
-      if (room) {
-        // The uri is needed for updating cache
-        const uri = this.buildUri(`/${room.id}`, room.id);
-        this.currentRoomSettings$ = this.wsCommentService
-          .getCommentSettingsStream(room.id)
-          .pipe(
-            map((msg) => JSON.parse(msg.body).payload),
-            tap(
-              (settings) => this.handleObjectCaching(uri, settings),
-              shareReplay()
-            )
-          );
-        this.stompSubscription = this.currentRoomSettings$.subscribe();
-      } else {
-        if (this.stompSubscription) {
-          this.stompSubscription.unsubscribe();
+    roomService
+      .getCurrentRoomIdStream()
+      .pipe(map((id) => id?.replaceAll('-', '')))
+      .subscribe((roomId) => {
+        if (roomId) {
+          // The uri is needed for updating cache
+          const uri = this.buildUri(`/${roomId}`, roomId);
+          this.currentRoomSettings$ = this.wsCommentService
+            .getCommentSettingsStream(roomId)
+            .pipe(
+              map((msg) => JSON.parse(msg.body).payload),
+              tap(
+                (settings) => this.handleObjectCaching(uri, settings),
+                shareReplay()
+              )
+            );
+          this.stompSubscription = this.currentRoomSettings$.subscribe();
+        } else {
+          if (this.stompSubscription) {
+            this.stompSubscription.unsubscribe();
+          }
         }
-      }
-    });
+      });
   }
 
   getSettingsStream(): Observable<CommentSettings> {

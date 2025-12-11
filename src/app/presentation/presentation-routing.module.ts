@@ -98,7 +98,7 @@ const routes: Routes = [
           },
           resolve: {
             room: legacyRoomResolver,
-            roomIdResolver,
+            roomId: roomIdResolver,
             viewRole: roomViewUserRoleResolver,
             language: languageResolver,
           },

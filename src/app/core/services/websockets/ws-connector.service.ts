@@ -44,7 +44,12 @@ export class WsConnectorService {
   }
 
   public getWatcher(topic: string): Observable<IMessage> {
-    return this.client.watch(topic);
+    // Strip dashes from ID in topic
+    const normalizedTopic = topic.replaceAll(
+      /\/topic\/(.*?)\./g,
+      (_, id) => `/topic/${id.replaceAll('-', '')}.`
+    );
+    return this.client.watch(normalizedTopic);
   }
 
   public getConnectionState(): Observable<RxStompState> {

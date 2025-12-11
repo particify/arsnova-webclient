@@ -29,7 +29,7 @@ import { DevErrorIndicatorComponent } from '@app/standalone/dev-error-indicator/
 import { ENVIRONMENT } from '@environments/environment-token';
 import { environment } from '@environments/environment';
 import { AnnouncementsButtonComponent } from '@app/standalone/announcements-button/announcements-button.component';
-import { Room, RoomByShortIdGql } from '@gql/generated/graphql';
+import { Room, RoomByIdGql } from '@gql/generated/graphql';
 import { filter, map } from 'rxjs';
 
 @Component({
@@ -71,7 +71,7 @@ export class HeaderComponent implements OnInit {
   private drawerService = inject(DrawerService);
   private pageTitleService = inject(PageTitleService);
   private env = inject<typeof environment>(ENVIRONMENT);
-  private readonly roomByShortId = inject(RoomByShortIdGql);
+  private readonly roomById = inject(RoomByIdGql);
 
   auth?: AuthenticatedUser;
 
@@ -98,16 +98,16 @@ export class HeaderComponent implements OnInit {
           .toLocaleUpperCase();
       });
 
-    this.roomService.getCurrentRoomStream().subscribe((room) => {
-      if (!room) {
+    this.roomService.getCurrentRoomIdStream().subscribe((roomId) => {
+      if (!roomId) {
         this.room = undefined;
         return;
       }
-      this.roomByShortId
-        .watch({ variables: { shortId: room.shortId } })
+      this.roomById
+        .watch({ variables: { id: roomId } })
         .valueChanges.pipe(
           filter((r) => r.dataState === 'complete'),
-          map((r) => r.data?.roomByShortId),
+          map((r) => r.data?.roomById),
           filter((roomData) => !!roomData)
         )
         .subscribe((r) => (this.room = r));

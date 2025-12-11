@@ -43,15 +43,15 @@ export abstract class AbstractFocusModeService implements OnDestroy {
     })
   );
 
-  protected readonly roomId$ = this.roomService.getCurrentRoomStream().pipe(
+  protected readonly roomId$ = this.roomService.getCurrentRoomIdStream().pipe(
     takeUntil(this.destroyed$),
-    filter((r) => !!r),
-    map((r) => r.id),
+    filter((r) => r !== undefined),
     shareReplay()
   );
   protected readonly roomId = toSignal(this.roomId$);
 
   protected readonly focusModeEnabled$ = this.roomId$.pipe(
+    map((id) => id?.replaceAll('-', '')),
     switchMap((roomId) =>
       this.roomSettingsService
         .getByRoomId(roomId)
@@ -78,6 +78,7 @@ export abstract class AbstractFocusModeService implements OnDestroy {
   protected readonly state$ = this.reloadState$.pipe(
     switchMap(() =>
       this.roomId$.pipe(
+        map((roomId) => roomId.replaceAll('-', '')),
         switchMap((roomId) =>
           this.http
             .get<FocusEvent>(`api/room/${roomId}/focus-event`)

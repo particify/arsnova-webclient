@@ -7,8 +7,7 @@ import {
   PublicDataChanged,
 } from '@app/core/models/events/data-changed';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
-import { Room } from '@app/core/models/room';
-import { RoomMembershipByShortIdGql, RoomRole } from '@gql/generated/graphql';
+import { RoomMembershipByIdGql, RoomRole } from '@gql/generated/graphql';
 import { RoomService } from '@app/core/services/http/room.service';
 import { EventService } from '@app/core/services/util/event.service';
 import { WsConnectorService } from './ws-connector.service';
@@ -18,64 +17,64 @@ export class WsRoomEventDispatcherService {
   private wsConnector = inject(WsConnectorService);
   private eventService = inject(EventService);
   private roomService = inject(RoomService);
-  private roomMembershipByShortIdGql = inject(RoomMembershipByShortIdGql);
+  private roomMembershipByIdGql = inject(RoomMembershipByIdGql);
 
   private roomChanged$ = new Subject<void>();
 
   init() {
     this.roomService
-      .getCurrentRoomStream()
+      .getCurrentRoomIdStream()
       .subscribe((r) => this.handleRoomChange(r));
   }
 
-  private handleRoomChange(room?: Room) {
+  private handleRoomChange(roomId?: string) {
     this.roomChanged$.next();
-    if (room) {
-      const role$ = this.roomMembershipByShortIdGql
-        .fetch({ variables: { shortId: room.shortId } })
+    if (roomId) {
+      const role$ = this.roomMembershipByIdGql
+        .fetch({ variables: { roomId: roomId } })
         .pipe(
           map((r) => r.data),
           filter((data) => !!data),
-          map((data) => data.roomMembershipByShortId?.role ?? RoomRole.None)
+          map((data) => data.roomMembershipById?.role ?? RoomRole.None)
         );
-      this.registerChangesMetaListener(room);
-      role$.subscribe((role) => this.registerDataChangeListener(room, role));
+      this.registerChangesMetaListener(roomId);
+      role$.subscribe((role) => this.registerDataChangeListener(roomId, role));
     }
   }
 
-  private registerChangesMetaListener(room: Room) {
+  private registerChangesMetaListener(roomId: string) {
     this.wsConnector
-      .getWatcher(`/topic/${room.id}.changes-meta.stream`)
+      .getWatcher(`/topic/${roomId}.changes-meta.stream`)
       .pipe(takeUntil(this.roomChanged$))
       .subscribe((msg) => {
-        this.dispatchEntityChangeNotificationEvent(msg, room);
+        this.dispatchEntityChangeNotificationEvent(msg, roomId);
       });
   }
 
-  private registerDataChangeListener(room: Room, role: RoomRole) {
+  private registerDataChangeListener(roomId: string, role: RoomRole) {
     this.wsConnector
-      .getWatcher(`/topic/${room.id}.changes.stream`)
+      .getWatcher(`/topic/${roomId}.changes.stream`)
       .pipe(takeUntil(this.roomChanged$))
       .subscribe((msg) => {
-        this.dispatchDataChangeEvents(msg, room, false);
+        this.dispatchDataChangeEvents(msg, roomId, false);
       });
     if ([RoomRole.Owner, RoomRole.Editor, RoomRole.Moderator].includes(role)) {
       this.wsConnector
-        .getWatcher(`/topic/${room.id}.moderator.changes.stream`)
+        .getWatcher(`/topic/${roomId}.moderator.changes.stream`)
         .pipe(takeUntil(this.roomChanged$))
         .subscribe((msg) => {
-          this.dispatchDataChangeEvents(msg, room, true);
+          this.dispatchDataChangeEvents(msg, roomId, true);
         });
     }
   }
 
-  private dispatchEntityChangeNotificationEvent(msg: IMessage, room: Room) {
+  private dispatchEntityChangeNotificationEvent(msg: IMessage, roomId: string) {
     const msgEvent = JSON.parse(msg.body);
     const entityChangeNotification = new EntityChangeNotification(
       msgEvent.changeType,
       msgEvent.entityType,
       msgEvent.entityId,
-      room.id
+      roomId
     );
     this.eventService.broadcast(
       entityChangeNotification.type,
@@ -85,14 +84,14 @@ export class WsRoomEventDispatcherService {
 
   private dispatchDataChangeEvents(
     msg: IMessage,
-    room: Room,
+    roomId: string,
     moderatorRole: boolean
   ) {
     const dataType = msg.headers['__TypeId__'].split('.').slice(-1)[0];
     const data = JSON.parse(msg.body);
     const event = moderatorRole
-      ? new ModeratorDataChanged(dataType, room.id, data)
-      : new PublicDataChanged(dataType, room.id, data);
+      ? new ModeratorDataChanged(dataType, roomId, data)
+      : new PublicDataChanged(dataType, roomId, data);
     this.eventService.broadcast(event.type, event);
   }
 }

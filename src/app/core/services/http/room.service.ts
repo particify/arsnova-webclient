@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { RoomSummary } from '@app/core/models/room-summary';
-import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, Subscription, of } from 'rxjs';
+import { catchError, map, share, switchAll, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import {
   GlobalStorageService,
@@ -12,6 +12,11 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
 import { IMessage } from '@stomp/stompjs';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { DefaultCache } from '@app/core/services/util/caching.service';
+
+export interface RoomMessage {
+  roomId: string;
+  body: Record<string, any>;
+}
 
 @Injectable()
 export class RoomService extends AbstractEntityService<Room> {
@@ -26,9 +31,22 @@ export class RoomService extends AbstractEntityService<Room> {
     summary: '/_view/room/summary',
   };
 
-  private currentRoom?: Room;
-  private currentRoomStream$ = new BehaviorSubject<Room | undefined>(undefined);
-  private messageStream$: Observable<IMessage> = of();
+  private currentRoomId?: string;
+  private currentRoomIdStream$ = new BehaviorSubject<string | undefined>(
+    undefined
+  );
+  private messageStream$: Subject<Observable<IMessage>> = new Subject();
+  private roomMessageStream$ = this.messageStream$.pipe(
+    switchAll(),
+    map(
+      (message) =>
+        ({
+          roomId: this.currentRoomId!,
+          body: JSON.parse(message.body),
+        }) satisfies RoomMessage
+    ),
+    share()
+  );
   private messageStreamSubscription?: Subscription;
 
   constructor() {
@@ -41,26 +59,30 @@ export class RoomService extends AbstractEntityService<Room> {
    *
    * @param room The room to join or null to leave the current room.
    */
-  joinRoom(room?: Room) {
-    if (room && room?.id === this.currentRoom?.id) {
+  joinRoom(roomId?: string) {
+    if (roomId && roomId === this.currentRoomId) {
       return;
     }
-    this.currentRoom = room;
-    this.currentRoomStream$.next(room);
+    this.currentRoomId = roomId;
     this.cachingService.getCache(DefaultCache.CURRENT_ROOM).clear();
     if (this.messageStreamSubscription) {
       this.messageStreamSubscription.unsubscribe();
-      this.messageStream$ = of();
+      this.messageStream$.next(of());
     }
-    if (!room) {
+    if (!roomId) {
+      this.currentRoomIdStream$.next(undefined);
       this.feedbackService.unsubscribe();
       this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
       return;
     }
-    this.messageStream$ = this.ws.getWatcher(`/topic/${room.id}.stream`);
+    const legacyRoomId = roomId.replaceAll('-', '');
+    this.messageStream$.next(
+      this.ws.getWatcher(`/topic/${legacyRoomId}.stream`)
+    );
     /* Make sure that at least one subscription is active even if we don't care
      * for event messages here. */
     this.messageStreamSubscription = this.messageStream$.subscribe();
+    this.currentRoomIdStream$.next(roomId);
   }
 
   /**
@@ -70,12 +92,12 @@ export class RoomService extends AbstractEntityService<Room> {
     this.joinRoom();
   }
 
-  getCurrentRoomStream(): Observable<Room | undefined> {
-    return this.currentRoomStream$;
+  getCurrentRoomIdStream(): Observable<string | undefined> {
+    return this.currentRoomIdStream$;
   }
 
-  getCurrentRoomsMessageStream(): Observable<IMessage> {
-    return this.messageStream$;
+  getCurrentRoomsMessageStream(): Observable<RoomMessage> {
+    return this.roomMessageStream$;
   }
 
   getCreatorRooms(userId: string): Observable<Room[]> {

@@ -399,6 +399,7 @@ export enum RoomRole {
 export type RoomStats = {
   __typename?: 'RoomStats';
   activeMemberCount?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['ID']['output'];
 };
 
 export type UpdateAnnouncementInput = {
@@ -554,6 +555,12 @@ export type RoomDetailsFragmentFragment = {
   focusModeEnabled?: boolean | null;
 };
 
+export type RoomStatsFragment = {
+  __typename?: 'RoomStats';
+  id: string;
+  activeMemberCount?: number | null;
+};
+
 export type RoomMembershipFragment = {
   __typename?: 'RoomMembership';
   role: RoomRole;
@@ -568,6 +575,7 @@ export type RoomMembershipFragment = {
     focusModeEnabled?: boolean | null;
     stats?: {
       __typename?: 'RoomStats';
+      id: string;
       activeMemberCount?: number | null;
     } | null;
   };
@@ -601,6 +609,24 @@ export type RoomLanguageByShortIdQueryVariables = Exact<{
 export type RoomLanguageByShortIdQuery = {
   __typename?: 'Query';
   roomByShortId?: { __typename?: 'Room'; language?: string | null } | null;
+};
+
+export type RoomByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type RoomByIdQuery = {
+  __typename?: 'Query';
+  roomById?: {
+    __typename?: 'Room';
+    id: string;
+    shortId: string;
+    name: string;
+    description?: string | null;
+    descriptionRendered?: string | null;
+    language?: string | null;
+    focusModeEnabled?: boolean | null;
+  } | null;
 };
 
 export type RoomByShortIdQueryVariables = Exact<{
@@ -654,6 +680,33 @@ export type RoomsQuery = {
   } | null;
 };
 
+export type RoomMembershipByIdQueryVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type RoomMembershipByIdQuery = {
+  __typename?: 'Query';
+  roomMembershipById?: {
+    __typename?: 'RoomMembership';
+    role: RoomRole;
+    room: {
+      __typename?: 'Room';
+      id: string;
+      shortId: string;
+      name: string;
+      description?: string | null;
+      descriptionRendered?: string | null;
+      language?: string | null;
+      focusModeEnabled?: boolean | null;
+      stats?: {
+        __typename?: 'RoomStats';
+        id: string;
+        activeMemberCount?: number | null;
+      } | null;
+    };
+  } | null;
+};
+
 export type RoomMembershipByShortIdQueryVariables = Exact<{
   shortId: Scalars['String']['input'];
 }>;
@@ -674,6 +727,7 @@ export type RoomMembershipByShortIdQuery = {
       focusModeEnabled?: boolean | null;
       stats?: {
         __typename?: 'RoomStats';
+        id: string;
         activeMemberCount?: number | null;
       } | null;
     };
@@ -706,6 +760,7 @@ export type RoomMembershipsQuery = {
           focusModeEnabled?: boolean | null;
           stats?: {
             __typename?: 'RoomStats';
+            id: string;
             activeMemberCount?: number | null;
           } | null;
         };
@@ -747,6 +802,7 @@ export type RoomsByUserIdQuery = {
           focusModeEnabled?: boolean | null;
           stats?: {
             __typename?: 'RoomStats';
+            id: string;
             activeMemberCount?: number | null;
           } | null;
         };
@@ -759,6 +815,22 @@ export type RoomsByUserIdQuery = {
       hasPreviousPage: boolean;
       startCursor?: string | null;
     };
+  } | null;
+};
+
+export type RoomStatsByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type RoomStatsByIdQuery = {
+  __typename?: 'Query';
+  roomById?: {
+    __typename?: 'Room';
+    stats?: {
+      __typename?: 'RoomStats';
+      id: string;
+      activeMemberCount?: number | null;
+    } | null;
   } | null;
 };
 
@@ -782,6 +854,7 @@ export type JoinRoomMutation = {
       focusModeEnabled?: boolean | null;
       stats?: {
         __typename?: 'RoomStats';
+        id: string;
         activeMemberCount?: number | null;
       } | null;
     };
@@ -1120,17 +1193,24 @@ export const RoomDetailsFragmentFragmentDoc = gql`
     focusModeEnabled
   }
 `;
+export const RoomStatsFragmentDoc = gql`
+  fragment RoomStats on RoomStats {
+    id
+    activeMemberCount
+  }
+`;
 export const RoomMembershipFragmentDoc = gql`
   fragment RoomMembership on RoomMembership {
     room {
       ...RoomDetailsFragment
       stats {
-        activeMemberCount
+        ...RoomStats
       }
     }
     role
   }
   ${RoomDetailsFragmentFragmentDoc}
+  ${RoomStatsFragmentDoc}
 `;
 export const RoomMemberFragmentDoc = gql`
   fragment RoomMember on RoomMember {
@@ -1340,6 +1420,28 @@ export class RoomLanguageByShortIdGql extends Apollo.Query<
     super(apollo);
   }
 }
+export const RoomByIdDocument = gql`
+  query RoomById($id: ID!) {
+    roomById(id: $id) {
+      ...RoomDetailsFragment
+    }
+  }
+  ${RoomDetailsFragmentFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomByIdGql extends Apollo.Query<
+  RoomByIdQuery,
+  RoomByIdQueryVariables
+> {
+  document = RoomByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const RoomByShortIdDocument = gql`
   query RoomByShortId($shortId: String!) {
     roomByShortId(shortId: $shortId) {
@@ -1387,6 +1489,28 @@ export const RoomsDocument = gql`
 })
 export class RoomsGql extends Apollo.Query<RoomsQuery, RoomsQueryVariables> {
   document = RoomsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RoomMembershipByIdDocument = gql`
+  query RoomMembershipById($roomId: UUID!) {
+    roomMembershipById(roomId: $roomId) {
+      ...RoomMembership
+    }
+  }
+  ${RoomMembershipFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomMembershipByIdGql extends Apollo.Query<
+  RoomMembershipByIdQuery,
+  RoomMembershipByIdQueryVariables
+> {
+  document = RoomMembershipByIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -1475,6 +1599,30 @@ export class RoomsByUserIdGql extends Apollo.Query<
   RoomsByUserIdQueryVariables
 > {
   document = RoomsByUserIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RoomStatsByIdDocument = gql`
+  query RoomStatsById($id: ID!) {
+    roomById(id: $id) {
+      stats {
+        ...RoomStats
+      }
+    }
+  }
+  ${RoomStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomStatsByIdGql extends Apollo.Query<
+  RoomStatsByIdQuery,
+  RoomStatsByIdQueryVariables
+> {
+  document = RoomStatsByIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -8,11 +8,16 @@ fragment RoomDetailsFragment on Room {
   focusModeEnabled
 }
 
+fragment RoomStats on RoomStats {
+  id
+  activeMemberCount
+}
+
 fragment RoomMembership on RoomMembership {
   room {
     ...RoomDetailsFragment
     stats {
-      activeMemberCount
+      ...RoomStats
     }
   }
   role
@@ -40,6 +45,12 @@ query RoomLanguageByShortId($shortId: String!) {
   }
 }
 
+query RoomById($id: ID!) {
+  roomById(id: $id) {
+    ...RoomDetailsFragment
+  }
+}
+
 query RoomByShortId($shortId: String!) {
   roomByShortId(shortId: $shortId) {
     ...RoomDetailsFragment
@@ -63,8 +74,26 @@ query Rooms($room: RoomQueryInput!, $cursor: String) {
   }
 }
 
+query RoomMembershipById($roomId: UUID!) {
+  roomMembershipById(roomId: $roomId) {
+    ...RoomMembership
+  }
+}
+
 query RoomMembershipByShortId($shortId: String!) {
   roomMembershipByShortId(shortId: $shortId) {
+    ...RoomMembership
+  }
+}
+
+query RoomByShortId($shortId: String!) {
+  roomByShortId(shortId: $shortId) {
+    ...RoomDetailsFragment
+  }
+}
+
+query RoomMembershipById($roomId: UUID!) {
+  roomMembershipById(roomId: $roomId) {
     ...RoomMembership
   }
 }
@@ -99,6 +128,14 @@ query RoomsByUserId($userId: UUID!, $cursor: String) {
       hasNextPage
       hasPreviousPage
       startCursor
+    }
+  }
+}
+
+query RoomStatsById($id: ID!) {
+  roomById(id: $id) {
+    stats {
+      ...RoomStats
     }
   }
 }

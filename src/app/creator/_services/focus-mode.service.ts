@@ -18,7 +18,10 @@ export class FocusModeService extends AbstractFocusModeService {
   }
 
   private sendState(room: string, newState: FocusEvent) {
-    this.http.post(`api/room/${room}/focus-event`, newState).subscribe();
+    const legacyRoomId = room.replaceAll('-', '');
+    this.http
+      .post(`api/room/${legacyRoomId}/focus-event`, newState)
+      .subscribe();
   }
 
   getState(): Observable<FocusEvent> {

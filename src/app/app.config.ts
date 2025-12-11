@@ -80,6 +80,10 @@ import { environment } from '@environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { apolloProvider } from '@app/apollo-provider';
 import { hideSplashscreenInitializer } from './hide-splashscreen';
+import {
+  GraphqlEntityChangeHandler,
+  graphqlEntityChangeHandlerInitializer,
+} from '@app/core/services/graphql-entity-change-handler';
 
 if (environment.production) {
   enableProdMode();
@@ -120,6 +124,9 @@ export const AppConfig: ApplicationConfig = {
       );
       return initializerFn();
     }),
+    provideAppInitializer(() =>
+      graphqlEntityChangeHandlerInitializer(inject(GraphqlEntityChangeHandler))
+    ),
     provideAppInitializer(() => hideSplashscreenInitializer()),
     {
       provide: HTTP_INTERCEPTORS,

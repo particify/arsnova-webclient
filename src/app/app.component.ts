@@ -127,8 +127,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
       this.allowRegister = !config.ui.registrationDisabled;
     });
-    this.roomService.getCurrentRoomStream().subscribe((room) => {
-      this.isRoom = !!room;
+    this.roomService.getCurrentRoomIdStream().subscribe((roomId) => {
+      this.isRoom = !!roomId;
     });
     this.authenticationService
       .getAuthenticatedUserChanges()
