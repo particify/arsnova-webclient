@@ -90,3 +90,20 @@ mutation AdminTransferRoom($roomId: ID!, $userId: ID!) {
     ...AdminRoomDetails
   }
 }
+
+query AdminStats {
+  adminUserStats {
+    totalCount
+    verifiedCount
+    pendingCount
+    deletedCount
+  }
+  adminRoomStats {
+    totalCount
+    deletedCount
+  }
+  adminAnnouncementStats {
+    totalCount
+    deletedCount
+  }
+}

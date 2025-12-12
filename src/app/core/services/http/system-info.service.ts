@@ -7,7 +7,7 @@ import { SystemHealth } from '@app/admin/_models/system-health';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    Accept: 'application/vnd.spring-boot.actuator.v2+json,application/json',
+    Accept: 'application/json',
   }),
 };
 
@@ -25,7 +25,7 @@ export class SystemInfoService extends AbstractHttpService<void> {
     health: '/health',
     management: '/management/core',
     summarizedStats: '/_system/summarizedstats',
-    serviceStats: '/_system/servicestats',
+    core3Stats: '/management/stats',
   };
 
   constructor() {
@@ -50,13 +50,13 @@ export class SystemInfoService extends AbstractHttpService<void> {
       );
   }
 
-  getServiceStats(tenantId?: string): Observable<{ [key: string]: any }> {
-    let connectionUrl = this.apiUrl.base + this.serviceApiUrl.serviceStats;
+  getCore3Stats(tenantId?: string): Observable<{ [key: string]: any }> {
+    let connectionUrl = this.apiUrl.base + this.serviceApiUrl.core3Stats;
     if (tenantId) {
       connectionUrl += '?tenantId=' + tenantId;
     }
     return this.http
       .get<Map<string, any>>(connectionUrl, httpOptions)
-      .pipe(catchError(this.handleError<Map<string, any>>('getServiceStats')));
+      .pipe(catchError(this.handleError<Map<string, any>>('getCore3Stats')));
   }
 }
