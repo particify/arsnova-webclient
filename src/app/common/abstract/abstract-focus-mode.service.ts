@@ -20,6 +20,7 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RxStompState } from '@stomp/rx-stomp';
+import { RoomFocusModeEnabledByIdGql } from '@gql/generated/graphql';
 
 @Injectable()
 export abstract class AbstractFocusModeService implements OnDestroy {
@@ -28,6 +29,7 @@ export abstract class AbstractFocusModeService implements OnDestroy {
   protected featureFlagService = inject(FeatureFlagService);
   protected roomService = inject(RoomService);
   protected roomSettingsService = inject(RoomSettingsService);
+  protected readonly roomById = inject(RoomFocusModeEnabledByIdGql);
 
   destroyed$ = new Subject<void>();
 
@@ -51,21 +53,13 @@ export abstract class AbstractFocusModeService implements OnDestroy {
   protected readonly roomId = toSignal(this.roomId$);
 
   protected readonly focusModeEnabled$ = this.roomId$.pipe(
-    map((id) => id?.replaceAll('-', '')),
-    switchMap((roomId) =>
-      this.roomSettingsService
-        .getByRoomId(roomId)
-        .pipe(
-          switchMap((s) =>
-            concat(
-              of(s),
-              this.roomSettingsService.getRoomSettingsStream(roomId, s.id)
-            )
-          )
-        )
+    switchMap((id) =>
+      this.roomById.watch({ variables: { id } }).valueChanges.pipe(
+        filter((r) => r.dataState === 'complete'),
+        filter((r) => !!r.data),
+        map((r) => r.data.roomById?.focusModeEnabled ?? false)
+      )
     ),
-    map((s) => s.focusModeEnabled),
-    filter((e) => e !== undefined),
     shareReplay(1)
   );
   protected readonly focusModeEnabled = toSignal(this.focusModeEnabled$);

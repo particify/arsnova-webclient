@@ -126,7 +126,6 @@ class MockRoomSettingsService {
     return of({
       surveyEnabled: true,
       surveyType: LiveFeedbackType.FEEDBACK,
-      focusModeEnabled: false,
       commentThresholdEnabled: false,
     });
   }

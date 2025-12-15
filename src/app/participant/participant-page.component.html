@@ -5,7 +5,7 @@
         extensionId="remote"
         [extensionData]="{ isParticipant: true }"
       ></lib-extension-point>
-      @if (!focusModeEnabled) {
+      @if (!focusModeEnabled()) {
         <mat-drawer mode="side" opened [disableClose]="true">
           <div fxLayout="column" fxLayoutAlign="space-between" fxFill>
             @if (roomSettings) {
@@ -24,7 +24,7 @@
         fxLayout="column"
         fxLayoutAlign="space-between"
         id="routing-content"
-        [ngClass]="{ 'no-navigation': focusModeEnabled }"
+        [ngClass]="{ 'no-navigation': focusModeEnabled() }"
       >
         <div fxLayout="row" fxLayoutAlign="center">
           <div class="routing-container">

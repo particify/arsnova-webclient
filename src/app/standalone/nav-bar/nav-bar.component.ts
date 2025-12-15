@@ -127,7 +127,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     )
   );
   focusFeature?: RoutingFeature;
-  focusModeEnabled = false;
+  focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {
@@ -189,14 +189,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
       this.subscribeToContentGroups();
     } else {
       this.subscribeToContentGroupEvents();
-      this.focusModeService
-        .getFocusModeEnabled()
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((focusModeEnabled) => {
-          setTimeout(() => {
-            this.focusModeEnabled = focusModeEnabled;
-          }, 300);
-        });
       this.focusModeService
         .getState()
         .pipe(takeUntil(this.destroyed$))
@@ -616,7 +608,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   getFocusInfo(feature: string) {
-    if (!this.focusModeEnabled) {
+    if (!this.focusModeEnabled()) {
       return '';
     }
     return feature === this.focusFeature ? 'creator.sidebar.focus-feature' : '';

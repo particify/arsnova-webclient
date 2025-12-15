@@ -5,7 +5,6 @@ export interface RoomSettings {
   roomId: string;
   surveyEnabled: boolean;
   surveyType: LiveFeedbackType;
-  focusModeEnabled: boolean;
   commentThresholdEnabled: boolean;
   commentThreshold: number;
   commentTags?: string[];

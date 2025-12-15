@@ -9,7 +9,7 @@
         [ngClass]="{
           current: i === currentRouteIndex,
           'reduce-bottom-padding':
-            focusModeEnabled && barItem.name === focusFeature,
+            focusModeEnabled() && barItem.name === focusFeature,
         }"
         (click)="navToUrl(i)"
         [matTooltip]="
@@ -35,7 +35,7 @@
             class="badge"
           ></div>
         </mat-icon>
-        @if (focusModeEnabled && barItem.name === focusFeature) {
+        @if (focusModeEnabled() && barItem.name === focusFeature) {
           <div class="focus-indicator"></div>
         }
         <div class="ellipsis">

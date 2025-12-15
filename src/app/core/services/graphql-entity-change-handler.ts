@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
 import { RoomService } from '@app/core/services/http/room.service';
 import { EventService } from '@app/core/services/util/event.service';
-import { RoomByIdDocument, RoomStatsFragmentDoc } from '@gql/generated/graphql';
+import { RoomStatsFragmentDoc } from '@gql/generated/graphql';
 import { Apollo } from 'apollo-angular';
 import { filter } from 'rxjs';
 
@@ -21,7 +21,7 @@ export class GraphqlEntityChangeHandler {
             e.payload.entityType === 'Room' && e.payload.changeType === 'UPDATE'
         )
       )
-      .subscribe(() => this.handleRoomUpdateEvent());
+      .subscribe((e) => this.handleRoomUpdateEvent(e.payload.id));
     this.roomService
       .getCurrentRoomsMessageStream()
       .pipe(filter((msg) => !!msg.body.UserCountChanged))
@@ -33,10 +33,15 @@ export class GraphqlEntityChangeHandler {
       );
   }
 
-  private handleRoomUpdateEvent() {
-    this.apollo.client.refetchQueries({
-      include: [RoomByIdDocument],
-    });
+  private handleRoomUpdateEvent(roomId: string) {
+    for (const [query] of this.apollo.client.getObservableQueries().entries()) {
+      if (
+        query.queryName === 'RoomById' &&
+        query.variables?.id?.replaceAll('-', '') === roomId
+      ) {
+        query.refetch();
+      }
+    }
   }
 
   private updateCachedRoomActiveMemberCount(roomId: string, count: number) {

@@ -18,6 +18,7 @@ import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { RoomSettings } from '@app/core/models/room-settings';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-participant-page',
@@ -43,8 +44,6 @@ export class ParticipantPageComponent implements OnInit {
   private routingService = inject(RoutingService);
   private roomSettingsService = inject(RoomSettingsService);
 
-  focusModeEnabled = false;
-
   // Route data input below
   roomId = input.required<string>();
   @Input({ required: true }) room!: Room;
@@ -52,6 +51,7 @@ export class ParticipantPageComponent implements OnInit {
   @Input({ required: true }) viewRole!: UserRole;
 
   roomSettings?: RoomSettings;
+  focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
 
   constructor() {
     const translateService = this.translateService;
@@ -68,11 +68,6 @@ export class ParticipantPageComponent implements OnInit {
       return;
     }
     this.focusModeService.init();
-    this.focusModeService
-      .getFocusModeEnabled()
-      .subscribe(
-        (focusModeEnabled) => (this.focusModeEnabled = focusModeEnabled)
-      );
     this.roomSettingsService.getByRoomId(this.room.id).subscribe((settings) => {
       this.roomSettings = settings;
     });

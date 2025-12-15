@@ -60,7 +60,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { BaseCardComponent } from '@app/standalone/base-card/base-card.component';
 import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
 import { AnswerResultType } from '@app/core/models/answer-result';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Room } from '@app/core/models/room';
 import { UserUiSettings } from '@gql/generated/graphql';
 
@@ -140,7 +140,7 @@ export class ParticipantContentCarouselPageComponent
   isReloading = false;
   isReloadingCurrentContent = false;
   displaySnackBar = false;
-  focusModeEnabled = false;
+  focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
   lockedContentId?: string;
 
   isFinished = false;
@@ -171,12 +171,6 @@ export class ParticipantContentCarouselPageComponent
   }
 
   ngOnInit() {
-    this.focusModeService
-      .getFocusModeEnabled()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((focusModeEnabled) => {
-        this.focusModeEnabled = focusModeEnabled;
-      });
     this.translateService.setActiveLang(
       this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
     );
@@ -334,7 +328,7 @@ export class ParticipantContentCarouselPageComponent
     if (contentIndex !== undefined && (contentIndex == 0 || contentIndex > 0)) {
       this.initStepper(contentIndex);
     } else {
-      if (!this.focusModeEnabled) {
+      if (!this.focusModeEnabled()) {
         this.getInitialStep();
       }
     }
@@ -459,7 +453,7 @@ export class ParticipantContentCarouselPageComponent
     );
     this.checkState();
     if (
-      !this.focusModeEnabled &&
+      !this.focusModeEnabled() &&
       this.started &&
       this.contentGroup.publishingMode !== PublishingMode.LIVE &&
       this.contentGroup.groupType !== GroupType.QUIZ
@@ -522,7 +516,7 @@ export class ParticipantContentCarouselPageComponent
     ) {
       return;
     }
-    if (this.focusModeEnabled) {
+    if (this.focusModeEnabled()) {
       this.reloadContents();
     } else if (
       this.contentGroup.publishingMode === PublishingMode.LIVE &&

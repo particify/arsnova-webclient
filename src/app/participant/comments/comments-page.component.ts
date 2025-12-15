@@ -17,6 +17,7 @@ import { CommentSettingsHintComponent } from '@app/standalone/comment-settings-h
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CommentListBarComponent } from '@app/standalone/comment-list-bar/comment-list-bar.component';
 import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-comments-page',
@@ -45,7 +46,7 @@ export class CommentsPageComponent
 
   commentVoteMap = new Map<string, Vote>();
 
-  focusModeEnabled = false;
+  focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
 
   ngOnInit(): void {
     this.publicComments$ = this.commentService
@@ -53,12 +54,6 @@ export class CommentsPageComponent
       .pipe(takeUntil(this.destroyed$));
     this.activeComments$ = this.publicComments$;
     this.load();
-    this.focusModeService
-      .getFocusModeEnabled()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((focusModeEnabled) => {
-        this.focusModeEnabled = focusModeEnabled;
-      });
     this.focusModeService
       .getCommentState()
       .pipe(takeUntil(this.destroyed$))
