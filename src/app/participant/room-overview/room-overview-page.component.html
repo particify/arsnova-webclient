@@ -92,10 +92,11 @@
           </app-feature-card>
         }
       }
-      @if (!anyFeatureEnabled || focusModeEnabled()) {
+      @let roomName = room()?.name;
+      @if ((!anyFeatureEnabled || focusModeEnabled()) && !!roomName) {
         <app-room-info-component
           style="max-width: 100%"
-          [name]="room.name"
+          [name]="roomName"
           [shortId]="_shortId"
           [description]="descriptionRendered()"
           [focusModeEnabled]="!!focusModeEnabled()"
