@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
-import { Room } from '@app/core/models/room';
-import { RoomService } from '@app/core/services/http/room.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+} from '@angular/core';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { AdminService } from '@app/core/services/http/admin.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -10,16 +12,29 @@ import {
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { UserService } from '@app/core/services/http/user.service';
 import { FormService } from '@app/core/services/util/form.service';
-import { take } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
-import { SearchBarComponent } from '@app/admin/search-bar/search-bar.component';
 import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
 import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  AdminDeleteRoomByIdGql,
+  AdminRoomGql,
+  AdminTransferRoomGql,
+} from '@gql/generated/graphql';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AdminUtilService } from '@app/admin/admin-util.service';
 
 @Component({
   selector: 'app-room-management',
@@ -27,81 +42,116 @@ import { MatIcon } from '@angular/material/icon';
   styleUrls: ['../admin-styles.scss'],
   imports: [
     AdminPageHeaderComponent,
-    SearchBarComponent,
     MatCard,
     FlexModule,
     EntityPropertiesComponent,
     MatButton,
     MatIcon,
     TranslocoPipe,
+    LoadingIndicatorComponent,
+    MatFormField,
+    MatLabel,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInput,
+    MatSuffix,
+    MatIconButton,
   ],
+  providers: [AdminUtilService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoomManagementComponent {
-  protected adminService = inject(AdminService);
-  protected roomService = inject(RoomService);
-  protected dialogService = inject(DialogService);
-  protected notificationService = inject(NotificationService);
-  protected translateService = inject(TranslocoService);
-  protected dialog = inject(MatDialog);
-  protected userService = inject(UserService);
-  private formService = inject(FormService);
+  private readonly dialogService = inject(DialogService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly dialog = inject(MatDialog);
+  private readonly formService = inject(FormService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly adminRoom = inject(AdminRoomGql);
+  private readonly adminDeleteRoom = inject(AdminDeleteRoomByIdGql);
+  private readonly adminTransferRoom = inject(AdminTransferRoomGql);
+  private readonly adminUtilService = inject(AdminUtilService);
 
-  room?: Room;
-  rooms: Room[] = [];
-  searchResults: string[] = [];
+  readonly formControl = new FormControl();
 
-  showRoom(searchResult: string) {
-    const index = this.searchResults.indexOf(searchResult);
-    this.room = this.rooms[index];
-  }
+  private readonly startSearch$ = this.formControl.valueChanges.pipe(
+    takeUntilDestroyed(this.destroyRef),
+    map((value) => this.determineSearchVariables(value))
+  );
 
-  search(id: string) {
-    this.searchResults = [];
-    if (!id || this.room) {
-      return;
+  private readonly roomQueryRef = this.startSearch$.pipe(
+    switchMap((variables) =>
+      variables
+        ? this.adminRoom.watch({
+            errorPolicy: 'all',
+            variables,
+          }).valueChanges
+        : of(null)
+    )
+  );
+
+  readonly isLoading = toSignal(
+    this.roomQueryRef.pipe(map((r) => r?.loading ?? false))
+  );
+  readonly room = toSignal(
+    this.roomQueryRef.pipe(
+      map((r) =>
+        !!r && r.dataState === 'complete'
+          ? r.data?.adminRoomByIdOrShortId
+          : undefined
+      ),
+      catchError(() => of(undefined))
+    )
+  );
+
+  private determineSearchVariables(input: string) {
+    if (input.length === 8) {
+      return { shortId: Number(input) };
+    } else if (this.adminUtilService.isUuid(input)) {
+      return { id: input };
     }
-    id = id.replace(' ', '');
-    if (id.match(/^[0-9]{8}$/)) {
-      id = '~' + id;
-    }
-    this.searchResults = [];
-    this.adminService.getRoom(id).subscribe((room) => {
-      this.rooms = [];
-      if (room) {
-        this.rooms.push(room);
-        this.searchResults.push(`${room.name} (${room.shortId})`);
-      }
-    });
+    return;
   }
 
   clear() {
-    this.rooms = [];
-    this.searchResults = [];
-    this.room = undefined;
+    this.formControl.setValue('');
   }
 
-  deleteEntity() {
-    if (this.room) {
-      const confirmAction = this.roomService.deleteRoom(this.room.id);
+  deleteRoom() {
+    const room = this.room();
+    if (room) {
+      const confirmAction = this.adminDeleteRoom.mutate({
+        variables: { id: room.id },
+        update: (cache, result) => {
+          if (result.data?.adminDeleteRoomById) {
+            const cacheId = cache.identify({
+              __typename: 'AdminRoom',
+              id: room.id,
+            });
+            if (cacheId) {
+              cache.evict({ id: cacheId });
+              cache.gc();
+            }
+          }
+        },
+      });
       const dialogRef = this.dialogService.openDeleteDialog(
         'room-as-admin',
         'dialog.really-delete-room',
-        this.room.name,
+        room.name,
         undefined,
         () => confirmAction
       );
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-          this.translateService
-            .selectTranslate('admin.admin-area.room-deleted')
-            .pipe(take(1))
-            .subscribe((message) =>
-              this.notificationService.showAdvanced(
-                message,
-                AdvancedSnackBarTypes.WARNING
-              )
-            );
-          this.room = undefined;
+          this.clear();
+          const msg = this.translateService.translate(
+            'admin.admin-area.room-deleted'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
         }
       });
     }
@@ -115,24 +165,28 @@ export class RoomManagementComponent {
         useUserSearch: true,
       },
     });
+    const room = this.room();
     dialogRef.componentInstance.clicked$.subscribe((userId) => {
-      if (!userId || !this.room) {
+      if (!userId || !room) {
         return;
       }
-      this.adminService.transferRoom(this.room.id, userId).subscribe(
-        () => {
-          this.formService.enableForm();
-          dialogRef.close();
-          const msg = this.translateService.translate(
-            'admin.admin-area.room-transferred'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.SUCCESS
-          );
-        },
-        () => this.formService.enableForm()
-      );
+      this.formService.disableForm();
+      this.adminTransferRoom
+        .mutate({ variables: { roomId: room.id, userId: userId } })
+        .subscribe({
+          next: () => {
+            this.formService.enableForm();
+            dialogRef.close();
+            const msg = this.translateService.translate(
+              'admin.admin-area.room-transferred'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          },
+          error: () => this.formService.enableForm(),
+        });
     });
   }
 }

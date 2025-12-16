@@ -34,6 +34,53 @@ export type Scalars = {
   UUID: { input: string; output: string };
 };
 
+export type AdminRoom = {
+  __typename?: 'AdminRoom';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  createdBy?: Maybe<Scalars['ID']['output']>;
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedBy?: Maybe<Scalars['ID']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  descriptionRendered?: Maybe<Scalars['String']['output']>;
+  focusModeEnabled?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
+  language?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  shortId: Scalars['ID']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedBy?: Maybe<Scalars['ID']['output']>;
+};
+
+export type AdminRoomQueryInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  shortId?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type AdminUser = {
+  __typename?: 'AdminUser';
+  id: Scalars['ID']['output'];
+  language?: Maybe<Scalars['String']['output']>;
+  mailAddress?: Maybe<Scalars['String']['output']>;
+  uiSettings?: Maybe<UserUiSettings>;
+  unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
+  verificationCode?: Maybe<Scalars['Int']['output']>;
+  verificationErrors?: Maybe<Scalars['Int']['output']>;
+  verificationExpiresAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type AdminUserConnection = {
+  __typename?: 'AdminUserConnection';
+  edges?: Maybe<Array<Maybe<AdminUserEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export type AdminUserEdge = {
+  __typename?: 'AdminUserEdge';
+  cursor: Scalars['String']['output'];
+  node: AdminUser;
+};
+
 export type Announcement = {
   __typename?: 'Announcement';
   body: Scalars['String']['output'];
@@ -85,6 +132,11 @@ export type JoinRoomInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  adminCreateUser: AdminUser;
+  adminDeleteRoomById: Scalars['UUID']['output'];
+  adminDeleteUserById: Scalars['UUID']['output'];
+  adminTransferRoom: AdminRoom;
+  adminVerifyUserById: AdminUser;
   claimUnverifiedUser?: Maybe<User>;
   createAnnouncement: Announcement;
   createRoom: Room;
@@ -113,6 +165,27 @@ export type Mutation = {
   updateUserUiSettings?: Maybe<UserUiSettings>;
   verifyUserMailAddress?: Maybe<User>;
   verifyUserMailAddressUnauthenticated?: Maybe<User>;
+};
+
+export type MutationAdminCreateUserArgs = {
+  mailAddress: Scalars['String']['input'];
+};
+
+export type MutationAdminDeleteRoomByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationAdminDeleteUserByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationAdminTransferRoomArgs = {
+  roomId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+};
+
+export type MutationAdminVerifyUserByIdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type MutationClaimUnverifiedUserArgs = {
@@ -240,6 +313,9 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query';
+  adminRoomByIdOrShortId?: Maybe<AdminRoom>;
+  adminUserById?: Maybe<AdminUser>;
+  adminUsers?: Maybe<AdminUserConnection>;
   announcementsByRoomId?: Maybe<AnnouncementConnection>;
   announcementsByUserId?: Maybe<AnnouncementConnection>;
   announcementsForCurrentUser?: Maybe<AnnouncementConnection>;
@@ -254,6 +330,23 @@ export type Query = {
   rooms?: Maybe<RoomConnection>;
   roomsByUserId?: Maybe<RoomMembershipConnection>;
   userByDisplayId?: Maybe<User>;
+};
+
+export type QueryAdminRoomByIdOrShortIdArgs = {
+  input: AdminRoomQueryInput;
+};
+
+export type QueryAdminUserByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QueryAdminUsersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  exactSearchMode?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryAnnouncementsByRoomIdArgs = {
@@ -437,6 +530,230 @@ export type UserUiSettings = {
   contentVisualizationUnitPercent?: Maybe<Scalars['Boolean']['output']>;
   rotateWordcloudItems?: Maybe<Scalars['Boolean']['output']>;
   showContentResultsDirectly?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type AdminUserDetailsFragment = {
+  __typename?: 'AdminUser';
+  id: string;
+  username?: string | null;
+  mailAddress?: string | null;
+  unverifiedMailAddress?: string | null;
+  language?: string | null;
+  verificationCode?: number | null;
+  verificationErrors?: number | null;
+  verificationExpiresAt?: string | null;
+  uiSettings?: {
+    __typename?: 'UserUiSettings';
+    contentAnswersDirectlyBelowChart?: boolean | null;
+    contentVisualizationUnitPercent?: boolean | null;
+    showContentResultsDirectly?: boolean | null;
+    rotateWordcloudItems?: boolean | null;
+  } | null;
+};
+
+export type AdminRoomDetailsFragment = {
+  __typename?: 'AdminRoom';
+  id: string;
+  shortId: string;
+  name: string;
+  description?: string | null;
+  descriptionRendered?: string | null;
+  language?: string | null;
+  focusModeEnabled?: boolean | null;
+  createdBy?: string | null;
+  createdAt?: string | null;
+  updatedBy?: string | null;
+  updatedAt?: string | null;
+  deletedBy?: string | null;
+  deletedAt?: string | null;
+};
+
+export type AdminUserByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type AdminUserByIdQuery = {
+  __typename?: 'Query';
+  adminUserById?: {
+    __typename?: 'AdminUser';
+    id: string;
+    username?: string | null;
+    mailAddress?: string | null;
+    unverifiedMailAddress?: string | null;
+    language?: string | null;
+    verificationCode?: number | null;
+    verificationErrors?: number | null;
+    verificationExpiresAt?: string | null;
+    uiSettings?: {
+      __typename?: 'UserUiSettings';
+      contentAnswersDirectlyBelowChart?: boolean | null;
+      contentVisualizationUnitPercent?: boolean | null;
+      showContentResultsDirectly?: boolean | null;
+      rotateWordcloudItems?: boolean | null;
+    } | null;
+  } | null;
+};
+
+export type AdminUsersQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  exactSearchMode?: InputMaybe<Scalars['Boolean']['input']>;
+  cursor?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type AdminUsersQuery = {
+  __typename?: 'Query';
+  adminUsers?: {
+    __typename?: 'AdminUserConnection';
+    edges?: Array<{
+      __typename?: 'AdminUserEdge';
+      cursor: string;
+      node: {
+        __typename?: 'AdminUser';
+        id: string;
+        username?: string | null;
+        mailAddress?: string | null;
+        unverifiedMailAddress?: string | null;
+        language?: string | null;
+        verificationCode?: number | null;
+        verificationErrors?: number | null;
+        verificationExpiresAt?: string | null;
+        uiSettings?: {
+          __typename?: 'UserUiSettings';
+          contentAnswersDirectlyBelowChart?: boolean | null;
+          contentVisualizationUnitPercent?: boolean | null;
+          showContentResultsDirectly?: boolean | null;
+          rotateWordcloudItems?: boolean | null;
+        } | null;
+      };
+    } | null> | null;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      endCursor?: string | null;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+    };
+  } | null;
+};
+
+export type AdminDeleteUserByIdMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type AdminDeleteUserByIdMutation = {
+  __typename?: 'Mutation';
+  adminDeleteUserById: string;
+};
+
+export type AdminCreateUserMutationVariables = Exact<{
+  mailAddress: Scalars['String']['input'];
+}>;
+
+export type AdminCreateUserMutation = {
+  __typename?: 'Mutation';
+  adminCreateUser: {
+    __typename?: 'AdminUser';
+    id: string;
+    username?: string | null;
+    mailAddress?: string | null;
+    unverifiedMailAddress?: string | null;
+    language?: string | null;
+    verificationCode?: number | null;
+    verificationErrors?: number | null;
+    verificationExpiresAt?: string | null;
+    uiSettings?: {
+      __typename?: 'UserUiSettings';
+      contentAnswersDirectlyBelowChart?: boolean | null;
+      contentVisualizationUnitPercent?: boolean | null;
+      showContentResultsDirectly?: boolean | null;
+      rotateWordcloudItems?: boolean | null;
+    } | null;
+  };
+};
+
+export type AdminVerifyUserByIdMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type AdminVerifyUserByIdMutation = {
+  __typename?: 'Mutation';
+  adminVerifyUserById: {
+    __typename?: 'AdminUser';
+    id: string;
+    username?: string | null;
+    mailAddress?: string | null;
+    unverifiedMailAddress?: string | null;
+    language?: string | null;
+    verificationCode?: number | null;
+    verificationErrors?: number | null;
+    verificationExpiresAt?: string | null;
+    uiSettings?: {
+      __typename?: 'UserUiSettings';
+      contentAnswersDirectlyBelowChart?: boolean | null;
+      contentVisualizationUnitPercent?: boolean | null;
+      showContentResultsDirectly?: boolean | null;
+      rotateWordcloudItems?: boolean | null;
+    } | null;
+  };
+};
+
+export type AdminRoomQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']['input']>;
+  shortId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type AdminRoomQuery = {
+  __typename?: 'Query';
+  adminRoomByIdOrShortId?: {
+    __typename?: 'AdminRoom';
+    id: string;
+    shortId: string;
+    name: string;
+    description?: string | null;
+    descriptionRendered?: string | null;
+    language?: string | null;
+    focusModeEnabled?: boolean | null;
+    createdBy?: string | null;
+    createdAt?: string | null;
+    updatedBy?: string | null;
+    updatedAt?: string | null;
+    deletedBy?: string | null;
+    deletedAt?: string | null;
+  } | null;
+};
+
+export type AdminDeleteRoomByIdMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type AdminDeleteRoomByIdMutation = {
+  __typename?: 'Mutation';
+  adminDeleteRoomById: string;
+};
+
+export type AdminTransferRoomMutationVariables = Exact<{
+  roomId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+}>;
+
+export type AdminTransferRoomMutation = {
+  __typename?: 'Mutation';
+  adminTransferRoom: {
+    __typename?: 'AdminRoom';
+    id: string;
+    shortId: string;
+    name: string;
+    description?: string | null;
+    descriptionRendered?: string | null;
+    language?: string | null;
+    focusModeEnabled?: boolean | null;
+    createdBy?: string | null;
+    createdAt?: string | null;
+    updatedBy?: string | null;
+    updatedAt?: string | null;
+    deletedBy?: string | null;
+    deletedAt?: string | null;
+  };
 };
 
 export type AnnouncementsMetaForCurrentUserQueryVariables = Exact<{
@@ -1191,6 +1508,41 @@ export type ResendVerificationMailMutation = {
   resendVerificationMail?: boolean | null;
 };
 
+export const AdminUserDetailsFragmentDoc = gql`
+  fragment AdminUserDetails on AdminUser {
+    id
+    username
+    mailAddress
+    unverifiedMailAddress
+    uiSettings {
+      contentAnswersDirectlyBelowChart
+      contentVisualizationUnitPercent
+      showContentResultsDirectly
+      rotateWordcloudItems
+    }
+    language
+    verificationCode
+    verificationErrors
+    verificationExpiresAt
+  }
+`;
+export const AdminRoomDetailsFragmentDoc = gql`
+  fragment AdminRoomDetails on AdminRoom {
+    id
+    shortId
+    name
+    description
+    descriptionRendered
+    language
+    focusModeEnabled
+    createdBy
+    createdAt
+    updatedBy
+    updatedAt
+    deletedBy
+    deletedAt
+  }
+`;
 export const RoomDetailsFragmentFragmentDoc = gql`
   fragment RoomDetailsFragment on Room {
     id
@@ -1232,6 +1584,196 @@ export const RoomMemberFragmentDoc = gql`
     role
   }
 `;
+export const AdminUserByIdDocument = gql`
+  query AdminUserById($id: ID!) {
+    adminUserById(id: $id) {
+      ...AdminUserDetails
+    }
+  }
+  ${AdminUserDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminUserByIdGql extends Apollo.Query<
+  AdminUserByIdQuery,
+  AdminUserByIdQueryVariables
+> {
+  document = AdminUserByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminUsersDocument = gql`
+  query AdminUsers(
+    $search: String
+    $exactSearchMode: Boolean
+    $cursor: String
+  ) {
+    adminUsers(
+      search: $search
+      exactSearchMode: $exactSearchMode
+      first: 10
+      after: $cursor
+    ) {
+      edges {
+        node {
+          ...AdminUserDetails
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+  ${AdminUserDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminUsersGql extends Apollo.Query<
+  AdminUsersQuery,
+  AdminUsersQueryVariables
+> {
+  document = AdminUsersDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminDeleteUserByIdDocument = gql`
+  mutation AdminDeleteUserById($id: ID!) {
+    adminDeleteUserById(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminDeleteUserByIdGql extends Apollo.Mutation<
+  AdminDeleteUserByIdMutation,
+  AdminDeleteUserByIdMutationVariables
+> {
+  document = AdminDeleteUserByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminCreateUserDocument = gql`
+  mutation AdminCreateUser($mailAddress: String!) {
+    adminCreateUser(mailAddress: $mailAddress) {
+      ...AdminUserDetails
+    }
+  }
+  ${AdminUserDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminCreateUserGql extends Apollo.Mutation<
+  AdminCreateUserMutation,
+  AdminCreateUserMutationVariables
+> {
+  document = AdminCreateUserDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminVerifyUserByIdDocument = gql`
+  mutation AdminVerifyUserById($id: ID!) {
+    adminVerifyUserById(id: $id) {
+      ...AdminUserDetails
+    }
+  }
+  ${AdminUserDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminVerifyUserByIdGql extends Apollo.Mutation<
+  AdminVerifyUserByIdMutation,
+  AdminVerifyUserByIdMutationVariables
+> {
+  document = AdminVerifyUserByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminRoomDocument = gql`
+  query AdminRoom($id: ID, $shortId: Int) {
+    adminRoomByIdOrShortId(input: { id: $id, shortId: $shortId }) {
+      ...AdminRoomDetails
+    }
+  }
+  ${AdminRoomDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminRoomGql extends Apollo.Query<
+  AdminRoomQuery,
+  AdminRoomQueryVariables
+> {
+  document = AdminRoomDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminDeleteRoomByIdDocument = gql`
+  mutation AdminDeleteRoomById($id: ID!) {
+    adminDeleteRoomById(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminDeleteRoomByIdGql extends Apollo.Mutation<
+  AdminDeleteRoomByIdMutation,
+  AdminDeleteRoomByIdMutationVariables
+> {
+  document = AdminDeleteRoomByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminTransferRoomDocument = gql`
+  mutation AdminTransferRoom($roomId: ID!, $userId: ID!) {
+    adminTransferRoom(roomId: $roomId, userId: $userId) {
+      ...AdminRoomDetails
+    }
+  }
+  ${AdminRoomDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminTransferRoomGql extends Apollo.Mutation<
+  AdminTransferRoomMutation,
+  AdminTransferRoomMutationVariables
+> {
+  document = AdminTransferRoomDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const AnnouncementsMetaForCurrentUserDocument = gql`
   query AnnouncementsMetaForCurrentUser {
     announcementsMetaForCurrentUser {

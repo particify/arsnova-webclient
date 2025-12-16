@@ -1,25 +1,33 @@
 <app-admin-page-header headerText="room-management"> </app-admin-page-header>
 
-<app-search-bar
-  label="{{ 'admin.admin-area.search-room' | transloco }}"
-  [results]="searchResults"
-  (inputChanged)="search($event)"
-  (inputCleared)="clear()"
-  (itemSelected)="showRoom($event)"
-></app-search-bar>
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'admin.admin-area.search-room' | transloco }}</mat-label>
+  <input matInput appDisableForm [formControl]="formControl" />
+  @if (formControl.value) {
+    <button matSuffix mat-icon-button class="clear-button" (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</mat-form-field>
 
-@if (room) {
-  <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
-    <app-entity-properties [entity]="room"></app-entity-properties>
-    <div fxLayoutAlign="space-between">
-      <button mat-stroked-button color="warn" (click)="deleteEntity()">
-        <mat-icon>delete</mat-icon>
-        {{ 'admin.admin-area.delete-room' | transloco }}
-      </button>
-      <button mat-raised-button color="primary" (click)="transferRoom()">
-        <mat-icon>forward</mat-icon>
-        {{ 'admin.admin-area.transfer-room' | transloco }}
-      </button>
-    </div>
-  </mat-card>
+@if (isLoading()) {
+  <app-loading-indicator></app-loading-indicator>
+} @else {
+  @if (room()) {
+    <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
+      <app-entity-properties [entity]="room()!!"></app-entity-properties>
+      <div fxLayoutAlign="space-between">
+        <button mat-stroked-button color="warn" (click)="deleteRoom()">
+          <mat-icon>delete</mat-icon>
+          {{ 'admin.admin-area.delete-room' | transloco }}
+        </button>
+        <button mat-raised-button color="primary" (click)="transferRoom()">
+          <mat-icon>forward</mat-icon>
+          {{ 'admin.admin-area.transfer-room' | transloco }}
+        </button>
+      </div>
+    </mat-card>
+  } @else if (formControl.value) {
+    <span>{{ 'admin.admin-area.no-rooms-found' | transloco }}</span>
+  }
 }
