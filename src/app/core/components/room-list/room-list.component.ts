@@ -87,6 +87,7 @@ export class RoomListComponent implements AfterViewInit, OnInit {
 
   private roomsQueryRef = this.roomMembershipsGql.watch({
     errorPolicy: 'all',
+    fetchPolicy: 'network-only',
   });
   private roomsResult = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
