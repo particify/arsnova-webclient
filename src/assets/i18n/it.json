@@ -147,7 +147,6 @@
     "enter-room-number": "Inserisci il numero della stanza"
   },
   "login": {
-    "a11y-register": "Vai alla registrazione per creare un account utente.",
     "username": "ID utente",
     "email": "Indirizzo e-mail",
     "email-invalid": "L'indirizzo e-mail non è valido",
@@ -158,7 +157,6 @@
     "login-successful": "Hai effettuato l'accesso.",
     "password-reset": "Hai dimenticato la password?",
     "a11y-sso-login": "Verrai indirizzato a {{provider}} per effettuare il login.",
-    "a11y-reset-pw": "Vai al modulo per reimpostare la tua password.",
     "login-with": "Accedi con",
     "login-data-incorrect": "ID utente o password non corretti",
     "not-registered": "Non hai ancora un account?",

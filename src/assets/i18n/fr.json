@@ -101,8 +101,6 @@
   },
   "login": {
     "a11y-sso-login": "Vous serez redirigé vers {{provider}} pour vous connecter.",
-    "a11y-reset-pw": "Accédez à un formulaire pour réinitialiser votre mot de passe.",
-    "a11y-register": "Allez à l'enregistrement pour créer un nouveau compte utilisateur.",
     "email": "Adresse e-mail",
     "email-invalid": "Adresse e-mail invalide",
     "email-required": "Adresse e-mail obligatoire",

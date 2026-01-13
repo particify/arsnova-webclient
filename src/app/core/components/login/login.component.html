@@ -80,7 +80,6 @@
                 mat-button
                 class="forgot-pw"
                 (click)="navToPasswordReset()"
-                aria-labelledby="forgot-pw"
               >
                 {{ 'login.password-reset' | transloco }}
               </button>
@@ -121,7 +120,6 @@
                 color="accent"
                 class="action-link"
                 [routerLink]="'/register'"
-                aria-labelledby="register"
               >
                 {{ 'login.register' | transloco }}
               </button>
@@ -136,10 +134,3 @@
 @if (isLoading) {
   <app-loading-indicator></app-loading-indicator>
 }
-
-<div class="visually-hidden">
-  @if (passwordLoginEnabled) {
-    <div id="forgot-pw">{{ 'login.a11y-reset-pw' | transloco }}</div>
-    <div id="register">{{ 'login.a11y-register' | transloco }}</div>
-  }
-</div>
