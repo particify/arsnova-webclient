@@ -101,8 +101,6 @@
   },
   "login": {
     "a11y-sso-login": "Serás redirigido a {{provider}} para iniciar sesión.",
-    "a11y-reset-pw": "Ir a un formulario para restablecer tu contraseña.",
-    "a11y-register": "Ir al registro para crear una cuenta de usuario.",
     "username": "ID de usuario",
     "email": "Dirección de correo electrónico",
     "email-invalid": "La dirección de correo electrónico no es válida",

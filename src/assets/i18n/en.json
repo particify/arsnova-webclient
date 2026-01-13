@@ -101,8 +101,6 @@
   },
   "login": {
     "a11y-sso-login": "You will be forwarded to {{provider}} to log in.",
-    "a11y-reset-pw": "Go to a form to reset your password.",
-    "a11y-register": "Go to the registration to create an user account.",
     "username": "User ID",
     "email": "E-mail address",
     "email-invalid": "E-mail address is invalid",

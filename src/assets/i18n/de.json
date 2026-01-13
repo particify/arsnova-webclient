@@ -101,8 +101,6 @@
   },
   "login": {
     "a11y-sso-login": "Hier wirst du zum Anmelden auf {{provider}} weitergeleitet.",
-    "a11y-reset-pw": "Gehe zu einem Formular zum Zurücksetzen deines Passworts.",
-    "a11y-register": "Gehe zu einem Formular um dich zu registrieren.",
     "username": "Benutzerkennung",
     "email": "E-Mail-Adresse",
     "email-invalid": "E-Mail-Adresse ungültig",

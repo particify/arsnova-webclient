@@ -140,7 +140,6 @@ ul {
 
 .smaller-text {
   font-size: $s-font-size;
-  margin-bottom: 0;
 }
 
 @mixin ellipsis-mixin {
@@ -734,19 +733,6 @@ mat-slide-toggle:not(.no-label) .mat-internal-form-field {
 
 .no-ripple .mat-mdc-button-ripple * {
   display: none;
-}
-
-// Links
-
-.action-link {
-  font-size: smaller;
-  text-decoration: none;
-  font-weight: $font-weight-bold;
-}
-
-.after-text-link {
-  padding-left: 10px;
-  margin-top: 1em;
 }
 
 // Icons

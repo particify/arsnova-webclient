@@ -1,3 +1,9 @@
-.mat-mdc-checkbox {
-  margin-bottom: 1em !important;
+@use '../../../../variables' as *;
+
+.tos-checkbox {
+  margin-bottom: $spacing-2;
+}
+
+.link-container {
+  margin-top: $spacing;
 }

@@ -1,16 +1,19 @@
+@use '../../../../variables' as *;
+
 .forgot-pw {
-  color: var(--on-surface);
-  margin-bottom: 1em;
+  margin-bottom: $spacing-2;
 }
 
 .mat-divider {
-  width: 95% !important;
-  max-width: 350px !important;
-  position: static !important;
-  margin: 10px 0 20px;
+  width: calc(100% - $spacing-2);
+  margin: $spacing 0 $spacing-4;
 }
 
 input:-webkit-autofill {
   box-shadow: 0 0 0 30px var(--surface) inset;
   -webkit-text-fill-color: var(--on-surface);
+}
+
+.link-container {
+  margin-top: $spacing;
 }

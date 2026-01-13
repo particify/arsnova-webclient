@@ -76,18 +76,13 @@
           <app-password-entry [preFill]="password"></app-password-entry>
           @if (dbLoginEnabled && allowPwReset) {
             <div fxLayout="row">
-              <a
-                class="action-link forgot-pw"
-                [routerLink]="[]"
-                (click)="
-                  navToPasswordReset();
-                  $event.preventDefault();
-                  $event.stopPropagation()
-                "
-                aria-labelledby="forgot-pw"
+              <button
+                mat-button
+                class="forgot-pw"
+                (click)="navToPasswordReset()"
               >
                 {{ 'login.password-reset' | transloco }}
-              </a>
+              </button>
             </div>
           }
           <div fxLayout="column" fxLayoutGap="5px">
@@ -112,17 +107,22 @@
             }
           </div>
           @if (dbLoginEnabled && allowRegister) {
-            <div fxLayout="row" fxLayoutAlign="center">
-              <p class="smaller-text">
+            <div
+              fxLayout="row"
+              fxLayoutAlign="center center"
+              class="link-container"
+            >
+              <span class="smaller-text">
                 {{ 'login.not-registered' | transloco }}
-              </p>
-              <a
-                class="action-link after-text-link"
+              </span>
+              <button
+                mat-button
+                color="accent"
+                class="action-link"
                 [routerLink]="'/register'"
-                aria-labelledby="register"
               >
-                {{ 'login.register' | transloco }}</a
-              >
+                {{ 'login.register' | transloco }}
+              </button>
             </div>
           }
         </form>
@@ -134,10 +134,3 @@
 @if (isLoading) {
   <app-loading-indicator></app-loading-indicator>
 }
-
-<div class="visually-hidden">
-  @if (passwordLoginEnabled) {
-    <div id="forgot-pw">{{ 'login.a11y-reset-pw' | transloco }}</div>
-    <div id="register">{{ 'login.a11y-register' | transloco }}</div>
-  }
-</div>
