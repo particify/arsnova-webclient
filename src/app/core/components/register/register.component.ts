@@ -34,6 +34,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 import { ClaimUnverifiedUserGql } from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { first, switchMap } from 'rxjs';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-register',
@@ -55,6 +56,7 @@ import { first, switchMap } from 'rxjs';
     LoadingButtonComponent,
     RouterLink,
     TranslocoPipe,
+    MatButton,
   ],
 })
 export class RegisterComponent extends FormComponent implements OnInit {

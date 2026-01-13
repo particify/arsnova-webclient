@@ -76,18 +76,14 @@
           <app-password-entry [preFill]="password"></app-password-entry>
           @if (dbLoginEnabled && allowPwReset) {
             <div fxLayout="row">
-              <a
-                class="action-link forgot-pw"
-                [routerLink]="[]"
-                (click)="
-                  navToPasswordReset();
-                  $event.preventDefault();
-                  $event.stopPropagation()
-                "
+              <button
+                mat-button
+                class="forgot-pw"
+                (click)="navToPasswordReset()"
                 aria-labelledby="forgot-pw"
               >
                 {{ 'login.password-reset' | transloco }}
-              </a>
+              </button>
             </div>
           }
           <div fxLayout="column" fxLayoutGap="5px">
@@ -112,17 +108,23 @@
             }
           </div>
           @if (dbLoginEnabled && allowRegister) {
-            <div fxLayout="row" fxLayoutAlign="center">
-              <p class="smaller-text">
+            <div
+              fxLayout="row"
+              fxLayoutAlign="center center"
+              class="link-container"
+            >
+              <span class="smaller-text">
                 {{ 'login.not-registered' | transloco }}
-              </p>
-              <a
-                class="action-link after-text-link"
+              </span>
+              <button
+                mat-button
+                color="accent"
+                class="action-link"
                 [routerLink]="'/register'"
                 aria-labelledby="register"
               >
-                {{ 'login.register' | transloco }}</a
-              >
+                {{ 'login.register' | transloco }}
+              </button>
             </div>
           }
         </form>

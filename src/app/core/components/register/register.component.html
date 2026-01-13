@@ -43,33 +43,37 @@
         [isNew]="true"
       ></app-password-entry>
 
-      <mat-checkbox
-        [(ngModel)]="acceptTos"
-        [disabled]="formDisabled"
-        name="accept"
-      >
-        {{ 'register.accept' | transloco
-        }}<a href="{{ linkOfTos() }}" target="_blank">{{
-          'register.terms' | transloco
-        }}</a
-        >{{ 'register.accept-2' | transloco }}
-      </mat-checkbox>
+      <div>
+        <mat-checkbox
+          [(ngModel)]="acceptTos"
+          [disabled]="formDisabled"
+          name="accept"
+          class="tos-checkbox"
+        >
+          {{ 'register.accept' | transloco
+          }}<a href="{{ linkOfTos() }}" target="_blank">{{
+            'register.terms' | transloco
+          }}</a
+          >{{ 'register.accept-2' | transloco }}
+        </mat-checkbox>
+      </div>
       <app-loading-button
         name="register.register"
         [fullWidth]="true"
         (clicked)="register(userName.value)"
       ></app-loading-button>
-      <div fxLayout="row" fxLayoutAlign="center">
-        <p class="smaller-text">
+      <div fxLayout="row" fxLayoutAlign="center center" class="link-container">
+        <span class="smaller-text">
           {{ 'register.already-registered' | transloco }}
-        </p>
-        <a
-          class="action-link after-text-link"
+        </span>
+        <button
+          mat-button
+          color="accent"
           [routerLink]="'/login'"
           aria-labelledby="register"
         >
-          {{ 'login.login' | transloco }}</a
-        >
+          {{ 'login.login' | transloco }}
+        </button>
       </div>
     </form>
   </mat-card>
