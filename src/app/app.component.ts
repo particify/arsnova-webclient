@@ -102,6 +102,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   themes: string[] = [];
   contentGroupTemplatesActive = false;
   allowRegister = false;
+  drawerOpened = false;
 
   ngOnInit(): void {
     this.languageService.init();

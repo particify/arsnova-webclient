@@ -215,6 +215,7 @@ describe('AppComponent', () => {
     );
     fixture = testBed.createComponent(AppComponent);
     component = fixture.componentInstance;
+    component.drawerOpened = true;
     loader = TestbedHarnessEnvironment.loader(fixture);
     routerSpy = testBed.inject(Router);
     trackingService = testBed.inject(TrackingService);
