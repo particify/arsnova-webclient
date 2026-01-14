@@ -63,6 +63,7 @@ import {
   UserByDisplayIdGql,
 } from '@gql/generated/graphql';
 import { ErrorClassification } from '@gql/helper/handle-operation-error';
+import { MatTooltip } from '@angular/material/tooltip';
 
 export interface Role {
   name: string;
@@ -96,6 +97,7 @@ export interface Role {
     MatChipOption,
     MatIconButton,
     TranslocoPipe,
+    MatTooltip,
   ],
 })
 export class AccessComponent
