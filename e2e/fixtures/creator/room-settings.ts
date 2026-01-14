@@ -27,7 +27,12 @@ export class RoomSettingsPage {
   }
 
   async saveSettings() {
-    await this.page.getByRole('button', { name: 'save' }).click();
+    await Promise.all([
+      this.page.waitForResponse(
+        (res) => !!res.request().postData()?.includes('RoomById') && res.ok()
+      ),
+      this.page.getByRole('button', { name: 'save' }).click(),
+    ]);
   }
 
   async updateName(name: string) {

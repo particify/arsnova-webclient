@@ -44,10 +44,10 @@ export class MockApi {
     await this.page.route('*/**/graphql', async (route) => {
       const res = await route.fetch();
       const json = await res.json();
-      const room = json?.data?.roomMembershipByShortId?.room;
+      const room = json?.data?.joinRoom?.room;
       if (room) {
         room.language = lang;
-        json.data.roomMembershipByShortId.room = room;
+        json.data.joinRoom.room = room;
         await route.fulfill({ json });
       } else {
         await route.continue();
