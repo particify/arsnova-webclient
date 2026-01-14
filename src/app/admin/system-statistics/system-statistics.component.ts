@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  computed,
+  effect,
+  inject,
+} from '@angular/core';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { ActivatedRoute } from '@angular/router';
 import { FlexModule } from '@angular/flex-layout';
@@ -9,6 +16,9 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { MatCard } from '@angular/material/card';
 import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { AdminStatsGql } from '@gql/generated/graphql';
+import { map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 export class AdminStats {
   userProfile: object;
@@ -21,7 +31,6 @@ export class AdminStats {
   violationReport: object;
   announcement: object;
   comment: object;
-  summary: object;
 
   constructor(
     userProfile: object,
@@ -33,8 +42,7 @@ export class AdminStats {
     contentTemplate: object,
     violationReport: object,
     announcement: object,
-    comment: object,
-    summary: object
+    comment: object
   ) {
     this.userProfile = userProfile;
     this.room = room;
@@ -46,7 +54,6 @@ export class AdminStats {
     this.violationReport = violationReport;
     this.announcement = announcement;
     this.comment = comment;
-    this.summary = summary;
   }
 }
 
@@ -69,16 +76,41 @@ export class AdminStats {
 export class SystemStatisticsComponent implements OnInit {
   protected systemInfoService = inject(SystemInfoService);
   private route = inject(ActivatedRoute);
+  private core4Stats = inject(AdminStatsGql);
 
   // Route data input below
   @Input({ required: true }) tenantId!: string;
 
-  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  stats!: AdminStats;
+  stats?: AdminStats;
   isLoading = true;
   showDetails = false;
   selectedTab = 0;
   tabs: string[] = [];
+
+  adminStats = toSignal(this.core4Stats.fetch().pipe(map((s) => s.data)));
+  roomStats = computed(() => this.adminStats()?.adminRoomStats);
+  userStats = computed(() => this.adminStats()?.adminUserStats);
+  announcementStats = computed(() => this.adminStats()?.adminAnnouncementStats);
+
+  constructor() {
+    effect(() => {
+      if (this.userStats()) {
+        if (this.stats) {
+          this.stats.userProfile = this.userStats() ?? {};
+        }
+      }
+      if (this.roomStats()) {
+        if (this.stats) {
+          this.stats.room = this.roomStats() ?? {};
+        }
+      }
+      if (this.announcementStats()) {
+        if (this.stats) {
+          this.stats.announcement = this.announcementStats() ?? {};
+        }
+      }
+    });
+  }
 
   ngOnInit() {
     this.loadStats(this.tenantId);
@@ -93,20 +125,18 @@ export class SystemStatisticsComponent implements OnInit {
 
   loadStats(tenantId: string) {
     this.isLoading = true;
-    this.systemInfoService.getServiceStats(tenantId).subscribe((stats) => {
-      const coreStats = stats['coreServiceStats'];
+    this.systemInfoService.getCore3Stats(tenantId).subscribe((stats) => {
       this.stats = new AdminStats(
-        coreStats?.userProfile,
-        coreStats?.room,
-        coreStats?.contentGroup,
-        coreStats?.content,
-        coreStats?.answer,
-        coreStats?.contentGroupTemplate,
-        coreStats?.contentTemplate,
-        coreStats?.violationReport,
-        coreStats?.announcement,
-        stats['commentServiceStats'],
-        stats
+        this.userStats() ?? {},
+        this.roomStats() ?? {},
+        stats?.contentGroup,
+        stats?.content,
+        stats?.answer,
+        stats?.contentGroupTemplate,
+        stats?.contentTemplate,
+        stats?.violationReport,
+        this.announcementStats() ?? {},
+        stats['commentServiceStats']
       );
       this.initTabs();
       this.isLoading = false;
@@ -115,14 +145,22 @@ export class SystemStatisticsComponent implements OnInit {
 
   initTabs() {
     this.tabs = [];
+    if (!this.stats) {
+      return;
+    }
     Object.keys(this.stats).forEach((key) => {
-      if (this.stats[key as keyof AdminStats]) {
-        this.tabs.push(key);
+      if (this.stats) {
+        if (this.stats[key as keyof AdminStats]) {
+          this.tabs.push(key);
+        }
       }
     });
   }
 
   getStats(key: string) {
-    return this.stats[key as keyof AdminStats];
+    if (this.stats) {
+      return this.stats[key as keyof AdminStats];
+    }
+    return {};
   }
 }

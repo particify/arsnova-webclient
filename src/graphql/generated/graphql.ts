@@ -34,6 +34,12 @@ export type Scalars = {
   UUID: { input: string; output: string };
 };
 
+export type AdminAnnouncementStats = {
+  __typename?: 'AdminAnnouncementStats';
+  deletedCount: Scalars['Int']['output'];
+  totalCount: Scalars['Int']['output'];
+};
+
 export type AdminRoom = {
   __typename?: 'AdminRoom';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -54,6 +60,12 @@ export type AdminRoom = {
 export type AdminRoomQueryInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   shortId?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type AdminRoomStats = {
+  __typename?: 'AdminRoomStats';
+  deletedCount: Scalars['Int']['output'];
+  totalCount: Scalars['Int']['output'];
 };
 
 export type AdminUser = {
@@ -79,6 +91,14 @@ export type AdminUserEdge = {
   __typename?: 'AdminUserEdge';
   cursor: Scalars['String']['output'];
   node: AdminUser;
+};
+
+export type AdminUserStats = {
+  __typename?: 'AdminUserStats';
+  deletedCount: Scalars['Int']['output'];
+  pendingCount: Scalars['Int']['output'];
+  totalCount: Scalars['Int']['output'];
+  verifiedCount: Scalars['Int']['output'];
 };
 
 export type Announcement = {
@@ -313,8 +333,11 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query';
+  adminAnnouncementStats?: Maybe<AdminAnnouncementStats>;
   adminRoomByIdOrShortId?: Maybe<AdminRoom>;
+  adminRoomStats?: Maybe<AdminRoomStats>;
   adminUserById?: Maybe<AdminUser>;
+  adminUserStats?: Maybe<AdminUserStats>;
   adminUsers?: Maybe<AdminUserConnection>;
   announcementsByRoomId?: Maybe<AnnouncementConnection>;
   announcementsByUserId?: Maybe<AnnouncementConnection>;
@@ -754,6 +777,29 @@ export type AdminTransferRoomMutation = {
     deletedBy?: string | null;
     deletedAt?: string | null;
   };
+};
+
+export type AdminStatsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AdminStatsQuery = {
+  __typename?: 'Query';
+  adminUserStats?: {
+    __typename?: 'AdminUserStats';
+    totalCount: number;
+    verifiedCount: number;
+    pendingCount: number;
+    deletedCount: number;
+  } | null;
+  adminRoomStats?: {
+    __typename?: 'AdminRoomStats';
+    totalCount: number;
+    deletedCount: number;
+  } | null;
+  adminAnnouncementStats?: {
+    __typename?: 'AdminAnnouncementStats';
+    totalCount: number;
+    deletedCount: number;
+  } | null;
 };
 
 export type AnnouncementsMetaForCurrentUserQueryVariables = Exact<{
@@ -1769,6 +1815,38 @@ export class AdminTransferRoomGql extends Apollo.Mutation<
   AdminTransferRoomMutationVariables
 > {
   document = AdminTransferRoomDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminStatsDocument = gql`
+  query AdminStats {
+    adminUserStats {
+      totalCount
+      verifiedCount
+      pendingCount
+      deletedCount
+    }
+    adminRoomStats {
+      totalCount
+      deletedCount
+    }
+    adminAnnouncementStats {
+      totalCount
+      deletedCount
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminStatsGql extends Apollo.Query<
+  AdminStatsQuery,
+  AdminStatsQueryVariables
+> {
+  document = AdminStatsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
