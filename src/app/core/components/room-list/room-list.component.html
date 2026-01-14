@@ -95,6 +95,7 @@
                   setCurrentRoom(roomWithRole.room.shortId, roomWithRole.role)
                 "
                 class="bottom-border full-width-list-item"
+                data-testid="room-item"
               >
                 <div fxLayout="row" fxFill class="outer">
                   <div
@@ -203,6 +204,7 @@
                       [matMenuTriggerFor]="moreActions"
                       aria-labelledby="more-options"
                       matTooltip="{{ 'room-list.more-options' | transloco }}"
+                      [attr.data-testid]="'more-room-options-btn-' + i"
                     >
                       <mat-icon>more_vert</mat-icon>
                     </button>

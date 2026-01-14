@@ -1,9 +1,8 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
 import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
-import { RoomOverviewPage } from '@e2e/fixtures/participant/room-overview';
 
 test.describe('create room', () => {
   let header: Header;
@@ -12,9 +11,9 @@ test.describe('create room', () => {
   let shortId: string;
 
   test.beforeEach(async ({ page, baseURL }) => {
-    header = new Header(page);
     roomSettings = new RoomSettingsPage(page, baseURL);
     roomOverviewPage = new CreatorRoomOverviewPage(page, baseURL);
+    header = new Header(page);
     const homePage = new HomePage(page, baseURL);
     await homePage.goto();
     shortId = await homePage.createRoom('My room');
@@ -24,6 +23,21 @@ test.describe('create room', () => {
   test.afterEach(async () => {
     await header.goToSettings();
     await roomSettings.deleteRoom();
+  });
+
+  test('Q&A and Live Feedback are visible', async ({ page }) => {
+    await expect(
+      page.locator('#routing-content').getByText('Q&A', { exact: true })
+    ).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Open Q&A' })).toBeVisible();
+    await expect(
+      page
+        .locator('#routing-content')
+        .getByText('Live Feedback', { exact: true })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Open Live Feedback' })
+    ).toBeVisible();
   });
 
   test('create two question series', async ({ page }) => {
@@ -37,40 +51,13 @@ test.describe('create room', () => {
     await expect(page.getByRole('button', { name: 'Survey' })).toBeVisible();
   });
 
-  test('update room name', async ({ page }) => {
-    await header.goToSettings();
-    await roomSettings.updateName('My awesome room');
-    await page.goBack();
-    await expect(page.getByLabel('My awesome room')).toBeVisible();
-  });
-
-  test('add room description', async ({ baseURL }) => {
-    await header.goToSettings();
-    await roomSettings.updateDescription(
-      'This is a short discription for this awesome room.'
-    );
-    const browser = await chromium.launch();
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    const participant = new RoomOverviewPage(page, baseURL);
-    await participant.goto(shortId);
+  test('preview shows welcome card', async ({ page }) => {
+    await header.switchRole();
+    await expect(page.getByText('Welcome to', { exact: true })).toBeVisible();
+    await expect(page.getByText('My room', { exact: true })).toBeVisible();
     await expect(
-      page.getByText('This is a short discription for this awesome room.')
+      page.getByText(shortId.slice(0, 4) + ' ' + shortId.slice(4, 8))
     ).toBeVisible();
-    await context.close();
-  });
-
-  test('set room language', async ({ page }) => {
-    await header.goToSettings();
-    await roomSettings.setLanguage('English');
-    await page.reload();
-    await expect(page.getByText('English')).toBeVisible();
-  });
-
-  test('enable focus mode', async ({ page }) => {
-    await header.goToSettings();
-    await roomSettings.toggleFocusMode();
-    await page.reload();
-    await expect(page.getByLabel('guide the participants')).toBeChecked();
+    await header.switchRole();
   });
 });

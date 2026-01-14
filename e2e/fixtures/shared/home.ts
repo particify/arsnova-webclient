@@ -42,6 +42,7 @@ export class HomePage {
       (res) => !!res.request().postData()?.includes('CreateRoom') && res.ok()
     );
     await this.submitRoomCreationButton.click();
+    await this.page.waitForURL(/edit/);
     return (await (await response$).json()).data.createRoom.shortId;
   }
 }

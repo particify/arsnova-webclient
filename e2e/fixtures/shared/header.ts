@@ -12,6 +12,7 @@ export class Header {
   async goToRooms() {
     await this.openMainMenu();
     await this.page.getByRole('button', { name: 'my rooms' }).click();
+    await this.page.waitForURL('user');
   }
 
   async goToLogin() {
@@ -19,12 +20,22 @@ export class Header {
     await this.page.getByRole('button', { name: 'log in' }).click();
   }
 
-  async goToSettings() {
+  async goToUserSettings() {
+    await this.openMainMenu();
+    await this.page.getByRole('button', { name: 'account settings' }).click();
+  }
+
+  async goToSettings(subroute?: string) {
     await this.page
       .getByRole('button', {
         name: 'room settings',
       })
       .click();
+    if (subroute) {
+      await this.page
+        .getByRole('button', { name: subroute, exact: true })
+        .click();
+    }
   }
 
   async goToPresentation() {
@@ -32,9 +43,14 @@ export class Header {
   }
 
   async switchRole() {
+    const label = (await this.page
+      .getByText('Preview', { exact: true })
+      .isVisible())
+      ? 'switch role'
+      : 'switch back';
     await this.page
       .getByRole('button', {
-        name: 'switch back',
+        name: label,
       })
       .click();
   }

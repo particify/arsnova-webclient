@@ -8,11 +8,13 @@
     ) | transloco
   "
   appHotkey="a"
+  data-testid="announcements-icon-btn"
 >
   <mat-icon
     matBadge="{{ newAnnouncementCount() }}"
     matBadgeColor="accent"
     [matBadgeHidden]="newAnnouncementCount() === 0"
+    data-testid="announcement-icon-with-badge"
   >
     notifications
   </mat-icon>
