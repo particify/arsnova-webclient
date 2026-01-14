@@ -257,7 +257,6 @@
     "a11y-access": "Ora sei nel pannello dei diritti di accesso. Qui puoi aggiungere o rimuovere i Moderatori o impostare una password per questa Camera.",
     "a11y-categories": "Ora ti trovi nell'amministrazione delle categorie. Qui puoi aggiungere o rimuovere categorie.",
     "a11y-threshold-changed": "Hai impostato la soglia su {{value}}.",
-    "a11y-delete-moderator": "Elimina il Moderatore {{loginId}}",
     "a11y-delete-room": "Elimina la tua Camera",
     "a11y-room-name": "Dai un nuovo nome alla Camera.",
     "a11y-room-description": "Inserisci una descrizione per la Camera.",

@@ -297,7 +297,6 @@
     "a11y-access": "Ahora estás en el panel de derechos de acceso. Aquí puedes agregar o eliminar moderadores o establecer una contraseña para esta sala.",
     "a11y-categories": "Ahora estás en la administración de categorías. Aquí puedes agregar o eliminar categorías.",
     "a11y-threshold-changed": "Has establecido el umbral en {{value}}.",
-    "a11y-delete-moderator": "Eliminar el moderador {{loginId}}",
     "a11y-delete-room": "Elimina tu sala",
     "a11y-room-name": "Dale un nuevo nombre a la sala aquí.",
     "a11y-room-description": "Ingresa una descripción para la sala.",

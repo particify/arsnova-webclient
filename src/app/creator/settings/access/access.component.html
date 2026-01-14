@@ -157,10 +157,9 @@
                   class="close"
                   (click)="removeModerator(member)"
                   fxFlex
-                  attr.aria-label="{{
-                    'creator.settings.a11y-delete-moderator'
-                      | transloco: { loginId: member.user.displayId }
-                  }}"
+                  [matTooltip]="
+                    'creator.settings.remove-access-rights' | transloco
+                  "
                   data-testid="remove-access-rights-btn"
                 >
                   <mat-icon>close</mat-icon>

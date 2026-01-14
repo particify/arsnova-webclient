@@ -310,7 +310,6 @@
     "a11y-save-changes": "Sauvegardez les changements de la salle.",
     "a11y-collapse-settings": "Laissez les paramètres {{name}} ou naviguez avec tabulation dans les paramètres.",
     "user-not-found": "Aucun utilisateur n'a été trouvé avec ce nom.",
-    "a11y-delete-moderator": "Supprimer le modérateur {{loginId}}",
     "disabled-for-guests": "Vous ne pouvez pas attribuer de droits d'accès avec un compte invité.",
     "editor": "Éditeur",
     "you": "Vous",
