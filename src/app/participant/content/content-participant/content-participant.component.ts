@@ -74,6 +74,8 @@ import { ContentShortAnswerParticipantComponent } from '@app/participant/content
 import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
 import { STEPPER_ANIMATION_DURATION } from '@app/standalone/stepper/stepper.component';
 import { UserUiSettings } from '@gql/generated/graphql';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 
 interface ContentActionTab {
   route: string;
@@ -125,14 +127,15 @@ export class ContentParticipantComponent
   extends FormComponent
   implements OnInit, OnChanges
 {
-  private router = inject(Router);
-  private location = inject(Location);
-  private eventService = inject(EventService);
-  private contentService = inject(ContentService);
-  private translateService = inject(TranslocoService);
-  private notificationService = inject(NotificationService);
-  private contentPublishService = inject(ContentPublishService);
-  private answerService = inject(ContentAnswerService);
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
+  private readonly eventService = inject(EventService);
+  private readonly contentService = inject(ContentService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly contentPublishService = inject(ContentPublishService);
+  private readonly answerService = inject(ContentAnswerService);
+  private readonly focusModeService = inject(FocusModeService);
 
   @Input({ required: true }) room!: Room;
   @Input({ required: true }) content!: Content;
@@ -189,6 +192,10 @@ export class ContentParticipantComponent
   GroupType = GroupType;
   PublishingMode = PublishingMode;
   waitForCountdown = true;
+
+  readonly focusModeEnabled = toSignal(
+    this.focusModeService.getFocusModeEnabled()
+  );
 
   tabs: ContentActionTab[] = [
     {

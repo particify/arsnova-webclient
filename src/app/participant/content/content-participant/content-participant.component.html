@@ -344,7 +344,9 @@
                     <mat-icon>keyboard_arrow_up</mat-icon>
                     {{ 'participant.content.hide-answer' | transloco }}
                   </button>
-                  <ng-template [ngTemplateOutlet]="nextButton"></ng-template>
+                  @if (!focusModeEnabled()) {
+                    <ng-template [ngTemplateOutlet]="nextButton"></ng-template>
+                  }
                 }
               </div>
             } @else {
@@ -397,7 +399,7 @@
                       ((contentGroup.publishingMode !== PublishingMode.LIVE ||
                         lastContent) &&
                         contentGroup.groupType === GroupType.QUIZ) ||
-                      finished
+                      (finished && !focusModeEnabled())
                     ) {
                       <ng-template
                         [ngTemplateOutlet]="nextButton"
