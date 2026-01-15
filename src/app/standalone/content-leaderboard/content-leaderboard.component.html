@@ -45,6 +45,7 @@
           'bold-text bg-dark': element.userAlias?.id === aliasId,
         }"
         *matCellDef="let element; index as i"
+        [ngStyle]="{ color: element.color }"
       >
         <div fxLayout.xs="column">
           <span>
@@ -81,6 +82,7 @@
             'bold-text bg-dark': element.userAlias?.id === aliasId,
           }"
           *matCellDef="let element; index as i"
+          [ngStyle]="{ color: element.color }"
         >
           <span class="less-visible">{{
             element.currentDuration | duration: contentDuration
