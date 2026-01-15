@@ -13,6 +13,7 @@ import {
   MatDialogRef,
   MatDialogContent,
   MatDialogActions,
+  MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -56,6 +57,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   private translationService = inject(TranslocoService);
   private authenticationService = inject(AuthenticationService);
   private resendMail = inject(ResendVerificationMailGql);
+  private data: { initial: boolean } = inject(MAT_DIALOG_DATA);
 
   resendCooldownSeconds = 0;
   resendCooldownInterval?: ReturnType<typeof setInterval>;
@@ -66,6 +68,9 @@ export class UserActivationComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.setFormControl(this.verificationCodeFormControl);
+    if (this.data.initial) {
+      this.startResendCooldown();
+    }
   }
 
   verify(verificationCode: string): void {

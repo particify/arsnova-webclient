@@ -123,9 +123,14 @@ export class DialogService {
     });
   }
 
-  openUserActivationDialog(): MatDialogRef<UserActivationComponent> {
+  openUserActivationDialog(
+    initial = false
+  ): MatDialogRef<UserActivationComponent> {
     return this.openDialog(UserActivationComponent, {
       width: DIALOG_SIZES.xsmall,
+      data: {
+        initial: initial,
+      },
     });
   }
 
