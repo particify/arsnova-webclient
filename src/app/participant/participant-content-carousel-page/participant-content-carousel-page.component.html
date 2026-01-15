@@ -9,7 +9,7 @@
           (newIndex)="updateContentIndexUrl($event)"
           [listLength]="contentGroup.contentIds.length"
           [answerResults]="answerResults"
-          [showSteps]="showStepper"
+          [showSteps]="showStepper && !focusModeEnabled()"
           [allowNavigation]="!focusModeEnabled()"
           [lockedContentsDisabled]="true"
         >
