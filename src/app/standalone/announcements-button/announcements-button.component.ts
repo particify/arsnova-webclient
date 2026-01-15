@@ -18,6 +18,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { AnnouncementListComponent } from '@app/standalone/announcement-list/announcement-list.component';
 import { filter, map } from 'rxjs';
 import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-announcements-button',
@@ -27,6 +28,7 @@ import { MatIconButton } from '@angular/material/button';
     MatBadge,
     TranslocoPipe,
     MatIconButton,
+    MatIcon,
   ],
   templateUrl: './announcements-button.component.html',
 })
