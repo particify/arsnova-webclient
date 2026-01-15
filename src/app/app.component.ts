@@ -164,7 +164,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   openVerifyDialog() {
     const dialogRef = this.dialogService.openUserActivationDialog();
     dialogRef.afterClosed().subscribe((result?: { success: boolean }) => {
-      this.authenticationService.refetchCurrentUser();
       if (result?.success) {
         this.globalHintsService.removeHint('verify-hint');
       }

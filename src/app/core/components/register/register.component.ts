@@ -112,6 +112,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
         .subscribe({
           next: () => {
             this.enableForm();
+            this.authenticationService.refetchCurrentUser();
             this.router.navigate(['user'], {
               queryParams: { startVerification: true },
             });

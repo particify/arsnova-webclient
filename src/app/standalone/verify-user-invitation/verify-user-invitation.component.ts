@@ -27,6 +27,7 @@ import { VerifyUserMailAddressUnauthenticatedGql } from '@gql/generated/graphql'
 import { ErrorClassification } from '@gql/helper/handle-operation-error';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { first, switchMap } from 'rxjs';
+import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
 
 const EXPIRES_FALLBACK_OFFSET = 3600;
 
@@ -51,6 +52,7 @@ export class VerifyUserInvitationComponent extends FormComponent {
   private readonly translationService = inject(TranslocoService);
   private readonly verifyGql = inject(VerifyUserMailAddressUnauthenticatedGql);
   private readonly passwordEntry = viewChild.required(PasswordEntryComponent);
+  private readonly globalHintsService = inject(GlobalHintsService);
   readonly apiConfig = input.required<ApiConfig>();
   readonly userId = input.required<string>();
   readonly code = input.required<string>();
@@ -92,6 +94,7 @@ export class VerifyUserInvitationComponent extends FormComponent {
         complete: () => this.enableForm(),
         next: (r) => {
           if (r.data?.verifyUserMailAddressUnauthenticated) {
+            this.globalHintsService.removeHint('verify-hint');
             this.router.navigate(['login']);
             this.notificationService.showAdvanced(
               this.translationService.translate(

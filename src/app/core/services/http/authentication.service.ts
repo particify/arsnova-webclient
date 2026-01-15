@@ -218,6 +218,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * validity and reloads the user.
    */
   refreshAndReloadUser(): Observable<AuthenticatedUser | undefined> {
+    this.refetchCurrentUser();
     return this.handleLoginResponse(this.refreshLogin()).pipe(
       map((r) => r.authentication)
     );

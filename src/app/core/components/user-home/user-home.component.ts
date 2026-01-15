@@ -1,5 +1,4 @@
 import { Component, OnInit, inject, input } from '@angular/core';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { FlexModule } from '@angular/flex-layout';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { RoomListComponent } from '@app/core/components/room-list/room-list.component';
@@ -7,6 +6,7 @@ import { AsyncPipe } from '@angular/common';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { Router } from '@angular/router';
+import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
 
 @Component({
   selector: 'app-user-home',
@@ -21,9 +21,9 @@ import { Router } from '@angular/router';
   ],
 })
 export class UserHomeComponent implements OnInit {
-  private authenticationService = inject(AuthenticationService);
-  private dialogService = inject(DialogService);
-  private router = inject(Router);
+  private readonly dialogService = inject(DialogService);
+  private readonly router = inject(Router);
+  private readonly globalHintsService = inject(GlobalHintsService);
 
   startVerification = input<boolean>(false);
 
@@ -33,8 +33,10 @@ export class UserHomeComponent implements OnInit {
       this.dialogService
         .openUserActivationDialog()
         .afterClosed()
-        .subscribe(() => {
-          this.authenticationService.refetchCurrentUser();
+        .subscribe((result?: { success: boolean }) => {
+          if (result?.success) {
+            this.globalHintsService.removeHint('verify-hint');
+          }
         });
     }
   }
