@@ -72,7 +72,7 @@
 
   .item {
     flex-direction: column;
-    padding: 24px;
+    padding: 24px !important;
   }
 
   .list {
@@ -136,7 +136,7 @@
   @include gt-xs {
     .item {
       flex-direction: row;
-      padding: 16px 12px;
+      padding: 16px 12px !important;
 
       .mat-icon {
         margin-right: 12px;
@@ -150,7 +150,7 @@
 
   @include xs {
     .item {
-      padding: 8px 12px;
+      padding: 8px 12px !important;
       flex-direction: column;
     }
   }
