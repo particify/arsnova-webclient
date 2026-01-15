@@ -2,10 +2,11 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import {
   Component,
   DestroyRef,
-  Input,
   OnDestroy,
   OnInit,
+  computed,
   inject,
+  input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -135,10 +136,12 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
   private breakpointObserver = inject(BreakpointObserver);
   private contentGroupPageService = inject(ContentGroupPageService);
 
-  // Route data input below
-  @Input({ required: true }) userRole!: UserRole;
-  @Input({ required: true }) room!: Room;
-  @Input({ required: true }) seriesName!: string;
+  readonly userRole = input.required<UserRole>();
+  readonly room = input.required<Room>();
+  readonly seriesName = input.required<string>();
+
+  readonly isModerator = computed(() => this.userRole() === UserRole.MODERATOR);
+
   destroyed$ = new Subject<void>();
 
   isLoading = true;
@@ -290,7 +293,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  setContentGroup(groupName = this.seriesName) {
+  setContentGroup(groupName = this.seriesName()) {
     if (!this.contentGroup || groupName !== this.contentGroup.name) {
       this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, groupName);
       this.reloadContentGroup(groupName);
@@ -301,7 +304,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.totalCorrect = undefined;
     this.contentGroupService
-      .getByRoomIdAndName(this.room.id, groupName, true)
+      .getByRoomIdAndName(this.room().id, groupName, true)
       .subscribe((group) => {
         this.contentGroup = { ...group };
         this.getGroups();
@@ -329,7 +332,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
               this.navigateToFirstContent();
             });
           this.contentGroupService
-            .getAttributions(this.room.id, this.contentGroup.id)
+            .getAttributions(this.room().id, this.contentGroup.id)
             .pipe(takeUntil(this.destroyed$))
             .subscribe((attributions) => {
               this.attributionsExist = attributions.length > 0;
@@ -347,7 +350,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   getGroups(): void {
     this.roomStatsService
-      .getStats(this.room.id, true)
+      .getStats(this.room().id, true)
       .subscribe((roomStats) => {
         if (roomStats.groupStats) {
           this.contentGroupStats = roomStats.groupStats;
@@ -364,7 +367,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
 
   generateExportFilename(extension: string): string {
     const name = this.localFileService.generateFilename(
-      [this.contentGroup.name, this.room.shortId],
+      [this.contentGroup.name, this.room().shortId],
       true
     );
     return `${name}.${extension}`;
@@ -379,7 +382,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       if (options) {
         const blob$ = this.contentService.export(
           options.exportType,
-          this.room.id,
+          this.room().id,
           this.contentGroup.contentIds,
           options.charset
         );
@@ -403,7 +406,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
             return of();
           }
           return this.contentGroupService.import(
-            this.room.id,
+            this.room().id,
             this.contentGroup.id,
             blob
           );
@@ -451,7 +454,7 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
       if (result) {
         this.router.navigate([
           this.routingService.getRoleRoute(),
-          this.room.shortId,
+          this.room().shortId,
         ]);
         this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
         const msg = this.translateService.translate(
@@ -611,10 +614,6 @@ export class ContentGroupPageComponent implements OnInit, OnDestroy {
         return 'blue';
       }
     }
-  }
-
-  isModerator(): boolean {
-    return this.userRole === UserRole.MODERATOR;
   }
 
   toggleLeaderboard() {
