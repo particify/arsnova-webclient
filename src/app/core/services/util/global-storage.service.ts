@@ -40,6 +40,7 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   UI_ERROR_COUNT: Symbol(),
   HTTP_ERROR_COUNT: Symbol(),
   SHOW_SHARE_OVERLAY: Symbol(),
+  VERIFICATION_COOLDOWN_EXPIRATION: Symbol(),
 };
 
 /**
@@ -134,6 +135,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
     key: STORAGE_KEYS.BROWSER_SESSION_INITIALIZED,
     name: 'BROWSER_SESSION_INITIALIZED',
     category: StorageItemCategory.STATISTICS,
+    backend: StorageBackend.SESSIONSTORAGE,
+  },
+  {
+    key: STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION,
+    name: 'VERIFICATION_COOLDOWN_EXPIRATION',
+    category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.SESSIONSTORAGE,
   },
   // Used by extensions

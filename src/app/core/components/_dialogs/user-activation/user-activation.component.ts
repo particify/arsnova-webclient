@@ -13,6 +13,7 @@ import {
   MatDialogRef,
   MatDialogContent,
   MatDialogActions,
+  MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -28,6 +29,10 @@ import {
 } from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ErrorClassification } from '@gql/helper/handle-operation-error';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
 
 @Component({
   selector: 'app-user-activation',
@@ -56,6 +61,8 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   private translationService = inject(TranslocoService);
   private authenticationService = inject(AuthenticationService);
   private resendMail = inject(ResendVerificationMailGql);
+  private readonly data: { initial: boolean } = inject(MAT_DIALOG_DATA);
+  private readonly globalStorageService = inject(GlobalStorageService);
 
   resendCooldownSeconds = 0;
   resendCooldownInterval?: ReturnType<typeof setInterval>;
@@ -66,6 +73,25 @@ export class UserActivationComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.setFormControl(this.verificationCodeFormControl);
+    if (this.data.initial) {
+      this.startResendCooldown();
+    } else {
+      const activeCooldown = this.globalStorageService.getItem(
+        STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION
+      );
+      const currentDate = new Date().getTime();
+      if (activeCooldown) {
+        if (activeCooldown < currentDate) {
+          this.globalStorageService.removeItem(
+            STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION
+          );
+          return;
+        }
+        this.startResendCooldown(
+          Math.round((activeCooldown - currentDate) / 1000)
+        );
+      }
+    }
   }
 
   verify(verificationCode: string): void {
@@ -125,12 +151,21 @@ export class UserActivationComponent extends FormComponent implements OnInit {
     });
   }
 
-  startResendCooldown() {
-    this.resendCooldownSeconds = 90;
+  startResendCooldown(cooldown = 90) {
+    this.resendCooldownSeconds = cooldown;
+    const cooldownExpiration =
+      new Date().getTime() + this.resendCooldownSeconds * 1000;
+    this.globalStorageService.setItem(
+      STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION,
+      cooldownExpiration
+    );
     this.resendCooldownInterval = setInterval(() => {
       this.resendCooldownSeconds--;
       if (this.resendCooldownSeconds <= 0) {
         clearInterval(this.resendCooldownInterval);
+        this.globalStorageService.removeItem(
+          STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION
+        );
       }
     }, 1000);
   }

@@ -31,7 +31,7 @@ export class UserHomeComponent implements OnInit {
     if (this.startVerification()) {
       this.router.navigate(['user'], { replaceUrl: true });
       this.dialogService
-        .openUserActivationDialog()
+        .openUserActivationDialog(true)
         .afterClosed()
         .subscribe((result?: { success: boolean }) => {
           if (result?.success) {
