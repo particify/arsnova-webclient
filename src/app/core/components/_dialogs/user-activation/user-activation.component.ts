@@ -82,7 +82,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
         .subscribe({
           next: (r) => {
             if (r.data?.verifyUserMailAddress) {
-              this.authenticationService.refreshLogin().subscribe({
+              this.authenticationService.refreshAndReloadUser().subscribe({
                 next: () => {
                   this.notificationService.showAdvanced(
                     this.translationService.translate(
