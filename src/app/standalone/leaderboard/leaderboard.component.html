@@ -41,6 +41,7 @@
           [ngClass]="{
             'bold-text bg-dark': element.userAlias?.id === aliasId,
           }"
+          [ngStyle]="{ color: element.color }"
         >
           <span
             >{{ element.score }}
