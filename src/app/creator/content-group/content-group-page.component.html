@@ -19,9 +19,9 @@
                 mat-raised-button
                 color="primary"
                 [routerLink]="'create'"
-                [disabled]="creationMode"
+                [disabled]="creationMode || isModerator()"
                 appHotkey="1"
-                [appHotkeyDisabled]="creationMode"
+                [appHotkeyDisabled]="creationMode || isModerator()"
                 [appHotkeyTitle]="
                   'creator.room-page.create-content' | transloco
                 "
@@ -46,26 +46,26 @@
                       }"
                       data-testid="leaderboard-btn"
                     >
-                      <mat-icon [ngClass]="{ 'action-icon': !showLeaderboard }"
-                        >emoji_events</mat-icon
-                      >
+                      <mat-icon>emoji_events</mat-icon>
                     </button>
                   }
                   <button
                     mat-icon-button
+                    [disabled]="isModerator()"
                     (click)="openSettings()"
                     [matTooltip]="'creator.content.group-settings' | transloco"
                     data-testid="content-group-settings"
                   >
-                    <mat-icon class="action-icon">settings</mat-icon>
+                    <mat-icon>settings</mat-icon>
                   </button>
                   <button
                     mat-icon-button
+                    [disabled]="isModerator()"
                     [matMenuTriggerFor]="groupSettings"
                     [matTooltip]="'creator.content.more-options' | transloco"
                     data-testid="group-more-menu"
                   >
-                    <mat-icon class="action-icon">more_vert</mat-icon>
+                    <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #groupSettings="matMenu">
                     <button mat-menu-item [matMenuTriggerFor]="exportMenu">
@@ -84,7 +84,7 @@
                         extensionId="series-results-export"
                         [extensionData]="{
                           series: contentGroup,
-                          shortId: room.shortId,
+                          shortId: room().shortId,
                         }"
                       ></lib-extension-point>
                     </mat-menu>
@@ -212,7 +212,7 @@
           </div>
           <div class="list-container">
             <app-content-list
-              [room]="room"
+              [room]="room()"
               [contentGroup]="contentGroup"
               [contents]="contents"
               [contentGroupStats]="contentGroupStats"
