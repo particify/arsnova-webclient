@@ -7954,16 +7954,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"altcha@npm:2.2.4":
-  version: 2.2.4
-  resolution: "altcha@npm:2.2.4"
+"altcha@npm:2.3.0":
+  version: 2.3.0
+  resolution: "altcha@npm:2.3.0"
   dependencies:
     "@altcha/crypto": "npm:^0.0.1"
     "@rollup/rollup-linux-x64-gnu": "npm:4.18.0"
   dependenciesMeta:
     "@rollup/rollup-linux-x64-gnu":
       optional: true
-  checksum: 10c0/e69221bab0faffe6a18705bb74541c8ef841840496c5cdc88402a4b873aa24b2b83ef0fc816ebc7b7c2a8fef16f0918afa0079ea0b5e1bf7dd3d3f2aa48ef85a
+  checksum: 10c0/5ce8cc2671c827d57ee62797ad9bd209c5c1d5736a113af10a74e81aa1be907626d8aea9c6c0eceff84d97511eeeeb88fa7082dc07e991e4f08416555999333b
   languageName: node
   linkType: hard
 
@@ -8231,7 +8231,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:8.44.0"
     "@typescript-eslint/parser": "npm:8.44.0"
     "@typescript-eslint/utils": "npm:8.44.0"
-    altcha: "npm:2.2.4"
+    altcha: "npm:2.3.0"
     angular-material-css-vars: "npm:10.0.0"
     apollo-angular: "npm:12.1.0"
     backoff-rxjs: "npm:7.0.0"
