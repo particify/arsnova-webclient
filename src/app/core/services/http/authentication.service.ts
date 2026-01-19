@@ -446,6 +446,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
         if (auth) {
           // If authenticated, transform response by fetching user, building AuthenticatedUser and wrapping it in a ClientAuthenticationResult.
           this.handleAuthenticationResponse(auth);
+          this.refetchCurrentUser();
           return this.currentUserQueryRef.valueChanges.pipe(
             filter((r) => r.dataState === 'complete'),
             map((r) => r.data?.currentUser),
