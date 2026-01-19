@@ -41,7 +41,7 @@
     "@jsverse/transloco": "8.2.0",
     "@stomp/rx-stomp": "2.2.0",
     "@stomp/stompjs": "7.2.0",
-    "altcha": "2.2.4",
+    "altcha": "2.3.0",
     "angular-material-css-vars": "10.0.0",
     "apollo-angular": "12.1.0",
     "backoff-rxjs": "7.0.0",
