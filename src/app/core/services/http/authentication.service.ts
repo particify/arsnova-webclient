@@ -93,10 +93,10 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     if (savedAuth) {
       this._accessToken.set(savedAuth);
     }
-    const savedUser: AuthenticatedUser = this.globalStorageService.getItem(
-      STORAGE_KEYS.USER
+    const savedUser = this.globalStorageService.getItem(STORAGE_KEYS.USER);
+    this.auth$$ = new BehaviorSubject(
+      of(savedUser?.authProvider ? null : savedUser)
     );
-    this.auth$$ = new BehaviorSubject(of(savedUser));
   }
 
   /**
