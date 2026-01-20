@@ -645,6 +645,7 @@ export class ControlBarComponent
           AdvancedSnackBarTypes.SUCCESS
         );
         contentGroup.publishingMode = result;
+        contentGroup.published = true;
         this.updateGroup(contentGroup);
       }
     });
