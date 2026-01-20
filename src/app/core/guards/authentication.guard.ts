@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
   AdvancedSnackBarTypes,
@@ -28,6 +28,7 @@ import { environment } from '@environments/environment';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Apollo } from 'apollo-angular';
+import { ErrorClassification } from '@gql/helper/handle-operation-error';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -90,6 +91,18 @@ export class AuthenticationGuard implements CanActivate {
               },
             })
             .pipe(
+              tap({
+                error: (e) => {
+                  this.notificationService.showOnRequestClientError(e, {
+                    [ErrorClassification.NotFound]: {
+                      message: this.translateService.translate(
+                        'errors.room-not-found'
+                      ),
+                      type: AdvancedSnackBarTypes.WARNING,
+                    },
+                  });
+                },
+              }),
               map((r) => r.data?.joinRoom.role),
               map((role) => {
                 if (!role) {
@@ -176,21 +189,6 @@ export class AuthenticationGuard implements CanActivate {
           if (this.router.url !== '/user') {
             this.router.navigate(['']);
           }
-        }
-      });
-  }
-
-  handleRoomNotFound() {
-    this.translateService
-      .selectTranslate('errors.room-not-found')
-      .pipe(take(1))
-      .subscribe((msg) => {
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.FAILED
-        );
-        if (this.router.url !== '/user') {
-          this.router.navigateByUrl('home');
         }
       });
   }
