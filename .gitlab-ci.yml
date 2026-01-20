@@ -86,35 +86,33 @@ docker_image:
   dependencies:
     - ngbuild
   image:
-    name: gcr.io/kaniko-project/executor:debug@sha256:2562c4fe551399514277ffff7dcca9a3b1628c4ea38cb017d7286dc6ea52f4cd
-    entrypoint: ['']
+    name: quay.io/podman/stable:v5.8.7-immutable@sha256:f345d8d4fddea244d3a1ced27bcec82d14cc9e32cb5ead7f5882b0baf59dc8b0
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: on_success
       variables:
-        DOCKER_TAG: next
+        CONTAINER_TAG: next
     - when: manual
       variables:
-        DOCKER_TAG: dev-$CI_COMMIT_REF_SLUG
+        CONTAINER_TAG: dev-$CI_COMMIT_REF_SLUG
   variables:
-    DOCKER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH
-    KANIKO_CONTEXT: $CI_PROJECT_DIR
-    KANIKO_DOCKERFILE: $CI_PROJECT_DIR/docker/Dockerfile
+    CONTAINER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH
+    CONTAINER_CONTEXT: $CI_PROJECT_DIR
+    CONTAINERFILE: $CI_PROJECT_DIR/docker/Dockerfile
   allow_failure: true
   interruptible: false
   before_script:
     - date
   script:
-    - chmod -R o+rX "$BUILD_DIR"
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor
-      --context "$KANIKO_CONTEXT"
-      --dockerfile "$KANIKO_DOCKERFILE"
-      --destination "$DOCKER_IMAGE:$DOCKER_TAG"
+    - podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - podman build
+      --tag "$CONTAINER_IMAGE:$CONTAINER_TAG"
+      --file "$CONTAINERFILE"
       --build-arg "ARSNOVA_BUILD_DIR=`echo $BUILD_DIR`"
+      "$CONTAINER_CONTEXT"
+    - podman push "$CONTAINER_IMAGE:$CONTAINER_TAG"
 
 prepare_dependency_cache:
   stage: .pre
@@ -136,26 +134,25 @@ dependency_cache:
   needs:
     - prepare_dependency_cache
   image:
-    name: gcr.io/kaniko-project/executor:debug@sha256:2562c4fe551399514277ffff7dcca9a3b1628c4ea38cb017d7286dc6ea52f4cd
-    entrypoint: ['']
+    name: quay.io/podman/stable:v5.8.7-immutable@sha256:f345d8d4fddea244d3a1ced27bcec82d14cc9e32cb5ead7f5882b0baf59dc8b0
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   variables:
-    DOCKER_IMAGE: $DEPENDENCY_CACHE_IMAGE
-    DOCKER_TAG: $CHROME_IMAGE_TAG
-    KANIKO_CONTEXT: $CI_PROJECT_DIR
-    KANIKO_DOCKERFILE: $CI_PROJECT_DIR/docker/dependency-cache.Dockerfile
+    CONTAINER_IMAGE: $DEPENDENCY_CACHE_IMAGE
+    CONTAINER_TAG: $CHROME_IMAGE_TAG
+    CONTAINER_CONTEXT: $CI_PROJECT_DIR
+    CONTAINERFILE: $CI_PROJECT_DIR/docker/dependency-cache.Dockerfile
     YARN_GLOBAL_FOLDER: .yarn-global
   allow_failure: true
   interruptible: false
   before_script:
     - date
   script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor
-      --context "$KANIKO_CONTEXT"
-      --dockerfile "$KANIKO_DOCKERFILE"
-      --destination "$DOCKER_IMAGE:$DOCKER_TAG"
-      --build-arg "BASE_TAG=`echo $DOCKER_TAG`"
+    - podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - podman build
+      --tag "$CONTAINER_IMAGE:$CONTAINER_TAG"
+      --file "$CONTAINERFILE"
+      --build-arg "BASE_TAG=`echo $CONTAINER_TAG`"
       --build-arg "YARN_GLOBAL_FOLDER=`echo $YARN_GLOBAL_FOLDER`"
+      "$CONTAINER_CONTEXT"
+    - podman push "$CONTAINER_IMAGE:$CONTAINER_TAG"
