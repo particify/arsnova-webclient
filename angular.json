@@ -104,7 +104,7 @@
           "options": {
             "compodoc": false,
             "port": 6006,
-            "styles": ["../src/fonts.scss", "./custom-styles.scss"]
+            "styles": ["src/fonts.scss", ".storybook/custom-styles.scss"]
           }
         },
         "build-storybook": {
@@ -112,7 +112,7 @@
           "options": {
             "compodoc": false,
             "outputDir": "dist/storybook/arsnova-webclient",
-            "styles": ["../src/fonts.scss", "./custom-styles.scss"]
+            "styles": ["src/fonts.scss", ".storybook/custom-styles.scss"]
           }
         }
       }
