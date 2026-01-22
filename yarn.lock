@@ -6913,10 +6913,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jasmine@npm:5.1.9":
-  version: 5.1.9
-  resolution: "@types/jasmine@npm:5.1.9"
-  checksum: 10c0/f39edad861c8d9c980fc5a8b594dc835d72bfa4187b9799a8a1d716b658ac0680e4a50d60e792718acfa19dc62016e8a23c2c6a87a2c90d1e31d070c01da1954
+"@types/jasmine@npm:5.1.15":
+  version: 5.1.15
+  resolution: "@types/jasmine@npm:5.1.15"
+  checksum: 10c0/824119f85fd01f88a251fb654f58b135ba38d1085137b4bf57ecaa74b129ba617da58183b9f5f9cf271c86c72cf1f33b6277afb720a1734574cd953b4da2bf22
   languageName: node
   linkType: hard
 
@@ -8241,7 +8241,7 @@ __metadata:
     "@storybook/addon-docs": "npm:10.1.11"
     "@storybook/angular": "npm:10.1.11"
     "@types/d3-cloud": "npm:^1.2.5"
-    "@types/jasmine": "npm:5.1.9"
+    "@types/jasmine": "npm:5.1.15"
     "@types/jasminewd2": "npm:2.0.13"
     "@types/node": "npm:24.10.1"
     "@types/wordcloud": "npm:1.2.2"
