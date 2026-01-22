@@ -103,7 +103,7 @@
     "karma-jasmine-html-reporter": "2.1.0",
     "karma-viewport": "1.0.9",
     "ng-packagr": "21.1.0",
-    "prettier": "3.8.0",
+    "prettier": "3.8.1",
     "sass-embedded": "1.93.0",
     "storybook": "10.1.11",
     "stylelint": "16.24.0",
