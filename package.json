@@ -45,7 +45,7 @@
     "angular-material-css-vars": "10.0.0",
     "apollo-angular": "13.0.0",
     "backoff-rxjs": "7.0.0",
-    "chart.js": "4.5.0",
+    "chart.js": "4.5.1",
     "chartjs-plugin-datalabels": "2.2.0",
     "d3-cloud": "1.2.7",
     "dayjs": "1.11.18",
