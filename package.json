@@ -79,7 +79,7 @@
     "@playwright/test": "1.58.0",
     "@storybook/addon-docs": "10.2.0",
     "@storybook/angular": "10.2.0",
-    "@types/d3-cloud": "^1.2.5",
+    "@types/d3-cloud": "1.2.9",
     "@types/jasmine": "5.1.15",
     "@types/jasminewd2": "2.0.13",
     "@types/node": "24.10.9",
