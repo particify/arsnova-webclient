@@ -6785,7 +6785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/d3-cloud@npm:^1.2.5":
+"@types/d3-cloud@npm:1.2.9":
   version: 1.2.9
   resolution: "@types/d3-cloud@npm:1.2.9"
   dependencies:
@@ -8162,7 +8162,7 @@ __metadata:
     "@stomp/stompjs": "npm:7.2.1"
     "@storybook/addon-docs": "npm:10.2.0"
     "@storybook/angular": "npm:10.2.0"
-    "@types/d3-cloud": "npm:^1.2.5"
+    "@types/d3-cloud": "npm:1.2.9"
     "@types/jasmine": "npm:5.1.15"
     "@types/jasminewd2": "npm:2.0.13"
     "@types/node": "npm:24.10.9"
