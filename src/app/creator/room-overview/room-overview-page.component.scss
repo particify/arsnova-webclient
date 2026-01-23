@@ -3,7 +3,7 @@
 
 .group-types-container {
   display: grid;
-  grid-gap: $spacing;
+  gap: $spacing;
   grid-auto-flow: dense;
 }
 

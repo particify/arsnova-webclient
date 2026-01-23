@@ -93,10 +93,10 @@
 
   font-size: $s-font-size;
 
-  --mat-chip-label-text-size: $s-font-size;
+  --mat-chip-label-text-size: #{$s-font-size};
 
   @include xs {
-    --mat-chip-label-text-size: $xs-font-size;
+    --mat-chip-label-text-size: #{$xs-font-size};
 
     font-size: $xs-font-size;
   }
