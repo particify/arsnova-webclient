@@ -192,7 +192,7 @@ app-share-overlay {
 .locked-icon {
   font-size: $m-font-size;
 
-  --mat-menu-item-icon-size: $m-font-size;
+  --mat-menu-item-icon-size: #{$m-font-size};
 
   margin: 0 0 0 $spacing !important;
 }

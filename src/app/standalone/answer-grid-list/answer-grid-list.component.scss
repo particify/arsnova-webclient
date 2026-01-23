@@ -23,7 +23,7 @@
 @include gt-xs {
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: $spacing-1;
+    gap: $spacing-1;
     grid-auto-flow: dense;
   }
 }
@@ -31,7 +31,7 @@
 @include xs {
   .grid-container {
     grid-template-columns: repeat(1, 1fr);
-    grid-gap: $spacing;
+    gap: $spacing;
     grid-auto-flow: dense;
   }
 }
