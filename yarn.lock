@@ -643,7 +643,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/build@npm:^21.0.0":
+"@angular/build@npm:21.1.1":
   version: 21.1.1
   resolution: "@angular/build@npm:21.1.1"
   dependencies:
@@ -8132,7 +8132,7 @@ __metadata:
     "@angular-eslint/schematics": "npm:21.1.0"
     "@angular-eslint/template-parser": "npm:21.1.0"
     "@angular/animations": "npm:21.1.1"
-    "@angular/build": "npm:^21.0.0"
+    "@angular/build": "npm:21.1.1"
     "@angular/cdk": "npm:21.1.1"
     "@angular/cli": "npm:21.1.1"
     "@angular/common": "npm:21.1.1"
