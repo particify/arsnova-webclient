@@ -5,14 +5,22 @@
   ],
   "packageRules": [
     {
-      "matchPackageNames": ["ng-packagr", "typescript"],
-      "matchPackagePrefixes": ["@angular/", "@angular-devkit/"],
+      "matchPackageNames": [
+        "ng-packagr",
+        "typescript",
+        "@angular/{/,}**",
+        "@angular-devkit/{/,}**"
+      ],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
     {
-      "matchPackageNames": ["ng-packagr", "typescript"],
-      "matchPackagePrefixes": ["@angular/", "@angular-devkit/"],
+      "matchPackageNames": [
+        "ng-packagr",
+        "typescript",
+        "@angular/{/,}**",
+        "@angular-devkit/{/,}**"
+      ],
       "minimumReleaseAge": "0 days"
     },
     {
@@ -21,27 +29,35 @@
     },
     {
       "groupName": "angular",
-      "matchPackageNames": ["ng-packagr"],
-      "matchPackagePrefixes": ["@angular/", "@angular-devkit/"]
+      "matchPackageNames": [
+        "ng-packagr",
+        "@angular/{/,}**",
+        "@angular-devkit/{/,}**"
+      ]
     },
     {
       "groupName": "apollo/graphql",
-      "matchPackageNames": ["apollo-angular", "graphql"],
-      "matchPackagePrefixes": ["@apollo/", "@graphql-codegen/"]
+      "matchPackageNames": [
+        "apollo-angular",
+        "graphql",
+        "@apollo/{/,}**",
+        "@graphql-codegen/{/,}**"
+      ]
     },
     {
       "groupName": "eslint",
-      "matchPackageNames": ["eslint", "typescript-eslint"],
-      "matchPackagePrefixes": [
-        "@angular-eslint/",
-        "@eslint/",
-        "@typescript-eslint/",
-        "eslint-"
+      "matchPackageNames": [
+        "eslint",
+        "typescript-eslint",
+        "@angular-eslint/{/,}**",
+        "@eslint/{/,}**",
+        "@typescript-eslint/{/,}**",
+        "eslint-{/,}**"
       ]
     },
     {
       "groupName": "stomp",
-      "matchPackagePrefixes": ["@stomp/"]
+      "matchPackageNames": ["@stomp/{/,}**"]
     }
   ]
 }
