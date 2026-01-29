@@ -53,7 +53,7 @@
     "is-docker": "4.0.0",
     "jwt-decode": "4.0.0",
     "katex": "0.16.28",
-    "lru-cache": "11.2.4",
+    "lru-cache": "11.2.5",
     "ng-qrcode": "21.0.0",
     "prismjs": "1.30.0",
     "rxjs": "7.8.2",
