@@ -61,7 +61,7 @@
     "zone.js": "0.16.0"
   },
   "devDependencies": {
-    "@analogjs/storybook-angular": "2.2.2",
+    "@analogjs/storybook-angular": "2.2.3",
     "@angular-eslint/builder": "21.1.0",
     "@angular-eslint/eslint-plugin": "21.1.0",
     "@angular-eslint/eslint-plugin-template": "21.1.0",
