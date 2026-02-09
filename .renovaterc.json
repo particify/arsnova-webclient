@@ -58,6 +58,10 @@
     {
       "groupName": "stomp",
       "matchPackageNames": ["@stomp/{/,}**"]
+    },
+    {
+      "groupName": "stylelint",
+      "matchPackageNames": ["stylelint", "stylelint-config-standard-scss"]
     }
   ]
 }
