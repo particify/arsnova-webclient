@@ -198,8 +198,8 @@ __metadata:
   linkType: hard
 
 "@analogjs/vite-plugin-angular@npm:*":
-  version: 2.2.2
-  resolution: "@analogjs/vite-plugin-angular@npm:2.2.2"
+  version: 2.2.3
+  resolution: "@analogjs/vite-plugin-angular@npm:2.2.3"
   dependencies:
     ts-morph: "npm:^21.0.0"
   peerDependencies:
@@ -210,7 +210,7 @@ __metadata:
       optional: true
     "@angular/build":
       optional: true
-  checksum: 10c0/a06b999d1e99ffedfe5f6b36a3d386261c756f0bee1654d64862fa941ac801ee3bc42bdd11e11081972fefc78c6e0bfdfc2457ba87b82deeb4e62e90ffc2e75d
+  checksum: 10c0/acfb1b40a171eacbd7fca96fa1e17953bc5956776c01ac9b08f5aaf8bd8507f33d2122a9a950293c3ea677d195619bb99b009349744232ef3ec3944984997657
   languageName: node
   linkType: hard
 
@@ -5480,16 +5480,15 @@ __metadata:
   linkType: hard
 
 "@storybook/builder-vite@npm:^10.0.0":
-  version: 10.2.0
-  resolution: "@storybook/builder-vite@npm:10.2.0"
+  version: 10.2.7
+  resolution: "@storybook/builder-vite@npm:10.2.7"
   dependencies:
-    "@storybook/csf-plugin": "npm:10.2.0"
-    "@vitest/mocker": "npm:3.2.4"
+    "@storybook/csf-plugin": "npm:10.2.7"
     ts-dedent: "npm:^2.0.0"
   peerDependencies:
-    storybook: ^10.2.0
+    storybook: ^10.2.7
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 10c0/aaefd66b8d5958faf4a93bf24ee0ba6d1fcd1c1c9207567bea0bd1f0d0c85f57a1b29c8248f73a3e99082a2f72989267ce4f6609beae9e20bd01567656b522d9
+  checksum: 10c0/e9694d980d7429dc303d8197f73a436cf118ef3748028ec1cf47ebe5a4bce0680a876d05f2ae71c74049578e6e132b6d90a9301d3d9d13671a8998e339d43f8f
   languageName: node
   linkType: hard
 
@@ -5529,30 +5528,6 @@ __metadata:
   peerDependencies:
     storybook: ^10.2.7
   checksum: 10c0/edf24ef18aa8b1d6d795f56bd021eff33768fe6ca212c5af4ac952d9054f384a36887a1445076f0ffc49afa01a5664eaece1c19207f2ad7a87eabee9de60fd00
-  languageName: node
-  linkType: hard
-
-"@storybook/csf-plugin@npm:10.2.0":
-  version: 10.2.0
-  resolution: "@storybook/csf-plugin@npm:10.2.0"
-  dependencies:
-    unplugin: "npm:^2.3.5"
-  peerDependencies:
-    esbuild: "*"
-    rollup: "*"
-    storybook: ^10.2.0
-    vite: "*"
-    webpack: "*"
-  peerDependenciesMeta:
-    esbuild:
-      optional: true
-    rollup:
-      optional: true
-    vite:
-      optional: true
-    webpack:
-      optional: true
-  checksum: 10c0/bf388e4abce3c40b52d35e892b5eddbc3856b3676967e573400f355315bfd65b96d23f430257d47ac9087696adf842bab23a10cb515713a26254fdcccb4a5126
   languageName: node
   linkType: hard
 
@@ -6459,25 +6434,6 @@ __metadata:
     chai: "npm:^5.2.0"
     tinyrainbow: "npm:^2.0.0"
   checksum: 10c0/7586104e3fd31dbe1e6ecaafb9a70131e4197dce2940f727b6a84131eee3decac7b10f9c7c72fa5edbdb68b6f854353bd4c0fa84779e274207fb7379563b10db
-  languageName: node
-  linkType: hard
-
-"@vitest/mocker@npm:3.2.4":
-  version: 3.2.4
-  resolution: "@vitest/mocker@npm:3.2.4"
-  dependencies:
-    "@vitest/spy": "npm:3.2.4"
-    estree-walker: "npm:^3.0.3"
-    magic-string: "npm:^0.30.17"
-  peerDependencies:
-    msw: ^2.4.9
-    vite: ^5.0.0 || ^6.0.0 || ^7.0.0-0
-  peerDependenciesMeta:
-    msw:
-      optional: true
-    vite:
-      optional: true
-  checksum: 10c0/f7a4aea19bbbf8f15905847ee9143b6298b2c110f8b64789224cb0ffdc2e96f9802876aa2ca83f1ec1b6e1ff45e822abb34f0054c24d57b29ab18add06536ccd
   languageName: node
   linkType: hard
 
@@ -9622,15 +9578,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"estree-walker@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "estree-walker@npm:3.0.3"
-  dependencies:
-    "@types/estree": "npm:^1.0.0"
-  checksum: 10c0/c12e3c2b2642d2bcae7d5aa495c60fa2f299160946535763969a1c83fc74518ffa9c2cd3a8b69ac56aea547df6a8aac25f729a342992ef0bbac5f1c73e78995d
-  languageName: node
-  linkType: hard
-
 "esutils@npm:^2.0.2":
   version: 2.0.3
   resolution: "esutils@npm:2.0.3"
@@ -12341,7 +12288,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:0.30.21, magic-string@npm:^0.30.17, magic-string@npm:^0.30.21, magic-string@npm:^0.30.5":
+"magic-string@npm:0.30.21, magic-string@npm:^0.30.21, magic-string@npm:^0.30.5":
   version: 0.30.21
   resolution: "magic-string@npm:0.30.21"
   dependencies:
