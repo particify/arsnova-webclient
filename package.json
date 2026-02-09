@@ -76,7 +76,7 @@
     "@graphql-codegen/typescript": "5.0.7",
     "@graphql-codegen/typescript-apollo-angular": "4.0.1",
     "@graphql-codegen/typescript-operations": "5.0.7",
-    "@playwright/test": "1.58.0",
+    "@playwright/test": "1.58.2",
     "@storybook/addon-docs": "10.2.7",
     "@storybook/angular": "10.2.7",
     "@types/d3-cloud": "1.2.9",
