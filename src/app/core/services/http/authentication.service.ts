@@ -1,7 +1,7 @@
 import { Injectable, Signal, inject, signal } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, timer } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, timer } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -13,6 +13,7 @@ import {
   shareReplay,
   take,
   tap,
+  throttleTime,
 } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
 import {
@@ -77,6 +78,8 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     headers: new HttpHeaders({}),
   };
 
+  private isUnauthorized$ = new Subject<string>();
+
   serviceApiUrl = {
     login: '/login',
     logout: '/logout',
@@ -131,6 +134,13 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
         this.refreshLogin().subscribe();
       }
     });
+    this.isUnauthorized$.pipe(throttleTime(1000)).subscribe((redirectUrl) => {
+      this.handleUnauthorizedError(redirectUrl);
+    });
+  }
+
+  setUnauthorized(redirectUrl: string) {
+    this.isUnauthorized$.next(redirectUrl);
   }
 
   /**
@@ -342,18 +352,17 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
       )
       .subscribe(() => {
         this.logoutLocally();
-
-        // FIXME: This is currently needed to assign null
-        // This should be refactored at some point
-        // eslint-disable-next-line
-        // @ts-ignore
-        this.auth$$.next(of(null));
       });
   }
 
   private logoutLocally() {
     this.globalStorageService.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
     this.globalStorageService.removeItem(STORAGE_KEYS.USER);
+    // FIXME: This is currently needed to assign null
+    // This should be refactored at some point
+    // eslint-disable-next-line
+    // @ts-ignore
+    this.auth$$.next(of(null));
   }
 
   private openSsoPopup(url: string): Window | null {
