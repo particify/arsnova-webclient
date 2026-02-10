@@ -198,7 +198,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
             }
           ),
           this.isLoggedIn()
-        );
+        ).pipe(first());
       })
     );
   }
