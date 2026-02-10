@@ -40,7 +40,7 @@
     "@fontsource/roboto": "5.2.9",
     "@jsverse/transloco": "8.2.1",
     "@stomp/rx-stomp": "2.3.0",
-    "@stomp/stompjs": "7.2.1",
+    "@stomp/stompjs": "7.3.0",
     "altcha": "2.3.0",
     "angular-material-css-vars": "10.0.0",
     "apollo-angular": "13.0.0",
