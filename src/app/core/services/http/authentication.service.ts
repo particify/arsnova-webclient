@@ -78,7 +78,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     headers: new HttpHeaders({}),
   };
 
-  private isUnauthorized$ = new Subject<string>();
+  private handleUnauthorizedWithRedirect$ = new Subject<string>();
 
   serviceApiUrl = {
     login: '/login',
@@ -134,13 +134,15 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
         this.refreshLogin().subscribe();
       }
     });
-    this.isUnauthorized$.pipe(throttleTime(1000)).subscribe((redirectUrl) => {
-      this.handleUnauthorizedError(redirectUrl);
-    });
+    this.handleUnauthorizedWithRedirect$
+      .pipe(throttleTime(1000))
+      .subscribe((redirectUrl) => {
+        this.handleUnauthorizedError(redirectUrl);
+      });
   }
 
   setUnauthorized(redirectUrl: string) {
-    this.isUnauthorized$.next(redirectUrl);
+    this.handleUnauthorizedWithRedirect$.next(redirectUrl);
   }
 
   /**
@@ -412,11 +414,11 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * Furthermore, the current route is stored so it can be restored after
    * login.
    */
-  handleUnauthorizedError() {
+  private handleUnauthorizedError(redirectUrl: string) {
     this.refreshLogin().subscribe({
       error: () => {
         this.logoutLocally();
-        this.routingService.setRedirect(undefined, true);
+        this.routingService.setRedirect(redirectUrl, true);
         this.router.navigateByUrl('login');
         this.translateService
           .selectTranslate('login.authentication-expired')
