@@ -50,7 +50,7 @@
     "LDAP": "LDAP",
     "SAML": "SAML",
     "CAS": "CAS",
-    "activationsPending": "Activaciones pendientes",
+    "pendingCount": "Activaciones pendientes",
     "closed": "Cerrado",
     "published": "Publicado",
     "fromTemplate": "Creado a partir de plantilla",

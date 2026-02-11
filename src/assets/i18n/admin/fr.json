@@ -2,7 +2,7 @@
   "admin-area": {
     "NUMERIC": "Trouver le nombre",
     "countByPublishingMode": "Nombre par mode de publication",
-    "activationsPending": "Comptes en attente",
+    "pendingCount": "Comptes en attente",
     "SAML": "SAML",
     "CAS": "CAS",
     "closed": "Fermé",
