@@ -788,17 +788,11 @@ export type AdminStatsQuery = {
     totalCount: number;
     verifiedCount: number;
     pendingCount: number;
-    deletedCount: number;
   } | null;
-  adminRoomStats?: {
-    __typename?: 'AdminRoomStats';
-    totalCount: number;
-    deletedCount: number;
-  } | null;
+  adminRoomStats?: { __typename?: 'AdminRoomStats'; totalCount: number } | null;
   adminAnnouncementStats?: {
     __typename?: 'AdminAnnouncementStats';
     totalCount: number;
-    deletedCount: number;
   } | null;
 };
 
@@ -1835,15 +1829,12 @@ export const AdminStatsDocument = gql`
       totalCount
       verifiedCount
       pendingCount
-      deletedCount
     }
     adminRoomStats {
       totalCount
-      deletedCount
     }
     adminAnnouncementStats {
       totalCount
-      deletedCount
     }
   }
 `;

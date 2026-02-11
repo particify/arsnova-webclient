@@ -96,14 +96,11 @@ query AdminStats {
     totalCount
     verifiedCount
     pendingCount
-    deletedCount
   }
   adminRoomStats {
     totalCount
-    deletedCount
   }
   adminAnnouncementStats {
     totalCount
-    deletedCount
   }
 }
