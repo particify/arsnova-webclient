@@ -1261,6 +1261,15 @@ export type DuplicateRoomMutation = {
   duplicateRoom: { __typename?: 'Room'; id: string; shortId: string };
 };
 
+export type DuplicateDemoRoomMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type DuplicateDemoRoomMutation = {
+  __typename?: 'Mutation';
+  duplicateDemoRoom: { __typename?: 'Room'; id: string; shortId: string };
+};
+
 export type UpdateRoomDetailsMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -2358,6 +2367,28 @@ export class DuplicateRoomGql extends Apollo.Mutation<
   DuplicateRoomMutationVariables
 > {
   document = DuplicateRoomDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const DuplicateDemoRoomDocument = gql`
+  mutation DuplicateDemoRoom {
+    duplicateDemoRoom {
+      id
+      shortId
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DuplicateDemoRoomGql extends Apollo.Mutation<
+  DuplicateDemoRoomMutation,
+  DuplicateDemoRoomMutationVariables
+> {
+  document = DuplicateDemoRoomDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
