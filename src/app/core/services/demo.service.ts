@@ -1,45 +1,43 @@
 import { Injectable, inject } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
 import { Observable } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
 import { DemoRoomCreated } from '@app/core/models/events/demo-room-created';
-import { Room } from '@app/core/models/room';
-import { ApiConfigService } from './http/api-config.service';
 import { RoomService } from './http/room.service';
 import { EventService } from './util/event.service';
+import { DuplicateDemoRoomGql } from '@gql/generated/graphql';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class DemoService {
-  private apiConfigService = inject(ApiConfigService);
+  private http = inject(HttpClient);
   private roomService = inject(RoomService);
-  private translateService = inject(TranslocoService);
   private eventService = inject(EventService);
+  private duplicateDemoRoomGql = inject(DuplicateDemoRoomGql);
 
-  createDemoRoom(): Observable<Room> {
-    return this.getLocalizedDemoRoomId().pipe(
-      mergeMap((shortId) => {
-        return this.roomService.duplicateRoom(`~${shortId}`, true);
-      }),
-      tap((room) => this.roomService.generateRandomData(room.id).subscribe()),
+  createDemoRoom(): Observable<string> {
+    return this.duplicateDemoRoomGql.mutate().pipe(
+      map((r) => r.data?.duplicateDemoRoom),
+      filter((room) => room !== undefined),
+      switchMap((room) =>
+        this.generateRandomData(room.id).pipe(map(() => room))
+      ),
       tap((room) => {
         const event = new DemoRoomCreated(room.id, room.shortId);
         this.eventService.broadcast(event.type, event.payload);
-      })
+      }),
+      map((room) => room.shortId)
     );
   }
 
-  getLocalizedDemoRoomId(): Observable<string> {
-    const lang = this.translateService.getActiveLang();
-    const fallbackLang = this.translateService.getDefaultLang();
-    return this.apiConfigService.getApiConfig$().pipe(
-      map((config) => {
-        let id = config.ui.demo?.[lang];
-        id = id ?? config.ui.demo?.[fallbackLang];
-        if (!id) {
-          throw new Error('Demo room ID is not set.');
-        }
-        return id;
-      })
+  private generateRandomData(roomId: string): Observable<void> {
+    const connectionUrl = this.roomService.buildForeignUri(
+      '/generate-random-data',
+      roomId
     );
+    return this.http
+      .post<void>(connectionUrl, null)
+      .pipe(
+        catchError(this.roomService.handleError<void>(`generateRandomData`))
+      );
   }
 }

@@ -7,13 +7,13 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { DemoService } from '@app/core/services/demo.service';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
+import { DemoService } from '@app/core/services/demo.service';
 
 @Injectable()
 export class DemoRoomGuard implements CanActivate {
-  private demoService = inject(DemoService);
   private authenticationGuard = inject(AuthenticationGuard);
+  private demoService = inject(DemoService);
   private router = inject(Router);
 
   canActivate(
@@ -22,10 +22,9 @@ export class DemoRoomGuard implements CanActivate {
   ): Observable<boolean> {
     return this.authenticationGuard.canActivate(route, state).pipe(
       mergeMap(() => {
-        const demoRoom = this.demoService.createDemoRoom();
-        return demoRoom.pipe(
-          mergeMap((r) => this.router.navigate(['edit', r.shortId]))
-        );
+        return this.demoService
+          .createDemoRoom()
+          .pipe(mergeMap((shortId) => this.router.navigate(['edit', shortId])));
       })
     );
   }

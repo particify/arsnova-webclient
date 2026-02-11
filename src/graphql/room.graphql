@@ -170,6 +170,13 @@ mutation DuplicateRoom($id: ID!, $newName: String!) {
   }
 }
 
+mutation DuplicateDemoRoom {
+  duplicateDemoRoom {
+    id
+    shortId
+  }
+}
+
 # Using one combined mutation because of the existing component behavior.
 # This should be split up later with settings UX improvements.
 mutation UpdateRoomDetails(
