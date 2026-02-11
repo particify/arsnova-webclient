@@ -1,0 +1,30 @@
+<div fxLayout="column" fxLayoutGap="16px">
+  <app-back-button
+    [text]="'Back to user management' | transloco"
+    [backRoute]="['..']"
+  ></app-back-button>
+  <app-admin-page-header headerText="user-details"> </app-admin-page-header>
+</div>
+@if (isLoading()) {
+  <app-loading-indicator></app-loading-indicator>
+} @else {
+  @let _user = user();
+  @if (_user) {
+    <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
+      <app-entity-properties [entity]="_user"></app-entity-properties>
+      <div fxLayoutAlign="space-between">
+        <button mat-stroked-button color="warn" (click)="deleteUser()">
+          <mat-icon>delete</mat-icon>
+          {{ 'admin.admin-area.delete-user' | transloco }}
+        </button>
+        <app-loading-button
+          name="admin.admin-area.activate-user"
+          (clicked)="activateUser()"
+          [disabled]="!!_user.username || !_user.unverifiedMailAddress"
+        ></app-loading-button>
+      </div>
+    </mat-card>
+  } @else {
+    <span>{{ 'admin.admin-area.user-not-found' | transloco }}</span>
+  }
+}

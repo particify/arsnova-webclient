@@ -1,0 +1,6 @@
+@use '../../../variables' as *;
+
+.user-list-item {
+  padding: $spacing-2;
+  border: 1px solid var(--border);
+}
