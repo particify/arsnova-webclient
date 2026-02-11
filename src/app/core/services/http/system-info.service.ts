@@ -23,7 +23,7 @@ export interface SummarizedStats {
 export class SystemInfoService extends AbstractHttpService<void> {
   serviceApiUrl = {
     health: '/health',
-    management: '/management/core',
+    management: '/management',
     summarizedStats: '/_system/summarizedstats',
     core3Stats: '/management/stats',
   };
