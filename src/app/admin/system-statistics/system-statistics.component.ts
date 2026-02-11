@@ -17,44 +17,20 @@ import { MatCard } from '@angular/material/card';
 import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { AdminStatsGql } from '@gql/generated/graphql';
-import { map } from 'rxjs';
+import { debounceTime, map, Subject } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-export class AdminStats {
-  userProfile: object;
-  room: object;
-  contentGroup: object;
-  content: object;
-  answer: object;
-  contentGroupTemplate: object;
-  contentTemplate: object;
-  violationReport: object;
-  announcement: object;
-  comment: object;
-
-  constructor(
-    userProfile: object,
-    room: object,
-    contentGroup: object,
-    content: object,
-    answer: object,
-    contentGroupTemplate: object,
-    contentTemplate: object,
-    violationReport: object,
-    announcement: object,
-    comment: object
-  ) {
-    this.userProfile = userProfile;
-    this.room = room;
-    this.contentGroup = contentGroup;
-    this.content = content;
-    this.answer = answer;
-    this.contentGroupTemplate = contentGroupTemplate;
-    this.contentTemplate = contentTemplate;
-    this.violationReport = violationReport;
-    this.announcement = announcement;
-    this.comment = comment;
-  }
+export interface AdminStats {
+  userProfile?: object;
+  room?: object;
+  contentGroup?: object;
+  content?: object;
+  answer?: object;
+  contentGroupTemplate?: object;
+  contentTemplate?: object;
+  violationReport?: object;
+  announcement?: object;
+  comment?: object;
 }
 
 @Component({
@@ -76,39 +52,40 @@ export class AdminStats {
 export class SystemStatisticsComponent implements OnInit {
   protected systemInfoService = inject(SystemInfoService);
   private route = inject(ActivatedRoute);
-  private core4Stats = inject(AdminStatsGql);
+  private core4AdminStats = inject(AdminStatsGql);
 
   // Route data input below
   @Input({ required: true }) tenantId!: string;
 
-  stats?: AdminStats;
+  core3Stats: AdminStats = {};
+  core4Stats: AdminStats = {};
+  stats: AdminStats = {};
   isLoading = true;
   showDetails = false;
-  selectedTab = 0;
   tabs: string[] = [];
 
-  adminStats = toSignal(this.core4Stats.fetch().pipe(map((s) => s.data)));
+  adminStats = toSignal(this.core4AdminStats.fetch().pipe(map((s) => s.data)));
   roomStats = computed(() => this.adminStats()?.adminRoomStats);
   userStats = computed(() => this.adminStats()?.adminUserStats);
   announcementStats = computed(() => this.adminStats()?.adminAnnouncementStats);
 
+  shouldInitTabs$ = new Subject<void>();
+
   constructor() {
+    this.shouldInitTabs$
+      .pipe(debounceTime(100))
+      .subscribe(() => this.initTabs());
     effect(() => {
       if (this.userStats()) {
-        if (this.stats) {
-          this.stats.userProfile = this.userStats() ?? {};
-        }
+        this.core4Stats.userProfile = this.userStats() ?? {};
       }
       if (this.roomStats()) {
-        if (this.stats) {
-          this.stats.room = this.roomStats() ?? {};
-        }
+        this.core4Stats.room = this.roomStats() ?? {};
       }
       if (this.announcementStats()) {
-        if (this.stats) {
-          this.stats.announcement = this.announcementStats() ?? {};
-        }
+        this.core4Stats.announcement = this.announcementStats() ?? {};
       }
+      this.shouldInitTabs$.next();
     });
   }
 
@@ -124,43 +101,33 @@ export class SystemStatisticsComponent implements OnInit {
   }
 
   loadStats(tenantId: string) {
-    this.isLoading = true;
-    this.systemInfoService.getCore3Stats(tenantId).subscribe((stats) => {
-      this.stats = new AdminStats(
-        this.userStats() ?? {},
-        this.roomStats() ?? {},
-        stats?.contentGroup,
-        stats?.content,
-        stats?.answer,
-        stats?.contentGroupTemplate,
-        stats?.contentTemplate,
-        stats?.violationReport,
-        this.announcementStats() ?? {},
-        stats['commentServiceStats']
-      );
-      this.initTabs();
-      this.isLoading = false;
+    this.systemInfoService.getCore3Stats(tenantId).subscribe({
+      next: (stats) => {
+        this.core3Stats.contentGroup = stats.contentGroup;
+        this.core3Stats.content = stats.content;
+        this.core3Stats.answer = stats.answer;
+        this.core3Stats.contentGroupTemplate = stats.contentGroupTemplate;
+        this.core3Stats.contentTemplate = stats.contentTemplate;
+        this.core3Stats.violationReport = stats.violationReport;
+        this.core3Stats.comment = stats.commentServiceStats;
+        this.shouldInitTabs$.next();
+      },
     });
   }
 
   initTabs() {
+    this.isLoading = true;
+    this.stats = { ...this.core4Stats, ...this.core3Stats };
     this.tabs = [];
-    if (!this.stats) {
-      return;
-    }
     Object.keys(this.stats).forEach((key) => {
-      if (this.stats) {
-        if (this.stats[key as keyof AdminStats]) {
-          this.tabs.push(key);
-        }
+      if (this.stats[key as keyof AdminStats]) {
+        this.tabs.push(key);
       }
     });
+    this.isLoading = false;
   }
 
-  getStats(key: string) {
-    if (this.stats) {
-      return this.stats[key as keyof AdminStats];
-    }
-    return {};
+  getStats(key: string): object {
+    return this.stats[key as keyof AdminStats] ?? {};
   }
 }
