@@ -106,6 +106,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * Initialize authentication at startup.
    */
   init() {
+    this.migrateLegacyGuestToken();
     this.getAuthenticatedUserChanges().subscribe((auth) => {
       if (!environment.production) {
         console.log('Authenticated user changed', auth);
@@ -172,7 +173,9 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
           return of(auth);
         }
 
-        return this.loginGuest().pipe(map((result) => result.authentication));
+        return this.createGuestAccount().pipe(
+          map((result) => result.authentication)
+        );
       })
     );
   }
@@ -226,6 +229,19 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
   }
 
   /**
+   * Sends a refresh request using a legacy token.
+   */
+  refreshLegacyLogin(legacyToken: string): Observable<Authentication> {
+    return this.http
+      .post<Authentication>(
+        this.buildUri(this.serviceApiUrl.refresh),
+        {},
+        { headers: new HttpHeaders({ Authorization: `Bearer ${legacyToken}` }) }
+      )
+      .pipe(tap((a) => this.handleAuthenticationResponse(a)));
+  }
+
+  /**
    * Sends a refresh request using current authentication to extend the
    * validity and reloads the user.
    */
@@ -258,23 +274,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     return this.globalStorageService.getItem(STORAGE_KEYS.GUEST_TOKEN);
   }
 
-  loginGuest(): Observable<ClientAuthenticationResult> {
-    // Use legacy guest token as refresh token
-    const guestToken = this.globalStorageService.getItem(
-      STORAGE_KEYS.GUEST_TOKEN
-    );
-    if (guestToken) {
-      this.globalStorageService.setItem(STORAGE_KEYS.ACCESS_TOKEN, guestToken);
-      return this.handleLoginResponse(this.refreshLogin()).pipe(
-        tap(() =>
-          this.globalStorageService.removeItem(STORAGE_KEYS.GUEST_TOKEN)
-        )
-      );
-    }
-    return this.createGuestAccount();
-  }
-
-  private createGuestAccount(): Observable<ClientAuthenticationResult> {
+  createGuestAccount(): Observable<ClientAuthenticationResult> {
     const token$ = this.challengeService.authenticateByChallenge();
     const loginResult$ = token$.pipe(
       switchMap((token) => {
@@ -530,5 +530,19 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     );
 
     return auth$;
+  }
+
+  private migrateLegacyGuestToken() {
+    const guestToken = this.globalStorageService.getItem(
+      STORAGE_KEYS.GUEST_TOKEN
+    );
+    if (guestToken) {
+      this.handleLoginResponse(this.refreshLegacyLogin(guestToken)).subscribe(
+        () => {
+          console.log('REMOVE TOKEN');
+          this.globalStorageService.removeItem(STORAGE_KEYS.GUEST_TOKEN);
+        }
+      );
+    }
   }
 }

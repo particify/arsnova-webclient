@@ -132,7 +132,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
       this.addRoom(this.auth);
     } else {
       this.authenticationService
-        .loginGuest()
+        .createGuestAccount()
         .pipe(first())
         .subscribe((result) => {
           if (result.authentication) {
