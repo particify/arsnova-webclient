@@ -41,6 +41,7 @@ export enum EventCategory {
   BROSWER = 'Browser',
   APP_UPDATE = 'App Update',
   ERROR = 'Error',
+  PERFORMANCE = 'Performance',
   ACCOUNT = 'Account',
   USER_DATA_ROOM = 'User data - Room',
   USER_DATA_COMMENT = 'User data - Comment',
@@ -262,6 +263,16 @@ export class TrackingService {
         )
       );
     this.eventService
+      .on<any>('ChallengeSolved')
+      .subscribe((e) =>
+        this.addEvent(
+          EventCategory.PERFORMANCE,
+          'PoW challenge solved',
+          `${e.iterations} iterations`,
+          e.duration
+        )
+      );
+    this.eventService
       .on<any>('AccountCreated')
       .subscribe(() => this.addEvent(EventCategory.ACCOUNT, 'Account created'));
     this.eventService
@@ -299,6 +310,11 @@ export class TrackingService {
       .on<any>('HotkeyActivated')
       .subscribe((e) =>
         this.setVisitDimension(VisitDimension.HOTKEYS, e.count.toString())
+      );
+    this.eventService
+      .on<any>('GuestTokenMigrated')
+      .subscribe(() =>
+        this.addEvent(EventCategory.ACCOUNT, 'Guest token migrated')
       );
   }
 
