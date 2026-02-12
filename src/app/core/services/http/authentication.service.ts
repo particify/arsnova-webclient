@@ -34,6 +34,7 @@ import { Apollo } from 'apollo-angular';
 import { ChallengeService } from '@app/core/services/challenge.service';
 import { Authentication } from '@app/core/models/authentication';
 import { CurrentUserGql } from '@gql/generated/graphql';
+import { GuestTokenMigrated } from '@app/core/models/events/guest-token-migrated';
 
 export const AUTH_HEADER_KEY = 'Authorization';
 export const AUTH_SCHEME = 'Bearer';
@@ -539,8 +540,9 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     if (guestToken) {
       this.handleLoginResponse(this.refreshLegacyLogin(guestToken)).subscribe(
         () => {
-          console.log('REMOVE TOKEN');
           this.globalStorageService.removeItem(STORAGE_KEYS.GUEST_TOKEN);
+          const event = new GuestTokenMigrated();
+          this.eventService.broadcast(event.type, event.payload);
         }
       );
     }

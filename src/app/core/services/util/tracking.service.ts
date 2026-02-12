@@ -311,6 +311,11 @@ export class TrackingService {
       .subscribe((e) =>
         this.setVisitDimension(VisitDimension.HOTKEYS, e.count.toString())
       );
+    this.eventService
+      .on<any>('GuestTokenMigrated')
+      .subscribe(() =>
+        this.addEvent(EventCategory.ACCOUNT, 'Guest token migrated')
+      );
   }
 
   setVisitDimension(dimension: VisitDimension, value: string) {
