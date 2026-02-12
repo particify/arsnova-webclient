@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { from, map, Observable, of, switchMap } from 'rxjs';
+import { ChallengeSolved } from '@app/core/models/events/challenge-solved';
+import { EventService } from '@app/core/services/util/event.service';
+import { from, map, Observable, of, switchMap, tap } from 'rxjs';
 
 export const CHALLENGE_URL = '/api/challenge';
 
@@ -25,6 +27,7 @@ interface TokenResponse {
 @Injectable({ providedIn: 'root' })
 export class ChallengeService {
   private http = inject(HttpClient);
+  private eventService = inject(EventService);
 
   authenticateByChallenge(): Observable<string | undefined> {
     return this.fetchChallenge().pipe(
@@ -41,11 +44,19 @@ export class ChallengeService {
   }
 
   private solveChallenge(challenge: Challenge): Observable<Solution | null> {
+    const start = Date.now();
     const handler = this.solveChallengeOnWorkers(
       challenge,
       navigator.hardwareConcurrency
     );
-    return from(handler.promise);
+    return from(handler.promise).pipe(
+      tap(() => this.sendSolvedEvent(challenge.maxnumber, start))
+    );
+  }
+
+  private sendSolvedEvent(iterations: number, start: number) {
+    const event = new ChallengeSolved(iterations, Date.now() - start);
+    this.eventService.broadcast(event.type, event.payload);
   }
 
   private fetchChallenge(): Observable<Challenge> {

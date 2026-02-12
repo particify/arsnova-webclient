@@ -41,6 +41,7 @@ export enum EventCategory {
   BROSWER = 'Browser',
   APP_UPDATE = 'App Update',
   ERROR = 'Error',
+  PERFORMANCE = 'Performance',
   ACCOUNT = 'Account',
   USER_DATA_ROOM = 'User data - Room',
   USER_DATA_COMMENT = 'User data - Comment',
@@ -259,6 +260,16 @@ export class TrackingService {
           `Status code ${e.status}`,
           undefined,
           e.url
+        )
+      );
+    this.eventService
+      .on<any>('ChallengeSolved')
+      .subscribe((e) =>
+        this.addEvent(
+          EventCategory.PERFORMANCE,
+          'PoW challenge solved',
+          `${e.iterations} iterations`,
+          e.duration
         )
       );
     this.eventService
