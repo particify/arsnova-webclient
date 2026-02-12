@@ -43,8 +43,6 @@ export type AdminRoom = {
   __typename?: 'AdminRoom';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   createdBy?: Maybe<Scalars['ID']['output']>;
-  deletedAt?: Maybe<Scalars['DateTime']['output']>;
-  deletedBy?: Maybe<Scalars['ID']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   descriptionRendered?: Maybe<Scalars['String']['output']>;
   focusModeEnabled?: Maybe<Scalars['Boolean']['output']>;
@@ -589,8 +587,6 @@ export type AdminRoomDetailsFragment = {
   createdAt?: string | null;
   updatedBy?: string | null;
   updatedAt?: string | null;
-  deletedBy?: string | null;
-  deletedAt?: string | null;
 };
 
 export type AdminUserByIdQueryVariables = Exact<{
@@ -742,8 +738,6 @@ export type AdminRoomQuery = {
     createdAt?: string | null;
     updatedBy?: string | null;
     updatedAt?: string | null;
-    deletedBy?: string | null;
-    deletedAt?: string | null;
   } | null;
 };
 
@@ -776,8 +770,6 @@ export type AdminTransferRoomMutation = {
     createdAt?: string | null;
     updatedBy?: string | null;
     updatedAt?: string | null;
-    deletedBy?: string | null;
-    deletedAt?: string | null;
   };
 };
 
@@ -1631,8 +1623,6 @@ export const AdminRoomDetailsFragmentDoc = gql`
     createdAt
     updatedBy
     updatedAt
-    deletedBy
-    deletedAt
   }
 `;
 export const RoomDetailsFragmentFragmentDoc = gql`

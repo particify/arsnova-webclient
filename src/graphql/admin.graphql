@@ -27,8 +27,6 @@ fragment AdminRoomDetails on AdminRoom {
   createdAt
   updatedBy
   updatedAt
-  deletedBy
-  deletedAt
 }
 
 query AdminUserById($id: ID!) {
