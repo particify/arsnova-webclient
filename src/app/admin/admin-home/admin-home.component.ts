@@ -86,7 +86,7 @@ export class AdminHomeComponent implements OnInit {
         'status',
         'admin.admin-area.status-details',
         'dns',
-        this.healthInfo.pipe(map((h) => !!h?.details))
+        this.healthInfo.pipe(map((h) => !!h.components))
       ),
     ];
   }

@@ -8,9 +8,7 @@
     <table mat-table [dataSource]="dataSource | keyvalue">
       <ng-container matColumnDef="statusKey">
         <td mat-cell *matCellDef="let element">
-          {{
-            'admin.admin-area.status-' + (element.key | lowercase) | transloco
-          }}
+          {{ element.key.replace('status', '') }}
         </td>
       </ng-container>
       <ng-container matColumnDef="statusValue">

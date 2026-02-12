@@ -5,25 +5,17 @@
 
 @if (isLoading) {
   <app-loading-indicator></app-loading-indicator>
-}
-
-@if (!isLoading) {
-  <div fxLayout="column" fxLayoutGap="16px">
-    <mat-tab-group
-      (selectedTabChange)="selectedTab = $event.index"
-      [selectedIndex]="selectedTab"
-      [dynamicHeight]="true"
-    >
-      @for (tab of tabs; track tab) {
-        <mat-tab [label]="'admin.admin-area.' + tab | transloco"></mat-tab>
-      }
-    </mat-tab-group>
-    <mat-card appearance="outlined">
-      <app-entity-properties
-        [entity]="getStats(tabs[selectedTab])"
-        [translateKeys]="true"
-        [expandOnInit]="tabs[selectedTab] !== 'summary'"
-      ></app-entity-properties>
-    </mat-card>
-  </div>
+} @else {
+  <mat-tab-group [dynamicHeight]="true" [animationDuration]="0">
+    @for (tab of tabs; track tab; let i = $index) {
+      <mat-tab [label]="'admin.admin-area.' + tab | transloco">
+        <mat-card class="stats-card" appearance="outlined">
+          <app-entity-properties
+            [entity]="getStats(tabs[i])"
+            [translateKeys]="true"
+          ></app-entity-properties>
+        </mat-card>
+      </mat-tab>
+    }
+  </mat-tab-group>
 }

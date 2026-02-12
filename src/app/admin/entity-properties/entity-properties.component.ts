@@ -33,7 +33,6 @@ export class EntityPropertiesComponent implements OnChanges {
 
   @Input({ required: true }) entity!: object;
   @Input() translateKeys = false;
-  @Input() expandOnInit = false;
   treeControl: NestedTreeControl<any> = new NestedTreeControl(
     (obj) => obj.value
   );
@@ -41,10 +40,6 @@ export class EntityPropertiesComponent implements OnChanges {
 
   ngOnChanges() {
     this.dataSource.data = this.toNode(this.entity);
-    if (this.expandOnInit) {
-      this.treeControl.dataNodes = this.dataSource.data;
-      this.treeControl.expandAll();
-    }
   }
 
   toNode(object: object): object[] {

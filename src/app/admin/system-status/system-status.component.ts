@@ -56,7 +56,7 @@ export class SystemStatusComponent implements OnInit {
         shareReplay()
       )
       .subscribe((healthInfo) => {
-        this.dataSource = healthInfo?.details;
+        this.dataSource = healthInfo?.components;
         this.isLoading = false;
       });
   }

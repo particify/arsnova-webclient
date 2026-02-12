@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
 import { SystemHealth } from '@app/admin/_models/system-health';
+import { WebsocketStats } from '@app/admin/_models/websocket-stats';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -11,21 +12,13 @@ const httpOptions = {
   }),
 };
 
-export interface SummarizedStats {
-  connectedUsers: number;
-  users: number;
-  rooms: number;
-  answers: number;
-  comments: number;
-}
-
 @Injectable()
 export class SystemInfoService extends AbstractHttpService<void> {
   serviceApiUrl = {
     health: '/health',
-    management: '/management/core',
-    summarizedStats: '/_system/summarizedstats',
+    management: '/management',
     core3Stats: '/management/stats',
+    websocket: '/websocket',
   };
 
   constructor() {
@@ -41,15 +34,6 @@ export class SystemInfoService extends AbstractHttpService<void> {
     return this.http.get<SystemHealth>(connectionUrl, httpOptions);
   }
 
-  getSummarizedStats(): Observable<SummarizedStats> {
-    const connectionUrl = this.apiUrl.base + this.serviceApiUrl.summarizedStats;
-    return this.http
-      .get<SummarizedStats>(connectionUrl, httpOptions)
-      .pipe(
-        catchError(this.handleError<SummarizedStats>('getSummarizedStats'))
-      );
-  }
-
   getCore3Stats(tenantId?: string): Observable<{ [key: string]: any }> {
     let connectionUrl = this.apiUrl.base + this.serviceApiUrl.core3Stats;
     if (tenantId) {
@@ -58,5 +42,16 @@ export class SystemInfoService extends AbstractHttpService<void> {
     return this.http
       .get<Map<string, any>>(connectionUrl, httpOptions)
       .pipe(catchError(this.handleError<Map<string, any>>('getCore3Stats')));
+  }
+
+  getConnectedUserCount(): Observable<number> {
+    const connectionUrl =
+      this.apiUrl.base +
+      this.serviceApiUrl.management +
+      this.serviceApiUrl.websocket;
+    return this.http.get<WebsocketStats>(connectionUrl, httpOptions).pipe(
+      map((s) => s.webSocketUserCount),
+      catchError(this.handleError<number>('getConnectedUserCount'))
+    );
   }
 }

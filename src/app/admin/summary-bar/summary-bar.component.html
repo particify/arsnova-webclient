@@ -1,10 +1,5 @@
-@if ((healthInfo | async)?.details) {
-  <div
-    fxLayout="row"
-    fxLayoutAlign="space-around"
-    fxLayoutGap="10px"
-    class="summary-container"
-  >
+@if ((healthInfo | async)?.status) {
+  <div fxLayout="row" fxLayoutAlign="space-around" class="summary-container">
     <div fxLayout="column" fxLayoutAlign="center center">
       <div fxLayout="column" fxLayoutAlign="center">
         <app-health-status
@@ -15,29 +10,35 @@
         {{ 'admin.admin-area.system-health' | transloco }}
       </p>
     </div>
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <div fxLayout="column" fxLayoutAlign="center">
-        <span>{{ (stats | async)?.connectedUsers }}</span>
+    @if (connectedUserCount() !== undefined) {
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxLayout="column" fxLayoutAlign="center">
+          <span>{{ connectedUserCount() }}</span>
+        </div>
+        <p>
+          {{ 'admin.admin-area.connected-users' | transloco }}
+        </p>
       </div>
-      <p>
-        {{ 'admin.admin-area.connected-users' | transloco }}
-      </p>
-    </div>
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <div fxLayout="column" fxLayoutAlign="center">
-        <span>{{ (stats | async)?.users }}</span>
+    }
+    @if (userCount()) {
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxLayout="column" fxLayoutAlign="center">
+          <span>{{ userCount() }}</span>
+        </div>
+        <p>
+          {{ 'admin.admin-area.user-accounts' | transloco }}
+        </p>
       </div>
-      <p>
-        {{ 'admin.admin-area.user-accounts' | transloco }}
-      </p>
-    </div>
-    <div fxLayout="column" fxLayoutAlign="center center">
-      <div fxLayout="column" fxLayoutAlign="center">
-        <span>{{ (stats | async)?.rooms }}</span>
+    }
+    @if (roomCount()) {
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxLayout="column" fxLayoutAlign="center">
+          <span>{{ roomCount() }}</span>
+        </div>
+        <p>
+          {{ 'admin.admin-area.rooms' | transloco }}
+        </p>
       </div>
-      <p>
-        {{ 'admin.admin-area.rooms' | transloco }}
-      </p>
-    </div>
+    }
   </div>
 }
