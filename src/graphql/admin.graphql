@@ -104,3 +104,20 @@ query AdminStats {
     totalCount
   }
 }
+
+query AdminMembershipsByUserId($userId: UUID!) {
+  adminMembershipsByUserId(userId: $userId) {
+    edges {
+      node {
+        ...RoomMembership
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}

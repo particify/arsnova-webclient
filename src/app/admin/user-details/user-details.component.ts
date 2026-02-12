@@ -18,6 +18,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatIcon } from '@angular/material/icon';
 import {
   AdminDeleteUserByIdGql,
+  AdminMembershipsByUserIdGql,
   AdminUserByIdGql,
   AdminVerifyUserByIdGql,
 } from '@gql/generated/graphql';
@@ -57,6 +58,7 @@ export class UserDetailsComponent {
   private readonly adminDeleteUser = inject(AdminDeleteUserByIdGql);
   private readonly adminVerifyUser = inject(AdminVerifyUserByIdGql);
   private readonly adminUserById = inject(AdminUserByIdGql);
+  private readonly adminMemberships = inject(AdminMembershipsByUserIdGql);
 
   readonly userId = input.required<string>();
 
@@ -69,6 +71,20 @@ export class UserDetailsComponent {
     )
   );
 
+  readonly membershipsRef = toSignal(
+    toObservable(this.userId).pipe(
+      switchMap((userId) => {
+        return this.adminMemberships.watch({ variables: { userId } })
+          .valueChanges;
+      })
+    )
+  );
+
+  readonly memberships = computed(() =>
+    this.membershipsRef()
+      ?.data?.adminMembershipsByUserId?.edges?.filter((e) => !!e)
+      .map((e) => e?.node)
+  );
   readonly user = computed(() => this.userRef()?.data?.adminUserById);
   readonly isLoading = computed(() => this.userRef()?.loading ?? true);
 
