@@ -22,24 +22,16 @@
 @if (isLoading()) {
   <app-loading-indicator></app-loading-indicator>
 } @else {
-  <div fxLayout="column" fxLayoutGap="16px">
+  <mat-action-list fxLayout="column" fxLayoutGap="16px">
     @for (user of _users; track user) {
-      <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
-        <app-entity-properties [entity]="user"></app-entity-properties>
-        <div fxLayoutAlign="space-between">
-          <button mat-stroked-button color="warn" (click)="deleteUser(user.id)">
-            <mat-icon>delete</mat-icon>
-            {{ 'admin.admin-area.delete-user' | transloco }}
-          </button>
-          <app-loading-button
-            name="admin.admin-area.activate-user"
-            (clicked)="activateUser(user.id)"
-            [disabled]="!!user.username || !user.unverifiedMailAddress"
-          ></app-loading-button>
+      <button mat-list-item class="user-list-item" [routerLink]="user.id">
+        <div fxLayout="column" fxLayoutGap="16px">
+          <span>{{ user.mailAddress ?? user.unverifiedMailAddress }}</span>
+          <span style="opacity: 0.7">{{ user.id }}</span>
         </div>
-      </mat-card>
+      </button>
     }
-  </div>
+  </mat-action-list>
   @if (formControl.value && _users.length === 0) {
     <span>{{ 'admin.admin-area.no-accounts-found' | transloco }}</span>
   }

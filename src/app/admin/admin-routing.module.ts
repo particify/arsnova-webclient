@@ -12,6 +12,7 @@ import { RoomManagementComponent } from './room-management/room-management.compo
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { TemplateManagementComponent } from '@app/admin/template-management/template-management.component';
 import { ReportManagementComponent } from '@app/admin/report-management/report-management.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
   {
     path: 'users',
     component: UserManagementComponent,
+  },
+  {
+    path: 'users/:userId',
+    component: UserDetailsComponent,
   },
   {
     path: 'rooms',

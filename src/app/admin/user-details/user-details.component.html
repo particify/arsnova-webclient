@@ -1,0 +1,44 @@
+<div fxLayout="column" fxLayoutGap="16px">
+  <app-back-button
+    [text]="'Back to user management' | transloco"
+    [backRoute]="['..']"
+  ></app-back-button>
+  @if (isLoading()) {
+    <app-loading-indicator></app-loading-indicator>
+  } @else {
+    @let _user = user();
+    @if (_user) {
+      <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
+        <b>User details</b>
+        <app-entity-properties [entity]="_user"></app-entity-properties>
+        <div fxLayoutAlign="space-between">
+          <button mat-stroked-button color="warn" (click)="deleteUser()">
+            <mat-icon>delete</mat-icon>
+            {{ 'admin.admin-area.delete-user' | transloco }}
+          </button>
+          <app-loading-button
+            name="admin.admin-area.activate-user"
+            (clicked)="activateUser()"
+            [disabled]="!!_user.username || !_user.unverifiedMailAddress"
+          ></app-loading-button>
+        </div>
+        @let _memberships = memberships();
+        @if (_memberships && _memberships.length > 0) {
+          <mat-divider></mat-divider>
+          <b>Memberships</b>
+          @for (membership of _memberships; track membership) {
+            @if (membership) {
+              <mat-card appearance="outlined">
+                <app-entity-properties
+                  [entity]="membership"
+                ></app-entity-properties>
+              </mat-card>
+            }
+          }
+        }
+      </mat-card>
+    } @else {
+      <span>{{ 'admin.admin-area.user-not-found' | transloco }}</span>
+    }
+  }
+</div>

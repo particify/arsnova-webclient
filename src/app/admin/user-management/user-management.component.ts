@@ -6,7 +6,6 @@ import {
   inject,
   linkedSignal,
 } from '@angular/core';
-import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -18,21 +17,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { catchError, debounceTime, filter, first, map, of } from 'rxjs';
 import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import {
   AdminCreateUserGql,
-  AdminDeleteUserByIdGql,
   AdminUserByIdGql,
   AdminUsersGql,
-  AdminVerifyUserByIdGql,
 } from '@gql/generated/graphql';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormService } from '@app/core/services/util/form.service';
-import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatFormField,
@@ -41,21 +35,19 @@ import {
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AdminUtilService } from '@app/admin/admin-util.service';
+import { MatActionList, MatListItem } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
-  styleUrls: ['../admin-styles.scss'],
+  styleUrls: ['./user-management.component.scss'],
   imports: [
     AdminPageHeaderComponent,
     LoadingIndicatorComponent,
-    MatCard,
     FlexModule,
-    MatButton,
     MatIcon,
-    LoadingButtonComponent,
     TranslocoPipe,
-    EntityPropertiesComponent,
     FormsModule,
     MatFormField,
     MatLabel,
@@ -63,21 +55,21 @@ import { AdminUtilService } from '@app/admin/admin-util.service';
     MatInput,
     MatSuffix,
     MatIconButton,
+    MatActionList,
+    MatListItem,
+    RouterLink,
   ],
   providers: [AdminUtilService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserManagementComponent {
-  private readonly dialogService = inject(DialogService);
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly apiConfigService = inject(ApiConfigService);
   private readonly formService = inject(FormService);
   private readonly dialog = inject(MatDialog);
   private readonly adminUsers = inject(AdminUsersGql);
-  private readonly adminDeleteUser = inject(AdminDeleteUserByIdGql);
   private readonly adminCreateUser = inject(AdminCreateUserGql);
-  private readonly adminVerifyUser = inject(AdminVerifyUserByIdGql);
   private readonly destroyRef = inject(DestroyRef);
   private readonly adminUtilService = inject(AdminUtilService);
   private readonly adminUserById = inject(AdminUserByIdGql);
@@ -151,53 +143,6 @@ export class UserManagementComponent {
 
   clear() {
     this.formControl.setValue('');
-  }
-
-  deleteUser(id: string) {
-    const confirmAction = this.adminDeleteUser.mutate({
-      variables: { id },
-      update: (cache, result) => {
-        if (result.data?.adminDeleteUserById) {
-          const cacheId = cache.identify({
-            __typename: 'AdminUser',
-            id: id,
-          });
-          if (cacheId) {
-            cache.evict({ id: cacheId });
-            cache.gc();
-          }
-        }
-      },
-    });
-    const dialogRef = this.dialogService.openDeleteDialog(
-      'account-as-admin',
-      'admin.dialog.really-delete-account-admin',
-      undefined,
-      undefined,
-      () => confirmAction
-    );
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const msg = this.translateService.translate(
-          'admin.admin-area.user-deleted'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      }
-    });
-  }
-
-  activateUser(id: string) {
-    this.formService.disableForm();
-    this.adminVerifyUser.mutate({ variables: { id } }).subscribe(() => {
-      this.formService.enableForm();
-      const msg = this.translateService.translate(
-        'admin.admin-area.user-activated'
-      );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
-    });
   }
 
   addAccount() {
