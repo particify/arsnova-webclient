@@ -41,6 +41,7 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   HTTP_ERROR_COUNT: Symbol(),
   SHOW_SHARE_OVERLAY: Symbol(),
   VERIFICATION_COOLDOWN_EXPIRATION: Symbol(),
+  EXPAND_ROOM_DESCRIPTION: Symbol(),
 };
 
 /**
@@ -140,6 +141,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
   {
     key: STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION,
     name: 'VERIFICATION_COOLDOWN_EXPIRATION',
+    category: StorageItemCategory.REQUIRED,
+    backend: StorageBackend.SESSIONSTORAGE,
+  },
+  {
+    key: STORAGE_KEYS.EXPAND_ROOM_DESCRIPTION,
+    name: 'EXPAND_ROOM_DESCRIPTION',
     category: StorageItemCategory.REQUIRED,
     backend: StorageBackend.SESSIONSTORAGE,
   },
