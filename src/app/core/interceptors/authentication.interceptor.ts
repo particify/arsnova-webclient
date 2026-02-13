@@ -1,6 +1,7 @@
-import { tap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import {
+  HttpClient,
   HttpErrorResponse,
   HttpEvent,
   HttpHandler,
@@ -12,13 +13,14 @@ import {
   AUTH_HEADER_KEY,
   AUTH_SCHEME,
 } from '@app/core/services/http/authentication.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 const REFRESH_URI = '/api/auth/refresh';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
   private authenticationService = inject(AuthenticationService);
+  private http = inject(HttpClient);
 
   private readonly token = this.authenticationService.accessToken;
 
@@ -40,12 +42,23 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       });
 
       return next.handle(authReq).pipe(
-        tap({
-          error: (err: any) => {
-            if (err instanceof HttpErrorResponse && err.status === 401) {
-              this.authenticationService.handleUnauthorizedError();
-            }
-          },
+        catchError((err) => {
+          if (err instanceof HttpErrorResponse && err.status === 401) {
+            console.log('Access token expired. Refreshing...');
+            return this.authenticationService.handleUnauthorizedError().pipe(
+              switchMap(() => {
+                console.log('Retrying request with new access token...');
+                const retryReq = req.clone({
+                  headers: req.headers.set(
+                    AUTH_HEADER_KEY,
+                    `${AUTH_SCHEME} ${this.token()}`
+                  ),
+                });
+                return this.http.request(retryReq);
+              })
+            );
+          }
+          return of(err);
         })
       );
     } else {

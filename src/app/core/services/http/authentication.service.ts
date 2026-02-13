@@ -403,23 +403,25 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * Furthermore, the current route is stored so it can be restored after
    * login.
    */
-  handleUnauthorizedError() {
-    this.refreshLogin().subscribe({
-      error: () => {
-        this.logoutLocally();
-        this.routingService.setRedirect(undefined, true);
-        this.router.navigateByUrl('login');
-        this.translateService
-          .selectTranslate('login.authentication-expired')
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-          });
-      },
-    });
+  handleUnauthorizedError(): Observable<Authentication> {
+    return this.refreshLogin().pipe(
+      tap({
+        error: () => {
+          this.logoutLocally();
+          this.routingService.setRedirect(undefined, true);
+          this.router.navigateByUrl('login');
+          this.translateService
+            .selectTranslate('login.authentication-expired')
+            .pipe(take(1))
+            .subscribe((msg) => {
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.WARNING
+              );
+            });
+        },
+      })
+    );
   }
 
   private handleAuthenticationResponse(auth: Authentication) {
