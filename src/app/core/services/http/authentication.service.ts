@@ -1,7 +1,7 @@
 import { Injectable, Signal, inject, signal } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, Subject, timer } from 'rxjs';
+import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -13,7 +13,6 @@ import {
   shareReplay,
   take,
   tap,
-  throttleTime,
 } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
 import {
@@ -79,8 +78,6 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     headers: new HttpHeaders({}),
   };
 
-  private handleUnauthorizedWithRedirect$ = new Subject<string>();
-
   serviceApiUrl = {
     login: '/login',
     logout: '/logout',
@@ -136,15 +133,6 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
         this.refreshLogin().subscribe();
       }
     });
-    this.handleUnauthorizedWithRedirect$
-      .pipe(throttleTime(1000))
-      .subscribe((redirectUrl) => {
-        this.handleUnauthorizedError(redirectUrl);
-      });
-  }
-
-  setUnauthorized(redirectUrl: string) {
-    this.handleUnauthorizedWithRedirect$.next(redirectUrl);
   }
 
   /**
@@ -355,17 +343,18 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
       )
       .subscribe(() => {
         this.logoutLocally();
+
+        // FIXME: This is currently needed to assign null
+        // This should be refactored at some point
+        // eslint-disable-next-line
+        // @ts-ignore
+        this.auth$$.next(of(null));
       });
   }
 
   private logoutLocally() {
     this.globalStorageService.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
     this.globalStorageService.removeItem(STORAGE_KEYS.USER);
-    // FIXME: This is currently needed to assign null
-    // This should be refactored at some point
-    // eslint-disable-next-line
-    // @ts-ignore
-    this.auth$$.next(of(null));
   }
 
   private openSsoPopup(url: string): Window | null {
@@ -415,11 +404,11 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * Furthermore, the current route is stored so it can be restored after
    * login.
    */
-  private handleUnauthorizedError(redirectUrl: string) {
+  handleUnauthorizedError() {
     this.refreshLogin().subscribe({
       error: () => {
         this.logoutLocally();
-        this.routingService.setRedirect(redirectUrl, true);
+        this.routingService.setRedirect(undefined, true);
         this.router.navigateByUrl('login');
         this.translateService
           .selectTranslate('login.authentication-expired')

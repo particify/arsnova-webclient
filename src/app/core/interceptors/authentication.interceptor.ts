@@ -43,9 +43,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         tap({
           error: (err: any) => {
             if (err instanceof HttpErrorResponse && err.status === 401) {
-              this.authenticationService.setUnauthorized(
-                window.location.pathname
-              );
+              this.authenticationService.handleUnauthorizedError();
             }
           },
         })
