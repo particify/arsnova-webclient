@@ -227,7 +227,7 @@
     "room-successfully-removed": "La stanza è stata rimossa con successo dall'elenco.",
     "room-successfully-deleted": "La stanza è stata cancellata con successo.",
     "visited-rooms": "Stanze visitate",
-    "load-rooms": "Stanze di carico",
+    "load-more": "Carica altro",
     "active": "Attivo",
     "active-info": "Attualmente ci sono {{userCount}} persone in questa stanza.",
     "duplicate-room": "Stanza duplicata",
