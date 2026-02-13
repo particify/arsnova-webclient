@@ -191,7 +191,7 @@
     "room-successfully-deleted": "La sala se eliminó correctamente.",
     "participant-role": "Participante",
     "visited-rooms": "Salas visitadas",
-    "load-rooms": "Cargar salas",
+    "load-more": "Cargar más",
     "import": "Importar",
     "active": "Activa",
     "active-info": "Actualmente hay {{userCount}} personas en esta sala.",

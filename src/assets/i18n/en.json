@@ -193,7 +193,7 @@
     "room-successfully-deleted": "The room was successfully deleted.",
     "participant-role": "Participant",
     "visited-rooms": "Visited rooms",
-    "load-rooms": "Load rooms",
+    "load-more": "Load more",
     "import": "Import",
     "active": "Active",
     "active-info": "There are currently {{userCount}} people in this room.",
