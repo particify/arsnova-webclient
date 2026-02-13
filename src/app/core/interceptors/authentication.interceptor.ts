@@ -37,23 +37,20 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       !req.withCredentials &&
       req.url !== REFRESH_URI
     ) {
-      const authReq = req.clone({
-        headers: req.headers.set(AUTH_HEADER_KEY, `${AUTH_SCHEME} ${token}`),
-      });
-
+      const authReq = this.buildAuthenticatedRequest(req);
       return next.handle(authReq).pipe(
         catchError((err) => {
           if (err instanceof HttpErrorResponse && err.status === 401) {
-            console.log('Access token expired. Refreshing...');
+            if (
+              authReq.headers.get(AUTH_HEADER_KEY) !==
+              `${AUTH_SCHEME} ${this.token()}`
+            ) {
+              // Access token expired but has been refreshed in the meantime.
+              return this.http.request(this.buildAuthenticatedRequest(req));
+            }
             return this.authenticationService.handleUnauthorizedError().pipe(
               switchMap(() => {
-                console.log('Retrying request with new access token...');
-                const retryReq = req.clone({
-                  headers: req.headers.set(
-                    AUTH_HEADER_KEY,
-                    `${AUTH_SCHEME} ${this.token()}`
-                  ),
-                });
+                const retryReq = this.buildAuthenticatedRequest(req);
                 return this.http.request(retryReq);
               })
             );
@@ -64,5 +61,14 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     } else {
       return next.handle(req);
     }
+  }
+
+  private buildAuthenticatedRequest(req: HttpRequest<any>): HttpRequest<any> {
+    return req.clone({
+      headers: req.headers.set(
+        AUTH_HEADER_KEY,
+        `${AUTH_SCHEME} ${this.token()}`
+      ),
+    });
   }
 }

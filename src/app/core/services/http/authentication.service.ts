@@ -73,6 +73,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
   get accessToken(): Signal<string | undefined> {
     return this._accessToken;
   }
+  private inflightRefreshRequest?: Observable<Authentication>;
 
   private httpOptions = {
     headers: new HttpHeaders({}),
@@ -209,12 +210,27 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
 
   /**
    * Sends a refresh request using current authentication to extend the
-   * validity.
+   * validity. When a request is already in flight, its Observable is returned
+   * instead of sending a new request.
    */
   refreshLogin(): Observable<Authentication> {
-    return this.http
+    if (this.inflightRefreshRequest) {
+      return this.inflightRefreshRequest;
+    }
+    console.log('Refreshing access token...');
+    this.inflightRefreshRequest = this.http
       .post<Authentication>(this.buildUri(this.serviceApiUrl.refresh), {})
-      .pipe(tap((a) => this.handleAuthenticationResponse(a)));
+      .pipe(
+        tap({
+          next: (a) => {
+            this.handleAuthenticationResponse(a);
+            this.inflightRefreshRequest = undefined;
+          },
+          error: () => (this.inflightRefreshRequest = undefined),
+        }),
+        shareReplay(1)
+      );
+    return this.inflightRefreshRequest;
   }
 
   /**
@@ -403,7 +419,11 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * Furthermore, the current route is stored so it can be restored after
    * login.
    */
-  handleUnauthorizedError(): Observable<Authentication> {
+  handleUnauthorizedError(): Observable<Authentication | undefined> {
+    if (!this.accessToken()) {
+      this.router.navigateByUrl('login');
+      return of(undefined);
+    }
     return this.refreshLogin().pipe(
       tap({
         error: () => {
