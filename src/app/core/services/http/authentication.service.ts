@@ -343,18 +343,17 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
       )
       .subscribe(() => {
         this.logoutLocally();
-
-        // FIXME: This is currently needed to assign null
-        // This should be refactored at some point
-        // eslint-disable-next-line
-        // @ts-ignore
-        this.auth$$.next(of(null));
       });
   }
 
   private logoutLocally() {
     this.globalStorageService.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
     this.globalStorageService.removeItem(STORAGE_KEYS.USER);
+    // FIXME: This is currently needed to assign null
+    // This should be refactored at some point
+    // eslint-disable-next-line
+    // @ts-ignore
+    this.auth$$.next(of(null));
   }
 
   private openSsoPopup(url: string): Window | null {
