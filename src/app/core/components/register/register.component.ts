@@ -35,6 +35,8 @@ import { ClaimUnverifiedUserGql } from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { first, switchMap } from 'rxjs';
 import { MatButton } from '@angular/material/button';
+import { AccountCreated } from '@app/core/models/events/account-created';
+import { EventService } from '@app/core/services/util/event.service';
 
 @Component({
   selector: 'app-register',
@@ -66,6 +68,7 @@ export class RegisterComponent extends FormComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private router = inject(Router);
   private passwordEntry = viewChild.required(PasswordEntryComponent);
+  private eventService = inject(EventService);
 
   // Route data input below
   apiConfig = input<ApiConfig>() as InputSignal<ApiConfig>;
@@ -123,6 +126,8 @@ export class RegisterComponent extends FormComponent implements OnInit {
               msg,
               AdvancedSnackBarTypes.SUCCESS
             );
+            const event = new AccountCreated();
+            this.eventService.broadcast(event.type);
           },
           error: () => {
             this.enableForm();

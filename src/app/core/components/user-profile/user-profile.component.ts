@@ -15,7 +15,7 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { Router } from '@angular/router';
 import { Location, AsyncPipe } from '@angular/common';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { filter, take } from 'rxjs';
+import { filter } from 'rxjs';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { FlexModule } from '@angular/flex-layout';
 import {
@@ -37,6 +37,8 @@ import {
   UpdateUserSettingsGql,
 } from '@gql/generated/graphql';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { AccountDeleted } from '@app/core/models/events/account-deleted';
+import { EventService } from '@app/core/services/util/event.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -67,6 +69,7 @@ export class UserProfileComponent {
   private dialogService = inject(DialogService);
   private router = inject(Router);
   private location = inject(Location);
+  private eventService = inject(EventService);
 
   private currentUserGql = inject(CurrentUserWithSettingsGql);
   private deleteUser = inject(DeleteUserGql);
@@ -112,16 +115,15 @@ export class UserProfileComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.authenticationService.logout();
-        this.translationService
-          .selectTranslate('header.account-deleted')
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-          });
+        const msg = this.translationService.translate('header.account-deleted');
+
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
         this.navToHome();
+        const event = new AccountDeleted();
+        this.eventService.broadcast(event.type);
       }
     });
   }
