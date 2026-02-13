@@ -1,7 +1,7 @@
 import { Injectable, Signal, inject, signal } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, Subject, timer } from 'rxjs';
+import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import {
   catchError,
   concatMap,
@@ -13,7 +13,6 @@ import {
   shareReplay,
   take,
   tap,
-  throttleTime,
 } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
 import {
@@ -74,12 +73,11 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
   get accessToken(): Signal<string | undefined> {
     return this._accessToken;
   }
+  private inflightRefreshRequest?: Observable<Authentication>;
 
   private httpOptions = {
     headers: new HttpHeaders({}),
   };
-
-  private handleUnauthorizedWithRedirect$ = new Subject<string>();
 
   serviceApiUrl = {
     login: '/login',
@@ -94,10 +92,11 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     const savedAuth: string = this.globalStorageService.getItem(
       STORAGE_KEYS.ACCESS_TOKEN
     );
+    let savedUser;
     if (savedAuth) {
       this._accessToken.set(savedAuth);
+      savedUser = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     }
-    const savedUser = this.globalStorageService.getItem(STORAGE_KEYS.USER);
     this.auth$$ = new BehaviorSubject(
       of(savedUser?.authProvider ? null : savedUser)
     );
@@ -136,15 +135,6 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
         this.refreshLogin().subscribe();
       }
     });
-    this.handleUnauthorizedWithRedirect$
-      .pipe(throttleTime(1000))
-      .subscribe((redirectUrl) => {
-        this.handleUnauthorizedError(redirectUrl);
-      });
-  }
-
-  setUnauthorized(redirectUrl: string) {
-    this.handleUnauthorizedWithRedirect$.next(redirectUrl);
   }
 
   /**
@@ -221,12 +211,27 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
 
   /**
    * Sends a refresh request using current authentication to extend the
-   * validity.
+   * validity. When a request is already in flight, its Observable is returned
+   * instead of sending a new request.
    */
   refreshLogin(): Observable<Authentication> {
-    return this.http
+    if (this.inflightRefreshRequest) {
+      return this.inflightRefreshRequest;
+    }
+    console.log('Refreshing access token...');
+    this.inflightRefreshRequest = this.http
       .post<Authentication>(this.buildUri(this.serviceApiUrl.refresh), {})
-      .pipe(tap((a) => this.handleAuthenticationResponse(a)));
+      .pipe(
+        tap({
+          next: (a) => {
+            this.handleAuthenticationResponse(a);
+            this.inflightRefreshRequest = undefined;
+          },
+          error: () => (this.inflightRefreshRequest = undefined),
+        }),
+        shareReplay(1)
+      );
+    return this.inflightRefreshRequest;
   }
 
   /**
@@ -415,23 +420,29 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    * Furthermore, the current route is stored so it can be restored after
    * login.
    */
-  private handleUnauthorizedError(redirectUrl: string) {
-    this.refreshLogin().subscribe({
-      error: () => {
-        this.logoutLocally();
-        this.routingService.setRedirect(redirectUrl, true);
-        this.router.navigateByUrl('login');
-        this.translateService
-          .selectTranslate('login.authentication-expired')
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.WARNING
-            );
-          });
-      },
-    });
+  handleUnauthorizedError(): Observable<Authentication | undefined> {
+    if (!this.accessToken()) {
+      this.router.navigateByUrl('login');
+      return of(undefined);
+    }
+    return this.refreshLogin().pipe(
+      tap({
+        error: () => {
+          this.logoutLocally();
+          this.routingService.setRedirect(undefined, true);
+          this.router.navigateByUrl('login');
+          this.translateService
+            .selectTranslate('login.authentication-expired')
+            .pipe(take(1))
+            .subscribe((msg) => {
+              this.notificationService.showAdvanced(
+                msg,
+                AdvancedSnackBarTypes.WARNING
+              );
+            });
+        },
+      })
+    );
   }
 
   private handleAuthenticationResponse(auth: Authentication) {
