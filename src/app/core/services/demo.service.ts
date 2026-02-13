@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
 import { DemoRoomCreated } from '@app/core/models/events/demo-room-created';
 import { RoomService } from './http/room.service';
@@ -18,10 +18,10 @@ export class DemoService {
     return this.duplicateDemoRoomGql.mutate().pipe(
       map((r) => r.data?.duplicateDemoRoom),
       filter((room) => room !== undefined),
-      switchMap((room) =>
-        this.generateRandomData(room.id).pipe(map(() => room))
-      ),
       tap((room) => {
+        timer(500)
+          .pipe(switchMap(() => this.generateRandomData(room.id)))
+          .subscribe();
         const event = new DemoRoomCreated(room.id, room.shortId);
         this.eventService.broadcast(event.type, event.payload);
       }),
