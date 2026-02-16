@@ -50,7 +50,7 @@
       >
         <mat-icon class="add-icon">add</mat-icon>
       </button>
-      @if (isLoading()) {
+      @if (isLoading() && !isFetchMore()) {
         <app-loading-indicator></app-loading-indicator>
       } @else {
         <div
@@ -260,9 +260,18 @@
               </button>
             }
           </mat-action-list>
-          <button mat-flat-button (click)="fetchMore()" [hidden]="!hasMore()">
-            {{ 'room-list.load-more' | transloco }}
-          </button>
+          @if (isLoading()) {
+            <button mat-flat-button [disabled]="true">
+              <app-loading-indicator
+                [size]="18"
+                [disabled]="true"
+              ></app-loading-indicator>
+            </button>
+          } @else {
+            <button mat-flat-button (click)="fetchMore()" [hidden]="!hasMore()">
+              {{ 'room-list.load-more' | transloco }}
+            </button>
+          }
         }
       }
     </mat-card>

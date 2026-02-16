@@ -5,6 +5,7 @@ import {
   ElementRef,
   inject,
   OnInit,
+  signal,
   viewChild,
 } from '@angular/core';
 import { EventService } from '@app/core/services/util/event.service';
@@ -134,6 +135,7 @@ export class RoomListComponent implements AfterViewInit, OnInit {
       map((u) => u.userId)
     )
   );
+  readonly isFetchMore = signal(false);
   RoomRole = RoomRole;
   roles = new Map<RoomRole, string>();
   roomIds: string[] = [];
@@ -226,6 +228,7 @@ export class RoomListComponent implements AfterViewInit, OnInit {
 
   fetchMore() {
     const cursor = this.roomsResult()?.pageInfo.endCursor;
+    this.isFetchMore.set(true);
     this.roomsQueryRef.fetchMore({ variables: { cursor: cursor } });
   }
 
@@ -237,6 +240,7 @@ export class RoomListComponent implements AfterViewInit, OnInit {
     } else {
       this.roomsQueryRef.options.variables = {};
     }
+    this.isFetchMore.set(false);
     this.roomsQueryRef.refetch();
   }
 
