@@ -4,7 +4,7 @@
   @if (userId()) {
     <lib-extension-point
       extensionId="lms-course-room-list"
-      [extensionData]="{ userId: userId(), excludeRoomIds: roomIds }"
+      [extensionData]="{ userId: userId(), excludeRoomIds: roomIds() }"
     ></lib-extension-point>
   }
   <div>

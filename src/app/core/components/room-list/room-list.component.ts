@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -71,35 +72,36 @@ const ACTIVE_ROOM_THRESHOLD = 15;
     TextOverflowClipComponent,
     TranslocoPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoomListComponent implements AfterViewInit, OnInit {
-  private dialogService = inject(DialogService);
-  private eventService = inject(EventService);
-  private notificationService = inject(NotificationService);
-  private roomMembershipsGql = inject(RoomMembershipsGql);
-  private router = inject(Router);
-  private routingService = inject(RoutingService);
-  private translateService = inject(TranslocoService);
-  private deleteRoom = inject(DeleteRoomGql);
-  private revokeMembership = inject(RevokeRoomMembershipGql);
-  private authenticationService = inject(AuthenticationService);
+  private readonly dialogService = inject(DialogService);
+  private readonly eventService = inject(EventService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly roomMembershipsGql = inject(RoomMembershipsGql);
+  private readonly router = inject(Router);
+  private readonly routingService = inject(RoutingService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly deleteRoom = inject(DeleteRoomGql);
+  private readonly revokeMembership = inject(RevokeRoomMembershipGql);
+  private readonly authenticationService = inject(AuthenticationService);
 
-  private searchInput =
+  private readonly searchInput =
     viewChild.required<ElementRef<HTMLInputElement>>('search');
 
-  private roomsQueryRef = this.roomMembershipsGql.watch({
+  private readonly roomsQueryRef = this.roomMembershipsGql.watch({
     errorPolicy: 'all',
     fetchPolicy: 'network-only',
   });
-  private roomsResult = toSignal(
+  private readonly roomsResult = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
       filter((r) => r.dataState === 'complete'),
       map((r) => r.data.roomMemberships),
       catchError(() => of())
     )
   );
-  hasMore = computed(() => this.roomsResult()?.pageInfo.hasNextPage);
-  rooms = computed(
+  readonly hasMore = computed(() => this.roomsResult()?.pageInfo.hasNextPage);
+  readonly rooms = computed(
     () =>
       this.roomsResult()
         ?.edges?.filter((e) => !!e)
@@ -110,7 +112,7 @@ export class RoomListComponent implements AfterViewInit, OnInit {
           return +bAboveThreshold - +aAboveThreshold;
         }) ?? []
   );
-  noRooms = toSignal(
+  readonly noRooms = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
       filter((r) => r.dataState === 'complete'),
       first(),
@@ -118,13 +120,13 @@ export class RoomListComponent implements AfterViewInit, OnInit {
       catchError(() => of(false))
     )
   );
-  isLoading = toSignal(
+  readonly isLoading = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
       map((r) => r.loading),
       catchError(() => of(false))
     )
   );
-  errors = toSignal(
+  readonly errors = toSignal(
     this.roomsQueryRef.valueChanges.pipe(
       map((r) => r.error),
       catchError(() => of(true))
@@ -137,10 +139,10 @@ export class RoomListComponent implements AfterViewInit, OnInit {
     )
   );
   readonly isFetchMore = signal(false);
-  RoomRole = RoomRole;
-  roles = new Map<RoomRole, string>();
-  roomIds: string[] = [];
-  buttonIndicatorSize = INDICATOR_SIZE;
+  readonly RoomRole = RoomRole;
+  readonly roles = new Map<RoomRole, string>();
+  readonly roomIds = signal<string[]>([]);
+  readonly buttonIndicatorSize = INDICATOR_SIZE;
 
   ngOnInit() {
     const roleKeys = [
