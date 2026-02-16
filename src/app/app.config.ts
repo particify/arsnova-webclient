@@ -10,6 +10,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { AuthenticationInterceptor } from '@app/core/interceptors/authentication.interceptor';
 import { ServerTimeInterceptor } from '@app/core/interceptors/server-time.interceptor';
 import { DefaultHeaderInterceptor } from '@app/core/interceptors/default-header.interceptor';
+import { GraphqlErrorInterceptor } from '@app/core/interceptors/graphql-error.interceptor';
 import { UpdateService } from '@app/core/services/util/update.service';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -140,6 +141,11 @@ export const AppConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: DefaultHeaderInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: GraphqlErrorInterceptor,
       multi: true,
     },
     UpdateService,
