@@ -296,7 +296,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
               headers: httpHeaders,
             }
           )
-        );
+        ).pipe(first());
       })
     );
 
