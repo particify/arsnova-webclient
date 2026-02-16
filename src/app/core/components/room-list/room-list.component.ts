@@ -5,6 +5,7 @@ import {
   ElementRef,
   inject,
   OnInit,
+  signal,
   viewChild,
 } from '@angular/core';
 import { EventService } from '@app/core/services/util/event.service';
@@ -47,6 +48,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { NgClass } from '@angular/common';
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { INDICATOR_SIZE } from '@app/standalone/loading-button/loading-button.component';
 
 const ACTIVE_ROOM_THRESHOLD = 15;
 
@@ -134,9 +136,11 @@ export class RoomListComponent implements AfterViewInit, OnInit {
       map((u) => u.userId)
     )
   );
+  readonly isFetchMore = signal(false);
   RoomRole = RoomRole;
   roles = new Map<RoomRole, string>();
   roomIds: string[] = [];
+  buttonIndicatorSize = INDICATOR_SIZE;
 
   ngOnInit() {
     const roleKeys = [
@@ -226,6 +230,7 @@ export class RoomListComponent implements AfterViewInit, OnInit {
 
   fetchMore() {
     const cursor = this.roomsResult()?.pageInfo.endCursor;
+    this.isFetchMore.set(true);
     this.roomsQueryRef.fetchMore({ variables: { cursor: cursor } });
   }
 
@@ -237,6 +242,7 @@ export class RoomListComponent implements AfterViewInit, OnInit {
     } else {
       this.roomsQueryRef.options.variables = {};
     }
+    this.isFetchMore.set(false);
     this.roomsQueryRef.refetch();
   }
 
