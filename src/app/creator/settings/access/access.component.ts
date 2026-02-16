@@ -204,7 +204,9 @@ export class AccessComponent
           }
         },
         error: (e) => {
-          if (!this.loginIdIsEmail) {
+          if (this.loginIdIsEmail) {
+            this.currentInputIsChecked = true;
+          } else {
             this.notificationService.showOnRequestClientError(e, {
               [ErrorClassification.NotFound]: {
                 message: this.translationService.translate(
