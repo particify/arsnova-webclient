@@ -4,6 +4,8 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 import { FormComponent } from '@app/standalone/form/form.component';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 
+export const INDICATOR_SIZE = 18;
+
 @Component({
   imports: [CoreModule, LoadingIndicatorComponent],
   selector: 'app-loading-button',
@@ -25,6 +27,7 @@ export class LoadingButtonComponent extends FormComponent {
   @Input() useDirectives = false;
   @Output() clicked = new EventEmitter<void>();
 
+  readonly indicatorSize = INDICATOR_SIZE;
   loading = false;
 
   click() {
