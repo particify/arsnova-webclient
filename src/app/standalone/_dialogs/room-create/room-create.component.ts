@@ -129,7 +129,19 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     );
   }
 
-  checkLogin() {
+  checkNameAndLogin() {
+    this.newRoom.name = this.newRoom.name.trim();
+    if (!this.newRoom.name) {
+      this.emptyInputs = true;
+      this.translateService
+        .selectTranslate('dialog.no-empty-name')
+        .pipe(take(1))
+        .subscribe((msg) => {
+          this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+        });
+      return;
+    }
+    this.disableForm();
     if (this.auth) {
       this.addRoom(this.auth);
     } else {
@@ -142,19 +154,7 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
   }
 
   private addRoom(auth: AuthenticatedUser) {
-    this.newRoom.name = this.newRoom.name.trim();
-    if (!this.newRoom.name) {
-      this.emptyInputs = true;
-      this.translateService
-        .selectTranslate('dialog.no-empty-name')
-        .pipe(take(1))
-        .subscribe((msg) => {
-          this.notification.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-        });
-      return;
-    }
     if (this.createDuplication && this.data.roomId) {
-      this.disableForm();
       this.duplicateRoomGql
         .mutate({
           variables: { id: this.data.roomId, newName: this.newRoom.name },
@@ -180,7 +180,6 @@ export class RoomCreateComponent extends FormComponent implements OnInit {
     this.newRoom.abbreviation = '00000000';
     this.newRoom.description = '';
     this.newRoom.ownerId = auth.userId;
-    this.disableForm();
     this.createRoomGql
       .mutate({ variables: { name: this.newRoom.name } })
       .subscribe({

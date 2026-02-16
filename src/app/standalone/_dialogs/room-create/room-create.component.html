@@ -1,4 +1,4 @@
-<form mat-dialog-content (ngSubmit)="checkLogin()">
+<form mat-dialog-content (ngSubmit)="checkNameAndLogin()">
   <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
     <lib-extension-point
       extensionId="lms-course-autocomplete"
@@ -40,7 +40,7 @@
     <app-loading-button
       name="dialog.create-room"
       [isDialog]="true"
-      (clicked)="checkLogin()"
+      (clicked)="checkNameAndLogin()"
     ></app-loading-button>
     <button
       (click)="closeDialog()"
