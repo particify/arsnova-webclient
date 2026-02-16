@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import {
@@ -54,6 +55,7 @@ import { first, take } from 'rxjs';
     MatInput,
     MatLabel,
     TranslocoPipe,
+    FlexModule,
   ],
 })
 export class RoomCreateComponent extends FormComponent implements OnInit {
