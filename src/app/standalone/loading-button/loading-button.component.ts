@@ -25,6 +25,7 @@ export class LoadingButtonComponent extends FormComponent {
   @Input() trackName?: string;
   @Input() disabled = false;
   @Input() useDirectives = false;
+  @Input() nameParams = {};
   @Output() clicked = new EventEmitter<void>();
 
   readonly indicatorSize = INDICATOR_SIZE;

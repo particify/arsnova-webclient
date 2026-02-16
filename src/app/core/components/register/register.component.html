@@ -58,8 +58,14 @@
         </mat-checkbox>
       </div>
       <app-loading-button
-        name="register.register"
+        [name]="
+          resendCooldownSeconds()
+            ? 'register.register-again-in-seconds'
+            : 'register.register'
+        "
+        [nameParams]="{ seconds: resendCooldownSeconds() }"
         [fullWidth]="true"
+        [disabled]="!!resendCooldownSeconds()"
         (clicked)="register(userName.value)"
       ></app-loading-button>
       <div fxLayout="row" fxLayoutAlign="center center" class="link-container">
