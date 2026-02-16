@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -29,10 +34,9 @@ import {
 } from '@gql/generated/graphql';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ErrorClassification } from '@gql/helper/handle-operation-error';
-import {
-  GlobalStorageService,
-  STORAGE_KEYS,
-} from '@app/core/services/util/global-storage.service';
+import { CooldownService } from '@app/core/services/util/cooldown.service';
+
+const RESEND_COOLDOWN_SECONDS = 90;
 
 @Component({
   selector: 'app-user-activation',
@@ -52,6 +56,7 @@ import {
     LoadingButtonComponent,
     TranslocoPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserActivationComponent extends FormComponent implements OnInit {
   private verifyUserMailAddressGql = inject(VerifyUserMailAddressGql);
@@ -62,10 +67,9 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   private authenticationService = inject(AuthenticationService);
   private resendMail = inject(ResendVerificationMailGql);
   private readonly data: { initial: boolean } = inject(MAT_DIALOG_DATA);
-  private readonly globalStorageService = inject(GlobalStorageService);
+  private readonly cooldownService = inject(CooldownService);
 
-  resendCooldownSeconds = 0;
-  resendCooldownInterval?: ReturnType<typeof setInterval>;
+  resendCooldownSeconds = this.cooldownService.resendCooldownSeconds;
 
   verificationCodeFormControl = new UntypedFormControl('', [
     Validators.required,
@@ -74,23 +78,9 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   ngOnInit(): void {
     this.setFormControl(this.verificationCodeFormControl);
     if (this.data.initial) {
-      this.startResendCooldown();
+      this.cooldownService.startResendCooldown(RESEND_COOLDOWN_SECONDS);
     } else {
-      const activeCooldown = this.globalStorageService.getItem(
-        STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION
-      );
-      const currentDate = new Date().getTime();
-      if (activeCooldown) {
-        if (activeCooldown < currentDate) {
-          this.globalStorageService.removeItem(
-            STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION
-          );
-          return;
-        }
-        this.startResendCooldown(
-          Math.round((activeCooldown - currentDate) / 1000)
-        );
-      }
+      this.cooldownService.continueActiveResendCooldown();
     }
   }
 
@@ -141,7 +131,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   resendVerificationMail(): void {
     this.resendMail.mutate().subscribe({
       next: () => {
-        this.startResendCooldown();
+        this.cooldownService.startResendCooldown(RESEND_COOLDOWN_SECONDS);
         this.notificationService.showAdvanced(
           this.translationService.translate('user-activation.sent-again'),
           AdvancedSnackBarTypes.SUCCESS
@@ -149,25 +139,6 @@ export class UserActivationComponent extends FormComponent implements OnInit {
       },
       error: (e) => this.notificationService.showOnRequestClientError(e),
     });
-  }
-
-  startResendCooldown(cooldown = 90) {
-    this.resendCooldownSeconds = cooldown;
-    const cooldownExpiration =
-      new Date().getTime() + this.resendCooldownSeconds * 1000;
-    this.globalStorageService.setItem(
-      STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION,
-      cooldownExpiration
-    );
-    this.resendCooldownInterval = setInterval(() => {
-      this.resendCooldownSeconds--;
-      if (this.resendCooldownSeconds <= 0) {
-        clearInterval(this.resendCooldownInterval);
-        this.globalStorageService.removeItem(
-          STORAGE_KEYS.VERIFICATION_COOLDOWN_EXPIRATION
-        );
-      }
-    }, 1000);
   }
 
   close(result?: { success: boolean }) {
