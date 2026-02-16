@@ -83,6 +83,7 @@ export class RoomOverviewPageComponent
     Map<ContentType, string>
   >();
   readonly hintType = HintType.INFO;
+  expandDescription: boolean;
 
   constructor() {
     super();
@@ -101,6 +102,15 @@ export class RoomOverviewPageComponent
       });
       this.groupContentFormatIcons.set(key, groupTypeIcons);
     });
+    const expandDescription = this.globalStorageService.getItem(
+      STORAGE_KEYS.EXPAND_ROOM_DESCRIPTION
+    );
+    this.expandDescription = expandDescription;
+    if (expandDescription) {
+      this.globalStorageService.removeItem(
+        STORAGE_KEYS.EXPAND_ROOM_DESCRIPTION
+      );
+    }
   }
 
   ngOnInit() {

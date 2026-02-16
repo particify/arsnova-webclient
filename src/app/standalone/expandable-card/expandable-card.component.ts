@@ -1,5 +1,12 @@
 import { NgStyle } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  input,
+  linkedSignal,
+  ViewChild,
+} from '@angular/core';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 
@@ -10,7 +17,8 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './expandable-card.component.scss',
 })
 export class ExpandableCardComponent implements AfterViewInit {
-  expanded = false;
+  autoExpand = input<boolean>(false);
+  expanded = linkedSignal(() => this.autoExpand());
   isExpandable = true;
   isLoading = true;
 
@@ -31,7 +39,7 @@ export class ExpandableCardComponent implements AfterViewInit {
 
   toggleExpanded() {
     if (this.isExpandable) {
-      this.expanded = !this.expanded;
+      this.expanded.set(!this.expanded());
     }
   }
 }

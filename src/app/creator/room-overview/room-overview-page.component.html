@@ -15,7 +15,7 @@
     <div class="overview-container">
       <div fxLayout="column" fxLayoutGap="16px" fxLayoutGap.lt-md="12px">
         @if (description()) {
-          <app-expandable-card>
+          <app-expandable-card [autoExpand]="expandDescription">
             <app-rendered-text
               [rawText]="description()"
               [renderedText]="descriptionRendered()"
