@@ -37,6 +37,7 @@ import { first, switchMap } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { AccountCreated } from '@app/core/models/events/account-created';
 import { EventService } from '@app/core/services/util/event.service';
+import { CooldownService } from '@app/core/services/util/cooldown.service';
 
 @Component({
   selector: 'app-register',
@@ -62,13 +63,14 @@ import { EventService } from '@app/core/services/util/event.service';
   ],
 })
 export class RegisterComponent extends FormComponent implements OnInit {
-  private translationService = inject(TranslocoService);
-  private authenticationService = inject(AuthenticationService);
-  private claimUnverifiedUserGql = inject(ClaimUnverifiedUserGql);
-  private notificationService = inject(NotificationService);
-  private router = inject(Router);
-  private passwordEntry = viewChild.required(PasswordEntryComponent);
-  private eventService = inject(EventService);
+  private readonly translationService = inject(TranslocoService);
+  private readonly authenticationService = inject(AuthenticationService);
+  private readonly claimUnverifiedUserGql = inject(ClaimUnverifiedUserGql);
+  private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
+  private readonly passwordEntry = viewChild.required(PasswordEntryComponent);
+  private readonly eventService = inject(EventService);
+  private readonly cooldownService = inject(CooldownService);
 
   // Route data input below
   apiConfig = input<ApiConfig>() as InputSignal<ApiConfig>;
@@ -81,10 +83,12 @@ export class RegisterComponent extends FormComponent implements OnInit {
   accountServiceTitle = computed(
     () => this.apiConfig().ui.registration?.service || 'ARSnova'
   );
+  resendCooldownSeconds = this.cooldownService.resendCooldownSeconds;
 
   ngOnInit(): void {
     this.setFormControl(this.usernameFormControl);
     this.usernameFormControl.clearValidators();
+    this.cooldownService.continueActiveResendCooldown();
   }
 
   activateValidators() {

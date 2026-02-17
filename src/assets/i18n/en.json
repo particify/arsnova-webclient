@@ -133,6 +133,7 @@
   },
   "register": {
     "register": "Register",
+    "register-again-in-seconds": "Register again in {{seconds}}",
     "register-request-error": "Something went wrong. Maybe you already made the account?",
     "register-successful": "Your account has been created. Please check your mails.",
     "register-unsuccessful": "Please check your data.",

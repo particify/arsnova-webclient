@@ -133,6 +133,7 @@
   },
   "register": {
     "register": "Registrieren",
+    "register-again-in-seconds": "Erneut registrieren in {{seconds}}",
     "register-request-error": "Es ist etwas schief gegangen. Hast du dich vielleicht schon registriert?",
     "register-successful": "Dein Konto wurde erstellt. Bitte prüfe dein Postfach.",
     "register-unsuccessful": "Bitte prüfe deine Eingaben.",
