@@ -27,6 +27,7 @@ enum VisitDimension {
   UI_ERROR_COUNT = 8,
   HTTP_ERROR_COUNT = 9,
   HOTKEYS = 10,
+  GRAPHQL_ERROR_COUNT = 11,
 }
 
 /* This enum maps to Matomo dimension IDs for actions. */
@@ -167,6 +168,14 @@ export class TrackingService {
     this.appErrorHandler.httpErrorCount$.subscribe((count) =>
       this.setVisitDimension(VisitDimension.HTTP_ERROR_COUNT, count.toString())
     );
+    this.eventService
+      .on<any>('GraphqlError')
+      .subscribe((e) =>
+        this.setVisitDimension(
+          VisitDimension.GRAPHQL_ERROR_COUNT,
+          e.errorNumber.toString()
+        )
+      );
     this.setVisitDimension(
       VisitDimension.UI_LANGUAGE,
       this.translateService.getActiveLang()
@@ -261,6 +270,11 @@ export class TrackingService {
           undefined,
           e.url
         )
+      );
+    this.eventService
+      .on<any>('GraphqlError')
+      .subscribe((e) =>
+        this.addEvent(EventCategory.ERROR, 'GraphQL error', e.classification)
       );
     this.eventService
       .on<any>('ChallengeSolved')

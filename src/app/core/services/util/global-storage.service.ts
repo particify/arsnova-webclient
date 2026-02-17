@@ -39,6 +39,7 @@ export const STORAGE_KEYS: { [key: string]: symbol } = {
   HOTKEY_COUNT: Symbol(),
   UI_ERROR_COUNT: Symbol(),
   HTTP_ERROR_COUNT: Symbol(),
+  GRAPHQL_ERROR_COUNT: Symbol(),
   SHOW_SHARE_OVERLAY: Symbol(),
   VERIFICATION_COOLDOWN_EXPIRATION: Symbol(),
   EXPAND_ROOM_DESCRIPTION: Symbol(),
@@ -184,6 +185,12 @@ export const STORAGE_CONFIG: StorageItem[] = [
   {
     key: STORAGE_KEYS.HTTP_ERROR_COUNT,
     name: 'HTTP_ERROR_COUNT',
+    category: StorageItemCategory.STATISTICS,
+    backend: StorageBackend.SESSIONSTORAGE,
+  },
+  {
+    key: STORAGE_KEYS.GRAPHQL_ERROR_COUNT,
+    name: 'GRAPHQL_ERROR_COUNT',
     category: StorageItemCategory.STATISTICS,
     backend: StorageBackend.SESSIONSTORAGE,
   },
