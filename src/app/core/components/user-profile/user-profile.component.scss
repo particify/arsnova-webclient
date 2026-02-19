@@ -1,35 +1,67 @@
 @use '../../../../variables' as *;
 
-.mat-accordion {
-  width: 100%;
-  max-width: 800px;
-}
-
 .username {
   opacity: 0.8;
 }
 
-.container {
-  align-items: center;
-  gap: 16px;
+h1 {
+  font-size: $xl-font-size;
+  padding-left: $spacing-3;
 }
 
-.delete-container > * {
-  margin-top: 12px;
+mat-card {
+  padding: 0;
 }
 
-@include xs {
-  .input-field {
-    width: calc(100% - 40px);
+mat-accordion {
+  --mat-expansion-header-hover-state-layer-color: var(--surface);
+  --mat-expansion-header-focus-state-layer-color: var(--surface);
+}
+
+mat-expansion-panel {
+  color: var(--on-surface);
+
+  --mat-expansion-header-expanded-state-height: var(
+    --mat-expansion-header-collapsed-state-height
+  );
+  --mat-expansion-container-elevation-shadow: none;
+}
+
+mat-expansion-panel-header {
+  padding: $spacing-2 $spacing-5 $spacing-2 $spacing-4;
+}
+
+mat-divider {
+  margin: 0 $spacing-4;
+}
+
+app-settings-slide-toggle {
+  --settings-slide-toggle-font-size: #{$s-font-size};
+}
+
+.panel-content {
+  padding-top: $spacing;
+  font-size: $s-font-size;
+}
+
+.panel-header {
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
   }
 
-  .container {
-    justify-content: end;
+  span {
+    font-size: $m-font-size;
+    font-weight: $font-weight-bold;
   }
 }
 
-@include gt-xs {
-  .input-field {
-    width: calc(50% - 28px);
-  }
+.panel-subheader {
+  font-weight: normal;
+  color: var(--on-surface-light);
+}
+
+.settings-header {
+  padding: 0 $spacing-3;
 }

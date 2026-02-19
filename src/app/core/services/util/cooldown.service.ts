@@ -1,6 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 
+const RESEND_COOLDOWN_SECONDS = 90;
+
 @Injectable({ providedIn: 'root' })
 export class CooldownService {
   private readonly globalStorageService = inject(GlobalStorageService);
@@ -8,7 +10,7 @@ export class CooldownService {
   private resendCooldownInterval?: ReturnType<typeof setInterval>;
   readonly resendCooldownSeconds = signal(0);
 
-  startResendCooldown(cooldown: number) {
+  startResendCooldown(cooldown = RESEND_COOLDOWN_SECONDS) {
     this.resendCooldownSeconds.set(cooldown);
     const cooldownExpiration =
       new Date().getTime() + this.resendCooldownSeconds() * 1000;

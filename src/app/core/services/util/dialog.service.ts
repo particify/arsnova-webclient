@@ -124,12 +124,14 @@ export class DialogService {
   }
 
   openUserActivationDialog(
-    initial = false
+    initial = false,
+    successMessage?: string
   ): MatDialogRef<UserActivationComponent> {
     return this.openDialog(UserActivationComponent, {
       width: DIALOG_SIZES.xsmall,
       data: {
         initial: initial,
+        successMessage: successMessage,
       },
     });
   }

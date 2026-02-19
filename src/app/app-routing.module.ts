@@ -148,6 +148,11 @@ const routes: Routes = [
     title: 'account',
   },
   {
+    path: 'account',
+    component: UserProfileComponent,
+    title: 'account',
+  },
+  {
     path: 'redeem-token/:roomId/token/:token',
     canActivate: [AuthenticationGuard],
     component: RedeemTokenComponent,

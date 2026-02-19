@@ -1,9 +1,11 @@
 import {
   Component,
-  Input,
+  ElementRef,
   computed,
   inject,
+  input,
   linkedSignal,
+  viewChild,
 } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
@@ -23,7 +25,6 @@ import {
   MatExpansionPanel,
   MatExpansionPanelHeader,
 } from '@angular/material/expansion';
-import { SettingsPanelHeaderComponent } from '@app/standalone/settings-panel-header/settings-panel-header.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 import { HintComponent } from '@app/standalone/hint/hint.component';
@@ -34,11 +35,29 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import {
   CurrentUserWithSettingsGql,
   DeleteUserGql,
+  UpdateUserMailAddressGql,
+  UpdateUserPasswordGql,
   UpdateUserSettingsGql,
 } from '@gql/generated/graphql';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AccountDeleted } from '@app/core/models/events/account-deleted';
 import { EventService } from '@app/core/services/util/event.service';
+import { PasswordEntryComponent } from '@app/core/components/password-entry/password-entry.component';
+import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
+import { GlobalHintType } from '@app/standalone/global-hints/global-hint';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { ErrorClassification } from '@gql/helper/handle-operation-error';
+import { CooldownService } from '@app/core/services/util/cooldown.service';
+import { FormComponent } from '@app/standalone/form/form.component';
+import { MatCard } from '@angular/material/card';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-user-profile',
@@ -50,7 +69,6 @@ import { EventService } from '@app/core/services/util/event.service';
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelHeader,
-    SettingsPanelHeaderComponent,
     LoadingIndicatorComponent,
     ExtensionPointComponent,
     HintComponent,
@@ -60,9 +78,17 @@ import { EventService } from '@app/core/services/util/event.service';
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
+    PasswordEntryComponent,
+    MatCard,
+    MatFormField,
+    FormsModule,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    MatDivider,
   ],
 })
-export class UserProfileComponent {
+export class UserProfileComponent extends FormComponent {
   private authenticationService = inject(AuthenticationService);
   private translationService = inject(TranslocoService);
   private notificationService = inject(NotificationService);
@@ -74,6 +100,21 @@ export class UserProfileComponent {
   private currentUserGql = inject(CurrentUserWithSettingsGql);
   private deleteUser = inject(DeleteUserGql);
   private updateUserSettings = inject(UpdateUserSettingsGql);
+  private updateUserMail = inject(UpdateUserMailAddressGql);
+  private updateUserPassword = inject(UpdateUserPasswordGql);
+  private globalHintsService = inject(GlobalHintsService);
+  private cooldownService = inject(CooldownService);
+
+  private passwordForMailUpdate = viewChild.required<PasswordEntryComponent>(
+    'passwordForMailUpdate'
+  );
+  private currentPasswordForUpdate = viewChild.required<PasswordEntryComponent>(
+    'currentPasswordForUpdate'
+  );
+  private newPasswordForUpdate = viewChild.required<PasswordEntryComponent>(
+    'newPasswordForUpdate'
+  );
+  private newMailAddress = viewChild.required<ElementRef>('newMailAddress');
 
   userResult = toSignal(
     this.currentUserGql
@@ -86,6 +127,10 @@ export class UserProfileComponent {
   isLoading = computed(() => this.userResult()?.loading);
   verified = computed(() => this.user()?.verified);
   displayId = computed(() => this.user()?.displayId);
+  mailAddress = linkedSignal(() => this.user()?.mailAddress);
+  unverifiedMailAddress = linkedSignal(
+    () => this.user()?.unverifiedMailAddress
+  );
   contentVisualizationUnitPercent = linkedSignal(
     () => this.user()?.uiSettings?.contentVisualizationUnitPercent ?? true
   );
@@ -100,9 +145,14 @@ export class UserProfileComponent {
   );
 
   // Route data input below
-  @Input() accountSettingsName?: string;
+  accountSettingsName = input<string>();
+  activeSettings = linkedSignal(() => this.accountSettingsName());
 
   HintType = HintType;
+
+  newMailAddressFormControl = new FormControl('', {
+    validators: [Validators.required, Validators.email],
+  });
 
   deleteAccount() {
     const dialogRef = this.dialogService.openDeleteDialog(
@@ -163,7 +213,143 @@ export class UserProfileComponent {
   }
 
   updatePage(page: string) {
-    this.accountSettingsName = page;
-    this.location.replaceState(`account/${this.accountSettingsName}`);
+    this.activeSettings.set(page);
+    this.location.replaceState(`account/${page}`);
+  }
+
+  updateMailAddress(mailAddress: string) {
+    if (this.newMailAddressFormControl.invalid) {
+      const msg = this.translationService.translate(
+        'user-profile.please-enter-valid-address'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      this.newMailAddress().nativeElement.focus();
+      return;
+    }
+    const password = this.passwordForMailUpdate().getPassword();
+    if (!password) {
+      const msg = this.translationService.translate(
+        'user-profile.current-password-missing'
+      );
+      this.passwordForMailUpdate().passwordInput.nativeElement.focus();
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return;
+    }
+    this.disableForm();
+    this.updateUserMail
+      .mutate({
+        variables: {
+          mailAddress,
+          password,
+        },
+      })
+      .subscribe({
+        next: () => {
+          this.enableForm();
+          const msg = this.translationService.translate(
+            'user-profile.verification-mail-has-been-sent'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          this.newMailAddressFormControl.setValue('');
+          this.newMailAddressFormControl.setErrors(null);
+          this.newPasswordForUpdate().passwordFormControl.setErrors(null);
+          this.passwordForMailUpdate().passwordFormControl.setValue('');
+          this.unverifiedMailAddress.set(mailAddress);
+          this.cooldownService.startResendCooldown();
+          this.globalHintsService.addHint({
+            id: 'verify-mail-update-hint',
+            type: GlobalHintType.CUSTOM,
+            icon: 'mail',
+            message: 'user-profile.verify-new-mail-address',
+            action: () => this.openVerifyDialog(mailAddress),
+            actionLabel: 'user-activation.verify-mail',
+            dismissible: true,
+            translate: true,
+          });
+        },
+        error: (e) => {
+          this.enableForm();
+          this.notificationService.showOnRequestClientError(e, {
+            [ErrorClassification.BadRequest]: {
+              message: this.translationService.translate(
+                'user-profile.wrong-password'
+              ),
+              type: AdvancedSnackBarTypes.FAILED,
+            },
+          });
+        },
+      });
+  }
+
+  openVerifyDialog(mailAddress: string) {
+    const dialogRef = this.dialogService.openUserActivationDialog(
+      false,
+      'user-profile.new-mail-address-has-been-verified'
+    );
+    dialogRef.afterClosed().subscribe((result?: { success: boolean }) => {
+      if (result?.success) {
+        this.globalHintsService.removeHint('verify-mail-update-hint');
+        this.mailAddress.set(mailAddress);
+        this.unverifiedMailAddress.set(undefined);
+      }
+    });
+  }
+
+  updatePassword() {
+    const oldPassword = this.currentPasswordForUpdate().getPassword();
+    if (!oldPassword) {
+      const msg = this.translationService.translate(
+        'user-profile.current-password-missing'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      this.currentPasswordForUpdate().passwordInput.nativeElement.focus();
+      return;
+    }
+    const newPassword = this.newPasswordForUpdate().getPassword();
+    if (!newPassword) {
+      const msg = this.translationService.translate(
+        'user-profile.please-check-password'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      this.newPasswordForUpdate().passwordInput.nativeElement.focus();
+      return;
+    }
+    this.disableForm();
+    this.updateUserPassword
+      .mutate({
+        variables: {
+          oldPassword,
+          newPassword,
+        },
+      })
+      .subscribe({
+        next: () => {
+          this.enableForm();
+          this.currentPasswordForUpdate().passwordFormControl.setValue('');
+          this.newPasswordForUpdate().passwordFormControl.setValue('');
+          this.newPasswordForUpdate().passwordFormControl.setErrors(null);
+          const msg = this.translationService.translate(
+            'user-profile.password-changed'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        },
+        error: (e) => {
+          this.enableForm();
+          this.notificationService.showOnRequestClientError(e, {
+            [ErrorClassification.BadRequest]: {
+              message: this.translationService.translate(
+                'user-profile.wrong-password'
+              ),
+              type: AdvancedSnackBarTypes.FAILED,
+            },
+          });
+        },
+      });
   }
 }

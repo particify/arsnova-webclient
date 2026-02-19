@@ -297,6 +297,7 @@ export type MutationUpdateUserLanguageArgs = {
 
 export type MutationUpdateUserMailAddressArgs = {
   mailAddress: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type MutationUpdateUserPasswordArgs = {
@@ -542,6 +543,7 @@ export type User = {
   displayName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   language?: Maybe<Scalars['String']['output']>;
+  mailAddress?: Maybe<Scalars['String']['output']>;
   uiSettings?: Maybe<UserUiSettings>;
   unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
   verified: Scalars['Boolean']['output'];
@@ -1469,6 +1471,7 @@ export type CurrentUserWithSettingsQuery = {
     verified: boolean;
     displayId?: string | null;
     displayName?: string | null;
+    mailAddress?: string | null;
     unverifiedMailAddress?: string | null;
     uiSettings?: {
       __typename?: 'UserUiSettings';
@@ -1590,6 +1593,30 @@ export type ResendVerificationMailMutationVariables = Exact<{
 export type ResendVerificationMailMutation = {
   __typename?: 'Mutation';
   resendVerificationMail?: boolean | null;
+};
+
+export type UpdateUserMailAddressMutationVariables = Exact<{
+  mailAddress: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+export type UpdateUserMailAddressMutation = {
+  __typename?: 'Mutation';
+  updateUserMailAddress?: {
+    __typename?: 'User';
+    id: string;
+    verified: boolean;
+  } | null;
+};
+
+export type UpdateUserPasswordMutationVariables = Exact<{
+  oldPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+}>;
+
+export type UpdateUserPasswordMutation = {
+  __typename?: 'Mutation';
+  updateUserPassword?: { __typename?: 'User'; id: string } | null;
 };
 
 export const AdminUserDetailsFragmentDoc = gql`
@@ -2721,6 +2748,7 @@ export const CurrentUserWithSettingsDocument = gql`
       verified
       displayId
       displayName
+      mailAddress
       unverifiedMailAddress
       uiSettings {
         contentAnswersDirectlyBelowChart
@@ -2961,6 +2989,49 @@ export class ResendVerificationMailGql extends Apollo.Mutation<
   ResendVerificationMailMutationVariables
 > {
   document = ResendVerificationMailDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateUserMailAddressDocument = gql`
+  mutation UpdateUserMailAddress($mailAddress: String!, $password: String!) {
+    updateUserMailAddress(mailAddress: $mailAddress, password: $password) {
+      id
+      verified
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateUserMailAddressGql extends Apollo.Mutation<
+  UpdateUserMailAddressMutation,
+  UpdateUserMailAddressMutationVariables
+> {
+  document = UpdateUserMailAddressDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateUserPasswordDocument = gql`
+  mutation UpdateUserPassword($oldPassword: String!, $newPassword: String!) {
+    updateUserPassword(oldPassword: $oldPassword, newPassword: $newPassword) {
+      id
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateUserPasswordGql extends Apollo.Mutation<
+  UpdateUserPasswordMutation,
+  UpdateUserPasswordMutationVariables
+> {
+  document = UpdateUserPasswordDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

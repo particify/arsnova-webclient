@@ -2,44 +2,257 @@
   {{ 'user-profile.a11y-message' | a11yIntro | async }}
 </div>
 <div fxLayoutAlign="center">
-  <mat-accordion>
-    <mat-expansion-panel
-      class="settings-panel"
-      [expanded]="accountSettingsName === 'user'"
-      (afterExpand)="updatePage('user')"
-    >
-      <mat-expansion-panel-header>
-        <app-settings-panel-header
-          [text]="'user-profile.account-settings'"
-          [icon]="'manage_accounts'"
-        ></app-settings-panel-header>
-      </mat-expansion-panel-header>
-      @if (isLoading()) {
-        <app-loading-indicator></app-loading-indicator>
-      } @else {
-        <div>
+  <mat-card>
+    <h1>
+      {{ 'user-profile.account-settings' | transloco }}
+    </h1>
+    @if (isLoading()) {
+      <app-loading-indicator></app-loading-indicator>
+    } @else {
+      <div>
+        <div fxLayout="column" fxLayoutGap="16px" class="settings-header">
           <lib-extension-point
             extensionId="profile-subscription"
           ></lib-extension-point>
           <lib-extension-point
             extensionId="external-instance-hint"
           ></lib-extension-point>
-          @if (verified()) {
-            <p class="username">
-              {{ ('user-profile.username' | transloco) + ': ' + displayId() }}
-            </p>
-          } @else {
-            <app-hint
-              [text]="'user-profile.guest-hint'"
-              [type]="HintType.INFO"
-            ></app-hint>
+          @let _unverifiedMailAddress = unverifiedMailAddress();
+          @if (mailAddress() && _unverifiedMailAddress) {
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+              <span
+                >{{
+                  'user-profile.you-have-changed-your-email-address' | transloco
+                }}
+                <b>{{ _unverifiedMailAddress }}</b></span
+              >
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="openVerifyDialog(_unverifiedMailAddress)"
+              >
+                {{ 'user-profile.verify-now' | transloco }}
+              </button>
+            </div>
           }
-          <div>
+        </div>
+        <mat-accordion displayMode="flat">
+          @if (verified()) {
+            @if (!mailAddress()) {
+              <p class="username">
+                {{ ('user-profile.username' | transloco) + ': ' + displayId() }}
+              </p>
+            } @else {
+              <mat-expansion-panel
+                [expanded]="activeSettings() === 'user'"
+                (afterExpand)="updatePage('user')"
+              >
+                <mat-expansion-panel-header noRipple>
+                  <div fxLayout="column" fxLayoutGap="8px">
+                    <div
+                      fxLayout="row"
+                      fxLayoutAlign="start center"
+                      fxLayoutGap="8px"
+                      class="panel-header"
+                    >
+                      <mat-icon>mail</mat-icon>
+                      <span>{{ 'user-profile.email' | transloco }}</span>
+                    </div>
+                    <span class="panel-subheader"
+                      >{{ 'user-profile.your-email-address-is' | transloco }}
+                      <b>{{ mailAddress() }}</b></span
+                    >
+                  </div>
+                </mat-expansion-panel-header>
+                <form
+                  fxLayout="column"
+                  fxLayoutAlign="start start"
+                  fxLayoutGap="16px"
+                  class="panel-content"
+                >
+                  <div
+                    fxFill
+                    fxLayout="column"
+                    fxLayoutAlign="start start"
+                    fxLayoutGap="20px"
+                  >
+                    <mat-form-field appearance="outline" class="no-field-hint">
+                      <mat-label>{{
+                        'user-profile.new-email-address' | transloco
+                      }}</mat-label>
+                      <input
+                        matInput
+                        #newMailAddress
+                        type="email"
+                        [formControl]="newMailAddressFormControl"
+                      />
+                    </mat-form-field>
+                    <app-password-entry
+                      #passwordForMailUpdate
+                      fxFill
+                      [isNew]="true"
+                      [label]="'user-profile.your-password' | transloco"
+                    ></app-password-entry>
+                  </div>
+                  <div fxFill fxLayout="row" fxLayoutAlign="end">
+                    <button
+                      mat-stroked-button
+                      [disabled]="formDisabled"
+                      (click)="updateMailAddress(newMailAddress.value)"
+                    >
+                      {{ 'user-profile.change-email-address' | transloco }}
+                    </button>
+                  </div>
+                </form>
+              </mat-expansion-panel>
+              <mat-divider></mat-divider>
+              <mat-expansion-panel
+                [expanded]="activeSettings() === 'change-password'"
+                (afterExpand)="updatePage('change-password')"
+              >
+                <mat-expansion-panel-header noRipple>
+                  <div fxLayout="column" fxLayoutGap="8px">
+                    <div
+                      fxLayout="row"
+                      fxLayoutAlign="start center"
+                      fxLayoutGap="8px"
+                      class="panel-header"
+                    >
+                      <mat-icon>key</mat-icon>
+                      <span>{{
+                        'user-profile.change-password' | transloco
+                      }}</span>
+                    </div>
+                    <span class="panel-subheader">{{
+                      'user-profile.set-new-password-for-account' | transloco
+                    }}</span>
+                  </div>
+                </mat-expansion-panel-header>
+                <form
+                  fxLayout="column"
+                  fxLayoutAlign="start start"
+                  class="panel-content"
+                >
+                  <div fxFill fxLayout="column" fxLayoutGap="20px">
+                    <app-password-entry
+                      #currentPasswordForUpdate
+                      fxFill
+                      [isNew]="true"
+                      [label]="'Current password'"
+                    ></app-password-entry>
+                    <app-password-entry
+                      #newPasswordForUpdate
+                      fxFill
+                      [checkStrength]="true"
+                      [isNew]="true"
+                    ></app-password-entry>
+                  </div>
+                  <div fxFill fxLayout="row" fxLayoutAlign="end">
+                    <button
+                      mat-stroked-button
+                      [disabled]="formDisabled"
+                      (click)="updatePassword()"
+                    >
+                      {{ 'user-profile.change-password' | transloco }}
+                    </button>
+                  </div>
+                </form>
+              </mat-expansion-panel>
+              <mat-divider></mat-divider>
+            }
+          } @else {
+            <div class="settings-header">
+              <app-hint
+                [text]="'user-profile.guest-hint'"
+                [type]="HintType.INFO"
+              ></app-hint>
+            </div>
+          }
+          <mat-expansion-panel
+            [expanded]="activeSettings() === 'preferences'"
+            (afterExpand)="updatePage('preferences')"
+          >
+            <mat-expansion-panel-header noRipple>
+              <div fxLayout="column" fxLayoutGap="8px">
+                <div
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  fxLayoutGap="8px"
+                  class="panel-header"
+                >
+                  <mat-icon>tune</mat-icon>
+                  <span> {{ 'user-profile.preferences' | transloco }}</span>
+                </div>
+                <span class="panel-subheader">{{
+                  'user-profile.preferences-description' | transloco
+                }}</span>
+              </div>
+            </mat-expansion-panel-header>
+            <div fxLayout="column" fxLayoutGap="24px" class="panel-content">
+              <app-settings-slide-toggle
+                label="user-profile.visualization-unit-percent"
+                [isChecked]="contentVisualizationUnitPercent()"
+                (toggleEvent)="
+                  contentVisualizationUnitPercent.set($event); updateSettings()
+                "
+              ></app-settings-slide-toggle>
+              <app-settings-slide-toggle
+                label="user-profile.answers-below-chart"
+                [isChecked]="contentAnswersDirectlyBelowChart()"
+                (toggleEvent)="
+                  contentAnswersDirectlyBelowChart.set($event); updateSettings()
+                "
+              ></app-settings-slide-toggle>
+              <app-settings-slide-toggle
+                label="user-profile.show-results-directly"
+                [isChecked]="showContentResultsDirectly()"
+                (toggleEvent)="
+                  showContentResultsDirectly.set($event); updateSettings()
+                "
+              ></app-settings-slide-toggle>
+              <app-settings-slide-toggle
+                label="user-profile.rotate-wordcloud-items"
+                [isChecked]="rotateWordcloudItems()"
+                (toggleEvent)="
+                  rotateWordcloudItems.set($event); updateSettings()
+                "
+              ></app-settings-slide-toggle>
+              <lib-extension-point
+                extensionId="user-quota"
+              ></lib-extension-point>
+            </div>
+          </mat-expansion-panel>
+          <mat-divider></mat-divider>
+          <mat-expansion-panel
+            [expanded]="activeSettings() === 'delete-account'"
+            (afterExpand)="updatePage('delete-account')"
+          >
+            <mat-expansion-panel-header noRipple>
+              <div fxLayout="column" fxLayoutGap="8px">
+                <div
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  fxLayoutGap="8px"
+                  class="panel-header"
+                >
+                  <mat-icon>delete</mat-icon>
+                  <span>
+                    {{ 'user-profile.delete-account' | transloco }}
+                  </span>
+                </div>
+                <span class="panel-subheader">
+                  {{
+                    'user-profile.delete-your-account-permanently' | transloco
+                  }}
+                </span>
+              </div>
+            </mat-expansion-panel-header>
             <div
               fxLayout="row wrap"
               class="delete-container"
               fxLayoutAlign="space-between center"
               fxLayoutGap="16px"
+              class="panel-content"
             >
               <div>
                 <span>{{
@@ -51,55 +264,9 @@
                 {{ 'user-profile.delete-account' | transloco }}
               </button>
             </div>
-          </div>
-        </div>
-      }
-    </mat-expansion-panel>
-    <mat-expansion-panel
-      class="settings-panel"
-      [expanded]="accountSettingsName === 'preferences'"
-      (afterExpand)="updatePage('preferences')"
-    >
-      <mat-expansion-panel-header>
-        <app-settings-panel-header
-          [text]="'user-profile.preferences'"
-          [icon]="'settings_suggest'"
-        ></app-settings-panel-header>
-      </mat-expansion-panel-header>
-      @if (isLoading()) {
-        <app-loading-indicator></app-loading-indicator>
-      } @else {
-        <div fxLayout="column" fxLayoutGap="24px">
-          <span>{{ 'user-profile.preferences-description' | transloco }}</span>
-          <app-settings-slide-toggle
-            label="user-profile.visualization-unit-percent"
-            [isChecked]="contentVisualizationUnitPercent()"
-            (toggleEvent)="
-              contentVisualizationUnitPercent.set($event); updateSettings()
-            "
-          ></app-settings-slide-toggle>
-          <app-settings-slide-toggle
-            label="user-profile.answers-below-chart"
-            [isChecked]="contentAnswersDirectlyBelowChart()"
-            (toggleEvent)="
-              contentAnswersDirectlyBelowChart.set($event); updateSettings()
-            "
-          ></app-settings-slide-toggle>
-          <app-settings-slide-toggle
-            label="user-profile.show-results-directly"
-            [isChecked]="showContentResultsDirectly()"
-            (toggleEvent)="
-              showContentResultsDirectly.set($event); updateSettings()
-            "
-          ></app-settings-slide-toggle>
-          <app-settings-slide-toggle
-            label="user-profile.rotate-wordcloud-items"
-            [isChecked]="rotateWordcloudItems()"
-            (toggleEvent)="rotateWordcloudItems.set($event); updateSettings()"
-          ></app-settings-slide-toggle>
-          <lib-extension-point extensionId="user-quota"></lib-extension-point>
-        </div>
-      }
-    </mat-expansion-panel>
-  </mat-accordion>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    }
+  </mat-card>
 </div>
