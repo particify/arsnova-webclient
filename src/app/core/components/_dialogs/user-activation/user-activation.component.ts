@@ -36,8 +36,6 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { ErrorClassification } from '@gql/helper/handle-operation-error';
 import { CooldownService } from '@app/core/services/util/cooldown.service';
 
-const RESEND_COOLDOWN_SECONDS = 90;
-
 @Component({
   selector: 'app-user-activation',
   templateUrl: './user-activation.component.html',
@@ -78,7 +76,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   ngOnInit(): void {
     this.setFormControl(this.verificationCodeFormControl);
     if (this.data.initial) {
-      this.cooldownService.startResendCooldown(RESEND_COOLDOWN_SECONDS);
+      this.cooldownService.startResendCooldown();
     } else {
       this.cooldownService.continueActiveResendCooldown();
     }
@@ -131,7 +129,7 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   resendVerificationMail(): void {
     this.resendMail.mutate().subscribe({
       next: () => {
-        this.cooldownService.startResendCooldown(RESEND_COOLDOWN_SECONDS);
+        this.cooldownService.startResendCooldown();
         this.notificationService.showAdvanced(
           this.translationService.translate('user-activation.sent-again'),
           AdvancedSnackBarTypes.SUCCESS
