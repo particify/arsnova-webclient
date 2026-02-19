@@ -165,6 +165,25 @@ export class DialogService {
     });
   }
 
+  openCommunityLangDialog(lang: string, translateUrl?: string) {
+    const data: { [key: string]: string } = {
+      dialogId: 'community-lang',
+      headerLabel: 'dialog.you-are-using-community-lang',
+      body: 'dialog.community-lang',
+      confirmLabel: 'dialog.close',
+      type: 'button-primary',
+    };
+    if (translateUrl) {
+      data['additionalBody'] = 'dialog.contribute-to-lang';
+      data['link'] = translateUrl + lang;
+      data['linkText'] = 'dialog.translation-server';
+    }
+    this.openDialog(BaseDialogComponent, {
+      width: '400px',
+      data: data,
+    });
+  }
+
   private isCancelAction(action?: string) {
     return !action;
   }

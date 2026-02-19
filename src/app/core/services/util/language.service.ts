@@ -8,11 +8,16 @@ import {
 import { GlobalStorageService, STORAGE_KEYS } from './global-storage.service';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { IsoLanguage } from '@app/core/models/iso-language';
 import { AbstractHttpService } from '@app/core/services/http/abstract-http.service';
 import dayjs from 'dayjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.service';
+import { GlobalHintType } from '@app/standalone/global-hints/global-hint';
+import { DialogService } from './dialog.service';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 export const BROWSER_LANG = new InjectionToken<string>('BROWSER_LANG');
 
@@ -24,6 +29,15 @@ export class LanguageService extends AbstractHttpService<void> {
   private document = inject<Document>(DOCUMENT);
   private browserLang = inject(BROWSER_LANG);
   private authService = inject(AuthenticationService);
+  private globalHintsService = inject(GlobalHintsService);
+  private dialogService = inject(DialogService);
+  private readonly apiConfigService = inject(ApiConfigService);
+
+  private readonly translateUrl = toSignal(
+    this.apiConfigService
+      .getApiConfig$()
+      .pipe(map((c) => c.ui.links?.translate?.url))
+  );
 
   public readonly langEmitter = new EventEmitter<string>();
   private langs: Language[] = [
@@ -83,8 +97,23 @@ export class LanguageService extends AbstractHttpService<void> {
       key = this.browserLang;
       const lang = this.getLangWithKey(key);
       // If browser lang is not officially supported, use english as fallback
-      if (!lang || lang.category !== LanguageCategory.OFFICIAL) {
+      if (!lang) {
         key = 'en';
+      } else if (lang.category === LanguageCategory.COMMUNITY) {
+        this.globalHintsService.addHint({
+          id: 'community-lang-hint',
+          type: GlobalHintType.INFO,
+          message: 'header.this-language-is-maintained-by-community',
+          icon: 'translate',
+          actionLabel: 'header.learn-more',
+          action: () =>
+            this.dialogService.openCommunityLangDialog(
+              lang.key,
+              this.translateUrl()
+            ),
+          dismissible: true,
+          translate: true,
+        });
       }
     }
     this.setLang(key);

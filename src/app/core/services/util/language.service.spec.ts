@@ -70,16 +70,6 @@ describe('LanguageService', () => {
     expect(setLangSpy).toHaveBeenCalledWith('en');
   });
 
-  it('should use english as fallback if no language stored in global storage and browser lang is supported but not officially', () => {
-    langService = overrideBrowserLang('es');
-    const setLangSpy = spyOn(langService, 'setLang');
-    globalStorageService.getItem
-      .withArgs(STORAGE_KEYS.LANGUAGE)
-      .and.returnValue(null);
-    langService.init();
-    expect(setLangSpy).toHaveBeenCalledWith('en');
-  });
-
   it('should use language stored in global storage if supported', () => {
     langService = testBed.inject(LanguageService);
     const setLangSpy = spyOn(langService, 'setLang');
