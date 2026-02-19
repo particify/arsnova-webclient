@@ -58,7 +58,9 @@
     "editing-view": "Éditer",
     "room-settings": "Paramètre de la salle",
     "present-description": "Présenter la vue actuelle.",
-    "logged-out": "Vous avez été déconnecté."
+    "logged-out": "Vous avez été déconnecté.",
+    "this-language-is-maintained-by-community": "Cette langue est gérée par notre communauté.",
+    "learn-more": "En savior plus"
   },
   "home-page": {
     "a11y-welcome-message": "Bienvenue sur {{title}}. Saisis un numéro à huit chiffres pour rejoindre une salle.",

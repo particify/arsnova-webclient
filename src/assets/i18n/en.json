@@ -58,7 +58,9 @@
     "present": "Present",
     "present-description": "Present the current view.",
     "presentation-mode": "Presentation mode",
-    "templates": "Templates"
+    "templates": "Templates",
+    "this-language-is-maintained-by-community": "This language is maintained by our community.",
+    "learn-more": "Learn more"
   },
   "home-page": {
     "a11y-join-button": "Enter the room with the specified room number.",

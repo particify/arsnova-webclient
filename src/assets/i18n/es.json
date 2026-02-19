@@ -58,7 +58,9 @@
     "present": "Presentar",
     "presentation-mode": "Modo de presentación",
     "templates": "Plantillas",
-    "present-description": "Presenta la vista actual."
+    "present-description": "Presenta la vista actual.",
+    "this-language-is-maintained-by-community": "Este idioma es mantenido por nuestra comunidad.",
+    "learn-more": "Más información"
   },
   "home-page": {
     "a11y-join-button": "Ingresa a la sala con el número de sala especificado.",

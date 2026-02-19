@@ -117,7 +117,9 @@
     "news": "Ci sono notizie",
     "menu": "Menu principale",
     "preview": "Anteprima",
-    "editing-view": "Modifica"
+    "editing-view": "Modifica",
+    "this-language-is-maintained-by-community": "Questa lingua è curata dalla nostra community.",
+    "learn-more": "Per saperne di più"
   },
   "home-page": {
     "a11y-join-button": "Entra nella stanza con il numero di stanza specificato.",

@@ -58,7 +58,9 @@
     "present": "Präsentieren",
     "present-description": "Präsentiere die aktuelle Ansicht.",
     "presentation-mode": "Präsentationsmodus",
-    "templates": "Vorlagen"
+    "templates": "Vorlagen",
+    "this-language-is-maintained-by-community": "Diese Sprache wird von unserer Community gepflegt.",
+    "learn-more": "Mehr erfahren"
   },
   "home-page": {
     "a11y-join-button": "Betritt den Raum, von welchem du die Nummer eingegeben hast.",

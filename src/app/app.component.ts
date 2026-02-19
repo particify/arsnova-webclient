@@ -31,8 +31,6 @@ import { TranslocoService } from '@jsverse/transloco';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { Language } from '@app/core/models/language';
 import { LanguageCategory } from '@app/core/models/language-category.enum';
-import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import { UiConfig } from '@app/core/models/api-config';
 import { UiService } from '@app/core/services/util/ui.service';
@@ -75,7 +73,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   private authenticationService = inject(AuthenticationService);
   private notificationService = inject(NotificationService);
   private translationService = inject(TranslocoService);
-  private dialog = inject(MatDialog);
   private featureFlagService = inject(FeatureFlagService);
   private uiService = inject(UiService);
   private globalHintsService = inject(GlobalHintsService);
@@ -244,24 +241,23 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   changeLanguage(lang: Language) {
     this.languageService.setLang(lang.key);
-
     if (lang.category === LanguageCategory.COMMUNITY) {
-      const data: { [key: string]: string } = {
-        dialogId: 'community-lang',
-        headerLabel: 'dialog.you-are-using-community-lang',
-        body: 'dialog.community-lang',
-        confirmLabel: 'dialog.close',
-        type: 'button-primary',
-      };
-      if (this.translateUrl) {
-        data['additionalBody'] = 'dialog.contribute-to-lang';
-        data['link'] = this.translateUrl + lang.key;
-        data['linkText'] = 'dialog.translation-server';
-      }
-      this.dialog.open(BaseDialogComponent, {
-        width: '400px',
-        data: data,
+      this.globalHintsService.addHint({
+        id: 'community-lang-hint',
+        type: GlobalHintType.INFO,
+        message: 'header.this-language-is-maintained-by-community',
+        icon: 'translate',
+        actionLabel: 'header.learn-more',
+        action: () =>
+          this.dialogService.openCommunityLangDialog(
+            lang.key,
+            this.translateUrl
+          ),
+        dismissible: true,
+        translate: true,
       });
+    } else {
+      this.globalHintsService.removeHint('community-lang-hint');
     }
     if (this.auth) {
       this.updateUserLanguage
