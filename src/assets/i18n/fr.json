@@ -301,7 +301,26 @@
     "answers-below-chart": "Montre les options de réponse sous les tableaux",
     "show-results-directly-info": "Les résultats du contenu sont affichés directement lorsqu'ils sont présentés.",
     "rotate-wordcloud-items": "Faire pivoter les mots dans le nuage de mots",
-    "rotate-wordcloud-items-info": "Certains mots dans les nuages de mots sont tournés de 90 degrés."
+    "rotate-wordcloud-items-info": "Certains mots dans les nuages de mots sont tournés de 90 degrés.",
+    "delete-your-account-permanently": "Supprime ton compte définitivement.",
+    "you-have-changed-your-email-address": "Tu as changé ton adresse e-mail en :",
+    "your-password": "Ton mot de passe",
+    "email": "E-mail",
+    "your-email-address-is": "Ton adresse e-mail est la suivante :",
+    "new-email-address": "Nouvelle adresse e-mail",
+    "please-enter-valid-address": "Saisis une adresse e-mail valide.",
+    "wrong-password": "Le mot de passe est incorrect.",
+    "change-password": "Changer le mot de passe",
+    "current-password": "Mot de passe actuel",
+    "current-password-missing": "Le mot de passe actuel est manquant.",
+    "please-check-password": "Vérifie ton nouveau mot de passe.",
+    "change-email-address": "Changer d'adresse e-mail",
+    "password-changed": "Votre nouveau mot de passe a été modifié.",
+    "verify-now": "Vérifier maintenant",
+    "verify-new-mail-address": "Merci de vérifier ta nouvelle adresse e-mail.",
+    "set-new-password-for-account": "Définis un nouveau mot de passe pour ton compte.",
+    "verification-mail-has-been-sent": "Nous avons envoyé un e-mail à ta nouvelle adresse pour vérification.",
+    "new-mail-address-has-been-verified": "Ta nouvelle adresse e-mail a été vérifiée."
   },
   "dialog": {
     "sure": "Êtes-vous sûr ?",
@@ -342,7 +361,9 @@
     "presentation-mode": "Présentation",
     "account": "Mon compte",
     "request-pw-reset": "Mot de passe réinitialisé",
-    "pw-reset": "Définir un nouveau mot de passe"
+    "pw-reset": "Définir un nouveau mot de passe",
+    "verify-mail-address": "Vérification de l'e-mail",
+    "accept-invitation": "Accepter l'invitation"
   },
   "comment-export": {
     "answer": "Réponse",
@@ -364,7 +385,10 @@
     "terms": "Conditions d'utilisation",
     "info": "Créer votre compte {{accountService}}",
     "register-unsuccessful": "Merci de vérifier vos données.",
-    "please-accept": "Vous devez accepter les conditions d'utilisation."
+    "please-accept": "Vous devez accepter les conditions d'utilisation.",
+    "register-again-in-seconds": "Réinscris-toi dans {{seconds}}",
+    "claim-guest-account-hint": "Tu aimes notre outil ? Transfère tes données sur ton propre Compte et utilise toutes les fonctionnalités.",
+    "create-account": "Créer un compte"
   },
   "user-activation": {
     "activate": "Activer",
@@ -376,7 +400,20 @@
     "key-required": "Saisissez le code de vérification.",
     "didnt-get": "Code non reçu ?",
     "sent-again": "Le code de vérification a été envoyé à nouveau",
-    "verification-info": "Si vous n'avez pas encore reçu de code de vérification, vérifiez à nouveau vos mails dans quelques minutes et vérifiez vos spams."
+    "verification-info": "Si vous n'avez pas encore reçu de code de vérification, vérifiez à nouveau vos mails dans quelques minutes et vérifiez vos spams.",
+    "send-again-in-seconds": "Renvoyer en {{seconds}}",
+    "verify-mail-address": "Vérifier l'adresse e-mail",
+    "verification-link-expired": "Le lien de vérification a expiré.",
+    "invitation-link-expired": "Le lien d'invitation a expiré.",
+    "complete-verification": "Vérification complète",
+    "verification-successful": "Vérification réussie",
+    "verification-failed": "La vérification a échoué",
+    "account-verified": "Le compte a été vérifié.",
+    "accept-invitation": "Accepter l'invitation",
+    "accept-invitation-info": "Choisis un mot de passe pour ton compte afin d'accepter l'invitation.",
+    "create-account": "Créer un compte",
+    "verify-mail-to-use-all-features": "C'est presque terminé ! Vérifie ton adresse e-mail pour utiliser toutes les fonctionnalités.",
+    "verify-mail": "Vérifier le courrier électronique"
   },
   "hotkeys": {
     "press": "Presser",
@@ -412,7 +449,8 @@
     "something-went-wrong": "Une erreur s'est produite.",
     "http-too-many-requests": "Il y a trop de demandes émanant de votre réseau.",
     "establishing-connection": "Connexion en-cours …",
-    "action-not-allowed": "Action non autorisée."
+    "action-not-allowed": "Action non autorisée.",
+    "not-found": "Introuvable"
   },
   "survey": {
     "a11y-message": "Vous êtes maintenant en mode réaction en direct.",

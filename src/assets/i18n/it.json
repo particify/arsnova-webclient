@@ -201,7 +201,26 @@
     "answers-below-chart-info": "Le opzioni di risposta sono visualizzate direttamente sotto il grafico anziché in un elenco.",
     "show-results-directly-info": "I risultati dei contenuti vengono visualizzati direttamente quando vengono presentati.",
     "rotate-wordcloud-items": "Ruota le parole nella nuvola di parole",
-    "rotate-wordcloud-items-info": "Alcune parole nelle nuvole di parole sono ruotate di 90 gradi."
+    "rotate-wordcloud-items-info": "Alcune parole nelle nuvole di parole sono ruotate di 90 gradi.",
+    "change-email-address": "Cambia indirizzo e-mail",
+    "delete-your-account-permanently": "Elimina definitivamente il tuo conto.",
+    "email": "E-mail",
+    "your-email-address-is": "Il tuo indirizzo e-mail è:",
+    "you-have-changed-your-email-address": "Hai cambiato il tuo indirizzo e-mail in:",
+    "new-email-address": "Nuovo indirizzo e-mail",
+    "please-enter-valid-address": "Inserisci un indirizzo e-mail valido.",
+    "your-password": "La tua password",
+    "wrong-password": "La password non è corretta.",
+    "change-password": "Cambia password",
+    "current-password": "Password attuale",
+    "current-password-missing": "Manca la password attuale.",
+    "verify-new-mail-address": "Verifica il tuo nuovo indirizzo e-mail.",
+    "verification-mail-has-been-sent": "Abbiamo inviato un'e-mail al tuo nuovo indirizzo per la verifica.",
+    "new-mail-address-has-been-verified": "Il tuo nuovo indirizzo e-mail è stato verificato.",
+    "verify-now": "Verifica ora",
+    "set-new-password-for-account": "Imposta una nuova password per il tuo conto.",
+    "please-check-password": "Controlla la tua password.",
+    "password-changed": "La tua nuova password è stata impostata."
   },
   "room-list": {
     "executive-moderator-role": "Moderatore",
@@ -245,7 +264,20 @@
     "key-required": "Inserisci il codice di verifica.",
     "sent-again": "Codice di verifica inviato di nuovo",
     "cancel": "Annulla",
-    "verification-info": "Se non hai ancora ricevuto il codice di verifica, ti invitiamo a ricontrollare la tua posta elettronica tra qualche minuto e ad assicurarti che non sia stata filtrata come spam."
+    "verification-info": "Se non hai ancora ricevuto il codice di verifica, ti invitiamo a ricontrollare la tua posta elettronica tra qualche minuto e ad assicurarti che non sia stata filtrata come spam.",
+    "send-again-in-seconds": "Invia di nuovo in {{seconds}}",
+    "complete-verification": "Verifica completa",
+    "verification-successful": "Verifica riuscita",
+    "verify-mail-address": "Verifica l'indirizzo e-mail",
+    "verification-failed": "Verifica fallita",
+    "verification-link-expired": "Il link di verifica è scaduto.",
+    "account-verified": "Il conto è stato verificato.",
+    "verify-mail-to-use-all-features": "Quasi fatto! Verifica il tuo indirizzo e-mail per utilizzare tutte le funzioni.",
+    "verify-mail": "Verifica l'e-mail",
+    "invitation-link-expired": "Il link per l'invito è scaduto.",
+    "accept-invitation": "Accetta l'invito",
+    "accept-invitation-info": "Scegli una password per il tuo account per accettare l'invito.",
+    "create-account": "Crea conto"
   },
   "dialog": {
     "remove": "Rimuovi",
@@ -278,7 +310,8 @@
     "something-went-wrong": "Qualcosa è andato storto.",
     "establishing-connection": "Stabilire la connessione …",
     "invalid-request": "La tua richiesta non è valida.",
-    "action-not-allowed": "Azione non consentita."
+    "action-not-allowed": "Azione non consentita.",
+    "not-found": "Non è previsto"
   },
   "title": {
     "user": "Le mie stanze",
@@ -295,7 +328,9 @@
     "admin": "Amministrazione",
     "presentation-mode": "Presentazione",
     "account": "Il mio account",
-    "templates": "Modelli"
+    "templates": "Modelli",
+    "verify-mail-address": "Verifica dell'e-mail",
+    "accept-invitation": "Accetta l'invito"
   },
   "comment-export": {
     "correct/wrong": "Corretto/Sbagliato",
@@ -554,7 +589,10 @@
     "accept-2": ".",
     "terms": "termini di utilizzo",
     "please-accept": "Per registrarsi è necessario accettare le condizioni d'uso.",
-    "info": "Crea il tuo account su {{accountService}}"
+    "info": "Crea il tuo account su {{accountService}}",
+    "register-again-in-seconds": "Registrati di nuovo in {{seconds}}",
+    "claim-guest-account-hint": "Ti piace il nostro strumento? Trasferisci i tuoi dati sul tuo conto e utilizza tutte le funzionalità.",
+    "create-account": "Crea conto"
   },
   "hotkeys": {
     "a11y-help-key-announcement": "Premi {{helpKey}} per un elenco di scorciatoie da tastiera.",

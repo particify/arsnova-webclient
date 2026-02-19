@@ -111,7 +111,10 @@
     "SURVEY": "Sondage",
     "SHORT_ANSWER": "Réponse courte",
     "FLASHCARDS": "Flashcards",
-    "countByGroupType": "Nombre par type de série de questions"
+    "countByGroupType": "Nombre par type de série de questions",
+    "verifiedCount": "Vérifié",
+    "no-rooms-found": "Aucune salle trouvée.",
+    "no-accounts-found": "Aucun compte n'a été trouvé."
   },
   "dialog": {
     "really-delete-account-admin": "Voulez-vous supprimer de façon définitive ce compte et toutes les salles ?",

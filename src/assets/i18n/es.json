@@ -143,7 +143,10 @@
     "accept-2": ".",
     "terms": "términos de uso",
     "please-accept": "Debes aceptar los términos de uso para registrarte.",
-    "info": "Crea tu cuenta de {{accountService}}"
+    "info": "Crea tu cuenta de {{accountService}}",
+    "register-again-in-seconds": "Regístrate de nuevo en {{seconds}}",
+    "claim-guest-account-hint": "¿Te gusta nuestra herramienta? Transfiere tus datos a tu propia Cuenta y utiliza todas las funciones.",
+    "create-account": "Crear cuenta"
   },
   "user-profile": {
     "a11y-message": "Ahora estás en la página de la cuenta.",
@@ -166,7 +169,26 @@
     "show-results-directly": "Mostrar resultados directamente",
     "show-results-directly-info": "Los resultados del contenido se muestran directamente al presentarlo.",
     "rotate-wordcloud-items": "Rotar palabras en la nube de palabras",
-    "rotate-wordcloud-items-info": "Algunas palabras de las nubes de palabras están giradas 90 grados."
+    "rotate-wordcloud-items-info": "Algunas palabras de las nubes de palabras están giradas 90 grados.",
+    "delete-your-account-permanently": "Elimina tu Cuenta definitivamente.",
+    "email": "Correo electrónico",
+    "your-email-address-is": "Tu dirección de correo electrónico es",
+    "new-email-address": "Nueva dirección de correo electrónico",
+    "please-enter-valid-address": "Introduce una dirección de correo electrónico válida.",
+    "your-password": "Tu contraseña",
+    "change-email-address": "Cambiar la dirección de correo electrónico",
+    "wrong-password": "La contraseña es incorrecta.",
+    "change-password": "Cambiar contraseña",
+    "current-password": "Contraseña actual",
+    "current-password-missing": "Falta la contraseña actual.",
+    "verify-new-mail-address": "Por favor, verifica tu nueva dirección de correo electrónico.",
+    "verification-mail-has-been-sent": "Hemos enviado un correo electrónico a tu nueva dirección para su verificación.",
+    "new-mail-address-has-been-verified": "Tu nueva dirección de correo electrónico ha sido verificada.",
+    "verify-now": "Verificar ahora",
+    "you-have-changed-your-email-address": "Has cambiado tu dirección de correo electrónico a:",
+    "set-new-password-for-account": "Establecer una nueva contraseña para tu cuenta.",
+    "please-check-password": "Por favor, verifica tu contraseña.",
+    "password-changed": "Se ha establecido tu nueva contraseña."
   },
   "room-list": {
     "a11y-join-room": "Ingresa a la sala {{room}} con el número {{id}} en el rol {{role}}.",
@@ -210,7 +232,20 @@
     "reset-button": "Enviar nuevamente",
     "sent-again": "Código de verificación enviado nuevamente",
     "cancel": "Cancelar",
-    "verification-info": "Si aún no has recibido un código de verificación, por favor revisa tus correos electrónicos nuevamente en unos minutos y asegúrate de que no haya sido filtrado como correo no deseado."
+    "verification-info": "Si aún no has recibido un código de verificación, por favor revisa tus correos electrónicos nuevamente en unos minutos y asegúrate de que no haya sido filtrado como correo no deseado.",
+    "send-again-in-seconds": "Enviar de nuevo en {{seconds}}",
+    "verify-mail-address": "Verificar la dirección de correo electrónico",
+    "complete-verification": "Verificación completa",
+    "verification-link-expired": "El enlace de verificación ha caducado.",
+    "verification-successful": "Verificación satisfactoria",
+    "verification-failed": "Verificación fallida",
+    "account-verified": "Cuenta verificada.",
+    "verify-mail-to-use-all-features": "¡Ya casi está! Verifica tu dirección de correo electrónico para utilizar todas las funciones.",
+    "verify-mail": "Verificar el correo electrónico",
+    "accept-invitation": "Aceptar invitación",
+    "accept-invitation-info": "Elige una contraseña para tu cuenta para aceptar la invitación.",
+    "create-account": "Crear cuenta",
+    "invitation-link-expired": "El enlace de invitación ha caducado."
   },
   "dialog": {
     "a11y-update": "Guarda los cambios y cierra el diálogo.",
@@ -243,7 +278,8 @@
     "http-too-many-requests": "Demasiadas solicitudes desde tu red.",
     "establishing-connection": "Estableciendo conexión …",
     "invalid-request": "Su solicitud no es válida.",
-    "action-not-allowed": "Acción no permitida."
+    "action-not-allowed": "Acción no permitida.",
+    "not-found": "No disponible"
   },
   "title": {
     "register": "Registrarse",
@@ -260,7 +296,9 @@
     "admin": "Administración",
     "presentation-mode": "Modo de presentación",
     "account": "Mi cuenta",
-    "templates": "Plantillas"
+    "templates": "Plantillas",
+    "verify-mail-address": "Verificación del correo electrónico",
+    "accept-invitation": "Aceptar invitación"
   },
   "comment-export": {
     "answer": "Respuesta",

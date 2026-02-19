@@ -362,7 +362,9 @@
     "hotkey-comments": "Paramètres des Questions/Réponses",
     "focus-mode": "Mode suivi en direct",
     "hotkey-access": "Gestion des droits d'accès",
-    "hotkey-announcements": "Gestion des annonces"
+    "hotkey-announcements": "Gestion des annonces",
+    "unverified": "non vérifié",
+    "remove-access-rights": "Supprimer les droits d'accès"
   },
   "room": {
     "room-name": "Nom de la salle",

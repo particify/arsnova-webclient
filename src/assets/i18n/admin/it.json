@@ -111,7 +111,10 @@
     "SORT": "Ordinamento",
     "PRIORITIZATION": "Priorità",
     "TEXT": "Domanda aperta",
-    "SCALE": "Likert"
+    "SCALE": "Likert",
+    "verifiedCount": "Verificato",
+    "no-rooms-found": "Nessuna stanza trovata.",
+    "no-accounts-found": "Nessun conto trovato."
   },
   "dialog": {
     "really-delete-tag": "Vuoi davvero eliminare il seguente Tag?",

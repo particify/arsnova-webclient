@@ -111,7 +111,10 @@
     "SURVEY": "Encuesta",
     "FLASHCARDS": "Tarjetas de memoria",
     "SHORT_ANSWER": "Respuesta corta",
-    "QUIZ": "Quiz"
+    "QUIZ": "Quiz",
+    "verifiedCount": "Verificado",
+    "no-rooms-found": "No se encontraron salas.",
+    "no-accounts-found": "No se han encontrado cuentas."
   },
   "dialog": {
     "really-delete-account-admin": "¿Deseas eliminar irrevocablemente esta cuenta con todas las salas?",

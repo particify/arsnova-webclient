@@ -322,7 +322,9 @@
     "login-id": "Utente",
     "you": "Tu",
     "disabled-for-guests": "Non è possibile assegnare diritti di accesso con un conto ospite.",
-    "presented": "Presentato"
+    "presented": "Presentato",
+    "unverified": "non verificato",
+    "remove-access-rights": "Rimuovere i diritti di accesso"
   },
   "room": {
     "room-name": "Nome della Camera",

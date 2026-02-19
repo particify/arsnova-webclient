@@ -362,7 +362,9 @@
     "editor": "Editor",
     "owner": "Administrador",
     "focus-mode-info": "Guíe a los participantes por la sala en tiempo real. Tu control en modo presentación se sincroniza con las vistas de los participantes.",
-    "focus-mode": "Modo enfoque"
+    "focus-mode": "Modo enfoque",
+    "unverified": "sin verificar",
+    "remove-access-rights": "Eliminar derechos de acceso"
   },
   "room": {
     "room-name": "Nombre de sala",
