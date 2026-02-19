@@ -84,9 +84,9 @@
     "@types/jasminewd2": "2.0.13",
     "@types/node": "24.10.13",
     "@types/wordcloud": "1.2.2",
-    "@typescript-eslint/eslint-plugin": "8.55.0",
-    "@typescript-eslint/parser": "8.55.0",
-    "@typescript-eslint/utils": "8.55.0",
+    "@typescript-eslint/eslint-plugin": "8.56.0",
+    "@typescript-eslint/parser": "8.56.0",
+    "@typescript-eslint/utils": "8.56.0",
     "css-loader": "7.1.4",
     "eslint": "9.39.2",
     "eslint-import-resolver-typescript": "4.4.4",
@@ -110,7 +110,7 @@
     "stylelint-config-standard-scss": "17.0.0",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.55.0",
+    "typescript-eslint": "8.56.0",
     "vite": "7.3.1",
     "vite-tsconfig-paths": "6.1.1"
   }
