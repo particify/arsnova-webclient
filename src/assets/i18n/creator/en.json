@@ -121,7 +121,7 @@
     "duplicate-content": "Duplicate",
     "delete-content": "Delete",
     "moved-to-content-group": "The content has been moved to {{series}}.",
-    "copied-to-content-group": "The content has been moved to {{series}}",
+    "copied-to-content-group": "The content has been moved to {{series}}.",
     "content-has-been-duplicated": "The content has been duplicated.",
     "default-group": "Quiz",
     "more-options": "More options",

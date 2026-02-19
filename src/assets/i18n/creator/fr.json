@@ -93,7 +93,7 @@
     "enable-leaderboard-info": "Les participant·es participent au quiz en utilisant un pseudonyme et peuvent se comparer dans un classement.",
     "copy-content-to-group": "Copier",
     "move-content-to-group": "Déplacer",
-    "copied-to-content-group": "Le contenu a été déplacé vers {{series}}",
+    "copied-to-content-group": "Le contenu a été déplacé vers {{series}}.",
     "default-group": "Quiz",
     "more-options": "Plus d'options",
     "new-content-group": "Nouvelle série de questions",

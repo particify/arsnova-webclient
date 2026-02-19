@@ -71,7 +71,7 @@
     "duplicate-content": "Duplicati",
     "delete-content": "Elimina",
     "moved-to-content-group": "Il contenuto è stato spostato su {{series}}.",
-    "copied-to-content-group": "Il contenuto è stato spostato in {{series}}",
+    "copied-to-content-group": "Il contenuto è stato spostato in {{series}}.",
     "content-has-been-duplicated": "Il contenuto è stato duplicato.",
     "default-group": "Quiz",
     "more-options": "Altre opzioni",

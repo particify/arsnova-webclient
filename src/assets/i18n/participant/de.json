@@ -1,7 +1,7 @@
 {
   "answer": {
     "a11y-message": "Du kannst jetzt die Inhalte der Fragenserie {{group}} beantworten.",
-    "a11y-current-multiple": "Inhalt {{index}}. Dies ist ein Multiple-Choice-Inhalt. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und  drücke die Leertaste, um Antworten auszuwählen.",
+    "a11y-current-multiple": "Inhalt {{index}}. Dies ist ein Multiple-Choice-Inhalt. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und drücke die Leertaste, um Antworten auszuwählen.",
     "a11y-current-single": "Inhalt {{index}}. Dies ist ein Single-Choice-Inhalt. Drücke die Tab-Taste, um zum Inhalt und den Antworten zu gelangen und navigiere mit den Pfeiltasten, um eine Antwort auszuwählen.",
     "a11y-current-text": "Inhalt {{index}}. Dies ist eine Offene Frage. Drücke die Tab-Taste, um zum Inhalt und zur Eingabe der Antwort zu gelangen.",
     "a11y-current-slide": "Inhalt {{index}}. Dies ist eine Folie. Drücke die Tab-Taste, um zum Inhalt zu gelangen.",
