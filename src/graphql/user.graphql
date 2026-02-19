@@ -24,6 +24,7 @@ query CurrentUserWithSettings {
     verified
     displayId
     displayName
+    mailAddress
     unverifiedMailAddress
     uiSettings {
       contentAnswersDirectlyBelowChart
@@ -118,4 +119,17 @@ mutation updateUserLanguage($languageCode: String!) {
 
 mutation ResendVerificationMail {
   resendVerificationMail
+}
+
+mutation UpdateUserMailAddress($mailAddress: String!, $password: String!) {
+  updateUserMailAddress(mailAddress: $mailAddress, password: $password) {
+    id
+    unverifiedMailAddress
+  }
+}
+
+mutation UpdateUserPassword($oldPassword: String!, $newPassword: String!) {
+  updateUserPassword(oldPassword: $oldPassword, newPassword: $newPassword) {
+    id
+  }
 }
