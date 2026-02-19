@@ -2,9 +2,9 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  Input,
   ViewChild,
   inject,
+  input,
 } from '@angular/core';
 import {
   UntypedFormControl,
@@ -13,7 +13,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import { AutofillMonitor } from '@angular/cdk/text-field';
@@ -79,15 +79,15 @@ export class PasswordEntryComponent
   extends FormComponent
   implements AfterViewInit
 {
-  private translationService = inject(TranslocoService);
   notificationService = inject(NotificationService);
   private _autofill = inject(AutofillMonitor);
 
   @ViewChild('passwordInput') passwordInput!: ElementRef;
 
-  @Input() checkStrength = false;
-  @Input() preFill?: string;
-  @Input() isNew = false;
+  readonly checkStrength = input(false);
+  readonly preFill = input<string>();
+  readonly isNew = input(false);
+  readonly label = input<string>();
 
   password = '';
   passwordFormControl = new UntypedFormControl();
@@ -109,8 +109,9 @@ export class PasswordEntryComponent
         this.hidePw = true;
       }
     });
-    if (this.preFill) {
-      this.password = this.preFill;
+    const prefill = this.preFill();
+    if (prefill) {
+      this.password = prefill;
       this.passwordInput.nativeElement.value = this.password;
     }
   }
@@ -127,7 +128,7 @@ export class PasswordEntryComponent
   }
 
   activateValidators() {
-    if (this.checkStrength) {
+    if (this.checkStrength()) {
       this.passwordFormControl.setValidators([
         Validators.required,
         Validators.minLength(8),
@@ -138,7 +139,7 @@ export class PasswordEntryComponent
   }
 
   getPassword(): string {
-    return this.strength >= Strength.OKAY || !this.checkStrength
+    return this.strength >= Strength.OKAY || !this.checkStrength()
       ? this.password
       : '';
   }
