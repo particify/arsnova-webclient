@@ -64,7 +64,8 @@ export class UserActivationComponent extends FormComponent implements OnInit {
   private translationService = inject(TranslocoService);
   private authenticationService = inject(AuthenticationService);
   private resendMail = inject(ResendVerificationMailGql);
-  private readonly data: { initial: boolean } = inject(MAT_DIALOG_DATA);
+  private readonly data: { initial: boolean; successMessage?: string } =
+    inject(MAT_DIALOG_DATA);
   private readonly cooldownService = inject(CooldownService);
 
   resendCooldownSeconds = this.cooldownService.resendCooldownSeconds;
@@ -98,10 +99,11 @@ export class UserActivationComponent extends FormComponent implements OnInit {
             if (r.data?.verifyUserMailAddress) {
               this.authenticationService.refreshAndReloadUser().subscribe({
                 next: () => {
+                  const msg =
+                    this.data.successMessage ??
+                    'user-activation.account-verified';
                   this.notificationService.showAdvanced(
-                    this.translationService.translate(
-                      'user-activation.account-verified'
-                    ),
+                    this.translationService.translate(msg),
                     AdvancedSnackBarTypes.SUCCESS
                   );
                   this.close({ success: true });
