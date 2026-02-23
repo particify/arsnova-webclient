@@ -41,10 +41,7 @@ import { GlobalHintsService } from './standalone/global-hints/global-hints.servi
 import { GlobalHintType } from './standalone/global-hints/global-hint';
 import { DialogService } from './core/services/util/dialog.service';
 import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
-import {
-  CurrentUserWithSettingsGql,
-  UpdateUserLanguageGql,
-} from '@gql/generated/graphql';
+import { UpdateUserLanguageGql } from '@gql/generated/graphql';
 
 @Component({
   selector: 'app-root',
@@ -78,33 +75,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   private globalHintsService = inject(GlobalHintsService);
   private dialogService = inject(DialogService);
   private readonly updateUserLanguage = inject(UpdateUserLanguageGql);
-  private readonly currentUser = inject(CurrentUserWithSettingsGql);
 
   constructor() {
     const themeService = this.themeService;
     this.currentTheme = themeService.getCurrentTheme();
     this.themes = this.themeService.getThemes();
     this.langs = this.languageService.getLangs();
-    this.currentUser
-      .watch()
-      .valueChanges.pipe(filter((r) => r.dataState === 'complete'))
-      .subscribe({
-        next: (result) => {
-          const user = result.data.currentUser;
-          if (user && user.mailAddress && user.unverifiedMailAddress) {
-            this.globalHintsService.addHint({
-              id: 'verify-mail-update-hint',
-              type: GlobalHintType.CUSTOM,
-              icon: 'mail',
-              message: 'user-profile.verify-new-mail-address',
-              action: () => this.openVerifyDialog(),
-              actionLabel: 'user-activation.verify-mail',
-              dismissible: true,
-              translate: true,
-            });
-          }
-        },
-      });
   }
 
   @ViewChild('mainDrawer') drawer!: MatDrawer;
@@ -159,17 +135,30 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.userCharacter = this.auth?.displayId
           ?.slice(0, 1)
           .toLocaleUpperCase();
-        if (auth && auth.unverifiedMailAddress && !auth.verified) {
-          this.globalHintsService.addHint({
-            id: 'verify-hint',
-            type: GlobalHintType.CUSTOM,
-            icon: 'verified',
-            message: 'user-activation.verify-mail-to-use-all-features',
-            action: () => this.openVerifyDialog(),
-            actionLabel: 'user-activation.verify-mail',
-            dismissible: true,
-            translate: true,
-          });
+        if (auth && auth.unverifiedMailAddress) {
+          if (auth.verified) {
+            this.globalHintsService.addHint({
+              id: 'verify-mail-update-hint',
+              type: GlobalHintType.CUSTOM,
+              icon: 'mail',
+              message: 'user-profile.verify-new-mail-address',
+              action: () => this.openVerifyDialog(),
+              actionLabel: 'user-activation.verify-mail',
+              dismissible: true,
+              translate: true,
+            });
+          } else {
+            this.globalHintsService.addHint({
+              id: 'verify-hint',
+              type: GlobalHintType.CUSTOM,
+              icon: 'verified',
+              message: 'user-activation.verify-mail-to-use-all-features',
+              action: () => this.openVerifyDialog(),
+              actionLabel: 'user-activation.verify-mail',
+              dismissible: true,
+              translate: true,
+            });
+          }
         }
       });
     this.currentLang = this.translationService.getActiveLang();

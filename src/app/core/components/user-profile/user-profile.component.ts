@@ -259,6 +259,7 @@ export class UserProfileComponent extends FormComponent {
           this.passwordForMailUpdate().passwordFormControl.setValue('');
           this.unverifiedMailAddress.set(mailAddress);
           this.cooldownService.startResendCooldown();
+          this.authenticationService.refetchCurrentUser();
           this.globalHintsService.addHint({
             id: 'verify-mail-update-hint',
             type: GlobalHintType.CUSTOM,
