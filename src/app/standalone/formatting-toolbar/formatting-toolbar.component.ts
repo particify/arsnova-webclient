@@ -83,7 +83,7 @@ export class FormattingToolbarComponent {
 
   private extractFromCurrentLine(text: string, cursorStart: number) {
     let pos = -1;
-    let lineStart = 0;
+    let lineStart;
     do {
       // Add 1 to start after the line break and at 0 for the first line
       lineStart = pos + 1;
