@@ -29,7 +29,7 @@ import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.serv
 import { ApiConfigService } from './api-config.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { environment } from '@environments/environment';
-import { Apollo } from 'apollo-angular';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
 import { ChallengeService } from '@app/core/services/challenge.service';
 import { Authentication } from '@app/core/models/authentication';
 import { CurrentUserGql } from '@gql/generated/graphql';
@@ -75,6 +75,24 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
   }
   private inflightRefreshRequest?: Observable<Authentication>;
 
+  private readonly authenticatedUser$ =
+    this.currentUserQueryRef.valueChanges.pipe(
+      onlyCompleteData(),
+      map((r) => r.data?.currentUser),
+      map((u) => {
+        return u
+          ? new AuthenticatedUser(
+              u.id,
+              u.verified,
+              u.displayId ?? undefined,
+              u.displayName ?? undefined,
+              u.unverifiedMailAddress ?? undefined,
+              u.language ?? undefined
+            )
+          : undefined;
+      })
+    );
+
   private httpOptions = {
     headers: new HttpHeaders({}),
   };
@@ -112,6 +130,11 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
         console.log('Authenticated user changed', auth);
       }
       this.apollo?.client.clearStore();
+    });
+    this.authenticatedUser$.subscribe((au) => {
+      if (au) {
+        this.globalStorageService.setItem(STORAGE_KEYS.USER, au);
+      }
     });
 
     this.apiConfigService.getApiConfig$().subscribe((config) => {
@@ -470,27 +493,13 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
           // If authenticated, transform response by fetching user, building AuthenticatedUser and wrapping it in a ClientAuthenticationResult.
           this.handleAuthenticationResponse(auth);
           this.refetchCurrentUser();
-          return this.currentUserQueryRef.valueChanges.pipe(
-            filter((r) => r.dataState === 'complete'),
-            map((r) => r.data?.currentUser),
-            tap((u) => {
-              if (!u) {
-                throw new Error();
-              }
-            }),
+          return this.authenticatedUser$.pipe(
             map((u) => {
-              return new AuthenticatedUser(
-                u!.id,
-                u!.verified,
-                u!.displayId ?? undefined,
-                u!.displayName ?? undefined,
-                u!.unverifiedMailAddress ?? undefined,
-                u!.language ?? undefined
-              );
+              if (u) {
+                return u;
+              }
+              throw new Error();
             }),
-            tap((au) =>
-              this.globalStorageService.setItem(STORAGE_KEYS.USER, au)
-            ),
             map((au) => new ClientAuthenticationResult(au))
           );
         } else {

@@ -263,6 +263,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.updateUserLanguage
         .mutate({ variables: { languageCode: lang.key } })
         .subscribe();
+      this.authenticationService.refetchCurrentUser();
     }
   }
 
