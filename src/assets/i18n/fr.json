@@ -245,7 +245,7 @@
     "a11y-text-textForOneVote": "Un vote.",
     "a11y-message": "Vous êtes maintenant sur la page des questions/réponses.",
     "zoom-in": "Zoomer",
-    "send": "Evnoyer",
+    "send": "Envoyer",
     "zoom-out": "Dézoomer",
     "your-comment": "Votre question",
     "error-comment": "Saisissez une question.",
@@ -274,7 +274,7 @@
     "reset-password": "Réinitialiser le mot de passe",
     "new-password-successful": "Votre nouveau mot de passe a été modifié.",
     "set-new-password-button": "Modifier mot passe",
-    "your-email": "Votre adrese mail : ",
+    "your-email": "Votre adresse mail : ",
     "reset-successful": "Mot de passe réinitialisé. Merci de vérifier vos mails.",
     "set-new-password": "Vous avez reçu un mail avec un code pour créer un nouveau mot de passe.",
     "request-failed": "Quelque chose n'a pas fonctionné. Vérifiez vos saisies.",
@@ -391,7 +391,7 @@
     "create-account": "Créer un compte"
   },
   "user-activation": {
-    "activate": "Activer",
+    "activate": "Vérifier",
     "key": "Code de vérification",
     "key-incorrect": "Code de vérification incorrect.",
     "reset-button": "Envoyer à nouveau",
