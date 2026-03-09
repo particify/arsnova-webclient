@@ -88,7 +88,7 @@
     "@typescript-eslint/parser": "8.56.1",
     "@typescript-eslint/utils": "8.56.1",
     "css-loader": "7.1.4",
-    "eslint": "10.0.2",
+    "eslint": "10.0.3",
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jsdoc": "62.7.1",
