@@ -47,7 +47,7 @@
     "backoff-rxjs": "7.0.0",
     "chart.js": "4.5.1",
     "chartjs-plugin-datalabels": "2.2.0",
-    "d3-cloud": "1.2.8",
+    "d3-cloud": "1.2.9",
     "dayjs": "1.11.19",
     "graphql": "16.13.0",
     "is-docker": "4.0.0",
