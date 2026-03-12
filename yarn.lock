@@ -7003,7 +7003,7 @@ __metadata:
     eslint-plugin-import: "npm:2.32.0"
     eslint-plugin-jsdoc: "npm:62.7.1"
     eslint-plugin-prefer-arrow: "npm:1.2.3"
-    eslint-plugin-storybook: "npm:10.2.16"
+    eslint-plugin-storybook: "npm:10.2.17"
     graphql: "npm:16.13.1"
     is-docker: "npm:4.0.0"
     jasmine-core: "npm:5.13.0"
@@ -9240,15 +9240,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-storybook@npm:10.2.16":
-  version: 10.2.16
-  resolution: "eslint-plugin-storybook@npm:10.2.16"
+"eslint-plugin-storybook@npm:10.2.17":
+  version: 10.2.17
+  resolution: "eslint-plugin-storybook@npm:10.2.17"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.48.0"
   peerDependencies:
     eslint: ">=8"
-    storybook: ^10.2.16
-  checksum: 10c0/7fb50dabdf5ee0361cd25010a7a188cc88ce18233c181bb8f73320c1aa274a1003087707407a2290963f22a80f2cc39a094c3b0e45286d0775f3e6ed40e7c6c2
+    storybook: ^10.2.17
+  checksum: 10c0/a45d3f94c18c66c4c9fff65fe5bf74de35e0d97b36755f62d56818db40a70f0931e99e9715d9392e4efec5aa2e7a1e76935a76305ce85d165312608ea972b31d
   languageName: node
   linkType: hard
 
