@@ -1,9 +1,11 @@
 import {
+  AfterViewChecked,
   AfterViewInit,
   Component,
   DestroyRef,
   Injector,
   OnDestroy,
+  computed,
   inject,
   input,
 } from '@angular/core';
@@ -102,7 +104,7 @@ export interface Role {
 })
 export class AccessComponent
   extends FormComponent
-  implements AfterViewInit, OnDestroy
+  implements AfterViewInit, AfterViewChecked, OnDestroy
 {
   private injector = inject(Injector);
   private destroyRef = inject(DestroyRef);
@@ -124,8 +126,11 @@ export class AccessComponent
   selectedRole = RoomRole.Moderator;
   RoomRole: typeof RoomRole = RoomRole;
   roles: RoomRole[] = [RoomRole.Moderator];
-  isGuest = false;
   loginIdIsEmail = false;
+  private user = toSignal(
+    this.authenticationService.getCurrentAuthentication()
+  );
+  isGuest = computed(() => !this.user()?.verified);
 
   usernameFormControl = new UntypedFormControl('', [Validators.email]);
   currentInputIsChecked = true;
@@ -181,6 +186,12 @@ export class AccessComponent
           this.getUser();
         }
       });
+  }
+
+  ngAfterViewChecked() {
+    if (this.isGuest()) {
+      this.disableForm();
+    }
   }
 
   changesMade() {

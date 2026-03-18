@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutGap="16px">
-  @if (isGuest) {
+  @if (isGuest()) {
     <app-hint
       [text]="'creator.settings.disabled-for-guests'"
       [type]="HintType.WARNING"
@@ -38,7 +38,7 @@
       @if (!isLoading()) {
         <lib-extension-point
           extensionId="role-selection"
-          [extensionData]="{ disabled: isGuest }"
+          [extensionData]="{ disabled: formDisabled }"
           (extensionEvent)="updateSelectedRole($event)"
         >
           <mat-form-field
@@ -49,7 +49,7 @@
             <mat-label>{{ 'creator.settings.role' | transloco }}</mat-label>
             <mat-select
               [(ngModel)]="selectedRole"
-              [disabled]="isGuest || roles.length === 1"
+              [disabled]="formDisabled || roles.length === 1"
             >
               @for (role of roles; track role) {
                 <mat-option [value]="role">
@@ -69,10 +69,7 @@
       class="add-user-button"
       (click)="addModerator()"
       [disabled]="
-        isGuest ||
-        !currentInputIsChecked ||
-        loginId.length === 0 ||
-        formDisabled
+        !currentInputIsChecked || loginId.length === 0 || formDisabled
       "
       id="add-button"
       appTrackInteraction="Room member role invited"
@@ -88,10 +85,7 @@
       class="add-user-button"
       (click)="addModerator()"
       [disabled]="
-        isGuest ||
-        !currentInputIsChecked ||
-        loginId.length === 0 ||
-        formDisabled
+        !currentInputIsChecked || loginId.length === 0 || formDisabled
       "
       id="invite-button"
       appTrackInteraction="Room member role assigned"
