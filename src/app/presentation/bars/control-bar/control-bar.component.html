@@ -20,8 +20,8 @@
 }
 @if (currentRouteIndex > -1 && showShareOverlay) {
   <app-share-overlay
-    [shortId]="room.shortId"
-    [room]="room"
+    [shortId]="room().shortId"
+    [room]="room()"
     (expandClicked)="updateFeature()"
     (closeClicked)="toggleShareOverview()"
   ></app-share-overlay>
@@ -159,7 +159,7 @@
               <app-content-presentation-menu
                 [content]="content"
                 [groupName]="groupName"
-                [shortId]="room.shortId"
+                [shortId]="room().shortId"
                 [contentIndex]="contentIndex"
                 [publishingMode]="group?.publishingMode"
               ></app-content-presentation-menu>
@@ -211,13 +211,14 @@
             </mat-menu>
             <app-comment-filter
               class="full-height"
-              [currentFilter]="currentCommentFilter"
+              [roomId]="roomId()"
+              [selectedFlags]="currentCommentFilterFlags"
               [period]="currentCommentPeriod"
-              [categories]="commentCategories"
-              [selectedCategory]="currentCommentCategory"
+              [selectedTags]="currentCommentTags"
               [useIconButton]="false"
-              (filterSelected)="changeCommentFilter($event)"
-              (categorySelected)="changeCommentCategory($event)"
+              (flagSelected)="addCommentFilter($event)"
+              (flagRemoved)="removeCommentFilter($event)"
+              (tagSelected)="changeCommentTag($event)"
               (periodSelected)="changeCommentPeriod($event)"
             ></app-comment-filter>
             <div fxLayout="row">

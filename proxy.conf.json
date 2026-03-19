@@ -11,6 +11,7 @@
   "/api": {
     "target": "http://apisix:9080",
     "secure": false,
-    "logLevel": "debug"
+    "logLevel": "debug",
+    "ws": true
   }
 }

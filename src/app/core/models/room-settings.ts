@@ -5,7 +5,4 @@ export interface RoomSettings {
   roomId: string;
   surveyEnabled: boolean;
   surveyType: LiveFeedbackType;
-  commentThresholdEnabled: boolean;
-  commentThreshold: number;
-  commentTags?: string[];
 }

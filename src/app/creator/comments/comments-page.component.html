@@ -3,11 +3,11 @@
     <div fxLayout="column" fxLayoutGap="1em">
       <mat-tab-group
         (selectedTabChange)="switchList($event.index)"
-        [selectedIndex]="isModeration ? 1 : 0"
+        [selectedIndex]="isModeration() ? 1 : 0"
         tabindex="-1"
         [appAutofocus]
         [attr.aria-label]="
-          (isModeration
+          (isModeration()
             ? 'creator.comment-page.a11y-message-moderation'
             : 'comment-page.a11y-message'
           )
@@ -17,97 +17,100 @@
       >
         <mat-tab
           label="{{ 'creator.comment-list.public-list' | transloco }} {{
-            publicCounter | counterBraces
+            counts().accepted | counterBraces
           }}"
         ></mat-tab>
         <mat-tab
           label="{{ 'creator.comment-list.moderation' | transloco }} {{
-            moderationCounter | counterBraces
+            counts().rejected | counterBraces
           }}"
         ></mat-tab>
       </mat-tab-group>
       <app-comment-list-bar
+        [roomId]="roomId()"
         [showFixedBar]="scroll && isScrollStart"
-        [commentCounter]="commentsFilteredByTime.length"
-        [isAddButtonDisabled]="isModeration || readonly || disabled"
-        [currentFilter]="currentFilter"
+        [commentCounter]="
+          isModeration() ? counts().rejected : counts().accepted
+        "
+        [isAddButtonDisabled]="isModeration() || state() !== QnaState.Started"
+        [selectedFlags]="selectedFlags"
         [currentSort]="currentSort"
-        [period]="period"
-        [categories]="tags()"
-        [selectedCategory]="currentTag"
+        [period]="selectedPeriodFilter()"
+        [selectedTags]="selectedTags()"
         [searchInput]="searchInput"
         (searchInputChanged)="searchComments($event)"
         (createCommentClicked)="openCreateDialog()"
-        (filterSelected)="filterComments($event)"
-        (sortingSelected)="sortCommentsManually($event)"
-        (periodSelected)="setTimePeriod($event)"
-        (categorySelected)="selectTag($event)"
+        (filterSelected)="selectFlagFilter($event)"
+        (filterRemoved)="removeFlagFilter($event)"
+        (sortingSelected)="sort($event)"
+        (periodSelected)="setPeriod($event)"
+        (tagSelected)="selectFilterTag($event)"
+        (tagRemoved)="removeFilterTag($event)"
       >
         <app-comment-list-bar-extension
           [room]="room()"
-          [isModeration]="isModeration"
-          [comments]="comments"
-          [readonly]="readonly"
-          [disabled]="disabled"
-          [viewRole]="viewRole"
+          [qnaId]="qnaId()"
+          [isModeration]="isModeration()"
+          [posts]="posts()"
+          [state]="state()"
+          [viewRole]="viewRole()"
           (createCommentClicked)="openCreateDialog()"
           (toggleReadonlyClicked)="
-            disabled || readonly ? activateComments() : pauseComments()
+            state() !== QnaState.Started ? enableComments() : pauseComments()
           "
-          (resetCommentsClicked)="resetComments()"
+          (postsDeleted)="clearPosts()"
         ></app-comment-list-bar-extension>
       </app-comment-list-bar>
     </div>
-    @if (isLoading) {
-      <app-loading-indicator></app-loading-indicator>
-    }
-    <app-comment-settings-hint
-      [disabled]="disabled"
-      [readonly]="readonly"
-      [showToggleButton]="true"
-      (toggleButtonClicked)="
-        disabled || readonly ? activateComments() : pauseComments()
-      "
-    ></app-comment-settings-hint>
-    @if (!isLoading && !disabled) {
-      <app-comment-list-hint
-        [isListEmpty]="comments.length < 1"
-        [noPostsFound]="
-          (hideCommentsList && filteredComments.length < 1) ||
-          (!hideCommentsList && commentsFilteredByTime.length < 1)
+    @if (!isLoadingQna()) {
+      <app-comment-settings-hint
+        [state]="state()"
+        [showToggleButton]="true"
+        (toggleButtonClicked)="
+          state() !== QnaState.Started ? enableComments() : pauseComments()
         "
-      ></app-comment-list-hint>
+      ></app-comment-settings-hint>
     }
-    @if (!isLoading) {
+    @if (isLoadingPosts()) {
+      <app-loading-indicator></app-loading-indicator>
+    } @else {
+      @if (state() === QnaState.Started) {
+        <app-comment-list-hint
+          [isListEmpty]="posts().length === 0"
+          [noPostsFound]="
+            !!search() ||
+            !!this.selectedTags() ||
+            selectedFlags.length > 0 ||
+            selectedPeriodFilter() !== undefined
+          "
+        ></app-comment-list-hint>
+      }
       <div class="comments-container">
-        @for (comment of displayComments; track comment) {
+        @for (post of posts(); track post.id) {
           <app-comment
-            [comment]="comment"
+            [post]="post"
             [isEditor]="true"
-            [isModeration]="isModeration"
-            [referenceEvent]="referenceEvent.asObservable()"
-            [isNew]="comment.id === newestComment.id"
-            [fileUploadEnabled]="fileUploadEnabled"
-            (activeComment)="updateCurrentComment($event)"
-            (clickedOnTag)="selectTag($event)"
-            [tags]="tags()"
+            [isModeration]="isModeration()"
+            [activePostId]="activePost()?.id"
+            [qnaId]="qnaId()"
+            [animate]="animatePost"
+            (clickedOnTag)="selectFilterTag($event)"
           >
           </app-comment>
         }
       </div>
+      @if (posts().length < 3 && state() === QnaState.Started) {
+        <app-comment-list-add-button
+          [disabled]="state() === QnaState.Paused"
+          (buttonClicked)="openCreateDialog()"
+        ></app-comment-list-add-button>
+      }
+      <app-comment-list-floating-buttons
+        [showScrollButton]="scrollExtended && scrollActive"
+        [showScrollToNewPostsButton]="scrollExtended && newPostsAvailable"
+        [navBarExists]="true"
+        (scrollTopClicked)="scrollTop()"
+      ></app-comment-list-floating-buttons>
     }
-    @if (comments.length < 3 && !isLoading && !disabled) {
-      <app-comment-list-add-button
-        [disabled]="readonly"
-        (buttonClicked)="openCreateDialog()"
-      ></app-comment-list-add-button>
-    }
-    <app-comment-list-floating-buttons
-      [showScrollButton]="scrollExtended && scrollActive"
-      [showScrollToNewPostsButton]="scrollExtended && unreadCommentCount > 0"
-      [navBarExists]="true"
-      (scrollTopClicked)="scrollTop(true)"
-      (loadAndScrollClicked)="loadAndScroll()"
-    ></app-comment-list-floating-buttons>
   </div>
 </div>

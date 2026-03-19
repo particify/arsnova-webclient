@@ -4,21 +4,23 @@
   </div>
   <div fxLayout="column" fxLayoutGap="10px">
     <mat-card appearance="outlined">
-      <app-date class="date" [timestamp]="comment.timestamp"></app-date>
-      <p class="comment" appLangContext appDirContext>{{ comment.body }}</p>
+      <app-date class="date" [timestamp]="post.createdAt"></app-date>
+      <p class="comment" appLangContext appDirContext>{{ post.body }}</p>
     </mat-card>
     <div fxLayout="row" fxLayoutAlign="center">
-      @if (isEditor || answer) {
+      @if (isEditor || (post.replies && post.replies.length > 0)) {
         <mat-card appearance="outlined" class="answer">
-          @if ((!isEditor || !edit) && answer) {
+          @if (
+            (!isEditor || !edit) && post.replies && post.replies.length > 0
+          ) {
             <div>
               <app-rendered-text
-                [rawText]="answer"
+                [rawText]="post.replies[0].body"
                 [dynamic]="true"
                 [markdownFeatureset]="MarkdownFeatureset.SIMPLE"
                 [attr.aria-label]="
                   'comment-page.a11y-entered-answer'
-                    | transloco: { answer: answer }
+                    | transloco: { answer: post.replies[0].body }
                 "
                 appLangContext
                 appDirContext
@@ -38,7 +40,9 @@
               </div>
             </div>
           }
-          @if (isEditor && (edit || !answer)) {
+          @if (
+            isEditor && (edit || !post.replies || post.replies.length === 0)
+          ) {
             <div class="relative">
               <mat-tab-group
                 animationDuration="0"
@@ -53,14 +57,14 @@
                       class="tab-group-formatting-bar-mobile"
                       [inputElement]="answerInput"
                       [disabled]="formDisabled"
-                      (valueChanged)="answer = $event"
+                      (valueChanged)="bodyInput = $event"
                     ></app-formatting-toolbar>
                   }
                   <mat-form-field class="input-block" appearance="outline">
                     <textarea
                       #answerInput
                       [disabled]="formDisabled"
-                      [(ngModel)]="answer"
+                      [(ngModel)]="bodyInput"
                       (focus)="edit = true"
                       matInput
                       cdkTextareaAutosize
@@ -77,18 +81,18 @@
                     </textarea>
                     <mat-hint align="end">
                       <span aria-hidden="true">
-                        {{ answer ? answer.length : 0 }} / 1000
+                        {{ bodyInput ? bodyInput.length : 0 }} / 1000
                       </span>
                     </mat-hint>
                   </mat-form-field>
                 </mat-tab>
                 <mat-tab
                   label="{{ 'creator.room.preview' | transloco }}"
-                  [disabled]="!answer"
+                  [disabled]="!bodyInput"
                 >
                   <div class="preview-container">
                     <app-rendered-text
-                      [rawText]="answer"
+                      [rawText]="bodyInput"
                       [dynamic]="renderPreview"
                       [markdownFeatureset]="MarkdownFeatureset.SIMPLE"
                     >
@@ -101,18 +105,21 @@
                   class="tab-group-formatting-bar"
                   [inputElement]="answerInput"
                   [disabled]="formDisabled"
-                  (valueChanged)="answer = $event"
+                  (valueChanged)="bodyInput = $event"
                 ></app-formatting-toolbar>
               }
             </div>
           }
           <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
-            @if (isEditor && answer && edit) {
+            @if (isEditor && post.replies && post.replies.length > 0 && edit) {
               <button mat-stroked-button color="warn" (click)="deleteAnswer()">
                 {{ 'creator.comment-page.delete-answer' | transloco }}
               </button>
             }
-            @if (isEditor && (edit || !answer)) {
+            @if (
+              isEditor &&
+              (edit || !post.replies || this.post.replies.length === 0)
+            ) {
               <app-loading-button
                 name="creator.comment-page.save-answer"
                 (clicked)="saveAnswer()"

@@ -1,15 +1,13 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { Comment } from '@app/core/models/comment';
-import { CommentService } from '@app/core/services/http/comment.service';
 import { CommentAnswerComponent } from './comment-answer.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { Observable, of } from 'rxjs';
 
 import { ActivatedRoute } from '@angular/router';
+import { ModerationState, Post } from '@gql/generated/graphql';
 
-class MockCommentService {}
 class MockMatDialogRef {}
 class MockFormattingService {
   postString(text: string): Observable<string> {
@@ -17,15 +15,26 @@ class MockFormattingService {
   }
 }
 
-const comment = new Comment();
-comment.id = 'commentId';
-comment.roomId = 'roomId';
-comment.body = 'This is a comment body';
-comment.timestamp = new Date();
-comment.answer = 'answer';
+const post: Post = {
+  id: 'postId',
+  body: 'This is a comment body',
+  createdAt: new Date().toDateString(),
+  favorite: false,
+  score: 42,
+  moderationState: ModerationState.Approved,
+  tags: [],
+  replies: [
+    {
+      id: 'answerId',
+      body: 'This is a answer',
+      bodyRendered: 'This is a answer',
+      createdAt: new Date().toDateString(),
+    },
+  ],
+};
 
 const data = {
-  comment: comment,
+  post: post,
   isEditor: true,
 };
 
@@ -37,10 +46,6 @@ export default {
     moduleMetadata({
       imports: [CommentAnswerComponent],
       providers: [
-        {
-          provide: CommentService,
-          useClass: MockCommentService,
-        },
         {
           provide: MatDialogRef,
           useClass: MockMatDialogRef,

@@ -30,15 +30,15 @@
       <mat-select class="comment-tag" [disabled]="formDisabled">
         @for (tag of data.tags; track tag) {
           <mat-option
-            value="{{ tag }}"
+            value="{{ tag.id }}"
             (click)="updateTag(tag)"
             attr.aria-label="{{
-              'comment-page.a11y-select-tag' | transloco: { tag: tag }
+              'comment-page.a11y-select-tag' | transloco: { tag: tag.name }
             }}"
-            >{{ tag }}</mat-option
+            >{{ tag.name }}</mat-option
           >
         }
-        <mat-option (click)="updateTag('')">{{
+        <mat-option (click)="updateTag()">{{
           'comment-page.none' | transloco
         }}</mat-option>
       </mat-select>
@@ -46,23 +46,17 @@
   }
 </div>
 <div mat-dialog-actions fxLayoutAlign="end">
-  @if (data.fileUploadEnabled) {
-    <lib-extension-point
-      extensionId="image-upload"
-      [extensionData]="eventsWrapper"
-    ></lib-extension-point>
-  }
   <div fxLayoutAlign="end">
     <div fxLayout="row-reverse" fxLayoutAling="end" fxLayoutGap="10px">
       <app-loading-button
         name="comment-page.send"
         [isDialog]="true"
-        (clicked)="closeDialog(commentBody.value)"
+        (clicked)="addPost(commentBody.value)"
       ></app-loading-button>
       <button
-        (click)="onNoClick()"
         aria-labelledby="cancel"
         mat-button
+        mat-dialog-close
         type="button"
       >
         {{ 'comment-page.cancel' | transloco }}

@@ -92,12 +92,13 @@
       </button>
 
       <app-comment-filter
-        [currentFilter]="currentFilter"
+        [roomId]="roomId()"
+        [selectedFlags]="selectedFlags"
         [period]="period"
-        [categories]="categories"
-        [selectedCategory]="selectedCategory"
-        (filterSelected)="filter($event)"
-        (categorySelected)="selectCategory($event)"
+        [selectedTags]="selectedTags"
+        (flagSelected)="selectFilter($event)"
+        (flagRemoved)="removeFilter($event)"
+        (tagSelected)="selectTag($event.id)"
         (periodSelected)="setPeriod($event)"
       ></app-comment-filter>
 
@@ -154,24 +155,28 @@
       }
     </mat-menu>
   </div>
-  @if (currentFilter || period !== CommentPeriod.ALL || selectedCategory) {
+  @if (
+    selectedFlags.length > 0 ||
+    period !== undefined ||
+    (selectedTags && selectedTags.length > 0)
+  ) {
     <mat-chip-listbox fxFill>
-      @if (period !== CommentPeriod.ALL) {
+      @if (period !== undefined) {
         <app-filter-chip
-          [name]="'comment-list.select-' + period | transloco"
-          (removeClicked)="setPeriod(CommentPeriod.ALL)"
+          [name]="'comment-list.select-' + getPeriodString(period) | transloco"
+          (removeClicked)="setPeriod()"
         ></app-filter-chip>
       }
-      @if (currentFilter && currentFilter !== CommentFilter.TAG) {
+      @for (flag of selectedFlags; track flag) {
         <app-filter-chip
-          [name]="'comment-list.filter-' + currentFilter | transloco"
-          (removeClicked)="filter()"
+          [name]="'comment-list.filter-' + flag | transloco"
+          (removeClicked)="removeFilter(flag)"
         ></app-filter-chip>
       }
-      @if (selectedCategory) {
+      @for (tag of selectedTags; track tag) {
         <app-filter-chip
-          [name]="selectedCategory"
-          (removeClicked)="selectCategory()"
+          [name]="tag.name"
+          (removeClicked)="removeTag(tag.id)"
         ></app-filter-chip>
       }
     </mat-chip-listbox>

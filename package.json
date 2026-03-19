@@ -50,6 +50,7 @@
     "d3-cloud": "1.2.9",
     "dayjs": "1.11.20",
     "graphql": "16.13.1",
+    "graphql-ws": "6.0.7",
     "is-docker": "4.0.0",
     "jwt-decode": "4.0.0",
     "katex": "0.16.38",

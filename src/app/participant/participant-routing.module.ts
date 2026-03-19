@@ -12,12 +12,10 @@ import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { roomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ParticipantPageComponent } from '@app/participant/participant-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { languageResolver } from '@app/core/resolver/language.resolver';
 
 const routes: Routes = [
@@ -131,10 +129,6 @@ const routes: Routes = [
           children: [
             {
               path: '',
-              resolve: {
-                commentSettings: CommentSettingsResolver,
-              },
-              providers: [CommentSettingsService],
               runGuardsAndResolvers: 'always',
               children: [
                 ...routes,

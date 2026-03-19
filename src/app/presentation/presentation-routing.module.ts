@@ -7,7 +7,6 @@ import {
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { PresentationComponent } from './presentation/presentation.component';
 import { QrCodeComponent } from '@app/standalone/qr-code/qr-code.component';
-import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
 import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
@@ -106,9 +105,6 @@ const routes: Routes = [
           children: [
             {
               path: '',
-              resolve: {
-                commentSettings: CommentSettingsResolver,
-              },
               children: [
                 ...routes,
                 ...ExtensionRouteProvider.extractRoutesForMountPoint(

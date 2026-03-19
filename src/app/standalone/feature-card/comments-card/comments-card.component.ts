@@ -1,6 +1,5 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { Room } from '@app/core/models/room';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, Input, computed, inject, input } from '@angular/core';
+import { catchError, filter, map, of, switchMap } from 'rxjs';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FeatureCardComponent } from '@app/standalone/feature-card/feature-card.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -11,12 +10,16 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
-import { CommentSettings } from '@app/core/models/comment-settings';
-import { CommentService } from '@app/core/services/http/comment.service';
-import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
-import { Message } from '@stomp/stompjs';
 import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
+import {
+  PauseQnaGql,
+  QnaPostCountSummaryGql,
+  QnasByRoomIdGql,
+  QnaState,
+  StartQnaGql,
+  StopQnaGql,
+} from '@gql/generated/graphql';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-comments-card',
@@ -32,105 +35,123 @@ import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-re
   ],
   templateUrl: './comments-card.component.html',
 })
-export class CommentsCardComponent implements OnDestroy, OnInit {
+export class CommentsCardComponent {
   private notificationService = inject(NotificationService);
-  private commentSettingsService = inject(CommentSettingsService);
-  private commentService = inject(CommentService);
+  private qnasByRoomId = inject(QnasByRoomIdGql);
+  private startQna = inject(StartQnaGql);
+  private pauseQna = inject(PauseQnaGql);
+  private stopQna = inject(StopQnaGql);
   private translateService = inject(TranslocoService);
-  private wsCommentService = inject(WsCommentService);
+  private postCounts = inject(QnaPostCountSummaryGql);
 
-  private destroyed$ = new Subject<void>();
-
-  @Input({ required: true }) room!: Room;
   @Input({ required: true }) description!: string;
   @Input() pausedDescription?: string;
   @Input() showCount = false;
   @Input() clickable = false;
   @Input() showControls = false;
 
-  commentSettings?: CommentSettings;
-  commentCounter = 0;
+  roomId = input.required<string>();
+  qnaResult = toSignal(
+    toObservable(this.roomId).pipe(
+      switchMap((roomId) => {
+        return this.qnasByRoomId.watch({
+          variables: { roomId },
+        }).valueChanges;
+      }),
+      filter((r) => r.dataState === 'complete'),
+      map((r) => r.data.qnasByRoomId?.edges),
+      catchError(() => of())
+    )
+  );
 
-  ngOnInit() {
-    this.commentSettingsService
-      .get(this.room.id)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((settings) => {
-        this.commentSettings = settings;
-      });
-    this.commentSettingsService
-      .getSettingsStream()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((settings) => {
-        this.commentSettings = settings;
-      });
-    if (this.showCount) {
-      this.commentService
-        .countByRoomId(this.room.id, true)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((commentCounter) => {
-          this.commentCounter = commentCounter;
-        });
-      this.wsCommentService
-        .getCommentStream(this.room.id)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((message: Message) => {
-          this.commentCounter =
-            this.commentService.getUpdatedCommentCountWithMessage(
-              this.commentCounter,
-              message
+  private qnaId = computed(() => {
+    const qna = this.qnaResult();
+    if (qna && qna[0]) {
+      return qna[0].node.id;
+    }
+  });
+  state = computed(() => {
+    const qna = this.qnaResult();
+    if (qna && qna[0]) {
+      return qna[0].node.state ?? QnaState.Stopped;
+    }
+    return QnaState.Stopped;
+  });
+
+  readonly postCountsResult = toSignal(
+    toObservable(this.qnaId).pipe(
+      switchMap((qnaId) => {
+        if (!qnaId) {
+          return of(null);
+        }
+        return this.postCounts.subscribe({ variables: { qnaId } });
+      })
+    )
+  );
+
+  readonly counts = computed(() => {
+    return (
+      this.postCountsResult()?.data?.qnaPostCountSummary ?? {
+        accepted: 0,
+        rejected: 0,
+      }
+    );
+  });
+
+  QnaState = QnaState;
+
+  enableComments() {
+    const id = this.qnaId();
+    if (id) {
+      this.startQna
+        .mutate({
+          variables: { id },
+        })
+        .subscribe((r) => {
+          if (r.data) {
+            const msg = this.translateService.translate(
+              'comment-list.qna-started'
             );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          }
         });
     }
   }
 
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  enableComments() {
-    if (this.commentSettings) {
-      const settings = this.commentSettings;
-      settings.disabled = false;
-      settings.readonly = false;
-      this.commentSettingsService.update(settings).subscribe((settings) => {
-        this.commentSettings = settings;
-        const msg = this.translateService.translate('comment-list.qna-started');
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
+  disableComments() {
+    const id = this.qnaId();
+    if (id) {
+      this.stopQna.mutate({ variables: { id } }).subscribe((r) => {
+        if (r.data) {
+          const msg = this.translateService.translate(
+            'comment-list.qna-stopped'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        }
       });
     }
   }
 
   pauseComments() {
-    if (this.commentSettings) {
-      const settings = this.commentSettings;
-      settings.readonly = true;
-      this.commentSettingsService.update(settings).subscribe((settings) => {
-        this.commentSettings = settings;
-        const msg = this.translateService.translate('comment-list.qna-paused');
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      });
-    }
-  }
+    const id = this.qnaId();
+    if (id) {
+      this.pauseQna.mutate({ variables: { id } }).subscribe((r) => {
+        if (r.data) {
+          const msg = this.translateService.translate(
+            'comment-list.qna-paused'
+          );
 
-  disableComments() {
-    if (this.commentSettings) {
-      const settings = this.commentSettings;
-      settings.disabled = true;
-      this.commentSettingsService.update(settings).subscribe((settings) => {
-        this.commentSettings = settings;
-        const msg = this.translateService.translate('comment-list.qna-stopped');
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        }
       });
     }
   }

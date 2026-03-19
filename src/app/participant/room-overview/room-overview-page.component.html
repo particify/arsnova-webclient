@@ -6,7 +6,7 @@
   fxLayoutGap.lt-lg="12px"
 >
   <div [appAutofocus] tabIndex="-1" class="visually-hidden">
-    {{ 'room-page.a11y-room-message' | a11yIntro: { name: room.name } | async }}
+    {{ 'room-page.a11y-room-message' | a11yIntro: { name: name() } | async }}
   </div>
   @if (isLoading()) {
     <app-loading-indicator></app-loading-indicator>
@@ -14,7 +14,7 @@
     @let _shortId = shortId();
     @if (_shortId) {
       @let anyFeatureEnabled =
-        commentsEnabled || feedbackEnabled || contentGroups.length > 0;
+        commentsEnabled() || feedbackEnabled || contentGroups.length > 0;
       @if (!focusModeEnabled()) {
         @if (description() && anyFeatureEnabled) {
           <app-expandable-card>
@@ -26,17 +26,17 @@
             ></app-rendered-text>
           </app-expandable-card>
         }
-        @if (commentsEnabled || feedbackEnabled) {
+        @if (commentsEnabled() || feedbackEnabled) {
           <div
             fxFill
             [ngClass]="{
-              'overview-row-container': commentsEnabled && feedbackEnabled,
+              'overview-row-container': commentsEnabled() && feedbackEnabled,
             }"
           >
-            @if (commentsEnabled) {
+            @if (commentsEnabled()) {
               <app-comments-card
                 class="feature-row-item"
-                [room]="legacyRoom()"
+                [roomId]="roomId()"
                 [description]="
                   'participant.room-page.comments-description' | transloco
                 "

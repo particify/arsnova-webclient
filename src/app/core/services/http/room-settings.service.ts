@@ -97,28 +97,4 @@ export class RoomSettingsService extends AbstractEntityService<RoomSettings> {
     };
     return this.patchEntityByRoomId(roomId, changes);
   }
-
-  updateCommentThresholdEnabled(
-    roomId: string,
-    commentThresholdEnabled: boolean
-  ) {
-    const changes: { commentThresholdEnabled: boolean } = {
-      commentThresholdEnabled: commentThresholdEnabled,
-    };
-    return this.patchEntityByRoomId(roomId, changes);
-  }
-
-  updateCommentThreshold(roomId: string, commentThreshold: number) {
-    const changes: { commentThreshold: number } = {
-      commentThreshold: commentThreshold,
-    };
-    return this.patchEntityByRoomId(roomId, changes);
-  }
-
-  updateCommentTags(roomId: string, commentTags: string[]) {
-    const changes: { commentTags: string[] } = {
-      commentTags: commentTags,
-    };
-    return this.patchEntityByRoomId(roomId, changes);
-  }
 }

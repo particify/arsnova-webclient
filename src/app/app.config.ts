@@ -27,8 +27,6 @@ import {
   BROWSER_LANG,
   LanguageService,
 } from '@app/core/services/util/language.service';
-import { VoteService } from '@app/core/services/http/vote.service';
-import { CommentSettingsService } from '@app/core/services/http/comment-settings.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
 import {
@@ -39,7 +37,6 @@ import { TrackingService } from '@app/core/services/util/tracking.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
 import { ContentResolver } from '@app/core/resolver/content.resolver';
-import { CommentResolver } from '@app/core/resolver/comment.resolver';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -53,7 +50,6 @@ import { DemoService } from '@app/core/services/demo.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
-import { CommentSettingsResolver } from '@app/core/resolver/comment-settings.resolver';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TitleStrategy } from '@angular/router';
@@ -162,8 +158,6 @@ export const AppConfig: ApplicationConfig = {
     ContentService,
     ContentAnswerService,
     LanguageService,
-    VoteService,
-    CommentSettingsService,
     ContentGroupService,
     WsCommentService,
     ApiConfigService,
@@ -173,7 +167,6 @@ export const AppConfig: ApplicationConfig = {
     ThemeService,
     ApiConfigResolver,
     ContentResolver,
-    CommentResolver,
     AnnounceService,
     SystemInfoService,
     FormattingService,
@@ -188,7 +181,6 @@ export const AppConfig: ApplicationConfig = {
     HotkeyService,
     PresentationService,
     RemoteService,
-    CommentSettingsResolver,
     ContentPublishService,
     { provide: Window, useValue: window },
     STORAGE_CONFIG_PROVIDERS,

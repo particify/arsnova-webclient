@@ -92,22 +92,10 @@ export default {
           useValue: {
             data: of({
               room: { id: 'roomId', settings: {} },
-              commentSettings: {
-                directSend: true,
-                fileUploadEnabled: false,
-                disabled: false,
-                readonly: false,
-              },
             }),
             snapshot: {
               data: {
                 room: { id: 'roomId', settings: {} },
-                commentSettings: {
-                  directSend: true,
-                  fileUploadEnabled: false,
-                  disabled: false,
-                  readonly: false,
-                },
               },
             },
           },

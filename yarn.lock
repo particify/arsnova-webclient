@@ -6969,6 +6969,7 @@ __metadata:
     eslint-plugin-prefer-arrow: "npm:1.2.3"
     eslint-plugin-storybook: "npm:10.2.19"
     graphql: "npm:16.13.1"
+    graphql-ws: "npm:6.0.7"
     is-docker: "npm:4.0.0"
     jasmine-core: "npm:5.13.0"
     jasmine-spec-reporter: "npm:7.0.0"
@@ -10214,7 +10215,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:^6.0.6":
+"graphql-ws@npm:6.0.7, graphql-ws@npm:^6.0.6":
   version: 6.0.7
   resolution: "graphql-ws@npm:6.0.7"
   peerDependencies:

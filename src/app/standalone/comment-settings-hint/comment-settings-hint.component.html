@@ -1,4 +1,4 @@
-@if (disabled || readonly) {
+@if (state !== QnaState.Started) {
   <div
     fxLayout="column"
     fxLayoutAlign="start center"
@@ -6,13 +6,13 @@
   >
     <p class="hint">
       {{
-        (disabled
+        (state === QnaState.Stopped
           ? 'comment-list.comments-are-not-enabled'
           : 'comment-list.creation-currently-not-allowed'
         ) | transloco
       }}
     </p>
-    @if ((disabled || readonly) && showToggleButton) {
+    @if (showToggleButton) {
       <app-loading-button
         [name]="'creator.comment-list.start-qna'"
         (clicked)="toggleSettings()"

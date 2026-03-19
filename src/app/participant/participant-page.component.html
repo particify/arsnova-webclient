@@ -8,13 +8,15 @@
       @if (!focusModeEnabled()) {
         <mat-drawer mode="side" opened [disableClose]="true">
           <div fxLayout="column" fxLayoutAlign="space-between" fxFill>
-            @if (roomSettings) {
+            @let _qnaEnabled = qnaEnabled();
+            @if (roomSettings && _qnaEnabled !== undefined) {
               <app-nav-bar
                 [userRole]="userRole"
                 [viewRole]="viewRole"
                 [roomId]="roomId()"
                 [room]="room"
                 [roomSettings]="roomSettings"
+                [qnaEnabled]="_qnaEnabled"
               ></app-nav-bar>
             }
           </div>
