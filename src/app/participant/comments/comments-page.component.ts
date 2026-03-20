@@ -42,15 +42,5 @@ export class CommentsPageComponent
 
   ngOnInit(): void {
     this.initializeScrollListener();
-    // this.focusModeService
-    //   .getFocusModeEnabled()
-    //   .pipe(takeUntil(this.destroyed$))
-    //   .subscribe((focusModeEnabled) => {
-    //     this.focusModeEnabled = focusModeEnabled;
-    //   });
-    // this.focusModeService
-    //   .getCommentState()
-    //   .pipe(takeUntil(this.destroyed$))
-    //   .subscribe((state) => this.highlightFocusedComment(state.commentId));
   }
 }
