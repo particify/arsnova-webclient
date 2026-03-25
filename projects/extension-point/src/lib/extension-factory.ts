@@ -63,7 +63,7 @@ export class ExtensionFactory {
     }
     if (data) {
       for (const key of Object.keys(data)) {
-        componentRef.instance[key] = data[key as keyof object];
+        componentRef.setInput(key, data[key as keyof object]);
       }
     }
     componentRef.instance.event = eventEmitter;
