@@ -19,7 +19,7 @@
     "storybook": "yarn ng run arsnova-webclient:storybook",
     "build-storybook": "yarn ng run arsnova-webclient:build-storybook",
     "e2e": "yarn playwright test -c e2e/playwright.config.ts",
-    "generate-gql": "graphql-codegen"
+    "g:graphql-codegen": "cd $INIT_CWD && graphql-codegen"
   },
   "dependencies": {
     "@angular/animations": "21.2.6",
