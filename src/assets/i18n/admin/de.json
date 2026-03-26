@@ -24,7 +24,7 @@
     "no-rooms-found": "Keine Räume gefunden.",
     "add-account": "Account hinzufügen",
     "account-added": "Der Account wurde hinzugefügt.",
-    "search-account-with-id": "Account mit Benutzerkennung suchen",
+    "search-account": "{{count}} Accounts durchsuchen",
     "cancel": "Abbrechen",
     "user-not-found": "Es wurde kein Account mit dieser ID gefunden.",
     "no-accounts-found": "Keine Accounts gefunden.",

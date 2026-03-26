@@ -1,6 +1,6 @@
 @use '../../../variables' as *;
+@use '../admin-styles.scss' as *;
 
-.user-list-item {
-  padding: $spacing-2;
-  border: 1px solid var(--border);
+table {
+  --mat-table-row-item-container-height: 64px;
 }

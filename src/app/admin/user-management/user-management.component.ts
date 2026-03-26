@@ -22,8 +22,11 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import {
   AdminCreateUserGql,
+  AdminDeleteUserByIdGql,
   AdminUserByIdGql,
+  AdminUserCountGql,
   AdminUsersGql,
+  AdminVerifyUserByIdGql,
 } from '@gql/generated/graphql';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormService } from '@app/core/services/util/form.service';
@@ -35,8 +38,10 @@ import {
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AdminUtilService } from '@app/admin/admin-util.service';
-import { MatActionList, MatListItem } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
+import { CoreModule } from '@app/core/core.module';
+import { DateComponent } from '@app/standalone/date/date.component';
+import { DialogService } from '@app/core/services/util/dialog.service';
 
 @Component({
   selector: 'app-user-management',
@@ -55,9 +60,9 @@ import { RouterLink } from '@angular/router';
     MatInput,
     MatSuffix,
     MatIconButton,
-    MatActionList,
-    MatListItem,
     RouterLink,
+    CoreModule,
+    DateComponent,
   ],
   providers: [AdminUtilService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,6 +78,10 @@ export class UserManagementComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly adminUtilService = inject(AdminUtilService);
   private readonly adminUserById = inject(AdminUserByIdGql);
+  private readonly dialogService = inject(DialogService);
+  private readonly adminDeleteUser = inject(AdminDeleteUserByIdGql);
+  private readonly adminVerifyUser = inject(AdminVerifyUserByIdGql);
+  private readonly adminUserCount = inject(AdminUserCountGql);
 
   private readonly usersQueryRef = this.adminUsers.watch({
     errorPolicy: 'all',
@@ -107,6 +116,11 @@ export class UserManagementComponent {
         )
       )
     )
+  );
+  readonly userCount = toSignal(
+    this.adminUserCount
+      .fetch()
+      .pipe(map((r) => r.data?.adminUserStats?.totalCount))
   );
   readonly formControl = new FormControl('');
 
@@ -177,6 +191,53 @@ export class UserManagementComponent {
             this.formService.enableForm();
           },
         });
+    });
+  }
+
+  deleteUser(id: string) {
+    const confirmAction = this.adminDeleteUser.mutate({
+      variables: { id },
+      update: (cache, result) => {
+        if (result.data?.adminDeleteUserById) {
+          const cacheId = cache.identify({
+            __typename: 'AdminUser',
+            id: id,
+          });
+          if (cacheId) {
+            cache.evict({ id: cacheId });
+            cache.gc();
+          }
+        }
+      },
+    });
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'account-as-admin',
+      'admin.dialog.really-delete-account-admin',
+      undefined,
+      undefined,
+      () => confirmAction
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const msg = this.translateService.translate(
+          'admin.admin-area.user-deleted'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      }
+    });
+  }
+
+  activateUser(id: string) {
+    this.formService.disableForm();
+    this.adminVerifyUser.mutate({ variables: { id } }).subscribe(() => {
+      this.formService.enableForm();
+      const msg = this.translateService.translate(
+        'admin.admin-area.user-activated'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
     });
   }
 }

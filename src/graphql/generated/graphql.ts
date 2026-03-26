@@ -39,6 +39,47 @@ export type AdminAnnouncementStats = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type AdminAuditEvent = {
+  __typename?: 'AdminAuditEvent';
+  createdAt: Scalars['DateTime']['output'];
+  createdBy?: Maybe<Scalars['UUID']['output']>;
+  domain?: Maybe<Scalars['String']['output']>;
+  domainId?: Maybe<Scalars['String']['output']>;
+  eventType?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+};
+
+export type AdminAuditEventConnection = {
+  __typename?: 'AdminAuditEventConnection';
+  edges?: Maybe<Array<Maybe<AdminAuditEventEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export type AdminAuditEventEdge = {
+  __typename?: 'AdminAuditEventEdge';
+  cursor: Scalars['String']['output'];
+  node: AdminAuditEvent;
+};
+
+export type AdminDailyStatisticsCount = {
+  __typename?: 'AdminDailyStatisticsCount';
+  count?: Maybe<Scalars['Int']['output']>;
+  date: Scalars['String']['output'];
+};
+
+export type AdminDailyStatisticsType = {
+  __typename?: 'AdminDailyStatisticsType';
+  domain: Scalars['String']['output'];
+  localizedDomain?: Maybe<Scalars['String']['output']>;
+  localizedType?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+export type AdminQnaStats = {
+  __typename?: 'AdminQnaStats';
+  postCount: Scalars['Int']['output'];
+};
+
 export type AdminRoom = {
   __typename?: 'AdminRoom';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -61,16 +102,23 @@ export type AdminRoomQueryInput = {
 
 export type AdminRoomStats = {
   __typename?: 'AdminRoomStats';
+  activeRoomCount: Scalars['Int']['output'];
+  managingUserCount: Scalars['Int']['output'];
+  membershipCount: Scalars['Int']['output'];
+  participantCount: Scalars['Int']['output'];
   totalCount: Scalars['Int']['output'];
 };
 
 export type AdminUser = {
   __typename?: 'AdminUser';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
   language?: Maybe<Scalars['String']['output']>;
+  lastActivityAt?: Maybe<Scalars['DateTime']['output']>;
   mailAddress?: Maybe<Scalars['String']['output']>;
   uiSettings?: Maybe<UserUiSettings>;
   unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   username?: Maybe<Scalars['String']['output']>;
   verificationCode?: Maybe<Scalars['Int']['output']>;
   verificationErrors?: Maybe<Scalars['Int']['output']>;
@@ -550,7 +598,13 @@ export enum QnaState {
 export type Query = {
   __typename?: 'Query';
   adminAnnouncementStats?: Maybe<AdminAnnouncementStats>;
+  adminAuditEventsByCreatedBy?: Maybe<AdminAuditEventConnection>;
+  adminAuditEventsByDomainId?: Maybe<AdminAuditEventConnection>;
+  adminAuditEventsByUserId?: Maybe<AdminAuditEventConnection>;
+  adminDailyStatisticsByDomainAndType?: Maybe<Array<AdminDailyStatisticsCount>>;
+  adminDailyStatisticsTypes?: Maybe<Array<AdminDailyStatisticsType>>;
   adminMembershipsByUserId?: Maybe<RoomMembershipConnection>;
+  adminQnaStats?: Maybe<AdminQnaStats>;
   adminRoomByIdOrShortId?: Maybe<AdminRoom>;
   adminRoomStats?: Maybe<AdminRoomStats>;
   adminUserById?: Maybe<AdminUser>;
@@ -573,6 +627,26 @@ export type Query = {
   rooms?: Maybe<RoomConnection>;
   roomsByUserId?: Maybe<RoomMembershipConnection>;
   userByDisplayId?: Maybe<User>;
+};
+
+export type QueryAdminAuditEventsByCreatedByArgs = {
+  createdBy: Scalars['UUID']['input'];
+};
+
+export type QueryAdminAuditEventsByDomainIdArgs = {
+  domain: Scalars['String']['input'];
+  domainId: Scalars['UUID']['input'];
+};
+
+export type QueryAdminAuditEventsByUserIdArgs = {
+  userId: Scalars['UUID']['input'];
+};
+
+export type QueryAdminDailyStatisticsByDomainAndTypeArgs = {
+  domain: Scalars['String']['input'];
+  from: Scalars['DateTime']['input'];
+  to: Scalars['DateTime']['input'];
+  type: Scalars['String']['input'];
 };
 
 export type QueryAdminMembershipsByUserIdArgs = {
@@ -893,6 +967,9 @@ export type AdminUserDetailsFragment = {
   verificationCode?: number | null;
   verificationErrors?: number | null;
   verificationExpiresAt?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  lastActivityAt?: string | null;
   uiSettings?: {
     __typename?: 'UserUiSettings';
     contentAnswersDirectlyBelowChart?: boolean | null;
@@ -933,6 +1010,9 @@ export type AdminUserByIdQuery = {
     verificationCode?: number | null;
     verificationErrors?: number | null;
     verificationExpiresAt?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    lastActivityAt?: string | null;
     uiSettings?: {
       __typename?: 'UserUiSettings';
       contentAnswersDirectlyBelowChart?: boolean | null;
@@ -966,6 +1046,9 @@ export type AdminUsersQuery = {
         verificationCode?: number | null;
         verificationErrors?: number | null;
         verificationExpiresAt?: string | null;
+        createdAt?: string | null;
+        updatedAt?: string | null;
+        lastActivityAt?: string | null;
         uiSettings?: {
           __typename?: 'UserUiSettings';
           contentAnswersDirectlyBelowChart?: boolean | null;
@@ -1010,6 +1093,9 @@ export type AdminCreateUserMutation = {
     verificationCode?: number | null;
     verificationErrors?: number | null;
     verificationExpiresAt?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    lastActivityAt?: string | null;
     uiSettings?: {
       __typename?: 'UserUiSettings';
       contentAnswersDirectlyBelowChart?: boolean | null;
@@ -1036,6 +1122,9 @@ export type AdminVerifyUserByIdMutation = {
     verificationCode?: number | null;
     verificationErrors?: number | null;
     verificationExpiresAt?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    lastActivityAt?: string | null;
     uiSettings?: {
       __typename?: 'UserUiSettings';
       contentAnswersDirectlyBelowChart?: boolean | null;
@@ -1116,6 +1205,20 @@ export type AdminStatsQuery = {
     __typename?: 'AdminAnnouncementStats';
     totalCount: number;
   } | null;
+};
+
+export type AdminUserCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AdminUserCountQuery = {
+  __typename?: 'Query';
+  adminUserStats?: { __typename?: 'AdminUserStats'; totalCount: number } | null;
+};
+
+export type AdminRoomCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AdminRoomCountQuery = {
+  __typename?: 'Query';
+  adminRoomStats?: { __typename?: 'AdminRoomStats'; totalCount: number } | null;
 };
 
 export type AdminMembershipsByUserIdQueryVariables = Exact<{
@@ -2441,6 +2544,9 @@ export const AdminUserDetailsFragmentDoc = gql`
     verificationCode
     verificationErrors
     verificationExpiresAt
+    createdAt
+    updatedAt
+    lastActivityAt
   }
 `;
 export const AdminRoomDetailsFragmentDoc = gql`
@@ -2558,7 +2664,7 @@ export const AdminUsersDocument = gql`
     adminUsers(
       search: $search
       exactSearchMode: $exactSearchMode
-      first: 10
+      first: 50
       after: $cursor
     ) {
       edges {
@@ -2741,6 +2847,48 @@ export class AdminStatsGql extends Apollo.Query<
   AdminStatsQueryVariables
 > {
   document = AdminStatsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminUserCountDocument = gql`
+  query AdminUserCount {
+    adminUserStats {
+      totalCount
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminUserCountGql extends Apollo.Query<
+  AdminUserCountQuery,
+  AdminUserCountQueryVariables
+> {
+  document = AdminUserCountDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminRoomCountDocument = gql`
+  query AdminRoomCount {
+    adminRoomStats {
+      totalCount
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminRoomCountGql extends Apollo.Query<
+  AdminRoomCountQuery,
+  AdminRoomCountQueryVariables
+> {
+  document = AdminRoomCountDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

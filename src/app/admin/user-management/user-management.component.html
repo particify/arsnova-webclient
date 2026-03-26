@@ -8,7 +8,7 @@
 
 <mat-form-field appearance="outline">
   <mat-label>{{
-    'admin.admin-area.search-account-with-id' | transloco
+    'admin.admin-area.search-account' | transloco: { count: userCount() }
   }}</mat-label>
   <input matInput appDisableForm [formControl]="formControl" />
   @if (formControl.value) {
@@ -22,17 +22,86 @@
 @if (isLoading()) {
   <app-loading-indicator></app-loading-indicator>
 } @else {
-  <mat-action-list fxLayout="column" fxLayoutGap="16px">
-    @for (user of _users; track user) {
-      <button mat-list-item class="user-list-item" [routerLink]="user.id">
-        <div fxLayout="column" fxLayoutGap="16px">
-          <span>{{ user.mailAddress ?? user.unverifiedMailAddress }}</span>
-          <span style="opacity: 0.7">{{ user.id }}</span>
-        </div>
-      </button>
-    }
-  </mat-action-list>
   @if (formControl.value && _users.length === 0) {
     <span>{{ 'admin.admin-area.no-accounts-found' | transloco }}</span>
+  } @else {
+    <table mat-table [dataSource]="_users">
+      <ng-container matColumnDef="displayId">
+        <mat-header-cell *matHeaderCellDef>{{
+          'admin.admin-area.display-id' | transloco
+        }}</mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          [routerLink]="element.id"
+          class="clickable"
+        >
+          {{ element.displayId }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef>{{
+          'admin.admin-area.status' | transloco
+        }}</mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          class="less-important clickable"
+          [routerLink]="element.id"
+        >
+          {{
+            'admin.admin-area.' +
+              (!!element.username
+                ? 'verified'
+                : element.verificationExpiresAt
+                  ? 'pending'
+                  : 'guest') | transloco
+          }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="createdAt">
+        <mat-header-cell *matHeaderCellDef>{{
+          'admin.admin-area.created' | transloco
+        }}</mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          class="less-important clickable"
+          [routerLink]="element.id"
+        >
+          <app-date
+            [timestamp]="element.createdAt"
+            [smallerText]="false"
+          ></app-date>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="more">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element" class="less-important">
+          <button mat-icon-button [matMenuTriggerFor]="moreMenu">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+          <mat-menu #moreMenu="matMenu">
+            @if (!element.username || element.unverifiedMailAddress) {
+              <button mat-menu-item (click)="activateUser(element.id)">
+                <mat-icon color="primary">verified</mat-icon>
+                {{ 'admin.admin-area.activate' | transloco }}
+              </button>
+            }
+            <button mat-menu-item (click)="deleteUser(element.id)">
+              <mat-icon color="warn">delete</mat-icon>
+              {{ 'admin.admin-area.delete' | transloco }}
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row
+        *matHeaderRowDef="['displayId', 'status', 'createdAt', 'more']"
+      ></mat-header-row>
+      <mat-row
+        *matRowDef="
+          let row;
+          columns: ['displayId', 'status', 'createdAt', 'more']
+        "
+        class="action-row"
+      ></mat-row>
+    </table>
   }
 }

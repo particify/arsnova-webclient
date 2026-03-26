@@ -13,6 +13,9 @@ fragment AdminUserDetails on AdminUser {
   verificationCode
   verificationErrors
   verificationExpiresAt
+  createdAt
+  updatedAt
+  lastActivityAt
 }
 
 fragment AdminRoomDetails on AdminRoom {
@@ -39,7 +42,7 @@ query AdminUsers($search: String, $exactSearchMode: Boolean, $cursor: String) {
   adminUsers(
     search: $search
     exactSearchMode: $exactSearchMode
-    first: 10
+    first: 50
     after: $cursor
   ) {
     edges {
@@ -99,6 +102,18 @@ query AdminStats {
     totalCount
   }
   adminAnnouncementStats {
+    totalCount
+  }
+}
+
+query AdminUserCount {
+  adminUserStats {
+    totalCount
+  }
+}
+
+query AdminRoomCount {
+  adminRoomStats {
     totalCount
   }
 }

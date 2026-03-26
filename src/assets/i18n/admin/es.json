@@ -23,7 +23,7 @@
     "room-transferred": "La sala ha sido transferida.",
     "add-account": "Agregar cuenta",
     "account-added": "La cuenta ha sido agregada.",
-    "search-account-with-id": "Buscar cuenta por ID de usuario",
+    "search-account": "Buscar cuenta",
     "cancel": "Cancelar",
     "user-not-found": "No se ha encontrado ningún usuario con este ID.",
     "userProfile": "Usuarios",
