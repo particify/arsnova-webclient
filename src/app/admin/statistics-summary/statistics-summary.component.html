@@ -1,0 +1,19 @@
+<div fxLayout="column" fxLayoutGap="20px">
+  <h2>
+    {{ 'admin.admin-area.summary' | transloco }}
+  </h2>
+  <div class="summary-container">
+    <app-statistic-card
+      [headerName]="'admin.admin-area.users' | transloco"
+      [tableData]="userSummary()"
+    ></app-statistic-card>
+    <app-statistic-card
+      [headerName]="'admin.admin-area.rooms' | transloco"
+      [tableData]="roomSummary()"
+    ></app-statistic-card>
+    <app-statistic-card
+      [headerName]="'admin.admin-area.interactions' | transloco"
+      [tableData]="interactionSummary()"
+    ></app-statistic-card>
+  </div>
+</div>

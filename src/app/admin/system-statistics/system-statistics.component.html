@@ -3,19 +3,26 @@
   <lib-extension-point extensionId="tenant-selection"></lib-extension-point>
 </div>
 
-@if (isLoading) {
-  <app-loading-indicator></app-loading-indicator>
-} @else {
-  <mat-tab-group [dynamicHeight]="true" [animationDuration]="0">
-    @for (tab of tabs; track tab; let i = $index) {
-      <mat-tab [label]="'admin.admin-area.' + tab | transloco">
-        <mat-card class="stats-card" appearance="outlined">
-          <app-entity-properties
-            [entity]="getStats(tabs[i])"
-            [translateKeys]="true"
-          ></app-entity-properties>
-        </mat-card>
-      </mat-tab>
+<div fxLayout="column" fxLayoutGap="24px">
+  <app-statistics-summary></app-statistics-summary>
+  <lib-extension-point extensionId="admin-time-series"></lib-extension-point>
+  <div fxLayout="column" fxLayoutGap="20px">
+    <h2>
+      {{ 'admin.admin-area.more-data' | transloco }}
+    </h2>
+    @if (!isLoading) {
+      <mat-tab-group [dynamicHeight]="true" [animationDuration]="0">
+        @for (tab of tabs; track tab; let i = $index) {
+          <mat-tab [label]="'admin.admin-area.' + tab | transloco">
+            <mat-card class="stats-card" appearance="outlined">
+              <app-entity-properties
+                [entity]="getStats(tabs[i])"
+                [translateKeys]="true"
+              ></app-entity-properties>
+            </mat-card>
+          </mat-tab>
+        }
+      </mat-tab-group>
     }
-  </mat-tab-group>
-}
+  </div>
+</div>

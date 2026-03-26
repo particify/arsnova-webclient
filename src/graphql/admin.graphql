@@ -124,9 +124,16 @@ query AdminStats {
   }
   adminRoomStats {
     totalCount
+    membershipCount
+    activeRoomCount
+    managingUserCount
+    participantCount
   }
   adminAnnouncementStats {
     totalCount
+  }
+  adminQnaStats {
+    postCount
   }
 }
 

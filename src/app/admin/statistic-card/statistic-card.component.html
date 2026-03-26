@@ -1,0 +1,25 @@
+<mat-card fxLayout="column" fxLayoutGap="16px" appearance="outlined">
+  <h3>{{ headerName() }}</h3>
+  <table mat-table [dataSource]="tableData()">
+    <ng-container matColumnDef="name">
+      <td mat-cell *matCellDef="let element">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+          <span>{{ element.name | transloco }}</span>
+          @if (element.description) {
+            <mat-icon
+              class="help-icon"
+              [matTooltip]="element.description | transloco"
+              >help</mat-icon
+            >
+          }
+        </div>
+      </td>
+    </ng-container>
+    <mat-text-column name="value" justify="end">
+      <td mat-cell *matCellDef="let element">
+        {{ element.value() }}
+      </td>
+    </mat-text-column>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'value']"></tr>
+  </table>
+</mat-card>

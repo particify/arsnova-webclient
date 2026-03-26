@@ -1,0 +1,17 @@
+@use '../../../variables' as *;
+
+h3 {
+  margin: 0;
+}
+
+mat-card {
+  width: unset;
+  padding: $spacing-3;
+}
+
+.help-icon {
+  font-size: $m-font-size;
+  height: $m-font-size;
+  width: $m-font-size;
+  color: var(--grey);
+}

@@ -1,7 +1,7 @@
 @use '../../variables' as *;
 @use '@angular/material' as mat;
 
-.mat-mdc-card {
+mat-card {
   width: 100%;
   max-width: initial;
   padding: $spacing-3;
@@ -13,6 +13,12 @@
 
 .stats-card {
   margin-top: $spacing-2;
+}
+
+h2 {
+  margin: 0;
+  font-size: $l-font-size !important;
+  color: var(--on-surface-light);
 }
 
 .mat-column-more {

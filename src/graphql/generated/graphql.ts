@@ -1226,11 +1226,19 @@ export type AdminStatsQuery = {
     verifiedCount: number;
     pendingCount: number;
   } | null;
-  adminRoomStats?: { __typename?: 'AdminRoomStats'; totalCount: number } | null;
+  adminRoomStats?: {
+    __typename?: 'AdminRoomStats';
+    totalCount: number;
+    membershipCount: number;
+    activeRoomCount: number;
+    managingUserCount: number;
+    participantCount: number;
+  } | null;
   adminAnnouncementStats?: {
     __typename?: 'AdminAnnouncementStats';
     totalCount: number;
   } | null;
+  adminQnaStats?: { __typename?: 'AdminQnaStats'; postCount: number } | null;
 };
 
 export type AdminUserCountQueryVariables = Exact<{ [key: string]: never }>;
@@ -2918,9 +2926,16 @@ export const AdminStatsDocument = gql`
     }
     adminRoomStats {
       totalCount
+      membershipCount
+      activeRoomCount
+      managingUserCount
+      participantCount
     }
     adminAnnouncementStats {
       totalCount
+    }
+    adminQnaStats {
+      postCount
     }
   }
 `;
