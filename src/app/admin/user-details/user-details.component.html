@@ -41,4 +41,10 @@
       <span>{{ 'admin.admin-area.user-not-found' | transloco }}</span>
     }
   }
+  <div>
+    <lib-extension-point
+      extensionId="admin-audit-events"
+      [extensionData]="{ domain: 'user', domainId: userId() }"
+    ></lib-extension-point>
+  </div>
 </div>

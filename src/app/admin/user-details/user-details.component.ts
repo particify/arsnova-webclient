@@ -30,6 +30,7 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
 import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
 import { MatCard } from '@angular/material/card';
 import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
+import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
 
 @Component({
   selector: 'app-user-details',
@@ -46,6 +47,7 @@ import { BackButtonComponent } from '@app/standalone/back-button/back-button.com
     LoadingButtonComponent,
     MatCard,
     BackButtonComponent,
+    ExtensionPointComponent,
   ],
   providers: [AdminUtilService],
   changeDetection: ChangeDetectionStrategy.OnPush,
