@@ -4016,9 +4016,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsverse/transloco@npm:8.2.1":
-  version: 8.2.1
-  resolution: "@jsverse/transloco@npm:8.2.1"
+"@jsverse/transloco@npm:8.3.0":
+  version: 8.3.0
+  resolution: "@jsverse/transloco@npm:8.3.0"
   dependencies:
     "@jsverse/transloco-utils": "npm:^8.2.1"
     "@jsverse/utils": "npm:1.0.0-beta.5"
@@ -4026,7 +4026,7 @@ __metadata:
   peerDependencies:
     "@angular/core": ">=16.0.0"
     rxjs: ">=6.0.0"
-  checksum: 10c0/e2a8c0151e83ddeac6f92b97432187193d517c879b63def2201584bb1572a948b08292cf88d80b9e92eab9d33448bb4819db72f9a108d3a4c6b6994343a7ddbf
+  checksum: 10c0/f3a6c9e6cfae6243b403012834600ddf25aede863b01239a08bc2d917851ae37924a75c255544c71e1dfe54caeb5df40664d56d4cfbf770115a001ef6e3b4638
   languageName: node
   linkType: hard
 
@@ -7078,7 +7078,7 @@ __metadata:
     "@graphql-codegen/typescript": "npm:5.0.9"
     "@graphql-codegen/typescript-apollo-angular": "npm:5.0.0"
     "@graphql-codegen/typescript-operations": "npm:5.0.9"
-    "@jsverse/transloco": "npm:8.2.1"
+    "@jsverse/transloco": "npm:8.3.0"
     "@playwright/test": "npm:1.59.1"
     "@stomp/rx-stomp": "npm:2.3.0"
     "@stomp/stompjs": "npm:7.3.0"
