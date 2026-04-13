@@ -1,0 +1,94 @@
+<div fxLayout="column" fxLayoutGap="16px">
+  <mat-card appearance="outlined">
+    <h3>{{ 'admin.admin-area.room-details' | transloco }}</h3>
+    @if (isLoadingDetails()) {
+      <app-loading-indicator></app-loading-indicator>
+    } @else {
+      @let _room = room();
+      @if (_room) {
+        <table mat-table [dataSource]="displayRoomData()">
+          <ng-container matColumnDef="label">
+            <td mat-cell *matCellDef="let element">
+              @if (element.value) {
+                <span>{{ element.label | transloco }}:</span>
+              }
+            </td>
+          </ng-container>
+          <mat-text-column name="value">
+            <td mat-cell *matCellDef="let element">
+              {{ element.value }}
+            </td>
+          </mat-text-column>
+          <tr mat-row *matRowDef="let row; columns: ['label', 'value']"></tr>
+        </table>
+      } @else {
+        <span>{{ 'admin.admin-area.room-not-found' | transloco }}</span>
+      }
+    }
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <h3>{{ 'admin.admin-area.managing-users' | transloco }}</h3>
+    @if (isLoadingDetails()) {
+      <app-loading-indicator></app-loading-indicator>
+    } @else {
+      @let _members = members();
+      @if (_members && _members.length > 0) {
+        <table mat-table [dataSource]="_members">
+          <ng-container matColumnDef="username">
+            <mat-header-cell *matHeaderCellDef>{{
+              'admin.admin-area.username' | transloco
+            }}</mat-header-cell>
+
+            <mat-cell *matCellDef="let element" class="clickable">
+              <app-admin-entity-link
+                fxFill
+                entityName="users"
+                [entityId]="element.user.id"
+              >
+                {{ element.user.displayId }}
+              </app-admin-entity-link>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef>{{
+              'admin.admin-area.id' | transloco
+            }}</mat-header-cell>
+            <mat-cell *matCellDef="let element" class="clickable">
+              <app-admin-entity-link
+                fxFill
+                entityName="users"
+                [entityId]="element.user.id"
+              >
+                {{ element.user.id }}
+              </app-admin-entity-link>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="role">
+            <mat-header-cell *matHeaderCellDef>{{
+              'admin.admin-area.role' | transloco
+            }}</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.role }}
+            </mat-cell>
+          </ng-container>
+          <mat-header-row
+            *matHeaderRowDef="['username', 'id', 'role']"
+          ></mat-header-row>
+          <mat-row
+            *matRowDef="let row; columns: ['username', 'id', 'role']"
+            class="action-row"
+          ></mat-row>
+        </table>
+      } @else {
+        <span>{{
+          'admin.admin-area.no-managing-users-found' | transloco
+        }}</span>
+      }
+    }
+  </mat-card>
+  <lib-extension-point
+    extensionId="admin-audit-events"
+    [extensionData]="{ domain: 'room', domainId: roomId() }"
+  ></lib-extension-point>
+</div>

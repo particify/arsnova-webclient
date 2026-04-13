@@ -1,6 +1,7 @@
 fragment AdminUserDetails on AdminUser {
   id
   username
+  displayId
   mailAddress
   unverifiedMailAddress
   uiSettings {
@@ -76,9 +77,32 @@ mutation AdminVerifyUserById($id: ID!) {
   }
 }
 
-query AdminRoom($id: ID, $shortId: Int) {
-  adminRoomByIdOrShortId(input: { id: $id, shortId: $shortId }) {
+query AdminRoomById($id: ID!) {
+  adminRoomById(id: $id) {
     ...AdminRoomDetails
+  }
+}
+
+query AdminRooms($search: String, $cursor: String) {
+  adminRooms(search: $search, first: 50, after: $cursor) {
+    edges {
+      node {
+        ...AdminRoomDetails
+      }
+      cursor
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+query AdminRoomManagingMembersByRoomId($roomId: UUID!) {
+  adminRoomManagingMembersByRoomId(roomId: $roomId) {
+    ...RoomMember
   }
 }
 

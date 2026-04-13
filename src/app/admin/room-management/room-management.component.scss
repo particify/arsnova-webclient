@@ -1,0 +1,6 @@
+@use '../../../variables' as *;
+@use '../admin-styles.scss' as *;
+
+table {
+  --mat-table-row-item-container-height: 64px;
+}
