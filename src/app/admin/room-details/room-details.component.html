@@ -35,9 +35,9 @@
       @let _members = members();
       @if (_members && _members.length > 0) {
         <table mat-table [dataSource]="_members">
-          <ng-container matColumnDef="username">
+          <ng-container matColumnDef="user">
             <mat-header-cell *matHeaderCellDef>{{
-              'admin.admin-area.username' | transloco
+              'admin.admin-area.user' | transloco
             }}</mat-header-cell>
 
             <mat-cell *matCellDef="let element" class="clickable">
@@ -73,10 +73,10 @@
             </mat-cell>
           </ng-container>
           <mat-header-row
-            *matHeaderRowDef="['username', 'id', 'role']"
+            *matHeaderRowDef="['user', 'id', 'role']"
           ></mat-header-row>
           <mat-row
-            *matRowDef="let row; columns: ['username', 'id', 'role']"
+            *matRowDef="let row; columns: ['user', 'id', 'role']"
             class="action-row"
           ></mat-row>
         </table>

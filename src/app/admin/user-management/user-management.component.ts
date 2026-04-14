@@ -120,7 +120,13 @@ export class UserManagementComponent {
   readonly userCount = toSignal(
     this.adminUserCount
       .fetch()
-      .pipe(map((r) => r.data?.adminUserStats?.totalCount))
+      .pipe(
+        map(
+          (r) =>
+            (r.data?.adminUserStats?.verifiedCount ?? 0) +
+            (r.data?.adminUserStats?.pendingCount ?? 0)
+        )
+      )
   );
   readonly formControl = new FormControl('');
 

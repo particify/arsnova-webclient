@@ -1,4 +1,5 @@
 @use '../../variables' as *;
+@use '@angular/material' as mat;
 
 .mat-mdc-card {
   width: 100%;
@@ -35,4 +36,12 @@
 
 h3 {
   margin: $spacing 0 $spacing-2;
+}
+
+table {
+  @include mat.table-overrides(
+    (
+      background-color: var(--surface),
+    )
+  );
 }

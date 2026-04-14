@@ -68,12 +68,12 @@ export class UserDetailsComponent {
         value: status,
       },
       {
-        label: 'admin.admin-area.created',
-        value: user?.createdAt,
-      },
-      {
         label: 'admin.admin-area.last-activity',
         value: user?.lastActivityAt,
+      },
+      {
+        label: 'admin.admin-area.created',
+        value: user?.createdAt,
       },
       {
         label: 'admin.admin-area.last-updated',

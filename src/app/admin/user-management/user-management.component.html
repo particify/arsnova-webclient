@@ -26,9 +26,9 @@
     <span>{{ 'admin.admin-area.no-accounts-found' | transloco }}</span>
   } @else {
     <table mat-table [dataSource]="_users">
-      <ng-container matColumnDef="displayId">
+      <ng-container matColumnDef="user">
         <mat-header-cell *matHeaderCellDef>{{
-          'admin.admin-area.display-id' | transloco
+          'admin.admin-area.user' | transloco
         }}</mat-header-cell>
         <mat-cell
           *matCellDef="let element"
@@ -93,13 +93,10 @@
         </mat-cell>
       </ng-container>
       <mat-header-row
-        *matHeaderRowDef="['displayId', 'status', 'createdAt', 'more']"
+        *matHeaderRowDef="['user', 'status', 'createdAt', 'more']"
       ></mat-header-row>
       <mat-row
-        *matRowDef="
-          let row;
-          columns: ['displayId', 'status', 'createdAt', 'more']
-        "
+        *matRowDef="let row; columns: ['user', 'status', 'createdAt', 'more']"
         class="action-row"
       ></mat-row>
     </table>

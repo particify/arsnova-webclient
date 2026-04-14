@@ -1237,7 +1237,11 @@ export type AdminUserCountQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AdminUserCountQuery = {
   __typename?: 'Query';
-  adminUserStats?: { __typename?: 'AdminUserStats'; totalCount: number } | null;
+  adminUserStats?: {
+    __typename?: 'AdminUserStats';
+    verifiedCount: number;
+    pendingCount: number;
+  } | null;
 };
 
 export type AdminRoomCountQueryVariables = Exact<{ [key: string]: never }>;
@@ -2937,7 +2941,8 @@ export class AdminStatsGql extends Apollo.Query<
 export const AdminUserCountDocument = gql`
   query AdminUserCount {
     adminUserStats {
-      totalCount
+      verifiedCount
+      pendingCount
     }
   }
 `;

@@ -132,7 +132,8 @@ query AdminStats {
 
 query AdminUserCount {
   adminUserStats {
-    totalCount
+    verifiedCount
+    pendingCount
   }
 }
 

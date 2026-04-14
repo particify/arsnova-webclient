@@ -64,6 +64,10 @@ export class RoomDetailsComponent {
         value: room?.createdAt,
       },
       {
+        label: 'admin.admin-area.created-by',
+        value: room?.createdBy,
+      },
+      {
         label: 'admin.admin-area.last-updated',
         value: room?.updatedAt,
       },
