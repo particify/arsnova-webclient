@@ -15,8 +15,7 @@ import {
 import { HealthStatusComponent } from '@app/admin/health-status/health-status.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
-import { LowerCasePipe, JsonPipe, KeyValuePipe } from '@angular/common';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { JsonPipe, KeyValuePipe } from '@angular/common';
 
 @Component({
   selector: 'app-system-status',
@@ -35,10 +34,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
     MatTooltip,
     MatRowDef,
     MatRow,
-    LowerCasePipe,
     JsonPipe,
     KeyValuePipe,
-    TranslocoPipe,
   ],
 })
 export class SystemStatusComponent implements OnInit {

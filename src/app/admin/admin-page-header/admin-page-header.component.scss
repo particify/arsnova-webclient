@@ -1,7 +1,10 @@
+@use '../../../variables' as *;
+
 .title {
-  margin: 6px 0;
+  margin: 0 0 $spacing;
+  font-size: $xl-font-size;
 }
 
 .header-container {
-  margin-bottom: 1.5em;
+  margin-bottom: $spacing-2;
 }

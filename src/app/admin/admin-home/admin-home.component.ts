@@ -17,7 +17,6 @@ import {
 } from '@app/standalone/navigation-drawer/navigation-drawer.component';
 import { FlexModule } from '@angular/flex-layout';
 import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
-import { SummaryBarComponent } from '@app/admin/summary-bar/summary-bar.component';
 @Component({
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
@@ -26,7 +25,6 @@ import { SummaryBarComponent } from '@app/admin/summary-bar/summary-bar.componen
     NavigationDrawerComponent,
     FlexModule,
     ExtensionPointComponent,
-    SummaryBarComponent,
     RouterOutlet,
     TranslocoPipe,
   ],

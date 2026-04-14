@@ -11,7 +11,6 @@ import { ActivatedRoute } from '@angular/router';
 import { FlexModule } from '@angular/flex-layout';
 import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
 import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
-import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { MatCard } from '@angular/material/card';
 import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
@@ -19,13 +18,15 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { AdminStatsGql } from '@gql/generated/graphql';
 import { debounceTime, map, Subject } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { CoreModule } from '@app/core/core.module';
+import { StatisticsSummaryComponent } from '@app/admin/statistics-summary/statistics-summary.component';
 
 export interface AdminStats {
   userProfile?: object;
   room?: object;
   contentGroup?: object;
-  content?: object;
-  answer?: object;
+  content?: { [index: string]: number; totalCount: number };
+  answer?: { [index: string]: number; totalCount: number };
   contentGroupTemplate?: object;
   contentTemplate?: object;
   violationReport?: object;
@@ -41,12 +42,13 @@ export interface AdminStats {
     FlexModule,
     AdminPageHeaderComponent,
     ExtensionPointComponent,
-    LoadingIndicatorComponent,
     MatTabGroup,
     MatTab,
     MatCard,
     EntityPropertiesComponent,
     TranslocoPipe,
+    CoreModule,
+    StatisticsSummaryComponent,
   ],
 })
 export class SystemStatisticsComponent implements OnInit {
@@ -68,6 +70,7 @@ export class SystemStatisticsComponent implements OnInit {
   roomStats = computed(() => this.adminStats()?.adminRoomStats);
   userStats = computed(() => this.adminStats()?.adminUserStats);
   announcementStats = computed(() => this.adminStats()?.adminAnnouncementStats);
+  qnaStats = computed(() => this.adminStats()?.adminQnaStats);
 
   shouldInitTabs$ = new Subject<void>();
 
@@ -76,14 +79,21 @@ export class SystemStatisticsComponent implements OnInit {
       .pipe(debounceTime(100))
       .subscribe(() => this.initTabs());
     effect(() => {
-      if (this.userStats()) {
-        this.core4Stats.userProfile = this.userStats() ?? {};
+      const userStats = this.userStats();
+      const roomStats = this.roomStats();
+      const announcementStats = this.announcementStats();
+      const qnaStats = this.qnaStats();
+      if (userStats) {
+        this.core4Stats.userProfile = userStats;
       }
-      if (this.roomStats()) {
-        this.core4Stats.room = this.roomStats() ?? {};
+      if (roomStats) {
+        this.core4Stats.room = roomStats;
       }
-      if (this.announcementStats()) {
-        this.core4Stats.announcement = this.announcementStats() ?? {};
+      if (announcementStats) {
+        this.core4Stats.announcement = announcementStats;
+      }
+      if (qnaStats) {
+        this.core4Stats.comment = qnaStats;
       }
       this.shouldInitTabs$.next();
     });
@@ -109,7 +119,6 @@ export class SystemStatisticsComponent implements OnInit {
         this.core3Stats.contentGroupTemplate = stats.contentGroupTemplate;
         this.core3Stats.contentTemplate = stats.contentTemplate;
         this.core3Stats.violationReport = stats.violationReport;
-        this.core3Stats.comment = stats.commentServiceStats;
         this.shouldInitTabs$.next();
       },
     });
