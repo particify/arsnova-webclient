@@ -4,10 +4,10 @@
   [showFooter]="false"
   backgroundColor="surface"
 >
-  <div header fxLayout="row" fxLayoutAlign="start" class="title">
+  <div footer fxLayout="row" fxLayoutAlign="center" [style.height]="'32px'">
     <lib-extension-point
       extensionId="app-logo"
-      [extensionData]="{ height: '36px' }"
+      [extensionData]="{ height: '32px' }"
     >
       <h2>{{ 'admin.admin-area.title' | transloco }}</h2>
     </lib-extension-point>

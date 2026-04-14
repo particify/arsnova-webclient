@@ -1,8 +1,5 @@
 @use '../../../variables' as *;
 
-$drawer-header-font-size: 20px;
-$drawer-header-padding: 24px;
-
 button {
   margin-bottom: 0.5em;
 }
@@ -54,17 +51,19 @@ button {
   }
 }
 
-.section-header {
-  padding: $drawer-header-padding;
-  font-weight: $font-weight-bold;
-  font-size: $drawer-header-font-size;
+.section-footer {
+  padding: $spacing-4;
+}
+
+.section-container {
+  padding-top: $spacing-3;
 }
 
 .subheader {
   margin-top: 0;
   color: var(--on-surface-light);
   font-size: $s-font-size;
-  padding: 0 $drawer-header-padding;
+  padding: 0 $spacing-4;
 }
 
 .button-container {

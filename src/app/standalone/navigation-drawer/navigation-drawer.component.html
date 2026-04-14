@@ -2,38 +2,35 @@
   <mat-drawer-container>
     <mat-drawer #drawer mode="side" [opened]="true" mode="side">
       <div fxFill fxLayout="column" fxLayoutAlign="space-between">
-        <div>
-          <div class="section-header">
-            <ng-content select="[header]"></ng-content>
-          </div>
-          <mat-divider style="padding-bottom: 24px"></mat-divider>
-          @for (section of buttonSections; track section) {
-            <div fxLayoutGap="1em">
-              @if (section.subheader) {
-                <p class="subheader">
-                  {{ section.subheader | transloco }}
-                </p>
-              }
-              <div class="button-container" fxLayout="column" fxLayoutGap="8px">
-                @for (button of section.buttons; track button) {
-                  @if (button.display | async) {
-                    <button
-                      mat-button
-                      class="nav-button"
-                      (click)="changePage(button.name)"
-                      color="{{ currentPage === button.name ? 'primary' : '' }}"
-                      [ngClass]="{
-                        'primary-variant': currentPage === button.name,
-                      }"
-                    >
-                      <mat-icon>{{ button.icon }}</mat-icon>
-                      {{ button.i18nName | transloco }}
-                    </button>
-                  }
+        @for (section of buttonSections; track section) {
+          <div fxLayoutGap="16px" class="section-container">
+            @if (section.subheader) {
+              <p class="subheader">
+                {{ section.subheader | transloco }}
+              </p>
+            }
+            <div class="button-container" fxLayout="column" fxLayoutGap="8px">
+              @for (button of section.buttons; track button) {
+                @if (button.display | async) {
+                  <button
+                    mat-button
+                    class="nav-button"
+                    (click)="changePage(button.name)"
+                    color="{{ currentPage === button.name ? 'primary' : '' }}"
+                    [ngClass]="{
+                      'primary-variant': currentPage === button.name,
+                    }"
+                  >
+                    <mat-icon>{{ button.icon }}</mat-icon>
+                    {{ button.i18nName | transloco }}
+                  </button>
                 }
-              </div>
+              }
             </div>
-          }
+          </div>
+        }
+        <div class="section-footer">
+          <ng-content select="[footer]"></ng-content>
         </div>
       </div>
     </mat-drawer>
