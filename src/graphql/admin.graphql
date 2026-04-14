@@ -142,8 +142,8 @@ query AdminRoomCount {
   }
 }
 
-query AdminMembershipsByUserId($userId: UUID!) {
-  adminMembershipsByUserId(userId: $userId) {
+query AdminRoomMembershipsByUserId($userId: UUID!) {
+  adminRoomMembershipsByUserId(userId: $userId) {
     edges {
       node {
         ...RoomMembership

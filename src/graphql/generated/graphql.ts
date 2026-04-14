@@ -575,10 +575,10 @@ export enum QnaState {
 export type Query = {
   __typename?: 'Query';
   adminAnnouncementStats?: Maybe<AdminAnnouncementStats>;
-  adminMembershipsByUserId?: Maybe<RoomMembershipConnection>;
   adminQnaStats?: Maybe<AdminQnaStats>;
   adminRoomById?: Maybe<AdminRoom>;
   adminRoomManagingMembersByRoomId?: Maybe<Array<RoomMember>>;
+  adminRoomMembershipsByUserId?: Maybe<RoomMembershipConnection>;
   adminRoomStats?: Maybe<AdminRoomStats>;
   adminRooms?: Maybe<AdminRoomConnection>;
   adminUserById?: Maybe<AdminUser>;
@@ -603,16 +603,16 @@ export type Query = {
   userByDisplayId?: Maybe<User>;
 };
 
-export type QueryAdminMembershipsByUserIdArgs = {
-  userId: Scalars['UUID']['input'];
-};
-
 export type QueryAdminRoomByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
 export type QueryAdminRoomManagingMembersByRoomIdArgs = {
   roomId: Scalars['UUID']['input'];
+};
+
+export type QueryAdminRoomMembershipsByUserIdArgs = {
+  userId: Scalars['UUID']['input'];
 };
 
 export type QueryAdminRoomsArgs = {
@@ -1247,13 +1247,13 @@ export type AdminRoomCountQuery = {
   adminRoomStats?: { __typename?: 'AdminRoomStats'; totalCount: number } | null;
 };
 
-export type AdminMembershipsByUserIdQueryVariables = Exact<{
+export type AdminRoomMembershipsByUserIdQueryVariables = Exact<{
   userId: Scalars['UUID']['input'];
 }>;
 
-export type AdminMembershipsByUserIdQuery = {
+export type AdminRoomMembershipsByUserIdQuery = {
   __typename?: 'Query';
-  adminMembershipsByUserId?: {
+  adminRoomMembershipsByUserId?: {
     __typename?: 'RoomMembershipConnection';
     edges?: Array<{
       __typename?: 'RoomMembershipEdge';
@@ -2976,9 +2976,9 @@ export class AdminRoomCountGql extends Apollo.Query<
     super(apollo);
   }
 }
-export const AdminMembershipsByUserIdDocument = gql`
-  query AdminMembershipsByUserId($userId: UUID!) {
-    adminMembershipsByUserId(userId: $userId) {
+export const AdminRoomMembershipsByUserIdDocument = gql`
+  query AdminRoomMembershipsByUserId($userId: UUID!) {
+    adminRoomMembershipsByUserId(userId: $userId) {
       edges {
         node {
           ...RoomMembership
@@ -2999,11 +2999,11 @@ export const AdminMembershipsByUserIdDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-export class AdminMembershipsByUserIdGql extends Apollo.Query<
-  AdminMembershipsByUserIdQuery,
-  AdminMembershipsByUserIdQueryVariables
+export class AdminRoomMembershipsByUserIdGql extends Apollo.Query<
+  AdminRoomMembershipsByUserIdQuery,
+  AdminRoomMembershipsByUserIdQueryVariables
 > {
-  document = AdminMembershipsByUserIdDocument;
+  document = AdminRoomMembershipsByUserIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

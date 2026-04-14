@@ -10,7 +10,7 @@ import { switchMap } from 'rxjs';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { FlexModule } from '@angular/flex-layout';
 import {
-  AdminMembershipsByUserIdGql,
+  AdminRoomMembershipsByUserIdGql,
   AdminUser,
   AdminUserByIdGql,
 } from '@gql/generated/graphql';
@@ -39,7 +39,7 @@ import { AdminEntityLinkComponent } from '@app/admin/admin-entity-link/admin-ent
 })
 export class UserDetailsComponent {
   private readonly adminUserById = inject(AdminUserByIdGql);
-  private readonly adminMemberships = inject(AdminMembershipsByUserIdGql);
+  private readonly adminMemberships = inject(AdminRoomMembershipsByUserIdGql);
 
   readonly userId = input.required<string>();
 
@@ -107,7 +107,7 @@ export class UserDetailsComponent {
   );
   readonly memberships = computed(() =>
     this.membershipsRef()
-      ?.data?.adminMembershipsByUserId?.edges?.filter((e) => !!e)
+      ?.data?.adminRoomMembershipsByUserId?.edges?.filter((e) => !!e)
       .map((e) => e?.node)
   );
   readonly isLoadingMemberships = computed(
