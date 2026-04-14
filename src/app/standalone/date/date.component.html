@@ -1,3 +1,5 @@
-<span [matTooltip]="timestamp | dateFormat: language" class="date">{{
-  timestamp | dateFromNow: language : refreshCounter
-}}</span>
+<span
+  [matTooltip]="timestamp() | dateFormat: language"
+  [class.date]="smallerText()"
+  >{{ timestamp() | dateFromNow: language : refreshCounter }}</span
+>

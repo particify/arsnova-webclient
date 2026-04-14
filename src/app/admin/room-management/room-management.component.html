@@ -1,7 +1,9 @@
 <app-admin-page-header headerText="room-management"> </app-admin-page-header>
 
 <mat-form-field appearance="outline">
-  <mat-label>{{ 'admin.admin-area.search-room' | transloco }}</mat-label>
+  <mat-label>{{
+    'admin.admin-area.search-room' | transloco: { count: roomCount() }
+  }}</mat-label>
   <input matInput appDisableForm [formControl]="formControl" />
   @if (formControl.value) {
     <button matSuffix mat-icon-button class="clear-button" (click)="clear()">
@@ -10,24 +12,84 @@
   }
 </mat-form-field>
 
+@let _rooms = rooms();
 @if (isLoading()) {
   <app-loading-indicator></app-loading-indicator>
 } @else {
-  @if (room()) {
-    <mat-card appearance="outlined" fxLayout="column" fxLayoutGap="16px">
-      <app-entity-properties [entity]="room()!!"></app-entity-properties>
-      <div fxLayoutAlign="space-between">
-        <button mat-stroked-button color="warn" (click)="deleteRoom()">
-          <mat-icon>delete</mat-icon>
-          {{ 'admin.admin-area.delete-room' | transloco }}
-        </button>
-        <button mat-raised-button color="primary" (click)="transferRoom()">
-          <mat-icon>forward</mat-icon>
-          {{ 'admin.admin-area.transfer-room' | transloco }}
-        </button>
-      </div>
-    </mat-card>
-  } @else if (formControl.value) {
+  @if (formControl.value && _rooms.length === 0) {
     <span>{{ 'admin.admin-area.no-rooms-found' | transloco }}</span>
+  } @else {
+    <table mat-table [dataSource]="_rooms">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>{{
+          'admin.admin-area.name' | transloco
+        }}</mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          [routerLink]="element.id"
+          class="clickable"
+        >
+          {{ element.name }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="room-number">
+        <mat-header-cell *matHeaderCellDef>{{
+          'admin.admin-area.room-number' | transloco
+        }}</mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          class="less-important clickable"
+          [routerLink]="element.id"
+        >
+          {{ element.shortId }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="createdAt">
+        <mat-header-cell *matHeaderCellDef>{{
+          'admin.admin-area.created' | transloco
+        }}</mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          class="less-important clickable"
+          [routerLink]="element.id"
+        >
+          <app-date
+            [timestamp]="element.createdAt"
+            [smallerText]="false"
+          ></app-date>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="more">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element" class="less-important">
+          <button mat-icon-button [matMenuTriggerFor]="moreMenu">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+          <mat-menu #moreMenu="matMenu">
+            <button mat-menu-item (click)="transferRoom(element.id)">
+              <mat-icon color="primary">forward</mat-icon>
+              {{ 'admin.admin-area.transfer-room' | transloco }}
+            </button>
+            <button
+              mat-menu-item
+              (click)="deleteRoom(element.id, element.name)"
+            >
+              <mat-icon color="warn">delete</mat-icon>
+              {{ 'admin.admin-area.delete' | transloco }}
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row
+        *matHeaderRowDef="['name', 'room-number', 'createdAt', 'more']"
+      ></mat-header-row>
+      <mat-row
+        *matRowDef="
+          let row;
+          columns: ['name', 'room-number', 'createdAt', 'more']
+        "
+        class="action-row"
+      ></mat-row>
+    </table>
   }
 }

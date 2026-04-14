@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
+  linkedSignal,
 } from '@angular/core';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -13,17 +15,16 @@ import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { InputDialogComponent } from '@app/admin/_dialogs/input-dialog/input-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormService } from '@app/core/services/util/form.service';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, map, of } from 'rxjs';
 import { AdminPageHeaderComponent } from '@app/admin/admin-page-header/admin-page-header.component';
-import { MatCard } from '@angular/material/card';
 import { FlexModule } from '@angular/flex-layout';
-import { EntityPropertiesComponent } from '@app/admin/entity-properties/entity-properties.component';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AdminDeleteRoomByIdGql,
-  AdminRoomGql,
+  AdminRoomCountGql,
+  AdminRoomsGql,
   AdminTransferRoomGql,
 } from '@gql/generated/graphql';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -35,17 +36,19 @@ import {
 } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AdminUtilService } from '@app/admin/admin-util.service';
+import { onlyCompleteData } from 'apollo-angular';
+import { MatTableModule } from '@angular/material/table';
+import { DateComponent } from '@app/standalone/date/date.component';
+import { CoreModule } from '@app/core/core.module';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-room-management',
   templateUrl: './room-management.component.html',
-  styleUrls: ['../admin-styles.scss'],
+  styleUrls: ['./room-management.component.scss'],
   imports: [
     AdminPageHeaderComponent,
-    MatCard,
     FlexModule,
-    EntityPropertiesComponent,
-    MatButton,
     MatIcon,
     TranslocoPipe,
     LoadingIndicatorComponent,
@@ -56,6 +59,10 @@ import { AdminUtilService } from '@app/admin/admin-util.service';
     MatInput,
     MatSuffix,
     MatIconButton,
+    MatTableModule,
+    DateComponent,
+    RouterLink,
+    CoreModule,
   ],
   providers: [AdminUtilService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,97 +74,100 @@ export class RoomManagementComponent {
   private readonly dialog = inject(MatDialog);
   private readonly formService = inject(FormService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly adminRoom = inject(AdminRoomGql);
+  private readonly adminRooms = inject(AdminRoomsGql);
   private readonly adminDeleteRoom = inject(AdminDeleteRoomByIdGql);
   private readonly adminTransferRoom = inject(AdminTransferRoomGql);
-  private readonly adminUtilService = inject(AdminUtilService);
+  private readonly adminRoomCount = inject(AdminRoomCountGql);
 
   readonly formControl = new FormControl();
 
-  private readonly startSearch$ = this.formControl.valueChanges.pipe(
-    takeUntilDestroyed(this.destroyRef),
-    map((value) => this.determineSearchVariables(value))
-  );
-
-  private readonly roomQueryRef = this.startSearch$.pipe(
-    switchMap((variables) =>
-      variables
-        ? this.adminRoom.watch({
-            errorPolicy: 'all',
-            variables,
-          }).valueChanges
-        : of(null)
+  private readonly roomsQueryRef = this.adminRooms.watch({
+    errorPolicy: 'all',
+  });
+  private readonly roomsResult = toSignal(
+    this.roomsQueryRef.valueChanges.pipe(
+      onlyCompleteData(),
+      map((r) => r.data?.adminRooms),
+      catchError(() => of())
     )
   );
 
-  readonly isLoading = toSignal(
-    this.roomQueryRef.pipe(map((r) => r?.loading ?? false))
-  );
-  readonly room = toSignal(
-    this.roomQueryRef.pipe(
-      map((r) =>
-        !!r && r.dataState === 'complete'
-          ? r.data?.adminRoomByIdOrShortId
-          : undefined
-      ),
-      catchError(() => of(undefined))
+  readonly isLoading = computed(
+    toSignal(
+      this.roomsQueryRef.valueChanges.pipe(map((r) => r?.loading ?? false))
     )
   );
+  readonly roomsFromSearch = computed(
+    () =>
+      this.roomsResult()
+        ?.edges?.filter((e) => !!e)
+        .map((e) => e.node) ?? []
+  );
+  readonly rooms = linkedSignal(this.roomsFromSearch);
 
-  private determineSearchVariables(input: string) {
-    if (input.length === 8) {
-      return { shortId: Number(input) };
-    } else if (this.adminUtilService.isUuid(input)) {
-      return { id: input };
+  readonly roomCount = toSignal(
+    this.adminRoomCount
+      .fetch()
+      .pipe(map((r) => r.data?.adminRoomStats?.totalCount))
+  );
+
+  constructor() {
+    this.formControl.valueChanges
+      .pipe(debounceTime(250), takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.search(value?.trim() ?? undefined);
+      });
+  }
+
+  private search(search?: string) {
+    if (search !== this.roomsQueryRef.options.variables.search) {
+      this.roomsQueryRef.options.variables.search = search;
+      this.roomsQueryRef.refetch();
     }
-    return;
   }
 
   clear() {
     this.formControl.setValue('');
   }
 
-  deleteRoom() {
-    const room = this.room();
-    if (room) {
-      const confirmAction = this.adminDeleteRoom.mutate({
-        variables: { id: room.id },
-        update: (cache, result) => {
-          if (result.data?.adminDeleteRoomById) {
-            const cacheId = cache.identify({
-              __typename: 'AdminRoom',
-              id: room.id,
-            });
-            if (cacheId) {
-              cache.evict({ id: cacheId });
-              cache.gc();
-            }
+  deleteRoom(id: string, name: string) {
+    const confirmAction = this.adminDeleteRoom.mutate({
+      variables: { id },
+      update: (cache, result) => {
+        if (result.data?.adminDeleteRoomById) {
+          const cacheId = cache.identify({
+            __typename: 'AdminRoom',
+            id: id,
+          });
+          if (cacheId) {
+            cache.evict({ id: cacheId });
+            cache.gc();
           }
-        },
-      });
-      const dialogRef = this.dialogService.openDeleteDialog(
-        'room-as-admin',
-        'dialog.really-delete-room',
-        room.name,
-        undefined,
-        () => confirmAction
-      );
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.clear();
-          const msg = this.translateService.translate(
-            'admin.admin-area.room-deleted'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.WARNING
-          );
         }
-      });
-    }
+      },
+    });
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'room-as-admin',
+      'dialog.really-delete-room',
+      name,
+      undefined,
+      () => confirmAction
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.clear();
+        const msg = this.translateService.translate(
+          'admin.admin-area.room-deleted'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      }
+    });
   }
 
-  transferRoom() {
+  transferRoom(roomId: string) {
     const dialogRef = this.dialog.open(InputDialogComponent, {
       data: {
         inputName: 'room-new-owner-id',
@@ -165,14 +175,13 @@ export class RoomManagementComponent {
         useUserSearch: true,
       },
     });
-    const room = this.room();
     dialogRef.componentInstance.clicked$.subscribe((userId) => {
-      if (!userId || !room) {
+      if (!userId) {
         return;
       }
       this.formService.disableForm();
       this.adminTransferRoom
-        .mutate({ variables: { roomId: room.id, userId: userId } })
+        .mutate({ variables: { roomId, userId: userId } })
         .subscribe({
           next: () => {
             this.formService.enableForm();

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, inject, input } from '@angular/core';
 
 import { Subject, takeUntil, timer } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
@@ -15,12 +15,11 @@ const TIME_UPDATE_INTERVAL = 60000;
 export class DateComponent implements OnDestroy {
   private translateService = inject(TranslocoService);
 
-  @Input({
-    required: true,
+  timestamp = input.required<Date, string | Date>({
     transform: (value: string | Date) =>
       typeof value === 'string' ? new Date(value) : value,
-  })
-  timestamp!: Date;
+  });
+  smallerText = input(true);
 
   refreshCounter = 0;
   destroyed$ = new Subject<void>();

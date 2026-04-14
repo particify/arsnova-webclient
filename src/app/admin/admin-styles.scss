@@ -1,8 +1,10 @@
 @use '../../variables' as *;
+@use '@angular/material' as mat;
 
 .mat-mdc-card {
   width: 100%;
   max-width: initial;
+  padding: $spacing-3;
 }
 
 .clear-button {
@@ -11,4 +13,35 @@
 
 .stats-card {
   margin-top: $spacing-2;
+}
+
+.mat-column-more {
+  max-width: 80px;
+}
+
+.less-important {
+  color: var(--on-surface-light);
+}
+
+.action-row {
+  &:hover,
+  :focus {
+    background-color: var(--background);
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+h3 {
+  margin: $spacing 0 $spacing-2;
+}
+
+table {
+  @include mat.table-overrides(
+    (
+      background-color: var(--surface),
+    )
+  );
 }

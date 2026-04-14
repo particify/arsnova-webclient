@@ -13,6 +13,7 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { TemplateManagementComponent } from '@app/admin/template-management/template-management.component';
 import { ReportManagementComponent } from '@app/admin/report-management/report-management.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { RoomDetailsComponent } from './room-details/room-details.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: 'rooms',
     component: RoomManagementComponent,
+  },
+  {
+    path: 'rooms/:roomId',
+    component: RoomDetailsComponent,
   },
   {
     path: 'templates',

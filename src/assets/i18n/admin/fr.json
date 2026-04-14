@@ -64,7 +64,7 @@
     "countByReason": "Décompte par raison",
     "announcement": "Annonces",
     "account-added": "Le compte a été ajouté.",
-    "search-account-with-id": "Chercher le compte avec l'ID utilisateur",
+    "search-account": "Chercher le compte",
     "cancel": "Annuler",
     "user-not-found": "Aucun utilisateur n'a été trouvé avec cet ID.",
     "userProfile": "Utilisateurs",

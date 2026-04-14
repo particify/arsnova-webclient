@@ -39,6 +39,11 @@ export type AdminAnnouncementStats = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type AdminQnaStats = {
+  __typename?: 'AdminQnaStats';
+  postCount: Scalars['Int']['output'];
+};
+
 export type AdminRoom = {
   __typename?: 'AdminRoom';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -54,6 +59,18 @@ export type AdminRoom = {
   updatedBy?: Maybe<Scalars['ID']['output']>;
 };
 
+export type AdminRoomConnection = {
+  __typename?: 'AdminRoomConnection';
+  edges?: Maybe<Array<Maybe<AdminRoomEdge>>>;
+  pageInfo: PageInfo;
+};
+
+export type AdminRoomEdge = {
+  __typename?: 'AdminRoomEdge';
+  cursor: Scalars['String']['output'];
+  node: AdminRoom;
+};
+
 export type AdminRoomQueryInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   shortId?: InputMaybe<Scalars['Int']['input']>;
@@ -61,16 +78,24 @@ export type AdminRoomQueryInput = {
 
 export type AdminRoomStats = {
   __typename?: 'AdminRoomStats';
+  activeRoomCount: Scalars['Int']['output'];
+  managingUserCount: Scalars['Int']['output'];
+  membershipCount: Scalars['Int']['output'];
+  participantCount: Scalars['Int']['output'];
   totalCount: Scalars['Int']['output'];
 };
 
 export type AdminUser = {
   __typename?: 'AdminUser';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  displayId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   language?: Maybe<Scalars['String']['output']>;
+  lastActivityAt?: Maybe<Scalars['DateTime']['output']>;
   mailAddress?: Maybe<Scalars['String']['output']>;
   uiSettings?: Maybe<UserUiSettings>;
   unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   username?: Maybe<Scalars['String']['output']>;
   verificationCode?: Maybe<Scalars['Int']['output']>;
   verificationErrors?: Maybe<Scalars['Int']['output']>;
@@ -550,9 +575,12 @@ export enum QnaState {
 export type Query = {
   __typename?: 'Query';
   adminAnnouncementStats?: Maybe<AdminAnnouncementStats>;
-  adminMembershipsByUserId?: Maybe<RoomMembershipConnection>;
-  adminRoomByIdOrShortId?: Maybe<AdminRoom>;
+  adminQnaStats?: Maybe<AdminQnaStats>;
+  adminRoomById?: Maybe<AdminRoom>;
+  adminRoomManagingMembersByRoomId?: Maybe<Array<RoomMember>>;
+  adminRoomMembershipsByUserId?: Maybe<RoomMembershipConnection>;
   adminRoomStats?: Maybe<AdminRoomStats>;
+  adminRooms?: Maybe<AdminRoomConnection>;
   adminUserById?: Maybe<AdminUser>;
   adminUserStats?: Maybe<AdminUserStats>;
   adminUsers?: Maybe<AdminUserConnection>;
@@ -575,12 +603,24 @@ export type Query = {
   userByDisplayId?: Maybe<User>;
 };
 
-export type QueryAdminMembershipsByUserIdArgs = {
+export type QueryAdminRoomByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QueryAdminRoomManagingMembersByRoomIdArgs = {
+  roomId: Scalars['UUID']['input'];
+};
+
+export type QueryAdminRoomMembershipsByUserIdArgs = {
   userId: Scalars['UUID']['input'];
 };
 
-export type QueryAdminRoomByIdOrShortIdArgs = {
-  input: AdminRoomQueryInput;
+export type QueryAdminRoomsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryAdminUserByIdArgs = {
@@ -887,12 +927,16 @@ export type AdminUserDetailsFragment = {
   __typename?: 'AdminUser';
   id: string;
   username?: string | null;
+  displayId?: string | null;
   mailAddress?: string | null;
   unverifiedMailAddress?: string | null;
   language?: string | null;
   verificationCode?: number | null;
   verificationErrors?: number | null;
   verificationExpiresAt?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  lastActivityAt?: string | null;
   uiSettings?: {
     __typename?: 'UserUiSettings';
     contentAnswersDirectlyBelowChart?: boolean | null;
@@ -927,12 +971,16 @@ export type AdminUserByIdQuery = {
     __typename?: 'AdminUser';
     id: string;
     username?: string | null;
+    displayId?: string | null;
     mailAddress?: string | null;
     unverifiedMailAddress?: string | null;
     language?: string | null;
     verificationCode?: number | null;
     verificationErrors?: number | null;
     verificationExpiresAt?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    lastActivityAt?: string | null;
     uiSettings?: {
       __typename?: 'UserUiSettings';
       contentAnswersDirectlyBelowChart?: boolean | null;
@@ -960,12 +1008,16 @@ export type AdminUsersQuery = {
         __typename?: 'AdminUser';
         id: string;
         username?: string | null;
+        displayId?: string | null;
         mailAddress?: string | null;
         unverifiedMailAddress?: string | null;
         language?: string | null;
         verificationCode?: number | null;
         verificationErrors?: number | null;
         verificationExpiresAt?: string | null;
+        createdAt?: string | null;
+        updatedAt?: string | null;
+        lastActivityAt?: string | null;
         uiSettings?: {
           __typename?: 'UserUiSettings';
           contentAnswersDirectlyBelowChart?: boolean | null;
@@ -1004,12 +1056,16 @@ export type AdminCreateUserMutation = {
     __typename?: 'AdminUser';
     id: string;
     username?: string | null;
+    displayId?: string | null;
     mailAddress?: string | null;
     unverifiedMailAddress?: string | null;
     language?: string | null;
     verificationCode?: number | null;
     verificationErrors?: number | null;
     verificationExpiresAt?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    lastActivityAt?: string | null;
     uiSettings?: {
       __typename?: 'UserUiSettings';
       contentAnswersDirectlyBelowChart?: boolean | null;
@@ -1030,12 +1086,16 @@ export type AdminVerifyUserByIdMutation = {
     __typename?: 'AdminUser';
     id: string;
     username?: string | null;
+    displayId?: string | null;
     mailAddress?: string | null;
     unverifiedMailAddress?: string | null;
     language?: string | null;
     verificationCode?: number | null;
     verificationErrors?: number | null;
     verificationExpiresAt?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    lastActivityAt?: string | null;
     uiSettings?: {
       __typename?: 'UserUiSettings';
       contentAnswersDirectlyBelowChart?: boolean | null;
@@ -1046,14 +1106,13 @@ export type AdminVerifyUserByIdMutation = {
   };
 };
 
-export type AdminRoomQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ID']['input']>;
-  shortId?: InputMaybe<Scalars['Int']['input']>;
+export type AdminRoomByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
 }>;
 
-export type AdminRoomQuery = {
+export type AdminRoomByIdQuery = {
   __typename?: 'Query';
-  adminRoomByIdOrShortId?: {
+  adminRoomById?: {
     __typename?: 'AdminRoom';
     id: string;
     shortId: string;
@@ -1067,6 +1126,62 @@ export type AdminRoomQuery = {
     updatedBy?: string | null;
     updatedAt?: string | null;
   } | null;
+};
+
+export type AdminRoomsQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  cursor?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type AdminRoomsQuery = {
+  __typename?: 'Query';
+  adminRooms?: {
+    __typename?: 'AdminRoomConnection';
+    edges?: Array<{
+      __typename?: 'AdminRoomEdge';
+      cursor: string;
+      node: {
+        __typename?: 'AdminRoom';
+        id: string;
+        shortId: string;
+        name: string;
+        description?: string | null;
+        descriptionRendered?: string | null;
+        language?: string | null;
+        focusModeEnabled?: boolean | null;
+        createdBy?: string | null;
+        createdAt?: string | null;
+        updatedBy?: string | null;
+        updatedAt?: string | null;
+      };
+    } | null> | null;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      endCursor?: string | null;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+    };
+  } | null;
+};
+
+export type AdminRoomManagingMembersByRoomIdQueryVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type AdminRoomManagingMembersByRoomIdQuery = {
+  __typename?: 'Query';
+  adminRoomManagingMembersByRoomId?: Array<{
+    __typename?: 'RoomMember';
+    role?: RoomRole | null;
+    user: {
+      __typename?: 'User';
+      id: string;
+      displayId?: string | null;
+      displayName?: string | null;
+      verified: boolean;
+    };
+  }> | null;
 };
 
 export type AdminDeleteRoomByIdMutationVariables = Exact<{
@@ -1118,13 +1233,31 @@ export type AdminStatsQuery = {
   } | null;
 };
 
-export type AdminMembershipsByUserIdQueryVariables = Exact<{
+export type AdminUserCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AdminUserCountQuery = {
+  __typename?: 'Query';
+  adminUserStats?: {
+    __typename?: 'AdminUserStats';
+    verifiedCount: number;
+    pendingCount: number;
+  } | null;
+};
+
+export type AdminRoomCountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AdminRoomCountQuery = {
+  __typename?: 'Query';
+  adminRoomStats?: { __typename?: 'AdminRoomStats'; totalCount: number } | null;
+};
+
+export type AdminRoomMembershipsByUserIdQueryVariables = Exact<{
   userId: Scalars['UUID']['input'];
 }>;
 
-export type AdminMembershipsByUserIdQuery = {
+export type AdminRoomMembershipsByUserIdQuery = {
   __typename?: 'Query';
-  adminMembershipsByUserId?: {
+  adminRoomMembershipsByUserId?: {
     __typename?: 'RoomMembershipConnection';
     edges?: Array<{
       __typename?: 'RoomMembershipEdge';
@@ -2429,6 +2562,7 @@ export const AdminUserDetailsFragmentDoc = gql`
   fragment AdminUserDetails on AdminUser {
     id
     username
+    displayId
     mailAddress
     unverifiedMailAddress
     uiSettings {
@@ -2441,6 +2575,9 @@ export const AdminUserDetailsFragmentDoc = gql`
     verificationCode
     verificationErrors
     verificationExpiresAt
+    createdAt
+    updatedAt
+    lastActivityAt
   }
 `;
 export const AdminRoomDetailsFragmentDoc = gql`
@@ -2558,7 +2695,7 @@ export const AdminUsersDocument = gql`
     adminUsers(
       search: $search
       exactSearchMode: $exactSearchMode
-      first: 10
+      first: 50
       after: $cursor
     ) {
       edges {
@@ -2654,9 +2791,9 @@ export class AdminVerifyUserByIdGql extends Apollo.Mutation<
     super(apollo);
   }
 }
-export const AdminRoomDocument = gql`
-  query AdminRoom($id: ID, $shortId: Int) {
-    adminRoomByIdOrShortId(input: { id: $id, shortId: $shortId }) {
+export const AdminRoomByIdDocument = gql`
+  query AdminRoomById($id: ID!) {
+    adminRoomById(id: $id) {
       ...AdminRoomDetails
     }
   }
@@ -2666,11 +2803,66 @@ export const AdminRoomDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-export class AdminRoomGql extends Apollo.Query<
-  AdminRoomQuery,
-  AdminRoomQueryVariables
+export class AdminRoomByIdGql extends Apollo.Query<
+  AdminRoomByIdQuery,
+  AdminRoomByIdQueryVariables
 > {
-  document = AdminRoomDocument;
+  document = AdminRoomByIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminRoomsDocument = gql`
+  query AdminRooms($search: String, $cursor: String) {
+    adminRooms(search: $search, first: 50, after: $cursor) {
+      edges {
+        node {
+          ...AdminRoomDetails
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+  }
+  ${AdminRoomDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminRoomsGql extends Apollo.Query<
+  AdminRoomsQuery,
+  AdminRoomsQueryVariables
+> {
+  document = AdminRoomsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminRoomManagingMembersByRoomIdDocument = gql`
+  query AdminRoomManagingMembersByRoomId($roomId: UUID!) {
+    adminRoomManagingMembersByRoomId(roomId: $roomId) {
+      ...RoomMember
+    }
+  }
+  ${RoomMemberFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminRoomManagingMembersByRoomIdGql extends Apollo.Query<
+  AdminRoomManagingMembersByRoomIdQuery,
+  AdminRoomManagingMembersByRoomIdQueryVariables
+> {
+  document = AdminRoomManagingMembersByRoomIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -2746,9 +2938,52 @@ export class AdminStatsGql extends Apollo.Query<
     super(apollo);
   }
 }
-export const AdminMembershipsByUserIdDocument = gql`
-  query AdminMembershipsByUserId($userId: UUID!) {
-    adminMembershipsByUserId(userId: $userId) {
+export const AdminUserCountDocument = gql`
+  query AdminUserCount {
+    adminUserStats {
+      verifiedCount
+      pendingCount
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminUserCountGql extends Apollo.Query<
+  AdminUserCountQuery,
+  AdminUserCountQueryVariables
+> {
+  document = AdminUserCountDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminRoomCountDocument = gql`
+  query AdminRoomCount {
+    adminRoomStats {
+      totalCount
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminRoomCountGql extends Apollo.Query<
+  AdminRoomCountQuery,
+  AdminRoomCountQueryVariables
+> {
+  document = AdminRoomCountDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminRoomMembershipsByUserIdDocument = gql`
+  query AdminRoomMembershipsByUserId($userId: UUID!) {
+    adminRoomMembershipsByUserId(userId: $userId) {
       edges {
         node {
           ...RoomMembership
@@ -2769,11 +3004,11 @@ export const AdminMembershipsByUserIdDocument = gql`
 @Injectable({
   providedIn: 'root',
 })
-export class AdminMembershipsByUserIdGql extends Apollo.Query<
-  AdminMembershipsByUserIdQuery,
-  AdminMembershipsByUserIdQueryVariables
+export class AdminRoomMembershipsByUserIdGql extends Apollo.Query<
+  AdminRoomMembershipsByUserIdQuery,
+  AdminRoomMembershipsByUserIdQueryVariables
 > {
-  document = AdminMembershipsByUserIdDocument;
+  document = AdminRoomMembershipsByUserIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
