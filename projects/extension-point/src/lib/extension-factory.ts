@@ -1,5 +1,4 @@
 import {
-  ComponentFactoryResolver,
   Injectable,
   ViewContainerRef,
   ComponentRef,
@@ -16,7 +15,6 @@ import { FeatureFlagService } from '@app/core/services/util/feature-flag.service
   providedIn: 'root',
 })
 export class ExtensionFactory {
-  private resolver = inject(ComponentFactoryResolver);
   private featureFlagService = inject(FeatureFlagService);
 
   extensions: { [key: string]: Extension } = {};
@@ -56,8 +54,7 @@ export class ExtensionFactory {
       return null;
     }
     ref.clear();
-    const factory = this.resolver.resolveComponentFactory(extension.getType());
-    const componentRef = ref.createComponent(factory);
+    const componentRef = ref.createComponent(extension.getType());
     if (typeof data === 'string') {
       data = JSON.parse(data);
     }
