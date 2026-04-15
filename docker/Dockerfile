@@ -1,4 +1,4 @@
-FROM nginx:stable-alpine@sha256:6a0f9e30dfafae85467e60bc66d48076df1c0825ec3f9b518a2a9d3d9264ea26
+FROM nginx:stable-alpine@sha256:2e665dfdd34c48b5a4dec0cf06496743f922a27ca1339273464a3badf916c0ae
 LABEL maintainer "Daniel Gerhardt <code@dgerhardt.net>"
 
 ARG ARSNOVA_BUILD_DIR
