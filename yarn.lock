@@ -166,13 +166,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altcha/crypto@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "@altcha/crypto@npm:0.0.1"
-  checksum: 10c0/686cfb4a2ab536bcc041cff0acaff97862f4bd27570f63306ad9c948ba8d579c76770088542b1056784b43e5daa9417ba2346ebece00f234cd6aade839e06fa9
-  languageName: node
-  linkType: hard
-
 "@ampproject/remapping@npm:2.3.0, @ampproject/remapping@npm:^2.3.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -5160,13 +5153,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:4.18.0":
-  version: 4.18.0
-  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.18.0"
-  conditions: os=linux & cpu=x64 & libc=glibc
-  languageName: node
-  linkType: hard
-
 "@rollup/rollup-linux-x64-gnu@npm:4.60.1":
   version: 4.60.1
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.60.1"
@@ -6808,16 +6794,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"altcha@npm:2.3.0":
-  version: 2.3.0
-  resolution: "altcha@npm:2.3.0"
+"altcha@npm:3.0.2":
+  version: 3.0.2
+  resolution: "altcha@npm:3.0.2"
   dependencies:
-    "@altcha/crypto": "npm:^0.0.1"
-    "@rollup/rollup-linux-x64-gnu": "npm:4.18.0"
-  dependenciesMeta:
-    "@rollup/rollup-linux-x64-gnu":
-      optional: true
-  checksum: 10c0/5ce8cc2671c827d57ee62797ad9bd209c5c1d5736a113af10a74e81aa1be907626d8aea9c6c0eceff84d97511eeeeb88fa7082dc07e991e4f08416555999333b
+    hash-wasm: "npm:^4.12.0"
+  checksum: 10c0/e108111c6ce44b8d470508f74a90ec8fd2cbe10036798493f5c5a5374aa04e8a6f89106414aa029a276014a7d558df2583226d69d0d6251c4272b1b520874979
   languageName: node
   linkType: hard
 
@@ -7085,7 +7067,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:8.58.1"
     "@typescript-eslint/parser": "npm:8.58.1"
     "@typescript-eslint/utils": "npm:8.58.1"
-    altcha: "npm:2.3.0"
+    altcha: "npm:3.0.2"
     angular-material-css-vars: "npm:10.0.0"
     apollo-angular: "npm:13.0.0"
     backoff-rxjs: "npm:7.0.0"
@@ -10431,6 +10413,13 @@ __metadata:
   dependencies:
     has-symbols: "npm:^1.0.3"
   checksum: 10c0/a8b166462192bafe3d9b6e420a1d581d93dd867adb61be223a17a8d6dad147aa77a8be32c961bb2f27b3ef893cae8d36f564ab651f5e9b7938ae86f74027c48c
+  languageName: node
+  linkType: hard
+
+"hash-wasm@npm:^4.12.0":
+  version: 4.12.0
+  resolution: "hash-wasm@npm:4.12.0"
+  checksum: 10c0/6cb95055319810b6f673de755289960683a9831807690795f0e8918b2fd7e6ae5b82a9dc47cbace171cf2814b412ef68c315a0ead0b4d96bd3e56a05e4bde136
   languageName: node
   linkType: hard
 

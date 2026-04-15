@@ -1,1 +1,1 @@
-import 'altcha/worker';
+import 'altcha/workers/pbkdf2';
