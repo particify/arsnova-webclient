@@ -1,14 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import {
-  GlobalStorageService,
-  STORAGE_KEYS,
-} from '@app/core/services/util/global-storage.service';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { RouterOutlet } from '@angular/router';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
-import { catchError, map, Observable, of, shareReplay } from 'rxjs';
-import { LanguageService } from '@app/core/services/util/language.service';
-import { SystemHealth } from '@app/admin/_models/system-health';
+import { catchError, map, of, shareReplay } from 'rxjs';
 import { FeatureFlagService } from '@app/core/services/util/feature-flag.service';
 import {
   NavButton,
@@ -29,38 +23,12 @@ import { ExtensionPointComponent } from '@projects/extension-point/src/lib/exten
     TranslocoPipe,
   ],
 })
-export class AdminHomeComponent implements OnInit {
-  protected langService = inject(LanguageService);
-  protected translateService = inject(TranslocoService);
-  protected globalStorageService = inject(GlobalStorageService);
-  protected router = inject(Router);
-  protected systemInfoService = inject(SystemInfoService);
-  protected featureFlagService = inject(FeatureFlagService);
+export class AdminHomeComponent {
+  private readonly systemInfoService = inject(SystemInfoService);
+  private readonly featureFlagService = inject(FeatureFlagService);
 
-  healthInfo: Observable<SystemHealth>;
-  navButtonSection: NavButtonSection[] = [];
-
-  constructor() {
-    const langService = this.langService;
-    const translateService = this.translateService;
-
-    langService.langEmitter.subscribe((lang) => {
-      translateService.setActiveLang(lang);
-    });
-    this.healthInfo = this.getHealthInfo();
-  }
-
-  ngOnInit() {
-    this.translateService.setActiveLang(
-      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
-    );
-    this.navButtonSection.push(
-      new NavButtonSection(this.getButtons(), 'admin.admin-area.general')
-    );
-  }
-
-  getButtons(): NavButton[] {
-    return [
+  navButtonSection: NavButtonSection[] = [
+    new NavButtonSection([
       new NavButton('stats', 'admin.admin-area.system-stats', 'insights'),
       new NavButton('users', 'admin.admin-area.user-management', 'people'),
       new NavButton(
@@ -84,15 +52,14 @@ export class AdminHomeComponent implements OnInit {
         'status',
         'admin.admin-area.status-details',
         'dns',
-        this.healthInfo.pipe(map((h) => !!h.components))
+        this.systemInfoService
+          .getHealthInfo()
+          .pipe(
+            catchError((response) => of(response.error)),
+            shareReplay()
+          )
+          .pipe(map((h) => !!h.components))
       ),
-    ];
-  }
-
-  getHealthInfo() {
-    return this.systemInfoService.getHealthInfo().pipe(
-      catchError((response) => of(response.error)),
-      shareReplay()
-    );
-  }
+    ]),
+  ];
 }
