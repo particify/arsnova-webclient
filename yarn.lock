@@ -2760,16 +2760,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/introspection@npm:5.0.1":
-  version: 5.0.1
-  resolution: "@graphql-codegen/introspection@npm:5.0.1"
+"@graphql-codegen/introspection@npm:5.0.2":
+  version: 5.0.2
+  resolution: "@graphql-codegen/introspection@npm:5.0.2"
   dependencies:
-    "@graphql-codegen/plugin-helpers": "npm:^6.1.1"
-    "@graphql-codegen/visitor-plugin-common": "npm:^6.2.4"
-    tslib: "npm:~2.6.0"
+    "@graphql-codegen/plugin-helpers": "npm:^6.3.0"
+    "@graphql-codegen/visitor-plugin-common": "npm:^6.3.0"
+    tslib: "npm:^2.8.0"
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 10c0/d154c33f9f6d7f3c1dd9d68cae4e6b1da9f9c7df6774e2dc5c50992e3fef93534e0a9270e2080250a1a8cee33d8e605e75756d7bcb7c904e7e6f802ac77dcb14
+  checksum: 10c0/e1b2b41cb5eab0dd9e789aa22c7a43a2ddee2277c3fe2990f51a2e7442f785e46c30b1484c27cae9b49143334d7ab2437cffb31058637bd9feb2f0d8bf96accb
   languageName: node
   linkType: hard
 
@@ -2788,7 +2788,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/schema-ast@npm:^5.0.1, @graphql-codegen/schema-ast@npm:^5.0.2":
+"@graphql-codegen/schema-ast@npm:^5.0.2":
   version: 5.0.2
   resolution: "@graphql-codegen/schema-ast@npm:5.0.2"
   dependencies:
@@ -2869,22 +2869,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript@npm:5.0.9":
-  version: 5.0.9
-  resolution: "@graphql-codegen/typescript@npm:5.0.9"
-  dependencies:
-    "@graphql-codegen/plugin-helpers": "npm:^6.1.1"
-    "@graphql-codegen/schema-ast": "npm:^5.0.1"
-    "@graphql-codegen/visitor-plugin-common": "npm:^6.2.4"
-    auto-bind: "npm:~4.0.0"
-    tslib: "npm:~2.6.0"
-  peerDependencies:
-    graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 10c0/e2b69b84ba9530876ad472df7a0a1f2327edc6c9393b95234c0002aec579380c816008304c2c7cbb258a4391d4dbec0151804f7887b631f6793d910bb6531587
-  languageName: node
-  linkType: hard
-
-"@graphql-codegen/typescript@npm:^5.0.10, @graphql-codegen/typescript@npm:^5.0.9":
+"@graphql-codegen/typescript@npm:5.0.10, @graphql-codegen/typescript@npm:^5.0.10, @graphql-codegen/typescript@npm:^5.0.9":
   version: 5.0.10
   resolution: "@graphql-codegen/typescript@npm:5.0.10"
   dependencies:
@@ -7049,8 +7034,8 @@ __metadata:
     "@fontsource/material-symbols-outlined": "npm:5.2.41"
     "@fontsource/roboto": "npm:5.2.10"
     "@graphql-codegen/cli": "npm:6.2.1"
-    "@graphql-codegen/introspection": "npm:5.0.1"
-    "@graphql-codegen/typescript": "npm:5.0.9"
+    "@graphql-codegen/introspection": "npm:5.0.2"
+    "@graphql-codegen/typescript": "npm:5.0.10"
     "@graphql-codegen/typescript-apollo-angular": "npm:5.0.0"
     "@graphql-codegen/typescript-operations": "npm:5.0.9"
     "@jsverse/transloco": "npm:8.3.0"
