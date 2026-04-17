@@ -80,6 +80,8 @@ import {
   GraphqlEntityChangeHandler,
   graphqlEntityChangeHandlerInitializer,
 } from '@app/core/services/graphql-entity-change-handler';
+import { iconFontInitializer } from '@app/icon-font';
+import { MatIconRegistry } from '@angular/material/icon';
 
 if (environment.production) {
   enableProdMode();
@@ -101,6 +103,7 @@ export const AppConfig: ApplicationConfig = {
       useValue: environment,
     },
     apolloProvider,
+    provideAppInitializer(() => iconFontInitializer(inject(MatIconRegistry))),
     provideAppInitializer(() => {
       const initializerFn = initAuthenticationService(
         inject(AuthenticationService)
