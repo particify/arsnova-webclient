@@ -17,13 +17,11 @@
 
 .mat-drawer-container {
   width: 100vw;
-  height: var(--full-height);
   background-color: unset;
   margin-top: var(--hints-height);
 }
 
 .mat-drawer {
-  height: var(--full-height);
   width: $drawer-modal-width;
   background-color: var(--surface);
 }
