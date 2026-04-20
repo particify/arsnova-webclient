@@ -176,9 +176,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@analogjs/storybook-angular@npm:2.4.7":
-  version: 2.4.7
-  resolution: "@analogjs/storybook-angular@npm:2.4.7"
+"@analogjs/storybook-angular@npm:2.4.8":
+  version: 2.4.8
+  resolution: "@analogjs/storybook-angular@npm:2.4.8"
   dependencies:
     "@storybook/builder-vite": "npm:^10.0.0"
   peerDependencies:
@@ -186,7 +186,7 @@ __metadata:
     "@storybook/angular": ^10.0.0
     storybook: ^10.0.0
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: 10c0/43fbf79e009cf4c2a114dbb66ff0ea1f11b99958e773e13342725b78cc70b153163d4b3f1524689c4e29d37f3c3294837e68ab2a3a655edb11c275d20be33afb
+  checksum: 10c0/d6f937f972a5544b28fdacbf2be16ab8387f1256e844fea6dc1da9a4eaa039d5d25348cef567e521975762f4fab2c552c03c4b4243830b1a641208bb6843e0c0
   languageName: node
   linkType: hard
 
@@ -6924,7 +6924,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "arsnova-webclient@workspace:."
   dependencies:
-    "@analogjs/storybook-angular": "npm:2.4.7"
+    "@analogjs/storybook-angular": "npm:2.4.8"
     "@angular-eslint/builder": "npm:21.3.1"
     "@angular-eslint/eslint-plugin": "npm:21.3.1"
     "@angular-eslint/eslint-plugin-template": "npm:21.3.1"
