@@ -570,6 +570,13 @@ export class AbstractCommentsPageComponent {
 
   setPeriod(period?: number) {
     this.selectedPeriodFilter.set(period);
-    this.globalStorageService.setItem(STORAGE_KEYS.COMMENT_TIME_FILTER, period);
+    if (period) {
+      this.globalStorageService.setItem(
+        STORAGE_KEYS.COMMENT_TIME_FILTER,
+        period
+      );
+    } else {
+      this.globalStorageService.removeItem(STORAGE_KEYS.COMMENT_TIME_FILTER);
+    }
   }
 }
