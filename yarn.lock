@@ -2917,7 +2917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/plugin-helpers@npm:^6.1.1, @graphql-codegen/plugin-helpers@npm:^6.3.0":
+"@graphql-codegen/plugin-helpers@npm:^6.3.0":
   version: 6.3.0
   resolution: "@graphql-codegen/plugin-helpers@npm:6.3.0"
   dependencies:
@@ -2960,18 +2960,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-apollo-angular@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@graphql-codegen/typescript-apollo-angular@npm:5.0.0"
+"@graphql-codegen/typescript-apollo-angular@npm:5.0.1":
+  version: 5.0.1
+  resolution: "@graphql-codegen/typescript-apollo-angular@npm:5.0.1"
   dependencies:
-    "@graphql-codegen/plugin-helpers": "npm:^6.1.1"
-    "@graphql-codegen/visitor-plugin-common": "npm:^6.2.4"
+    "@graphql-codegen/plugin-helpers": "npm:^6.3.0"
+    "@graphql-codegen/visitor-plugin-common": "npm:^6.3.0"
     auto-bind: "npm:~4.0.0"
     change-case-all: "npm:1.0.15"
     tslib: "npm:^2.8.1"
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 10c0/b9df5af91c8e06cd2349b7630afec4a176990a5007517bf40a98313e6d0316f85e058d93de833212326a1548bdb7f93358bd19be9e78940ca9abc9094f0eb133
+  checksum: 10c0/c5358955d4db03957fb41cdcabe258812e07d294f83ce80a56ced90635986f46c34d583c4416c4f85663db32df66f2717d7fab37428677c9e7199ac00a8bc583
   languageName: node
   linkType: hard
 
@@ -3009,7 +3009,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/visitor-plugin-common@npm:^6.2.4, @graphql-codegen/visitor-plugin-common@npm:^6.3.0":
+"@graphql-codegen/visitor-plugin-common@npm:^6.3.0":
   version: 6.3.0
   resolution: "@graphql-codegen/visitor-plugin-common@npm:6.3.0"
   dependencies:
@@ -7078,7 +7078,7 @@ __metadata:
     "@graphql-codegen/cli": "npm:6.3.1"
     "@graphql-codegen/introspection": "npm:5.0.2"
     "@graphql-codegen/typescript": "npm:5.0.10"
-    "@graphql-codegen/typescript-apollo-angular": "npm:5.0.0"
+    "@graphql-codegen/typescript-apollo-angular": "npm:5.0.1"
     "@graphql-codegen/typescript-operations": "npm:5.1.0"
     "@jsverse/transloco": "npm:8.3.0"
     "@playwright/test": "npm:1.59.1"
