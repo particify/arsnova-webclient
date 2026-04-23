@@ -1,22 +1,20 @@
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import {
-  AfterViewInit,
   Component,
-  EventEmitter,
   inject,
-  Input,
-  Output,
-  ViewChild,
-  ChangeDetectionStrategy,
+  input,
+  viewChild,
+  output,
+  effect,
+  booleanAttribute,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { Content } from '@app/core/models/content';
-import { UserUiSettings } from '@gql/generated/graphql';
+import { Content, UserUiSettings } from '@gql/generated/graphql';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
-import { PresentationService } from '@app/core/services/util/presentation.service';
+import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 
 @Component({
   selector: 'app-content-stepper',
@@ -29,38 +27,39 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
     LoadingIndicatorComponent,
   ],
   templateUrl: './content-stepper.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-stepper.component.scss',
 })
-export class ContentStepperComponent implements AfterViewInit {
-  private presentationService = inject(PresentationService);
+export class ContentStepperComponent {
+  private readonly contentResultsServive = inject(ContentResultsService);
 
-  @ViewChild(StepperComponent) stepper!: StepperComponent;
+  stepper = viewChild.required(StepperComponent);
 
-  @Input({ required: true }) contents!: Content[];
-  @Input({ required: true }) settings!: UserUiSettings;
-  @Input({ required: true }) startIndex!: number;
-  @Input() hideControls = false;
-  @Input() showStepInfo = true;
-  @Input() isLiveMode = false;
-  @Input() language?: string;
-  @Output() indexChanged: EventEmitter<number> = new EventEmitter<number>();
+  contents = input.required<Content[]>();
+  settings = input.required<UserUiSettings>();
+  startIndex = input.required<number>();
+
+  hideControls = input(false, { transform: booleanAttribute });
+  showStepInfo = input(true);
+  isLiveMode = input(false, { transform: booleanAttribute });
+  language = input<string>();
+
+  indexChanged = output<number>();
 
   currentStep?: number;
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.stepper?.init(this.startIndex, this.contents.length);
-      this.updateIndex(this.startIndex);
+  constructor() {
+    effect(() => {
+      if (this.stepper()) {
+        this.stepper().init(this.startIndex(), this.contents().length);
+        this.currentStep = this.startIndex();
+      }
     });
   }
 
   updateIndex(index: number) {
     this.currentStep = index;
-    this.presentationService.updateResultsDisplayed(false);
-    this.presentationService.updateCorrectResultsDisplayed(false);
-    setTimeout(() => {
-      this.indexChanged.emit(index);
-    }, 300);
+    this.contentResultsServive.setResultsVisible(false);
+    this.contentResultsServive.setCorrectResultsVisible(false);
+    this.indexChanged.emit(index);
   }
 }

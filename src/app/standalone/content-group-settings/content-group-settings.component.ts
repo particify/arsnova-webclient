@@ -12,7 +12,6 @@ import {
   GroupType,
   PublishingMode,
 } from '@app/core/models/content-group';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
@@ -44,7 +43,6 @@ export class ContentGroupSettingsComponent
     groupNames: string[];
     alreadyAnswered: boolean;
   }>(MAT_DIALOG_DATA);
-  private contentGroupService = inject(ContentGroupService);
   private contentPublishService = inject(ContentPublishService);
 
   nameFormControl = new UntypedFormControl();
@@ -72,24 +70,8 @@ export class ContentGroupSettingsComponent
 
   saveGroup() {
     if (this.nameFormControl.valid) {
-      this.disableForm();
-      const changes = {
-        name: this.nameFormControl.value,
-        statisticsPublished: this.group.statisticsPublished,
-        correctOptionsPublished: this.group.correctOptionsPublished,
-        leaderboardEnabled: this.group.leaderboardEnabled,
-        published: this.group.published,
-        publishingMode: this.group.publishingMode,
-        publishingIndex: this.group.publishingIndex,
-      };
-      this.contentGroupService
-        .patchContentGroup(this.group, changes)
-        .subscribe({
-          next: (contentGroup) => {
-            this.dialogRef.close(contentGroup);
-          },
-          error: () => this.enableForm(),
-        });
+      // TODO: Update questionnaire
+      this.dialogRef.close();
     }
   }
 

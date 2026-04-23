@@ -9,7 +9,7 @@ import { ContentChoice } from '@app/core/models/content-choice';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { IMessage } from '@stomp/stompjs';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
-import { ContentType } from '@app/core/models/content-type.enum';
+import { ContentType as LegacyContentType } from '@app/core/models/content-type.enum';
 import { ContentCreated } from '@app/core/models/events/content-created';
 import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
@@ -18,9 +18,9 @@ import { DialogService } from '@app/core/services/util/dialog.service';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ContentState } from '@app/core/models/content-state';
-import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
-import { AnswerOption } from '@app/core/models/answer-option';
+import { DisplayAnswer } from '@app/creator/questionnaire/content-editing/_models/display-answer';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
+import { ContentType } from '@gql/generated/graphql';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -44,18 +44,25 @@ export class ContentService extends AbstractEntityService<Content> {
     bannedKeywords: '/banned-keywords',
   };
 
+  legacyTypeIcons: Map<LegacyContentType, string> = new Map<
+    LegacyContentType,
+    string
+  >([
+    [LegacyContentType.CHOICE, 'list'],
+    [LegacyContentType.SCALE, 'mood'],
+    [LegacyContentType.BINARY, 'rule'],
+    [LegacyContentType.TEXT, 'description'],
+    [LegacyContentType.SHORT_ANSWER, 'sms'],
+    [LegacyContentType.SORT, 'move_up'],
+    [LegacyContentType.PRIORITIZATION, 'sort'],
+    [LegacyContentType.NUMERIC, 'numbers'],
+    [LegacyContentType.SLIDE, 'info'],
+    [LegacyContentType.FLASHCARD, 'school'],
+  ]);
+
   typeIcons: Map<ContentType, string> = new Map<ContentType, string>([
-    [ContentType.CHOICE, 'list'],
-    [ContentType.SCALE, 'mood'],
-    [ContentType.BINARY, 'rule'],
-    [ContentType.TEXT, 'description'],
-    [ContentType.SHORT_ANSWER, 'sms'],
-    [ContentType.WORDCLOUD, 'cloud'],
-    [ContentType.SORT, 'move_up'],
-    [ContentType.PRIORITIZATION, 'sort'],
-    [ContentType.NUMERIC, 'numbers'],
-    [ContentType.SLIDE, 'info'],
-    [ContentType.FLASHCARD, 'school'],
+    [ContentType.Choice, 'list'],
+    [ContentType.Wordcloud, 'cloud'],
   ]);
 
   constructor() {
@@ -357,7 +364,7 @@ export class ContentService extends AbstractEntityService<Content> {
 
   getSupportedContents(contents: Content[]) {
     return contents.filter(
-      (content) => Object.values(ContentType).indexOf(content.format) > -1
+      (content) => Object.values(LegacyContentType).indexOf(content.format) > -1
     );
   }
 
@@ -404,16 +411,24 @@ export class ContentService extends AbstractEntityService<Content> {
     return this.answersDeleted;
   }
 
+  getLegacyTypeIcons(): Map<LegacyContentType, string> {
+    return this.legacyTypeIcons;
+  }
+
   getTypeIcons(): Map<ContentType, string> {
     return this.typeIcons;
   }
 
   hasFormatRounds(format: ContentType): boolean {
+    return [ContentType.Choice, ContentType.Scale].includes(format);
+  }
+
+  hasLegacyFormatRounds(format: LegacyContentType): boolean {
     return [
-      ContentType.CHOICE,
-      ContentType.SCALE,
-      ContentType.BINARY,
-      ContentType.NUMERIC,
+      LegacyContentType.CHOICE,
+      LegacyContentType.SCALE,
+      LegacyContentType.BINARY,
+      LegacyContentType.NUMERIC,
     ].includes(format);
   }
 
@@ -470,14 +485,14 @@ export class ContentService extends AbstractEntityService<Content> {
   }
 
   getAnswerOptions(
-    options: AnswerOption[],
+    options: string[],
     correctOptionIndexes?: number[]
   ): DisplayAnswer[] {
     const answers: DisplayAnswer[] = [];
     options?.map((option, i) => {
       answers.push(
         new DisplayAnswer(
-          new AnswerOption(option.label),
+          option,
           correctOptionIndexes ? correctOptionIndexes.includes(i) : false
         )
       );

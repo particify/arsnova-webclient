@@ -1,0 +1,39 @@
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+  @let type = questionnaireType();
+  @if (type) {
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      class="group-type-container"
+      [class]="type.toLowerCase()"
+      [matTooltip]="'content.group-type-' + type.toLowerCase() | transloco"
+    >
+      <mat-icon class="group-type">{{ typeIcons.get(type) }}</mat-icon>
+    </div>
+  }
+  @if (contentCount() !== undefined) {
+    <span
+      class="content-count no-bg"
+      [ngClass]="{ 'count-color': countColor() }"
+      [class]="countColor() && type ? type.toLowerCase() : ''"
+      >{{
+        'content.content-count'
+          | transloco
+            : {
+                count: contentCount(),
+              }
+      }}
+    </span>
+  }
+  @if (!published()) {
+    <div
+      fxLayout="row"
+      fxLayoutGap="4px"
+      fxLayoutAlign="start center"
+      class="locked-info"
+    >
+      <mat-icon>lock</mat-icon>
+      <span>{{ 'creator.content.locked' | transloco }}</span>
+    </div>
+  }
+</div>

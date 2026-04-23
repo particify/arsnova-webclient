@@ -33,7 +33,7 @@ import { ViolationReportComponent } from '@app/standalone/_dialogs/violation-rep
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { EditContentGroupTemplateComponent } from '@app/standalone/_dialogs/edit-content-group-template/edit-content-group-template.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
+//import { ContentGroupInfoComponent } from '@app/standalone/content-group-info/content-group-info.component';
 import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
 
 @Component({
@@ -43,7 +43,7 @@ import { BackButtonComponent } from '@app/standalone/back-button/back-button.com
     TemplateLicenseComponent,
     AddTemplateButtonComponent,
     ClipboardModule,
-    ContentGroupInfoComponent,
+    // ContentGroupInfoComponent,
     BackButtonComponent,
   ],
   selector: 'app-content-group-template-preview',
@@ -132,7 +132,7 @@ export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {
   }
 
   getIcon(format: ContentType): string {
-    return this.contentService.getTypeIcons().get(format) || '';
+    return this.contentService.getLegacyTypeIcons().get(format) || '';
   }
 
   openPreview(content: Content): void {

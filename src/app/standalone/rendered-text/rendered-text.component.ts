@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -25,6 +26,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
 export class RenderedTextComponent implements OnChanges {
   private formattingService = inject(FormattingService);
   private domSanitizer = inject(DomSanitizer);
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   @Input() rawText?: string;
   @Input() renderedText?: string;
@@ -62,6 +64,8 @@ export class RenderedTextComponent implements OnChanges {
         this.renderedText = renderedBody.html;
         this.updateDisplayedText();
         this.isLoading = false;
+        // An OnPush ancestor would otherwise never be checked for the async result.
+        this.changeDetectorRef.markForCheck();
         this.rendered.emit();
       });
   }

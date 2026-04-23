@@ -1,0 +1,21 @@
+@if (preview()) {
+  <app-content-choice-answer
+    [answerOptions]="selectableAnswers()"
+    [multipleAnswersAllowed]="multiple()"
+    [dynamicRendering]="true"
+    [disabled]="true"
+  ></app-content-choice-answer>
+} @else {
+  <div class="format-container">
+    <span class="section-label">{{
+      'creator.content.answer-options' | transloco
+    }}</span>
+    <app-answer-option-list
+      [answers]="displayAnswers()"
+      (answersChange)="onAnswersChange($event)"
+      [correctAnswers]="hasCorrectAnswer()"
+      [multiple]="multiple()"
+      [allowDeletion]="!contentId() || !answered()"
+    ></app-answer-option-list>
+  </div>
+}

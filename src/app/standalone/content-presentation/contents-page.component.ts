@@ -1,37 +1,35 @@
 import {
   booleanAttribute,
   Component,
-  Input,
-  OnDestroy,
-  OnInit,
   inject,
   input,
   linkedSignal,
   ChangeDetectionStrategy,
+  computed,
+  effect,
+  viewChild,
+  DestroyRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ContentService } from '@app/core/services/http/content.service';
-import { Content } from '@app/core/models/content';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup } from '@app/core/models/content-group';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { debounceTime, fromEvent, Subject, take, takeUntil } from 'rxjs';
 import {
   CARD_WIDTH,
   PresentationService,
 } from '@app/core/services/util/presentation.service';
-import { UserUiSettings } from '@gql/generated/graphql';
+import {
+  ContentType,
+  Questionnaire,
+  UserUiSettings,
+} from '@gql/generated/graphql';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
-import { Room } from '@app/core/models/room';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { EventService } from '@app/core/services/util/event.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import {
   HotkeyActionButtonComponent,
   hotkeyEnterLeaveAnimation,
@@ -48,6 +46,8 @@ import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 import { CountComponent } from '@app/standalone/count/count.component';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
+import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 
 @Component({
   selector: 'app-contents-page',
@@ -68,50 +68,71 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   changeDetection: ChangeDetectionStrategy.Eager,
   animations: [hotkeyEnterLeaveAnimation],
 })
-export class ContentsPageComponent implements OnInit, OnDestroy {
-  private route = inject(ActivatedRoute);
-  private contentService = inject(ContentService);
-  private contentGroupService = inject(ContentGroupService);
-  private globalStorageService = inject(GlobalStorageService);
-  private location = inject(Location);
-  private router = inject(Router);
-  private presentationService = inject(PresentationService);
-  private focusModeService = inject(FocusModeService);
-  private contentPublishService = inject(ContentPublishService);
-  private eventService = inject(EventService);
-  private translateService = inject(TranslocoService);
-  private hotkeyService = inject(HotkeyService);
+export class ContentsPageComponent {
+  private readonly route = inject(ActivatedRoute);
+  private readonly globalStorageService = inject(GlobalStorageService);
+  private readonly location = inject(Location);
+  private readonly router = inject(Router);
+  private readonly presentationService = inject(PresentationService);
+  private readonly focusModeService = inject(FocusModeService);
+  private readonly contentPublishService = inject(ContentPublishV4Service);
+  private readonly eventService = inject(EventService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly hotkeyService = inject(HotkeyService);
+  private readonly contentPresentationService = inject(
+    ContentPresentationService
+  );
+  private readonly destroyRef = inject(DestroyRef);
 
   // Route data input below
-  @Input({ required: true }) room!: Room;
-  @Input({ transform: booleanAttribute }) showStepInfo!: boolean;
-  @Input({ transform: booleanAttribute }) showAnswerCount!: boolean;
-  @Input({ transform: booleanAttribute }) showHotkeyActionButtons!: boolean;
-  @Input({ transform: booleanAttribute }) showResults?: boolean;
-  @Input({ transform: booleanAttribute }) noControlBar?: boolean;
-  @Input() seriesName!: string;
-  @Input() contentIndex?: number;
+  readonly showStepInfo = input(false, { transform: booleanAttribute });
+  readonly showAnswerCount = input(false, { transform: booleanAttribute });
+  readonly showHotkeyActionButtons = input(false, {
+    transform: booleanAttribute,
+  });
+  readonly showResults = input(false, { transform: booleanAttribute });
+  readonly noControlBar = input(false, { transform: booleanAttribute });
+  readonly seriesName = input.required<string>();
+  readonly contentIndex = input<number>();
 
   settings = input.required<UserUiSettings>();
   language = input.required<string>();
+  questionnaire = input.required<Questionnaire>();
 
-  showContentResultsDirectly = linkedSignal(
-    () => this.settings().showContentResultsDirectly
+  readonly contents = computed(() =>
+    this.contentPresentationService.contents()
   );
-  destroyed$ = new Subject<void>();
+  readonly loading = computed(() =>
+    this.contentPresentationService.loadingContents()
+  );
 
-  contents?: Content[];
-  isLoading = true;
+  readonly stepCount = computed(() => this.contents()?.length ?? 0);
+
+  readonly showContentResultsDirectly = linkedSignal(
+    () => this.settings().showContentResultsDirectly || this.showResults()
+  );
+  private readonly destroyed$ = new Subject<void>();
+
+  readonly questionnaireName = computed(
+    () =>
+      this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) ??
+      this.seriesName()
+  );
+  readonly hideControlBar = linkedSignal(() => this.noControlBar());
+
+  readonly currentIndex = computed(() =>
+    this.contentPresentationService.currentContentIndex()
+  );
+
+  readonly content = computed(() =>
+    this.contentPresentationService.currentContent()
+  );
+
+  initialized = false;
   entryIndex = 0;
-  currentIndex = 0;
-  currentStep = 0;
   responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
-  // TODO: non-null assertion operator is used here temporaly. We need to use a resolver here to move async logic out of component.
-  content!: Content;
-  contentGroup!: ContentGroup;
   canAnswerContent = false;
   attributions: ContentLicenseAttribution[] = [];
-  stepCount = 0;
   endDate?: Date;
   showLeaderboard = false;
   answeringLocked = false;
@@ -119,24 +140,47 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
 
   private hotkeyRefs: symbol[] = [];
 
-  ngOnInit() {
-    // Use index from route if available. Otherwise use the stored index or 0 as fallback.
-    const routeContentIndex = (this.contentIndex ?? 0) - 1;
-    const lastIndex =
-      this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) ?? 0;
-    this.entryIndex = routeContentIndex > -1 ? routeContentIndex : lastIndex;
-    this.seriesName =
-      this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) ||
-      this.seriesName;
-    this.globalStorageService.setItem(STORAGE_KEYS.LAST_GROUP, this.seriesName);
-    if (this.showResults) {
-      this.showContentResultsDirectly.set(true);
-    }
-    this.initGroup(true);
+  stepper = viewChild(ContentStepperComponent);
+
+  constructor() {
+    effect(() => {
+      // Use index from route if available. Otherwise use the stored index or 0 as fallback.
+      if (this.questionnaireName()) {
+        const routeContentIndex = (this.contentIndex() ?? 0) - 1;
+        const lastIndex =
+          this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) ?? 0;
+        this.entryIndex =
+          routeContentIndex > -1 ? routeContentIndex : lastIndex;
+        this.globalStorageService.setItem(
+          STORAGE_KEYS.LAST_GROUP,
+          this.questionnaireName()
+        );
+      }
+      if (this.contents()?.length > 0 && this.stepper()) {
+        this.initScale();
+        fromEvent(window, 'resize')
+          .pipe(debounceTime(100), takeUntil(this.destroyed$))
+          .subscribe(() => {
+            this.initScale();
+          });
+        if (!this.initialized) {
+          const index =
+            this.entryIndex < this.stepCount() ? this.entryIndex : 0;
+          this.contentPresentationService.setCurrentContentIndex(index);
+          // Deferred out of the change detection pass this effect runs in, because the control bar
+          // reads the step state and would otherwise change after it has been checked.
+          queueMicrotask(() => this.enterContent(index));
+          this.initialized = true;
+        }
+      }
+      this.contentPresentationService.setQuestionnaireId(
+        this.questionnaire().id
+      );
+    });
     this.eventService
       .on<boolean>('ControlBarVisible')
       .subscribe((isVisible) => {
-        this.noControlBar = !isVisible;
+        this.hideControlBar.set(!isVisible);
       });
     this.translateService
       .selectTranslate('creator.control-bar.leaderboard')
@@ -151,59 +195,14 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
           this.hotkeyRefs
         )
       );
-    this.presentationService.getCountdownChanged().subscribe((content) => {
-      this.initScale();
-      this.content.state = content.state;
-      this.evaluateContentState();
+    this.destroyRef.onDestroy(() => {
+      this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
     });
-    this.contentService
-      .getAnswersDeleted()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((contentId) => {
-        if (contentId === this.content.id) {
-          this.presentationService.reloadCurrentContent();
-        }
-      });
-    this.contentService
-      .getRoundStarted()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((content) => {
-        if (content.id === this.content.id) {
-          this.content.state.answeringEndTime = undefined;
-          this.evaluateContentState();
-        }
-      });
-    this.contentService
-      .getAnswerCounts()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((counts) => {
-        this.responseCounts = counts;
-      });
-  }
-
-  private evaluateContentState() {
-    if (this.content.state.answeringEndTime) {
-      this.endDate = new Date(this.content.state.answeringEndTime);
-      this.answeringLocked = new Date() > this.endDate;
-      if (this.contents) {
-        this.contents
-          .filter((c) => c.id !== this.content.id && c.state.answeringEndTime)
-          .forEach((c) => (c.state.answeringEndTime = new Date()));
-      }
-    } else {
-      this.endDate = undefined;
-    }
   }
 
   private toggleLeaderboard() {
     this.showLeaderboard = !this.showLeaderboard;
     this.presentationService.updateLeaderboardDisplayed(this.showLeaderboard);
-  }
-
-  ngOnDestroy() {
-    this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
   initScale() {
@@ -217,70 +216,8 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  initGroup(initial = false) {
-    this.contentGroupService
-      .getByRoomIdAndName(this.room.id, this.seriesName, true)
-      .subscribe((group) => {
-        this.contentGroup = group;
-        if (this.contentGroup.contentIds) {
-          this.contentService
-            .getContentsByIds(
-              this.contentGroup.roomId,
-              this.contentGroup.contentIds,
-              true
-            )
-            .subscribe((contents) => {
-              this.contents =
-                this.contentService.getSupportedContents(contents);
-              this.stepCount = this.contents.length;
-              this.contentGroupService
-                .getAttributions(this.room.id, this.contentGroup.id)
-                .pipe(takeUntil(this.destroyed$))
-                .subscribe((attributions) => {
-                  if (attributions.some((a) => a.license !== 'CC0-1.0')) {
-                    this.attributions = attributions;
-                    this.stepCount++;
-                  }
-                  this.finishInit(initial);
-                  if (this.entryIndex > -1) {
-                    this.currentIndex =
-                      initial && this.entryIndex < this.stepCount
-                        ? this.entryIndex
-                        : 0;
-                    this.setCurrentContent(this.currentIndex);
-                  }
-                  this.sendContentStepState();
-                });
-            });
-        } else {
-          this.finishInit(initial);
-          this.sendContentStepState(true);
-        }
-      });
-  }
-
-  finishInit(initial: boolean) {
-    this.isLoading = false;
-    if (initial) {
-      this.initScale();
-      fromEvent(window, 'resize')
-        .pipe(debounceTime(100), takeUntil(this.destroyed$))
-        .subscribe(() => {
-          this.initScale();
-        });
-      this.presentationService
-        .getCurrentGroup()
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((group) => {
-          this.isLoading = true;
-          this.seriesName = group;
-          this.initGroup();
-        });
-    }
-  }
-
   updateRoute(index: number) {
-    const currentPath = this.contentIndex ? '..' : '.';
+    const currentPath = this.contentIndex() ? '..' : '.';
     const urlTree = this.router.createUrlTree([currentPath, index], {
       relativeTo: this.route,
       queryParams: this.route.snapshot.queryParams,
@@ -288,62 +225,57 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
+  private enterContent(index: number) {
+    this.setCurrentContent(index);
+    this.sendContentStepState(index);
+    if (this.questionnaire()?.published) {
+      this.updateStateChange();
+    }
+    const format = this.content()?.formatData.format;
+    this.canAnswerContent =
+      !!format && ![ContentType.Slide, ContentType.Flashcard].includes(format);
+  }
+
   updateURL(index: number) {
-    if (this.currentStep === index && !this.content) {
+    if (this.currentIndex() === index && !this.content()) {
       return;
     }
-    this.setCurrentContent(index);
-    const urlIndex = index + 1;
-    this.updateRoute(urlIndex);
-    this.sendContentStepState();
-    this.showLeaderboard = false;
     if (
       this.attributions.length > 0 &&
-      this.currentStep === this.stepCount - 1
+      this.currentIndex() === this.stepCount() - 1
     ) {
       return;
     }
-    if (this.contentGroup.published) {
+    this.contentPresentationService.setCurrentContentIndex(index);
+    this.updateRoute(index + 1);
+    this.setCurrentContent(index);
+    this.sendContentStepState(index);
+    this.showLeaderboard = false;
+    if (this.questionnaire().published) {
       this.updateStateChange();
     }
-    this.canAnswerContent = ![
-      ContentType.SLIDE,
-      ContentType.FLASHCARD,
-    ].includes(this.content.format);
-    if (index !== this.entryIndex) {
-      this.currentIndex = -1;
-    }
+    const format = this.content()?.formatData.format;
+    this.canAnswerContent =
+      !!format && ![ContentType.Slide, ContentType.Flashcard].includes(format);
   }
 
   private setCurrentContent(index: number): void {
-    if (!this.contents) {
+    if (!this.contents() || !this.contents()[index]) {
       return;
     }
-    this.currentStep = index;
-    if (!this.contents[index]) {
-      return;
-    }
-    const lastAnsweringEndTime = this.content?.state.answeringEndTime;
-    this.content = this.contents[index];
+    const publishingIndex = this.questionnaire().publishedUpToContent?.position;
     if (
       this.isLiveMode() &&
       !this.isPublished() &&
-      index > this.contentGroup.publishingIndex &&
-      lastAnsweringEndTime &&
+      (publishingIndex == null || index > publishingIndex) &&
       this.answeringLocked
     ) {
       this.publishCurrentContent();
     }
-    if (this.content.state.answeringEndTime) {
-      this.endDate = new Date(this.content.state.answeringEndTime);
-      this.answeringLocked = new Date() > this.endDate;
-    } else {
-      this.endDate = undefined;
-    }
   }
 
   startCountdown(): void {
-    this.presentationService.startContent(this.contentGroup.id);
+    this.presentationService.startContent(this.questionnaire().id);
   }
 
   stopCountdown(): void {
@@ -351,51 +283,48 @@ export class ContentsPageComponent implements OnInit, OnDestroy {
   }
 
   updateStateChange() {
-    this.focusModeService.updateContentState(
-      this.content.id,
-      this.currentStep,
-      this.contentGroup.id,
-      this.contentGroup.name
-    );
+    const contentId = this.content()?.id;
+    if (contentId) {
+      this.focusModeService.updateContentState(
+        contentId,
+        this.currentIndex(),
+        this.questionnaire().id,
+        this.questionnaire().name
+      );
+    }
   }
 
-  sendContentStepState(emptyList = false) {
-    let position;
-    let index;
+  sendContentStepState(index: number, emptyList = false) {
+    const content = this.content();
+    if (!content) {
+      return;
+    }
     if (!emptyList) {
-      index = this.currentStep;
-      position = this.presentationService.getStepState(
-        this.currentStep,
-        this.stepCount
+      const state = new ContentPresentationState(
+        this.presentationService.getStepState(index, this.stepCount()),
+        index,
+        content
       );
-      const state = new ContentPresentationState(position, index, this.content);
       this.presentationService.updateContentState(state);
     }
   }
 
   isPublished(): boolean {
     return this.contentPublishService.isIndexPublished(
-      this.contentGroup,
-      this.currentStep
+      this.questionnaire(),
+      this.currentIndex()
     );
   }
 
   isGroupLocked(): boolean {
-    return this.contentPublishService.isGroupLocked(this.contentGroup);
+    return this.contentPublishService.isGroupLocked(this.questionnaire());
   }
 
   publishCurrentContent(): void {
-    this.isPublishing = true;
-    const changes = { publishingIndex: this.currentStep };
-    this.contentGroupService
-      .patchContentGroup(this.contentGroup, changes)
-      .subscribe(() => {
-        this.contentGroup.publishingIndex = this.currentStep;
-        this.isPublishing = false;
-      });
+    // TODO: Publish current content
   }
 
   isLiveMode(): boolean {
-    return this.contentPublishService.isGroupLive(this.contentGroup);
+    return this.contentPublishService.isLive(this.questionnaire());
   }
 }

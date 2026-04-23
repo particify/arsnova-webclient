@@ -16,22 +16,18 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { Content } from '@app/core/models/content';
-import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentService } from '@app/core/services/http/content.service';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
-import { ContentState } from '@app/core/models/content-state';
-import { ContentChoice } from '@app/core/models/content-choice';
-import { AnswerOption } from '@app/core/models/answer-option';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
-import { ContentScale } from '@app/core/models/content-scale';
-import { LikertScaleTemplate } from '@app/core/models/likert-scale-template.enum';
-import { ContentWordcloud } from '@app/core/models/content-wordcloud';
 import { ContentsPageComponent } from '@app/standalone/content-presentation/contents-page.component';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { RoundStatistics } from '@app/core/models/round-statistics';
-import { AnswerStatistics } from '@app/core/models/answer-statistics';
-import { Room } from '@app/core/models/room';
+import {
+  ContentType,
+  QuestionnaireContentsByQuestionnaireIdGql,
+  QuestionnairePublishingMode,
+  QuestionnaireType,
+} from '@gql/generated/graphql';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 
 class MockService {}
 
@@ -88,112 +84,7 @@ class MockRoutingService {
 
 class MockFormattingService {}
 
-class MockContentService {
-  private contents: Content[] = [
-    new ContentChoice(
-      'roomId',
-      'subject',
-      'Content 2',
-      [],
-      [
-        new AnswerOption('Answer 1'),
-        new AnswerOption('Answer 2'),
-        new AnswerOption('Answer 3'),
-        new AnswerOption('Answer 4'),
-      ],
-      [1],
-      false,
-      ContentType.CHOICE
-    ),
-    new ContentScale(LikertScaleTemplate.AGREEMENT, 5),
-    new ContentWordcloud(
-      'roomId',
-      'subject',
-      'Content 4',
-      [],
-      ContentType.WORDCLOUD,
-      3
-    ),
-  ];
-
-  getContentsByIds() {
-    this.contents[0].id = 'content1';
-    this.contents[1].id = 'content2';
-    this.contents[2].id = 'content3';
-    this.contents[0].renderedBody = '<p>Content 1</p>';
-    this.contents[1].renderedBody = '<p>Content 2</p>';
-    this.contents[2].renderedBody = '<p>Content 3</p>';
-    this.contents[0].state = new ContentState(1, undefined, true);
-    this.contents[1].state = new ContentState(1, undefined, true);
-    this.contents[2].state = new ContentState(1, undefined, true);
-    return of(this.contents);
-  }
-
-  getSupportedContents() {
-    this.contents[0].id = 'content1';
-    this.contents[1].id = 'content2';
-    this.contents[2].id = 'content3';
-    this.contents[0].renderedBody = '<p>Content 1</p>';
-    this.contents[1].renderedBody = '<p>Content 2</p>';
-    this.contents[2].renderedBody = '<p>Content 3</p>';
-    this.contents[0].state = new ContentState(1, undefined, true);
-    this.contents[1].state = new ContentState(1, undefined, true);
-    this.contents[2].state = new ContentState(1, undefined, true);
-    return this.contents;
-  }
-
-  getAnswersDeleted() {
-    return of({});
-  }
-
-  hasFormatRounds() {
-    return false;
-  }
-
-  getAnswer(contentId: string) {
-    const roundStatistics = new RoundStatistics(1, [1, 5, 2, 3], [], 0, 11);
-    const stats = new AnswerStatistics();
-    stats.contentId = contentId;
-    stats.roundStatistics = [roundStatistics];
-    return of(stats);
-  }
-
-  getTextAnswerCreatedStream(contentId: string) {
-    const roundStatistics = new RoundStatistics(1, [1, 5, 2, 3], [], 0, 11);
-    const stats = new AnswerStatistics();
-    stats.contentId = contentId;
-    stats.roundStatistics = [roundStatistics];
-    const body = {
-      payload: {
-        stats: stats,
-      },
-    };
-    const message = {
-      body: JSON.stringify(body),
-    };
-    return of(message);
-  }
-
-  getAnswersChangedStream(contentId: string) {
-    const roundStatistics = new RoundStatistics(1, [1, 5, 2, 3], [], 0, 11);
-    const stats = new AnswerStatistics();
-    stats.contentId = contentId;
-    stats.roundStatistics = [roundStatistics];
-    const body = {
-      payload: {
-        stats: stats,
-      },
-    };
-    const message = {
-      body: JSON.stringify(body),
-    };
-    return of(message);
-  }
-
-  getAnswerBanned() {
-    return of({});
-  }
-}
+class MockContentService {}
 
 class MockContentPublishService {
   filterPublishedIds() {
@@ -218,6 +109,84 @@ class MockContentAnswerService {
     return of([]);
   }
 }
+
+const questionnaireContentsByQuestionnaireIdGql = {
+  watch: () => ({
+    valueChanges: of({
+      data: {
+        questionnaireContentsByQuestionnaireId: {
+          edges: [
+            {
+              node: {
+                __typename: 'Content',
+                id: 'content1',
+                body: 'Was ist die richtige Antwort?',
+                bodyRendered: '<p>Was ist die richtige Antwort?</p>',
+                duration: 30,
+                abstentionsAllowed: false,
+                hasCorrectAnswer: true,
+                weight: 1,
+                answerCount: 10,
+                abstentionCount: 1,
+                correctAnswerCount: 6,
+                activeRound: {
+                  __typename: 'Round',
+                  id: 'round-1',
+                  roundNo: 1,
+                },
+                formatData: {
+                  __typename: 'ChoiceContentFormatData',
+                  format: ContentType.Choice,
+                  correctOptionIndexes: [1],
+                  multiple: false,
+                  options: [
+                    {
+                      __typename: 'AnswerOption',
+                      label: 'Antwort A',
+                      labelRendered: '<p>Antwort A</p>',
+                    },
+                    {
+                      __typename: 'AnswerOption',
+                      label: 'Antwort B (richtig)',
+                      labelRendered: '<p>Antwort B</p>',
+                    },
+                    {
+                      __typename: 'AnswerOption',
+                      label: 'Antwort C',
+                      labelRendered: '<p>Antwort C</p>',
+                    },
+                  ],
+                },
+              },
+            },
+
+            {
+              node: {
+                __typename: 'Content',
+                id: 'content-2',
+                body: 'Was denkst du gerade?',
+                bodyRendered: '<p>Was denkst du gerade?</p>',
+                duration: 45,
+                abstentionsAllowed: true,
+                hasCorrectAnswer: false,
+                weight: 1,
+                answerCount: 0,
+                abstentionCount: 0,
+                correctAnswerCount: 0,
+                activeRound: null,
+                formatData: {
+                  __typename: 'WordcloudContentFormatData',
+                  format: ContentType.Wordcloud,
+                  maxAnswers: 3,
+                },
+              },
+            },
+          ],
+        },
+      },
+    }),
+  }),
+};
 
 export default {
   component: ContentsPageComponent,
@@ -263,8 +232,13 @@ export default {
           provide: ContentAnswerService,
           useClass: MockContentAnswerService,
         },
+        {
+          provide: QuestionnaireContentsByQuestionnaireIdGql,
+          useValue: questionnaireContentsByQuestionnaireIdGql,
+        },
         LikertScaleService,
         PresentationService,
+        ContentPresentationService,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -308,13 +282,21 @@ type Story = StoryObj<ContentsPageComponent>;
 
 export const ContentsPagePresentation: Story = {
   args: {
-    room: new Room(),
     showStepInfo: true,
     showAnswerCount: true,
     showHotkeyActionButtons: true,
     showResults: true,
-    seriesName: 'My mixed series',
     contentIndex: 1,
     noControlBar: undefined,
+    questionnaire: {
+      id: 'questionnaireId',
+      name: 'Quiz',
+      contentCount: 42,
+      published: true,
+      type: QuestionnaireType.Quiz,
+      publishingMode: QuestionnairePublishingMode.All,
+    },
+    language: 'de',
+    settings: {},
   },
 };

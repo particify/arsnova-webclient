@@ -1,5 +1,4 @@
 <app-content-wordcloud-answer
-  [words]="words"
-  [givenAnswer]="answer"
-  [disabled]="isDisabled"
+  [words]="words()"
+  [disabled]="!!answerFormatData()"
 ></app-content-wordcloud-answer>

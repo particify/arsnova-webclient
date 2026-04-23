@@ -1,13 +1,12 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  OnInit,
   computed,
   inject,
   input,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
@@ -15,12 +14,8 @@ import {
 } from '@app/core/services/util/global-storage.service';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AbstractRoomOverviewPageComponent } from '@app/common/abstract/abstract-room-overview-page';
-import { DataChanged } from '@app/core/models/events/data-changed';
-import { RoomStats } from '@app/core/models/room-stats';
-import { GroupType } from '@app/core/models/content-group';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { ContentService } from '@app/core/services/http/content.service';
-import { ContentType } from '@app/core/models/content-type.enum';
 import { FlexModule } from '@angular/flex-layout';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -34,13 +29,22 @@ import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directiv
 import { MatCard } from '@angular/material/card';
 import { MatRipple } from '@angular/material/core';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ContentGroupsComponent } from '@app/standalone/content-groups/content-groups.component';
 import { AsyncPipe } from '@angular/common';
 import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-readonly.directive';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { ExpandableCardComponent } from '@app/standalone/expandable-card/expandable-card.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  ContentType,
+  QuestionnairesByRoomIdGql,
+  QuestionnairesChangedGql,
+  QuestionnaireSummaryFragment,
+  QuestionnaireType,
+} from '@gql/generated/graphql';
+import { switchMap } from 'rxjs';
+import { QuestionnaireComponent } from '@app/standalone/questionnaire/questionnaire.component';
+import { refetchOn } from '@gql/helper/refetch-on';
 
 @Component({
   selector: 'app-creator-overview',
@@ -61,33 +65,50 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatCard,
     MatRipple,
     MatTooltip,
-    ContentGroupsComponent,
     AsyncPipe,
     A11yIntroPipe,
     TranslocoPipe,
     DisabledIfReadonlyDirective,
     RenderedTextComponent,
     ExpandableCardComponent,
+    QuestionnaireComponent,
   ],
 })
-export class RoomOverviewPageComponent
-  extends AbstractRoomOverviewPageComponent
-  implements OnInit
-{
+export class RoomOverviewPageComponent extends AbstractRoomOverviewPageComponent {
   protected readonly router = inject(Router);
-  protected readonly translateService = inject(TranslocoService);
   protected readonly dialogService = inject(DialogService);
   protected readonly globalStorageService = inject(GlobalStorageService);
   private readonly contentService = inject(ContentService);
+  private readonly questionnairesByRoomId = inject(QuestionnairesByRoomIdGql);
+  private readonly questionnairesChanged = inject(QuestionnairesChangedGql);
 
-  // Route data input below
+  readonly questionnairesResult = toSignal(
+    toObservable(this.roomId).pipe(
+      switchMap((roomId) =>
+        refetchOn(
+          this.questionnairesByRoomId.watch({ variables: { roomId } }),
+          this.questionnairesChanged.subscribe({ variables: { roomId } })
+        )
+      )
+    )
+  );
+
+  readonly questionnaires = computed(() => {
+    return (
+      this.questionnairesResult()?.data?.questionnairesByRoomId ?? []
+    ).filter((n): n is QuestionnaireSummaryFragment => !!n);
+  });
+
+  readonly loadingQuestionnaires = computed(
+    () => this.questionnairesResult()?.loading
+  );
+
   readonly userRole = input.required<UserRole>();
-
   readonly isModerator = computed(() => this.userRole() === UserRole.MODERATOR);
 
-  groupTypes: Map<GroupType, string>;
-  readonly groupContentFormatIcons = new Map<
-    GroupType,
+  quesionnaireTypes: Map<QuestionnaireType, string>;
+  readonly questionnaireContentFormatIcons = new Map<
+    QuestionnaireType,
     Map<ContentType, string>
   >();
   readonly hintType = HintType.INFO;
@@ -95,20 +116,20 @@ export class RoomOverviewPageComponent
 
   constructor() {
     super();
-    this.groupTypes = this.contentGroupService.getTypeIcons();
-    this.groupTypes.forEach((value, key) => {
+    this.quesionnaireTypes =
+      this.contentGroupService.getQuestionnaireTypeIcons();
+    this.quesionnaireTypes.forEach((_, key) => {
       const groupTypeIcons = new Map<ContentType, string>();
-      this.contentService.getTypeIcons().forEach((icon, type) => {
-        if (
-          this.contentGroupService
-            .getContentFormatsOfGroupType(key)
-            .includes(type) &&
-          type !== ContentType.SLIDE
-        ) {
-          groupTypeIcons.set(type, icon);
-        }
-      });
-      this.groupContentFormatIcons.set(key, groupTypeIcons);
+      const typeIcons = this.contentService.getTypeIcons();
+      this.contentGroupService
+        .getContentFormatsOfQuestionnaireType(key)
+        .forEach((type) => {
+          const icon = typeIcons.get(type);
+          if (icon && type !== ContentType.Slide) {
+            groupTypeIcons.set(type, icon);
+          }
+        });
+      this.questionnaireContentFormatIcons.set(key, groupTypeIcons);
     });
     const expandDescription = this.globalStorageService.getItem(
       STORAGE_KEYS.EXPAND_ROOM_DESCRIPTION
@@ -121,28 +142,9 @@ export class RoomOverviewPageComponent
     }
   }
 
-  ngOnInit() {
-    window.scroll(0, 0);
-    this.translateService.setActiveLang(
-      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
-    );
-    this.eventService
-      .on<DataChanged<RoomStats>>('ModeratorDataChanged')
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.initializeStats(true));
-    this.initializeStats(true);
-  }
-
-  setGroupDataInGlobalStorage() {
-    this.globalStorageService.setItem(
-      STORAGE_KEYS.CONTENT_GROUPS,
-      this.contentGroups.map((cg) => cg.name)
-    );
-  }
-
-  openCreateContentGroupDialog(type = GroupType.MIXED) {
+  openCreateQuestionnaireDialog(type = QuestionnaireType.Mixed) {
     this.dialogService
-      .openContentGroupCreationDialog(this.legacyRoom().id, type)
+      .openQuestionnaireCreationDialog(this.roomId(), type)
       .afterClosed()
       .subscribe((name) => {
         if (name) {

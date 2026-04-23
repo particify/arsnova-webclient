@@ -1,0 +1,68 @@
+<mat-card
+  appearance="outlined"
+  tabindex="0"
+  role="button"
+  id="content-group"
+  #contentGroupCard
+  fxLayoutAlign="start center"
+  (click)="viewContents()"
+  attr.aria-label="{{
+    'room-page.a11y-enter-content-group'
+      | transloco
+        : {
+            name: questionnaire().name,
+          }
+  }}"
+  (keyup.enter)="viewContents()"
+  matRipple
+  [matRippleDisabled]="!showRipple()"
+>
+  <div
+    fxFill
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    fxLayoutGap="0.5em"
+  >
+    <div fxLayout="column" fxLayoutGap="8px" class="ellipsis">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxLayoutGap="0.5em"
+        class="ellipsis group-name"
+      >
+        <app-text-overflow-clip
+          class="ellipsis"
+          [text]="questionnaire().name"
+        ></app-text-overflow-clip>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+        <app-questionnaire-info
+          [questionnaireType]="questionnaire().type"
+          [contentCount]="questionnaire().contentCount ?? 0"
+          [published]="questionnaire().published"
+        ></app-questionnaire-info>
+      </div>
+    </div>
+    @if (!this.isParticipant()) {
+      <button
+        mat-icon-button
+        color="primary"
+        class="publishing-btn"
+        (click)="$event.stopPropagation(); togglePublishing()"
+        [attr.data-testid]="
+          questionnaire().published ? 'lock-group-btn' : 'publish-group-btn'
+        "
+      >
+        <mat-icon
+          [matTooltip]="
+            (!questionnaire().published
+              ? 'creator.content.publish'
+              : 'creator.content.lock'
+            ) | transloco
+          "
+          >{{ !questionnaire().published ? 'lock_open' : 'locked' }}</mat-icon
+        >
+      </button>
+    }
+  </div>
+</mat-card>

@@ -54,8 +54,8 @@ const routes: Routes = [
   {
     path: 'series',
     loadChildren: () =>
-      import('./content-group/content-group.module').then(
-        (m) => m.ContentGroupModule
+      import('./questionnaire/questionnaire.module').then(
+        (m) => m.QuestionnaireModule
       ),
     title: 'series',
   },

@@ -1,53 +1,27 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
+  DestroyRef,
+  OutputRefSubscription,
+  Signal,
+  computed,
+  effect,
   inject,
   input,
-  ChangeDetectionStrategy,
+  linkedSignal,
+  output,
+  viewChild,
 } from '@angular/core';
-import { ContentType } from '@app/core/models/content-type.enum';
-import { Answer } from '@app/core/models/answer';
-import { Content } from '@app/core/models/content';
-import { ContentChoice } from '@app/core/models/content-choice';
-import { TextAnswer } from '@app/core/models/text-answer';
-import { ChoiceAnswer } from '@app/core/models/choice-answer';
-import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
-import { ContentPrioritization } from '@app/core/models/content-prioritization';
-import { ContentFlashcard } from '@app/core/models/content-flashcard';
-import { ContentScale } from '@app/core/models/content-scale';
-import { ContentWordcloud } from '@app/core/models/content-wordcloud';
-import { FormComponent } from '@app/standalone/form/form.component';
-import { ContentNumeric } from '@app/core/models/content-numeric';
-import { NumericAnswer } from '@app/core/models/numeric-answer';
-import { EventService } from '@app/core/services/util/event.service';
-import { EntityChangeNotification } from '@app/core/models/events/entity-change-notification';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { ContentService } from '@app/core/services/http/content.service';
-import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { NotificationService } from '@app/core/services/util/notification.service';
+import { of, switchMap } from 'rxjs';
 import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { Router } from '@angular/router';
-import { Location, NgClass } from '@angular/common';
+import { Location, NgClass, NgComponentOutlet } from '@angular/common';
 import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
-import { DividerComponent } from '@app/standalone/divider/divider.component';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
-import { ContentPrioritizationParticipantComponent } from '@app/participant/content/content-prioritization-participant/content-prioritization-participant.component';
-import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
-import { ContentSortParticipantComponent } from '@app/participant/content/content-sort-participant/content-sort-participant.component';
-import { ContentTextParticipantComponent } from '@app/participant/content/content-text-participant/content-text-participant.component';
-import { ContentScaleParticipantComponent } from '@app/participant/content/content-scale-participant/content-scale-participant.component';
-import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
 import { FormsModule } from '@angular/forms';
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
 import { ExtensionPointModule } from '@projects/extension-point/src/lib/extension-point.module';
@@ -59,24 +33,29 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CoreModule } from '@app/core/core.module';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
-import { ContentState } from '@app/core/models/content-state';
+import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
-import { Room } from '@app/core/models/room';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { AnswerResultType } from '@app/core/models/answer-result';
-import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
-import { ShortAnswerAnswer } from '@app/core/models/short-answer-answer';
-import { STEPPER_ANIMATION_DURATION } from '@app/standalone/stepper/stepper.component';
-import { UserUiSettings } from '@gql/generated/graphql';
-import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  Answer,
+  ContentAnswerResult,
+  AnswerResultState,
+  Content,
+  ContentType,
+  CreateQuestionnaireAbstentionGql,
+  Questionnaire,
+  QuestionnaireAnswerByRoundIdGql,
+  QuestionnaireContentAnswerResultsByQuestionnaireIdDocument,
+  QuestionnairePublishingMode,
+  QuestionnaireType,
+  UserUiSettings,
+} from '@gql/generated/graphql';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { FORMAT_REGISTRY } from './format-registry';
+import { AnswerForm } from '@app/participant/content/answer-form';
+import { formatAnsweringDuration } from './answering-duration';
 
 interface ContentActionTab {
   route: string;
@@ -104,95 +83,113 @@ interface ContentActionTab {
     CountdownTimerComponent,
     MatTabNavPanel,
     FormsModule,
-    ContentChoiceParticipantComponent,
-    ContentScaleParticipantComponent,
-    ContentTextParticipantComponent,
-    ContentSortParticipantComponent,
-    ContentWordcloudParticipantComponent,
-    ContentPrioritizationParticipantComponent,
-    ContentNumericParticipantComponent,
-    ContentShortAnswerParticipantComponent,
     NgClass,
     MatButton,
     LoadingButtonComponent,
     MatIconButton,
     MatTooltip,
     ContentResultsComponent,
-    DividerComponent,
     LeaderboardPageComponent,
-    TranslocoPipe,
     LanguageContextDirective,
     LanguageDirectionPipe,
   ],
 })
-export class ContentParticipantComponent
-  extends FormComponent
-  implements OnInit, OnChanges
-{
+export class ContentParticipantComponent {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
-  private readonly eventService = inject(EventService);
-  private readonly contentService = inject(ContentService);
-  private readonly translateService = inject(TranslocoService);
-  private readonly notificationService = inject(NotificationService);
-  private readonly contentPublishService = inject(ContentPublishService);
-  private readonly answerService = inject(ContentAnswerService);
+  private readonly contentPublishService = inject(ContentPublishV4Service);
   private readonly focusModeService = inject(FocusModeService);
+  private readonly answerByRoundId = inject(QuestionnaireAnswerByRoundIdGql);
+  private readonly cache = inject(Apollo).client.cache;
+  private readonly createAbstention = inject(CreateQuestionnaireAbstentionGql);
 
-  @Input({ required: true }) room!: Room;
-  @Input({ required: true }) content!: Content;
-  @Input({ required: true }) contentGroup!: ContentGroup;
-  @Input({ required: true }) userId!: string;
-  @Input({ required: true }) settings!: UserUiSettings;
-  @Input() lastContent = false;
-  @Input() active = false;
-  @Input({ required: true }) index!: number;
-  @Input() statsPublished = false;
-  @Input() correctOptionsPublished = false;
-  @Input() attribution?: string;
-  @Input() alias?: RoomUserAlias;
-  @Input() showCard = true;
-  @Input() hasAbstained = false;
-  @Input() answerResult?: AnswerResultType;
-  @Input() activeTab?: string;
-  @Input() finished = false;
-  @Output() answerChanged = new EventEmitter<AnswerResultType>();
-  @Output() next = new EventEmitter<void>();
-  @Output() answerReset = new EventEmitter<string>();
+  readonly formatComponent = computed(
+    () => FORMAT_REGISTRY[this.content().formatData.format].component
+  );
+
+  readonly componentInputs = computed(() => {
+    const base = {
+      contentId: this.content()?.id,
+      result: this.answer()?.result,
+      answerFormatData: this.answer()?.formatData,
+      roundId: this.content().activeRound?.id,
+      contentFormatData: this.content().formatData,
+      correctOptionsPublished: this.correctOptionsPublished(),
+    };
+    if (this.content()?.formatData.format === ContentType.Choice) {
+      return {
+        ...base,
+      };
+    }
+    return base;
+  });
+
+  private readonly formComponentOutlet =
+    viewChild<NgComponentOutlet>(NgComponentOutlet);
+  private readonly answerForm: Signal<AnswerForm | undefined> = computed(
+    () =>
+      (this.formComponentOutlet()?.componentInstance as AnswerForm | null) ??
+      undefined
+  );
+  shortId = input.required<string>();
+  questionnaire = input.required<Questionnaire>();
+  content = input.required<Content>();
+  roomId = input.required<string>();
+  showCard = input(true);
+  correctOptionsPublished = input(false);
+  userId = input.required<string>();
+  settings = input.required<UserUiSettings>();
+  lastContent = input(false);
+  active = input(false);
+  index = input.required<number>();
+  statsPublished = input(false);
+  attribution = input<string>();
+  alias = input<RoomUserAlias>();
+  answerResult = input<AnswerResultState>();
+  activeTab = input<string>();
+  finished = input(false);
+  next = output<void>();
+
+  private readonly answerRef = toSignal(
+    toObservable(this.content).pipe(
+      switchMap((content) => {
+        if (content.activeRound) {
+          return this.answerByRoundId
+            .watch({
+              variables: { roundId: content.activeRound?.id },
+              fetchPolicy: 'no-cache',
+            })
+            .valueChanges.pipe(onlyCompleteData());
+        }
+        return of();
+      })
+    )
+  );
+
+  readonly answer = linkedSignal(
+    () =>
+      this.answerRef()?.data.questionnaireAnswerByRoundId as Answer | undefined
+  );
+  readonly loadingAnswer = computed(() => this.answerRef()?.loading ?? true);
+
+  abstained = computed(
+    () => this.answer()?.result === AnswerResultState.Abstained
+  );
+
+  readonly answeringDuration = computed(() =>
+    formatAnsweringDuration(this.answer()?.durationMs)
+  );
 
   language = input.required<string>();
 
-  private answerSubmitted$ = new Subject<string>();
-  answer?: Answer;
-  isLoading = true;
-  ContentType: typeof ContentType = ContentType;
-  answersString = '';
-  extensionData: any;
-  alreadySent = false;
-  isMultiple = false;
+  ContentType = ContentType;
   HotkeyAction = HotkeyAction;
-  a11yMsg?: string;
-
-  // TODO: non-null assertion operator is used here temporaly. We need to make this component generic with a future refactoring.
-  choiceContent!: ContentChoice;
-  prioritizationContent!: ContentPrioritization;
-  flashcardContent!: ContentFlashcard;
-  scaleContent!: ContentScale;
-  wordloudContent!: ContentWordcloud;
-  numericContent!: ContentNumeric;
-
-  choiceAnswer?: ChoiceAnswer;
-  prioritizationAnswer?: PrioritizationAnswer;
-  wordcloudAnswer?: MultipleTextsAnswer;
-  textAnswer?: TextAnswer;
-  numericAnswer?: NumericAnswer;
-  shortAnswerAnswer?: ShortAnswerAnswer;
 
   selectedRoute = '';
   endDate?: Date;
   answeringLocked = false;
-  GroupType = GroupType;
-  PublishingMode = PublishingMode;
+  QuestionnaireType = QuestionnaireType;
+  QuestionnairePublishingMode = QuestionnairePublishingMode;
   waitForCountdown = true;
 
   readonly focusModeEnabled = toSignal(
@@ -220,247 +217,73 @@ export class ContentParticipantComponent
     },
   ];
 
-  get answerSubmitted(): Observable<string> {
-    return this.answerSubmitted$;
-  }
-
-  ngOnInit(): void {
-    if (this.active) {
-      this.selectedRoute = this.activeTab || '';
-      this.checkForCountdown();
-    }
-    this.setExtensionData(this.content.roomId, this.content.id);
-    this.initContentData();
-    this.isMultiple = (this.content as ContentChoice).multiple;
-    this.a11yMsg = this.getA11yMessage();
-    this.answerService
-      .getAnswersByUserIdContentIds(this.content.roomId, this.userId, [
-        this.content.id,
-      ])
-      .subscribe({
-        next: (answer) => {
-          if (answer[0]) {
-            this.answer = answer[0];
-            this.alreadySent = true;
-            this.initAnswerData();
-          }
-          this.isLoading = false;
-        },
-        error: () => (this.isLoading = false),
-      });
-    this.eventService
-      .on<EntityChangeNotification>('EntityChangeNotification')
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((notification) => {
-        if (notification.payload.id === this.content.id) {
-          this.reloadContent();
-        }
-      });
-  }
-
-  reloadContent() {
-    this.contentService
-      .getContent(this.content.roomId, this.content.id, false)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((content) => {
-        const newState = content.state;
-        if (
-          this.content.state.round !== newState.round ||
-          (this.answeringLocked && !newState.answeringEndTime)
-        ) {
-          this.content.state = newState;
-          this.resetAnswer();
-          const msg = this.translateService.translate(
-            content.state.round === 1
-              ? 'participant.content.answers-reset'
-              : 'participant.content.new-round-started'
-          );
-          this.notificationService.show(msg);
-          if (content.state.round > 1 && newState.answeringEndTime) {
-            this.startCountdown(newState.answeringEndTime);
-          }
-          this.updateTab('');
-        } else if (this.isContentStarted(newState)) {
-          this.startCountdown(newState.answeringEndTime!);
-        } else if (this.isContentStopped(newState)) {
-          this.answeringLocked = true;
-        }
-        this.content.state = newState;
-      });
-  }
-
-  private isContentStarted(newState: ContentState): boolean {
-    return !this.content.state.answeringEndTime && !!newState.answeringEndTime;
-  }
-
-  private isContentStopped(newState: ContentState): boolean {
-    return (
-      !!this.content.state.answeringEndTime &&
-      !!newState.answeringEndTime &&
-      newState.answeringEndTime !== this.content.state.answeringEndTime
-    );
-  }
-
-  private resetAnswer(): void {
-    this.answerReset.emit(this.content.id);
-    this.alreadySent = false;
-    this.answeringLocked = false;
-    this.endDate = undefined;
-    this.answer = undefined;
-    this.resetAnswerData();
-  }
-
-  private startCountdown(endDate: Date, timeout = 0): void {
-    if (this.active) {
-      this.answeringLocked = false;
-      this.endDate = new Date(endDate);
-      setTimeout(() => {
-        this.waitForCountdown = false;
-      }, timeout);
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes.active &&
-      changes.active.previousValue !== undefined &&
-      changes.active.currentValue &&
-      !changes.active.previousValue
-    ) {
-      this.updateTab(this.selectedRoute);
-    }
-    if (changes.active && !!changes.active.currentValue) {
-      this.checkForCountdown();
-    }
-  }
-
-  checkForCountdown(): void {
-    if (this.contentPublishService.isGroupLive(this.contentGroup)) {
-      if (this.content.state.answeringEndTime) {
-        const now = new Date();
-        if (
-          now.getTime() >
-          new Date(this.content.state.answeringEndTime).getTime()
-        ) {
-          this.answeringLocked = true;
-        } else {
-          this.startCountdown(
-            this.content.state.answeringEndTime,
-            STEPPER_ANIMATION_DURATION
-          );
-        }
-      }
-    }
-  }
-
-  private resetAnswerData(): void {
-    this.choiceAnswer = undefined;
-    this.textAnswer = undefined;
-    this.prioritizationAnswer = undefined;
-    this.numericAnswer = undefined;
-    this.wordcloudAnswer = undefined;
-    this.shortAnswerAnswer = undefined;
-  }
-
-  initAnswerData() {
-    if (
-      [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
-        this.content.format
-      )
-    ) {
-      this.initChoiceAnswerData();
-    } else if (this.content.format === ContentType.WORDCLOUD) {
-      this.initWordcloudAnswerData();
-    } else if (this.content.format === ContentType.TEXT) {
-      this.textAnswer = this.answer as TextAnswer;
-      this.answersString = this.textAnswer.body ?? '';
-    } else if (this.content.format === ContentType.SHORT_ANSWER) {
-      this.shortAnswerAnswer = this.answer as ShortAnswerAnswer;
-      this.answersString = this.shortAnswerAnswer.text || '';
-    } else if (this.content.format === ContentType.PRIORITIZATION) {
-      this.prioritizationAnswer = this.answer as PrioritizationAnswer;
-    } else if (this.content.format === ContentType.SCALE) {
-      this.choiceAnswer = this.answer as ChoiceAnswer;
-    } else if (this.content.format === ContentType.NUMERIC) {
-      this.numericAnswer = this.answer as NumericAnswer;
-    }
-  }
-
-  initChoiceAnswerData() {
-    this.choiceAnswer = this.answer as ChoiceAnswer;
-    for (const option of (this.answer as ChoiceAnswer).selectedChoiceIndexes ??
-      []) {
-      this.answersString = this.answersString.concat(
-        (this.content as ContentChoice).options[option].label + ','
+  constructor() {
+    let answerCreatedSubscription: OutputRefSubscription | undefined;
+    effect(() => {
+      const form = this.answerForm();
+      answerCreatedSubscription?.unsubscribe();
+      answerCreatedSubscription = form?.answerCreated.subscribe((answer) =>
+        this.setAnswer(answer)
       );
+    });
+    inject(DestroyRef).onDestroy(() => {
+      answerCreatedSubscription?.unsubscribe();
+    });
+  }
+
+  submitAnswer() {
+    this.answerForm()?.submitAnswer();
+  }
+
+  submitAbstention() {
+    const roundId = this.content().activeRound?.id;
+    if (roundId) {
+      this.createAbstention.mutate({ variables: { roundId } }).subscribe({
+        next: (r) => {
+          const answer = r.data?.createQuestionnaireAbstention;
+          if (answer) {
+            this.setAnswer(answer as Answer);
+          }
+        },
+      });
     }
   }
 
-  initWordcloudAnswerData() {
-    this.wordcloudAnswer = this.answer as MultipleTextsAnswer;
-    for (const text of (this.answer as MultipleTextsAnswer).texts ?? []) {
-      this.answersString = this.answersString.concat(text + ',');
-    }
-  }
-
-  initContentData() {
-    if (
-      [ContentType.CHOICE, ContentType.BINARY, ContentType.SORT].includes(
-        this.content.format
-      )
-    ) {
-      this.choiceContent = this.content as ContentChoice;
-    } else if (this.content.format === ContentType.WORDCLOUD) {
-      this.wordloudContent = this.content as ContentWordcloud;
-    } else if (this.content.format === ContentType.PRIORITIZATION) {
-      this.prioritizationContent = this.content as ContentPrioritization;
-    } else if (this.content.format === ContentType.SCALE) {
-      this.scaleContent = this.content as ContentScale;
-    } else if (this.content.format === ContentType.FLASHCARD) {
-      this.flashcardContent = this.content as ContentFlashcard;
-    } else if (this.content.format === ContentType.NUMERIC) {
-      this.numericContent = this.content as ContentNumeric;
-    }
-  }
-
-  setExtensionData(roomId: string, refId: string) {
-    this.extensionData = {
-      roomId: roomId,
-      refType: 'content',
-      refId: refId,
-      detailedView: false,
-    };
-  }
-
-  submitAnswerEvent($event: MouseEvent, type: string) {
-    $event.preventDefault();
-    this.answerSubmitted$.next(type);
-  }
-
-  forwardAnswerMessage(status: {
-    answer?: Answer;
-    answerResult: AnswerResultType;
-  }) {
-    this.answer = status.answer;
-    if (this.answer) {
-      this.initAnswerData();
-    }
-    this.answerChanged.emit(status.answerResult);
-    setTimeout(() => {
-      this.enableForm();
-      this.hasAbstained = status.answerResult === AnswerResultType.ABSTAINED;
-      this.alreadySent = true;
-    }, 100);
+  setAnswer(answer: Answer) {
+    this.answer.set(answer);
+    this.cache.updateQuery<{
+      questionnaireContentAnswerResultsByQuestionnaireId: ContentAnswerResult[];
+    }>(
+      {
+        query: QuestionnaireContentAnswerResultsByQuestionnaireIdDocument,
+        variables: { questionnaireId: this.questionnaire().id },
+      },
+      (data) => {
+        if (!data) {
+          return data;
+        }
+        return {
+          questionnaireContentAnswerResultsByQuestionnaireId:
+            data.questionnaireContentAnswerResultsByQuestionnaireId.map((r) =>
+              r.contentId === this.content().id
+                ? { ...r, result: answer.result }
+                : r
+            ),
+        };
+      }
+    );
   }
 
   showTab(route: string): boolean {
     switch (route) {
       case '':
-        return this.statsPublished || this.contentGroup.leaderboardEnabled;
+        return (
+          this.statsPublished() || !!this.questionnaire().leaderboardEnabled
+        );
       case 'results':
-        return this.statsPublished;
+        return this.statsPublished();
       case 'leaderboard':
-        return this.contentGroup.leaderboardEnabled;
+        return !!this.questionnaire().leaderboardEnabled;
       default:
         return false;
     }
@@ -470,10 +293,10 @@ export class ContentParticipantComponent
     this.selectedRoute = route;
     const urlList = [
       'p',
-      this.room.shortId,
+      this.shortId(),
       'series',
-      this.contentGroup.name,
-      this.index + 1,
+      this.questionnaire().name,
+      this.index() + 1,
     ];
     if (this.selectedRoute) {
       urlList.push(this.selectedRoute);
@@ -482,36 +305,13 @@ export class ContentParticipantComponent
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
-  getA11yMessage(): string {
-    let msg = 'participant.answer.a11y-';
-    if (this.alreadySent) {
-      msg += 'already-answered';
-    } else {
-      msg += 'current-';
-      let format: string;
-      if (this.content.format !== ContentType.CHOICE) {
-        format = this.content.format.toLowerCase();
-      } else {
-        format = (this.content as ContentChoice).multiple
-          ? 'multiple'
-          : 'single';
-      }
-      msg += format;
-    }
-    return msg;
-  }
-
   showWaitingArea(): boolean {
     return (
-      !this.answer &&
-      ((this.contentPublishService.isGroupLive(this.contentGroup) &&
-        !this.endDate &&
-        !this.content.state.answeringEndTime) ||
-        (this.contentGroup.leaderboardEnabled && !this.alias?.id))
+      !this.answer() &&
+      this.contentPublishService.isLive(this.questionnaire()) &&
+      !this.endDate &&
+      !!this.questionnaire().leaderboardEnabled &&
+      !this.alias()?.id
     );
-  }
-
-  getIndexInContentGroup(): number {
-    return this.contentGroup.contentIds.indexOf(this.content.id);
   }
 }

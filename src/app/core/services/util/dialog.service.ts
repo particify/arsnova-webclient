@@ -8,7 +8,6 @@ import {
 import { VersionReadyEvent } from '@angular/service-worker';
 import { Observable } from 'rxjs';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
-import { ContentGroupCreationComponent } from '@app/creator/_dialogs/content-group-creation/content-group-creation.component';
 import { RoomCreateComponent } from '@app/standalone/_dialogs/room-create/room-create.component';
 import { UserActivationComponent } from '@app/core/components//_dialogs/user-activation/user-activation.component';
 import { UpdateInfoComponent } from '@app/core/components/update-info/update-info.component';
@@ -16,10 +15,14 @@ import { VersionInfo } from '@app/core/models/version-info';
 import {
   ExportComponent,
   ExportOptions,
-} from '@app/creator/content-group/_dialogs/export/export.component';
+} from '@app/creator/questionnaire/_dialogs/export/export.component';
 import { EventCategory, TrackingService } from './tracking.service';
-import { ContentGroup, GroupType } from '@app/core/models/content-group';
 import { PublishContentGroupDialogComponent } from '@app/presentation/_dialogs/publish-content-group-dialog/publish-content-group-dialog.component';
+import {
+  QuestionnairePublishingMode,
+  QuestionnaireType,
+} from '@gql/generated/graphql';
+import { QuestionnaireCreationComponent } from '@app/creator/_dialogs/questionnaire-creation/questionnaire-creation.component';
 
 export const DIALOG_SIZES: Readonly<Record<string, string>> = {
   xsmall: '350px',
@@ -92,11 +95,11 @@ export class DialogService {
     });
   }
 
-  openContentGroupCreationDialog(
+  openQuestionnaireCreationDialog(
     roomId?: string,
-    type?: GroupType
-  ): MatDialogRef<ContentGroupCreationComponent> {
-    return this.openDialog(ContentGroupCreationComponent, {
+    type?: QuestionnaireType
+  ): MatDialogRef<QuestionnaireCreationComponent> {
+    return this.openDialog(QuestionnaireCreationComponent, {
       width: DIALOG_SIZES.medium,
       maxWidth: '90vw',
       data: {
@@ -157,12 +160,14 @@ export class DialogService {
   }
 
   openPublishGroupDialog(
-    contentGroup: ContentGroup
+    questionnaireId: string,
+    publishingMode: QuestionnairePublishingMode
   ): MatDialogRef<PublishContentGroupDialogComponent> {
     return this.openDialog(PublishContentGroupDialogComponent, {
       width: DIALOG_SIZES.small,
       data: {
-        contentGroup: contentGroup,
+        questionnaireId,
+        publishingMode,
       },
     });
   }

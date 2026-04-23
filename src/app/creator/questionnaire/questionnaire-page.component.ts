@@ -1,0 +1,443 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
+import {
+  Component,
+  DestroyRef,
+  computed,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+} from '@angular/core';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
+import { Room } from '@app/core/models/room';
+import { UserRole } from '@app/core/models/user-roles.enum';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
+import { LocalFileService } from '@app/core/services/util/local-file.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
+import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/_dialogs/create-content-group-template/create-content-group-template.component';
+import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { switchMap, map } from 'rxjs';
+import { FlexModule } from '@angular/flex-layout';
+import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
+import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
+import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
+import { FeatureFlagDirective } from '@app/core/directives/feature-flag.directive';
+import { MatDivider } from '@angular/material/divider';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatCard } from '@angular/material/card';
+import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
+import {
+  Content,
+  DeleteQuestionnaireGql,
+  Questionnaire,
+  QuestionnaireContentsByQuestionnaireIdGql,
+  QuestionnairePublishingMode,
+  QuestionnaireType,
+  ToggleQuestionnairePublishedGql,
+} from '@gql/generated/graphql';
+import { QuestionnaireInfoComponent } from '@app/standalone/questionnaire-info/questionnaire-info.component';
+import { ContentListComponent } from './content-list/content-list.component';
+import { QuestionnairePageService } from './questionnaire-page.service';
+import { RoutingService } from '@app/core/services/util/routing.service';
+
+const STATUS_OKAY = 50;
+const STATUS_BETTER = 62.5;
+const STATUS_GOOD = 75;
+const STATUS_EXCELLENT = 87.5;
+
+export interface ContentStats {
+  count: number;
+  correct?: number;
+  abstentions?: number;
+}
+
+@Component({
+  selector: 'app-questionnaire-page',
+  templateUrl: './questionnaire-page.component.html',
+  styleUrls: ['./questionnaire-page.component.scss'],
+  imports: [
+    FlexModule,
+    LoadingIndicatorComponent,
+    MatButton,
+    HotkeyDirective,
+    RouterLink,
+    MatIcon,
+    MatIconButton,
+    MatTooltip,
+    NgClass,
+    ExtendedModule,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    ExtensionPointComponent,
+    TrackInteractionDirective,
+    FeatureFlagDirective,
+    MatDivider,
+    MatProgressBar,
+    MatCard,
+    RouterOutlet,
+    BackButtonComponent,
+    TranslocoPipe,
+    QuestionnaireInfoComponent,
+    ContentListComponent,
+  ],
+})
+export class QuestionnairePageComponent {
+  private readonly route = inject(ActivatedRoute);
+  private readonly notificationService = inject(NotificationService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly globalStorageService = inject(GlobalStorageService);
+  private readonly contentGroupService = inject(ContentGroupService);
+  private readonly router = inject(Router);
+  private readonly routingService = inject(RoutingService);
+  private readonly localFileService = inject(LocalFileService);
+  private readonly dialogService = inject(DialogService);
+  private readonly authService = inject(AuthenticationService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly toggleQuestionnairePublished = inject(
+    ToggleQuestionnairePublishedGql
+  );
+  private readonly contentsByQuestionnareId = inject(
+    QuestionnaireContentsByQuestionnaireIdGql
+  );
+  private readonly deleteQuestionnaire = inject(DeleteQuestionnaireGql);
+  private readonly questionnairePageService = inject(QuestionnairePageService);
+
+  readonly userRole = input.required<UserRole>();
+  readonly room = input.required<Room>();
+  readonly questionnaire = input.required<Questionnaire>();
+  readonly published = linkedSignal(() => this.questionnaire().published);
+  readonly isModerator = computed(() => this.userRole() === UserRole.MODERATOR);
+  readonly contentsResult = toSignal(
+    toObservable(this.questionnaire).pipe(
+      switchMap((questionnaire) => {
+        return this.contentsByQuestionnareId.watch({
+          variables: { questionnaireId: questionnaire.id },
+        }).valueChanges;
+      })
+    )
+  );
+  readonly contents = computed(() => {
+    const edges =
+      this.contentsResult()?.data?.questionnaireContentsByQuestionnaireId
+        ?.edges;
+    return edges?.map((e) => e?.node).filter((n): n is Content => !!n) ?? [];
+  });
+  readonly loadingContents = computed(() => this.contentsResult()?.loading);
+
+  isLoading = true;
+
+  readonly isGuest = toSignal(
+    this.authService.getCurrentAuthentication().pipe(map((a) => !a?.verified)),
+    { initialValue: true }
+  );
+
+  attributionsExist = false;
+  QuestionnaireType = QuestionnaireType;
+  totalCorrect?: number;
+  totalAbstentions?: number;
+  isContentStarted = false;
+  showLeaderboard = false;
+  creationMode = false;
+  editMode = false;
+  selectedContentIndex?: number;
+  isDesktop?: boolean;
+  childActive = false;
+
+  constructor() {
+    this.questionnairePageService
+      .getEditedContent()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.router.navigate(['.'], { relativeTo: this.route });
+      });
+    effect(() => {
+      if (!this.loadingContents()) {
+        this.determinateRouteState();
+        this.navigateToFirstContent();
+        if (this.contents().length === 0 && this.isDesktop) {
+          this.openCreation();
+        }
+      }
+    });
+    this.breakpointObserver
+      .observe(['(min-width: 1000px)'])
+      .subscribe((changes) => {
+        const temp = this.isDesktop;
+        this.isDesktop = changes.matches;
+        if (temp !== undefined && temp !== changes.matches) {
+          this.determinateRouteState();
+          this.navigateToFirstContent();
+          if (this.contents().length === 0 && this.isDesktop) {
+            this.openCreation();
+          }
+        }
+      });
+  }
+
+  private determinateRouteState() {
+    const child = this.route.firstChild;
+    const childPath = child?.snapshot.routeConfig?.path;
+    this.showLeaderboard = childPath === 'leaderboard';
+    this.creationMode = childPath === 'create';
+    this.editMode = !!childPath?.includes('edit');
+    if (childPath === 'attributions' && this.isDesktop) {
+      this.selectedContentIndex = -1;
+    }
+    this.childActive = !!child;
+    this.evaluateRouteStateChild(child, childPath);
+  }
+
+  private evaluateRouteStateChild(
+    route: ActivatedRoute | null,
+    path: string | undefined
+  ) {
+    if (!route) {
+      if (this.selectedContentIndex !== undefined && this.isDesktop) {
+        this.router.navigate([this.selectedContentIndex + 1], {
+          relativeTo: this.route,
+          replaceUrl: true,
+        });
+      }
+      return;
+    }
+    if (path) {
+      const contentIndex = route.snapshot.params.contentIndex;
+      if (contentIndex !== undefined) {
+        this.selectedContentIndex = Number(contentIndex) - 1;
+        return;
+      }
+      const contentId = route.snapshot.params.contentId;
+      if (contentId) {
+        this.editMode = true;
+        const index = this.contents()
+          .map((c) => c.id)
+          .indexOf(contentId);
+        if (index !== undefined) {
+          this.selectedContentIndex = index;
+        }
+      }
+    }
+  }
+
+  private navigateToFirstContent() {
+    if (
+      this.isDesktop &&
+      this.selectedContentIndex === undefined &&
+      !this.showLeaderboard &&
+      !this.creationMode &&
+      !this.editMode &&
+      this.contents().length > 0
+    ) {
+      this.router.navigate([1], { relativeTo: this.route, replaceUrl: true });
+    }
+  }
+
+  generateExportFilename(extension: string): string {
+    const name = this.localFileService.generateFilename(
+      [this.questionnaire().name, this.room().shortId],
+      true
+    );
+    return `${name}.${extension}`;
+  }
+
+  exportToCsv() {
+    // TODO: Export contents to CSV
+  }
+
+  importFromCsv() {
+    // TODO: Import contents from CSV
+  }
+
+  deleteAllAnswers() {
+    // TODO: Delete results of all contents
+  }
+
+  deleteGroup() {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'content-group',
+      'creator.dialog.really-delete-content-group',
+      this.questionnaire().name,
+      undefined,
+      () =>
+        this.deleteQuestionnaire.mutate({
+          variables: { id: this.questionnaire().id },
+          update: (cache, result) => {
+            if (result.data?.deleteQuestionnaire) {
+              const cacheId = cache.identify({
+                __typename: 'Questionnaire',
+                id: this.questionnaire().id,
+              });
+              if (cacheId) {
+                cache.evict({ id: cacheId });
+                cache.gc();
+              }
+            }
+          },
+        })
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.router.navigate([
+          this.routingService.getRoleRoute(),
+          this.room().shortId,
+        ]);
+        this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
+        const msg = this.translateService.translate(
+          'creator.content.content-group-deleted'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      }
+    });
+  }
+
+  publish(): void {
+    this.toggleQuestionnairePublished
+      .mutate({
+        variables: { id: this.questionnaire().id, published: true },
+      })
+      .subscribe({
+        next: (r) => {
+          if (r.data?.toggleQuestionnairePublished) {
+            const msg = this.translateService.translate(
+              'creator.content.group-published'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+            this.published.set(true);
+          }
+        },
+      });
+  }
+
+  createTemplate() {
+    this.dialogService.openDialog(CreateContentGroupTemplateComponent, {
+      width: '600px',
+      data: {
+        name: this.questionnaire().name,
+        contentGroupId: this.questionnaire().id,
+      },
+    });
+  }
+
+  openSettings(): void {
+    const dialogRef = this.dialogService.openDialog(
+      ContentGroupSettingsComponent,
+      {
+        width: '600px',
+        data: {
+          contentGroup: { ...this.questionnaire() },
+          groupNames: [this.questionnaire().name],
+        },
+      }
+    );
+    dialogRef.afterClosed().subscribe((contentGroup) => {
+      if (contentGroup) {
+        const msg = this.translateService.translate(
+          'creator.content.changes-made'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+        if (this.questionnaire().name !== contentGroup.name) {
+          this.contentGroupService.updateGroupInMemoryStorage(
+            this.questionnaire().name,
+            contentGroup.name
+          );
+        }
+      }
+    });
+  }
+
+  handleActiveContentChanged(index?: number): void {
+    this.isContentStarted = index !== undefined;
+    if (this.isContentStarted) {
+      if (this.selectedContentIndex !== index && !this.childActive) {
+        this.router.navigate(['.', index! + 1], { relativeTo: this.route });
+      }
+    }
+  }
+
+  isLiveMode(): boolean {
+    return (
+      this.questionnaire().publishingMode === QuestionnairePublishingMode.Live
+    );
+  }
+
+  getProgressColor(): string {
+    if (!this.totalCorrect) {
+      return '';
+    } else {
+      if (this.totalCorrect < STATUS_OKAY) {
+        return 'red';
+      } else if (this.totalCorrect < STATUS_BETTER) {
+        return 'orange';
+      } else if (this.totalCorrect < STATUS_GOOD) {
+        return 'yellow';
+      } else if (this.totalCorrect < STATUS_EXCELLENT) {
+        return 'green';
+      } else {
+        return 'blue';
+      }
+    }
+  }
+
+  toggleLeaderboard() {
+    const url = ['.'];
+    if (this.showLeaderboard) {
+      if (
+        this.selectedContentIndex !== undefined &&
+        this.selectedContentIndex > -1
+      ) {
+        url.push((this.selectedContentIndex + 1).toString());
+      }
+    } else {
+      url.push('leaderboard');
+    }
+    this.router.navigate(url, {
+      relativeTo: this.route,
+    });
+    this.showLeaderboard = !this.showLeaderboard;
+  }
+
+  private openCreation() {
+    this.router.navigate(['create'], {
+      relativeTo: this.route,
+      replaceUrl: true,
+    });
+  }
+}

@@ -1,9 +1,0 @@
-@use '../../../../../variables' as *;
-
-.mat-mdc-list {
-  margin-top: $spacing-1;
-}
-
-.mat-mdc-list-item:last-of-type {
-  border-bottom: solid 1px var(--border);
-}

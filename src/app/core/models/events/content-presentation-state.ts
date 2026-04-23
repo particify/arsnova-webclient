@@ -1,4 +1,4 @@
-import { Content } from '@app/core/models/content';
+import { Content } from '@gql/generated/graphql';
 import { PresentationStepPosition } from './presentation-step-position.enum';
 
 export class ContentPresentationState {

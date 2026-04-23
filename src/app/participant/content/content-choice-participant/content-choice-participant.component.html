@@ -1,20 +1,13 @@
-@if (isLoading) {
-  <app-loading-indicator></app-loading-indicator>
-}
-@if (!isLoading) {
-  <app-content-choice-answer
-    [answer]="answer"
-    [selectableAnswers]="selectableAnswers"
-    [isDisabled]="isDisabled"
-    [multipleAnswersAllowed]="content.multiple"
-    [hasAbstained]="hasAbstained"
-    [hasCorrectAnswer]="isChoice"
-    [isCorrectAnswerPublished]="correctOptionsPublished"
-    [contentId]="content.id"
-    [selectedAnswerIndex]="selectedAnswerIndex"
-    [correctOptionIndexes]="correctOptionIndexes"
-    [language]="language"
-    (answerIndexSelected)="setAnswerIndex($event)"
-  >
-  </app-content-choice-answer>
-}
+<app-content-choice-answer
+  [answerOptions]="answerOptionsWithAnswer()"
+  [correctOptionIndexes]="contentFormatData().correctOptionIndexes ?? undefined"
+  [disabled]="!!result() && result() !== 'UNANSWERED'"
+  [multipleAnswersAllowed]="!!contentFormatData().multiple"
+  [correctOptionsPublished]="correctOptionsPublished()"
+  [language]="language()"
+  [answered]="
+    !!result() && result() !== 'UNANSWERED' && result() !== 'ABSTAINED'
+  "
+  (answerOptionsChange)="answerOptions.set($event)"
+>
+</app-content-choice-answer>

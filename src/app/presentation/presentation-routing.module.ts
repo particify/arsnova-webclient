@@ -7,13 +7,13 @@ import {
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { PresentationComponent } from './presentation/presentation.component';
 import { QrCodeComponent } from '@app/standalone/qr-code/qr-code.component';
-import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
 import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
 import { AuthenticationGuard } from '@app/core/guards/authentication.guard';
 import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
 import { languageResolver } from '@app/core/resolver/language.resolver';
+import { questionnaireResolver } from '@app/core/resolver/questionnaire.resolver';
 
 const routes: Routes = [
   {
@@ -54,7 +54,7 @@ const routes: Routes = [
       ),
     data: { extendedView: true },
     resolve: {
-      contentGroup: ContentGroupResolver,
+      questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
   },
@@ -66,7 +66,7 @@ const routes: Routes = [
       ),
     data: { extendedView: true },
     resolve: {
-      contentGroup: ContentGroupResolver,
+      questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
   },

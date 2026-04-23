@@ -1,0 +1,355 @@
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  viewChild,
+  output,
+  computed,
+} from '@angular/core';
+import { ContentService } from '@app/core/services/http/content.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
+import { DragDropBaseComponent } from '@app/standalone/drag-drop-base/drag-drop-base.component';
+import {
+  CdkDragDrop,
+  CdkDragSortEvent,
+  CdkDropList,
+  CdkDrag,
+} from '@angular/cdk/drag-drop';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FlexModule } from '@angular/flex-layout';
+import { MatActionList, MatListItem } from '@angular/material/list';
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { MatIconButton } from '@angular/material/button';
+import { TrackInteractionDirective } from '@app/core/directives/track-interaction.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatMenuTrigger,
+  MatMenu,
+  MatMenuItem,
+  MatMenuContent,
+} from '@angular/material/menu';
+import { MatDivider } from '@angular/material/divider';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
+import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
+import {
+  Content,
+  ContentType,
+  DeleteQuestionnaireAnswersByContentIdGql,
+  DeleteQuestionnaireContentGql,
+  Questionnaire,
+  QuestionnaireContentsByQuestionnaireIdDocument,
+  QuestionnairesByRoomIdDocument,
+  QuestionnairePublishingMode,
+  QuestionnaireType,
+  ResetBannedQuestionnaireWordcloudContentKeywordsGql,
+} from '@gql/generated/graphql';
+import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+
+@Component({
+  selector: 'app-content-list',
+  templateUrl: './content-list.component.html',
+  styleUrls: ['./content-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    FlexModule,
+    MatActionList,
+    CdkDropList,
+    NgClass,
+    ExtendedModule,
+    MatListItem,
+    CdkDrag,
+    RouterLink,
+    NgStyle,
+    RenderedTextComponent,
+    NgTemplateOutlet,
+    MatIconButton,
+    TrackInteractionDirective,
+    MatTooltip,
+    MatIcon,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+    MatDivider,
+    MatMenuContent,
+    HotkeyDirective,
+    CountdownTimerComponent,
+    PulsatingCircleComponent,
+    A11yRenderedBodyPipe,
+    TranslocoPipe,
+  ],
+})
+export class ContentListComponent extends DragDropBaseComponent<Content> {
+  private readonly contentService = inject(ContentService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly dialogService = inject(DialogService);
+  private readonly contentGroupService = inject(ContentGroupService);
+  private readonly contentPublishService = inject(ContentPublishV4Service);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly deleteContentById = inject(DeleteQuestionnaireContentGql);
+  private readonly deleteAnswersByContentId = inject(
+    DeleteQuestionnaireAnswersByContentIdGql
+  );
+  private readonly resetBannedKeywords = inject(
+    ResetBannedQuestionnaireWordcloudContentKeywordsGql
+  );
+
+  publishingDivider = viewChild<ElementRef>('publishingDivider');
+  roomId = input.required<string>();
+  questionnaire = input.required<Questionnaire>();
+  contents = input.required<Content[]>();
+  isModerator = input(false);
+  attributionsExist = input(false);
+  selectedContentIndex = input<number | undefined>();
+  startedContentIndexChanged = output<number | undefined>();
+
+  currentGroupIndex?: number;
+  contentTypes: string[] = Object.values(ContentType);
+
+  activeMenuIndex?: number;
+  activeContentId?: string;
+  markdownFeatureset = MarkdownFeatureset.MINIMUM;
+
+  ContentType: typeof ContentType = ContentType;
+  QuestionnaireType = QuestionnaireType;
+
+  iconList = computed(() => this.contentService.getTypeIcons());
+
+  publishingChangeActive = false;
+  publishingChangePosition?: number;
+
+  startedContentIndex?: number;
+  endDate?: Date;
+
+  finishedContents = new Map<string, boolean>();
+
+  deleteContent(index: number) {
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'content',
+      'creator.dialog.really-delete-content',
+      this.contents()[index].body,
+      undefined,
+      () =>
+        this.deleteContentById.mutate({
+          variables: { id: this.contents()[index].id },
+          refetchQueries: [
+            {
+              query: QuestionnaireContentsByQuestionnaireIdDocument,
+              variables: { questionnaireId: this.questionnaire().id },
+            },
+            QuestionnairesByRoomIdDocument,
+          ],
+        })
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const selectedContentIndex = this.selectedContentIndex();
+        if (selectedContentIndex !== undefined) {
+          const url = ['.'];
+          if (this.contents().length > 0) {
+            if (index < selectedContentIndex) {
+              url.push(this.selectedContentIndex.toString());
+            }
+          } else {
+            url.push('create');
+          }
+          this.router.navigate(url, {
+            relativeTo: this.route,
+            onSameUrlNavigation: 'reload',
+            replaceUrl: true,
+          });
+        }
+        const msg = this.translateService.translate(
+          'creator.content.content-deleted'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      }
+    });
+  }
+
+  showSuccessNotification(actionString: string, name: string) {
+    const msg = this.translateService.translate(
+      `creator.content.${actionString}-to-content-group`,
+      { series: name }
+    );
+    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+  }
+
+  deleteAnswers(content: Content) {
+    this.dialogService.openDeleteDialog(
+      'content-answers',
+      'creator.dialog.really-delete-answers',
+      undefined,
+      undefined,
+      () =>
+        this.deleteAnswersByContentId.mutate({
+          variables: { contentId: content.id },
+          refetchQueries: [
+            {
+              query: QuestionnaireContentsByQuestionnaireIdDocument,
+              variables: { questionnaireId: this.questionnaire().id },
+            },
+          ],
+        })
+    );
+  }
+
+  isRangePublished(): boolean {
+    return (
+      this.questionnaire().published &&
+      this.questionnaire().publishingMode !== QuestionnairePublishingMode.All
+    );
+  }
+
+  isPublished(index: number): boolean {
+    return this.contentPublishService.isIndexPublished(
+      this.questionnaire(),
+      index
+    );
+  }
+
+  isLiveMode(): boolean {
+    return this.contentPublishService.isLive(this.questionnaire());
+  }
+
+  openedMenu(index: number) {
+    this.activeMenuIndex = index;
+  }
+
+  closedMenu() {
+    this.activeMenuIndex = undefined;
+  }
+
+  updateActive(contentId: string) {
+    this.activeContentId = contentId;
+  }
+
+  resetBannedAnswers(contentId: string) {
+    this.resetBannedKeywords.mutate({ variables: { contentId } }).subscribe({
+      next: () => {
+        const msg = this.translateService.translate(
+          'creator.content.banned-keywords-reset'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      },
+    });
+  }
+
+  private getSortIndex(
+    index: number,
+    indexIsNotPublishingIndex = true
+  ): number {
+    const publishingIndex = this.questionnaire().publishedUpToContent?.position;
+    return (
+      index -
+      (this.isRangePublished() &&
+      publishingIndex != null &&
+      index > publishingIndex &&
+      indexIsNotPublishingIndex
+        ? 1
+        : 0)
+    );
+  }
+
+  dropContent(prev: number, current: number) {
+    if (prev === current) {
+      return;
+    }
+    const oldPublishingIndex =
+      this.questionnaire().publishedUpToContent?.position;
+    const prevContentIndex = this.getSortIndex(
+      prev,
+      prev !== oldPublishingIndex
+    );
+    const currentContentIndex = this.getSortIndex(current);
+    this.moveItem(prevContentIndex, currentContentIndex);
+    // TODO: Update order of contents in questionnaire
+  }
+
+  dropPublishingDivider(event: CdkDragDrop<Content[]>) {
+    this.publishingChangeActive = false;
+    this.publishingChangePosition = undefined;
+    const newPublishingIndex = event.currentIndex - 1;
+    if (
+      this.questionnaire().publishedUpToContent?.position !== newPublishingIndex
+    ) {
+      // TODO: Update questionnaires publishing index / active content
+    }
+  }
+
+  movePublishingDividerUp(index: number) {
+    if (index > 0) {
+      //this.movePublishingDivider(index - 1);
+    }
+  }
+
+  movePublishingDividerDown(index: number) {
+    if (index < this.dragDroplist.length - 1) {
+      //this.movePublishingDivider(index + 1);
+    }
+  }
+
+  onSortChanged(event: CdkDragSortEvent) {
+    if (this.publishingChangeActive) {
+      this.publishingChangePosition = event.currentIndex;
+    }
+    this.changeDetectorRef.detectChanges();
+  }
+
+  getPercentageString(value?: number): string {
+    return value?.toFixed() + '\u202F%';
+  }
+
+  finishAnswering(): void {
+    if (this.startedContentIndex !== undefined) {
+      this.finishedContents.set(
+        this.contents()[this.startedContentIndex].id,
+        true
+      );
+    }
+    this.endDate = undefined;
+    this.setStartedContent();
+  }
+
+  setStartedContent(index?: number): void {
+    this.startedContentIndex = index;
+    this.startedContentIndexChanged.emit(this.startedContentIndex);
+  }
+
+  hasFormatRounds(format: ContentType): boolean {
+    return this.contentService.hasFormatRounds(format);
+  }
+
+  isCompatibleWithGroupType(
+    content: Content,
+    groupType: QuestionnaireType
+  ): boolean {
+    return this.contentGroupService.isContentCompatibleWithQuestionnaireType(
+      content,
+      groupType
+    );
+  }
+}

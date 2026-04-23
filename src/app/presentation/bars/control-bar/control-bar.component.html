@@ -7,13 +7,15 @@
     class="view-switcher presentation-feature-controls"
     [ngClass]="{
       visible:
-        barVisible && content && content.format === ContentType.WORDCLOUD,
+        barVisible &&
+        content &&
+        content.formatData.format === ContentType.Wordcloud,
     }"
   >
     <app-toggle-button-bar
       [buttons]="buttons"
       [activeButtonId]="activeWordcloudVisualiation()"
-      (activeButtonChange)="setActiveWordcloudVisualiation($event)"
+      (activeButtonChange)="toggleWordcloudVisualiation()"
     >
     </app-toggle-button-bar>
   </div>
@@ -82,7 +84,7 @@
             fxLayoutAlign="center center"
             class="feature-container no-padding"
           >
-            @if (contentGroups.length > 1) {
+            @if (questionnaires().length > 1) {
               <button
                 mat-button
                 class="full-height nav-button"
@@ -97,33 +99,31 @@
               </button>
             }
             <mat-menu #groupMenu="matMenu">
-              @for (contentGroup of contentGroups; track contentGroup) {
+              @for (questionnaire of questionnaires(); track questionnaire) {
                 <button
                   mat-menu-item
                   fxLayoutAlign="space-between center"
-                  [value]="contentGroup.name"
-                  [disabled]="
-                    !contentGroup.contentIds ||
-                    contentGroup.contentIds.length === 0
-                  "
-                  (click)="changeGroup(contentGroup)"
+                  [value]="questionnaire.name"
+                  [disabled]="questionnaire.contentCount === 0"
+                  (click)="changeGroup(questionnaire)"
                   [ngClass]="{
-                    'locked-group': isGroupLocked(contentGroup),
+                    'locked-group': !questionnaire.published,
                   }"
                 >
                   <span
                     [ngClass]="{
-                      'selected-menu-item': contentGroup.name === groupName,
+                      'selected-menu-item': questionnaire.name === groupName,
                     }"
-                    >{{ contentGroup.name }}</span
+                    >{{ questionnaire.name }}</span
                   >
-                  @if (isGroupLocked(contentGroup)) {
+                  @if (!questionnaire.published) {
                     <mat-icon class="locked-icon">lock</mat-icon>
                   }
                 </button>
               }
             </mat-menu>
             <app-key-button-bar [items]="groupItems"></app-key-button-bar>
+            @let _moreMenu = moreMenu();
             <div
               matRipple
               role="button"
@@ -132,9 +132,7 @@
               class="action-button more-button"
               [ngClass]="{ disabled: !content }"
               #moreMenuTrigger="matMenuTrigger"
-              [matMenuTriggerFor]="
-                moreMenuComponent ? moreMenuComponent.moreMenu : hideMenu
-              "
+              [matMenuTriggerFor]="_moreMenu ? _moreMenu.moreMenu : hideMenu"
               (menuOpened)="menuOpen = true"
               (menuClosed)="menuClosed()"
               [matTooltip]="
@@ -155,15 +153,13 @@
               <p class="text">{{ 'creator.control-bar.more' | transloco }}</p>
             </div>
             <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
-            @if (content && groupName) {
+            @let _questionnaireName = questionnaireName();
+            @if (content && _questionnaireName) {
               <app-content-presentation-menu
                 [content]="content"
-                [groupName]="groupName"
+                [groupName]="_questionnaireName"
                 [shortId]="room().shortId"
                 [contentIndex]="contentIndex"
-                [publishingMode]="
-                  $safeNavigationMigration(group?.publishingMode)
-                "
               ></app-content-presentation-menu>
               <div class="bar-divider"></div>
               <app-key-button-bar

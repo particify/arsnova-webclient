@@ -1,27 +1,20 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
   Output,
   ViewChild,
   inject,
   ChangeDetectionStrategy,
+  afterNextRender,
 } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
-import { Content } from '@app/core/models/content';
-import { PublishingMode } from '@app/core/models/content-group';
-import { ContentType } from '@app/core/models/content-type.enum';
-import { RoundState } from '@app/core/models/events/round-state';
 import { ContentService } from '@app/core/services/http/content.service';
-import { DialogService } from '@app/core/services/util/dialog.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { Subject, of, takeUntil } from 'rxjs';
+import { Content, ContentType } from '@gql/generated/graphql';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-content-presentation-menu',
@@ -29,11 +22,8 @@ import { Subject, of, takeUntil } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './content-presentation-menu.component.html',
 })
-export class ContentPresentationMenuComponent
-  implements AfterViewInit, OnChanges, OnDestroy, OnInit
-{
+export class ContentPresentationMenuComponent {
   private contentService = inject(ContentService);
-  private dialogService = inject(DialogService);
   private presentationService = inject(PresentationService);
 
   @ViewChild('moreMenu') moreMenu!: MatMenu;
@@ -44,7 +34,6 @@ export class ContentPresentationMenuComponent
   @Input({ required: true }) contentIndex!: number;
   @Input() editingEnabled = true;
   @Input() settingsEnabled = true;
-  @Input() publishingMode?: PublishingMode;
   @Output() menuLoaded = new EventEmitter<void>();
 
   destroyed$ = new Subject<void>();
@@ -58,70 +47,20 @@ export class ContentPresentationMenuComponent
   isLive = false;
   isFinished = true;
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.menuLoaded.emit();
-    });
-  }
-
-  ngOnChanges() {
-    this.isLive = this.publishingMode === PublishingMode.LIVE;
-  }
-
-  ngOnInit(): void {
-    this.checkIfFinished();
-    this.contentService
-      .getAnswersDeleted()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((contentId) => {
-        if (contentId === this.content?.id) {
-          this.content.state.round = 1;
-          this.changeRound(0);
-          this.multipleRounds = false;
-        }
-      });
-    this.contentService
-      .getRoundStarted()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((content) => {
-        this.afterRoundStarted(content);
-      });
-    this.presentationService
-      .getMultipleRoundState()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(
-        (multipleRounds) => (this.multipleRounds = multipleRounds || false)
-      );
-    this.presentationService.getContentState().subscribe((state) => {
-      if (state?.content) {
-        this.content = state.content;
-        this.contentRounds.set(this.content.id, this.content.state.round - 1);
-      }
-    });
+  constructor() {
     this.presentationService
       .getWordcloudVisualizationChanged()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((rotateWordcloudItems) => {
         this.rotateWordcloudItems = rotateWordcloudItems;
       });
-    this.presentationService.getCountdownChanged().subscribe((content) => {
-      this.content = content;
-      this.checkIfFinished();
+    afterNextRender(() => {
+      this.menuLoaded.emit();
     });
   }
 
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  private checkIfFinished() {
-    const endTime = this.content.state.answeringEndTime;
-    this.isFinished = !!endTime && new Date() > new Date(endTime);
-  }
-
   hasFormatAnswer(format: ContentType): boolean {
-    return ![ContentType.SLIDE, ContentType.FLASHCARD].includes(format);
+    return ![ContentType.Slide, ContentType.Flashcard].includes(format);
   }
 
   hasFormatRounds(format: ContentType): boolean {
@@ -129,7 +68,7 @@ export class ContentPresentationMenuComponent
   }
 
   hasFormatCloudVisualization(): boolean {
-    return this.content.format === ContentType.WORDCLOUD;
+    return this.content.formatData.format === ContentType.Wordcloud;
   }
 
   editContent() {
@@ -140,40 +79,20 @@ export class ContentPresentationMenuComponent
   }
 
   deleteContentAnswers() {
-    if (this.content) {
-      this.dialogService.openDeleteDialog(
-        'content-answers',
-        'creator.dialog.really-delete-answers',
-        undefined,
-        undefined,
-        () =>
-          this.content
-            ? this.contentService.deleteAnswersOfContent(
-                this.content.id,
-                this.content.roomId
-              )
-            : of()
-      );
-    }
+    // TODO: Delete content answers
   }
 
-  changeRound(round: number) {
-    this.contentRounds.set(this.content.id, round);
-    const roundState = new RoundState(this.contentIndex, round);
-    this.presentationService.updateRoundState(roundState);
+  changeRound() {
+    // TODO: Change round
   }
 
   afterRoundStarted(content: Content) {
     this.content = content;
-    this.changeRound(this.content.state.round - 1);
     this.multipleRounds = true;
   }
 
   startNewRound() {
-    if (!this.content) {
-      return;
-    }
-    this.contentService.startNewRound(this.content);
+    // TODO: Start new round
   }
 
   changeWordcloudVisualization() {

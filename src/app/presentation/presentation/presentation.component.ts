@@ -1,18 +1,16 @@
 import {
   Component,
-  Input,
   OnDestroy,
-  OnInit,
   inject,
   input,
   ChangeDetectionStrategy,
+  signal,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import {
   GlobalStorageService,
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
-import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -20,16 +18,16 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
-import { first } from 'rxjs';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { ControlBarComponent } from '@app/presentation/bars/control-bar/control-bar.component';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIcon } from '@angular/material/icon';
-import { RoomSettings } from '@app/core/models/room-settings';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
+import { first, switchMap } from 'rxjs';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-presentation',
@@ -45,39 +43,36 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
     TranslocoPipe,
   ],
 })
-export class PresentationComponent implements OnInit, OnDestroy {
-  private route = inject(ActivatedRoute);
-  router = inject(Router);
-  private globalStorageService = inject(GlobalStorageService);
-  private roomStatsService = inject(RoomStatsService);
-  private translateService = inject(TranslocoService);
-  private presentationService = inject(PresentationService);
-  private notificationService = inject(NotificationService);
-  private roomSettingsService = inject(RoomSettingsService);
-  private focusModeService = inject(FocusModeService);
+export class PresentationComponent implements OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly globalStorageService = inject(GlobalStorageService);
+  private readonly translateService = inject(TranslocoService);
+  private readonly presentationService = inject(PresentationService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly roomSettingsService = inject(RoomSettingsService);
+  private readonly focusModeService = inject(FocusModeService);
 
   // Route data input below
   roomId = input.required<string>();
-  @Input({ required: true }) room!: Room;
-  @Input({ required: true }) userRole!: UserRole;
-  @Input({ required: true }) viewRole!: UserRole;
-  lastGroup?: string;
+  room = input.required<Room>();
+  userRole = input.required<UserRole>();
+  viewRole = input.required<UserRole>();
+  activeQuestionnaire = signal<string | undefined>(undefined);
   featureString?: string;
 
-  roomSettings?: RoomSettings;
+  roomSettings = toSignal(
+    toObservable(this.room).pipe(
+      switchMap((r) => this.roomSettingsService.getByRoomId(r.id))
+    )
+  );
 
   constructor() {
     const childRoute = this.route.snapshot?.firstChild?.firstChild;
     if (childRoute) {
       this.featureString = childRoute.url[0]?.path;
-      this.lastGroup = childRoute.params['seriesName'];
+      this.activeQuestionnaire.set(childRoute.params.seriesName);
     }
-  }
-
-  ngOnInit(): void {
-    this.roomSettingsService.getByRoomId(this.room.id).subscribe((settings) => {
-      this.roomSettings = settings;
-    });
     this.focusModeService
       .getFocusModeEnabled()
       .pipe(first())
@@ -93,33 +88,13 @@ export class PresentationComponent implements OnInit, OnDestroy {
         }
       });
     document.body.style.background = 'var(--surface)';
-    this.translateService.setActiveLang(
-      this.globalStorageService.getItem(STORAGE_KEYS.LANGUAGE)
-    );
-    if (this.lastGroup === undefined) {
-      this.lastGroup = this.globalStorageService.getItem(
-        STORAGE_KEYS.LAST_GROUP
-      );
-      if (this.lastGroup === undefined) {
-        this.roomStatsService
-          .getStats(this.room.id, true)
-          .subscribe((stats) => {
-            if (stats.groupStats) {
-              this.lastGroup = stats.groupStats[0].groupName;
-              if (this.lastGroup) {
-                this.setGroupInSessionStorage(this.lastGroup);
-              }
-            }
-          });
-      }
-    }
   }
 
   ngOnDestroy(): void {
     this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
   }
 
-  updateFeature(feature: string) {
+  updateFeature(feature?: string) {
     this.featureString = feature;
     this.updateUrl();
   }
@@ -127,15 +102,18 @@ export class PresentationComponent implements OnInit, OnDestroy {
   updateUrl(group?: string) {
     const isGroup = this.featureString === RoutingFeature.CONTENTS;
     if (group) {
-      this.lastGroup = group;
+      if (group === this.activeQuestionnaire()) {
+        return;
+      }
+      this.activeQuestionnaire.set(group);
       this.presentationService.updateCurrentGroup(group);
       this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     }
-    const urlList = ['present', this.room.shortId];
+    const urlList = ['present', this.room().shortId];
     if (this.featureString) {
       urlList.push(this.featureString);
       if (isGroup) {
-        const groupName = group || this.lastGroup;
+        const groupName = group || this.activeQuestionnaire();
         if (groupName) {
           urlList.push(groupName);
         }

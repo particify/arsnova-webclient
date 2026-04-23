@@ -2,13 +2,13 @@
   <div mat-dialog-content>
     <h3>
       {{
-        (isLive
+        (isLive()
           ? 'creator.dialog.want-publish-group'
           : 'creator.dialog.how-to-publish-group'
         ) | transloco
       }}
     </h3>
-    @if (isLive) {
+    @if (isLive()) {
       <p>
         {{ 'creator.content.group-is-hidden-for-participants' | transloco }}
       </p>
@@ -24,7 +24,7 @@
             <div
               class="mode-item unselected"
               [ngClass]="{
-                'primary-border-color': selectedMode?.type === mode.type,
+                'primary-border-color': selectedMode().type === mode.type,
               }"
             >
               <mat-radio-button
@@ -38,7 +38,7 @@
                   fxLayout="row"
                   fxLayoutGap="0.75em"
                   fxLayoutAlign="start center"
-                  [ngClass]="{ primary: selectedMode?.type === mode.type }"
+                  [ngClass]="{ primary: selectedMode().type === mode.type }"
                 >
                   <mat-icon>{{ mode.icon }}</mat-icon>
                   <div fxLayout="column" fxLayoutGap="0.25em">

@@ -1,0 +1,94 @@
+@use '../../../../../variables' as *;
+
+.answer-item {
+  background-color: var(--background);
+  border-radius: 4px;
+  align-items: center;
+  color: var(--on-surface);
+  padding: 0 16px;
+
+  &.all-animations:not(:last-of-type) {
+    margin-bottom: 10px;
+  }
+}
+
+.all-animations {
+  transition: 300ms;
+}
+
+.answer-label {
+  font-size: 18px;
+  font-weight: $font-weight-bold;
+  margin-right: 12px;
+}
+
+.answer-text {
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+}
+
+.correct {
+  background-color: var(--surface);
+  box-shadow: 0 0 6px var(--success);
+}
+
+.not-correct {
+  color: var(--on-surface-light);
+}
+
+.correct-icon {
+  transition: opacity 300ms;
+  opacity: 0;
+  color: var(--success);
+}
+
+.show-correct-icon {
+  opacity: 1;
+}
+
+.chart-answer-label {
+  font-size: 10px;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 10;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.no-background,
+.no-background > * {
+  transition: box-shadow 300ms;
+  background: transparent;
+  min-height: 0;
+
+  .mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.no-background .answer-label {
+  margin: 8px 0;
+  min-width: 18px;
+  max-height: 18px;
+  line-height: 18px;
+  padding: 4px;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid var(--grey);
+  transition: border-color 300ms;
+  font-size: 12px;
+}
+
+.no-background.correct .answer-label {
+  border-color: transparent;
+}
+
+.no-background p {
+  margin: 0;
+}
+
+.no-margin {
+  margin: 0;
+}

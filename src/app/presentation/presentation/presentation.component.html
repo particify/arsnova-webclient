@@ -1,12 +1,15 @@
-@if (roomSettings) {
+@let _roomId = roomId();
+@let _roomSettings = roomSettings();
+@if (_roomId && _roomSettings) {
   <app-control-bar
-    [roomId]="roomId()"
-    [room]="room"
-    [userRole]="userRole"
-    [viewRole]="viewRole"
+    [roomId]="_roomId"
+    [room]="room()"
+    [userRole]="userRole()"
+    [viewRole]="viewRole()"
+    [questionnaireName]="activeQuestionnaire()"
     (activeFeature)="updateFeature($event)"
-    (activeGroup)="updateUrl($event)"
-    [roomSettings]="roomSettings"
+    (activeQuestionnaireChange)="updateUrl($event.name)"
+    [roomSettings]="_roomSettings"
   ></app-control-bar>
 }
 <div tabindex="-1" [appAutofocus] class="visually-hidden">

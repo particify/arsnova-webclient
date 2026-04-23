@@ -5,7 +5,6 @@ import {
   RouteMountPoint,
 } from '@projects/extension-point/src/lib/extension-route';
 import { UserRole } from '@app/core/models/user-roles.enum';
-import { ParticipantContentCarouselPageComponent } from './participant-content-carousel-page/participant-content-carousel-page.component';
 import { legacyRoomResolver } from '@app/core/resolver/legacy-room.resolver';
 import { roomIdResolver } from '@app/core/resolver/room-id.resolver';
 import { roomViewUserRoleResolver } from '@app/core/resolver/room-view-user-role.resolver';
@@ -14,9 +13,10 @@ import { roomUserRoleResolver } from '@app/core/resolver/room-user-role.resolver
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ParticipantPageComponent } from '@app/participant/participant-page.component';
 import { ParentRoute } from '@app/core/models/parent-route';
-import { ContentGroupResolver } from '@app/core/resolver/content-group.resolver';
 import { userSettingsResolver } from '@app/core/resolver/user-settings.resolver';
 import { languageResolver } from '@app/core/resolver/language.resolver';
+import { questionnaireResolver } from '@app/core/resolver/questionnaire.resolver';
+import { QuestionnairePageComponent } from './questionnaire-page/questionnaire-page.component';
 
 const routes: Routes = [
   {
@@ -66,36 +66,36 @@ const routes: Routes = [
   },
   {
     path: 'series/:seriesName',
-    component: ParticipantContentCarouselPageComponent,
+    component: QuestionnairePageComponent,
     data: {
       feature: RoutingFeature.CONTENTS,
     },
     resolve: {
-      contentGroup: ContentGroupResolver,
+      questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
     title: 'series',
   },
   {
     path: 'series/:seriesName/:contentIndex',
-    component: ParticipantContentCarouselPageComponent,
+    component: QuestionnairePageComponent,
     data: {
       feature: RoutingFeature.CONTENTS,
     },
     resolve: {
-      contentGroup: ContentGroupResolver,
+      questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
     title: 'series',
   },
   {
     path: 'series/:seriesName/:contentIndex/:activeTab',
-    component: ParticipantContentCarouselPageComponent,
+    component: QuestionnairePageComponent,
     data: {
       feature: RoutingFeature.CONTENTS,
     },
     resolve: {
-      contentGroup: ContentGroupResolver,
+      questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
     title: 'series',

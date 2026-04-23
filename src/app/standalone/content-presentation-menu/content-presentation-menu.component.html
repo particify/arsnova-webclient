@@ -10,10 +10,12 @@
         <span> {{ 'creator.content.edit-content' | transloco }}</span>
       </button>
     }
-    @if (content && hasFormatAnswer(content.format) && editingEnabled) {
+    @if (
+      content && hasFormatAnswer(content.formatData.format) && editingEnabled
+    ) {
       <mat-divider></mat-divider>
     }
-    @if (content && hasFormatAnswer(content.format)) {
+    @if (content && hasFormatAnswer(content.formatData.format)) {
       <button
         mat-menu-item
         (click)="deleteContentAnswers()"
@@ -44,7 +46,7 @@
         <span>{{ 'creator.content.preferences' | transloco }}</span>
       </button>
     }
-    @if (content && hasFormatRounds(content.format)) {
+    @if (content && hasFormatRounds(content.formatData.format)) {
       <button
         [disabled]="!multipleRounds"
         mat-menu-item
@@ -66,7 +68,7 @@
       </button>
       <mat-menu #roundMenu>
         @for (roundItem of rounds; track roundItem; let i = $index) {
-          <button mat-menu-item (click)="changeRound(i)">
+          <button mat-menu-item (click)="changeRound()">
             <span
               [ngClass]="{
                 'selected-menu-item': this.contentRounds.get(content.id) === i,
@@ -80,7 +82,7 @@
       <button
         mat-menu-item
         (click)="startNewRound()"
-        [disabled]="content.state.round > 1 || (isLive && !isFinished)"
+        [disabled]="isLive && !isFinished"
       >
         <mat-icon>replay</mat-icon>
         {{ 'creator.content.start-new-round' | transloco }}

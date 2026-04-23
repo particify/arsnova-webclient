@@ -12,10 +12,9 @@ import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.co
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { take, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Room } from '@app/core/models/room';
-import { ContentGroup } from '@app/core/models/content-group';
 import { CoreModule } from '@app/core/core.module';
 import { AnnounceService } from '@app/core/services/util/announce.service';
+import { Questionnaire } from '@gql/generated/graphql';
 
 const REFRESH_INTERVAL = 5000;
 const REFRESH_LIMIT = 100;
@@ -32,8 +31,7 @@ export class ContentGroupLeaderboardComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private announceService = inject(AnnounceService);
 
-  @Input({ required: true }) room!: Room;
-  @Input({ required: true }) contentGroup!: ContentGroup;
+  @Input({ required: true }) questionnaire!: Questionnaire;
   @Input() showAll = false;
   @Input() allowScrolling = false;
   leaderboardItems: LeaderboardItem[] = [];
@@ -44,12 +42,12 @@ export class ContentGroupLeaderboardComponent implements OnInit {
     timer(0, REFRESH_INTERVAL)
       .pipe(take(REFRESH_LIMIT), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        this.contentGroupService
-          .getLeaderboard(this.room.id, this.contentGroup.id)
-          .subscribe((items) => {
-            this.leaderboardItems = items;
-            this.isLoading = false;
-          });
+        // this.contentGroupService
+        //   .getLeaderboard(this.room.id, this.contentGroup.id)
+        //   .subscribe((items) => {
+        //     this.leaderboardItems = items;
+        //     this.isLoading = false;
+        //   });
       });
   }
 }

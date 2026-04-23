@@ -1,21 +1,28 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-
-import { ActivatedRoute } from '@angular/router';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
-import { ContentType } from '@app/core/models/content-type.enum';
-import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
-import { ContentWordcloud } from '@app/core/models/content-wordcloud';
-import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
+import { ContentWordcloudParticipantComponent } from './content-wordcloud-participant.component';
+import {
+  AnswerResultState,
+  ContentType,
+  CreateQuestionnaireWordcloudAnswerGql,
+  WordcloudAnswerFormatData,
+  WordcloudContentFormatData,
+} from '@gql/generated/graphql';
+import { of } from 'rxjs';
 
 class MockFormattingService {}
 
-class MockContentAnswerService {}
+const createQuestionnaireWordcloudAnswerGqlMock = {
+  mutate: () =>
+    of({
+      data: {
+        createQuestionnaireWordcloudAnswer: {
+          success: true,
+          id: 'mock-id',
+        },
+      },
+    }),
+};
 
 export default {
   component: ContentWordcloudParticipantComponent,
@@ -30,41 +37,8 @@ export default {
           useClass: MockFormattingService,
         },
         {
-          provide: ContentAnswerService,
-          useClass: MockContentAnswerService,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                apiConfig: { ui: {} },
-                room: {
-                  id: 'roomId',
-                  name: 'My awesome room',
-                  shortId: '12345678',
-                  description: 'This is my awesome room description.',
-                  settings: {},
-                },
-                contentGroup: new ContentGroup(
-                  'roomId',
-                  'My mixed series',
-                  ['content1', 'content2', 'content3', 'content4'],
-                  true,
-                  true,
-                  true,
-                  PublishingMode.ALL,
-                  0,
-                  GroupType.MIXED,
-                  false
-                ),
-              },
-              params: {
-                shortId: '12345678',
-                seriesName: 'My mixed series',
-              },
-            },
-          },
+          provide: CreateQuestionnaireWordcloudAnswerGql,
+          useValue: createQuestionnaireWordcloudAnswerGqlMock,
         },
       ],
     }),
@@ -73,54 +47,48 @@ export default {
 
 type Story = StoryObj<ContentWordcloudParticipantComponent>;
 
-const wordcloudContent = new ContentWordcloud(
-  'roomId',
-  'subject',
-  'Text Content',
-  [],
-  ContentType.TEXT,
-  3
-);
+const baseArgs = {
+  contentId: 'content-1',
+  roundId: 'round-1',
+  result: AnswerResultState.Unanswered,
+  correctOptionsPublished: false,
+};
+
+const wordcloudFormatData: WordcloudContentFormatData = {
+  __typename: 'WordcloudContentFormatData',
+  format: ContentType.Wordcloud,
+  maxAnswers: 3,
+};
+
+const wordcloudAnswerFormatData: WordcloudAnswerFormatData = {
+  __typename: 'WordcloudAnswerFormatData',
+  format: ContentType.Wordcloud,
+  words: ['abc', 'test'],
+};
 
 export const Unanswered: Story = {
   args: {
-    content: wordcloudContent,
+    ...baseArgs,
+    contentFormatData: wordcloudFormatData,
   },
 };
-
-const wordcloudContentWithMoreMaxAnswers = new ContentWordcloud(
-  'roomId',
-  'subject',
-  'Text Content',
-  [],
-  ContentType.TEXT,
-  10
-);
 
 export const UnansweredMoreMaxAnswers: Story = {
   args: {
-    content: wordcloudContentWithMoreMaxAnswers,
+    ...baseArgs,
+    contentFormatData: {
+      ...wordcloudFormatData,
+      maxAnswers: 10,
+    },
   },
 };
-
-export const UnansweredDisabled: Story = {
-  args: {
-    content: wordcloudContent,
-    isDisabled: true,
-  },
-};
-
-const wordcloudAnswer = new MultipleTextsAnswer(
-  'contentId',
-  1,
-  ContentType.WORDCLOUD
-);
-wordcloudAnswer.texts = ['abc', 'test'];
 
 export const Answered: Story = {
   args: {
-    content: wordcloudContent,
-    answer: wordcloudAnswer,
-    isDisabled: true,
+    ...baseArgs,
+    contentFormatData: wordcloudFormatData,
+    answerFormatData: wordcloudAnswerFormatData,
+    result: AnswerResultState.Neutral,
+    correctOptionsPublished: true,
   },
 };

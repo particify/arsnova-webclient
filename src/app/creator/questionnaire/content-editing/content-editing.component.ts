@@ -1,0 +1,282 @@
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  OutputRefSubscription,
+  Signal,
+  afterRenderEffect,
+  computed,
+  inject,
+  input,
+  linkedSignal,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { AnnounceService } from '@app/core/services/util/announce.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { HintType } from '@app/core/models/hint-type.enum';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
+import { FlexModule } from '@angular/flex-layout';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatSelectTrigger } from '@angular/material/select';
+import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatTabNav, MatTabLink, MatTabNavPanel } from '@angular/material/tabs';
+import { FormsModule } from '@angular/forms';
+import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
+import { FormattingToolbarComponent } from '@app/standalone/formatting-toolbar/formatting-toolbar.component';
+import { MatInput } from '@angular/material/input';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { Dir } from '@angular/cdk/bidi';
+import { HintComponent } from '@app/standalone/hint/hint.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgStyle, AsyncPipe, NgComponentOutlet } from '@angular/common';
+import { ExtendedModule } from '@angular/flex-layout/extended';
+import { ChoiceContentFormComponent } from './choice-content-form/choice-content-form.component';
+import { MatButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
+import { CoreModule } from '@app/core/core.module';
+import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
+import {
+  Content,
+  ContentType,
+  Questionnaire,
+  QuestionnaireType,
+} from '@gql/generated/graphql';
+import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
+import { FORM_REGISTRY } from './form-registry';
+import { WordcloudContentFormComponent } from './wordcloud-content-form/wordcloud-content-form.component';
+
+interface ContentFormat {
+  type: ContentType;
+  name: string;
+  icon: string;
+}
+
+@Component({
+  selector: 'app-content-editing',
+  templateUrl: './content-editing.component.html',
+  styleUrls: ['./content-editing.component.scss'],
+  imports: [
+    FlexModule,
+    MatFormField,
+    MatSelect,
+    HotkeyDirective,
+    MatSelectTrigger,
+    MatIcon,
+    MatOption,
+    MatTabNav,
+    MatTabLink,
+    MatTabNavPanel,
+    FormsModule,
+    AutofocusDirective,
+    FormattingToolbarComponent,
+    MatLabel,
+    MatInput,
+    CdkTextareaAutosize,
+    Dir,
+    HintComponent,
+    MatTooltip,
+    NgStyle,
+    ExtendedModule,
+    MatButton,
+    RouterLink,
+    LoadingButtonComponent,
+    AsyncPipe,
+    A11yIntroPipe,
+    TranslocoPipe,
+    CoreModule,
+    SettingsSlideToggleComponent,
+    RenderedTextComponent,
+  ],
+})
+export class ContentEditingComponent {
+  private readonly translateService = inject(TranslocoService);
+  private readonly announceService = inject(AnnounceService);
+  private readonly formattingService = inject(FormattingService);
+  private readonly contentService = inject(ContentService);
+  private readonly contentGroupService = inject(ContentGroupService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly contentPublishService = inject(ContentPublishV4Service);
+
+  private readonly formComponentOutlet =
+    viewChild<NgComponentOutlet>(NgComponentOutlet);
+  private readonly contentForm: Signal<
+    ChoiceContentFormComponent | WordcloudContentFormComponent | undefined
+  > = computed(() => {
+    // componentInstance is no signal: the outlet swaps it on a format change.
+    this.formatComponent();
+    return this.formComponentOutlet()?.componentInstance ?? undefined;
+  });
+  private readonly bodyInput = viewChild.required<ElementRef>('questionInput');
+  readonly formatComponent = computed(() => {
+    const format = this.selectedFormat()?.type;
+    if (!format) return;
+    return FORM_REGISTRY[format];
+  });
+
+  readonly componentInputs = computed(() => {
+    const base = {
+      contentId: this.content()?.id,
+      duration: this.duration(),
+      preview: this.isPreview(),
+      formatData: this.content()?.formatData,
+      abstentionsAllowed: this.abstentionsAllowed(),
+    };
+    if (this.selectedFormat()?.type === ContentType.Choice) {
+      return {
+        ...base,
+        multiple: this.multiple(),
+        weight: this.weight(),
+        answered: this.answered(),
+        hasCorrectAnswer: this.hasCorrectAnswer(),
+      };
+    }
+    return base;
+  });
+
+  readonly questionnaire = input.required<Questionnaire>();
+
+  readonly content = input<Content>();
+  readonly multiple = linkedSignal(() => {
+    const formatData = this.content()?.formatData;
+    return formatData?.__typename === 'ChoiceContentFormatData'
+      ? !!formatData.multiple
+      : false;
+  });
+  readonly question = linkedSignal(() => this.content()?.body ?? '');
+  readonly weight = linkedSignal(() => this.content()?.weight ?? 1);
+  readonly duration = linkedSignal(() => this.content()?.duration);
+  readonly abstentionsAllowed = linkedSignal(
+    () => this.content()?.abstentionsAllowed ?? true
+  );
+  readonly hasCorrectAnswer = linkedSignal(
+    () =>
+      this.content()?.hasCorrectAnswer ??
+      this.questionnaire().type === QuestionnaireType.Quiz
+  );
+
+  readonly answered = computed(() => !!this.content()?.answerCount);
+
+  // Route data input below
+  fixedHeight = input(false);
+  language = input.required<string>();
+
+  ContentType = ContentType;
+
+  isPreview = signal(false);
+  textContainsImage = false;
+  HintType = HintType;
+  isLoading = true;
+  created = false;
+  QuestionnaireType = QuestionnaireType;
+  questionMaxLength = 2000;
+
+  readonly formats = computed(() => {
+    const iconList = this.contentService.getTypeIcons();
+    const supportedTypes =
+      this.contentGroupService.getContentFormatsOfQuestionnaireType(
+        this.questionnaire().type
+      );
+
+    return supportedTypes
+      .filter((type) => iconList.has(type))
+      .map((type) => ({
+        type,
+        name: type.toLowerCase(),
+        icon: iconList.get(type)!,
+      }));
+  });
+
+  selectedFormat = linkedSignal(() =>
+    this.content()
+      ? this.formats().find((f) => f.type === this.content()?.formatData.format)
+      : this.formats()[0]
+  );
+  formatData = linkedSignal(() => this.content()?.formatData);
+
+  constructor() {
+    let submittedSubscription: OutputRefSubscription | undefined;
+    afterRenderEffect(() => {
+      const form = this.contentForm();
+      submittedSubscription?.unsubscribe();
+      submittedSubscription = form?.submitted.subscribe(() =>
+        this.afterCreation()
+      );
+    });
+    inject(DestroyRef).onDestroy(() => {
+      submittedSubscription?.unsubscribe();
+    });
+  }
+
+  formatChanged($event: ContentFormat) {
+    this.selectedFormat.set($event);
+  }
+
+  private prepareContent(): boolean {
+    if (!this.question()) {
+      const msg = this.translateService.translate(
+        'creator.content.no-empty-fields-allowed'
+      );
+      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
+      return false;
+    }
+    return true;
+  }
+
+  togglePreview() {
+    if (this.isPreview()) {
+      this.showEditing();
+    } else {
+      if (this.prepareContent() && this.contentForm()?.formatDataValid()) {
+        this.isPreview.set(true);
+      }
+    }
+  }
+
+  updateTextContainsImage(text: string) {
+    this.textContainsImage = this.formattingService.containsTextAnImage(text);
+  }
+
+  setDuration(value: string): void {
+    const duration = Number.parseInt(value, 10);
+    this.duration.set(Number.isNaN(duration) ? null : duration);
+  }
+
+  submitContent(): void {
+    if (!this.prepareContent()) {
+      return;
+    }
+    this.contentForm()?.submit(this.questionnaire().id, this.question());
+  }
+
+  isLiveMode(): boolean {
+    return this.contentPublishService.isLive(this.questionnaire());
+  }
+
+  afterCreation() {
+    this.question.set('');
+    setTimeout(() => {
+      this.bodyInput().nativeElement.focus();
+    });
+    this.created = true;
+    setTimeout(() => {
+      this.created = false;
+    }, 300);
+  }
+
+  private showEditing() {
+    this.isPreview.set(false);
+    this.announceService.announce('creator.content.a11y-back-in-creation');
+  }
+}

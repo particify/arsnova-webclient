@@ -11,12 +11,12 @@
     >
       @for (content of data.contents; track content; let i = $index) {
         <cdk-step>
-          <app-content-preview
-            [content]="content"
+          <!-- <app-content-preview
+            [contentFormatData]="content().formatData"
             [renderAnswersDynamically]="false"
             [showTitle]="false"
             [language]="data.lang"
-          ></app-content-preview>
+          ></app-content-preview> -->
         </cdk-step>
       }
     </app-stepper>

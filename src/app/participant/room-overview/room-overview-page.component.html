@@ -14,7 +14,7 @@
     @let _shortId = shortId();
     @if (_shortId) {
       @let anyFeatureEnabled =
-        commentsEnabled() || feedbackEnabled || contentGroups.length > 0;
+        commentsEnabled() || feedbackEnabled() || questionnaires().length > 0;
       @if (!focusModeEnabled()) {
         @if (description() && anyFeatureEnabled) {
           <app-expandable-card>
@@ -26,11 +26,11 @@
             ></app-rendered-text>
           </app-expandable-card>
         }
-        @if (commentsEnabled() || feedbackEnabled) {
+        @if (commentsEnabled() || feedbackEnabled()) {
           <div
             fxFill
             [ngClass]="{
-              'overview-row-container': commentsEnabled() && feedbackEnabled,
+              'overview-row-container': commentsEnabled() && feedbackEnabled(),
             }"
           >
             @if (commentsEnabled()) {
@@ -49,7 +49,7 @@
               >
               </app-comments-card>
             }
-            @if (feedbackEnabled) {
+            @if (feedbackEnabled()) {
               <app-live-feedback-card
                 class="feature-row-item"
                 [room]="legacyRoom()"
@@ -64,9 +64,9 @@
             }
           </div>
         }
-        @if (isLoadingGroups()) {
+        @if (loadingQuestionnaires()) {
           <app-loading-indicator></app-loading-indicator>
-        } @else if (contentGroups && contentGroups.length > 0) {
+        } @else if (questionnaires() && questionnaires().length > 0) {
           <app-feature-card
             class="feature-column-item"
             [ngClass]="{ disabled: focusModeEnabled() }"
@@ -79,13 +79,12 @@
           >
             <ng-container featureActionFill>
               <div fxLayout="column" fxLayoutGap="8px">
-                @for (contentGroup of contentGroups; track contentGroup) {
-                  <app-content-groups
-                    [contentGroup]="contentGroup"
-                    [role]="viewRole()"
-                    [shortId]="_shortId"
+                @for (questionnaire of questionnaires(); track questionnaire) {
+                  <app-questionnaire
+                    [questionnaire]="questionnaire"
+                    [isParticipant]="true"
                     [showRipple]="true"
-                  ></app-content-groups>
+                  ></app-questionnaire>
                 }
               </div>
             </ng-container>

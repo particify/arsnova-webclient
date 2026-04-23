@@ -1,11 +1,12 @@
 import {
   Component,
-  Input,
   OnDestroy,
   OnInit,
   inject,
   input,
   ChangeDetectionStrategy,
+  computed,
+  model,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -16,21 +17,12 @@ import {
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentGroup } from '@app/core/models/content-group';
-import { EventService } from '@app/core/services/util/event.service';
 import { Subject, Subscription, map, switchMap, takeUntil } from 'rxjs';
-import { EntityChanged } from '@app/core/models/events/entity-changed';
-import { ContentGroupStatistics } from '@app/core/models/content-group-statistics';
-import { DataChanged } from '@app/core/models/events/data-changed';
-import { RoomStats } from '@app/core/models/room-stats';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
-import { SeriesCreated } from '@app/core/models/events/series-created';
-import { SeriesDeleted } from '@app/core/models/events/series-deleted';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { RoomService } from '@app/core/services/http/room.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { Room } from '@app/core/models/room';
-import { EntityChangedPayload } from '@app/core/models/events/entity-changed-payload';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { TextOverflowClipComponent } from '@app/standalone/text-overflow-clip/text-overflow-clip.component';
 import { MatIcon } from '@angular/material/icon';
@@ -38,14 +30,16 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatButton } from '@angular/material/button';
 import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
-import { RoomSettings } from '@app/core/models/room-settings';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import {
   QnaState,
   QnaStateChangedGql,
+  QuestionnairesByRoomIdGql,
+  QuestionnaireSummaryFragment,
   RoomStatsByIdGql,
 } from '@gql/generated/graphql';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { RoomSettings } from '@app/core/models/room-settings';
 
 export class NavBarItem {
   name: string;
@@ -86,25 +80,55 @@ export class NavBarItem {
   ],
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-  protected router = inject(Router);
-  protected routingService = inject(RoutingService);
-  protected route = inject(ActivatedRoute);
-  protected globalStorageService = inject(GlobalStorageService);
-  protected roomStatsService = inject(RoomStatsService);
-  protected roomSettingsService = inject(RoomSettingsService);
-  protected contentGroupService = inject(ContentGroupService);
-  protected eventService = inject(EventService);
-  protected roomService = inject(RoomService);
-  protected focusModeService = inject(FocusModeService);
-  private readonly roomStatsByIdGql = inject(RoomStatsByIdGql);
-  private readonly qnaStateChanged = inject(QnaStateChangedGql);
+  protected readonly router = inject(Router);
+  protected readonly routingService = inject(RoutingService);
+  protected readonly route = inject(ActivatedRoute);
+  protected readonly globalStorageService = inject(GlobalStorageService);
+  protected readonly roomStatsService = inject(RoomStatsService);
+  protected readonly roomSettingsService = inject(RoomSettingsService);
+  protected readonly contentGroupService = inject(ContentGroupService);
+  protected readonly roomService = inject(RoomService);
+  protected readonly focusModeService = inject(FocusModeService);
+  protected readonly roomStatsByIdGql = inject(RoomStatsByIdGql);
+  protected readonly qnaStateChanged = inject(QnaStateChangedGql);
+  protected readonly questionnairesByRoomId = inject(QuestionnairesByRoomIdGql);
 
   readonly roomId = input.required<string>();
   readonly qnaEnabled = input<boolean>();
-  @Input({ required: true }) userRole!: UserRole;
-  @Input({ required: true }) viewRole!: UserRole;
-  @Input({ required: true }) roomSettings!: RoomSettings;
+
+  readonly questionnairesResult = toSignal(
+    toObservable(this.roomId).pipe(
+      switchMap((roomId) => {
+        return this.questionnairesByRoomId.watch({
+          variables: { roomId },
+        }).valueChanges;
+      })
+    )
+  );
+
+  readonly questionnaires = computed(() => {
+    return (
+      this.questionnairesResult()?.data?.questionnairesByRoomId ?? []
+    ).filter((n): n is QuestionnaireSummaryFragment => !!n);
+  });
+
+  protected readonly loadingQuestionnaires = computed(
+    () => this.questionnairesResult()?.loading ?? true
+  );
+
+  readonly activeQuestionnaire = model(
+    computed(() => {
+      const name = this.route.snapshot.params.seriesName;
+      const first = this.questionnaires()[0];
+      return name
+        ? (this.questionnaires().find((q) => q.name === name) ?? first)
+        : first;
+    })()
+  );
+  userRole = input.required<UserRole>();
+  viewRole = input.required<UserRole>();
   room = input.required<Room>();
+  roomSettings = input.required<RoomSettings>();
   destroyed$ = new Subject<void>();
   barItems: NavBarItem[] = [];
   features: NavBarItem[] = [
@@ -115,12 +139,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
   ];
   currentRouteIndex = -1;
   activeFeatures: string[] = [RoutingFeature.OVERVIEW];
-  group?: ContentGroup;
   groupName?: string;
   private changesSubscription?: Subscription;
   private statsChangesSubscription?: Subscription;
-  contentGroups: ContentGroup[] = [];
-  isLoading = true;
 
   userCount = toSignal(
     toObservable(this.roomId).pipe(
@@ -132,6 +153,27 @@ export class NavBarComponent implements OnInit, OnDestroy {
   );
   focusFeature?: RoutingFeature;
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
+
+  constructor() {
+    let group = this.routingService.seriesName;
+    if (group === undefined) {
+      group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+    } else {
+      this.setGroupInSessionStorage(group);
+    }
+    toObservable(this.questionnaires).subscribe({
+      next: (r) => {
+        if (r && r.length > 0 && r[0].name) {
+          this.groupName = group ?? r[0].name;
+          this.setGroupInSessionStorage(this.groupName);
+          this.addContentFeatureItem(false);
+        } else if (!this.loadingQuestionnaires()) {
+          this.removeContentFeatureItem();
+        }
+        this.getItems();
+      },
+    });
+  }
 
   ngOnDestroy(): void {
     if (this.changesSubscription) {
@@ -146,57 +188,34 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (
-      this.roomSettings.surveyEnabled ||
-      this.viewRole !== UserRole.PARTICIPANT
+      this.roomSettings()?.surveyEnabled ||
+      this.viewRole() !== UserRole.PARTICIPANT
     ) {
       this.activeFeatures.splice(1, 0, RoutingFeature.FEEDBACK);
     }
-    if (this.qnaEnabled() || this.viewRole !== UserRole.PARTICIPANT) {
+    if (this.qnaEnabled() || this.viewRole() !== UserRole.PARTICIPANT) {
       this.activeFeatures.splice(1, 0, RoutingFeature.COMMENTS);
     }
-    let group = this.routingService.seriesName;
-    if (group === undefined) {
-      group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
-    } else {
-      this.setGroupInSessionStorage(group);
-    }
-    this.roomStatsService
-      .getStats(this.room().id, this.viewRole !== UserRole.PARTICIPANT)
-      .subscribe((stats) => {
-        if (stats.groupStats) {
-          this.groupName = group || stats.groupStats[0].groupName;
-          this.setGroupInSessionStorage(this.groupName);
-          this.addContentFeatureItem(false);
-        }
-        this.getItems();
-        this.updateGroups(stats.groupStats ?? [], !!group, false);
-      });
     this.subscribeToParticipantEvents();
     this.subscribeToRouteChanges();
+    this.subscribeToFocusState();
   }
 
-  afterInit() {
-    // This function is implemented and used different in presentation control bar so this check is needed for now
-    if (!this.isLoading) {
+  private subscribeToFocusState() {
+    if (this.userRole() === UserRole.PARTICIPANT) {
       return;
     }
-    if (this.userRole === UserRole.PARTICIPANT) {
-      this.subscribeToContentGroups();
-    } else {
-      this.subscribeToContentGroupEvents();
-      this.focusModeService
-        .getState()
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state) => {
-          if (state) {
-            this.focusFeature =
-              RoutingFeature[state?.feature as keyof typeof RoutingFeature];
-          } else {
-            this.focusFeature = RoutingFeature.OVERVIEW;
-          }
-        });
-    }
-    this.isLoading = false;
+    this.focusModeService
+      .getState()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((state) => {
+        if (state) {
+          this.focusFeature =
+            RoutingFeature[state?.feature as keyof typeof RoutingFeature];
+        } else {
+          this.focusFeature = RoutingFeature.OVERVIEW;
+        }
+      });
   }
 
   setGroupInSessionStorage(group: string) {
@@ -208,9 +227,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   subscribeToParticipantEvents() {
-    if (this.viewRole === UserRole.PARTICIPANT) {
+    if (this.viewRole() === UserRole.PARTICIPANT) {
+      const roomSettingsId = this.roomSettings()?.id;
+      if (!roomSettingsId) {
+        return;
+      }
       this.roomSettingsService
-        .getRoomSettingsStream(this.room().id, this.roomSettings.id)
+        .getRoomSettingsStream(this.room().id, roomSettingsId)
         .pipe(takeUntil(this.destroyed$))
         .subscribe((settings) => {
           const surveyEnabled = this.activeFeatures.includes(
@@ -259,34 +282,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.disableNewsForCurrentRoute();
       }
     });
-  }
-
-  subscribeToContentGroupEvents() {
-    const createdEvent = new SeriesCreated(new ContentGroup());
-    this.eventService
-      .on<typeof createdEvent.payload>(createdEvent.type)
-      .subscribe((group) => {
-        this.roomStatsService
-          .getStats(this.room().id, true)
-          .subscribe((stats) => {
-            this.groupName = group.name;
-            this.addContentFeatureItem();
-            this.updateGroups(stats.groupStats, true);
-          });
-      });
-    const deletedEvent = new SeriesDeleted();
-    this.eventService
-      .on<typeof deletedEvent.payload>(deletedEvent.type)
-      .subscribe(() => {
-        this.roomStatsService
-          .getStats(this.room().id, true)
-          .subscribe((stats) => {
-            if (!stats.groupStats) {
-              this.removeContentFeatureItem();
-            }
-            this.updateGroups(stats.groupStats, false);
-          });
-      });
   }
 
   getItems() {
@@ -351,7 +346,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private getBaseUrl(): string[] {
     return [
       this.routingService.getRoleRoute(
-        this.viewRole === UserRole.PARTICIPANT
+        this.viewRole() === UserRole.PARTICIPANT
           ? UserRole.PARTICIPANT
           : undefined
       ),
@@ -359,23 +354,24 @@ export class NavBarComponent implements OnInit, OnDestroy {
     ];
   }
 
-  navToUrl(index: number, newGroup?: ContentGroup) {
+  navToUrl(index: number, questionnaire?: QuestionnaireSummaryFragment) {
     const item = this.barItems[index];
-    if (newGroup) {
-      this.setGroup(newGroup);
+    if (questionnaire) {
+      this.activeQuestionnaire.set(questionnaire);
     } else {
       if (this.isMenuActive(item.name)) {
         return;
       }
     }
     const route = [
-      this.routingService.getRoleRoute(this.viewRole),
+      this.routingService.getRoleRoute(this.viewRole()),
       this.room().shortId,
     ];
     if (item.name !== RoutingFeature.OVERVIEW) {
       route.push(item.name);
-      if (item.name === RoutingFeature.CONTENTS && this.groupName) {
-        route.push(this.groupName);
+      const questionnaireName = this.activeQuestionnaire()?.name;
+      if (item.name === RoutingFeature.CONTENTS && questionnaireName) {
+        route.push(questionnaireName);
       }
     }
     this.router.navigate(route);
@@ -384,60 +380,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   disableNewsForCurrentRoute() {
     if (this.currentRouteIndex) {
       this.barItems[this.currentRouteIndex].changeIndicator = false;
-    }
-  }
-
-  updateGroups(
-    groupStats: ContentGroupStatistics[],
-    alreadySet: boolean,
-    showNews = true
-  ) {
-    const oldGroups = this.contentGroups.slice(0);
-    if (this.contentGroups.length > 0) {
-      if (this.listObjectIdsEquals(this.contentGroups, groupStats)) {
-        return;
-      }
-      this.resetGroups();
-    }
-    const groupCount = groupStats?.length ?? 0;
-    if (groupCount > 0) {
-      this.contentGroupService
-        .getByIds(
-          groupStats.map((stats) => stats.id),
-          { roomId: this.room().id }
-        )
-        .subscribe((groups) => {
-          for (const group of groups) {
-            this.contentGroups.push(group);
-            if (this.contentGroups.length === groupCount) {
-              this.contentGroups =
-                this.contentGroupService.sortContentGroupsByName(
-                  this.contentGroups
-                );
-              if (alreadySet) {
-                const currentGroup =
-                  this.contentGroups.find((c) => c.name === this.groupName) ||
-                  this.contentGroups[0];
-                this.setGroup(currentGroup);
-                this.addContentFeatureItem();
-                // route data's `userRole` is used here to prevent showing notification indicator in creators room preview
-                if (this.userRole === UserRole.PARTICIPANT && showNews) {
-                  const newGroups = this.contentGroups.filter(
-                    (g) => !oldGroups.includes(g)
-                  );
-                  this.toggleNews(RoutingFeature.CONTENTS, newGroups[0]);
-                }
-                this.afterInit();
-              } else {
-                this.afterInit();
-                this.setGroup();
-              }
-            }
-          }
-        });
-    } else {
-      this.afterInit();
-      this.removeContentFeatureItem();
     }
   }
 
@@ -462,59 +404,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
   }
 
-  resetGroups() {
-    this.contentGroups.splice(0, this.contentGroups.length);
-  }
-
-  subscribeToContentGroups() {
-    this.changesSubscription = this.eventService
-      .on('EntityChanged')
-      .pipe(map((changes) => changes as EntityChangedPayload<ContentGroup>))
-      .subscribe((changes) => {
-        this.handleContentGroupChanges(changes);
-      });
-    const changeEventType =
-      this.viewRole === UserRole.PARTICIPANT
-        ? 'PublicDataChanged'
-        : 'ModeratorDataChanged';
-    this.statsChangesSubscription = this.eventService
-      .on<DataChanged<RoomStats>>(changeEventType)
-      .subscribe((event) =>
-        this.updateGroups(event.payload.data.groupStats, true)
-      );
-  }
-
-  setGroup(group?: ContentGroup) {
-    this.group = group || this.getFirstGroupWithPublishedContents();
-    this.setGroupProperties();
-    if (this.groupName) {
-      this.updateGroupName(this.groupName);
-    }
-  }
-
-  getFirstGroupWithPublishedContents(): ContentGroup {
-    return (
-      this.contentGroups.filter((cg) => cg.published)[0] ||
-      this.contentGroups[0]
-    );
-  }
-
-  filterPublishedGroups(): boolean {
-    this.contentGroups = this.contentGroups.filter((cg) => cg.published);
-    if (this.contentGroups.length === 0) {
-      this.removeContentFeatureItem();
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  setGroupProperties() {
-    if (this.group) {
-      this.groupName = this.group.name;
-    }
-  }
-
   getBarIndexOfFeature(name: string): number {
     return this.barItems.map((b) => b.name).indexOf(name);
   }
@@ -534,66 +423,29 @@ export class NavBarComponent implements OnInit, OnDestroy {
     return first === -1 && last === -1;
   }
 
-  toggleNews(feature: string, newGroup?: ContentGroup) {
+  toggleNews(feature: string, questionnaire?: QuestionnaireSummaryFragment) {
     const featureIndex = this.getBarIndexOfFeature(feature);
     if (
       featureIndex !== this.currentRouteIndex ||
-      (newGroup && this.group && newGroup.id !== this.group.id)
+      (questionnaire &&
+        this.activeQuestionnaire() &&
+        questionnaire.id !== this.activeQuestionnaire().id)
     ) {
       this.barItems[featureIndex].changeIndicator = true;
     }
   }
 
-  handleContentGroupChanges(changes: EntityChangedPayload<ContentGroup>) {
-    if (changes.entityType === 'ContentGroup') {
-      const index = this.contentGroups
-        .map((cg) => cg.id)
-        .indexOf(changes.entity.id);
-      if (index !== undefined && index > -1) {
-        this.contentGroups[index] = changes.entity;
-      }
-      this.checkChanges(changes);
-    }
-  }
-
-  checkChanges(changes: EntityChangedPayload<ContentGroup>) {
-    const changedEvent = new EntityChanged(
-      'ContentGroup',
-      changes.entity,
-      changes.changedProperties
-    );
-    if (changedEvent.hasPropertyChanged('publishingIndex')) {
-      this.toggleNews(RoutingFeature.CONTENTS);
-    }
-    if (changedEvent.hasPropertyChanged('name')) {
-      this.updateGroupName(changes.entity.name);
-    }
-    if (changedEvent.hasPropertyChanged('published')) {
-      if (!changes.entity.published) {
-        this.filterPublishedGroups();
-      } else {
-        this.addContentFeatureItem();
-        this.toggleNews(RoutingFeature.CONTENTS);
-      }
-    }
-  }
-
-  private listObjectIdsEquals(obj1: { id: string }[], obj2: { id: string }[]) {
-    return (
-      JSON.stringify(obj1?.map((cg) => cg.id)) ===
-      JSON.stringify(obj2?.map((cg) => cg.id))
-    );
-  }
-
   getFeatureText(feature: string) {
     return feature === RoutingFeature.CONTENTS &&
-      this.contentGroups.length === 1
-      ? this.groupName
+      this.questionnaires().length === 1
+      ? this.activeQuestionnaire()?.name
       : 'sidebar.' + feature;
   }
 
   isMenuActive(feature: string): boolean {
-    return feature === RoutingFeature.CONTENTS && this.contentGroups.length > 1;
+    return (
+      feature === RoutingFeature.CONTENTS && this.questionnaires().length > 1
+    );
   }
 
   checkMenu(feature: string, trigger: MatMenuTrigger) {
