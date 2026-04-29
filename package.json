@@ -36,7 +36,7 @@
     "@angular/router": "21.2.10",
     "@angular/service-worker": "21.2.10",
     "@apollo/client": "4.1.9",
-    "@fontsource/material-symbols-outlined": "5.2.42",
+    "@fontsource/material-symbols-outlined": "5.2.43",
     "@fontsource/roboto": "5.2.10",
     "@jsverse/transloco": "8.3.0",
     "@stomp/rx-stomp": "2.3.0",
