@@ -2741,10 +2741,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/material-symbols-outlined@npm:5.2.43":
-  version: 5.2.43
-  resolution: "@fontsource/material-symbols-outlined@npm:5.2.43"
-  checksum: 10c0/a625de5033a25446e35ddfa2c5b0174a770e1e8a904ac00e4012c462c43314a7349424998aa506b37d28bcc36ce9799cec42eeddcd8bfeb1eb0c7dd392a9a539
+"@fontsource/material-symbols-outlined@npm:5.2.44":
+  version: 5.2.44
+  resolution: "@fontsource/material-symbols-outlined@npm:5.2.44"
+  checksum: 10c0/9cc700cadb23c0002059a4aaee559718a759eb791d4bb5393dc95b752f8f0cfd9b1052330e3f8375b073e38ff94e6e8c93f3619e5e620c219fb6ac7365b421fd
   languageName: node
   linkType: hard
 
@@ -7517,7 +7517,7 @@ __metadata:
     "@angular/service-worker": "npm:21.2.13"
     "@apollo/client": "npm:4.1.9"
     "@eslint/js": "npm:10.0.1"
-    "@fontsource/material-symbols-outlined": "npm:5.2.43"
+    "@fontsource/material-symbols-outlined": "npm:5.2.44"
     "@fontsource/roboto": "npm:5.2.10"
     "@graphql-codegen/cli": "npm:7.0.0"
     "@graphql-codegen/introspection": "npm:6.0.0"
