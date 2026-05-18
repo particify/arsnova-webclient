@@ -39,7 +39,7 @@
     "@fontsource/material-symbols-outlined": "5.2.43",
     "@fontsource/roboto": "5.2.10",
     "@jsverse/transloco": "8.3.0",
-    "@stomp/rx-stomp": "2.3.0",
+    "@stomp/rx-stomp": "2.4.0",
     "@stomp/stompjs": "7.3.0",
     "altcha": "3.0.8",
     "angular-material-css-vars": "10.0.0",
