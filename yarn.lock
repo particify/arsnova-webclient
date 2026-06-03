@@ -2746,9 +2746,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:7.1.0":
-  version: 7.1.0
-  resolution: "@graphql-codegen/cli@npm:7.1.0"
+"@graphql-codegen/cli@npm:7.1.1":
+  version: 7.1.1
+  resolution: "@graphql-codegen/cli@npm:7.1.1"
   dependencies:
     "@babel/generator": "npm:^7.18.13"
     "@babel/template": "npm:^7.18.10"
@@ -2797,7 +2797,7 @@ __metadata:
     graphql-codegen: esm/bin.js
     graphql-codegen-cjs: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 10c0/779f1661942b2f698c0c110394c1efc129c823e96ef3af350547abd17c9370573ede6caf6b7504d04715cf5fc4b13c790010bb9e8b1dc2106d415c44c6d59565
+  checksum: 10c0/225b1ba6d09223236100bb97909c4cc8d13bf42ec00fa1ffc794ab0b54bf55fbdbfe624d9b5b10169c264ed27a261f5972323a8a66b37e6345a1b23182d9719a
   languageName: node
   linkType: hard
 
@@ -7802,7 +7802,7 @@ __metadata:
     "@eslint/js": "npm:10.0.1"
     "@fontsource/material-symbols-outlined": "npm:5.2.45"
     "@fontsource/roboto": "npm:5.2.10"
-    "@graphql-codegen/cli": "npm:7.1.0"
+    "@graphql-codegen/cli": "npm:7.1.1"
     "@graphql-codegen/introspection": "npm:6.0.1"
     "@graphql-codegen/typescript": "npm:6.0.2"
     "@graphql-codegen/typescript-apollo-angular": "npm:5.0.1"

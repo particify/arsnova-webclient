@@ -72,7 +72,7 @@
     "@angular/compiler-cli": "21.2.15",
     "@angular/language-service": "21.2.15",
     "@eslint/js": "10.0.1",
-    "@graphql-codegen/cli": "7.1.0",
+    "@graphql-codegen/cli": "7.1.1",
     "@graphql-codegen/introspection": "6.0.1",
     "@graphql-codegen/typescript": "6.0.2",
     "@graphql-codegen/typescript-apollo-angular": "5.0.1",
