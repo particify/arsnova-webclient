@@ -68,7 +68,7 @@
     "@angular-eslint/eslint-plugin-template": "21.4.0",
     "@angular-eslint/schematics": "21.4.0",
     "@angular-eslint/template-parser": "21.4.0",
-    "@angular/build": "21.2.14",
+    "@angular/build": "22.0.0",
     "@angular/compiler-cli": "22.0.0",
     "@angular/language-service": "22.0.0",
     "@eslint/js": "10.0.1",
