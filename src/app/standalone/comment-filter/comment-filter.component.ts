@@ -6,6 +6,7 @@ import {
   input,
   Input,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { CoreModule } from '@app/core/core.module';
@@ -18,6 +19,7 @@ import { catchError, filter, of, switchMap } from 'rxjs';
   imports: [CoreModule],
   selector: 'app-comment-filter',
   templateUrl: './comment-filter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./comment-filter.component.scss'],
 })
 export class CommentFilterComponent {

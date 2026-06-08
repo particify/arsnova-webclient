@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexLayoutModule, FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -40,6 +47,7 @@ export class DetailedRadioGroup {
     FlexLayoutModule,
   ],
   templateUrl: './detail-radio-group.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './detail-radio-group.component.scss',
 })
 export class DetailRadioGroupComponent implements OnInit {

@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { FeedbackMessageType } from '@app/core/models/messages/feedback-message-type';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
@@ -16,6 +23,7 @@ import { EventService } from '@app/core/services/util/event.service';
   selector: 'app-live-feedback-page',
   templateUrl: './live-feedback-page.component.html',
   styleUrls: ['./live-feedback-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CoreModule,
     LoadingIndicatorComponent,

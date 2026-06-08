@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import {
   HotkeyActionType,
@@ -18,6 +18,7 @@ import { configureTestModule } from '@testing/test.setup';
   >
     Hotkey Button
   </button>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [HotkeyDirective],
 })
 class TestComponent {

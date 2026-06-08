@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   ViewChildren,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import {
@@ -36,6 +37,7 @@ const MAX_ANSWER_OPTIONS = 12;
   selector: 'app-answer-option-list',
   templateUrl: './answer-option-list.component.html',
   styleUrls: ['./answer-option-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatList,
     CdkDropList,

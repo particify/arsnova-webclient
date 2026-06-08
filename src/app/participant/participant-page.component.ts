@@ -5,6 +5,7 @@ import {
   computed,
   inject,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
@@ -35,6 +36,7 @@ import { onlyCompleteData } from 'apollo-angular';
   templateUrl: './participant-page.component.html',
   styleUrls: ['../common/styles/room-page.scss'],
   providers: [FocusModeService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatDrawerContainer,

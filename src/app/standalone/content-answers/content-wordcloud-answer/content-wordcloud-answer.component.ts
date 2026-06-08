@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
 
@@ -6,6 +6,7 @@ import { MultipleTextsAnswer } from '@app/core/models/multiple-texts-answer';
   selector: 'app-content-wordcloud-answer',
   imports: [CoreModule],
   templateUrl: './content-wordcloud-answer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-wordcloud-answer.component.scss'],
 })
 export class ContentWordcloudAnswerComponent {

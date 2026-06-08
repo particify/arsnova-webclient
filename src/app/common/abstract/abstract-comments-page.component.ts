@@ -7,6 +7,7 @@ import {
   input,
   signal,
   effect,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { WsCommentService } from '@app/core/services/websockets/ws-comment.service';
@@ -79,6 +80,7 @@ const APP_PADDING = innerWidth < 600 ? 16 : 24;
 const THROTTLE = 1000;
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AbstractCommentsPageComponent {

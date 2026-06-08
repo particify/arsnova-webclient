@@ -1,5 +1,10 @@
 import { NgClass } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -15,6 +20,7 @@ export interface ToggleButtonOption {
   selector: 'app-toggle-button-bar',
   imports: [MatIcon, MatIconButton, MatTooltip, NgClass, FlexLayoutModule],
   templateUrl: './toggle-button-bar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './toggle-button-bar.component.scss',
 })
 export class ToggleButtonBarComponent {

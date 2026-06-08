@@ -1,4 +1,10 @@
-import { Component, OnInit, inject, input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
 import { RoomListComponent } from '@app/core/components/room-list/room-list.component';
@@ -12,6 +18,7 @@ import { GlobalHintsService } from '@app/standalone/global-hints/global-hints.se
   selector: 'app-user-home',
   templateUrl: './user-home.component.html',
   styleUrls: ['./user-home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AutofocusDirective,

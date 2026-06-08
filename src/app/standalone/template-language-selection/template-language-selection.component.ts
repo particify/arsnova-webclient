@@ -1,4 +1,11 @@
-import { Component, effect, inject, input, model } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  model,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CoreModule } from '@app/core/core.module';
 import { IsoLanguage } from '@app/core/models/iso-language';
@@ -10,6 +17,7 @@ import { map } from 'rxjs';
 @Component({
   selector: 'app-template-language-selection',
   imports: [CoreModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './template-language-selection.component.html',
 })
 export class TemplateLanguageSelectionComponent extends FormComponent {

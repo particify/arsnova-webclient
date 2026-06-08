@@ -4,6 +4,7 @@ import {
   DestroyRef,
   EventEmitter,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   FormControl,
@@ -57,6 +58,7 @@ export interface DialogData {
   selector: 'app-input-dialog',
   templateUrl: './input-dialog.component.html',
   styleUrl: './input-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     CdkScrollable,

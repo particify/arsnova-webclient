@@ -5,6 +5,7 @@ import {
   Input,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -50,6 +51,7 @@ import { AnnounceService } from '@app/core/services/util/announce.service';
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [
     trigger('slide', [
       transition(':enter', [

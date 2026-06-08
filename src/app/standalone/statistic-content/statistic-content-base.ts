@@ -6,6 +6,7 @@ import {
   Output,
   inject,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -17,6 +18,7 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export abstract class StatisticContentBaseComponent implements OnInit {

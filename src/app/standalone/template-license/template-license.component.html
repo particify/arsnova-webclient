@@ -1,9 +1,11 @@
 <div class="license">
   <span> {{ 'templates.licensed-under' | transloco }} </span>
   @if (showLink) {
-    <a [href]="LICENSES.get(license)?.url" class="primary">{{
-      LICENSES.get(license)?.name
-    }}</a>
+    <a
+      [href]="$safeNavigationMigration(LICENSES.get(license)?.url)"
+      class="primary"
+      >{{ LICENSES.get(license)?.name }}</a
+    >
   }
   @if (!showLink) {
     <span>{{ LICENSES.get(license)?.name }}</span>

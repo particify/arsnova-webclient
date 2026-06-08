@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -16,6 +22,7 @@ import { MatCard } from '@angular/material/card';
   selector: 'app-announcement',
   templateUrl: './announcement.component.html',
   styleUrls: ['./announcement.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCard,
     NgClass,

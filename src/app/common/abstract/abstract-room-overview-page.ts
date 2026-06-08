@@ -12,6 +12,7 @@ import {
   inject,
   input,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { RoomByShortIdGql } from '@gql/generated/graphql';
 import {
@@ -23,6 +24,7 @@ import { Room } from '@app/core/models/room';
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AbstractRoomOverviewPageComponent {

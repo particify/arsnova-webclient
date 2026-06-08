@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -20,6 +25,7 @@ import { take } from 'rxjs';
   ],
   selector: 'app-copy-url',
   templateUrl: './copy-url.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./copy-url.component.scss'],
 })
 export class CopyUrlComponent {

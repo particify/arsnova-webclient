@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 
@@ -6,6 +6,7 @@ import { CoreModule } from '@app/core/core.module';
   imports: [CoreModule, RouterModule],
   selector: 'app-feature-card',
   templateUrl: './feature-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./feature-card.component.scss'],
 })
 export class FeatureCardComponent {

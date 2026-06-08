@@ -1,4 +1,10 @@
-import { Component, OnInit, inject, computed } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  computed,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { catchError, filter, map, of, switchMap } from 'rxjs';
 import {
@@ -35,6 +41,7 @@ import {
   selector: 'app-participant-overview',
   templateUrl: './room-overview-page.component.html',
   styleUrls: ['../../common/styles/room-overview.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     CoreModule,

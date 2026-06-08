@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-seperator.pipe';
 
@@ -7,6 +12,7 @@ import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-s
   imports: [CoreModule],
   providers: [LocalizeDecimalSeperatorPipe],
   templateUrl: './statistic-info.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './statistic-info.component.scss',
 })
 export class StatisticInfoComponent {

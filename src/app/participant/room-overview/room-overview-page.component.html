@@ -92,7 +92,7 @@
           </app-feature-card>
         }
       }
-      @let roomName = room()?.name;
+      @let roomName = $safeNavigationMigration(room()?.name);
       @if ((!anyFeatureEnabled || focusModeEnabled()) && !!roomName) {
         <app-room-info-component
           style="max-width: 100%"

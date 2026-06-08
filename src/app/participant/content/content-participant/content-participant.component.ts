@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   inject,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { Answer } from '@app/core/models/answer';
@@ -88,6 +89,7 @@ interface ContentActionTab {
   selector: 'app-content-participant',
   templateUrl: './content-participant.component.html',
   styleUrls: ['./content-participant.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CoreModule,
     LoadingIndicatorComponent,

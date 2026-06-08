@@ -8,6 +8,7 @@ import {
   ViewChild,
   inject,
   model,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { StatisticChoiceComponent } from '@app/standalone/statistic-content/statistic-choice/statistic-choice.component';
 import { StatisticTextComponent } from '@app/standalone/statistic-content/statistic-text/statistic-text.component';
@@ -47,6 +48,7 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   selector: 'app-content-results',
   templateUrl: './content-results.component.html',
   styleUrls: ['./content-results.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     NgClass,

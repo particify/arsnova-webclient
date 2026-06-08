@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogTitle,
@@ -27,6 +27,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
   selector: 'app-hotkeys',
   templateUrl: './hotkeys.component.html',
   styleUrls: ['./hotkeys.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatDialogTitle,
     CdkScrollable,

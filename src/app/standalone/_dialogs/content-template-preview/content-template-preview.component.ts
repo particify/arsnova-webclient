@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Content } from '@app/core/models/content';
 import { ContentPreviewComponent } from '@app/standalone/content-preview/content-preview.component';
@@ -15,6 +21,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
     CdkStepperModule,
   ],
   templateUrl: './content-template-preview.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-template-preview.component.scss'],
 })
 export class ContentTemplatePreviewComponent implements AfterViewInit {

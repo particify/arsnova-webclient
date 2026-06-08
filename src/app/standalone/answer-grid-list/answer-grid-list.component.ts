@@ -1,5 +1,10 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, Input, OnChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +20,7 @@ import { TextStatistic } from '@app/core/models/text-statistic';
     NgTemplateOutlet,
   ],
   templateUrl: './answer-grid-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './answer-grid-list.component.scss',
 })
 export class AnswerGridListComponent implements OnChanges {

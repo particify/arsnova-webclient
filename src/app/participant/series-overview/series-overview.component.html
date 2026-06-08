@@ -215,7 +215,7 @@
           <app-leaderboard
             fxFill
             [leaderboardItems]="leaderboard"
-            [aliasId]="alias?.id"
+            [aliasId]="$safeNavigationMigration(alias?.id)"
           ></app-leaderboard>
         } @else {
           <app-content-waiting

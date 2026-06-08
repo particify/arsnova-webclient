@@ -38,7 +38,9 @@
   </mat-form-field>
   <app-template-language-selection
     [defaultLang]="selectedLang"
-    (selectedLangChange)="updateLanguage($event?.code)"
+    (selectedLangChange)="
+      updateLanguage($safeNavigationMigration($event?.code))
+    "
   ></app-template-language-selection>
   <app-settings-slide-toggle
     label="templates.publish-template"

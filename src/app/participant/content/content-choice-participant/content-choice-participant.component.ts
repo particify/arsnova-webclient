@@ -4,6 +4,7 @@ import {
   OnChanges,
   SimpleChanges,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -23,6 +24,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   selector: 'app-content-choice-participant',
   templateUrl: './content-choice-participant.component.html',
   imports: [LoadingIndicatorComponent, ContentChoiceAnswerComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentChoiceParticipantComponent

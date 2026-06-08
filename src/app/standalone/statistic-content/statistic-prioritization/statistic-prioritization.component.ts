@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   BarController,
@@ -28,6 +29,7 @@ import { FlexModule } from '@angular/flex-layout';
   selector: 'app-statistic-prioritization',
   templateUrl: './statistic-prioritization.component.html',
   styleUrls: ['./statistic-prioritization.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FlexModule, LoadingIndicatorComponent, NgStyle],
 })
 export class StatisticPrioritizationComponent

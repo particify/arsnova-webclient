@@ -10,6 +10,7 @@ import {
   inject,
   DestroyRef,
   effect,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
@@ -47,6 +48,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     CommentListHintComponent,
     CommentComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('creator')],
 })
 export class CommentsPageComponent

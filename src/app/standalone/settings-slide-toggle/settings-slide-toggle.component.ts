@@ -1,5 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import {
@@ -18,6 +24,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   ],
   selector: 'app-settings-slide-toggle',
   templateUrl: './settings-slide-toggle.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./settings-slide-toggle.component.scss'],
 })
 export class SettingsSlideToggleComponent {

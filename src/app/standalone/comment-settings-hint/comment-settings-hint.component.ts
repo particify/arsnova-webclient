@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +27,7 @@ import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
   providers: [provideTranslocoScope('creator')],
   selector: 'app-comment-settings-hint',
   templateUrl: './comment-settings-hint.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./comment-settings-hint.component.scss'],
 })
 export class CommentSettingsHintComponent {

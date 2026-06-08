@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { GroupType } from '@app/core/models/content-group';
 import { TranslocoRootModule } from '@app/transloco-root.module';
@@ -19,6 +24,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   ],
   providers: [provideTranslocoScope('creator')],
   templateUrl: './content-group-info.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-group-info.component.scss',
 })
 export class ContentGroupInfoComponent {

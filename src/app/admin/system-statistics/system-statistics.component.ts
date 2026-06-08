@@ -5,6 +5,7 @@ import {
   computed,
   effect,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { ActivatedRoute } from '@angular/router';
@@ -38,6 +39,7 @@ export interface AdminStats {
   selector: 'app-system-statistics',
   templateUrl: './system-statistics.component.html',
   styleUrls: ['../admin-styles.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AdminPageHeaderComponent,

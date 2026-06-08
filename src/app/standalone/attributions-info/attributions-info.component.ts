@@ -1,4 +1,9 @@
-import { Component, inject, input } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatListModule } from '@angular/material/list';
 import { ContentGroup } from '@app/core/models/content-group';
@@ -11,6 +16,7 @@ import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
   selector: 'app-attributions-info',
   imports: [TranslocoPipe, MatListModule],
   providers: [provideTranslocoScope('creator')],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './attributions-info.component.html',
 })
 export class AttributionsInfoComponent {

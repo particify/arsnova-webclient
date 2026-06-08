@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ApiConfig } from '@app/core/models/api-config';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
@@ -19,6 +24,7 @@ import { DisabledIfReadonlyDirective } from '@app/core/directives/disabled-if-re
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AutofocusDirective,
     FlexModule,

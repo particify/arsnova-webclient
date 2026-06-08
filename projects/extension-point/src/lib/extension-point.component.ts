@@ -7,12 +7,14 @@ import {
   Input,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ExtensionFactory } from './extension-factory';
 
 @Component({
   selector: 'lib-extension-point',
   templateUrl: './extension-point.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [':host:empty { display: none; }'],
 })
 export class ExtensionPointComponent implements OnInit {

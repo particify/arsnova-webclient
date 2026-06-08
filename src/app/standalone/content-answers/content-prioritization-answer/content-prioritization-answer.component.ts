@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
@@ -7,6 +14,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
   selector: 'app-content-prioritization-answer',
   imports: [CoreModule, RenderedTextComponent],
   templateUrl: './content-prioritization-answer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-prioritization-answer.component.scss'],
 })
 export class ContentPrioritizationAnswerComponent implements OnInit {

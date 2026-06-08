@@ -58,7 +58,8 @@
   } @else {
     @if (alias?.id) {
       <span class="primary">{{
-        'content.get-ready-alias' | transloco: { alias: alias?.alias }
+        'content.get-ready-alias'
+          | transloco: { alias: $safeNavigationMigration(alias?.alias) }
       }}</span>
       <div fxLayout="row" fxLayoutAlign="center" class="answering-hint">
         @if (timerActive) {

@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
@@ -16,6 +17,7 @@ import { ConsentService } from '@app/core/services/util/consent.service';
   selector: 'app-footer-links',
   imports: [CoreModule, RouterModule],
   templateUrl: './footer-links.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './footer-links.component.scss',
 })
 export class FooterLinksComponent implements OnInit {

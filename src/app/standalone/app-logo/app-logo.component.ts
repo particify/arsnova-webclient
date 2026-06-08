@@ -1,7 +1,10 @@
-import { Component, Input, Type } from '@angular/core';
+import { Component, Input, Type, ChangeDetectionStrategy } from '@angular/core';
 import { Extension } from '@ext-point/extension';
 
-@Component({ templateUrl: './app-logo.component.svg' })
+@Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
+  templateUrl: './app-logo.component.svg',
+})
 export class AppLogoComponent extends Extension {
   @Input() width = '100%';
   @Input() height = '100%';

@@ -7,6 +7,7 @@ import {
   ViewChild,
   inject,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   NavBarComponent,
@@ -89,6 +90,7 @@ export class KeyNavBarItem extends NavBarItem {
   selector: 'app-control-bar',
   templateUrl: './control-bar.component.html',
   styleUrls: ['./control-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ExtensionPointComponent,
     FlexModule,

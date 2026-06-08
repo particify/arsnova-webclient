@@ -1,4 +1,11 @@
-import { Component, HostListener, inject, input, output } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  inject,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { QrCodeComponent } from 'ng-qrcode';
 import { Room } from '@app/core/models/room';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -23,6 +30,7 @@ import { ThemeService } from '@app/core/theme/theme.service';
     TrackInteractionDirective,
   ],
   templateUrl: './share-overlay.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './share-overlay.component.scss',
 })
 export class ShareOverlayComponent {

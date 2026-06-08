@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,6 +35,7 @@ import { Subject, takeUntil } from 'rxjs';
     LoadingIndicatorComponent,
   ],
   templateUrl: './content-group-template-selection.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-group-template-selection.component.scss'],
 })
 export class ContentGroupTemplateSelectionComponent

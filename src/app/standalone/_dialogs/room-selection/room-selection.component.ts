@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Room } from '@gql/generated/graphql';
 import { CoreModule } from '@app/core/core.module';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -8,6 +14,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-room-selection',
   imports: [CoreModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './room-selection.component.html',
 })
 export class RoomSelectionComponent implements OnInit, OnDestroy {

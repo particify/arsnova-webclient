@@ -35,7 +35,7 @@
           [bodyRendered]="announcement.bodyRendered ?? announcement.body"
           [createdAt]="announcement.createdAt"
           [updatedAt]="announcement.updatedAt ?? undefined"
-          [roomName]="announcement.room?.name"
+          [roomName]="$safeNavigationMigration(announcement.room?.name)"
           [label]="
             getLabel(
               announcement.createdAt,

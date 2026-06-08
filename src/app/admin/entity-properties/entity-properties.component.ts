@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import {
   MatTreeNestedDataSource,
@@ -17,6 +23,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-entity-properties',
   templateUrl: './entity-properties.component.html',
   styleUrls: ['./entity-properties.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatTree,
     MatTreeNodeDef,

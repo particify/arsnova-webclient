@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Content } from '@app/core/models/content';
 import {
   ArcElement,
@@ -79,6 +86,7 @@ interface ContentResultView {
     OrdinalPipe,
     ContentWaitingComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class SeriesOverviewComponent implements OnInit, OnDestroy {

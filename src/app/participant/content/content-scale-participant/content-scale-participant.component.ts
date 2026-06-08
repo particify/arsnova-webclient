@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { provideTranslocoScope } from '@jsverse/transloco';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { ContentScale } from '@app/core/models/content-scale';
@@ -17,6 +22,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
   selector: 'app-content-scale-participant',
   templateUrl: './content-scale-participant.component.html',
   imports: [ContentChoiceAnswerComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentScaleParticipantComponent extends ContentParticipantBaseComponent {

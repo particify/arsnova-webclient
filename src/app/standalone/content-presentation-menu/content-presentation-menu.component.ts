@@ -9,6 +9,7 @@ import {
   Output,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatMenu } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
@@ -25,6 +26,7 @@ import { Subject, of, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-content-presentation-menu',
   imports: [CoreModule, RouterLink],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './content-presentation-menu.component.html',
 })
 export class ContentPresentationMenuComponent

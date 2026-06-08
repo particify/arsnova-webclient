@@ -1,5 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AbstractCommentsPageComponent } from '@app/common/abstract/abstract-comments-page.component';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { provideTranslocoScope } from '@jsverse/transloco';
@@ -29,6 +34,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     CommentListFloatingButtonsComponent,
     DisabledIfReadonlyDirective,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class CommentsPageComponent

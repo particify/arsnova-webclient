@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { RouterOutlet } from '@angular/router';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
@@ -15,6 +15,7 @@ import { ExtensionPointComponent } from '@projects/extension-point/src/lib/exten
   selector: 'app-admin-home',
   templateUrl: './admin-home.component.html',
   styleUrls: ['./admin-home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NavigationDrawerComponent,
     FlexModule,

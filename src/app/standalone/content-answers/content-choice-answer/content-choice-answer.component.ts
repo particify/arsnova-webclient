@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
@@ -18,6 +19,7 @@ import { forkJoin, Observable } from 'rxjs';
   selector: 'app-content-choice-answer',
   imports: [CoreModule, RenderedTextComponent],
   templateUrl: './content-choice-answer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-choice-answer.component.scss'],
 })
 export class ContentChoiceAnswerComponent implements OnInit {

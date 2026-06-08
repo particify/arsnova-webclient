@@ -7,6 +7,7 @@ import {
   Output,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -20,6 +21,7 @@ import { startWith, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-template-tag-selection',
   imports: [CoreModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './template-tag-selection.component.html',
 })
 export class TemplateTagSelectionComponent

@@ -5,5 +5,13 @@
     "baseUrl": "./",
     "types": ["node"]
   },
-  "files": ["main.ts"]
+  "files": ["main.ts"],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  }
 }

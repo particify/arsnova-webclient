@@ -6,6 +6,7 @@ import {
   input,
   linkedSignal,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import {
@@ -63,6 +64,7 @@ import { MatDivider } from '@angular/material/divider';
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AutofocusDirective,
     FlexModule,

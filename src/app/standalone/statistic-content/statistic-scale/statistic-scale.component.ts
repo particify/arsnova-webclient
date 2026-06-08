@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { forkJoin, Observable, take } from 'rxjs';
 import { ContentScale } from '@app/core/models/content-scale';
@@ -17,6 +22,7 @@ import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-re
   selector: 'app-statistic-scale',
   templateUrl: '../statistic-choice/statistic-choice.component.html',
   styleUrls: ['../statistic-choice/statistic-choice.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     LoadingIndicatorComponent,

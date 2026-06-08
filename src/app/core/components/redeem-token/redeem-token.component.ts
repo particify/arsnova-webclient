@@ -1,11 +1,18 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { RoomMembershipService } from '@app/core/services/room-membership.service';
 import { Subject, takeUntil } from 'rxjs';
 
-@Component({ template: '' })
+@Component({ changeDetection: ChangeDetectionStrategy.Eager, template: '' })
 export class RedeemTokenComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private routingService = inject(RoutingService);

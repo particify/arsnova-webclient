@@ -1,4 +1,10 @@
-import { Component, OnInit, inject, input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -36,6 +42,7 @@ export interface Settings {
   selector: 'app-settings-page',
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     AutofocusDirective,
     FlexModule,

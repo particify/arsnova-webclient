@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
@@ -13,6 +19,7 @@ import {
   imports: [CoreModule, OrdinalPipe, FlexLayoutModule],
   selector: 'app-leaderboard',
   templateUrl: './leaderboard.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './leaderboard.component.scss',
 })
 export class LeaderboardComponent implements OnChanges {

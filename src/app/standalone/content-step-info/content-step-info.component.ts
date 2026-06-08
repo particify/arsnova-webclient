@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { TranslocoModule } from '@jsverse/transloco';
 
@@ -6,6 +6,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   selector: 'app-content-step-info',
   imports: [CoreModule, TranslocoModule],
   templateUrl: './content-step-info.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-step-info.component.scss',
 })
 export class ContentStepInfoComponent {

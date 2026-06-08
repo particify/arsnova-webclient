@@ -161,7 +161,9 @@
                 [groupName]="groupName"
                 [shortId]="room().shortId"
                 [contentIndex]="contentIndex"
-                [publishingMode]="group?.publishingMode"
+                [publishingMode]="
+                  $safeNavigationMigration(group?.publishingMode)
+                "
               ></app-content-presentation-menu>
               <div class="bar-divider"></div>
               <app-key-button-bar
