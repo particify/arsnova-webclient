@@ -28,7 +28,8 @@
       "@projects/*": ["../projects/*"],
       "@ext-point/*": ["../projects/extension-point/src/lib/*"],
       "@e2e/*": ["../e2e/*"]
-    }
+    },
+    "ignoreDeprecations": "6.0"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
