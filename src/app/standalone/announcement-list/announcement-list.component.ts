@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -24,6 +31,7 @@ import { AnnouncementState } from '@app/core/models/announcement-state';
   selector: 'app-announcement-list',
   templateUrl: './announcement-list.component.html',
   styleUrls: ['./announcement-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatDialogTitle,

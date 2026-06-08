@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { Router } from '@angular/router';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
@@ -37,6 +42,7 @@ import { filter, map } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   providers: [CustomPageTitleStrategy],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatToolbar,
     FlexModule,

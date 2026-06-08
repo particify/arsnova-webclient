@@ -1,5 +1,10 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { HintType } from '@app/core/models/hint-type.enum';
@@ -28,6 +33,7 @@ export const HINTS: Hint[] = [
   imports: [FlexModule, MatIconModule, TranslocoModule, NgClass],
   selector: 'app-hint',
   templateUrl: './hint.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./hint.component.scss'],
 })
 export class HintComponent implements OnInit {

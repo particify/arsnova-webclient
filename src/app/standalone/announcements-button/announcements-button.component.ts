@@ -4,6 +4,7 @@ import {
   inject,
   input,
   linkedSignal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatBadge } from '@angular/material/badge';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -30,6 +31,7 @@ import { MatIcon } from '@angular/material/icon';
     MatIconButton,
     MatIcon,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './announcements-button.component.html',
 })
 export class AnnouncementsButtonComponent {

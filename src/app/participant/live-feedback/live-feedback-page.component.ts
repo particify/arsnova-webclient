@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AbstractLiveFeedbackPageComponent } from '@app/common/abstract/abstract-live-feedback-page';
 import { LiveFeedbackType } from '@app/core/models/live-feedback-type.enum';
@@ -37,6 +44,7 @@ function setDefaultTrue(value: boolean | undefined): boolean {
     AsyncPipe,
     TranslocoPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class LiveFeedbackPageComponent

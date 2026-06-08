@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -60,6 +61,7 @@ function setDefaultTrue(value: boolean | undefined): boolean {
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatCard,

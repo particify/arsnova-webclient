@@ -138,7 +138,9 @@
                 </p>
                 <mat-chip-listbox class="role-chip">
                   <mat-chip-option selectable="false">{{
-                    'creator.settings.' + member.role?.toLowerCase() | transloco
+                    'creator.settings.' +
+                      $safeNavigationMigration(member.role?.toLowerCase())
+                      | transloco
                   }}</mat-chip-option>
                 </mat-chip-listbox>
               </div>

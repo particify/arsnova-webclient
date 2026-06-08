@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, inject, input } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { LanguageService } from '@app/core/services/util/language.service';
@@ -20,6 +27,7 @@ import { RoomSettingsService } from '@app/core/services/http/room-settings.servi
   selector: 'app-creator-page',
   templateUrl: './creator-page.component.html',
   styleUrls: ['../common/styles/room-page.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatDrawerContainer,

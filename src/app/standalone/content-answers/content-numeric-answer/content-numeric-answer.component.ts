@@ -4,6 +4,7 @@ import {
   Input,
   OnChanges,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { ContentNumeric } from '@app/core/models/content-numeric';
@@ -15,6 +16,7 @@ import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-s
   imports: [CoreModule],
   providers: [LocalizeDecimalSeperatorPipe],
   templateUrl: './content-numeric-answer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-numeric-answer.component.scss',
 })
 export class ContentNumericAnswerComponent implements OnChanges {

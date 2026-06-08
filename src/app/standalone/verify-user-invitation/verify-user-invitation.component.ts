@@ -6,6 +6,7 @@ import {
   input,
   model,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
@@ -43,6 +44,7 @@ const EXPIRES_FALLBACK_OFFSET = 3600;
     PasswordEntryComponent,
     TranslocoPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: 'verify-user-invitation.component.html',
 })
 export class VerifyUserInvitationComponent extends FormComponent {

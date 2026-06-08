@@ -1,4 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ComponentFixture, inject } from '@angular/core/testing';
 import {
   EventCategory,
@@ -19,6 +24,7 @@ const TEST_TRACK_NAME = 'test-track-name';
   >
     Tracked Button
   </button>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TrackInteractionDirective],
 })
 class TestComponent {

@@ -7,6 +7,7 @@ import {
   Input,
   Output,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Content } from '@app/core/models/content';
@@ -28,6 +29,7 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
     LoadingIndicatorComponent,
   ],
   templateUrl: './content-stepper.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-stepper.component.scss',
 })
 export class ContentStepperComponent implements AfterViewInit {

@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NavigationError, Router } from '@angular/router';
 import { FormErrorStateMatcher } from '@app/core/components/form-error-state-matcher/form-error-state-matcher';
 import {
@@ -33,6 +38,7 @@ import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loa
   selector: 'app-room-join',
   templateUrl: './room-join.component.html',
   styleUrls: ['./room-join.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     FormsModule,

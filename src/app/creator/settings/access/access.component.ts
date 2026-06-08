@@ -8,6 +8,7 @@ import {
   computed,
   inject,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -76,6 +77,7 @@ export interface Role {
   selector: 'app-access',
   templateUrl: './access.component.html',
   styleUrls: ['./access.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     HintComponent,

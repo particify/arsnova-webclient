@@ -5,6 +5,7 @@ import {
   OnInit,
   effect,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   BarController,
@@ -47,6 +48,7 @@ interface AnswerGroup {
   selector: 'app-statistic-numeric',
   templateUrl: './statistic-numeric.component.html',
   styleUrls: ['./statistic-numeric.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     LoadingIndicatorComponent,

@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { Subject, takeUntil, timer } from 'rxjs';
@@ -20,6 +21,7 @@ const DELAY_BUFFER = 250;
   selector: 'app-countdown-timer',
   imports: [CoreModule],
   styleUrl: './countdown-timer.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './countdown-timer.component.html',
 })
 export class CountdownTimerComponent implements OnInit, OnDestroy {

@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -39,6 +46,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'app-creator-overview',
   templateUrl: './room-overview-page.component.html',
   styleUrls: ['./room-overview-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AutofocusDirective,

@@ -1,5 +1,10 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentShortAnswer } from '@app/core/models/content-short-answer';
@@ -24,6 +29,7 @@ import { takeUntil } from 'rxjs';
     TranslocoPipe,
     CorrectAnswerResultsComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './statistic-short-answer.component.html',
 })
 export class StatisticShortAnswerComponent

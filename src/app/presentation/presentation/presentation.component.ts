@@ -5,6 +5,7 @@ import {
   OnInit,
   inject,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import {
@@ -34,6 +35,7 @@ import { FocusModeService } from '@app/creator/_services/focus-mode.service';
   selector: 'app-presentation',
   templateUrl: './presentation.component.html',
   styleUrl: './presentation.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ControlBarComponent,
     AutofocusDirective,

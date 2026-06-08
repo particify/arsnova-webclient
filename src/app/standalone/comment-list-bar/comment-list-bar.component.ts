@@ -5,6 +5,7 @@ import {
   input,
   Input,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
@@ -31,6 +32,7 @@ class SortItem {
   imports: [CoreModule, FilterChipComponent, CommentFilterComponent],
   selector: 'app-comment-list-bar',
   templateUrl: './comment-list-bar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./comment-list-bar.component.scss'],
 })
 export class CommentListBarComponent {

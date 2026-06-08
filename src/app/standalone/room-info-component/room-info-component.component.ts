@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 import { ExtensionPointComponent } from '@projects/extension-point/src/public-api';
@@ -22,6 +22,7 @@ import { NgClass } from '@angular/common';
     NgClass,
   ],
   templateUrl: './room-info-component.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './room-info-component.component.scss',
 })
 export class RoomInfoComponentComponent {

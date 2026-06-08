@@ -93,7 +93,7 @@
   <app-template-language-selection
     [defaultLang]="language()"
     [allowNoneSelection]="true"
-    (selectedLangChange)="language.set($event?.code)"
+    (selectedLangChange)="language.set($safeNavigationMigration($event?.code))"
   ></app-template-language-selection>
   <app-settings-slide-toggle
     *appFeatureFlag="'FOCUS_MODE'"

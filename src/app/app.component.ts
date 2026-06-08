@@ -4,6 +4,7 @@ import {
   OnInit,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ApiConfigService } from '@app/core/services/http/api-config.service';
@@ -47,6 +48,7 @@ import { UpdateUserLanguageGql } from '@gql/generated/graphql';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CoreModule,
     FooterLinksComponent,

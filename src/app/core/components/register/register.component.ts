@@ -6,6 +6,7 @@ import {
   inject,
   input,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   UntypedFormControl,
@@ -43,6 +44,7 @@ import { CooldownService } from '@app/core/services/util/cooldown.service';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatCard,

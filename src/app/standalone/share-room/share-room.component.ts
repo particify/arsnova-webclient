@@ -5,6 +5,7 @@ import {
   input,
   OnInit,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -39,6 +40,7 @@ import { MatDivider } from '@angular/material/divider';
     MatDivider,
   ],
   templateUrl: './share-room.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './share-room.component.scss',
 })
 export class ShareRoomComponent implements OnInit {

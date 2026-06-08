@@ -4,6 +4,7 @@ import {
   OnChanges,
   SimpleChanges,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -33,6 +34,7 @@ const MAX_VALUE = 1_000_000_000_000_000; // Maximum value is up (or down) to one
       useExisting: NumericContentFormComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     FormsModule,

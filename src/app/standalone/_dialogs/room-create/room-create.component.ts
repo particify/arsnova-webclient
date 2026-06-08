@@ -1,4 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
@@ -42,6 +47,7 @@ import { first, take } from 'rxjs';
 @Component({
   selector: 'app-room-create',
   templateUrl: './room-create.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ExtensionPointModule,
     FormsModule,

@@ -5,6 +5,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { DisplayAnswer } from '@app/creator/content-group/content-editing/_models/display-answer';
@@ -27,6 +28,7 @@ import { CoreModule } from '@app/core/core.module';
       useExisting: ChoiceContentFormComponent,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FlexModule, AnswerOptionListComponent, CoreModule],
 })
 export class ChoiceContentFormComponent

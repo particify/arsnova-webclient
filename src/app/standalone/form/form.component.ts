@@ -1,10 +1,16 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FormService } from '@app/core/services/util/form.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export abstract class FormComponent implements OnDestroy {

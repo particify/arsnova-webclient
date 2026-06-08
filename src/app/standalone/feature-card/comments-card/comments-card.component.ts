@@ -1,4 +1,11 @@
-import { Component, Input, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  Input,
+  computed,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { catchError, filter, map, of, switchMap } from 'rxjs';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FeatureCardComponent } from '@app/standalone/feature-card/feature-card.component';
@@ -33,6 +40,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
     FlexLayoutModule,
     DisabledIfReadonlyDirective,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './comments-card.component.html',
 })
 export class CommentsCardComponent {

@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Room } from '@app/core/models/room';
 import { FeedbackService } from '@app/core/services/http/feedback.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -24,6 +31,7 @@ import { WsFeedbackService } from '@app/core/services/websockets/ws-feedback.ser
     FlexModule,
     DisabledIfReadonlyDirective,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './live-feedback-card.component.html',
 })
 export class LiveFeedbackCardComponent implements OnDestroy, OnInit {

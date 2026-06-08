@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
@@ -34,6 +40,7 @@ import {
   providers: [provideTranslocoScope('creator')],
   selector: 'app-comment-answer',
   templateUrl: './comment-answer.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./comment-answer.component.scss'],
 })
 export class CommentAnswerComponent extends FormComponent {

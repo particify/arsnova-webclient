@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
@@ -41,6 +48,7 @@ import { BackButtonComponent } from '@app/standalone/back-button/back-button.com
   ],
   selector: 'app-content-group-template-preview',
   templateUrl: './content-group-template-preview.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-group-template-preview.component.scss'],
 })
 export class ContentGroupTemplatePreviewComponent implements OnInit, OnDestroy {

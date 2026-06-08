@@ -5,6 +5,7 @@ import {
   inject,
   input,
   linkedSignal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AdvancedSnackBarTypes,
@@ -51,6 +52,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-room-edit',
   templateUrl: './room.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatFormField,

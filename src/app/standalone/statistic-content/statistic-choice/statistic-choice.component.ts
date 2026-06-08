@@ -6,6 +6,7 @@ import {
   effect,
   inject,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   BarController,
@@ -46,6 +47,7 @@ import {
   selector: 'app-statistic-choice',
   templateUrl: './statistic-choice.component.html',
   styleUrls: ['./statistic-choice.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     LoadingIndicatorComponent,

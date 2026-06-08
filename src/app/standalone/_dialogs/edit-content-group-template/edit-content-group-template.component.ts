@@ -1,4 +1,9 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentGroupTemplateEditingComponent } from '@app/standalone/content-group-template-editing/content-group-template-editing.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -19,6 +24,7 @@ import { BaseTemplateService } from '@app/core/services/http/base-template.servi
     LoadingButtonComponent,
     ContentGroupTemplateEditingComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './edit-content-group-template.component.html',
 })
 export class EditContentGroupTemplateComponent extends FormComponent {

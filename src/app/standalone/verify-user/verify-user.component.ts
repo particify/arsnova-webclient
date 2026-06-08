@@ -1,5 +1,11 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
 import { Router } from '@angular/router';
@@ -29,6 +35,7 @@ const EXPIRES_FALLBACK_OFFSET = 3600;
     MatCard,
     TranslocoPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: 'verify-user.component.html',
 })
 export class VerifyUserComponent extends FormComponent {

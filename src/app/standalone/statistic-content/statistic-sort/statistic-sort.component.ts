@@ -5,6 +5,7 @@ import {
   OnDestroy,
   inject,
   effect,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ContentChoice } from '@app/core/models/content-choice';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
@@ -40,6 +41,7 @@ export const MAX_COMBINATIONS = 4;
   selector: 'app-statistic-sort',
   templateUrl: './statistic-sort.component.html',
   styleUrls: ['./statistic-sort.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     LoadingIndicatorComponent,

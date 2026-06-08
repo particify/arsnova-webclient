@@ -19,7 +19,9 @@
           fxFlex.xs="100"
           [defaultLang]="selectedLang"
           [smaller]="true"
-          (selectedLangChange)="updateLanguage($event?.code)"
+          (selectedLangChange)="
+            updateLanguage($safeNavigationMigration($event?.code))
+          "
         ></app-template-language-selection>
       }
     </div>

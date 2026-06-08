@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { TranslocoModule } from '@jsverse/transloco';
 
@@ -7,6 +7,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   imports: [CommonModule, FlexModule, TranslocoModule],
   selector: 'app-answer-count',
   templateUrl: './answer-count.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./answer-count.component.scss'],
 })
 export class AnswerCountComponent {

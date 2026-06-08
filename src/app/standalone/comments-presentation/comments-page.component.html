@@ -6,7 +6,7 @@
     <app-present-comment
       fxFill
       [isPresentation]="true"
-      [body]="activePost()?.body"
+      [body]="$safeNavigationMigration(activePost()?.body)"
     ></app-present-comment>
   </div>
   <div #commentList (scroll)="onScroll()" class="list-container">
@@ -32,7 +32,7 @@
             [isEditor]="true"
             [isSimpleView]="true"
             [outlinedCard]="outlinedCards"
-            [activePostId]="activePost()?.id"
+            [activePostId]="$safeNavigationMigration(activePost()?.id)"
             [animate]="animatePost"
             (click)="toggleActivePost(post.id)"
           >

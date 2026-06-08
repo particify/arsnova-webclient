@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { LiveFeedbackIcon } from '@app/core/models/live-feedback-icon.enum';
 import { LiveFeedbackLabel } from '@app/core/models/live-feedback-label.enum';
 import { LiveFeedbackSurveyLabel } from '@app/core/models/live-feedback-survey-label.enum';
@@ -19,6 +25,7 @@ import { Message } from '@stomp/stompjs';
 import { Subject, takeUntil } from 'rxjs';
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AbstractLiveFeedbackPageComponent {

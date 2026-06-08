@@ -1,7 +1,7 @@
 import { ComponentFixture } from '@angular/core/testing';
 
 import { HomePageComponent } from './home-page.component';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -11,6 +11,7 @@ import { ApiConfig } from '@app/core/models/api-config';
 import { configureTestModule } from '@testing/test.setup';
 @Component({
   selector: 'lib-extension-point',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<svg>Particify</svg>',
 })
 class LibExtensionPointStubComponent {

@@ -1,4 +1,11 @@
-import { Component, DestroyRef, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { LeaderboardComponent } from '@app/standalone/leaderboard/leaderboard.component';
@@ -17,6 +24,7 @@ const REFRESH_LIMIT = 100;
   selector: 'app-content-group-leaderboard',
   imports: [CoreModule, LeaderboardComponent, LoadingIndicatorComponent],
   templateUrl: './content-group-leaderboard.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-group-leaderboard.component.scss',
 })
 export class ContentGroupLeaderboardComponent implements OnInit {

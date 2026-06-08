@@ -3,7 +3,7 @@
     <app-content-text-answer
       (inputEvent)="textAnswer = $event"
       [disabled]="isDisabled"
-      [givenAnswer]="answer?.body"
+      [givenAnswer]="$safeNavigationMigration(answer?.body)"
     ></app-content-text-answer>
   </form>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 import { LICENSES } from '@app/core/models/licenses';
 
@@ -6,6 +6,7 @@ import { LICENSES } from '@app/core/models/licenses';
   selector: 'app-template-license',
   imports: [CoreModule],
   templateUrl: './template-license.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./template-license.component.scss'],
 })
 export class TemplateLicenseComponent {

@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-menu-item-details',
   imports: [FlexLayoutModule],
   templateUrl: './menu-item-details.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './menu-item-details.component.scss',
 })
 export class MenuItemDetailsComponent {

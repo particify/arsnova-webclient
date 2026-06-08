@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { NgClass } from '@angular/common';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -10,6 +16,7 @@ import { FlexModule } from '@angular/flex-layout';
   selector: 'app-multiple-round-selection',
   templateUrl: './multiple-round-selection.component.html',
   styleUrls: ['./multiple-round-selection.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     MatFabButton,

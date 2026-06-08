@@ -6,6 +6,7 @@ import {
   OnChanges,
   ViewChild,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import Wordcloud from 'd3-cloud';
 import { Subscription, timer } from 'rxjs';
@@ -39,6 +40,7 @@ export class WordCloudItem {
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslocoPipe],
 })
 export class WordcloudComponent implements OnChanges {

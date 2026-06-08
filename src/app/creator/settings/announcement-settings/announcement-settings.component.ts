@@ -5,6 +5,7 @@ import {
   inject,
   input,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
@@ -43,6 +44,7 @@ import { QueryRef } from 'apollo-angular';
   selector: 'app-announcement-settings',
   templateUrl: './announcement-settings.component.html',
   styleUrls: ['./announcement-settings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     FormsModule,

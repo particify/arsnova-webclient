@@ -48,7 +48,7 @@
         @for (post of posts(); track post.id) {
           <app-comment
             [post]="post"
-            [activePostId]="activePost()?.id"
+            [activePostId]="$safeNavigationMigration(activePost()?.id)"
             [animate]="animatePost"
             (clickedOnTag)="selectFilterTag($event)"
           >

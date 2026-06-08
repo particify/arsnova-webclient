@@ -1,5 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
@@ -8,6 +14,7 @@ import { MatMenu, MatMenuModule } from '@angular/material/menu';
   selector: 'app-split-button',
   imports: [MatButtonModule, MatIconModule, MatMenuModule, NgClass],
   templateUrl: './split-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './split-button.component.scss',
 })
 export class SplitButtonComponent {

@@ -1,4 +1,10 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -33,6 +39,7 @@ import { NetworkStatus } from '@apollo/client';
   selector: 'app-comment-settings',
   templateUrl: './comment-settings.component.html',
   styleUrls: ['./comment-settings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LoadingIndicatorComponent,
     FlexModule,

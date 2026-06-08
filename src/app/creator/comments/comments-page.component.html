@@ -91,7 +91,7 @@
             [post]="post"
             [isEditor]="true"
             [isModeration]="isModeration()"
-            [activePostId]="activePost()?.id"
+            [activePostId]="$safeNavigationMigration(activePost()?.id)"
             [qnaId]="qnaId()"
             [animate]="animatePost"
             (clickedOnTag)="selectFilterTag($event)"

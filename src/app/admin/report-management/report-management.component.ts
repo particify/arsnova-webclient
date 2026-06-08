@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { TemplateService } from '@app/admin/template-management/template.service';
 import {
   ViolationReport,
@@ -24,6 +29,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-report-management',
   templateUrl: './report-management.component.html',
   styleUrl: '../admin-styles.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     AdminPageHeaderComponent,

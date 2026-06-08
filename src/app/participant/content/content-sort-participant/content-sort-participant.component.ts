@@ -1,4 +1,9 @@
-import { Component, Input, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { AdvancedSnackBarTypes } from '@app/core/services/util/notification.service';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -25,6 +30,7 @@ import { AnswerResultType } from '@app/core/models/answer-result';
     NgClass,
     MatIcon,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [provideTranslocoScope('participant')],
 })
 export class ContentSortParticipantComponent extends ContentParticipantBaseComponent {

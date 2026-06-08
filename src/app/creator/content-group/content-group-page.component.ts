@@ -7,6 +7,7 @@ import {
   computed,
   inject,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -92,6 +93,7 @@ export interface ContentStats {
   selector: 'app-content-group-page',
   templateUrl: './content-group-page.component.html',
   styleUrls: ['./content-group-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FlexModule,
     LoadingIndicatorComponent,

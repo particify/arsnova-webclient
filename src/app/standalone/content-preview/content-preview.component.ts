@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, inject, input } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { ContentType } from '@app/core/models/content-type.enum';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -42,6 +49,7 @@ import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
   ],
   providers: [provideTranslocoScope('creator')],
   templateUrl: './content-preview.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./content-preview.component.scss'],
 })
 export class ContentPreviewComponent implements OnInit {

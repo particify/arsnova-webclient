@@ -7,6 +7,7 @@ import {
   inject,
   input,
   linkedSignal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -64,6 +65,7 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
   ],
   templateUrl: './contents-page.component.html',
   styleUrls: ['./contents-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [hotkeyEnterLeaveAnimation],
 })
 export class ContentsPageComponent implements OnInit, OnDestroy {

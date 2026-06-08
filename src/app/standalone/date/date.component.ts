@@ -1,4 +1,10 @@
-import { Component, OnDestroy, inject, input } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { Subject, takeUntil, timer } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
@@ -10,6 +16,7 @@ const TIME_UPDATE_INTERVAL = 60000;
   imports: [CoreModule],
   selector: 'app-date',
   templateUrl: './date.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./date.component.scss'],
 })
 export class DateComponent implements OnDestroy {
