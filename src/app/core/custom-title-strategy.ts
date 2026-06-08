@@ -69,7 +69,9 @@ export class CustomPageTitleStrategy extends TitleStrategy {
     }
   }
 
-  override getResolvedTitleForRoute(route: ActivatedRouteSnapshot) {
+  override getResolvedTitleForRoute(
+    route: ActivatedRouteSnapshot
+  ): string | undefined {
     // Exit if no component is set
     if (!route.component) {
       return;
