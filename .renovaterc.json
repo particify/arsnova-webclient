@@ -36,13 +36,8 @@
       ]
     },
     {
-      "groupName": "apollo/graphql",
-      "matchPackageNames": [
-        "apollo-angular",
-        "graphql",
-        "@apollo/{/,}**",
-        "@graphql-codegen/{/,}**"
-      ]
+      "groupName": "apollo",
+      "matchPackageNames": ["apollo-angular", "@apollo/{/,}**"]
     },
     {
       "groupName": "eslint",
@@ -54,6 +49,10 @@
         "@typescript-eslint/{/,}**",
         "eslint-{/,}**"
       ]
+    },
+    {
+      "groupName": "graphql-codegen",
+      "matchPackageNames": ["@graphql-codegen/{/,}**"]
     },
     {
       "groupName": "stomp",
