@@ -37,7 +37,7 @@
     },
     {
       "groupName": "apollo",
-      "matchPackageNames": ["apollo-angular", "@apollo/{/,}**"]
+      "matchPackageNames": ["@apollo/{/,}**"]
     },
     {
       "groupName": "eslint",
