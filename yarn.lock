@@ -6085,6 +6085,7 @@ __metadata:
     storybook: "npm:9.1.20"
     stylelint: "npm:16.24.0"
     stylelint-config-standard-scss: "npm:15.0.1"
+    stylelint-scss: "npm:6.12.1"
     ts-node: "npm:10.9.2"
     tslib: "npm:2.8.1"
     typescript: "npm:5.9.3"
@@ -14669,7 +14670,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^6.12.0":
+"stylelint-scss@npm:6.12.1, stylelint-scss@npm:^6.12.0":
   version: 6.12.1
   resolution: "stylelint-scss@npm:6.12.1"
   dependencies:
