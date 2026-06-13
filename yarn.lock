@@ -519,7 +519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/build@npm:20.3.28, @angular/build@npm:^20.3.2":
+"@angular/build@npm:20.3.28":
   version: 20.3.28
   resolution: "@angular/build@npm:20.3.28"
   dependencies:
@@ -4702,7 +4702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/d3-cloud@npm:^1.2.5":
+"@types/d3-cloud@npm:1.2.9":
   version: 1.2.9
   resolution: "@types/d3-cloud@npm:1.2.9"
   dependencies:
@@ -6020,7 +6020,7 @@ __metadata:
     "@angular-eslint/schematics": "npm:20.3.0"
     "@angular-eslint/template-parser": "npm:20.3.0"
     "@angular/animations": "npm:20.3.24"
-    "@angular/build": "npm:^20.3.2"
+    "@angular/build": "npm:20.3.28"
     "@angular/cdk": "npm:20.2.14"
     "@angular/cli": "npm:20.3.27"
     "@angular/common": "npm:20.3.24"
@@ -6044,7 +6044,7 @@ __metadata:
     "@stomp/stompjs": "npm:7.2.1"
     "@storybook/addon-docs": "npm:9.1.20"
     "@storybook/angular": "npm:9.1.20"
-    "@types/d3-cloud": "npm:^1.2.5"
+    "@types/d3-cloud": "npm:1.2.9"
     "@types/jasmine": "npm:5.1.15"
     "@types/jasminewd2": "npm:2.0.13"
     "@types/node": "npm:22.18.13"
@@ -15816,7 +15816,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:<5.105.0":
+"webpack@npm:5.104.1":
   version: 5.104.1
   resolution: "webpack@npm:5.104.1"
   dependencies:
