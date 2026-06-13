@@ -61,14 +61,14 @@
     "@angular-eslint/eslint-plugin-template": "20.3.0",
     "@angular-eslint/schematics": "20.3.0",
     "@angular-eslint/template-parser": "20.3.0",
-    "@angular/build": "^20.3.2",
+    "@angular/build": "20.3.28",
     "@angular/compiler-cli": "20.3.24",
     "@angular/language-service": "20.3.24",
     "@eslint/js": "9.36.0",
     "@playwright/test": "1.55.1",
     "@storybook/addon-docs": "9.1.20",
     "@storybook/angular": "9.1.20",
-    "@types/d3-cloud": "^1.2.5",
+    "@types/d3-cloud": "1.2.9",
     "@types/jasmine": "5.1.15",
     "@types/jasminewd2": "2.0.13",
     "@types/node": "22.18.13",
@@ -102,6 +102,6 @@
     "typescript-eslint": "8.44.1"
   },
   "resolutions": {
-    "webpack": "<5.105.0"
+    "webpack": "5.104.1"
   }
 }
