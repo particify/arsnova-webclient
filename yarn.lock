@@ -8165,17 +8165,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-angular@npm:14.0.0":
-  version: 14.0.0
-  resolution: "apollo-angular@npm:14.0.0"
+"apollo-angular@npm:14.1.0":
+  version: 14.1.0
+  resolution: "apollo-angular@npm:14.1.0"
   dependencies:
     tslib: "npm:^2.6.2"
   peerDependencies:
-    "@angular/core": ^19.0.0 || ^20.0.0 || ^21.0.0
+    "@angular/core": ^20.0.0 || ^21.0.0 || ^22.0.0
     "@apollo/client": ^4.0.1
     graphql: ^16.0.0
     rxjs: ^7.8.0
-  checksum: 10c0/3deb9bf3cee6faec5898abb12baf37dae7016e2105a0ce09de6cebe6c548d42f0a9856d8c07a08e12a68a968234570585169ca2e7e52414ada845ad37076f21f
+  checksum: 10c0/aabbf40925daa5ce3fc5156bdb00c4d6bfb3db1e333643ba22572732025ed515d4a67d86a450bed1afb9bc5624c3dbaa54a15610f3c7722df1d888b66fe66a68
   languageName: node
   linkType: hard
 
@@ -8352,7 +8352,7 @@ __metadata:
     "@typescript-eslint/utils": "npm:8.61.0"
     altcha: "npm:3.1.0"
     angular-material-css-vars: "npm:11.0.0"
-    apollo-angular: "npm:14.0.0"
+    apollo-angular: "npm:14.1.0"
     backoff-rxjs: "npm:7.0.0"
     chart.js: "npm:4.5.1"
     chartjs-plugin-datalabels: "npm:2.2.0"
