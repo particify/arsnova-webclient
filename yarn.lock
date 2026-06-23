@@ -8408,7 +8408,7 @@ __metadata:
     katex: "npm:0.17.0"
     lru-cache: "npm:11.5.1"
     ng-packagr: "npm:21.2.5"
-    ng-qrcode: "npm:21.0.0"
+    ng-qrcode: "npm:22.0.0"
     prettier: "npm:3.8.4"
     prismjs: "npm:1.30.0"
     rxjs: "npm:7.8.2"
@@ -14441,16 +14441,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ng-qrcode@npm:21.0.0":
-  version: 21.0.0
-  resolution: "ng-qrcode@npm:21.0.0"
+"ng-qrcode@npm:22.0.0":
+  version: 22.0.0
+  resolution: "ng-qrcode@npm:22.0.0"
   dependencies:
     qrcode: "npm:^1.5.3"
-    tslib: "npm:^2.6.2"
+    tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/common": ">=21 <22"
-    "@angular/core": ">=21 <22"
-  checksum: 10c0/64e848604ed87e28d158648c6a86520b2710b27f0451138e1a67f5b8ff4740a890435dac5d66fdbcfebd12ade7169bf5948872ad25aaaee62d5962211817670e
+    "@angular/common": ">=22 <23"
+    "@angular/core": ">=22 <23"
+  checksum: 10c0/c5bd24a3c9dec8a1e55ce0ef54ad83a02d0554a9b3508987eaf9b2fd4d65993b40f79d3db6b356d7b34386cadf80850d64986e49c370e587f2f3f103919ed5ff
   languageName: node
   linkType: hard
 
