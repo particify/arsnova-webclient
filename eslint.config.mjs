@@ -1,9 +1,8 @@
 import eslint from '@eslint/js';
-import eslintTypescript from 'typescript-eslint';
-import eslintAngular from '@angular-eslint/eslint-plugin';
-import eslintAngularTemplate from '@angular-eslint/eslint-plugin-template';
+import eslintAngular from 'angular-eslint';
 import eslintImport from 'eslint-plugin-import';
 import eslintStorybook from 'eslint-plugin-storybook';
+import eslintTypescript from 'typescript-eslint';
 
 export default eslintTypescript.config(
   eslint.configs.recommended,
@@ -13,7 +12,7 @@ export default eslintTypescript.config(
   },
   {
     plugins: {
-      '@angular-eslint': eslintAngular,
+      '@angular-eslint': eslintAngular.tsPlugin,
       import: eslintImport,
     },
     languageOptions: {
@@ -25,8 +24,8 @@ export default eslintTypescript.config(
       },
     },
     rules: {
-      ...eslintAngular.configs.recommended.rules,
-      ...eslintAngularTemplate.configs['process-inline-templates'].rules,
+      ...eslintAngular.configs.tsRecommended.rules,
+      ...eslintAngular.processInlineTemplates.rules,
       ...eslintImport.configs.recommended.rules,
       ...eslintImport.configs.typescript.rules,
       complexity: ['error', 10],
@@ -46,7 +45,7 @@ export default eslintTypescript.config(
           style: 'camelCase',
         },
       ],
-      '@angular-eslint/prefer-standalone': 'off',
+      '@angular-eslint/prefer-inject': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
       'import/no-named-as-default': 'off',
@@ -69,7 +68,8 @@ export default eslintTypescript.config(
   },
   {
     files: ['*.html'],
-    ...eslintAngularTemplate.configs.recommended,
+    ...eslintAngular.configs.templateRecommended,
+    ...eslintAngular.configs.templateAccessibility,
   },
   {
     files: ['*.spec.ts', 'test-helpers.ts'],
