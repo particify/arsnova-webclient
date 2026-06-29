@@ -40,7 +40,6 @@ export class AbstractRoomOverviewPageComponent {
   readonly shortId = input.required<string>();
   // The old room structure is still used by child components.
   // Remove, once they have been updated to directly use GraphQL.
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   readonly legacyRoom = input.required<Room>({ alias: 'room' });
 
   private readonly roomResult = toSignal(
