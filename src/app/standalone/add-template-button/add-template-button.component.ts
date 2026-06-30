@@ -48,7 +48,7 @@ export class AddTemplateButtonComponent extends FormComponent {
       this.disableForm();
       this.roomMembershipsGql
         .fetch({
-          variables: { query: { role: RoomRole.Owner } },
+          variables: { query: { anyRole: [RoomRole.Owner] } },
           fetchPolicy: 'no-cache',
         })
         .pipe(
