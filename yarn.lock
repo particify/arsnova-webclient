@@ -8231,7 +8231,7 @@ __metadata:
     eslint: "npm:10.6.0"
     eslint-import-resolver-typescript: "npm:4.4.5"
     eslint-plugin-import: "npm:2.32.0"
-    eslint-plugin-jsdoc: "npm:63.0.9"
+    eslint-plugin-jsdoc: "npm:63.0.10"
     eslint-plugin-prefer-arrow: "npm:1.2.3"
     eslint-plugin-storybook: "npm:10.4.6"
     graphql: "npm:16.14.2"
@@ -10499,9 +10499,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsdoc@npm:63.0.9":
-  version: 63.0.9
-  resolution: "eslint-plugin-jsdoc@npm:63.0.9"
+"eslint-plugin-jsdoc@npm:63.0.10":
+  version: 63.0.10
+  resolution: "eslint-plugin-jsdoc@npm:63.0.10"
   dependencies:
     "@es-joy/jsdoccomment": "npm:~0.87.0"
     "@es-joy/resolve.exports": "npm:1.2.0"
@@ -10519,7 +10519,7 @@ __metadata:
     to-valid-identifier: "npm:^1.0.0"
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
-  checksum: 10c0/04abee1edb464e3cbfb21d4a527e9d118d2773d9ebd5e751a23d231ebda4404b720878a1579da576e8d177f4f8ad46bbf72cd273be0155924ce8799ef7913799
+  checksum: 10c0/0a42c66e964398e3fa08743cc3c5aee18f175dc65b048a813c218d270c4cd1a67732839b098e7208422e62fb6d4a2524bd86940216e57924b6a525c0211c6746
   languageName: node
   linkType: hard
 
