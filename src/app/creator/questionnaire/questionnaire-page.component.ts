@@ -56,10 +56,12 @@ import {
   Content,
   DeleteQuestionnaireGql,
   Questionnaire,
+  QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
   QuestionnaireType,
+  ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
 import { QuestionnaireInfoComponent } from '@app/standalone/questionnaire-info/questionnaire-info.component';
@@ -129,6 +131,9 @@ export class QuestionnairePageComponent {
   );
   private readonly deleteQuestionnaire = inject(DeleteQuestionnaireGql);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly resetQuestionnaireResults = inject(
+    ResetQuestionnaireResultsGql
+  );
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
 
   readonly userRole = input.required<UserRole>();
@@ -295,7 +300,43 @@ export class QuestionnairePageComponent {
   }
 
   deleteAllAnswers() {
-    // TODO: Delete results of all contents
+    const dialogRef = this.dialogService.openDeleteDialog(
+      'content-answers',
+      'creator.dialog.really-reset-group-results',
+      undefined,
+      undefined,
+      () =>
+        this.resetQuestionnaireResults.mutate({
+          variables: { id: this.questionnaireId() },
+          // The results views watch their round stats, which the reset
+          // invalidates; dropping them makes those views fetch them anew.
+          update: (cache) =>
+            cache.modify({
+              id: 'ROOT_QUERY',
+              fields: (value, { fieldName, DELETE }) =>
+                fieldName.endsWith('RoundStatsByRoundId') ? DELETE : value,
+            }),
+          refetchQueries: [
+            {
+              query: QuestionnaireContentsByQuestionnaireIdDocument,
+              variables: { questionnaireId: this.questionnaireId() },
+            },
+          ],
+        })
+    );
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result) {
+          const msg = this.translateService.translate(
+            'creator.content.results-have-been-reset'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        }
+      },
+    });
   }
 
   deleteGroup() {

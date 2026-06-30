@@ -282,10 +282,14 @@ mutation BanQuestionnaireWordcloudContentKeyword(
   }
 }
 
-mutation resetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID) {
+mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID) {
   resetBannedQuestionnaireWordcloudContentKeywords(contentId: $contentId) {
     ...ContentDetails
   }
+}
+
+mutation ResetQuestionnaireResults($id: UUID!) {
+  resetQuestionnaireResults(id: $id)
 }
 
 mutation DuplicateQuestionnaireContent($id: ID!) {

@@ -3285,6 +3285,15 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
   } | null;
 };
 
+export type ResetQuestionnaireResultsMutationVariables = Exact<{
+  id: Scalars['UUID']['input'];
+}>;
+
+export type ResetQuestionnaireResultsMutation = {
+  __typename?: 'Mutation';
+  resetQuestionnaireResults?: boolean | null;
+};
+
 export type DuplicateQuestionnaireContentMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -6251,7 +6260,7 @@ export class BanQuestionnaireWordcloudContentKeywordGql extends Apollo.Mutation<
   }
 }
 export const ResetBannedQuestionnaireWordcloudContentKeywordsDocument = gql`
-  mutation resetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID) {
+  mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID) {
     resetBannedQuestionnaireWordcloudContentKeywords(contentId: $contentId) {
       ...ContentDetails
     }
@@ -6267,6 +6276,25 @@ export class ResetBannedQuestionnaireWordcloudContentKeywordsGql extends Apollo.
   ResetBannedQuestionnaireWordcloudContentKeywordsMutationVariables
 > {
   document = ResetBannedQuestionnaireWordcloudContentKeywordsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ResetQuestionnaireResultsDocument = gql`
+  mutation ResetQuestionnaireResults($id: UUID!) {
+    resetQuestionnaireResults(id: $id)
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResetQuestionnaireResultsGql extends Apollo.Mutation<
+  ResetQuestionnaireResultsMutation,
+  ResetQuestionnaireResultsMutationVariables
+> {
+  document = ResetQuestionnaireResultsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
