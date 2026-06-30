@@ -33,7 +33,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/_dialogs/create-content-group-template/create-content-group-template.component';
-import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
+import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-settings/questionnaire-settings.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { switchMap, map, filter } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
@@ -412,12 +412,11 @@ export class QuestionnairePageComponent {
 
   openSettings(): void {
     const dialogRef = this.dialogService.openDialog(
-      ContentGroupSettingsComponent,
+      QuestionnaireSettingsComponent,
       {
         width: '600px',
         data: {
           questionnaire: { ...this.questionnaire() },
-          groupNames: [this.questionnaire()?.name],
           alreadyAnswered:
             this.contents().filter((c) => c.answerCount && c.answerCount > 0)
               .length > 0,

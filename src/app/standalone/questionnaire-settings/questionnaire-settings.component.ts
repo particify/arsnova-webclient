@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
 import { FormComponent } from '@app/standalone/form/form.component';
@@ -18,9 +18,15 @@ import {
   QuestionnaireType,
   UpdateQuestionnaireGql,
 } from '@gql/generated/graphql';
+import {
+  ErrorClassification,
+  FALLBACK_HANDLER,
+  handleOperationErrors,
+} from '@gql/helper/handle-operation-error';
+import { NotificationService } from '@app/core/services/util/notification.service';
 
 @Component({
-  selector: 'app-content-group-settings',
+  selector: 'app-questionnaire-settings',
   imports: [
     CoreModule,
     SettingsSlideToggleComponent,
@@ -28,22 +34,22 @@ import {
     MatButtonToggleModule,
   ],
   providers: [provideTranslocoScope('creator')],
-  templateUrl: './content-group-settings.component.html',
+  templateUrl: './questionnaire-settings.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './content-group-settings.component.scss',
+  styleUrl: './questionnaire-settings.component.scss',
 })
-export class ContentGroupSettingsComponent
+export class QuestionnaireSettingsComponent
   extends FormComponent
   implements OnInit
 {
   private dialogRef =
-    inject<MatDialogRef<ContentGroupSettingsComponent>>(MatDialogRef);
+    inject<MatDialogRef<QuestionnaireSettingsComponent>>(MatDialogRef);
   data = inject<{
     questionnaire: Questionnaire;
-    groupNames: string[];
     alreadyAnswered: boolean;
   }>(MAT_DIALOG_DATA);
   private readonly updateQuestionnaire = inject(UpdateQuestionnaireGql);
+  private readonly notificationService = inject(NotificationService);
 
   nameFormControl = new UntypedFormControl();
   questionnaire: Questionnaire;
@@ -65,7 +71,6 @@ export class ContentGroupSettingsComponent
     this.nameFormControl.setValidators([
       Validators.required,
       Validators.maxLength(50),
-      this.validateUniqueName(),
     ]);
     this.nameFormControl.updateValueAndValidity();
   }
@@ -95,17 +100,17 @@ export class ContentGroupSettingsComponent
               this.enableForm();
             }
           },
-          error: () => this.enableForm(),
+          error: (e) => {
+            this.enableForm();
+            handleOperationErrors(e, {
+              [ErrorClassification.BadRequest]: () =>
+                this.nameFormControl.setErrors({ validateUniqueName: true }),
+              [FALLBACK_HANDLER]: () =>
+                this.notificationService.showOnRequestClientError(e),
+            });
+          },
         });
     }
-  }
-
-  validateUniqueName(): ValidatorFn {
-    return (formControl) =>
-      formControl.value !== this.questionnaire.name &&
-      this.data.groupNames.includes(formControl.value)
-        ? { validateUniqueName: { value: formControl.value } }
-        : null;
   }
 
   isLive(): boolean {

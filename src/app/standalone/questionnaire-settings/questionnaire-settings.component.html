@@ -17,6 +17,11 @@
     <mat-hint align="end" aria-hidden="true"
       >{{ groupName.value.length }} / 50</mat-hint
     >
+    @if (nameFormControl.hasError('required')) {
+      <mat-error>
+        {{ 'creator.content.no-empty-fields-allowed' | transloco }}
+      </mat-error>
+    }
     @if (nameFormControl.hasError('validateUniqueName')) {
       <mat-error>
         {{ 'creator.content.duplicate-series-name' | transloco }}
