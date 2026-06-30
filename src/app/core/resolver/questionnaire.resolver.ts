@@ -1,9 +1,6 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
-import {
-  Questionnaire,
-  QuestionnaireByRoomIdAndNameGql,
-} from '@gql/generated/graphql';
+import { Questionnaire, QuestionnaireByIdGql } from '@gql/generated/graphql';
 import { filter, map } from 'rxjs';
 
 /**
@@ -12,15 +9,14 @@ import { filter, map } from 'rxjs';
 export const questionnaireResolver: ResolveFn<Questionnaire> = (
   route: ActivatedRouteSnapshot
 ) => {
-  return inject(QuestionnaireByRoomIdAndNameGql)
+  return inject(QuestionnaireByIdGql)
     .watch({
       variables: {
-        roomId: route.data.roomId,
-        name: route.params['seriesName'],
+        id: route.params['questionnaireId'],
       },
     })
     .valueChanges.pipe(
-      map((r) => r.data?.questionnaireByRoomIdAndName),
+      map((r) => r.data?.questionnaireById),
       filter((n): n is Questionnaire => !!n)
     );
 };

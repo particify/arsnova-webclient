@@ -58,7 +58,7 @@ export class PresentationComponent implements OnDestroy {
   room = input.required<Room>();
   userRole = input.required<UserRole>();
   viewRole = input.required<UserRole>();
-  activeQuestionnaire = signal<string | undefined>(undefined);
+  activeQuestionnaireId = signal<string | undefined>(undefined);
   featureString?: string;
 
   roomSettings = toSignal(
@@ -71,7 +71,7 @@ export class PresentationComponent implements OnDestroy {
     const childRoute = this.route.snapshot?.firstChild?.firstChild;
     if (childRoute) {
       this.featureString = childRoute.url[0]?.path;
-      this.activeQuestionnaire.set(childRoute.params.seriesName);
+      this.activeQuestionnaireId.set(childRoute.params.questionnaireId);
     }
     this.focusModeService
       .getFocusModeEnabled()
@@ -99,23 +99,23 @@ export class PresentationComponent implements OnDestroy {
     this.updateUrl();
   }
 
-  updateUrl(group?: string) {
+  updateUrl(questionnaireId?: string) {
     const isGroup = this.featureString === RoutingFeature.CONTENTS;
-    if (group) {
-      if (group === this.activeQuestionnaire()) {
+    if (questionnaireId) {
+      if (questionnaireId === this.activeQuestionnaireId()) {
         return;
       }
-      this.activeQuestionnaire.set(group);
-      this.presentationService.updateCurrentGroup(group);
+      this.activeQuestionnaireId.set(questionnaireId);
+      this.presentationService.updateCurrentGroup(questionnaireId);
       this.globalStorageService.removeItem(STORAGE_KEYS.LAST_INDEX);
     }
     const urlList = ['present', this.room().shortId];
     if (this.featureString) {
       urlList.push(this.featureString);
       if (isGroup) {
-        const groupName = group || this.activeQuestionnaire();
-        if (groupName) {
-          urlList.push(groupName);
+        questionnaireId = questionnaireId || this.activeQuestionnaireId();
+        if (questionnaireId) {
+          urlList.push(questionnaireId);
         }
       }
     }

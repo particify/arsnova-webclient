@@ -43,7 +43,7 @@ const routes: Routes = [
     component: AttributionsInfoComponent,
   },
   {
-    path: ':contentIndex',
+    path: ':contentId',
     component: ContentResultsComponent,
     runGuardsAndResolvers: 'always',
     data: {
@@ -64,7 +64,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forChild([
       {
-        path: ':seriesName',
+        path: ':questionnaireId',
         component: QuestionnairePageComponent,
         resolve: {
           questionnaire: questionnaireResolver,

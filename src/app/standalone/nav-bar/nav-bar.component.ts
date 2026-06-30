@@ -6,7 +6,7 @@ import {
   input,
   ChangeDetectionStrategy,
   computed,
-  model,
+  linkedSignal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutingService } from '@app/core/services/util/routing.service';
@@ -17,7 +17,15 @@ import {
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { Subject, Subscription, map, switchMap, takeUntil } from 'rxjs';
+import {
+  Subject,
+  Subscription,
+  combineLatest,
+  filter,
+  map,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu';
 import { RoomService } from '@app/core/services/http/room.service';
@@ -32,14 +40,19 @@ import { NgClass } from '@angular/common';
 import { FlexModule } from '@angular/flex-layout';
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import {
+  PublishedQuestionnairesByRoomIdGql,
   QnaState,
   QnaStateChangedGql,
   QuestionnairesByRoomIdGql,
+  QuestionnairesChangedGql,
   QuestionnaireSummaryFragment,
   RoomStatsByIdGql,
 } from '@gql/generated/graphql';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RoomSettings } from '@app/core/models/room-settings';
+import { refetchOn } from '@gql/helper/refetch-on';
+import { EventService } from '@app/core/services/util/event.service';
+import { RoomDeletionStarted } from '@app/core/models/events/room-deletion-started';
 
 export class NavBarItem {
   name: string;
@@ -92,43 +105,78 @@ export class NavBarComponent implements OnInit, OnDestroy {
   protected readonly roomStatsByIdGql = inject(RoomStatsByIdGql);
   protected readonly qnaStateChanged = inject(QnaStateChangedGql);
   protected readonly questionnairesByRoomId = inject(QuestionnairesByRoomIdGql);
+  protected readonly publishedQuestionnairesByRoomId = inject(
+    PublishedQuestionnairesByRoomIdGql
+  );
+  protected readonly questionnairesChanged = inject(QuestionnairesChangedGql);
+  private readonly roomEvents = inject(EventService);
 
   readonly roomId = input.required<string>();
   readonly qnaEnabled = input<boolean>();
+  readonly userRole = input.required<UserRole>();
+  readonly viewRole = input.required<UserRole>();
+  readonly room = input.required<Room>();
+  readonly roomSettings = input.required<RoomSettings>();
 
-  readonly questionnairesResult = toSignal(
-    toObservable(this.roomId).pipe(
-      switchMap((roomId) => {
-        return this.questionnairesByRoomId.watch({
-          variables: { roomId },
-        }).valueChanges;
+  readonly questionnairesState = toSignal(
+    combineLatest([
+      toObservable(this.roomId),
+      toObservable(this.viewRole),
+    ]).pipe(
+      switchMap(([roomId, viewRole]) => {
+        // Deleting the room deletes its questionnaires too; refetching the list
+        // of a room that is gone would only fail.
+        const deletionStarted$ = this.roomEvents
+          .on<RoomDeletionStarted['payload']>('RoomDeletionStarted')
+          .pipe(filter((e) => e.id === roomId));
+        const changed$ = this.questionnairesChanged
+          .subscribe({ variables: { roomId } })
+          .pipe(takeUntil(deletionStarted$));
+        if (viewRole === UserRole.PARTICIPANT) {
+          return refetchOn(
+            this.publishedQuestionnairesByRoomId.watch({
+              variables: { roomId },
+            }),
+            changed$
+          ).pipe(
+            map((r) => ({
+              questionnaires: (
+                r.data?.publishedQuestionnairesByRoomId ?? []
+              ).filter((n): n is QuestionnaireSummaryFragment => !!n),
+              loading: r.loading,
+            }))
+          );
+        }
+
+        return refetchOn(
+          this.questionnairesByRoomId.watch({ variables: { roomId } }),
+          changed$
+        ).pipe(
+          map((r) => ({
+            questionnaires: (r.data?.questionnairesByRoomId ?? []).filter(
+              (n): n is QuestionnaireSummaryFragment => !!n
+            ),
+            loading: r.loading,
+          }))
+        );
       })
-    )
+    ),
+    { initialValue: { questionnaires: [], loading: true } }
   );
 
-  readonly questionnaires = computed(() => {
-    return (
-      this.questionnairesResult()?.data?.questionnairesByRoomId ?? []
-    ).filter((n): n is QuestionnaireSummaryFragment => !!n);
+  readonly questionnaires = computed(
+    () => this.questionnairesState().questionnaires
+  );
+  protected readonly loadingQuestionnaires = computed(
+    () => this.questionnairesState().loading
+  );
+
+  readonly activeQuestionnaire = linkedSignal(() => {
+    const id = this.route.snapshot.params.questionnaireId;
+    const first = this.questionnaires()[0];
+    return this.questionnaires().find((q) => q.id === id) ?? first;
   });
 
-  protected readonly loadingQuestionnaires = computed(
-    () => this.questionnairesResult()?.loading ?? true
-  );
-
-  readonly activeQuestionnaire = model(
-    computed(() => {
-      const name = this.route.snapshot.params.seriesName;
-      const first = this.questionnaires()[0];
-      return name
-        ? (this.questionnaires().find((q) => q.name === name) ?? first)
-        : first;
-    })()
-  );
-  userRole = input.required<UserRole>();
-  viewRole = input.required<UserRole>();
-  room = input.required<Room>();
-  roomSettings = input.required<RoomSettings>();
   destroyed$ = new Subject<void>();
   barItems: NavBarItem[] = [];
   features: NavBarItem[] = [
@@ -139,9 +187,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
   ];
   currentRouteIndex = -1;
   activeFeatures: string[] = [RoutingFeature.OVERVIEW];
-  groupName?: string;
   private changesSubscription?: Subscription;
   private statsChangesSubscription?: Subscription;
+  private publishedQuestionnaireIds?: Set<string>;
 
   userCount = toSignal(
     toObservable(this.roomId).pipe(
@@ -155,22 +203,28 @@ export class NavBarComponent implements OnInit, OnDestroy {
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
 
   constructor() {
-    let group = this.routingService.seriesName;
-    if (group === undefined) {
-      group = this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP);
+    let questionnaireId = this.routingService.questionnaireId;
+    if (questionnaireId === undefined) {
+      questionnaireId = this.globalStorageService.getItem(
+        STORAGE_KEYS.LAST_GROUP
+      );
     } else {
-      this.setGroupInSessionStorage(group);
+      this.setGroupInSessionStorage(questionnaireId);
     }
-    toObservable(this.questionnaires).subscribe({
-      next: (r) => {
-        if (r && r.length > 0 && r[0].name) {
-          this.groupName = group ?? r[0].name;
-          this.setGroupInSessionStorage(this.groupName);
+    toObservable(this.questionnairesState).subscribe({
+      next: ({ questionnaires, loading }) => {
+        if (questionnaires.length > 0) {
+          this.setGroupInSessionStorage(
+            questionnaireId ?? questionnaires[0].id
+          );
           this.addContentFeatureItem(false);
-        } else if (!this.loadingQuestionnaires()) {
+        } else if (!loading) {
           this.removeContentFeatureItem();
         }
         this.getItems();
+        if (!loading) {
+          this.announceNewlyPublishedQuestionnaires(questionnaires);
+        }
       },
     });
   }
@@ -216,6 +270,24 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.focusFeature = RoutingFeature.OVERVIEW;
         }
       });
+  }
+
+  /**
+   * Flags the questionnaire item for participants once a questionnaire gets
+   * published. Route data's `userRole` keeps a creator's room preview quiet.
+   */
+  private announceNewlyPublishedQuestionnaires(
+    questionnaires: QuestionnaireSummaryFragment[]
+  ) {
+    const known = this.publishedQuestionnaireIds;
+    this.publishedQuestionnaireIds = new Set(questionnaires.map((q) => q.id));
+    if (!known || this.userRole() !== UserRole.PARTICIPANT) {
+      return;
+    }
+    const published = questionnaires.find((q) => !known.has(q.id));
+    if (published) {
+      this.toggleNews(RoutingFeature.CONTENTS, published);
+    }
   }
 
   setGroupInSessionStorage(group: string) {
@@ -273,9 +345,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   subscribeToRouteChanges() {
     this.routingService.getRouteChanges().subscribe((route) => {
-      const newGroup = route.params['seriesName'];
-      if (newGroup && newGroup !== this.groupName) {
-        this.updateGroupName(newGroup);
+      const newQuestionnaireId = route.params['questionnaireId'];
+      if (
+        newQuestionnaireId &&
+        newQuestionnaireId !== this.activeQuestionnaire()?.id
+      ) {
+        this.updateQuestionnaire(newQuestionnaireId);
       }
       this.getCurrentRouteIndex();
       if (this.currentRouteIndex && this.currentRouteIndex > -1) {
@@ -336,9 +411,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     const url = this.getBaseUrl();
     if (feature) {
       url.push(feature);
-      if (this.groupName && feature === RoutingFeature.CONTENTS) {
-        url.push(this.groupName);
-      }
     }
     return this.router.serializeUrl(this.router.createUrlTree(url));
   }
@@ -369,9 +441,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     ];
     if (item.name !== RoutingFeature.OVERVIEW) {
       route.push(item.name);
-      const questionnaireName = this.activeQuestionnaire()?.name;
-      if (item.name === RoutingFeature.CONTENTS && questionnaireName) {
-        route.push(questionnaireName);
+      const questionnaireId = this.activeQuestionnaire()?.id;
+      if (item.name === RoutingFeature.CONTENTS && questionnaireId) {
+        route.push(questionnaireId);
       }
     }
     this.router.navigate(route);
@@ -408,15 +480,19 @@ export class NavBarComponent implements OnInit, OnDestroy {
     return this.barItems.map((b) => b.name).indexOf(name);
   }
 
-  updateGroupName(name: string) {
-    this.groupName = name;
+  updateQuestionnaire(id: string) {
+    const questionnaire = this.questionnaires().find((q) => q.id === id);
+    if (!questionnaire) {
+      return;
+    }
+    this.activeQuestionnaire.set(questionnaire);
     const groupBarIndex = this.getBarIndexOfFeature(RoutingFeature.CONTENTS);
     if (this.barItems[groupBarIndex]) {
       this.barItems[groupBarIndex].url = this.getFeatureUrl(
         RoutingFeature.CONTENTS
       );
     }
-    this.setGroupInSessionStorage(this.groupName);
+    this.setGroupInSessionStorage(questionnaire.id);
   }
 
   noContentsPublished(first: number, last: number) {

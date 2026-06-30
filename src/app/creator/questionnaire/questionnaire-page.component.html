@@ -187,12 +187,8 @@
               [contents]="contents()"
               [isModerator]="isModerator()"
               [attributionsExist]="attributionsExist"
-              [selectedContentIndex]="
-                creationMode || showLeaderboard
-                  ? undefined
-                  : selectedContentIndex
-              "
-              (startedContentIndexChanged)="handleActiveContentChanged($event)"
+              [selectedContentId]="selectedContentId()"
+              (startedContentChanged)="handleActiveContentChanged($event)"
             ></app-content-list>
           </div>
         }

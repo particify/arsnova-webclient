@@ -576,7 +576,7 @@
     "a11y-switch-to-feature": "Passe à {{feature}}.",
     "overview": "Vue d'ensemble",
     "comments": "Questions/Réponses",
-    "series": "Série de questions",
+    "questionnaire": "Série de questions",
     "feedback": "Commentaires en direct"
   },
   "templates": {

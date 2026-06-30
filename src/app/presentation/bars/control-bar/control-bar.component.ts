@@ -134,9 +134,7 @@ export class ControlBarComponent
   protected readonly questionnairesByRoomId = inject(QuestionnairesByRoomIdGql);
   private readonly contentResultsService = inject(ContentResultsService);
 
-  readonly roomId = input.required<string>();
-  readonly qnaEnabled = input<boolean>();
-  readonly questionnaireName = input<string>();
+  readonly questionnaireId = input<string>();
 
   readonly questionnairesResult = toSignal(
     toObservable(this.roomId).pipe(
@@ -257,7 +255,7 @@ export class ControlBarComponent
       STORAGE_KEYS.SHOW_SHARE_OVERLAY
     );
     effect(() => {
-      const questionnaireName = this.questionnaireName();
+      const questionnaireId = this.questionnaireId();
       if (!this.loadingQuestionnaires()) {
         this.afterInit();
         const questionnaires = this.questionnaires();
@@ -266,9 +264,8 @@ export class ControlBarComponent
         } else {
           const first = questionnaires[0];
           this.activeQuestionnaire.set(
-            questionnaireName
-              ? (questionnaires.find((q) => q.name === questionnaireName) ??
-                  first)
+            questionnaireId
+              ? (questionnaires.find((q) => q.id === questionnaireId) ?? first)
               : first
           );
         }

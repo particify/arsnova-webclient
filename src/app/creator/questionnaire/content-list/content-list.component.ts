@@ -117,8 +117,8 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   contents = input.required<Content[]>();
   isModerator = input(false);
   attributionsExist = input(false);
-  selectedContentIndex = input<number | undefined>();
-  startedContentIndexChanged = output<number | undefined>();
+  selectedContentId = input<string | undefined>();
+  startedContentChanged = output<string | undefined>();
 
   currentGroupIndex?: number;
   contentTypes: string[] = Object.values(ContentType);
@@ -135,20 +135,20 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   publishingChangeActive = false;
   publishingChangePosition?: number;
 
-  startedContentIndex?: number;
+  startedContentId?: string;
   endDate?: Date;
 
   finishedContents = new Map<string, boolean>();
 
-  deleteContent(index: number) {
+  deleteContent(id: string, body: string) {
     const dialogRef = this.dialogService.openDeleteDialog(
       'content',
       'creator.dialog.really-delete-content',
-      this.contents()[index].body,
+      body,
       undefined,
       () =>
         this.deleteContentById.mutate({
-          variables: { id: this.contents()[index].id },
+          variables: { id },
           refetchQueries: [
             {
               query: QuestionnaireContentsByQuestionnaireIdDocument,
@@ -160,17 +160,8 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        const selectedContentIndex = this.selectedContentIndex();
-        if (selectedContentIndex !== undefined) {
-          const url = ['.'];
-          if (this.contents().length > 0) {
-            if (index < selectedContentIndex) {
-              url.push(this.selectedContentIndex.toString());
-            }
-          } else {
-            url.push('create');
-          }
-          this.router.navigate(url, {
+        if (this.selectedContentId() === id) {
+          this.router.navigate(['.', this.getSuccessorId(id) ?? 'create'], {
             relativeTo: this.route,
             onSameUrlNavigation: 'reload',
             replaceUrl: true,
@@ -193,6 +184,13 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
       { series: name }
     );
     this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
+  }
+
+  /** The content taking the place of the deleted one, else the one before it. */
+  private getSuccessorId(deletedId: string): string | undefined {
+    const index = this.contents().findIndex((c) => c.id === deletedId);
+    const remaining = this.contents().filter((c) => c.id !== deletedId);
+    return remaining[Math.min(Math.max(index, 0), remaining.length - 1)]?.id;
   }
 
   deleteAnswers(content: Content) {
@@ -324,19 +322,16 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   }
 
   finishAnswering(): void {
-    if (this.startedContentIndex !== undefined) {
-      this.finishedContents.set(
-        this.contents()[this.startedContentIndex].id,
-        true
-      );
+    if (this.startedContentId !== undefined) {
+      this.finishedContents.set(this.startedContentId, true);
     }
     this.endDate = undefined;
     this.setStartedContent();
   }
 
-  setStartedContent(index?: number): void {
-    this.startedContentIndex = index;
-    this.startedContentIndexChanged.emit(this.startedContentIndex);
+  setStartedContent(id?: string): void {
+    this.startedContentId = id;
+    this.startedContentChanged.emit(this.startedContentId);
   }
 
   hasFormatRounds(format: ContentType): boolean {

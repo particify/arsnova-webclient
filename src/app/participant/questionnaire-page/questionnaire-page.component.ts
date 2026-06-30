@@ -6,6 +6,8 @@ import {
   effect,
   inject,
   input,
+  linkedSignal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import {
@@ -13,15 +15,12 @@ import {
   TranslocoService,
   TranslocoPipe,
 } from '@jsverse/transloco';
-import {
-  STEPPER_ANIMATION_DURATION,
-  StepperComponent,
-} from '@app/standalone/stepper/stepper.component';
+import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Location } from '@angular/common';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { map, Subject, switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
@@ -46,7 +45,7 @@ import {
   Content,
   Questionnaire,
   QuestionnaireContentAnswerResultsByQuestionnaireIdGql,
-  QuestionnaireContentsByQuestionnaireIdGql,
+  QuestionnairePublishedContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
   UserUiSettings,
   QuestionnaireType,
@@ -86,7 +85,7 @@ export class QuestionnairePageComponent {
   private readonly focusModeService = inject(FocusModeService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly contentsByQuestionnareId = inject(
-    QuestionnaireContentsByQuestionnaireIdGql
+    QuestionnairePublishedContentsByQuestionnaireIdGql
   );
   private readonly answerResultsByQuestionnaireId = inject(
     QuestionnaireContentAnswerResultsByQuestionnaireIdGql
@@ -103,6 +102,7 @@ export class QuestionnairePageComponent {
   showCard = input(true, { transform: setDefaultTrue });
   showStepper = input(true, { transform: setDefaultTrue });
   language = input.required<string>();
+  contentId = input<string>();
 
   private readonly contentsResult = toSignal(
     toObservable(this.questionnaire).pipe(
@@ -138,8 +138,8 @@ export class QuestionnairePageComponent {
 
   readonly contents = computed(() => {
     const edges =
-      this.contentsResult()?.data?.questionnaireContentsByQuestionnaireId
-        ?.edges;
+      this.contentsResult()?.data
+        ?.questionnairePublishedContentsByQuestionnaireId?.edges;
     return edges?.map((e) => e?.node).filter((n): n is Content => !!n) ?? [];
   });
 
@@ -156,20 +156,18 @@ export class QuestionnairePageComponent {
     )
   );
 
-  private destroyed$ = new Subject<void>();
-
   ContentType: typeof ContentType = ContentType;
   QuestionnairePublishingMode = QuestionnairePublishingMode;
 
-  isLoading = false;
   started = false;
-  AnsweResultState = AnswerResultState;
   currentStep?: number;
-  isReloading = false;
-  isReloadingCurrentContent = false;
-  displaySnackBar = false;
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
-  lockedContentId?: string;
+  private readonly contentFocusState = toSignal(
+    this.focusModeService.getContentState()
+  );
+  currentIndex = linkedSignal(() =>
+    this.contents().findIndex((c) => c.id === this.contentId())
+  );
 
   isFinished = computed(
     () =>
@@ -182,31 +180,64 @@ export class QuestionnairePageComponent {
     this.contents().every((c) => this.isInfoContent(c))
   );
   hasAnsweredLastContent = false;
-  showOverview = false;
 
   attributions: ContentLicenseAttribution[] = [];
   alias?: RoomUserAlias;
-  prevAnswerResults: ContentAnswerResult[] = [];
 
   constructor() {
     let prevAnswerResults: ContentAnswerResult[] = [];
     effect(() => {
       if (
         this.contentIndexes().length > 0 &&
-        this.answerResults().length === this.contentIndexes().length &&
-        !!this.stepper() &&
+        this.answerResults().length > 0 &&
         !this.started
       ) {
-        setTimeout(() => {
-          this.checkIfLastContentExists(
-            this.route.snapshot.params.contentIndex - 1
-          );
-        });
+        this.checkIfLastContentExists(this.route.snapshot.params.contentId);
+        if (this.stepper()) {
+          this.initStepper(this.currentIndex());
+        }
       }
+
       const currentResults = this.answerResults();
       this.evaluateAnswerResultsState(prevAnswerResults, currentResults);
       prevAnswerResults = currentResults;
     });
+
+    let prevQuestionnaireId: string | undefined;
+    effect(() => {
+      // The component is reused when the route switches to another questionnaire.
+      const questionnaireId = this.questionnaire().id;
+      if (prevQuestionnaireId && questionnaireId !== prevQuestionnaireId) {
+        this.started = false;
+      }
+      prevQuestionnaireId = questionnaireId;
+    });
+
+    effect(() => {
+      const state = this.contentFocusState();
+      const contents = this.contents();
+      if (
+        !this.focusModeEnabled() ||
+        !state ||
+        state.contentGroupId !== this.questionnaire().id ||
+        contents.length === 0
+      ) {
+        return;
+      }
+      untracked(() => this.followFocusedContent(state.contentId));
+    });
+  }
+
+  private followFocusedContent(contentId: string) {
+    const index = this.getIndexOfContentById(contentId);
+    if (index < 0) {
+      return;
+    }
+    if (!this.started) {
+      this.initStepper(index);
+    } else if (index !== this.currentStep) {
+      this.goToContent(index);
+    }
   }
 
   evaluateAnswerResultsState(
@@ -248,19 +279,15 @@ export class QuestionnairePageComponent {
       .indexOf(id);
   }
 
-  finishLoading() {
-    this.isLoading = false;
-    this.isReloading = false;
-  }
-
   announce(key: string) {
     this.announceService.announce(key);
   }
 
-  checkIfLastContentExists(contentIndex?: number) {
+  checkIfLastContentExists(contentId?: string) {
     // Since `null >= 0` is `true` trough a type coercion with `ToPrimitive() this muste be checked seperately
-    if (contentIndex !== undefined && (contentIndex == 0 || contentIndex > 0)) {
-      this.initStepper(contentIndex);
+    const index = this.contents().findIndex((c) => c.id === contentId);
+    if (index !== undefined && (index == 0 || index > 0)) {
+      this.initStepper(index);
     } else {
       if (!this.focusModeEnabled()) {
         this.getInitialStep();
@@ -268,12 +295,12 @@ export class QuestionnairePageComponent {
     }
   }
 
-  initStepper(index: number, delay = 0) {
+  initStepper(index: number) {
     setTimeout(() => {
       this.currentStep = index;
       if (this.stepper()) this.stepper()?.init(index, this.contents()?.length);
-    }, delay);
-    this.started = true;
+      this.started = true;
+    });
   }
 
   goToContent(index: number) {
@@ -283,17 +310,16 @@ export class QuestionnairePageComponent {
   }
 
   updateContentIndexUrl(index: number = 0) {
-    if (this.currentStep !== index && (!!index || !this.isReloading)) {
-      setTimeout(() => {
-        this.currentStep = index || 0;
-        this.replaceUrl([
-          'p',
-          this.shortId(),
-          'series',
-          this.questionnaire().name,
-          index + 1,
-        ]);
-      }, STEPPER_ANIMATION_DURATION);
+    if (this.currentStep !== index) {
+      this.currentStep = index || 0;
+      const content = this.contents().find((c) => c.position === index);
+      this.replaceUrl([
+        'p',
+        this.shortId(),
+        'questionnaire',
+        this.questionnaire().id,
+        content?.id,
+      ]);
     }
   }
 
@@ -305,11 +331,11 @@ export class QuestionnairePageComponent {
         !this.isPureInfoSeries() &&
         !this.contentCarouselService.isLastContentAnswered())
     ) {
-      this.showOverview = false;
       this.initStepper(firstIndex || 0);
-      this.updateContentIndexUrl(firstIndex);
-    } else {
-      this.showOverview = true;
+      this.router.navigate(
+        ['.', this.contents().find((c) => c.position === firstIndex)?.id],
+        { relativeTo: this.route, replaceUrl: true }
+      );
     }
   }
 
@@ -345,8 +371,7 @@ export class QuestionnairePageComponent {
   }
 
   goToOverview() {
-    this.showOverview = true;
-    this.replaceUrl(['p', this.shortId(), 'series', this.questionnaire().name]);
+    this.router.navigate(['..'], { relativeTo: this.route, replaceUrl: true });
   }
 
   replaceUrl(url: any[]) {

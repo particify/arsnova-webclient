@@ -7,6 +7,7 @@ import {
   inject,
   input,
   linkedSignal,
+  signal,
 } from '@angular/core';
 import {
   takeUntilDestroyed,
@@ -15,6 +16,7 @@ import {
 } from '@angular/core/rxjs-interop';
 import {
   ActivatedRoute,
+  NavigationEnd,
   Router,
   RouterLink,
   RouterOutlet,
@@ -22,7 +24,6 @@ import {
 import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   GlobalStorageService,
@@ -36,7 +37,7 @@ import {
 import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/_dialogs/create-content-group-template/create-content-group-template.component';
 import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
-import { switchMap, map } from 'rxjs';
+import { switchMap, map, filter } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -114,7 +115,6 @@ export class QuestionnairePageComponent {
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly globalStorageService = inject(GlobalStorageService);
-  private readonly contentGroupService = inject(ContentGroupService);
   private readonly router = inject(Router);
   private readonly routingService = inject(RoutingService);
   private readonly localFileService = inject(LocalFileService);
@@ -164,15 +164,22 @@ export class QuestionnairePageComponent {
   QuestionnaireType = QuestionnaireType;
   totalCorrect?: number;
   totalAbstentions?: number;
-  isContentStarted = false;
   showLeaderboard = false;
   creationMode = false;
   editMode = false;
-  selectedContentIndex?: number;
+  selectedContentId = signal<string | undefined>(undefined);
   isDesktop?: boolean;
   childActive = false;
 
   constructor() {
+    this.router.events
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((event) => event instanceof NavigationEnd)
+      )
+      .subscribe(() => {
+        this.determinateRouteState();
+      });
     this.questionnairePageService
       .getEditedContent()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -186,6 +193,12 @@ export class QuestionnairePageComponent {
         if (this.contents().length === 0 && this.isDesktop) {
           this.openCreation();
         }
+      }
+      if (this.questionnaire()) {
+        this.globalStorageService.setItem(
+          STORAGE_KEYS.LAST_GROUP,
+          this.questionnaire().id
+        );
       }
     });
     this.breakpointObserver
@@ -210,7 +223,7 @@ export class QuestionnairePageComponent {
     this.creationMode = childPath === 'create';
     this.editMode = !!childPath?.includes('edit');
     if (childPath === 'attributions' && this.isDesktop) {
-      this.selectedContentIndex = -1;
+      this.selectedContentId.set(undefined);
     }
     this.childActive = !!child;
     this.evaluateRouteStateChild(child, childPath);
@@ -221,8 +234,8 @@ export class QuestionnairePageComponent {
     path: string | undefined
   ) {
     if (!route) {
-      if (this.selectedContentIndex !== undefined && this.isDesktop) {
-        this.router.navigate([this.selectedContentIndex + 1], {
+      if (this.selectedContentId() !== undefined && this.isDesktop) {
+        this.router.navigate([this.selectedContentId()], {
           relativeTo: this.route,
           replaceUrl: true,
         });
@@ -230,20 +243,9 @@ export class QuestionnairePageComponent {
       return;
     }
     if (path) {
-      const contentIndex = route.snapshot.params.contentIndex;
-      if (contentIndex !== undefined) {
-        this.selectedContentIndex = Number(contentIndex) - 1;
-        return;
-      }
       const contentId = route.snapshot.params.contentId;
       if (contentId) {
-        this.editMode = true;
-        const index = this.contents()
-          .map((c) => c.id)
-          .indexOf(contentId);
-        if (index !== undefined) {
-          this.selectedContentIndex = index;
-        }
+        this.selectedContentId.set(contentId);
       }
     }
   }
@@ -251,13 +253,16 @@ export class QuestionnairePageComponent {
   private navigateToFirstContent() {
     if (
       this.isDesktop &&
-      this.selectedContentIndex === undefined &&
+      this.selectedContentId() === undefined &&
       !this.showLeaderboard &&
       !this.creationMode &&
       !this.editMode &&
       this.contents().length > 0
     ) {
-      this.router.navigate([1], { relativeTo: this.route, replaceUrl: true });
+      this.router.navigate([this.contents()[0].id], {
+        relativeTo: this.route,
+        replaceUrl: true,
+      });
     }
   }
 
@@ -373,22 +378,13 @@ export class QuestionnairePageComponent {
           msg,
           AdvancedSnackBarTypes.SUCCESS
         );
-        if (this.questionnaire().name !== contentGroup.name) {
-          this.contentGroupService.updateGroupInMemoryStorage(
-            this.questionnaire().name,
-            contentGroup.name
-          );
-        }
       }
     });
   }
 
-  handleActiveContentChanged(index?: number): void {
-    this.isContentStarted = index !== undefined;
-    if (this.isContentStarted) {
-      if (this.selectedContentIndex !== index && !this.childActive) {
-        this.router.navigate(['.', index! + 1], { relativeTo: this.route });
-      }
+  handleActiveContentChanged(id?: string): void {
+    if (this.selectedContentId() !== id && !this.childActive) {
+      this.router.navigate(['.', id], { relativeTo: this.route });
     }
   }
 
@@ -419,11 +415,9 @@ export class QuestionnairePageComponent {
   toggleLeaderboard() {
     const url = ['.'];
     if (this.showLeaderboard) {
-      if (
-        this.selectedContentIndex !== undefined &&
-        this.selectedContentIndex > -1
-      ) {
-        url.push((this.selectedContentIndex + 1).toString());
+      const selectedContentId = this.selectedContentId();
+      if (selectedContentId !== undefined) {
+        url.push(selectedContentId);
       }
     } else {
       url.push('leaderboard');

@@ -63,7 +63,7 @@ export class QuestionnaireComponent {
     });
     this.globalStorageService.setItem(
       STORAGE_KEYS.LAST_GROUP,
-      this.questionnaire().name
+      this.questionnaire().id
     );
   }
 

@@ -2,7 +2,7 @@
   extensionId="remote"
   [extensionData]="{ isPresentation: true }"
 ></lib-extension-point>
-@if (isActiveFeature('series')) {
+@if (isActiveFeature('questionnaire')) {
   <div
     class="view-switcher presentation-feature-controls"
     [ngClass]="{
@@ -78,7 +78,7 @@
         }
       </div>
       <div class="presentation-feature-controls">
-        @if (isActiveFeature('series')) {
+        @if (isActiveFeature('questionnaire')) {
           <div
             fxLayout="row"
             fxLayoutAlign="center center"
@@ -93,7 +93,7 @@
                 (menuClosed)="menuClosed()"
               >
                 <div class="ellipsis group-button-label">
-                  {{ groupName }}
+                  {{ activeQuestionnaire().name }}
                 </div>
                 <mat-icon>arrow_drop_down</mat-icon>
               </button>
@@ -112,7 +112,8 @@
                 >
                   <span
                     [ngClass]="{
-                      'selected-menu-item': questionnaire.name === groupName,
+                      'selected-menu-item':
+                        questionnaire.id === questionnaireId(),
                     }"
                     >{{ questionnaire.name }}</span
                   >
@@ -153,13 +154,12 @@
               <p class="text">{{ 'creator.control-bar.more' | transloco }}</p>
             </div>
             <mat-menu class="visually-hidden" #hideMenu="matMenu"></mat-menu>
-            @let _questionnaireName = questionnaireName();
-            @if (content && _questionnaireName) {
+            @let _questionnaireId = questionnaireId();
+            @if (content && _questionnaireId) {
               <app-content-presentation-menu
                 [content]="content"
-                [groupName]="_questionnaireName"
+                [questionnaireId]="_questionnaireId"
                 [shortId]="room().shortId"
-                [contentIndex]="contentIndex"
               ></app-content-presentation-menu>
               <div class="bar-divider"></div>
               <app-key-button-bar

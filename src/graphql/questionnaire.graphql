@@ -60,6 +60,7 @@ fragment ContentDetails on Content {
   answerCount
   abstentionCount
   correctAnswerCount
+  position
 }
 
 fragment Answer on Answer {
@@ -115,14 +116,26 @@ subscription QuestionnairesChanged($roomId: UUID!) {
   questionnairesChanged(roomId: $roomId)
 }
 
-query QuestionnaireByRoomIdAndName($roomId: UUID!, $name: String!) {
-  questionnaireByRoomIdAndName(roomId: $roomId, name: $name) {
+query QuestionnaireById($id: UUID!) {
+  questionnaireById(id: $id) {
     ...QuestionnaireDetails
   }
 }
 
 query QuestionnaireContentsByQuestionnaireId($questionnaireId: UUID!) {
   questionnaireContentsByQuestionnaireId(questionnaireId: $questionnaireId) {
+    edges {
+      node {
+        ...ContentDetails
+      }
+    }
+  }
+}
+
+query QuestionnairePublishedContentsByQuestionnaireId($questionnaireId: UUID!) {
+  questionnairePublishedContentsByQuestionnaireId(
+    questionnaireId: $questionnaireId
+  ) {
     edges {
       node {
         ...ContentDetails
@@ -177,18 +190,6 @@ mutation UpdateQuestionnaireWordcloudContent(
 
 query QuestionnaireContentById($id: UUID!) {
   questionnaireContentById(id: $id) {
-    ...ContentDetails
-  }
-}
-
-query QuestionnaireContentByQuestionnaireIdAndPosition(
-  $questionnaireId: UUID!
-  $position: Int!
-) {
-  questionnaireContentByQuestionnaireIdAndPosition(
-    questionnaireId: $questionnaireId
-    position: $position
-  ) {
     ...ContentDetails
   }
 }

@@ -36,7 +36,7 @@
                     }
             "
             class="content-box"
-            [routerLink]="(i + 1).toString()"
+            [routerLink]="content.id"
             [ngClass]="{
               'not-supported':
                 contentTypes.indexOf(content.formatData.format) === -1,
@@ -44,7 +44,7 @@
               'no-pointer-events': publishingChangeActive,
             }"
             [ngClass.gt-sm]="{
-              'primary-border-color': selectedContentIndex() === i,
+              'primary-border-color': selectedContentId() === content.id,
             }"
             [ngStyle]="{
               'border-color': publishingChangeActive ? 'transparent' : null,
@@ -102,7 +102,7 @@
                           <div
                             (click)="$event.stopPropagation()"
                             [matTooltip]="
-                              (startedContentIndex !== undefined
+                              (startedContentId !== undefined
                                 ? 'creator.content.stop-active-content-to-start'
                                 : hasFormatRounds(content.formatData.format)
                                   ? 'creator.content.starting-new-round-not-possible'
@@ -110,7 +110,7 @@
                               ) | transloco
                             "
                             [matTooltipDisabled]="
-                              startedContentIndex == undefined &&
+                              startedContentId == undefined &&
                               !(
                                 finishedContents.get(content.id) &&
                                 ((content.activeRound &&
@@ -122,7 +122,7 @@
                             <button
                               mat-icon-button
                               [disabled]="
-                                startedContentIndex !== undefined ||
+                                startedContentId !== undefined ||
                                 (finishedContents.get(content.id) &&
                                   ((content.activeRound &&
                                     content.activeRound.roundNo > 1) ||
@@ -276,7 +276,10 @@
                             </button>
                           </div>
                         }
-                        <button mat-menu-item (click)="deleteContent(i)">
+                        <button
+                          mat-menu-item
+                          (click)="deleteContent(content.id, content.body)"
+                        >
                           <mat-icon color="warn">delete_forever</mat-icon>
                           <span>{{
                             'creator.content.delete-content' | transloco
@@ -489,12 +492,12 @@
         <button
           disableRipple
           mat-list-item
-          [ngClass]="{ primary: selectedContentIndex() === -1 }"
+          [ngClass]="{ primary: !selectedContentId() }"
           [routerLink]="'attributions'"
         >
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
             <mat-icon
-              [ngClass]="{ primary: selectedContentIndex() === -1 }"
+              [ngClass]="{ primary: !selectedContentId() }"
               class="type-icon"
               >attribution</mat-icon
             >

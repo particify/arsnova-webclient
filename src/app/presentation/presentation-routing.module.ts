@@ -47,7 +47,19 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'series/:seriesName',
+    path: 'questionnaire/:questionnaireId',
+    loadComponent: () =>
+      import('@app/standalone/content-presentation/contents-page.component').then(
+        (m) => m.ContentsPageComponent
+      ),
+    data: { extendedView: true },
+    resolve: {
+      questionnaire: questionnaireResolver,
+      settings: userSettingsResolver,
+    },
+  },
+  {
+    path: 'questionnaire/:questionnaireId/:contentId',
     loadComponent: () =>
       import('@app/standalone/content-presentation/contents-page.component').then(
         (m) => m.ContentsPageComponent
@@ -60,19 +72,11 @@ const routes: Routes = [
   },
   {
     path: 'series/:seriesName/:contentIndex',
-    loadComponent: () =>
-      import('@app/standalone/content-presentation/contents-page.component').then(
-        (m) => m.ContentsPageComponent
-      ),
-    data: { extendedView: true },
-    resolve: {
-      questionnaire: questionnaireResolver,
-      settings: userSettingsResolver,
-    },
+    redirectTo: '',
   },
   {
-    path: 'series/:seriesName/edit/:contentId',
-    redirectTo: 'series/:seriesName',
+    path: 'series/:seriesName',
+    redirectTo: '',
   },
 ];
 

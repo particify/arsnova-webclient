@@ -18,7 +18,7 @@ export class CustomPageTitleStrategy extends TitleStrategy {
   homeTitle?: string;
   titleSuffix?: string;
   roomName?: string;
-  seriesName?: string;
+  questionnaireName?: string;
   title?: string;
 
   constructor() {
@@ -52,10 +52,10 @@ export class CustomPageTitleStrategy extends TitleStrategy {
           this.setDocumentTitle(this.roomName);
         }
         break;
-      case 'series':
+      case 'questionnaire':
         // Use series name as title
-        if (this.seriesName) {
-          this.setDocumentTitle(this.seriesName);
+        if (this.questionnaireName) {
+          this.setDocumentTitle(this.questionnaireName);
         }
         break;
       default:
@@ -77,9 +77,8 @@ export class CustomPageTitleStrategy extends TitleStrategy {
       return;
     }
     // Set series name if exist
-    const series = route.params['seriesName'];
-    if (series) {
-      this.seriesName = series;
+    if (route.params['questionnaireId']) {
+      this.questionnaireName = route.data.questionnaire.name;
     }
     // Set room if exists
     if (route.data.room) {

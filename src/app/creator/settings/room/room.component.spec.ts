@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { RoomComponent } from '@app/creator/settings/room/room.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { EventService } from '@app/core/services/util/event.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
@@ -37,14 +38,13 @@ describe('RoomComponent', () => {
   let fixture: ComponentFixture<RoomComponent>;
   let component: RoomComponent;
   let cache: Apollo['client']['cache'];
+  let dialogService: jasmine.SpyObj<DialogService>;
 
   beforeEach(async () => {
     const notificationService = jasmine.createSpyObj('NotificationService', [
       'showAdvanced',
     ]);
-    const dialogService = jasmine.createSpyObj('DialogService', [
-      'openDeleteDialog',
-    ]);
+    dialogService = jasmine.createSpyObj('DialogService', ['openDeleteDialog']);
     const formattingService = jasmine.createSpyObj('FormattingService', [
       'containsTextAnImage',
     ]);
@@ -119,6 +119,26 @@ describe('RoomComponent', () => {
       component.name.set('A new name');
       component.saveChanges();
       expect(readCachedRoom()?.name).toBe('A new name');
+    });
+  });
+
+  describe('deleteRoom', () => {
+    it('announces the deletion before the room is deleted', () => {
+      dialogService.openDeleteDialog.and.returnValue({
+        afterClosed: () => of(undefined),
+      } as never);
+      const announced: string[] = [];
+      TestBed.inject(EventService)
+        .on<{ id: string }>('RoomDeletionStarted')
+        .subscribe((e) => announced.push(e.id));
+
+      component.deleteRoom();
+      const confirmAction =
+        dialogService.openDeleteDialog.calls.mostRecent().args[4];
+
+      expect(announced).toEqual([]);
+      confirmAction?.();
+      expect(announced).toEqual([ROOM_ID]);
     });
   });
 });

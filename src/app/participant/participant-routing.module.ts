@@ -20,8 +20,12 @@ import { QuestionnairePageComponent } from './questionnaire-page/questionnaire-p
 
 const routes: Routes = [
   {
-    path: 'group',
-    redirectTo: 'series',
+    path: 'series/:seriesName/:contentIndex',
+    redirectTo: '',
+  },
+  {
+    path: 'series/:seriesName',
+    redirectTo: '',
   },
   {
     path: 'survey',
@@ -65,7 +69,7 @@ const routes: Routes = [
     title: 'live-feedback',
   },
   {
-    path: 'series/:seriesName',
+    path: 'questionnaire/:questionnaireId',
     component: QuestionnairePageComponent,
     data: {
       feature: RoutingFeature.CONTENTS,
@@ -74,10 +78,10 @@ const routes: Routes = [
       questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
-    title: 'series',
+    title: 'questionnaire',
   },
   {
-    path: 'series/:seriesName/:contentIndex',
+    path: 'questionnaire/:questionnaireId/:contentId',
     component: QuestionnairePageComponent,
     data: {
       feature: RoutingFeature.CONTENTS,
@@ -86,10 +90,10 @@ const routes: Routes = [
       questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
-    title: 'series',
+    title: 'questionnaire',
   },
   {
-    path: 'series/:seriesName/:contentIndex/:activeTab',
+    path: 'questionnaire/:questionnaireId/:contentId/:activeTab',
     component: QuestionnairePageComponent,
     data: {
       feature: RoutingFeature.CONTENTS,
@@ -98,7 +102,7 @@ const routes: Routes = [
       questionnaire: questionnaireResolver,
       settings: userSettingsResolver,
     },
-    title: 'series',
+    title: 'questionnaire',
   },
 ];
 

@@ -92,8 +92,8 @@ export class ContentsPageComponent {
   });
   readonly showResults = input(false, { transform: booleanAttribute });
   readonly noControlBar = input(false, { transform: booleanAttribute });
-  readonly seriesName = input.required<string>();
-  readonly contentIndex = input<number>();
+  readonly questionnaireId = input.required<string>();
+  readonly contentId = input<string>();
 
   settings = input.required<UserUiSettings>();
   language = input.required<string>();
@@ -113,10 +113,10 @@ export class ContentsPageComponent {
   );
   private readonly destroyed$ = new Subject<void>();
 
-  readonly questionnaireName = computed(
+  private readonly _questionnaireId = computed(
     () =>
       this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) ??
-      this.seriesName()
+      this.questionnaireId()
   );
   readonly hideControlBar = linkedSignal(() => this.noControlBar());
 
@@ -129,7 +129,6 @@ export class ContentsPageComponent {
   );
 
   initialized = false;
-  entryIndex = 0;
   responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
   canAnswerContent = false;
   attributions: ContentLicenseAttribution[] = [];
@@ -145,15 +144,10 @@ export class ContentsPageComponent {
   constructor() {
     effect(() => {
       // Use index from route if available. Otherwise use the stored index or 0 as fallback.
-      if (this.questionnaireName()) {
-        const routeContentIndex = (this.contentIndex() ?? 0) - 1;
-        const lastIndex =
-          this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) ?? 0;
-        this.entryIndex =
-          routeContentIndex > -1 ? routeContentIndex : lastIndex;
+      if (this._questionnaireId()) {
         this.globalStorageService.setItem(
           STORAGE_KEYS.LAST_GROUP,
-          this.questionnaireName()
+          this._questionnaireId()
         );
       }
       if (this.contents()?.length > 0 && this.stepper()) {
@@ -164,8 +158,11 @@ export class ContentsPageComponent {
             this.initScale();
           });
         if (!this.initialized) {
-          const index =
-            this.entryIndex < this.stepCount() ? this.entryIndex : 0;
+          const contentId = this.contentId();
+          const entryIndex = contentId
+            ? this.contents().find((c) => c.id === contentId)?.position
+            : (this.globalStorageService.getItem(STORAGE_KEYS.LAST_INDEX) ?? 0);
+          const index = entryIndex < this.stepCount() ? entryIndex : 0;
           this.contentPresentationService.setCurrentContentIndex(index);
           // Deferred out of the change detection pass this effect runs in, because the control bar
           // reads the step state and would otherwise change after it has been checked.
@@ -216,12 +213,15 @@ export class ContentsPageComponent {
     }
   }
 
-  updateRoute(index: number) {
-    const currentPath = this.contentIndex() ? '..' : '.';
-    const urlTree = this.router.createUrlTree([currentPath, index], {
-      relativeTo: this.route,
-      queryParams: this.route.snapshot.queryParams,
-    });
+  updateRoute() {
+    const currentPath = this.contentId() ? '..' : '.';
+    const urlTree = this.router.createUrlTree(
+      [currentPath, this.content().id],
+      {
+        relativeTo: this.route,
+        queryParams: this.route.snapshot.queryParams,
+      }
+    );
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
@@ -247,8 +247,8 @@ export class ContentsPageComponent {
       return;
     }
     this.contentPresentationService.setCurrentContentIndex(index);
-    this.updateRoute(index + 1);
     this.setCurrentContent(index);
+    this.updateRoute();
     this.sendContentStepState(index);
     this.showLeaderboard = false;
     if (this.questionnaire().published) {
@@ -260,7 +260,8 @@ export class ContentsPageComponent {
   }
 
   private setCurrentContent(index: number): void {
-    if (!this.contents() || !this.contents()[index]) {
+    const content = this.contents().find((c) => c.position === index);
+    if (!content) {
       return;
     }
     const publishingIndex = this.questionnaire().publishedUpToContent?.position;

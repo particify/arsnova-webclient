@@ -109,6 +109,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     return this.contents().map((c) => {
       const r = this.answerResults().find((r) => r.contentId === c.id);
       return {
+        id: c.id,
         body: c.bodyRendered,
         state: r?.result,
         duration: r?.durationMs,
@@ -353,22 +354,22 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     );
   }
 
-  goToContent(index: number) {
+  goToContent(id: string) {
     this.router.navigate([
       this.routingService.getRoleRoute(UserRole.PARTICIPANT),
       this.routingService.getShortId(),
       RoutingFeature.CONTENTS,
-      this.questionnaire().name,
-      index + 1,
+      this.questionnaire().id,
+      id,
     ]);
   }
 
   goToFirstUnanswered() {
-    const index = this.contentsWithResults().findIndex(
+    const content = this.contentsWithResults().find(
       (c) => c.state === AnswerResultState.Unanswered
     );
-    if (index) {
-      this.goToContent(index);
+    if (content) {
+      this.goToContent(content.id);
     }
   }
 

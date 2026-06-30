@@ -112,7 +112,8 @@ export class QuestionnaireCreationComponent {
         })
         .subscribe({
           next: (r) => {
-            if (r.data?.createQuestionnaire) {
+            const id = r.data?.createQuestionnaire.id;
+            if (id) {
               this.translateService
                 .selectTranslate('creator.room-page.content-group-created')
                 .pipe(take(1))
@@ -122,7 +123,7 @@ export class QuestionnaireCreationComponent {
                     AdvancedSnackBarTypes.SUCCESS
                   );
                 });
-              this.closeDialog(this.name);
+              this.closeDialog(id, r.data?.createQuestionnaire.name);
             }
           },
           error: (e) => {
@@ -143,11 +144,7 @@ export class QuestionnaireCreationComponent {
     }
   }
 
-  closeDialog(name?: string): void {
-    if (name) {
-      this.dialogRef.close(name);
-    } else {
-      this.dialogRef.close();
-    }
+  closeDialog(id?: string, name?: string): void {
+    this.dialogRef.close({ id: id, name: name });
   }
 }

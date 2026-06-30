@@ -294,9 +294,9 @@ export class ContentParticipantComponent {
     const urlList = [
       'p',
       this.shortId(),
-      'series',
-      this.questionnaire().name,
-      this.index() + 1,
+      'questionnaire',
+      this.questionnaire().id,
+      this.content().id,
     ];
     if (this.selectedRoute) {
       urlList.push(this.selectedRoute);

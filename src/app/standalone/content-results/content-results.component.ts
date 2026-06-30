@@ -46,7 +46,6 @@ export class ContentResultsComponent {
   private readonly contentService = inject(ContentService);
   private readonly contentResultsService = inject(ContentResultsService);
 
-  contentIndex = input(0);
   content = input.required<Content>();
   active = input(false, { transform: booleanAttribute });
   directShow = input(false, { transform: booleanAttribute });

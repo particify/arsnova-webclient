@@ -54,7 +54,7 @@
                 <div
                   [ngClass]="{
                     'selected-menu-item':
-                      questionnaire.name === groupName &&
+                      questionnaire.id === activeQuestionnaire()?.id &&
                       i === currentRouteIndex,
                   }"
                 >

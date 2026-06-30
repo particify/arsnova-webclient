@@ -140,7 +140,7 @@
               mat-list-item
               disableRipple
               class="full-border"
-              (click)="goToContent(i)"
+              (click)="goToContent(content.id)"
             >
               <div
                 fxLayout="row"
@@ -207,7 +207,7 @@
                   [renderedText]="content.body ?? undefined"
                   [listPreview]="true"
                   role="button"
-                  (keyup.enter)="goToContent(i)"
+                  (keyup.enter)="goToContent(content.id)"
                 ></app-rendered-text>
                 <span class="fill-remaining-space"></span>
                 @if (content.duration && isLiveMode()) {

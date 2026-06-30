@@ -36,7 +36,6 @@ import {
 import { TrackingService } from '@app/core/services/util/tracking.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { ApiConfigResolver } from '@app/core/resolver/api-config.resolver';
-import { ContentResolver } from '@app/core/resolver/content.resolver';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { SystemInfoService } from '@app/core/services/http/system-info.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -170,7 +169,6 @@ export const AppConfig: ApplicationConfig = {
     TrackingService,
     ThemeService,
     ApiConfigResolver,
-    ContentResolver,
     AnnounceService,
     SystemInfoService,
     FormattingService,

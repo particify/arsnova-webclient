@@ -146,9 +146,9 @@ export class RoomOverviewPageComponent extends AbstractRoomOverviewPageComponent
     this.dialogService
       .openQuestionnaireCreationDialog(this.roomId(), type)
       .afterClosed()
-      .subscribe((name) => {
-        if (name) {
-          this.router.navigate(['edit', this.shortId(), 'series', name]);
+      .subscribe((q) => {
+        if (q) {
+          this.router.navigate(['edit', this.shortId(), 'questionnaire', q.id]);
         }
       });
   }

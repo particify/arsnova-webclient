@@ -6,9 +6,9 @@
     [room]="room()"
     [userRole]="userRole()"
     [viewRole]="viewRole()"
-    [questionnaireName]="activeQuestionnaire()"
+    [questionnaireId]="activeQuestionnaireId()"
     (activeFeature)="updateFeature($event)"
-    (activeQuestionnaireChange)="updateUrl($event.name)"
+    (activeQuestionnaireChange)="updateUrl($event.id)"
     [roomSettings]="_roomSettings"
   ></app-control-bar>
 }

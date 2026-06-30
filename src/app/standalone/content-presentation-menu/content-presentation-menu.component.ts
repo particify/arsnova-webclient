@@ -29,9 +29,8 @@ export class ContentPresentationMenuComponent {
   @ViewChild('moreMenu') moreMenu!: MatMenu;
 
   @Input({ required: true }) content!: Content;
-  @Input({ required: true }) groupName!: string;
+  @Input({ required: true }) questionnaireId!: string;
   @Input({ required: true }) shortId!: string;
-  @Input({ required: true }) contentIndex!: number;
   @Input() editingEnabled = true;
   @Input() settingsEnabled = true;
   @Output() menuLoaded = new EventEmitter<void>();
@@ -72,10 +71,14 @@ export class ContentPresentationMenuComponent {
   }
 
   editContent() {
-    if (!this.content || !this.groupName) {
+    if (!this.content || !this.questionnaireId) {
       return;
     }
-    this.contentService.goToEdit(this.content.id, this.shortId, this.groupName);
+    this.contentService.goToEdit(
+      this.content.id,
+      this.shortId,
+      this.questionnaireId
+    );
   }
 
   deleteContentAnswers() {
