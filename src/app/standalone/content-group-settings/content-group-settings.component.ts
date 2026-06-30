@@ -7,17 +7,17 @@ import {
 import { UntypedFormControl, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreModule } from '@app/core/core.module';
-import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { provideTranslocoScope } from '@jsverse/transloco';
+import {
+  Questionnaire,
+  QuestionnairePublishingMode,
+  QuestionnaireType,
+  UpdateQuestionnaireGql,
+} from '@gql/generated/graphql';
 
 @Component({
   selector: 'app-content-group-settings',
@@ -39,26 +39,28 @@ export class ContentGroupSettingsComponent
   private dialogRef =
     inject<MatDialogRef<ContentGroupSettingsComponent>>(MatDialogRef);
   data = inject<{
-    contentGroup: ContentGroup;
+    questionnaire: Questionnaire;
     groupNames: string[];
     alreadyAnswered: boolean;
   }>(MAT_DIALOG_DATA);
-  private contentPublishService = inject(ContentPublishService);
+  private readonly updateQuestionnaire = inject(UpdateQuestionnaireGql);
 
   nameFormControl = new UntypedFormControl();
-  group: ContentGroup;
-  GroupType = GroupType;
-  PublishingMode = PublishingMode;
+  questionnaire: Questionnaire;
+  QuestionnaireType = QuestionnaireType;
+  PublishingMode = QuestionnairePublishingMode;
+
+  private previousPublishingMode = QuestionnairePublishingMode.All;
 
   constructor() {
     super();
     const data = this.data;
 
-    this.group = { ...data.contentGroup };
+    this.questionnaire = data.questionnaire;
   }
   ngOnInit(): void {
     this.setFormControl(this.nameFormControl);
-    this.nameFormControl.setValue(this.data.contentGroup.name);
+    this.nameFormControl.setValue(this.data.questionnaire.name);
     this.nameFormControl.clearValidators();
     this.nameFormControl.setValidators([
       Validators.required,
@@ -70,20 +72,55 @@ export class ContentGroupSettingsComponent
 
   saveGroup() {
     if (this.nameFormControl.valid) {
-      // TODO: Update questionnaire
-      this.dialogRef.close();
+      this.disableForm();
+      this.updateQuestionnaire
+        .mutate({
+          variables: {
+            id: this.questionnaire.id,
+            name: this.nameFormControl.value,
+            published: this.questionnaire.published ?? false,
+            publishingMode: this.questionnaire.publishingMode,
+            statisticsPublished: this.questionnaire.statisticsPublished,
+            correctOptionsPublished:
+              this.questionnaire.correctOptionsPublished ?? false,
+            leaderboardEnabled: this.questionnaire.leaderboardEnabled ?? false,
+          },
+        })
+        .subscribe({
+          next: (result) => {
+            const questionnaire = result.data?.updateQuestionnaire;
+            if (questionnaire) {
+              this.dialogRef.close(questionnaire);
+            } else {
+              this.enableForm();
+            }
+          },
+          error: () => this.enableForm(),
+        });
     }
   }
 
   validateUniqueName(): ValidatorFn {
     return (formControl) =>
-      formControl.value !== this.group.name &&
+      formControl.value !== this.questionnaire.name &&
       this.data.groupNames.includes(formControl.value)
         ? { validateUniqueName: { value: formControl.value } }
         : null;
   }
 
   isLive(): boolean {
-    return this.contentPublishService.isGroupLive(this.group);
+    return (
+      this.data.questionnaire.publishingMode ===
+      QuestionnairePublishingMode.Live
+    );
+  }
+
+  setLiveMode(live: boolean): void {
+    if (live) {
+      this.previousPublishingMode = this.questionnaire.publishingMode;
+      this.questionnaire.publishingMode = QuestionnairePublishingMode.Live;
+    } else {
+      this.questionnaire.publishingMode = this.previousPublishingMode;
+    }
   }
 }

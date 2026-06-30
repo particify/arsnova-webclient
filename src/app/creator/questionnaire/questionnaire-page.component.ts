@@ -416,8 +416,11 @@ export class QuestionnairePageComponent {
       {
         width: '600px',
         data: {
-          contentGroup: { ...this.questionnaire() },
+          questionnaire: { ...this.questionnaire() },
           groupNames: [this.questionnaire()?.name],
+          alreadyAnswered:
+            this.contents().filter((c) => c.answerCount && c.answerCount > 0)
+              .length > 0,
         },
       }
     );

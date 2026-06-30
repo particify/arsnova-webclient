@@ -1,38 +1,43 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
-
-import { ContentGroupSettingsComponent } from '@app/standalone/content-group-settings/content-group-settings.component';
-
-import { of } from 'rxjs';
+import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-settings/questionnaire-settings.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import {
-  ContentGroup,
-  GroupType,
-  PublishingMode,
-} from '@app/core/models/content-group';
+  QuestionnaireType,
+  UpdateQuestionnaireGql,
+} from '@gql/generated/graphql';
+import { of } from 'rxjs';
 
 class MockDialogRef {
   close() {}
 }
 
-class MockContentGroupService {
-  patchContentGroup() {
-    return of(new ContentGroup());
-  }
-}
+const updateQuestionnaireGqlMock = {
+  mutate: () =>
+    of({
+      data: {
+        updateQuestionnaire: {
+          id: 'questionnaireId',
+          name: 'Quiz',
+          contentCount: 42,
+          published: true,
+          type: QuestionnaireType.Quiz,
+        },
+      },
+    }),
+};
 
 export default {
-  component: ContentGroupSettingsComponent,
-  title: 'ContentGroupSettings',
+  component: QuestionnaireSettingsComponent,
+  title: 'QuestionnaireSettings',
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
       imports: [
-        ContentGroupSettingsComponent,
+        QuestionnaireSettingsComponent,
         SettingsSlideToggleComponent,
         LoadingIndicatorComponent,
         LoadingButtonComponent,
@@ -40,35 +45,31 @@ export default {
       providers: [
         ContentPublishService,
         {
-          provide: ContentGroupService,
-          useClass: MockContentGroupService,
-        },
-        {
           provide: MatDialogRef,
           useClass: MockDialogRef,
         },
         {
           provide: MAT_DIALOG_DATA,
           useValue: {
-            contentGroup: new ContentGroup(
-              'roomId',
-              'My awesome quiz',
-              ['content1', 'content2', 'content3', 'content4', 'content5'],
-              true,
-              true,
-              true,
-              PublishingMode.LIVE,
-              0,
-              GroupType.QUIZ,
-              true
-            ),
+            questionnaire: {
+              id: 'questionnaireId',
+              name: 'Quiz',
+              contentCount: 42,
+              published: true,
+              type: QuestionnaireType.Quiz,
+            },
+            alreadyAnswered: false,
           },
+        },
+        {
+          provide: UpdateQuestionnaireGql,
+          useValue: updateQuestionnaireGqlMock,
         },
       ],
     }),
   ],
 } as Meta;
 
-type Story = StoryObj<ContentGroupSettingsComponent>;
+type Story = StoryObj<QuestionnaireSettingsComponent>;
 
 export const ContentGroupSettings: Story = {};

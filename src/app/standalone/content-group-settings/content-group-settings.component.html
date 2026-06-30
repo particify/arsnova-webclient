@@ -26,30 +26,24 @@
   <app-settings-slide-toggle
     [label]="'creator.content.publish'"
     [disabled]="formDisabled"
-    [isChecked]="group.published"
-    (toggleEvent)="group.published = $event"
+    [isChecked]="questionnaire.published"
+    (toggleEvent)="questionnaire.published = $event"
   ></app-settings-slide-toggle>
-  @if (group.groupType !== GroupType.FLASHCARDS) {
+  @if (questionnaire.type !== QuestionnaireType.Flashcards) {
     <app-settings-slide-toggle
       [matTooltip]="
         'creator.content.reset-answers-to-disable-setting' | transloco
       "
       [matTooltipDisabled]="
-        !isLive() || !data.alreadyAnswered || !group.leaderboardEnabled
+        !isLive() || !data.alreadyAnswered || !questionnaire.leaderboardEnabled
       "
       [label]="'creator.content.live-mode'"
       [disabled]="
         formDisabled ||
-        (isLive() && data.alreadyAnswered && group.leaderboardEnabled)
+        (isLive() && data.alreadyAnswered && !!questionnaire.leaderboardEnabled)
       "
       [isChecked]="isLive()"
-      (toggleEvent)="
-        group.publishingMode = $event
-          ? PublishingMode.LIVE
-          : data.contentGroup.publishingMode === PublishingMode.UP_TO
-            ? PublishingMode.UP_TO
-            : PublishingMode.ALL
-      "
+      (toggleEvent)="setLiveMode($event)"
     ></app-settings-slide-toggle>
   }
   <div
@@ -66,14 +60,14 @@
     <mat-button-toggle-group
       name="publishingMode"
       [hideSingleSelectionIndicator]="true"
-      [(ngModel)]="group.publishingMode"
+      [(ngModel)]="questionnaire.publishingMode"
       class="mode-toggle-btn"
     >
       <div fxFlex>
         <mat-button-toggle
           fxFlex
           [disabled]="isLive()"
-          [value]="PublishingMode.ALL"
+          [value]="PublishingMode.All"
           >{{
             'creator.content.publishing-mode-all' | transloco
           }}</mat-button-toggle
@@ -83,20 +77,20 @@
       <mat-button-toggle
         fxFlex
         [disabled]="isLive()"
-        [value]="PublishingMode.UP_TO"
+        [value]="PublishingMode.UpTo"
         >{{
           'creator.content.publishing-mode-up-to' | transloco
         }}</mat-button-toggle
       >
     </mat-button-toggle-group>
     <div class="publishing-mode-description">
-      @switch (group.publishingMode) {
-        @case (PublishingMode.ALL) {
+      @switch (questionnaire.publishingMode) {
+        @case (PublishingMode.All) {
           <span>{{
             'creator.content.publishing-mode-description-all' | transloco
           }}</span>
         }
-        @case (PublishingMode.UP_TO) {
+        @case (PublishingMode.UpTo) {
           <span
             >{{
               'creator.content.publishing-mode-description-up-to' | transloco
@@ -106,37 +100,41 @@
       }
     </div>
   </div>
-  @if (group.groupType === GroupType.QUIZ) {
+  @if (questionnaire.type === QuestionnaireType.Quiz) {
     <app-settings-slide-toggle
       [matTooltip]="
         'creator.content.reset-answers-to-disable-setting' | transloco
       "
       [matTooltipDisabled]="
-        !isLive() || !data.alreadyAnswered || !group.leaderboardEnabled
+        !isLive() || !data.alreadyAnswered || !questionnaire.leaderboardEnabled
       "
       [label]="'creator.content.enable-leaderboard'"
       [disabled]="
         formDisabled ||
-        (isLive() && data.alreadyAnswered && group.leaderboardEnabled)
+        (isLive() && data.alreadyAnswered && !!questionnaire.leaderboardEnabled)
       "
-      [isChecked]="group.leaderboardEnabled"
-      (toggleEvent)="group.leaderboardEnabled = $event"
+      [isChecked]="!!questionnaire.leaderboardEnabled"
+      (toggleEvent)="questionnaire.leaderboardEnabled = $event"
     ></app-settings-slide-toggle>
   }
-  @if (group.groupType !== GroupType.FLASHCARDS) {
+  @if (questionnaire.type !== QuestionnaireType.Flashcards) {
     <app-settings-slide-toggle
       [label]="'creator.content.publish-statistics'"
       [disabled]="formDisabled"
-      [isChecked]="group.statisticsPublished"
-      (toggleEvent)="group.statisticsPublished = $event"
+      [isChecked]="!!questionnaire.statisticsPublished"
+      (toggleEvent)="questionnaire.statisticsPublished = $event"
     ></app-settings-slide-toggle>
   }
-  @if ([GroupType.QUIZ, GroupType.MIXED].includes(group.groupType)) {
+  @if (
+    [QuestionnaireType.Quiz, QuestionnaireType.Mixed].includes(
+      questionnaire.type
+    )
+  ) {
     <app-settings-slide-toggle
       [label]="'creator.content.publish-correct-answers'"
       [disabled]="formDisabled"
-      [isChecked]="group.correctOptionsPublished"
-      (toggleEvent)="group.correctOptionsPublished = $event"
+      [isChecked]="!!questionnaire.correctOptionsPublished"
+      (toggleEvent)="questionnaire.correctOptionsPublished = $event"
     ></app-settings-slide-toggle>
   }
 </mat-dialog-content>

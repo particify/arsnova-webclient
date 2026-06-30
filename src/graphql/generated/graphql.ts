@@ -3294,6 +3294,37 @@ export type ResetQuestionnaireResultsMutation = {
   resetQuestionnaireResults?: boolean | null;
 };
 
+export type UpdateQuestionnaireMutationVariables = Exact<{
+  id: Scalars['UUID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  published?: InputMaybe<Scalars['Boolean']['input']>;
+  publishingMode?: InputMaybe<QuestionnairePublishingMode>;
+  statisticsPublished?: InputMaybe<Scalars['Boolean']['input']>;
+  correctOptionsPublished?: InputMaybe<Scalars['Boolean']['input']>;
+  leaderboardEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type UpdateQuestionnaireMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaire: {
+    __typename?: 'Questionnaire';
+    id: string;
+    name: string;
+    type: QuestionnaireType;
+    published: boolean;
+    publishingMode: QuestionnairePublishingMode;
+    statisticsPublished?: boolean | null;
+    correctOptionsPublished?: boolean | null;
+    leaderboardEnabled?: boolean | null;
+    contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+  };
+};
+
 export type DuplicateQuestionnaireContentMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -6295,6 +6326,46 @@ export class ResetQuestionnaireResultsGql extends Apollo.Mutation<
   ResetQuestionnaireResultsMutationVariables
 > {
   document = ResetQuestionnaireResultsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireDocument = gql`
+  mutation UpdateQuestionnaire(
+    $id: UUID!
+    $name: String
+    $published: Boolean
+    $publishingMode: QuestionnairePublishingMode
+    $statisticsPublished: Boolean
+    $correctOptionsPublished: Boolean
+    $leaderboardEnabled: Boolean
+  ) {
+    updateQuestionnaire(
+      input: {
+        id: $id
+        name: $name
+        published: $published
+        publishingMode: $publishingMode
+        statisticsPublished: $statisticsPublished
+        correctOptionsPublished: $correctOptionsPublished
+        leaderboardEnabled: $leaderboardEnabled
+      }
+    ) {
+      ...QuestionnaireDetails
+    }
+  }
+  ${QuestionnaireDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireGql extends Apollo.Mutation<
+  UpdateQuestionnaireMutation,
+  UpdateQuestionnaireMutationVariables
+> {
+  document = UpdateQuestionnaireDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

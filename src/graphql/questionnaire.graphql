@@ -292,6 +292,30 @@ mutation ResetQuestionnaireResults($id: UUID!) {
   resetQuestionnaireResults(id: $id)
 }
 
+mutation UpdateQuestionnaire(
+  $id: UUID!
+  $name: String
+  $published: Boolean
+  $publishingMode: QuestionnairePublishingMode
+  $statisticsPublished: Boolean
+  $correctOptionsPublished: Boolean
+  $leaderboardEnabled: Boolean
+) {
+  updateQuestionnaire(
+    input: {
+      id: $id
+      name: $name
+      published: $published
+      publishingMode: $publishingMode
+      statisticsPublished: $statisticsPublished
+      correctOptionsPublished: $correctOptionsPublished
+      leaderboardEnabled: $leaderboardEnabled
+    }
+  ) {
+    ...QuestionnaireDetails
+  }
+}
+
 mutation DuplicateQuestionnaireContent($id: ID!) {
   duplicateQuestionnaireContent(id: $id) {
     ...ContentDetails
