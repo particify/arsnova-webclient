@@ -84,10 +84,7 @@ export class FocusModeService extends AbstractFocusModeService {
   private updateFeatureState(
     feature: RoutingFeature,
     state:
-      | ContentFocusState
-      | CommentFocusState
-      | FeedbackFocusState
-      | undefined
+      ContentFocusState | CommentFocusState | FeedbackFocusState | undefined
   ) {
     if (feature === RoutingFeature.CONTENTS) {
       this.contentStateUpdated$.next(state as ContentFocusState);

@@ -66,10 +66,10 @@ export class ContentShortAnswerParticipantComponent extends ContentParticipantBa
       this.textAnswer
     );
     this.answerService
-      .addAnswerAndCheckResult<
-        ShortAnswerAnswer,
-        string[]
-      >(this.content.roomId, answer)
+      .addAnswerAndCheckResult<ShortAnswerAnswer, string[]>(
+        this.content.roomId,
+        answer
+      )
       .subscribe({
         next: (answerResponse) => {
           this.answer = answerResponse.answer;

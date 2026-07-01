@@ -25,8 +25,7 @@ export function handleOperationErrors(
     return;
   }
   const classification = response.errors[0].extensions?.['classification'] as
-    | ErrorClassification
-    | undefined;
+    ErrorClassification | undefined;
   if (classification) {
     (handlers[classification] ?? handlers[FALLBACK_HANDLER])?.();
   }
