@@ -502,8 +502,8 @@ export class StatisticChoiceComponent
           : 0
       );
     } else {
-      return this.roundStats.map(
-        (s) => s.independentCounts.find((c, i) => this.checkIfCorrect(i))!
+      return this.roundStats.map((s) =>
+        s.independentCounts.find((c, i) => this.checkIfCorrect(i))!
       );
     }
   }
