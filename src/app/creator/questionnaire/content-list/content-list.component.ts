@@ -8,6 +8,8 @@ import {
   viewChild,
   output,
   computed,
+  effect,
+  linkedSignal,
 } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
 import {
@@ -49,16 +51,24 @@ import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import {
   Content,
   ContentType,
+  CopyQuestionnaireContentToQuestionnaireGql,
   DeleteQuestionnaireAnswersByContentIdGql,
   DeleteQuestionnaireContentGql,
+  DuplicateQuestionnaireContentGql,
+  MoveQuestionnaireContentToQuestionnaireGql,
   Questionnaire,
   QuestionnaireContentsByQuestionnaireIdDocument,
-  QuestionnairesByRoomIdDocument,
   QuestionnairePublishingMode,
+  QuestionnairesByRoomIdDocument,
+  QuestionnairesByRoomIdGql,
+  QuestionnaireSummaryFragment,
   QuestionnaireType,
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
+  UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
 import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { filter, map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-content-list',
@@ -110,6 +120,19 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   private readonly resetBannedKeywords = inject(
     ResetBannedQuestionnaireWordcloudContentKeywordsGql
   );
+  private readonly duplicateQuestionnaireContent = inject(
+    DuplicateQuestionnaireContentGql
+  );
+  private readonly copyQuestionnaireContentToQuestionnaire = inject(
+    CopyQuestionnaireContentToQuestionnaireGql
+  );
+  private readonly moveQuestionnaireContentToQuestionnaire = inject(
+    MoveQuestionnaireContentToQuestionnaireGql
+  );
+  private readonly questionnairesByRoomId = inject(QuestionnairesByRoomIdGql);
+  private readonly updateQuestionnaireContentOrder = inject(
+    UpdateQuestionnaireContentOrderGql
+  );
 
   publishingDivider = viewChild<ElementRef>('publishingDivider');
   roomId = input.required<string>();
@@ -120,7 +143,24 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   selectedContentId = input<string | undefined>();
   startedContentChanged = output<string | undefined>();
 
-  currentGroupIndex?: number;
+  readonly questionnairesResult = toSignal(
+    toObservable(this.roomId).pipe(
+      switchMap((roomId) => {
+        return this.questionnairesByRoomId.watch({
+          variables: { roomId },
+        }).valueChanges;
+      })
+    )
+  );
+
+  readonly questionnaires = computed(() => {
+    return (
+      this.questionnairesResult()?.data?.questionnairesByRoomId ?? []
+    ).filter((n): n is QuestionnaireSummaryFragment => !!n);
+  });
+
+  sortableContents = linkedSignal(() => [...this.contents()]);
+
   contentTypes: string[] = Object.values(ContentType);
 
   activeMenuIndex?: number;
@@ -139,6 +179,14 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   endDate?: Date;
 
   finishedContents = new Map<string, boolean>();
+
+  constructor() {
+    super();
+
+    effect(() => {
+      this.dragDroplist = [...this.sortableContents()];
+    });
+  }
 
   deleteContent(id: string, body: string) {
     const dialogRef = this.dialogService.openDeleteDialog(
@@ -176,14 +224,6 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
         );
       }
     });
-  }
-
-  showSuccessNotification(actionString: string, name: string) {
-    const msg = this.translateService.translate(
-      `creator.content.${actionString}-to-content-group`,
-      { series: name }
-    );
-    this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.SUCCESS);
   }
 
   /** The content taking the place of the deleted one, else the one before it. */
@@ -283,8 +323,22 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
       prev !== oldPublishingIndex
     );
     const currentContentIndex = this.getSortIndex(current);
+    const previousOrder = [...this.dragDroplist];
     this.moveItem(prevContentIndex, currentContentIndex);
-    // TODO: Update order of contents in questionnaire
+    this.sortableContents.set(this.dragDroplist);
+    this.updateQuestionnaireContentOrder
+      .mutate({
+        variables: {
+          questionnaireId: this.questionnaire().id,
+          contentIds: this.dragDroplist.map((content) => content.id),
+        },
+      })
+      .subscribe({
+        error: () => {
+          this.sortableContents.set(previousOrder);
+          this.dragDroplist = previousOrder;
+        },
+      });
   }
 
   dropPublishingDivider(event: CdkDragDrop<Content[]>) {
@@ -338,13 +392,106 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     return this.contentService.hasFormatRounds(format);
   }
 
-  isCompatibleWithGroupType(
+  isCompatibleWithQuestionnaireType(
     content: Content,
     groupType: QuestionnaireType
   ): boolean {
     return this.contentGroupService.isContentCompatibleWithQuestionnaireType(
       content,
       groupType
+    );
+  }
+
+  duplicateContent(id: string) {
+    this.duplicateQuestionnaireContent
+      .mutate({
+        variables: { id },
+        refetchQueries: [
+          {
+            query: QuestionnaireContentsByQuestionnaireIdDocument,
+            variables: { questionnaireId: this.questionnaire().id },
+          },
+          QuestionnairesByRoomIdDocument,
+        ],
+      })
+      .subscribe({
+        next: (r) => {
+          if (r.data?.duplicateQuestionnaireContent) {
+            const msg = this.translateService.translate(
+              'creator.content.content-has-been-duplicated'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          }
+        },
+        error: (e) => this.notificationService.showOnRequestClientError(e),
+      });
+  }
+
+  private executeContentAction(
+    action: 'copy' | 'move',
+    contentId: string,
+    target: { id: string; name: string } | undefined,
+    mutation: (
+      contentId: string,
+      questionnaireId: string
+    ) => Observable<unknown>
+  ) {
+    const questionnaire$ = target
+      ? of(target)
+      : this.dialogService
+          .openQuestionnaireCreationDialog(this.roomId())
+          .afterClosed();
+
+    questionnaire$
+      .pipe(
+        filter((q): q is { id: string; name: string } => !!q),
+
+        switchMap((q) => mutation(contentId, q.id).pipe(map(() => q)))
+      )
+      .subscribe({
+        next: (q) => {
+          const msg = this.translateService.translate(
+            `creator.content.${action === 'copy' ? 'copied' : 'moved'}-to-content-group`,
+            { series: q.name }
+          );
+
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        },
+        error: (e) => this.notificationService.showOnRequestClientError(e),
+      });
+  }
+
+  performContentAction(
+    action: 'copy' | 'move',
+    contentId: string,
+    target?: { id: string; name: string }
+  ) {
+    this.executeContentAction(
+      action,
+      contentId,
+      target,
+      (contentId, questionnaireId) =>
+        action === 'copy'
+          ? this.copyQuestionnaireContentToQuestionnaire.mutate({
+              variables: { contentId, questionnaireId },
+              refetchQueries: [QuestionnairesByRoomIdDocument],
+            })
+          : this.moveQuestionnaireContentToQuestionnaire.mutate({
+              variables: { contentId, questionnaireId },
+              refetchQueries: [
+                {
+                  query: QuestionnaireContentsByQuestionnaireIdDocument,
+                  variables: { questionnaireId: this.questionnaire().id },
+                },
+                QuestionnairesByRoomIdDocument,
+              ],
+            })
     );
   }
 }

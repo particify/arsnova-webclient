@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="start center" class="list-container">
-  @if (contents().length > 0) {
+  @if (sortableContents().length > 0) {
     <mat-action-list
       cdkDropList
       (cdkDropListSorted)="onSortChanged($event)"
@@ -8,7 +8,7 @@
       fxLayout="column"
       class="content-list"
     >
-      @for (content of contents(); track content; let i = $index) {
+      @for (content of sortableContents(); track content; let i = $index) {
         <div
           [ngClass]="{
             'item-with-top-space': i === 0,
@@ -203,7 +203,10 @@
                             'creator.content.move-content-to-group' | transloco
                           }}</span>
                         </button>
-                        <button mat-menu-item>
+                        <button
+                          mat-menu-item
+                          (click)="duplicateContent(content.id)"
+                        >
                           <mat-icon>dynamic_feed</mat-icon>
                           <span>{{
                             'creator.content.duplicate-content' | transloco
@@ -288,22 +291,27 @@
                       </mat-menu>
                       <mat-menu #chooseGroups="matMenu" xPosition="before">
                         <ng-template matMenuContent let-action="action">
-                          <button
-                            mat-menu-item
-                            [disabled]="
-                              i === currentGroupIndex ||
-                              !isCompatibleWithGroupType(
-                                content,
-                                questionnaire().type
-                              )
-                            "
-                            [attr.aria-label]="
-                              'creator.content.a11y-add-to-this-content-group'
-                                | transloco: { name: 'Questionnaire' }
-                            "
-                          >
-                            <span>Questionnaire</span>
-                          </button>
+                          @for (q of questionnaires(); track q.id) {
+                            <button
+                              mat-menu-item
+                              [disabled]="
+                                q.id === questionnaire().id ||
+                                !isCompatibleWithQuestionnaireType(
+                                  content,
+                                  q.type
+                                )
+                              "
+                              [attr.aria-label]="
+                                'creator.content.a11y-add-to-this-content-group'
+                                  | transloco: { name: q.name }
+                              "
+                              (click)="
+                                performContentAction(action, content.id, q)
+                              "
+                            >
+                              <span>{{ q.name }}</span>
+                            </button>
+                          }
 
                           <mat-divider></mat-divider>
                           <button
@@ -312,6 +320,7 @@
                               'creator.content.a11y-new-content-group'
                                 | transloco
                             "
+                            (click)="performContentAction(action, content.id)"
                           >
                             <mat-icon>add</mat-icon>
                             <span>{{

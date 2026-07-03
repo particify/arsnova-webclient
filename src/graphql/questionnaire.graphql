@@ -287,3 +287,45 @@ mutation resetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID) {
     ...ContentDetails
   }
 }
+
+mutation DuplicateQuestionnaireContent($id: ID!) {
+  duplicateQuestionnaireContent(id: $id) {
+    ...ContentDetails
+  }
+}
+
+mutation CopyQuestionnaireContentToQuestionnaire(
+  $contentId: UUID!
+  $questionnaireId: UUID!
+) {
+  copyQuestionnaireContentToQuestionnaire(
+    contentId: $contentId
+    questionnaireId: $questionnaireId
+  ) {
+    ...ContentDetails
+  }
+}
+
+mutation MoveQuestionnaireContentToQuestionnaire(
+  $contentId: UUID!
+  $questionnaireId: UUID!
+) {
+  moveQuestionnaireContentToQuestionnaire(
+    contentId: $contentId
+    questionnaireId: $questionnaireId
+  ) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireContentOrder(
+  $questionnaireId: UUID!
+  $contentIds: [UUID!]!
+) {
+  updateQuestionnaireContentOrder(
+    questionnaireId: $questionnaireId
+    contentIds: $contentIds
+  ) {
+    id
+  }
+}

@@ -68,7 +68,7 @@
                       extensionId="series-results-export"
                       [extensionData]="{
                         series: questionnaire(),
-                        shortId: room().shortId,
+                        shortId: shortId(),
                       }"
                     ></lib-extension-point>
                   </mat-menu>
@@ -182,7 +182,7 @@
         } @else {
           <div class="list-container">
             <app-content-list
-              [roomId]="room().id"
+              [roomId]="roomId()"
               [questionnaire]="questionnaire()"
               [contents]="contents()"
               [isModerator]="isModerator()"

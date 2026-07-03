@@ -21,7 +21,6 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import { Room } from '@app/core/models/room';
 import { UserRole } from '@app/core/models/user-roles.enum';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -132,7 +131,8 @@ export class QuestionnairePageComponent {
   private readonly questionnairePageService = inject(QuestionnairePageService);
 
   readonly userRole = input.required<UserRole>();
-  readonly room = input.required<Room>();
+  readonly roomId = input.required<string>();
+  readonly shortId = input.required<string>();
   readonly questionnaire = input.required<Questionnaire>();
   readonly published = linkedSignal(() => this.questionnaire().published);
   readonly isModerator = computed(() => this.userRole() === UserRole.MODERATOR);
@@ -268,7 +268,7 @@ export class QuestionnairePageComponent {
 
   generateExportFilename(extension: string): string {
     const name = this.localFileService.generateFilename(
-      [this.questionnaire().name, this.room().shortId],
+      [this.questionnaire().name, this.shortId()],
       true
     );
     return `${name}.${extension}`;
@@ -313,7 +313,7 @@ export class QuestionnairePageComponent {
       if (result) {
         this.router.navigate([
           this.routingService.getRoleRoute(),
-          this.room().shortId,
+          this.shortId(),
         ]);
         this.globalStorageService.removeItem(STORAGE_KEYS.LAST_GROUP);
         const msg = this.translateService.translate(
