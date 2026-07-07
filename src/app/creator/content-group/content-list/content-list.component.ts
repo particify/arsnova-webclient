@@ -94,7 +94,7 @@ import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
   ],
 })
 export class ContentListComponent
-  extends DragDropBaseComponent
+  extends DragDropBaseComponent<Content>
   implements OnInit
 {
   private contentService = inject(ContentService);

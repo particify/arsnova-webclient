@@ -14,10 +14,10 @@ import { MatListItem } from '@angular/material/list';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
 })
-export class DragDropBaseComponent {
+export class DragDropBaseComponent<T> {
   @ViewChildren('sortListItem') listItems!: QueryList<ElementRef | MatListItem>;
 
-  dragDroplist: object[] = [];
+  dragDroplist: T[] = [];
   selectedSortItem?: number;
 
   drop(previousIndex: number, currentIndex: number) {
