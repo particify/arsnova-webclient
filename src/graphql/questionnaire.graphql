@@ -356,3 +356,16 @@ mutation UpdateQuestionnaireContentOrder(
     id
   }
 }
+
+subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
+  questionnaireChoiceRoundStatsUpdated(roundId: $roundId) {
+    selectionCounts
+  }
+}
+
+subscription QuestionnaireWordcloudRoundStatsUpdated($roundId: UUID!) {
+  questionnaireWordcloudRoundStatsUpdated(roundId: $roundId) {
+    words
+    counts
+  }
+}

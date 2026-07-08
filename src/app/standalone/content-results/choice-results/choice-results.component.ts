@@ -3,9 +3,10 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   ChoiceContentFormatData,
   QuestionnaireChoiceRoundStatsByRoundIdGql,
+  QuestionnaireChoiceRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
-import { switchMap } from 'rxjs';
+import { map, merge, share, switchMap, takeUntil } from 'rxjs';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { ChoiceAnswerListComponent } from './choice-answer-list/choice-answer-list.component';
 import {
@@ -33,6 +34,9 @@ export class ChoiceResultsComponent {
     QuestionnaireChoiceRoundStatsByRoundIdGql
   );
   private readonly presentationService = inject(PresentationService);
+  private readonly choiceRoundStatsUpdated = inject(
+    QuestionnaireChoiceRoundStatsUpdatedGql
+  );
   readonly roundId = input.required<string>();
   readonly hasCorrectAnswer = input(false);
   readonly formatData = input.required<ChoiceContentFormatData>();
@@ -49,16 +53,26 @@ export class ChoiceResultsComponent {
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
       switchMap((roundId) => {
-        return this.roundStatsByRoundId
+        const initial$ = this.roundStatsByRoundId
           .watch({ variables: { roundId } })
-          .valueChanges.pipe(onlyCompleteData());
+          .valueChanges.pipe(
+            onlyCompleteData(),
+            map((r) => r.data?.questionnaireChoiceRoundStatsByRoundId)
+          );
+
+        const updates$ = this.choiceRoundStatsUpdated
+          .subscribe({ variables: { roundId } })
+          .pipe(
+            map((r) => r.data?.questionnaireChoiceRoundStatsUpdated),
+            share()
+          );
+        return merge(initial$.pipe(takeUntil(updates$)), updates$);
       })
     )
   );
+
   readonly selectionCounts = computed(
-    () =>
-      this.roundStats()?.data.questionnaireChoiceRoundStatsByRoundId
-        ?.selectionCounts ?? []
+    () => this.roundStats()?.selectionCounts ?? []
   );
   readonly options = computed(() => this.formatData().options);
   readonly labels = computed(() =>

@@ -8,10 +8,11 @@ import { VisualizationType } from '@app/standalone/content-results/visualization
 import {
   BanQuestionnaireWordcloudContentKeywordGql,
   QuestionnaireWordcloudRoundStatsByRoundIdGql,
+  QuestionnaireWordcloudRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { Observable, of } from 'rxjs';
+import { NEVER, Observable, of } from 'rxjs';
 import { WordcloudResultsComponent } from './wordcloud-results.component';
 
 describe('WordcloudResultsComponent', () => {
@@ -69,6 +70,10 @@ describe('WordcloudResultsComponent', () => {
         {
           provide: QuestionnaireWordcloudRoundStatsByRoundIdGql,
           useValue: roundStats,
+        },
+        {
+          provide: QuestionnaireWordcloudRoundStatsUpdatedGql,
+          useValue: { subscribe: () => NEVER },
         },
         {
           provide: BanQuestionnaireWordcloudContentKeywordGql,

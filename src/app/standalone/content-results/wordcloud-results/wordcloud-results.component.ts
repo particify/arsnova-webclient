@@ -3,9 +3,10 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   BanQuestionnaireWordcloudContentKeywordGql,
   QuestionnaireWordcloudRoundStatsByRoundIdGql,
+  QuestionnaireWordcloudRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
-import { map, switchMap } from 'rxjs';
+import { map, merge, share, switchMap, takeUntil } from 'rxjs';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { CoreModule } from '@app/core/core.module';
@@ -38,6 +39,9 @@ export class WordcloudResultsComponent {
   private readonly banKeyword = inject(
     BanQuestionnaireWordcloudContentKeywordGql
   );
+  private readonly wordcloudRoundStatsUpdated = inject(
+    QuestionnaireWordcloudRoundStatsUpdatedGql
+  );
   private readonly dialogService = inject(DialogService);
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
@@ -52,12 +56,20 @@ export class WordcloudResultsComponent {
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
       switchMap((roundId) => {
-        return this.roundStatsByRoundId
+        const initial$ = this.roundStatsByRoundId
           .watch({ variables: { roundId } })
           .valueChanges.pipe(
             onlyCompleteData(),
             map((r) => r.data?.questionnaireWordcloudRoundStatsByRoundId)
           );
+
+        const updates$ = this.wordcloudRoundStatsUpdated
+          .subscribe({ variables: { roundId } })
+          .pipe(
+            map((r) => r.data?.questionnaireWordcloudRoundStatsUpdated),
+            share()
+          );
+        return merge(initial$.pipe(takeUntil(updates$)), updates$);
       })
     )
   );

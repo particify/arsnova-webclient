@@ -5,6 +5,7 @@ import {
   ChoiceContentFormatData,
   ContentType,
   QuestionnaireChoiceRoundStatsByRoundIdGql,
+  QuestionnaireChoiceRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { NEVER } from 'rxjs';
@@ -28,6 +29,11 @@ describe('ChoiceResultsComponent', () => {
       ['watch']
     );
     roundStats.watch.and.returnValue({ valueChanges: NEVER });
+    const roundStatsUpdated = jasmine.createSpyObj(
+      'QuestionnaireChoiceRoundStatsUpdatedGql',
+      ['subscribe']
+    );
+    roundStatsUpdated.subscribe.and.returnValue(NEVER);
     const themeService = jasmine.createSpyObj('ThemeService', [
       'getBarColors',
       'getColor',
@@ -41,6 +47,10 @@ describe('ChoiceResultsComponent', () => {
         {
           provide: QuestionnaireChoiceRoundStatsByRoundIdGql,
           useValue: roundStats,
+        },
+        {
+          provide: QuestionnaireChoiceRoundStatsUpdatedGql,
+          useValue: roundStatsUpdated,
         },
         {
           provide: ThemeService,
