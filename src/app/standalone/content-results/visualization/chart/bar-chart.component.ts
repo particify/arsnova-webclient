@@ -32,7 +32,12 @@ Chart.register(
 
 @Component({
   selector: 'app-bar-chart',
-  template: `<canvas class="chart" #canvas></canvas>`,
+  template: ` <div
+    [style.height]="scale() > 1 ? '28vh' : '40vh'"
+    [style.maxHeight]="scale() > 1 ? '180px' : '500px'"
+  >
+    <canvas style="max-height: 100%; max-width: 100%" #canvas></canvas>
+  </div>`,
 })
 export class BarChartComponent {
   data = input.required<VisualizationData>();
@@ -81,7 +86,7 @@ export class BarChartComponent {
   private options = computed<ChartOptions<'bar'>>(() => ({
     responsive: true,
     maintainAspectRatio: false,
-
+    devicePixelRatio: window.devicePixelRatio * this.scale(),
     layout: {
       padding: {
         top: 25,

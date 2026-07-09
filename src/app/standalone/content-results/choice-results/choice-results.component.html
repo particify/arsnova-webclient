@@ -9,7 +9,7 @@
   @if (resultsVisible()) {
     <app-bar-chart
       [data]="visualizationData()"
-      [scale]="1"
+      [scale]="scale()"
       [showLegend]="!isPresentation()"
       [showLabels]="!answersDirectlyBelowChart()"
       [dataLabelMode]="visualizationUnitPercent() ? 'percent' : 'absolute'"

@@ -16,7 +16,7 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
-import { debounceTime, fromEvent, Subject, take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 import {
   CARD_WIDTH,
   PresentationService,
@@ -111,7 +111,6 @@ export class ContentsPageComponent {
   readonly showContentResultsDirectly = linkedSignal(
     () => this.settings().showContentResultsDirectly || this.showResults()
   );
-  private readonly destroyed$ = new Subject<void>();
 
   private readonly _questionnaireId = computed(
     () =>
@@ -127,6 +126,21 @@ export class ContentsPageComponent {
   readonly content = computed(() =>
     this.contentPresentationService.currentContent()
   );
+
+  protected readonly scale = computed(() =>
+    this.presentationService.getScale()
+  );
+
+  protected readonly containerStyle = computed(() => {
+    const scale = this.scale();
+    if (!scale) return;
+    return {
+      width: `${CARD_WIDTH}px`,
+      transform: `scale(${scale})`,
+      left: `calc(50vw - calc(${CARD_WIDTH / 2}px * ${scale}))`,
+      top: `calc(4vw - calc(1em * ${scale}))`,
+    };
+  });
 
   initialized = false;
   responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
@@ -151,12 +165,6 @@ export class ContentsPageComponent {
         );
       }
       if (this.contents()?.length > 0 && this.stepper()) {
-        this.initScale();
-        fromEvent(window, 'resize')
-          .pipe(debounceTime(100), takeUntil(this.destroyed$))
-          .subscribe(() => {
-            this.initScale();
-          });
         if (!this.initialized) {
           const contentId = this.contentId();
           const entryIndex = contentId
@@ -200,17 +208,6 @@ export class ContentsPageComponent {
   private toggleLeaderboard() {
     this.showLeaderboard = !this.showLeaderboard;
     this.presentationService.updateLeaderboardDisplayed(this.showLeaderboard);
-  }
-
-  initScale() {
-    const scale = this.presentationService.getScale();
-    const stepperContainer = document.getElementById('stepper-container');
-    if (stepperContainer) {
-      stepperContainer.style.width = `${CARD_WIDTH}px`;
-      stepperContainer.style.transform = `scale(${scale})`;
-      stepperContainer.style.left = `calc(50vw - calc(${CARD_WIDTH / 2}px * ${scale})`;
-      stepperContainer.style.top = `calc(4vw - calc(1em * ${scale}))`;
-    }
   }
 
   updateRoute() {

@@ -8,7 +8,10 @@ import { onlyCompleteData } from 'apollo-angular';
 import { switchMap } from 'rxjs';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { ChoiceAnswerListComponent } from './choice-answer-list/choice-answer-list.component';
-import { CARD_WIDTH } from '@app/core/services/util/presentation.service';
+import {
+  CARD_WIDTH,
+  PresentationService,
+} from '@app/core/services/util/presentation.service';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { VisualizationType } from '@app/standalone/content-results/visualization/visualization-type';
 import { CoreModule } from '@app/core/core.module';
@@ -29,6 +32,7 @@ export class ChoiceResultsComponent {
   private readonly roundStatsByRoundId = inject(
     QuestionnaireChoiceRoundStatsByRoundIdGql
   );
+  private readonly presentationService = inject(PresentationService);
   readonly roundId = input.required<string>();
   readonly hasCorrectAnswer = input(false);
   readonly formatData = input.required<ChoiceContentFormatData>();
@@ -39,6 +43,9 @@ export class ChoiceResultsComponent {
   readonly answersDirectlyBelowChart = input(false);
   readonly visualizationUnitPercent = input(false);
   readonly isPresentation = input(false);
+  readonly scale = computed(() =>
+    this.isPresentation() ? this.presentationService.getScale() : 1
+  );
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
       switchMap((roundId) => {
