@@ -1,11 +1,12 @@
 import {
   Component,
-  DestroyRef,
   ElementRef,
+  afterRenderEffect,
   computed,
   effect,
   inject,
   input,
+  untracked,
   viewChild,
 } from '@angular/core';
 
@@ -65,21 +66,29 @@ export class BarChartComponent {
   fgColor = computed(() => this.themeService.getColor('on-surface'));
 
   constructor() {
-    inject(DestroyRef).onDestroy(() => {
-      this.chart?.destroy();
-      this.chart = undefined;
-    });
-    effect(() => {
+    afterRenderEffect((onCleanup) => {
       const canvas = this.canvas()?.nativeElement;
       if (!canvas) return;
-      const data = this.chartData();
-      const options = this.options();
-      this.chart?.destroy();
-      this.chart = new Chart(canvas, {
-        type: 'bar',
-        data,
-        options,
+      if (this.chart) return;
+      const data = untracked(() => this.chartData());
+      const options = untracked(() => this.options());
+      this.chart = new Chart(canvas, { type: 'bar', data, options });
+      this.chart.resize();
+      onCleanup(() => {
+        this.chart?.destroy();
+        this.chart = undefined;
       });
+    });
+    effect(() => {
+      const data = this.chartData();
+      if (!this.chart) return;
+      this.chart.data.labels = data.labels;
+      data.datasets.forEach((newDataset, i) => {
+        const existingDataset = this.chart!.data.datasets[i];
+        existingDataset.data = newDataset.data;
+        existingDataset.backgroundColor = newDataset.backgroundColor;
+      });
+      this.chart.update();
     });
   }
 
