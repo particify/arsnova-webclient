@@ -78,7 +78,7 @@
     "@types/d3-cloud": "1.2.9",
     "@types/jasmine": "6.0.0",
     "@types/jasminewd2": "2.0.13",
-    "@types/node": "24.13.2",
+    "@types/node": "24.13.3",
     "@types/wordcloud": "1.2.2",
     "@typescript-eslint/eslint-plugin": "8.63.0",
     "@typescript-eslint/parser": "8.63.0",
