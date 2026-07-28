@@ -53,7 +53,7 @@
     "graphql-ws": "6.1.1",
     "is-docker": "4.0.0",
     "jwt-decode": "4.0.0",
-    "katex": "0.17.0",
+    "katex": "0.18.1",
     "lru-cache": "11.5.2",
     "ng-qrcode": "22.0.0",
     "prismjs": "1.30.0",
