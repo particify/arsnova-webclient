@@ -59,7 +59,7 @@ const MAX_ANSWER_OPTIONS = 12;
   ],
 })
 export class AnswerOptionListComponent
-  extends DragDropBaseComponent
+  extends DragDropBaseComponent<DisplayAnswer>
   implements OnInit, OnChanges
 {
   private announceService = inject(AnnounceService);

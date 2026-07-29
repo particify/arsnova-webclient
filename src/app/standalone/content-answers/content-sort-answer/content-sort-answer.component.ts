@@ -17,7 +17,7 @@ import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-te
   styleUrls: ['./content-sort-answer.component.scss'],
 })
 export class ContentSortAnswerComponent
-  extends DragDropBaseComponent
+  extends DragDropBaseComponent<AnswerOption>
   implements OnInit
 {
   @Input({ required: true }) answerOptions!: AnswerOption[];
