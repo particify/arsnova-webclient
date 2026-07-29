@@ -24,7 +24,7 @@
   "dependencies": {
     "@angular/animations": "22.0.8",
     "@angular/cdk": "22.0.6",
-    "@angular/cli": "22.0.8",
+    "@angular/cli": "22.0.9",
     "@angular/common": "22.0.8",
     "@angular/compiler": "22.0.8",
     "@angular/core": "22.0.8",
@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@analogjs/storybook-angular": "2.6.4",
-    "@angular/build": "22.0.8",
+    "@angular/build": "22.0.9",
     "@angular/compiler-cli": "22.0.8",
     "@angular/language-service": "22.0.8",
     "@eslint/js": "10.0.1",
