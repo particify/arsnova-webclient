@@ -6,7 +6,6 @@ import {
   effect,
   inject,
   input,
-  linkedSignal,
   signal,
 } from '@angular/core';
 import {
@@ -57,6 +56,7 @@ import {
   Content,
   DeleteQuestionnaireGql,
   Questionnaire,
+  QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
   QuestionnaireType,
@@ -129,18 +129,29 @@ export class QuestionnairePageComponent {
   );
   private readonly deleteQuestionnaire = inject(DeleteQuestionnaireGql);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly questionnaireById = inject(QuestionnaireByIdGql);
 
   readonly userRole = input.required<UserRole>();
   readonly roomId = input.required<string>();
+  readonly questionnaireId = input.required<string>();
   readonly shortId = input.required<string>();
-  readonly questionnaire = input.required<Questionnaire>();
-  readonly published = linkedSignal(() => this.questionnaire().published);
+  readonly published = computed(() => this.questionnaire()?.published ?? false);
   readonly isModerator = computed(() => this.userRole() === UserRole.MODERATOR);
+  readonly questionnaire = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((id) =>
+        this.questionnaireById.watch({ variables: { id } }).valueChanges.pipe(
+          map((r) => r.data?.questionnaireById),
+          filter((n): n is Questionnaire => !!n)
+        )
+      )
+    )
+  );
   readonly contentsResult = toSignal(
-    toObservable(this.questionnaire).pipe(
-      switchMap((questionnaire) => {
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) => {
         return this.contentsByQuestionnareId.watch({
-          variables: { questionnaireId: questionnaire.id },
+          variables: { questionnaireId: questionnaireId },
         }).valueChanges;
       })
     )
@@ -197,7 +208,7 @@ export class QuestionnairePageComponent {
       if (this.questionnaire()) {
         this.globalStorageService.setItem(
           STORAGE_KEYS.LAST_GROUP,
-          this.questionnaire().id
+          this.questionnaire()?.id
         );
       }
     });
@@ -267,8 +278,9 @@ export class QuestionnairePageComponent {
   }
 
   generateExportFilename(extension: string): string {
+    const questionnaireName = this.questionnaire()?.name ?? '';
     const name = this.localFileService.generateFilename(
-      [this.questionnaire().name, this.shortId()],
+      [questionnaireName, this.shortId()],
       true
     );
     return `${name}.${extension}`;
@@ -290,16 +302,16 @@ export class QuestionnairePageComponent {
     const dialogRef = this.dialogService.openDeleteDialog(
       'content-group',
       'creator.dialog.really-delete-content-group',
-      this.questionnaire().name,
+      this.questionnaire()?.name,
       undefined,
       () =>
         this.deleteQuestionnaire.mutate({
-          variables: { id: this.questionnaire().id },
+          variables: { id: this.questionnaireId() },
           update: (cache, result) => {
             if (result.data?.deleteQuestionnaire) {
               const cacheId = cache.identify({
                 __typename: 'Questionnaire',
-                id: this.questionnaire().id,
+                id: this.questionnaireId(),
               });
               if (cacheId) {
                 cache.evict({ id: cacheId });
@@ -330,7 +342,7 @@ export class QuestionnairePageComponent {
   publish(): void {
     this.toggleQuestionnairePublished
       .mutate({
-        variables: { id: this.questionnaire().id, published: true },
+        variables: { id: this.questionnaireId(), published: true },
       })
       .subscribe({
         next: (r) => {
@@ -342,7 +354,6 @@ export class QuestionnairePageComponent {
               msg,
               AdvancedSnackBarTypes.SUCCESS
             );
-            this.published.set(true);
           }
         },
       });
@@ -352,8 +363,8 @@ export class QuestionnairePageComponent {
     this.dialogService.openDialog(CreateContentGroupTemplateComponent, {
       width: '600px',
       data: {
-        name: this.questionnaire().name,
-        contentGroupId: this.questionnaire().id,
+        name: this.questionnaire()?.name,
+        contentGroupId: this.questionnaireId(),
       },
     });
   }
@@ -365,7 +376,7 @@ export class QuestionnairePageComponent {
         width: '600px',
         data: {
           contentGroup: { ...this.questionnaire() },
-          groupNames: [this.questionnaire().name],
+          groupNames: [this.questionnaire()?.name],
         },
       }
     );
@@ -390,7 +401,7 @@ export class QuestionnairePageComponent {
 
   isLiveMode(): boolean {
     return (
-      this.questionnaire().publishingMode === QuestionnairePublishingMode.Live
+      this.questionnaire()?.publishingMode === QuestionnairePublishingMode.Live
     );
   }
 

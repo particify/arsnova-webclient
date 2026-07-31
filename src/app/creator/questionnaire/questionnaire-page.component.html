@@ -26,10 +26,10 @@
               fxLayoutGap="8px"
             >
               <div fxLayout="row" fxLayoutGap="8px">
-                @if (questionnaire().type === QuestionnaireType.Quiz) {
+                @if (questionnaire()?.type === QuestionnaireType.Quiz) {
                   <button
                     mat-icon-button
-                    [disabled]="!questionnaire().leaderboardEnabled"
+                    [disabled]="!questionnaire()?.leaderboardEnabled"
                     [matTooltip]="'content.leaderboard' | transloco"
                     (click)="toggleLeaderboard()"
                     [ngClass]="{
@@ -92,7 +92,7 @@
                     </button>
                   </div>
                   <mat-divider></mat-divider>
-                  @if (questionnaire().type !== QuestionnaireType.Flashcards) {
+                  @if (questionnaire()?.type !== QuestionnaireType.Flashcards) {
                     <button
                       mat-menu-item
                       (click)="deleteAllAnswers()"
@@ -114,8 +114,8 @@
           </div>
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
             <app-questionnaire-info
-              [contentCount]="questionnaire().contentCount ?? 0"
-              [questionnaireType]="questionnaire().type"
+              [contentCount]="questionnaire()?.contentCount ?? 0"
+              [questionnaireType]="questionnaire()?.type"
               [published]="published()"
             ></app-questionnaire-info>
             @if (isLiveMode()) {
@@ -181,15 +181,18 @@
           </div>
         } @else {
           <div class="list-container">
-            <app-content-list
-              [roomId]="roomId()"
-              [questionnaire]="questionnaire()"
-              [contents]="contents()"
-              [isModerator]="isModerator()"
-              [attributionsExist]="attributionsExist"
-              [selectedContentId]="selectedContentId()"
-              (startedContentChanged)="handleActiveContentChanged($event)"
-            ></app-content-list>
+            @let _questionnaire = questionnaire();
+            @if (_questionnaire) {
+              <app-content-list
+                [roomId]="roomId()"
+                [questionnaire]="_questionnaire"
+                [contents]="contents()"
+                [isModerator]="isModerator()"
+                [attributionsExist]="attributionsExist"
+                [selectedContentId]="selectedContentId()"
+                (startedContentChanged)="handleActiveContentChanged($event)"
+              ></app-content-list>
+            }
           </div>
         }
       </div>

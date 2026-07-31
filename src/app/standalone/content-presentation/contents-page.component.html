@@ -1,12 +1,16 @@
+@let _questionnaire = questionnaire();
 @if (loading()) {
   <app-loading-indicator></app-loading-indicator>
-} @else {
-  @if (showStepInfo() && !isGroupLocked() && contents()) {
+} @else if (_questionnaire) {
+  @if (showStepInfo() && _questionnaire.published && contents()) {
     <span class="step-info">
       {{ currentIndex() + 1 + ' / ' + stepCount() }}
     </span>
   } @else if (
-    showAnswerCount() && !isGroupLocked() && canAnswerContent && content()
+    showAnswerCount() &&
+    _questionnaire.published &&
+    canAnswerContent &&
+    content()
   ) {
     <div
       class="answer-count"
@@ -39,7 +43,7 @@
         {{ 'creator.content.no-contents-yet' | transloco }}
       </p>
     }
-    @if (isGroupLocked()) {
+    @if (!_questionnaire.published) {
       <p class="hint">
         {{ 'creator.content.group-not-published' | transloco }}
       </p>
@@ -50,7 +54,7 @@
     <div tabindex="-1" [appAutofocus] class="visually-hidden">
       {{
         'creator.presentation.a11y-content-message'
-          | transloco: { group: questionnaire().name }
+          | transloco: { group: _questionnaire.name }
       }}
     </div>
 
@@ -61,7 +65,7 @@
       fxLayoutAlign="start center"
       class="scalable"
     >
-      @if (contents() && contents().length > 0 && !isGroupLocked()) {
+      @if (contents() && contents().length > 0 && _questionnaire.published) {
         <app-content-stepper
           [hidden]="showLeaderboard"
           [contents]="contents()"
@@ -77,7 +81,7 @@
       @if (showLeaderboard) {
         <app-content-group-leaderboard
           fxFill
-          [questionnaire]="questionnaire()"
+          [questionnaire]="_questionnaire"
           [showAll]="true"
           [allowScrolling]="true"
           [ngClass]="{ 'over-control-bar': !hideControlBar() }"
@@ -87,7 +91,7 @@
   </div>
   @if (
     showHotkeyActionButtons() &&
-    !isGroupLocked() &&
+    _questionnaire.published &&
     isLiveMode() &&
     content() &&
     isPublished()
@@ -147,7 +151,7 @@
   </div>
   @if (
     showHotkeyActionButtons() &&
-    !isGroupLocked() &&
+    _questionnaire.published &&
     content() &&
     !isPublished() &&
     !this.isPublishing
