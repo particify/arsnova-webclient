@@ -363,6 +363,23 @@ mutation UpdateQuestionnaireContentOrder(
   }
 }
 
+subscription QuestionnaireUpdated($questionnaireId: UUID!) {
+  questionnaireUpdated(questionnaireId: $questionnaireId) {
+    id
+    publishingMode
+    publishedUpToContent {
+      id
+      position
+    }
+    activeRound {
+      id
+      contentId
+      roundNo
+      closed
+    }
+  }
+}
+
 subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
   questionnaireChoiceRoundStatsUpdated(roundId: $roundId) {
     selectionCounts

@@ -20,7 +20,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Location } from '@angular/common';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { map, switchMap } from 'rxjs';
+import {
+  catchError,
+  distinctUntilChanged,
+  EMPTY,
+  filter,
+  ignoreElements,
+  map,
+  merge,
+  shareReplay,
+  switchMap,
+  take,
+} from 'rxjs';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
@@ -44,16 +55,33 @@ import {
   AnswerResultState,
   Content,
   Questionnaire,
+  QuestionnaireByIdGql,
   QuestionnaireContentAnswerResultsByQuestionnaireIdGql,
   QuestionnairePublishedContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
+  QuestionnaireUpdatedGql,
   UserUiSettings,
   QuestionnaireType,
   ContentType,
 } from '@gql/generated/graphql';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { onlyCompleteData } from 'apollo-angular';
 
 function setDefaultTrue(value: boolean | undefined): boolean {
   return value ?? true;
+}
+
+function publishedContentsKey(questionnaire: Questionnaire): string {
+  return [
+    questionnaire.published,
+    questionnaire.publishingMode,
+    questionnaire.publishedUpToContent?.id,
+    questionnaire.contentCount,
+    questionnaire.activeRound?.id,
+    questionnaire.activeRound?.closed,
+    // Solutions are withheld from participants until they are published.
+    questionnaire.correctOptionsPublished,
+  ].join('|');
 }
 
 @Component({
@@ -90,11 +118,14 @@ export class QuestionnairePageComponent {
   private readonly answerResultsByQuestionnaireId = inject(
     QuestionnaireContentAnswerResultsByQuestionnaireIdGql
   );
+  private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
+  private readonly questionnaireById = inject(QuestionnaireByIdGql);
+  private readonly notificationService = inject(NotificationService);
 
   stepper = viewChild(StepperComponent);
 
   // Route data input below
-  questionnaire = input.required<Questionnaire>();
+  questionnaireId = input.required<string>();
   shortId = input.required<string>();
   roomId = input.required<string>();
   settings = input.required<UserUiSettings>();
@@ -104,23 +135,59 @@ export class QuestionnairePageComponent {
   language = input.required<string>();
   contentId = input<string>();
 
+  readonly questionnaire = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((id) => {
+        const questionnaire$ = this.questionnaireById
+          .watch({ variables: { id } })
+          .valueChanges.pipe(
+            map((r) => r.data?.questionnaireById),
+            filter((q): q is Questionnaire => !!q),
+            shareReplay({ bufferSize: 1, refCount: true })
+          );
+        // Participants may only read a published questionnaire.
+        const updates$ = questionnaire$.pipe(
+          map((q) => q.published),
+          distinctUntilChanged(),
+          switchMap((published) =>
+            published ? this.questionnaireUpdates(id) : EMPTY
+          )
+        );
+        return merge(updates$, questionnaire$);
+      })
+    )
+  );
+
   private readonly contentsResult = toSignal(
     toObservable(this.questionnaire).pipe(
+      filter((q): q is Questionnaire => !!q),
+      distinctUntilChanged(
+        (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
+      ),
       switchMap((questionnaire) => {
-        return this.contentsByQuestionnareId.watch({
-          variables: { questionnaireId: questionnaire.id },
-          fetchPolicy: 'network-only',
-        }).valueChanges;
+        return this.contentsByQuestionnareId
+          .watch({
+            variables: { questionnaireId: questionnaire.id },
+            fetchPolicy: 'network-only',
+          })
+          .valueChanges.pipe(onlyCompleteData());
       })
     )
   );
 
   private readonly answerResultsResult = toSignal(
     toObservable(this.questionnaire).pipe(
+      filter((q): q is Questionnaire => !!q),
+      distinctUntilChanged(
+        (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
+      ),
       switchMap((questionnaire) => {
-        return this.answerResultsByQuestionnaireId.watch({
-          variables: { questionnaireId: questionnaire.id },
-        }).valueChanges;
+        return this.answerResultsByQuestionnaireId
+          .watch({
+            variables: { questionnaireId: questionnaire.id },
+            fetchPolicy: 'network-only',
+          })
+          .valueChanges.pipe(onlyCompleteData());
       })
     )
   );
@@ -132,9 +199,7 @@ export class QuestionnairePageComponent {
     return results.filter((r): r is ContentAnswerResult => !!r);
   });
 
-  readonly loadingAnswerResults = computed(
-    () => this.answerResultsResult()?.loading
-  );
+  readonly loadingAnswerResults = computed(() => !this.answerResultsResult());
 
   readonly contents = computed(() => {
     const edges =
@@ -143,10 +208,10 @@ export class QuestionnairePageComponent {
     return edges?.map((e) => e?.node).filter((n): n is Content => !!n) ?? [];
   });
 
-  readonly loadingContents = computed(() => this.contentsResult()?.loading);
+  readonly loadingContents = computed(() => !this.contentsResult());
 
   readonly contentIndexes = computed(() =>
-    Array.from(Array(this.questionnaire().contentCount).keys())
+    Array.from(Array(this.questionnaire()?.contentCount ?? 0).keys())
   );
 
   readonly userId = toSignal(
@@ -184,6 +249,18 @@ export class QuestionnairePageComponent {
   attributions: ContentLicenseAttribution[] = [];
   alias?: RoomUserAlias;
 
+  private questionnaireUpdates(questionnaireId: string) {
+    return this.questionnaireUpdated
+      .subscribe({ variables: { questionnaireId } })
+      .pipe(
+        ignoreElements(),
+        catchError((error) => {
+          console.error('Questionnaire subscription failed', error);
+          return EMPTY;
+        })
+      );
+  }
+
   constructor() {
     let prevAnswerResults: ContentAnswerResult[] = [];
     effect(() => {
@@ -206,7 +283,7 @@ export class QuestionnairePageComponent {
     let prevQuestionnaireId: string | undefined;
     effect(() => {
       // The component is reused when the route switches to another questionnaire.
-      const questionnaireId = this.questionnaire().id;
+      const questionnaireId = this.questionnaireId();
       if (prevQuestionnaireId && questionnaireId !== prevQuestionnaireId) {
         this.started = false;
       }
@@ -219,12 +296,54 @@ export class QuestionnairePageComponent {
       if (
         !this.focusModeEnabled() ||
         !state ||
-        state.contentGroupId !== this.questionnaire().id ||
+        state.contentGroupId !== this.questionnaireId() ||
         contents.length === 0
       ) {
         return;
       }
       untracked(() => this.followFocusedContent(state.contentId));
+    });
+
+    // Live mode auto-follows the content the moderator just started, the
+    // same way the moderator's own client jumps ahead after starting it.
+    effect(() => {
+      const questionnaire = this.questionnaire();
+      if (
+        !questionnaire ||
+        !this.started ||
+        !this.stepper() ||
+        this.focusModeEnabled()
+      ) {
+        return;
+      }
+      const activeContentId = questionnaire.activeRound?.contentId;
+      if (
+        questionnaire.publishingMode !== QuestionnairePublishingMode.Live ||
+        !activeContentId
+      ) {
+        return;
+      }
+      const index = this.getIndexOfContentById(activeContentId);
+      if (index >= 0 && index !== this.currentStep) {
+        this.goToContent(index);
+      }
+    });
+
+    let prevPublishedUpToContentId: string | undefined;
+    effect(() => {
+      const questionnaire = this.questionnaire();
+      const publishedUpToContentId = questionnaire?.publishedUpToContent?.id;
+      if (
+        this.started &&
+        !this.focusModeEnabled() &&
+        questionnaire?.publishingMode === QuestionnairePublishingMode.UpTo &&
+        prevPublishedUpToContentId !== undefined &&
+        publishedUpToContentId !== undefined &&
+        publishedUpToContentId !== prevPublishedUpToContentId
+      ) {
+        this.offerReleasedContent(publishedUpToContentId);
+      }
+      prevPublishedUpToContentId = publishedUpToContentId;
     });
   }
 
@@ -240,6 +359,22 @@ export class QuestionnairePageComponent {
     }
   }
 
+  private offerReleasedContent(releasedContentId: string) {
+    this.notificationService
+      .show(
+        this.translateService.translate('participant.answer.state-changed'),
+        this.translateService.translate('participant.answer.load')
+      )
+      .onAction()
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        const index = this.getIndexOfContentById(releasedContentId);
+        if (index >= 0) {
+          this.goToContent(index);
+        }
+      });
+  }
+
   evaluateAnswerResultsState(
     prevResults: ContentAnswerResult[],
     currentResults: ContentAnswerResult[]
@@ -252,9 +387,9 @@ export class QuestionnairePageComponent {
       answeredIndex >= 0 &&
       !this.focusModeEnabled() &&
       this.started &&
-      this.questionnaire().publishingMode !==
+      this.questionnaire()?.publishingMode !==
         QuestionnairePublishingMode.Live &&
-      this.questionnaire().type !== QuestionnaireType.Quiz
+      this.questionnaire()?.type !== QuestionnaireType.Quiz
     ) {
       setTimeout(() => {
         const nextIndex = this.findNextUnansweredContentIndex(
@@ -348,7 +483,7 @@ export class QuestionnairePageComponent {
         'p',
         this.shortId(),
         'questionnaire',
-        this.questionnaire().id,
+        this.questionnaireId(),
         content?.id,
       ]);
     }

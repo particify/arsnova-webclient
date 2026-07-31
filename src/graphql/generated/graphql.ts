@@ -3588,6 +3588,31 @@ export type UpdateQuestionnaireContentOrderMutation = {
   } | null;
 };
 
+export type QuestionnaireUpdatedSubscriptionVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireUpdated?: {
+    __typename?: 'Questionnaire';
+    id: string;
+    publishingMode: QuestionnairePublishingMode;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+    } | null;
+  } | null;
+};
+
 export type QuestionnaireChoiceRoundStatsUpdatedSubscriptionVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -6655,6 +6680,38 @@ export class UpdateQuestionnaireContentOrderGql extends Apollo.Mutation<
   UpdateQuestionnaireContentOrderMutationVariables
 > {
   document = UpdateQuestionnaireContentOrderDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireUpdatedDocument = gql`
+  subscription QuestionnaireUpdated($questionnaireId: UUID!) {
+    questionnaireUpdated(questionnaireId: $questionnaireId) {
+      id
+      publishingMode
+      publishedUpToContent {
+        id
+        position
+      }
+      activeRound {
+        id
+        contentId
+        roundNo
+        closed
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireUpdatedGql extends Apollo.Subscription<
+  QuestionnaireUpdatedSubscription,
+  QuestionnaireUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

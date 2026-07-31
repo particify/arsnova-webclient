@@ -1,11 +1,12 @@
-@if (loadingContents() || loadingAnswerResults()) {
+@let _questionnaire = questionnaire();
+@if (!_questionnaire || loadingContents() || loadingAnswerResults()) {
   <app-loading-indicator></app-loading-indicator>
 } @else if (contents().length > 0) {
   <div fxLayout="column" fxLayoutAlign="start center">
     @if (currentIndex() > -1) {
       <app-stepper
         (newIndex)="updateContentIndexUrl($event)"
-        [listLength]="questionnaire().contentCount ?? 0"
+        [listLength]="_questionnaire.contentCount ?? 0"
         [answerResults]="answerResults()"
         [showSteps]="showStepper() && !focusModeEnabled()"
         [allowNavigation]="!focusModeEnabled()"
@@ -26,19 +27,19 @@
                     (next)="nextContent()"
                     [shortId]="shortId()"
                     [content]="_content"
-                    [questionnaire]="questionnaire()"
+                    [questionnaire]="_questionnaire"
                     [userId]="_userId"
                     [lastContent]="
-                      index === (questionnaire().contentCount ?? 0) - 1 ||
+                      index === (_questionnaire.contentCount ?? 0) - 1 ||
                       (!contents()[index + 1] &&
-                        questionnaire().publishingMode !==
+                        _questionnaire.publishingMode !==
                           QuestionnairePublishingMode.Live)
                     "
                     [active]="currentStep === index"
                     [index]="index"
-                    [statsPublished]="!!questionnaire().statisticsPublished"
+                    [statsPublished]="!!_questionnaire.statisticsPublished"
                     [correctOptionsPublished]="
-                      !!questionnaire().correctOptionsPublished
+                      !!_questionnaire.correctOptionsPublished
                     "
                     [attribution]="getAttribution()"
                     [alias]="alias"
@@ -56,7 +57,7 @@
                     <app-content-waiting
                       [alias]="alias"
                       [current]="index + 1"
-                      [totalCount]="questionnaire().contentCount ?? 0"
+                      [totalCount]="_questionnaire.contentCount ?? 0"
                       [roomId]="roomId()"
                       [isLocked]="true"
                     ></app-content-waiting>
@@ -69,7 +70,7 @@
       </app-stepper>
     } @else {
       <app-series-overview
-        [questionnaire]="questionnaire()"
+        [questionnaire]="_questionnaire"
         [answerResults]="answerResults()"
         [contents]="contents()"
         [finished]="isFinished()"
