@@ -21,6 +21,12 @@ fragment QuestionnaireDetails on Questionnaire {
     id
     position
   }
+  activeRound {
+    id
+    contentId
+    roundNo
+    closed
+  }
   statisticsPublished
   correctOptionsPublished
   leaderboardEnabled
@@ -367,5 +373,42 @@ subscription QuestionnaireWordcloudRoundStatsUpdated($roundId: UUID!) {
   questionnaireWordcloudRoundStatsUpdated(roundId: $roundId) {
     words
     counts
+  }
+}
+
+mutation StartQuestionnaireContent($contentId: UUID!) {
+  startQuestionnaireContent(contentId: $contentId) {
+    id
+    activeRound {
+      id
+      roundNo
+      closed
+    }
+  }
+}
+
+mutation StopQuestionnaireContent($questionnaireId: UUID!) {
+  stopQuestionnaireContent(questionnaireId: $questionnaireId) {
+    id
+    activeRound {
+      id
+      roundNo
+      closed
+    }
+  }
+}
+
+mutation PublishQuestionnaireUpToContent(
+  $questionnaireId: UUID!
+  $contentId: UUID!
+) {
+  publishQuestionnaireUpToContent(
+    questionnaireId: $questionnaireId
+    contentId: $contentId
+  ) {
+    id
+    publishedUpToContent {
+      id
+    }
   }
 }

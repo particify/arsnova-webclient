@@ -267,8 +267,10 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
 
   isPublished(index: number): boolean {
     return this.contentPublishService.isIndexPublished(
-      this.questionnaire(),
-      index
+      this.questionnaire().published,
+      this.questionnaire().publishingMode,
+      index,
+      this.questionnaire().publishedUpToContent?.position ?? undefined
     );
   }
 

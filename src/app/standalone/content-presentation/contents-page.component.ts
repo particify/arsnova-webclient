@@ -143,6 +143,18 @@ export class ContentsPageComponent {
     this.contentPresentationService.currentContent()
   );
 
+  readonly isPublished = computed(() => {
+    const questionnaire = this.questionnaire();
+    if (questionnaire) {
+      return this.contentPublishService.isIndexPublished(
+        questionnaire.published ?? false,
+        questionnaire.publishingMode,
+        this.currentIndex(),
+        questionnaire.publishedUpToContent?.position ?? undefined
+      );
+    }
+  });
+
   protected readonly scale = this.presentationService.scale;
 
   protected readonly containerStyle = computed(() => {
@@ -355,17 +367,6 @@ export class ContentsPageComponent {
       );
       this.presentationService.updateContentState(state);
     }
-  }
-
-  isPublished(): boolean {
-    const questionnaire = this.questionnaire();
-    return (
-      !!questionnaire &&
-      this.contentPublishService.isIndexPublished(
-        questionnaire,
-        this.currentIndex()
-      )
-    );
   }
 
   publishCurrentContent(): void {
