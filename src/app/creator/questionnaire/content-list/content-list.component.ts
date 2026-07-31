@@ -56,6 +56,7 @@ import {
   DeleteQuestionnaireContentGql,
   DuplicateQuestionnaireContentGql,
   MoveQuestionnaireContentToQuestionnaireGql,
+  PublishQuestionnaireUpToContentGql,
   Questionnaire,
   QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnairePublishingMode,
@@ -135,6 +136,9 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   private readonly updateQuestionnaireContentOrder = inject(
     UpdateQuestionnaireContentOrderGql
   );
+  private readonly publishQuestionnaireContentUpTo = inject(
+    PublishQuestionnaireUpToContentGql
+  );
 
   publishingDivider = viewChild<ElementRef>('publishingDivider');
   roomId = input.required<string>();
@@ -162,6 +166,10 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   });
 
   sortableContents = linkedSignal(() => [...this.contents()]);
+
+  publishedContentId = linkedSignal(
+    () => this.questionnaire().publishedUpToContent?.id
+  );
 
   contentTypes: string[] = Object.values(ContentType);
 
@@ -360,20 +368,51 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     if (
       this.questionnaire().publishedUpToContent?.position !== newPublishingIndex
     ) {
-      // TODO: Update questionnaires publishing index / active content
+      this.updatePublishingRangeToIndex(newPublishingIndex);
     }
   }
 
   movePublishingDividerUp(index: number) {
     if (index > 0) {
-      //this.movePublishingDivider(index - 1);
+      this.movePublishingDivider(index - 1);
     }
   }
 
   movePublishingDividerDown(index: number) {
     if (index < this.dragDroplist.length - 1) {
-      //this.movePublishingDivider(index + 1);
+      this.movePublishingDivider(index + 1);
     }
+  }
+
+  private movePublishingDivider(index: number) {
+    if (!this.isLiveMode()) {
+      this.updatePublishingRangeToIndex(index);
+      this.publishingDivider()?.nativeElement.focus();
+    }
+  }
+
+  private updatePublishingRangeToIndex(index: number) {
+    const publishToContentId = this.contents().find(
+      (c) => c.position === index
+    )?.id;
+    if (!publishToContentId) {
+      return;
+    }
+    this.publishedContentId.set(publishToContentId);
+    this.publishQuestionnaireContentUpTo
+      .mutate({
+        variables: {
+          questionnaireId: this.questionnaire().id,
+          contentId: publishToContentId,
+        },
+      })
+      .subscribe({
+        error: () => {
+          this.publishedContentId.set(
+            this.questionnaire().publishedUpToContent?.id
+          );
+        },
+      });
   }
 
   onSortChanged(event: CdkDragSortEvent) {

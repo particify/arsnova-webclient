@@ -29,6 +29,7 @@ import {
 } from '@app/core/services/util/presentation.service';
 import {
   ContentType,
+  PublishQuestionnaireUpToContentGql,
   Questionnaire,
   QuestionnaireByIdGql,
   UserUiSettings,
@@ -94,6 +95,9 @@ export class ContentsPageComponent {
   );
   private readonly destroyRef = inject(DestroyRef);
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
+  private readonly publishQuestionnaireContentUpTo = inject(
+    PublishQuestionnaireUpToContentGql
+  );
 
   // Route data input below
   readonly showStepInfo = input(false, { transform: booleanAttribute });
@@ -370,7 +374,18 @@ export class ContentsPageComponent {
   }
 
   publishCurrentContent(): void {
-    // TODO: Publish current content
+    const contentId = this.contentId();
+    if (!contentId) {
+      return;
+    }
+    this.publishQuestionnaireContentUpTo
+      .mutate({
+        variables: {
+          questionnaireId: this.questionnaireId(),
+          contentId: contentId,
+        },
+      })
+      .subscribe();
   }
 
   isLiveMode(): boolean {

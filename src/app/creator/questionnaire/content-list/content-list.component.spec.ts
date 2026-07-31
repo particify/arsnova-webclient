@@ -220,7 +220,7 @@ describe('ContentListComponent', () => {
     setUp(
       questionnaire({
         publishingMode: QuestionnairePublishingMode.UpTo,
-        publishedUpToContent: { position: 1 } as Content,
+        publishedUpToContent: { id: 'c-1', position: 1 } as Content,
       })
     );
 
@@ -359,7 +359,7 @@ describe('ContentListComponent', () => {
     setUp(
       questionnaire({
         publishingMode: QuestionnairePublishingMode.UpTo,
-        publishedUpToContent: { position: 0 } as Content,
+        publishedUpToContent: { id: 'c-0', position: 0 } as Content,
       })
     );
 
@@ -391,7 +391,7 @@ describe('ContentListComponent', () => {
     setUp(
       questionnaire({
         publishingMode: QuestionnairePublishingMode.UpTo,
-        publishedUpToContent: { position: 1 } as Content,
+        publishedUpToContent: { id: 'c-1', position: 1 } as Content,
       })
     );
 

@@ -352,10 +352,7 @@
             </div>
           </button>
         </div>
-        @if (
-          isRangePublished() &&
-          questionnaire().publishedUpToContent?.position === i
-        ) {
+        @if (isRangePublished() && publishedContentId() === content.id) {
           <div
             #publishingDivider
             cdkDrag
