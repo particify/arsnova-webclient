@@ -45,7 +45,6 @@ import {
 } from '@angular/material/menu';
 import { MatDivider } from '@angular/material/divider';
 import { HotkeyDirective } from '@app/core/directives/hotkey.directive';
-import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import {
@@ -65,6 +64,8 @@ import {
   QuestionnaireSummaryFragment,
   QuestionnaireType,
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
+  StartQuestionnaireContentGql,
+  StopQuestionnaireContentGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -99,7 +100,6 @@ import { filter, map, Observable, of, switchMap } from 'rxjs';
     MatDivider,
     MatMenuContent,
     HotkeyDirective,
-    CountdownTimerComponent,
     PulsatingCircleComponent,
     A11yRenderedBodyPipe,
     TranslocoPipe,
@@ -136,6 +136,12 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   private readonly updateQuestionnaireContentOrder = inject(
     UpdateQuestionnaireContentOrderGql
   );
+  private readonly startQuestionnaireContent = inject(
+    StartQuestionnaireContentGql
+  );
+  private readonly stopQuestionnaireContent = inject(
+    StopQuestionnaireContentGql
+  );
   private readonly publishQuestionnaireContentUpTo = inject(
     PublishQuestionnaireUpToContentGql
   );
@@ -147,7 +153,8 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   isModerator = input(false);
   attributionsExist = input(false);
   selectedContentId = input<string | undefined>();
-  startedContentChanged = output<string | undefined>();
+  startedContentId = input<string | undefined>();
+  startedContentChanged = output<string>();
 
   readonly questionnairesResult = toSignal(
     toObservable(this.roomId).pipe(
@@ -184,11 +191,6 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
 
   publishingChangeActive = false;
   publishingChangePosition?: number;
-
-  startedContentId?: string;
-  endDate?: Date;
-
-  finishedContents = new Map<string, boolean>();
 
   constructor() {
     super();
@@ -426,19 +428,6 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     return value?.toFixed() + '\u202F%';
   }
 
-  finishAnswering(): void {
-    if (this.startedContentId !== undefined) {
-      this.finishedContents.set(this.startedContentId, true);
-    }
-    this.endDate = undefined;
-    this.setStartedContent();
-  }
-
-  setStartedContent(id?: string): void {
-    this.startedContentId = id;
-    this.startedContentChanged.emit(this.startedContentId);
-  }
-
   hasFormatRounds(format: ContentType): boolean {
     return this.contentService.hasFormatRounds(format);
   }
@@ -549,5 +538,42 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
               ],
             })
     );
+  }
+
+  startContent(contentId: string) {
+    this.startQuestionnaireContent
+      .mutate({ variables: { contentId } })
+      .subscribe({
+        next: (r) => {
+          if (r.data?.startQuestionnaireContent) {
+            this.startedContentChanged.emit(contentId);
+            const msg = this.translateService.translate(
+              'creator.content.content-started'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.SUCCESS
+            );
+          }
+        },
+      });
+  }
+
+  stopContent() {
+    this.stopQuestionnaireContent
+      .mutate({ variables: { questionnaireId: this.questionnaire().id } })
+      .subscribe({
+        next: (r) => {
+          if (r.data?.stopQuestionnaireContent) {
+            const msg = this.translateService.translate(
+              'creator.content.content-stopped'
+            );
+            this.notificationService.showAdvanced(
+              msg,
+              AdvancedSnackBarTypes.WARNING
+            );
+          }
+        },
+      });
   }
 }

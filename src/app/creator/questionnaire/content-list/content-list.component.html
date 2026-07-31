@@ -80,14 +80,18 @@
                     'show-bar':
                       i === activeMenuIndex ||
                       content.id === activeContentId ||
-                      isLiveMode(),
+                      (isLiveMode() && startedContentId() === content.id),
                   }"
                 >
                   @if (contentTypes.indexOf(content.formatData.format) > -1) {
                     <div fxLayout="row">
                       @if (!isModerator() && isLiveMode()) {
-                        @if (false) {
+                        @if (
+                          startedContentId() === content.id &&
+                          !questionnaire().activeRound?.closed
+                        ) {
                           <button
+                            (click)="stopContent()"
                             mat-icon-button
                             style="margin-right: 8px"
                             class="stop-button"
@@ -99,47 +103,20 @@
                             <mat-icon>stop</mat-icon>
                           </button>
                         } @else {
-                          <div
-                            (click)="$event.stopPropagation()"
+                          <button
+                            mat-icon-button
+                            (click)="
+                              $event.stopPropagation(); startContent(content.id)
+                            "
+                            style="margin-right: 8px"
+                            class="start-button"
                             [matTooltip]="
-                              (startedContentId !== undefined
-                                ? 'creator.content.stop-active-content-to-start'
-                                : hasFormatRounds(content.formatData.format)
-                                  ? 'creator.content.starting-new-round-not-possible'
-                                  : 'creator.content.starting-multiple-rounds-not-available-for-content-type'
-                              ) | transloco
+                              'creator.content.start-content' | transloco
                             "
-                            [matTooltipDisabled]="
-                              startedContentId == undefined &&
-                              !(
-                                finishedContents.get(content.id) &&
-                                ((content.activeRound &&
-                                  content.activeRound.roundNo > 1) ||
-                                  !hasFormatRounds(content.formatData.format))
-                              )
-                            "
+                            [attr.data-testid]="'start-content-' + i"
                           >
-                            <button
-                              mat-icon-button
-                              [disabled]="
-                                startedContentId !== undefined ||
-                                (finishedContents.get(content.id) &&
-                                  ((content.activeRound &&
-                                    content.activeRound.roundNo > 1) ||
-                                    !hasFormatRounds(
-                                      content.formatData.format
-                                    )))
-                              "
-                              style="margin-right: 8px"
-                              class="start-button"
-                              [matTooltip]="
-                                'creator.content.start-content' | transloco
-                              "
-                              [attr.data-testid]="'start-content-' + i"
-                            >
-                              <mat-icon>play_arrow</mat-icon>
-                            </button>
-                          </div>
+                            <mat-icon>play_arrow</mat-icon>
+                          </button>
                         }
                       }
                       @if (!isModerator()) {
@@ -450,35 +427,22 @@
               </div>
             }
 
-            @if (isLiveMode() && endDate) {
+            @if (
+              isLiveMode() &&
+              questionnaire().activeRound?.id === content.activeRound?.id &&
+              !questionnaire().activeRound?.closed
+            ) {
               <div
                 fxLayout="row"
                 fxLayoutGap="4px"
                 fxLayoutAlign="start center"
                 class="live-info"
               >
-                @if (content.duration) {
-                  <app-countdown-timer
-                    [endDate]="endDate"
-                    [duration]="content.duration"
-                    [showProgressBar]="false"
-                    fontSize="12px"
-                    (finished)="finishAnswering()"
-                  >
-                  </app-countdown-timer>
-                } @else {
-                  <div
-                    fxLayout="row"
-                    fxLayoutGap="4px"
-                    fxLayoutAlign="start center"
-                  >
-                    <app-pulsating-circle></app-pulsating-circle>
-                    <span>{{ 'creator.content.live' | transloco }}</span>
-                  </div>
-                }
+                <app-pulsating-circle></app-pulsating-circle>
+                <span>{{ 'creator.content.live' | transloco }}</span>
               </div>
             }
-            @if (finishedContents.get(content.id)) {
+            @if (content.activeRound?.closed && content.answerCount) {
               <div
                 fxLayout="row"
                 fxLayoutGap="4px"

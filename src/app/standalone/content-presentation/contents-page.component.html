@@ -74,7 +74,10 @@
           [startIndex]="currentIndex()"
           [hideControls]="true"
           [language]="language()"
-          [isLiveMode]="isLiveMode()"
+          [isLiveMode]="isLive()"
+          [startedContentId]="
+            questionnaire()?.activeRound?.contentId ?? undefined
+          "
           (indexChanged)="updateURL($event)"
         >
         </app-content-stepper>
@@ -90,43 +93,44 @@
       }
     </div>
   </div>
+  @let _content = content();
   @if (
+    _content &&
     showHotkeyActionButtons() &&
     _questionnaire.published &&
-    isLiveMode() &&
-    content() &&
-    isPublished()
+    isLive() &&
+    isPublished() &&
+    (!questionnaire()?.activeRound?.closed ||
+      startedContentId() !== _content.id)
   ) {
-    <!-- @if (!content.state.answeringEndTime) {
-      <div @hotkeyEnterLeaveAnimation fxFill>
-        <app-hotkey-action-button
-          hotkey="s"
-          [hotkeyTitle]="'creator.content.start-content' | transloco"
-          [action]="'creator.content.to-start-content' | transloco"
-          [isNavBarVisible]="!hideControlBar()"
-          (buttonClicked)="startCountdown()"
-        ></app-hotkey-action-button>
-      </div>
-    }
-    @if (endDate && !answeringLocked) {
+    @if (startedContentId() === _content.id) {
       <div @hotkeyEnterLeaveAnimation fxFill>
         <app-hotkey-action-button
           hotkey="s"
           [hotkeyTitle]="'creator.content.stop-content' | transloco"
           [action]="'creator.content.to-stop-content' | transloco"
           [isNavBarVisible]="!hideControlBar()"
-          [additionalBottomSpace]="!answeringLocked"
-          (buttonClicked)="stopCountdown()"
+          (buttonClicked)="stopContent()"
         ></app-hotkey-action-button>
       </div>
-    } -->
+    } @else {
+      <div @hotkeyEnterLeaveAnimation fxFill>
+        <app-hotkey-action-button
+          hotkey="s"
+          [hotkeyTitle]="'creator.content.start-content' | transloco"
+          [action]="'creator.content.to-start-content' | transloco"
+          [isNavBarVisible]="!hideControlBar()"
+          (buttonClicked)="startContent()"
+        ></app-hotkey-action-button>
+      </div>
+    }
   }
   <div
     class="countdown-container"
     [ngClass]="{ 'over-control-bar': !hideControlBar() }"
   >
-    @if (content() && endDate && !answeringLocked) {
-      @let duration = content().duration;
+    @if (_content && endDate) {
+      @let duration = _content.duration;
       @if (duration) {
         <app-countdown-timer
           [endDate]="endDate"
@@ -134,7 +138,6 @@
           [showIcon]="true"
           [layout]="'column-reverse'"
           [bigFontSize]="true"
-          (finished)="answeringLocked = true"
         ></app-countdown-timer>
       } @else {
         <div
@@ -153,7 +156,6 @@
   @if (
     showHotkeyActionButtons() &&
     _questionnaire.published &&
-    content() &&
     !isPublished() &&
     !this.isPublishing
   ) {
@@ -169,7 +171,10 @@
     ></app-hotkey-action-button>
   }
   @if (
-    isPublished() && answeringLocked && endDate && showHotkeyActionButtons()
+    _content &&
+    isPublished() &&
+    questionnaire()?.activeRound?.closed &&
+    startedContentId() === _content.id
   ) {
     <div
       class="locked-hint"

@@ -39,7 +39,7 @@ describe('ContentParticipantComponent', () => {
   let component: ContentParticipantComponent;
   let answerByRoundId: jasmine.SpyObj<QuestionnaireAnswerByRoundIdGql>;
   let createAbstention: jasmine.SpyObj<CreateQuestionnaireAbstentionGql>;
-  let cache: { updateQuery: jasmine.Spy };
+  let cache: { modify: jasmine.Spy; updateQuery: jasmine.Spy };
 
   const choiceContent = {
     id: 'c-1',
@@ -116,7 +116,7 @@ describe('ContentParticipantComponent', () => {
         },
       }) as never
     );
-    cache = jasmine.createSpyObj('InMemoryCache', ['updateQuery']);
+    cache = jasmine.createSpyObj('InMemoryCache', ['modify', 'updateQuery']);
     const focusModeService = jasmine.createSpyObj('FocusModeService', [
       'getFocusModeEnabled',
     ]);

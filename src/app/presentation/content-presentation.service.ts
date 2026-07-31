@@ -39,7 +39,7 @@ export class ContentPresentationService {
   readonly currentContentIndex = this._currentContentIndex.asReadonly();
 
   readonly currentContent = computed(
-    () => this.contents()[this._currentContentIndex()]
+    (): Content | undefined => this.contents()[this._currentContentIndex()]
   );
 
   setQuestionnaireId(id: string) {

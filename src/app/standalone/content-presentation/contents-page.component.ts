@@ -32,6 +32,9 @@ import {
   PublishQuestionnaireUpToContentGql,
   Questionnaire,
   QuestionnaireByIdGql,
+  QuestionnairePublishingMode,
+  StartQuestionnaireContentGql,
+  StopQuestionnaireContentGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
@@ -94,6 +97,12 @@ export class ContentsPageComponent {
     ContentPresentationService
   );
   private readonly destroyRef = inject(DestroyRef);
+  private readonly startQuestionnaireContent = inject(
+    StartQuestionnaireContentGql
+  );
+  private readonly stopQuestionnaireContent = inject(
+    StopQuestionnaireContentGql
+  );
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
   private readonly publishQuestionnaireContentUpTo = inject(
     PublishQuestionnaireUpToContentGql
@@ -109,7 +118,6 @@ export class ContentsPageComponent {
   readonly noControlBar = input(false, { transform: booleanAttribute });
   readonly questionnaireId = input.required<string>();
   readonly contentId = input<string>();
-
   readonly settings = input.required<UserUiSettings>();
   readonly language = input.required<string>();
 
@@ -147,6 +155,10 @@ export class ContentsPageComponent {
     this.contentPresentationService.currentContent()
   );
 
+  readonly startedContentId = computed(
+    () => this.questionnaire()?.activeRound?.contentId
+  );
+
   readonly isPublished = computed(() => {
     const questionnaire = this.questionnaire();
     if (questionnaire) {
@@ -158,6 +170,11 @@ export class ContentsPageComponent {
       );
     }
   });
+
+  readonly isLive = computed(
+    () =>
+      this.questionnaire()?.publishingMode === QuestionnairePublishingMode.Live
+  );
 
   protected readonly scale = this.presentationService.scale;
 
@@ -182,7 +199,6 @@ export class ContentsPageComponent {
   attributions: ContentLicenseAttribution[] = [];
   endDate?: Date;
   showLeaderboard = false;
-  answeringLocked = false;
   isPublishing = false;
 
   private hotkeyRefs: symbol[] = [];
@@ -275,14 +291,15 @@ export class ContentsPageComponent {
   }
 
   updateRoute() {
+    const content = this.content();
+    if (!content) {
+      return;
+    }
     const currentPath = this.contentId() ? '..' : '.';
-    const urlTree = this.router.createUrlTree(
-      [currentPath, this.content().id],
-      {
-        relativeTo: this.route,
-        queryParams: this.route.snapshot.queryParams,
-      }
-    );
+    const urlTree = this.router.createUrlTree([currentPath, content.id], {
+      relativeTo: this.route,
+      queryParams: this.route.snapshot.queryParams,
+    });
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
@@ -328,21 +345,12 @@ export class ContentsPageComponent {
     const publishingIndex =
       this.questionnaire()?.publishedUpToContent?.position;
     if (
-      this.isLiveMode() &&
+      this.isLive() &&
       !this.isPublished() &&
-      (publishingIndex == null || index > publishingIndex) &&
-      this.answeringLocked
+      (publishingIndex == null || index > publishingIndex)
     ) {
       this.publishCurrentContent();
     }
-  }
-
-  startCountdown(): void {
-    this.presentationService.startContent(this.questionnaireId());
-  }
-
-  stopCountdown(): void {
-    this.presentationService.stopContent();
   }
 
   updateStateChange() {
@@ -374,7 +382,7 @@ export class ContentsPageComponent {
   }
 
   publishCurrentContent(): void {
-    const contentId = this.contentId();
+    const contentId = this.content()?.id;
     if (!contentId) {
       return;
     }
@@ -388,8 +396,19 @@ export class ContentsPageComponent {
       .subscribe();
   }
 
-  isLiveMode(): boolean {
-    const questionnaire = this.questionnaire();
-    return !!questionnaire && this.contentPublishService.isLive(questionnaire);
+  startContent() {
+    const contentId = this.content()?.id;
+    if (!contentId) {
+      return;
+    }
+    this.startQuestionnaireContent
+      .mutate({ variables: { contentId } })
+      .subscribe();
+  }
+
+  stopContent() {
+    this.stopQuestionnaireContent
+      .mutate({ variables: { questionnaireId: this.questionnaireId() } })
+      .subscribe();
   }
 }

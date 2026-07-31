@@ -37,6 +37,7 @@ export class ContentStepperComponent {
   contents = input.required<Content[]>();
   settings = input.required<UserUiSettings>();
   startIndex = input.required<number>();
+  startedContentId = input<string>();
 
   hideControls = input(false, { transform: booleanAttribute });
   showStepInfo = input(true);

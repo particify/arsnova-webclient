@@ -8,7 +8,9 @@
   @for (content of contents(); track content.id; let i = $index) {
     <cdk-step>
       <div fxLayoutAlign="center" id="step">
-        @if (!showStepInfo() || !isLiveMode()) {
+        @if (
+          !showStepInfo() || !isLiveMode() || content.id === startedContentId()
+        ) {
           <!--|| content.state.answeringEndTime) { -->
           <mat-card [ngClass]="{ 'no-card-appearance': hideControls() }">
             @if (currentStep === undefined) {

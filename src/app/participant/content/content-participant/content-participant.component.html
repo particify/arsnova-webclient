@@ -7,20 +7,20 @@
       'no-shadow': !showCard(),
     }"
   >
-    @if (showWaitingArea()) {
+    @let position = content().position;
+    @let contentCount = questionnaire().contentCount;
+    @if (
+      position != null && contentCount != null && !answer() && waitingForStart()
+    ) {
       <div fxFill>
-        @let position = content().position;
-        @let contentCount = questionnaire().contentCount;
-        @if (position != null && contentCount != null) {
-          <app-content-waiting
-            [current]="position"
-            [totalCount]="contentCount"
-            [alias]="alias()"
-            [roomId]="roomId()"
-            [timerActive]="!!content().duration"
-            [aliasRequired]="!!questionnaire().leaderboardEnabled"
-          ></app-content-waiting>
-        }
+        <app-content-waiting
+          [current]="position + 1"
+          [totalCount]="contentCount"
+          [alias]="alias()"
+          [roomId]="roomId()"
+          [timerActive]="!!content().duration"
+          [aliasRequired]="!!questionnaire().leaderboardEnabled"
+        ></app-content-waiting>
       </div>
     } @else {
       <div fxLayout="column" fxLayoutGap="0.5em">
@@ -41,7 +41,7 @@
             appDirContext
           ></app-rendered-text>
           @if (
-            (answer() || answeringLocked) &&
+            (answer() || answeringLocked()) &&
             content().formatData.format !== ContentType.Slide &&
             (statsPublished() || questionnaire().leaderboardEnabled)
           ) {
@@ -71,17 +71,11 @@
             </nav>
           }
         </div>
-        @if (
-          active() &&
-          _content.duration &&
-          endDate &&
-          !answeringLocked &&
-          !waitForCountdown
-        ) {
+        @if (active() && _content.duration && !answeringLocked() && endDate) {
           <app-countdown-timer
             [endDate]="endDate"
             [duration]="_content.duration"
-            (finished)="answeringLocked = true"
+            (finished)="answeringLocked.set(true)"
             [borderRadius]="3"
           ></app-countdown-timer>
         }
@@ -112,7 +106,7 @@
                   @if (
                     [ContentType.Slide, ContentType.Flashcard].indexOf(
                       content().formatData.format
-                    ) === -1 && !answeringLocked
+                    ) === -1 && !answeringLocked()
                   ) {
                     <div fxFill [ngClass]="{ invisible: answer() }">
                       <div
@@ -235,8 +229,8 @@
               fxLayoutAlign="center center"
               fxLayoutGap="1em"
               [ngClass]="{
-                visible: answer() || answeringLocked,
-                invisible: !answer() && !answeringLocked,
+                visible: answer() || answeringLocked(),
+                invisible: !answer() && !answeringLocked(),
               }"
               class="primary info-container"
               style="margin-top: 20px"
@@ -279,7 +273,7 @@
                     <ng-template [ngTemplateOutlet]="nextButton"></ng-template>
                   }
                 </div>
-              } @else if (answeringLocked) {
+              } @else if (answeringLocked()) {
                 <div>
                   <p>
                     {{ 'participant.answer.not-answered-in-time' | transloco }}

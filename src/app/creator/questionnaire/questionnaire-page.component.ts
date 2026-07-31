@@ -444,8 +444,8 @@ export class QuestionnairePageComponent {
     });
   }
 
-  handleActiveContentChanged(id?: string): void {
-    if (this.selectedContentId() !== id && !this.childActive) {
+  navToContent(id: string): void {
+    if (this.selectedContentId() !== id) {
       this.router.navigate(['.', id], { relativeTo: this.route });
     }
   }
