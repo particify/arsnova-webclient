@@ -10,7 +10,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
-import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import {
@@ -73,7 +73,7 @@ describe('ContentEditingComponent', () => {
         { provide: ContentService, useValue: contentService },
         { provide: ContentGroupService, useValue: contentGroupService },
         spyProvider(AnnounceService, ['announce']),
-        spyProvider(ContentPublishV4Service, ['isLive']),
+        spyProvider(ContentPublishService, ['isLive']),
         spyProvider(FormattingService, ['containsTextAnImage']),
         spyProvider(NotificationService, ['showAdvanced']),
         spyProvider(QuestionnairePageService, ['updateEditedContent']),

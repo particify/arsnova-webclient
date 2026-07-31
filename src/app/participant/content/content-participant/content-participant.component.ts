@@ -33,7 +33,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CoreModule } from '@app/core/core.module';
-import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 import {
@@ -97,7 +97,7 @@ interface ContentActionTab {
 export class ContentParticipantComponent {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
-  private readonly contentPublishService = inject(ContentPublishV4Service);
+  private readonly contentPublishService = inject(ContentPublishService);
   private readonly focusModeService = inject(FocusModeService);
   private readonly answerByRoundId = inject(QuestionnaireAnswerByRoundIdGql);
   private readonly cache = inject(Apollo).client.cache;

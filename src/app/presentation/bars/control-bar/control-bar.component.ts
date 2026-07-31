@@ -524,12 +524,6 @@ export class ControlBarComponent
       this.activeFeature.emit(feature);
       if (feature === RoutingFeature.CONTENTS) {
         this.setArrowsState(this.contentStepState);
-        if (
-          this.activeQuestionnaire() &&
-          !this.activeQuestionnaire().published
-        ) {
-          //this.publishContentGroup(this.group);
-        }
       } else if (feature === RoutingFeature.COMMENTS) {
         this.setArrowsState(this.commentStepState);
       }
@@ -666,12 +660,9 @@ export class ControlBarComponent
   }
 
   changeGroup(questionnaire: QuestionnaireSummaryFragment) {
+    // Presenting an unpublished questionnaire offers to publish it.
     if (this.activeQuestionnaire()?.id !== questionnaire.id) {
-      if (questionnaire.published) {
-        this.activeQuestionnaire.set(questionnaire);
-      } else {
-        // TODO: Publish questionnaire
-      }
+      this.activeQuestionnaire.set(questionnaire);
     }
   }
 

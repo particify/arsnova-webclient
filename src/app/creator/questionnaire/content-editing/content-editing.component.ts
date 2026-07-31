@@ -52,7 +52,7 @@ import {
   Questionnaire,
   QuestionnaireType,
 } from '@gql/generated/graphql';
-import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { FORM_REGISTRY } from './form-registry';
 import { WordcloudContentFormComponent } from './wordcloud-content-form/wordcloud-content-form.component';
@@ -107,7 +107,7 @@ export class ContentEditingComponent {
   private readonly contentService = inject(ContentService);
   private readonly contentGroupService = inject(ContentGroupService);
   private readonly notificationService = inject(NotificationService);
-  private readonly contentPublishService = inject(ContentPublishV4Service);
+  private readonly contentPublishService = inject(ContentPublishService);
 
   private readonly formComponentOutlet =
     viewChild<NgComponentOutlet>(NgComponentOutlet);

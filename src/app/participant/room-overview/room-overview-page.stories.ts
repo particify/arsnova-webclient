@@ -6,7 +6,6 @@ import { RoomService } from '@app/core/services/http/room.service';
 import { RoomOverviewPageComponent } from '@app/participant/room-overview/room-overview-page.component';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import { RoomStats } from '@app/core/models/room-stats';
@@ -135,10 +134,6 @@ export default {
         {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
-        },
-        {
-          provide: ContentPublishService,
-          useClass: MockService,
         },
         {
           provide: FocusModeService,

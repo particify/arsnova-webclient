@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { SettingsSlideToggleComponent } from '@app/standalone/settings-slide-toggle/settings-slide-toggle.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import {
   QuestionnaireType,
   UpdateQuestionnaireGql,
@@ -43,7 +42,6 @@ export default {
         LoadingButtonComponent,
       ],
       providers: [
-        ContentPublishService,
         {
           provide: MatDialogRef,
           useClass: MockDialogRef,

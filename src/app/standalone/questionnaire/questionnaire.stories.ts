@@ -1,7 +1,6 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 import { QuestionnaireComponent } from './questionnaire.component';
 import { RoutingService } from '@app/core/services/util/routing.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import {
   QuestionnaireType,
@@ -44,7 +43,6 @@ export default {
     moduleMetadata({
       imports: [QuestionnaireComponent],
       providers: [
-        ContentPublishService,
         {
           provide: ToggleQuestionnairePublishedGql,
           useValue: toggleQuestionnairePublishedGqlMock,

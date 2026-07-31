@@ -7,9 +7,15 @@ import {
   ChangeDetectionStrategy,
   computed,
   effect,
+  untracked,
   viewChild,
   DestroyRef,
 } from '@angular/core';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import {
+  AdvancedSnackBarTypes,
+  NotificationService,
+} from '@app/core/services/util/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalStorageService,
@@ -47,7 +53,7 @@ import { ContentGroupLeaderboardComponent } from '@app/standalone/content-group-
 import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsating-circle.component';
 import { CountComponent } from '@app/standalone/count/count.component';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
-import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
@@ -77,10 +83,12 @@ export class ContentsPageComponent {
   private readonly router = inject(Router);
   private readonly presentationService = inject(PresentationService);
   private readonly focusModeService = inject(FocusModeService);
-  private readonly contentPublishService = inject(ContentPublishV4Service);
+  private readonly contentPublishService = inject(ContentPublishService);
   private readonly eventService = inject(EventService);
   private readonly translateService = inject(TranslocoService);
   private readonly hotkeyService = inject(HotkeyService);
+  private readonly dialogService = inject(DialogService);
+  private readonly notificationService = inject(NotificationService);
   private readonly contentPresentationService = inject(
     ContentPresentationService
   );
@@ -156,7 +164,11 @@ export class ContentsPageComponent {
   });
 
   initialized = false;
-  responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
+  /** The presented content carries its counts, which its queries keep current. */
+  readonly responseCounts = computed<AnswerResponseCounts>(() => ({
+    answers: this.content()?.answerCount ?? 0,
+    abstentions: this.content()?.abstentionCount ?? 0,
+  }));
   canAnswerContent = false;
   attributions: ContentLicenseAttribution[] = [];
   endDate?: Date;
@@ -165,6 +177,7 @@ export class ContentsPageComponent {
   isPublishing = false;
 
   private hotkeyRefs: symbol[] = [];
+  private publishingOfferedFor?: string;
 
   stepper = viewChild(ContentStepperComponent);
 
@@ -195,6 +208,18 @@ export class ContentsPageComponent {
         this.questionnaireId()
       );
     });
+    effect(() => {
+      const questionnaire = this.questionnaire();
+      if (
+        questionnaire &&
+        !questionnaire.published &&
+        !this.noControlBar() &&
+        this.publishingOfferedFor !== questionnaire.id
+      ) {
+        this.publishingOfferedFor = questionnaire.id;
+        untracked(() => this.offerPublishing(questionnaire));
+      }
+    });
     this.eventService
       .on<boolean>('ControlBarVisible')
       .subscribe((isVisible) => {
@@ -216,6 +241,25 @@ export class ContentsPageComponent {
     this.destroyRef.onDestroy(() => {
       this.hotkeyRefs.forEach((h) => this.hotkeyService.unregisterHotkey(h));
     });
+  }
+
+  /**
+   * An unpublished questionnaire shows participants nothing, so presenting it
+   * starts with asking to publish it. The watched questionnaire picks up the
+   * result.
+   */
+  private offerPublishing(questionnaire: Questionnaire) {
+    this.dialogService
+      .openPublishGroupDialog(questionnaire.id, questionnaire.publishingMode)
+      .afterClosed()
+      .subscribe((publishingMode) => {
+        if (publishingMode) {
+          this.notificationService.showAdvanced(
+            this.translateService.translate('creator.content.group-published'),
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        }
+      });
   }
 
   private toggleLeaderboard() {

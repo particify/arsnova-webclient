@@ -11,7 +11,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
 import {
   QuestionnairePublishingMode,
-  ToggleQuestionnairePublishedGql,
+  UpdateQuestionnaireGql,
 } from '@gql/generated/graphql';
 import { provideTranslocoScope } from '@jsverse/transloco';
 
@@ -41,9 +41,7 @@ export class PublishContentGroupDialogComponent extends FormComponent {
     questionnaireId: string;
     publishingMode: QuestionnairePublishingMode;
   }>(MAT_DIALOG_DATA);
-  private readonly toggleQuestionnairePublished = inject(
-    ToggleQuestionnairePublishedGql
-  );
+  private readonly updateQuestionnaire = inject(UpdateQuestionnaireGql);
 
   readonly dialogId = 'publish-content';
 
@@ -58,16 +56,23 @@ export class PublishContentGroupDialogComponent extends FormComponent {
     super();
   }
 
+  /** A live questionnaire keeps its mode; otherwise the chosen one applies. */
   updatePublishingMode(): void {
-    if (!this.selectedMode && !this.isLive) {
-      return;
-    }
-    this.toggleQuestionnairePublished
+    const publishingMode = this.isLive()
+      ? QuestionnairePublishingMode.Live
+      : this.selectedMode().type;
+    this.disableForm();
+    this.updateQuestionnaire
       .mutate({
-        variables: { id: this.data.questionnaireId, published: true },
+        variables: {
+          id: this.data.questionnaireId,
+          published: true,
+          publishingMode,
+        },
       })
       .subscribe({
-        next: () => this.close(this.selectedMode().type),
+        next: () => this.close(publishingMode),
+        error: () => this.enableForm(),
       });
   }
 

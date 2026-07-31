@@ -49,7 +49,6 @@ import { DemoService } from '@app/core/services/demo.service';
 import { HotkeyService } from '@app/core/services/util/hotkey.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { RemoteService } from '@app/core/services/util/remote.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TitleStrategy } from '@angular/router';
 import { CustomPageTitleStrategy } from '@app/core/custom-title-strategy';
@@ -183,7 +182,6 @@ export const AppConfig: ApplicationConfig = {
     HotkeyService,
     PresentationService,
     RemoteService,
-    ContentPublishService,
     { provide: Window, useValue: window },
     STORAGE_CONFIG_PROVIDERS,
     {

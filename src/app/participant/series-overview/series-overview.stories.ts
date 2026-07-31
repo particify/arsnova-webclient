@@ -5,7 +5,6 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { CommentFocusState } from '@app/core/models/events/remote/comment-focus-state';
 import {
@@ -281,10 +280,6 @@ export default {
         {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
-        },
-        {
-          provide: ContentPublishService,
-          useClass: MockService,
         },
         {
           provide: FocusModeService,

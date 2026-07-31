@@ -5,7 +5,6 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import {
   ContentGroup,
@@ -233,20 +232,6 @@ class MockContentService {
   }
 }
 
-class MockContentPublishService {
-  filterPublishedIds() {
-    return ['content1', 'content2', 'content3', 'content4'];
-  }
-
-  isIndexPublished() {
-    return true;
-  }
-
-  isGroupLive() {
-    return false;
-  }
-}
-
 class MockRoomUserAliasService {}
 
 export default {
@@ -268,10 +253,6 @@ export default {
         {
           provide: ContentGroupService,
           useClass: MockContentGroupService,
-        },
-        {
-          provide: ContentPublishService,
-          useClass: MockContentPublishService,
         },
         {
           provide: FocusModeService,

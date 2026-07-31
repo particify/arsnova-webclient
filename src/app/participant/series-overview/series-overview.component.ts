@@ -51,7 +51,7 @@ import {
   ContentType,
   QuestionnaireAnswerResultsByQuestionnaireIdGql,
 } from '@gql/generated/graphql';
-import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 
@@ -91,7 +91,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   private themeService = inject(ThemeService);
   private router = inject(Router);
   private contentCarouselService = inject(ContentCarouselService);
-  private contentPublishService = inject(ContentPublishV4Service);
+  private contentPublishService = inject(ContentPublishService);
   private answerService = inject(ContentAnswerService);
   private readonly questionnaireAnswerResults = inject(
     QuestionnaireAnswerResultsByQuestionnaireIdGql

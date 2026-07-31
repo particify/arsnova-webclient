@@ -5,7 +5,6 @@ import { AuthenticationService } from '@app/core/services/http/authentication.se
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { RoomService } from '@app/core/services/http/room.service';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import {
   ContentGroup,
@@ -23,6 +22,7 @@ import { PresentationService } from '@app/core/services/util/presentation.servic
 import {
   ContentType,
   QuestionnaireContentsByQuestionnaireIdGql,
+  QuestionnaireByIdGql,
   QuestionnairePublishingMode,
   QuestionnaireType,
 } from '@gql/generated/graphql';
@@ -86,23 +86,22 @@ class MockFormattingService {}
 
 class MockContentService {}
 
-class MockContentPublishService {
-  filterPublishedIds() {
-    return ['content1', 'content2', 'content3', 'content4'];
-  }
-
-  isIndexPublished() {
-    return true;
-  }
-
-  isGroupLive() {
-    return false;
-  }
-
-  isGroupLocked() {
-    return false;
-  }
-}
+const questionnaireByIdGqlMock = {
+  watch: () => ({
+    valueChanges: of({
+      data: {
+        questionnaireById: {
+          id: 'questionnaireId',
+          name: 'Quiz',
+          contentCount: 42,
+          published: true,
+          type: QuestionnaireType.Quiz,
+          publishingMode: QuestionnairePublishingMode.All,
+        },
+      },
+    }),
+  }),
+};
 
 class MockContentAnswerService {
   getAnswers() {
@@ -209,8 +208,8 @@ export default {
           useClass: MockContentGroupService,
         },
         {
-          provide: ContentPublishService,
-          useClass: MockContentPublishService,
+          provide: QuestionnaireByIdGql,
+          useValue: questionnaireByIdGqlMock,
         },
         {
           provide: FocusModeService,
@@ -288,14 +287,7 @@ export const ContentsPagePresentation: Story = {
     showResults: true,
     contentIndex: 1,
     noControlBar: undefined,
-    questionnaire: {
-      id: 'questionnaireId',
-      name: 'Quiz',
-      contentCount: 42,
-      published: true,
-      type: QuestionnaireType.Quiz,
-      publishingMode: QuestionnairePublishingMode.All,
-    },
+    questionnaireId: 'questionnaireId',
     language: 'de',
     settings: {},
   },

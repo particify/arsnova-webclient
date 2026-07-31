@@ -66,7 +66,7 @@ import {
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
-import { ContentPublishV4Service } from '@app/core/services/util/content-publish-v4.service';
+import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, Observable, of, switchMap } from 'rxjs';
 
@@ -109,7 +109,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   private readonly translateService = inject(TranslocoService);
   private readonly dialogService = inject(DialogService);
   private readonly contentGroupService = inject(ContentGroupService);
-  private readonly contentPublishService = inject(ContentPublishV4Service);
+  private readonly contentPublishService = inject(ContentPublishService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
