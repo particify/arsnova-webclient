@@ -134,6 +134,9 @@ export class QuestionnairePageComponent {
   showStepper = input(true, { transform: setDefaultTrue });
   language = input.required<string>();
   contentId = input<string>();
+  // Set by the dedicated overview route to suppress the entry jump to the
+  // content a live series is currently at.
+  overview = input(false);
 
   readonly questionnaire = toSignal(
     toObservable(this.questionnaireId).pipe(
@@ -214,6 +217,42 @@ export class QuestionnairePageComponent {
     Array.from(Array(this.questionnaire()?.contentCount ?? 0).keys())
   );
 
+  private readonly questionnaireInLiveMode = computed(() => {
+    const questionnaire = this.questionnaire();
+    return questionnaire?.publishingMode === QuestionnairePublishingMode.Live
+      ? questionnaire
+      : undefined;
+  });
+
+  private readonly activeUnansweredContentId = computed(() => {
+    const round = this.questionnaireInLiveMode()?.activeRound;
+    if (!round?.contentId || round.closed) {
+      return undefined;
+    }
+    const result = this.answerResults().find(
+      (r) => r.contentId === round.contentId
+    );
+    return result?.result === AnswerResultState.Unanswered
+      ? round.contentId
+      : undefined;
+  });
+
+  readonly startedContentPosition = computed(() => {
+    const contentId = this.questionnaireInLiveMode()?.activeRound?.contentId;
+    if (!contentId) {
+      return undefined;
+    }
+    return (
+      this.contents().find((c) => c.id === contentId)?.position ?? undefined
+    );
+  });
+
+  private readonly liveContentId = computed(
+    () =>
+      this.activeUnansweredContentId() ??
+      this.questionnaireInLiveMode()?.publishedUpToContent?.id
+  );
+
   readonly userId = toSignal(
     this.authenticationService.getCurrentAuthentication().pipe(
       takeUntilDestroyed(this.destroyRef),
@@ -226,6 +265,7 @@ export class QuestionnairePageComponent {
 
   started = false;
   currentStep?: number;
+  private followedLiveContentId?: string;
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
   private readonly contentFocusState = toSignal(
     this.focusModeService.getContentState()
@@ -304,27 +344,20 @@ export class QuestionnairePageComponent {
       untracked(() => this.followFocusedContent(state.contentId));
     });
 
-    // Live mode auto-follows the content the moderator just started, the
-    // same way the moderator's own client jumps ahead after starting it.
     effect(() => {
-      const questionnaire = this.questionnaire();
-      if (
-        !questionnaire ||
-        !this.started ||
-        !this.stepper() ||
-        this.focusModeEnabled()
-      ) {
+      const liveContentId = this.liveContentId();
+      if (!this.started || !this.stepper() || this.focusModeEnabled()) {
         return;
       }
-      const activeContentId = questionnaire.activeRound?.contentId;
-      if (
-        questionnaire.publishingMode !== QuestionnairePublishingMode.Live ||
-        !activeContentId
-      ) {
+      if (!liveContentId || liveContentId === this.followedLiveContentId) {
         return;
       }
-      const index = this.getIndexOfContentById(activeContentId);
-      if (index >= 0 && index !== this.currentStep) {
+      const index = this.getIndexOfContentById(liveContentId);
+      if (index < 0) {
+        return;
+      }
+      this.followedLiveContentId = liveContentId;
+      if (index !== this.currentStep) {
         this.goToContent(index);
       }
     });
@@ -450,21 +483,40 @@ export class QuestionnairePageComponent {
   }
 
   checkIfLastContentExists(contentId?: string) {
-    // Since `null >= 0` is `true` trough a type coercion with `ToPrimitive() this muste be checked seperately
-    const index = this.contents().findIndex((c) => c.id === contentId);
-    if (index !== undefined && (index == 0 || index > 0)) {
-      this.initStepper(index);
-    } else {
-      if (!this.focusModeEnabled()) {
-        this.getInitialStep();
-      }
+    if (this.overview()) {
+      this.started = true;
+      return;
     }
+    if (this.enterAtActiveLiveContent()) {
+      return;
+    }
+    const index = this.contents().findIndex((c) => c.id === contentId);
+    if (index >= 0) {
+      this.initStepper(index);
+      return;
+    }
+    if (this.focusModeEnabled()) {
+      return;
+    }
+    const liveContentId = this.liveContentId();
+    const liveIndex = liveContentId
+      ? this.getIndexOfContentById(liveContentId)
+      : -1;
+    if (liveIndex >= 0) {
+      this.initStepper(liveIndex);
+      this.router.navigate(this.contentUrl(liveContentId), {
+        replaceUrl: true,
+      });
+      return;
+    }
+    this.getInitialStep();
   }
 
   initStepper(index: number) {
     setTimeout(() => {
       this.currentStep = index;
       if (this.stepper()) this.stepper()?.init(index, this.contents()?.length);
+      this.followedLiveContentId = this.liveContentId();
       this.started = true;
     });
   }
@@ -479,14 +531,38 @@ export class QuestionnairePageComponent {
     if (this.currentStep !== index) {
       this.currentStep = index || 0;
       const content = this.contents().find((c) => c.position === index);
-      this.replaceUrl([
-        'p',
-        this.shortId(),
-        'questionnaire',
-        this.questionnaireId(),
-        content?.id,
-      ]);
+      this.replaceUrl(this.contentUrl(content?.id));
     }
+  }
+
+  private questionnaireUrl(...segments: string[]): string[] {
+    return [
+      'p',
+      this.shortId(),
+      'questionnaire',
+      this.questionnaireId(),
+      ...segments,
+    ];
+  }
+
+  private contentUrl(contentId?: string): string[] {
+    return this.questionnaireUrl(...(contentId ? [contentId] : []));
+  }
+
+  private enterAtActiveLiveContent(): boolean {
+    const activeContentId = this.activeUnansweredContentId();
+    if (!activeContentId || this.focusModeEnabled()) {
+      return false;
+    }
+    const activeIndex = this.getIndexOfContentById(activeContentId);
+    if (activeIndex < 0) {
+      return false;
+    }
+    this.initStepper(activeIndex);
+    this.router.navigate(this.contentUrl(activeContentId), {
+      replaceUrl: true,
+    });
+    return true;
   }
 
   private getInitialStep() {
@@ -499,8 +575,10 @@ export class QuestionnairePageComponent {
     ) {
       this.initStepper(firstIndex || 0);
       this.router.navigate(
-        ['.', this.contents().find((c) => c.position === firstIndex)?.id],
-        { relativeTo: this.route, replaceUrl: true }
+        this.contentUrl(
+          this.contents().find((c) => c.position === firstIndex)?.id
+        ),
+        { replaceUrl: true }
       );
     }
   }
@@ -537,7 +615,9 @@ export class QuestionnairePageComponent {
   }
 
   goToOverview() {
-    this.router.navigate(['..'], { relativeTo: this.route, replaceUrl: true });
+    this.router.navigate(this.questionnaireUrl('overview'), {
+      replaceUrl: true,
+    });
   }
 
   replaceUrl(url: any[]) {

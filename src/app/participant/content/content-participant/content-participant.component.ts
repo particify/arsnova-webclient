@@ -160,6 +160,7 @@ export class ContentParticipantComponent {
   answerResult = input<AnswerResultState>();
   activeTab = input<string>();
   finished = input(false);
+  startedPosition = input<number>();
   next = output<void>();
 
   private readonly answerRef = toSignal(
@@ -197,23 +198,18 @@ export class ContentParticipantComponent {
     () => this.answer()?.result === AnswerResultState.Abstained
   );
 
-  /**
-   * Whether this content is the one of the questionnaire's active round.
-   * Compared by round, not by the content back reference of the round: that
-   * field is only part of the questionnaire's selection set, so it cannot be
-   * relied on for a round that was written to the cache by another query.
-   */
-  readonly isContentOfActiveRound = computed(() => {
-    const activeRoundId = this.questionnaire().activeRound?.id;
-    return !!activeRoundId && activeRoundId === this.content().activeRound?.id;
+  readonly waitingForStart = computed(() => {
+    if (
+      this.questionnaire().publishingMode !== QuestionnairePublishingMode.Live
+    ) {
+      return false;
+    }
+    const startedPosition = this.startedPosition();
+    const position = this.content().position;
+    return (
+      startedPosition == null || position == null || position > startedPosition
+    );
   });
-
-  /** Live mode shows a waiting area until the content has been started. */
-  readonly waitingForStart = computed(
-    () =>
-      this.questionnaire().publishingMode ===
-        QuestionnairePublishingMode.Live && !this.isContentOfActiveRound()
-  );
 
   answeringLocked = linkedSignal(
     () =>

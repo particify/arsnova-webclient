@@ -80,6 +80,20 @@ const routes: Routes = [
     },
     title: 'questionnaire',
   },
+  // Must precede the :contentId route so the literal segment wins the match.
+  {
+    path: 'questionnaire/:questionnaireId/overview',
+    component: QuestionnairePageComponent,
+    data: {
+      feature: RoutingFeature.CONTENTS,
+      overview: true,
+    },
+    resolve: {
+      questionnaire: questionnaireResolver,
+      settings: userSettingsResolver,
+    },
+    title: 'questionnaire',
+  },
   {
     path: 'questionnaire/:questionnaireId/:contentId',
     component: QuestionnairePageComponent,
