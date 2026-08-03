@@ -22,6 +22,10 @@ $step-button-count: 5;
   overflow: hidden;
 }
 
+.slide-header {
+  transition: transform 300ms ease-out;
+}
+
 .step-container {
   margin: 0
     calc(
