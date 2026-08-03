@@ -22,7 +22,15 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
-import { filter, map, switchMap, take } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  filter,
+  ignoreElements,
+  map,
+  switchMap,
+  take,
+} from 'rxjs';
 import {
   CARD_WIDTH,
   PresentationService,
@@ -32,6 +40,7 @@ import {
   PublishQuestionnaireUpToContentGql,
   Questionnaire,
   QuestionnaireByIdGql,
+  QuestionnaireContentUpdatedGql,
   QuestionnairePublishingMode,
   StartQuestionnaireContentGql,
   StopQuestionnaireContentGql,
@@ -120,6 +129,27 @@ export class ContentsPageComponent {
   readonly contentId = input<string>();
   readonly settings = input.required<UserUiSettings>();
   readonly language = input.required<string>();
+
+  private readonly questionnaireContentUpdated = inject(
+    QuestionnaireContentUpdatedGql
+  );
+
+  /**
+   * Feeds incoming answer counts into the cache, which the presented contents
+   * and so the answer counter are watched from.
+   */
+  private readonly contentUpdates = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) =>
+        this.questionnaireContentUpdated
+          .subscribe({ variables: { questionnaireId } })
+          .pipe(
+            ignoreElements(),
+            catchError(() => EMPTY)
+          )
+      )
+    )
+  );
 
   readonly questionnaire = toSignal(
     toObservable(this.questionnaireId).pipe(

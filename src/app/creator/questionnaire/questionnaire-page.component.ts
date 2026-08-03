@@ -36,7 +36,14 @@ import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/
 import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-settings/questionnaire-settings.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { mutationHelper } from '@gql/helper/mutation-helper';
-import { switchMap, map, filter } from 'rxjs';
+import {
+  switchMap,
+  map,
+  filter,
+  catchError,
+  ignoreElements,
+  EMPTY,
+} from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -60,6 +67,7 @@ import {
   QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
+  QuestionnaireContentUpdatedGql,
   QuestionnairePublishingMode,
   QuestionnaireType,
   ResetQuestionnaireResultsGql,
@@ -137,6 +145,9 @@ export class QuestionnairePageComponent {
     ResetQuestionnaireResultsGql
   );
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
+  private readonly questionnaireContentUpdated = inject(
+    QuestionnaireContentUpdatedGql
+  );
 
   readonly userRole = input.required<UserRole>();
   readonly roomId = input.required<string>();
@@ -161,6 +172,18 @@ export class QuestionnairePageComponent {
           variables: { questionnaireId: questionnaireId },
         }).valueChanges;
       })
+    )
+  );
+  private readonly contentUpdates = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) =>
+        this.questionnaireContentUpdated
+          .subscribe({ variables: { questionnaireId } })
+          .pipe(
+            ignoreElements(),
+            catchError(() => EMPTY)
+          )
+      )
     )
   );
   readonly contents = computed(() => {

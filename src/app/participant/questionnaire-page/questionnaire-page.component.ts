@@ -57,6 +57,7 @@ import {
   Questionnaire,
   QuestionnaireByIdGql,
   QuestionnaireContentAnswerResultsByQuestionnaireIdGql,
+  QuestionnaireContentUpdatedGql,
   QuestionnairePublishedContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
   QuestionnaireUpdatedGql,
@@ -120,6 +121,9 @@ export class QuestionnairePageComponent {
   );
   private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
+  private readonly questionnaireContentUpdated = inject(
+    QuestionnaireContentUpdatedGql
+  );
   private readonly notificationService = inject(NotificationService);
 
   stepper = viewChild(StepperComponent);
@@ -175,6 +179,26 @@ export class QuestionnairePageComponent {
           })
           .valueChanges.pipe(onlyCompleteData());
       })
+    )
+  );
+
+  // Feeds the answer counts into the normalized contents; only readable while
+  // the questionnaire is published.
+  private readonly contentUpdates = toSignal(
+    toObservable(this.questionnaire).pipe(
+      filter((q): q is Questionnaire => !!q),
+      map((q) => (q.published ? q.id : undefined)),
+      distinctUntilChanged(),
+      switchMap((questionnaireId) =>
+        questionnaireId
+          ? this.questionnaireContentUpdated
+              .subscribe({ variables: { questionnaireId } })
+              .pipe(
+                ignoreElements(),
+                catchError(() => EMPTY)
+              )
+          : EMPTY
+      )
     )
   );
 

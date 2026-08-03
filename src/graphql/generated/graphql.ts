@@ -3613,6 +3613,27 @@ export type QuestionnaireUpdatedSubscription = {
   } | null;
 };
 
+export type QuestionnaireContentUpdatedSubscriptionVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireContentUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireContentUpdated?: {
+    __typename?: 'Content';
+    id: string;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+    } | null;
+  } | null;
+};
+
 export type QuestionnaireChoiceRoundStatsUpdatedSubscriptionVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -6712,6 +6733,35 @@ export class QuestionnaireUpdatedGql extends Apollo.Subscription<
   QuestionnaireUpdatedSubscriptionVariables
 > {
   document = QuestionnaireUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireContentUpdatedDocument = gql`
+  subscription QuestionnaireContentUpdated($questionnaireId: UUID!) {
+    questionnaireContentUpdated(questionnaireId: $questionnaireId) {
+      id
+      answerCount
+      abstentionCount
+      correctAnswerCount
+      activeRound {
+        id
+        roundNo
+        closed
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireContentUpdatedGql extends Apollo.Subscription<
+  QuestionnaireContentUpdatedSubscription,
+  QuestionnaireContentUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireContentUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -380,6 +380,20 @@ subscription QuestionnaireUpdated($questionnaireId: UUID!) {
   }
 }
 
+subscription QuestionnaireContentUpdated($questionnaireId: UUID!) {
+  questionnaireContentUpdated(questionnaireId: $questionnaireId) {
+    id
+    answerCount
+    abstentionCount
+    correctAnswerCount
+    activeRound {
+      id
+      roundNo
+      closed
+    }
+  }
+}
+
 subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
   questionnaireChoiceRoundStatsUpdated(roundId: $roundId) {
     selectionCounts
