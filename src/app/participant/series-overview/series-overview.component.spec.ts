@@ -230,4 +230,46 @@ describe('SeriesOverviewComponent', () => {
     expect(items[2].querySelector('mat-icon')).toBeNull();
     expect(items[1].querySelector('app-loading-indicator')).toBeNull();
   });
+
+  describe('score', () => {
+    function scoreQueries() {
+      return (
+        TestBed.inject(QuestionnaireAnswerResultsByQuestionnaireIdGql)
+          .watch as jasmine.Spy
+      ).calls;
+    }
+
+    function update(changes: Partial<Questionnaire>) {
+      fixture.componentRef.setInput('questionnaire', {
+        id: 'q-1',
+        name: 'Slides',
+        type: QuestionnaireType.Mixed,
+        leaderboardEnabled: false,
+        ...changes,
+      } as Questionnaire);
+      fixture.detectChanges();
+    }
+
+    it('fetches the score anew once the correct answers are published', () => {
+      setUp();
+      const fetches = scoreQueries().count();
+
+      update({ correctOptionsPublished: true });
+
+      expect(scoreQueries().count()).toBe(fetches + 1);
+      expect(scoreQueries().mostRecent().args[0]).toEqual({
+        variables: { questionnaireId: 'q-1' },
+        fetchPolicy: 'network-only',
+      });
+    });
+
+    it('keeps the score for other changes of the questionnaire', () => {
+      setUp();
+      const fetches = scoreQueries().count();
+
+      update({ name: 'Renamed' });
+
+      expect(scoreQueries().count()).toBe(fetches);
+    });
+  });
 });

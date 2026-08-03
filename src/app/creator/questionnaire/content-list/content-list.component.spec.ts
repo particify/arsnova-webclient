@@ -14,11 +14,14 @@ import {
   DeleteQuestionnaireContentGql,
   DuplicateQuestionnaireContentGql,
   MoveQuestionnaireContentToQuestionnaireGql,
+  PublishQuestionnaireUpToContentGql,
   Questionnaire,
   QuestionnairePublishingMode,
   QuestionnairesByRoomIdGql,
   QuestionnaireType,
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
+  StartQuestionnaireContentGql,
+  StopQuestionnaireContentGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
@@ -128,6 +131,9 @@ describe('ContentListComponent', () => {
         mutationSpy(MoveQuestionnaireContentToQuestionnaireGql),
         mutationSpy(ResetBannedQuestionnaireWordcloudContentKeywordsGql),
         mutationSpy(UpdateQuestionnaireContentOrderGql),
+        mutationSpy(PublishQuestionnaireUpToContentGql),
+        mutationSpy(StartQuestionnaireContentGql),
+        mutationSpy(StopQuestionnaireContentGql),
       ]
     ).compileComponents();
 
@@ -398,5 +404,194 @@ describe('ContentListComponent', () => {
     expect(
       translationParams('creator.content.publishing-index-info')
     ).toContain({ index: 2 });
+  });
+
+  describe('publishing range', () => {
+    const upTo = (position: number) =>
+      questionnaire({
+        publishingMode: QuestionnairePublishingMode.UpTo,
+        publishedUpToContent: {
+          id: `c-${position}`,
+          position,
+        } as Content,
+      });
+
+    function publishedUpTo() {
+      return mutation(PublishQuestionnaireUpToContentGql).calls.mostRecent()
+        .args[0].variables;
+    }
+
+    it('publishes up to the content above the dropped divider', () => {
+      setUp(upTo(1));
+
+      component.dropPublishingDivider({ currentIndex: 4 } as never);
+
+      expect(publishedUpTo()).toEqual({
+        questionnaireId: 'q-1',
+        contentId: 'c-3',
+      });
+      expect(component.publishedContentId()).toBe('c-3');
+    });
+
+    it('publishes nothing if the divider is dropped in place', () => {
+      setUp(upTo(1));
+
+      component.dropPublishingDivider({ currentIndex: 2 } as never);
+
+      expect(
+        mutation(PublishQuestionnaireUpToContentGql)
+      ).not.toHaveBeenCalled();
+    });
+
+    it('moves the divider back if publishing fails', () => {
+      setUp(upTo(1));
+      mutation(PublishQuestionnaireUpToContentGql).and.returnValue(
+        throwError(() => new Error('failed'))
+      );
+
+      component.dropPublishingDivider({ currentIndex: 4 } as never);
+
+      expect(component.publishedContentId()).toBe('c-1');
+    });
+
+    it('moves the divider by keyboard', () => {
+      setUp(upTo(1));
+
+      component.movePublishingDividerDown(1);
+      expect(publishedUpTo().contentId).toBe('c-2');
+
+      component.movePublishingDividerUp(1);
+      expect(publishedUpTo().contentId).toBe('c-0');
+    });
+
+    it('keeps the divider fixed in live mode', () => {
+      setUp(
+        questionnaire({
+          publishingMode: QuestionnairePublishingMode.Live,
+          publishedUpToContent: { id: 'c-1', position: 1 } as Content,
+        })
+      );
+
+      component.movePublishingDividerDown(1);
+
+      expect(
+        mutation(PublishQuestionnaireUpToContentGql)
+      ).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('live mode', () => {
+    const live = (activeRound?: Partial<Content['activeRound']>) =>
+      questionnaire({
+        publishingMode: QuestionnairePublishingMode.Live,
+        publishedUpToContent: { id: 'c-1', position: 1 } as Content,
+        activeRound: activeRound as Questionnaire['activeRound'],
+      });
+
+    function liveRows() {
+      return Array.from(
+        fixture.nativeElement.querySelectorAll(
+          '.live-info'
+        ) as NodeListOf<HTMLElement>
+      ).map((e) => e.textContent?.trim());
+    }
+
+    it('starts a content and tells the page about it', () => {
+      setUp(live());
+      const started = jasmine.createSpy('startedContentChanged');
+      component.startedContentChanged.subscribe(started);
+      mutation(StartQuestionnaireContentGql).and.returnValue(
+        of({ data: { startQuestionnaireContent: { id: 'round-1' } } })
+      );
+
+      component.startContent('c-1');
+
+      expect(
+        mutation(StartQuestionnaireContentGql).calls.mostRecent().args[0]
+          .variables
+      ).toEqual({ contentId: 'c-1' });
+      expect(started).toHaveBeenCalledWith('c-1');
+      expect(notificationService.showAdvanced).toHaveBeenCalled();
+    });
+
+    it('stops the running content of the questionnaire', () => {
+      setUp(live({ id: 'round-1', closed: false, answerable: true }));
+      mutation(StopQuestionnaireContentGql).and.returnValue(
+        of({ data: { stopQuestionnaireContent: { id: 'round-1' } } })
+      );
+
+      component.stopContent();
+
+      expect(
+        mutation(StopQuestionnaireContentGql).calls.mostRecent().args[0]
+          .variables
+      ).toEqual({ questionnaireId: 'q-1' });
+      expect(notificationService.showAdvanced).toHaveBeenCalled();
+    });
+
+    it('offers starting a content of any format', () => {
+      const wordcloud = contents.map((c) => ({
+        ...c,
+        formatData: { format: ContentType.Wordcloud },
+      })) as Content[];
+      setUp(live(), undefined, wordcloud);
+      // Only some formats support several rounds; starting the first one must not depend on it.
+      (
+        TestBed.inject(ContentService) as unknown as {
+          hasFormatRounds: jasmine.Spy;
+        }
+      ).hasFormatRounds.and.callFake((format: ContentType) =>
+        [ContentType.Choice, ContentType.Scale].includes(format)
+      );
+      fixture.detectChanges();
+
+      const startButtons = fixture.nativeElement.querySelectorAll(
+        '.start-button'
+      ) as NodeListOf<HTMLButtonElement>;
+      expect(startButtons.length).toBe(contents.length);
+      expect(Array.from(startButtons).some((b) => b.disabled)).toBeFalse();
+    });
+
+    it('marks only the content of the running round as live', () => {
+      const withRounds = contents.map((c, i) => ({
+        ...c,
+        activeRound: {
+          id: `round-${i}`,
+          roundNo: 1,
+          closed: false,
+          answerable: true,
+        },
+      })) as Content[];
+      setUp(
+        live({ id: 'round-1', closed: false, answerable: true }),
+        undefined,
+        withRounds
+      );
+
+      // Each row renders its info twice, for small and for large screens.
+      expect(liveRows()).toEqual([
+        'creator.content.live',
+        'creator.content.live',
+      ]);
+    });
+
+    it('marks no content as live once the round is closed', () => {
+      const withRounds = contents.map((c, i) => ({
+        ...c,
+        activeRound: {
+          id: `round-${i}`,
+          roundNo: 1,
+          closed: i === 1,
+          answerable: i !== 1,
+        },
+      })) as Content[];
+      setUp(
+        live({ id: 'round-1', closed: true, answerable: false }),
+        undefined,
+        withRounds
+      );
+
+      expect(liveRows()).toEqual([]);
+    });
   });
 });
