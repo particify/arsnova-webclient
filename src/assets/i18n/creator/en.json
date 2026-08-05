@@ -424,7 +424,6 @@
     "ban": "Ban",
     "really-ban-answer": "Do you really want to ban the answer?",
     "really-start-new-round": "Do you really want to start a new round?",
-    "started-new-round": "New round has been started.",
     "start": "Start",
     "csv-import-errors-header": "Import incomplete",
     "csv-import-errors": "{{importedLines}} out of {{totalLines}} contents have been imported.",

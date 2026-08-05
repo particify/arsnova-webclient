@@ -382,7 +382,6 @@
     "ban": "Ban",
     "really-ban-answer": "Vuoi davvero vietare la risposta?",
     "really-start-new-round": "Vuoi davvero iniziare un nuovo round?",
-    "started-new-round": "È stato avviato un nuovo turno.",
     "csv-import-errors-header": "Importazione incompleta",
     "csv-import-errors": "{{importedLines}} I contenuti di {{totalLines}} sono stati importati.",
     "csv-import-errors-line-info": "Le righe seguenti sono state saltate a causa di dati non validi: {{errorLines}}",

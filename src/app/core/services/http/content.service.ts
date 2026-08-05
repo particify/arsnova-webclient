@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Content } from '@app/core/models/content';
 import { HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable, of, Subject } from 'rxjs';
-import { catchError, take, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -15,8 +15,6 @@ import { ExportFileType } from '@app/core/models/export-file-type';
 import { Router } from '@angular/router';
 import { ContentGroup } from '@app/core/models/content-group';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { ContentState } from '@app/core/models/content-state';
 import { DisplayAnswer } from '@app/creator/questionnaire/content-editing/_models/display-answer';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
@@ -31,10 +29,8 @@ export class ContentService extends AbstractEntityService<Content> {
   private ws = inject(WsConnectorService);
   private router = inject(Router);
   private dialogService = inject(DialogService);
-  private dialog = inject(MatDialog);
 
   private answersDeleted = new Subject<string>();
-  private roundStarted = new Subject<Content>();
   private answerBanned = new Subject<string>();
   private answerCounts$ = new Subject<AnswerResponseCounts>();
 
@@ -424,71 +420,6 @@ export class ContentService extends AbstractEntityService<Content> {
 
   getTypeIcons(): Map<ContentType, string> {
     return this.typeIcons;
-  }
-
-  hasFormatRounds(format: ContentType): boolean {
-    return [ContentType.Choice, ContentType.Scale].includes(format);
-  }
-
-  hasLegacyFormatRounds(format: LegacyContentType): boolean {
-    return [
-      LegacyContentType.CHOICE,
-      LegacyContentType.SCALE,
-      LegacyContentType.BINARY,
-      LegacyContentType.NUMERIC,
-    ].includes(format);
-  }
-
-  startNewRound(content: Content) {
-    const dialogRef = this.dialog.open(BaseDialogComponent, {
-      data: {
-        headerLabel: 'dialog.sure',
-        body: 'creator.dialog.really-start-new-round',
-        confirmLabel: 'creator.dialog.start',
-        abortLabel: 'dialog.cancel',
-        type: 'button-primary',
-        confirmAction: () => this.startRound(content.roomId, content.id, 2),
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        content.state.round = 2;
-        this.roundStarted.next(content);
-        this.translateService
-          .selectTranslate('creator.dialog.started-new-round')
-          .pipe(take(1))
-          .subscribe((msg) => {
-            this.notificationService.showAdvanced(
-              msg,
-              AdvancedSnackBarTypes.SUCCESS
-            );
-          });
-      }
-    });
-  }
-
-  startRound(
-    roomId: string,
-    contentId: string,
-    round: number
-  ): Observable<void> {
-    const connectionUrl = this.buildUri(
-      `/${contentId}/start-round?round=${round}`,
-      roomId
-    );
-    return this.http
-      .post<void>(connectionUrl, httpOptions)
-      .pipe(
-        catchError(
-          this.handleError<void>(
-            `Start new round, room: ${roomId}, content: ${contentId}, round ${round}`
-          )
-        )
-      );
-  }
-
-  getRoundStarted(): Observable<Content> {
-    return this.roundStarted;
   }
 
   getAnswerOptions(

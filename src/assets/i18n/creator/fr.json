@@ -398,7 +398,6 @@
     "really-delete-announcement": "Voulez-vous vraiment supprimer cette annonce ?",
     "really-delete-comments": "Voulez-vous vraiment supprimer toutes les questions de cette salle ? Cette action est irréversible.",
     "really-start-new-round": "Voulez-vous vraiment comment un nouveau tour ?",
-    "started-new-round": "Un nouveau tour a débuté.",
     "start": "Démarrer",
     "csv-import-errors-header": "Import incomplet",
     "csv-import-errors": "{{importedLines}} sur {{totalLines}} ont été importées.",

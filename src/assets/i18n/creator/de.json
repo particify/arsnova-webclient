@@ -425,7 +425,6 @@
     "really-ban-answer": "Willst du die Antwort wirklich verbannen?",
     "really-start-new-round": "Willst du wirklich eine neue Runde starten?",
     "start": "Starten",
-    "started-new-round": "Neue Runde wurde gestartet.",
     "csv-import-errors-header": "Import unvollständig",
     "csv-import-errors": "{{importedLines}} von {{totalLines}} Inhalten wurden importiert.",
     "csv-import-errors-line-info": "Die folgenden Zeilen wurden aufgrund von ungültigen Daten übersprungen: {{errorLines}}"

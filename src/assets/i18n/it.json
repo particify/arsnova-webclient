@@ -42,8 +42,6 @@
     "a11y-type-choice": "Scelta",
     "a11y-type-text": "Testo",
     "a11y-choice-evaluation": "Risposta {{label}}: {{answer}}.",
-    "a11y-multiple-round-counts": "{{countRoundA}} risposte nel round 1, {{countRoundB}} risposte nel round 2",
-    "a11y-single-round-count": "{{count}} risposte",
     "a11y-text-evaluation": "{{count}} Le persone hanno risposto con {{answer}}.",
     "a11y-no-more-answers": "Non ci sono più risposte. Premi il tasto freccia destra per passare alla prossima.",
     "a11y-correct": "La risposta è corretta.",
