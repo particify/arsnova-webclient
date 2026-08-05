@@ -1,5 +1,10 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  input,
+} from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -11,56 +16,33 @@ import { TranslocoPipe } from '@jsverse/transloco';
   styleUrl: './correct-answer-results.component.scss',
 })
 export class CorrectAnswerResultsComponent {
-  @Input() answerCounts?: number[];
-  @Input() correctAnswerCounts?: number[];
-  @Input() correctAnswerFractions?: number[];
-  @Input() abstentionCounts?: number[];
-  @Input() round = 1;
-  @Input() compareRounds = false;
-  @Input() show = false;
+  show = input(false);
+  answerCount = input(0);
+  correctAnswerCount = input(0);
+  abstentionCount = input(0);
 
-  getCorrectPercentage(round: number): string {
+  private readonly totalResponses = computed(
+    () => this.answerCount() + this.abstentionCount()
+  );
+
+  readonly correctPercentage = computed(() => {
     let percent = 0;
-    if (
-      this.answerCounts &&
-      this.correctAnswerFractions &&
-      this.correctAnswerFractions[round]
-    ) {
-      percent =
-        this.correctAnswerFractions[round] *
-        (this.answerCounts[round] / this.getTotalResponses(round)) *
-        100;
-    } else {
-      if (
-        this.answerCounts &&
-        this.correctAnswerCounts &&
-        this.answerCounts[round] > 0 &&
-        this.correctAnswerCounts[round] > 0
-      ) {
-        percent =
-          (this.correctAnswerCounts[round] / this.getTotalResponses(round)) *
-          100;
-      }
+    if (this.answerCount() > 0 && this.correctAnswerCount() > 0) {
+      percent = (this.correctAnswerCount() / this.totalResponses()) * 100;
     }
-    return this.getCountWithPercentageSign(percent);
-  }
+    return this.formatPercentage(percent);
+  });
 
-  getAbstentionPercentage(round: number): string | undefined {
-    if (this.abstentionCounts && this.abstentionCounts[round] > 0) {
-      const percent =
-        (this.abstentionCounts[round] / this.getTotalResponses(round)) * 100;
-      return this.getCountWithPercentageSign(percent);
+  readonly abstentionPercentage = computed(() => {
+    if (this.abstentionCount() > 0) {
+      return this.formatPercentage(
+        (this.abstentionCount() / this.totalResponses()) * 100
+      );
     }
-  }
+    return undefined;
+  });
 
-  private getCountWithPercentageSign(percent: number): string {
+  private formatPercentage(percent: number): string {
     return percent.toFixed(0) + '\u202F%';
-  }
-
-  private getTotalResponses(round: number): number {
-    if (this.answerCounts && this.abstentionCounts) {
-      return this.answerCounts[round] + this.abstentionCounts[round];
-    }
-    return 0;
   }
 }

@@ -63,6 +63,12 @@
           [attr.hidden]="isPresentation() || null"
         >
           <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="end">
+            <app-round-selector
+              class="action-button"
+              [rounds]="rounds()"
+              [(selectedRoundIds)]="selectedRoundIds"
+              [allowComparison]="allowRoundComparison()"
+            />
             @if (allowingUnitChange()) {
               <div>
                 <button

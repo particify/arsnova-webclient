@@ -2,8 +2,9 @@
   @if (hasCorrectAnswer() && isPresentation()) {
     <app-correct-answer-results
       [show]="showCorrect()"
-      [round]="1"
-      [compareRounds]="false"
+      [answerCount]="answerCount()"
+      [correctAnswerCount]="correctAnswerCount()"
+      [abstentionCount]="abstentionCount()"
     />
   }
   @if (resultsVisible()) {
@@ -13,7 +14,7 @@
       [showLegend]="!isPresentation()"
       [showLabels]="!answersDirectlyBelowChart()"
       [dataLabelMode]="visualizationUnitPercent() ? 'percent' : 'absolute'"
-      [totalValue]="answerCount() || undefined"
+      [totalValue]="respondentCount()"
     ></app-bar-chart>
   }
   <app-choice-answer-list

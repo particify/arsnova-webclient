@@ -6,8 +6,10 @@ import {
   ContentType,
   QuestionnaireChoiceRoundStatsByRoundIdGql,
   QuestionnaireChoiceRoundStatsUpdatedGql,
+  Round,
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { Subject } from 'rxjs';
 import { ChoiceResultsComponent } from './choice-results.component';
 
@@ -26,7 +28,9 @@ describe('ChoiceResultsComponent', () => {
     inputs: {
       hasCorrectAnswer?: boolean;
       showCorrect?: boolean;
-      roundClosed?: boolean;
+      roundIds?: string[];
+      answerCount?: number;
+      activeRoundId?: string;
     } = {}
   ) {
     TestBed.overrideComponent(ChoiceResultsComponent, {
@@ -57,7 +61,7 @@ describe('ChoiceResultsComponent', () => {
     themeService.getColor.and.callFake((name: string) => name);
 
     configureTestModule(
-      [ChoiceResultsComponent],
+      [getTranslocoModule(), ChoiceResultsComponent],
       [
         {
           provide: QuestionnaireChoiceRoundStatsByRoundIdGql,
@@ -80,7 +84,11 @@ describe('ChoiceResultsComponent', () => {
 
     fixture = TestBed.createComponent(ChoiceResultsComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('roundId', 'round-1');
+    fixture.componentRef.setInput('roundIds', ['round-1']);
+    fixture.componentRef.setInput('rounds', [
+      { id: 'round-1', roundNo: 1 },
+      { id: 'round-2', roundNo: 2 },
+    ] as Round[]);
     fixture.componentRef.setInput('formatData', {
       format: ContentType.Choice,
       options: [],
@@ -137,6 +145,28 @@ describe('ChoiceResultsComponent', () => {
     expect(barColors()).toEqual(['bar-1', 'bar-2', 'bar-1']);
   });
 
+  it('applies the reveal colours to both compared rounds', () => {
+    setUp(
+      { options, correctOptionIndexes: [1] },
+      {
+        hasCorrectAnswer: true,
+        showCorrect: true,
+        roundIds: ['round-1', 'round-2'],
+      }
+    );
+
+    expect(
+      component.visualizationData().datasets.map((dataset) => dataset.colors)
+    ).toEqual([
+      ['grey', 'bar-2', 'grey'],
+      ['grey', 'bar-2', 'grey'],
+    ]);
+  });
+
+  function counts() {
+    return component.visualizationData().datasets[0].values;
+  }
+
   function emitStats(selectionCounts: number[]) {
     stats$.next({
       dataState: 'complete',
@@ -161,34 +191,14 @@ describe('ChoiceResultsComponent', () => {
     });
   });
 
-  it('loads the stats of a closed round without listening to updates', () => {
-    setUp({ options }, { roundClosed: true });
-
-    expect(roundStats.watch).toHaveBeenCalledWith({
-      variables: { roundId: 'round-1' },
-    });
-    expect(roundStatsUpdated.subscribe).not.toHaveBeenCalled();
-  });
-
-  it('keeps listening to a round closed while it is shown', () => {
-    setUp({ options });
-
-    fixture.componentRef.setInput('roundClosed', true);
-    fixture.detectChanges();
-    emitUpdate([2, 2, 3]);
-
-    expect(roundStatsUpdated.subscribe).toHaveBeenCalledTimes(1);
-    expect(component.selectionCounts()).toEqual([2, 2, 3]);
-  });
-
   it('shows the loaded stats and then each update', () => {
     setUp({ options });
 
     emitStats([1, 2, 3]);
-    expect(component.selectionCounts()).toEqual([1, 2, 3]);
+    expect(counts()).toEqual([1, 2, 3]);
 
     emitUpdate([2, 2, 3]);
-    expect(component.selectionCounts()).toEqual([2, 2, 3]);
+    expect(counts()).toEqual([2, 2, 3]);
   });
 
   it('still reflects a refetch of the query after an update', () => {
@@ -197,7 +207,7 @@ describe('ChoiceResultsComponent', () => {
 
     emitStats([0, 0, 0]);
 
-    expect(component.selectionCounts()).toEqual([0, 0, 0]);
+    expect(counts()).toEqual([0, 0, 0]);
   });
 
   it('keeps the last stats when the updates fail', () => {
@@ -207,14 +217,14 @@ describe('ChoiceResultsComponent', () => {
 
     updates$.error(new Error('Subscription lost'));
 
-    expect(component.selectionCounts()).toEqual([1, 2, 3]);
+    expect(counts()).toEqual([1, 2, 3]);
     expect(console.error).toHaveBeenCalled();
   });
 
   it('switches both sources to another round', () => {
     setUp({ options });
 
-    fixture.componentRef.setInput('roundId', 'round-2');
+    fixture.componentRef.setInput('roundIds', ['round-2']);
     fixture.detectChanges();
 
     expect(roundStats.watch).toHaveBeenCalledWith({
@@ -222,6 +232,28 @@ describe('ChoiceResultsComponent', () => {
     });
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
       variables: { roundId: 'round-2' },
+    });
+  });
+
+  describe('respondents', () => {
+    const counted = { answerCount: 4, activeRoundId: 'round-2' };
+
+    it('relates the shares of the active round to its respondents', () => {
+      setUp({ options }, { ...counted, roundIds: ['round-2'] });
+
+      expect(component.respondentCount()).toBe(4);
+    });
+
+    it('falls back to shares of selections for compared rounds', () => {
+      setUp({ options }, { ...counted, roundIds: ['round-1', 'round-2'] });
+
+      expect(component.respondentCount()).toBeUndefined();
+    });
+
+    it('falls back to shares of selections for an earlier round', () => {
+      setUp({ options }, { ...counted, roundIds: ['round-1'] });
+
+      expect(component.respondentCount()).toBeUndefined();
     });
   });
 });

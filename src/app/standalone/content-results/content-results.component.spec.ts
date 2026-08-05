@@ -7,7 +7,7 @@ import {
   Content,
   ContentType,
   CurrentUserWithSettingsGql,
-  Round,
+  QuestionnaireRoundsByContentIdGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentResultsComponent } from './content-results.component';
@@ -58,6 +58,26 @@ describe('ContentResultsComponent', () => {
         {
           provide: CurrentUserWithSettingsGql,
           useValue: { fetch: () => of({ data: {} }) },
+        },
+        {
+          provide: QuestionnaireRoundsByContentIdGql,
+          useValue: {
+            watch: () => ({
+              valueChanges: of({
+                dataState: 'complete' as const,
+                data: {
+                  questionnaireRoundsByContentId: [
+                    {
+                      __typename: 'Round',
+                      id: 'round-1',
+                      roundNo: 1,
+                      closed: false,
+                    },
+                  ],
+                },
+              }),
+            }),
+          },
         },
       ]
     ).compileComponents();
@@ -124,33 +144,6 @@ describe('ContentResultsComponent', () => {
     expect(
       (component.componentInputs() as { answerCount: number }).answerCount
     ).toBe(0);
-  });
-
-  function roundClosed() {
-    return (component.componentInputs() as { roundClosed?: boolean })
-      .roundClosed;
-  }
-
-  function round(closed: boolean): Round {
-    return {
-      __typename: 'Round',
-      id: 'round-1',
-      roundNo: 1,
-      closed,
-      started: true,
-      answerable: !closed,
-    };
-  }
-
-  it('tells a chart format whether its round is closed', () => {
-    setUp({ content: { activeRound: round(true) } });
-    expect(roundClosed()).toBeTrue();
-
-    fixture.componentRef.setInput('content', {
-      ...choiceContent(),
-      activeRound: round(false),
-    });
-    expect(roundClosed()).toBeFalse();
   });
 
   it('lets a wordcloud ban keywords only where answers may be moderated', () => {

@@ -6,4 +6,5 @@ export interface VisualizationData {
 export interface VisualizationDataset {
   values: number[];
   colors?: string[];
+  label?: string;
 }

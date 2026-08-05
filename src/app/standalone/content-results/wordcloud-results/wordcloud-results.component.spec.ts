@@ -103,7 +103,7 @@ describe('WordcloudResultsComponent', () => {
     fixture = TestBed.createComponent(WordcloudResultsComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('contentId', 'content-1');
-    fixture.componentRef.setInput('roundId', 'round-1');
+    fixture.componentRef.setInput('roundIds', ['round-1']);
     for (const [name, value] of Object.entries(inputs)) {
       fixture.componentRef.setInput(name, value);
     }
@@ -138,7 +138,7 @@ describe('WordcloudResultsComponent', () => {
   it('loads the stats of another round', () => {
     setUp();
 
-    fixture.componentRef.setInput('roundId', 'round-2');
+    fixture.componentRef.setInput('roundIds', ['round-2']);
     fixture.detectChanges();
 
     expect(roundStats.watch).toHaveBeenCalledWith({

@@ -8,9 +8,17 @@ import {
   linkedSignal,
   model,
 } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { map, switchMap } from 'rxjs';
+import { onlyCompleteData } from 'apollo-angular';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
-import { Content, ContentType, UserUiSettings } from '@gql/generated/graphql';
+import {
+  Content,
+  ContentType,
+  QuestionnaireRoundsByContentIdGql,
+  UserUiSettings,
+} from '@gql/generated/graphql';
 import { ContentService } from '@app/core/services/http/content.service';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MatIcon } from '@angular/material/icon';
@@ -22,6 +30,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
+import { RoundSelectorComponent } from '@app/standalone/round-selector/round-selector.component';
 import { ContentResultsService } from './content-results.service';
 import { RESULT_REGISTRY } from './result-registry';
 import { VisualizationType } from './visualization/visualization-type';
@@ -40,11 +49,15 @@ import { VisualizationType } from './visualization/visualization-type';
     RenderedTextComponent,
     TranslocoPipe,
     LanguageContextDirective,
+    RoundSelectorComponent,
   ],
 })
 export class ContentResultsComponent {
   private readonly contentService = inject(ContentService);
   private readonly contentResultsService = inject(ContentResultsService);
+  private readonly questionnaireRoundsByContentId = inject(
+    QuestionnaireRoundsByContentIdGql
+  );
 
   content = input.required<Content>();
   active = input(false, { transform: booleanAttribute });
@@ -56,21 +69,54 @@ export class ContentResultsComponent {
   isStandalone = input(false, { transform: booleanAttribute });
   allowAnswerModeration = input(false, { transform: booleanAttribute });
 
+  readonly rounds = toSignal(
+    toObservable(computed(() => this.content().id)).pipe(
+      switchMap(
+        (contentId) =>
+          this.questionnaireRoundsByContentId.watch({
+            variables: { contentId },
+          }).valueChanges
+      ),
+      onlyCompleteData(),
+      map((r) => r.data.questionnaireRoundsByContentId ?? [])
+    ),
+    { initialValue: [] }
+  );
+
+  readonly defaultRoundId = computed(() => {
+    const rounds = this.rounds();
+    return rounds.length ? rounds[rounds.length - 1].id : undefined;
+  });
+
+  readonly selectedRoundIds = linkedSignal(() => {
+    if (this.isPresentation()) {
+      const presentationRoundIds =
+        this.contentResultsService.presentationSelectedRoundIds(
+          this.content().id
+        );
+      if (presentationRoundIds?.length) {
+        return presentationRoundIds;
+      }
+    }
+    const defaultRoundId = this.defaultRoundId();
+    return defaultRoundId ? [defaultRoundId] : [];
+  });
+
   readonly resultComponent = computed(
     () => RESULT_REGISTRY[this.content().formatData.format]
   );
 
+  readonly allowRoundComparison = computed(
+    () => !!this.resultComponent().supportsRoundComparison
+  );
+
   readonly componentInputs = computed(() => {
     const base = {
-      roundId: this.content().activeRound?.id,
+      roundIds: this.selectedRoundIds(),
       resultsVisible: this.resultsVisible(),
     };
-    const chart = {
-      ...base,
-      roundClosed: !!this.content().activeRound?.closed,
-    };
     if (this.content().formatData.format === ContentType.Scale) {
-      return { ...chart, language: this.language() };
+      return { ...base, rounds: this.rounds(), language: this.language() };
     }
     if (this.content().formatData.format === ContentType.Wordcloud) {
       return {
@@ -83,7 +129,8 @@ export class ContentResultsComponent {
     }
     if (this.content().formatData.format === ContentType.Choice) {
       return {
-        ...chart,
+        ...base,
+        rounds: this.rounds(),
         answersDirectlyBelowChart:
           !!this.settings().contentAnswersDirectlyBelowChart,
         visualizationUnitPercent:
@@ -93,9 +140,12 @@ export class ContentResultsComponent {
         hasCorrectAnswer: this.content()?.hasCorrectAnswer,
         formatData: this.content().formatData,
         answerCount: this.content().answerCount ?? 0,
+        correctAnswerCount: this.content().correctAnswerCount ?? 0,
+        abstentionCount: this.content().abstentionCount ?? 0,
+        activeRoundId: this.content().activeRound?.id,
       };
     }
-    return chart;
+    return { ...base, rounds: this.rounds() };
   });
 
   resultsVisible = computed(() => this.contentResultsService.resultsVisible());
