@@ -125,7 +125,6 @@
     "banned-keywords-reset": "Les mots-clés interdits ont été réinitialisés.",
     "start-new-round": "Commencer un nouveau tour",
     "preferences": "Paramètres d'affichage",
-    "starting-new-round-not-possible": "Actuellement, seuls deux tours peuvent être lancés. Une fois que les réponses ont été supprimées, vous pouvez relancer second tour.",
     "md-info": "Dans ce champ de saisie, le formatage du texte avec Markdown est pris en charge.",
     "format-flashcard-description": "Avec les flashcards, les participant·es peuvent apprendre en regardant le recto puis le verso (souvent une question en recto ou une réponse en verso).",
     "answer-options": "Options de réponse",
@@ -223,13 +222,13 @@
     "reset-answers-to-disable-setting": "Réinitialise les résultats de cette série de questions pour désactiver ce paramètre.",
     "reset-group-results": "Réinitialiser les résultats",
     "stop-content-to-delete-answers": "Arrête le contenu pour supprimer les réponses.",
-    "stop-active-content-to-start": "Arrête le contenu actuel pour démarrer ce contenu.",
-    "starting-multiple-rounds-not-available-for-content-type": "Les tours multiples ne sont pas pris en charge pour ce format de contenu. Supprime les réponses pour redémarrer le contenu.",
+    "stop-content-to-start-new-round": "Arrête le contenu pour démarrer un nouveau tour.",
     "publishing-index-info": "Publié jusqu'au contenu {{index}}. Utilise la touche de contrôle avec les touches fléchées pour éditer la publication.",
     "publishing-index-info-live": "Publié jusqu'au contenu {{index}}. Lance le contenu suivant pour le publier.",
     "live": "En direct",
     "content-started": "Le contenu a démarré.",
-    "content-stopped": "Le contenu est arrêté."
+    "content-stopped": "Le contenu est arrêté.",
+    "new-round-started": "Un nouveau tour a démarré."
   },
   "comment-page": {
     "a11y-message-moderation": "Vous êtes sur la page de modération.",

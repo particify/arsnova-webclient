@@ -57,21 +57,25 @@ import {
   MoveQuestionnaireContentToQuestionnaireGql,
   PublishQuestionnaireUpToContentGql,
   Questionnaire,
+  QuestionnaireByIdDocument,
   QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnairePublishingMode,
   QuestionnairesByRoomIdDocument,
+  QuestionnaireRoundsByContentIdDocument,
   QuestionnairesByRoomIdGql,
   QuestionnaireSummaryFragment,
   QuestionnaireType,
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
   StartQuestionnaireContentGql,
+  StartQuestionnaireContentRoundGql,
   StopQuestionnaireContentGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { mutationHelper } from '@gql/helper/mutation-helper';
-import { filter, map, Observable, of, switchMap } from 'rxjs';
+import { filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { RESULT_REGISTRY } from '@app/standalone/content-results/result-registry';
 
 @Component({
   selector: 'app-content-list',
@@ -138,6 +142,9 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   );
   private readonly startQuestionnaireContent = inject(
     StartQuestionnaireContentGql
+  );
+  private readonly startQuestionnaireContentRound = inject(
+    StartQuestionnaireContentRoundGql
   );
   private readonly stopQuestionnaireContent = inject(
     StopQuestionnaireContentGql
@@ -294,6 +301,17 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     return this.contentPublishService.isLive(this.questionnaire());
   }
 
+  supportsRounds(content: Content): boolean {
+    return !!RESULT_REGISTRY[content.formatData.format].supportsRounds;
+  }
+
+  canModifyAnswersOrRounds(content: Content): boolean {
+    if (!this.isLiveMode()) {
+      return true;
+    }
+    return !!content.activeRound && content.activeRound.closed;
+  }
+
   openedMenu(index: number) {
     this.activeMenuIndex = index;
   }
@@ -430,10 +448,6 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
 
   getPercentageString(value?: number): string {
     return value?.toFixed() + '\u202F%';
-  }
-
-  hasFormatRounds(format: ContentType): boolean {
-    return this.contentService.hasFormatRounds(format);
   }
 
   isCompatibleWithQuestionnaireType(
@@ -581,5 +595,45 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
           }
         },
       });
+  }
+
+  startNewRound(contentId: string) {
+    const dialogRef = this.dialogService.openStartNewRoundDialog(() =>
+      this.startQuestionnaireContentRound
+        .mutate({
+          variables: { contentId },
+          refetchQueries: [
+            {
+              query: QuestionnaireRoundsByContentIdDocument,
+              variables: { contentId },
+            },
+            {
+              query: QuestionnaireContentsByQuestionnaireIdDocument,
+              variables: { questionnaireId: this.questionnaire().id },
+            },
+            {
+              query: QuestionnaireByIdDocument,
+              variables: { id: this.questionnaire().id },
+            },
+          ],
+        })
+        .pipe(
+          tap({
+            error: (e) => this.notificationService.showOnRequestClientError(e),
+          })
+        )
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.startedContentChanged.emit(contentId);
+        const msg = this.translateService.translate(
+          'creator.content.new-round-started'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.SUCCESS
+        );
+      }
+    });
   }
 }

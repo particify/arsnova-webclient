@@ -95,6 +95,23 @@ export class DialogService {
     });
   }
 
+  openStartNewRoundDialog(
+    confirmAction: () => Observable<object | void>
+  ): MatDialogRef<BaseDialogComponent> {
+    return this.openDialog(BaseDialogComponent, {
+      width: DIALOG_SIZES.small,
+      data: {
+        dialogId: 'start-new-round',
+        body: 'creator.dialog.really-start-new-round',
+        headerLabel: 'dialog.sure',
+        confirmLabel: 'creator.dialog.start',
+        abortLabel: 'dialog.cancel',
+        type: 'button-primary',
+        confirmAction: confirmAction,
+      },
+    });
+  }
+
   openQuestionnaireCreationDialog(
     roomId?: string,
     type?: QuestionnaireType

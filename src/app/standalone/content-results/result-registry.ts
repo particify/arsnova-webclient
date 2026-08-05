@@ -7,6 +7,7 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
   [ContentType.Choice]: {
     component: ChoiceResultsComponent,
     supportsRoundComparison: true,
+    supportsRounds: true,
   },
   [ContentType.Binary]: {
     component: ChoiceResultsComponent,
@@ -41,5 +42,6 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
   },
   [ContentType.Wordcloud]: {
     component: WordcloudResultsComponent,
+    supportsRounds: true,
   },
 };
