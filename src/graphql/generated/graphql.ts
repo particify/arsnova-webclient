@@ -2428,6 +2428,16 @@ export type QuestionnaireSummaryFragment = {
   } | null;
 };
 
+export type RoundFragment = {
+  __typename?: 'Round';
+  id: string;
+  contentId?: string | null;
+  roundNo: number;
+  closed: boolean;
+  started: boolean;
+  answerable: boolean;
+};
+
 export type QuestionnaireDetailsFragment = {
   __typename?: 'Questionnaire';
   id: string;
@@ -2450,6 +2460,8 @@ export type QuestionnaireDetailsFragment = {
     contentId?: string | null;
     roundNo: number;
     closed: boolean;
+    started: boolean;
+    answerable: boolean;
   } | null;
 };
 
@@ -2468,6 +2480,7 @@ export type ContentDetailsFragment = {
   activeRound?: {
     __typename?: 'Round';
     id: string;
+    contentId?: string | null;
     roundNo: number;
     closed: boolean;
     started: boolean;
@@ -2662,6 +2675,8 @@ export type QuestionnaireByIdQuery = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
+      answerable: boolean;
     } | null;
   } | null;
 };
@@ -2693,6 +2708,7 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
         activeRound?: {
           __typename?: 'Round';
           id: string;
+          contentId?: string | null;
           roundNo: number;
           closed: boolean;
           started: boolean;
@@ -2748,6 +2764,7 @@ export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
         activeRound?: {
           __typename?: 'Round';
           id: string;
+          contentId?: string | null;
           roundNo: number;
           closed: boolean;
           started: boolean;
@@ -2805,6 +2822,8 @@ export type CreateQuestionnaireMutation = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
+      answerable: boolean;
     } | null;
   };
 };
@@ -2838,6 +2857,8 @@ export type ToggleQuestionnairePublishedMutation = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
+      answerable: boolean;
     } | null;
   };
 };
@@ -2865,6 +2886,7 @@ export type CreateQuestionnaireChoiceContentMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -2915,6 +2937,7 @@ export type UpdateQuestionnaireChoiceContentMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -2965,6 +2988,7 @@ export type CreateQuestionnaireWordcloudContentMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -3015,6 +3039,7 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -3065,6 +3090,7 @@ export type QuestionnaireContentByIdQuery = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -3298,6 +3324,7 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -3349,6 +3376,7 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -3419,6 +3447,8 @@ export type UpdateQuestionnaireMutation = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
+      answerable: boolean;
     } | null;
   };
 };
@@ -3446,6 +3476,7 @@ export type DuplicateQuestionnaireContentMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -3497,6 +3528,7 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -3548,6 +3580,7 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
@@ -3609,6 +3642,8 @@ export type QuestionnaireUpdatedSubscription = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
+      answerable: boolean;
     } | null;
   } | null;
 };
@@ -3627,8 +3662,11 @@ export type QuestionnaireContentUpdatedSubscription = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
+      answerable: boolean;
     } | null;
   } | null;
 };
@@ -3648,8 +3686,11 @@ export type CreatorQuestionnaireContentUpdatedSubscription = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
+      answerable: boolean;
     } | null;
   } | null;
 };
@@ -3692,10 +3733,29 @@ export type StartQuestionnaireContentMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answerable: boolean;
     } | null;
+  };
+};
+
+export type StartQuestionnaireContentRoundMutationVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+}>;
+
+export type StartQuestionnaireContentRoundMutation = {
+  __typename?: 'Mutation';
+  startQuestionnaireContentRound: {
+    __typename?: 'Round';
+    id: string;
+    contentId?: string | null;
+    roundNo: number;
+    closed: boolean;
+    started: boolean;
+    answerable: boolean;
   };
 };
 
@@ -3711,10 +3771,30 @@ export type StopQuestionnaireContentMutation = {
     activeRound?: {
       __typename?: 'Round';
       id: string;
+      contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
+      answerable: boolean;
     } | null;
   };
+};
+
+export type QuestionnaireRoundsByContentIdQueryVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireRoundsByContentIdQuery = {
+  __typename?: 'Query';
+  questionnaireRoundsByContentId?: Array<{
+    __typename?: 'Round';
+    id: string;
+    contentId?: string | null;
+    roundNo: number;
+    closed: boolean;
+    started: boolean;
+    answerable: boolean;
+  }> | null;
 };
 
 export type PublishQuestionnaireUpToContentMutationVariables = Exact<{
@@ -4501,6 +4581,16 @@ export const QuestionnaireSummaryFragmentDoc = gql`
     contentCount
   }
 `;
+export const RoundFragmentDoc = gql`
+  fragment Round on Round {
+    id
+    contentId
+    roundNo
+    closed
+    started
+    answerable
+  }
+`;
 export const QuestionnaireDetailsFragmentDoc = gql`
   fragment QuestionnaireDetails on Questionnaire {
     id
@@ -4513,16 +4603,14 @@ export const QuestionnaireDetailsFragmentDoc = gql`
       position
     }
     activeRound {
-      id
-      contentId
-      roundNo
-      closed
+      ...Round
     }
     statisticsPublished
     correctOptionsPublished
     leaderboardEnabled
     contentCount
   }
+  ${RoundFragmentDoc}
 `;
 export const ContentDetailsFragmentDoc = gql`
   fragment ContentDetails on Content {
@@ -4530,11 +4618,7 @@ export const ContentDetailsFragmentDoc = gql`
     body
     bodyRendered
     activeRound {
-      id
-      roundNo
-      closed
-      started
-      answerable
+      ...Round
     }
     formatData {
       ... on ChoiceContentFormatData {
@@ -4565,6 +4649,7 @@ export const ContentDetailsFragmentDoc = gql`
     abstentionCount
     position
   }
+  ${RoundFragmentDoc}
 `;
 export const CreatorContentDetailsFragmentDoc = gql`
   fragment CreatorContentDetails on Content {
@@ -6737,13 +6822,11 @@ export const QuestionnaireUpdatedDocument = gql`
         position
       }
       activeRound {
-        id
-        contentId
-        roundNo
-        closed
+        ...Round
       }
     }
   }
+  ${RoundFragmentDoc}
 `;
 
 @Injectable({
@@ -6766,12 +6849,11 @@ export const QuestionnaireContentUpdatedDocument = gql`
       answerCount
       abstentionCount
       activeRound {
-        id
-        roundNo
-        closed
+        ...Round
       }
     }
   }
+  ${RoundFragmentDoc}
 `;
 
 @Injectable({
@@ -6795,12 +6877,11 @@ export const CreatorQuestionnaireContentUpdatedDocument = gql`
       abstentionCount
       correctAnswerCount
       activeRound {
-        id
-        roundNo
-        closed
+        ...Round
       }
     }
   }
+  ${RoundFragmentDoc}
 `;
 
 @Injectable({
@@ -6864,13 +6945,11 @@ export const StartQuestionnaireContentDocument = gql`
     startQuestionnaireContent(contentId: $contentId) {
       id
       activeRound {
-        id
-        roundNo
-        closed
-        started
+        ...Round
       }
     }
   }
+  ${RoundFragmentDoc}
 `;
 
 @Injectable({
@@ -6886,17 +6965,38 @@ export class StartQuestionnaireContentGql extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const StartQuestionnaireContentRoundDocument = gql`
+  mutation StartQuestionnaireContentRound($contentId: UUID!) {
+    startQuestionnaireContentRound(contentId: $contentId) {
+      ...Round
+    }
+  }
+  ${RoundFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class StartQuestionnaireContentRoundGql extends Apollo.Mutation<
+  StartQuestionnaireContentRoundMutation,
+  StartQuestionnaireContentRoundMutationVariables
+> {
+  document = StartQuestionnaireContentRoundDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const StopQuestionnaireContentDocument = gql`
   mutation StopQuestionnaireContent($questionnaireId: UUID!) {
     stopQuestionnaireContent(questionnaireId: $questionnaireId) {
       id
       activeRound {
-        id
-        roundNo
-        closed
+        ...Round
       }
     }
   }
+  ${RoundFragmentDoc}
 `;
 
 @Injectable({
@@ -6907,6 +7007,28 @@ export class StopQuestionnaireContentGql extends Apollo.Mutation<
   StopQuestionnaireContentMutationVariables
 > {
   document = StopQuestionnaireContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireRoundsByContentIdDocument = gql`
+  query QuestionnaireRoundsByContentId($contentId: UUID!) {
+    questionnaireRoundsByContentId(contentId: $contentId) {
+      ...Round
+    }
+  }
+  ${RoundFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireRoundsByContentIdGql extends Apollo.Query<
+  QuestionnaireRoundsByContentIdQuery,
+  QuestionnaireRoundsByContentIdQueryVariables
+> {
+  document = QuestionnaireRoundsByContentIdDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
