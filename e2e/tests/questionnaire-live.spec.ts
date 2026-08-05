@@ -4,6 +4,7 @@ import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creat
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
 import { ContentCreationPage } from '@e2e/fixtures/creator/content-creation';
 import { ContentGroupOverviewPage } from '@e2e/fixtures/creator/content-group-overview';
+import { QuestionnaireContentListPage } from '@e2e/fixtures/creator/questionnaire-content-list';
 import { ContentGroupPage as ParticipantContentGroupPage } from '@e2e/fixtures/participant/content-group';
 import { QuestionnairePage } from '@e2e/fixtures/participant/questionnaire-page';
 
@@ -119,6 +120,30 @@ test.describe('questionnaire live mode with a real backend', () => {
         participant.getContentBody('My second choice content')
       ).toBeVisible();
       await expect(participant.getSubmitButton()).toBeVisible();
+    });
+  });
+
+  test.describe('rounds', () => {
+    test.beforeEach(async ({ page, baseURL }) => {
+      await setUp(page, baseURL, 'My quiz', 'Quiz');
+      await contentGroupOverview.configure({ leaderboard: false });
+      await contentGroupOverview.publishContentGroup();
+    });
+
+    test('a new round lets the participant answer again', async ({
+      browser,
+      baseURL,
+    }) => {
+      const contentList = new QuestionnaireContentListPage(creatorPage);
+      await contentGroupOverview.startContent('My first choice content', 0);
+      await join(browser, baseURL, 'My quiz');
+      await participant.answerContent(['b']);
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await contentGroupOverview.stopContent(0);
+      // Starting a new round starts the content, too.
+      await contentList.startNewRound(0);
+      await expect(participant.getHintAfterAnswering()).toBeHidden();
+      await expect(participant.getSubmitButton()).toBeEnabled();
     });
   });
 

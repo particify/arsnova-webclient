@@ -60,4 +60,17 @@ export class RoomOverviewPage {
     await this.page.getByRole('button', { name: name }).hover();
     await this.page.getByTestId('publish-group-btn').click();
   }
+
+  async createQuestionnaire(name: string, type: string): Promise<string> {
+    await this.createSeriesButton.click();
+    await this.questionSeriesNameInput.fill(name);
+    await this.page.getByTestId(type).click();
+    await this.submitSeriesCreationButton.click();
+    await this.page.waitForURL(/\/questionnaire\/[^/]+/);
+    const match = /\/questionnaire\/([^/]+)/.exec(this.page.url());
+    if (!match) {
+      throw new Error('Could not determine created questionnaire ID.');
+    }
+    return match[1];
+  }
 }

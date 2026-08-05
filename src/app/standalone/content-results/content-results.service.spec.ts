@@ -61,4 +61,15 @@ describe('ContentResultsService', () => {
       VisualizationType.TABLE
     );
   });
+
+  it('remembers the rounds selected in presentation per content', () => {
+    const service = setUp();
+    expect(service.presentationSelectedRoundIds('c-1')).toBeUndefined();
+
+    service.setPresentationSelectedRoundIds('c-1', ['r-1', 'r-2']);
+    service.setPresentationSelectedRoundIds('c-2', ['r-3']);
+
+    expect(service.presentationSelectedRoundIds('c-1')).toEqual(['r-1', 'r-2']);
+    expect(service.presentationSelectedRoundIds('c-2')).toEqual(['r-3']);
+  });
 });

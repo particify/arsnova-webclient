@@ -10,6 +10,7 @@ export interface QuestionnaireStateOptions {
   activeContentPosition?: number;
   activeRoundClosed?: boolean;
   answeredPositions?: number[];
+  roundCounts?: Record<number, number>;
   /** Contents whose round ran before, besides the active one. */
   startedPositions?: number[];
 }
@@ -18,8 +19,8 @@ export function contentId(position: number): string {
   return `content-${position + 1}`;
 }
 
-function roundId(position: number): string {
-  return `round-${position + 1}`;
+function roundId(position: number, roundNo: number): string {
+  return `round-${position + 1}-${roundNo}`;
 }
 
 export class MockGraphqlApi {
@@ -96,17 +97,42 @@ export class MockGraphqlApi {
     }
   }
 
+  private roundCount(position: number): number {
+    return this.state.roundCounts?.[position] ?? 1;
+  }
+
   private contentRound(position: number) {
+    const roundNo = this.roundCount(position);
     return {
       __typename: 'Round',
-      id: roundId(position),
-      roundNo: 1,
+      id: roundId(position, roundNo),
+      contentId: contentId(position),
+      roundNo,
       closed: this.isRoundClosed(position),
       started:
         this.state.publishingMode !== 'LIVE' ||
         this.startedPositions.has(position),
       answerable: !this.isRoundClosed(position),
     };
+  }
+
+  private roundsForPosition(position: number) {
+    const roundCount = this.roundCount(position);
+    return Array.from({ length: roundCount }, (_, i) => {
+      const roundNo = i + 1;
+      const isCurrentRound = roundNo === roundCount;
+      return {
+        __typename: 'Round',
+        id: roundId(position, roundNo),
+        contentId: contentId(position),
+        roundNo,
+        closed: isCurrentRound ? this.isRoundClosed(position) : true,
+        started:
+          !isCurrentRound ||
+          this.state.publishingMode !== 'LIVE' ||
+          this.startedPositions.has(position),
+      };
+    });
   }
 
   private isRoundClosed(position: number): boolean {
@@ -123,13 +149,7 @@ export class MockGraphqlApi {
     if (this.state.publishingMode !== 'LIVE' || position === undefined) {
       return null;
     }
-    return {
-      __typename: 'Round',
-      id: roundId(position),
-      contentId: contentId(position),
-      roundNo: 1,
-      closed: !!this.state.activeRoundClosed,
-    };
+    return this.contentRound(position);
   }
 
   private questionnaire() {
@@ -186,7 +206,7 @@ export class MockGraphqlApi {
       abstentionsAllowed: true,
       hasCorrectAnswer: false,
       weight: null,
-      answerCount: 0,
+      answerCount: this.answeredPositions.includes(position) ? 1 : 0,
       abstentionCount: 0,
       correctAnswerCount: null,
       position,
@@ -207,7 +227,13 @@ export class MockGraphqlApi {
   }
 
   private positionOfRound(roundId: unknown): number {
-    return Number(String(roundId).replace('round-', '')) - 1;
+    const match = /^round-(\d+)-\d+$/.exec(String(roundId));
+    return Number(match?.[1]) - 1;
+  }
+
+  private positionOfContent(contentId: unknown): number {
+    const match = /^content-(\d+)$/.exec(String(contentId));
+    return Number(match?.[1]) - 1;
   }
 
   private handlers(): Record<
@@ -258,6 +284,34 @@ export class MockGraphqlApi {
             input.selectedChoiceIndexes
           ),
         };
+      },
+      QuestionnaireRoundsByContentId: (variables) => {
+        const position = this.positionOfContent(variables.contentId);
+        return {
+          questionnaireRoundsByContentId: this.roundsForPosition(position),
+        };
+      },
+      StartQuestionnaireContent: (variables) => {
+        const position = this.positionOfContent(variables.contentId);
+        this.state.activeContentPosition = position;
+        this.state.activeRoundClosed = false;
+        this.trackStartedRound();
+        return { startQuestionnaireContent: this.questionnaire() };
+      },
+      StopQuestionnaireContent: () => {
+        this.state.activeRoundClosed = true;
+        return { stopQuestionnaireContent: this.questionnaire() };
+      },
+      StartQuestionnaireContentRound: (variables) => {
+        const position = this.positionOfContent(variables.contentId);
+        this.state.roundCounts = {
+          ...this.state.roundCounts,
+          [position]: this.roundCount(position) + 1,
+        };
+        this.state.answeredPositions = this.answeredPositions.filter(
+          (answeredPosition) => answeredPosition !== position
+        );
+        return { startQuestionnaireContentRound: this.contentRound(position) };
       },
       CurrentUserWithSettings: () => ({
         currentUser: {
