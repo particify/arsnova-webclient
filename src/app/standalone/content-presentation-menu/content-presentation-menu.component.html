@@ -14,12 +14,12 @@
         [matTooltip]="
           'creator.content.stop-content-to-delete-answers' | transloco
         "
-        [matTooltipDisabled]="hasClosedRound()"
+        [matTooltipDisabled]="canModifyAnswersOrRounds()"
       >
         <button
           mat-menu-item
           (click)="deleteContentAnswers()"
-          [disabled]="!hasClosedRound()"
+          [disabled]="!canModifyAnswersOrRounds()"
           data-testid="delete-content-answer-button"
         >
           <mat-icon>clear_all</mat-icon>
@@ -68,12 +68,12 @@
         [matTooltip]="
           'creator.content.stop-content-to-start-new-round' | transloco
         "
-        [matTooltipDisabled]="hasClosedRound()"
+        [matTooltipDisabled]="canModifyAnswersOrRounds()"
       >
         <button
           mat-menu-item
           (click)="startNewRound()"
-          [disabled]="!hasClosedRound()"
+          [disabled]="!canModifyAnswersOrRounds()"
         >
           <mat-icon>replay</mat-icon>
           {{ 'creator.content.start-new-round' | transloco }}

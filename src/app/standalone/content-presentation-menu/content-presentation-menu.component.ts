@@ -41,6 +41,7 @@ import {
   sortedRoundNumbers,
   toggleRoundSelection,
 } from '@app/standalone/round-selector/round-selection';
+import { isRoundOver } from '@app/standalone/countdown-timer/answering';
 
 @Component({
   selector: 'app-content-presentation-menu',
@@ -180,12 +181,11 @@ export class ContentPresentationMenuComponent {
     );
   }
 
-  hasClosedRound(): boolean {
+  canModifyAnswersOrRounds(): boolean {
     if (!this.isLiveMode()) {
       return true;
     }
-    const currentRound = this.currentRound();
-    return !!currentRound && currentRound.closed;
+    return isRoundOver(this.currentRound(), Date.now(), this.isLiveMode());
   }
 
   deleteContentAnswers() {

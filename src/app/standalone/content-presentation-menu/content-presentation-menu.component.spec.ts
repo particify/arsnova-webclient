@@ -58,7 +58,11 @@ function content(
   } as Content;
 }
 
-function roundsResponse(roundNo: number, closed: boolean) {
+function roundsResponse(
+  roundNo: number,
+  closed: boolean,
+  answeringEndTime?: string
+) {
   return {
     dataState: 'complete' as const,
     data: {
@@ -69,6 +73,8 @@ function roundsResponse(roundNo: number, closed: boolean) {
           contentId: 'content-1',
           roundNo,
           closed,
+          answerable: !closed,
+          answeringEndTime: answeringEndTime ?? null,
         },
       ],
     },
@@ -169,24 +175,34 @@ describe('ContentPresentationMenuComponent', () => {
 
   it('reflects a round closing even though the stale content input still says it is open', () => {
     setUp(content(false));
-    expect(component.hasClosedRound()).toBe(false);
+    expect(component.canModifyAnswersOrRounds()).toBe(false);
 
     rounds$.next(roundsResponse(1, true));
     fixture.detectChanges();
 
-    expect(component.hasClosedRound()).toBe(true);
+    expect(component.canModifyAnswersOrRounds()).toBe(true);
   });
 
   it('reflects a newly started round even though the stale content input still says the old one is closed', () => {
     setUp(content(true));
     rounds$.next(roundsResponse(1, true));
     fixture.detectChanges();
-    expect(component.hasClosedRound()).toBe(true);
+    expect(component.canModifyAnswersOrRounds()).toBe(true);
 
     rounds$.next(roundsResponse(2, false));
     fixture.detectChanges();
 
-    expect(component.hasClosedRound()).toBe(false);
+    expect(component.canModifyAnswersOrRounds()).toBe(false);
+  });
+
+  it('treats a round whose deadline expired without being explicitly stopped as over', () => {
+    setUp(content(false));
+    rounds$.next(
+      roundsResponse(1, false, new Date(Date.now() - 1000).toISOString())
+    );
+    fixture.detectChanges();
+
+    expect(component.canModifyAnswersOrRounds()).toBe(true);
   });
 
   it('falls back to the new round once the answers are deleted', () => {
