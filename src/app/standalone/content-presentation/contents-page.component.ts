@@ -70,6 +70,11 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { mutationHelper } from '@gql/helper/mutation-helper';
+import {
+  answeringEndDate,
+  isRoundOver,
+  roundKey,
+} from '@app/standalone/countdown-timer/answering';
 
 @Component({
   selector: 'app-contents-page',
@@ -208,6 +213,16 @@ export class ContentsPageComponent {
       this.questionnaire()?.publishingMode === QuestionnairePublishingMode.Live
   );
 
+  readonly endDate = computed(() =>
+    answeringEndDate(this.content()?.activeRound)
+  );
+
+  readonly roundOver = linkedSignal({
+    source: () => roundKey(this.questionnaire()?.activeRound),
+    computation: () =>
+      isRoundOver(this.questionnaire()?.activeRound, Date.now(), this.isLive()),
+  });
+
   protected readonly scale = this.presentationService.scale;
 
   protected readonly containerStyle = computed(() => {
@@ -229,7 +244,6 @@ export class ContentsPageComponent {
   }));
   canAnswerContent = false;
   attributions: ContentLicenseAttribution[] = [];
-  endDate?: Date;
   showLeaderboard = false;
   isPublishing = false;
 

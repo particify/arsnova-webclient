@@ -100,8 +100,7 @@
     _questionnaire.published &&
     isLive() &&
     isPublished() &&
-    (!questionnaire()?.activeRound?.closed ||
-      startedContentId() !== _content.id)
+    (!roundOver() || startedContentId() !== _content.id)
   ) {
     @if (startedContentId() === _content.id) {
       <div @hotkeyEnterLeaveAnimation fxFill>
@@ -110,6 +109,7 @@
           [hotkeyTitle]="'creator.content.stop-content' | transloco"
           [action]="'creator.content.to-stop-content' | transloco"
           [isNavBarVisible]="!hideControlBar()"
+          [additionalBottomSpace]="true"
           (buttonClicked)="stopContent()"
         ></app-hotkey-action-button>
       </div>
@@ -129,15 +129,18 @@
     class="countdown-container"
     [ngClass]="{ 'over-control-bar': !hideControlBar() }"
   >
-    @if (_content && endDate) {
-      @let duration = _content.duration;
-      @if (duration) {
+    @if (
+      _content && isLive() && startedContentId() === _content.id && !roundOver()
+    ) {
+      @let _endDate = endDate();
+      @if (_endDate) {
         <app-countdown-timer
-          [endDate]="endDate"
-          [duration]="duration"
+          [endDate]="_endDate"
+          [duration]="_content.duration ?? undefined"
           [showIcon]="true"
           [layout]="'column-reverse'"
           [bigFontSize]="true"
+          (finished)="roundOver.set(true)"
         ></app-countdown-timer>
       } @else {
         <div
@@ -173,7 +176,7 @@
   @if (
     _content &&
     isPublished() &&
-    questionnaire()?.activeRound?.closed &&
+    roundOver() &&
     startedContentId() === _content.id
   ) {
     <div
