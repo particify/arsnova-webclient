@@ -2435,6 +2435,7 @@ export type RoundFragment = {
   roundNo: number;
   closed: boolean;
   started: boolean;
+  answeringEndTime?: string | null;
   answerable: boolean;
 };
 
@@ -2461,6 +2462,7 @@ export type QuestionnaireDetailsFragment = {
     roundNo: number;
     closed: boolean;
     started: boolean;
+    answeringEndTime?: string | null;
     answerable: boolean;
   } | null;
 };
@@ -2484,6 +2486,7 @@ export type ContentDetailsFragment = {
     roundNo: number;
     closed: boolean;
     started: boolean;
+    answeringEndTime?: string | null;
     answerable: boolean;
   } | null;
   formatData:
@@ -2528,6 +2531,7 @@ export type CreatorContentDetailsFragment = {
     roundNo: number;
     closed: boolean;
     started: boolean;
+    answeringEndTime?: string | null;
     answerable: boolean;
   } | null;
   formatData:
@@ -2555,6 +2559,8 @@ export type AnswerFragment = {
   __typename?: 'Answer';
   id: string;
   result: AnswerResultState;
+  createdAt?: string | null;
+  durationMs?: number | null;
   formatData?:
     | {
         __typename?: 'ChoiceAnswerFormatData';
@@ -2677,6 +2683,7 @@ export type QuestionnaireByIdQuery = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   } | null;
@@ -2713,6 +2720,7 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
           roundNo: number;
           closed: boolean;
           started: boolean;
+          answeringEndTime?: string | null;
           answerable: boolean;
         } | null;
         formatData:
@@ -2769,6 +2777,7 @@ export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
           roundNo: number;
           closed: boolean;
           started: boolean;
+          answeringEndTime?: string | null;
           answerable: boolean;
         } | null;
         formatData:
@@ -2824,6 +2833,7 @@ export type CreateQuestionnaireMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   };
@@ -2859,6 +2869,7 @@ export type ToggleQuestionnairePublishedMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   };
@@ -2891,6 +2902,7 @@ export type CreateQuestionnaireChoiceContentMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -2942,6 +2954,7 @@ export type UpdateQuestionnaireChoiceContentMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -2993,6 +3006,7 @@ export type CreateQuestionnaireWordcloudContentMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -3044,6 +3058,7 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -3095,6 +3110,7 @@ export type QuestionnaireContentByIdQuery = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -3129,6 +3145,8 @@ export type QuestionnaireAnswerByRoundIdQuery = {
     __typename?: 'Answer';
     id: string;
     result: AnswerResultState;
+    createdAt?: string | null;
+    durationMs?: number | null;
     formatData?:
       | {
           __typename?: 'ChoiceAnswerFormatData';
@@ -3209,6 +3227,8 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
     __typename?: 'Answer';
     id: string;
     result: AnswerResultState;
+    createdAt?: string | null;
+    durationMs?: number | null;
     formatData?:
       | {
           __typename?: 'ChoiceAnswerFormatData';
@@ -3234,6 +3254,8 @@ export type CreateQuestionnaireWordcloudAnswerMutation = {
     __typename?: 'Answer';
     id: string;
     result: AnswerResultState;
+    createdAt?: string | null;
+    durationMs?: number | null;
     formatData?:
       | {
           __typename?: 'ChoiceAnswerFormatData';
@@ -3259,6 +3281,8 @@ export type CreateQuestionnaireAbstentionMutation = {
     __typename?: 'Answer';
     id: string;
     result: AnswerResultState;
+    createdAt?: string | null;
+    durationMs?: number | null;
     formatData?:
       | {
           __typename?: 'ChoiceAnswerFormatData';
@@ -3329,6 +3353,7 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -3381,6 +3406,7 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -3449,6 +3475,7 @@ export type UpdateQuestionnaireMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   };
@@ -3481,6 +3508,7 @@ export type DuplicateQuestionnaireContentMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -3533,6 +3561,7 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -3585,6 +3614,7 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
     formatData:
@@ -3644,6 +3674,7 @@ export type QuestionnaireUpdatedSubscription = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   } | null;
@@ -3691,6 +3722,7 @@ export type CreatorQuestionnaireContentUpdatedSubscription = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   } | null;
@@ -3738,6 +3770,7 @@ export type StartQuestionnaireContentMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   };
@@ -3756,6 +3789,7 @@ export type StartQuestionnaireContentRoundMutation = {
     roundNo: number;
     closed: boolean;
     started: boolean;
+    answeringEndTime?: string | null;
     answerable: boolean;
   };
 };
@@ -3776,6 +3810,7 @@ export type StopQuestionnaireContentMutation = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   };
@@ -3794,6 +3829,7 @@ export type QuestionnaireRoundsByContentIdQuery = {
     roundNo: number;
     closed: boolean;
     started: boolean;
+    answeringEndTime?: string | null;
     answerable: boolean;
   }> | null;
 };
@@ -4589,6 +4625,7 @@ export const RoundFragmentDoc = gql`
     roundNo
     closed
     started
+    answeringEndTime
     answerable
   }
 `;
@@ -4674,6 +4711,8 @@ export const AnswerFragmentDoc = gql`
         words
       }
     }
+    createdAt
+    durationMs
   }
 `;
 export const ContentAnswerResultFragmentDoc = gql`
