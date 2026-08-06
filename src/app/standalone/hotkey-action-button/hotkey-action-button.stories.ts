@@ -34,3 +34,13 @@ export const Hotkey2: Story = {
     isNavBarVisible: true,
   },
 };
+
+export const WithAdditionalBottomSpace: Story = {
+  args: {
+    hotkey: 's',
+    hotkeyTitle: 'Stop content',
+    action: 'to stop content',
+    isNavBarVisible: true,
+    additionalBottomSpace: true,
+  },
+};
