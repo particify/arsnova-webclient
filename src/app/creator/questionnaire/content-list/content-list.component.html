@@ -88,7 +88,7 @@
                       @if (!isModerator() && isLiveMode()) {
                         @if (
                           startedContentId() === content.id &&
-                          !questionnaire().activeRound?.closed
+                          !isRoundOver(questionnaire().activeRound)
                         ) {
                           <button
                             (click)="stopContent()"
@@ -422,19 +422,26 @@
               </div>
             }
 
-            @if (
-              isLiveMode() &&
-              questionnaire().activeRound?.id === content.activeRound?.id &&
-              !questionnaire().activeRound?.closed
-            ) {
+            @if (isLiveRow(content)) {
+              @let rowEndDate = answeringEndDate(content.activeRound);
               <div
                 fxLayout="row"
                 fxLayoutGap="4px"
                 fxLayoutAlign="start center"
                 class="live-info"
               >
-                <app-pulsating-circle></app-pulsating-circle>
-                <span>{{ 'creator.content.live' | transloco }}</span>
+                @if (rowEndDate) {
+                  <app-countdown-timer
+                    [endDate]="rowEndDate"
+                    [duration]="content.duration ?? undefined"
+                    [showProgressBar]="false"
+                    fontSize="12px"
+                    (finished)="onRoundCountdownFinished()"
+                  ></app-countdown-timer>
+                } @else {
+                  <app-pulsating-circle></app-pulsating-circle>
+                  <span>{{ 'creator.content.live' | transloco }}</span>
+                }
               </div>
             }
             @if (content.activeRound?.closed && content.answerCount) {

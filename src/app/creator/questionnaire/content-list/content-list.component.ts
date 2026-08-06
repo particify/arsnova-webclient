@@ -77,6 +77,11 @@ import { ContentResultsService } from '@app/standalone/content-results/content-r
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import { filter, map, Observable, of, switchMap } from 'rxjs';
 import { RESULT_REGISTRY } from '@app/standalone/content-results/result-registry';
+import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import {
+  answeringEndDate,
+  isRoundOver as isRoundOverAt,
+} from '@app/standalone/countdown-timer/answering';
 
 @Component({
   selector: 'app-content-list',
@@ -108,6 +113,7 @@ import { RESULT_REGISTRY } from '@app/standalone/content-results/result-registry
     PulsatingCircleComponent,
     A11yRenderedBodyPipe,
     TranslocoPipe,
+    CountdownTimerComponent,
   ],
 })
 export class ContentListComponent extends DragDropBaseComponent<Content> {
@@ -203,6 +209,8 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   QuestionnaireType = QuestionnaireType;
 
   iconList = computed(() => this.contentService.getTypeIcons());
+
+  readonly answeringEndDate = answeringEndDate;
 
   publishingChangeActive = false;
   publishingChangePosition?: number;
@@ -317,11 +325,27 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     return !!RESULT_REGISTRY[content.formatData.format].supportsRounds;
   }
 
+  isLiveRow(content: Content): boolean {
+    return (
+      this.isLiveMode() &&
+      this.questionnaire().activeRound?.id === content.activeRound?.id &&
+      !this.isRoundOver(this.questionnaire().activeRound)
+    );
+  }
+
   canModifyAnswersOrRounds(content: Content): boolean {
     if (!this.isLiveMode()) {
       return true;
     }
-    return !!content.activeRound && content.activeRound.closed;
+    return !!content.activeRound && this.isRoundOver(content.activeRound);
+  }
+
+  isRoundOver(round: Content['activeRound']): boolean {
+    return isRoundOverAt(round, Date.now(), this.isLiveMode());
+  }
+
+  onRoundCountdownFinished(): void {
+    this.changeDetectorRef.detectChanges();
   }
 
   openedMenu(index: number) {
