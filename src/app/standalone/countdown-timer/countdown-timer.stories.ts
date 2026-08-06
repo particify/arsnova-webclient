@@ -26,6 +26,7 @@ endDate90.setSeconds(endDate90.getSeconds() + 90);
 export const Timer10: Story = {
   args: {
     endDate: endDate10,
+    duration: 10,
     showIcon: true,
   },
 };
@@ -33,6 +34,7 @@ export const Timer10: Story = {
 export const Timer60: Story = {
   args: {
     endDate: endDate60,
+    duration: 60,
     showIcon: true,
   },
 };
@@ -40,6 +42,7 @@ export const Timer60: Story = {
 export const Timer90: Story = {
   args: {
     endDate: endDate90,
+    duration: 90,
     showIcon: true,
   },
 };

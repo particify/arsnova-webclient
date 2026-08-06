@@ -1,18 +1,20 @@
 import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  inject,
   ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  afterRenderEffect,
+  computed,
+  inject,
+  input,
+  linkedSignal,
+  output,
+  viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CoreModule } from '@app/core/core.module';
-import { Subject, takeUntil, timer } from 'rxjs';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
+import dayjs from 'dayjs';
+import { interval } from 'rxjs';
 
 const TIMER_UPDATE_INTERVAL = 1000;
 const DELAY_BUFFER = 250;
@@ -24,61 +26,81 @@ const DELAY_BUFFER = 250;
   changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './countdown-timer.component.html',
 })
-export class CountdownTimerComponent implements OnInit, OnDestroy {
+export class CountdownTimerComponent {
   private serverTimeService = inject(ServerTimeService);
 
-  @Input({ required: true }) endDate!: Date;
-  @Input({ required: true }) duration!: number;
-  @Input() showIcon = false;
-  @Input() layout = 'row';
-  @Input() borderRadius = 0;
-  @Input() fontSize?: string;
-  @Input() bigFontSize = false;
-  @Input() showProgressBar = true;
-  @Output() finished = new EventEmitter<void>();
-  totalTime = 0;
-  timeLeft = 0;
+  readonly endDate = input.required<Date>();
+  readonly duration = input<number>();
+  readonly showIcon = input(false);
+  readonly layout = input('row');
+  readonly borderRadius = input(0);
+  readonly fontSize = input<string>();
+  readonly bigFontSize = input(false);
+  readonly showProgressBar = input(true);
+  readonly finished = output<void>();
 
-  protected timerFinished$ = new Subject<void>();
+  private readonly deadline = computed(
+    () => this.endDate().getTime() - DELAY_BUFFER
+  );
 
-  ngOnInit(): void {
-    this.endDate.setTime(this.endDate.getTime() - DELAY_BUFFER);
-    timer(0, TIMER_UPDATE_INTERVAL)
-      .pipe(takeUntil(this.timerFinished$))
-      .subscribe(() => {
-        this.setTimeLeft();
-      });
+  readonly timeLeft = linkedSignal({
+    source: this.deadline,
+    computation: () => this.remainingTime(),
+  });
+
+  readonly totalTime = linkedSignal({
+    source: this.deadline,
+    computation: () => this.remainingTime(),
+  });
+
+  readonly progressWidth = computed(() => {
+    const duration = this.duration();
+    return duration ? this.totalTime() / duration / 10 + '%' : '100%';
+  });
+
+  readonly timeLabel = computed(() =>
+    this.timeLeft() > 0 ? dayjs(this.timeLeft()).format('mm:ss') : undefined
+  );
+
+  private readonly progressBar =
+    viewChild<ElementRef<HTMLElement>>('progressBar');
+
+  constructor() {
+    interval(TIMER_UPDATE_INTERVAL)
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.tick());
+
+    afterRenderEffect((onCleanup) => {
+      this.deadline();
+      const duration = this.totalTime();
+      const element = this.progressBar()?.nativeElement;
+      if (!element || duration <= 0) {
+        return;
+      }
+      const animation = element.animate(
+        [{ transform: 'translateX(0)' }, { transform: 'translateX(-100%)' }],
+        { duration, easing: 'linear', fill: 'forwards' }
+      );
+      onCleanup(() => animation.cancel());
+    });
   }
 
-  ngOnDestroy(): void {
-    this.finishTimer();
-  }
-
-  private finishTimer(): void {
-    this.finished.emit();
-    this.timerFinished$.next();
-  }
-
-  private setTimeLeft(): void {
-    const now = new Date();
-    dayjs.extend(relativeTime);
-    this.timeLeft =
-      Math.round(
-        dayjs(this.endDate).diff(now) / 1000 -
-          this.serverTimeService.averageOffset / 1000
-      ) * 1000;
-    if (!this.timeLeft) {
-      this.finishTimer();
+  private tick(): void {
+    if (this.timeLeft() <= 0) {
       return;
     }
-    if (!this.totalTime) {
-      this.totalTime = this.timeLeft;
+    this.timeLeft.set(this.remainingTime());
+    if (this.timeLeft() <= 0) {
+      this.finished.emit();
     }
   }
 
-  getTime() {
-    if (this.timeLeft) {
-      return dayjs(this.timeLeft).format('mm:ss');
-    }
+  private remainingTime(): number {
+    return (
+      Math.round(
+        (this.deadline() - Date.now() - this.serverTimeService.averageOffset) /
+          1000
+      ) * 1000
+    );
   }
 }
