@@ -7,6 +7,7 @@ import {
   tick,
 } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
@@ -42,6 +43,199 @@ import { QuestionnairePageComponent } from './questionnaire-page.component';
 // Any result other than unanswered counts as answered.
 const Answered = AnswerResultState.Neutral;
 const Unanswered = AnswerResultState.Unanswered;
+
+describe('QuestionnairePageComponent', () => {
+  let fixture: ComponentFixture<QuestionnairePageComponent>;
+  let component: QuestionnairePageComponent;
+  let focusModeEnabled$: BehaviorSubject<boolean>;
+  let contentState$: Subject<ContentFocusState>;
+  let contents$: Subject<unknown>;
+
+  const contents = ['c-1', 'c-2', 'c-3'].map(
+    (id, position) => ({ id, position }) as Content
+  );
+
+  function questionnaireResult(id: string) {
+    return {
+      data: {
+        questionnaireById: {
+          id,
+          published: true,
+          publishingMode: QuestionnairePublishingMode.All,
+          contentCount: contents.length,
+        },
+      },
+    };
+  }
+
+  function spyProvider(token: Type<unknown>, methods: string[]) {
+    return {
+      provide: token,
+      useValue: jasmine.createSpyObj(token.name, methods),
+    };
+  }
+
+  function setUp(focusModeEnabled = true) {
+    // The page's child components are irrelevant to the focus logic here.
+    TestBed.overrideComponent(QuestionnairePageComponent, {
+      set: { template: '', imports: [] },
+    });
+    focusModeEnabled$ = new BehaviorSubject(focusModeEnabled);
+    contentState$ = new Subject();
+    contents$ = new Subject();
+    const focusModeService = jasmine.createSpyObj('FocusModeService', [
+      'getFocusModeEnabled',
+      'getContentState',
+    ]);
+    focusModeService.getFocusModeEnabled.and.returnValue(focusModeEnabled$);
+    focusModeService.getContentState.and.returnValue(contentState$);
+    const questionnaireById = jasmine.createSpyObj('QuestionnaireByIdGql', [
+      'watch',
+    ]);
+    questionnaireById.watch.and.callFake(
+      ({ variables }: { variables: { id: string } }) => ({
+        valueChanges: of(questionnaireResult(variables.id)),
+      })
+    );
+    const contentsGql = jasmine.createSpyObj('ContentsGql', ['watch']);
+    contentsGql.watch.and.returnValue({ valueChanges: contents$ });
+    const answerResultsGql = jasmine.createSpyObj('AnswerResultsGql', [
+      'watch',
+    ]);
+    answerResultsGql.watch.and.returnValue({ valueChanges: NEVER });
+    const subscriptionGql = (name: string) => {
+      const gql = jasmine.createSpyObj(name, ['subscribe']);
+      gql.subscribe.and.returnValue(NEVER);
+      return gql;
+    };
+    const authenticationService = jasmine.createSpyObj(
+      'AuthenticationService',
+      ['getCurrentAuthentication']
+    );
+    authenticationService.getCurrentAuthentication.and.returnValue(
+      of({ userId: 'user-1' })
+    );
+
+    configureTestModule(
+      [getTranslocoModule(), QuestionnairePageComponent],
+      [
+        { provide: FocusModeService, useValue: focusModeService },
+        { provide: QuestionnaireByIdGql, useValue: questionnaireById },
+        {
+          provide: QuestionnairePublishedContentsByQuestionnaireIdGql,
+          useValue: contentsGql,
+        },
+        {
+          provide: QuestionnaireContentAnswerResultsByQuestionnaireIdGql,
+          useValue: answerResultsGql,
+        },
+        {
+          provide: QuestionnaireUpdatedGql,
+          useValue: subscriptionGql('QuestionnaireUpdatedGql'),
+        },
+        {
+          provide: QuestionnaireContentUpdatedGql,
+          useValue: subscriptionGql('QuestionnaireContentUpdatedGql'),
+        },
+        { provide: AuthenticationService, useValue: authenticationService },
+        spyProvider(AnnounceService, ['announce']),
+        spyProvider(ContentCarouselService, ['isLastContentAnswered']),
+        spyProvider(NotificationService, ['show']),
+      ]
+    ).compileComponents();
+
+    fixture = TestBed.createComponent(QuestionnairePageComponent);
+    component = fixture.componentInstance;
+    fixture.componentRef.setInput('questionnaireId', 'q-1');
+    fixture.componentRef.setInput('shortId', '12345678');
+    fixture.componentRef.setInput('roomId', 'room-1');
+    fixture.componentRef.setInput('settings', {} as UserUiSettings);
+    fixture.componentRef.setInput('language', 'en');
+    spyOn(component, 'initStepper');
+    spyOn(component, 'goToContent');
+    fixture.detectChanges();
+  }
+
+  function emitContents() {
+    contents$.next({
+      dataState: 'complete',
+      data: {
+        questionnairePublishedContentsByQuestionnaireId: {
+          edges: contents.map((node) => ({ node })),
+        },
+      },
+    });
+    fixture.detectChanges();
+  }
+
+  function focusOn(questionnaireId: string, contentId: string) {
+    contentState$.next(
+      new ContentFocusState(contentId, 0, questionnaireId, 'Questionnaire')
+    );
+    fixture.detectChanges();
+  }
+
+  it('enters the stepper at the focused content', () => {
+    setUp();
+    emitContents();
+
+    focusOn('q-1', 'c-3');
+
+    expect(component.initStepper).toHaveBeenCalledWith(2);
+    expect(component.goToContent).not.toHaveBeenCalled();
+  });
+
+  it('follows a focus change once the stepper has started', () => {
+    setUp();
+    emitContents();
+    component.started = true;
+    component.currentStep = 0;
+
+    focusOn('q-1', 'c-2');
+
+    expect(component.goToContent).toHaveBeenCalledWith(1);
+  });
+
+  it('follows a focus change that arrived before the contents', () => {
+    setUp();
+    focusOn('q-1', 'c-3');
+    expect(component.initStepper).not.toHaveBeenCalled();
+
+    emitContents();
+
+    expect(component.initStepper).toHaveBeenCalledWith(2);
+  });
+
+  it('ignores the focus on another questionnaire', () => {
+    setUp();
+    emitContents();
+
+    focusOn('q-2', 'c-3');
+
+    expect(component.initStepper).not.toHaveBeenCalled();
+    expect(component.goToContent).not.toHaveBeenCalled();
+  });
+
+  it('ignores content focus while focus mode is disabled', () => {
+    setUp(false);
+    emitContents();
+
+    focusOn('q-1', 'c-3');
+
+    expect(component.initStepper).not.toHaveBeenCalled();
+    expect(component.goToContent).not.toHaveBeenCalled();
+  });
+
+  it('starts over when the reused page switches to another questionnaire', () => {
+    setUp(false);
+    component.started = true;
+
+    fixture.componentRef.setInput('questionnaireId', 'q-2');
+    fixture.detectChanges();
+
+    expect(component.started).toBeFalse();
+  });
+});
 
 describe('QuestionnairePageComponent (live sync)', () => {
   let fixture: ComponentFixture<QuestionnairePageComponent>;
