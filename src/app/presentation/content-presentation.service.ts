@@ -3,27 +3,50 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   Content,
   QuestionnaireContentsByQuestionnaireIdGql,
+  QuestionnaireUpdatedGql,
 } from '@gql/generated/graphql';
-import { of, switchMap } from 'rxjs';
+import { catchError, EMPTY, map, of, switchMap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ContentPresentationService {
   private readonly contentsByQuestionnareId = inject(
     QuestionnaireContentsByQuestionnaireIdGql
   );
+  private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
   private _questionnaireId = signal<string | undefined>(undefined);
   private _currentContentIndex = signal(0);
 
-  private readonly contentsResult = toSignal(
+  private readonly activeRoundId = toSignal(
     toObservable(this._questionnaireId).pipe(
-      switchMap((q) => {
-        if (!q) {
-          return of();
-        } else {
-          return this.contentsByQuestionnareId.watch({
-            variables: { questionnaireId: q },
-          }).valueChanges;
+      switchMap((questionnaireId) => {
+        if (!questionnaireId) {
+          return EMPTY;
         }
+        return this.questionnaireUpdated
+          .subscribe({ variables: { questionnaireId } })
+          .pipe(
+            map((r) => r.data?.questionnaireUpdated?.activeRound?.id),
+            catchError(() => EMPTY)
+          );
+      })
+    )
+  );
+
+  private readonly contentsKey = computed(() =>
+    [this._questionnaireId(), this.activeRoundId()].join('|')
+  );
+
+  private readonly contentsResult = toSignal(
+    toObservable(this.contentsKey).pipe(
+      switchMap(() => {
+        const questionnaireId = this._questionnaireId();
+        if (!questionnaireId) {
+          return of();
+        }
+        return this.contentsByQuestionnareId.watch({
+          variables: { questionnaireId },
+          fetchPolicy: 'network-only',
+        }).valueChanges;
       })
     )
   );
