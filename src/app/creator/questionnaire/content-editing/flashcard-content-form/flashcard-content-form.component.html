@@ -1,0 +1,18 @@
+<mat-form-field appearance="outline" class="input-block no-field-hint">
+  <mat-label>{{ 'creator.content.answer' | transloco }}</mat-label>
+  <textarea
+    #answerInput
+    matInput
+    [disabled]="formDisabled"
+    [maxlength]="answerMaxLength"
+    [(ngModel)]="answer"
+    (input)="updateTextContainsImage(answerInput.value)"
+    dir="auto"
+  ></textarea>
+</mat-form-field>
+@if (textContainsImage) {
+  <app-hint
+    text="creator.utils.formatting-image-hint"
+    [type]="HintType.WARNING"
+  ></app-hint>
+}

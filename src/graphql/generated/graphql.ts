@@ -3181,6 +3181,230 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
   } | null;
 };
 
+export type CreateQuestionnaireFlashcardContentMutationVariables = Exact<{
+  input: CreateFlashcardContentInput;
+}>;
+
+export type CreateQuestionnaireFlashcardContentMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireFlashcardContent: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  };
+};
+
+export type UpdateQuestionnaireFlashcardContentMutationVariables = Exact<{
+  input: UpdateFlashcardContentInput;
+}>;
+
+export type UpdateQuestionnaireFlashcardContentMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaireFlashcardContent: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  };
+};
+
+export type CreateQuestionnaireSlideContentMutationVariables = Exact<{
+  input: CreateSlideContentInput;
+}>;
+
+export type CreateQuestionnaireSlideContentMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireSlideContent: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  };
+};
+
+export type UpdateQuestionnaireSlideContentMutationVariables = Exact<{
+  input: UpdateSlideContentInput;
+}>;
+
+export type UpdateQuestionnaireSlideContentMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaireSlideContent: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | { __typename?: 'TextContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  };
+};
+
 export type QuestionnaireContentByIdQueryVariables = Exact<{
   id: Scalars['UUID']['input'];
 }>;
@@ -6511,6 +6735,98 @@ export class UpdateQuestionnaireWordcloudContentGql extends Apollo.Mutation<
   UpdateQuestionnaireWordcloudContentMutationVariables
 > {
   document = UpdateQuestionnaireWordcloudContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireFlashcardContentDocument = gql`
+  mutation CreateQuestionnaireFlashcardContent(
+    $input: CreateFlashcardContentInput!
+  ) {
+    createQuestionnaireFlashcardContent(input: $input) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireFlashcardContentGql extends Apollo.Mutation<
+  CreateQuestionnaireFlashcardContentMutation,
+  CreateQuestionnaireFlashcardContentMutationVariables
+> {
+  document = CreateQuestionnaireFlashcardContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireFlashcardContentDocument = gql`
+  mutation UpdateQuestionnaireFlashcardContent(
+    $input: UpdateFlashcardContentInput!
+  ) {
+    updateQuestionnaireFlashcardContent(input: $input) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireFlashcardContentGql extends Apollo.Mutation<
+  UpdateQuestionnaireFlashcardContentMutation,
+  UpdateQuestionnaireFlashcardContentMutationVariables
+> {
+  document = UpdateQuestionnaireFlashcardContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireSlideContentDocument = gql`
+  mutation CreateQuestionnaireSlideContent($input: CreateSlideContentInput!) {
+    createQuestionnaireSlideContent(input: $input) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireSlideContentGql extends Apollo.Mutation<
+  CreateQuestionnaireSlideContentMutation,
+  CreateQuestionnaireSlideContentMutationVariables
+> {
+  document = CreateQuestionnaireSlideContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireSlideContentDocument = gql`
+  mutation UpdateQuestionnaireSlideContent($input: UpdateSlideContentInput!) {
+    updateQuestionnaireSlideContent(input: $input) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireSlideContentGql extends Apollo.Mutation<
+  UpdateQuestionnaireSlideContentMutation,
+  UpdateQuestionnaireSlideContentMutationVariables
+> {
+  document = UpdateQuestionnaireSlideContentDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

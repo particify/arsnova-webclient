@@ -213,6 +213,34 @@ mutation UpdateQuestionnaireWordcloudContent(
   }
 }
 
+mutation CreateQuestionnaireFlashcardContent(
+  $input: CreateFlashcardContentInput!
+) {
+  createQuestionnaireFlashcardContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireFlashcardContent(
+  $input: UpdateFlashcardContentInput!
+) {
+  updateQuestionnaireFlashcardContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation CreateQuestionnaireSlideContent($input: CreateSlideContentInput!) {
+  createQuestionnaireSlideContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireSlideContent($input: UpdateSlideContentInput!) {
+  updateQuestionnaireSlideContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
 query QuestionnaireContentById($id: UUID!) {
   questionnaireContentById(id: $id) {
     ...CreatorContentDetails
