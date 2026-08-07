@@ -58,6 +58,8 @@ export class ContentService extends AbstractEntityService<Content> {
 
   typeIcons: Map<ContentType, string> = new Map<ContentType, string>([
     [ContentType.Choice, 'list'],
+    [ContentType.Flashcard, 'school'],
+    [ContentType.Slide, 'info'],
     [ContentType.Wordcloud, 'cloud'],
   ]);
 

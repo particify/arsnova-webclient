@@ -67,6 +67,13 @@ fragment ContentDetails on Content {
       format
       maxAnswers
     }
+    ... on FlashcardContentFormatData {
+      format
+      answer
+    }
+    ... on SlideContentFormatData {
+      format
+    }
   }
   duration
   abstentionsAllowed

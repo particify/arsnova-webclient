@@ -135,14 +135,17 @@ export class ContentGroupService {
           ContentType.Slide,
         ];
       case QuestionnaireType.Quiz:
-        return [ContentType.Choice];
+        return [ContentType.Choice, ContentType.Slide];
       case QuestionnaireType.Survey:
         return [
           ContentType.Choice,
           ContentType.Scale,
           ContentType.Text,
           ContentType.Wordcloud,
+          ContentType.Slide,
         ];
+      case QuestionnaireType.Flashcards:
+        return [ContentType.Flashcard, ContentType.Slide];
       default:
         return [];
     }
@@ -160,7 +163,7 @@ export class ContentGroupService {
       return false;
     }
     if (
-      [ContentType.Slide, ContentType.Text].includes(
+      [ContentType.Flashcard, ContentType.Slide, ContentType.Text].includes(
         content.formatData.format
       ) ||
       questionnaireType === QuestionnaireType.Mixed
