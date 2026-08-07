@@ -124,12 +124,10 @@
       appLangContext
       appDirContext
     >
-      <ng-container
-        *ngComponentOutlet="
-          resultComponent().component;
-          inputs: componentInputs()
-        "
-      />
+      @let rc = resultComponent().component;
+      @if (rc) {
+        <ng-container *ngComponentOutlet="rc; inputs: componentInputs()" />
+      }
     </div>
   }
 </div>

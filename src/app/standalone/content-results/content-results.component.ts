@@ -12,7 +12,6 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { map, skip, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
 import { refetchOn } from '@gql/helper/refetch-on';
-import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import {
   Content,
@@ -136,6 +135,9 @@ export class ContentResultsComponent {
         allowAnswerModeration: this.allowAnswerModeration(),
       };
     }
+    if (this.content().formatData.format === ContentType.Flashcard) {
+      return { ...base, formatData: this.content().formatData };
+    }
     if (this.content().formatData.format === ContentType.Choice) {
       return {
         ...base,
@@ -169,7 +171,6 @@ export class ContentResultsComponent {
 
   responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };
   ContentType = ContentType;
-  flashcardMarkdownFeatures = MarkdownFeatureset.EXTENDED;
   HotkeyAction = HotkeyAction;
   allowingUnitChange = computed(() =>
     [

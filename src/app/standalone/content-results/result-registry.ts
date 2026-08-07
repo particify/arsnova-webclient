@@ -2,6 +2,7 @@ import { ContentType } from '@gql/generated/graphql';
 import { ResultDefinition } from './result-definition';
 import { ChoiceResultsComponent } from './choice-results/choice-results.component';
 import { WordcloudResultsComponent } from './wordcloud-results/wordcloud-results.component';
+import { FlashcardResultsComponent } from './flashcard-results/flashcard-results.component';
 
 export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
   [ContentType.Choice]: {
@@ -14,7 +15,7 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
     supportsRoundComparison: true,
   },
   [ContentType.Flashcard]: {
-    component: ChoiceResultsComponent,
+    component: FlashcardResultsComponent,
   },
   [ContentType.Numeric]: {
     component: ChoiceResultsComponent,
@@ -31,9 +32,7 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
     component: ChoiceResultsComponent,
     supportsRoundComparison: true,
   },
-  [ContentType.Slide]: {
-    component: ChoiceResultsComponent,
-  },
+  [ContentType.Slide]: {},
   [ContentType.Sort]: {
     component: ChoiceResultsComponent,
   },
