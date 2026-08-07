@@ -1,9 +1,8 @@
 import {
   Component,
-  EventEmitter,
-  Input,
-  Output,
   ChangeDetectionStrategy,
+  input,
+  model,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
 
@@ -15,10 +14,8 @@ import { CoreModule } from '@app/core/core.module';
   styleUrls: ['./content-text-answer.component.scss'],
 })
 export class ContentTextAnswerComponent {
-  @Output() inputEvent: EventEmitter<string> = new EventEmitter();
-  @Input() disabled = false;
-  @Input() givenAnswer?: string;
-  @Input() correct?: boolean;
-  @Input() minRows = 3;
-  @Input() lengthLimit = 1000;
+  answer = model<string>('');
+  disabled = input(false);
+  lengthLimit = input(1000);
+  minRows = input(3);
 }
