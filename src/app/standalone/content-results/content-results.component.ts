@@ -68,6 +68,7 @@ export class ContentResultsComponent {
   isPresentation = input(false, { transform: booleanAttribute });
   isStandalone = input(false, { transform: booleanAttribute });
   allowAnswerModeration = input(false, { transform: booleanAttribute });
+  viewAsParticipant = input(false, { transform: booleanAttribute });
 
   private readonly activeRoundId$ = toObservable(
     computed(() => this.content().activeRound?.id)
@@ -118,46 +119,49 @@ export class ContentResultsComponent {
     () => !!this.resultComponent().supportsRoundComparison
   );
 
-  readonly componentInputs = computed(() => {
-    const base = {
-      roundIds: this.selectedRoundIds(),
-      resultsVisible: this.resultsVisible(),
-    };
-    if (this.content().formatData.format === ContentType.Scale) {
-      return { ...base, rounds: this.rounds(), language: this.language() };
-    }
-    if (this.content().formatData.format === ContentType.Wordcloud) {
-      return {
-        ...base,
-        contentId: this.content().id,
-        rotateWords: !!this.settings().rotateWordcloudItems,
-        visualizationType: this.activeWordcloudVisualiation(),
-        allowAnswerModeration: this.allowAnswerModeration(),
-      };
-    }
-    if (this.content().formatData.format === ContentType.Flashcard) {
-      return { ...base, formatData: this.content().formatData };
-    }
-    if (this.content().formatData.format === ContentType.Choice) {
-      return {
-        ...base,
-        rounds: this.rounds(),
-        answersDirectlyBelowChart:
-          !!this.settings().contentAnswersDirectlyBelowChart,
-        visualizationUnitPercent:
-          !!this.settings().contentVisualizationUnitPercent,
-        isPresentation: this.isPresentation(),
-        showCorrect: this.correctRevealed(),
-        hasCorrectAnswer: this.content()?.hasCorrectAnswer,
-        formatData: this.content().formatData,
-        answerCount: this.content().answerCount ?? 0,
-        correctAnswerCount: this.content().correctAnswerCount ?? 0,
-        abstentionCount: this.content().abstentionCount ?? 0,
-        activeRoundId: this.content().activeRound?.id,
-      };
-    }
-    return { ...base, rounds: this.rounds() };
-  });
+  private readonly formatInputs: Partial<
+    Record<ContentType, () => Record<string, unknown>>
+  > = {
+    [ContentType.Choice]: () => ({
+      rounds: this.rounds(),
+      answersDirectlyBelowChart:
+        !!this.settings().contentAnswersDirectlyBelowChart,
+      visualizationUnitPercent:
+        !!this.settings().contentVisualizationUnitPercent,
+      isPresentation: this.isPresentation(),
+      showCorrect: this.correctRevealed(),
+      hasCorrectAnswer: this.content()?.hasCorrectAnswer,
+      formatData: this.content().formatData,
+      answerCount: this.content().answerCount ?? 0,
+      correctAnswerCount: this.content().correctAnswerCount ?? 0,
+      abstentionCount: this.content().abstentionCount ?? 0,
+      activeRoundId: this.content().activeRound?.id,
+    }),
+    [ContentType.Flashcard]: () => ({ formatData: this.content().formatData }),
+    [ContentType.Scale]: () => ({
+      rounds: this.rounds(),
+      language: this.language(),
+    }),
+    [ContentType.Text]: () => ({
+      formatData: this.content().formatData,
+      allowAnswerModeration: this.allowAnswerModeration(),
+      viewAsParticipant: this.viewAsParticipant(),
+    }),
+    [ContentType.Wordcloud]: () => ({
+      contentId: this.content().id,
+      rotateWords: !!this.settings().rotateWordcloudItems,
+      visualizationType: this.activeWordcloudVisualiation(),
+      allowAnswerModeration: this.allowAnswerModeration(),
+    }),
+  };
+
+  readonly componentInputs = computed<Record<string, unknown>>(() => ({
+    roundIds: this.selectedRoundIds(),
+    resultsVisible: this.resultsVisible(),
+    ...(this.formatInputs[this.content().formatData.format]?.() ?? {
+      rounds: this.rounds(),
+    }),
+  }));
 
   resultsVisible = computed(() => this.contentResultsService.resultsVisible());
   correctResultsVisible = linkedSignal(() =>

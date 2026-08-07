@@ -1,0 +1,38 @@
+@use '../../../../../variables' as *;
+
+.list-item {
+  padding: $spacing-1 $spacing-2;
+
+  &:not(:first-of-type) {
+    border-top: 1px solid var(--border);
+  }
+}
+
+.answer {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.delete-button {
+  opacity: 0;
+}
+
+@mixin show-delete-button {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .moderation .delete-button {
+    @include show-delete-button;
+  }
+}
+
+.moderation:hover,
+.moderation:focus-within {
+  background-color: var(--surface);
+  filter: brightness(97%);
+
+  .delete-button {
+    @include show-delete-button;
+  }
+}

@@ -1,0 +1,30 @@
+<div role="list">
+  @for (answer of answers(); track answer.id) {
+    <div
+      role="listitem"
+      tabindex="0"
+      class="list-item"
+      [ngClass]="{ moderation: hidingAllowed() }"
+      data-testid="text-answer-item"
+    >
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        fxLayoutGap="8px"
+      >
+        <span fxFlex class="answer">{{ answer.body }}</span>
+        @if (hidingAllowed()) {
+          <button
+            mat-icon-button
+            color="warn"
+            class="delete-button"
+            (click)="hideClicked.emit(answer)"
+            [matTooltip]="'creator.statistic.delete-answer' | transloco"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

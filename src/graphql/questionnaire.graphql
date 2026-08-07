@@ -62,6 +62,7 @@ fragment ContentDetails on Content {
     }
     ... on TextContentFormatData {
       format
+      answersPublished
     }
     ... on WordcloudContentFormatData {
       format
@@ -93,6 +94,7 @@ fragment CreatorContentDetails on Content {
 fragment Answer on Answer {
   id
   result
+  hidden
   formatData {
     ... on ChoiceAnswerFormatData {
       format
@@ -299,6 +301,12 @@ query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
   }
 }
 
+query QuestionnaireTextAnswersByRoundId($roundId: UUID!) {
+  questionnaireTextAnswersByRoundId(roundId: $roundId) {
+    ...Answer
+  }
+}
+
 mutation CreateQuestionnaireChoiceAnswer($input: CreateChoiceAnswerInput!) {
   createQuestionnaireChoiceAnswer(input: $input) {
     ...Answer
@@ -352,6 +360,15 @@ mutation BanQuestionnaireWordcloudContentKeyword(
 mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID!) {
   resetBannedQuestionnaireWordcloudContentKeywords(contentId: $contentId) {
     ...CreatorContentDetails
+  }
+}
+
+mutation ToggleQuestionnaireTextAnswerHidden(
+  $answerId: UUID!
+  $hidden: Boolean!
+) {
+  toggleQuestionnaireTextAnswerHidden(answerId: $answerId, hidden: $hidden) {
+    ...Answer
   }
 }
 
@@ -472,6 +489,12 @@ subscription QuestionnaireWordcloudRoundStatsUpdated($roundId: UUID!) {
   questionnaireWordcloudRoundStatsUpdated(roundId: $roundId) {
     words
     counts
+  }
+}
+
+subscription QuestionnaireTextAnswersUpdated($roundId: UUID!) {
+  questionnaireTextAnswersUpdated(roundId: $roundId) {
+    ...Answer
   }
 }
 
