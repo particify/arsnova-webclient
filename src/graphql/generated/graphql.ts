@@ -2698,7 +2698,7 @@ export type AnswerFragment = {
         format: ContentType;
         selectedChoiceIndexes: Array<number>;
       }
-    | { __typename?: 'TextAnswerFormatData' }
+    | { __typename?: 'TextAnswerFormatData'; format: ContentType; body: string }
     | {
         __typename?: 'WordcloudAnswerFormatData';
         format: ContentType;
@@ -3671,7 +3671,11 @@ export type QuestionnaireAnswerByRoundIdQuery = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'TextAnswerFormatData' }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'WordcloudAnswerFormatData';
           format: ContentType;
@@ -3754,7 +3758,11 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'TextAnswerFormatData' }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'WordcloudAnswerFormatData';
           format: ContentType;
@@ -3782,7 +3790,44 @@ export type CreateQuestionnaireWordcloudAnswerMutation = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'TextAnswerFormatData' }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type CreateQuestionnaireTextAnswerMutationVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+  body: Scalars['String']['input'];
+}>;
+
+export type CreateQuestionnaireTextAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireTextAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    createdAt?: string | null;
+    durationMs?: number | null;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'WordcloudAnswerFormatData';
           format: ContentType;
@@ -3810,7 +3855,11 @@ export type CreateQuestionnaireAbstentionMutation = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'TextAnswerFormatData' }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'WordcloudAnswerFormatData';
           format: ContentType;
@@ -5265,6 +5314,10 @@ export const AnswerFragmentDoc = gql`
       ... on ChoiceAnswerFormatData {
         format
         selectedChoiceIndexes
+      }
+      ... on TextAnswerFormatData {
+        format
+        body
       }
       ... on WordcloudAnswerFormatData {
         format
@@ -7250,6 +7303,28 @@ export class CreateQuestionnaireWordcloudAnswerGql extends Apollo.Mutation<
   CreateQuestionnaireWordcloudAnswerMutationVariables
 > {
   document = CreateQuestionnaireWordcloudAnswerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireTextAnswerDocument = gql`
+  mutation CreateQuestionnaireTextAnswer($roundId: UUID!, $body: String!) {
+    createQuestionnaireTextAnswer(input: { roundId: $roundId, body: $body }) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireTextAnswerGql extends Apollo.Mutation<
+  CreateQuestionnaireTextAnswerMutation,
+  CreateQuestionnaireTextAnswerMutationVariables
+> {
+  document = CreateQuestionnaireTextAnswerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

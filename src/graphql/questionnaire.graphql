@@ -98,6 +98,10 @@ fragment Answer on Answer {
       format
       selectedChoiceIndexes
     }
+    ... on TextAnswerFormatData {
+      format
+      body
+    }
     ... on WordcloudAnswerFormatData {
       format
       words
@@ -305,6 +309,12 @@ mutation CreateQuestionnaireWordcloudAnswer(
   $input: CreateWordcloudAnswerInput!
 ) {
   createQuestionnaireWordcloudAnswer(input: $input) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireTextAnswer($roundId: UUID!, $body: String!) {
+  createQuestionnaireTextAnswer(input: { roundId: $roundId, body: $body }) {
     ...Answer
   }
 }
