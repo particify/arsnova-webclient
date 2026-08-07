@@ -363,6 +363,18 @@ mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID!) {
   }
 }
 
+mutation ToggleQuestionnaireTextContentAnswersPublished(
+  $contentId: UUID!
+  $published: Boolean!
+) {
+  toggleQuestionnaireTextContentAnswersPublished(
+    contentId: $contentId
+    published: $published
+  ) {
+    ...ContentDetails
+  }
+}
+
 mutation ToggleQuestionnaireTextAnswerHidden(
   $answerId: UUID!
   $hidden: Boolean!

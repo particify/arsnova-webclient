@@ -85,6 +85,42 @@
                 >
                   @if (contentTypes.indexOf(content.formatData.format) > -1) {
                     <div fxLayout="row">
+                      @if (
+                        isText(content.formatData) &&
+                        content.formatData.answersPublished &&
+                        !isModerator()
+                      ) {
+                        <button
+                          mat-icon-button
+                          color="primary"
+                          matTooltip="{{
+                            'creator.content.dont-publish-answers' | transloco
+                          }}"
+                          (click)="toggleTextAnswersPublished(content)"
+                          appTrackInteraction="Content publish text answers toggled"
+                          appTrackName="off"
+                        >
+                          <mat-icon class="unlocked">visibility</mat-icon>
+                        </button>
+                      }
+                      @if (
+                        isText(content.formatData) &&
+                        !content.formatData.answersPublished &&
+                        !isModerator()
+                      ) {
+                        <button
+                          mat-icon-button
+                          color="primary"
+                          matTooltip="{{
+                            'creator.content.publish-answers' | transloco
+                          }}"
+                          (click)="toggleTextAnswersPublished(content)"
+                          appTrackInteraction="Content publish text answers toggled"
+                          appTrackName="on"
+                        >
+                          <mat-icon>visibility_off</mat-icon>
+                        </button>
+                      }
                       @if (!isModerator() && isLiveMode()) {
                         @if (
                           startedContentId() === content.id &&

@@ -3,6 +3,7 @@ import { ResultDefinition } from './result-definition';
 import { ChoiceResultsComponent } from './choice-results/choice-results.component';
 import { WordcloudResultsComponent } from './wordcloud-results/wordcloud-results.component';
 import { FlashcardResultsComponent } from './flashcard-results/flashcard-results.component';
+import { TextResultsComponent } from './text-results/text-results.component';
 
 export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
   [ContentType.Choice]: {
@@ -37,7 +38,7 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
     component: ChoiceResultsComponent,
   },
   [ContentType.Text]: {
-    component: ChoiceResultsComponent,
+    component: TextResultsComponent,
   },
   [ContentType.Wordcloud]: {
     component: WordcloudResultsComponent,

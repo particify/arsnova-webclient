@@ -4119,6 +4119,68 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
   } | null;
 };
 
+export type ToggleQuestionnaireTextContentAnswersPublishedMutationVariables =
+  Exact<{
+    contentId: Scalars['UUID']['input'];
+    published: Scalars['Boolean']['input'];
+  }>;
+
+export type ToggleQuestionnaireTextContentAnswersPublishedMutation = {
+  __typename?: 'Mutation';
+  toggleQuestionnaireTextContentAnswersPublished?: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'TextContentFormatData';
+          format: ContentType;
+          answersPublished?: boolean | null;
+        }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
 export type ToggleQuestionnaireTextAnswerHiddenMutationVariables = Exact<{
   answerId: Scalars['UUID']['input'];
   hidden: Scalars['Boolean']['input'];
@@ -7662,6 +7724,34 @@ export class ResetBannedQuestionnaireWordcloudContentKeywordsGql extends Apollo.
   ResetBannedQuestionnaireWordcloudContentKeywordsMutationVariables
 > {
   document = ResetBannedQuestionnaireWordcloudContentKeywordsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ToggleQuestionnaireTextContentAnswersPublishedDocument = gql`
+  mutation ToggleQuestionnaireTextContentAnswersPublished(
+    $contentId: UUID!
+    $published: Boolean!
+  ) {
+    toggleQuestionnaireTextContentAnswersPublished(
+      contentId: $contentId
+      published: $published
+    ) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ToggleQuestionnaireTextContentAnswersPublishedGql extends Apollo.Mutation<
+  ToggleQuestionnaireTextContentAnswersPublishedMutation,
+  ToggleQuestionnaireTextContentAnswersPublishedMutationVariables
+> {
+  document = ToggleQuestionnaireTextContentAnswersPublishedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
