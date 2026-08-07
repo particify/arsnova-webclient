@@ -93,12 +93,11 @@
                 </p>
               } @else {
                 <div>
-                  <ng-container
-                    *ngComponentOutlet="
-                      formatComponent();
-                      inputs: componentInputs()
-                    "
-                  />
+                  @if (formatComponent(); as fc) {
+                    <ng-container
+                      *ngComponentOutlet="fc; inputs: componentInputs()"
+                    />
+                  }
                 </div>
 
                 <div fxLayout="row-reverse" fxLayoutAlign="end">
