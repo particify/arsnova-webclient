@@ -213,6 +213,18 @@ mutation UpdateQuestionnaireWordcloudContent(
   }
 }
 
+mutation CreateQuestionnaireTextContent($input: CreateTextContentInput!) {
+  createQuestionnaireTextContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireTextContent($input: UpdateTextContentInput!) {
+  updateQuestionnaireTextContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
 mutation CreateQuestionnaireFlashcardContent(
   $input: CreateFlashcardContentInput!
 ) {

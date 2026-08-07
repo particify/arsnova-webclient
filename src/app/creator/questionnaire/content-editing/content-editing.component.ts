@@ -58,6 +58,7 @@ import { FORM_REGISTRY } from './form-registry';
 import { WordcloudContentFormComponent } from './wordcloud-content-form/wordcloud-content-form.component';
 import { FlashcardContentFormComponent } from './flashcard-content-form/flashcard-content-form.component';
 import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
+import { TextContentFormComponent } from './text-content-form/text-content-form.component';
 
 interface ContentFormat {
   type: ContentType;
@@ -125,6 +126,7 @@ export class ContentEditingComponent {
     | WordcloudContentFormComponent
     | FlashcardContentFormComponent
     | SlideContentFormComponent
+    | TextContentFormComponent
     | undefined
   > = computed(() => {
     // componentInstance is no signal: the outlet swaps it on a format change.
