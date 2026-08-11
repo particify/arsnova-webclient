@@ -119,29 +119,39 @@ export class ContentResultsComponent {
     () => !!this.resultComponent().supportsRoundComparison
   );
 
+  /** In presentation the reveal is toggled; every other view follows its own entitlement. */
+  private readonly correctRevealed = computed(() =>
+    this.isPresentation() ? this.correctResultsVisible() : this.showCorrect()
+  );
+
+  /** What a scored format needs for its correct-answer summary. */
   private readonly scoringInputs = computed(() => ({
-    rounds: this.rounds(),
-    visualizationUnitPercent: !!this.settings().contentVisualizationUnitPercent,
-    isPresentation: this.isPresentation(),
     showCorrect: this.correctRevealed(),
     hasCorrectAnswer: this.content()?.hasCorrectAnswer,
     formatData: this.content().formatData,
     answerCount: this.content().answerCount ?? 0,
     correctAnswerCount: this.content().correctAnswerCount ?? 0,
     abstentionCount: this.content().abstentionCount ?? 0,
+    isPresentation: this.isPresentation(),
+  }));
+
+  private readonly scoredChartInputs = computed(() => ({
+    ...this.scoringInputs(),
+    rounds: this.rounds(),
+    visualizationUnitPercent: !!this.settings().contentVisualizationUnitPercent,
   }));
 
   private readonly formatInputs: Partial<
     Record<ContentType, () => Record<string, unknown>>
   > = {
     [ContentType.Choice]: () => ({
-      ...this.scoringInputs(),
+      ...this.scoredChartInputs(),
       answersDirectlyBelowChart:
         !!this.settings().contentAnswersDirectlyBelowChart,
       activeRoundId: this.content().activeRound?.id,
     }),
     [ContentType.Flashcard]: () => ({ formatData: this.content().formatData }),
-    [ContentType.Numeric]: () => this.scoringInputs(),
+    [ContentType.Numeric]: () => this.scoredChartInputs(),
     [ContentType.Scale]: () => ({
       rounds: this.rounds(),
       formatData: this.content().formatData,
@@ -149,6 +159,11 @@ export class ContentResultsComponent {
         !!this.settings().contentVisualizationUnitPercent,
       isPresentation: this.isPresentation(),
       language: this.language(),
+    }),
+    [ContentType.ShortAnswer]: () => ({
+      ...this.scoringInputs(),
+      contentId: this.content().id,
+      allowAnswerModeration: this.allowAnswerModeration(),
     }),
     [ContentType.Text]: () => ({
       formatData: this.content().formatData,
@@ -174,11 +189,6 @@ export class ContentResultsComponent {
   resultsVisible = computed(() => this.contentResultsService.resultsVisible());
   correctResultsVisible = linkedSignal(() =>
     this.contentResultsService.correctResultsVisible()
-  );
-
-  /** In presentation the reveal is toggled; every other view follows its own entitlement. */
-  private readonly correctRevealed = computed(() =>
-    this.isPresentation() ? this.correctResultsVisible() : this.showCorrect()
   );
 
   responseCounts: AnswerResponseCounts = { answers: 0, abstentions: 0 };

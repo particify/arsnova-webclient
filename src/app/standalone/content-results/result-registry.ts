@@ -5,6 +5,7 @@ import { WordcloudResultsComponent } from './wordcloud-results/wordcloud-results
 import { FlashcardResultsComponent } from './flashcard-results/flashcard-results.component';
 import { NumericResultsComponent } from './numeric-results/numeric-results.component';
 import { ScaleResultsComponent } from './scale-results/scale-results.component';
+import { ShortAnswerResultsComponent } from './short-answer-results/short-answer-results.component';
 import { TextResultsComponent } from './text-results/text-results.component';
 
 export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
@@ -34,8 +35,7 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
     supportsRounds: true,
   },
   [ContentType.ShortAnswer]: {
-    component: ChoiceResultsComponent,
-    supportsRoundComparison: true,
+    component: ShortAnswerResultsComponent,
   },
   [ContentType.Slide]: {},
   [ContentType.Sort]: {

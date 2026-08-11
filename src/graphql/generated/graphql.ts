@@ -3042,6 +3042,12 @@ export type ScaleContentRoundStatsFragment = {
   counts?: Array<number> | null;
 };
 
+export type ShortAnswerContentRoundStatsFragment = {
+  __typename?: 'ShortAnswerContentRoundStats';
+  texts?: Array<string> | null;
+  counts?: Array<number> | null;
+};
+
 export type WordcloudContentRoundStatsFragment = {
   __typename?: 'WordcloudContentRoundStats';
   words?: Array<string> | null;
@@ -4858,6 +4864,19 @@ export type QuestionnaireScaleRoundStatsByRoundIdQuery = {
   } | null;
 };
 
+export type QuestionnaireShortAnswerRoundStatsByRoundIdQueryVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireShortAnswerRoundStatsByRoundIdQuery = {
+  __typename?: 'Query';
+  questionnaireShortAnswerRoundStatsByRoundId?: {
+    __typename?: 'ShortAnswerContentRoundStats';
+    texts?: Array<string> | null;
+    counts?: Array<number> | null;
+  } | null;
+};
+
 export type QuestionnaireWordcloudRoundStatsByRoundIdQueryVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -5286,6 +5305,86 @@ export type DeleteQuestionnaireAnswersByContentIdMutation = {
   deleteQuestionnaireAnswersByContentId?: boolean | null;
 };
 
+export type BanQuestionnaireShortAnswerContentKeywordMutationVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+  keyword: Scalars['String']['input'];
+}>;
+
+export type BanQuestionnaireShortAnswerContentKeywordMutation = {
+  __typename?: 'Mutation';
+  banQuestionnaireShortAnswerContentKeyword?: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | {
+          __typename?: 'NumericContentFormatData';
+          format: ContentType;
+          minNumber: number;
+          maxNumber: number;
+          correctNumber?: number | null;
+          tolerance: number;
+        }
+      | {
+          __typename?: 'ScaleContentFormatData';
+          format: ContentType;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'TextContentFormatData';
+          format: ContentType;
+          answersPublished: boolean;
+        }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
 export type BanQuestionnaireWordcloudContentKeywordMutationVariables = Exact<{
   contentId: Scalars['UUID']['input'];
   keyword: Scalars['String']['input'];
@@ -5306,6 +5405,86 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | {
+          __typename?: 'NumericContentFormatData';
+          format: ContentType;
+          minNumber: number;
+          maxNumber: number;
+          correctNumber?: number | null;
+          tolerance: number;
+        }
+      | {
+          __typename?: 'ScaleContentFormatData';
+          format: ContentType;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'TextContentFormatData';
+          format: ContentType;
+          answersPublished: boolean;
+        }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type ResetBannedQuestionnaireShortAnswerContentKeywordsMutationVariables =
+  Exact<{
+    contentId: Scalars['UUID']['input'];
+  }>;
+
+export type ResetBannedQuestionnaireShortAnswerContentKeywordsMutation = {
+  __typename?: 'Mutation';
+  resetBannedQuestionnaireShortAnswerContentKeywords?: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -5999,6 +6178,20 @@ export type QuestionnaireScaleRoundStatsUpdatedSubscription = {
   __typename?: 'Subscription';
   questionnaireScaleRoundStatsUpdated?: {
     __typename?: 'ScaleContentRoundStats';
+    counts?: Array<number> | null;
+  } | null;
+};
+
+export type QuestionnaireShortAnswerRoundStatsUpdatedSubscriptionVariables =
+  Exact<{
+    roundId: Scalars['UUID']['input'];
+  }>;
+
+export type QuestionnaireShortAnswerRoundStatsUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireShortAnswerRoundStatsUpdated?: {
+    __typename?: 'ShortAnswerContentRoundStats';
+    texts?: Array<string> | null;
     counts?: Array<number> | null;
   } | null;
 };
@@ -7099,6 +7292,12 @@ export const NumericContentRoundStatsFragmentDoc = gql`
 `;
 export const ScaleContentRoundStatsFragmentDoc = gql`
   fragment ScaleContentRoundStats on ScaleContentRoundStats {
+    counts
+  }
+`;
+export const ShortAnswerContentRoundStatsFragmentDoc = gql`
+  fragment ShortAnswerContentRoundStats on ShortAnswerContentRoundStats {
+    texts
     counts
   }
 `;
@@ -9178,6 +9377,28 @@ export class QuestionnaireScaleRoundStatsByRoundIdGql extends Apollo.Query<
     super(apollo);
   }
 }
+export const QuestionnaireShortAnswerRoundStatsByRoundIdDocument = gql`
+  query QuestionnaireShortAnswerRoundStatsByRoundId($roundId: UUID!) {
+    questionnaireShortAnswerRoundStatsByRoundId(roundId: $roundId) {
+      ...ShortAnswerContentRoundStats
+    }
+  }
+  ${ShortAnswerContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireShortAnswerRoundStatsByRoundIdGql extends Apollo.Query<
+  QuestionnaireShortAnswerRoundStatsByRoundIdQuery,
+  QuestionnaireShortAnswerRoundStatsByRoundIdQueryVariables
+> {
+  document = QuestionnaireShortAnswerRoundStatsByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const QuestionnaireWordcloudRoundStatsByRoundIdDocument = gql`
   query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
     questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
@@ -9447,6 +9668,34 @@ export class DeleteQuestionnaireAnswersByContentIdGql extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const BanQuestionnaireShortAnswerContentKeywordDocument = gql`
+  mutation BanQuestionnaireShortAnswerContentKeyword(
+    $contentId: UUID!
+    $keyword: String!
+  ) {
+    banQuestionnaireShortAnswerContentKeyword(
+      contentId: $contentId
+      keyword: $keyword
+    ) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class BanQuestionnaireShortAnswerContentKeywordGql extends Apollo.Mutation<
+  BanQuestionnaireShortAnswerContentKeywordMutation,
+  BanQuestionnaireShortAnswerContentKeywordMutationVariables
+> {
+  document = BanQuestionnaireShortAnswerContentKeywordDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const BanQuestionnaireWordcloudContentKeywordDocument = gql`
   mutation BanQuestionnaireWordcloudContentKeyword(
     $contentId: UUID!
@@ -9470,6 +9719,30 @@ export class BanQuestionnaireWordcloudContentKeywordGql extends Apollo.Mutation<
   BanQuestionnaireWordcloudContentKeywordMutationVariables
 > {
   document = BanQuestionnaireWordcloudContentKeywordDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ResetBannedQuestionnaireShortAnswerContentKeywordsDocument = gql`
+  mutation ResetBannedQuestionnaireShortAnswerContentKeywords(
+    $contentId: UUID!
+  ) {
+    resetBannedQuestionnaireShortAnswerContentKeywords(contentId: $contentId) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResetBannedQuestionnaireShortAnswerContentKeywordsGql extends Apollo.Mutation<
+  ResetBannedQuestionnaireShortAnswerContentKeywordsMutation,
+  ResetBannedQuestionnaireShortAnswerContentKeywordsMutationVariables
+> {
+  document = ResetBannedQuestionnaireShortAnswerContentKeywordsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -9859,6 +10132,28 @@ export class QuestionnaireScaleRoundStatsUpdatedGql extends Apollo.Subscription<
   QuestionnaireScaleRoundStatsUpdatedSubscriptionVariables
 > {
   document = QuestionnaireScaleRoundStatsUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireShortAnswerRoundStatsUpdatedDocument = gql`
+  subscription QuestionnaireShortAnswerRoundStatsUpdated($roundId: UUID!) {
+    questionnaireShortAnswerRoundStatsUpdated(roundId: $roundId) {
+      ...ShortAnswerContentRoundStats
+    }
+  }
+  ${ShortAnswerContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireShortAnswerRoundStatsUpdatedGql extends Apollo.Subscription<
+  QuestionnaireShortAnswerRoundStatsUpdatedSubscription,
+  QuestionnaireShortAnswerRoundStatsUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireShortAnswerRoundStatsUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

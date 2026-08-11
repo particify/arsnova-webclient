@@ -227,11 +227,18 @@
                         </button>
                         <mat-divider></mat-divider>
                         @if (
-                          content.formatData.format === ContentType.Wordcloud
+                          formatsWithBannableAnswers.includes(
+                            content.formatData.format
+                          )
                         ) {
                           <button
                             mat-menu-item
-                            (click)="resetBannedAnswers(content.id)"
+                            (click)="
+                              resetBannedAnswers(
+                                content.id,
+                                content.formatData.format
+                              )
+                            "
                           >
                             <mat-icon>lock_reset</mat-icon>
                             <span>{{

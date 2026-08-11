@@ -1,0 +1,29 @@
+<div fxLayout="column" fxLayoutGap="16px">
+  @if (hasCorrectAnswer() && isPresentation()) {
+    <app-correct-answer-results
+      [show]="showCorrect()"
+      [answerCount]="answerCount()"
+      [correctAnswerCount]="correctAnswerCount()"
+      [abstentionCount]="abstentionCount()"
+    />
+  }
+  @if (resultsVisible()) {
+    @if (!hasAnswers()) {
+      <p class="hint-sm">{{ 'statistic.no-answers' | transloco }}</p>
+    } @else if (showModeration()) {
+      <app-answer-list
+        [answers]="answers()"
+        [banMode]="true"
+        [showCorrect]="showCorrect()"
+        [correctAnswers]="correctTerms()"
+        (deleteClicked)="banAnswer($event.answer)"
+      ></app-answer-list>
+    } @else {
+      <app-answer-grid-list
+        [answers]="answers()"
+        [showCorrect]="showCorrect()"
+        [correctTerms]="correctTerms()"
+      ></app-answer-grid-list>
+    }
+  }
+</div>
