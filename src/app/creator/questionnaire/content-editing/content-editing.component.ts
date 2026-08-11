@@ -58,6 +58,7 @@ import { FORM_REGISTRY } from './form-registry';
 import { WordcloudContentFormComponent } from './wordcloud-content-form/wordcloud-content-form.component';
 import { FlashcardContentFormComponent } from './flashcard-content-form/flashcard-content-form.component';
 import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
+import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
 import { TextContentFormComponent } from './text-content-form/text-content-form.component';
 
 interface ContentFormat {
@@ -125,6 +126,7 @@ export class ContentEditingComponent {
     | ChoiceContentFormComponent
     | WordcloudContentFormComponent
     | FlashcardContentFormComponent
+    | NumericContentFormComponent
     | SlideContentFormComponent
     | TextContentFormComponent
     | undefined
@@ -152,6 +154,14 @@ export class ContentEditingComponent {
       return {
         ...base,
         multiple: this.multiple(),
+        weight: this.weight(),
+        answered: this.answered(),
+        hasCorrectAnswer: this.hasCorrectAnswer(),
+      };
+    }
+    if (this.selectedFormat()?.type === ContentType.Numeric) {
+      return {
+        ...base,
         weight: this.weight(),
         answered: this.answered(),
         hasCorrectAnswer: this.hasCorrectAnswer(),

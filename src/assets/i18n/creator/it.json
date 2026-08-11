@@ -136,6 +136,7 @@
     "maximum": "Massimo",
     "correct-answer": "Risposta corretta",
     "optional-tolerance": "Tolleranza (opzionale)",
+    "tolerance": "Tolleranza",
     "all-answers-between-are-correct": "Tutte le risposte comprese tra {{min}} e {{max}} sono corrette.",
     "numeric-minimum-has-to-be-lower-than-maximum": "Il minimo deve essere inferiore al massimo.",
     "numeric-minimum-too-large": "Il minimo non deve essere inferiore a {{min}}.",

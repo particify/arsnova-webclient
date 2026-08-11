@@ -173,6 +173,7 @@
     "minimum": "Mínimo",
     "maximum": "Máximo",
     "optional-tolerance": "Tolerancia (opcional)",
+    "tolerance": "Tolerancia",
     "all-answers-between-are-correct": "Todas las respuestas entre {{min}} y {{max}} son correctas.",
     "numeric-minimum-too-large": "El mínimo no debe ser inferior a {{min}}.",
     "numeric-maximum-too-large": "El máximo no debe ser mayor que {{max}}.",

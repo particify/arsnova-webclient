@@ -57,6 +57,13 @@ fragment ContentDetails on Content {
       correctOptionIndexes
       multiple
     }
+    ... on NumericContentFormatData {
+      format
+      minNumber
+      maxNumber
+      correctNumber
+      tolerance
+    }
     ... on ScaleContentFormatData {
       format
     }
@@ -200,6 +207,18 @@ mutation CreateQuestionnaireChoiceContent($input: CreateChoiceContentInput!) {
 mutation UpdateQuestionnaireChoiceContent($input: UpdateChoiceContentInput!) {
   updateQuestionnaireChoiceContent(input: $input) {
     ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireNumericContent($input: CreateNumericContentInput!) {
+  createQuestionnaireNumericContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireNumericContent($input: UpdateNumericContentInput!) {
+  updateQuestionnaireNumericContent(input: $input) {
+    ...ContentDetails
   }
 }
 

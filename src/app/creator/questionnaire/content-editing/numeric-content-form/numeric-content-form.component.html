@@ -1,0 +1,78 @@
+<div class="format-container">
+  <div class="format-container">
+    <span class="section-label">{{ 'creator.content.range' | transloco }}</span>
+    <div fxLayout="row" fxLayoutGap="1em">
+      <mat-form-field appearance="outline" class="no-field-hint initial-width">
+        <mat-label>{{ 'creator.content.minimum' | transloco }}</mat-label>
+        <input
+          matInput
+          [disabled]="formDisabled || preview()"
+          type="number"
+          data-testid="numeric-minimum-input"
+          [(ngModel)]="minimum"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="no-field-hint initial-width">
+        <mat-label>{{ 'creator.content.maximum' | transloco }}</mat-label>
+        <input
+          matInput
+          [disabled]="formDisabled || preview()"
+          type="number"
+          data-testid="numeric-maximum-input"
+          [(ngModel)]="maximum"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+  @if (hasCorrectAnswer()) {
+    <div class="format-container">
+      <span class="section-label">{{
+        'creator.content.correct-answer' | transloco
+      }}</span>
+      <div fxLayout="column" fxLayoutGap="8px">
+        <div fxLayout="row" fxLayoutGap="16px">
+          <mat-form-field
+            appearance="outline"
+            class="no-field-hint initial-width"
+          >
+            <mat-label>{{
+              'creator.content.correct-answer' | transloco
+            }}</mat-label>
+            <input
+              matInput
+              [disabled]="formDisabled || answered() || preview()"
+              type="number"
+              data-testid="numeric-correct-number-input"
+              [(ngModel)]="correctNumber"
+            />
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            class="no-field-hint initial-width"
+          >
+            <mat-label>{{ 'creator.content.tolerance' | transloco }}</mat-label>
+            <input
+              matInput
+              [disabled]="formDisabled || answered() || preview()"
+              type="number"
+              data-testid="numeric-tolerance-input"
+              [(ngModel)]="tolerance"
+            />
+          </mat-form-field>
+        </div>
+        @let _correctNumber = correctNumber();
+        @let _tolerance = tolerance();
+        @if (_correctNumber && _tolerance) {
+          <span class="range-hint">{{
+            'creator.content.all-answers-between-are-correct'
+              | transloco
+                : {
+                    min: _correctNumber - _tolerance | localizeDecimalSeperator,
+                    max: _correctNumber + _tolerance | localizeDecimalSeperator,
+                  }
+          }}</span>
+        }
+      </div>
+    </div>
+  }
+</div>

@@ -192,6 +192,7 @@
     "maximum": "Maximum",
     "correct-answer": "Richtige Antwort",
     "optional-tolerance": "Toleranz (optional)",
+    "tolerance": "Toleranz",
     "all-answers-between-are-correct": "Alle antworten zwischen {{min}} und {{max}} sind richtig.",
     "numeric-minimum-has-to-be-lower-than-maximum": "Das Minimum muss kleiner sein als das Maximum.",
     "numeric-minimum-too-large": "Das Minimum darf nicht kleiner sein als {{min}}.",

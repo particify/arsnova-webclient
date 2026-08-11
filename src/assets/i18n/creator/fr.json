@@ -161,6 +161,7 @@
     "format-wordcloud-description": "Les participant·es peuvent répondre à l'aide de mots-clés qui apparaitront sous la forme d'un nuage de mots. Plus un mot est saisi, plus il prendra de la place dans le nuage.",
     "range": "Échelle",
     "optional-tolerance": "Tolérance (facultatif)",
+    "tolerance": "Tolérance",
     "all-answers-between-are-correct": "Toutes les réponses entre {{min}} et {{max}} sont correctes.",
     "numeric-minimum-has-to-be-lower-than-maximum": "Le minimum doit être plus petit que le maximum.",
     "numeric-minimum-too-large": "Le minimum ne doit pas être inférieur à {{min}}.",
