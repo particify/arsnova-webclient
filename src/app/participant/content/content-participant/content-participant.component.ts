@@ -55,6 +55,7 @@ import { FocusModeService } from '@app/participant/_services/focus-mode.service'
 import { Apollo, onlyCompleteData } from 'apollo-angular';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
 import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
+import { ContentScaleParticipantComponent } from '@app/participant/content/content-scale-participant/content-scale-participant.component';
 import { ContentTextParticipantComponent } from '@app/participant/content/content-text-participant/content-text-participant.component';
 import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
 import { FORMAT_REGISTRY } from './format-registry';
@@ -82,6 +83,7 @@ const NON_ANSWERABLE_FORMATS = [ContentType.Flashcard, ContentType.Slide];
 const LOCKABLE_ANSWER_FORMS: Type<unknown>[] = [
   ContentChoiceParticipantComponent,
   ContentNumericParticipantComponent,
+  ContentScaleParticipantComponent,
   ContentTextParticipantComponent,
   ContentWordcloudParticipantComponent,
 ];
@@ -138,6 +140,9 @@ export class ContentParticipantComponent {
       roundId: this.content().activeRound?.id,
       contentFormatData: this.content().formatData,
       correctOptionsPublished: this.correctOptionsPublished(),
+      ...(this.formatComponent() === ContentScaleParticipantComponent
+        ? { language: this.language() }
+        : {}),
     };
     const formatComponent = this.formatComponent();
     if (formatComponent && LOCKABLE_ANSWER_FORMS.includes(formatComponent)) {

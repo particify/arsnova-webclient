@@ -113,6 +113,10 @@ fragment Answer on Answer {
       format
       selectedNumber
     }
+    ... on ScaleAnswerFormatData {
+      format
+      rating
+    }
     ... on TextAnswerFormatData {
       format
       body
@@ -374,6 +378,14 @@ mutation CreateQuestionnaireNumericAnswer(
 ) {
   createQuestionnaireNumericAnswer(
     input: { roundId: $roundId, selectedNumber: $selectedNumber }
+  ) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireScaleAnswer($roundId: UUID!, $rating: Int!) {
+  createQuestionnaireScaleAnswer(
+    input: { roundId: $roundId, rating: $rating }
   ) {
     ...Answer
   }

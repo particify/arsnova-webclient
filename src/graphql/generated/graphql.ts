@@ -2896,7 +2896,11 @@ export type AnswerFragment = {
         format: ContentType;
         selectedNumber: number;
       }
-    | { __typename?: 'ScaleAnswerFormatData' }
+    | {
+        __typename?: 'ScaleAnswerFormatData';
+        format: ContentType;
+        rating: number;
+      }
     | { __typename?: 'TextAnswerFormatData'; format: ContentType; body: string }
     | {
         __typename?: 'WordcloudAnswerFormatData';
@@ -4412,7 +4416,11 @@ export type QuestionnaireAnswerByRoundIdQuery = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4526,7 +4534,11 @@ export type QuestionnaireTextAnswersByRoundIdQuery = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4565,7 +4577,11 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4605,7 +4621,55 @@ export type CreateQuestionnaireNumericAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type CreateQuestionnaireScaleAnswerMutationVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+  rating: Scalars['Int']['input'];
+}>;
+
+export type CreateQuestionnaireScaleAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireScaleAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    hidden: boolean;
+    createdAt?: string | null;
+    durationMs?: number | null;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4644,7 +4708,11 @@ export type CreateQuestionnaireWordcloudAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4684,7 +4752,11 @@ export type CreateQuestionnaireTextAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4723,7 +4795,11 @@ export type CreateQuestionnaireAbstentionMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5017,7 +5093,11 @@ export type ToggleQuestionnaireTextAnswerHiddenMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5469,7 +5549,11 @@ export type QuestionnaireTextAnswersUpdatedSubscription = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'ScaleAnswerFormatData' }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -6457,6 +6541,10 @@ export const AnswerFragmentDoc = gql`
       ... on NumericAnswerFormatData {
         format
         selectedNumber
+      }
+      ... on ScaleAnswerFormatData {
+        format
+        rating
       }
       ... on TextAnswerFormatData {
         format
@@ -8598,6 +8686,30 @@ export class CreateQuestionnaireNumericAnswerGql extends Apollo.Mutation<
   CreateQuestionnaireNumericAnswerMutationVariables
 > {
   document = CreateQuestionnaireNumericAnswerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireScaleAnswerDocument = gql`
+  mutation CreateQuestionnaireScaleAnswer($roundId: UUID!, $rating: Int!) {
+    createQuestionnaireScaleAnswer(
+      input: { roundId: $roundId, rating: $rating }
+    ) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireScaleAnswerGql extends Apollo.Mutation<
+  CreateQuestionnaireScaleAnswerMutation,
+  CreateQuestionnaireScaleAnswerMutationVariables
+> {
+  document = CreateQuestionnaireScaleAnswerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
