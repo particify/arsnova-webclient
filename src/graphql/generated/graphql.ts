@@ -2990,7 +2990,11 @@ export type AnswerFragment = {
         format: ContentType;
         rating: number;
       }
-    | { __typename?: 'ShortAnswerAnswerFormatData' }
+    | {
+        __typename?: 'ShortAnswerAnswerFormatData';
+        format: ContentType;
+        body: string;
+      }
     | { __typename?: 'TextAnswerFormatData'; format: ContentType; body: string }
     | {
         __typename?: 'WordcloudAnswerFormatData';
@@ -4761,7 +4765,11 @@ export type QuestionnaireAnswerByRoundIdQuery = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4892,7 +4900,11 @@ export type QuestionnaireTextAnswersByRoundIdQuery = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4936,7 +4948,11 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4981,7 +4997,11 @@ export type CreateQuestionnaireNumericAnswerMutation = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5026,7 +5046,60 @@ export type CreateQuestionnaireScaleAnswerMutation = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type CreateQuestionnaireShortAnswerAnswerMutationVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+  body: Scalars['String']['input'];
+}>;
+
+export type CreateQuestionnaireShortAnswerAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireShortAnswerAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    hidden: boolean;
+    createdAt?: string | null;
+    durationMs?: number | null;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5070,7 +5143,11 @@ export type CreateQuestionnaireWordcloudAnswerMutation = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5115,7 +5192,11 @@ export type CreateQuestionnaireTextAnswerMutation = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5159,7 +5240,11 @@ export type CreateQuestionnaireAbstentionMutation = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5473,7 +5558,11 @@ export type ToggleQuestionnaireTextAnswerHiddenMutation = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5957,7 +6046,11 @@ export type QuestionnaireTextAnswersUpdatedSubscription = {
           format: ContentType;
           rating: number;
         }
-      | { __typename?: 'ShortAnswerAnswerFormatData' }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -6953,6 +7046,10 @@ export const AnswerFragmentDoc = gql`
       ... on ScaleAnswerFormatData {
         format
         rating
+      }
+      ... on ShortAnswerAnswerFormatData {
+        format
+        body
       }
       ... on TextAnswerFormatData {
         format
@@ -9193,6 +9290,33 @@ export class CreateQuestionnaireScaleAnswerGql extends Apollo.Mutation<
   CreateQuestionnaireScaleAnswerMutationVariables
 > {
   document = CreateQuestionnaireScaleAnswerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireShortAnswerAnswerDocument = gql`
+  mutation CreateQuestionnaireShortAnswerAnswer(
+    $roundId: UUID!
+    $body: String!
+  ) {
+    createQuestionnaireShortAnswerAnswer(
+      input: { roundId: $roundId, body: $body }
+    ) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireShortAnswerAnswerGql extends Apollo.Mutation<
+  CreateQuestionnaireShortAnswerAnswerMutation,
+  CreateQuestionnaireShortAnswerAnswerMutationVariables
+> {
+  document = CreateQuestionnaireShortAnswerAnswerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -1,0 +1,18 @@
+<div fxLayout="column" fxLayoutGap="8px">
+  <app-content-text-answer
+    [(answer)]="answer"
+    [correct]="correct()"
+    [disabled]="disabled() || answered()"
+    [minRows]="1"
+    [lengthLimit]="lengthLimit"
+  ></app-content-text-answer>
+  @let _correctTerms = correctTerms();
+  @if (_correctTerms.length) {
+    <span class="answer-hint" data-testid="short-answer-correct-terms"
+      >{{ 'answer.correct-answers-are' | transloco }}
+      @for (term of _correctTerms; track term; let i = $index) {
+        <b>{{ (i > 0 ? ', ' : '') + term }}</b>
+      }
+    </span>
+  }
+</div>

@@ -3,6 +3,7 @@ import { ContentType } from '@gql/generated/graphql';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
 import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
 import { ContentScaleParticipantComponent } from '@app/participant/content/content-scale-participant/content-scale-participant.component';
+import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
 import { ContentTextParticipantComponent } from '@app/participant/content/content-text-participant/content-text-participant.component';
 import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
 
@@ -24,7 +25,7 @@ export const FORMAT_REGISTRY: Record<ContentType, FormatDefinition> = {
     component: ContentScaleParticipantComponent,
   },
   [ContentType.ShortAnswer]: {
-    component: ContentChoiceParticipantComponent,
+    component: ContentShortAnswerParticipantComponent,
   },
   [ContentType.Slide]: {},
   [ContentType.Sort]: {

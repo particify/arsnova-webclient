@@ -1,3 +1,4 @@
-.form-field-indication {
-  --mat-form-field-outlined-disabled-input-text-color: var(--on-surface);
-}
+@use '../contents-with-form-field' as cwff;
+
+@include cwff.correctness-indication;
+@include cwff.form-field-indication;
