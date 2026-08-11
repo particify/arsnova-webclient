@@ -141,6 +141,18 @@ fragment ChoiceContentRoundStats on ChoiceContentRoundStats {
   selectionCounts
 }
 
+fragment NumericContentRoundStats on NumericContentRoundStats {
+  selectedNumbers
+  counts
+  mean
+  median
+  standardDeviation
+  variance
+  minimum
+  maximum
+  correctAnswerFraction
+}
+
 fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
   words
   counts
@@ -315,6 +327,12 @@ query QuestionnaireAnswerResultsByQuestionnaireId($questionnaireId: UUID!) {
 query QuestionnaireChoiceRoundStatsByRoundId($roundId: UUID!) {
   questionnaireChoiceRoundStatsByRoundId(roundId: $roundId) {
     ...ChoiceContentRoundStats
+  }
+}
+
+query QuestionnaireNumericRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireNumericRoundStatsByRoundId(roundId: $roundId) {
+    ...NumericContentRoundStats
   }
 }
 
@@ -528,6 +546,12 @@ subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
 subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
   questionnaireChoiceRoundStatsUpdated(roundId: $roundId) {
     selectionCounts
+  }
+}
+
+subscription QuestionnaireNumericRoundStatsUpdated($roundId: UUID!) {
+  questionnaireNumericRoundStatsUpdated(roundId: $roundId) {
+    ...NumericContentRoundStats
   }
 }
 

@@ -2835,6 +2835,19 @@ export type ChoiceContentRoundStatsFragment = {
   selectionCounts?: Array<number> | null;
 };
 
+export type NumericContentRoundStatsFragment = {
+  __typename?: 'NumericContentRoundStats';
+  selectedNumbers?: Array<number> | null;
+  counts?: Array<number> | null;
+  mean: number;
+  median: number;
+  standardDeviation: number;
+  variance: number;
+  minimum: number;
+  maximum: number;
+  correctAnswerFraction?: number | null;
+};
+
 export type WordcloudContentRoundStatsFragment = {
   __typename?: 'WordcloudContentRoundStats';
   words?: Array<string> | null;
@@ -4139,6 +4152,26 @@ export type QuestionnaireChoiceRoundStatsByRoundIdQuery = {
   } | null;
 };
 
+export type QuestionnaireNumericRoundStatsByRoundIdQueryVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireNumericRoundStatsByRoundIdQuery = {
+  __typename?: 'Query';
+  questionnaireNumericRoundStatsByRoundId?: {
+    __typename?: 'NumericContentRoundStats';
+    selectedNumbers?: Array<number> | null;
+    counts?: Array<number> | null;
+    mean: number;
+    median: number;
+    standardDeviation: number;
+    variance: number;
+    minimum: number;
+    maximum: number;
+    correctAnswerFraction?: number | null;
+  } | null;
+};
+
 export type QuestionnaireWordcloudRoundStatsByRoundIdQueryVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -5021,6 +5054,26 @@ export type QuestionnaireChoiceRoundStatsUpdatedSubscription = {
   questionnaireChoiceRoundStatsUpdated?: {
     __typename?: 'ChoiceContentRoundStats';
     selectionCounts?: Array<number> | null;
+  } | null;
+};
+
+export type QuestionnaireNumericRoundStatsUpdatedSubscriptionVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireNumericRoundStatsUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireNumericRoundStatsUpdated?: {
+    __typename?: 'NumericContentRoundStats';
+    selectedNumbers?: Array<number> | null;
+    counts?: Array<number> | null;
+    mean: number;
+    median: number;
+    standardDeviation: number;
+    variance: number;
+    minimum: number;
+    maximum: number;
+    correctAnswerFraction?: number | null;
   } | null;
 };
 
@@ -6079,6 +6132,19 @@ export const QuestionnaireAnswerResultFragmentDoc = gql`
 export const ChoiceContentRoundStatsFragmentDoc = gql`
   fragment ChoiceContentRoundStats on ChoiceContentRoundStats {
     selectionCounts
+  }
+`;
+export const NumericContentRoundStatsFragmentDoc = gql`
+  fragment NumericContentRoundStats on NumericContentRoundStats {
+    selectedNumbers
+    counts
+    mean
+    median
+    standardDeviation
+    variance
+    minimum
+    maximum
+    correctAnswerFraction
   }
 `;
 export const WordcloudContentRoundStatsFragmentDoc = gql`
@@ -8021,6 +8087,28 @@ export class QuestionnaireChoiceRoundStatsByRoundIdGql extends Apollo.Query<
     super(apollo);
   }
 }
+export const QuestionnaireNumericRoundStatsByRoundIdDocument = gql`
+  query QuestionnaireNumericRoundStatsByRoundId($roundId: UUID!) {
+    questionnaireNumericRoundStatsByRoundId(roundId: $roundId) {
+      ...NumericContentRoundStats
+    }
+  }
+  ${NumericContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireNumericRoundStatsByRoundIdGql extends Apollo.Query<
+  QuestionnaireNumericRoundStatsByRoundIdQuery,
+  QuestionnaireNumericRoundStatsByRoundIdQueryVariables
+> {
+  document = QuestionnaireNumericRoundStatsByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const QuestionnaireWordcloudRoundStatsByRoundIdDocument = gql`
   query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
     questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
@@ -8607,6 +8695,28 @@ export class QuestionnaireChoiceRoundStatsUpdatedGql extends Apollo.Subscription
   QuestionnaireChoiceRoundStatsUpdatedSubscriptionVariables
 > {
   document = QuestionnaireChoiceRoundStatsUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireNumericRoundStatsUpdatedDocument = gql`
+  subscription QuestionnaireNumericRoundStatsUpdated($roundId: UUID!) {
+    questionnaireNumericRoundStatsUpdated(roundId: $roundId) {
+      ...NumericContentRoundStats
+    }
+  }
+  ${NumericContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireNumericRoundStatsUpdatedGql extends Apollo.Subscription<
+  QuestionnaireNumericRoundStatsUpdatedSubscription,
+  QuestionnaireNumericRoundStatsUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireNumericRoundStatsUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

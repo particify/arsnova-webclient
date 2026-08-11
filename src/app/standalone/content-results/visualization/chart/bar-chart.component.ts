@@ -18,6 +18,7 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
+  Tooltip,
 } from 'chart.js';
 
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -29,6 +30,7 @@ Chart.register(
   BarElement,
   CategoryScale,
   LinearScale,
+  Tooltip,
   ChartDataLabels
 );
 
@@ -56,6 +58,13 @@ export class BarChartComponent {
   });
   showLegend = input(false);
   showLabels = input(false);
+  /**
+   * Keeps the x-axis labels legible where `showLegend` would hide them with the
+   * rest of the axis chrome, for formats whose labels carry the values.
+   */
+  alwaysShowXAxisLabels = input(false);
+  /** One title per bar; without them the chart has no tooltips. */
+  tooltipTitles = input<string[] | undefined>(undefined);
   scale = input(1);
   totalValue = input<number | undefined>(undefined);
   dataLabelMode = input<'absolute' | 'percent'>('absolute');
@@ -135,7 +144,10 @@ export class BarChartComponent {
         },
         ticks: {
           display: this.showLabels(),
-          color: this.showLegend() ? this.fgColor() : this.bgColor(),
+          color:
+            this.showLegend() || this.alwaysShowXAxisLabels()
+              ? this.fgColor()
+              : this.bgColor(),
         },
         border: {
           color: this.fgColor(),
@@ -162,6 +174,17 @@ export class BarChartComponent {
     plugins: {
       legend: {
         display: this.showLegend() || this.data().datasets.length > 1,
+      },
+
+      tooltip: {
+        enabled: !!this.tooltipTitles(),
+        mode: 'point',
+        displayColors: false,
+        titleMarginBottom: 0,
+        bodyFont: { size: 0 },
+        callbacks: {
+          title: (items) => this.tooltipTitles()?.[items[0].dataIndex] ?? '',
+        },
       },
 
       datalabels: {

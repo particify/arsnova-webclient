@@ -3,6 +3,7 @@ import { ResultDefinition } from './result-definition';
 import { ChoiceResultsComponent } from './choice-results/choice-results.component';
 import { WordcloudResultsComponent } from './wordcloud-results/wordcloud-results.component';
 import { FlashcardResultsComponent } from './flashcard-results/flashcard-results.component';
+import { NumericResultsComponent } from './numeric-results/numeric-results.component';
 import { TextResultsComponent } from './text-results/text-results.component';
 
 export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
@@ -19,8 +20,9 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
     component: FlashcardResultsComponent,
   },
   [ContentType.Numeric]: {
-    component: ChoiceResultsComponent,
+    component: NumericResultsComponent,
     supportsRoundComparison: true,
+    supportsRounds: true,
   },
   [ContentType.Prioritization]: {
     component: ChoiceResultsComponent,
