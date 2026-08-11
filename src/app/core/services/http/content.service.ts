@@ -61,6 +61,7 @@ export class ContentService extends AbstractEntityService<Content> {
     [ContentType.Flashcard, 'school'],
     [ContentType.Numeric, 'numbers'],
     [ContentType.Scale, 'mood'],
+    [ContentType.ShortAnswer, 'sms'],
     [ContentType.Slide, 'info'],
     [ContentType.Text, 'description'],
     [ContentType.Wordcloud, 'cloud'],

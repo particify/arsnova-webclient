@@ -227,10 +227,7 @@
                         </button>
                         <mat-divider></mat-divider>
                         @if (
-                          [
-                            ContentType.Wordcloud,
-                            ContentType.ShortAnswer,
-                          ].includes(content.formatData.format)
+                          content.formatData.format === ContentType.Wordcloud
                         ) {
                           <button
                             mat-menu-item

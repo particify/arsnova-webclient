@@ -6,6 +6,7 @@ import { FlashcardContentFormComponent } from './flashcard-content-form/flashcar
 import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
 import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
 import { ScaleContentFormComponent } from './scale-content-form/scale-content-form.component';
+import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
 import { TextContentFormComponent } from './text-content-form/text-content-form.component';
 
 export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
@@ -28,7 +29,7 @@ export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
     component: ScaleContentFormComponent,
   },
   [ContentType.ShortAnswer]: {
-    component: ChoiceContentFormComponent,
+    component: ShortAnswerContentFormComponent,
   },
   [ContentType.Slide]: {
     component: SlideContentFormComponent,

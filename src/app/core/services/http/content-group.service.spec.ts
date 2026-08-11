@@ -73,10 +73,15 @@ describe('ContentGroupService', () => {
       ]);
     });
 
-    it('returns Choice, Numeric and Slide for Quiz', () => {
+    it('returns Choice, ShortAnswer, Numeric and Slide for Quiz', () => {
       expect(
         service.getContentFormatsOfQuestionnaireType(QuestionnaireType.Quiz)
-      ).toEqual([ContentType.Choice, ContentType.Numeric, ContentType.Slide]);
+      ).toEqual([
+        ContentType.Choice,
+        ContentType.ShortAnswer,
+        ContentType.Numeric,
+        ContentType.Slide,
+      ]);
     });
 
     it('returns Choice, Scale, Text, Wordcloud, Numeric and Slide for Survey', () => {
@@ -163,6 +168,24 @@ describe('ContentGroupService', () => {
           QuestionnaireType.Survey
         )
       ).toBeTrue();
+    });
+
+    it('accepts a short answer content in a Quiz series', () => {
+      expect(
+        service.isContentCompatibleWithQuestionnaireType(
+          content(ContentType.ShortAnswer, true),
+          QuestionnaireType.Quiz
+        )
+      ).toBeTrue();
+    });
+
+    it('rejects a short answer content in a Survey series', () => {
+      expect(
+        service.isContentCompatibleWithQuestionnaireType(
+          content(ContentType.ShortAnswer, true),
+          QuestionnaireType.Survey
+        )
+      ).toBeFalse();
     });
 
     it('rejects a numeric content without a correct number in a Quiz series', () => {

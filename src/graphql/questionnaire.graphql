@@ -69,6 +69,10 @@ fragment ContentDetails on Content {
       template
       neutralOption
     }
+    ... on ShortAnswerContentFormatData {
+      format
+      correctTerms
+    }
     ... on TextContentFormatData {
       format
       answersPublished
@@ -257,6 +261,22 @@ mutation CreateQuestionnaireScaleContent($input: CreateScaleContentInput!) {
 mutation UpdateQuestionnaireScaleContent($input: UpdateScaleContentInput!) {
   updateQuestionnaireScaleContent(input: $input) {
     ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireShortAnswerContent(
+  $input: CreateShortAnswerContentInput!
+) {
+  createQuestionnaireShortAnswerContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireShortAnswerContent(
+  $input: UpdateShortAnswerContentInput!
+) {
+  updateQuestionnaireShortAnswerContent(input: $input) {
+    ...ContentDetails
   }
 }
 

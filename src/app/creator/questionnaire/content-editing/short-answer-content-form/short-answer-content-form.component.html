@@ -1,0 +1,23 @@
+@if (preview()) {
+  <app-content-text-answer
+    [disabled]="true"
+    [minRows]="1"
+    [lengthLimit]="lengthLimit"
+  ></app-content-text-answer>
+} @else {
+  <div class="format-container">
+    <span class="section-label">{{
+      'creator.content.answers' | transloco
+    }}</span>
+    <app-answer-option-list
+      [answers]="displayAnswers()"
+      (answersChange)="displayAnswers.set($event)"
+      [allowDeletion]="!locked()"
+      [disabled]="locked()"
+      [minimumAnswerCount]="1"
+      [lengthLimit]="lengthLimit"
+      optionLabel="answer"
+      optionLabels="answers"
+    ></app-answer-option-list>
+  </div>
+}
