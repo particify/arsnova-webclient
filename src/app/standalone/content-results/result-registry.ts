@@ -4,6 +4,7 @@ import { ChoiceResultsComponent } from './choice-results/choice-results.componen
 import { WordcloudResultsComponent } from './wordcloud-results/wordcloud-results.component';
 import { FlashcardResultsComponent } from './flashcard-results/flashcard-results.component';
 import { NumericResultsComponent } from './numeric-results/numeric-results.component';
+import { ScaleResultsComponent } from './scale-results/scale-results.component';
 import { TextResultsComponent } from './text-results/text-results.component';
 
 export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
@@ -28,8 +29,9 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
     component: ChoiceResultsComponent,
   },
   [ContentType.Scale]: {
-    component: ChoiceResultsComponent,
+    component: ScaleResultsComponent,
     supportsRoundComparison: true,
+    supportsRounds: true,
   },
   [ContentType.ShortAnswer]: {
     component: ChoiceResultsComponent,

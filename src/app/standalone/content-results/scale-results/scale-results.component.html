@@ -1,0 +1,11 @@
+@if (resultsVisible()) {
+  <app-bar-chart
+    [data]="visualizationData()"
+    [tooltipTitles]="labels()"
+    [scale]="scale()"
+    [showLegend]="!isPresentation()"
+    [showLabels]="true"
+    [alwaysShowXAxisLabels]="true"
+    [dataLabelMode]="visualizationUnitPercent() ? 'percent' : 'absolute'"
+  ></app-bar-chart>
+}

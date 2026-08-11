@@ -2943,6 +2943,11 @@ export type NumericContentRoundStatsFragment = {
   correctAnswerFraction?: number | null;
 };
 
+export type ScaleContentRoundStatsFragment = {
+  __typename?: 'ScaleContentRoundStats';
+  counts?: Array<number> | null;
+};
+
 export type WordcloudContentRoundStatsFragment = {
   __typename?: 'WordcloudContentRoundStats';
   words?: Array<string> | null;
@@ -4497,6 +4502,18 @@ export type QuestionnaireNumericRoundStatsByRoundIdQuery = {
   } | null;
 };
 
+export type QuestionnaireScaleRoundStatsByRoundIdQueryVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireScaleRoundStatsByRoundIdQuery = {
+  __typename?: 'Query';
+  questionnaireScaleRoundStatsByRoundId?: {
+    __typename?: 'ScaleContentRoundStats';
+    counts?: Array<number> | null;
+  } | null;
+};
+
 export type QuestionnaireWordcloudRoundStatsByRoundIdQueryVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -5508,6 +5525,18 @@ export type QuestionnaireNumericRoundStatsUpdatedSubscription = {
     minimum: number;
     maximum: number;
     correctAnswerFraction?: number | null;
+  } | null;
+};
+
+export type QuestionnaireScaleRoundStatsUpdatedSubscriptionVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireScaleRoundStatsUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireScaleRoundStatsUpdated?: {
+    __typename?: 'ScaleContentRoundStats';
+    counts?: Array<number> | null;
   } | null;
 };
 
@@ -6590,6 +6619,11 @@ export const NumericContentRoundStatsFragmentDoc = gql`
     minimum
     maximum
     correctAnswerFraction
+  }
+`;
+export const ScaleContentRoundStatsFragmentDoc = gql`
+  fragment ScaleContentRoundStats on ScaleContentRoundStats {
+    counts
   }
 `;
 export const WordcloudContentRoundStatsFragmentDoc = gql`
@@ -8598,6 +8632,28 @@ export class QuestionnaireNumericRoundStatsByRoundIdGql extends Apollo.Query<
     super(apollo);
   }
 }
+export const QuestionnaireScaleRoundStatsByRoundIdDocument = gql`
+  query QuestionnaireScaleRoundStatsByRoundId($roundId: UUID!) {
+    questionnaireScaleRoundStatsByRoundId(roundId: $roundId) {
+      ...ScaleContentRoundStats
+    }
+  }
+  ${ScaleContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireScaleRoundStatsByRoundIdGql extends Apollo.Query<
+  QuestionnaireScaleRoundStatsByRoundIdQuery,
+  QuestionnaireScaleRoundStatsByRoundIdQueryVariables
+> {
+  document = QuestionnaireScaleRoundStatsByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const QuestionnaireWordcloudRoundStatsByRoundIdDocument = gql`
   query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
     questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
@@ -9230,6 +9286,28 @@ export class QuestionnaireNumericRoundStatsUpdatedGql extends Apollo.Subscriptio
   QuestionnaireNumericRoundStatsUpdatedSubscriptionVariables
 > {
   document = QuestionnaireNumericRoundStatsUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireScaleRoundStatsUpdatedDocument = gql`
+  subscription QuestionnaireScaleRoundStatsUpdated($roundId: UUID!) {
+    questionnaireScaleRoundStatsUpdated(roundId: $roundId) {
+      ...ScaleContentRoundStats
+    }
+  }
+  ${ScaleContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireScaleRoundStatsUpdatedGql extends Apollo.Subscription<
+  QuestionnaireScaleRoundStatsUpdatedSubscription,
+  QuestionnaireScaleRoundStatsUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireScaleRoundStatsUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

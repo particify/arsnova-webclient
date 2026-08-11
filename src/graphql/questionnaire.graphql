@@ -159,6 +159,10 @@ fragment NumericContentRoundStats on NumericContentRoundStats {
   correctAnswerFraction
 }
 
+fragment ScaleContentRoundStats on ScaleContentRoundStats {
+  counts
+}
+
 fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
   words
   counts
@@ -351,6 +355,12 @@ query QuestionnaireChoiceRoundStatsByRoundId($roundId: UUID!) {
 query QuestionnaireNumericRoundStatsByRoundId($roundId: UUID!) {
   questionnaireNumericRoundStatsByRoundId(roundId: $roundId) {
     ...NumericContentRoundStats
+  }
+}
+
+query QuestionnaireScaleRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireScaleRoundStatsByRoundId(roundId: $roundId) {
+    ...ScaleContentRoundStats
   }
 }
 
@@ -578,6 +588,12 @@ subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
 subscription QuestionnaireNumericRoundStatsUpdated($roundId: UUID!) {
   questionnaireNumericRoundStatsUpdated(roundId: $roundId) {
     ...NumericContentRoundStats
+  }
+}
+
+subscription QuestionnaireScaleRoundStatsUpdated($roundId: UUID!) {
+  questionnaireScaleRoundStatsUpdated(roundId: $roundId) {
+    ...ScaleContentRoundStats
   }
 }
 

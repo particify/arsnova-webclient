@@ -144,6 +144,10 @@ export class ContentResultsComponent {
     [ContentType.Numeric]: () => this.scoringInputs(),
     [ContentType.Scale]: () => ({
       rounds: this.rounds(),
+      formatData: this.content().formatData,
+      visualizationUnitPercent:
+        !!this.settings().contentVisualizationUnitPercent,
+      isPresentation: this.isPresentation(),
       language: this.language(),
     }),
     [ContentType.Text]: () => ({
