@@ -2801,7 +2801,11 @@ export type AnswerFragment = {
         format: ContentType;
         selectedChoiceIndexes: Array<number>;
       }
-    | { __typename?: 'NumericAnswerFormatData' }
+    | {
+        __typename?: 'NumericAnswerFormatData';
+        format: ContentType;
+        selectedNumber: number;
+      }
     | { __typename?: 'TextAnswerFormatData'; format: ContentType; body: string }
     | {
         __typename?: 'WordcloudAnswerFormatData';
@@ -4074,7 +4078,11 @@ export type QuestionnaireAnswerByRoundIdQuery = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'NumericAnswerFormatData' }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4163,7 +4171,11 @@ export type QuestionnaireTextAnswersByRoundIdQuery = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'NumericAnswerFormatData' }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4197,7 +4209,50 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'NumericAnswerFormatData' }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type CreateQuestionnaireNumericAnswerMutationVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+  selectedNumber: Scalars['Float']['input'];
+}>;
+
+export type CreateQuestionnaireNumericAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireNumericAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    hidden: boolean;
+    createdAt?: string | null;
+    durationMs?: number | null;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4231,7 +4286,11 @@ export type CreateQuestionnaireWordcloudAnswerMutation = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'NumericAnswerFormatData' }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4266,7 +4325,11 @@ export type CreateQuestionnaireTextAnswerMutation = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'NumericAnswerFormatData' }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4300,7 +4363,11 @@ export type CreateQuestionnaireAbstentionMutation = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'NumericAnswerFormatData' }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4574,7 +4641,11 @@ export type ToggleQuestionnaireTextAnswerHiddenMutation = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'NumericAnswerFormatData' }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -4986,7 +5057,11 @@ export type QuestionnaireTextAnswersUpdatedSubscription = {
           format: ContentType;
           selectedChoiceIndexes: Array<number>;
         }
-      | { __typename?: 'NumericAnswerFormatData' }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
       | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
@@ -5968,6 +6043,10 @@ export const AnswerFragmentDoc = gql`
       ... on ChoiceAnswerFormatData {
         format
         selectedChoiceIndexes
+      }
+      ... on NumericAnswerFormatData {
+        format
+        selectedNumber
       }
       ... on TextAnswerFormatData {
         format
@@ -8003,6 +8082,33 @@ export class CreateQuestionnaireChoiceAnswerGql extends Apollo.Mutation<
   CreateQuestionnaireChoiceAnswerMutationVariables
 > {
   document = CreateQuestionnaireChoiceAnswerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireNumericAnswerDocument = gql`
+  mutation CreateQuestionnaireNumericAnswer(
+    $roundId: UUID!
+    $selectedNumber: Float!
+  ) {
+    createQuestionnaireNumericAnswer(
+      input: { roundId: $roundId, selectedNumber: $selectedNumber }
+    ) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireNumericAnswerGql extends Apollo.Mutation<
+  CreateQuestionnaireNumericAnswerMutation,
+  CreateQuestionnaireNumericAnswerMutationVariables
+> {
+  document = CreateQuestionnaireNumericAnswerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

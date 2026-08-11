@@ -1,0 +1,10 @@
+<app-content-numeric-answer
+  [(selectedNumber)]="selectedNumber"
+  [minNumber]="contentFormatData().minNumber"
+  [maxNumber]="contentFormatData().maxNumber"
+  [correctNumber]="contentFormatData().correctNumber"
+  [tolerance]="contentFormatData().tolerance"
+  [answered]="answered()"
+  [correctOptionsPublished]="correctOptionsPublished()"
+  [disabled]="disabled() || answered()"
+></app-content-numeric-answer>

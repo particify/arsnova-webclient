@@ -4,49 +4,50 @@
       appearance="outline"
       class="no-field-hint form-field-indication"
       [ngClass]="{
-        correct: showAnswerIndicator() && isCorrect(),
-        wrong: showAnswerIndicator() && !isCorrect(),
+        correct: answerIndicatorVisible() && correct(),
+        wrong: answerIndicatorVisible() && !correct(),
       }"
     >
       <mat-label>{{ 'answer.your-answer' | transloco }}</mat-label>
       <input
-        [disabled]="isDisabled"
+        [disabled]="disabled()"
         [(ngModel)]="selectedNumber"
-        (ngModelChange)="emitSelectedNumber()"
         matInput
         type="number"
-        [min]="content.minNumber"
-        [max]="content.maxNumber"
-        name="'answer'"
+        data-testid="numeric-answer-input"
+        [min]="minNumber()"
+        [max]="maxNumber()"
+        name="answer"
       />
-      @if (showAnswerIndicator()) {
+      @if (answerIndicatorVisible()) {
         <mat-icon
           matSuffix
           class="icon-indicator"
-          [ngClass]="isCorrect() ? 'correct' : 'wrong'"
+          [ngClass]="correct() ? 'correct' : 'wrong'"
         >
-          {{ isCorrect() ? 'check' : 'close' }}</mat-icon
+          {{ correct() ? 'check' : 'close' }}</mat-icon
         >
       }
     </mat-form-field>
-    @if (!answer) {
+    @if (!answered()) {
       <span class="answer-hint"
         >{{
           'answer.select-a-number-between'
             | transloco
               : {
-                  min: content.minNumber | localizeDecimalSeperator,
-                  max: content.maxNumber | localizeDecimalSeperator,
+                  min: minNumber() | localizeDecimalSeperator,
+                  max: maxNumber() | localizeDecimalSeperator,
                 }
         }}
       </span>
     }
-    @if (showAnswerIndicator()) {
+    @let _correctNumber = correctNumber();
+    @if (answerIndicatorVisible() && _correctNumber != null) {
       <span class="answer-hint"
         >{{ 'answer.correct-answer-is' | transloco }}
-        <b>{{ content.correctNumber }}</b>
-        @if (content.tolerance) {
-          <span> &plusmn; {{ content.tolerance }}</span>
+        <b>{{ _correctNumber | localizeDecimalSeperator }}</b>
+        @if (tolerance()) {
+          <span> &plusmn; {{ tolerance() | localizeDecimalSeperator }}</span>
         }
       </span>
     }

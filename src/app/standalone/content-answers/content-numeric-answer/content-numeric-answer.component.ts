@@ -1,60 +1,47 @@
 import {
   Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
   ChangeDetectionStrategy,
+  computed,
+  input,
+  model,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { ContentNumeric } from '@app/core/models/content-numeric';
-import { NumericAnswer } from '@app/core/models/numeric-answer';
-import { LocalizeDecimalSeperatorPipe } from '@app/core/pipes/localize-decimal-seperator.pipe';
 
 @Component({
   selector: 'app-content-numeric-answer',
   imports: [CoreModule],
-  providers: [LocalizeDecimalSeperatorPipe],
   templateUrl: './content-numeric-answer.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './content-numeric-answer.component.scss',
 })
-export class ContentNumericAnswerComponent implements OnChanges {
-  @Input({ required: true }) content!: ContentNumeric;
-  @Input() answer?: NumericAnswer;
-  @Input() correctOptionsPublished = false;
-  @Input() isDisabled = false;
-  @Output() selectedNumberUpdated = new EventEmitter<number>();
+export class ContentNumericAnswerComponent {
+  readonly selectedNumber = model<number | undefined>(undefined);
+  readonly minNumber = input.required<number>();
+  readonly maxNumber = input.required<number>();
+  readonly correctNumber = input<number | null | undefined>();
+  readonly tolerance = input(0);
+  readonly answered = input(false);
+  readonly correctOptionsPublished = input(false);
+  readonly disabled = input(false);
 
-  selectedNumber?: number;
+  readonly answerIndicatorVisible = computed(
+    () =>
+      this.answered() &&
+      this.selectedNumber() !== undefined &&
+      this.correctNumber() != null &&
+      this.correctOptionsPublished()
+  );
 
-  ngOnChanges() {
-    this.selectedNumber = this.answer?.selectedNumber;
-  }
-
-  emitSelectedNumber(): void {
-    this.selectedNumberUpdated.emit(this.selectedNumber);
-  }
-
-  showAnswerIndicator(): boolean {
-    return (
-      !!this.answer &&
-      this.answer.selectedNumber !== undefined &&
-      this.content.correctNumber !== undefined &&
-      this.correctOptionsPublished
-    );
-  }
-
-  isCorrect(): boolean {
-    if (this.content.correctNumber !== undefined && this.answer) {
-      return (
-        this.answer.selectedNumber !== undefined &&
-        this.answer.selectedNumber >=
-          this.content.correctNumber - this.content.tolerance &&
-        this.answer.selectedNumber <=
-          this.content.correctNumber + this.content.tolerance
-      );
+  /** Inclusive on both bounds, as on the server. */
+  readonly correct = computed(() => {
+    const correctNumber = this.correctNumber();
+    const selectedNumber = this.selectedNumber();
+    if (correctNumber == null || selectedNumber === undefined) {
+      return false;
     }
-    return false;
-  }
+    return (
+      selectedNumber >= correctNumber - this.tolerance() &&
+      selectedNumber <= correctNumber + this.tolerance()
+    );
+  });
 }

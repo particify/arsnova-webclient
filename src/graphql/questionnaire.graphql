@@ -107,6 +107,10 @@ fragment Answer on Answer {
       format
       selectedChoiceIndexes
     }
+    ... on NumericAnswerFormatData {
+      format
+      selectedNumber
+    }
     ... on TextAnswerFormatData {
       format
       body
@@ -328,6 +332,17 @@ query QuestionnaireTextAnswersByRoundId($roundId: UUID!) {
 
 mutation CreateQuestionnaireChoiceAnswer($input: CreateChoiceAnswerInput!) {
   createQuestionnaireChoiceAnswer(input: $input) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireNumericAnswer(
+  $roundId: UUID!
+  $selectedNumber: Float!
+) {
+  createQuestionnaireNumericAnswer(
+    input: { roundId: $roundId, selectedNumber: $selectedNumber }
+  ) {
     ...Answer
   }
 }
