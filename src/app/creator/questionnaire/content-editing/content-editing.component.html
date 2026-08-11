@@ -241,6 +241,14 @@
         (toggleEvent)="hasCorrectAnswer.set($event)"
       ></app-settings-slide-toggle>
     }
+    @if (_selectedFormat.type === ContentType.Scale) {
+      <app-settings-slide-toggle
+        [label]="'creator.content.offer-neutral-option'"
+        [isChecked]="neutralOption()"
+        [disabled]="(content() && answered()) || isPreview()"
+        (toggleEvent)="neutralOption.set($event)"
+      ></app-settings-slide-toggle>
+    }
 
     <div
       fxLayout="row"

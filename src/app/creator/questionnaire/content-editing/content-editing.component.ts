@@ -59,6 +59,7 @@ import { WordcloudContentFormComponent } from './wordcloud-content-form/wordclou
 import { FlashcardContentFormComponent } from './flashcard-content-form/flashcard-content-form.component';
 import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
 import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
+import { ScaleContentFormComponent } from './scale-content-form/scale-content-form.component';
 import { TextContentFormComponent } from './text-content-form/text-content-form.component';
 
 interface ContentFormat {
@@ -127,6 +128,7 @@ export class ContentEditingComponent {
     | WordcloudContentFormComponent
     | FlashcardContentFormComponent
     | NumericContentFormComponent
+    | ScaleContentFormComponent
     | SlideContentFormComponent
     | TextContentFormComponent
     | undefined
@@ -167,6 +169,14 @@ export class ContentEditingComponent {
         hasCorrectAnswer: this.hasCorrectAnswer(),
       };
     }
+    if (this.selectedFormat()?.type === ContentType.Scale) {
+      return {
+        ...base,
+        neutralOption: this.neutralOption(),
+        answered: this.answered(),
+        language: this.language(),
+      };
+    }
     return base;
   });
 
@@ -178,6 +188,22 @@ export class ContentEditingComponent {
     return formatData?.__typename === 'ChoiceContentFormatData'
       ? !!formatData.multiple
       : false;
+  });
+  readonly neutralOption = linkedSignal<boolean | undefined, boolean>({
+    source: () => {
+      const formatData = this.content()?.formatData;
+      return formatData?.__typename === 'ScaleContentFormatData'
+        ? !!formatData.neutralOption
+        : undefined;
+    },
+    /**
+     * linkedSignal re-seeds on any content change, so the persisted flag is
+     * compared explicitly to keep a toggle the creator just flipped.
+     */
+    computation: (persisted, previous) =>
+      previous && persisted === previous.source
+        ? previous.value
+        : (persisted ?? previous?.value ?? true),
   });
   readonly question = linkedSignal(() => this.content()?.body ?? '');
   readonly weight = linkedSignal(() => this.content()?.weight ?? 1);

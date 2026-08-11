@@ -66,6 +66,8 @@ fragment ContentDetails on Content {
     }
     ... on ScaleContentFormatData {
       format
+      template
+      neutralOption
     }
     ... on TextContentFormatData {
       format
@@ -235,6 +237,18 @@ mutation CreateQuestionnaireNumericContent($input: CreateNumericContentInput!) {
 mutation UpdateQuestionnaireNumericContent($input: UpdateNumericContentInput!) {
   updateQuestionnaireNumericContent(input: $input) {
     ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireScaleContent($input: CreateScaleContentInput!) {
+  createQuestionnaireScaleContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireScaleContent($input: UpdateScaleContentInput!) {
+  updateQuestionnaireScaleContent(input: $input) {
+    ...ContentDetails
   }
 }
 

@@ -1,0 +1,40 @@
+@if (preview()) {
+  <app-content-choice-answer
+    [answerOptions]="selectableAnswers()"
+    [disabled]="true"
+    [language]="language()"
+    [translateOptions]="translateLabels()"
+  ></app-content-choice-answer>
+} @else {
+  <div class="format-container">
+    <span class="section-label">{{
+      'creator.content.answer-template' | transloco
+    }}</span>
+    <mat-form-field appearance="outline" class="no-field-hint">
+      <mat-label>{{ 'creator.content.answer-template' | transloco }}</mat-label>
+      <mat-select
+        [(value)]="template"
+        [disabled]="formDisabled || locked()"
+        data-testid="scale-template-select"
+      >
+        <!-- Bound rather than taken from the option text, which is empty until
+        the lazily loaded creator scope arrives and is then not re-read. -->
+        <mat-select-trigger>{{
+          templateLabel(template()) | transloco
+        }}</mat-select-trigger>
+        @for (scaleTemplate of templates; track scaleTemplate) {
+          <mat-option [value]="scaleTemplate">{{
+            templateLabel(scaleTemplate) | transloco
+          }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-list>
+      @for (label of optionLabels(); track label) {
+        <mat-list-item class="bottom-border">{{
+          translateLabels() ? (label | transloco) : label
+        }}</mat-list-item>
+      }
+    </mat-list>
+  </div>
+}
