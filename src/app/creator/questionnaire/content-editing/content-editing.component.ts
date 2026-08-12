@@ -61,6 +61,7 @@ import { SlideContentFormComponent } from './slide-content-form/slide-content-fo
 import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
 import { ScaleContentFormComponent } from './scale-content-form/scale-content-form.component';
 import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
+import { SortContentFormComponent } from './sort-content-form/sort-content-form.component';
 import { TextContentFormComponent } from './text-content-form/text-content-form.component';
 
 interface ContentFormat {
@@ -132,6 +133,7 @@ export class ContentEditingComponent {
     | ScaleContentFormComponent
     | ShortAnswerContentFormComponent
     | SlideContentFormComponent
+    | SortContentFormComponent
     | TextContentFormComponent
     | undefined
   > = computed(() => {
@@ -180,7 +182,7 @@ export class ContentEditingComponent {
         language: this.language(),
       };
     }
-    if (format === ContentType.ShortAnswer) {
+    if (format === ContentType.ShortAnswer || format === ContentType.Sort) {
       return {
         ...base,
         weight: this.weight(),

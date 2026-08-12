@@ -73,12 +73,13 @@ describe('ContentGroupService', () => {
       ]);
     });
 
-    it('returns Choice, ShortAnswer, Numeric and Slide for Quiz', () => {
+    it('returns Choice, ShortAnswer, Sort, Numeric and Slide for Quiz', () => {
       expect(
         service.getContentFormatsOfQuestionnaireType(QuestionnaireType.Quiz)
       ).toEqual([
         ContentType.Choice,
         ContentType.ShortAnswer,
+        ContentType.Sort,
         ContentType.Numeric,
         ContentType.Slide,
       ]);
@@ -183,6 +184,24 @@ describe('ContentGroupService', () => {
       expect(
         service.isContentCompatibleWithQuestionnaireType(
           content(ContentType.ShortAnswer, true),
+          QuestionnaireType.Survey
+        )
+      ).toBeFalse();
+    });
+
+    it('accepts a sort content in a Quiz series', () => {
+      expect(
+        service.isContentCompatibleWithQuestionnaireType(
+          content(ContentType.Sort, true),
+          QuestionnaireType.Quiz
+        )
+      ).toBeTrue();
+    });
+
+    it('rejects a sort content in a Survey series', () => {
+      expect(
+        service.isContentCompatibleWithQuestionnaireType(
+          content(ContentType.Sort, true),
           QuestionnaireType.Survey
         )
       ).toBeFalse();

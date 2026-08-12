@@ -138,6 +138,7 @@ export class ContentGroupService {
         return [
           ContentType.Choice,
           ContentType.ShortAnswer,
+          ContentType.Sort,
           ContentType.Numeric,
           ContentType.Slide,
         ];

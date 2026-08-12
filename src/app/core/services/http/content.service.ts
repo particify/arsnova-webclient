@@ -63,6 +63,7 @@ export class ContentService extends AbstractEntityService<Content> {
     [ContentType.Scale, 'mood'],
     [ContentType.ShortAnswer, 'sms'],
     [ContentType.Slide, 'info'],
+    [ContentType.Sort, 'move_up'],
     [ContentType.Text, 'description'],
     [ContentType.Wordcloud, 'cloud'],
   ]);

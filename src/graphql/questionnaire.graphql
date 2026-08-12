@@ -73,6 +73,14 @@ fragment ContentDetails on Content {
       format
       correctTerms
     }
+    ... on SortContentFormatData {
+      format
+      correctOrder
+      options {
+        label
+        labelRendered
+      }
+    }
     ... on TextContentFormatData {
       format
       answersPublished
@@ -286,6 +294,18 @@ mutation UpdateQuestionnaireShortAnswerContent(
 ) {
   updateQuestionnaireShortAnswerContent(input: $input) {
     ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireSortContent($input: CreateSortContentInput!) {
+  createQuestionnaireSortContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireSortContent($input: UpdateSortContentInput!) {
+  updateQuestionnaireSortContent(input: $input) {
+    ...ContentDetails
   }
 }
 
