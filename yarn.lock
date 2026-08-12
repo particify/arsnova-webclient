@@ -8067,7 +8067,7 @@ __metadata:
     karma-jasmine: "npm:5.1.0"
     karma-jasmine-html-reporter: "npm:2.2.0"
     karma-viewport: "npm:1.0.9"
-    katex: "npm:0.18.2"
+    katex: "npm:0.18.3"
     lru-cache: "npm:11.5.2"
     ng-packagr: "npm:21.2.7"
     ng-qrcode: "npm:22.0.0"
@@ -12704,14 +12704,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:0.18.2":
-  version: 0.18.2
-  resolution: "katex@npm:0.18.2"
+"katex@npm:0.18.3":
+  version: 0.18.3
+  resolution: "katex@npm:0.18.3"
   dependencies:
     commander: "npm:^8.3.0"
   bin:
     katex: cli.js
-  checksum: 10c0/05f0eadc718cbf18d805089cfe7d930f15199b2781087f2055b25f93b0adaad5cfa7c50311366ced324e85f382edae7ed20ba09819ff8eab62b96bba5fe97029
+  checksum: 10c0/b30cdb9552b5278f16567d207571dbbbe84c7710f10b94e02249e0e10b850073bfc751df16aabe39d78038589e0d9829bf162bd672d9d054a59123f69f44d8c9
   languageName: node
   linkType: hard
 
