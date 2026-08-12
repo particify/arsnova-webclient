@@ -1,0 +1,6 @@
+<app-content-sort-answer
+  [answerOptions]="displayOptions()"
+  (reordered)="displayOptions.set($event)"
+  [correct]="correct()"
+  [disabled]="disabled() || answered()"
+></app-content-sort-answer>

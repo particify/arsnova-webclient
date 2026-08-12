@@ -5,7 +5,6 @@ import { catchError, map } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
 import { Answer } from '@app/core/models/answer';
-import { AnswerOption } from '@app/core/models/answer-option';
 import { PrioritizationAnswer } from '@app/core/models/prioritization-answer';
 import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { AnswerResponse } from '@app/core/models/answer-response';
@@ -192,7 +191,8 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
       .pipe(catchError(this.handleError<void>('hideAnswer')));
   }
 
-  shuffleAnswerOptions(answers: AnswerOption[]): AnswerOption[] {
+  /** Shuffles in place and returns the same array. */
+  shuffleAnswerOptions<T>(answers: T[]): T[] {
     for (let i = answers.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * i);
       const temp = answers[i];

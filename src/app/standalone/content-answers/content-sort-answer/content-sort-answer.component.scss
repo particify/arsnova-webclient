@@ -15,9 +15,16 @@ $option-padding: 0;
   }
 }
 
-.mat-icon {
+// Scoped to the drag handle so the shared correctness colors reach the
+// indicator, which sits outside the list.
+.answer .mat-icon {
   color: var(--grey);
 }
+
+@include cwo.correctness-borders(
+  '.correct-order .answer',
+  '.wrong-order .answer'
+);
 
 .no-grab {
   cursor: initial;

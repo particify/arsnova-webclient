@@ -4,6 +4,7 @@ import { ContentChoiceParticipantComponent } from '@app/participant/content/cont
 import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
 import { ContentScaleParticipantComponent } from '@app/participant/content/content-scale-participant/content-scale-participant.component';
 import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
+import { ContentSortParticipantComponent } from '@app/participant/content/content-sort-participant/content-sort-participant.component';
 import { ContentTextParticipantComponent } from '@app/participant/content/content-text-participant/content-text-participant.component';
 import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
 
@@ -29,7 +30,7 @@ export const FORMAT_REGISTRY: Record<ContentType, FormatDefinition> = {
   },
   [ContentType.Slide]: {},
   [ContentType.Sort]: {
-    component: ContentChoiceParticipantComponent,
+    component: ContentSortParticipantComponent,
   },
   [ContentType.Text]: {
     component: ContentTextParticipantComponent,

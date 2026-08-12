@@ -133,6 +133,10 @@ fragment Answer on Answer {
       format
       body
     }
+    ... on SortAnswerFormatData {
+      format
+      selectedChoiceIndexes
+    }
     ... on TextAnswerFormatData {
       format
       body
@@ -459,6 +463,17 @@ mutation CreateQuestionnaireScaleAnswer($roundId: UUID!, $rating: Int!) {
 mutation CreateQuestionnaireShortAnswerAnswer($roundId: UUID!, $body: String!) {
   createQuestionnaireShortAnswerAnswer(
     input: { roundId: $roundId, body: $body }
+  ) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireSortAnswer(
+  $roundId: UUID!
+  $selectedChoiceIndexes: [Int!]!
+) {
+  createQuestionnaireSortAnswer(
+    input: { roundId: $roundId, selectedChoiceIndexes: $selectedChoiceIndexes }
   ) {
     ...Answer
   }
