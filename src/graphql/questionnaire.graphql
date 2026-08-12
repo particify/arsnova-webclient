@@ -188,6 +188,13 @@ fragment ShortAnswerContentRoundStats on ShortAnswerContentRoundStats {
   counts
 }
 
+fragment SortContentRoundStats on SortContentRoundStats {
+  combinations {
+    selectedChoiceIndexes
+    count
+  }
+}
+
 fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
   words
   counts
@@ -420,6 +427,12 @@ query QuestionnaireScaleRoundStatsByRoundId($roundId: UUID!) {
 query QuestionnaireShortAnswerRoundStatsByRoundId($roundId: UUID!) {
   questionnaireShortAnswerRoundStatsByRoundId(roundId: $roundId) {
     ...ShortAnswerContentRoundStats
+  }
+}
+
+query QuestionnaireSortRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireSortRoundStatsByRoundId(roundId: $roundId) {
+    ...SortContentRoundStats
   }
 }
 
@@ -696,6 +709,12 @@ subscription QuestionnaireScaleRoundStatsUpdated($roundId: UUID!) {
 subscription QuestionnaireShortAnswerRoundStatsUpdated($roundId: UUID!) {
   questionnaireShortAnswerRoundStatsUpdated(roundId: $roundId) {
     ...ShortAnswerContentRoundStats
+  }
+}
+
+subscription QuestionnaireSortRoundStatsUpdated($roundId: UUID!) {
+  questionnaireSortRoundStatsUpdated(roundId: $roundId) {
+    ...SortContentRoundStats
   }
 }
 

@@ -1,0 +1,25 @@
+<div fxLayout="column" fxLayoutGap="16px">
+  @if (hasCorrectAnswer() && isPresentation()) {
+    <app-correct-answer-results
+      [show]="showCorrect()"
+      [answerCount]="answerCount()"
+      [correctAnswerCount]="correctAnswerCount()"
+      [abstentionCount]="abstentionCount()"
+    />
+  }
+  @if (resultsVisible()) {
+    <app-bar-chart
+      [data]="visualizationData()"
+      [scale]="scale()"
+      [showLegend]="!isPresentation()"
+      [showLabels]="true"
+      [alwaysShowXAxisLabels]="true"
+      [dataLabelMode]="visualizationUnitPercent() ? 'percent' : 'absolute'"
+    ></app-bar-chart>
+  }
+  <app-choice-answer-list
+    [answers]="answerItems()"
+    [showCorrect]="showCorrect()"
+    [presentationMode]="isPresentation()"
+  />
+</div>
