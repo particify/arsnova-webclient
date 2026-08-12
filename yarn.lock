@@ -535,9 +535,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cdk@npm:22.1.1":
-  version: 22.1.1
-  resolution: "@angular/cdk@npm:22.1.1"
+"@angular/cdk@npm:22.1.2":
+  version: 22.1.2
+  resolution: "@angular/cdk@npm:22.1.2"
   dependencies:
     parse5: "npm:^8.0.0"
     tslib: "npm:^2.3.0"
@@ -546,7 +546,7 @@ __metadata:
     "@angular/core": ^22.0.0 || ^23.0.0
     "@angular/platform-browser": ^22.0.0 || ^23.0.0
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10c0/a36147e4c58d39f43eddc66214da27ef3cc10eb93089a3b45bcccdc2a19bed5054b769b1238329fa6e9ff6ea56271e795a622d8331cf5bb0c95f28c31d97b1dc
+  checksum: 10c0/aa3306c2189b9bd52f83cd44cd548a9afaeaf3b6353c220ec1a5007c893dabf7b2b9234de8ace4b9c82f6860e991529e0dce1a662cd6f1670f6c438261853fdd
   languageName: node
   linkType: hard
 
@@ -676,19 +676,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/material@npm:22.1.1":
-  version: 22.1.1
-  resolution: "@angular/material@npm:22.1.1"
+"@angular/material@npm:22.1.2":
+  version: 22.1.2
+  resolution: "@angular/material@npm:22.1.2"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/cdk": 22.1.1
+    "@angular/cdk": 22.1.2
     "@angular/common": ^22.0.0 || ^23.0.0
     "@angular/core": ^22.0.0 || ^23.0.0
     "@angular/forms": ^22.0.0 || ^23.0.0
     "@angular/platform-browser": ^22.0.0 || ^23.0.0
     rxjs: ^6.5.3 || ^7.4.0
-  checksum: 10c0/a5ed2b9bdc55847148925d7772c9f148b514c68d24bf32ffafe6d9cf242059ab27126af6abe593a415c07d077dd322c7a510fde220cc3501e45c7dd95cb9388e
+  checksum: 10c0/5ae90102ff645edea25dfd10a70b67485091153777b6ccd914ba1136bc655a244b26a0c1185c1f2cb0a6d6f25f2db6e7cb1dd29031f3559dbe35e3ae8162602a
   languageName: node
   linkType: hard
 
@@ -8002,7 +8002,7 @@ __metadata:
     "@analogjs/storybook-angular": "npm:2.6.4"
     "@angular/animations": "npm:22.1.1"
     "@angular/build": "npm:22.1.3"
-    "@angular/cdk": "npm:22.1.1"
+    "@angular/cdk": "npm:22.1.2"
     "@angular/cli": "npm:22.1.3"
     "@angular/common": "npm:22.1.1"
     "@angular/compiler": "npm:22.1.1"
@@ -8011,7 +8011,7 @@ __metadata:
     "@angular/flex-layout": "npm:15.0.0-beta.42"
     "@angular/forms": "npm:22.1.1"
     "@angular/language-service": "npm:22.1.1"
-    "@angular/material": "npm:22.1.1"
+    "@angular/material": "npm:22.1.2"
     "@angular/platform-browser": "npm:22.1.1"
     "@angular/platform-browser-dynamic": "npm:22.1.1"
     "@angular/router": "npm:22.1.1"
