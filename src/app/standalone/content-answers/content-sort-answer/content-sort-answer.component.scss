@@ -3,16 +3,12 @@
 $option-padding: 0;
 
 .answer {
+  @include cwo.option-box;
+
   background-color: var(--surface);
-  margin-top: cwo.$option-padding-full;
   cursor: grabbing;
   padding: $option-padding cwo.$option-padding-full;
-  border: 2px solid var(--border);
-  border-radius: 4px;
-
-  &:first-of-type {
-    margin-top: 0;
-  }
+  border-color: var(--border);
 
   &:focus {
     border-color: transparent;
