@@ -1,0 +1,6 @@
+<app-content-prioritization-answer
+  [answerOptions]="items()"
+  [assignablePoints]="contentFormatData().assignablePoints"
+  [(assignedPoints)]="assignedPoints"
+  [disabled]="disabled() || answered()"
+></app-content-prioritization-answer>

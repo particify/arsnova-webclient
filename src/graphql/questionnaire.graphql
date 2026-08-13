@@ -133,6 +133,10 @@ fragment Answer on Answer {
       format
       selectedNumber
     }
+    ... on PrioritizationAnswerFormatData {
+      format
+      assignedPoints
+    }
     ... on ScaleAnswerFormatData {
       format
       rating
@@ -484,6 +488,17 @@ mutation CreateQuestionnaireNumericAnswer(
 ) {
   createQuestionnaireNumericAnswer(
     input: { roundId: $roundId, selectedNumber: $selectedNumber }
+  ) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnairePrioritizationAnswer(
+  $roundId: UUID!
+  $assignedPoints: [Int!]!
+) {
+  createQuestionnairePrioritizationAnswer(
+    input: { roundId: $roundId, assignedPoints: $assignedPoints }
   ) {
     ...Answer
   }

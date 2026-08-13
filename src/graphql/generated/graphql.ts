@@ -3160,7 +3160,11 @@ export type AnswerFragment = {
         format: ContentType;
         selectedNumber: number;
       }
-    | { __typename?: 'PrioritizationAnswerFormatData' }
+    | {
+        __typename?: 'PrioritizationAnswerFormatData';
+        format: ContentType;
+        assignedPoints: Array<number>;
+      }
     | {
         __typename?: 'ScaleAnswerFormatData';
         format: ContentType;
@@ -5736,7 +5740,11 @@ export type QuestionnaireAnswerByRoundIdQuery = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -5906,7 +5914,11 @@ export type QuestionnaireTextAnswersByRoundIdQuery = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -5960,7 +5972,11 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -6015,7 +6031,70 @@ export type CreateQuestionnaireNumericAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'SortAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type CreateQuestionnairePrioritizationAnswerMutationVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+  assignedPoints: Array<Scalars['Int']['input']> | Scalars['Int']['input'];
+}>;
+
+export type CreateQuestionnairePrioritizationAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnairePrioritizationAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    hidden: boolean;
+    createdAt?: string | null;
+    durationMs?: number | null;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -6070,7 +6149,11 @@ export type CreateQuestionnaireScaleAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -6125,7 +6208,11 @@ export type CreateQuestionnaireShortAnswerAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -6181,7 +6268,11 @@ export type CreateQuestionnaireSortAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -6235,7 +6326,11 @@ export type CreateQuestionnaireWordcloudAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -6290,7 +6385,11 @@ export type CreateQuestionnaireTextAnswerMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -6344,7 +6443,11 @@ export type CreateQuestionnaireAbstentionMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -6926,7 +7029,11 @@ export type ToggleQuestionnaireTextAnswerHiddenMutation = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -7510,7 +7617,11 @@ export type QuestionnaireTextAnswersUpdatedSubscription = {
           format: ContentType;
           selectedNumber: number;
         }
-      | { __typename?: 'PrioritizationAnswerFormatData' }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
       | {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
@@ -8533,6 +8644,10 @@ export const AnswerFragmentDoc = gql`
       ... on NumericAnswerFormatData {
         format
         selectedNumber
+      }
+      ... on PrioritizationAnswerFormatData {
+        format
+        assignedPoints
       }
       ... on ScaleAnswerFormatData {
         format
@@ -10911,6 +11026,33 @@ export class CreateQuestionnaireNumericAnswerGql extends Apollo.Mutation<
   CreateQuestionnaireNumericAnswerMutationVariables
 > {
   document = CreateQuestionnaireNumericAnswerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnairePrioritizationAnswerDocument = gql`
+  mutation CreateQuestionnairePrioritizationAnswer(
+    $roundId: UUID!
+    $assignedPoints: [Int!]!
+  ) {
+    createQuestionnairePrioritizationAnswer(
+      input: { roundId: $roundId, assignedPoints: $assignedPoints }
+    ) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnairePrioritizationAnswerGql extends Apollo.Mutation<
+  CreateQuestionnairePrioritizationAnswerMutation,
+  CreateQuestionnairePrioritizationAnswerMutationVariables
+> {
+  document = CreateQuestionnairePrioritizationAnswerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

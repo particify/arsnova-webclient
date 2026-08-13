@@ -55,6 +55,7 @@ import { FocusModeService } from '@app/participant/_services/focus-mode.service'
 import { Apollo, onlyCompleteData } from 'apollo-angular';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
 import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
+import { ContentPrioritizationParticipantComponent } from '@app/participant/content/content-prioritization-participant/content-prioritization-participant.component';
 import { ContentScaleParticipantComponent } from '@app/participant/content/content-scale-participant/content-scale-participant.component';
 import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
 import { ContentSortParticipantComponent } from '@app/participant/content/content-sort-participant/content-sort-participant.component';
@@ -85,6 +86,7 @@ const NON_ANSWERABLE_FORMATS = [ContentType.Flashcard, ContentType.Slide];
 const LOCKABLE_ANSWER_FORMS: Type<unknown>[] = [
   ContentChoiceParticipantComponent,
   ContentNumericParticipantComponent,
+  ContentPrioritizationParticipantComponent,
   ContentScaleParticipantComponent,
   ContentShortAnswerParticipantComponent,
   ContentSortParticipantComponent,
