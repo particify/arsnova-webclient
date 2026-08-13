@@ -5,6 +5,7 @@ import { WordcloudContentFormComponent } from './wordcloud-content-form/wordclou
 import { FlashcardContentFormComponent } from './flashcard-content-form/flashcard-content-form.component';
 import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
 import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
+import { PrioritizationContentFormComponent } from './prioritization-content-form/prioritization-content-form.component';
 import { ScaleContentFormComponent } from './scale-content-form/scale-content-form.component';
 import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
 import { SortContentFormComponent } from './sort-content-form/sort-content-form.component';
@@ -24,7 +25,7 @@ export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
     component: NumericContentFormComponent,
   },
   [ContentType.Prioritization]: {
-    component: ChoiceContentFormComponent,
+    component: PrioritizationContentFormComponent,
   },
   [ContentType.Scale]: {
     component: ScaleContentFormComponent,

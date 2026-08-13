@@ -8,6 +8,7 @@ import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/co
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 import { ContentFormatData, ContentType } from '@gql/generated/graphql';
+import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-answers/content-prioritization-answer/content-prioritization-answer.component';
 import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
 import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
@@ -43,7 +44,7 @@ export class ContentPreviewComponent {
     [ContentType.Binary]: ContentChoiceAnswerComponent,
     [ContentType.Flashcard]: undefined,
     [ContentType.Numeric]: ContentChoiceAnswerComponent,
-    [ContentType.Prioritization]: ContentChoiceAnswerComponent,
+    [ContentType.Prioritization]: ContentPrioritizationAnswerComponent,
     [ContentType.Scale]: ContentChoiceAnswerComponent,
     [ContentType.ShortAnswer]: ContentTextAnswerComponent,
     [ContentType.Slide]: undefined,
@@ -67,6 +68,13 @@ export class ContentPreviewComponent {
           ),
           correctOptionIndexes: formatData.correctOptionIndexes ?? undefined,
           multipleAnswersAllowed: !!formatData.multiple,
+        };
+
+      case 'PrioritizationContentFormatData':
+        return {
+          answerOptions: formatData.options,
+          assignablePoints: formatData.assignablePoints,
+          disabled: true,
         };
 
       case 'ShortAnswerContentFormatData':

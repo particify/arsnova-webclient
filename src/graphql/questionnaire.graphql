@@ -64,6 +64,14 @@ fragment ContentDetails on Content {
       correctNumber
       tolerance
     }
+    ... on PrioritizationContentFormatData {
+      format
+      options {
+        label
+        labelRendered
+      }
+      assignablePoints
+    }
     ... on ScaleContentFormatData {
       format
       template
@@ -277,6 +285,22 @@ mutation CreateQuestionnaireNumericContent($input: CreateNumericContentInput!) {
 mutation UpdateQuestionnaireNumericContent($input: UpdateNumericContentInput!) {
   updateQuestionnaireNumericContent(input: $input) {
     ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnairePrioritizationContent(
+  $input: CreatePrioritizationContentInput!
+) {
+  createQuestionnairePrioritizationContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnairePrioritizationContent(
+  $input: UpdatePrioritizationContentInput!
+) {
+  updateQuestionnairePrioritizationContent(input: $input) {
+    ...ContentDetails
   }
 }
 
