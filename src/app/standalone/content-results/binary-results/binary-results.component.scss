@@ -1,0 +1,11 @@
+@use '../../../../variables' as *;
+
+.info-text {
+  color: var(--on-surface-light);
+  font-size: $xs-font-size;
+}
+
+.correct-answer {
+  color: var(--success);
+  font-size: 28px;
+}

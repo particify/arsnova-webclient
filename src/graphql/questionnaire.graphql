@@ -183,6 +183,10 @@ fragment QuestionnaireAnswerResult on QuestionnaireAnswerResult {
   maxScore
 }
 
+fragment BinaryContentRoundStats on BinaryContentRoundStats {
+  selectionCounts
+}
+
 fragment ChoiceContentRoundStats on ChoiceContentRoundStats {
   selectionCounts
 }
@@ -455,6 +459,12 @@ query QuestionnaireAnswerResultsByQuestionnaireId($questionnaireId: UUID!) {
     questionnaireId: $questionnaireId
   ) {
     ...QuestionnaireAnswerResult
+  }
+}
+
+query QuestionnaireBinaryRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireBinaryRoundStatsByRoundId(roundId: $roundId) {
+    ...BinaryContentRoundStats
   }
 }
 
@@ -762,6 +772,12 @@ subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
     activeRound {
       ...Round
     }
+  }
+}
+
+subscription QuestionnaireBinaryRoundStatsUpdated($roundId: UUID!) {
+  questionnaireBinaryRoundStatsUpdated(roundId: $roundId) {
+    ...BinaryContentRoundStats
   }
 }
 

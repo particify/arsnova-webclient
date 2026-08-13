@@ -144,6 +144,10 @@ export class ContentResultsComponent {
   private readonly formatInputs: Partial<
     Record<ContentType, () => Record<string, unknown>>
   > = {
+    [ContentType.Binary]: () => ({
+      ...this.scoredChartInputs(),
+      language: this.language(),
+    }),
     [ContentType.Choice]: () => ({
       ...this.scoredChartInputs(),
       answersDirectlyBelowChart:
