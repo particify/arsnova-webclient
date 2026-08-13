@@ -1,7 +1,8 @@
-import { Component, input, computed, Type } from '@angular/core';
-import { provideTranslocoScope } from '@jsverse/transloco';
+import { Component, computed, inject, input, Type } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
+import { AnswerOption, toAnswerOption } from '@app/core/models/answer-option';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
-import { toAnswerOption } from '@app/core/models/answer-option';
 import { CoreModule } from '@app/core/core.module';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
@@ -12,6 +13,17 @@ import { ContentPrioritizationAnswerComponent } from '@app/standalone/content-an
 import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
 import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
+
+/** A binary content stores no options, so both labels come from i18n. */
+const BINARY_OPTION_KEYS = ['answer.yes', 'answer.no'];
+
+function binaryCorrectOptionIndexes(
+  correctAnswer?: boolean | null
+): number[] | undefined {
+  return correctAnswer === null || correctAnswer === undefined
+    ? undefined
+    : [correctAnswer ? 0 : 1];
+}
 
 @Component({
   selector: 'app-content-preview',
@@ -26,11 +38,22 @@ import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers
   styleUrls: ['./content-preview.component.scss'],
 })
 export class ContentPreviewComponent {
+  private readonly translateService = inject(TranslocoService);
+
   contentFormatData = input.required<ContentFormatData>();
   body = input.required<string>();
   renderAnswersDynamically = input<boolean>(false);
   showTitle = input<boolean>(true);
   language = input<string>();
+
+  /**
+   * Follows the active language and waits for its file, so neither a switch
+   * nor a slow load leaves the options showing stale labels or raw keys.
+   */
+  private readonly binaryLabels = toSignal(
+    this.translateService.selectTranslate<string[]>(BINARY_OPTION_KEYS),
+    { initialValue: [] as string[] }
+  );
 
   readonly answerText = computed(() => {
     const formatData = this.contentFormatData();
@@ -61,6 +84,16 @@ export class ContentPreviewComponent {
     const formatData = this.contentFormatData();
 
     switch (formatData.__typename) {
+      case 'BinaryContentFormatData':
+        return {
+          answerOptions: this.binaryLabels().map(
+            (label) => new SelectableAnswer(new AnswerOption(label), false)
+          ),
+          correctOptionIndexes: binaryCorrectOptionIndexes(
+            formatData.correctAnswer
+          ),
+        };
+
       case 'ChoiceContentFormatData':
         return {
           answerOptions: formatData.options.map(

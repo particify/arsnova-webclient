@@ -137,6 +137,7 @@ export class ContentGroupService {
       case QuestionnaireType.Quiz:
         return [
           ContentType.Choice,
+          ContentType.Binary,
           ContentType.ShortAnswer,
           ContentType.Sort,
           ContentType.Numeric,
@@ -146,6 +147,7 @@ export class ContentGroupService {
         return [
           ContentType.Choice,
           ContentType.Scale,
+          ContentType.Binary,
           ContentType.Text,
           ContentType.Wordcloud,
           ContentType.Prioritization,

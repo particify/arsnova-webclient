@@ -48,6 +48,10 @@ fragment ContentDetails on Content {
     ...Round
   }
   formatData {
+    ... on BinaryContentFormatData {
+      format
+      correctAnswer
+    }
     ... on ChoiceContentFormatData {
       format
       options {
@@ -269,6 +273,18 @@ mutation CreateQuestionnaire($input: CreateQuestionnaireInput!) {
 mutation ToggleQuestionnairePublished($id: UUID!, $published: Boolean!) {
   toggleQuestionnairePublished(id: $id, published: $published) {
     ...QuestionnaireDetails
+  }
+}
+
+mutation CreateQuestionnaireBinaryContent($input: CreateBinaryContentInput!) {
+  createQuestionnaireBinaryContent(input: $input) {
+    ...ContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireBinaryContent($input: UpdateBinaryContentInput!) {
+  updateQuestionnaireBinaryContent(input: $input) {
+    ...ContentDetails
   }
 }
 

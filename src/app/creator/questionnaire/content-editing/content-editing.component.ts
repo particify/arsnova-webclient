@@ -39,6 +39,7 @@ import { HintComponent } from '@app/standalone/hint/hint.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { NgStyle, AsyncPipe, NgComponentOutlet } from '@angular/common';
 import { ExtendedModule } from '@angular/flex-layout/extended';
+import { BinaryContentFormComponent } from './binary-content-form/binary-content-form.component';
 import { ChoiceContentFormComponent } from './choice-content-form/choice-content-form.component';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
@@ -127,6 +128,7 @@ export class ContentEditingComponent {
   private readonly formComponentOutlet =
     viewChild<NgComponentOutlet>(NgComponentOutlet);
   private readonly contentForm: Signal<
+    | BinaryContentFormComponent
     | ChoiceContentFormComponent
     | WordcloudContentFormComponent
     | FlashcardContentFormComponent
@@ -150,15 +152,29 @@ export class ContentEditingComponent {
     return FORM_REGISTRY[format];
   });
 
-  readonly componentInputs = computed(() => {
-    const format = this.selectedFormat()?.type;
-    const base = {
-      contentId: this.content()?.id,
+  /** The inputs every format form declares, whatever else it adds. */
+  private sharedInputs() {
+    const content = this.content();
+    return {
+      contentId: content?.id,
       duration: this.duration(),
       preview: this.isPreview(),
-      formatData: this.content()?.formatData,
+      formatData: content?.formatData,
       abstentionsAllowed: this.abstentionsAllowed(),
     };
+  }
+
+  readonly componentInputs = computed(() => {
+    const format = this.selectedFormat()?.type;
+    const base = this.sharedInputs();
+    if (format === ContentType.Binary) {
+      return {
+        ...base,
+        weight: this.weight(),
+        answered: this.answered(),
+        hasCorrectAnswer: this.hasCorrectAnswer(),
+      };
+    }
     if (format === ContentType.Choice) {
       return {
         ...base,

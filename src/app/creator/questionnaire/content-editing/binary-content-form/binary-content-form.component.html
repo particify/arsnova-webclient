@@ -1,0 +1,20 @@
+@if (hasCorrectAnswer()) {
+  <div class="format-container">
+    <span class="section-label">{{
+      'creator.content.correct-answer' | transloco
+    }}</span>
+    <mat-radio-group
+      class="binary-options"
+      [disabled]="formDisabled || answered() || preview()"
+      [(ngModel)]="correctAnswer"
+      data-testid="binary-correct-answer-group"
+    >
+      <mat-radio-button [value]="true" data-testid="binary-yes-option">{{
+        'creator.content.answer-yes' | transloco
+      }}</mat-radio-button>
+      <mat-radio-button [value]="false" data-testid="binary-no-option">{{
+        'creator.content.answer-no' | transloco
+      }}</mat-radio-button>
+    </mat-radio-group>
+  </div>
+}
