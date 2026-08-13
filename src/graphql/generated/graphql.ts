@@ -3232,7 +3232,11 @@ export type AnswerFragment = {
   createdAt?: string | null;
   durationMs?: number | null;
   formatData?:
-    | { __typename?: 'BinaryAnswerFormatData' }
+    | {
+        __typename?: 'BinaryAnswerFormatData';
+        format: ContentType;
+        answer: boolean;
+      }
     | {
         __typename?: 'ChoiceAnswerFormatData';
         format: ContentType;
@@ -6143,7 +6147,11 @@ export type QuestionnaireAnswerByRoundIdQuery = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6331,7 +6339,11 @@ export type QuestionnaireTextAnswersByRoundIdQuery = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6376,6 +6388,70 @@ export type QuestionnaireTextAnswersByRoundIdQuery = {
   }> | null;
 };
 
+export type CreateQuestionnaireBinaryAnswerMutationVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+  answer: Scalars['Boolean']['input'];
+}>;
+
+export type CreateQuestionnaireBinaryAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireBinaryAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    hidden: boolean;
+    createdAt?: string | null;
+    durationMs?: number | null;
+    formatData?:
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
+      | {
+          __typename?: 'PrioritizationAnswerFormatData';
+          format: ContentType;
+          assignedPoints: Array<number>;
+        }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'SortAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
 export type CreateQuestionnaireChoiceAnswerMutationVariables = Exact<{
   input: CreateChoiceAnswerInput;
 }>;
@@ -6390,7 +6466,11 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6450,7 +6530,11 @@ export type CreateQuestionnaireNumericAnswerMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6510,7 +6594,11 @@ export type CreateQuestionnairePrioritizationAnswerMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6570,7 +6658,11 @@ export type CreateQuestionnaireScaleAnswerMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6630,7 +6722,11 @@ export type CreateQuestionnaireShortAnswerAnswerMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6691,7 +6787,11 @@ export type CreateQuestionnaireSortAnswerMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6750,7 +6850,11 @@ export type CreateQuestionnaireWordcloudAnswerMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6810,7 +6914,11 @@ export type CreateQuestionnaireTextAnswerMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -6869,7 +6977,11 @@ export type CreateQuestionnaireAbstentionMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -7481,7 +7593,11 @@ export type ToggleQuestionnaireTextAnswerHiddenMutation = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -8098,7 +8214,11 @@ export type QuestionnaireTextAnswersUpdatedSubscription = {
     createdAt?: string | null;
     durationMs?: number | null;
     formatData?:
-      | { __typename?: 'BinaryAnswerFormatData' }
+      | {
+          __typename?: 'BinaryAnswerFormatData';
+          format: ContentType;
+          answer: boolean;
+        }
       | {
           __typename?: 'ChoiceAnswerFormatData';
           format: ContentType;
@@ -9133,6 +9253,10 @@ export const AnswerFragmentDoc = gql`
     result
     hidden
     formatData {
+      ... on BinaryAnswerFormatData {
+        format
+        answer
+      }
       ... on ChoiceAnswerFormatData {
         format
         selectedChoiceIndexes
@@ -11544,6 +11668,30 @@ export class QuestionnaireTextAnswersByRoundIdGql extends Apollo.Query<
   QuestionnaireTextAnswersByRoundIdQueryVariables
 > {
   document = QuestionnaireTextAnswersByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireBinaryAnswerDocument = gql`
+  mutation CreateQuestionnaireBinaryAnswer($roundId: UUID!, $answer: Boolean!) {
+    createQuestionnaireBinaryAnswer(
+      input: { roundId: $roundId, answer: $answer }
+    ) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireBinaryAnswerGql extends Apollo.Mutation<
+  CreateQuestionnaireBinaryAnswerMutation,
+  CreateQuestionnaireBinaryAnswerMutationVariables
+> {
+  document = CreateQuestionnaireBinaryAnswerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -129,6 +129,10 @@ fragment Answer on Answer {
   result
   hidden
   formatData {
+    ... on BinaryAnswerFormatData {
+      format
+      answer
+    }
     ... on ChoiceAnswerFormatData {
       format
       selectedChoiceIndexes
@@ -498,6 +502,14 @@ query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
 
 query QuestionnaireTextAnswersByRoundId($roundId: UUID!) {
   questionnaireTextAnswersByRoundId(roundId: $roundId) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireBinaryAnswer($roundId: UUID!, $answer: Boolean!) {
+  createQuestionnaireBinaryAnswer(
+    input: { roundId: $roundId, answer: $answer }
+  ) {
     ...Answer
   }
 }
