@@ -3222,6 +3222,11 @@ export type NumericContentRoundStatsFragment = {
   correctAnswerFraction?: number | null;
 };
 
+export type PrioritizationContentRoundStatsFragment = {
+  __typename?: 'PrioritizationContentRoundStats';
+  assignedPoints?: Array<number> | null;
+};
+
 export type ScaleContentRoundStatsFragment = {
   __typename?: 'ScaleContentRoundStats';
   counts?: Array<number> | null;
@@ -5836,6 +5841,19 @@ export type QuestionnaireNumericRoundStatsByRoundIdQuery = {
   } | null;
 };
 
+export type QuestionnairePrioritizationRoundStatsByRoundIdQueryVariables =
+  Exact<{
+    roundId: Scalars['UUID']['input'];
+  }>;
+
+export type QuestionnairePrioritizationRoundStatsByRoundIdQuery = {
+  __typename?: 'Query';
+  questionnairePrioritizationRoundStatsByRoundId?: {
+    __typename?: 'PrioritizationContentRoundStats';
+    assignedPoints?: Array<number> | null;
+  } | null;
+};
+
 export type QuestionnaireScaleRoundStatsByRoundIdQueryVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -7537,6 +7555,19 @@ export type QuestionnaireNumericRoundStatsUpdatedSubscription = {
   } | null;
 };
 
+export type QuestionnairePrioritizationRoundStatsUpdatedSubscriptionVariables =
+  Exact<{
+    roundId: Scalars['UUID']['input'];
+  }>;
+
+export type QuestionnairePrioritizationRoundStatsUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnairePrioritizationRoundStatsUpdated?: {
+    __typename?: 'PrioritizationContentRoundStats';
+    assignedPoints?: Array<number> | null;
+  } | null;
+};
+
 export type QuestionnaireScaleRoundStatsUpdatedSubscriptionVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -8705,6 +8736,11 @@ export const NumericContentRoundStatsFragmentDoc = gql`
     minimum
     maximum
     correctAnswerFraction
+  }
+`;
+export const PrioritizationContentRoundStatsFragmentDoc = gql`
+  fragment PrioritizationContentRoundStats on PrioritizationContentRoundStats {
+    assignedPoints
   }
 `;
 export const ScaleContentRoundStatsFragmentDoc = gql`
@@ -10872,6 +10908,28 @@ export class QuestionnaireNumericRoundStatsByRoundIdGql extends Apollo.Query<
     super(apollo);
   }
 }
+export const QuestionnairePrioritizationRoundStatsByRoundIdDocument = gql`
+  query QuestionnairePrioritizationRoundStatsByRoundId($roundId: UUID!) {
+    questionnairePrioritizationRoundStatsByRoundId(roundId: $roundId) {
+      ...PrioritizationContentRoundStats
+    }
+  }
+  ${PrioritizationContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnairePrioritizationRoundStatsByRoundIdGql extends Apollo.Query<
+  QuestionnairePrioritizationRoundStatsByRoundIdQuery,
+  QuestionnairePrioritizationRoundStatsByRoundIdQueryVariables
+> {
+  document = QuestionnairePrioritizationRoundStatsByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const QuestionnaireScaleRoundStatsByRoundIdDocument = gql`
   query QuestionnaireScaleRoundStatsByRoundId($roundId: UUID!) {
     questionnaireScaleRoundStatsByRoundId(roundId: $roundId) {
@@ -11706,6 +11764,28 @@ export class QuestionnaireNumericRoundStatsUpdatedGql extends Apollo.Subscriptio
   QuestionnaireNumericRoundStatsUpdatedSubscriptionVariables
 > {
   document = QuestionnaireNumericRoundStatsUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnairePrioritizationRoundStatsUpdatedDocument = gql`
+  subscription QuestionnairePrioritizationRoundStatsUpdated($roundId: UUID!) {
+    questionnairePrioritizationRoundStatsUpdated(roundId: $roundId) {
+      ...PrioritizationContentRoundStats
+    }
+  }
+  ${PrioritizationContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnairePrioritizationRoundStatsUpdatedGql extends Apollo.Subscription<
+  QuestionnairePrioritizationRoundStatsUpdatedSubscription,
+  QuestionnairePrioritizationRoundStatsUpdatedSubscriptionVariables
+> {
+  document = QuestionnairePrioritizationRoundStatsUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

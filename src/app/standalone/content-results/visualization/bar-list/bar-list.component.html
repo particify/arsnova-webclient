@@ -1,0 +1,21 @@
+<div class="bar-list" role="list">
+  @for (bar of bars(); track $index) {
+    <div class="bar-row" role="listitem">
+      <div class="bar-label">
+        <app-rendered-text
+          [rawText]="bar.label"
+          [renderedText]="bar.labelRendered"
+        ></app-rendered-text>
+      </div>
+      <div class="bar-line">
+        <div
+          class="bar"
+          data-testid="bar"
+          [style.width.%]="bar.widthPercent"
+          [style.background-color]="bar.color"
+        ></div>
+        <span class="bar-value" data-testid="bar-value">{{ bar.text }}</span>
+      </div>
+    </div>
+  }
+</div>

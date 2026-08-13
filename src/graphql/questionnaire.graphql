@@ -191,6 +191,10 @@ fragment NumericContentRoundStats on NumericContentRoundStats {
   correctAnswerFraction
 }
 
+fragment PrioritizationContentRoundStats on PrioritizationContentRoundStats {
+  assignedPoints
+}
+
 fragment ScaleContentRoundStats on ScaleContentRoundStats {
   counts
 }
@@ -443,6 +447,12 @@ query QuestionnaireChoiceRoundStatsByRoundId($roundId: UUID!) {
 query QuestionnaireNumericRoundStatsByRoundId($roundId: UUID!) {
   questionnaireNumericRoundStatsByRoundId(roundId: $roundId) {
     ...NumericContentRoundStats
+  }
+}
+
+query QuestionnairePrioritizationRoundStatsByRoundId($roundId: UUID!) {
+  questionnairePrioritizationRoundStatsByRoundId(roundId: $roundId) {
+    ...PrioritizationContentRoundStats
   }
 }
 
@@ -736,6 +746,12 @@ subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
 subscription QuestionnaireNumericRoundStatsUpdated($roundId: UUID!) {
   questionnaireNumericRoundStatsUpdated(roundId: $roundId) {
     ...NumericContentRoundStats
+  }
+}
+
+subscription QuestionnairePrioritizationRoundStatsUpdated($roundId: UUID!) {
+  questionnairePrioritizationRoundStatsUpdated(roundId: $roundId) {
+    ...PrioritizationContentRoundStats
   }
 }
 

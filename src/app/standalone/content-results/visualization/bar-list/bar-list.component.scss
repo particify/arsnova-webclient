@@ -1,0 +1,45 @@
+@use '../../../../../variables' as *;
+
+.bar-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+// The label-to-bar spacing is the row's own, since a clamping label contributes
+// none of its content's bottom margin to its height. styles.scss drops that
+// margin so the spacing does not depend on whether the label wrapped.
+.bar-row {
+  display: flex;
+  flex-direction: column;
+  gap: calc($spacing / 2);
+}
+
+.bar-label {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  font-size: $s-font-size;
+  line-height: 1.4;
+}
+
+.bar-line {
+  display: flex;
+  align-items: center;
+  gap: $spacing;
+}
+
+.bar {
+  flex: 0 0 auto;
+  height: 24px;
+  background-color: var(--primary);
+  transition: width 300ms;
+}
+
+.bar-value {
+  flex: 0 0 auto;
+  font-size: $s-font-size;
+}

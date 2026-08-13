@@ -4,6 +4,7 @@ import { ChoiceResultsComponent } from './choice-results/choice-results.componen
 import { WordcloudResultsComponent } from './wordcloud-results/wordcloud-results.component';
 import { FlashcardResultsComponent } from './flashcard-results/flashcard-results.component';
 import { NumericResultsComponent } from './numeric-results/numeric-results.component';
+import { PrioritizationResultsComponent } from './prioritization-results/prioritization-results.component';
 import { ScaleResultsComponent } from './scale-results/scale-results.component';
 import { ShortAnswerResultsComponent } from './short-answer-results/short-answer-results.component';
 import { SortResultsComponent } from './sort-results/sort-results.component';
@@ -28,7 +29,7 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
     supportsRounds: true,
   },
   [ContentType.Prioritization]: {
-    component: ChoiceResultsComponent,
+    component: PrioritizationResultsComponent,
   },
   [ContentType.Scale]: {
     component: ScaleResultsComponent,
