@@ -8,7 +8,10 @@ import { LikertScaleService } from '@app/core/services/util/likert-scale.service
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import { TranslocoService } from '@jsverse/transloco';
 import { configureTestModule } from '@testing/test.setup';
-import { getTranslocoModuleWithTranslations } from '@testing/transloco-testing.module';
+import {
+  getTranslocoModule,
+  getTranslocoModuleWithTranslations,
+} from '@testing/transloco-testing.module';
 import { of } from 'rxjs';
 
 /*
@@ -103,5 +106,101 @@ describe('ContentChoiceAnswerComponent option labels', () => {
 
   it('should derive the option labels from the scale template', () => {
     expect(likertLabels).toContain(SOMEWHAT_AGREE_KEY);
+  });
+});
+
+describe('ContentChoiceAnswerComponent', () => {
+  let fixture: ComponentFixture<ContentChoiceAnswerComponent>;
+  let component: ContentChoiceAnswerComponent;
+
+  /** Three options with the first one picked, as a given answer leaves them. */
+  function answerOptions(): SelectableAnswer[] {
+    return ['Berlin', 'Bonn', 'Bern'].map(
+      (label, index) =>
+        new SelectableAnswer(new AnswerOption(label), index === 0)
+    );
+  }
+
+  function setUp(correctOptionIndexes?: number[]) {
+    const formattingService = jasmine.createSpyObj('FormattingService', [
+      'postString',
+    ]);
+    formattingService.postString.and.returnValue(of({ html: '' }));
+
+    configureTestModule(
+      [getTranslocoModule(), ContentChoiceAnswerComponent],
+      [
+        { provide: FormattingService, useValue: formattingService },
+        { provide: BROWSER_LANG, useValue: 'en' },
+      ]
+    ).compileComponents();
+
+    fixture = TestBed.createComponent(ContentChoiceAnswerComponent);
+    component = fixture.componentInstance;
+    fixture.componentRef.setInput('answerOptions', answerOptions());
+    fixture.componentRef.setInput('answered', true);
+    fixture.componentRef.setInput('correctOptionsPublished', true);
+    fixture.componentRef.setInput('correctOptionIndexes', correctOptionIndexes);
+    fixture.detectChanges();
+  }
+
+  it('marks a pick correct when it is among the correct options', () => {
+    setUp([0]);
+    expect(component.checkedOptions()[0]).toEqual({
+      correct: true,
+      incorrect: false,
+    });
+  });
+
+  it('marks a pick incorrect when it is not among the correct options', () => {
+    setUp([1]);
+    expect(component.checkedOptions()[0]).toEqual({
+      correct: false,
+      incorrect: true,
+    });
+  });
+
+  it('marks a pick neither way when there are no correct options', () => {
+    setUp(undefined);
+    expect(component.checkedOptions()[0]).toEqual({
+      correct: false,
+      incorrect: false,
+    });
+  });
+
+  it('leaves the unpicked options unmarked', () => {
+    setUp([1]);
+    expect(component.checkedOptions().slice(1)).toEqual([
+      { correct: false, incorrect: false },
+      { correct: false, incorrect: false },
+    ]);
+  });
+
+  it('marks nothing while the correct options are unpublished', () => {
+    setUp([1]);
+    fixture.componentRef.setInput('correctOptionsPublished', false);
+    fixture.detectChanges();
+    expect(component.checkedOptions()[0]).toEqual({
+      correct: false,
+      incorrect: false,
+    });
+  });
+
+  it('shows no correctness indicator when there are no correct options', () => {
+    setUp(undefined);
+    expect(component.correctOptionVisible()).toEqual([false, false, false]);
+  });
+
+  it('marks a pick neither way when the correct options are empty', () => {
+    setUp([]);
+    expect(component.checkedOptions()[0]).toEqual({
+      correct: false,
+      incorrect: false,
+    });
+  });
+
+  it('shows no correctness indicator when the correct options are empty', () => {
+    setUp([]);
+    expect(component.correctOptionVisible()).toEqual([false, false, false]);
   });
 });
