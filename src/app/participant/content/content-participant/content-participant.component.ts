@@ -15,7 +15,6 @@ import {
 } from '@angular/core';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import { of, switchMap } from 'rxjs';
-import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { Router } from '@angular/router';
 import { Location, NgClass, NgComponentOutlet } from '@angular/common';
 import { LeaderboardPageComponent } from '@app/participant/leaderboard-page/leaderboard-page.component';
@@ -48,6 +47,7 @@ import {
   QuestionnaireContentAnswerResultsByQuestionnaireIdDocument,
   QuestionnairePublishingMode,
   QuestionnaireType,
+  RoomUserAlias,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';

@@ -42,7 +42,7 @@
                       !!_questionnaire.correctOptionsPublished
                     "
                     [attribution]="getAttribution()"
-                    [alias]="alias"
+                    [alias]="alias()"
                     [showCard]="showCard()"
                     [answerResult]="answerResults()[index]?.result"
                     [activeTab]="activeTab()"
@@ -55,7 +55,7 @@
                 } @else {
                   <app-base-card>
                     <app-content-waiting
-                      [alias]="alias"
+                      [alias]="alias()"
                       [current]="index + 1"
                       [totalCount]="_questionnaire.contentCount ?? 0"
                       [roomId]="roomId()"
@@ -75,7 +75,7 @@
         [contents]="contents()"
         [finished]="isFinished()"
         [isPureInfoSeries]="isPureInfoSeries()"
-        [alias]="alias"
+        [alias]="alias()"
         [roomId]="roomId()"
       >
       </app-series-overview>

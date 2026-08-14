@@ -226,11 +226,12 @@
         leaderboard &&
         selectedTabIndex === 1
       ) {
-        @if (alias()?.id) {
+        @let aliasId = alias()?.id;
+        @if (aliasId) {
           <app-leaderboard
             fxFill
             [leaderboardItems]="leaderboard"
-            [aliasId]="$safeNavigationMigration(alias()?.id)"
+            [aliasId]="aliasId"
           ></app-leaderboard>
         } @else {
           <app-content-waiting

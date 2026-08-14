@@ -28,6 +28,7 @@ import {
   ignoreElements,
   map,
   merge,
+  of,
   shareReplay,
   switchMap,
   take,
@@ -36,7 +37,6 @@ import { ContentCarouselService } from '@app/core/services/util/content-carousel
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
 import { LICENSES } from '@app/core/models/licenses';
-import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { SeriesOverviewComponent } from '@app/participant/series-overview/series-overview.component';
 import { ContentParticipantComponent } from '@app/participant/content/content-participant/content-participant.component';
 import { CdkStep } from '@angular/cdk/stepper';
@@ -61,6 +61,7 @@ import {
   QuestionnairePublishedContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
   QuestionnaireUpdatedGql,
+  RoomUserAliasByRoomIdGql,
   UserUiSettings,
   QuestionnaireType,
   ContentType,
@@ -125,6 +126,7 @@ export class QuestionnairePageComponent {
     QuestionnaireContentUpdatedGql
   );
   private readonly notificationService = inject(NotificationService);
+  private readonly roomUserAliasByRoomId = inject(RoomUserAliasByRoomIdGql);
 
   stepper = viewChild(StepperComponent);
 
@@ -328,7 +330,28 @@ export class QuestionnairePageComponent {
   hasAnsweredLastContent = false;
 
   attributions: ContentLicenseAttribution[] = [];
-  alias?: RoomUserAlias;
+
+  private readonly aliasRoomId = computed(() =>
+    this.questionnaire()?.leaderboardEnabled ? this.roomId() : undefined
+  );
+
+  // Either the alias the user has chosen for the room or an unsaved proposal
+  // whose id is not set.
+  readonly alias = toSignal(
+    toObservable(this.aliasRoomId).pipe(
+      distinctUntilChanged(),
+      switchMap((roomId) =>
+        roomId
+          ? this.roomUserAliasByRoomId
+              .watch({ variables: { roomId } })
+              .valueChanges.pipe(
+                onlyCompleteData(),
+                map((r) => r.data.roomUserAliasByRoomId)
+              )
+          : of(undefined)
+      )
+    )
+  );
 
   private questionnaireUpdates(questionnaireId: string) {
     return this.questionnaireUpdated

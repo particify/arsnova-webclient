@@ -33,6 +33,12 @@ fragment RoomMember on RoomMember {
   role
 }
 
+fragment RoomUserAlias on RoomUserAlias {
+  id
+  alias
+  seed
+}
+
 query RoomIdByShortId($shortId: String!) {
   roomByShortId(shortId: $shortId) {
     id
@@ -268,5 +274,19 @@ mutation RevokeRoomMembership($roomId: UUID!) {
     room {
       id
     }
+  }
+}
+
+# Returns an unsaved proposal with a null id if the user has not chosen an alias
+# for the room yet.
+query RoomUserAliasByRoomId($roomId: UUID!) {
+  roomUserAliasByRoomId(roomId: $roomId) {
+    ...RoomUserAlias
+  }
+}
+
+mutation SetRoomUserAlias($roomId: UUID!, $alias: String, $seed: Int) {
+  setRoomUserAlias(input: { roomId: $roomId, alias: $alias, seed: $seed }) {
+    ...RoomUserAlias
   }
 }

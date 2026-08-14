@@ -7,12 +7,16 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { RoomUserAlias } from '@app/core/models/room-user-alias';
-import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
+import {
+  RoomUserAlias,
+  RoomUserAliasByRoomIdDocument,
+  RoomUserAliasByRoomIdGql,
+  SetRoomUserAliasGql,
+} from '@gql/generated/graphql';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-content-waiting',
@@ -22,8 +26,8 @@ import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-b
   styleUrl: './content-waiting.component.scss',
 })
 export class ContentWaitingComponent extends FormComponent {
-  private roomUserAliasService = inject(RoomUserAliasService);
-  private authService = inject(AuthenticationService);
+  private roomUserAliasByRoomId = inject(RoomUserAliasByRoomIdGql);
+  private setRoomUserAlias = inject(SetRoomUserAliasGql);
 
   @Input() current?: number;
   @Input() totalCount?: number;
@@ -36,29 +40,48 @@ export class ContentWaitingComponent extends FormComponent {
 
   enteredAlias = '';
 
+  /**
+   * Persists the alias for the room, either by accepting the proposal's `seed`
+   * or with a custom one. This can only be done once per room.
+   */
   setAlias(): void {
     this.disableForm();
+    const roomId = this.roomId;
     const changes = this.enteredAlias
       ? { alias: this.enteredAlias }
       : { seed: this.alias?.seed };
-    this.authService.getCurrentAuthentication().subscribe((auth) => {
-      this.roomUserAliasService
-        .updateAlias(this.roomId, auth.userId, changes)
-        .subscribe((alias) => {
-          if (this.alias) {
-            this.alias.id = alias.id;
-            if (this.enteredAlias) {
-              this.alias.alias = this.enteredAlias;
-            }
-            this.aliasSet.emit();
+    this.setRoomUserAlias
+      .mutate({
+        variables: { roomId, ...changes },
+        // A proposal carries no id, so Apollo cannot normalize the result into
+        // the query it was read from.
+        update: (cache, { data }) => {
+          const alias = data?.setRoomUserAlias;
+          if (alias) {
+            cache.writeQuery({
+              query: RoomUserAliasByRoomIdDocument,
+              variables: { roomId },
+              data: { roomUserAliasByRoomId: alias },
+            });
           }
-        });
-    });
+        },
+      })
+      .subscribe(() => this.aliasSet.emit());
   }
 
+  /** Requests another proposal for an alias which is not persisted yet. */
   generateAlias(): void {
-    this.roomUserAliasService.generateAlias(this.roomId).subscribe((alias) => {
-      this.alias = alias;
-    });
+    this.roomUserAliasByRoomId
+      .fetch({
+        variables: { roomId: this.roomId },
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        map((r) => r.data?.roomUserAliasByRoomId),
+        filter((alias) => !!alias)
+      )
+      .subscribe((alias) => {
+        this.alias = alias;
+      });
   }
 }
