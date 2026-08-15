@@ -7,6 +7,7 @@ import {
   effect,
   inject,
   input,
+  untracked,
 } from '@angular/core';
 import {
   ArcElement,
@@ -23,7 +24,6 @@ import { Router } from '@angular/router';
 import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { HintType } from '@app/core/models/hint-type.enum';
-import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
@@ -49,11 +49,18 @@ import {
   QuestionnaireType,
   ContentType,
   QuestionnaireAnswerResultsByQuestionnaireIdGql,
+  QuestionnaireLeaderboardByQuestionnaireIdGql,
+  QuestionnaireLeaderboardUpdatedGql,
   RoomUserAlias,
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, distinctUntilChanged, EMPTY, switchMap } from 'rxjs';
+import { catchError, distinctUntilChanged, EMPTY, of, switchMap } from 'rxjs';
+import {
+  LEADERBOARD_DISPLAY_LIMIT,
+  LeaderboardService,
+  watchLeaderboard,
+} from '@app/core/services/util/leaderboard.service';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 // const RELOAD_INTERVAL = 2250;
@@ -95,6 +102,13 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   private answerService = inject(ContentAnswerService);
   private readonly questionnaireAnswerResults = inject(
     QuestionnaireAnswerResultsByQuestionnaireIdGql
+  );
+  private readonly leaderboardService = inject(LeaderboardService);
+  private readonly leaderboardByQuestionnaireId = inject(
+    QuestionnaireLeaderboardByQuestionnaireIdGql
+  );
+  private readonly leaderboardUpdated = inject(
+    QuestionnaireLeaderboardUpdatedGql
   );
 
   questionnaire = input.required<Questionnaire>();
@@ -198,12 +212,42 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       !!this.questionnaireResult()?.maxScore &&
       !!this.questionnaire().correctOptionsPublished
   );
-  leaderboardPosition?: number;
   HintType = HintType;
-  leaderboard?: LeaderboardItem[];
-  userLeaderboardItem?: LeaderboardItem;
   selectedTabIndex = 0;
   QuestionnaireType = QuestionnaireType;
+
+  // Reading the leaderboard of an unpublished questionnaire requires room write
+  // access, which participants do not have.
+  private readonly leaderboardQuestionnaireId = computed(() => {
+    const questionnaire = this.questionnaire();
+    return questionnaire.leaderboardEnabled && questionnaire.published
+      ? questionnaire.id
+      : undefined;
+  });
+
+  readonly leaderboard = toSignal(
+    toObservable(this.leaderboardQuestionnaireId).pipe(
+      distinctUntilChanged(),
+      switchMap((questionnaireId) =>
+        questionnaireId
+          ? watchLeaderboard(
+              this.leaderboardByQuestionnaireId,
+              this.leaderboardUpdated,
+              { questionnaireId, limit: LEADERBOARD_DISPLAY_LIMIT }
+            )
+          : of(undefined)
+      )
+    )
+  );
+
+  readonly userLeaderboardItem = computed(() => {
+    const page = this.leaderboard();
+    return page && this.leaderboardService.getOwnEntry(page, this.alias()?.id);
+  });
+
+  readonly leaderboardPosition = computed(
+    () => this.userLeaderboardItem()?.position
+  );
 
   constructor() {
     effect(() => {
@@ -211,6 +255,35 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
         this.updateCharts();
       }
     });
+
+    let knownAliasId: string | null | undefined;
+    effect(() => {
+      // A nickname set here changes how the user is ranked, which the watched
+      // ranking only learns about from the server.
+      const aliasId = this.alias()?.id;
+      if (aliasId && knownAliasId !== undefined && aliasId !== knownAliasId) {
+        untracked(() => this.refreshLeaderboard());
+      }
+      knownAliasId = aliasId ?? null;
+    });
+
+    effect(() => {
+      if (this.userLeaderboardItem()) {
+        this.updatePointsChart();
+      }
+    });
+  }
+
+  private refreshLeaderboard() {
+    const questionnaireId = this.leaderboardQuestionnaireId();
+    if (questionnaireId) {
+      this.leaderboardByQuestionnaireId
+        .fetch({
+          variables: { questionnaireId, limit: LEADERBOARD_DISPLAY_LIMIT },
+          fetchPolicy: 'network-only',
+        })
+        .subscribe();
+    }
   }
 
   ngOnDestroy(): void {
@@ -300,13 +373,12 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private getPointChartData() {
-    if (this.leaderboard && this.userLeaderboardItem) {
-      return [
-        this.userLeaderboardItem.score,
-        this.leaderboard
-          .map((l) => l.score)
-          .reduce((a, b) => Math.max(a, b), 0) - this.userLeaderboardItem.score,
-      ];
+    const leaderboard = this.leaderboard();
+    const userItem = this.userLeaderboardItem();
+    if (leaderboard && userItem) {
+      // Entries are ranked by score, so the first one holds the maximum.
+      const maxScore = leaderboard.entries[0]?.score ?? 0;
+      return [userItem.score, maxScore - userItem.score];
     }
     return [0, 0];
   }
@@ -416,30 +488,12 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
     return this.totalContentCount - this.contents().length;
   }
 
-  private getPosition(): number {
-    if (this.userLeaderboardItem && this.leaderboard) {
-      let score = 1;
-      let position = score;
-      this.leaderboard.forEach((value, index) => {
-        if (index > 0 && value.score !== this.leaderboard![index - 1].score) {
-          score = index + 1;
-        }
-        if (this.userLeaderboardItem?.userAlias?.id === value.userAlias?.id) {
-          position = score;
-          return;
-        }
-      });
-      return position;
-    }
-    return -1;
-  }
-
   isLiveMode(): boolean {
     return this.contentPublishService.isLive(this.questionnaire());
   }
 
   getTrophyIconColor(): string {
-    switch (this.leaderboardPosition) {
+    switch (this.leaderboardPosition()) {
       case 1:
         return 'gold';
       case 2:

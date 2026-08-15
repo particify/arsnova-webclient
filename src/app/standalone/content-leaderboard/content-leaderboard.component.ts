@@ -10,13 +10,13 @@ import {
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CoreModule } from '@app/core/core.module';
-import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { provideTranslocoScope } from '@jsverse/transloco';
 import {
   ContentLeaderboardTableItem,
   LeaderboardService,
 } from '@app/core/services/util/leaderboard.service';
+import { LeaderboardPage } from '@gql/generated/graphql';
 
 @Component({
   imports: [CoreModule, OrdinalPipe, MatSortModule],
@@ -31,7 +31,7 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  @Input({ required: true }) leaderboardItems: CurrentLeaderboardItem[] = [];
+  @Input({ required: true }) leaderboardPage!: LeaderboardPage;
   @Input({ required: true }) aliasId!: string;
   @Input() contentDuration?: number;
 
@@ -47,8 +47,7 @@ export class ContentLeaderboardComponent implements AfterViewInit, OnChanges {
     }
     this.dataSource = new MatTableDataSource(
       this.leaderboardService.buildContentLeaderboardTableData(
-        this.leaderboardItems,
-        this.aliasId
+        this.leaderboardPage
       )
     );
   }

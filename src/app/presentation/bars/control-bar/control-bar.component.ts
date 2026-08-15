@@ -19,7 +19,7 @@ import {
 } from '@app/standalone/nav-bar/nav-bar.component';
 import { STORAGE_KEYS } from '@app/core/services/util/global-storage.service';
 import { map, switchMap, take, takeUntil, throttleTime } from 'rxjs/operators';
-import { fromEvent, Subject } from 'rxjs';
+import { distinctUntilChanged, fromEvent, of, Subject } from 'rxjs';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Hotkey, HotkeyService } from '@app/core/services/util/hotkey.service';
 import {
@@ -60,6 +60,7 @@ import {
 import {
   Content,
   ContentType,
+  QuestionnaireByIdGql,
   QuestionnairesByRoomIdGql,
   QuestionnaireSummaryFragment,
   QuestionnaireType,
@@ -158,6 +159,26 @@ export class ControlBarComponent
   );
 
   readonly activeQuestionnaire = model(this.questionnaires()[0] ?? undefined);
+
+  private readonly questionnaireById = inject(QuestionnaireByIdGql);
+
+  /** The summary has no settings, so the leaderboard control follows the watched details. */
+  private readonly leaderboardEnabled = toSignal(
+    toObservable(this.activeQuestionnaire).pipe(
+      map((questionnaire) => questionnaire?.id),
+      distinctUntilChanged(),
+      switchMap((id) =>
+        id
+          ? this.questionnaireById
+              .watch({ variables: { id } })
+              .valueChanges.pipe(
+                map((r) => !!r.data?.questionnaireById?.leaderboardEnabled)
+              )
+          : of(false)
+      )
+    ),
+    { initialValue: false }
+  );
 
   private readonly contentResultsVisible = computed(() =>
     this.contentResultsService.resultsVisible()
@@ -286,6 +307,10 @@ export class ControlBarComponent
     effect(() => {
       this.contentCorrectResultsVisible();
       this.determineCorrectItemHighlighted();
+    });
+    effect(() => {
+      this.leaderboardEnabled();
+      untracked(() => this.determineContentControlLeaderboard());
     });
   }
 
@@ -632,17 +657,16 @@ export class ControlBarComponent
   }
 
   private determineContentControlLeaderboard() {
-    // if (this.activeQuestionnaire()?.leaderboardEnabled) {
-    //   if (this.getIndexOfGroupItem('leaderboard') === -1) {
-    //     this.groupItems.push(
-    //       new KeyNavBarItem('leaderboard', 'emoji_events', '', 'l')
-    //     );
-    //   }
-    // } else {
-    //   if (this.getIndexOfGroupItem('leaderboard') > -1) {
-    //     this.groupItems.splice(-1, 1);
-    //   }
-    // }
+    const leaderboardItemIndex = this.getIndexOfGroupItem('leaderboard');
+    if (this.leaderboardEnabled()) {
+      if (leaderboardItemIndex === -1) {
+        this.groupItems.push(
+          new KeyNavBarItem('leaderboard', 'emoji_events', '', 'l')
+        );
+      }
+    } else if (leaderboardItemIndex > -1) {
+      this.groupItems.splice(leaderboardItemIndex, 1);
+    }
   }
 
   private determineResultsItemHighlighted() {

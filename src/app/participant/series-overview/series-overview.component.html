@@ -1,11 +1,14 @@
 <div fxLayout="column" fxLayoutAlign="start center">
   <mat-card fxLayout="column" fxLayoutGap="16px">
+    @let leaderboardPage = leaderboard();
+    @let userItem = userLeaderboardItem();
+    @let position = leaderboardPosition();
     @if (loadingAnswerResults()) {
       <app-loading-indicator></app-loading-indicator>
     } @else if (
       !loadingAnswerResults() &&
       (!questionnaire().leaderboardEnabled ||
-        (userLeaderboardItem && leaderboardPosition && leaderboardPosition > 3))
+        (userItem && position && position > 3))
     ) {
       <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="12px">
         <span [appAutofocus] tabindex="-1" class="header-text">
@@ -17,9 +20,9 @@
       @if (
         !loadingAnswerResults() &&
         questionnaire().leaderboardEnabled &&
-        userLeaderboardItem &&
-        leaderboardPosition &&
-        leaderboardPosition <= 3
+        userItem &&
+        position &&
+        position <= 3
       ) {
         <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="24px">
           <mat-icon
@@ -30,7 +33,7 @@
           <span [appAutofocus] tabindex="-1" class="header-text">
             {{
               'participant.content.you-are-at-position-congrats'
-                | transloco: { position: leaderboardPosition | ordinal }
+                | transloco: { position: position | ordinal }
             }}
           </span>
         </div>
@@ -42,14 +45,12 @@
           class="info-chart-container"
         >
           @if (
-            questionnaire().leaderboardEnabled &&
-            leaderboard &&
-            userLeaderboardItem
+            questionnaire().leaderboardEnabled && leaderboardPage && userItem
           ) {
             <app-info-chart
               id="points-info-chart"
               chartId="points-chart"
-              [dataText]="userLeaderboardItem.score.toString()"
+              [dataText]="userItem.score.toString()"
               [infoText]="'content.points' | transloco"
             ></app-info-chart>
           }
@@ -72,7 +73,9 @@
         </div>
       }
       @if (
-        !loadingAnswerResults() && !leaderboard && getLockedContentCount() > 0
+        !loadingAnswerResults() &&
+        !leaderboardPage &&
+        getLockedContentCount() > 0
       ) {
         <app-hint
           [ngStyle]="{ 'margin-top': isPureInfoSeries() ? '0' : '-1em' }"
@@ -223,14 +226,14 @@
       @if (
         !loadingAnswerResults() &&
         questionnaire().leaderboardEnabled &&
-        leaderboard &&
+        leaderboardPage &&
         selectedTabIndex === 1
       ) {
         @let aliasId = alias()?.id;
         @if (aliasId) {
           <app-leaderboard
             fxFill
-            [leaderboardItems]="leaderboard"
+            [leaderboardPage]="leaderboardPage"
             [aliasId]="aliasId"
           ></app-leaderboard>
         } @else {

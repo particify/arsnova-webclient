@@ -510,6 +510,30 @@ export type JoinRoomInput =
   | { id: Scalars['ID']['input']; shortId?: never }
   | { id?: never; shortId: Scalars['ID']['input'] };
 
+export type LeaderboardCurrentResult = {
+  __typename?: 'LeaderboardCurrentResult';
+  correct: Scalars['Boolean']['output'];
+  durationMs: Scalars['Int']['output'];
+  points: Scalars['Int']['output'];
+};
+
+export type LeaderboardEntry = {
+  __typename?: 'LeaderboardEntry';
+  currentResult?: Maybe<LeaderboardCurrentResult>;
+  /** Equal scores share a position; the next distinct score continues after all of them. */
+  position: Scalars['Int']['output'];
+  score: Scalars['Int']['output'];
+  userAlias?: Maybe<RoomUserAlias>;
+};
+
+export type LeaderboardPage = {
+  __typename?: 'LeaderboardPage';
+  entries: Array<LeaderboardEntry>;
+  /** The requesting user's own entry, set only if it is not part of the entries above. */
+  ownEntry?: Maybe<LeaderboardEntry>;
+  totalCount: Scalars['Int']['output'];
+};
+
 export enum ModerationState {
   Accepted = 'ACCEPTED',
   Pending = 'PENDING',
@@ -1245,6 +1269,7 @@ export type Query = {
   >;
   questionnaireContentById?: Maybe<Content>;
   questionnaireContentsByQuestionnaireId?: Maybe<ContentConnection>;
+  questionnaireLeaderboardByQuestionnaireId?: Maybe<LeaderboardPage>;
   questionnaireNumericRoundStatsByRoundId?: Maybe<NumericContentRoundStats>;
   questionnairePrioritizationRoundStatsByRoundId?: Maybe<PrioritizationContentRoundStats>;
   questionnairePublishedContentsByQuestionnaireId?: Maybe<ContentConnection>;
@@ -1386,6 +1411,12 @@ export type QueryQuestionnaireContentByIdArgs = {
 };
 
 export type QueryQuestionnaireContentsByQuestionnaireIdArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireLeaderboardByQuestionnaireIdArgs = {
+  contentId?: InputMaybe<Scalars['UUID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   questionnaireId: Scalars['UUID']['input'];
 };
 
@@ -1722,6 +1753,7 @@ export type Subscription = {
   questionnaireBinaryRoundStatsUpdated?: Maybe<BinaryContentRoundStats>;
   questionnaireChoiceRoundStatsUpdated?: Maybe<ChoiceContentRoundStats>;
   questionnaireContentUpdated?: Maybe<Content>;
+  questionnaireLeaderboardUpdated?: Maybe<LeaderboardPage>;
   questionnaireNumericRoundStatsUpdated?: Maybe<NumericContentRoundStats>;
   questionnairePrioritizationRoundStatsUpdated?: Maybe<PrioritizationContentRoundStats>;
   questionnaireScaleRoundStatsUpdated?: Maybe<ScaleContentRoundStats>;
@@ -1786,6 +1818,12 @@ export type SubscriptionQuestionnaireChoiceRoundStatsUpdatedArgs = {
 };
 
 export type SubscriptionQuestionnaireContentUpdatedArgs = {
+  questionnaireId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQuestionnaireLeaderboardUpdatedArgs = {
+  contentId?: InputMaybe<Scalars['UUID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   questionnaireId: Scalars['UUID']['input'];
 };
 
@@ -3372,6 +3410,63 @@ export type WordcloudContentRoundStatsFragment = {
   __typename?: 'WordcloudContentRoundStats';
   words?: Array<string> | null;
   counts?: Array<number> | null;
+};
+
+export type LeaderboardEntryFragment = {
+  __typename?: 'LeaderboardEntry';
+  score: number;
+  position: number;
+  userAlias?: {
+    __typename?: 'RoomUserAlias';
+    id?: string | null;
+    alias: string;
+    seed: number;
+  } | null;
+  currentResult?: {
+    __typename?: 'LeaderboardCurrentResult';
+    points: number;
+    durationMs: number;
+    correct: boolean;
+  } | null;
+};
+
+export type LeaderboardPageFragment = {
+  __typename?: 'LeaderboardPage';
+  totalCount: number;
+  entries: Array<{
+    __typename?: 'LeaderboardEntry';
+    score: number;
+    position: number;
+    userAlias?: {
+      __typename?: 'RoomUserAlias';
+      id?: string | null;
+      alias: string;
+      seed: number;
+    } | null;
+    currentResult?: {
+      __typename?: 'LeaderboardCurrentResult';
+      points: number;
+      durationMs: number;
+      correct: boolean;
+    } | null;
+  }>;
+  ownEntry?: {
+    __typename?: 'LeaderboardEntry';
+    score: number;
+    position: number;
+    userAlias?: {
+      __typename?: 'RoomUserAlias';
+      id?: string | null;
+      alias: string;
+      seed: number;
+    } | null;
+    currentResult?: {
+      __typename?: 'LeaderboardCurrentResult';
+      points: number;
+      durationMs: number;
+      correct: boolean;
+    } | null;
+  } | null;
 };
 
 export type QuestionnairesByRoomIdQueryVariables = Exact<{
@@ -6262,6 +6357,54 @@ export type QuestionnaireAnswerResultsByQuestionnaireIdQuery = {
   } | null;
 };
 
+export type QuestionnaireLeaderboardByQuestionnaireIdQueryVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+  contentId?: InputMaybe<Scalars['UUID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type QuestionnaireLeaderboardByQuestionnaireIdQuery = {
+  __typename?: 'Query';
+  questionnaireLeaderboardByQuestionnaireId?: {
+    __typename?: 'LeaderboardPage';
+    totalCount: number;
+    entries: Array<{
+      __typename?: 'LeaderboardEntry';
+      score: number;
+      position: number;
+      userAlias?: {
+        __typename?: 'RoomUserAlias';
+        id?: string | null;
+        alias: string;
+        seed: number;
+      } | null;
+      currentResult?: {
+        __typename?: 'LeaderboardCurrentResult';
+        points: number;
+        durationMs: number;
+        correct: boolean;
+      } | null;
+    }>;
+    ownEntry?: {
+      __typename?: 'LeaderboardEntry';
+      score: number;
+      position: number;
+      userAlias?: {
+        __typename?: 'RoomUserAlias';
+        id?: string | null;
+        alias: string;
+        seed: number;
+      } | null;
+      currentResult?: {
+        __typename?: 'LeaderboardCurrentResult';
+        points: number;
+        durationMs: number;
+        correct: boolean;
+      } | null;
+    } | null;
+  } | null;
+};
+
 export type QuestionnaireBinaryRoundStatsByRoundIdQueryVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -8323,6 +8466,54 @@ export type QuestionnaireTextAnswersUpdatedSubscription = {
   }> | null;
 };
 
+export type QuestionnaireLeaderboardUpdatedSubscriptionVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+  contentId?: InputMaybe<Scalars['UUID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type QuestionnaireLeaderboardUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireLeaderboardUpdated?: {
+    __typename?: 'LeaderboardPage';
+    totalCount: number;
+    entries: Array<{
+      __typename?: 'LeaderboardEntry';
+      score: number;
+      position: number;
+      userAlias?: {
+        __typename?: 'RoomUserAlias';
+        id?: string | null;
+        alias: string;
+        seed: number;
+      } | null;
+      currentResult?: {
+        __typename?: 'LeaderboardCurrentResult';
+        points: number;
+        durationMs: number;
+        correct: boolean;
+      } | null;
+    }>;
+    ownEntry?: {
+      __typename?: 'LeaderboardEntry';
+      score: number;
+      position: number;
+      userAlias?: {
+        __typename?: 'RoomUserAlias';
+        id?: string | null;
+        alias: string;
+        seed: number;
+      } | null;
+      currentResult?: {
+        __typename?: 'LeaderboardCurrentResult';
+        points: number;
+        durationMs: number;
+        correct: boolean;
+      } | null;
+    } | null;
+  } | null;
+};
+
 export type StartQuestionnaireContentMutationVariables = Exact<{
   contentId: Scalars['UUID']['input'];
 }>;
@@ -9459,6 +9650,40 @@ export const WordcloudContentRoundStatsFragmentDoc = gql`
     counts
   }
 `;
+export const RoomUserAliasFragmentDoc = gql`
+  fragment RoomUserAlias on RoomUserAlias {
+    id
+    alias
+    seed
+  }
+`;
+export const LeaderboardEntryFragmentDoc = gql`
+  fragment LeaderboardEntry on LeaderboardEntry {
+    userAlias {
+      ...RoomUserAlias
+    }
+    score
+    position
+    currentResult {
+      points
+      durationMs
+      correct
+    }
+  }
+  ${RoomUserAliasFragmentDoc}
+`;
+export const LeaderboardPageFragmentDoc = gql`
+  fragment LeaderboardPage on LeaderboardPage {
+    entries {
+      ...LeaderboardEntry
+    }
+    ownEntry {
+      ...LeaderboardEntry
+    }
+    totalCount
+  }
+  ${LeaderboardEntryFragmentDoc}
+`;
 export const RoomDetailsFragmentFragmentDoc = gql`
   fragment RoomDetailsFragment on Room {
     id
@@ -9498,13 +9723,6 @@ export const RoomMemberFragmentDoc = gql`
       verified
     }
     role
-  }
-`;
-export const RoomUserAliasFragmentDoc = gql`
-  fragment RoomUserAlias on RoomUserAlias {
-    id
-    alias
-    seed
   }
 `;
 export const AdminUserByIdDocument = gql`
@@ -11606,6 +11824,36 @@ export class QuestionnaireAnswerResultsByQuestionnaireIdGql extends Apollo.Query
     super(apollo);
   }
 }
+export const QuestionnaireLeaderboardByQuestionnaireIdDocument = gql`
+  query QuestionnaireLeaderboardByQuestionnaireId(
+    $questionnaireId: UUID!
+    $contentId: UUID
+    $limit: Int
+  ) {
+    questionnaireLeaderboardByQuestionnaireId(
+      questionnaireId: $questionnaireId
+      contentId: $contentId
+      limit: $limit
+    ) {
+      ...LeaderboardPage
+    }
+  }
+  ${LeaderboardPageFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireLeaderboardByQuestionnaireIdGql extends Apollo.Query<
+  QuestionnaireLeaderboardByQuestionnaireIdQuery,
+  QuestionnaireLeaderboardByQuestionnaireIdQueryVariables
+> {
+  document = QuestionnaireLeaderboardByQuestionnaireIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const QuestionnaireBinaryRoundStatsByRoundIdDocument = gql`
   query QuestionnaireBinaryRoundStatsByRoundId($roundId: UUID!) {
     questionnaireBinaryRoundStatsByRoundId(roundId: $roundId) {
@@ -12706,6 +12954,36 @@ export class QuestionnaireTextAnswersUpdatedGql extends Apollo.Subscription<
   QuestionnaireTextAnswersUpdatedSubscriptionVariables
 > {
   document = QuestionnaireTextAnswersUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireLeaderboardUpdatedDocument = gql`
+  subscription QuestionnaireLeaderboardUpdated(
+    $questionnaireId: UUID!
+    $contentId: UUID
+    $limit: Int
+  ) {
+    questionnaireLeaderboardUpdated(
+      questionnaireId: $questionnaireId
+      contentId: $contentId
+      limit: $limit
+    ) {
+      ...LeaderboardPage
+    }
+  }
+  ${LeaderboardPageFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireLeaderboardUpdatedGql extends Apollo.Subscription<
+  QuestionnaireLeaderboardUpdatedSubscription,
+  QuestionnaireLeaderboardUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireLeaderboardUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

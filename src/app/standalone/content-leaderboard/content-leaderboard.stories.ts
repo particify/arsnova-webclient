@@ -2,7 +2,7 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ContentLeaderboardComponent } from '@app/standalone/content-leaderboard/content-leaderboard.component';
 
-import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
+import { LeaderboardEntry, LeaderboardPage } from '@gql/generated/graphql';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { ThemeService } from '@app/core/theme/theme.service';
 
@@ -29,10 +29,11 @@ export default {
 
 type Story = StoryObj<ContentLeaderboardComponent>;
 
-const leaderboardItems: CurrentLeaderboardItem[] = [
+const leaderboardItems: LeaderboardEntry[] = [
   {
     userAlias: { id: '1', alias: 'Happy Hippo', seed: 1 },
     score: 5700,
+    position: 1,
     currentResult: {
       points: 975,
       durationMs: 432,
@@ -42,6 +43,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '2', alias: 'Funny Cow', seed: 1 },
     score: 5100,
+    position: 2,
     currentResult: {
       points: 965,
       durationMs: 786,
@@ -51,6 +53,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '3', alias: 'Silent Panda', seed: 1 },
     score: 3100,
+    position: 3,
     currentResult: {
       points: 925,
       durationMs: 999,
@@ -60,6 +63,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '4', alias: 'Curious Turtle', seed: 1 },
     score: 2200,
+    position: 4,
     currentResult: {
       points: 912,
       durationMs: 1234,
@@ -69,6 +73,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '5', alias: 'Reliable Rhino', seed: 1 },
     score: 1800,
+    position: 5,
     currentResult: {
       points: 901,
       durationMs: 1543,
@@ -78,6 +83,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '6', alias: 'Smart Starfish', seed: 1 },
     score: 1700,
+    position: 6,
     currentResult: {
       points: 854,
       durationMs: 2345,
@@ -87,6 +93,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '7', alias: 'Ambitious Amadillo', seed: 1 },
     score: 1200,
+    position: 7,
     currentResult: {
       points: 821,
       durationMs: 3456,
@@ -96,6 +103,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '8', alias: 'This is my awesome name', seed: 1 },
     score: 1111,
+    position: 8,
     currentResult: {
       points: 786,
       durationMs: 4567,
@@ -105,6 +113,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '9', alias: 'I made it', seed: 1 },
     score: 987,
+    position: 9,
     currentResult: {
       points: 742,
       durationMs: 5678,
@@ -114,6 +123,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '10', alias: '10th! wohoo!', seed: 1 },
     score: 985,
+    position: 10,
     currentResult: {
       points: 534,
       durationMs: 6789,
@@ -127,6 +137,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
       seed: 1,
     },
     score: 897,
+    position: 11,
     currentResult: {
       points: 521,
       durationMs: 7890,
@@ -136,6 +147,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '12', alias: 'Crazy Frog', seed: 1 },
     score: 789,
+    position: 12,
     currentResult: {
       points: 457,
       durationMs: 8354,
@@ -145,6 +157,7 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   {
     userAlias: { id: '13', alias: 'This is another player', seed: 1 },
     score: 665,
+    position: 13,
     currentResult: {
       points: 378,
       durationMs: 8969,
@@ -153,22 +166,27 @@ const leaderboardItems: CurrentLeaderboardItem[] = [
   },
 ];
 
+const leaderboardPage: LeaderboardPage = {
+  entries: leaderboardItems,
+  totalCount: leaderboardItems.length,
+};
+
 export const ContentLeaderboard: Story = {
   args: {
-    leaderboardItems: leaderboardItems,
+    leaderboardPage: leaderboardPage,
   },
 };
 
 export const ContentLeaderboardWithAlias: Story = {
   args: {
-    leaderboardItems: leaderboardItems,
-    aliasId: '12',
+    leaderboardPage: leaderboardPage,
+    aliasId: '7',
   },
 };
 
 export const ContentLeaderboardWithTime: Story = {
   args: {
-    leaderboardItems: leaderboardItems,
+    leaderboardPage: leaderboardPage,
     contentDuration: 20,
   },
 };

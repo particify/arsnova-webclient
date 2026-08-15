@@ -1,4 +1,4 @@
-@if (dataSource && leaderboardItems.length > 0) {
+@if (dataSource && dataSource.data.length > 0) {
   <div [ngClass]="{ 'table-container-with-limited-height': allowScrolling }">
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="position">
