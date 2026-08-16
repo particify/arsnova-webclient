@@ -85,9 +85,7 @@ test.describe('Presentation of a survey', () => {
     await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.startNewRound();
     await expect(page.getByText('0 answers').first()).toBeVisible();
-    await expect(page.getByText('round has been started')).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('round has been started')).toBeVisible();
     await presentationModePage.exitPresentation();
     await context.close();
   });
@@ -111,9 +109,7 @@ test.describe('Presentation of a survey', () => {
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
     await participant.answerContent(['c']);
-    await expect(page.getByText('1 answer').first()).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await presentationModePage.exitPresentation();
@@ -133,9 +129,7 @@ test.describe('Presentation of a survey', () => {
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
     await participant.answerContent(['Somewhat agree']);
-    await expect(page.getByText('1 answer').first()).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await presentationModePage.exitPresentation();
@@ -155,9 +149,7 @@ test.describe('Presentation of a survey', () => {
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
     await participant.answerContent(['Yes']);
-    await expect(page.getByText('1 answer').first()).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await presentationModePage.exitPresentation();
@@ -177,9 +169,7 @@ test.describe('Presentation of a survey', () => {
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
     await participant.answerTextContent('Text answer');
-    await expect(page.getByText('1 answer').first()).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await presentationModePage.exitPresentation();
@@ -199,9 +189,7 @@ test.describe('Presentation of a survey', () => {
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
     await participant.answerWordcloudContent(['Hello', 'Test', 'Hi']);
-    await expect(page.getByText('1 answer').first()).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await presentationModePage.exitPresentation();
@@ -224,9 +212,7 @@ test.describe('Presentation of a survey', () => {
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
     await participant.answerPrioritizationContent([10, 20, 50, 20]);
-    await expect(page.getByText('1 answer').first()).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await presentationModePage.exitPresentation();
@@ -246,9 +232,7 @@ test.describe('Presentation of a survey', () => {
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
     await participant.answerTextContent('42');
-    await expect(page.getByText('1 answer').first()).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.startNewRound();
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await expect(page.getByText('round has been started')).toBeVisible();
@@ -269,9 +253,7 @@ test.describe('Presentation of a survey', () => {
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My survey');
     await participant.answerTextContent('42');
-    await expect(page.getByText('1 answer').first()).toBeVisible({
-      timeout: 7_500,
-    });
+    await expect(page.getByText('1 answer').first()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await presentationModePage.exitPresentation();
