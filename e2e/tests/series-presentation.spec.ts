@@ -14,6 +14,7 @@ test.describe('Presentation of a question series', () => {
   let contentGroupOverview: ContentGroupOverviewPage;
   let contentCreation: ContentCreationPage;
   let presentationModePage: PresentationModePage;
+  let shortId: string;
 
   test.beforeEach(async ({ page, baseURL }) => {
     header = new Header(page);
@@ -24,13 +25,12 @@ test.describe('Presentation of a question series', () => {
     presentationModePage = new PresentationModePage(page, baseURL);
     const homePage = new HomePage(page, baseURL);
     await homePage.goto();
-    await homePage.createRoom('My room');
+    shortId = await homePage.createRoom('My room');
     await page.waitForURL(/edit/);
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('should publish series with confirmation dialog', async ({ page }) => {

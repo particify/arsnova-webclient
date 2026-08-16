@@ -1,4 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
@@ -19,8 +19,7 @@ test.describe('room settings', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('update room name', async ({ page }) => {
@@ -30,12 +29,11 @@ test.describe('room settings', () => {
     await expect(page.getByLabel('My awesome room')).toBeVisible();
   });
 
-  test('add room description', async ({ baseURL }) => {
+  test('add room description', async ({ baseURL, browser }) => {
     await header.goToSettings();
     await roomSettings.updateDescription(
       'This is a short discription for this awesome room.'
     );
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const page = await context.newPage();
     const participant = new RoomOverviewPage(page, baseURL);

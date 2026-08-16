@@ -1,4 +1,4 @@
-import { test, expect, Page, chromium } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
@@ -20,8 +20,7 @@ test.describe('announcements', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings('Room');
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('go to announcement settings', async ({ page }) => {
@@ -133,8 +132,8 @@ test.describe('announcements', () => {
   test('get announcement for room as participant', async ({
     page,
     baseURL,
+    browser,
   }) => {
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new RoomOverviewPage(p, baseURL);
@@ -159,6 +158,7 @@ test.describe('announcements', () => {
     await expect(
       p.getByTestId('announcement-icon-with-badge')
     ).not.toContainText('1');
+    await context.close();
   });
 });
 

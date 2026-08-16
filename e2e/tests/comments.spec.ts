@@ -1,4 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { CreatorCommentsPage } from '@e2e/fixtures/creator/comments';
 import { ParticipantCommentsPage } from '@e2e/fixtures/participant/comments';
@@ -30,9 +30,7 @@ test.describe('Q&A', () => {
   });
 
   test.afterEach(async () => {
-    // Delete room
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('should create a first post', async ({ page }) => {
@@ -47,8 +45,8 @@ test.describe('Q&A', () => {
   test('should disable creation of new posts if readonly mode enabled', async ({
     page,
     baseURL,
+    browser,
   }) => {
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participantCommentPage = new ParticipantCommentsPage(p, baseURL);
@@ -74,9 +72,9 @@ test.describe('Q&A', () => {
   test('should display incoming posts by participant', async ({
     page,
     baseURL,
+    browser,
   }) => {
     await commentsPage.goto(shortId);
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participantCommentPage = new ParticipantCommentsPage(p, baseURL);

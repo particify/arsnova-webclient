@@ -21,8 +21,7 @@ test.describe('create room', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('Q&A and Live Feedback are visible', async ({ page }) => {

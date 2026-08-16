@@ -1,4 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
 import { Header } from '@e2e/fixtures/shared/header';
@@ -32,8 +32,7 @@ test.describe('Presentation of a survey', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('should toggle content results', async ({ page }) => {
@@ -67,6 +66,7 @@ test.describe('Presentation of a survey', () => {
   test('should start multiple rounds for MC content', async ({
     page,
     baseURL,
+    browser,
   }) => {
     await contentCreation.createChoiceContent(
       'My choice content',
@@ -77,7 +77,6 @@ test.describe('Presentation of a survey', () => {
     );
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -90,9 +89,14 @@ test.describe('Presentation of a survey', () => {
       timeout: 7_500,
     });
     await presentationModePage.exitPresentation();
+    await context.close();
   });
 
-  test('should delete answers of MC content', async ({ page, baseURL }) => {
+  test('should delete answers of MC content', async ({
+    page,
+    baseURL,
+    browser,
+  }) => {
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
@@ -102,7 +106,6 @@ test.describe('Presentation of a survey', () => {
     );
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -117,11 +120,14 @@ test.describe('Presentation of a survey', () => {
     await context.close();
   });
 
-  test('should delete answers of likert content', async ({ page, baseURL }) => {
+  test('should delete answers of likert content', async ({
+    page,
+    baseURL,
+    browser,
+  }) => {
     await contentCreation.createLikertContent('My likert content', 'agreement');
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -136,11 +142,14 @@ test.describe('Presentation of a survey', () => {
     await context.close();
   });
 
-  test('should delete answers of binary content', async ({ page, baseURL }) => {
+  test('should delete answers of binary content', async ({
+    page,
+    baseURL,
+    browser,
+  }) => {
     await contentCreation.createBinaryContent('My binary content');
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -155,11 +164,14 @@ test.describe('Presentation of a survey', () => {
     await context.close();
   });
 
-  test('should delete answers of text content', async ({ page, baseURL }) => {
+  test('should delete answers of text content', async ({
+    page,
+    baseURL,
+    browser,
+  }) => {
     await contentCreation.createTextContent('My text content');
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -177,11 +189,11 @@ test.describe('Presentation of a survey', () => {
   test('should delete answers of wordcloud content', async ({
     page,
     baseURL,
+    browser,
   }) => {
     await contentCreation.createWordcloudContent('My wordcloud content');
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -199,6 +211,7 @@ test.describe('Presentation of a survey', () => {
   test('should delete answers of prioritization content', async ({
     page,
     baseURL,
+    browser,
   }) => {
     await contentCreation.createPrioritizationContent(
       'My prioritization content',
@@ -206,7 +219,6 @@ test.describe('Presentation of a survey', () => {
     );
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -224,11 +236,11 @@ test.describe('Presentation of a survey', () => {
   test('should start multiple rounds for numeric content', async ({
     page,
     baseURL,
+    browser,
   }) => {
     await contentCreation.createNumericContent('My numeric content', 0, 100);
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -241,16 +253,17 @@ test.describe('Presentation of a survey', () => {
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await expect(page.getByText('round has been started')).toBeVisible();
     await presentationModePage.exitPresentation();
+    await context.close();
   });
 
   test('should delete answers of numeric content', async ({
     page,
     baseURL,
+    browser,
   }) => {
     await contentCreation.createNumericContent('My numeric content', 0, 100);
     await contentGroupOverview.publishContentGroup();
     await header.goToPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);

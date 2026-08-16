@@ -1,4 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
 import { Header } from '@e2e/fixtures/shared/header';
@@ -44,8 +44,7 @@ test.describe('Presentation of a quiz', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('should show correct initial state of live content', async ({
@@ -65,8 +64,8 @@ test.describe('Presentation of a quiz', () => {
   test('should start and stop contents with live answers', async ({
     page,
     baseURL,
+    browser,
   }) => {
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -101,8 +100,8 @@ test.describe('Presentation of a quiz', () => {
   test('should start and stop second content before first one is started', async ({
     page,
     baseURL,
+    browser,
   }) => {
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -130,8 +129,7 @@ test.describe('Presentation of a quiz', () => {
     await presentationModePage.exitPresentation();
   });
 
-  test('should delete answers', async ({ page, baseURL }) => {
-    const browser = await chromium.launch();
+  test('should delete answers', async ({ page, baseURL, browser }) => {
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -149,5 +147,6 @@ test.describe('Presentation of a quiz', () => {
     ).toBeVisible();
     await expect(page.getByText('My choice content')).toBeHidden();
     await presentationModePage.exitPresentation();
+    await context.close();
   });
 });

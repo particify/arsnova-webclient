@@ -1,4 +1,4 @@
-import { chromium, test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
 import { Header } from '@e2e/fixtures/shared/header';
@@ -24,8 +24,7 @@ test.describe('presentation mode', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('open room in presentation mode', async ({ page }) => {
@@ -41,7 +40,10 @@ test.describe('presentation mode', () => {
     await expect(page).toHaveTitle(/My room/);
   });
 
-  test('copy url to clipboard and join in new context', async ({ page }) => {
+  test('copy url to clipboard and join in new context', async ({
+    page,
+    browser,
+  }) => {
     await header.goToPresentation();
     await expect(page).toHaveTitle(/Presentation/);
     await presentationModePage.copyUrl();
@@ -49,7 +51,6 @@ test.describe('presentation mode', () => {
       navigator.clipboard.readText()
     );
     await presentationModePage.exitPresentation();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     await p.goto(urlFromClipboard);
