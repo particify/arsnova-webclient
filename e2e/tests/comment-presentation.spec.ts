@@ -195,14 +195,16 @@ test.describe('Q&A presentation', () => {
     ).toContainText('This is another post.');
     await participant.voteDownPost('This is a third post.');
     await context.close();
+    // A score arriving live updates the post in place. The list deliberately keeps the order it
+    // was queried with instead of re-sorting, so rows do not jump while an audience reads them.
     await expect(
-      presentationModePage.getComment(2),
-      'Lowest rating should be displayed at the end'
-    ).toContainText('This is a third post.');
+      presentationModePage.getPost('This is a third post.'),
+      'Score of the downvoted post updates live'
+    ).toContainText('-1');
     await expect(
       presentationModePage.getComment(1),
-      'Neutral rating should be displayed in the middle'
-    ).toContainText('This is another post.');
+      'Position of the downvoted post is unchanged'
+    ).toContainText('This is a third post.');
     await presentationModePage.exitPresentation();
   });
 });
