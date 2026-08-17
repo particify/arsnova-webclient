@@ -28,21 +28,6 @@ import { Page } from '@playwright/test';
 export class MockApi {
   constructor(public readonly page: Page) {}
 
-  async mockRoomLang(lang?: string) {
-    await this.page.route('*/**/graphql', async (route) => {
-      const res = await route.fetch();
-      const json = await res.json();
-      const room = json?.data?.joinRoom?.room;
-      if (room) {
-        room.language = lang;
-        json.data.joinRoom.room = room;
-        await route.fulfill({ json });
-      } else {
-        await route.continue();
-      }
-    });
-  }
-
   async mockContentGroup(
     roomId: string,
     name: string,
