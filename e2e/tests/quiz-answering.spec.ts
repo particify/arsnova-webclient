@@ -10,14 +10,12 @@ test.describe('participant answer async quiz', () => {
   let mockApi: MockApi;
   test.beforeEach(async ({ page }) => {
     mockApi = new MockApi(page);
-    mockApi.mockRoomSettings(TEST_ROOM_ID);
     mockApi.mockContentGroup(
       TEST_ROOM_ID,
       'My quiz',
       ['content1', 'content2'],
       GroupType.QUIZ
     );
-    mockApi.mockFocusEvent(TEST_ROOM_ID);
     mockApi.mockRoomStats(TEST_ROOM_ID, 'My quiz', 2, GroupType.QUIZ);
     mockApi.mockAliasGeneration(TEST_ROOM_ID, 'Funny fish');
     mockApi.mockUserAlias(TEST_ROOM_ID);

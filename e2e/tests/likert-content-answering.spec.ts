@@ -23,7 +23,6 @@ test.describe('participant choice answer option translation', () => {
       0,
       false
     );
-    mockApi.mockFocusEvent(TEST_ROOM_ID);
     mockApi.mockRoomStats(TEST_ROOM_ID, 'My survey', 3, GroupType.SURVEY);
     mockApi.mockGroupStats(TEST_ROOM_ID, 0, 0, 0, 0, [
       {
