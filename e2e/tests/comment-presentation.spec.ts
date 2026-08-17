@@ -1,4 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
@@ -23,8 +23,7 @@ test.describe('Q&A presentation', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('should show correct initial state comment presentation', async ({
@@ -61,12 +60,11 @@ test.describe('Q&A presentation', () => {
     await presentationModePage.exitPresentation();
   });
 
-  test('should show incoming comments', async ({ page, baseURL }) => {
+  test('should show incoming comments', async ({ page, baseURL, browser }) => {
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToComments();
     await presentationModePage.startComments();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantCommentsPage(p, baseURL);
@@ -88,11 +86,11 @@ test.describe('Q&A presentation', () => {
   test('should filter posts by favorite and then by correct', async ({
     page,
     baseURL,
+    browser,
   }) => {
     const commentsPage = new CreatorCommentsPage(page, baseURL);
     await commentsPage.goto(shortId);
     await commentsPage.startComments();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantCommentsPage(p, baseURL);
@@ -136,12 +134,12 @@ test.describe('Q&A presentation', () => {
   test('should sort posts correctly by time by default', async ({
     page,
     baseURL,
+    browser,
   }) => {
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToComments();
     await presentationModePage.startComments();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantCommentsPage(p, baseURL);
@@ -164,12 +162,15 @@ test.describe('Q&A presentation', () => {
     await presentationModePage.exitPresentation();
   });
 
-  test('should sort posts correctly by votes', async ({ page, baseURL }) => {
+  test('should sort posts correctly by votes', async ({
+    page,
+    baseURL,
+    browser,
+  }) => {
     await header.goToPresentation();
     await page.waitForURL(/present/);
     await presentationModePage.goToComments();
     await presentationModePage.startComments();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantCommentsPage(p, baseURL);

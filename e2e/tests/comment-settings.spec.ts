@@ -1,12 +1,10 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { CreatorCommentsPage } from '@e2e/fixtures/creator/comments';
 import { ParticipantCommentsPage } from '@e2e/fixtures/participant/comments';
-import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
 
 test.describe('Q&A settings', () => {
-  let header: Header;
   let roomSettings: RoomSettingsPage;
   let commentsPage: CreatorCommentsPage;
 
@@ -14,7 +12,6 @@ test.describe('Q&A settings', () => {
 
   test.beforeEach(async ({ page, baseURL }) => {
     // Shared fixtures
-    header = new Header(page);
     roomSettings = new RoomSettingsPage(page, baseURL);
     commentsPage = new CreatorCommentsPage(page, baseURL);
     // Go to home
@@ -25,13 +22,10 @@ test.describe('Q&A settings', () => {
   });
 
   test.afterEach(async () => {
-    // Delete room
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
-  test('should enable Q&A', async ({ baseURL }) => {
-    const browser = await chromium.launch();
+  test('should enable Q&A', async ({ baseURL, browser }) => {
     const context = await browser.newContext();
     const p = await context.newPage();
     const participantCommentPage = new ParticipantCommentsPage(p, baseURL);
@@ -81,12 +75,12 @@ test.describe('Q&A settings', () => {
   test('should add incoming posts to moderation if direct send setting is set to false', async ({
     page,
     baseURL,
+    browser,
   }) => {
     await roomSettings.goto(shortId);
     await roomSettings.goToCommentSettings();
     await roomSettings.toggleCommentsEnabled();
     await roomSettings.toggleAutoPublish();
-    const browser = await chromium.launch();
     const context = await browser.newContext();
     const p = await context.newPage();
     const participantCommentPage = new ParticipantCommentsPage(p, baseURL);

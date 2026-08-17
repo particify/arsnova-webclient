@@ -1,27 +1,25 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
-import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
 import { ContentGroupOverviewPage } from '@e2e/fixtures/creator/content-group-overview';
 import { ContentCreationPage } from '@e2e/fixtures/creator/content-creation';
 
 test.describe('create room for quiz', () => {
-  let header: Header;
   let roomSettings: RoomSettingsPage;
   let roomOverviewPage: CreatorRoomOverviewPage;
   let contentGroupOverview: ContentGroupOverviewPage;
   let contentCreation: ContentCreationPage;
+  let shortId: string;
 
   test.beforeEach(async ({ page, baseURL }) => {
-    header = new Header(page);
     roomSettings = new RoomSettingsPage(page, baseURL);
     roomOverviewPage = new CreatorRoomOverviewPage(page, baseURL);
     contentGroupOverview = new ContentGroupOverviewPage(page, baseURL);
     contentCreation = new ContentCreationPage(page, baseURL);
     const homePage = new HomePage(page, baseURL);
     await homePage.goto();
-    await homePage.createRoom('My room');
+    shortId = await homePage.createRoom('My room');
     await page.waitForURL(/edit/);
     await roomOverviewPage.createQuestionSeries('My quiz', 'Quiz');
     await expect(page).toHaveTitle(/My quiz/);
@@ -29,8 +27,7 @@ test.describe('create room for quiz', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('create quiz series with contents for all quiz types and publish it', async ({

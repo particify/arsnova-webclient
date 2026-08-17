@@ -1,14 +1,12 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
-import { Header } from '@e2e/fixtures/shared/header';
 import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
 import { ContentGroupOverviewPage } from '@e2e/fixtures/creator/content-group-overview';
 import { ContentCreationPage } from '@e2e/fixtures/creator/content-creation';
 import { ContentGroupPage as ParticipantContentGroupPage } from '@e2e/fixtures/participant/content-group';
 
 test.describe('live quiz with MC and short answer content', () => {
-  let header: Header;
   let roomSettings: RoomSettingsPage;
   let roomOverviewPage: CreatorRoomOverviewPage;
   let contentGroupOverview: ContentGroupOverviewPage;
@@ -16,7 +14,6 @@ test.describe('live quiz with MC and short answer content', () => {
   let shortId: string;
 
   test.beforeEach(async ({ page, baseURL }) => {
-    header = new Header(page);
     roomSettings = new RoomSettingsPage(page, baseURL);
     roomOverviewPage = new CreatorRoomOverviewPage(page, baseURL);
     contentGroupOverview = new ContentGroupOverviewPage(page, baseURL);
@@ -41,12 +38,10 @@ test.describe('live quiz with MC and short answer content', () => {
   });
 
   test.afterEach(async () => {
-    await header.goToSettings();
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
-  test('answer MC content correct', async ({ baseURL }) => {
-    const browser = await chromium.launch();
+  test('answer MC content correct', async ({ baseURL, browser }) => {
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -58,8 +53,7 @@ test.describe('live quiz with MC and short answer content', () => {
     await context.close();
   });
 
-  test('answer MC content incorrect', async ({ baseURL }) => {
-    const browser = await chromium.launch();
+  test('answer MC content incorrect', async ({ baseURL, browser }) => {
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -71,8 +65,7 @@ test.describe('live quiz with MC and short answer content', () => {
     await context.close();
   });
 
-  test('answer MC content multiple rounds', async ({ baseURL }) => {
-    const browser = await chromium.launch();
+  test('answer MC content multiple rounds', async ({ baseURL, browser }) => {
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -87,8 +80,7 @@ test.describe('live quiz with MC and short answer content', () => {
     await context.close();
   });
 
-  test('abstain MC content', async ({ baseURL }) => {
-    const browser = await chromium.launch();
+  test('abstain MC content', async ({ baseURL, browser }) => {
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
@@ -100,8 +92,7 @@ test.describe('live quiz with MC and short answer content', () => {
     await context.close();
   });
 
-  test('should hide answer button if stopped', async ({ baseURL }) => {
-    const browser = await chromium.launch();
+  test('should hide answer button if stopped', async ({ baseURL, browser }) => {
     const context = await browser.newContext();
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);

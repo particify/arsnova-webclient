@@ -7,19 +7,19 @@ test.describe('room access settings', () => {
   let header: Header;
   let roomSettings: RoomSettingsPage;
   let homePage: HomePage;
+  let shortId: string;
 
   test.beforeEach(async ({ page, baseURL }) => {
     header = new Header(page);
     roomSettings = new RoomSettingsPage(page, baseURL);
     homePage = new HomePage(page, baseURL);
     await homePage.goto();
-    await homePage.createRoom('Room 1');
+    shortId = await homePage.createRoom('Room 1');
     await header.goToSettings('Access rights');
   });
 
   test.afterEach(async () => {
-    await header.goToSettings('Room');
-    await roomSettings.deleteRoom();
+    await roomSettings.deleteRoomById(shortId);
   });
 
   test('go to access settings', async ({ page }) => {

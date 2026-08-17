@@ -1,4 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { HomePage } from '@e2e/fixtures/shared/home';
 import { Header } from '@e2e/fixtures/shared/header';
 
@@ -35,8 +35,7 @@ test.describe('room list', () => {
     await expect(page).toHaveTitle(/Room 1/);
   });
 
-  test('join room as participant', async ({ baseURL }) => {
-    const browser = await chromium.launch();
+  test('join room as participant', async ({ baseURL, browser }) => {
     const context = await browser.newContext();
     const p = await context.newPage();
     await p.goto(baseURL + '/p/' + shortId);
@@ -45,6 +44,7 @@ test.describe('room list', () => {
     await p.getByTestId('room-item').nth(0).click();
     await expect(p).toHaveURL(/\/p\//);
     await expect(p).toHaveTitle(/Room 1/);
+    await context.close();
   });
 
   test('delete room from room list', async ({ page }) => {

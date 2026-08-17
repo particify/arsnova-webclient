@@ -16,6 +16,15 @@ export class RoomSettingsPage {
     await this.page.goto(`${this.baseURL}/edit/${shortId}/settings`);
   }
 
+  /**
+   * Navigates to the settings itself rather than relying on the header button, so cleanup does
+   * not depend on where a failed test left the page.
+   */
+  async deleteRoomById(shortId: string) {
+    await this.goto(shortId);
+    await this.deleteRoom();
+  }
+
   async deleteRoom() {
     await this.deleteRoomButton.click();
     await Promise.all([
