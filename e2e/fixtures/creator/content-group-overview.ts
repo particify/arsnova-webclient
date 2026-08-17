@@ -27,9 +27,8 @@ export class ContentGroupOverviewPage {
     await this.createContentButton.click();
   }
 
-  async getContents() {
-    await this.page.getByRole('group').waitFor();
-    return await this.page.getByTestId('content-item').all();
+  getContents(): Locator {
+    return this.page.getByTestId('content-item');
   }
 
   async publishContentGroup() {

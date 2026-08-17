@@ -306,12 +306,12 @@ test.describe('Q&A', () => {
     await participantCommentPage.goto(shortId);
     await participantCommentPage.createPost('This is my first post.');
     await participantCommentPage.createPost('This is another post.');
-    expect(
+    await expect(
       participantCommentPage.getSecondaryCreateButton(),
       'Additional create button is visible'
     ).toBeVisible();
     await participantCommentPage.createPost('This is a third post.');
-    expect(
+    await expect(
       participantCommentPage.getSecondaryCreateButton(),
       'Additional create button is hidden after third post'
     ).toBeHidden();

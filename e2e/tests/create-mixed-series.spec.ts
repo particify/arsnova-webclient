@@ -96,21 +96,21 @@ test.describe('create room with question series', () => {
       'My flashcard content',
       'Back of flashcard'
     );
-    expect(await contentGroupOverview.getContents()).toHaveLength(16);
+    await expect(contentGroupOverview.getContents()).toHaveCount(16);
     await expect(page.getByText('16 contents', { exact: true })).toBeVisible();
     await expect(
       page.getByText('series is hidden for participants')
     ).toBeHidden();
   });
 
-  test('create question series with a duplicated content', async ({ page }) => {
+  test('create question series with a duplicated content', async () => {
     await contentCreation.createChoiceContent(
       'My choice content',
       ['a', 'b', 'c', 'd'],
       ['b']
     );
     await contentGroupOverview.duplicateContent('My choice content', 0);
-    expect(await contentGroupOverview.getContents()).toHaveLength(2);
+    await expect(contentGroupOverview.getContents()).toHaveCount(2);
   });
 
   test('create two question series with copied contents', async ({ page }) => {
@@ -155,7 +155,7 @@ test.describe('create room with question series', () => {
       'Another question series',
       'dashboard'
     );
-    expect(await contentGroupOverview.getContents()).toHaveLength(2);
+    await expect(contentGroupOverview.getContents()).toHaveCount(2);
     await page.goBack();
     await expect(page.getByText('Another question series')).toBeVisible();
     await expect(page.getByText('1 contents')).toBeVisible();

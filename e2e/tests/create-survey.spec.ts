@@ -49,7 +49,7 @@ test.describe('create room for survey', () => {
     );
     await contentCreation.createNumericContent('My numeric content', -50, 50);
     await contentCreation.createSlideContent('My slide content');
-    expect(await contentGroupOverview.getContents()).toHaveLength(8);
+    await expect(contentGroupOverview.getContents()).toHaveCount(8);
     await expect(page.getByText('8 contents', { exact: true })).toBeVisible();
     await contentGroupOverview.publishContentGroup();
     await expect(

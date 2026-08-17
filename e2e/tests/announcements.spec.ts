@@ -143,7 +143,7 @@ test.describe('announcements', () => {
       'Awesome title',
       'This is a very important announcement.'
     );
-    p.reload();
+    await p.reload();
     await expect(p.getByTestId('announcement-icon-with-badge')).toContainText(
       '1'
     );
