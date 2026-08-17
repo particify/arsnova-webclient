@@ -475,7 +475,7 @@ export class AbstractCommentsPageComponent {
       data: {
         tags: this.tags(),
         roomId: this.room().id,
-        autoPublish: this.autoPublish,
+        autoPublish: this.autoPublish(),
         qnaId: this.qnaId(),
       },
     });
