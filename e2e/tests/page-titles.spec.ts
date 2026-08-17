@@ -8,7 +8,7 @@ test.describe('page titles', () => {
   test('show no title on home page', async ({ page, baseURL }) => {
     const homePage = new HomePage(page, baseURL);
     await homePage.goto();
-    expect(page.getByTestId('page-title')).toBeHidden();
+    await expect(page.getByTestId('page-title')).toBeHidden();
   });
 
   test('show login and register title', async ({ page }) => {
