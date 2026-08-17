@@ -70,14 +70,12 @@ test.describe('Q&A presentation', () => {
     const participant = new ParticipantCommentsPage(p, baseURL);
     await participant.goto(shortId);
     await participant.createPost('Hello!');
-    await expect(page.getByText('Hello!', { exact: true })).toBeVisible();
+    await expect(presentationModePage.getPost('Hello!')).toBeVisible();
     await participant.createPost('This is a test.');
-    await expect(
-      page.getByText('This is a test.', { exact: true })
-    ).toBeVisible();
+    await expect(presentationModePage.getPost('This is a test.')).toBeVisible();
     await participant.createPost('Is this the third post?');
     await expect(
-      page.getByText('Is this the third post?', { exact: true })
+      presentationModePage.getPost('Is this the third post?')
     ).toBeVisible();
     await context.close();
     await presentationModePage.exitPresentation();
@@ -99,34 +97,37 @@ test.describe('Q&A presentation', () => {
     await participant.createPost('This is a favorite post.');
     await participant.createPost('This is a correct post.');
     await context.close();
-    await commentsPage.openMoreMenu(1);
+    await commentsPage.openMoreMenuForPost('This is a favorite post.');
     await commentsPage.performMoreMenuAction('favorite');
-    await commentsPage.openMoreMenu(0);
+    await commentsPage.openMoreMenuForPost('This is a correct post.');
     await commentsPage.performMoreMenuAction('correct');
     await header.goToPresentation();
     await page.waitForURL(/present/);
-    await expect(page.getByText('Hello!', { exact: true })).toBeVisible();
+    await expect(presentationModePage.getPost('Hello!')).toBeVisible();
     await expect(
-      page.getByText('This is a favorite post.', { exact: true }).first()
+      presentationModePage.getPost('This is a favorite post.')
     ).toBeVisible();
     await expect(
-      page.getByText('This is a correct post.', { exact: true }).first()
+      presentationModePage.getPost('This is a correct post.')
     ).toBeVisible();
     await presentationModePage.filterComments('favorite');
-    await expect(page.getByText('Hello!', { exact: true })).toBeHidden();
+    await expect(presentationModePage.getPost('Hello!')).toBeHidden();
     await expect(
-      page.getByText('This is a favorite post.', { exact: true }).first()
+      presentationModePage.getPost('This is a favorite post.')
     ).toBeVisible();
     await expect(
-      page.getByText('This is a correct post.', { exact: true }).first()
+      presentationModePage.getPost('This is a correct post.')
     ).toBeHidden();
+    // Filters combine, and selecting an active one clears it, so favorite has to be turned off
+    // before switching to correct. Leaving both on would match no post at all.
+    await presentationModePage.filterComments('favorite');
     await presentationModePage.filterComments('correct');
-    await expect(page.getByText('Hello!', { exact: true })).toBeHidden();
+    await expect(presentationModePage.getPost('Hello!')).toBeHidden();
     await expect(
-      page.getByText('This is a favorite post.', { exact: true }).first()
+      presentationModePage.getPost('This is a favorite post.')
     ).toBeHidden();
     await expect(
-      page.getByText('This is a correct post.', { exact: true }).first()
+      presentationModePage.getPost('This is a correct post.')
     ).toBeVisible();
     await presentationModePage.exitPresentation();
   });
@@ -177,7 +178,7 @@ test.describe('Q&A presentation', () => {
     await participant.goto(shortId);
     await participant.createPost('This is my first post.');
     await participant.createPost('This is another post.');
-    await participant.voteUp(1);
+    await participant.voteUpPost('This is my first post.');
     await participant.createPost('This is a third post.');
     await presentationModePage.sortComments('popular');
     await expect(
@@ -192,7 +193,7 @@ test.describe('Q&A presentation', () => {
       presentationModePage.getComment(2),
       'Oldest comment with zero votes should be displayed at the end'
     ).toContainText('This is another post.');
-    await participant.voteDown(0);
+    await participant.voteDownPost('This is a third post.');
     await context.close();
     await expect(
       presentationModePage.getComment(2),

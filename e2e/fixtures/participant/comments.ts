@@ -24,8 +24,8 @@ export class ParticipantCommentsPage {
     await this.page.goto(`${this.baseURL}/p/${shortId}/comments`);
   }
 
-  async getSearchPlaceholder(): Promise<string | null> {
-    return await this.commentSearchInput.getAttribute('placeholder');
+  getSearchInput(): Locator {
+    return this.commentSearchInput;
   }
 
   async createPost(body: string) {
@@ -40,12 +40,20 @@ export class ParticipantCommentsPage {
     return this.page.getByTestId('comment-card').nth(index);
   }
 
+  /**
+   * Addresses a post by its body rather than by list position. The list re-sorts and updates live,
+   * so an index taken right after creating or voting on a post can refer to a different one.
+   */
+  getPost(body: string): Locator {
+    return this.page.getByTestId('comment-card').filter({ hasText: body });
+  }
+
   getSecondaryCreateButton(): Locator {
     return this.page.getByText('write a post').nth(1);
   }
 
-  async getSortSelect(): Promise<string | null> {
-    return await this.sortSelect.textContent();
+  getSortSelect(): Locator {
+    return this.sortSelect;
   }
 
   async setSorting(index: number) {
@@ -53,14 +61,11 @@ export class ParticipantCommentsPage {
     await this.page.getByRole('option').nth(index).click();
   }
 
-  async voteUp(index: number) {
-    await this.page.getByRole('button', { name: 'vote up' }).nth(index).click();
+  async voteUpPost(body: string) {
+    await this.getPost(body).getByRole('button', { name: 'vote up' }).click();
   }
 
-  async voteDown(index: number) {
-    await this.page
-      .getByRole('button', { name: 'vote down' })
-      .nth(index)
-      .click();
+  async voteDownPost(body: string) {
+    await this.getPost(body).getByRole('button', { name: 'vote down' }).click();
   }
 }

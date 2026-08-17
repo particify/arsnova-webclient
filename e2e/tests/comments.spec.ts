@@ -182,10 +182,10 @@ test.describe('Q&A', () => {
 
   test('should have recent order by default', async () => {
     await commentsPage.goto(shortId);
-    expect(
-      await commentsPage.getSortSelect(),
+    await expect(
+      commentsPage.getSortSelect(),
       'Sorting is set to recent'
-    ).toContain('sort Recent');
+    ).toContainText('Recent');
   });
 
   test('should create multiple Q&A posts which are displayed in recent order', async () => {
@@ -215,7 +215,7 @@ test.describe('Q&A', () => {
     await participantCommentPage.setSorting(1);
     await participantCommentPage.createPost('This is my first post.');
     await participantCommentPage.createPost('This is another post.');
-    await participantCommentPage.voteUp(1);
+    await participantCommentPage.voteUpPost('This is another post.');
     await participantCommentPage.createPost('This is a third post.');
     await expect(
       participantCommentPage.getComment(0),
@@ -223,13 +223,13 @@ test.describe('Q&A', () => {
     ).toContainText('This is another post.');
     await expect(
       participantCommentPage.getComment(1),
-      'Oldest comment with zero votes should be displayed in the middle'
-    ).toContainText('This is my first post.');
+      'Newest comment with zero votes should be displayed in the middle'
+    ).toContainText('This is a third post.');
     await expect(
       participantCommentPage.getComment(2),
-      'Newest comment with zero votes should be displayed at the end'
-    ).toContainText('This is a third post.');
-    await participantCommentPage.voteDown(1);
+      'Oldest comment with zero votes should be displayed at the end'
+    ).toContainText('This is my first post.');
+    await participantCommentPage.voteDownPost('This is my first post.');
     await expect(
       participantCommentPage.getComment(2),
       'Lowest rating should be displayed at the end'
@@ -241,28 +241,24 @@ test.describe('Q&A', () => {
     await header.switchRole();
   });
 
-  test('should filter favorite comments', async ({ page }) => {
+  test('should filter favorite comments', async () => {
     await commentsPage.goto(shortId);
     await commentsPage.createPost('This is my first post.');
     await commentsPage.createPost('This is my favorite post.');
     await commentsPage.createPost('This is a third post.');
     await commentsPage.createPost('This is another favorite post.');
-    await commentsPage.openMoreMenu(0);
+    await commentsPage.openMoreMenuForPost('This is my favorite post.');
     await commentsPage.performMoreMenuAction('favorite');
-    await commentsPage.openMoreMenu(2);
+    await commentsPage.openMoreMenuForPost('This is another favorite post.');
     await commentsPage.performMoreMenuAction('favorite');
     await commentsPage.filterComments('favorite');
+    await expect(commentsPage.getPost('This is my first post.')).toBeHidden();
+    await expect(commentsPage.getPost('This is a third post.')).toBeHidden();
     await expect(
-      page.getByText('This is my first post.', { exact: true })
-    ).toBeHidden();
-    await expect(
-      page.getByText('This is a third post.', { exact: true })
-    ).toBeHidden();
-    await expect(
-      page.getByText('This is my favorite post.', { exact: true })
+      commentsPage.getPost('This is my favorite post.')
     ).toBeVisible();
     await expect(
-      page.getByText('This is another favorite post.', { exact: true })
+      commentsPage.getPost('This is another favorite post.')
     ).toBeVisible();
   });
 
@@ -289,17 +285,17 @@ test.describe('Q&A', () => {
 
   test('should show correct content count in search bar placeholder', async () => {
     await commentsPage.goto(shortId);
-    expect(
-      await commentsPage.getSearchPlaceholder(),
+    await expect(
+      commentsPage.getSearchInput(),
       'Placeholder shows no posts'
-    ).toContain('No posts');
+    ).toHaveAttribute('placeholder', /No posts/);
     await commentsPage.createPost('This is my first post.');
     await commentsPage.createPost('This is another post.');
     await commentsPage.createPost('This is a third post.');
-    expect(
-      await commentsPage.getSearchPlaceholder(),
+    await expect(
+      commentsPage.getSearchInput(),
       'Search placeholder counts 3 posts'
-    ).toContain('3 posts');
+    ).toHaveAttribute('placeholder', /3 posts/);
   });
 
   test('should show additional create button until 3 posts are created', async ({

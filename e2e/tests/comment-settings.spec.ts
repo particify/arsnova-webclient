@@ -77,9 +77,11 @@ test.describe('Q&A settings', () => {
     baseURL,
     browser,
   }) => {
+    // Q&A is enabled from the Q&A page itself; the room settings only carry the post handling.
+    await commentsPage.goto(shortId);
+    await commentsPage.startComments();
     await roomSettings.goto(shortId);
     await roomSettings.goToCommentSettings();
-    await roomSettings.toggleCommentsEnabled();
     await roomSettings.toggleAutoPublish();
     const context = await browser.newContext();
     const p = await context.newPage();
