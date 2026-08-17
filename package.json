@@ -62,7 +62,7 @@
     "zone.js": "0.16.2"
   },
   "devDependencies": {
-    "@analogjs/storybook-angular": "2.6.4",
+    "@analogjs/storybook-angular": "2.7.0",
     "@angular/build": "22.1.4",
     "@angular/compiler-cli": "22.1.2",
     "@angular/language-service": "22.1.2",
