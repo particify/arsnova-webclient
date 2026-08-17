@@ -1,20 +1,21 @@
 import { Header } from '@e2e/fixtures/shared/header';
 import { HomePage } from '@e2e/fixtures/shared/home';
+import { LoginPage, VERIFIED_USER } from '@e2e/fixtures/shared/login';
+import { UserProfilePage } from '@e2e/fixtures/shared/user-profile';
 import { test, expect } from '@playwright/test';
 
+// Every test here runs as the account it creates or logs into itself - one of them deletes that
+// account, so this spec must never adopt a shared session.
 test.describe('user settings', () => {
-  test('display user id', async ({ page }) => {
-    await page.goto('login');
-    await page
-      .getByLabel('E-mail address', { exact: true })
-      .fill('user@example.com');
-    await page.getByLabel('Password', { exact: true }).fill('user');
-    await page.getByRole('button', { name: 'Log in', exact: true }).click();
-    await page.waitForURL('user');
+  test('display user id', async ({ page, baseURL }) => {
+    await new LoginPage(page).login(VERIFIED_USER);
+    const userProfile = new UserProfilePage(page, baseURL);
     const header = new Header(page);
     await header.goToUserSettings();
-    await expect(page).toHaveURL('account/user');
-    await expect(page.getByText('User ID: user@example.com')).toBeVisible();
+    await expect(page).toHaveURL('account');
+    await expect(userProfile.getMailAddressSection()).toContainText(
+      VERIFIED_USER.loginId
+    );
   });
 
   test('delete guest account', async ({ page, baseURL }) => {
@@ -22,11 +23,9 @@ test.describe('user settings', () => {
     await homePage.goto();
     await homePage.createRoom('My room');
     await page.waitForURL(/edit/);
-    const header = new Header(page);
-    await header.goToUserSettings();
-    await page.waitForURL('account/user');
-    await page.getByRole('button', { name: 'Delete account' }).click();
-    await page.getByRole('button', { name: 'Delete', exact: true }).click();
+    const userProfile = new UserProfilePage(page, baseURL);
+    await userProfile.goto('delete-account');
+    await userProfile.deleteAccount();
     await page.waitForResponse(
       (res) => !!res.request().postData()?.includes('DeleteUser') && res.ok()
     );
@@ -40,8 +39,9 @@ test.describe('user settings', () => {
     await page.waitForURL(/edit/);
     const header = new Header(page);
     await header.goToUserSettings();
-    await page.waitForURL('account/user');
-    await page.getByRole('button', { name: 'display settings' }).click();
+    await expect(page).toHaveURL('account');
+    const userProfile = new UserProfilePage(page, baseURL);
+    await userProfile.openDisplaySettings();
     await expect(page).toHaveURL('account/preferences');
     await page
       .getByRole('switch', {
