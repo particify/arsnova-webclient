@@ -25,9 +25,19 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   projects: [
+    // Provides a logged-in session for the specs that opt into it with test.use({ storageState }).
+    // Deliberately not wired into the shared use block above: almost every spec has to run as a
+    // fresh guest, and some of them delete everything the account they run as can see.
+    {
+      name: 'setup',
+      testDir: './setup',
+      // The default testMatch only picks up *.spec.ts/*.test.ts, so it would find nothing here.
+      testMatch: /.*\.setup\.ts/,
+    },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
     },
     // {
     //   name: 'firefox',

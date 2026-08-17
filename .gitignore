@@ -46,5 +46,6 @@ Thumbs.db
 *.tmp
 
 # Playwright
+/e2e/.auth/
 /playwright-report/*
 /test-results/*
