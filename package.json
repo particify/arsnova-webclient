@@ -35,7 +35,7 @@
     "@angular/platform-browser-dynamic": "22.1.2",
     "@angular/router": "22.1.2",
     "@angular/service-worker": "22.1.2",
-    "@apollo/client": "4.2.10",
+    "@apollo/client": "4.2.12",
     "@fontsource/material-symbols-outlined": "5.3.2",
     "@fontsource/roboto": "5.3.0",
     "@jsverse/transloco": "8.4.0",
