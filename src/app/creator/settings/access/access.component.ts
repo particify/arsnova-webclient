@@ -1,11 +1,11 @@
 import {
-  AfterViewChecked,
   AfterViewInit,
   Component,
   DestroyRef,
   Injector,
   OnDestroy,
   computed,
+  effect,
   inject,
   input,
   ChangeDetectionStrategy,
@@ -106,7 +106,7 @@ export interface Role {
 })
 export class AccessComponent
   extends FormComponent
-  implements AfterViewInit, AfterViewChecked, OnDestroy
+  implements AfterViewInit, OnDestroy
 {
   private injector = inject(Injector);
   private destroyRef = inject(DestroyRef);
@@ -168,8 +168,26 @@ export class AccessComponent
     { initialValue: [], injector: this.injector }
   );
 
-  ngAfterViewInit() {
+  constructor() {
+    super();
+    // Set here rather than in ngAfterViewInit so the guest state below already applies to the
+    // real control on the first change detection pass.
     this.setFormControl(this.usernameFormControl);
+    // Guests may not assign access rights. Applied to this panel's own controls instead of
+    // disableForm(), whose disabled state FormService shares with every other form.
+    effect(() => {
+      this.formDisabled = this.isGuest();
+      this.handleFormChanges();
+    });
+  }
+
+  /** Keeps this panel disabled for guests even when another form re-enables the shared state. */
+  protected override handleFormChanges(): void {
+    this.formDisabled = this.formDisabled || this.isGuest();
+    super.handleFormChanges();
+  }
+
+  ngAfterViewInit() {
     this.selectedRole = this.roles[0];
     this.authenticationService
       .isLoginIdEmailAddress()
@@ -188,12 +206,6 @@ export class AccessComponent
           this.getUser();
         }
       });
-  }
-
-  ngAfterViewChecked() {
-    if (this.isGuest()) {
-      this.disableForm();
-    }
   }
 
   changesMade() {

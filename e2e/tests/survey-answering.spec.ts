@@ -10,7 +10,6 @@ test.describe('participant answer survey', () => {
   let mockApi: MockApi;
   test.beforeEach(async ({ page }) => {
     mockApi = new MockApi(page);
-    mockApi.mockRoomSettings(TEST_ROOM_ID);
     mockApi.mockContentGroup(
       TEST_ROOM_ID,
       'My survey',
@@ -23,7 +22,6 @@ test.describe('participant answer survey', () => {
       0,
       false
     );
-    mockApi.mockFocusEvent(TEST_ROOM_ID);
     mockApi.mockRoomStats(TEST_ROOM_ID, 'My survey', 3, GroupType.SURVEY);
     mockApi.mockGroupStats(TEST_ROOM_ID, 0, 0, 0, 0, [
       {

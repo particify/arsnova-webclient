@@ -24,10 +24,6 @@ export class CreatorCommentsPage {
     await this.page.goto(`${this.baseURL}/edit/${shortId}/comments`);
   }
 
-  async getSearchPlaceholder(): Promise<string | null> {
-    return await this.commentSearchInput.getAttribute('placeholder');
-  }
-
   async createPost(body: string) {
     await this.openCommentsMoreMenu();
     await this.page.getByRole('menuitem', { name: 'write a post' }).click();
@@ -45,12 +41,24 @@ export class CreatorCommentsPage {
     return this.page.getByTestId('comment-card').nth(index);
   }
 
+  /**
+   * Addresses a post by its body rather than by list position. The list re-sorts and updates live,
+   * so an index taken right after creating or voting on a post can refer to a different one.
+   */
+  getPost(body: string): Locator {
+    return this.page.getByTestId('comment-card').filter({ hasText: body });
+  }
+
   getSecondaryCreateButton(): Locator {
     return this.page.getByText('write a post').nth(1);
   }
 
-  async getSortSelect(): Promise<string | null> {
-    return await this.sortSelect.textContent();
+  getSortSelect(): Locator {
+    return this.sortSelect;
+  }
+
+  getSearchInput(): Locator {
+    return this.commentSearchInput;
   }
 
   async setSorting(index: number) {
@@ -71,6 +79,10 @@ export class CreatorCommentsPage {
       .getByTestId('comment-more-menu-button')
       .nth(commentIndex)
       .click();
+  }
+
+  async openMoreMenuForPost(body: string) {
+    await this.getPost(body).getByTestId('comment-more-menu-button').click();
   }
 
   async performMoreMenuAction(action: string) {

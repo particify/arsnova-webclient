@@ -7,7 +7,6 @@ import {
 } from '@app/core/models/answer-result';
 import { AnswerStatistics } from '@app/core/models/answer-statistics';
 import { ChoiceAnswer } from '@app/core/models/choice-answer';
-import { CommentSettings } from '@app/core/models/comment-settings';
 import { Content } from '@app/core/models/content';
 import { ContentChoice } from '@app/core/models/content-choice';
 import {
@@ -28,32 +27,6 @@ import { Page } from '@playwright/test';
 
 export class MockApi {
   constructor(public readonly page: Page) {}
-
-  async mockRoomSettings(roomId: string) {
-    await this.page.route(
-      `*/**/room/${roomId}/settings/roomId`,
-      async (route) => {
-        const settings = new CommentSettings(roomId);
-        settings.disabled = true;
-        await route.fulfill({ status: 200, json: settings });
-      }
-    );
-  }
-
-  async mockRoomLang(lang?: string) {
-    await this.page.route('*/**/graphql', async (route) => {
-      const res = await route.fetch();
-      const json = await res.json();
-      const room = json?.data?.joinRoom?.room;
-      if (room) {
-        room.language = lang;
-        json.data.joinRoom.room = room;
-        await route.fulfill({ json });
-      } else {
-        await route.continue();
-      }
-    });
-  }
 
   async mockContentGroup(
     roomId: string,
@@ -86,13 +59,6 @@ export class MockApi {
         await route.fulfill({ status: 200, json: group });
       }
     );
-  }
-
-  async mockFocusEvent(roomId: string) {
-    await this.page.route(`*/**/room/${roomId}/focus-event`, async (route) => {
-      const settings = new CommentSettings(roomId);
-      await route.fulfill({ status: 200, json: settings });
-    });
   }
 
   async mockRoomStats(

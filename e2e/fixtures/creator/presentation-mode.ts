@@ -173,6 +173,14 @@ export class PresentationModePage {
     return this.page.getByTestId('comment-card').nth(index);
   }
 
+  /**
+   * Addresses a post in the list by its body. Locating it on the page instead would be ambiguous:
+   * the post being presented is rendered a second time, outside the list.
+   */
+  getPost(body: string): Locator {
+    return this.page.getByTestId('comment-card').filter({ hasText: body });
+  }
+
   async sortComments(sorting: string) {
     await this.page.getByTestId('comments-sort-button').click();
     await this.page.getByRole('menuitem', { name: sorting }).click();

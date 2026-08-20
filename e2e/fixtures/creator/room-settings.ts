@@ -71,10 +71,6 @@ export class RoomSettingsPage {
     await this.page.getByRole('button', { name: 'Q&A', exact: true }).click();
   }
 
-  async toggleCommentsEnabled() {
-    await this.page.getByLabel('enable the Q&A section').click();
-  }
-
   async toggleAutoPublish() {
     await this.page
       .getByLabel('moderator or the lecturer must activate new posts')

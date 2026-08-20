@@ -58,7 +58,7 @@ test.describe('create room for quiz', () => {
       2
     );
     await contentCreation.createSlideContent('My slide content');
-    expect(await contentGroupOverview.getContents()).toHaveLength(6);
+    await expect(contentGroupOverview.getContents()).toHaveCount(6);
     await expect(page.getByText('6 contents', { exact: true })).toBeVisible();
     await expect(
       page.getByText('series is hidden for participants')

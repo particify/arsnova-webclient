@@ -16,7 +16,9 @@ export class HomePage {
     this.openCreateDialogButton = page.getByRole('button', {
       name: 'create room',
     });
-    this.roomNameInput = page.getByRole('combobox', { name: 'room name' });
+    // By label, not by role: an extension can turn this field into a combobox, so the role
+    // differs between builds while the label stays the same.
+    this.roomNameInput = page.getByLabel('room name');
     this.submitRoomCreationButton = page.getByRole('button', {
       name: 'create room',
     });

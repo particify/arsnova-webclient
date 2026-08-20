@@ -93,25 +93,25 @@ test.describe('room list', () => {
     await homePage.createRoom('My awesome room');
     await header.goToRooms();
     await page.waitForURL('user');
-    expect(await page.getByTestId('room-item').all()).toHaveLength(3);
+    await expect(page.getByTestId('room-item')).toHaveCount(3);
     await page.getByPlaceholder('search rooms').fill('awesome');
     await page.waitForResponse(
       (res) =>
         !!res.request().postData()?.includes('RoomMemberships') && res.ok()
     );
-    expect(await page.getByTestId('room-item').all()).toHaveLength(1);
+    await expect(page.getByTestId('room-item')).toHaveCount(1);
     await page.getByPlaceholder('search rooms').fill('a');
     await page.waitForResponse(
       (res) =>
         !!res.request().postData()?.includes('RoomMemberships') && res.ok()
     );
-    expect(await page.getByTestId('room-item').all()).toHaveLength(2);
+    await expect(page.getByTestId('room-item')).toHaveCount(2);
     await page.getByPlaceholder('search rooms').clear();
     await page.waitForResponse(
       (res) =>
         !!res.request().postData()?.includes('RoomMemberships') && res.ok()
     );
-    expect(await page.getByTestId('room-item').all()).toHaveLength(3);
+    await expect(page.getByTestId('room-item')).toHaveCount(3);
   });
 
   test('create more than 10 rooms and load more in room list', async ({
@@ -142,12 +142,12 @@ test.describe('room list', () => {
       (res) =>
         !!res.request().postData()?.includes('RoomMemberships') && res.ok()
     );
-    expect(await page.getByTestId('room-item').all()).toHaveLength(10);
+    await expect(page.getByTestId('room-item')).toHaveCount(10);
     await page.getByRole('button', { name: 'Load more' }).click();
     await page.waitForResponse(
       (res) =>
         !!res.request().postData()?.includes('RoomMemberships') && res.ok()
     );
-    expect(await page.getByTestId('room-item').all()).toHaveLength(11);
+    await expect(page.getByTestId('room-item')).toHaveCount(11);
   });
 });
