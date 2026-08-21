@@ -35,12 +35,18 @@ export class LoginPage {
   private readonly submitButton: Locator;
 
   constructor(public readonly page: Page) {
-    this.loginIdInput = page.getByLabel('E-mail address', { exact: true });
+    // Both labels depend on how many username/password providers the backend advertises: a single
+    // one gives 'E-mail address' and 'Log in', additional ones (e.g. LDAP) switch to 'User ID' and
+    // one 'Log in with <provider title>' button per provider.
+    this.loginIdInput = page.getByLabel(/^(E-mail address|User ID)$/);
     this.passwordInput = page.getByLabel('Password', { exact: true });
-    this.submitButton = page.getByRole('button', {
-      name: 'Log in',
-      exact: true,
-    });
+    // Scoped to the form so the SSO buttons, which carry the same 'Log in with …' label, cannot
+    // match. The first button belongs to the first provider the backend advertises, which is the
+    // local one the accounts above live in.
+    this.submitButton = page
+      .locator('form', { has: this.passwordInput })
+      .getByRole('button', { name: /^Log in( with .+)?$/ })
+      .first();
   }
 
   async login(account: Account) {
