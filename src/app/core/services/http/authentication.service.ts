@@ -202,11 +202,9 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
     password: string,
     providerId?: string
   ): Observable<ClientAuthenticationResult> {
-    if (providerId !== 'user-db') {
-      throw new Error(
-        'Provider handling for username/password login not yet implemented.'
-      );
-    }
+    // The API expects a UUID and treats an absent value as the local provider, so the legacy
+    // 'user-db' id must not be passed on.
+    const requestProviderId = providerId === 'user-db' ? undefined : providerId;
     const connectionUrl: string = this.buildUri(this.serviceApiUrl.login);
     const token$ = this.challengeService.authenticateByChallenge();
     return token$.pipe(
@@ -221,6 +219,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
             {
               username,
               password,
+              providerId: requestProviderId,
             },
             {
               headers: httpHeaders,
