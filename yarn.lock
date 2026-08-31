@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@analogjs/storybook-angular@npm:2.7.0":
-  version: 2.7.0
-  resolution: "@analogjs/storybook-angular@npm:2.7.0"
+"@analogjs/storybook-angular@npm:2.7.1":
+  version: 2.7.1
+  resolution: "@analogjs/storybook-angular@npm:2.7.1"
   dependencies:
     "@storybook/builder-vite": "npm:^10.0.0"
   peerDependencies:
@@ -32,7 +32,7 @@ __metadata:
     "@storybook/angular": ^10.0.0
     storybook: ^10.0.0
     vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: 10c0/cf894f41c94f6286843b49d2e938b238facbd37ae447b648989fe3644c977d93dedb5f1ee9b2a1d04989d69d7fae8a1a83f1ce4f74e1da0ad0ecc5d5ddf95f80
+  checksum: 10c0/604784435e59ac6e629b2af77be55fca41908c2f97bd4a0ecd619ce76daff4a7eef1b5441c857bcb4ccd9af4178b4be0332e9d2c8c080748a6913889bda25785
   languageName: node
   linkType: hard
 
@@ -8243,7 +8243,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "arsnova-webclient@workspace:."
   dependencies:
-    "@analogjs/storybook-angular": "npm:2.7.0"
+    "@analogjs/storybook-angular": "npm:2.7.1"
     "@angular/animations": "npm:22.1.4"
     "@angular/build": "npm:22.1.6"
     "@angular/cdk": "npm:22.1.4"
