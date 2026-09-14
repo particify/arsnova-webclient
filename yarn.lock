@@ -8388,7 +8388,7 @@ __metadata:
     karma-jasmine: "npm:5.1.0"
     karma-jasmine-html-reporter: "npm:2.3.0"
     karma-viewport: "npm:1.0.9"
-    katex: "npm:0.18.4"
+    katex: "npm:0.18.7"
     lru-cache: "npm:11.5.2"
     ng-packagr: "npm:21.2.7"
     ng-qrcode: "npm:22.0.0"
@@ -9185,6 +9185,13 @@ __metadata:
   version: 14.0.3
   resolution: "commander@npm:14.0.3"
   checksum: 10c0/755652564bbf56ff2ff083313912b326450d3f8d8c85f4b71416539c9a05c3c67dbd206821ca72635bf6b160e2afdefcb458e86b317827d5cb333b69ce7f1a24
+  languageName: node
+  linkType: hard
+
+"commander@npm:^15.0.0":
+  version: 15.0.0
+  resolution: "commander@npm:15.0.0"
+  checksum: 10c0/539229c171914ea1ccd45ee5f10d924289a12a684ea3a7a44147abe54003c35ed6de9ae4ad198d88c29fdf403dca0428451a388234e6dc01b6faa978fb207206
   languageName: node
   linkType: hard
 
@@ -13094,14 +13101,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:0.18.4":
-  version: 0.18.4
-  resolution: "katex@npm:0.18.4"
+"katex@npm:0.18.7":
+  version: 0.18.7
+  resolution: "katex@npm:0.18.7"
   dependencies:
-    commander: "npm:^8.3.0"
+    commander: "npm:^15.0.0"
   bin:
     katex: cli.js
-  checksum: 10c0/a8ecf3079c1748c15856b25f4175a98b6fc5d8e7f567afe8dcf4f63673159036fd2c50527621ec338c6144ae8e18a0103ffd820e175165f6659881c9d9a711b9
+  checksum: 10c0/191b690af9099fb25b595270b9da191cd37c9b45d7773188112ad7831e74a4a3e07f10e1e1bdd656daa8794e744cefd03d079eb05be49983ac578bcb2ce857df
   languageName: node
   linkType: hard
 
