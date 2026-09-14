@@ -31,7 +31,6 @@ export class StatisticsSummaryComponent {
   adminStats = toSignal(this.core4AdminStats.fetch().pipe(map((s) => s.data)));
   roomStats = computed(() => this.adminStats()?.adminRoomStats);
   qnaPostCount = computed(() => this.adminStats()?.adminQnaStats?.postCount);
-  connectedUserCount = toSignal(this.systemInfoService.getConnectedUserCount());
   core3Stats = toSignal(this.systemInfoService.getCore3Stats());
 
   userSummary: Signal<StatTable[]> = computed(() => {
@@ -45,11 +44,6 @@ export class StatisticsSummaryComponent {
         name: 'admin.admin-area.participants',
         value: this.roomStats()?.participantCount,
       },
-      {
-        name: 'admin.admin-area.connected-users',
-        description: 'admin.admin-area.connected-users-description',
-        value: this.connectedUserCount(),
-      },
     ];
   });
 
@@ -62,11 +56,6 @@ export class StatisticsSummaryComponent {
       {
         name: 'admin.admin-area.room-memberships',
         value: this.roomStats()?.membershipCount,
-      },
-      {
-        name: 'admin.admin-area.active-rooms',
-        description: 'admin.admin-area.active-rooms-description',
-        value: this.roomStats()?.activeRoomCount,
       },
     ];
   });

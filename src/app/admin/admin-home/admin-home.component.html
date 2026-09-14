@@ -4,13 +4,16 @@
   [showFooter]="false"
   backgroundColor="surface"
 >
-  <div footer fxLayout="row" fxLayoutAlign="center" [style.height]="'32px'">
-    <lib-extension-point
-      extensionId="app-logo"
-      [extensionData]="{ height: '32px' }"
-    >
-      <h2>{{ 'admin.admin-area.title' | transloco }}</h2>
-    </lib-extension-point>
+  <div footer fxLayout="column" fxLayoutGap="24px">
+    <app-live-indicators></app-live-indicators>
+    <div fxLayout="row" fxLayoutAlign="center" [style.height]="'32px'">
+      <lib-extension-point
+        extensionId="app-logo"
+        [extensionData]="{ height: '32px' }"
+      >
+        <h2>{{ 'admin.admin-area.title' | transloco }}</h2>
+      </lib-extension-point>
+    </div>
   </div>
   <div class="routing-container">
     <router-outlet></router-outlet></div

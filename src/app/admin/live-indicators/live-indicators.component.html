@@ -1,0 +1,64 @@
+<div
+  class="live-indicators"
+  fxLayout="row"
+  fxLayoutAlign="center"
+  fxLayoutGap="24px"
+>
+  @let connectedUsers = connectedUserCount();
+  @if (connectedUsers != null) {
+    @let connectedUsersLabel =
+      'admin.admin-area.indicator-value'
+        | transloco
+          : {
+              name: 'admin.admin-area.connected-users' | transloco,
+              count: connectedUsers,
+              description:
+                'admin.admin-area.connected-users-description' | transloco,
+            };
+    <div
+      class="indicator"
+      role="img"
+      tabindex="0"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxLayoutGap="4px"
+      [attr.aria-label]="connectedUsersLabel"
+      [matTooltip]="connectedUsersLabel"
+      data-testid="connected-users-indicator"
+    >
+      <mat-icon>people</mat-icon>
+      <span>{{ connectedUsers }}</span>
+    </div>
+  }
+  @let activeRooms = activeRoomStats();
+  @if (activeRooms != null) {
+    @let activeRoomsLabel =
+      'admin.admin-area.indicator-value'
+        | transloco
+          : {
+              name: 'admin.admin-area.active-rooms' | transloco,
+              count: activeRooms.count,
+              description:
+                'admin.admin-area.active-rooms-description'
+                | transloco
+                  : {
+                      minMembers: activeRooms.minMemberCount,
+                      minutes: activeRooms.activityWindowMinutes,
+                    },
+            };
+    <div
+      class="indicator"
+      role="img"
+      tabindex="0"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxLayoutGap="4px"
+      [attr.aria-label]="activeRoomsLabel"
+      [matTooltip]="activeRoomsLabel"
+      data-testid="active-rooms-indicator"
+    >
+      <mat-icon>meeting_room</mat-icon>
+      <span>{{ activeRooms.count }}</span>
+    </div>
+  }
+</div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AbstractHttpService } from './abstract-http.service';
 import { SystemHealth } from '@app/admin/_models/system-health';
@@ -44,14 +44,18 @@ export class SystemInfoService extends AbstractHttpService<void> {
       .pipe(catchError(this.handleError<Map<string, any>>('getCore3Stats')));
   }
 
-  getConnectedUserCount(): Observable<number> {
+  /**
+   * Resolves to `undefined` instead of failing: this is polled by a background indicator, so the
+   * default error handling would raise a snackbar on every tick.
+   */
+  getConnectedUserCount(): Observable<number | undefined> {
     const connectionUrl =
       this.apiUrl.base +
       this.serviceApiUrl.management +
       this.serviceApiUrl.websocket;
     return this.http.get<WebsocketStats>(connectionUrl, httpOptions).pipe(
       map((s) => s.webSocketUserCount),
-      catchError(this.handleError<number>('getConnectedUserCount'))
+      catchError(() => of(undefined))
     );
   }
 }
