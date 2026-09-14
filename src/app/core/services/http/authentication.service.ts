@@ -249,7 +249,15 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
             this.handleAuthenticationResponse(a);
             this.inflightRefreshRequest = undefined;
           },
-          error: () => (this.inflightRefreshRequest = undefined),
+          error: (e) => {
+            this.inflightRefreshRequest = undefined;
+            if (e.status === 401) {
+              // The refresh token is gone or expired, so the persisted access
+              // token cannot be renewed and the session has ended. Other
+              // errors might be transient, so the session is kept for those.
+              this.handleSessionEnd();
+            }
+          },
         }),
         shareReplay(1)
       );
@@ -386,6 +394,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
   }
 
   private logoutLocally() {
+    this._accessToken.set(undefined);
     this.globalStorageService.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
     this.globalStorageService.removeItem(STORAGE_KEYS.USER);
     // FIXME: This is currently needed to assign null
@@ -437,34 +446,41 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
   }
 
   /**
-   * First tries to refresh the authentication. If this fails,
-   * resets the local authentication state and redirects to the login page.
-   * Furthermore, the current route is stored so it can be restored after
-   * login.
+   * First tries to refresh the authentication. If the session has ended, it is
+   * handled by `handleSessionEnd()` via `refreshLogin()`.
    */
   handleUnauthorizedError(): Observable<Authentication | undefined> {
     if (!this.accessToken()) {
       this.router.navigateByUrl('login');
       return of(undefined);
     }
-    return this.refreshLogin().pipe(
-      tap({
-        error: () => {
-          this.logoutLocally();
-          this.routingService.setRedirect(undefined, true);
-          this.router.navigateByUrl('login');
-          this.translateService
-            .selectTranslate('login.authentication-expired')
-            .pipe(take(1))
-            .subscribe((msg) => {
-              this.notificationService.showAdvanced(
-                msg,
-                AdvancedSnackBarTypes.WARNING
-              );
-            });
-        },
-      })
-    );
+    return this.refreshLogin();
+  }
+
+  /**
+   * Handles a session which has ended involuntarily: The local authentication
+   * state is reset and the user is redirected to the login page where they are
+   * informed about the expiration. The current route is stored so it can be
+   * restored after login.
+   */
+  private handleSessionEnd() {
+    if (!this.accessToken()) {
+      // There is no session left to end, e.g. because a scheduled refresh ran
+      // after the user had already been logged out.
+      return;
+    }
+    this.logoutLocally();
+    this.routingService.setRedirect(undefined, true);
+    this.router.navigateByUrl('login');
+    this.translateService
+      .selectTranslate('login.authentication-expired')
+      .pipe(take(1))
+      .subscribe((msg) => {
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      });
   }
 
   private handleAuthenticationResponse(auth: Authentication) {

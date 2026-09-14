@@ -13,7 +13,7 @@ import {
   AUTH_HEADER_KEY,
   AUTH_SCHEME,
 } from '@app/core/services/http/authentication.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 const REFRESH_URI = '/api/auth/refresh';
 
@@ -41,15 +41,22 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       return next.handle(authReq).pipe(
         catchError((err) => {
           if (err instanceof HttpErrorResponse && err.status === 401) {
+            const currentToken = this.token();
             if (
+              currentToken &&
               authReq.headers.get(AUTH_HEADER_KEY) !==
-              `${AUTH_SCHEME} ${this.token()}`
+                `${AUTH_SCHEME} ${currentToken}`
             ) {
               // Access token expired but has been refreshed in the meantime.
               return this.http.request(this.buildAuthenticatedRequest(req));
             }
             return this.authenticationService.handleUnauthorizedError().pipe(
               switchMap(() => {
+                if (!this.token()) {
+                  // The session has been reset, so there is no token left to
+                  // retry the request with.
+                  return throwError(() => err);
+                }
                 const retryReq = this.buildAuthenticatedRequest(req);
                 return this.http.request(retryReq);
               })
