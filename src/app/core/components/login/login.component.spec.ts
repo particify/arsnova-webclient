@@ -8,6 +8,7 @@ import { configureTestModule } from '@testing/test.setup';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatFormFieldHarness } from '@angular/material/form-field/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BehaviorSubject, first, of } from 'rxjs';
@@ -16,6 +17,7 @@ import {
   AuthenticationProvider,
   AuthenticationProviderRole,
   AuthenticationProviderType,
+  UiConfig,
 } from '@app/core/models/api-config';
 import { AuthenticationStatus } from '@app/core/models/client-authentication-result';
 import { NotificationService } from '@app/core/services/util/notification.service';
@@ -89,12 +91,13 @@ describe('LoginComponent', () => {
   ]);
 
   async function createComponent(
-    authenticationProviders: AuthenticationProvider[]
+    authenticationProviders: AuthenticationProvider[],
+    ui: UiConfig = {}
   ) {
     const apiConfig: ApiConfig = {
       authenticationProviders,
       features: {},
-      ui: {},
+      ui,
       readOnly: false,
     };
 
@@ -158,6 +161,12 @@ describe('LoginComponent', () => {
     );
   }
 
+  function getRememberMeCheckboxes(): Promise<MatCheckboxHarness[]> {
+    return loader.getAllHarnesses(
+      MatCheckboxHarness.with({ name: 'remember-me' })
+    );
+  }
+
   beforeEach(() => {
     router.navigateByUrl.calls.reset();
     notificationService.showAdvanced.calls.reset();
@@ -187,6 +196,10 @@ describe('LoginComponent', () => {
       ).toHaveSize(0);
     });
 
+    it('should not render the remember me checkbox', async () => {
+      expect(await getRememberMeCheckboxes()).toHaveSize(0);
+    });
+
     it('should render a single unqualified submit button', async () => {
       const buttons = await getSubmitButtons();
       expect(buttons).toHaveSize(1);
@@ -200,7 +213,47 @@ describe('LoginComponent', () => {
       expect(authenticationService.login).toHaveBeenCalledWith(
         'user@example.com',
         'secret',
-        'user-db'
+        'user-db',
+        false
+      );
+    });
+  });
+
+  describe('with remembered sessions enabled', () => {
+    beforeEach(async () => {
+      await createComponent([LOCAL_PROVIDER], { rememberMeEnabled: true });
+    });
+
+    it('should render the remember me checkbox', async () => {
+      const checkboxes = await getRememberMeCheckboxes();
+      expect(checkboxes).toHaveSize(1);
+      expect(await checkboxes[0].getLabelText()).toBe('login.remember-me');
+      expect(await checkboxes[0].isChecked()).toBeFalse();
+    });
+
+    it('should log in without a remembered session if the checkbox is unchecked', async () => {
+      enterCredentials('user@example.com', 'secret');
+      const buttons = await getSubmitButtons();
+      await buttons[0].click();
+      expect(authenticationService.login).toHaveBeenCalledWith(
+        'user@example.com',
+        'secret',
+        'user-db',
+        false
+      );
+    });
+
+    it('should log in with a remembered session if the checkbox is checked', async () => {
+      enterCredentials('user@example.com', 'secret');
+      const checkboxes = await getRememberMeCheckboxes();
+      await checkboxes[0].check();
+      const buttons = await getSubmitButtons();
+      await buttons[0].click();
+      expect(authenticationService.login).toHaveBeenCalledWith(
+        'user@example.com',
+        'secret',
+        'user-db',
+        true
       );
     });
   });
@@ -246,7 +299,8 @@ describe('LoginComponent', () => {
       expect(authenticationService.login).toHaveBeenCalledWith(
         'ldap-user',
         'secret',
-        LDAP_PROVIDER_ID
+        LDAP_PROVIDER_ID,
+        false
       );
     });
   });

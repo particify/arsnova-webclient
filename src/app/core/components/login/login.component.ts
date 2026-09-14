@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
   inject,
+  model,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
@@ -44,6 +45,7 @@ import { FormComponent } from '@app/standalone/form/form.component';
 import { take } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { FormHeaderComponent } from '@app/core/components/form-header/form-header.component';
 import { MatButton } from '@angular/material/button';
 import { AutofocusDirective } from '@app/core/directives/autofocus.directive';
@@ -65,6 +67,7 @@ function setDefaultTrue(value: boolean | undefined): boolean {
   imports: [
     FlexModule,
     MatCard,
+    MatCheckbox,
     FormHeaderComponent,
     MatButton,
     AutofocusDirective,
@@ -116,6 +119,8 @@ export class LoginComponent
   deviceWidth = innerWidth;
   authProviders: AuthenticationProvider[] = [];
   loginIdIsEmail = false;
+  rememberMeEnabled = false;
+  readonly rememberMe = model(false);
 
   loginIdFormControl = new UntypedFormControl();
 
@@ -128,6 +133,8 @@ export class LoginComponent
       this.authProviders = data.apiConfig.authenticationProviders;
       this.allowRegister =
         this.allowRegister && !data.apiConfig.ui.registrationDisabled;
+      // The key is only published if the deployment supports remembered sessions.
+      this.rememberMeEnabled = !!data.apiConfig.ui.rememberMeEnabled;
     });
     if (this.externalRouteAfterLogin) {
       this.routingService.setRedirect(this.externalRouteAfterLogin);
@@ -219,7 +226,7 @@ export class LoginComponent
     if (this.loginIdFormControl.valid && password) {
       this.disableForm();
       this.authenticationService
-        .login(this.username, password, providerId)
+        .login(this.username, password, providerId, this.rememberMe())
         .subscribe((loginSuccessful) => {
           this.enableForm();
           this.checkLogin(loginSuccessful);

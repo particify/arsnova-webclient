@@ -115,6 +115,7 @@
     "login-successful": "You have been logged in.",
     "not-registered": "Don't have an account yet?",
     "password-reset": "Forgot your password?",
+    "remember-me": "Stay logged in",
     "register": "Register",
     "or": "or",
     "authentication-expired": "Please log in again.",
