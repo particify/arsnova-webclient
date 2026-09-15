@@ -1,5 +1,12 @@
 import { HttpTestingController } from '@angular/common/http/testing';
 import { Injectable } from '@angular/core';
+import {
+  TestBed,
+  discardPeriodicTasks,
+  fakeAsync,
+  flushMicrotasks,
+  tick,
+} from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
@@ -59,10 +66,16 @@ describe('AuthenticationService', () => {
   let router: MockRouter;
   let service: AuthenticationService;
 
-  beforeEach(() => {
+  /**
+   * Sets up the test module. Pass false to simulate a client which has never
+   * been authenticated.
+   */
+  const setUp = (seedAuthentication = true) => {
     globalStorageService = new MockGlobalStorageService();
-    globalStorageService.setItem(STORAGE_KEYS.ACCESS_TOKEN, ACCESS_TOKEN);
-    globalStorageService.setItem(STORAGE_KEYS.USER, USER);
+    if (seedAuthentication) {
+      globalStorageService.setItem(STORAGE_KEYS.ACCESS_TOKEN, ACCESS_TOKEN);
+      globalStorageService.setItem(STORAGE_KEYS.USER, USER);
+    }
     notificationService = jasmine.createSpyObj('NotificationService', [
       'showAdvanced',
     ]);
@@ -105,7 +118,9 @@ describe('AuthenticationService', () => {
     httpTestingController = testBed.inject(HttpTestingController);
     router = testBed.inject(Router) as unknown as MockRouter;
     service = testBed.inject(AuthenticationService);
-  });
+  };
+
+  beforeEach(() => setUp());
 
   /** Asserts that the user has been informed about the ended session. */
   const expectRedirectToLogin = () => {
@@ -293,5 +308,58 @@ describe('AuthenticationService', () => {
       expect(globalStorageService.getItem(STORAGE_KEYS.USER)).toBeUndefined();
       expectNoRedirectToLogin();
     });
+  });
+
+  describe('periodic refresh', () => {
+    // Upper bound for the initial delay: start-due plus the maximum random
+    // offset added to it.
+    const START_DUE_MAX = 7 * 60 * 1000;
+    // The macrotask queue must not be drained at the end of the test because
+    // that would keep the periodic timer running beyond the ticked time.
+    const NO_FLUSH = { flush: false };
+
+    it('should not refresh after logout', fakeAsync(() => {
+      service.init();
+      flushMicrotasks();
+      service.logout();
+      httpTestingController
+        .expectOne({ url: LOGOUT_URI, method: 'POST' })
+        .flush(null);
+
+      tick(START_DUE_MAX);
+
+      expect(
+        httpTestingController.match({ url: REFRESH_URI, method: 'POST' }).length
+      ).toBe(0);
+      discardPeriodicTasks();
+    }, NO_FLUSH));
+
+    it('should not refresh if never authenticated', fakeAsync(() => {
+      TestBed.resetTestingModule();
+      setUp(false);
+      service.init();
+      flushMicrotasks();
+
+      tick(START_DUE_MAX);
+
+      expect(
+        httpTestingController.match({ url: REFRESH_URI, method: 'POST' }).length
+      ).toBe(0);
+      discardPeriodicTasks();
+    }, NO_FLUSH));
+
+    it('should refresh if the user is authenticated', fakeAsync(() => {
+      service.init();
+      flushMicrotasks();
+
+      tick(START_DUE_MAX);
+
+      httpTestingController
+        .expectOne({ url: REFRESH_URI, method: 'POST' })
+        .flush({ accessToken: 'new-access-token' });
+
+      expect(service.accessToken()).toEqual('new-access-token');
+      discardPeriodicTasks();
+    }, NO_FLUSH));
   });
 });

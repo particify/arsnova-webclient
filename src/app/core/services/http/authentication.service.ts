@@ -154,7 +154,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
       REFRESH_INTERVAL_STARTDUE_MINUTES * 60 * 1000 + offset
     );
     timer(startDue, interval).subscribe(() => {
-      if (this.getCurrentAuthentication() != null) {
+      if (this.accessToken()) {
         this.refreshLogin().subscribe();
       }
     });
