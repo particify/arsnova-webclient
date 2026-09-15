@@ -136,6 +136,14 @@ query AdminStats {
   }
 }
 
+query AdminRoomActivityStats($from: DateTime!, $to: DateTime!) {
+  adminRoomActivityStats(from: $from, to: $to) {
+    managingUserCount
+    participantCount
+    roomCount
+  }
+}
+
 query ActiveRoomStats($minMemberCount: Int, $activityWindowMinutes: Int) {
   adminActiveRoomStats(
     minMemberCount: $minMemberCount

@@ -66,6 +66,13 @@ export type AdminRoom = {
   updatedBy?: Maybe<Scalars['ID']['output']>;
 };
 
+export type AdminRoomActivityStats = {
+  __typename?: 'AdminRoomActivityStats';
+  managingUserCount: Scalars['Int']['output'];
+  participantCount: Scalars['Int']['output'];
+  roomCount: Scalars['Int']['output'];
+};
+
 export type AdminRoomConnection = {
   __typename?: 'AdminRoomConnection';
   edges?: Maybe<Array<Maybe<AdminRoomEdge>>>;
@@ -584,6 +591,7 @@ export type Query = {
   adminActiveRoomStats?: Maybe<AdminActiveRoomStats>;
   adminAnnouncementStats?: Maybe<AdminAnnouncementStats>;
   adminQnaStats?: Maybe<AdminQnaStats>;
+  adminRoomActivityStats: AdminRoomActivityStats;
   adminRoomById?: Maybe<AdminRoom>;
   adminRoomManagingMembersByRoomId?: Maybe<Array<RoomMember>>;
   adminRoomMembershipsByUserId?: Maybe<RoomMembershipConnection>;
@@ -614,6 +622,11 @@ export type Query = {
 export type QueryAdminActiveRoomStatsArgs = {
   activityWindowMinutes?: InputMaybe<Scalars['Int']['input']>;
   minMemberCount?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QueryAdminRoomActivityStatsArgs = {
+  from: Scalars['DateTime']['input'];
+  to: Scalars['DateTime']['input'];
 };
 
 export type QueryAdminRoomByIdArgs = {
@@ -1251,6 +1264,21 @@ export type AdminStatsQuery = {
     totalCount: number;
   } | null;
   adminQnaStats?: { __typename?: 'AdminQnaStats'; postCount: number } | null;
+};
+
+export type AdminRoomActivityStatsQueryVariables = Exact<{
+  from: Scalars['DateTime']['input'];
+  to: Scalars['DateTime']['input'];
+}>;
+
+export type AdminRoomActivityStatsQuery = {
+  __typename?: 'Query';
+  adminRoomActivityStats: {
+    __typename?: 'AdminRoomActivityStats';
+    managingUserCount: number;
+    participantCount: number;
+    roomCount: number;
+  };
 };
 
 export type ActiveRoomStatsQueryVariables = Exact<{
@@ -2974,6 +3002,29 @@ export class AdminStatsGql extends Apollo.Query<
   AdminStatsQueryVariables
 > {
   document = AdminStatsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AdminRoomActivityStatsDocument = gql`
+  query AdminRoomActivityStats($from: DateTime!, $to: DateTime!) {
+    adminRoomActivityStats(from: $from, to: $to) {
+      managingUserCount
+      participantCount
+      roomCount
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminRoomActivityStatsGql extends Apollo.Query<
+  AdminRoomActivityStatsQuery,
+  AdminRoomActivityStatsQueryVariables
+> {
+  document = AdminRoomActivityStatsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

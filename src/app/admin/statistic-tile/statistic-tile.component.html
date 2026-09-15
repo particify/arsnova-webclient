@@ -1,0 +1,24 @@
+<mat-card appearance="outlined" fxLayout="column" fxLayoutGap="4px">
+  @let count = value();
+  <span class="value" data-testid="statistic-tile-value">{{
+    count ?? placeholder
+  }}</span>
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+    <span class="label" data-testid="statistic-tile-label">{{
+      label() | transloco
+    }}</span>
+    @let hint = description();
+    @if (hint) {
+      <!-- The icon itself is aria-hidden by MatIcon, so the wrapper carries the description. -->
+      <span
+        class="help-icon"
+        role="img"
+        tabindex="0"
+        [attr.aria-label]="hint | transloco: descriptionParams()"
+        [matTooltip]="hint | transloco: descriptionParams()"
+      >
+        <mat-icon>help</mat-icon>
+      </span>
+    }
+  </div>
+</mat-card>
