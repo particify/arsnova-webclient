@@ -31,6 +31,7 @@
                   <button
                     mat-flat-button
                     color="primary"
+                    data-testid="comment-answer-edit-button"
                     (click)="editAnswer()"
                   >
                     <mat-icon>edit</mat-icon>
@@ -112,7 +113,12 @@
           }
           <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
             @if (isEditor && post.replies && post.replies.length > 0 && edit) {
-              <button mat-stroked-button color="warn" (click)="deleteAnswer()">
+              <button
+                mat-stroked-button
+                color="warn"
+                data-testid="comment-answer-delete-button"
+                (click)="deleteAnswer()"
+              >
                 {{ 'creator.comment-page.delete-answer' | transloco }}
               </button>
             }
@@ -122,6 +128,7 @@
             ) {
               <app-loading-button
                 name="creator.comment-page.save-answer"
+                data-testid="comment-answer-save-button"
                 (clicked)="saveAnswer()"
               ></app-loading-button>
             }

@@ -88,11 +88,12 @@ export class CommentAnswerComponent extends FormComponent {
       return;
     }
     this.disableForm();
-    if (this.post.replies && this.post.replies.length < 0) {
+    const reply = this.post.replies?.[0];
+    if (reply) {
       this.updateReply
-        .mutate({ variables: { postId: this.post.id, body: this.bodyInput } })
+        .mutate({ variables: { id: reply.id, body: this.bodyInput } })
         .subscribe({
-          next: () => {
+          next: (result) => {
             const msg = this.translateService.translate(
               'creator.comment-page.comment-answered'
             );
@@ -100,6 +101,10 @@ export class CommentAnswerComponent extends FormComponent {
               msg,
               AdvancedSnackBarTypes.SUCCESS
             );
+            const updatedReply = result.data?.updateQnaReply;
+            if (updatedReply) {
+              this.post = { ...this.post, replies: [updatedReply] };
+            }
             this.edit = false;
             this.enableForm();
           },
@@ -114,16 +119,19 @@ export class CommentAnswerComponent extends FormComponent {
               __typename: 'Post',
               id: this.post.id,
             });
-            if (cacheId) {
-              cache.modify({
-                id: cacheId,
-                fields: {
-                  replies() {
-                    return [result.data?.createQnaReply];
-                  },
-                },
-              });
+            const reply = result.data?.createQnaReply;
+            if (!cacheId || !reply) {
+              return;
             }
+            cache.modify({
+              id: cacheId,
+              fields: {
+                replies(existingReplies, { toReference }) {
+                  const replyRef = toReference(reply, true);
+                  return replyRef ? [replyRef] : existingReplies;
+                },
+              },
+            });
           },
         })
         .subscribe({
@@ -137,15 +145,7 @@ export class CommentAnswerComponent extends FormComponent {
             );
             const reply = result.data?.createQnaReply;
             if (reply) {
-              this.post = {
-                id: this.post.id,
-                body: this.post.body,
-                moderationState: this.post.moderationState,
-                createdAt: this.post.createdAt,
-                score: this.post.score,
-                userVote: this.post.userVote,
-                replies: [reply],
-              };
+              this.post = { ...this.post, replies: [reply] };
             }
             this.edit = false;
             this.enableForm();
@@ -156,6 +156,10 @@ export class CommentAnswerComponent extends FormComponent {
   }
 
   deleteAnswer() {
+    const reply = this.post.replies?.[0];
+    if (!reply) {
+      return;
+    }
     const dialogRef = this.dialogService.openDeleteDialog(
       'comment-answer',
       'creator.dialog.really-delete-answer',
@@ -163,15 +167,15 @@ export class CommentAnswerComponent extends FormComponent {
       undefined,
       () =>
         this.deleteReply.mutate({
-          variables: { id: this.post.id },
+          variables: { id: reply.id },
           update: (cache) => {
-            const cacheId = cache.identify({
+            const postCacheId = cache.identify({
               __typename: 'Post',
               id: this.post.id,
             });
-            if (cacheId) {
+            if (postCacheId) {
               cache.modify({
-                id: cacheId,
+                id: postCacheId,
                 fields: {
                   replies() {
                     return [];
@@ -179,12 +183,17 @@ export class CommentAnswerComponent extends FormComponent {
                 },
               });
             }
+            const replyCacheId = cache.identify(reply);
+            if (replyCacheId) {
+              cache.evict({ id: replyCacheId });
+            }
           },
         })
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.bodyInput = '';
+        this.post = { ...this.post, replies: [] };
         const msg = this.translateService.translate(
           'creator.comment-page.answer-deleted'
         );
