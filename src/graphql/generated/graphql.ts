@@ -34,6 +34,13 @@ export type Scalars = {
   UUID: { input: string; output: string };
 };
 
+export type AdminActiveRoomStats = {
+  __typename?: 'AdminActiveRoomStats';
+  activityWindowMinutes: Scalars['Int']['output'];
+  count: Scalars['Int']['output'];
+  minMemberCount: Scalars['Int']['output'];
+};
+
 export type AdminAnnouncementStats = {
   __typename?: 'AdminAnnouncementStats';
   totalCount: Scalars['Int']['output'];
@@ -574,6 +581,7 @@ export enum QnaState {
 
 export type Query = {
   __typename?: 'Query';
+  adminActiveRoomStats?: Maybe<AdminActiveRoomStats>;
   adminAnnouncementStats?: Maybe<AdminAnnouncementStats>;
   adminQnaStats?: Maybe<AdminQnaStats>;
   adminRoomById?: Maybe<AdminRoom>;
@@ -601,6 +609,11 @@ export type Query = {
   rooms?: Maybe<RoomConnection>;
   roomsByUserId?: Maybe<RoomMembershipConnection>;
   userByDisplayId?: Maybe<User>;
+};
+
+export type QueryAdminActiveRoomStatsArgs = {
+  activityWindowMinutes?: InputMaybe<Scalars['Int']['input']>;
+  minMemberCount?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryAdminRoomByIdArgs = {
@@ -1230,7 +1243,6 @@ export type AdminStatsQuery = {
     __typename?: 'AdminRoomStats';
     totalCount: number;
     membershipCount: number;
-    activeRoomCount: number;
     managingUserCount: number;
     participantCount: number;
   } | null;
@@ -1239,6 +1251,21 @@ export type AdminStatsQuery = {
     totalCount: number;
   } | null;
   adminQnaStats?: { __typename?: 'AdminQnaStats'; postCount: number } | null;
+};
+
+export type ActiveRoomStatsQueryVariables = Exact<{
+  minMemberCount?: InputMaybe<Scalars['Int']['input']>;
+  activityWindowMinutes?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type ActiveRoomStatsQuery = {
+  __typename?: 'Query';
+  adminActiveRoomStats?: {
+    __typename?: 'AdminActiveRoomStats';
+    count: number;
+    minMemberCount: number;
+    activityWindowMinutes: number;
+  } | null;
 };
 
 export type AdminUserCountQueryVariables = Exact<{ [key: string]: never }>;
@@ -2927,7 +2954,6 @@ export const AdminStatsDocument = gql`
     adminRoomStats {
       totalCount
       membershipCount
-      activeRoomCount
       managingUserCount
       participantCount
     }
@@ -2948,6 +2974,32 @@ export class AdminStatsGql extends Apollo.Query<
   AdminStatsQueryVariables
 > {
   document = AdminStatsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ActiveRoomStatsDocument = gql`
+  query ActiveRoomStats($minMemberCount: Int, $activityWindowMinutes: Int) {
+    adminActiveRoomStats(
+      minMemberCount: $minMemberCount
+      activityWindowMinutes: $activityWindowMinutes
+    ) {
+      count
+      minMemberCount
+      activityWindowMinutes
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ActiveRoomStatsGql extends Apollo.Query<
+  ActiveRoomStatsQuery,
+  ActiveRoomStatsQueryVariables
+> {
+  document = ActiveRoomStatsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

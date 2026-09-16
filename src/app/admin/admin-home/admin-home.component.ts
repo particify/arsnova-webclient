@@ -10,6 +10,7 @@ import {
   NavigationDrawerComponent,
 } from '@app/standalone/navigation-drawer/navigation-drawer.component';
 import { FlexModule } from '@angular/flex-layout';
+import { LiveIndicatorsComponent } from '@app/admin/live-indicators/live-indicators.component';
 import { ExtensionPointComponent } from '@projects/extension-point/src/lib/extension-point.component';
 @Component({
   selector: 'app-admin-home',
@@ -19,6 +20,7 @@ import { ExtensionPointComponent } from '@projects/extension-point/src/lib/exten
   imports: [
     NavigationDrawerComponent,
     FlexModule,
+    LiveIndicatorsComponent,
     ExtensionPointComponent,
     RouterOutlet,
     TranslocoPipe,

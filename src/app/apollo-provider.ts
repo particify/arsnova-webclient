@@ -37,6 +37,12 @@ function errorLink(
     );
   }
   return new ErrorLink(({ error, operation, forward }) => {
+    /*
+     * Opt-in flag for background polls, which would otherwise raise a snackbar on every tick.
+     * It only suppresses the snackbar - the error is still logged so a failing poll stays
+     * diagnosable.
+     */
+    const silentError = operation.getContext().silentError === true;
     if (CombinedGraphQLErrors.is(error)) {
       console.group('GraphQL error(s)');
       error.errors.forEach((e) => {
@@ -49,10 +55,14 @@ function errorLink(
       forward(operation);
     } else if (ServerError.is(error)) {
       console.log(`Server error: ${error.message}`);
-      showUnknownError();
+      if (!silentError) {
+        showUnknownError();
+      }
     } else if (error) {
       console.log(`Other error: ${error.message}`);
-      showUnknownError();
+      if (!silentError) {
+        showUnknownError();
+      }
     }
   });
 }

@@ -125,7 +125,6 @@ query AdminStats {
   adminRoomStats {
     totalCount
     membershipCount
-    activeRoomCount
     managingUserCount
     participantCount
   }
@@ -134,6 +133,17 @@ query AdminStats {
   }
   adminQnaStats {
     postCount
+  }
+}
+
+query ActiveRoomStats($minMemberCount: Int, $activityWindowMinutes: Int) {
+  adminActiveRoomStats(
+    minMemberCount: $minMemberCount
+    activityWindowMinutes: $activityWindowMinutes
+  ) {
+    count
+    minMemberCount
+    activityWindowMinutes
   }
 }
 
