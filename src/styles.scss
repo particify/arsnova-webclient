@@ -525,13 +525,13 @@ div {
   margin-left: 4px;
 }
 
-.choice-answer .mdc-form-field {
+.choice-answer .mat-internal-form-field {
   width: 100%;
+  cursor: pointer;
 
-  & > label {
-    cursor: pointer;
+  & > .mat-internal-form-field-label {
+    flex: 1;
     min-height: 48px;
-    width: 100%;
     display: flex;
     flex-direction: column;
     place-content: center;
@@ -539,7 +539,7 @@ div {
   }
 }
 
-.disabled-choice-answer .mdc-form-field > label {
+.choice-answer.disabled-choice-answer .mat-internal-form-field {
   cursor: default;
 }
 
