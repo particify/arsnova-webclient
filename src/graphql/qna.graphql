@@ -192,10 +192,9 @@ mutation CreateQnaReply($postId: UUID!, $body: String!) {
   }
 }
 
-mutation UpdateQnaReply($postId: UUID!, $body: String!) {
-  updateQnaReply(input: { postId: $postId, body: $body }) {
-    id
-    body
+mutation UpdateQnaReply($id: ID!, $body: String!) {
+  updateQnaReply(id: $id, body: $body) {
+    ...ReplyDetails
   }
 }
 

@@ -427,7 +427,8 @@ export type MutationUpdateQnaPostFavoriteArgs = {
 };
 
 export type MutationUpdateQnaReplyArgs = {
-  input: UpdateReplyInput;
+  body: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
 };
 
 export type MutationUpdateQnaThresholdArgs = {
@@ -892,11 +893,6 @@ export type UpdateAnnouncementInput = {
   body?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   title?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateReplyInput = {
-  body: Scalars['String']['input'];
-  postId: Scalars['UUID']['input'];
 };
 
 export type UpdateUserDetailsInput = {
@@ -1763,13 +1759,19 @@ export type CreateQnaReplyMutation = {
 };
 
 export type UpdateQnaReplyMutationVariables = Exact<{
-  postId: Scalars['UUID']['input'];
+  id: Scalars['ID']['input'];
   body: Scalars['String']['input'];
 }>;
 
 export type UpdateQnaReplyMutation = {
   __typename?: 'Mutation';
-  updateQnaReply: { __typename?: 'Reply'; id: string; body: string };
+  updateQnaReply: {
+    __typename?: 'Reply';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    createdAt: string;
+  };
 };
 
 export type DeleteQnaReplyMutationVariables = Exact<{
@@ -3708,12 +3710,12 @@ export class CreateQnaReplyGql extends Apollo.Mutation<
   }
 }
 export const UpdateQnaReplyDocument = gql`
-  mutation UpdateQnaReply($postId: UUID!, $body: String!) {
-    updateQnaReply(input: { postId: $postId, body: $body }) {
-      id
-      body
+  mutation UpdateQnaReply($id: ID!, $body: String!) {
+    updateQnaReply(id: $id, body: $body) {
+      ...ReplyDetails
     }
   }
+  ${ReplyDetailsFragmentDoc}
 `;
 
 @Injectable({
