@@ -1,19 +1,29 @@
 <div fxLayout="column" fxLayoutGap="20px">
   <h2>
-    {{ 'admin.admin-area.summary' | transloco }}
+    {{ 'admin.admin-area.summary-range' | transloco: rangeParams() }}
   </h2>
+  @let stats = activityStats();
   <div class="summary-container">
-    <app-statistic-card
-      [headerName]="'admin.admin-area.users' | transloco"
-      [tableData]="userSummary()"
-    ></app-statistic-card>
-    <app-statistic-card
-      [headerName]="'admin.admin-area.rooms' | transloco"
-      [tableData]="roomSummary()"
-    ></app-statistic-card>
-    <app-statistic-card
-      [headerName]="'admin.admin-area.interactions' | transloco"
-      [tableData]="interactionSummary()"
-    ></app-statistic-card>
+    <app-statistic-tile
+      data-testid="managing-users-tile"
+      label="admin.admin-area.managing-users"
+      description="admin.admin-area.managing-users-description"
+      [descriptionParams]="rangeParams()"
+      [value]="stats?.managingUserCount"
+    ></app-statistic-tile>
+    <app-statistic-tile
+      data-testid="rooms-tile"
+      label="admin.admin-area.rooms"
+      description="admin.admin-area.rooms-description"
+      [descriptionParams]="rangeParams()"
+      [value]="stats?.roomCount"
+    ></app-statistic-tile>
+    <app-statistic-tile
+      data-testid="participants-tile"
+      label="admin.admin-area.participants"
+      description="admin.admin-area.participants-description"
+      [descriptionParams]="rangeParams()"
+      [value]="stats?.participantCount"
+    ></app-statistic-tile>
   </div>
 </div>

@@ -2,6 +2,11 @@
 
 .summary-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(3, 1fr);
   gap: $spacing-4;
+
+  /* The admin content area is too narrow for three tiles once the viewport shrinks. */
+  @include lt-md {
+    grid-template-columns: 1fr;
+  }
 }

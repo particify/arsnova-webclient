@@ -3,80 +3,79 @@ import {
   Component,
   computed,
   inject,
-  Signal,
 } from '@angular/core';
-import { SystemInfoService } from '@app/core/services/http/system-info.service';
-import { FlexModule } from '@angular/flex-layout';
-import { TranslocoPipe } from '@jsverse/transloco';
-import { AdminStatsGql } from '@gql/generated/graphql';
-import { map } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { StatisticTileComponent } from '@app/admin/statistic-tile/statistic-tile.component';
 import { CoreModule } from '@app/core/core.module';
-import {
-  StatisticCardComponent,
-  StatTable,
-} from '@app/admin/statistic-card/statistic-card.component';
+import { UiConfig } from '@app/core/models/api-config';
+import { ApiConfigService } from '@app/core/services/http/api-config.service';
+import { AdminRoomActivityStatsGql } from '@gql/generated/graphql';
+import { TranslocoPipe } from '@jsverse/transloco';
+import dayjs from 'dayjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 
+/** Window length a deployment gets without an `ui.admin.statistics.summaryRangeDays` setting. */
+const SUMMARY_RANGE_DAYS = 90;
+
+/**
+ * Resolves the configured window length. Anything but a whole number of days above zero falls
+ * back to {@link SUMMARY_RANGE_DAYS}.
+ */
+function resolveRangeDays(ui: UiConfig | undefined): number {
+  const days = ui?.['admin']?.statistics?.summaryRangeDays;
+  return Number.isInteger(days) && days > 0 ? days : SUMMARY_RANGE_DAYS;
+}
+
+/**
+ * Activity in a recent period, as opposed to the lifetime totals of the "More data" tabs below it.
+ * Deployments configure the length of that period, but not its end: the participant count reads
+ * the single mutable `Membership.lastActivityAt`, so the window can only ever end now.
+ * The room-derived counts sit on an immutable `created_at` and could answer any range.
+ */
 @Component({
   selector: 'app-statistics-summary',
   templateUrl: './statistics-summary.component.html',
   styleUrls: ['../admin-styles.scss', './statistics-summary.component.scss'],
-  imports: [FlexModule, TranslocoPipe, CoreModule, StatisticCardComponent],
+  imports: [CoreModule, TranslocoPipe, StatisticTileComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatisticsSummaryComponent {
-  protected systemInfoService = inject(SystemInfoService);
-  private core4AdminStats = inject(AdminStatsGql);
+  private readonly apiConfigService = inject(ApiConfigService);
+  private readonly adminRoomActivityStatsGql = inject(
+    AdminRoomActivityStatsGql
+  );
 
-  adminStats = toSignal(this.core4AdminStats.fetch().pipe(map((s) => s.data)));
-  roomStats = computed(() => this.adminStats()?.adminRoomStats);
-  qnaPostCount = computed(() => this.adminStats()?.adminQnaStats?.postCount);
-  core3Stats = toSignal(this.systemInfoService.getCore3Stats());
+  /* The configuration is loaded via HTTP and cached for an hour, so the initial value is what
+   * most page loads render. */
+  private readonly rangeDays = toSignal(
+    this.apiConfigService
+      .getApiConfig$()
+      .pipe(map((config) => resolveRangeDays(config.ui))),
+    { initialValue: SUMMARY_RANGE_DAYS }
+  );
 
-  userSummary: Signal<StatTable[]> = computed(() => {
-    return [
-      {
-        name: 'admin.admin-area.managing-users',
-        description: 'admin.admin-area.managing-users-description',
-        value: this.roomStats()?.managingUserCount,
-      },
-      {
-        name: 'admin.admin-area.participants',
-        value: this.roomStats()?.participantCount,
-      },
-    ];
+  /** Interpolates the period into the heading and into every tile description. */
+  protected readonly rangeParams = computed(() => ({
+    days: this.rangeDays(),
+  }));
+
+  private readonly range = computed(() => {
+    const to = dayjs();
+    return {
+      from: to.subtract(this.rangeDays(), 'day').toISOString(),
+      to: to.toISOString(),
+    };
   });
 
-  roomSummary: Signal<StatTable[]> = computed(() => {
-    return [
-      {
-        name: 'admin.admin-area.total-rooms',
-        value: this.roomStats()?.totalCount,
-      },
-      {
-        name: 'admin.admin-area.room-memberships',
-        value: this.roomStats()?.membershipCount,
-      },
-    ];
-  });
-
-  interactionSummary: Signal<StatTable[]> = computed(() => {
-    return [
-      {
-        name: 'admin.admin-area.questions',
-        description: 'admin.admin-area.questions-description',
-        value: this.core3Stats()?.content.totalCount,
-      },
-      {
-        name: 'admin.admin-area.answers',
-        description: 'admin.admin-area.answers-description',
-        value: this.core3Stats()?.answer.totalCount,
-      },
-      {
-        name: 'admin.admin-area.qna-posts',
-        description: 'admin.admin-area.qna-posts-description',
-        value: this.qnaPostCount(),
-      },
-    ];
-  });
+  protected readonly activityStats = toSignal(
+    toObservable(this.range).pipe(
+      switchMap((range) =>
+        this.adminRoomActivityStatsGql.fetch({ variables: range }).pipe(
+          map((result) => result.data?.adminRoomActivityStats),
+          /* A failed request must not blank the view - the tiles keep their placeholders. */
+          catchError(() => of(undefined))
+        )
+      )
+    )
+  );
 }
