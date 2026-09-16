@@ -86,6 +86,15 @@
               </button>
             </div>
           }
+          @if (rememberMeEnabled) {
+            <mat-checkbox
+              [(ngModel)]="rememberMe"
+              [disabled]="formDisabled"
+              name="remember-me"
+            >
+              {{ 'login.remember-me' | transloco }}
+            </mat-checkbox>
+          }
           <div fxLayout="column" fxLayoutGap="5px">
             @for (provider of usernamePasswordProviders; track provider) {
               <div>

@@ -200,7 +200,8 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
   login(
     username: string,
     password: string,
-    providerId?: string
+    providerId?: string,
+    rememberMe = false
   ): Observable<ClientAuthenticationResult> {
     // The API expects a UUID and treats an absent value as the local provider, so the legacy
     // 'user-db' id must not be passed on.
@@ -220,6 +221,7 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
               username,
               password,
               providerId: requestProviderId,
+              rememberMe,
             },
             {
               headers: httpHeaders,
