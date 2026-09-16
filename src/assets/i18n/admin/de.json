@@ -143,7 +143,8 @@
     "active-rooms-description": "Räume, in denen in den letzten {{minutes}} Minuten mindestens {{minMembers}} Personen aktiv waren",
     "indicator-value": "{{name}}: {{count}} – {{description}}",
     "more-data": "Weitere Daten",
-    "no-managing-users-found": "Keine Raumverwalter:innen gefunden."
+    "no-managing-users-found": "Keine Raumverwalter:innen gefunden.",
+    "activate": "Aktivieren"
   },
   "dialog": {
     "really-delete-account-admin": "Willst du das Konto mit allen Räumen unwiderruflich löschen?",

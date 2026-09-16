@@ -165,7 +165,8 @@
     "register": "Registro",
     "or": "o",
     "authentication-expired": "Effettua nuovamente il login.",
-    "welcome": "Bentornati!"
+    "welcome": "Bentornati!",
+    "remember-me": "Rimani connesso"
   },
   "password-reset": {
     "key": "Codice di verifica",
@@ -186,7 +187,7 @@
     "first-name": "Nome",
     "delete-account-info": "Se cancelli il tuo account, tutte le stanze che hai creato verranno cancellate.",
     "preferences": "Impostazioni di visualizzazione",
-    "preferences-description": "Qui puoi configurare le impostazioni di visualizzazione attive in tutte le stanze.",
+    "preferences-description": "Configura le impostazioni di visualizzazione per tutte le Stanze.",
     "show-results-directly": "Mostra direttamente i risultati",
     "a11y-message": "Ora sei nella pagina dell'account.",
     "guest-hint": "Non hai effettuato il login e utilizzi un account ospite.",
@@ -655,7 +656,7 @@
     "one": "",
     "two": "",
     "few": "",
-    "other": "Il"
+    "other": "°"
   },
   "share": {
     "share": "Condividi",

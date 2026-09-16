@@ -118,7 +118,8 @@
     "register": "Registrarse",
     "or": "o",
     "authentication-expired": "Por favor, vuelve a iniciar sesión.",
-    "welcome": "¡Bienvenido de nuevo!"
+    "welcome": "¡Bienvenido de nuevo!",
+    "remember-me": "Mantén la sesión abierta"
   },
   "password-reset": {
     "forgot-password": "Te enviaremos un correo electrónico para restablecer tu contraseña.",
@@ -161,7 +162,7 @@
     "delete-account": "Eliminar cuenta",
     "delete-account-info": "Si eliminas tu cuenta, se eliminarán todas las salas que hayas creado.",
     "preferences": "Configuración de visualización",
-    "preferences-description": "Aquí puedes configurar la configuración de visualización que se aplica en todas tus salas.",
+    "preferences-description": "Configura los ajustes de visualización de todas tus Salas.",
     "visualization-unit-percent": "Mostrar resultados en porcentaje",
     "visualization-unit-percent-info": "Los resultados de preguntas de opción única y Likert se muestran en porcentaje.",
     "answers-below-chart": "Mostrar opciones de respuesta debajo de los gráficos",
@@ -655,7 +656,7 @@
     "one": "",
     "two": "",
     "few": "",
-    "other": "°"
+    "other": ".°"
   },
   "share": {
     "share-room-with-participants": "Compartir Sala con los Participantes",
