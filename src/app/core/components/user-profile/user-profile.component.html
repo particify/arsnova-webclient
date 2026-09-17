@@ -42,7 +42,8 @@
               <p class="username">
                 {{ ('user-profile.username' | transloco) + ': ' + displayId() }}
               </p>
-            } @else {
+            }
+            @if (mailAddress() && localAccountsEnabled()) {
               <mat-expansion-panel
                 [expanded]="activeSettings() === 'user'"
                 (afterExpand)="updatePage('user')"
@@ -106,6 +107,8 @@
                 </form>
               </mat-expansion-panel>
               <mat-divider></mat-divider>
+            }
+            @if (mailAddress() && localAccountsEnabled()) {
               <mat-expansion-panel
                 [expanded]="activeSettings() === 'change-password'"
                 (afterExpand)="updatePage('change-password')"
@@ -138,7 +141,7 @@
                       #currentPasswordForUpdate
                       fxFill
                       [isNew]="false"
-                      [label]="'Current password'"
+                      [label]="'user-profile.current-password' | transloco"
                     ></app-password-entry>
                     <app-password-entry
                       #newPasswordForUpdate

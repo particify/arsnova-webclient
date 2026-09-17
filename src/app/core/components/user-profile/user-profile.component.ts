@@ -59,6 +59,7 @@ import { MatCard } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatDivider } from '@angular/material/divider';
+import { ApiConfig } from '@app/core/models/api-config';
 
 @Component({
   selector: 'app-user-profile',
@@ -146,9 +147,17 @@ export class UserProfileComponent extends FormComponent {
     () => this.user()?.uiSettings?.rotateWordcloudItems ?? true
   );
 
-  // Route data input below
+  // Route data inputs below
   accountSettingsName = input<string>();
+  apiConfig = input<ApiConfig>();
+
   activeSettings = linkedSignal(() => this.accountSettingsName());
+  localAccountsEnabled = computed(
+    () =>
+      this.apiConfig()?.authenticationProviders.some(
+        (p) => p.id === 'user-db'
+      ) ?? false
+  );
 
   HintType = HintType;
 
