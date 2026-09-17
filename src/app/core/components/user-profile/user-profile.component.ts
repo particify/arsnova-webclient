@@ -36,6 +36,7 @@ import { A11yIntroPipe } from '@app/core/pipes/a11y-intro.pipe';
 import {
   CurrentUserWithSettingsGql,
   DeleteUserGql,
+  RequestUserPasswordSetupGql,
   UpdateUserMailAddressGql,
   UpdateUserPasswordGql,
   UpdateUserSettingsGql,
@@ -105,13 +106,15 @@ export class UserProfileComponent extends FormComponent {
   private updateUserSettings = inject(UpdateUserSettingsGql);
   private updateUserMail = inject(UpdateUserMailAddressGql);
   private updateUserPassword = inject(UpdateUserPasswordGql);
+  private requestUserPasswordSetup = inject(RequestUserPasswordSetupGql);
   private globalHintsService = inject(GlobalHintsService);
   private cooldownService = inject(CooldownService);
 
   private passwordForMailUpdate = viewChild.required<PasswordEntryComponent>(
     'passwordForMailUpdate'
   );
-  private currentPasswordForUpdate = viewChild.required<PasswordEntryComponent>(
+  // Not `required`: the field is absent while the account has no local password yet.
+  private currentPasswordForUpdate = viewChild<PasswordEntryComponent>(
     'currentPasswordForUpdate'
   );
   private newPasswordForUpdate = viewChild.required<PasswordEntryComponent>(
@@ -129,6 +132,7 @@ export class UserProfileComponent extends FormComponent {
 
   isLoading = computed(() => this.userResult()?.loading);
   verified = computed(() => this.user()?.verified);
+  localPasswordSet = computed(() => this.user()?.localPasswordSet ?? false);
   displayId = computed(() => this.user()?.displayId);
   mailAddress = linkedSignal(() => this.user()?.mailAddress);
   unverifiedMailAddress = linkedSignal(
@@ -311,13 +315,22 @@ export class UserProfileComponent extends FormComponent {
   }
 
   updatePassword() {
-    const oldPassword = this.currentPasswordForUpdate().getPassword();
-    if (!oldPassword) {
+    if (this.localPasswordSet()) {
+      this.changePassword();
+    } else {
+      this.requestPasswordSetup();
+    }
+  }
+
+  private changePassword() {
+    const currentPassword = this.currentPasswordForUpdate();
+    const oldPassword = currentPassword?.getPassword();
+    if (!currentPassword || !oldPassword) {
       const msg = this.translationService.translate(
         'user-profile.current-password-missing'
       );
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
-      this.currentPasswordForUpdate().passwordInput.nativeElement.focus();
+      currentPassword?.passwordInput.nativeElement.focus();
       return;
     }
     const newPassword = this.newPasswordForUpdate().getPassword();
@@ -340,7 +353,7 @@ export class UserProfileComponent extends FormComponent {
       .subscribe({
         next: () => {
           this.enableForm();
-          this.currentPasswordForUpdate().passwordFormControl.setValue('');
+          currentPassword.passwordFormControl.setValue('');
           this.newPasswordForUpdate().passwordFormControl.setValue('');
           this.newPasswordForUpdate().passwordFormControl.setErrors(null);
           const msg = this.translationService.translate(
@@ -363,5 +376,52 @@ export class UserProfileComponent extends FormComponent {
           });
         },
       });
+  }
+
+  /**
+   * Adds a local password to an account which was created through an external
+   * authentication provider. The password itself is set on the password reset
+   * page, using the verification code sent by this mutation.
+   */
+  private requestPasswordSetup() {
+    this.disableForm();
+    this.requestUserPasswordSetup.mutate().subscribe({
+      complete: () => this.enableForm(),
+      next: (r) => {
+        if (r.data?.requestUserPasswordSetup) {
+          const msg = this.translationService.translate(
+            'user-profile.password-setup-mail-sent'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+          this.router.navigate(['password-reset', this.mailAddress()]);
+        } else {
+          const msg = this.translationService.translate(
+            'password-reset.request-failed'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.FAILED
+          );
+        }
+      },
+      error: (e) => {
+        this.enableForm();
+        // The setup is refused for several distinct reasons which are of no use
+        // to the user, so they all share one message.
+        const failure = {
+          message: this.translationService.translate(
+            'password-reset.request-failed'
+          ),
+          type: AdvancedSnackBarTypes.FAILED,
+        };
+        this.notificationService.showOnRequestClientError(e, {
+          [ErrorClassification.BadRequest]: failure,
+          [ErrorClassification.Forbidden]: failure,
+        });
+      },
+    });
   }
 }

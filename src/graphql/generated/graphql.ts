@@ -252,6 +252,7 @@ export type Mutation = {
   pauseQna: Qna;
   rejectQnaPost: Post;
   requestUserPasswordReset?: Maybe<Scalars['Boolean']['output']>;
+  requestUserPasswordSetup?: Maybe<Scalars['Boolean']['output']>;
   resendVerificationMail?: Maybe<Scalars['Boolean']['output']>;
   resetUserPassword?: Maybe<User>;
   revokeRoomMembership: RoomMembership;
@@ -926,6 +927,7 @@ export type User = {
   displayName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   language?: Maybe<Scalars['String']['output']>;
+  localPasswordSet?: Maybe<Scalars['Boolean']['output']>;
   mailAddress?: Maybe<Scalars['String']['output']>;
   uiSettings?: Maybe<UserUiSettings>;
   unverifiedMailAddress?: Maybe<Scalars['String']['output']>;
@@ -2477,6 +2479,7 @@ export type CurrentUserWithSettingsQuery = {
     displayName?: string | null;
     mailAddress?: string | null;
     unverifiedMailAddress?: string | null;
+    localPasswordSet?: boolean | null;
     uiSettings?: {
       __typename?: 'UserUiSettings';
       contentAnswersDirectlyBelowChart?: boolean | null;
@@ -2564,6 +2567,15 @@ export type RequestUserPasswordResetMutationVariables = Exact<{
 export type RequestUserPasswordResetMutation = {
   __typename?: 'Mutation';
   requestUserPasswordReset?: boolean | null;
+};
+
+export type RequestUserPasswordSetupMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type RequestUserPasswordSetupMutation = {
+  __typename?: 'Mutation';
+  requestUserPasswordSetup?: boolean | null;
 };
 
 export type ResetUserPasswordMutationVariables = Exact<{
@@ -4695,6 +4707,7 @@ export const CurrentUserWithSettingsDocument = gql`
       displayName
       mailAddress
       unverifiedMailAddress
+      localPasswordSet
       uiSettings {
         contentAnswersDirectlyBelowChart
         contentVisualizationUnitPercent
@@ -4864,6 +4877,25 @@ export class RequestUserPasswordResetGql extends Apollo.Mutation<
   RequestUserPasswordResetMutationVariables
 > {
   document = RequestUserPasswordResetDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RequestUserPasswordSetupDocument = gql`
+  mutation RequestUserPasswordSetup {
+    requestUserPasswordSetup
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RequestUserPasswordSetupGql extends Apollo.Mutation<
+  RequestUserPasswordSetupMutation,
+  RequestUserPasswordSetupMutationVariables
+> {
+  document = RequestUserPasswordSetupDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

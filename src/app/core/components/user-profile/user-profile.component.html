@@ -43,7 +43,9 @@
                 {{ ('user-profile.username' | transloco) + ': ' + displayId() }}
               </p>
             }
-            @if (mailAddress() && localAccountsEnabled()) {
+            @if (
+              mailAddress() && localAccountsEnabled() && localPasswordSet()
+            ) {
               <mat-expansion-panel
                 [expanded]="activeSettings() === 'user'"
                 (afterExpand)="updatePage('user')"
@@ -109,6 +111,10 @@
               <mat-divider></mat-divider>
             }
             @if (mailAddress() && localAccountsEnabled()) {
+              @let passwordActionKey =
+                localPasswordSet()
+                  ? 'user-profile.change-password'
+                  : 'user-profile.set-password';
               <mat-expansion-panel
                 [expanded]="activeSettings() === 'change-password'"
                 (afterExpand)="updatePage('change-password')"
@@ -122,12 +128,13 @@
                       class="panel-header"
                     >
                       <mat-icon>key</mat-icon>
-                      <span>{{
-                        'user-profile.change-password' | transloco
-                      }}</span>
+                      <span>{{ passwordActionKey | transloco }}</span>
                     </div>
                     <span class="panel-subheader">{{
-                      'user-profile.set-new-password-for-account' | transloco
+                      (localPasswordSet()
+                        ? 'user-profile.set-new-password-for-account'
+                        : 'user-profile.set-password-for-account'
+                      ) | transloco
                     }}</span>
                   </div>
                 </mat-expansion-panel-header>
@@ -137,18 +144,25 @@
                   class="panel-content"
                 >
                   <div fxFill fxLayout="column" fxLayoutGap="20px">
-                    <app-password-entry
-                      #currentPasswordForUpdate
-                      fxFill
-                      [isNew]="false"
-                      [label]="'user-profile.current-password' | transloco"
-                    ></app-password-entry>
-                    <app-password-entry
-                      #newPasswordForUpdate
-                      fxFill
-                      [checkStrength]="true"
-                      [isNew]="true"
-                    ></app-password-entry>
+                    @if (localPasswordSet()) {
+                      <app-password-entry
+                        #currentPasswordForUpdate
+                        fxFill
+                        [isNew]="false"
+                        [label]="'user-profile.current-password' | transloco"
+                      ></app-password-entry>
+                      <app-password-entry
+                        #newPasswordForUpdate
+                        fxFill
+                        [checkStrength]="true"
+                        [isNew]="true"
+                      ></app-password-entry>
+                    } @else {
+                      <app-hint
+                        [text]="'user-profile.set-password-hint'"
+                        [type]="HintType.INFO"
+                      ></app-hint>
+                    }
                   </div>
                   <div fxFill fxLayout="row" fxLayoutAlign="end">
                     <button
@@ -156,7 +170,7 @@
                       [disabled]="formDisabled"
                       (click)="updatePassword()"
                     >
-                      {{ 'user-profile.change-password' | transloco }}
+                      {{ passwordActionKey | transloco }}
                     </button>
                   </div>
                 </form>
