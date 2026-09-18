@@ -33,6 +33,8 @@ import { BackButtonComponent } from '@app/standalone/back-button/back-button.com
 import { HttpHeaders } from '@angular/common/http';
 import { ChallengeService } from '@app/core/services/challenge.service';
 import { ResetUserPasswordGql } from '@gql/generated/graphql';
+import { AuthenticationService } from '@app/core/services/http/authentication.service';
+import { Apollo } from 'apollo-angular';
 
 export class PasswordResetErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -74,6 +76,8 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly challengeService = inject(ChallengeService);
   private readonly resetPassword = inject(ResetUserPasswordGql);
+  private readonly authenticationService = inject(AuthenticationService);
+  private readonly apollo = inject(Apollo);
 
   passwordEntry = viewChild.required(PasswordEntryComponent);
 
@@ -121,9 +125,7 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
                 msg,
                 AdvancedSnackBarTypes.SUCCESS
               );
-              this.router.navigateByUrl('login', {
-                state: { data: { username: this.email(), password: password } },
-              });
+              this.navigateAfterReset(password);
             } else {
               const msg = this.translationService.translate(
                 'password-reset.request-failed'
@@ -139,5 +141,25 @@ export class PasswordResetComponent extends FormComponent implements OnInit {
       const msg = this.translationService.translate('login.inputs-incorrect');
       this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
     }
+  }
+
+  /**
+   * The verification code mail is also used to add a password to an account
+   * which has none, so this page can be reached from an active session. Such a
+   * visitor returns to the account page instead of the login form, with the
+   * account query refetched because the mutation cannot report the new state of
+   * the password itself.
+   */
+  private navigateAfterReset(password: string) {
+    if (this.authenticationService.isLoggedIn()) {
+      this.apollo.client.refetchQueries({
+        include: ['CurrentUserWithSettings'],
+      });
+      this.router.navigateByUrl('account/change-password');
+      return;
+    }
+    this.router.navigateByUrl('login', {
+      state: { data: { username: this.email(), password: password } },
+    });
   }
 }

@@ -26,6 +26,7 @@ query CurrentUserWithSettings {
     displayName
     mailAddress
     unverifiedMailAddress
+    localPasswordSet
     uiSettings {
       contentAnswersDirectlyBelowChart
       contentVisualizationUnitPercent
@@ -94,6 +95,10 @@ mutation UpdateUserSettings(
 
 mutation RequestUserPasswordReset($mailAddress: String!) {
   requestUserPasswordReset(mailAddress: $mailAddress)
+}
+
+mutation RequestUserPasswordSetup {
+  requestUserPasswordSetup
 }
 
 mutation resetUserPassword(
