@@ -93,7 +93,7 @@
     "enable-leaderboard-info": "Les participant·es participent au quiz en utilisant un pseudonyme et peuvent se comparer dans un classement.",
     "copy-content-to-group": "Copier",
     "move-content-to-group": "Déplacer",
-    "copied-to-content-group": "Le contenu a été déplacé vers {{series}}.",
+    "copied-to-content-group": "Le contenu a été copié dans {{series}}.",
     "default-group": "Quiz",
     "more-options": "Plus d'options",
     "new-content-group": "Nouvelle série de questions",
@@ -252,7 +252,7 @@
     "mark-correct": "Marquer comme correct",
     "banish": "Retirer de la liste publique",
     "show-actions": "Afficher les options",
-    "comment-answered": "La réponse a été envoyée."
+    "comment-answered": "La réponse a été enregistrée."
   },
   "room-page": {
     "a11y-settings": "Navigue vers les paramètres dans lesquels vous pouvez gérer la salle, ses messages et ajouter des modérateurs ou des catégories.",

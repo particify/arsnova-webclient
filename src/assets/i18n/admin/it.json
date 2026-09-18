@@ -23,7 +23,7 @@
     "user-activated": "L'account è stato attivato.",
     "rooms": "Stanze",
     "room-management": "Gestione delle stanze",
-    "search-room": "Cerca una camera con il numero o l'ID della stanza",
+    "search-room": "Cerca {{count}} camere",
     "room-deleted": "La stanza è stata eliminata.",
     "transfer-room": "Stanza di trasferimento",
     "room-transferred": "La stanza è stata trasferita.",
@@ -141,9 +141,9 @@
     "more-data": "Altri dati",
     "indicator-value": "{{name}}: {{count}} – {{description}}",
     "summary-range": "Gli ultimi giorni dell'{{days}}",
-    "participants-description": "Utenti che sono entrati in una stanza negli ultimi {{days}} giorni",
+    "participants-description": "Utenti che hanno partecipato a una chat negli ultimi {{days}} giorni",
     "rooms-description": "Stanze create negli ultimi {{days}} giorni",
-    "managing-users-description": "Utenti che hanno creato una chat negli ultimi {{days}} giorni",
+    "managing-users-description": "Utenti che negli ultimi {{days}} giorni hanno ricoperto il ruolo di amministratore, redattore o moderatore di una chat",
     "active-rooms-description": "Stanze in cui almeno {{minMembers}} persone sono state attive negli ultimi {{minutes}} minuti"
   },
   "dialog": {

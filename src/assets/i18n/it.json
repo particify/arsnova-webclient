@@ -221,7 +221,11 @@
     "verify-now": "Verifica ora",
     "set-new-password-for-account": "Imposta una nuova password per il tuo conto.",
     "please-check-password": "Controlla la tua password.",
-    "password-changed": "La tua nuova password è stata impostata."
+    "password-changed": "La tua nuova password è stata impostata.",
+    "set-password": "Imposta password",
+    "set-password-for-account": "Non è necessario: puoi continuare ad accedere come fai adesso.",
+    "set-password-hint": "Qui puoi anche impostare una password separata, così potrai accedere direttamente senza dover effettuare il login da un sito esterno. Ti invieremo un’e-mail con un codice di verifica.",
+    "password-setup-mail-sent": "Ti abbiamo inviato un’e-mail con un codice di verifica."
   },
   "room-list": {
     "executive-moderator-role": "Moderatore",
@@ -259,7 +263,7 @@
     "didnt-get": "Non hai ricevuto un codice?",
     "reset-button": "Invia di nuovo",
     "a11y-key-input": "Inserisci il codice di verifica che hai ricevuto via e-mail.",
-    "activate": "Attiva",
+    "activate": "Verifica",
     "key": "Codice di verifica",
     "key-incorrect": "Il codice di verifica non è corretto.",
     "key-required": "Inserisci il codice di verifica.",

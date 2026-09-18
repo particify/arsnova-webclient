@@ -321,7 +321,11 @@
     "verify-new-mail-address": "Merci de vérifier ta nouvelle adresse e-mail.",
     "set-new-password-for-account": "Définis un nouveau mot de passe pour ton compte.",
     "verification-mail-has-been-sent": "Nous avons envoyé un e-mail à ta nouvelle adresse pour vérification.",
-    "new-mail-address-has-been-verified": "Ta nouvelle adresse e-mail a été vérifiée."
+    "new-mail-address-has-been-verified": "Ta nouvelle adresse e-mail a été vérifiée.",
+    "set-password": "Définir le mot de passe",
+    "set-password-for-account": "Pas nécessaire — tu peux continuer à te connecter comme tu le fais actuellement.",
+    "set-password-hint": "Tu peux aussi définir un mot de passe distinct ici, ce qui te permettra de te connecter directement sans passer par une page de connexion externe. On t'enverra un e-mail avec un code de vérification.",
+    "password-setup-mail-sent": "On t'a envoyé un e-mail avec un code de vérification."
   },
   "dialog": {
     "sure": "Es-tu sûr ?",

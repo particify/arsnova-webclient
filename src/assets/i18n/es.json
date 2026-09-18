@@ -189,7 +189,11 @@
     "you-have-changed-your-email-address": "Has cambiado tu dirección de correo electrónico a:",
     "set-new-password-for-account": "Establecer una nueva contraseña para tu cuenta.",
     "please-check-password": "Por favor, verifica tu contraseña.",
-    "password-changed": "Se ha establecido tu nueva contraseña."
+    "password-changed": "Se ha establecido tu nueva contraseña.",
+    "set-password": "Establecer contraseña",
+    "set-password-for-account": "No es necesario: puedes seguir iniciando sesión como lo haces ahora.",
+    "set-password-hint": "Aquí también puedes establecer una contraseña independiente, para que puedas iniciar sesión directamente sin tener que pasar por un inicio de sesión externo. Te enviaremos un correo electrónico con un código de verificación.",
+    "password-setup-mail-sent": "Te hemos enviado un correo con un código de verificación."
   },
   "room-list": {
     "a11y-join-room": "Ingresa a la sala {{room}} con el número {{id}} en el rol {{role}}.",
@@ -225,7 +229,7 @@
   },
   "user-activation": {
     "a11y-key-input": "Ingresa el código de verificación que recibiste por correo electrónico.",
-    "activate": "Activar",
+    "activate": "Verificar",
     "key": "Código de verificación",
     "key-incorrect": "El código de verificación es incorrecto.",
     "key-required": "Por favor, ingresa el código de verificación.",

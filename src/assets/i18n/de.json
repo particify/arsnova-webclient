@@ -229,7 +229,7 @@
   },
   "user-activation": {
     "a11y-key-input": "Gib hier den Verifizierungscode ein, den du per E-Mail zugesendet bekommen hast.",
-    "activate": "Aktivieren",
+    "activate": "Verifizieren",
     "key": "Verifizierungscode",
     "key-incorrect": "Verifizierungscode nicht korrekt.",
     "key-required": "Bitte gib einen Code ein.",

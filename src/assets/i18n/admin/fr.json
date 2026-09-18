@@ -140,10 +140,10 @@
     "active-rooms": "Salles actives",
     "more-data": "Plus de données",
     "summary-range": "Derniers jours de l'{{days}}",
-    "participants-description": "Utilisateurs qui ont rejoint une salle au cours des {{days}} derniers jours",
+    "participants-description": "Utilisateurs ayant participé à une salle au cours des {{days}} derniers jours",
     "rooms-description": "Salles créées au cours des {{days}} derniers jours",
     "indicator-value": "{{name}}: {{count}} – {{description}}",
-    "managing-users-description": "Utilisateurs ayant créé une salle au cours des {{days}} derniers jours",
+    "managing-users-description": "Utilisateurs ayant occupé les fonctions d'administrateur, de rédacteur ou de modérateur d'un salon de discussion au cours des {{days}} derniers jours",
     "active-rooms-description": "Salles dans lesquelles au moins {{minMembers}} personnes ont été actives au cours des {{minutes}} dernières minutes"
   },
   "dialog": {

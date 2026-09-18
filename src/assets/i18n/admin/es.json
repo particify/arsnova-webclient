@@ -139,12 +139,12 @@
     "more-data": "Más datos",
     "indicator-value": "{{name}}: {{count}} – {{description}}",
     "summary-range": "Los últimos {{days}} días",
-    "participants-description": "Usuarios que se han unido a una sala en los últimos {{days}} días",
+    "participants-description": "Usuarios que han participado en una sala en los últimos {{days}} días",
     "rooms-description": "Salas creadas en los últimos {{days}} días",
     "room-number": "Nº de Sala",
     "participants": "Participantes",
     "active-rooms-description": "Salas en las que al menos {{minMembers}} personas han estado activas en los últimos {{minutes}} minutos",
-    "managing-users-description": "Usuarios que han creado una sala en los últimos {{days}} días"
+    "managing-users-description": "Usuarios que han desempeñado funciones de administrador, editor o moderador de una sala en los últimos {{days}} días"
   },
   "dialog": {
     "really-delete-account-admin": "¿Deseas eliminar irrevocablemente esta cuenta con todas las salas?",
