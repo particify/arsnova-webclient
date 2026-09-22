@@ -79,8 +79,7 @@ export abstract class AbstractHttpService<T> {
     body?: T | Omit<T, 'id'>,
     options: Omit<HttpOptions, 'body'> = {}
   ): Observable<U> {
-    (options as HttpOptions).body = body;
-    return this.performGenericRequest(method, uri, options);
+    return this.performGenericRequest(method, uri, { ...options, body });
   }
 
   protected performGenericRequest<U>(

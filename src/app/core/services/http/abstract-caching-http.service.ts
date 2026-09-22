@@ -53,8 +53,7 @@ export abstract class AbstractCachingHttpService<
     body?: T | Omit<T, 'id'>,
     options: Omit<HttpOptions, 'body'> = {}
   ): Observable<U> {
-    (options as HttpOptions).body = body;
-    const key = this.generateRequestKey(method, uri, options);
+    const key = this.generateRequestKey(method, uri, { ...options, body });
     if (this.inflightRequests.has(key)) {
       return this.inflightRequests.get(key) as Observable<U>;
     }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { TextAnswer } from '@app/core/models/text-answer';
-import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AbstractEntityService } from './abstract-entity.service';
@@ -12,10 +11,6 @@ import { NumericAnswer } from '@app/core/models/numeric-answer';
 import { AnswerResultType } from '@app/core/models/answer-result';
 import { AnswerResponse } from '@app/core/models/answer-response';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-};
-
 @Injectable()
 export class ContentAnswerService extends AbstractEntityService<Answer> {
   constructor() {
@@ -25,14 +20,10 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
   getAnswers(roomId: string, contentId: string): Observable<TextAnswer[]> {
     const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http
-      .post<TextAnswer[]>(
-        url,
-        {
-          properties: { contentId: contentId },
-          externalFilters: {},
-        },
-        httpOptions
-      )
+      .post<TextAnswer[]>(url, {
+        properties: { contentId: contentId },
+        externalFilters: {},
+      })
       .pipe(catchError(this.handleError('getAnswers', [])));
   }
 
@@ -43,19 +34,15 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
   ): Observable<Answer[]> {
     const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http
-      .post<Answer[]>(
-        url,
-        {
-          properties: {
-            creatorId: userId.replaceAll('-', ''),
-            round: -1,
-          },
-          externalFilters: {
-            contentIds: contentIds,
-          },
+      .post<Answer[]>(url, {
+        properties: {
+          creatorId: userId.replaceAll('-', ''),
+          round: -1,
         },
-        httpOptions
-      )
+        externalFilters: {
+          contentIds: contentIds,
+        },
+      })
       .pipe(
         catchError(this.handleError<Answer[]>('getAnswersByUserIdContentIds'))
       );
@@ -68,17 +55,13 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
   ): Observable<ChoiceAnswer> {
     const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http
-      .post<ChoiceAnswer[]>(
-        url,
-        {
-          properties: {
-            contentId: contentId,
-            creatorId: userId.replaceAll('-', ''),
-          },
-          externalFilters: {},
+      .post<ChoiceAnswer[]>(url, {
+        properties: {
+          contentId: contentId,
+          creatorId: userId.replaceAll('-', ''),
         },
-        httpOptions
-      )
+        externalFilters: {},
+      })
       .pipe(
         map((list) => list[0]),
         catchError(
@@ -96,17 +79,13 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
   ): Observable<TextAnswer> {
     const url = this.buildUri(this.apiUrl.find, roomId);
     return this.http
-      .post<TextAnswer[]>(
-        url,
-        {
-          properties: {
-            contentId: contentId,
-            creatorId: userId.replaceAll('-', ''),
-          },
-          externalFilters: {},
+      .post<TextAnswer[]>(url, {
+        properties: {
+          contentId: contentId,
+          creatorId: userId.replaceAll('-', ''),
         },
-        httpOptions
-      )
+        externalFilters: {},
+      })
       .pipe(
         map((list) => list[0]),
         catchError(
@@ -122,12 +101,9 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     answerText: TextAnswer
   ): Observable<TextAnswer> {
     const url = this.buildUri('/', roomId);
-    return this.requestOnce<TextAnswer>(
-      'POST',
-      url,
-      answerText,
-      httpOptions
-    ).pipe(catchError(this.handleError<TextAnswer>('addTextAnswer')));
+    return this.requestOnce<TextAnswer>('POST', url, answerText).pipe(
+      catchError(this.handleError<TextAnswer>('addTextAnswer'))
+    );
   }
 
   addAnswerChoice(
@@ -135,12 +111,9 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     answerChoice: ChoiceAnswer
   ): Observable<ChoiceAnswer> {
     const url = this.buildUri('/', roomId);
-    return this.requestOnce<ChoiceAnswer>(
-      'POST',
-      url,
-      answerChoice,
-      httpOptions
-    ).pipe(catchError(this.handleError<ChoiceAnswer>('addChoiceAnswer')));
+    return this.requestOnce<ChoiceAnswer>('POST', url, answerChoice).pipe(
+      catchError(this.handleError<ChoiceAnswer>('addChoiceAnswer'))
+    );
   }
 
   addAnswerPrioritization(
@@ -148,12 +121,7 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     answer: PrioritizationAnswer
   ): Observable<PrioritizationAnswer> {
     const url = this.buildUri('/', roomId);
-    return this.requestOnce<PrioritizationAnswer>(
-      'POST',
-      url,
-      answer,
-      httpOptions
-    ).pipe(
+    return this.requestOnce<PrioritizationAnswer>('POST', url, answer).pipe(
       catchError(
         this.handleError<PrioritizationAnswer>('addAnswerPrioritization')
       )
@@ -165,17 +133,14 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
     answer: NumericAnswer
   ): Observable<NumericAnswer> {
     const url = this.buildUri('/', roomId);
-    return this.requestOnce<NumericAnswer>(
-      'POST',
-      url,
-      answer,
-      httpOptions
-    ).pipe(catchError(this.handleError<NumericAnswer>('addAnswerNumeric')));
+    return this.requestOnce<NumericAnswer>('POST', url, answer).pipe(
+      catchError(this.handleError<NumericAnswer>('addAnswerNumeric'))
+    );
   }
 
   addAnswer<T extends Answer>(roomId: string, answer: T): Observable<T> {
     const url = this.buildUri('/', roomId);
-    return this.requestOnce<T>('POST', url, answer, httpOptions).pipe(
+    return this.requestOnce<T>('POST', url, answer).pipe(
       catchError(this.handleError<T>('addAnswer'))
     );
   }
@@ -186,7 +151,7 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
   ): Observable<AnswerResponse<R>> {
     const url = this.buildUri('/check-result', roomId);
     return this.http
-      .post<AnswerResponse<R>>(url, answer, httpOptions)
+      .post<AnswerResponse<R>>(url, answer)
       .pipe(
         catchError(
           this.handleError<AnswerResponse<R>>('addAnswerAndCheckResult')
@@ -209,21 +174,21 @@ export class ContentAnswerService extends AbstractEntityService<Answer> {
   deleteAnswerText(roomId: string, id: string): Observable<TextAnswer> {
     const url = this.buildUri(`/${id}`, roomId);
     return this.http
-      .delete<TextAnswer>(url, httpOptions)
+      .delete<TextAnswer>(url)
       .pipe(catchError(this.handleError<TextAnswer>('deleteTextAnswer')));
   }
 
   deleteAnswerChoice(roomId: string, id: string): Observable<ChoiceAnswer> {
     const url = this.buildUri(`/${id}`, roomId);
     return this.http
-      .delete<ChoiceAnswer>(url, httpOptions)
+      .delete<ChoiceAnswer>(url)
       .pipe(catchError(this.handleError<ChoiceAnswer>('deleteChoiceAnswer')));
   }
 
   hideAnswerText(roomId: string, id: string): Observable<void> {
     const url = this.buildUri(`/${id}/hide`, roomId);
     return this.http
-      .post<void>(url, null, httpOptions)
+      .post<void>(url, null)
       .pipe(catchError(this.handleError<void>('hideAnswer')));
   }
 
