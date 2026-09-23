@@ -3,6 +3,7 @@ import { Locator, Page } from '@playwright/test';
 export class RoomSettingsPage {
   private readonly deleteRoomButton: Locator;
   private readonly confirmDeleteRoomButton: Locator;
+  private readonly focusModeToggle: Locator;
 
   constructor(
     public readonly page: Page,
@@ -10,6 +11,7 @@ export class RoomSettingsPage {
   ) {
     this.deleteRoomButton = page.getByText('delete room');
     this.confirmDeleteRoomButton = page.getByText('Delete', { exact: true });
+    this.focusModeToggle = page.getByLabel('guide the participants');
   }
 
   async goto(shortId: string) {
@@ -63,8 +65,33 @@ export class RoomSettingsPage {
   }
 
   async toggleFocusMode() {
-    await this.page.getByLabel('guide the participants').click();
+    await this.focusModeToggle.click();
     await this.saveSettings();
+  }
+
+  getFocusModeToggle() {
+    return this.focusModeToggle;
+  }
+
+  async enableFocusMode() {
+    await Promise.all([
+      this.page.waitForResponse(
+        (res) =>
+          !!res.request().postData()?.includes('UpdateRoomFocusMode') &&
+          res.ok()
+      ),
+      this.focusModeToggle.click(),
+    ]);
+  }
+
+  async saveRoomDetails() {
+    await Promise.all([
+      this.page.waitForResponse(
+        (res) =>
+          !!res.request().postData()?.includes('UpdateRoomDetails') && res.ok()
+      ),
+      this.page.getByRole('button', { name: 'save' }).click(),
+    ]);
   }
 
   async goToCommentSettings() {
