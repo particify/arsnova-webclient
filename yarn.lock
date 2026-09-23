@@ -2882,10 +2882,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/material-symbols-outlined@npm:5.3.6":
-  version: 5.3.6
-  resolution: "@fontsource/material-symbols-outlined@npm:5.3.6"
-  checksum: 10c0/8b4184aa226b5ef1bc681f00e9fb27dc38a65727dcc89827cd09dde438f05767865a72ca73887f7d8b259a66afe81baea12a42ff8bdcb5f8d81e58f88176f0dd
+"@fontsource/material-symbols-outlined@npm:5.3.7":
+  version: 5.3.7
+  resolution: "@fontsource/material-symbols-outlined@npm:5.3.7"
+  checksum: 10c0/664313fb0f6fd0bde6ded050aed4bc579e4d648d4c4d8bd8f150b7bff3bf1cd7dc0a5c15518a15f72a01e88fb00513379381d8b1810b77e0bcfdc4de8ef3bd7b
   languageName: node
   linkType: hard
 
@@ -8311,7 +8311,7 @@ __metadata:
     "@angular/service-worker": "npm:22.1.7"
     "@apollo/client": "npm:4.3.1"
     "@eslint/js": "npm:10.0.1"
-    "@fontsource/material-symbols-outlined": "npm:5.3.6"
+    "@fontsource/material-symbols-outlined": "npm:5.3.7"
     "@fontsource/roboto": "npm:5.3.0"
     "@graphql-codegen/cli": "npm:6.3.1"
     "@graphql-codegen/introspection": "npm:5.0.2"
