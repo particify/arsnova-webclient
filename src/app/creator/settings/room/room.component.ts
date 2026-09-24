@@ -44,6 +44,7 @@ import {
   RoomByIdDocument,
   RoomByShortIdDocument,
   RoomByShortIdGql,
+  RoomByShortIdQuery,
   UpdateRoomDetailsGql,
   UpdateRoomFocusModeGql,
 } from '@gql/generated/graphql';
@@ -160,26 +161,35 @@ export class RoomComponent extends FormComponent implements AfterViewInit {
             languageCode: this.language(),
           },
           update: (cache) => {
-            const room = { ...this.room() };
-            if (room) {
-              room.name = name;
-              room.description = this.description() ?? '';
-              room.language = this.language() ?? null;
-              cache.writeQuery({
-                query: RoomByIdDocument,
-                variables: { id: room.id },
-                data: {
-                  roomById: room,
-                },
-              });
-              cache.writeQuery({
+            const cached = (
+              cache.readQuery({
                 query: RoomByShortIdDocument,
-                variables: { shortId: room.shortId },
-                data: {
-                  roomByShortId: room,
-                },
-              });
+                variables: { shortId: this.shortId() },
+              }) as RoomByShortIdQuery | null
+            )?.roomByShortId;
+            if (!cached) {
+              return;
             }
+            const room = {
+              ...cached,
+              name: name,
+              description: this.description() ?? '',
+              language: this.language() ?? null,
+            };
+            cache.writeQuery({
+              query: RoomByIdDocument,
+              variables: { id: room.id },
+              data: {
+                roomById: room,
+              },
+            });
+            cache.writeQuery({
+              query: RoomByShortIdDocument,
+              variables: { shortId: room.shortId },
+              data: {
+                roomByShortId: room,
+              },
+            });
           },
         })
         .subscribe({
