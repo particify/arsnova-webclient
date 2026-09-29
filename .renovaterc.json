@@ -16,6 +16,12 @@
       "enabled": false
     },
     {
+      "description": "jasmine-core 6.x is the final version supporting Karma and zone.js",
+      "matchPackageNames": ["jasmine-core"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
       "matchPackageNames": [
         "ng-packagr",
         "typescript",
