@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { RegistrationPage } from '@e2e/fixtures/shared/registration';
+import { RoomListPage } from '@e2e/fixtures/shared/room-list';
 
 test.describe('registration', () => {
   test('register via direct entry', async ({ page }) => {
@@ -24,6 +26,20 @@ test.describe('registration', () => {
     await expect(page.getByText('verify your e-mail address')).toBeVisible();
     await page.getByRole('button', { name: 'verify e-mail' }).click();
     await expect(page.getByLabel('verification code')).toBeVisible();
+  });
+
+  test('show an empty room list after registration', async ({ page }) => {
+    const registration = new RegistrationPage(page);
+    const roomList = new RoomListPage(page);
+    // A unique address keeps this test independent of the one above and of
+    // earlier runs against the same backend.
+    await registration.register(
+      `registration-${Date.now()}@test.de`,
+      'Test1234?'
+    );
+    await registration.cancelVerification();
+    await expect(roomList.getNoRoomsHint()).toBeVisible();
+    await expect(roomList.getErrorMessage()).toBeHidden();
   });
 
   test('navigate to login', async ({ page }) => {

@@ -23,7 +23,8 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { CurrentUserGql } from '@gql/generated/graphql';
 import { MockRouter } from '@testing/test-helpers';
 import { configureTestModule } from '@testing/test.setup';
-import { NEVER, of } from 'rxjs';
+import { Apollo } from 'apollo-angular';
+import { Subject, of } from 'rxjs';
 
 const REFRESH_URI = '/api/auth/refresh';
 const LOGOUT_URI = '/api/auth/logout';
@@ -48,11 +49,18 @@ class MockGlobalStorageService {
   }
 }
 
+interface CurrentUserResult {
+  dataState: 'complete';
+  data: { currentUser: { id: string; verified: boolean } };
+}
+
 @Injectable()
 class MockCurrentUserGql {
+  readonly valueChanges = new Subject<CurrentUserResult>();
+
   watch() {
     return {
-      valueChanges: NEVER,
+      valueChanges: this.valueChanges,
       refetch: () => Promise.resolve(),
     };
   }
@@ -64,6 +72,8 @@ describe('AuthenticationService', () => {
   let notificationService: jasmine.SpyObj<NotificationService>;
   let routingService: jasmine.SpyObj<RoutingService>;
   let router: MockRouter;
+  let currentUserGql: MockCurrentUserGql;
+  let apollo: Apollo;
   let service: AuthenticationService;
 
   /**
@@ -117,6 +127,10 @@ describe('AuthenticationService', () => {
     );
     httpTestingController = testBed.inject(HttpTestingController);
     router = testBed.inject(Router) as unknown as MockRouter;
+    currentUserGql = testBed.inject(
+      CurrentUserGql
+    ) as unknown as MockCurrentUserGql;
+    apollo = testBed.inject(Apollo);
     service = testBed.inject(AuthenticationService);
   };
 
@@ -308,6 +322,39 @@ describe('AuthenticationService', () => {
       expect(globalStorageService.getItem(STORAGE_KEYS.USER)).toBeUndefined();
       expectNoRedirectToLogin();
     });
+  });
+
+  describe('store reset', () => {
+    const emitCurrentUser = (id: string, verified = true) =>
+      currentUserGql.valueChanges.next({
+        dataState: 'complete',
+        data: { currentUser: { id, verified } },
+      });
+
+    it('should clear the store only if the authenticated user changes', fakeAsync(() => {
+      const clearStore = spyOn(apollo.client, 'clearStore').and.resolveTo([]);
+      service.init();
+      flushMicrotasks();
+      expect(clearStore).toHaveBeenCalledTimes(1);
+
+      service.refreshAndReloadUser().subscribe();
+      httpTestingController
+        .expectOne({ url: REFRESH_URI, method: 'POST' })
+        .flush({ accessToken: ACCESS_TOKEN });
+      emitCurrentUser(USER.userId, false);
+      emitCurrentUser(USER.userId, true);
+      expect(clearStore).toHaveBeenCalledTimes(1);
+
+      emitCurrentUser('other-user-id');
+      expect(clearStore).toHaveBeenCalledTimes(2);
+
+      service.logout();
+      httpTestingController
+        .expectOne({ url: LOGOUT_URI, method: 'POST' })
+        .flush(null);
+      expect(clearStore).toHaveBeenCalledTimes(3);
+      discardPeriodicTasks();
+    }));
   });
 
   describe('periodic refresh', () => {

@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import {
   catchError,
   concatMap,
+  distinctUntilChanged,
   filter,
   first,
   map,
@@ -125,12 +126,18 @@ export class AuthenticationService extends AbstractHttpService<AuthenticatedUser
    */
   init() {
     this.migrateLegacyGuestToken();
-    this.getAuthenticatedUserChanges().subscribe((auth) => {
-      if (!environment.production) {
-        console.log('Authenticated user changed', auth);
-      }
-      this.apollo?.client.clearStore();
-    });
+    this.getAuthenticatedUserChanges()
+      .pipe(
+        // Refetches of the current user must not clear the store because it
+        // cancels queries which are still in flight.
+        distinctUntilChanged((prev, curr) => prev?.userId === curr?.userId)
+      )
+      .subscribe((auth) => {
+        if (!environment.production) {
+          console.log('Authenticated user changed', auth);
+        }
+        this.apollo?.client.clearStore();
+      });
     this.authenticatedUser$.subscribe((au) => {
       if (au) {
         this.globalStorageService.setItem(STORAGE_KEYS.USER, au);
