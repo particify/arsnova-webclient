@@ -60,6 +60,8 @@ test.describe('participant answer survey', () => {
     await participant.answerContent(['answer 2']);
     await expect(participant.getHintAfterAnswering()).toBeVisible();
     await expect(participant.getCorrectStateIcon('correct')).toBeHidden();
+    // Without a correct answer, nothing is right or wrong.
+    await expect(participant.getCorrectStateIcon('wrong')).toBeHidden();
   });
 
   test('abstain on choice content', async ({ browser, baseURL }) => {

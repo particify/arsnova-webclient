@@ -14,35 +14,68 @@ export default {
 
 type Story = StoryObj<CountdownTimerComponent>;
 
-const endDate10 = new Date();
-endDate10.setSeconds(endDate10.getSeconds() + 10);
-
-const endDate60 = new Date();
-endDate60.setSeconds(endDate60.getSeconds() + 60);
-
-const endDate90 = new Date();
-endDate90.setSeconds(endDate90.getSeconds() + 90);
+/** Counts down from the moment the story renders, not from when it was loaded. */
+function startingNow(seconds: number): Story['render'] {
+  return (args) => ({
+    props: { ...args, endDate: new Date(Date.now() + seconds * 1000) },
+  });
+}
 
 export const Timer10: Story = {
   args: {
-    endDate: endDate10,
     duration: 10,
     showIcon: true,
   },
+  render: startingNow(10),
 };
 
 export const Timer60: Story = {
   args: {
-    endDate: endDate60,
     duration: 60,
     showIcon: true,
   },
+  render: startingNow(60),
 };
 
 export const Timer90: Story = {
   args: {
-    endDate: endDate90,
     duration: 90,
     showIcon: true,
   },
+  render: startingNow(90),
+};
+
+export const RunningOut: Story = {
+  args: {
+    duration: 60,
+    showIcon: true,
+  },
+  render: startingNow(5),
+};
+
+export const Presentation: Story = {
+  args: {
+    duration: 60,
+    showIcon: true,
+    layout: 'column-reverse',
+    bigFontSize: true,
+  },
+  render: startingNow(60),
+};
+
+export const Participant: Story = {
+  args: {
+    duration: 60,
+    borderRadius: 3,
+  },
+  render: startingNow(60),
+};
+
+export const ContentList: Story = {
+  args: {
+    duration: 60,
+    showProgressBar: false,
+    fontSize: '12px',
+  },
+  render: startingNow(60),
 };
