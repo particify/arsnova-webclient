@@ -107,3 +107,26 @@ export const ContentPreviewWordcloud: Story = {
     contentFormatData: wordcloudContentFormatData,
   },
 };
+
+export const ContentPreviewFlashcard: Story = {
+  args: {
+    ...baseArgs,
+    body: 'What is the capital of **Australia**?',
+    contentFormatData: {
+      __typename: 'FlashcardContentFormatData',
+      format: ContentType.Flashcard,
+      answer: 'Canberra, not Sydney.',
+    },
+  },
+};
+
+export const ContentPreviewSlide: Story = {
+  args: {
+    ...baseArgs,
+    body: '## Welcome\n\nA slide shows its body only.',
+    contentFormatData: {
+      __typename: 'SlideContentFormatData',
+      format: ContentType.Slide,
+    },
+  },
+};
