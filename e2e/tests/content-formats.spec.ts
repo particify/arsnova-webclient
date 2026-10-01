@@ -162,4 +162,63 @@ test.describe('content formats', () => {
       await expect(participant.getHintAfterAbstaining()).toBeVisible();
     });
   });
+
+  test.describe('short answer', () => {
+    test.beforeEach(async ({ page, baseURL }) => {
+      await createSeries(page, baseURL, 'Quiz');
+      await contentCreation.createShortAnswerContent(
+        'My short answer content',
+        ['abc']
+      );
+    });
+
+    test('a matching term is correct and the terms are shown', async ({
+      browser,
+      baseURL,
+    }) => {
+      await publish();
+      const participant = await join(browser, baseURL);
+      await participant.answerTextContent('abc');
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await expect(
+        participant.page.getByTestId('text-answer-correct')
+      ).toBeVisible();
+      await expect(
+        participant.page.getByTestId('short-answer-correct-terms')
+      ).toContainText('abc');
+      await expectAnswerCount(1);
+    });
+
+    test('another term is wrong', async ({ browser, baseURL }) => {
+      await publish();
+      const participant = await join(browser, baseURL);
+      await participant.answerTextContent('xyz');
+      await expect(
+        participant.page.getByTestId('text-answer-wrong')
+      ).toBeVisible();
+    });
+
+    test('the terms are withheld until correct answers are published', async ({
+      browser,
+      baseURL,
+    }) => {
+      await publish({ correctAnswers: false });
+      const participant = await join(browser, baseURL);
+      await participant.answerTextContent('abc');
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await expect(
+        participant.page.getByTestId('short-answer-correct-terms')
+      ).toBeHidden();
+      await expect(
+        participant.page.getByTestId('text-answer-correct')
+      ).toBeHidden();
+    });
+
+    test('a participant can abstain', async ({ browser, baseURL }) => {
+      await publish();
+      const participant = await join(browser, baseURL);
+      await participant.answerTextContent();
+      await expect(participant.getHintAfterAbstaining()).toBeVisible();
+    });
+  });
 });

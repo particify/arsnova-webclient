@@ -29,3 +29,21 @@ export const SingleLine: Story = {
     minRows: 1,
   },
 };
+
+export const Correct: Story = {
+  args: {
+    answer: 'Paris',
+    correct: true,
+    disabled: true,
+    minRows: 1,
+  },
+};
+
+export const Wrong: Story = {
+  args: {
+    answer: 'Lyon',
+    correct: false,
+    disabled: true,
+    minRows: 1,
+  },
+};

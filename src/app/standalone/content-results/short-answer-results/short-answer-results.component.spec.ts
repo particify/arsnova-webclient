@@ -1,11 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer-grid-list.component';
+import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import {
+  BanQuestionnaireShortAnswerContentKeywordGql,
   ContentType,
   QuestionnaireShortAnswerRoundStatsByRoundIdGql,
   QuestionnaireShortAnswerRoundStatsUpdatedGql,
@@ -45,10 +49,14 @@ describe('ShortAnswerResultsComponent', () => {
   let statsByRoundId: jasmine.SpyObj<QuestionnaireShortAnswerRoundStatsByRoundIdGql>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
+  let banKeyword: jasmine.SpyObj<BanQuestionnaireShortAnswerContentKeywordGql>;
+  let dialogService: jasmine.SpyObj<DialogService>;
+  let notificationService: jasmine.SpyObj<NotificationService>;
 
   interface SetUpOptions {
     stats?: ShortAnswerContentRoundStats | null;
     contentFormatData?: ShortAnswerContentFormatData;
+    dialogResult?: unknown;
   }
 
   function setUp(options: SetUpOptions = {}) {
@@ -64,6 +72,18 @@ describe('ShortAnswerResultsComponent', () => {
     } as never);
 
     statsUpdated = new Subject<unknown>();
+    banKeyword = jasmine.createSpyObj(
+      'BanQuestionnaireShortAnswerContentKeywordGql',
+      ['mutate']
+    );
+    banKeyword.mutate.and.returnValue(of({}) as never);
+    dialogService = jasmine.createSpyObj('DialogService', ['openDeleteDialog']);
+    dialogService.openDeleteDialog.and.returnValue({
+      afterClosed: () => of(options.dialogResult ?? true),
+    } as never);
+    notificationService = jasmine.createSpyObj('NotificationService', [
+      'showAdvanced',
+    ]);
 
     configureTestModule(
       [getTranslocoModule(), ShortAnswerResultsComponent],
@@ -76,6 +96,12 @@ describe('ShortAnswerResultsComponent', () => {
           provide: QuestionnaireShortAnswerRoundStatsUpdatedGql,
           useValue: { subscribe: () => statsUpdated.asObservable() },
         },
+        {
+          provide: BanQuestionnaireShortAnswerContentKeywordGql,
+          useValue: banKeyword,
+        },
+        { provide: DialogService, useValue: dialogService },
+        { provide: NotificationService, useValue: notificationService },
       ]
     ).compileComponents();
 
@@ -85,8 +111,20 @@ describe('ShortAnswerResultsComponent', () => {
       'formatData',
       options.contentFormatData ?? formatData()
     );
+    fixture.componentRef.setInput('contentId', 'content-1');
     fixture.componentRef.setInput('roundIds', ['round-1']);
     fixture.detectChanges();
+  }
+
+  function answerList(): AnswerListComponent | undefined {
+    return fixture.debugElement.query(By.directive(AnswerListComponent))
+      ?.componentInstance;
+  }
+
+  function banButtons(): HTMLElement[] {
+    return fixture.debugElement
+      .queryAll(By.css('.delete-button'))
+      .map((element) => element.nativeElement);
   }
 
   function grid(): AnswerGridListComponent | undefined {
@@ -199,6 +237,69 @@ describe('ShortAnswerResultsComponent', () => {
     fixture.detectChanges();
     expect(correctIndicators().length).toBe(2);
     expect(summary()?.show()).toBe(true);
+  });
+
+  it('offers no banning without moderation rights', () => {
+    setUp();
+    expect(answerList()).toBeUndefined();
+    expect(banButtons().length).toBe(0);
+  });
+
+  it('lists the answers with ban buttons where answers may be moderated', () => {
+    setUp();
+    fixture.componentRef.setInput('allowAnswerModeration', true);
+    fixture.detectChanges();
+
+    expect(grid()).toBeUndefined();
+    expect(answerList()?.banMode).toBe(true);
+    expect(answerList()?.correctAnswers).toEqual(['Kotlin', 'Java']);
+    expect(banButtons().length).toBeGreaterThan(0);
+  });
+
+  it('offers no banning in presentation', () => {
+    setUp();
+    fixture.componentRef.setInput('allowAnswerModeration', true);
+    fixture.componentRef.setInput('isPresentation', true);
+    fixture.detectChanges();
+
+    expect(answerList()).toBeUndefined();
+    expect(grid()).toBeDefined();
+  });
+
+  it('bans an answer of the content once confirmed', () => {
+    setUp();
+
+    component.banAnswer('Scala');
+
+    const [, , keyword, , confirmAction] =
+      dialogService.openDeleteDialog.calls.mostRecent().args;
+    expect(keyword).toBe('Scala');
+    (confirmAction as () => Observable<unknown>)().subscribe();
+    expect(banKeyword.mutate).toHaveBeenCalledWith({
+      variables: { contentId: 'content-1', keyword: 'Scala' },
+    });
+    expect(notificationService.showAdvanced).toHaveBeenCalled();
+  });
+
+  it('does not report a ban that was cancelled', () => {
+    setUp({ dialogResult: false });
+
+    component.banAnswer('Scala');
+
+    expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+  });
+
+  it('bans the answer whose button was clicked', () => {
+    setUp();
+    fixture.componentRef.setInput('allowAnswerModeration', true);
+    fixture.detectChanges();
+
+    banButtons()[0].click();
+
+    expect(dialogService.openDeleteDialog.calls.mostRecent().args[2]).toBe(
+      answerList()?.answers.find((a) => !answerList()?.isCorrect(a.answer))
+        ?.answer
+    );
   });
 
   it('merges live subscription emissions into the grid', () => {
