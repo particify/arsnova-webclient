@@ -41,3 +41,28 @@ export const ContentPrioritizationAnswer: Story = {
     disabled: false,
   },
 };
+
+export const Unassigned: Story = {
+  args: {
+    answerOptions: answerOptions,
+    assignablePoints: 100,
+    assignedPoints: [],
+  },
+};
+
+export const OverBudget: Story = {
+  args: {
+    answerOptions: answerOptions,
+    assignablePoints: 100,
+    assignedPoints: [60, 40, 20, 0],
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    answerOptions: answerOptions,
+    assignablePoints: 100,
+    assignedPoints: [40, 30, 20, 10],
+    disabled: true,
+  },
+};

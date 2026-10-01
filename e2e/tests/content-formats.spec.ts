@@ -310,4 +310,39 @@ test.describe('content formats', () => {
       }
     });
   });
+
+  test.describe('prioritization', () => {
+    test.beforeEach(async ({ page, baseURL }) => {
+      await createSeries(page, baseURL, 'Survey');
+      await contentCreation.createPrioritizationContent(
+        'My prioritization content',
+        ['More exercises', 'Shorter lectures', 'Recorded sessions']
+      );
+      await publish();
+    });
+
+    test('distributed points reach the creator, ranked', async ({
+      browser,
+      baseURL,
+    }) => {
+      const participant = await join(browser, baseURL);
+      await participant.answerPrioritizationContent([20, 30, 50]);
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await creatorPage
+        .getByRole('button', { name: /My prioritization content/ })
+        .click();
+      await expect(creatorPage.getByTestId('bar-value')).toHaveText([
+        '50',
+        '30',
+        '20',
+      ]);
+    });
+
+    test('points must add up to the budget', async ({ browser, baseURL }) => {
+      const participant = await join(browser, baseURL);
+      await participant.answerPrioritizationContent([20, 30, 10]);
+      await expect(participant.getHintAfterAnswering()).toBeHidden();
+      await expect(participant.getSubmitButton()).toBeEnabled();
+    });
+  });
 });

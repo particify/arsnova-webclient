@@ -131,6 +131,21 @@ export const ContentPreviewSlide: Story = {
   },
 };
 
+export const ContentPreviewPrioritization: Story = {
+  args: {
+    ...baseArgs,
+    contentFormatData: {
+      __typename: 'PrioritizationContentFormatData',
+      format: ContentType.Prioritization,
+      assignablePoints: 100,
+      options: [
+        { __typename: 'AnswerOption', label: 'More exercises' },
+        { __typename: 'AnswerOption', label: 'Shorter lectures' },
+      ],
+    },
+  },
+};
+
 export const ContentPreviewShortAnswer: Story = {
   args: {
     ...baseArgs,
