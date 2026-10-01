@@ -1,3 +1,4 @@
+@use 'sass:meta';
 @use 'angular-material-css-vars' as mat-css-vars;
 @use '@angular/material' as mat;
 @use 'app/core/theme/app-theme';
@@ -901,6 +902,27 @@ mat-card {
   strong {
     font-weight: $font-weight-extra-bold;
   }
+}
+
+.theme-dark {
+  --code-block-background: #272822;
+
+  @include meta.load-css('prismjs/themes/prism-okaidia');
+}
+
+.theme-light {
+  --code-block-background: #f5f2f0;
+
+  @include meta.load-css('prismjs/themes/prism');
+}
+
+// markdown-it-prism >= 4 sets the language class only on <code>, which the Prism themes do not style as a block
+pre:has(> code[class*='language-']) {
+  background: var(--code-block-background);
+  border-radius: 0.3em;
+  margin: 0.5em 0;
+  overflow: auto;
+  padding: 1em;
 }
 
 app-rendered-text:not(.rendered-list-preview-container, .no-full-width) {
