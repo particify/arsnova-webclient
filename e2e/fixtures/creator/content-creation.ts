@@ -201,6 +201,14 @@ export class ContentCreationPage {
     await this.submitContent();
   }
 
+  /** Applies to the content created next; the form keeps the value until then. */
+  async setTimer(seconds: number) {
+    await this.page
+      .getByTestId('content-duration-input')
+      .filter({ visible: true })
+      .fill(String(seconds));
+  }
+
   async submitContent() {
     await Promise.all([
       waitForOperation(this.page, /^CreateQuestionnaire\w+Content$/),

@@ -123,6 +123,45 @@ test.describe('questionnaire live mode with a real backend', () => {
     });
   });
 
+  test.describe('countdown', () => {
+    test('the timer running out locks answering', async ({
+      page,
+      browser,
+      baseURL,
+    }) => {
+      creatorPage = page;
+      roomSettings = new RoomSettingsPage(page, baseURL);
+      contentGroupOverview = new ContentGroupOverviewPage(page, baseURL);
+      const homePage = new HomePage(page, baseURL);
+      await homePage.goto();
+      shortId = await homePage.createRoom('My room');
+      await new CreatorRoomOverviewPage(page, baseURL).createQuestionSeries(
+        'My quiz',
+        'Quiz'
+      );
+      const contentCreation = new ContentCreationPage(page, baseURL);
+      await contentCreation.selectFormat('Multiple choice');
+      await contentCreation.setTimer(10);
+      await contentCreation.createChoiceContent(
+        'My timed choice content',
+        ['a', 'b'],
+        ['b'],
+        false,
+        false
+      );
+      await contentGroupOverview.configure({ leaderboard: false });
+      await contentGroupOverview.publishContentGroup();
+      await contentGroupOverview.startContent('My timed choice content', 0);
+      await join(browser, baseURL, 'My quiz');
+      await expect(participant.getSubmitButton()).toBeEnabled();
+      // The shortest timer the form allows is 10 seconds.
+      await expect(
+        participant.getHintAfterContentStoppedWithoutAnswering()
+      ).toBeVisible({ timeout: 20000 });
+      await expect(participant.getSubmitButton()).toBeHidden();
+    });
+  });
+
   test.describe('rounds', () => {
     test.beforeEach(async ({ page, baseURL }) => {
       await setUp(page, baseURL, 'My quiz', 'Quiz');

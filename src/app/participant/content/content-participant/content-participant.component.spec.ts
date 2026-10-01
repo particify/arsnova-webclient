@@ -503,5 +503,72 @@ describe('ContentParticipantComponent', () => {
         fixture.nativeElement.querySelector('app-content-waiting')
       ).toBeNull();
     });
+
+    describe('with a deadline', () => {
+      const now = new Date('2026-10-01T12:00:00Z');
+      const runningRound = (answeringEndTime: string, answerable = true) => ({
+        id: 'round-1',
+        roundNo: 1,
+        closed: false,
+        answerable,
+        answeringEndTime,
+      });
+
+      function setUpLive(round: ReturnType<typeof runningRound>) {
+        setUp({ ...choiceContent, activeRound: round } as Content, {
+          inputs: {
+            active: true,
+            questionnaire: {
+              id: 'q-1',
+              publishingMode: QuestionnairePublishingMode.Live,
+              activeRound: { ...round, contentId: 'c-1' },
+            },
+          },
+        });
+      }
+
+      function countdown() {
+        return fixture.debugElement.query(By.css('app-countdown-timer'));
+      }
+
+      beforeEach(() => {
+        jasmine.clock().install();
+        jasmine.clock().mockDate(now);
+      });
+
+      afterEach(() => jasmine.clock().uninstall());
+
+      it('counts down the running round', () => {
+        setUpLive(runningRound('2026-10-01T12:00:30Z'));
+
+        expect(countdown()).not.toBeNull();
+        expect(component.answeringLocked()).toBeFalse();
+      });
+
+      it('locks answering once the countdown has finished', () => {
+        setUpLive(runningRound('2026-10-01T12:00:30Z'));
+
+        countdown().triggerEventHandler('finished');
+        fixture.detectChanges();
+
+        expect(component.answeringLocked()).toBeTrue();
+        expect(fixture.nativeElement.textContent).toContain(
+          'participant.answer.not-answered-in-time'
+        );
+      });
+
+      it('locks answering for a round entered after its deadline', () => {
+        setUpLive(runningRound('2026-10-01T11:59:59Z'));
+
+        expect(component.answeringLocked()).toBeTrue();
+        expect(countdown()).toBeNull();
+      });
+
+      it('locks answering for a round the backend no longer accepts', () => {
+        setUpLive(runningRound('2026-10-01T12:00:30Z', false));
+
+        expect(component.answeringLocked()).toBeTrue();
+      });
+    });
   });
 });

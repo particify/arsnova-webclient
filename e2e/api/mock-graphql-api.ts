@@ -112,6 +112,7 @@ export class MockGraphqlApi {
       started:
         this.state.publishingMode !== 'LIVE' ||
         this.startedPositions.has(position),
+      // Without a timer, a round is answerable for exactly as long as it is open.
       answerable: !this.isRoundClosed(position),
     };
   }
@@ -131,6 +132,7 @@ export class MockGraphqlApi {
           !isCurrentRound ||
           this.state.publishingMode !== 'LIVE' ||
           this.startedPositions.has(position),
+        answerable: isCurrentRound && !this.isRoundClosed(position),
       };
     });
   }

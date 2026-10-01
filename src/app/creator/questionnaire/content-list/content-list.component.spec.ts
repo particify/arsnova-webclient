@@ -713,4 +713,88 @@ describe('ContentListComponent', () => {
       ).toBeFalse();
     });
   });
+
+  describe('countdown', () => {
+    const now = new Date('2026-10-01T12:00:00Z');
+    const inSeconds = (seconds: number) =>
+      new Date(now.getTime() + seconds * 1000).toISOString();
+    const round = (answeringEndTime?: string, answerable = true) => ({
+      id: 'round-1',
+      roundNo: 1,
+      closed: false,
+      answerable,
+      answeringEndTime,
+    });
+
+    function setUpRunning(answeringEndTime?: string, answerable = true) {
+      const activeRound = round(answeringEndTime, answerable);
+      setUp(
+        questionnaire({
+          publishingMode: QuestionnairePublishingMode.Live,
+          publishedUpToContent: { id: 'c-1', position: 1 } as Content,
+          activeRound: activeRound as Questionnaire['activeRound'],
+        }),
+        undefined,
+        contents.map((c) =>
+          c.id === 'c-1' ? ({ ...c, activeRound } as Content) : c
+        )
+      );
+    }
+
+    function countdowns() {
+      return fixture.nativeElement.querySelectorAll('app-countdown-timer');
+    }
+
+    beforeEach(() => {
+      jasmine.clock().install();
+      jasmine.clock().mockDate(now);
+    });
+
+    afterEach(() => jasmine.clock().uninstall());
+
+    it('counts down a running round with a deadline', () => {
+      setUpRunning(inSeconds(30));
+
+      expect(countdowns().length).toBeGreaterThan(0);
+    });
+
+    it('marks a running round without a deadline as live', () => {
+      setUpRunning();
+
+      expect(countdowns().length).toBe(0);
+      expect(fixture.nativeElement.textContent).toContain(
+        'creator.content.live'
+      );
+    });
+
+    it('takes the live mark away once the countdown has finished', () => {
+      setUpRunning(inSeconds(30));
+      jasmine.clock().mockDate(new Date(now.getTime() + 31_000));
+
+      component.onRoundCountdownFinished();
+
+      expect(countdowns().length).toBe(0);
+      expect(fixture.nativeElement.textContent).not.toContain(
+        'creator.content.live'
+      );
+    });
+
+    it('treats a round past its deadline as over', () => {
+      setUpRunning(inSeconds(-1));
+
+      expect(component.isLiveRow(contents[1])).toBeFalse();
+      expect(
+        component.canModifyAnswersOrRounds({
+          ...contents[1],
+          activeRound: round(inSeconds(-1)),
+        } as Content)
+      ).toBeTrue();
+    });
+
+    it('treats a round the backend no longer accepts answers for as over', () => {
+      setUpRunning(inSeconds(30), false);
+
+      expect(countdowns().length).toBe(0);
+    });
+  });
 });
