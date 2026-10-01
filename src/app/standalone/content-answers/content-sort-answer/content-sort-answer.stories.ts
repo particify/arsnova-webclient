@@ -39,3 +39,19 @@ export const ContentSortAnswer: Story = {
     disabled: false,
   },
 };
+
+export const Correct: Story = {
+  args: {
+    answerOptions: answerOptions,
+    disabled: true,
+    correct: true,
+  },
+};
+
+export const Wrong: Story = {
+  args: {
+    answerOptions: answerOptions,
+    disabled: true,
+    correct: false,
+  },
+};

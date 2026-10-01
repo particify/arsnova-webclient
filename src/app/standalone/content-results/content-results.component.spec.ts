@@ -54,6 +54,26 @@ function shortAnswerContent(): Content {
   };
 }
 
+function sortContent(): Content {
+  return {
+    __typename: 'Content',
+    id: 'content-3',
+    body: 'Order the planets by distance to the sun',
+    hasCorrectAnswer: true,
+    answerCount: 6,
+    correctAnswerCount: 2,
+    formatData: {
+      __typename: 'SortContentFormatData',
+      format: ContentType.Sort,
+      options: [
+        { __typename: 'AnswerOption', label: 'Earth' },
+        { __typename: 'AnswerOption', label: 'Mercury' },
+      ],
+      correctOrder: [1, 0],
+    },
+  };
+}
+
 describe('ContentResultsComponent', () => {
   let fixture: ComponentFixture<ContentResultsComponent>;
   let component: ContentResultsComponent;
@@ -64,6 +84,7 @@ describe('ContentResultsComponent', () => {
     content?: Content;
     isPresentation?: boolean;
     showCorrect?: boolean;
+    settings?: UserUiSettings;
   }
 
   /**
@@ -112,7 +133,10 @@ describe('ContentResultsComponent', () => {
       'content',
       options.content ?? choiceContent()
     );
-    fixture.componentRef.setInput('settings', {} as UserUiSettings);
+    fixture.componentRef.setInput(
+      'settings',
+      options.settings ?? ({} as UserUiSettings)
+    );
     fixture.componentRef.setInput('isPresentation', !!options.isPresentation);
     fixture.componentRef.setInput('showCorrect', !!options.showCorrect);
     fixture.detectChanges();
@@ -243,5 +267,19 @@ describe('ContentResultsComponent', () => {
 
     fixture.componentRef.setInput('allowAnswerModeration', true);
     expect(inputs()['allowAnswerModeration']).toBe(true);
+  });
+
+  it('hands a sort its correct-answer summary and the visualization unit', () => {
+    setUp({
+      content: sortContent(),
+      showCorrect: true,
+      settings: { contentVisualizationUnitPercent: true } as UserUiSettings,
+    });
+    const inputs = component.componentInputs() as Record<string, unknown>;
+    expect(inputs['showCorrect']).toBe(true);
+    expect(inputs['correctAnswerCount']).toBe(2);
+    expect(inputs['formatData']).toEqual(sortContent().formatData);
+    expect(inputs['visualizationUnitPercent']).toBe(true);
+    expect('rounds' in inputs).toBe(false);
   });
 });
