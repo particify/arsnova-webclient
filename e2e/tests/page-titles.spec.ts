@@ -24,13 +24,12 @@ test.describe('page titles', () => {
     const roomOverviewPage = new CreatorRoomOverviewPage(page, baseURL);
     const homePage = new HomePage(page, baseURL);
     await homePage.goto();
-    await homePage.createRoom('My room');
+    const shortId = await homePage.createRoom('My room');
     expect(page.getByAltText('My room')).toBeTruthy();
     await roomOverviewPage.createQuestionSeries('Survey', 'Survey');
-    await page.waitForURL(/Survey/);
     expect(page.getByAltText('My room')).toBeTruthy();
     expect(page.getByAltText('Survey')).toBeTruthy();
-    await page.goBack();
+    await roomOverviewPage.goto(shortId);
     await roomOverviewPage.goToComments();
     expect(page.getByAltText('My room')).toBeTruthy();
     expect(page.getByAltText('Q&A')).toBeTruthy();

@@ -1,4 +1,5 @@
 import { Locator, Page } from '@playwright/test';
+import { waitForOperation } from '@e2e/fixtures/shared/graphql';
 
 export class RoomOverviewPage {
   private readonly commentsButton: Locator;
@@ -48,14 +49,11 @@ export class RoomOverviewPage {
     await this.questionSeriesNameInput.fill(name);
     await this.page.getByTestId(type).click();
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/contentgroup/') &&
-          res.ok() &&
-          res.request().method() === 'POST'
-      ),
+      waitForOperation(this.page, 'CreateQuestionnaire'),
       await this.submitSeriesCreationButton.click(),
     ]);
+    // Creating a series opens its content creation, which is the page to be on afterwards.
+    await this.page.waitForURL(/\/questionnaire\/[^/]+\/create/);
   }
 
   async publishQuestionSeries(name: string) {

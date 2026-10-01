@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 import { ContentService } from '@app/core/services/http/content.service';
 import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { FormattingService } from '@app/core/services/http/formatting.service';
+import { PresentationService } from '@app/core/services/util/presentation.service';
 import {
   BanQuestionnaireWordcloudContentKeywordGql,
   Content,
@@ -25,6 +26,12 @@ class MockContentService {
 
   hasFormatRounds() {
     return true;
+  }
+}
+
+class MockPresentationService {
+  getScale() {
+    return 1;
   }
 }
 
@@ -53,6 +60,7 @@ const currentUserWithSettingsGqlMock = {
 const questionnaireChoiceRoundStatsByRoundIdGqlMock = {
   watch: () => ({
     valueChanges: of({
+      dataState: 'complete',
       data: {
         questionnaireChoiceRoundStatsByRoundId: {
           __typename: 'ChoiceContentRoundStats',
@@ -66,6 +74,7 @@ const questionnaireChoiceRoundStatsByRoundIdGqlMock = {
 const questionnaireWordcloudRoundStatsByRoundIdGqlMock = {
   watch: () => ({
     valueChanges: of({
+      dataState: 'complete',
       data: {
         questionnaireWordcloudRoundStatsByRoundId: {
           __typename: 'WordcloudContentRoundStats',
@@ -104,6 +113,10 @@ export default {
         {
           provide: FormattingService,
           useClass: MockFormattingService,
+        },
+        {
+          provide: PresentationService,
+          useClass: MockPresentationService,
         },
         {
           provide: CurrentUserWithSettingsGql,

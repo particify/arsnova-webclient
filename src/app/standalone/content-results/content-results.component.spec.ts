@@ -105,4 +105,29 @@ describe('ContentResultsComponent', () => {
     setUp();
     expect(scoringInputs().isPresentation).toBe(false);
   });
+
+  it('tells a choice format how many participants have answered', () => {
+    setUp();
+    expect(
+      (component.componentInputs() as { answerCount: number }).answerCount
+    ).toBe(4);
+  });
+
+  it('lets a wordcloud ban keywords only where answers may be moderated', () => {
+    setUp();
+    fixture.componentRef.setInput('content', {
+      ...choiceContent(),
+      formatData: {
+        __typename: 'WordcloudContentFormatData',
+        format: ContentType.Wordcloud,
+      },
+    } as Content);
+    const allowAnswerModeration = () =>
+      (component.componentInputs() as { allowAnswerModeration: boolean })
+        .allowAnswerModeration;
+    expect(allowAnswerModeration()).toBeFalse();
+
+    fixture.componentRef.setInput('allowAnswerModeration', true);
+    expect(allowAnswerModeration()).toBeTrue();
+  });
 });

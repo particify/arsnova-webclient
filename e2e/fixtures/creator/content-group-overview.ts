@@ -1,4 +1,5 @@
 import { Locator, Page } from '@playwright/test';
+import { waitForOperation } from '@e2e/fixtures/shared/graphql';
 
 export class ContentGroupOverviewPage {
   private readonly createContentButton: Locator;
@@ -33,12 +34,7 @@ export class ContentGroupOverviewPage {
 
   async publishContentGroup() {
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/contentgroup/') &&
-          res.ok() &&
-          res.request().method() === 'PATCH'
-      ),
+      waitForOperation(this.page, 'ToggleQuestionnairePublished'),
       await this.publishContentGroupButton.click(),
     ]);
   }
@@ -81,14 +77,35 @@ export class ContentGroupOverviewPage {
 
   async saveSettings() {
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/contentgroup/') &&
-          res.ok() &&
-          res.request().method() === 'PATCH'
-      ),
+      waitForOperation(this.page, 'UpdateQuestionnaire'),
       await this.page.getByRole('button', { name: 'save' }).click(),
     ]);
+  }
+
+  /**
+   * Sets the given question series settings in one save, leaving the others
+   * as they are. Labels match the switches' visible text.
+   */
+  async configure(settings: {
+    liveMode?: boolean;
+    leaderboard?: boolean;
+    statistics?: boolean;
+    correctAnswers?: boolean;
+  }) {
+    const labels: [keyof typeof settings, string][] = [
+      ['liveMode', 'contents are presented live'],
+      ['leaderboard', 'leaderboard'],
+      ['statistics', 'publish statistics'],
+      ['correctAnswers', 'correct answers'],
+    ];
+    await this.openSettings();
+    for (const [key, label] of labels) {
+      const value = settings[key];
+      if (value !== undefined) {
+        await this.page.getByRole('switch', { name: label }).setChecked(value);
+      }
+    }
+    await this.saveSettings();
   }
 
   async openSettings() {
@@ -97,12 +114,7 @@ export class ContentGroupOverviewPage {
 
   async startContent(body: string, i: number) {
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/start') &&
-          res.ok() &&
-          res.request().method() === 'POST'
-      ),
+      waitForOperation(this.page, 'StartQuestionnaireContent'),
       await this.hoverContent(body),
       await this.page.getByTestId('start-content-' + i).click(),
     ]);
@@ -110,24 +122,14 @@ export class ContentGroupOverviewPage {
 
   async stopContent(i: number) {
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/stop') &&
-          res.ok() &&
-          res.request().method() === 'POST'
-      ),
+      waitForOperation(this.page, 'StopQuestionnaireContent'),
       await this.page.getByTestId('stop-content-' + i).click(),
     ]);
   }
 
   async duplicateContent(body: string, i: number) {
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/duplicate') &&
-          res.ok() &&
-          res.request().method() === 'POST'
-      ),
+      waitForOperation(this.page, 'DuplicateQuestionnaireContent'),
       await this.hoverContent(body),
       await this.page.getByTestId('open-more-options-' + i).click(),
       await this.page.getByText('Duplicate').click(),
@@ -160,12 +162,7 @@ export class ContentGroupOverviewPage {
     groupIcon: string
   ) {
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/duplicate') &&
-          res.ok() &&
-          res.request().method() === 'POST'
-      ),
+      waitForOperation(this.page, 'CopyQuestionnaireContentToQuestionnaire'),
       await this.hoverContent(body),
       await this.openMoreMenu(i),
       await this.page.getByRole('menuitem', { name: 'Copy' }).click(),
@@ -180,18 +177,7 @@ export class ContentGroupOverviewPage {
     groupIcon: string
   ) {
     await Promise.all([
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/duplicate') &&
-          res.ok() &&
-          res.request().method() === 'POST'
-      ),
-      this.page.waitForResponse(
-        (res) =>
-          res.url().includes('/content') &&
-          res.ok() &&
-          res.request().method() === 'DELETE'
-      ),
+      waitForOperation(this.page, 'MoveQuestionnaireContentToQuestionnaire'),
       await this.hoverContent(body),
       await this.openMoreMenu(i),
       await this.page.getByRole('menuitem', { name: 'Move' }).click(),
@@ -210,12 +196,7 @@ export class ContentGroupOverviewPage {
       .click();
     if (confirm) {
       await Promise.all([
-        this.page.waitForResponse(
-          (res) =>
-            res.url().includes('/contentgroup/') &&
-            res.ok() &&
-            res.request().method() === 'DELETE'
-        ),
+        waitForOperation(this.page, 'DeleteQuestionnaire'),
         await this.page.getByRole('button', { name: 'delete' }).click(),
       ]);
     } else {

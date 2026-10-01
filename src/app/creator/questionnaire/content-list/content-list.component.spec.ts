@@ -1,0 +1,402 @@
+import { Type } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { ContentGroupService } from '@app/core/services/http/content-group.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { DialogService } from '@app/core/services/util/dialog.service';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import {
+  Content,
+  ContentType,
+  CopyQuestionnaireContentToQuestionnaireGql,
+  DeleteQuestionnaireAnswersByContentIdGql,
+  DeleteQuestionnaireContentGql,
+  DuplicateQuestionnaireContentGql,
+  MoveQuestionnaireContentToQuestionnaireGql,
+  Questionnaire,
+  QuestionnairePublishingMode,
+  QuestionnairesByRoomIdGql,
+  QuestionnaireType,
+  ResetBannedQuestionnaireWordcloudContentKeywordsGql,
+  UpdateQuestionnaireContentOrderGql,
+} from '@gql/generated/graphql';
+import { configureTestModule } from '@testing/test.setup';
+import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { TranslocoService } from '@jsverse/transloco';
+import { Observable, of, throwError } from 'rxjs';
+import { ContentListComponent } from './content-list.component';
+
+describe('ContentListComponent', () => {
+  let fixture: ComponentFixture<ContentListComponent>;
+  let component: ContentListComponent;
+  let gql: Map<Type<unknown>, jasmine.SpyObj<{ mutate: unknown }>>;
+  let questionnairesByRoomId: jasmine.SpyObj<QuestionnairesByRoomIdGql>;
+  let dialogService: jasmine.SpyObj<DialogService>;
+  let notificationService: jasmine.SpyObj<NotificationService>;
+  let router: Router;
+  let translate: jasmine.Spy;
+
+  const contents = ['c-0', 'c-1', 'c-2', 'c-3', 'c-4'].map(
+    (id, position) =>
+      ({
+        id,
+        position,
+        body: `Content ${position}`,
+        formatData: { format: ContentType.Choice },
+      }) as Content
+  );
+
+  function questionnaire(overrides: Partial<Questionnaire> = {}) {
+    return {
+      id: 'q-1',
+      name: 'Questionnaire',
+      published: true,
+      publishingMode: QuestionnairePublishingMode.All,
+      type: QuestionnaireType.Mixed,
+      ...overrides,
+    } as Questionnaire;
+  }
+
+  function mutationSpy(token: Type<unknown>) {
+    const spy = jasmine.createSpyObj(token.name, ['mutate']);
+    spy.mutate.and.returnValue(of({ data: {} }));
+    gql.set(token, spy);
+    return { provide: token, useValue: spy };
+  }
+
+  function mutation(token: Type<unknown>) {
+    return gql.get(token)!.mutate as jasmine.Spy;
+  }
+
+  function setUp(
+    q = questionnaire(),
+    selectedContentId?: string,
+    listedContents = contents
+  ) {
+    gql = new Map();
+    questionnairesByRoomId = jasmine.createSpyObj('QuestionnairesByRoomIdGql', [
+      'watch',
+    ]);
+    questionnairesByRoomId.watch.and.returnValue({
+      valueChanges: of({
+        data: {
+          questionnairesByRoomId: [
+            { id: 'q-1', name: 'Questionnaire', type: QuestionnaireType.Mixed },
+            { id: 'q-2', name: 'Other', type: QuestionnaireType.Quiz },
+          ],
+        },
+      }),
+    } as never);
+    const contentService = jasmine.createSpyObj('ContentService', [
+      'getTypeIcons',
+      'hasFormatRounds',
+    ]);
+    contentService.getTypeIcons.and.returnValue(new Map());
+    contentService.hasFormatRounds.and.returnValue(true);
+    const contentGroupService = jasmine.createSpyObj('ContentGroupService', [
+      'isContentCompatibleWithQuestionnaireType',
+    ]);
+    contentGroupService.isContentCompatibleWithQuestionnaireType.and.returnValue(
+      true
+    );
+    dialogService = jasmine.createSpyObj('DialogService', [
+      'openDeleteDialog',
+      'openQuestionnaireCreationDialog',
+    ]);
+    notificationService = jasmine.createSpyObj('NotificationService', [
+      'showAdvanced',
+      'showOnRequestClientError',
+    ]);
+
+    configureTestModule(
+      [getTranslocoModule(), ContentListComponent],
+      [
+        { provide: ContentService, useValue: contentService },
+        { provide: ContentGroupService, useValue: contentGroupService },
+        { provide: DialogService, useValue: dialogService },
+        { provide: NotificationService, useValue: notificationService },
+        { provide: FormattingService, useValue: { postString: () => of('') } },
+        {
+          provide: QuestionnairesByRoomIdGql,
+          useValue: questionnairesByRoomId,
+        },
+        mutationSpy(CopyQuestionnaireContentToQuestionnaireGql),
+        mutationSpy(DeleteQuestionnaireAnswersByContentIdGql),
+        mutationSpy(DeleteQuestionnaireContentGql),
+        mutationSpy(DuplicateQuestionnaireContentGql),
+        mutationSpy(MoveQuestionnaireContentToQuestionnaireGql),
+        mutationSpy(ResetBannedQuestionnaireWordcloudContentKeywordsGql),
+        mutationSpy(UpdateQuestionnaireContentOrderGql),
+      ]
+    ).compileComponents();
+
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.resolveTo(true);
+    translate = spyOn(TestBed.inject(TranslocoService), 'translate');
+    translate.and.callThrough();
+    fixture = TestBed.createComponent(ContentListComponent);
+    component = fixture.componentInstance;
+    fixture.componentRef.setInput('roomId', 'room-1');
+    fixture.componentRef.setInput('questionnaire', q);
+    fixture.componentRef.setInput('contents', listedContents);
+    fixture.componentRef.setInput('selectedContentId', selectedContentId);
+    fixture.detectChanges();
+  }
+
+  function confirmDeletion(id: string) {
+    dialogService.openDeleteDialog.and.returnValue({
+      afterClosed: () => of(true),
+    } as never);
+    component.deleteContent(id, 'Body');
+  }
+
+  function translationParams(key: string) {
+    return translate.calls
+      .allArgs()
+      .filter(([k]) => k === key)
+      .map(([, params]) => params);
+  }
+
+  function contentOrder() {
+    return component.sortableContents().map((c) => c.id);
+  }
+
+  function submittedOrder() {
+    return mutation(UpdateQuestionnaireContentOrderGql).calls.mostRecent()
+      .args[0].variables;
+  }
+
+  it('lists every content of the questionnaire', () => {
+    setUp();
+
+    const items = fixture.nativeElement.querySelectorAll(
+      '[data-testid="content-item"]'
+    );
+    expect(items.length).toBe(contents.length);
+  });
+
+  it('offers the questionnaires of the room as copy and move targets', () => {
+    setUp();
+
+    expect(questionnairesByRoomId.watch).toHaveBeenCalledWith({
+      variables: { roomId: 'room-1' },
+    });
+    expect(component.questionnaires().map((q) => q.id)).toEqual(['q-1', 'q-2']);
+  });
+
+  it('saves the new order after a content has been moved', () => {
+    setUp();
+
+    component.dropContent(0, 2);
+
+    expect(contentOrder()).toEqual(['c-1', 'c-2', 'c-0', 'c-3', 'c-4']);
+    expect(submittedOrder()).toEqual({
+      questionnaireId: 'q-1',
+      contentIds: ['c-1', 'c-2', 'c-0', 'c-3', 'c-4'],
+    });
+  });
+
+  it('does not save anything if a content is dropped in place', () => {
+    setUp();
+
+    component.dropContent(1, 1);
+
+    expect(mutation(UpdateQuestionnaireContentOrderGql)).not.toHaveBeenCalled();
+  });
+
+  it('restores the previous order if saving the order fails', () => {
+    setUp();
+    mutation(UpdateQuestionnaireContentOrderGql).and.returnValue(
+      throwError(() => new Error('failed'))
+    );
+
+    component.dropContent(0, 2);
+
+    expect(contentOrder()).toEqual(['c-0', 'c-1', 'c-2', 'c-3', 'c-4']);
+  });
+
+  it('skips the publishing divider when sorting a range-published questionnaire', () => {
+    setUp(
+      questionnaire({
+        publishingMode: QuestionnairePublishingMode.UpTo,
+        publishedUpToContent: { position: 1 } as Content,
+      })
+    );
+
+    // The divider sits at list index 2, so list index 4 is content index 3.
+    component.dropContent(4, 0);
+
+    expect(submittedOrder().contentIds).toEqual([
+      'c-3',
+      'c-0',
+      'c-1',
+      'c-2',
+      'c-4',
+    ]);
+  });
+
+  it('duplicates a content and confirms it', () => {
+    setUp();
+    mutation(DuplicateQuestionnaireContentGql).and.returnValue(
+      of({ data: { duplicateQuestionnaireContent: { id: 'c-5' } } })
+    );
+
+    component.duplicateContent('c-1');
+
+    expect(
+      mutation(DuplicateQuestionnaireContentGql).calls.mostRecent().args[0]
+        .variables
+    ).toEqual({ id: 'c-1' });
+    expect(notificationService.showAdvanced).toHaveBeenCalled();
+  });
+
+  it('copies a content to another questionnaire', () => {
+    setUp();
+
+    component.performContentAction('copy', 'c-1', { id: 'q-2', name: 'Other' });
+
+    expect(
+      mutation(CopyQuestionnaireContentToQuestionnaireGql).calls.mostRecent()
+        .args[0].variables
+    ).toEqual({ contentId: 'c-1', questionnaireId: 'q-2' });
+    expect(
+      mutation(MoveQuestionnaireContentToQuestionnaireGql)
+    ).not.toHaveBeenCalled();
+    expect(notificationService.showAdvanced).toHaveBeenCalled();
+  });
+
+  it('moves a content to a newly created questionnaire', () => {
+    setUp();
+    dialogService.openQuestionnaireCreationDialog.and.returnValue({
+      afterClosed: () => of({ id: 'q-new', name: 'New' }),
+    } as never);
+
+    component.performContentAction('move', 'c-1');
+
+    expect(dialogService.openQuestionnaireCreationDialog).toHaveBeenCalledWith(
+      'room-1'
+    );
+    expect(
+      mutation(MoveQuestionnaireContentToQuestionnaireGql).calls.mostRecent()
+        .args[0].variables
+    ).toEqual({ contentId: 'c-1', questionnaireId: 'q-new' });
+  });
+
+  it('moves nothing if creating a questionnaire is cancelled', () => {
+    setUp();
+    dialogService.openQuestionnaireCreationDialog.and.returnValue({
+      afterClosed: () => of(undefined),
+    } as never);
+
+    component.performContentAction('move', 'c-1');
+
+    expect(
+      mutation(MoveQuestionnaireContentToQuestionnaireGql)
+    ).not.toHaveBeenCalled();
+    expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+  });
+
+  it('deletes a content once confirmed', () => {
+    setUp();
+    dialogService.openDeleteDialog.and.returnValue({
+      afterClosed: () => of(true),
+    } as never);
+
+    component.deleteContent('c-1', 'Content 1');
+
+    const confirmAction = dialogService.openDeleteDialog.calls.mostRecent()
+      .args[4] as () => Observable<unknown>;
+    confirmAction().subscribe();
+    expect(
+      mutation(DeleteQuestionnaireContentGql).calls.mostRecent().args[0]
+        .variables
+    ).toEqual({ id: 'c-1' });
+    expect(notificationService.showAdvanced).toHaveBeenCalled();
+    // Without a selected content there is no detail view to leave.
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('stays on the selected content when another one is deleted', () => {
+    setUp(questionnaire(), 'c-2');
+
+    confirmDeletion('c-1');
+
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('shows the next content once the selected one is deleted', () => {
+    setUp(questionnaire(), 'c-1');
+
+    confirmDeletion('c-1');
+
+    expect((router.navigate as jasmine.Spy).calls.mostRecent().args[0]).toEqual(
+      ['.', 'c-2']
+    );
+  });
+
+  it('shows the previous content once the selected last one is deleted', () => {
+    setUp(questionnaire(), 'c-4');
+
+    confirmDeletion('c-4');
+
+    expect((router.navigate as jasmine.Spy).calls.mostRecent().args[0]).toEqual(
+      ['.', 'c-3']
+    );
+  });
+
+  it('opens the content creation once the only content is deleted', () => {
+    setUp(questionnaire(), 'c-0', [contents[0]]);
+
+    confirmDeletion('c-0');
+
+    expect((router.navigate as jasmine.Spy).calls.mostRecent().args[0]).toEqual(
+      ['.', 'create']
+    );
+  });
+
+  it('skips the divider when published up to the first content', () => {
+    setUp(
+      questionnaire({
+        publishingMode: QuestionnairePublishingMode.UpTo,
+        publishedUpToContent: { position: 0 } as Content,
+      })
+    );
+
+    // The divider sits at list index 1, so list index 2 is content index 1.
+    component.dropContent(2, 0);
+
+    expect(submittedOrder().contentIds).toEqual([
+      'c-1',
+      'c-0',
+      'c-2',
+      'c-3',
+      'c-4',
+    ]);
+  });
+
+  it('announces each content with its position in the list', () => {
+    setUp();
+
+    const params = translationParams(
+      'creator.content.a11y-content-item-selected'
+    );
+    expect(params.length).toBe(contents.length);
+    expect(params[1]).toEqual(
+      jasmine.objectContaining({ index: 2, length: contents.length })
+    );
+  });
+
+  it('announces the publishing divider by the human position', () => {
+    setUp(
+      questionnaire({
+        publishingMode: QuestionnairePublishingMode.UpTo,
+        publishedUpToContent: { position: 1 } as Content,
+      })
+    );
+
+    expect(
+      translationParams('creator.content.publishing-index-info')
+    ).toContain({ index: 2 });
+  });
+});

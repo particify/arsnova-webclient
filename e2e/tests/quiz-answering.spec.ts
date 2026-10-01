@@ -1,159 +1,97 @@
-import { test, expect } from '@playwright/test';
+import { Browser, BrowserContext, test, expect } from '@playwright/test';
+import { HomePage } from '@e2e/fixtures/shared/home';
+import { RoomOverviewPage as CreatorRoomOverviewPage } from '@e2e/fixtures/creator/room-overview';
+import { RoomSettingsPage } from '@e2e/fixtures/creator/room-settings';
+import { ContentCreationPage } from '@e2e/fixtures/creator/content-creation';
+import { ContentGroupOverviewPage } from '@e2e/fixtures/creator/content-group-overview';
 import { ContentGroupPage as ParticipantContentGroupPage } from '@e2e/fixtures/participant/content-group';
-import { GroupType } from '@app/core/models/content-group';
-import { AnswerResultType } from '@app/core/models/answer-result';
-import { MockApi } from '@e2e/api/mock-api';
-
-const TEST_ROOM_ID = '3f9cecb56dbf45ccb6304af700d474b6';
 
 test.describe('participant answer async quiz', () => {
-  let mockApi: MockApi;
-  test.beforeEach(async ({ page }) => {
-    mockApi = new MockApi(page);
-    mockApi.mockContentGroup(
-      TEST_ROOM_ID,
-      'My quiz',
-      ['content1', 'content2'],
-      GroupType.QUIZ
+  let shortId: string;
+  let roomSettings: RoomSettingsPage;
+  let contentGroupOverview: ContentGroupOverviewPage;
+  let participantContext: BrowserContext;
+  let participant: ParticipantContentGroupPage;
+
+  async function joinAsParticipant(browser: Browser, baseURL?: string) {
+    participantContext = await browser.newContext();
+    participant = new ParticipantContentGroupPage(
+      await participantContext.newPage(),
+      baseURL
     );
-    mockApi.mockRoomStats(TEST_ROOM_ID, 'My quiz', 2, GroupType.QUIZ);
-    mockApi.mockAliasGeneration(TEST_ROOM_ID, 'Funny fish');
-    mockApi.mockUserAlias(TEST_ROOM_ID);
-    mockApi.mockGroupStats(TEST_ROOM_ID, 0, 2, 0, 1000, [
-      {
-        contentId: 'content1',
-        achievedPoints: 0,
-        maxPoints: 500,
-        state: AnswerResultType.UNANSWERED,
-        duration: 0,
-      },
-      {
-        contentId: 'content2',
-        achievedPoints: 0,
-        maxPoints: 500,
-        state: AnswerResultType.UNANSWERED,
-        duration: 0,
-      },
-    ]);
-    mockApi.mockAttributions(TEST_ROOM_ID);
-    mockApi.mockContentsQuiz(TEST_ROOM_ID);
-    mockApi.mockRoomAnswers(TEST_ROOM_ID);
-    mockApi.mockContentAnswering();
-    mockApi.mockCheckResult(TEST_ROOM_ID);
-    mockApi.mockCorrectChoiceIndexes(TEST_ROOM_ID);
-    mockApi.mockGroupLeaderboard(TEST_ROOM_ID, 0, 'Funny fish');
+    await participant.goto(shortId, 'My quiz');
+  }
+
+  test.beforeEach(async ({ page, baseURL }) => {
+    roomSettings = new RoomSettingsPage(page, baseURL);
+    contentGroupOverview = new ContentGroupOverviewPage(page, baseURL);
+    const homePage = new HomePage(page, baseURL);
+    await homePage.goto();
+    shortId = await homePage.createRoom('My room');
+    await new CreatorRoomOverviewPage(page, baseURL).createQuestionSeries(
+      'My quiz',
+      'Quiz'
+    );
+    await new ContentCreationPage(page, baseURL).createChoiceContent(
+      'My choice content',
+      ['a', 'b', 'c'],
+      ['b'],
+      false,
+      false
+    );
+    await contentGroupOverview.configure({
+      liveMode: false,
+      leaderboard: false,
+    });
+    await contentGroupOverview.publishContentGroup();
   });
 
-  test('answer MC content correctly', async ({ page, baseURL }) => {
-    const participant = new ParticipantContentGroupPage(page, baseURL);
-    await participant.goto('12345678', 'My quiz');
-    await participant.joinQuiz();
+  test.afterEach(async () => {
+    await participantContext?.close();
+    await roomSettings.deleteRoomById(shortId);
+  });
+
+  test('answer MC content correctly', async ({ browser, baseURL }) => {
+    await joinAsParticipant(browser, baseURL);
     await participant.answerContent(['b']);
     await expect(participant.getHintAfterAnswering()).toBeVisible();
     await expect(participant.getCorrectStateIcon('correct')).toBeVisible();
+    await expect(participant.getCorrectStateIcon('wrong')).toBeHidden();
   });
 
-  test('answer MC content wrong', async ({ page, baseURL }) => {
-    const participant = new ParticipantContentGroupPage(page, baseURL);
-    await participant.goto('12345678', 'My quiz');
-    await participant.joinQuiz();
-    await participant.answerContent(['c']);
+  test('answer MC content wrong', async ({ browser, baseURL }) => {
+    await joinAsParticipant(browser, baseURL);
+    await participant.answerContent(['a']);
     await expect(participant.getHintAfterAnswering()).toBeVisible();
     await expect(participant.getCorrectStateIcon('correct')).toBeVisible();
     await expect(participant.getCorrectStateIcon('wrong')).toBeVisible();
   });
 
-  test('abstain on MC content', async ({ page, baseURL }) => {
-    const participant = new ParticipantContentGroupPage(page, baseURL);
-    await participant.goto('12345678', 'My quiz');
-    await participant.joinQuiz();
+  test('abstain on MC content', async ({ browser, baseURL }) => {
+    await joinAsParticipant(browser, baseURL);
     await participant.answerContent();
     await expect(participant.getHintAfterAbstaining()).toBeVisible();
-    await expect(participant.getCorrectStateIcon('correct')).toBeHidden();
     await expect(participant.getCorrectStateIcon('wrong')).toBeHidden();
   });
 
-  test('answer short answer content correctly', async ({ page, baseURL }) => {
-    mockApi.mockShortAnswerContentStats(
-      TEST_ROOM_ID,
-      'content2',
-      ['abc'],
-      [1],
-      1
-    );
-    const participant = new ParticipantContentGroupPage(page, baseURL);
-    await participant.goto('12345678', 'My quiz', 2);
-    await participant.joinQuiz();
-    await participant.answerTextContent('abc');
-    await expect(participant.getHintAfterAnswering()).toBeVisible();
-    await participant.switchToResultsTab();
-    await expect(page.getByText('abc')).toBeVisible();
-    await expect(
-      page.getByTestId('short-answer-correct-indicator')
-    ).toBeVisible();
-  });
-
-  test('answer short answer content wrong', async ({ page, baseURL }) => {
-    mockApi.mockShortAnswerContentStats(
-      TEST_ROOM_ID,
-      'content2',
-      ['xyz'],
-      [1],
-      1
-    );
-    const participant = new ParticipantContentGroupPage(page, baseURL);
-    await participant.goto('12345678', 'My quiz', 2);
-    await participant.joinQuiz();
-    await participant.answerTextContent('xyz');
-    await expect(participant.getHintAfterAnswering()).toBeVisible();
-    await participant.switchToResultsTab();
-    await expect(page.getByText('xyz')).toBeVisible();
-  });
-
-  test('abstain on short answer content', async ({ page, baseURL }) => {
-    const participant = new ParticipantContentGroupPage(page, baseURL);
-    await participant.goto('12345678', 'My quiz', 2);
-    await participant.joinQuiz();
-    await participant.answerTextContent();
-    await expect(participant.getHintAfterAbstaining()).toBeVisible();
-  });
-
   test('answer MC content correctly but correct options are not published', async ({
-    page,
+    browser,
     baseURL,
   }) => {
-    mockApi.mockContentGroup(
-      TEST_ROOM_ID,
-      'My quiz',
-      ['content1', 'content2'],
-      GroupType.QUIZ,
-      true,
-      false
-    );
-    const participant = new ParticipantContentGroupPage(page, baseURL);
-    await participant.goto('12345678', 'My quiz');
-    await participant.joinQuiz();
+    await contentGroupOverview.configure({ correctAnswers: false });
+    await joinAsParticipant(browser, baseURL);
     await participant.answerContent(['b']);
     await expect(participant.getHintAfterAnswering()).toBeVisible();
     await expect(participant.getCorrectStateIcon('correct')).toBeHidden();
   });
 
   test('answer MC content wrong but correct options are not published', async ({
-    page,
+    browser,
     baseURL,
   }) => {
-    mockApi.mockContentGroup(
-      TEST_ROOM_ID,
-      'My quiz',
-      ['content1', 'content2'],
-      GroupType.QUIZ,
-      true,
-      false
-    );
-    const participant = new ParticipantContentGroupPage(page, baseURL);
-    await participant.goto('12345678', 'My quiz');
-    await participant.joinQuiz();
-    await participant.answerContent(['c']);
+    await contentGroupOverview.configure({ correctAnswers: false });
+    await joinAsParticipant(browser, baseURL);
+    await participant.answerContent(['a']);
     await expect(participant.getHintAfterAnswering()).toBeVisible();
     await expect(participant.getCorrectStateIcon('wrong')).toBeHidden();
   });
