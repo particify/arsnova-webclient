@@ -12,13 +12,15 @@ import {
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { NEVER, Observable, of } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { WordcloudResultsComponent } from './wordcloud-results.component';
 
 describe('WordcloudResultsComponent', () => {
   let fixture: ComponentFixture<WordcloudResultsComponent>;
   let component: WordcloudResultsComponent;
   let roundStats: jasmine.SpyObj<QuestionnaireWordcloudRoundStatsByRoundIdGql>;
+  let roundStatsUpdated: jasmine.SpyObj<QuestionnaireWordcloudRoundStatsUpdatedGql>;
+  let updates$: Subject<unknown>;
   let banKeyword: jasmine.SpyObj<BanQuestionnaireWordcloudContentKeywordGql>;
   let dialogService: jasmine.SpyObj<DialogService>;
   let notificationService: jasmine.SpyObj<NotificationService>;
@@ -47,6 +49,12 @@ describe('WordcloudResultsComponent', () => {
     roundStats.watch.and.returnValue({
       valueChanges: of(statsResult(['Angular', 'Kotlin'], [3, 1])),
     } as never);
+    updates$ = new Subject();
+    roundStatsUpdated = jasmine.createSpyObj(
+      'QuestionnaireWordcloudRoundStatsUpdatedGql',
+      ['subscribe']
+    );
+    roundStatsUpdated.subscribe.and.returnValue(updates$ as never);
     banKeyword = jasmine.createSpyObj(
       'BanQuestionnaireWordcloudContentKeywordGql',
       ['mutate']
@@ -73,7 +81,7 @@ describe('WordcloudResultsComponent', () => {
         },
         {
           provide: QuestionnaireWordcloudRoundStatsUpdatedGql,
-          useValue: { subscribe: () => NEVER },
+          useValue: roundStatsUpdated,
         },
         {
           provide: BanQuestionnaireWordcloudContentKeywordGql,
@@ -183,5 +191,32 @@ describe('WordcloudResultsComponent', () => {
     component.banAnswer('Kotlin');
 
     expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+  });
+
+  it('listens to the stats updates of the round', () => {
+    setUp();
+
+    expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+  });
+
+  it('shows the words of an update instead of the loaded ones', () => {
+    setUp();
+
+    updates$.next({
+      data: {
+        questionnaireWordcloudRoundStatsUpdated: {
+          words: ['Angular', 'Kotlin', 'Rust'],
+          counts: [4, 1, 1],
+        },
+      },
+    });
+
+    expect(component.listData()).toEqual([
+      { answer: 'Angular', count: 4 },
+      { answer: 'Kotlin', count: 1 },
+      { answer: 'Rust', count: 1 },
+    ]);
   });
 });
