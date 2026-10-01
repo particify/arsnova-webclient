@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
-import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { TranslocoService } from '@jsverse/transloco';
+import {
+  getTranslocoModule,
+  getTranslocoModuleWithTranslations,
+} from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import {
   AdvancedSnackBarTypes,
@@ -9,6 +13,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
+import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import {
   AnswerResultState,
@@ -34,7 +39,10 @@ describe('ContentBinaryParticipantComponent', () => {
   let createAnswer: jasmine.SpyObj<CreateQuestionnaireBinaryAnswerGql>;
   let notificationService: jasmine.SpyObj<NotificationService>;
 
-  function setUp(contentFormatData = formatData()) {
+  function setUp(
+    contentFormatData = formatData(),
+    translocoModule = getTranslocoModule()
+  ) {
     createAnswer = jasmine.createSpyObj('CreateQuestionnaireBinaryAnswerGql', [
       'mutate',
     ]);
@@ -58,7 +66,7 @@ describe('ContentBinaryParticipantComponent', () => {
     formattingService.postString.and.returnValue(of({ html: '' }));
 
     configureTestModule(
-      [getTranslocoModule(), ContentBinaryParticipantComponent],
+      [translocoModule, ContentBinaryParticipantComponent],
       [
         { provide: CreateQuestionnaireBinaryAnswerGql, useValue: createAnswer },
         { provide: NotificationService, useValue: notificationService },
@@ -230,6 +238,49 @@ describe('ContentBinaryParticipantComponent', () => {
     expect(choiceAnswer().checkedOptions()[0]).toEqual({
       correct: true,
       incorrect: false,
+    });
+  });
+
+  describe('labels', () => {
+    function switchTo(lang: string) {
+      TestBed.inject(TranslocoService).setActiveLang(lang);
+      fixture.detectChanges();
+    }
+
+    beforeEach(() => {
+      setUp(formatData(), getTranslocoModuleWithTranslations());
+    });
+
+    it('shows the translated options', () => {
+      expect(labels()).toEqual(['Yes', 'No']);
+    });
+
+    it('follows a language switch', () => {
+      switchTo('de');
+      expect(labels()).toEqual(['Ja', 'Nein']);
+    });
+
+    it('keeps a choice not yet sent across a language switch', () => {
+      component.answerOptions.update((options) =>
+        options.map(
+          (option, index) =>
+            new SelectableAnswer(option.answerOption, index === 1)
+        )
+      );
+      switchTo('de');
+      expect(component.answerOptions().map((o) => o.checked)).toEqual([
+        false,
+        true,
+      ]);
+    });
+
+    it('keeps the given answer checked across a language switch', () => {
+      answerGiven(false);
+      switchTo('de');
+      expect(component.answerOptions().map((o) => o.checked)).toEqual([
+        false,
+        true,
+      ]);
     });
   });
 });

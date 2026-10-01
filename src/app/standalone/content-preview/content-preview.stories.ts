@@ -88,6 +88,17 @@ const choiceContentFormatData: ContentFormatData = {
   ],
 };
 
+export const ContentPreviewBinary: Story = {
+  args: {
+    ...baseArgs,
+    contentFormatData: {
+      __typename: 'BinaryContentFormatData',
+      format: ContentType.Binary,
+      correctAnswer: true,
+    },
+  },
+};
+
 export const ContentPreviewChoice: Story = {
   args: {
     ...baseArgs,
