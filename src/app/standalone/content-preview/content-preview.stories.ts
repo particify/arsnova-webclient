@@ -130,3 +130,14 @@ export const ContentPreviewSlide: Story = {
     },
   },
 };
+
+export const ContentPreviewText: Story = {
+  args: {
+    ...baseArgs,
+    contentFormatData: {
+      __typename: 'TextContentFormatData',
+      format: ContentType.Text,
+      answersPublished: false,
+    },
+  },
+};
