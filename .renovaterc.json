@@ -35,6 +35,10 @@
       "matchPackageNames": ["eslint-plugin-jsdoc"]
     },
     {
+      "groupName": "analog",
+      "matchPackageNames": ["@analogjs/{/,}**"]
+    },
+    {
       "groupName": "angular",
       "matchPackageNames": [
         "ng-packagr",
@@ -63,11 +67,15 @@
     },
     {
       "groupName": "stomp",
-      "matchPackageNames": ["@stomp/{/,}**"]
+      "matchPackageNames": ["@stomp/{/,}**", "uuid"]
     },
     {
       "groupName": "stylelint",
-      "matchPackageNames": ["stylelint", "stylelint-config-standard-scss"]
+      "matchPackageNames": [
+        "postcss",
+        "stylelint",
+        "stylelint-config-standard-scss"
+      ]
     }
   ]
 }

@@ -59,10 +59,14 @@
     "prismjs": "1.30.0",
     "rxjs": "7.8.2",
     "tslib": "2.8.1",
+    "uuid": "9.0.1",
     "zone.js": "0.16.3"
   },
   "devDependencies": {
     "@analogjs/storybook-angular": "2.8.0",
+    "@analogjs/vite-plugin-angular": "2.8.0",
+    "@angular-devkit/architect": "0.2202.1",
+    "@angular-devkit/core": "22.2.1",
     "@angular/build": "22.2.1",
     "@angular/compiler-cli": "22.2.1",
     "@angular/language-service": "22.2.1",
@@ -100,6 +104,7 @@
     "karma-jasmine-html-reporter": "2.3.0",
     "karma-viewport": "1.0.9",
     "ng-packagr": "21.2.7",
+    "postcss": "8.5.28",
     "prettier": "3.9.9",
     "sass-embedded": "1.105.1",
     "storybook": "10.6.1",
