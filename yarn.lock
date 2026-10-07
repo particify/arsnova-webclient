@@ -36,7 +36,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@analogjs/vite-plugin-angular@npm:*":
+"@analogjs/vite-plugin-angular@npm:2.8.0":
   version: 2.8.0
   resolution: "@analogjs/vite-plugin-angular@npm:2.8.0"
   dependencies:
@@ -59,7 +59,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/architect@npm:*, @angular-devkit/architect@npm:0.2202.1, @angular-devkit/architect@npm:>= 0.2200.0 < 0.2300.0":
+"@angular-devkit/architect@npm:0.2202.1, @angular-devkit/architect@npm:>= 0.2200.0 < 0.2300.0":
   version: 0.2202.1
   resolution: "@angular-devkit/architect@npm:0.2202.1"
   dependencies:
@@ -71,7 +71,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/core@npm:*, @angular-devkit/core@npm:22.2.1, @angular-devkit/core@npm:>= 22.0.0 < 23.0.0":
+"@angular-devkit/core@npm:22.2.1, @angular-devkit/core@npm:>= 22.0.0 < 23.0.0":
   version: 22.2.1
   resolution: "@angular-devkit/core@npm:22.2.1"
   dependencies:
@@ -5763,6 +5763,9 @@ __metadata:
   resolution: "arsnova-webclient@workspace:."
   dependencies:
     "@analogjs/storybook-angular": "npm:2.8.0"
+    "@analogjs/vite-plugin-angular": "npm:2.8.0"
+    "@angular-devkit/architect": "npm:0.2202.1"
+    "@angular-devkit/core": "npm:22.2.1"
     "@angular/animations": "npm:22.2.1"
     "@angular/build": "npm:22.2.1"
     "@angular/cdk": "npm:22.2.1"
@@ -5834,6 +5837,7 @@ __metadata:
     lru-cache: "npm:11.5.3"
     ng-packagr: "npm:21.2.7"
     ng-qrcode: "npm:22.0.0"
+    postcss: "npm:8.5.28"
     prettier: "npm:3.9.9"
     prismjs: "npm:1.30.0"
     rxjs: "npm:7.8.2"
@@ -5845,6 +5849,7 @@ __metadata:
     tslib: "npm:2.8.1"
     typescript: "npm:6.0.3"
     typescript-eslint: "npm:8.71.0"
+    uuid: "npm:9.0.1"
     vite: "npm:8.3.2"
     vite-tsconfig-paths: "npm:6.1.1"
     zone.js: "npm:0.16.3"
@@ -11596,7 +11601,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:*, postcss@npm:^8.4.40, postcss@npm:^8.4.47, postcss@npm:^8.4.49, postcss@npm:^8.5.26, postcss@npm:^8.5.28":
+"postcss@npm:8.5.28, postcss@npm:^8.4.40, postcss@npm:^8.4.47, postcss@npm:^8.4.49, postcss@npm:^8.5.26, postcss@npm:^8.5.28":
   version: 8.5.28
   resolution: "postcss@npm:8.5.28"
   dependencies:
@@ -14225,7 +14230,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^9.0.0":
+"uuid@npm:9.0.1":
   version: 9.0.1
   resolution: "uuid@npm:9.0.1"
   bin:
