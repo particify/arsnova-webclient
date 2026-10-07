@@ -33,7 +33,7 @@
     }
   },
   "postCreateCommand": "sudo chown -fR $USER:$USER $HOME/.yarn",
-  "postStartCommand": "yarn",
+  "postStartCommand": "yarn && scripts/install-test-browser",
   "shutdownAction": "none",
   "remoteUser": "dev"
 }
