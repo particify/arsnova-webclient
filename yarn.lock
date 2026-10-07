@@ -5949,6 +5949,7 @@ __metadata:
     "@analogjs/vite-plugin-angular": "npm:2.8.0"
     "@angular-devkit/architect": "npm:0.2202.2"
     "@angular-devkit/core": "npm:22.2.2"
+    "@angular-eslint/builder": "npm:22.5.0"
     "@angular/animations": "npm:22.2.2"
     "@angular/build": "npm:22.2.2"
     "@angular/cdk": "npm:22.2.2"
