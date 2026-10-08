@@ -26,7 +26,7 @@
         "ng-packagr",
         "typescript",
         "@angular/{/,}**",
-        "@angular-devkit/{/,}**"
+        "!@angular/{build,cli}"
       ],
       "minimumReleaseAge": "0 days"
     },
@@ -43,8 +43,12 @@
       "matchPackageNames": [
         "ng-packagr",
         "@angular/{/,}**",
-        "@angular-devkit/{/,}**"
+        "!@angular/{build,cli}"
       ]
+    },
+    {
+      "groupName": "angular-cli",
+      "matchPackageNames": ["@angular-devkit/{/,}**", "@angular/{build,cli}"]
     },
     {
       "groupName": "apollo",
