@@ -5587,12 +5587,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"altcha@npm:3.2.4":
-  version: 3.2.4
-  resolution: "altcha@npm:3.2.4"
+"altcha@npm:3.3.0":
+  version: 3.3.0
+  resolution: "altcha@npm:3.3.0"
   dependencies:
     hash-wasm: "npm:^4.12.0"
-  checksum: 10c0/656882d13683a022a287035de6d984309309923a1da3d96ca87ddc3d62cfc45f60f3c743ea9a15e17bbf9294471774b5e1f0bf3805269a789d06d2b70c9d366b
+  checksum: 10c0/149fe4ef658fed4189a6af945a6fc5eb84ac1b8d8eb9d72fcb98f12ae49a6b3dee2f7aabbfe6a8af65cfc9bce3c9be57e6ae281455072fd72ad3a3f6cf3305ff
   languageName: node
   linkType: hard
 
@@ -5888,7 +5888,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:8.71.1"
     "@typescript-eslint/parser": "npm:8.71.1"
     "@typescript-eslint/utils": "npm:8.71.1"
-    altcha: "npm:3.2.4"
+    altcha: "npm:3.3.0"
     angular-eslint: "npm:22.5.0"
     angular-material-css-vars: "npm:11.0.0"
     apollo-angular: "npm:14.2.0"
