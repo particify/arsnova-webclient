@@ -14,6 +14,7 @@ import {
   UpdateQuestionnaireGql,
 } from '@gql/generated/graphql';
 import { provideTranslocoScope } from '@jsverse/transloco';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 interface PublishingModeItem {
   type: QuestionnairePublishingMode;
@@ -42,6 +43,7 @@ export class PublishContentGroupDialogComponent extends FormComponent {
     publishingMode: QuestionnairePublishingMode;
   }>(MAT_DIALOG_DATA);
   private readonly updateQuestionnaire = inject(UpdateQuestionnaireGql);
+  private readonly mutations = mutationHelper();
 
   readonly dialogId = 'publish-content';
 
@@ -70,6 +72,7 @@ export class PublishContentGroupDialogComponent extends FormComponent {
           publishingMode,
         },
       })
+      .pipe(this.mutations.reportErrors())
       .subscribe({
         next: () => this.close(publishingMode),
         error: () => this.enableForm(),

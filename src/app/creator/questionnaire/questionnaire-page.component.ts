@@ -35,6 +35,7 @@ import {
 import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/_dialogs/create-content-group-template/create-content-group-template.component';
 import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-settings/questionnaire-settings.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { switchMap, map, filter } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -115,6 +116,7 @@ export class QuestionnairePageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
+  private readonly mutations = mutationHelper();
   private readonly globalStorageService = inject(GlobalStorageService);
   private readonly router = inject(Router);
   private readonly routingService = inject(RoutingService);
@@ -306,23 +308,25 @@ export class QuestionnairePageComponent {
       undefined,
       undefined,
       () =>
-        this.resetQuestionnaireResults.mutate({
-          variables: { id: this.questionnaireId() },
-          // The results views watch their round stats, which the reset
-          // invalidates; dropping them makes those views fetch them anew.
-          update: (cache) =>
-            cache.modify({
-              id: 'ROOT_QUERY',
-              fields: (value, { fieldName, DELETE }) =>
-                fieldName.endsWith('RoundStatsByRoundId') ? DELETE : value,
-            }),
-          refetchQueries: [
-            {
-              query: QuestionnaireContentsByQuestionnaireIdDocument,
-              variables: { questionnaireId: this.questionnaireId() },
-            },
-          ],
-        })
+        this.resetQuestionnaireResults
+          .mutate({
+            variables: { id: this.questionnaireId() },
+            // The results views watch their round stats, which the reset
+            // invalidates; dropping them makes those views fetch them anew.
+            update: (cache) =>
+              cache.modify({
+                id: 'ROOT_QUERY',
+                fields: (value, { fieldName, DELETE }) =>
+                  fieldName.endsWith('RoundStatsByRoundId') ? DELETE : value,
+              }),
+            refetchQueries: [
+              {
+                query: QuestionnaireContentsByQuestionnaireIdDocument,
+                variables: { questionnaireId: this.questionnaireId() },
+              },
+            ],
+          })
+          .pipe(this.mutations.reportErrors())
     );
     dialogRef.afterClosed().subscribe({
       next: (result) => {
@@ -346,21 +350,23 @@ export class QuestionnairePageComponent {
       this.questionnaire()?.name,
       undefined,
       () =>
-        this.deleteQuestionnaire.mutate({
-          variables: { id: this.questionnaireId() },
-          update: (cache, result) => {
-            if (result.data?.deleteQuestionnaire) {
-              const cacheId = cache.identify({
-                __typename: 'Questionnaire',
-                id: this.questionnaireId(),
-              });
-              if (cacheId) {
-                cache.evict({ id: cacheId });
-                cache.gc();
+        this.deleteQuestionnaire
+          .mutate({
+            variables: { id: this.questionnaireId() },
+            update: (cache, result) => {
+              if (result.data?.deleteQuestionnaire) {
+                const cacheId = cache.identify({
+                  __typename: 'Questionnaire',
+                  id: this.questionnaireId(),
+                });
+                if (cacheId) {
+                  cache.evict({ id: cacheId });
+                  cache.gc();
+                }
               }
-            }
-          },
-        })
+            },
+          })
+          .pipe(this.mutations.reportErrors())
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -385,6 +391,7 @@ export class QuestionnairePageComponent {
       .mutate({
         variables: { id: this.questionnaireId(), published: true },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.toggleQuestionnairePublished) {

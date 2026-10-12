@@ -6,6 +6,7 @@ import {
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
 import { map, switchMap } from 'rxjs';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { CoreModule } from '@app/core/core.module';
 import { WordcloudComponent } from '@app/standalone/content-results/visualization/wordcloud/wordcloud.component';
@@ -40,6 +41,7 @@ export class WordcloudResultsComponent {
   private readonly dialogService = inject(DialogService);
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
+  private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
   readonly roundId = input.required<string>();
@@ -90,9 +92,11 @@ export class WordcloudResultsComponent {
       keyword,
       'creator.dialog.ban',
       () =>
-        this.banKeyword.mutate({
-          variables: { contentId: this.contentId(), keyword },
-        })
+        this.banKeyword
+          .mutate({
+            variables: { contentId: this.contentId(), keyword },
+          })
+          .pipe(this.mutations.reportErrors())
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

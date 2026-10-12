@@ -12,6 +12,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
 import { take } from 'rxjs';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 import {
   Answer,
@@ -33,6 +34,7 @@ export class ContentWordcloudParticipantComponent implements AnswerForm {
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
   private readonly createAnswer = inject(CreateQuestionnaireWordcloudAnswerGql);
+  private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
   readonly roundId = input.required<string>();
@@ -67,6 +69,7 @@ export class ContentWordcloudParticipantComponent implements AnswerForm {
     }
     this.createAnswer
       .mutate({ variables: { roundId: this.roundId(), words } })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const answer = r.data?.createQuestionnaireWordcloudAnswer;
@@ -79,7 +82,6 @@ export class ContentWordcloudParticipantComponent implements AnswerForm {
             AdvancedSnackBarTypes.SUCCESS
           );
         },
-        error: (e) => this.notificationService.showOnRequestClientError(e),
       });
   }
 }

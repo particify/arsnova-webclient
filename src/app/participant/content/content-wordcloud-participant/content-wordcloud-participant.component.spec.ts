@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CombinedGraphQLErrors } from '@apollo/client';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   AnswerResultState,
@@ -105,7 +106,17 @@ describe('ContentWordcloudParticipantComponent', () => {
   it('reports a rejected answer', () => {
     setUp();
     createAnswer.mutate.and.returnValue(
-      throwError(() => new Error('rejected')) as never
+      throwError(
+        () =>
+          new CombinedGraphQLErrors({
+            errors: [
+              {
+                message: 'rejected',
+                extensions: { classification: 'BAD_REQUEST' },
+              },
+            ],
+          })
+      ) as never
     );
     component.words.set(['Angular', '', '']);
 

@@ -24,6 +24,7 @@ import {
   WordcloudContentFormatData,
 } from '@gql/generated/graphql';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 const MAX_KEYWORDS = 10;
 
@@ -40,6 +41,7 @@ export class WordcloudContentFormComponent
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
   private readonly createWordcloudContent = inject(
     CreateQuestionnaireWordcloudContentGql
   );
@@ -92,6 +94,7 @@ export class WordcloudContentFormComponent
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireWordcloudContent;
@@ -129,6 +132,7 @@ export class WordcloudContentFormComponent
           QuestionnairesByRoomIdDocument,
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireWordcloudContent) {

@@ -68,6 +68,7 @@ import {
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { filter, map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
@@ -107,6 +108,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   private readonly contentService = inject(ContentService);
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
+  private readonly mutations = mutationHelper();
   private readonly dialogService = inject(DialogService);
   private readonly contentGroupService = inject(ContentGroupService);
   private readonly contentPublishService = inject(ContentPublishService);
@@ -195,16 +197,18 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
       body,
       undefined,
       () =>
-        this.deleteContentById.mutate({
-          variables: { id },
-          refetchQueries: [
-            {
-              query: QuestionnaireContentsByQuestionnaireIdDocument,
-              variables: { questionnaireId: this.questionnaire().id },
-            },
-            QuestionnairesByRoomIdDocument,
-          ],
-        })
+        this.deleteContentById
+          .mutate({
+            variables: { id },
+            refetchQueries: [
+              {
+                query: QuestionnaireContentsByQuestionnaireIdDocument,
+                variables: { questionnaireId: this.questionnaire().id },
+              },
+              QuestionnairesByRoomIdDocument,
+            ],
+          })
+          .pipe(this.mutations.reportErrors())
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -240,15 +244,17 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
       undefined,
       undefined,
       () =>
-        this.deleteAnswersByContentId.mutate({
-          variables: { contentId: content.id },
-          refetchQueries: [
-            {
-              query: QuestionnaireContentsByQuestionnaireIdDocument,
-              variables: { questionnaireId: this.questionnaire().id },
-            },
-          ],
-        })
+        this.deleteAnswersByContentId
+          .mutate({
+            variables: { contentId: content.id },
+            refetchQueries: [
+              {
+                query: QuestionnaireContentsByQuestionnaireIdDocument,
+                variables: { questionnaireId: this.questionnaire().id },
+              },
+            ],
+          })
+          .pipe(this.mutations.reportErrors())
     );
   }
 
@@ -283,17 +289,20 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   }
 
   resetBannedAnswers(contentId: string) {
-    this.resetBannedKeywords.mutate({ variables: { contentId } }).subscribe({
-      next: () => {
-        const msg = this.translateService.translate(
-          'creator.content.banned-keywords-reset'
-        );
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.WARNING
-        );
-      },
-    });
+    this.resetBannedKeywords
+      .mutate({ variables: { contentId } })
+      .pipe(this.mutations.handleErrors())
+      .subscribe({
+        next: () => {
+          const msg = this.translateService.translate(
+            'creator.content.banned-keywords-reset'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.WARNING
+          );
+        },
+      });
   }
 
   private getSortIndex(
@@ -333,6 +342,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
           contentIds: this.dragDroplist.map((content) => content.id),
         },
       })
+      .pipe(this.mutations.reportErrors())
       .subscribe({
         error: () => {
           this.sortableContents.set(previousOrder);
@@ -414,6 +424,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
           QuestionnairesByRoomIdDocument,
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.duplicateQuestionnaireContent) {
@@ -449,7 +460,12 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
       .pipe(
         filter((q): q is { id: string; name: string } => !!q),
 
-        switchMap((q) => mutation(contentId, q.id).pipe(map(() => q)))
+        switchMap((q) =>
+          mutation(contentId, q.id).pipe(
+            this.mutations.handleErrors(),
+            map(() => q)
+          )
+        )
       )
       .subscribe({
         next: (q) => {
@@ -463,7 +479,6 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
             AdvancedSnackBarTypes.SUCCESS
           );
         },
-        error: (e) => this.notificationService.showOnRequestClientError(e),
       });
   }
 

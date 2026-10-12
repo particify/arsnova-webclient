@@ -56,6 +56,7 @@ import { Apollo, onlyCompleteData } from 'apollo-angular';
 import { FORMAT_REGISTRY } from './format-registry';
 import { AnswerForm } from '@app/participant/content/answer-form';
 import { formatAnsweringDuration } from './answering-duration';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 interface ContentActionTab {
   route: string;
@@ -102,6 +103,7 @@ export class ContentParticipantComponent {
   private readonly answerByRoundId = inject(QuestionnaireAnswerByRoundIdGql);
   private readonly cache = inject(Apollo).client.cache;
   private readonly createAbstention = inject(CreateQuestionnaireAbstentionGql);
+  private readonly mutations = mutationHelper();
 
   readonly formatComponent = computed(
     () => FORMAT_REGISTRY[this.content().formatData.format].component
@@ -238,14 +240,17 @@ export class ContentParticipantComponent {
   submitAbstention() {
     const roundId = this.content().activeRound?.id;
     if (roundId) {
-      this.createAbstention.mutate({ variables: { roundId } }).subscribe({
-        next: (r) => {
-          const answer = r.data?.createQuestionnaireAbstention;
-          if (answer) {
-            this.setAnswer(answer as Answer);
-          }
-        },
-      });
+      this.createAbstention
+        .mutate({ variables: { roundId } })
+        .pipe(this.mutations.handleErrors())
+        .subscribe({
+          next: (r) => {
+            const answer = r.data?.createQuestionnaireAbstention;
+            if (answer) {
+              this.setAnswer(answer as Answer);
+            }
+          },
+        });
     }
   }
 

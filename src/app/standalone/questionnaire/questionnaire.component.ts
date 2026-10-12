@@ -25,6 +25,7 @@ import {
   QuestionnaireSummaryFragment,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   imports: [
@@ -49,6 +50,7 @@ export class QuestionnaireComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
+  private readonly mutations = mutationHelper();
   private readonly toggleQuestionnairePublished = inject(
     ToggleQuestionnairePublishedGql
   );
@@ -71,6 +73,7 @@ export class QuestionnaireComponent {
     const published = !this.questionnaire().published;
     this.toggleQuestionnairePublished
       .mutate({ variables: { id: this.questionnaire().id, published } })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: () => {
           const msg = this.translateService.translate(

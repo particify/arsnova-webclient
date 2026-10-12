@@ -30,6 +30,7 @@ import { QuestionnairePageService } from '@app/creator/questionnaire/questionnai
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { AnswerOption } from '@app/core/models/answer-option';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   selector: 'app-choice-content-form',
@@ -53,6 +54,7 @@ export class ChoiceContentFormComponent implements ContentForm<ChoiceContentForm
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
 
   private readonly answerList = viewChild<AnswerOptionListComponent>(
     AnswerOptionListComponent
@@ -111,6 +113,7 @@ export class ChoiceContentFormComponent implements ContentForm<ChoiceContentForm
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireChoiceContent;
@@ -151,6 +154,7 @@ export class ChoiceContentFormComponent implements ContentForm<ChoiceContentForm
           QuestionnairesByRoomIdDocument,
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireChoiceContent) {

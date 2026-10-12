@@ -22,6 +22,7 @@ import {
   CreateQuestionnaireChoiceAnswerGql,
 } from '@gql/generated/graphql';
 import { AnswerForm } from '@app/participant/content/answer-form';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   selector: 'app-content-choice-participant',
@@ -33,6 +34,7 @@ export class ContentChoiceParticipantComponent implements AnswerForm {
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
   private readonly createAnswer = inject(CreateQuestionnaireChoiceAnswerGql);
+  private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
   readonly roundId = input<string>();
@@ -94,6 +96,7 @@ export class ContentChoiceParticipantComponent implements AnswerForm {
             selectedChoiceIndexes,
           },
         })
+        .pipe(this.mutations.handleErrors())
         .subscribe({
           next: (r) => {
             const answer = r.data?.createQuestionnaireChoiceAnswer;

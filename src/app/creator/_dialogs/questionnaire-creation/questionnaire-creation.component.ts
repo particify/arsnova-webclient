@@ -12,6 +12,7 @@ import {
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { take } from 'rxjs';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import {
   DetailedRadioGroup,
   DetailRadioGroupComponent,
@@ -61,6 +62,7 @@ export class QuestionnaireCreationComponent {
   private readonly translateService = inject(TranslocoService);
   private readonly contentGroupService = inject(ContentGroupService);
   private readonly createQuestionnaire = inject(CreateQuestionnaireGql);
+  private readonly mutations = mutationHelper();
   private readonly data = inject<DialogData>(MAT_DIALOG_DATA);
 
   readonly dialogId = 'create-content-group';
@@ -110,6 +112,7 @@ export class QuestionnaireCreationComponent {
           },
           refetchQueries: [QuestionnairesByRoomIdDocument],
         })
+        .pipe(this.mutations.handleErrors())
         .subscribe({
           next: (r) => {
             const id = r.data?.createQuestionnaire.id;
@@ -125,9 +128,6 @@ export class QuestionnaireCreationComponent {
                 });
               this.closeDialog(id, r.data?.createQuestionnaire.name);
             }
-          },
-          error: (e) => {
-            this.notificationService.showOnRequestClientError(e);
           },
         });
     } else {

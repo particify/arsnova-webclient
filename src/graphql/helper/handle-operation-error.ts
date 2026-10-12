@@ -17,15 +17,22 @@ export type ErrorHandlers = Partial<
   Record<ErrorClassification | FallbackHandler, ErrorHandler>
 >;
 
+/** The classification of a failed operation's first error, if it is a known one. */
+export function classifyOperationError(
+  response: unknown
+): ErrorClassification | undefined {
+  if (!CombinedGraphQLErrors.is(response)) {
+    return undefined;
+  }
+  const classification = response.errors[0].extensions?.['classification'];
+  return Object.values(ErrorClassification).find((c) => c === classification);
+}
+
 export function handleOperationErrors(
   response: unknown,
   handlers: ErrorHandlers
 ) {
-  if (!CombinedGraphQLErrors.is(response)) {
-    return;
-  }
-  const classification = response.errors[0].extensions?.['classification'] as
-    ErrorClassification | undefined;
+  const classification = classifyOperationError(response);
   if (classification) {
     (handlers[classification] ?? handlers[FALLBACK_HANDLER])?.();
   }
