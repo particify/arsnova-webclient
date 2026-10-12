@@ -89,7 +89,12 @@ export class TextResultsComponent {
         }
     ).pipe(
       onlyCompleteData(),
-      map((r) => r.data?.questionnaireTextAnswersByRoundId ?? [])
+      // Moderating readers receive hidden answers as well.
+      map((r) =>
+        (r.data?.questionnaireTextAnswersByRoundId ?? []).filter(
+          (answer) => !answer.hidden
+        )
+      )
     );
   }
 

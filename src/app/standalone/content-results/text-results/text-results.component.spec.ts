@@ -245,6 +245,24 @@ describe('TextResultsComponent', () => {
     expect(bodies()).toEqual(['First', 'Second', 'Third']);
   });
 
+  it('leaves out hidden answers that moderating readers receive', () => {
+    setUp();
+
+    answers$.next(
+      result({
+        questionnaireTextAnswersByRoundId: [
+          answer('a-1', 'First'),
+          answer('a-2', 'Second', true),
+        ],
+      })
+    );
+    fixture.detectChanges();
+    expect(bodies()).toEqual(['First']);
+
+    emitUpdate([answer('a-1', 'First', true), answer('a-3', 'Third')]);
+    expect(bodies()).toEqual(['Third']);
+  });
+
   it('still reflects a refetch of the query after a push', () => {
     setUp();
     emitUpdate([answer('a-3', 'Third')]);
