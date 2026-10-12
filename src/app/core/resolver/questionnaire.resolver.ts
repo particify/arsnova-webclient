@@ -36,8 +36,8 @@ export const questionnaireResolver: ResolveFn<Questionnaire> = (
     );
 };
 
-/** The URL of the room route the questionnaire route is nested in. */
-function roomPath(route: ActivatedRouteSnapshot): string[] {
+/** The URL of the room route the given route is nested in. */
+export function roomPath(route: ActivatedRouteSnapshot): string[] {
   const roomRoute = route.pathFromRoot.find((r) => r.paramMap.has('shortId'));
   const segments = (roomRoute?.pathFromRoot ?? []).flatMap((r) =>
     r.url.map((s) => s.path)

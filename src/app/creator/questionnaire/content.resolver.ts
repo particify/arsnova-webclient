@@ -1,14 +1,26 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
-import { filter, map } from 'rxjs';
+import {
+  ActivatedRouteSnapshot,
+  RedirectCommand,
+  ResolveFn,
+  Router,
+} from '@angular/router';
+import { roomPath } from '@app/core/resolver/questionnaire.resolver';
 import { Content, QuestionnaireContentByIdGql } from '@gql/generated/graphql';
+import { catchError, map, of } from 'rxjs';
 
 /**
  * A resolver that returns the current content (Content).
+ *
+ * A content that cannot be read or no longer exists leads back to the room
+ * instead of failing the navigation.
  */
 export const contentResolver: ResolveFn<Content> = (
   route: ActivatedRouteSnapshot
 ) => {
+  const router = inject(Router);
+  const toRoom = () =>
+    new RedirectCommand(router.createUrlTree(roomPath(route)));
   return inject(QuestionnaireContentByIdGql)
     .fetch({
       variables: {
@@ -16,7 +28,10 @@ export const contentResolver: ResolveFn<Content> = (
       },
     })
     .pipe(
-      map((r) => r.data?.questionnaireContentById),
-      filter((n): n is Content => !!n)
+      map(
+        (r) =>
+          (r.data?.questionnaireContentById as Content | undefined) ?? toRoom()
+      ),
+      catchError(() => of(toRoom()))
     );
 };

@@ -1,52 +1,87 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RedirectCommand,
+  Router,
+  UrlSegment,
+  convertToParamMap,
+} from '@angular/router';
 import { QuestionnaireContentByIdGql } from '@gql/generated/graphql';
-import { Observable, of, toArray, firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom, of, throwError } from 'rxjs';
 import { contentResolver } from './content.resolver';
 
+function snapshot(
+  path: string[],
+  params: Record<string, string>
+): ActivatedRouteSnapshot {
+  return {
+    url: path.map((p) => new UrlSegment(p, {})),
+    params,
+    paramMap: convertToParamMap(params),
+  } as unknown as ActivatedRouteSnapshot;
+}
+
 describe('contentResolver', () => {
+  const root = snapshot([], {});
+  const role = snapshot(['edit'], {});
+  const room = snapshot(['12345678'], { shortId: '12345678' });
+  const questionnaire = snapshot(['questionnaire', 'q-1'], {
+    questionnaireId: 'q-1',
+  });
+  const content = snapshot(['edit', 'c-1'], { contentId: 'c-1' });
+  const routes = [root, role, room, questionnaire, content];
+  for (const [i, s] of routes.entries()) {
+    Object.assign(s, { pathFromRoot: routes.slice(0, i + 1) });
+  }
+
   let contentById: jasmine.SpyObj<QuestionnaireContentByIdGql>;
 
-  function resolve(contentId: string, result: unknown) {
+  function resolve(fetch: Observable<unknown>) {
     contentById = jasmine.createSpyObj('QuestionnaireContentByIdGql', [
       'fetch',
     ]);
-    contentById.fetch.and.returnValue(of(result) as never);
+    contentById.fetch.and.returnValue(fetch as never);
     TestBed.configureTestingModule({
       providers: [
         { provide: QuestionnaireContentByIdGql, useValue: contentById },
       ],
     });
-    const route = {
-      params: { contentId },
-    } as unknown as ActivatedRouteSnapshot;
     return TestBed.runInInjectionContext(() =>
       firstValueFrom(
-        (contentResolver(route, {} as never) as Observable<unknown>).pipe(
-          toArray()
-        )
+        contentResolver(content, {} as never) as Observable<unknown>
       )
     );
   }
 
-  it('resolves the content of the route', async () => {
-    const content = { id: 'c-1' };
+  function redirectUrl(result: unknown): string {
+    expect(result).toBeInstanceOf(RedirectCommand);
+    return TestBed.inject(Router).serializeUrl(
+      (result as RedirectCommand).redirectTo as never
+    );
+  }
 
-    const resolved = await resolve('c-1', {
-      data: { questionnaireContentById: content },
-    });
+  it('resolves the content of the route', async () => {
+    const c = { id: 'c-1' };
+
+    const resolved = await resolve(
+      of({ data: { questionnaireContentById: c } })
+    );
 
     expect(contentById.fetch).toHaveBeenCalledWith({
       variables: { id: 'c-1' },
     });
-    expect(resolved).toEqual([content]);
+    expect(resolved).toBe(c);
   });
 
-  it('resolves nothing for a content that does not exist', async () => {
-    const resolved = await resolve('c-1', {
-      data: { questionnaireContentById: null },
-    });
+  it('leads back to the room when the content does not exist', async () => {
+    const result = await resolve(
+      of({ data: { questionnaireContentById: null } })
+    );
+    expect(redirectUrl(result)).toBe('/edit/12345678');
+  });
 
-    expect(resolved).toEqual([]);
+  it('leads back to the room when reading is forbidden', async () => {
+    const result = await resolve(throwError(() => new Error('Forbidden')));
+    expect(redirectUrl(result)).toBe('/edit/12345678');
   });
 });
