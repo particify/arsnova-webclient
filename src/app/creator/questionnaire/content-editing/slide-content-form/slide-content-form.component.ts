@@ -4,6 +4,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentForm } from '@app/creator/questionnaire/content-editing/content-form';
 import {
@@ -26,6 +27,7 @@ export class SlideContentFormComponent
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
   private readonly createSlideContent = inject(
     CreateQuestionnaireSlideContentGql
   );
@@ -63,6 +65,7 @@ export class SlideContentFormComponent
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireSlideContent;
@@ -96,6 +99,7 @@ export class SlideContentFormComponent
           },
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireSlideContent) {

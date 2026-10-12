@@ -11,6 +11,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentForm } from '@app/creator/questionnaire/content-editing/content-form';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -49,6 +50,7 @@ export class FlashcardContentFormComponent
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
   private readonly formattingService = inject(FormattingService);
   private readonly createFlashcardContent = inject(
     CreateQuestionnaireFlashcardContentGql
@@ -106,6 +108,7 @@ export class FlashcardContentFormComponent
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireFlashcardContent;
@@ -140,6 +143,7 @@ export class FlashcardContentFormComponent
           },
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireFlashcardContent) {
