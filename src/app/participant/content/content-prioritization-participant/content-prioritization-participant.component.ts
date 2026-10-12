@@ -22,6 +22,7 @@ import {
   PrioritizationAnswerFormatData,
   PrioritizationContentFormatData,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   selector: 'app-content-prioritization-participant',
@@ -33,6 +34,7 @@ import {
 export class ContentPrioritizationParticipantComponent implements AnswerForm {
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
+  private readonly mutations = mutationHelper();
   private readonly createAnswer = inject(
     CreateQuestionnairePrioritizationAnswerGql
   );
@@ -100,6 +102,7 @@ export class ContentPrioritizationParticipantComponent implements AnswerForm {
     }
     this.createAnswer
       .mutate({ variables: { roundId, assignedPoints } })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const answer = r.data?.createQuestionnairePrioritizationAnswer;

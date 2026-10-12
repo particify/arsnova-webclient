@@ -25,6 +25,7 @@ import {
   QuestionnaireContentsByQuestionnaireIdDocument,
   UpdateQuestionnairePrioritizationContentGql,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 function sameItems(labels: string[], others: string[]): boolean {
   return (
@@ -47,6 +48,7 @@ export class PrioritizationContentFormComponent implements ContentForm<Prioritiz
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
   private readonly createPrioritizationContent = inject(
     CreateQuestionnairePrioritizationContentGql
   );
@@ -127,6 +129,7 @@ export class PrioritizationContentFormComponent implements ContentForm<Prioritiz
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnairePrioritizationContent;
@@ -163,6 +166,7 @@ export class PrioritizationContentFormComponent implements ContentForm<Prioritiz
           },
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnairePrioritizationContent) {
