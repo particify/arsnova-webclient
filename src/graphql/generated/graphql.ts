@@ -572,11 +572,11 @@ export type MutationCreateQuestionnaireSlideContentArgs = {
 };
 
 export type MutationCreateQuestionnaireTextAnswerArgs = {
-  input?: InputMaybe<CreateTextAnswerInput>;
+  input: CreateTextAnswerInput;
 };
 
 export type MutationCreateQuestionnaireTextContentArgs = {
-  input?: InputMaybe<CreateTextContentInput>;
+  input: CreateTextContentInput;
 };
 
 export type MutationCreateQuestionnaireWordcloudAnswerArgs = {
@@ -793,7 +793,7 @@ export type MutationUpdateQuestionnaireSlideContentArgs = {
 };
 
 export type MutationUpdateQuestionnaireTextContentArgs = {
-  input?: InputMaybe<UpdateTextContentInput>;
+  input: UpdateTextContentInput;
 };
 
 export type MutationUpdateQuestionnaireWordcloudContentArgs = {
@@ -1422,7 +1422,7 @@ export type TextAnswerFormatData = {
 
 export type TextContentFormatData = {
   __typename?: 'TextContentFormatData';
-  answersPublished?: Maybe<Scalars['Boolean']['output']>;
+  answersPublished: Scalars['Boolean']['output'];
   format: ContentType;
 };
 
@@ -2627,7 +2627,11 @@ export type ContentDetailsFragment = {
       }
     | { __typename?: 'ScaleContentFormatData'; format: ContentType }
     | { __typename?: 'SlideContentFormatData'; format: ContentType }
-    | { __typename?: 'TextContentFormatData'; format: ContentType }
+    | {
+        __typename?: 'TextContentFormatData';
+        format: ContentType;
+        answersPublished: boolean;
+      }
     | {
         __typename?: 'WordcloudContentFormatData';
         format: ContentType;
@@ -2681,7 +2685,7 @@ export type CreatorContentDetailsFragment = {
     | {
         __typename?: 'TextContentFormatData';
         format: ContentType;
-        answersPublished?: boolean | null;
+        answersPublished: boolean;
       }
     | {
         __typename?: 'WordcloudContentFormatData';
@@ -2882,7 +2886,7 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
           | {
               __typename?: 'TextContentFormatData';
               format: ContentType;
-              answersPublished?: boolean | null;
+              answersPublished: boolean;
             }
           | {
               __typename?: 'WordcloudContentFormatData';
@@ -2949,7 +2953,7 @@ export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
           | {
               __typename?: 'TextContentFormatData';
               format: ContentType;
-              answersPublished?: boolean | null;
+              answersPublished: boolean;
             }
           | {
               __typename?: 'WordcloudContentFormatData';
@@ -3084,7 +3088,7 @@ export type CreateQuestionnaireChoiceContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3146,7 +3150,7 @@ export type UpdateQuestionnaireChoiceContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3208,7 +3212,7 @@ export type CreateQuestionnaireWordcloudContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3270,7 +3274,7 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3297,7 +3301,6 @@ export type CreateQuestionnaireTextContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3331,7 +3334,7 @@ export type CreateQuestionnaireTextContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3358,7 +3361,6 @@ export type UpdateQuestionnaireTextContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3392,7 +3394,7 @@ export type UpdateQuestionnaireTextContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3454,7 +3456,7 @@ export type CreateQuestionnaireFlashcardContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3516,7 +3518,7 @@ export type UpdateQuestionnaireFlashcardContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3578,7 +3580,7 @@ export type CreateQuestionnaireSlideContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3640,7 +3642,7 @@ export type UpdateQuestionnaireSlideContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -3702,7 +3704,7 @@ export type QuestionnaireContentByIdQuery = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -4046,7 +4048,7 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -4109,7 +4111,7 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -4138,7 +4140,6 @@ export type ToggleQuestionnaireTextContentAnswersPublishedMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -4146,6 +4147,7 @@ export type ToggleQuestionnaireTextContentAnswersPublishedMutation = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
@@ -4171,7 +4173,7 @@ export type ToggleQuestionnaireTextContentAnswersPublishedMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -4317,7 +4319,7 @@ export type DuplicateQuestionnaireContentMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -4380,7 +4382,7 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
@@ -4443,7 +4445,7 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
       | {
           __typename?: 'TextContentFormatData';
           format: ContentType;
-          answersPublished?: boolean | null;
+          answersPublished: boolean;
         }
       | {
           __typename?: 'WordcloudContentFormatData';
