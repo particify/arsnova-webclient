@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -50,13 +50,14 @@ function roundStats(combinations: [number[], number][]): SortContentRoundStats {
   };
 }
 
-function complete(data: unknown) {
-  return of({ dataState: 'complete' as const, data });
+function result(data: unknown) {
+  return { dataState: 'complete' as const, data };
 }
 
 describe('SortResultsComponent', () => {
   let fixture: ComponentFixture<SortResultsComponent>;
   let component: SortResultsComponent;
+  let stats$: BehaviorSubject<unknown>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
   let statsByRoundId: jasmine.SpyObj<QuestionnaireSortRoundStatsByRoundIdGql>;
@@ -70,8 +71,13 @@ describe('SortResultsComponent', () => {
       'QuestionnaireSortRoundStatsByRoundIdGql',
       ['watch']
     );
+    stats$ = new BehaviorSubject<unknown>(
+      result({ questionnaireSortRoundStatsByRoundId: stats })
+    );
+    // Writes land in the query like in Apollo's cache: as a new result.
     statsByRoundId.watch.and.returnValue({
-      valueChanges: complete({ questionnaireSortRoundStatsByRoundId: stats }),
+      valueChanges: stats$,
+      updateQuery: (mapFn: () => unknown) => stats$.next(result(mapFn())),
     } as never);
 
     statsUpdated = new Subject<unknown>();
@@ -288,22 +294,47 @@ describe('SortResultsComponent', () => {
     expect(chart()?.data().datasets[0].values).toEqual([]);
   });
 
+  function emitUpdate(stats: SortContentRoundStats) {
+    statsUpdated.next({ data: { questionnaireSortRoundStatsUpdated: stats } });
+    fixture.detectChanges();
+  }
+
   it('keeps the numbering while a live update arrives', () => {
     setUp(roundStats([[[0, 1, 2, 3], 1]]));
     const shuffled = optionOrder();
 
-    statsUpdated.next({
-      data: {
-        questionnaireSortRoundStatsUpdated: roundStats([
-          [[0, 1, 2, 3], 4],
-          [[1, 0, 2, 3], 1],
-        ]),
-      },
-    });
-    fixture.detectChanges();
+    emitUpdate(
+      roundStats([
+        [[0, 1, 2, 3], 4],
+        [[1, 0, 2, 3], 1],
+      ])
+    );
 
     expect(chart()?.data().datasets[0].values).toEqual([4, 1]);
     expect(optionOrder()).toEqual(shuffled);
+  });
+
+  it('still reflects a refetch of the query after a push', () => {
+    setUp(roundStats([[[0, 1, 2, 3], 1]]));
+    emitUpdate(roundStats([[[0, 1, 2, 3], 4]]));
+
+    stats$.next(
+      result({ questionnaireSortRoundStatsByRoundId: roundStats([]) })
+    );
+    fixture.detectChanges();
+
+    expect(chart()?.data().datasets[0].values).toEqual([]);
+  });
+
+  it('keeps the last stats when the updates fail', () => {
+    spyOn(console, 'error');
+    setUp(roundStats([[[0, 1, 2, 3], 1]]));
+
+    statsUpdated.error(new Error('Subscription lost'));
+    fixture.detectChanges();
+
+    expect(chart()?.data().datasets[0].values).toEqual([1]);
+    expect(console.error).toHaveBeenCalled();
   });
 
   it('hides the chart while the results are hidden, keeping the items', () => {

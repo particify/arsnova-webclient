@@ -7,8 +7,9 @@ import {
   untracked,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, merge, of, share, switchMap, takeUntil } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
+import { updateOn } from '@gql/helper/update-on';
 import { TranslocoService } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -76,20 +77,18 @@ export class SortResultsComponent {
         if (!roundId) {
           return of(undefined);
         }
-        const initial$ = this.roundStatsByRoundId
-          .watch({ variables: { roundId } })
-          .valueChanges.pipe(
-            onlyCompleteData(),
-            map((r) => r.data?.questionnaireSortRoundStatsByRoundId)
-          );
-
-        const updates$ = this.roundStatsUpdated
-          .subscribe({ variables: { roundId } })
-          .pipe(
-            map((r) => r.data?.questionnaireSortRoundStatsUpdated),
-            share()
-          );
-        return merge(initial$.pipe(takeUntil(updates$)), updates$);
+        return updateOn(
+          this.roundStatsByRoundId.watch({ variables: { roundId } }),
+          this.roundStatsUpdated.subscribe({ variables: { roundId } }),
+          (r) =>
+            r.data && {
+              questionnaireSortRoundStatsByRoundId:
+                r.data.questionnaireSortRoundStatsUpdated,
+            }
+        ).pipe(
+          onlyCompleteData(),
+          map((r) => r.data?.questionnaireSortRoundStatsByRoundId)
+        );
       })
     )
   );
