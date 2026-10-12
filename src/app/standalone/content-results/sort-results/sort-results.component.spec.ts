@@ -101,7 +101,7 @@ describe('SortResultsComponent', () => {
             getCurrentTheme$: () => of(Theme.LIGHT),
           },
         },
-        { provide: PresentationService, useValue: { getScale: () => 1 } },
+        { provide: PresentationService, useValue: { scale: () => 1 } },
         // The item list renders the labels through this service.
         {
           provide: FormattingService,

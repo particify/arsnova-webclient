@@ -67,7 +67,7 @@ export class SortResultsComponent {
   private readonly roundId = computed(() => this.roundIds()[0]);
 
   readonly scale = computed(() =>
-    this.isPresentation() ? this.presentationService.getScale() : 1
+    this.isPresentation() ? this.presentationService.scale() : 1
   );
 
   readonly roundStats = toSignal(
