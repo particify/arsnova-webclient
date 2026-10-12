@@ -385,6 +385,19 @@ subscription QuestionnaireContentUpdated($questionnaireId: UUID!) {
     id
     answerCount
     abstentionCount
+    activeRound {
+      id
+      roundNo
+      closed
+    }
+  }
+}
+
+subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
+  questionnaireContentUpdated(questionnaireId: $questionnaireId) {
+    id
+    answerCount
+    abstentionCount
     correctAnswerCount
     activeRound {
       id

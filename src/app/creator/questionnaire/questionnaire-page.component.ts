@@ -62,12 +62,12 @@ import { MatCard } from '@angular/material/card';
 import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
 import {
   Content,
+  CreatorQuestionnaireContentUpdatedGql,
   DeleteQuestionnaireGql,
   Questionnaire,
   QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
-  QuestionnaireContentUpdatedGql,
   QuestionnairePublishingMode,
   QuestionnaireType,
   ResetQuestionnaireResultsGql,
@@ -146,7 +146,7 @@ export class QuestionnairePageComponent {
   );
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
   private readonly questionnaireContentUpdated = inject(
-    QuestionnaireContentUpdatedGql
+    CreatorQuestionnaireContentUpdatedGql
   );
 
   readonly userRole = input.required<UserRole>();

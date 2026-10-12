@@ -3624,6 +3624,26 @@ export type QuestionnaireContentUpdatedSubscription = {
     id: string;
     answerCount?: number | null;
     abstentionCount?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+    } | null;
+  } | null;
+};
+
+export type CreatorQuestionnaireContentUpdatedSubscriptionVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type CreatorQuestionnaireContentUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireContentUpdated?: {
+    __typename?: 'Content';
+    id: string;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
     correctAnswerCount?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -6744,7 +6764,6 @@ export const QuestionnaireContentUpdatedDocument = gql`
       id
       answerCount
       abstentionCount
-      correctAnswerCount
       activeRound {
         id
         roundNo
@@ -6762,6 +6781,35 @@ export class QuestionnaireContentUpdatedGql extends Apollo.Subscription<
   QuestionnaireContentUpdatedSubscriptionVariables
 > {
   document = QuestionnaireContentUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreatorQuestionnaireContentUpdatedDocument = gql`
+  subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
+    questionnaireContentUpdated(questionnaireId: $questionnaireId) {
+      id
+      answerCount
+      abstentionCount
+      correctAnswerCount
+      activeRound {
+        id
+        roundNo
+        closed
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreatorQuestionnaireContentUpdatedGql extends Apollo.Subscription<
+  CreatorQuestionnaireContentUpdatedSubscription,
+  CreatorQuestionnaireContentUpdatedSubscriptionVariables
+> {
+  document = CreatorQuestionnaireContentUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
