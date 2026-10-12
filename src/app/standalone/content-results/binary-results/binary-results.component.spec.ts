@@ -5,7 +5,7 @@ import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { ThemeService } from '@app/core/theme/theme.service';
+import { Theme, ThemeService } from '@app/core/theme/theme.service';
 import { BarChartComponent } from '@app/standalone/content-results/visualization/chart/bar-chart.component';
 import {
   BinaryContentFormatData,
@@ -28,6 +28,7 @@ const themeService = {
   getBarColors: () => ['var(--bar-blue)', 'var(--bar-yellow)'],
   getBinaryColors: () => [...BINARY_COLORS],
   getColor: (name: string) => (name === 'grey' ? GREY : '#000000'),
+  getCurrentTheme$: () => of(Theme.LIGHT),
 };
 
 function answerLabels(labels: [string, string]) {
