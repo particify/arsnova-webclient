@@ -34,7 +34,12 @@ describe('ChoiceResultsComponent', () => {
       'QuestionnaireChoiceRoundStatsByRoundIdGql',
       ['watch']
     );
-    roundStats.watch.and.returnValue({ valueChanges: stats$ } as never);
+    // Writes land in the query like in Apollo's cache: as a new result.
+    roundStats.watch.and.returnValue({
+      valueChanges: stats$,
+      updateQuery: (mapFn: () => unknown) =>
+        stats$.next({ dataState: 'complete', data: mapFn() }),
+    } as never);
     roundStatsUpdated = jasmine.createSpyObj(
       'QuestionnaireChoiceRoundStatsUpdatedGql',
       ['subscribe']
@@ -152,7 +157,7 @@ describe('ChoiceResultsComponent', () => {
     });
   });
 
-  it('shows the loaded stats until an update arrives', () => {
+  it('shows the loaded stats and then each update', () => {
     setUp({ options });
 
     emitStats([1, 2, 3]);
@@ -162,13 +167,24 @@ describe('ChoiceResultsComponent', () => {
     expect(component.selectionCounts()).toEqual([2, 2, 3]);
   });
 
-  it('ignores the query once the updates have taken over', () => {
+  it('still reflects a refetch of the query after an update', () => {
     setUp({ options });
     emitUpdate([2, 2, 3]);
 
+    emitStats([0, 0, 0]);
+
+    expect(component.selectionCounts()).toEqual([0, 0, 0]);
+  });
+
+  it('keeps the last stats when the updates fail', () => {
+    spyOn(console, 'error');
+    setUp({ options });
     emitStats([1, 2, 3]);
 
-    expect(component.selectionCounts()).toEqual([2, 2, 3]);
+    updates$.error(new Error('Subscription lost'));
+
+    expect(component.selectionCounts()).toEqual([1, 2, 3]);
+    expect(console.error).toHaveBeenCalled();
   });
 
   it('switches both sources to another round', () => {

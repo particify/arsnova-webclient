@@ -6,8 +6,9 @@ import {
   QuestionnaireWordcloudRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
-import { map, merge, share, switchMap, takeUntil } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { mutationHelper } from '@gql/helper/mutation-helper';
+import { updateOn } from '@gql/helper/update-on';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { CoreModule } from '@app/core/core.module';
 import { WordcloudComponent } from '@app/standalone/content-results/visualization/wordcloud/wordcloud.component';
@@ -55,22 +56,20 @@ export class WordcloudResultsComponent {
   readonly allowAnswerModeration = input(false);
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
-      switchMap((roundId) => {
-        const initial$ = this.roundStatsByRoundId
-          .watch({ variables: { roundId } })
-          .valueChanges.pipe(
-            onlyCompleteData(),
-            map((r) => r.data?.questionnaireWordcloudRoundStatsByRoundId)
-          );
-
-        const updates$ = this.wordcloudRoundStatsUpdated
-          .subscribe({ variables: { roundId } })
-          .pipe(
-            map((r) => r.data?.questionnaireWordcloudRoundStatsUpdated),
-            share()
-          );
-        return merge(initial$.pipe(takeUntil(updates$)), updates$);
-      })
+      switchMap((roundId) =>
+        updateOn(
+          this.roundStatsByRoundId.watch({ variables: { roundId } }),
+          this.wordcloudRoundStatsUpdated.subscribe({ variables: { roundId } }),
+          (r) =>
+            r.data && {
+              questionnaireWordcloudRoundStatsByRoundId:
+                r.data.questionnaireWordcloudRoundStatsUpdated,
+            }
+        ).pipe(
+          onlyCompleteData(),
+          map((r) => r.data?.questionnaireWordcloudRoundStatsByRoundId)
+        )
+      )
     )
   );
 

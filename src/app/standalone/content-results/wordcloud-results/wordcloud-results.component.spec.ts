@@ -12,7 +12,7 @@ import {
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { Observable, Subject, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { WordcloudResultsComponent } from './wordcloud-results.component';
 
 describe('WordcloudResultsComponent', () => {
@@ -20,6 +20,7 @@ describe('WordcloudResultsComponent', () => {
   let component: WordcloudResultsComponent;
   let roundStats: jasmine.SpyObj<QuestionnaireWordcloudRoundStatsByRoundIdGql>;
   let roundStatsUpdated: jasmine.SpyObj<QuestionnaireWordcloudRoundStatsUpdatedGql>;
+  let stats$: BehaviorSubject<unknown>;
   let updates$: Subject<unknown>;
   let banKeyword: jasmine.SpyObj<BanQuestionnaireWordcloudContentKeywordGql>;
   let dialogService: jasmine.SpyObj<DialogService>;
@@ -46,8 +47,14 @@ describe('WordcloudResultsComponent', () => {
       'QuestionnaireWordcloudRoundStatsByRoundIdGql',
       ['watch']
     );
+    stats$ = new BehaviorSubject<unknown>(
+      statsResult(['Angular', 'Kotlin'], [3, 1])
+    );
+    // Writes land in the query like in Apollo's cache: as a new result.
     roundStats.watch.and.returnValue({
-      valueChanges: of(statsResult(['Angular', 'Kotlin'], [3, 1])),
+      valueChanges: stats$,
+      updateQuery: (mapFn: () => unknown) =>
+        stats$.next({ dataState: 'complete', data: mapFn() }),
     } as never);
     updates$ = new Subject();
     roundStatsUpdated = jasmine.createSpyObj(
@@ -201,22 +208,43 @@ describe('WordcloudResultsComponent', () => {
     });
   });
 
+  function emitUpdate(words: string[], counts: number[]) {
+    updates$.next({
+      data: { questionnaireWordcloudRoundStatsUpdated: { words, counts } },
+    });
+  }
+
   it('shows the words of an update instead of the loaded ones', () => {
     setUp();
 
-    updates$.next({
-      data: {
-        questionnaireWordcloudRoundStatsUpdated: {
-          words: ['Angular', 'Kotlin', 'Rust'],
-          counts: [4, 1, 1],
-        },
-      },
-    });
+    emitUpdate(['Angular', 'Kotlin', 'Rust'], [4, 1, 1]);
 
     expect(component.listData()).toEqual([
       { answer: 'Angular', count: 4 },
       { answer: 'Kotlin', count: 1 },
       { answer: 'Rust', count: 1 },
     ]);
+  });
+
+  it('still reflects a refetch of the query after an update', () => {
+    setUp();
+    emitUpdate(['Angular', 'Kotlin', 'Rust'], [4, 1, 1]);
+
+    stats$.next(statsResult([], []));
+
+    expect(component.listData()).toEqual([]);
+  });
+
+  it('keeps the last words when the updates fail', () => {
+    spyOn(console, 'error');
+    setUp();
+
+    updates$.error(new Error('Subscription lost'));
+
+    expect(component.listData()).toEqual([
+      { answer: 'Angular', count: 3 },
+      { answer: 'Kotlin', count: 1 },
+    ]);
+    expect(console.error).toHaveBeenCalled();
   });
 });

@@ -6,7 +6,8 @@ import {
   QuestionnaireChoiceRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
-import { map, merge, share, switchMap, takeUntil } from 'rxjs';
+import { map, switchMap } from 'rxjs';
+import { updateOn } from '@gql/helper/update-on';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { ChoiceAnswerListComponent } from './choice-answer-list/choice-answer-list.component';
 import {
@@ -52,22 +53,20 @@ export class ChoiceResultsComponent {
   );
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
-      switchMap((roundId) => {
-        const initial$ = this.roundStatsByRoundId
-          .watch({ variables: { roundId } })
-          .valueChanges.pipe(
-            onlyCompleteData(),
-            map((r) => r.data?.questionnaireChoiceRoundStatsByRoundId)
-          );
-
-        const updates$ = this.choiceRoundStatsUpdated
-          .subscribe({ variables: { roundId } })
-          .pipe(
-            map((r) => r.data?.questionnaireChoiceRoundStatsUpdated),
-            share()
-          );
-        return merge(initial$.pipe(takeUntil(updates$)), updates$);
-      })
+      switchMap((roundId) =>
+        updateOn(
+          this.roundStatsByRoundId.watch({ variables: { roundId } }),
+          this.choiceRoundStatsUpdated.subscribe({ variables: { roundId } }),
+          (r) =>
+            r.data && {
+              questionnaireChoiceRoundStatsByRoundId:
+                r.data.questionnaireChoiceRoundStatsUpdated,
+            }
+        ).pipe(
+          onlyCompleteData(),
+          map((r) => r.data?.questionnaireChoiceRoundStatsByRoundId)
+        )
+      )
     )
   );
 
