@@ -8,8 +8,9 @@ import {
   QuestionnaireLeaderboardUpdatedGql,
   RoomUserAlias,
 } from '@gql/generated/graphql';
-import { Observable, map, merge, share, takeUntil } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
+import { updateOn } from '@gql/helper/update-on';
 
 /** Rows a leaderboard shows before the user's own entry is appended. */
 export const LEADERBOARD_DISPLAY_LIMIT = 10;
@@ -50,19 +51,21 @@ export function watchLeaderboard(
   leaderboardUpdated: QuestionnaireLeaderboardUpdatedGql,
   variables: QuestionnaireLeaderboardByQuestionnaireIdQueryVariables
 ): Observable<LeaderboardPage> {
-  const initial$ = leaderboardByQuestionnaireId
+  return updateOn(
     // The cached page shows at once; the network answer keeps it current.
-    .watch({ variables, fetchPolicy: 'cache-and-network' })
-    .valueChanges.pipe(
-      onlyCompleteData(),
-      map((r) => r.data?.questionnaireLeaderboardByQuestionnaireId)
-    );
-  const updates$ = leaderboardUpdated.subscribe({ variables }).pipe(
-    map((r) => r.data?.questionnaireLeaderboardUpdated),
-    share()
-  );
-  return merge(initial$.pipe(takeUntil(updates$)), updates$).pipe(
-    map((page) => page ?? EMPTY_PAGE)
+    leaderboardByQuestionnaireId.watch({
+      variables,
+      fetchPolicy: 'cache-and-network',
+    }),
+    leaderboardUpdated.subscribe({ variables }),
+    (r) =>
+      r.data && {
+        questionnaireLeaderboardByQuestionnaireId:
+          r.data.questionnaireLeaderboardUpdated,
+      }
+  ).pipe(
+    onlyCompleteData(),
+    map((r) => r.data?.questionnaireLeaderboardByQuestionnaireId ?? EMPTY_PAGE)
   );
 }
 

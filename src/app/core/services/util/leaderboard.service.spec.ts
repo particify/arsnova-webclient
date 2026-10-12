@@ -48,8 +48,11 @@ describe('watchLeaderboard', () => {
     initial$ = new Subject();
     updates$ = new Subject();
     byQuestionnaireId = jasmine.createSpyObj('ByQuestionnaireIdGql', ['watch']);
+    // Writes land in the query like in Apollo's cache: as a new result.
     byQuestionnaireId.watch.and.returnValue({
       valueChanges: initial$,
+      updateQuery: (mapFn: () => unknown) =>
+        initial$.next({ dataState: 'complete', data: mapFn() }),
     } as never);
     updated = jasmine.createSpyObj('UpdatedGql', ['subscribe']);
     updated.subscribe.and.returnValue(updates$ as never);
@@ -85,13 +88,30 @@ describe('watchLeaderboard', () => {
     expect(pages).toEqual([current]);
   });
 
-  it('continues with pushed updates and ignores the query from then on', () => {
+  it('continues with pushed updates', () => {
     const pushed = page([entry(1, 500, 'b')]);
     emitInitial(page([entry(1, 300, 'a')]));
     emitUpdate(pushed);
-    emitInitial(page([entry(1, 100, 'c')]));
     expect(pages.length).toBe(2);
     expect(pages[1]).toEqual(pushed);
+  });
+
+  it('still reflects a refetch of the query after a push', () => {
+    const refetched = page([entry(1, 100, 'c')]);
+    emitInitial(page([entry(1, 300, 'a')]));
+    emitUpdate(page([entry(1, 500, 'b')]));
+    emitInitial(refetched);
+    expect(pages.length).toBe(3);
+    expect(pages[2]).toEqual(refetched);
+  });
+
+  it('keeps streaming the query when the updates fail', () => {
+    spyOn(console, 'error');
+    const current = page([entry(1, 300, 'a')]);
+    updates$.error(new Error('Subscription lost'));
+    emitInitial(current);
+    expect(pages).toEqual([current]);
+    expect(console.error).toHaveBeenCalled();
   });
 
   it('turns a missing page into an empty one', () => {
