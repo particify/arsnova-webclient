@@ -12,6 +12,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { CoreModule } from '@app/core/core.module';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
@@ -46,6 +47,7 @@ export class ScaleContentFormComponent
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
   private readonly likertScaleService = inject(LikertScaleService);
+  private readonly mutations = mutationHelper();
   private readonly createScaleContent = inject(
     CreateQuestionnaireScaleContentGql
   );
@@ -130,6 +132,7 @@ export class ScaleContentFormComponent
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireScaleContent;
@@ -167,6 +170,7 @@ export class ScaleContentFormComponent
           },
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireScaleContent) {

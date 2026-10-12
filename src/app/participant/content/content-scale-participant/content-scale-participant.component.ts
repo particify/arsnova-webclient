@@ -12,6 +12,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { AnswerOption } from '@app/core/models/answer-option';
 import { SelectableAnswer } from '@app/core/models/selectable-answer';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
@@ -38,6 +39,7 @@ export class ContentScaleParticipantComponent implements AnswerForm {
   private readonly notificationService = inject(NotificationService);
   private readonly likertScaleService = inject(LikertScaleService);
   private readonly createAnswer = inject(CreateQuestionnaireScaleAnswerGql);
+  private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
   readonly roundId = input<string>();
@@ -83,16 +85,21 @@ export class ContentScaleParticipantComponent implements AnswerForm {
       );
       return;
     }
-    this.createAnswer.mutate({ variables: { roundId, rating } }).subscribe({
-      next: (r) => {
-        const answer = r.data?.createQuestionnaireScaleAnswer;
-        if (answer) this.answerCreated.emit(answer as Answer);
-        const msg = this.translateService.translate('participant.answer.sent');
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-      },
-    });
+    this.createAnswer
+      .mutate({ variables: { roundId, rating } })
+      .pipe(this.mutations.handleErrors())
+      .subscribe({
+        next: (r) => {
+          const answer = r.data?.createQuestionnaireScaleAnswer;
+          if (answer) this.answerCreated.emit(answer as Answer);
+          const msg = this.translateService.translate(
+            'participant.answer.sent'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        },
+      });
   }
 }
