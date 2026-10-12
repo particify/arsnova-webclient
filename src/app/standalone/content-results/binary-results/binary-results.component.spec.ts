@@ -127,7 +127,7 @@ describe('BinaryResultsComponent', () => {
           useValue: { subscribe: () => statsUpdated.asObservable() },
         },
         { provide: ThemeService, useValue: themeService },
-        { provide: PresentationService, useValue: { getScale: () => 1 } },
+        { provide: PresentationService, useValue: { scale: () => 1 } },
         { provide: BROWSER_LANG, useValue: 'en' },
       ]
     ).compileComponents();
