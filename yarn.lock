@@ -511,9 +511,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:4.3.1":
-  version: 4.3.1
-  resolution: "@apollo/client@npm:4.3.1"
+"@apollo/client@npm:4.3.3":
+  version: 4.3.3
+  resolution: "@apollo/client@npm:4.3.3"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -538,7 +538,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/afcc59d1a729e16b9bec11d0c05ec02e0b10fc33b6e68c1a15f8540955bf28eecc300099d256b488b96edeac04b9be3b52005e68d2946d3c5fcbe8466a38f63c
+  checksum: 10c0/b84356a77251d17b717ec217cca44a46e54f9b89e02f927bb8f7d216551b3aae0f76c00f0c6076fe21717b001831cf634978ab8e2d07bbcff0eab7b7f9e3abf8
   languageName: node
   linkType: hard
 
@@ -5809,7 +5809,7 @@ __metadata:
     "@angular/platform-browser-dynamic": "npm:22.2.2"
     "@angular/router": "npm:22.2.2"
     "@angular/service-worker": "npm:22.2.2"
-    "@apollo/client": "npm:4.3.1"
+    "@apollo/client": "npm:4.3.3"
     "@eslint/js": "npm:10.0.1"
     "@fontsource/material-symbols-outlined": "npm:5.3.8"
     "@fontsource/roboto": "npm:5.3.0"
