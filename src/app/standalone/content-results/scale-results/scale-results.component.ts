@@ -4,15 +4,13 @@ import {
   combineLatest,
   forkJoin,
   map,
-  merge,
   Observable,
   of,
-  share,
   switchMap,
   take,
-  takeUntil,
 } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
+import { updateOn } from '@gql/helper/update-on';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   QuestionnaireScaleRoundStatsByRoundIdGql,
@@ -64,20 +62,18 @@ export class ScaleResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<ScaleContentRoundStats | null | undefined> {
-    const initial$ = this.roundStatsByRoundId
-      .watch({ variables: { roundId } })
-      .valueChanges.pipe(
-        onlyCompleteData(),
-        map((r) => r.data?.questionnaireScaleRoundStatsByRoundId)
-      );
-
-    const updates$ = this.scaleRoundStatsUpdated
-      .subscribe({ variables: { roundId } })
-      .pipe(
-        map((r) => r.data?.questionnaireScaleRoundStatsUpdated),
-        share()
-      );
-    return merge(initial$.pipe(takeUntil(updates$)), updates$);
+    return updateOn(
+      this.roundStatsByRoundId.watch({ variables: { roundId } }),
+      this.scaleRoundStatsUpdated.subscribe({ variables: { roundId } }),
+      (r) =>
+        r.data && {
+          questionnaireScaleRoundStatsByRoundId:
+            r.data.questionnaireScaleRoundStatsUpdated,
+        }
+    ).pipe(
+      onlyCompleteData(),
+      map((r) => r.data?.questionnaireScaleRoundStatsByRoundId)
+    );
   }
 
   readonly roundStatsList = toSignal(
