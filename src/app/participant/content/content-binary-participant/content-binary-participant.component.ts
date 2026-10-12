@@ -24,6 +24,7 @@ import {
   BinaryContentFormatData,
   CreateQuestionnaireBinaryAnswerGql,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 /**
  * A binary content stores no options, so both labels come from i18n. They are
@@ -48,6 +49,7 @@ export class ContentBinaryParticipantComponent implements AnswerForm {
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
   private readonly createAnswer = inject(CreateQuestionnaireBinaryAnswerGql);
+  private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
   readonly roundId = input<string>();
@@ -119,6 +121,7 @@ export class ContentBinaryParticipantComponent implements AnswerForm {
     }
     this.createAnswer
       .mutate({ variables: { roundId, answer: answerOfOption(index) } })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const answer = r.data?.createQuestionnaireBinaryAnswer;

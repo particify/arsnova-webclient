@@ -21,6 +21,7 @@ import {
   QuestionnaireContentsByQuestionnaireIdDocument,
   UpdateQuestionnaireBinaryContentGql,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   selector: 'app-binary-content-form',
@@ -38,6 +39,7 @@ export class BinaryContentFormComponent
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
   private readonly createBinaryContent = inject(
     CreateQuestionnaireBinaryContentGql
   );
@@ -110,6 +112,7 @@ export class BinaryContentFormComponent
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireBinaryContent;
@@ -147,6 +150,7 @@ export class BinaryContentFormComponent
           },
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireBinaryContent) {
