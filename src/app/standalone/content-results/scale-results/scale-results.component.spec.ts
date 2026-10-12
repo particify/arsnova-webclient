@@ -6,7 +6,7 @@ import { configureTestModule } from '@testing/test.setup';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
 import { LikertScaleService } from '@app/core/services/util/likert-scale.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { ThemeService } from '@app/core/theme/theme.service';
+import { Theme, ThemeService } from '@app/core/theme/theme.service';
 import { BarChartComponent } from '@app/standalone/content-results/visualization/chart/bar-chart.component';
 import {
   ContentType,
@@ -28,6 +28,8 @@ const LIKERT_COLORS = [
 
 // A fresh array per call, as the component splices the neutral colour out.
 const themeService = {
+  getColor: (name: string) => `var(--${name})`,
+  getCurrentTheme$: () => of(Theme.LIGHT),
   getLikertColors: () => [...LIKERT_COLORS],
 };
 
