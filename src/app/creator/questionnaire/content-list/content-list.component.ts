@@ -75,7 +75,7 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { mutationHelper } from '@gql/helper/mutation-helper';
-import { filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { filter, map, Observable, of, switchMap } from 'rxjs';
 import { RESULT_REGISTRY } from '@app/standalone/content-results/result-registry';
 
 @Component({
@@ -629,11 +629,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
             },
           ],
         })
-        .pipe(
-          tap({
-            error: (e) => this.notificationService.showOnRequestClientError(e),
-          })
-        )
+        .pipe(this.mutations.reportErrors())
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

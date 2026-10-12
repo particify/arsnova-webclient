@@ -9,7 +9,8 @@ import {
   afterNextRender,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { map, Subject, switchMap, takeUntil } from 'rxjs';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { onlyCompleteData } from 'apollo-angular';
 import { MatMenu } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
@@ -64,6 +65,7 @@ export class ContentPresentationMenuComponent {
     QuestionnaireRoundsByContentIdGql
   );
   private contentResultsService = inject(ContentResultsService);
+  private readonly mutations = mutationHelper();
 
   @ViewChild('moreMenu') moreMenu!: MatMenu;
 
@@ -194,26 +196,28 @@ export class ContentPresentationMenuComponent {
       undefined,
       undefined,
       () =>
-        this.deleteAnswersByContentId.mutate({
-          variables: { contentId },
-          // The content starts over with a new round, which the results
-          // views only learn about from its refetched rounds; a comparison
-          // of the deleted rounds falls back to it.
-          update: () =>
-            this.contentResultsService.clearPresentationSelectedRoundIds(
-              contentId
-            ),
-          refetchQueries: [
-            {
-              query: QuestionnaireContentsByQuestionnaireIdDocument,
-              variables: { questionnaireId: this.questionnaireId() },
-            },
-            {
-              query: QuestionnaireRoundsByContentIdDocument,
-              variables: { contentId },
-            },
-          ],
-        })
+        this.deleteAnswersByContentId
+          .mutate({
+            variables: { contentId },
+            // The content starts over with a new round, which the results
+            // views only learn about from its refetched rounds; a comparison
+            // of the deleted rounds falls back to it.
+            update: () =>
+              this.contentResultsService.clearPresentationSelectedRoundIds(
+                contentId
+              ),
+            refetchQueries: [
+              {
+                query: QuestionnaireContentsByQuestionnaireIdDocument,
+                variables: { questionnaireId: this.questionnaireId() },
+              },
+              {
+                query: QuestionnaireRoundsByContentIdDocument,
+                variables: { contentId },
+              },
+            ],
+          })
+          .pipe(this.mutations.reportErrors())
     );
   }
 
@@ -238,11 +242,7 @@ export class ContentPresentationMenuComponent {
             },
           ],
         })
-        .pipe(
-          tap({
-            error: (e) => this.notificationService.showOnRequestClientError(e),
-          })
-        )
+        .pipe(this.mutations.reportErrors())
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
