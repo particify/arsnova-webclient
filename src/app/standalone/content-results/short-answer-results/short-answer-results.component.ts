@@ -20,6 +20,7 @@ import {
   QuestionnaireShortAnswerRoundStatsUpdatedGql,
   ShortAnswerContentFormatData,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   selector: 'app-short-answer-results',
@@ -44,6 +45,7 @@ export class ShortAnswerResultsComponent {
   private readonly dialogService = inject(DialogService);
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
+  private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
   readonly roundIds = input.required<string[]>();
@@ -104,9 +106,11 @@ export class ShortAnswerResultsComponent {
       keyword,
       'creator.dialog.ban',
       () =>
-        this.banKeyword.mutate({
-          variables: { contentId: this.contentId(), keyword },
-        })
+        this.banKeyword
+          .mutate({
+            variables: { contentId: this.contentId(), keyword },
+          })
+          .pipe(this.mutations.reportErrors())
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

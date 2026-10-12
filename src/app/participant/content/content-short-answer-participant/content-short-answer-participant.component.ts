@@ -26,6 +26,7 @@ import {
   ShortAnswerAnswerFormatData,
   ShortAnswerContentFormatData,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 const TERM_LENGTH_LIMIT = 80;
 
@@ -40,6 +41,7 @@ const TERM_LENGTH_LIMIT = 80;
 export class ContentShortAnswerParticipantComponent implements AnswerForm {
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
+  private readonly mutations = mutationHelper();
   private readonly createAnswer = inject(
     CreateQuestionnaireShortAnswerAnswerGql
   );
@@ -86,16 +88,21 @@ export class ContentShortAnswerParticipantComponent implements AnswerForm {
       );
       return;
     }
-    this.createAnswer.mutate({ variables: { roundId, body } }).subscribe({
-      next: (r) => {
-        const answer = r.data?.createQuestionnaireShortAnswerAnswer;
-        if (answer) this.answerCreated.emit(answer as Answer);
-        const msg = this.translateService.translate('participant.answer.sent');
-        this.notificationService.showAdvanced(
-          msg,
-          AdvancedSnackBarTypes.SUCCESS
-        );
-      },
-    });
+    this.createAnswer
+      .mutate({ variables: { roundId, body } })
+      .pipe(this.mutations.handleErrors())
+      .subscribe({
+        next: (r) => {
+          const answer = r.data?.createQuestionnaireShortAnswerAnswer;
+          if (answer) this.answerCreated.emit(answer as Answer);
+          const msg = this.translateService.translate(
+            'participant.answer.sent'
+          );
+          this.notificationService.showAdvanced(
+            msg,
+            AdvancedSnackBarTypes.SUCCESS
+          );
+        },
+      });
   }
 }

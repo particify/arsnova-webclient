@@ -25,6 +25,7 @@ import {
   ShortAnswerContentFormatData,
   UpdateQuestionnaireShortAnswerContentGql,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 const TERM_LENGTH_LIMIT = 80;
 
@@ -45,6 +46,7 @@ export class ShortAnswerContentFormComponent implements ContentForm<ShortAnswerC
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
   private readonly createShortAnswerContent = inject(
     CreateQuestionnaireShortAnswerContentGql
   );
@@ -119,6 +121,7 @@ export class ShortAnswerContentFormComponent implements ContentForm<ShortAnswerC
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireShortAnswerContent;
@@ -156,6 +159,7 @@ export class ShortAnswerContentFormComponent implements ContentForm<ShortAnswerC
           },
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireShortAnswerContent) {
