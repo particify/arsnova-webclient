@@ -8,14 +8,15 @@
     'wrong-order': _correct === false,
   }"
 >
-  @for (answer of answerOptions(); track answer; let i = $index) {
+  @for (answer of dragDroplist; track answer; let i = $index) {
     <div
       class="answer primary-shadow-focus"
       cdkDrag
       [cdkDragStartDelay]="{ touch: 200, mouse: 20 }"
       [cdkDragPreviewClass]="'primary-shadow-always'"
       [ngClass]="{ 'no-grab': disabled() }"
-      tabindex="0"
+      [attr.tabindex]="disabled() ? -1 : 0"
+      [attr.aria-disabled]="disabled()"
       [attr.aria-label]="
         'participant.answer.a11y-sort-item'
           | transloco

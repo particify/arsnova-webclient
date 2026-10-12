@@ -33,10 +33,22 @@ export class ContentSortAnswerComponent extends DragDropBaseComponent<SortItem> 
   constructor() {
     super();
     effect(() => {
-      // The base class reorders this array in place, so it has to be the very
-      // array the template renders.
-      this.dragDroplist = this.answerOptions();
+      // The base class reorders this array in place, so the template renders
+      // a copy rather than the input, which may be a cached object.
+      this.dragDroplist = [...this.answerOptions()];
     });
+  }
+
+  override drop(previousIndex: number, currentIndex: number) {
+    if (!this.disabled()) {
+      super.drop(previousIndex, currentIndex);
+    }
+  }
+
+  override moveAnswer(event: KeyboardEvent, answerIndex: number) {
+    if (!this.disabled()) {
+      super.moveAnswer(event, answerIndex);
+    }
   }
 
   /** Covers dragging and the arrow keys alike. */

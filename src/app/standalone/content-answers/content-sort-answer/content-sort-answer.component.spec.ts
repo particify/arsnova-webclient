@@ -119,6 +119,39 @@ describe('ContentSortAnswerComponent', () => {
     expect(component.selectedSortItem).toBe(1);
   });
 
+  it('ignores the arrow keys and drops while disabled', () => {
+    setUp();
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+
+    pressArrow(0, 'ArrowDown');
+    component.drop(0, 2);
+
+    expect(labels()).toEqual(['A', 'B', 'C']);
+    expect(reordered).toEqual([]);
+  });
+
+  it('takes the items out of the tab order while disabled', () => {
+    setUp();
+    expect(items()[0].tabIndex).toBe(0);
+
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+
+    expect(items()[0].tabIndex).toBe(-1);
+    expect(items()[0].getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('leaves the given options untouched when reordering', () => {
+    setUp();
+    const given = component.answerOptions();
+
+    pressArrow(0, 'ArrowDown');
+
+    expect(given.map((item) => item.label)).toEqual(['A', 'B', 'C']);
+    expect(labels()).toEqual(['B', 'A', 'C']);
+  });
+
   it('stays neutral while no correctness is given', () => {
     setUp();
     expect(
