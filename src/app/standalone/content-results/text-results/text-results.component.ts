@@ -3,6 +3,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { map, Observable, of, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
 import { updateOn } from '@gql/helper/update-on';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
   AnswerFragment,
@@ -40,6 +41,7 @@ export class TextResultsComponent {
   private readonly dialogService = inject(DialogService);
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
+  private readonly mutations = mutationHelper();
 
   readonly formatData = input.required<ContentFormatData>();
   readonly roundIds = input.required<string[]>();
@@ -126,15 +128,17 @@ export class TextResultsComponent {
       answer.body,
       undefined,
       () =>
-        this.toggleAnswerHidden.mutate({
-          variables: { answerId: answer.id, hidden: true },
-          refetchQueries: [
-            {
-              query: QuestionnaireTextAnswersByRoundIdDocument,
-              variables: { roundId: this.roundId() },
-            },
-          ],
-        })
+        this.toggleAnswerHidden
+          .mutate({
+            variables: { answerId: answer.id, hidden: true },
+            refetchQueries: [
+              {
+                query: QuestionnaireTextAnswersByRoundIdDocument,
+                variables: { roundId: this.roundId() },
+              },
+            ],
+          })
+          .pipe(this.mutations.reportErrors())
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CombinedGraphQLErrors } from '@apollo/client';
 import { Router } from '@angular/router';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -866,7 +867,19 @@ describe('ContentListComponent', () => {
 
     it('reports a failed toggle', () => {
       setUp();
-      toggled().and.returnValue(throwError(() => new Error('failed')));
+      toggled().and.returnValue(
+        throwError(
+          () =>
+            new CombinedGraphQLErrors({
+              errors: [
+                {
+                  message: 'failed',
+                  extensions: { classification: 'BAD_REQUEST' },
+                },
+              ],
+            })
+        )
+      );
 
       component.toggleTextAnswersPublished(text(false));
 

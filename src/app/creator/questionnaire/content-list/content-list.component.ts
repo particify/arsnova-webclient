@@ -539,9 +539,8 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
           published: !content.formatData.answersPublished,
         },
       })
-      .subscribe({
-        error: (e) => this.notificationService.showOnRequestClientError(e),
-      });
+      .pipe(this.mutations.handleErrors())
+      .subscribe();
   }
 
   duplicateContent(id: string) {
