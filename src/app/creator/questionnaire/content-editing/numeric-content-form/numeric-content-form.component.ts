@@ -11,6 +11,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { TranslocoService } from '@jsverse/transloco';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentForm } from '@app/creator/questionnaire/content-editing/content-form';
 import { CoreModule } from '@app/core/core.module';
@@ -40,6 +41,7 @@ export class NumericContentFormComponent
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
   private readonly createNumericContent = inject(
     CreateQuestionnaireNumericContentGql
   );
@@ -173,6 +175,7 @@ export class NumericContentFormComponent
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireNumericContent;
@@ -210,6 +213,7 @@ export class NumericContentFormComponent
           },
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireNumericContent) {

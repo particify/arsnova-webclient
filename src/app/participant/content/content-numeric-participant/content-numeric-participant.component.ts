@@ -12,6 +12,7 @@ import {
   NotificationService,
 } from '@app/core/services/util/notification.service';
 import { provideTranslocoScope, TranslocoService } from '@jsverse/transloco';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { ContentNumericAnswerComponent } from '@app/standalone/content-answers/content-numeric-answer/content-numeric-answer.component';
 import {
   Answer,
@@ -33,6 +34,7 @@ export class ContentNumericParticipantComponent implements AnswerForm {
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
   private readonly createAnswer = inject(CreateQuestionnaireNumericAnswerGql);
+  private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
   readonly roundId = input<string>();
@@ -69,6 +71,7 @@ export class ContentNumericParticipantComponent implements AnswerForm {
     }
     this.createAnswer
       .mutate({ variables: { roundId, selectedNumber } })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const answer = r.data?.createQuestionnaireNumericAnswer;
