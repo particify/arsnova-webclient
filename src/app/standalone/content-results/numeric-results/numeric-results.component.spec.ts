@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { Theme, ThemeService } from '@app/core/theme/theme.service';
@@ -55,14 +55,15 @@ const themeService = {
   getCurrentTheme$: () => of(Theme.LIGHT),
 };
 
-function complete(data: unknown) {
-  return of({ dataState: 'complete' as const, data });
+function result(data: unknown) {
+  return { dataState: 'complete' as const, data };
 }
 
 describe('NumericResultsComponent', () => {
   let fixture: ComponentFixture<NumericResultsComponent>;
   let component: NumericResultsComponent;
   let statsByRoundId: jasmine.SpyObj<QuestionnaireNumericRoundStatsByRoundIdGql>;
+  let stats$: Map<string, BehaviorSubject<unknown>>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
 
@@ -78,19 +79,26 @@ describe('NumericResultsComponent', () => {
       'QuestionnaireNumericRoundStatsByRoundIdGql',
       ['watch']
     );
-    statsByRoundId.watch.and.callFake(
-      (options2) =>
-        ({
-          valueChanges: complete({
-            questionnaireNumericRoundStatsByRoundId:
-              (options2?.variables as { roundId: string }).roundId === 'round-2'
-                ? options.secondRoundStats
-                : options.stats === undefined
-                  ? roundStats()
-                  : options.stats,
-          }),
-        }) as never
-    );
+    stats$ = new Map();
+    // Writes land in the query like in Apollo's cache: as a new result.
+    statsByRoundId.watch.and.callFake((options2) => {
+      const roundId = (options2?.variables as { roundId: string }).roundId;
+      const subject = new BehaviorSubject<unknown>(
+        result({
+          questionnaireNumericRoundStatsByRoundId:
+            roundId === 'round-2'
+              ? options.secondRoundStats
+              : options.stats === undefined
+                ? roundStats()
+                : options.stats,
+        })
+      );
+      stats$.set(roundId, subject);
+      return {
+        valueChanges: subject,
+        updateQuery: (mapFn: () => unknown) => subject.next(result(mapFn())),
+      } as never;
+    });
 
     statsUpdated = new Subject<unknown>();
 
@@ -282,20 +290,47 @@ describe('NumericResultsComponent', () => {
     expect(chart()).toBeUndefined();
   });
 
-  it('merges live subscription emissions into the chart', () => {
+  function emitUpdate(stats: NumericContentRoundStats) {
+    statsUpdated.next({
+      data: { questionnaireNumericRoundStatsUpdated: stats },
+    });
+    fixture.detectChanges();
+  }
+
+  it('shows the pushed stats in the chart', () => {
     setUp();
     expect(chart()?.data().datasets[0].values).toEqual([0, 1, 0, 3, 0]);
 
-    statsUpdated.next({
-      data: {
-        questionnaireNumericRoundStatsUpdated: roundStats({
-          selectedNumbers: [2, 4, 5],
-          counts: [1, 3, 6],
-        }),
-      },
-    });
-    fixture.detectChanges();
+    emitUpdate(roundStats({ selectedNumbers: [2, 4, 5], counts: [1, 3, 6] }));
 
     expect(chart()?.data().datasets[0].values).toEqual([0, 1, 0, 3, 6]);
+  });
+
+  it('still reflects a refetch of the query after a push', () => {
+    setUp();
+    emitUpdate(roundStats({ selectedNumbers: [2, 4, 5], counts: [1, 3, 6] }));
+
+    stats$.get('round-1')!.next(
+      result({
+        questionnaireNumericRoundStatsByRoundId: roundStats({
+          selectedNumbers: [],
+          counts: [],
+        }),
+      })
+    );
+    fixture.detectChanges();
+
+    expect(chart()?.data().datasets[0].values).toEqual([0, 0, 0, 0, 0]);
+  });
+
+  it('keeps the last stats when the updates fail', () => {
+    spyOn(console, 'error');
+    setUp();
+
+    statsUpdated.error(new Error('Subscription lost'));
+    fixture.detectChanges();
+
+    expect(chart()?.data().datasets[0].values).toEqual([0, 1, 0, 3, 0]);
+    expect(console.error).toHaveBeenCalled();
   });
 });

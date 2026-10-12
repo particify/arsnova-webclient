@@ -1,16 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import {
-  combineLatest,
-  map,
-  merge,
-  Observable,
-  of,
-  share,
-  switchMap,
-  takeUntil,
-} from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
+import { updateOn } from '@gql/helper/update-on';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   NumericContentFormatData,
@@ -77,20 +69,18 @@ export class NumericResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<NumericContentRoundStats | null | undefined> {
-    const initial$ = this.roundStatsByRoundId
-      .watch({ variables: { roundId } })
-      .valueChanges.pipe(
-        onlyCompleteData(),
-        map((r) => r.data?.questionnaireNumericRoundStatsByRoundId)
-      );
-
-    const updates$ = this.numericRoundStatsUpdated
-      .subscribe({ variables: { roundId } })
-      .pipe(
-        map((r) => r.data?.questionnaireNumericRoundStatsUpdated),
-        share()
-      );
-    return merge(initial$.pipe(takeUntil(updates$)), updates$);
+    return updateOn(
+      this.roundStatsByRoundId.watch({ variables: { roundId } }),
+      this.numericRoundStatsUpdated.subscribe({ variables: { roundId } }),
+      (r) =>
+        r.data && {
+          questionnaireNumericRoundStatsByRoundId:
+            r.data.questionnaireNumericRoundStatsUpdated,
+        }
+    ).pipe(
+      onlyCompleteData(),
+      map((r) => r.data?.questionnaireNumericRoundStatsByRoundId)
+    );
   }
 
   readonly roundStatsList = toSignal(
