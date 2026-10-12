@@ -408,6 +408,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
           contentId: publishToContentId,
         },
       })
+      .pipe(this.mutations.reportErrors())
       .subscribe({
         error: () => {
           this.publishedContentId.set(
@@ -543,6 +544,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   startContent(contentId: string) {
     this.startQuestionnaireContent
       .mutate({ variables: { contentId } })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.startQuestionnaireContent) {
@@ -562,6 +564,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   stopContent() {
     this.stopQuestionnaireContent
       .mutate({ variables: { questionnaireId: this.questionnaire().id } })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.stopQuestionnaireContent) {

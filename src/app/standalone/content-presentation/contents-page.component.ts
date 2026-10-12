@@ -69,6 +69,7 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   selector: 'app-contents-page',
@@ -102,6 +103,7 @@ export class ContentsPageComponent {
   private readonly hotkeyService = inject(HotkeyService);
   private readonly dialogService = inject(DialogService);
   private readonly notificationService = inject(NotificationService);
+  private readonly mutations = mutationHelper();
   private readonly contentPresentationService = inject(
     ContentPresentationService
   );
@@ -423,6 +425,7 @@ export class ContentsPageComponent {
           contentId: contentId,
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe();
   }
 
@@ -433,12 +436,14 @@ export class ContentsPageComponent {
     }
     this.startQuestionnaireContent
       .mutate({ variables: { contentId } })
+      .pipe(this.mutations.handleErrors())
       .subscribe();
   }
 
   stopContent() {
     this.stopQuestionnaireContent
       .mutate({ variables: { questionnaireId: this.questionnaireId() } })
+      .pipe(this.mutations.handleErrors())
       .subscribe();
   }
 }
