@@ -56,7 +56,7 @@ export class ScaleResultsComponent {
   readonly language = input<string>();
 
   readonly scale = computed(() =>
-    this.isPresentation() ? this.presentationService.getScale() : 1
+    this.isPresentation() ? this.presentationService.scale() : 1
   );
 
   private statsForRound(
