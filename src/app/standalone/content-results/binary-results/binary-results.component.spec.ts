@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
@@ -52,14 +52,15 @@ function roundStats(selectionCounts: number[]): BinaryContentRoundStats {
   };
 }
 
-function complete(data: unknown) {
-  return of({ dataState: 'complete' as const, data });
+function result(data: unknown) {
+  return { dataState: 'complete' as const, data };
 }
 
 describe('BinaryResultsComponent', () => {
   let fixture: ComponentFixture<BinaryResultsComponent>;
   let component: BinaryResultsComponent;
   let statsByRoundId: jasmine.SpyObj<QuestionnaireBinaryRoundStatsByRoundIdGql>;
+  let stats$: Map<string, BehaviorSubject<unknown>>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
 
@@ -79,20 +80,26 @@ describe('BinaryResultsComponent', () => {
       'QuestionnaireBinaryRoundStatsByRoundIdGql',
       ['watch']
     );
-    statsByRoundId.watch.and.callFake(
-      (watchOptions) =>
-        ({
-          valueChanges: complete({
-            questionnaireBinaryRoundStatsByRoundId:
-              (watchOptions?.variables as { roundId: string }).roundId ===
-              'round-2'
-                ? options.secondRoundStats
-                : options.stats === undefined
-                  ? roundStats([7, 3])
-                  : options.stats,
-          }),
-        }) as never
-    );
+    stats$ = new Map();
+    // Writes land in the query like in Apollo's cache: as a new result.
+    statsByRoundId.watch.and.callFake((watchOptions) => {
+      const roundId = (watchOptions?.variables as { roundId: string }).roundId;
+      const subject = new BehaviorSubject<unknown>(
+        result({
+          questionnaireBinaryRoundStatsByRoundId:
+            roundId === 'round-2'
+              ? options.secondRoundStats
+              : options.stats === undefined
+                ? roundStats([7, 3])
+                : options.stats,
+        })
+      );
+      stats$.set(roundId, subject);
+      return {
+        valueChanges: subject,
+        updateQuery: (mapFn: () => unknown) => subject.next(result(mapFn())),
+      } as never;
+    });
 
     statsUpdated = new Subject<unknown>();
 
@@ -337,5 +344,46 @@ describe('BinaryResultsComponent', () => {
     fixture.componentRef.setInput('resultsVisible', false);
     fixture.detectChanges();
     expect(chart()).toBeUndefined();
+  });
+
+  function emitUpdate(stats: BinaryContentRoundStats) {
+    statsUpdated.next({
+      data: { questionnaireBinaryRoundStatsUpdated: stats },
+    });
+    fixture.detectChanges();
+  }
+
+  it('shows the pushed stats in the chart', () => {
+    setUp();
+    expect(chart()?.data().datasets[0].values).toEqual([7, 3]);
+
+    emitUpdate(roundStats([8, 3]));
+
+    expect(chart()?.data().datasets[0].values).toEqual([8, 3]);
+  });
+
+  it('still reflects a refetch of the query after a push', () => {
+    setUp();
+    emitUpdate(roundStats([8, 3]));
+
+    stats$
+      .get('round-1')!
+      .next(
+        result({ questionnaireBinaryRoundStatsByRoundId: roundStats([0, 0]) })
+      );
+    fixture.detectChanges();
+
+    expect(chart()?.data().datasets[0].values).toEqual([0, 0]);
+  });
+
+  it('keeps the last stats when the updates fail', () => {
+    spyOn(console, 'error');
+    setUp();
+
+    statsUpdated.error(new Error('Subscription lost'));
+    fixture.detectChanges();
+
+    expect(chart()?.data().datasets[0].values).toEqual([7, 3]);
+    expect(console.error).toHaveBeenCalled();
   });
 });

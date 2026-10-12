@@ -4,15 +4,13 @@ import {
   combineLatest,
   forkJoin,
   map,
-  merge,
   Observable,
   of,
-  share,
   switchMap,
   take,
-  takeUntil,
 } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
+import { updateOn } from '@gql/helper/update-on';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   BinaryContentFormatData,
@@ -73,20 +71,18 @@ export class BinaryResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<BinaryContentRoundStats | null | undefined> {
-    const initial$ = this.roundStatsByRoundId
-      .watch({ variables: { roundId } })
-      .valueChanges.pipe(
-        onlyCompleteData(),
-        map((r) => r.data?.questionnaireBinaryRoundStatsByRoundId)
-      );
-
-    const updates$ = this.binaryRoundStatsUpdated
-      .subscribe({ variables: { roundId } })
-      .pipe(
-        map((r) => r.data?.questionnaireBinaryRoundStatsUpdated),
-        share()
-      );
-    return merge(initial$.pipe(takeUntil(updates$)), updates$);
+    return updateOn(
+      this.roundStatsByRoundId.watch({ variables: { roundId } }),
+      this.binaryRoundStatsUpdated.subscribe({ variables: { roundId } }),
+      (r) =>
+        r.data && {
+          questionnaireBinaryRoundStatsByRoundId:
+            r.data.questionnaireBinaryRoundStatsUpdated,
+        }
+    ).pipe(
+      onlyCompleteData(),
+      map((r) => r.data?.questionnaireBinaryRoundStatsByRoundId)
+    );
   }
 
   readonly roundStatsList = toSignal(
