@@ -24,7 +24,6 @@ import {
   CreateQuestionnaireScaleAnswerGql,
   ScaleAnswerFormatData,
   ScaleContentFormatData,
-  ScaleContentTemplate,
 } from '@gql/generated/graphql';
 
 @Component({
@@ -57,8 +56,8 @@ export class ContentScaleParticipantComponent implements AnswerForm {
 
   private readonly options = computed(() =>
     this.likertScaleService.getOptions(
-      this.contentFormatData().template ?? ScaleContentTemplate.Agreement,
-      this.contentFormatData().neutralOption ?? true
+      this.contentFormatData().template,
+      this.contentFormatData().neutralOption
     )
   );
   /** Keys go to the answer component, which translates them into the room's language. */

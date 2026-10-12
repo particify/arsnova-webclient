@@ -18,7 +18,6 @@ import {
   Round,
   ScaleContentFormatData,
   ScaleContentRoundStats,
-  ScaleContentTemplate,
 } from '@gql/generated/graphql';
 import { CoreModule } from '@app/core/core.module';
 import { PresentationService } from '@app/core/services/util/presentation.service';
@@ -92,8 +91,8 @@ export class ScaleResultsComponent {
 
   private readonly options = computed(() =>
     this.likertScaleService.getOptions(
-      this.formatData().template ?? ScaleContentTemplate.Agreement,
-      this.formatData().neutralOption ?? true
+      this.formatData().template,
+      this.formatData().neutralOption
     )
   );
 
