@@ -277,6 +277,7 @@
             type="number"
             max="600"
             min="10"
+            step="1"
             data-testid="content-duration-input"
             (input)="setDuration(durationInput.value)"
           />
@@ -312,13 +313,16 @@
             class="no-field-hint initial-width number-input-small"
           >
             <input
+              #weightInput
               [value]="weight()"
               [disabled]="answered() || isPreview()"
               matInput
               type="number"
               max="5"
               min="1"
-              (input)="weight.set($event.target.valueAsNumber)"
+              step="1"
+              data-testid="content-weight-input"
+              (input)="setWeight(weightInput.value)"
             />
           </mat-form-field>
         </div>

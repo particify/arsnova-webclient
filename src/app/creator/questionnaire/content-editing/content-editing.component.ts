@@ -63,6 +63,13 @@ interface ContentFormat {
   icon: string;
 }
 
+export const DURATION_RANGE = { min: 10, max: 600 };
+export const WEIGHT_RANGE = { min: 1, max: 5 };
+
+function isInRange(value: number, range: { min: number; max: number }) {
+  return Number.isInteger(value) && value >= range.min && value <= range.max;
+}
+
 @Component({
   selector: 'app-content-editing',
   templateUrl: './content-editing.component.html',
@@ -224,14 +231,36 @@ export class ContentEditingComponent {
   }
 
   private prepareContent(): boolean {
-    if (!this.question()) {
-      const msg = this.translateService.translate(
-        'creator.content.no-empty-fields-allowed'
+    const error = this.question()
+      ? this.determineSettingsError()
+      : this.translateService.translate(
+          'creator.content.no-empty-fields-allowed'
+        );
+    if (error) {
+      this.notificationService.showAdvanced(
+        error,
+        AdvancedSnackBarTypes.WARNING
       );
-      this.notificationService.showAdvanced(msg, AdvancedSnackBarTypes.WARNING);
       return false;
     }
     return true;
+  }
+
+  private determineSettingsError(): string | undefined {
+    const duration = this.duration();
+    if (duration != null && !isInRange(duration, DURATION_RANGE)) {
+      return this.translateService.translate(
+        'creator.content.timer-out-of-range',
+        DURATION_RANGE
+      );
+    }
+    if (!isInRange(this.weight(), WEIGHT_RANGE)) {
+      return this.translateService.translate(
+        'creator.content.weight-out-of-range',
+        WEIGHT_RANGE
+      );
+    }
+    return undefined;
   }
 
   togglePreview() {
@@ -249,8 +278,11 @@ export class ContentEditingComponent {
   }
 
   setDuration(value: string): void {
-    const duration = Number.parseInt(value, 10);
-    this.duration.set(Number.isNaN(duration) ? null : duration);
+    this.duration.set(value.trim() === '' ? null : Number(value));
+  }
+
+  setWeight(value: string): void {
+    this.weight.set(Number(value));
   }
 
   submitContent(): void {

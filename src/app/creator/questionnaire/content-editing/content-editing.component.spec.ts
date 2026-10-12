@@ -103,6 +103,56 @@ describe('ContentEditingComponent', () => {
       .componentInstance.submitted.emit();
   }
 
+  describe('settings validation', () => {
+    function submitWith(duration: string, weight: string) {
+      setUp();
+      component.question.set('Question');
+      component.setDuration(duration);
+      component.setWeight(weight);
+      const form = fixture.debugElement.query(
+        By.directive(ChoiceContentFormComponent)
+      ).componentInstance;
+      spyOn(form, 'submit');
+
+      component.submitContent();
+
+      return {
+        submitted: form.submit.calls.count() === 1,
+        warned: TestBed.inject(NotificationService).showAdvanced as jasmine.Spy,
+      };
+    }
+
+    it('submits a content with a timer and weight in range', () => {
+      const { submitted, warned } = submitWith('60', '3');
+      expect(submitted).toBeTrue();
+      expect(warned).not.toHaveBeenCalled();
+    });
+
+    it('submits a content without a timer', () => {
+      expect(submitWith('', '1').submitted).toBeTrue();
+    });
+
+    it('rejects a timer below the minimum', () => {
+      const { submitted, warned } = submitWith('5', '1');
+      expect(submitted).toBeFalse();
+      expect(warned).toHaveBeenCalled();
+    });
+
+    it('rejects a timer that is no whole number', () => {
+      expect(submitWith('10.5', '1').submitted).toBeFalse();
+    });
+
+    it('rejects a weight above the maximum', () => {
+      const { submitted, warned } = submitWith('', '6');
+      expect(submitted).toBeFalse();
+      expect(warned).toHaveBeenCalled();
+    });
+
+    it('rejects an empty weight', () => {
+      expect(submitWith('', '').submitted).toBeFalse();
+    });
+  });
+
   it('resets the body after a content has been created', fakeAsync(() => {
     setUp();
     component.question.set('First question');
