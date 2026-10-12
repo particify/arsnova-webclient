@@ -35,6 +35,7 @@ import {
 import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/_dialogs/create-content-group-template/create-content-group-template.component';
 import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-settings/questionnaire-settings.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import {
   switchMap,
@@ -69,6 +70,7 @@ import {
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
+  QuestionnaireRoundsByContentIdDocument,
   QuestionnaireType,
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
@@ -130,6 +132,7 @@ export class QuestionnairePageComponent {
   private readonly routingService = inject(RoutingService);
   private readonly localFileService = inject(LocalFileService);
   private readonly dialogService = inject(DialogService);
+  private readonly contentResultsService = inject(ContentResultsService);
   private readonly authService = inject(AuthenticationService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly breakpointObserver = inject(BreakpointObserver);
@@ -354,19 +357,16 @@ export class QuestionnairePageComponent {
         this.resetQuestionnaireResults
           .mutate({
             variables: { id: this.questionnaireId() },
-            // The results views watch their round stats, which the reset
-            // invalidates; dropping them makes those views fetch them anew.
-            update: (cache) =>
-              cache.modify({
-                id: 'ROOT_QUERY',
-                fields: (value, { fieldName, DELETE }) =>
-                  fieldName.endsWith('RoundStatsByRoundId') ? DELETE : value,
-              }),
+            // Every content starts over with a new round, which the results
+            // views only learn about from their refetched rounds.
+            update: () =>
+              this.contentResultsService.clearPresentationSelectedRoundIds(),
             refetchQueries: [
               {
                 query: QuestionnaireContentsByQuestionnaireIdDocument,
                 variables: { questionnaireId: this.questionnaireId() },
               },
+              QuestionnaireRoundsByContentIdDocument,
             ],
           })
           .pipe(this.mutations.reportErrors())

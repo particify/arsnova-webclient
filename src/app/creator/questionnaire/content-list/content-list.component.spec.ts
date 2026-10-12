@@ -5,6 +5,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   Content,
@@ -17,6 +18,7 @@ import {
   PublishQuestionnaireUpToContentGql,
   Questionnaire,
   QuestionnairePublishingMode,
+  QuestionnaireRoundsByContentIdDocument,
   QuestionnairesByRoomIdGql,
   QuestionnaireType,
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
@@ -407,6 +409,33 @@ describe('ContentListComponent', () => {
     expect(
       translationParams('creator.content.publishing-index-info')
     ).toContain({ index: 2 });
+  });
+
+  it('reloads the rounds of the content once its answers are deleted', () => {
+    setUp();
+    const contentResultsService = TestBed.inject(ContentResultsService);
+    contentResultsService.setPresentationSelectedRoundIds(contents[1].id, [
+      'round-1',
+      'round-2',
+    ]);
+
+    component.deleteAnswers(contents[1]);
+    (
+      dialogService.openDeleteDialog.calls.mostRecent()
+        .args[4] as () => Observable<unknown>
+    )().subscribe();
+    const { refetchQueries, update } = mutation(
+      DeleteQuestionnaireAnswersByContentIdGql
+    ).calls.mostRecent().args[0];
+    (update as () => void)();
+
+    expect(refetchQueries).toContain({
+      query: QuestionnaireRoundsByContentIdDocument,
+      variables: { contentId: contents[1].id },
+    });
+    expect(
+      contentResultsService.presentationSelectedRoundIds(contents[1].id)
+    ).toBeUndefined();
   });
 
   describe('publishing range', () => {

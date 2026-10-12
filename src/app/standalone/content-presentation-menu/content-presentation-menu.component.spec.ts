@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BehaviorSubject, Subject, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
 import { BaseDialogComponent } from '@app/standalone/_dialogs/base-dialog/base-dialog.component';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
@@ -8,12 +8,14 @@ import { ContentService } from '@app/core/services/http/content.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
+import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import {
   Content,
   ContentType,
   DeleteQuestionnaireAnswersByContentIdGql,
   QuestionnaireByIdGql,
   QuestionnairePublishingMode,
+  QuestionnaireRoundsByContentIdDocument,
   QuestionnaireRoundsByContentIdGql,
   StartQuestionnaireContentRoundGql,
 } from '@gql/generated/graphql';
@@ -184,6 +186,36 @@ describe('ContentPresentationMenuComponent', () => {
     fixture.detectChanges();
 
     expect(component.hasClosedRound()).toBe(false);
+  });
+
+  it('falls back to the new round once the answers are deleted', () => {
+    setUp(content(true));
+    const deleteAnswers = TestBed.inject(
+      DeleteQuestionnaireAnswersByContentIdGql
+    ) as jasmine.SpyObj<DeleteQuestionnaireAnswersByContentIdGql>;
+    deleteAnswers.mutate.and.returnValue(of({ data: {} }) as never);
+    const contentResultsService = TestBed.inject(ContentResultsService);
+    contentResultsService.setPresentationSelectedRoundIds('content-1', [
+      'round-1',
+      'round-2',
+    ]);
+
+    component.deleteContentAnswers();
+    (
+      dialogService.openDeleteDialog.calls.mostRecent()
+        .args[4] as () => Observable<unknown>
+    )().subscribe();
+    const { refetchQueries, update } =
+      deleteAnswers.mutate.calls.mostRecent().args[0]!;
+    (update as unknown as () => void)();
+
+    expect(refetchQueries).toContain({
+      query: QuestionnaireRoundsByContentIdDocument,
+      variables: { contentId: 'content-1' },
+    });
+    expect(
+      contentResultsService.presentationSelectedRoundIds('content-1')
+    ).toBeUndefined();
   });
 
   it('starts a new round only once the dialog has been confirmed', () => {

@@ -196,10 +196,21 @@ export class ContentPresentationMenuComponent {
       () =>
         this.deleteAnswersByContentId.mutate({
           variables: { contentId },
+          // The content starts over with a new round, which the results
+          // views only learn about from its refetched rounds; a comparison
+          // of the deleted rounds falls back to it.
+          update: () =>
+            this.contentResultsService.clearPresentationSelectedRoundIds(
+              contentId
+            ),
           refetchQueries: [
             {
               query: QuestionnaireContentsByQuestionnaireIdDocument,
               variables: { questionnaireId: this.questionnaireId() },
+            },
+            {
+              query: QuestionnaireRoundsByContentIdDocument,
+              variables: { contentId },
             },
           ],
         })

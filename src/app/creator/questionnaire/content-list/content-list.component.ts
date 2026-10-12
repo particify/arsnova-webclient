@@ -73,6 +73,7 @@ import {
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import { filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { RESULT_REGISTRY } from '@app/standalone/content-results/result-registry';
@@ -115,6 +116,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   private readonly translateService = inject(TranslocoService);
   private readonly mutations = mutationHelper();
   private readonly dialogService = inject(DialogService);
+  private readonly contentResultsService = inject(ContentResultsService);
   private readonly contentGroupService = inject(ContentGroupService);
   private readonly contentPublishService = inject(ContentPublishService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -270,10 +272,20 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
         this.deleteAnswersByContentId
           .mutate({
             variables: { contentId: content.id },
+            // The content starts over with a new round, which the results
+            // views only learn about from its refetched rounds.
+            update: () =>
+              this.contentResultsService.clearPresentationSelectedRoundIds(
+                content.id
+              ),
             refetchQueries: [
               {
                 query: QuestionnaireContentsByQuestionnaireIdDocument,
                 variables: { questionnaireId: this.questionnaire().id },
+              },
+              {
+                query: QuestionnaireRoundsByContentIdDocument,
+                variables: { contentId: content.id },
               },
             ],
           })

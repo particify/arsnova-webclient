@@ -63,6 +63,18 @@ export class ContentResultsService {
     return this._presentationSelectedRoundIdsByContentId()[contentId];
   }
 
+  /** Forgets the selection of a content, or of every content without one. */
+  clearPresentationSelectedRoundIds(contentId?: string) {
+    this._presentationSelectedRoundIdsByContentId.update((byContentId) => {
+      if (!contentId) {
+        return {};
+      }
+      const others = { ...byContentId };
+      delete others[contentId];
+      return others;
+    });
+  }
+
   setPresentationSelectedRoundIds(contentId: string, roundIds: string[]) {
     this._presentationSelectedRoundIdsByContentId.update((byContentId) => ({
       ...byContentId,
