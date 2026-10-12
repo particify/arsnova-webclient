@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { of, Subject } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
-import { ThemeService } from '@app/core/theme/theme.service';
+import { Theme, ThemeService } from '@app/core/theme/theme.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import {
   ContentType,
@@ -52,6 +52,7 @@ function roundStats(
 // Echoes the variable name, so a spec can tell which colour a bar got.
 const themeService = {
   getColor: (name: string) => `var(--${name})`,
+  getCurrentTheme$: () => of(Theme.LIGHT),
 };
 
 function complete(data: unknown) {
