@@ -39,6 +39,7 @@ describe('ContentResultsComponent', () => {
   let contentResultsService: ContentResultsService;
 
   interface SetUpOptions {
+    content?: Partial<Content>;
     isPresentation?: boolean;
     showCorrect?: boolean;
   }
@@ -63,7 +64,10 @@ describe('ContentResultsComponent', () => {
 
     fixture = TestBed.createComponent(ContentResultsComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('content', choiceContent());
+    fixture.componentRef.setInput('content', {
+      ...choiceContent(),
+      ...options.content,
+    });
     fixture.componentRef.setInput('settings', {} as UserUiSettings);
     fixture.componentRef.setInput('isPresentation', !!options.isPresentation);
     fixture.componentRef.setInput('showCorrect', !!options.showCorrect);
@@ -111,6 +115,13 @@ describe('ContentResultsComponent', () => {
     expect(
       (component.componentInputs() as { answerCount: number }).answerCount
     ).toBe(4);
+  });
+
+  it('counts no answers while the count is withheld from the participant', () => {
+    setUp({ content: { answerCount: null, correctAnswerCount: null } });
+    expect(
+      (component.componentInputs() as { answerCount: number }).answerCount
+    ).toBe(0);
   });
 
   it('lets a wordcloud ban keywords only where answers may be moderated', () => {

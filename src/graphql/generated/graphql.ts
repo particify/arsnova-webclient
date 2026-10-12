@@ -28,9 +28,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  /** A slightly refined version of RFC-3339 compliant DateTime Scalar */
   DateTime: { input: string; output: string };
-  /** A universally unique identifier compliant UUID Scalar */
   UUID: { input: string; output: string };
 };
 
@@ -359,10 +357,9 @@ export type DuplicateRoomInput = {
   newName: Scalars['String']['input'];
 };
 
-export type JoinRoomInput = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  shortId?: InputMaybe<Scalars['ID']['input']>;
-};
+export type JoinRoomInput =
+  | { id: Scalars['ID']['input']; shortId?: never }
+  | { id?: never; shortId: Scalars['ID']['input'] };
 
 export enum ModerationState {
   Accepted = 'ACCEPTED',
@@ -478,8 +475,8 @@ export type MutationAdminVerifyUserByIdArgs = {
 };
 
 export type MutationBanQuestionnaireWordcloudContentKeywordArgs = {
-  contentId?: InputMaybe<Scalars['UUID']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  contentId: Scalars['UUID']['input'];
+  keyword: Scalars['String']['input'];
 };
 
 export type MutationClaimUnverifiedUserArgs = {
@@ -509,27 +506,27 @@ export type MutationCreateQnaTagArgs = {
 };
 
 export type MutationCreateQuestionnaireArgs = {
-  input?: InputMaybe<CreateQuestionnaireInput>;
+  input: CreateQuestionnaireInput;
 };
 
 export type MutationCreateQuestionnaireAbstentionArgs = {
-  roundId?: InputMaybe<Scalars['UUID']['input']>;
+  roundId: Scalars['UUID']['input'];
 };
 
 export type MutationCreateQuestionnaireChoiceAnswerArgs = {
-  input?: InputMaybe<CreateChoiceAnswerInput>;
+  input: CreateChoiceAnswerInput;
 };
 
 export type MutationCreateQuestionnaireChoiceContentArgs = {
-  input?: InputMaybe<CreateChoiceContentInput>;
+  input: CreateChoiceContentInput;
 };
 
 export type MutationCreateQuestionnaireWordcloudAnswerArgs = {
-  input?: InputMaybe<CreateWordcloudAnswerInput>;
+  input: CreateWordcloudAnswerInput;
 };
 
 export type MutationCreateQuestionnaireWordcloudContentArgs = {
-  input?: InputMaybe<CreateWordcloudContentInput>;
+  input: CreateWordcloudContentInput;
 };
 
 export type MutationCreateRoomArgs = {
@@ -562,7 +559,7 @@ export type MutationDeleteQuestionnaireArgs = {
 };
 
 export type MutationDeleteQuestionnaireAnswersByContentIdArgs = {
-  contentId?: InputMaybe<Scalars['UUID']['input']>;
+  contentId: Scalars['UUID']['input'];
 };
 
 export type MutationDeleteQuestionnaireContentArgs = {
@@ -625,7 +622,7 @@ export type MutationRequestUserPasswordResetArgs = {
 };
 
 export type MutationResetBannedQuestionnaireWordcloudContentKeywordsArgs = {
-  contentId?: InputMaybe<Scalars['UUID']['input']>;
+  contentId: Scalars['UUID']['input'];
 };
 
 export type MutationResetQuestionnaireResultsArgs = {
@@ -711,16 +708,16 @@ export type MutationUpdateQuestionnaireArgs = {
 };
 
 export type MutationUpdateQuestionnaireChoiceContentArgs = {
-  input?: InputMaybe<UpdateChoiceContentInput>;
+  input: UpdateChoiceContentInput;
 };
 
 export type MutationUpdateQuestionnaireContentOrderArgs = {
-  contentIds?: InputMaybe<Array<Scalars['UUID']['input']>>;
+  contentIds: Array<Scalars['UUID']['input']>;
   questionnaireId: Scalars['UUID']['input'];
 };
 
 export type MutationUpdateQuestionnaireWordcloudContentArgs = {
-  input?: InputMaybe<UpdateWordcloudContentInput>;
+  input: UpdateWordcloudContentInput;
 };
 
 export type MutationUpdateRoomDescriptionArgs = {
@@ -1029,18 +1026,10 @@ export type QueryQuestionnaireContentByIdArgs = {
 };
 
 export type QueryQuestionnaireContentsByQuestionnaireIdArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
   questionnaireId: Scalars['UUID']['input'];
 };
 
 export type QueryQuestionnairePublishedContentsByQuestionnaireIdArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
   questionnaireId: Scalars['UUID']['input'];
 };
 
@@ -1232,6 +1221,7 @@ export type Round = {
   contentId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   roundNo: Scalars['Int']['output'];
+  started: Scalars['Boolean']['output'];
 };
 
 export type ScaleContentFormatData = {
@@ -2460,13 +2450,55 @@ export type ContentDetailsFragment = {
   weight?: number | null;
   answerCount?: number | null;
   abstentionCount?: number | null;
-  correctAnswerCount?: number | null;
   position?: number | null;
   activeRound?: {
     __typename?: 'Round';
     id: string;
     roundNo: number;
     closed: boolean;
+    started: boolean;
+    answerable: boolean;
+  } | null;
+  formatData:
+    | {
+        __typename?: 'ChoiceContentFormatData';
+        format: ContentType;
+        correctOptionIndexes?: Array<number> | null;
+        multiple?: boolean | null;
+        options: Array<{
+          __typename?: 'AnswerOption';
+          label: string;
+          labelRendered?: string | null;
+        }>;
+      }
+    | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+    | { __typename?: 'TextContentFormatData'; format: ContentType }
+    | {
+        __typename?: 'WordcloudContentFormatData';
+        format: ContentType;
+        maxAnswers: number;
+      };
+};
+
+export type CreatorContentDetailsFragment = {
+  __typename?: 'Content';
+  correctAnswerCount?: number | null;
+  id: string;
+  body: string;
+  bodyRendered?: string | null;
+  duration?: number | null;
+  abstentionsAllowed?: boolean | null;
+  hasCorrectAnswer?: boolean | null;
+  weight?: number | null;
+  answerCount?: number | null;
+  abstentionCount?: number | null;
+  position?: number | null;
+  activeRound?: {
+    __typename?: 'Round';
+    id: string;
+    roundNo: number;
+    closed: boolean;
+    started: boolean;
     answerable: boolean;
   } | null;
   formatData:
@@ -2612,6 +2644,7 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
       __typename?: 'ContentEdge';
       node: {
         __typename?: 'Content';
+        correctAnswerCount?: number | null;
         id: string;
         body: string;
         bodyRendered?: string | null;
@@ -2621,13 +2654,13 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
         weight?: number | null;
         answerCount?: number | null;
         abstentionCount?: number | null;
-        correctAnswerCount?: number | null;
         position?: number | null;
         activeRound?: {
           __typename?: 'Round';
           id: string;
           roundNo: number;
           closed: boolean;
+          started: boolean;
           answerable: boolean;
         } | null;
         formatData:
@@ -2676,13 +2709,13 @@ export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
         weight?: number | null;
         answerCount?: number | null;
         abstentionCount?: number | null;
-        correctAnswerCount?: number | null;
         position?: number | null;
         activeRound?: {
           __typename?: 'Round';
           id: string;
           roundNo: number;
           closed: boolean;
+          started: boolean;
           answerable: boolean;
         } | null;
         formatData:
@@ -2710,9 +2743,7 @@ export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
 };
 
 export type CreateQuestionnaireMutationVariables = Exact<{
-  roomId: Scalars['UUID']['input'];
-  name: Scalars['String']['input'];
-  type: QuestionnaireType;
+  input: CreateQuestionnaireInput;
 }>;
 
 export type CreateQuestionnaireMutation = {
@@ -2770,6 +2801,7 @@ export type CreateQuestionnaireChoiceContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireChoiceContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -2779,13 +2811,13 @@ export type CreateQuestionnaireChoiceContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -2818,6 +2850,7 @@ export type UpdateQuestionnaireChoiceContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireChoiceContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -2827,13 +2860,13 @@ export type UpdateQuestionnaireChoiceContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -2866,6 +2899,7 @@ export type CreateQuestionnaireWordcloudContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireWordcloudContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -2875,13 +2909,13 @@ export type CreateQuestionnaireWordcloudContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -2914,6 +2948,7 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireWordcloudContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -2923,13 +2958,13 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -2962,6 +2997,7 @@ export type QuestionnaireContentByIdQuery = {
   __typename?: 'Query';
   questionnaireContentById?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -2971,13 +3007,13 @@ export type QuestionnaireContentByIdQuery = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -3083,9 +3119,7 @@ export type QuestionnaireWordcloudRoundStatsByRoundIdQuery = {
 };
 
 export type CreateQuestionnaireChoiceAnswerMutationVariables = Exact<{
-  roundId: Scalars['UUID']['input'];
-  selectedChoiceIndexes:
-    Array<Scalars['Int']['input']> | Scalars['Int']['input'];
+  input: CreateChoiceAnswerInput;
 }>;
 
 export type CreateQuestionnaireChoiceAnswerMutation = {
@@ -3110,8 +3144,7 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
 };
 
 export type CreateQuestionnaireWordcloudAnswerMutationVariables = Exact<{
-  roundId: Scalars['UUID']['input'];
-  words: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  input: CreateWordcloudAnswerInput;
 }>;
 
 export type CreateQuestionnaireWordcloudAnswerMutation = {
@@ -3188,14 +3221,15 @@ export type DeleteQuestionnaireAnswersByContentIdMutation = {
 };
 
 export type BanQuestionnaireWordcloudContentKeywordMutationVariables = Exact<{
-  contentId?: InputMaybe<Scalars['UUID']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  contentId: Scalars['UUID']['input'];
+  keyword: Scalars['String']['input'];
 }>;
 
 export type BanQuestionnaireWordcloudContentKeywordMutation = {
   __typename?: 'Mutation';
   banQuestionnaireWordcloudContentKeyword?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3205,13 +3239,13 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -3238,13 +3272,14 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
 
 export type ResetBannedQuestionnaireWordcloudContentKeywordsMutationVariables =
   Exact<{
-    contentId?: InputMaybe<Scalars['UUID']['input']>;
+    contentId: Scalars['UUID']['input'];
   }>;
 
 export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
   __typename?: 'Mutation';
   resetBannedQuestionnaireWordcloudContentKeywords?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3254,13 +3289,13 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -3333,6 +3368,7 @@ export type DuplicateQuestionnaireContentMutation = {
   __typename?: 'Mutation';
   duplicateQuestionnaireContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3342,13 +3378,13 @@ export type DuplicateQuestionnaireContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -3382,6 +3418,7 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
   __typename?: 'Mutation';
   copyQuestionnaireContentToQuestionnaire?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3391,13 +3428,13 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -3431,6 +3468,7 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
   __typename?: 'Mutation';
   moveQuestionnaireContentToQuestionnaire?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3440,13 +3478,13 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answerable: boolean;
     } | null;
     formatData:
@@ -4275,6 +4313,7 @@ export const ContentDetailsFragmentDoc = gql`
       id
       roundNo
       closed
+      started
       answerable
     }
     formatData {
@@ -4304,9 +4343,15 @@ export const ContentDetailsFragmentDoc = gql`
     weight
     answerCount
     abstentionCount
-    correctAnswerCount
     position
   }
+`;
+export const CreatorContentDetailsFragmentDoc = gql`
+  fragment CreatorContentDetails on Content {
+    ...ContentDetails
+    correctAnswerCount
+  }
+  ${ContentDetailsFragmentDoc}
 `;
 export const AnswerFragmentDoc = gql`
   fragment Answer on Answer {
@@ -5797,12 +5842,12 @@ export const QuestionnaireContentsByQuestionnaireIdDocument = gql`
     questionnaireContentsByQuestionnaireId(questionnaireId: $questionnaireId) {
       edges {
         node {
-          ...ContentDetails
+          ...CreatorContentDetails
         }
       }
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -5849,12 +5894,8 @@ export class QuestionnairePublishedContentsByQuestionnaireIdGql extends Apollo.Q
   }
 }
 export const CreateQuestionnaireDocument = gql`
-  mutation CreateQuestionnaire(
-    $roomId: UUID!
-    $name: String!
-    $type: QuestionnaireType!
-  ) {
-    createQuestionnaire(input: { roomId: $roomId, name: $name, type: $type }) {
+  mutation CreateQuestionnaire($input: CreateQuestionnaireInput!) {
+    createQuestionnaire(input: $input) {
       ...QuestionnaireDetails
     }
   }
@@ -5899,10 +5940,10 @@ export class ToggleQuestionnairePublishedGql extends Apollo.Mutation<
 export const CreateQuestionnaireChoiceContentDocument = gql`
   mutation CreateQuestionnaireChoiceContent($input: CreateChoiceContentInput!) {
     createQuestionnaireChoiceContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -5921,10 +5962,10 @@ export class CreateQuestionnaireChoiceContentGql extends Apollo.Mutation<
 export const UpdateQuestionnaireChoiceContentDocument = gql`
   mutation UpdateQuestionnaireChoiceContent($input: UpdateChoiceContentInput!) {
     updateQuestionnaireChoiceContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -5945,10 +5986,10 @@ export const CreateQuestionnaireWordcloudContentDocument = gql`
     $input: CreateWordcloudContentInput!
   ) {
     createQuestionnaireWordcloudContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -5969,10 +6010,10 @@ export const UpdateQuestionnaireWordcloudContentDocument = gql`
     $input: UpdateWordcloudContentInput!
   ) {
     updateQuestionnaireWordcloudContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -5991,10 +6032,10 @@ export class UpdateQuestionnaireWordcloudContentGql extends Apollo.Mutation<
 export const QuestionnaireContentByIdDocument = gql`
   query QuestionnaireContentById($id: UUID!) {
     questionnaireContentById(id: $id) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -6127,16 +6168,8 @@ export class QuestionnaireWordcloudRoundStatsByRoundIdGql extends Apollo.Query<
   }
 }
 export const CreateQuestionnaireChoiceAnswerDocument = gql`
-  mutation CreateQuestionnaireChoiceAnswer(
-    $roundId: UUID!
-    $selectedChoiceIndexes: [Int!]!
-  ) {
-    createQuestionnaireChoiceAnswer(
-      input: {
-        roundId: $roundId
-        selectedChoiceIndexes: $selectedChoiceIndexes
-      }
-    ) {
+  mutation CreateQuestionnaireChoiceAnswer($input: CreateChoiceAnswerInput!) {
+    createQuestionnaireChoiceAnswer(input: $input) {
       ...Answer
     }
   }
@@ -6158,12 +6191,9 @@ export class CreateQuestionnaireChoiceAnswerGql extends Apollo.Mutation<
 }
 export const CreateQuestionnaireWordcloudAnswerDocument = gql`
   mutation CreateQuestionnaireWordcloudAnswer(
-    $roundId: UUID!
-    $words: [String!]!
+    $input: CreateWordcloudAnswerInput!
   ) {
-    createQuestionnaireWordcloudAnswer(
-      input: { roundId: $roundId, words: $words }
-    ) {
+    createQuestionnaireWordcloudAnswer(input: $input) {
       ...Answer
     }
   }
@@ -6264,17 +6294,17 @@ export class DeleteQuestionnaireAnswersByContentIdGql extends Apollo.Mutation<
 }
 export const BanQuestionnaireWordcloudContentKeywordDocument = gql`
   mutation BanQuestionnaireWordcloudContentKeyword(
-    $contentId: UUID
-    $keyword: String
+    $contentId: UUID!
+    $keyword: String!
   ) {
     banQuestionnaireWordcloudContentKeyword(
       contentId: $contentId
       keyword: $keyword
     ) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -6291,12 +6321,12 @@ export class BanQuestionnaireWordcloudContentKeywordGql extends Apollo.Mutation<
   }
 }
 export const ResetBannedQuestionnaireWordcloudContentKeywordsDocument = gql`
-  mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID) {
+  mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID!) {
     resetBannedQuestionnaireWordcloudContentKeywords(contentId: $contentId) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -6374,10 +6404,10 @@ export class UpdateQuestionnaireGql extends Apollo.Mutation<
 export const DuplicateQuestionnaireContentDocument = gql`
   mutation DuplicateQuestionnaireContent($id: ID!) {
     duplicateQuestionnaireContent(id: $id) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -6402,10 +6432,10 @@ export const CopyQuestionnaireContentToQuestionnaireDocument = gql`
       contentId: $contentId
       questionnaireId: $questionnaireId
     ) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -6430,10 +6460,10 @@ export const MoveQuestionnaireContentToQuestionnaireDocument = gql`
       contentId: $contentId
       questionnaireId: $questionnaireId
     ) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({

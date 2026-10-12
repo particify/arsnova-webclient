@@ -95,7 +95,9 @@ describe('ContentChoiceParticipantComponent', () => {
       fixture.componentInstance.submitAnswer();
 
       expect(createAnswer.mutate).toHaveBeenCalledWith({
-        variables: { roundId: 'round-1', selectedChoiceIndexes: [1] },
+        variables: {
+          input: { roundId: 'round-1', selectedChoiceIndexes: [1] },
+        },
       });
     });
   });

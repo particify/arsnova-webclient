@@ -91,10 +91,7 @@ export class ContentChoiceParticipantComponent implements AnswerForm {
       }
       this.createAnswer
         .mutate({
-          variables: {
-            roundId,
-            selectedChoiceIndexes,
-          },
+          variables: { input: { roundId, selectedChoiceIndexes } },
         })
         .pipe(this.mutations.handleErrors())
         .subscribe({

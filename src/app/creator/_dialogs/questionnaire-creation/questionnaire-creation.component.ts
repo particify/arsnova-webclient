@@ -106,9 +106,11 @@ export class QuestionnaireCreationComponent {
       this.createQuestionnaire
         .mutate({
           variables: {
-            roomId: this.data.roomId,
-            name: this.name,
-            type: this.selectedType,
+            input: {
+              roomId: this.data.roomId,
+              name: this.name,
+              type: this.selectedType,
+            },
           },
           refetchQueries: [QuestionnairesByRoomIdDocument],
         })

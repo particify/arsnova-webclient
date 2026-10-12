@@ -30,6 +30,7 @@ fragment ContentDetails on Content {
     id
     roundNo
     closed
+    started
     answerable
   }
   formatData {
@@ -59,8 +60,12 @@ fragment ContentDetails on Content {
   weight
   answerCount
   abstentionCount
-  correctAnswerCount
   position
+}
+
+fragment CreatorContentDetails on Content {
+  ...ContentDetails
+  correctAnswerCount
 }
 
 fragment Answer on Answer {
@@ -126,7 +131,7 @@ query QuestionnaireContentsByQuestionnaireId($questionnaireId: UUID!) {
   questionnaireContentsByQuestionnaireId(questionnaireId: $questionnaireId) {
     edges {
       node {
-        ...ContentDetails
+        ...CreatorContentDetails
       }
     }
   }
@@ -144,12 +149,8 @@ query QuestionnairePublishedContentsByQuestionnaireId($questionnaireId: UUID!) {
   }
 }
 
-mutation CreateQuestionnaire(
-  $roomId: UUID!
-  $name: String!
-  $type: QuestionnaireType!
-) {
-  createQuestionnaire(input: { roomId: $roomId, name: $name, type: $type }) {
+mutation CreateQuestionnaire($input: CreateQuestionnaireInput!) {
+  createQuestionnaire(input: $input) {
     ...QuestionnaireDetails
   }
 }
@@ -162,13 +163,13 @@ mutation ToggleQuestionnairePublished($id: UUID!, $published: Boolean!) {
 
 mutation CreateQuestionnaireChoiceContent($input: CreateChoiceContentInput!) {
   createQuestionnaireChoiceContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 mutation UpdateQuestionnaireChoiceContent($input: UpdateChoiceContentInput!) {
   updateQuestionnaireChoiceContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -176,7 +177,7 @@ mutation CreateQuestionnaireWordcloudContent(
   $input: CreateWordcloudContentInput!
 ) {
   createQuestionnaireWordcloudContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -184,13 +185,13 @@ mutation UpdateQuestionnaireWordcloudContent(
   $input: UpdateWordcloudContentInput!
 ) {
   updateQuestionnaireWordcloudContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 query QuestionnaireContentById($id: UUID!) {
   questionnaireContentById(id: $id) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -230,24 +231,16 @@ query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
   }
 }
 
-mutation CreateQuestionnaireChoiceAnswer(
-  $roundId: UUID!
-  $selectedChoiceIndexes: [Int!]!
-) {
-  createQuestionnaireChoiceAnswer(
-    input: { roundId: $roundId, selectedChoiceIndexes: $selectedChoiceIndexes }
-  ) {
+mutation CreateQuestionnaireChoiceAnswer($input: CreateChoiceAnswerInput!) {
+  createQuestionnaireChoiceAnswer(input: $input) {
     ...Answer
   }
 }
 
 mutation CreateQuestionnaireWordcloudAnswer(
-  $roundId: UUID!
-  $words: [String!]!
+  $input: CreateWordcloudAnswerInput!
 ) {
-  createQuestionnaireWordcloudAnswer(
-    input: { roundId: $roundId, words: $words }
-  ) {
+  createQuestionnaireWordcloudAnswer(input: $input) {
     ...Answer
   }
 }
@@ -271,20 +264,20 @@ mutation DeleteQuestionnaireAnswersByContentId($contentId: UUID!) {
 }
 
 mutation BanQuestionnaireWordcloudContentKeyword(
-  $contentId: UUID
-  $keyword: String
+  $contentId: UUID!
+  $keyword: String!
 ) {
   banQuestionnaireWordcloudContentKeyword(
     contentId: $contentId
     keyword: $keyword
   ) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
-mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID) {
+mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID!) {
   resetBannedQuestionnaireWordcloudContentKeywords(contentId: $contentId) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -318,7 +311,7 @@ mutation UpdateQuestionnaire(
 
 mutation DuplicateQuestionnaireContent($id: ID!) {
   duplicateQuestionnaireContent(id: $id) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -330,7 +323,7 @@ mutation CopyQuestionnaireContentToQuestionnaire(
     contentId: $contentId
     questionnaireId: $questionnaireId
   ) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -342,7 +335,7 @@ mutation MoveQuestionnaireContentToQuestionnaire(
     contentId: $contentId
     questionnaireId: $questionnaireId
   ) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 

@@ -76,7 +76,7 @@ describe('ContentWordcloudParticipantComponent', () => {
     component.submitAnswer();
 
     expect(createAnswer.mutate).toHaveBeenCalledWith({
-      variables: { roundId: 'round-1', words: ['Angular'] },
+      variables: { input: { roundId: 'round-1', words: ['Angular'] } },
     });
   });
 

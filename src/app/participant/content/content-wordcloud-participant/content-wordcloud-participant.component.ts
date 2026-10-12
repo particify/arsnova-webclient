@@ -68,7 +68,7 @@ export class ContentWordcloudParticipantComponent implements AnswerForm {
       return;
     }
     this.createAnswer
-      .mutate({ variables: { roundId: this.roundId(), words } })
+      .mutate({ variables: { input: { roundId: this.roundId(), words } } })
       .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
