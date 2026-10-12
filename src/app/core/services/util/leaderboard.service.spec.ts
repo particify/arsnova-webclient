@@ -71,7 +71,10 @@ describe('watchLeaderboard', () => {
   }
 
   it('queries and subscribes with the same variables', () => {
-    expect(byQuestionnaireId.watch).toHaveBeenCalledOnceWith({ variables });
+    expect(byQuestionnaireId.watch).toHaveBeenCalledOnceWith({
+      variables,
+      fetchPolicy: 'cache-and-network',
+    });
     expect(updated.subscribe).toHaveBeenCalledOnceWith({ variables });
   });
 

@@ -53,6 +53,7 @@ describe('LeaderboardPageComponent', () => {
         contentId: 'c-1',
         limit: LEADERBOARD_DISPLAY_LIMIT,
       },
+      fetchPolicy: 'cache-and-network',
     });
   });
 

@@ -380,6 +380,7 @@ describe('SeriesOverviewComponent', () => {
       setUp({ questionnaire: { leaderboardEnabled: true, published: true } });
       expect(leaderboardQueries().mostRecent().args[0]).toEqual({
         variables: { questionnaireId: 'q-1', limit: LEADERBOARD_DISPLAY_LIMIT },
+        fetchPolicy: 'cache-and-network',
       });
     });
 

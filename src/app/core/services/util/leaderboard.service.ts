@@ -51,7 +51,8 @@ export function watchLeaderboard(
   variables: QuestionnaireLeaderboardByQuestionnaireIdQueryVariables
 ): Observable<LeaderboardPage> {
   const initial$ = leaderboardByQuestionnaireId
-    .watch({ variables })
+    // The cached page shows at once; the network answer keeps it current.
+    .watch({ variables, fetchPolicy: 'cache-and-network' })
     .valueChanges.pipe(
       onlyCompleteData(),
       map((r) => r.data?.questionnaireLeaderboardByQuestionnaireId)

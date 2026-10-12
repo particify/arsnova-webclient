@@ -61,6 +61,7 @@ describe('ContentGroupLeaderboardComponent', () => {
     setUp(false);
     expect(byQuestionnaireId.watch).toHaveBeenCalledOnceWith({
       variables: { questionnaireId: 'q-1', limit: undefined },
+      fetchPolicy: 'cache-and-network',
     });
   });
 
@@ -68,6 +69,7 @@ describe('ContentGroupLeaderboardComponent', () => {
     setUp(true);
     expect(byQuestionnaireId.watch).toHaveBeenCalledOnceWith({
       variables: { questionnaireId: 'q-1', limit: MAX_LEADERBOARD_LIMIT },
+      fetchPolicy: 'cache-and-network',
     });
   });
 
