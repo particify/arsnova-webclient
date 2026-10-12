@@ -395,6 +395,61 @@ describe('ContentParticipantComponent', () => {
       ).not.toBeNull();
     });
 
+    it('stops waiting once the round has started', () => {
+      setUp(
+        {
+          ...choiceContent,
+          position: 0,
+          activeRound: { id: 'round-1', roundNo: 1, started: true },
+        } as Content,
+        {
+          inputs: {
+            questionnaire: {
+              id: 'q-1',
+              contentCount: 3,
+              leaderboardEnabled: true,
+              publishingMode: QuestionnairePublishingMode.Live,
+            },
+          },
+        }
+      );
+
+      expect(
+        fixture.nativeElement.querySelector('app-content-waiting')
+      ).toBeNull();
+    });
+
+    it('locks a stopped round instead of waiting for its start', () => {
+      setUp(
+        {
+          ...choiceContent,
+          position: 0,
+          activeRound: {
+            id: 'round-1',
+            roundNo: 1,
+            started: true,
+            closed: true,
+          },
+        } as Content,
+        {
+          inputs: {
+            questionnaire: {
+              id: 'q-1',
+              contentCount: 3,
+              leaderboardEnabled: true,
+              publishingMode: QuestionnairePublishingMode.Live,
+            },
+          },
+        }
+      );
+
+      expect(component.waitingForStart()).toBeFalse();
+      expect(component.answeringLocked()).toBeTrue();
+      expect(
+        fixture.nativeElement.querySelector('app-content-waiting')
+      ).toBeNull();
+    });
+
     it('stops waiting once answered', () => {
       setUp(
         { ...choiceContent, position: 0 },

@@ -160,7 +160,6 @@ export class ContentParticipantComponent {
   answerResult = input<AnswerResultState>();
   activeTab = input<string>();
   finished = input(false);
-  startedPosition = input<number>();
   next = output<void>();
 
   private readonly answerRef = toSignal(
@@ -198,18 +197,13 @@ export class ContentParticipantComponent {
     () => this.answer()?.result === AnswerResultState.Abstained
   );
 
-  readonly waitingForStart = computed(() => {
-    if (
-      this.questionnaire().publishingMode !== QuestionnairePublishingMode.Live
-    ) {
-      return false;
-    }
-    const startedPosition = this.startedPosition();
-    const position = this.content().position;
-    return (
-      startedPosition == null || position == null || position > startedPosition
-    );
-  });
+  readonly waitingForStart = computed(
+    () =>
+      this.questionnaire().publishingMode ===
+        QuestionnairePublishingMode.Live &&
+      !this.answer() &&
+      !this.content().activeRound?.started
+  );
 
   answeringLocked = linkedSignal(
     () =>

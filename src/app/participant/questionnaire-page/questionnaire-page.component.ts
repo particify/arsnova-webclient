@@ -261,16 +261,6 @@ export class QuestionnairePageComponent {
       : undefined;
   });
 
-  readonly startedContentPosition = computed(() => {
-    const contentId = this.questionnaireInLiveMode()?.activeRound?.contentId;
-    if (!contentId) {
-      return undefined;
-    }
-    return (
-      this.contents().find((c) => c.id === contentId)?.position ?? undefined
-    );
-  });
-
   private readonly liveContentId = computed(
     () =>
       this.activeUnansweredContentId() ??
