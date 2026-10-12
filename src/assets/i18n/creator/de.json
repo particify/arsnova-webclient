@@ -198,6 +198,7 @@
     "numeric-minimum-too-large": "Das Minimum darf nicht kleiner sein als {{min}}.",
     "numeric-maximum-too-large": "Das Maximum darf nicht größer sein als {{max}}.",
     "numeric-range-too-large": "Der Bereich darf nicht größer als sein {{maxRange}}.",
+    "numeric-tolerance-negative": "Die Toleranz darf nicht negativ sein.",
     "select-correct-number-in-defined-range": "Die richtige Antwort muss im definierten Bereich liegen.",
     "publishing-mode": "Freischaltung",
     "edit-publishing": "Freischaltung bearbeiten",

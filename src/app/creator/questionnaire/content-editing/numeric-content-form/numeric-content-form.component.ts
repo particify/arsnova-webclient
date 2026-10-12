@@ -86,8 +86,11 @@ export class NumericContentFormComponent
     );
   }
 
-  private determineError(): string | undefined {
-    if (this.minimum() >= this.maximum()) {
+  private rangeError(): string | undefined {
+    // Clearing a number input leaves null behind the signal's number type.
+    const minimum: number | null = this.minimum();
+    const maximum: number | null = this.maximum();
+    if (minimum == null || maximum == null || minimum >= maximum) {
       return 'creator.content.numeric-minimum-has-to-be-lower-than-maximum';
     }
     if (this.isMinimumTooLarge()) {
@@ -99,13 +102,24 @@ export class NumericContentFormComponent
     if (this.isRangeTooLarge()) {
       return 'creator.content.numeric-range-too-large';
     }
-    if (
-      this.hasCorrectAnswer() &&
-      (this.correctNumber() === undefined || this.isCorrectOutOfRange())
-    ) {
+    return undefined;
+  }
+
+  private correctAnswerError(): string | undefined {
+    if (!this.hasCorrectAnswer()) {
+      return undefined;
+    }
+    if ((this.tolerance() ?? 0) < 0) {
+      return 'creator.content.numeric-tolerance-negative';
+    }
+    if (this.correctNumber() == null || this.isCorrectOutOfRange()) {
       return 'creator.content.select-correct-number-in-defined-range';
     }
     return undefined;
+  }
+
+  private determineError(): string | undefined {
+    return this.rangeError() ?? this.correctAnswerError();
   }
 
   formatDataValid(): boolean {

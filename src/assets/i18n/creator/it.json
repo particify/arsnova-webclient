@@ -142,6 +142,7 @@
     "numeric-minimum-too-large": "Il minimo non deve essere inferiore a {{min}}.",
     "numeric-maximum-too-large": "Il massimo non deve essere superiore a {{max}}.",
     "numeric-range-too-large": "L'intervallo non deve essere superiore a {{maxRange}}.",
+    "numeric-tolerance-negative": "La tolleranza non può essere negativa.",
     "select-correct-number-in-defined-range": "La risposta corretta deve rientrare nell'intervallo definito.",
     "publishing-mode": "Modalità di pubblicazione",
     "edit-publishing": "Modifica della pubblicazione",

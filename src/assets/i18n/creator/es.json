@@ -178,6 +178,7 @@
     "numeric-minimum-too-large": "El mínimo no debe ser inferior a {{min}}.",
     "numeric-maximum-too-large": "El máximo no debe ser mayor que {{max}}.",
     "numeric-range-too-large": "El rango no debe ser mayor que {{maxRange}}.",
+    "numeric-tolerance-negative": "La tolerancia no puede ser negativa.",
     "select-correct-number-in-defined-range": "La respuesta correcta debe encontrarse dentro del intervalo definido.",
     "import-failed": "El formato del archivo no es válido.",
     "publish-correct-answers-info": "Los participantes pueden ver las respuestas correctas después de haber contestado.",

@@ -148,6 +148,29 @@ describe('NumericContentFormComponent', () => {
     expectRejected();
   });
 
+  it('rejects an emptied minimum or maximum', () => {
+    setUp(null);
+    component.minimum.set(null as never);
+    expectRejected();
+  });
+
+  it('rejects a negative tolerance', () => {
+    setUp(null);
+    fixture.componentRef.setInput('hasCorrectAnswer', true);
+    fixture.detectChanges();
+    component.correctNumber.set(50);
+    component.tolerance.set(-1);
+    expectRejected();
+  });
+
+  it('requires a correct answer once it has been cleared', () => {
+    setUp(null);
+    fixture.componentRef.setInput('hasCorrectAnswer', true);
+    fixture.detectChanges();
+    component.correctNumber.set(null as never);
+    expectRejected();
+  });
+
   it('requires a correct answer once one is asked for', () => {
     setUp(null);
     fixture.componentRef.setInput('hasCorrectAnswer', true);

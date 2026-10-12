@@ -172,6 +172,7 @@
     "correct-answer": "Réponse correcte",
     "numeric-maximum-too-large": "Le maximum ne doit pas être supérieur à {{max}}.",
     "numeric-range-too-large": "La portée ne doit pas être supérieure à {{maxRange}}.",
+    "numeric-tolerance-negative": "La tolérance ne doit pas être négative.",
     "maximum": "Maximum",
     "publishing-mode": "Mode publication",
     "select-correct-number-in-defined-range": "La bonne réponse doit se situer dans la fourchette définie.",

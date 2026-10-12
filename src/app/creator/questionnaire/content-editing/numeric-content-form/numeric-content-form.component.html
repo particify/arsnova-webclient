@@ -42,6 +42,8 @@
               matInput
               [disabled]="formDisabled || answered() || preview()"
               type="number"
+              [min]="minimum()"
+              [max]="maximum()"
               data-testid="numeric-correct-number-input"
               [(ngModel)]="correctNumber"
             />
@@ -55,6 +57,7 @@
               matInput
               [disabled]="formDisabled || answered() || preview()"
               type="number"
+              min="0"
               data-testid="numeric-tolerance-input"
               [(ngModel)]="tolerance"
             />
