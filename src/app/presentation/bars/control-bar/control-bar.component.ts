@@ -11,6 +11,7 @@ import {
   viewChild,
   output,
   model,
+  untracked,
 } from '@angular/core';
 import {
   NavBarComponent,
@@ -220,6 +221,7 @@ export class ControlBarComponent
   HotkeyAction = HotkeyAction;
 
   private hotkeyRefs: symbol[] = [];
+  private initialised = false;
 
   activeWordcloudVisualiation =
     this.contentResultsService.activeWordcloudVisualization;
@@ -256,20 +258,26 @@ export class ControlBarComponent
     );
     effect(() => {
       const questionnaireId = this.questionnaireId();
-      if (!this.loadingQuestionnaires()) {
-        this.afterInit();
-        const questionnaires = this.questionnaires();
-        if (questionnaires.length === 0) {
-          this.removeContentFeatureItem();
-        } else {
-          const first = questionnaires[0];
-          this.activeQuestionnaire.set(
-            questionnaireId
-              ? (questionnaires.find((q) => q.id === questionnaireId) ?? first)
-              : first
-          );
-        }
+      if (this.loadingQuestionnaires()) {
+        return;
       }
+      if (!this.initialised) {
+        this.initialised = true;
+        untracked(() => this.afterInit());
+      }
+      const questionnaires = this.questionnaires();
+      if (questionnaires.length === 0) {
+        this.removeContentFeatureItem();
+      } else {
+        const first = questionnaires[0];
+        this.activeQuestionnaire.set(
+          questionnaireId
+            ? (questionnaires.find((q) => q.id === questionnaireId) ?? first)
+            : first
+        );
+      }
+    });
+    effect(() => {
       if (this.contentResultsVisible()) {
         this.determineResultsItemHighlighted();
       }
