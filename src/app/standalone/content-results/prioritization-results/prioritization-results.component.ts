@@ -1,7 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, merge, share, switchMap, takeUntil } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
+import { updateOn } from '@gql/helper/update-on';
 import { CoreModule } from '@app/core/core.module';
 import {
   BarListComponent,
@@ -46,20 +47,22 @@ export class PrioritizationResultsComponent {
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
       switchMap((roundId) => {
-        const initial$ = this.roundStatsByRoundId
-          .watch({ variables: { roundId } })
-          .valueChanges.pipe(
-            onlyCompleteData(),
-            map((r) => r.data?.questionnairePrioritizationRoundStatsByRoundId)
-          );
-
-        const updates$ = this.roundStatsUpdated
-          .subscribe({ variables: { roundId } })
-          .pipe(
-            map((r) => r.data?.questionnairePrioritizationRoundStatsUpdated),
-            share()
-          );
-        return merge(initial$.pipe(takeUntil(updates$)), updates$);
+        // Nothing to show until the content has a round.
+        if (!roundId) {
+          return of(undefined);
+        }
+        return updateOn(
+          this.roundStatsByRoundId.watch({ variables: { roundId } }),
+          this.roundStatsUpdated.subscribe({ variables: { roundId } }),
+          (r) =>
+            r.data && {
+              questionnairePrioritizationRoundStatsByRoundId:
+                r.data.questionnairePrioritizationRoundStatsUpdated,
+            }
+        ).pipe(
+          onlyCompleteData(),
+          map((r) => r.data?.questionnairePrioritizationRoundStatsByRoundId)
+        );
       })
     )
   );

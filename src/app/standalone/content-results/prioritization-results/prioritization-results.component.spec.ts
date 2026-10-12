@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { FormattingService } from '@app/core/services/http/formatting.service';
@@ -37,13 +37,15 @@ function roundStats(
   };
 }
 
-function complete(data: unknown) {
-  return of({ dataState: 'complete' as const, data });
+function result(data: unknown) {
+  return { dataState: 'complete' as const, data };
 }
 
 describe('PrioritizationResultsComponent', () => {
   let fixture: ComponentFixture<PrioritizationResultsComponent>;
   let component: PrioritizationResultsComponent;
+  let stats$: BehaviorSubject<unknown>;
+  let statsByRoundId: jasmine.SpyObj<QuestionnairePrioritizationRoundStatsByRoundIdGql>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
 
@@ -51,14 +53,17 @@ describe('PrioritizationResultsComponent', () => {
     stats: PrioritizationContentRoundStats | null = roundStats([]),
     labels?: string[]
   ) {
-    const statsByRoundId = jasmine.createSpyObj(
+    statsByRoundId = jasmine.createSpyObj(
       'QuestionnairePrioritizationRoundStatsByRoundIdGql',
       ['watch']
     );
+    stats$ = new BehaviorSubject<unknown>(
+      result({ questionnairePrioritizationRoundStatsByRoundId: stats })
+    );
+    // Writes land in the query like in Apollo's cache: as a new result.
     statsByRoundId.watch.and.returnValue({
-      valueChanges: complete({
-        questionnairePrioritizationRoundStatsByRoundId: stats,
-      }),
+      valueChanges: stats$,
+      updateQuery: (mapFn: () => unknown) => stats$.next(result(mapFn())),
     } as never);
 
     statsUpdated = new Subject<unknown>();
@@ -156,22 +161,59 @@ describe('PrioritizationResultsComponent', () => {
     ]);
   });
 
+  function emitUpdate(stats: PrioritizationContentRoundStats) {
+    statsUpdated.next({
+      data: { questionnairePrioritizationRoundStatsUpdated: stats },
+    });
+    fixture.detectChanges();
+  }
+
   it('reranks the items as a live update arrives', () => {
     setUp(roundStats([30, 20, 10]));
     expect(bars()[0]).toEqual(['A', 30]);
 
-    statsUpdated.next({
-      data: {
-        questionnairePrioritizationRoundStatsUpdated: roundStats([30, 90, 10]),
-      },
-    });
-    fixture.detectChanges();
+    emitUpdate(roundStats([30, 90, 10]));
 
     expect(bars()).toEqual([
       ['B', 90],
       ['A', 30],
       ['C', 10],
     ]);
+  });
+
+  it('still reflects a refetch of the query after a push', () => {
+    setUp(roundStats([30, 20, 10]));
+    emitUpdate(roundStats([30, 90, 10]));
+
+    stats$.next(
+      result({
+        questionnairePrioritizationRoundStatsByRoundId: roundStats([1, 2, 3]),
+      })
+    );
+    fixture.detectChanges();
+
+    expect(bars()[0]).toEqual(['C', 3]);
+  });
+
+  it('keeps the last stats when the updates fail', () => {
+    spyOn(console, 'error');
+    setUp(roundStats([30, 20, 10]));
+
+    statsUpdated.error(new Error('Subscription lost'));
+    fixture.detectChanges();
+
+    expect(bars()[0]).toEqual(['A', 30]);
+    expect(console.error).toHaveBeenCalled();
+  });
+
+  it('sends no query while the content has no round', () => {
+    setUp(roundStats([30, 20, 10]));
+    statsByRoundId.watch.calls.reset();
+
+    fixture.componentRef.setInput('roundIds', []);
+    fixture.detectChanges();
+
+    expect(statsByRoundId.watch).not.toHaveBeenCalled();
   });
 
   it('hides the bars while the results are hidden', () => {
