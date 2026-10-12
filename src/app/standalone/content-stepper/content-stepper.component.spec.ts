@@ -3,6 +3,8 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
+import { ContentService } from '@app/core/services/http/content.service';
+import { ContentResultsComponent } from '@app/standalone/content-results/content-results.component';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { StepperComponent } from '@app/standalone/stepper/stepper.component';
 import { Content, UserUiSettings } from '@gql/generated/graphql';
@@ -18,19 +20,10 @@ describe('ContentStepperComponent', () => {
   let contentResultsService: jasmine.SpyObj<ContentResultsService>;
 
   function setUp() {
-    // The cdk-step content pulls in ContentResultsComponent's full GraphQL
-    // dependency graph, which is irrelevant to the currentStep/effect logic
-    // under test here - strip it down to just the stepper it wraps.
-    TestBed.overrideComponent(ContentStepperComponent, {
-      set: {
-        template: `
-          <app-stepper [listLength]="contents().length">
-            @for (content of contents(); track content) {
-              <cdk-step></cdk-step>
-            }
-          </app-stepper>
-        `,
-      },
+    // The results component pulls in the full GraphQL dependency graph, which
+    // is irrelevant to the stepping logic under test here.
+    TestBed.overrideComponent(ContentResultsComponent, {
+      set: { template: '' },
     });
 
     contentResultsService = jasmine.createSpyObj('ContentResultsService', [
@@ -48,6 +41,10 @@ describe('ContentStepperComponent', () => {
           useValue: jasmine.createSpyObj('ContentAnswerService', [
             'getAnswerResultIcon',
           ]),
+        },
+        {
+          provide: ContentService,
+          useValue: jasmine.createSpyObj('ContentService', ['getTypeIcons']),
         },
       ]
     ).compileComponents();
@@ -92,6 +89,24 @@ describe('ContentStepperComponent', () => {
     expect(contentResultsService.setCorrectResultsVisible).toHaveBeenCalledWith(
       false
     );
+  });
+
+  it('keeps the rendered steps when the same contents are emitted again', () => {
+    setUp();
+    fixture.componentRef.setInput('startIndex', 0);
+    fixture.detectChanges();
+    const stepsBefore = component.stepper().steps.toArray();
+
+    fixture.componentRef.setInput('contents', [
+      content('c-1'),
+      content('c-2'),
+      content('c-3'),
+    ]);
+    fixture.detectChanges();
+
+    const stepsAfter = component.stepper().steps.toArray();
+    expect(stepsAfter.length).toBe(3);
+    expect(stepsAfter).toEqual(stepsBefore);
   });
 
   it('emits the navigated index so the page can resync startIndex', () => {
