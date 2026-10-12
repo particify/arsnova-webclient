@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -39,14 +39,15 @@ function roundStats(
   };
 }
 
-function complete(data: unknown) {
-  return of({ dataState: 'complete' as const, data });
+function result(data: unknown) {
+  return { dataState: 'complete' as const, data };
 }
 
 describe('ShortAnswerResultsComponent', () => {
   let fixture: ComponentFixture<ShortAnswerResultsComponent>;
   let component: ShortAnswerResultsComponent;
   let statsByRoundId: jasmine.SpyObj<QuestionnaireShortAnswerRoundStatsByRoundIdGql>;
+  let stats$: BehaviorSubject<unknown>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
   let banKeyword: jasmine.SpyObj<BanQuestionnaireShortAnswerContentKeywordGql>;
@@ -64,11 +65,16 @@ describe('ShortAnswerResultsComponent', () => {
       'QuestionnaireShortAnswerRoundStatsByRoundIdGql',
       ['watch']
     );
-    statsByRoundId.watch.and.returnValue({
-      valueChanges: complete({
+    stats$ = new BehaviorSubject<unknown>(
+      result({
         questionnaireShortAnswerRoundStatsByRoundId:
           options.stats === undefined ? roundStats() : options.stats,
-      }),
+      })
+    );
+    // Writes land in the query like in Apollo's cache: as a new result.
+    statsByRoundId.watch.and.returnValue({
+      valueChanges: stats$,
+      updateQuery: (mapFn: () => unknown) => stats$.next(result(mapFn())),
     } as never);
 
     statsUpdated = new Subject<unknown>();
@@ -302,20 +308,58 @@ describe('ShortAnswerResultsComponent', () => {
     );
   });
 
-  it('merges live subscription emissions into the grid', () => {
+  function emitUpdate(stats: ShortAnswerContentRoundStats) {
+    statsUpdated.next({
+      data: { questionnaireShortAnswerRoundStatsUpdated: stats },
+    });
+    fixture.detectChanges();
+  }
+
+  it('shows the pushed stats in the grid', () => {
     setUp();
     expect(grid()?.answers.length).toBe(3);
 
-    statsUpdated.next({
-      data: {
-        questionnaireShortAnswerRoundStatsUpdated: roundStats({
-          texts: ['Kotlin'],
-          counts: [5],
-        }),
-      },
-    });
-    fixture.detectChanges();
+    emitUpdate(roundStats({ texts: ['Kotlin'], counts: [5] }));
 
     expect(gridEntries()).toEqual([['Kotlin', 5]]);
+  });
+
+  it('still reflects a refetch of the query after a push', () => {
+    setUp();
+    emitUpdate(roundStats({ texts: ['Kotlin'], counts: [5] }));
+
+    stats$.next(
+      result({
+        questionnaireShortAnswerRoundStatsByRoundId: roundStats({
+          texts: [],
+          counts: [],
+        }),
+      })
+    );
+    fixture.detectChanges();
+
+    expect(grid()).toBeUndefined();
+  });
+
+  it('keeps the last stats when the updates fail', () => {
+    spyOn(console, 'error');
+    setUp();
+
+    statsUpdated.error(new Error('Subscription lost'));
+    fixture.detectChanges();
+
+    expect(grid()?.answers.length).toBe(3);
+    expect(console.error).toHaveBeenCalled();
+  });
+
+  it('sends no query while the content has no round', () => {
+    setUp();
+    statsByRoundId.watch.calls.reset();
+
+    fixture.componentRef.setInput('roundIds', []);
+    fixture.detectChanges();
+
+    expect(statsByRoundId.watch).not.toHaveBeenCalled();
+    expect(grid()).toBeUndefined();
   });
 });
