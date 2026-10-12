@@ -407,8 +407,8 @@ export type Mutation = {
   createQuestionnaireAbstention?: Maybe<Answer>;
   createQuestionnaireChoiceAnswer?: Maybe<Answer>;
   createQuestionnaireChoiceContent?: Maybe<Content>;
-  createQuestionnaireFlashcardContent: Content;
-  createQuestionnaireSlideContent: Content;
+  createQuestionnaireFlashcardContent?: Maybe<Content>;
+  createQuestionnaireSlideContent?: Maybe<Content>;
   createQuestionnaireWordcloudAnswer?: Maybe<Answer>;
   createQuestionnaireWordcloudContent?: Maybe<Content>;
   createRoom: Room;
@@ -457,8 +457,8 @@ export type Mutation = {
   updateQuestionnaire: Questionnaire;
   updateQuestionnaireChoiceContent?: Maybe<Content>;
   updateQuestionnaireContentOrder?: Maybe<Questionnaire>;
-  updateQuestionnaireFlashcardContent: Content;
-  updateQuestionnaireSlideContent: Content;
+  updateQuestionnaireFlashcardContent?: Maybe<Content>;
+  updateQuestionnaireSlideContent?: Maybe<Content>;
   updateQuestionnaireWordcloudContent?: Maybe<Content>;
   updateRoomDescription: Room;
   updateRoomFocusMode: Room;
@@ -547,11 +547,11 @@ export type MutationCreateQuestionnaireChoiceContentArgs = {
 };
 
 export type MutationCreateQuestionnaireFlashcardContentArgs = {
-  input?: InputMaybe<CreateFlashcardContentInput>;
+  input: CreateFlashcardContentInput;
 };
 
 export type MutationCreateQuestionnaireSlideContentArgs = {
-  input?: InputMaybe<CreateSlideContentInput>;
+  input: CreateSlideContentInput;
 };
 
 export type MutationCreateQuestionnaireWordcloudAnswerArgs = {
@@ -750,11 +750,11 @@ export type MutationUpdateQuestionnaireContentOrderArgs = {
 };
 
 export type MutationUpdateQuestionnaireFlashcardContentArgs = {
-  input?: InputMaybe<UpdateFlashcardContentInput>;
+  input: UpdateFlashcardContentInput;
 };
 
 export type MutationUpdateQuestionnaireSlideContentArgs = {
-  input?: InputMaybe<UpdateSlideContentInput>;
+  input: UpdateSlideContentInput;
 };
 
 export type MutationUpdateQuestionnaireWordcloudContentArgs = {
@@ -2557,7 +2557,13 @@ export type ContentDetailsFragment = {
           labelRendered?: string | null;
         }>;
       }
+    | {
+        __typename?: 'FlashcardContentFormatData';
+        format: ContentType;
+        answer: string;
+      }
     | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+    | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | { __typename?: 'TextContentFormatData'; format: ContentType }
     | {
         __typename?: 'WordcloudContentFormatData';
@@ -3187,7 +3193,7 @@ export type CreateQuestionnaireFlashcardContentMutationVariables = Exact<{
 
 export type CreateQuestionnaireFlashcardContentMutation = {
   __typename?: 'Mutation';
-  createQuestionnaireFlashcardContent: {
+  createQuestionnaireFlashcardContent?: {
     __typename?: 'Content';
     id: string;
     body: string;
@@ -3198,7 +3204,6 @@ export type CreateQuestionnaireFlashcardContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3206,6 +3211,7 @@ export type CreateQuestionnaireFlashcardContentMutation = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
@@ -3234,7 +3240,7 @@ export type CreateQuestionnaireFlashcardContentMutation = {
           format: ContentType;
           maxAnswers: number;
         };
-  };
+  } | null;
 };
 
 export type UpdateQuestionnaireFlashcardContentMutationVariables = Exact<{
@@ -3243,7 +3249,7 @@ export type UpdateQuestionnaireFlashcardContentMutationVariables = Exact<{
 
 export type UpdateQuestionnaireFlashcardContentMutation = {
   __typename?: 'Mutation';
-  updateQuestionnaireFlashcardContent: {
+  updateQuestionnaireFlashcardContent?: {
     __typename?: 'Content';
     id: string;
     body: string;
@@ -3254,7 +3260,6 @@ export type UpdateQuestionnaireFlashcardContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3262,6 +3267,7 @@ export type UpdateQuestionnaireFlashcardContentMutation = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
@@ -3290,7 +3296,7 @@ export type UpdateQuestionnaireFlashcardContentMutation = {
           format: ContentType;
           maxAnswers: number;
         };
-  };
+  } | null;
 };
 
 export type CreateQuestionnaireSlideContentMutationVariables = Exact<{
@@ -3299,7 +3305,7 @@ export type CreateQuestionnaireSlideContentMutationVariables = Exact<{
 
 export type CreateQuestionnaireSlideContentMutation = {
   __typename?: 'Mutation';
-  createQuestionnaireSlideContent: {
+  createQuestionnaireSlideContent?: {
     __typename?: 'Content';
     id: string;
     body: string;
@@ -3310,7 +3316,6 @@ export type CreateQuestionnaireSlideContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3318,6 +3323,7 @@ export type CreateQuestionnaireSlideContentMutation = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
@@ -3346,7 +3352,7 @@ export type CreateQuestionnaireSlideContentMutation = {
           format: ContentType;
           maxAnswers: number;
         };
-  };
+  } | null;
 };
 
 export type UpdateQuestionnaireSlideContentMutationVariables = Exact<{
@@ -3355,7 +3361,7 @@ export type UpdateQuestionnaireSlideContentMutationVariables = Exact<{
 
 export type UpdateQuestionnaireSlideContentMutation = {
   __typename?: 'Mutation';
-  updateQuestionnaireSlideContent: {
+  updateQuestionnaireSlideContent?: {
     __typename?: 'Content';
     id: string;
     body: string;
@@ -3366,7 +3372,6 @@ export type UpdateQuestionnaireSlideContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3374,6 +3379,7 @@ export type UpdateQuestionnaireSlideContentMutation = {
       contentId?: string | null;
       roundNo: number;
       closed: boolean;
+      started: boolean;
       answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
@@ -3402,7 +3408,7 @@ export type UpdateQuestionnaireSlideContentMutation = {
           format: ContentType;
           maxAnswers: number;
         };
-  };
+  } | null;
 };
 
 export type QuestionnaireContentByIdQueryVariables = Exact<{
@@ -4056,6 +4062,7 @@ export type QuestionnaireContentUpdatedSubscription = {
       roundNo: number;
       closed: boolean;
       started: boolean;
+      answeringEndTime?: string | null;
       answerable: boolean;
     } | null;
   } | null;
