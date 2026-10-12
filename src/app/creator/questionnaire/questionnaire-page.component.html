@@ -64,13 +64,15 @@
                     {{ 'creator.content.export-content-group' | transloco }}
                   </button>
                   <mat-menu #exportMenu="matMenu">
-                    <lib-extension-point
-                      extensionId="series-results-export"
-                      [extensionData]="{
-                        series: questionnaire(),
-                        shortId: shortId(),
-                      }"
-                    ></lib-extension-point>
+                    @if (questionnaire(); as q) {
+                      <lib-extension-point
+                        extensionId="series-results-export"
+                        [extensionData]="{
+                          questionnaire: q,
+                          shortId: shortId(),
+                        }"
+                      ></lib-extension-point>
+                    }
                   </mat-menu>
                   <div
                     [matTooltip]="
