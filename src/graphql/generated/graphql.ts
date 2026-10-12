@@ -618,11 +618,11 @@ export type MutationCreateQuestionnaireNumericContentArgs = {
 };
 
 export type MutationCreateQuestionnaireScaleAnswerArgs = {
-  input?: InputMaybe<CreateScaleAnswerInput>;
+  input: CreateScaleAnswerInput;
 };
 
 export type MutationCreateQuestionnaireScaleContentArgs = {
-  input?: InputMaybe<CreateScaleContentInput>;
+  input: CreateScaleContentInput;
 };
 
 export type MutationCreateQuestionnaireSlideContentArgs = {
@@ -851,7 +851,7 @@ export type MutationUpdateQuestionnaireNumericContentArgs = {
 };
 
 export type MutationUpdateQuestionnaireScaleContentArgs = {
-  input?: InputMaybe<UpdateScaleContentInput>;
+  input: UpdateScaleContentInput;
 };
 
 export type MutationUpdateQuestionnaireSlideContentArgs = {
@@ -1422,8 +1422,8 @@ export type ScaleAnswerFormatData = {
 export type ScaleContentFormatData = {
   __typename?: 'ScaleContentFormatData';
   format: ContentType;
-  neutralOption?: Maybe<Scalars['Boolean']['output']>;
-  template?: Maybe<ScaleContentTemplate>;
+  neutralOption: Scalars['Boolean']['output'];
+  template: ScaleContentTemplate;
 };
 
 export type ScaleContentRoundStats = {
@@ -2796,7 +2796,12 @@ export type ContentDetailsFragment = {
         correctNumber?: number | null;
         tolerance: number;
       }
-    | { __typename?: 'ScaleContentFormatData'; format: ContentType }
+    | {
+        __typename?: 'ScaleContentFormatData';
+        format: ContentType;
+        template: ScaleContentTemplate;
+        neutralOption: boolean;
+      }
     | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | {
         __typename?: 'TextContentFormatData';
@@ -2862,8 +2867,8 @@ export type CreatorContentDetailsFragment = {
     | {
         __typename?: 'ScaleContentFormatData';
         format: ContentType;
-        template?: ScaleContentTemplate | null;
-        neutralOption?: boolean | null;
+        template: ScaleContentTemplate;
+        neutralOption: boolean;
       }
     | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | {
@@ -3104,8 +3109,8 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
           | {
               __typename?: 'ScaleContentFormatData';
               format: ContentType;
-              template?: ScaleContentTemplate | null;
-              neutralOption?: boolean | null;
+              template: ScaleContentTemplate;
+              neutralOption: boolean;
             }
           | { __typename?: 'SlideContentFormatData'; format: ContentType }
           | {
@@ -3184,8 +3189,8 @@ export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
           | {
               __typename?: 'ScaleContentFormatData';
               format: ContentType;
-              template?: ScaleContentTemplate | null;
-              neutralOption?: boolean | null;
+              template: ScaleContentTemplate;
+              neutralOption: boolean;
             }
           | { __typename?: 'SlideContentFormatData'; format: ContentType }
           | {
@@ -3332,8 +3337,8 @@ export type CreateQuestionnaireChoiceContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3407,8 +3412,8 @@ export type UpdateQuestionnaireChoiceContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3482,8 +3487,8 @@ export type CreateQuestionnaireNumericContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3557,8 +3562,8 @@ export type UpdateQuestionnaireNumericContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3591,7 +3596,6 @@ export type CreateQuestionnaireScaleContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3631,8 +3635,8 @@ export type CreateQuestionnaireScaleContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3665,7 +3669,6 @@ export type UpdateQuestionnaireScaleContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3705,8 +3708,8 @@ export type UpdateQuestionnaireScaleContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3780,8 +3783,8 @@ export type CreateQuestionnaireWordcloudContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3855,8 +3858,8 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3930,8 +3933,8 @@ export type CreateQuestionnaireTextContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4005,8 +4008,8 @@ export type UpdateQuestionnaireTextContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4080,8 +4083,8 @@ export type CreateQuestionnaireFlashcardContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4155,8 +4158,8 @@ export type UpdateQuestionnaireFlashcardContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4230,8 +4233,8 @@ export type CreateQuestionnaireSlideContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4305,8 +4308,8 @@ export type UpdateQuestionnaireSlideContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4380,8 +4383,8 @@ export type QuestionnaireContentByIdQuery = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4917,8 +4920,8 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4993,8 +4996,8 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -5068,8 +5071,8 @@ export type ToggleQuestionnaireTextContentAnswersPublishedMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -5237,8 +5240,8 @@ export type DuplicateQuestionnaireContentMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -5313,8 +5316,8 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -5389,8 +5392,8 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
       | {
           __typename?: 'ScaleContentFormatData';
           format: ContentType;
-          template?: ScaleContentTemplate | null;
-          neutralOption?: boolean | null;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
