@@ -26,6 +26,7 @@ import {
   SortAnswerFormatData,
   SortContentFormatData,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   selector: 'app-content-sort-participant',
@@ -39,6 +40,7 @@ export class ContentSortParticipantComponent implements AnswerForm {
   private readonly notificationService = inject(NotificationService);
   private readonly answerService = inject(ContentAnswerService);
   private readonly createAnswer = inject(CreateQuestionnaireSortAnswerGql);
+  private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
   readonly roundId = input<string>();
@@ -89,6 +91,7 @@ export class ContentSortParticipantComponent implements AnswerForm {
           selectedChoiceIndexes: this.selectedChoiceIndexes(),
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const answer = r.data?.createQuestionnaireSortAnswer;

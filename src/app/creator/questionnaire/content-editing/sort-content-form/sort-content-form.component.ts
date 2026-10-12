@@ -25,6 +25,7 @@ import {
   SortContentFormatData,
   UpdateQuestionnaireSortContentGql,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 function sameOrder(labels: string[], others: string[]): boolean {
   return (
@@ -55,6 +56,7 @@ export class SortContentFormComponent implements ContentForm<SortContentFormatDa
   private readonly notificationService = inject(NotificationService);
   private readonly translateService = inject(TranslocoService);
   private readonly questionnairePageService = inject(QuestionnairePageService);
+  private readonly mutations = mutationHelper();
   private readonly createSortContent = inject(
     CreateQuestionnaireSortContentGql
   );
@@ -132,6 +134,7 @@ export class SortContentFormComponent implements ContentForm<SortContentFormatDa
           },
         },
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           const content = r.data?.updateQuestionnaireSortContent;
@@ -169,6 +172,7 @@ export class SortContentFormComponent implements ContentForm<SortContentFormatDa
           },
         ],
       })
+      .pipe(this.mutations.handleErrors())
       .subscribe({
         next: (r) => {
           if (r.data?.createQuestionnaireSortContent) {
