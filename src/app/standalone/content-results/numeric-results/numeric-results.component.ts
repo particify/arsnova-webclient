@@ -63,7 +63,7 @@ export class NumericResultsComponent {
   readonly abstentionCount = input(0);
 
   readonly scale = computed(() =>
-    this.isPresentation() ? this.presentationService.getScale() : 1
+    this.isPresentation() ? this.presentationService.scale() : 1
   );
 
   private statsForRound(
