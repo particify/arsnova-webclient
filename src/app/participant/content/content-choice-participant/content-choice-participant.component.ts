@@ -71,7 +71,10 @@ export class ContentChoiceParticipantComponent implements AnswerForm {
   submitAnswer(): void {
     const roundId = this.roundId();
     if (roundId) {
-      if (this.answerOptions().length === 0) {
+      const selectedChoiceIndexes = this.answerOptions().flatMap((o, i) =>
+        o.checked ? [i] : []
+      );
+      if (selectedChoiceIndexes.length === 0) {
         const msg = this.translateService.translate(
           this.contentFormatData().multiple
             ? 'participant.answer.at-least-one'
@@ -88,9 +91,7 @@ export class ContentChoiceParticipantComponent implements AnswerForm {
         .mutate({
           variables: {
             roundId,
-            selectedChoiceIndexes: this.answerOptions().flatMap((o, i) =>
-              o.checked ? [i] : []
-            ),
+            selectedChoiceIndexes,
           },
         })
         .subscribe({

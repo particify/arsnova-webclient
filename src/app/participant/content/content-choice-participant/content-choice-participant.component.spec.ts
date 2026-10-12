@@ -4,7 +4,11 @@ import { By } from '@angular/platform-browser';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { BROWSER_LANG } from '@app/core/services/util/language.service';
 import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
-import { AnswerResultState, ContentType } from '@gql/generated/graphql';
+import {
+  AnswerResultState,
+  ContentType,
+  CreateQuestionnaireChoiceAnswerGql,
+} from '@gql/generated/graphql';
 import { of } from 'rxjs';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
@@ -39,6 +43,60 @@ describe('ContentChoiceParticipantComponent', () => {
     expect(fixture.componentInstance.answerOptions()[0].answerOption).toEqual({
       label: '**A**',
       renderedLabel: '<p><b>A</b></p>',
+    });
+  });
+
+  describe('submitting', () => {
+    let createAnswer: jasmine.SpyObj<CreateQuestionnaireChoiceAnswerGql>;
+    let notificationService: jasmine.SpyObj<NotificationService>;
+
+    beforeEach(() => {
+      createAnswer = jasmine.createSpyObj(
+        'CreateQuestionnaireChoiceAnswerGql',
+        ['mutate']
+      );
+      createAnswer.mutate.and.returnValue(of({ data: {} }) as never);
+      notificationService = jasmine.createSpyObj('NotificationService', [
+        'showAdvanced',
+      ]);
+      TestBed.overrideComponent(ContentChoiceParticipantComponent, {
+        set: { template: '' },
+      });
+      configureTestModule(
+        [getTranslocoModule(), ContentChoiceParticipantComponent],
+        [
+          { provide: NotificationService, useValue: notificationService },
+          {
+            provide: CreateQuestionnaireChoiceAnswerGql,
+            useValue: createAnswer,
+          },
+        ]
+      ).compileComponents();
+      fixture = TestBed.createComponent(ContentChoiceParticipantComponent);
+      fixture.componentRef.setInput('contentId', 'content-1');
+      fixture.componentRef.setInput('roundId', 'round-1');
+      fixture.componentRef.setInput('contentFormatData', {
+        format: ContentType.Choice,
+        options: [{ label: 'A' }, { label: 'B' }],
+      });
+      fixture.detectChanges();
+    });
+
+    it('rejects an answer without a selected option', () => {
+      fixture.componentInstance.submitAnswer();
+
+      expect(createAnswer.mutate).not.toHaveBeenCalled();
+      expect(notificationService.showAdvanced).toHaveBeenCalled();
+    });
+
+    it('sends the selected option indexes', () => {
+      fixture.componentInstance.answerOptions()[1].checked = true;
+
+      fixture.componentInstance.submitAnswer();
+
+      expect(createAnswer.mutate).toHaveBeenCalledWith({
+        variables: { roundId: 'round-1', selectedChoiceIndexes: [1] },
+      });
     });
   });
 
