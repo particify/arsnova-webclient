@@ -18,8 +18,6 @@ export const LEADERBOARD_DISPLAY_LIMIT = 10;
 /** Upper bound the server clamps the requested page size to. */
 export const MAX_LEADERBOARD_LIMIT = 1000;
 
-const EMPTY_PAGE: LeaderboardPage = { entries: [], totalCount: 0 };
-
 export interface LeaderboardTableItem {
   position: number;
   // Not set for participants who did not choose a nickname.
@@ -65,7 +63,7 @@ export function watchLeaderboard(
       }
   ).pipe(
     onlyCompleteData(),
-    map((r) => r.data?.questionnaireLeaderboardByQuestionnaireId ?? EMPTY_PAGE)
+    map((r) => r.data.questionnaireLeaderboardByQuestionnaireId)
   );
 }
 

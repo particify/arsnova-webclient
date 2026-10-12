@@ -113,11 +113,6 @@ describe('watchLeaderboard', () => {
     expect(pages).toEqual([current]);
     expect(console.error).toHaveBeenCalled();
   });
-
-  it('turns a missing page into an empty one', () => {
-    emitInitial(null);
-    expect(pages).toEqual([{ entries: [], totalCount: 0 }]);
-  });
 });
 
 describe('LeaderboardService', () => {
