@@ -148,9 +148,7 @@ export class ContentsPageComponent {
     this.contentPresentationService.currentContent()
   );
 
-  protected readonly scale = computed(() =>
-    this.presentationService.getScale()
-  );
+  protected readonly scale = this.presentationService.scale;
 
   protected readonly containerStyle = computed(() => {
     const scale = this.scale();

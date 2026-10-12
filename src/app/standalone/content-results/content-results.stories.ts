@@ -30,7 +30,7 @@ class MockContentService {
 }
 
 class MockPresentationService {
-  getScale() {
+  scale() {
     return 1;
   }
 }

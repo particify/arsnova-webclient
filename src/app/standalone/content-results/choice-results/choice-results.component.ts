@@ -44,7 +44,7 @@ export class ChoiceResultsComponent {
   readonly visualizationUnitPercent = input(false);
   readonly isPresentation = input(false);
   readonly scale = computed(() =>
-    this.isPresentation() ? this.presentationService.getScale() : 1
+    this.isPresentation() ? this.presentationService.scale() : 1
   );
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(

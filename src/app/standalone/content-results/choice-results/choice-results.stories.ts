@@ -16,7 +16,7 @@ class MockFormattingService {
 }
 
 class MockPresentationService {
-  getScale() {
+  scale() {
     return 1;
   }
 }

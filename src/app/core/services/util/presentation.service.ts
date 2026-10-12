@@ -1,11 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommentSort } from '@app/core/models/comment-sort.enum';
 import { ContentGroup } from '@app/core/models/content-group';
 import { CommentPresentationState } from '@app/core/models/events/comment-presentation-state';
 import { PresentationStepPosition } from '@app/core/models/events/presentation-step-position.enum';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
 import { RoundState } from '@app/core/models/events/round-state';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  debounceTime,
+  fromEvent,
+} from 'rxjs';
 import { CommentFilter } from '@app/core/models/comment-filter.enum';
 import { Content } from '@gql/generated/graphql';
 
@@ -29,8 +36,17 @@ export class PresentationService {
     undefined
   );
 
-  private useRatioScale = true;
-  private scaleFactor = SCALE_FACTOR;
+  private readonly useRatioScale = signal(true);
+  private readonly scaleFactor = signal(SCALE_FACTOR);
+  private readonly resized = toSignal(
+    fromEvent(window, 'resize').pipe(debounceTime(100))
+  );
+
+  /** The scale of the presentation view, following the window size. */
+  readonly scale = computed(() => {
+    this.resized();
+    return this.getScale();
+  });
 
   private commentSortChanged = new Subject<CommentSort>();
   private commentFilterChanged = new Subject<CommentFilter>();
@@ -50,8 +66,8 @@ export class PresentationService {
     const ratioScale = innerHeight / innerWidth / ASPECT_RATIO;
     const deviceScale = parseFloat(
       (
-        (innerWidth / this.scaleFactor) *
-        (this.useRatioScale ? ratioScale : 1) *
+        (innerWidth / this.scaleFactor()) *
+        (this.useRatioScale() ? ratioScale : 1) *
         factor
       ).toFixed(1)
     );
@@ -59,11 +75,11 @@ export class PresentationService {
   }
 
   setUseRatioScale(useRatioScale: boolean): void {
-    this.useRatioScale = useRatioScale;
+    this.useRatioScale.set(useRatioScale);
   }
 
   setScaleFactor(scaleFactor: number): void {
-    this.scaleFactor = scaleFactor;
+    this.scaleFactor.set(scaleFactor);
   }
 
   getStepState(index: number, listLength: number) {

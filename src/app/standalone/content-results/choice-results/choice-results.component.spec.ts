@@ -48,7 +48,7 @@ describe('ChoiceResultsComponent', () => {
         },
         {
           provide: PresentationService,
-          useValue: jasmine.createSpyObj('PresentationService', ['getScale']),
+          useValue: { scale: () => 1 },
         },
       ]
     ).compileComponents();

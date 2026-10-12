@@ -1,30 +1,37 @@
-import { inject } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { PresentationService } from './presentation.service';
-import { ContentService } from '@app/core/services/http/content.service';
-import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { configureTestModule } from '@testing/test.setup';
 
 describe('PresentationService', () => {
-  const contentService = jasmine.createSpyObj(ContentService, ['getContent']);
+  let service: PresentationService;
 
-  const contentGroupService = jasmine.createSpyObj(ContentGroupService, [
-    'startContent',
-  ]);
   beforeEach(() => {
-    configureTestModule(
-      [],
-      [
-        PresentationService,
-        { provide: ContentService, useValue: contentService },
-        { provide: ContentGroupService, useValue: contentGroupService },
-      ]
-    );
+    configureTestModule([], [PresentationService]);
+    service = TestBed.inject(PresentationService);
   });
 
-  it('should be created', inject(
-    [PresentationService],
-    (service: PresentationService) => {
-      expect(service).toBeTruthy();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('recomputes the scale after the window has been resized', fakeAsync(() => {
+    service.setUseRatioScale(false);
+    service.setScaleFactor(innerWidth / 2);
+    expect(service.scale()).toBe(2);
+
+    const original = Object.getOwnPropertyDescriptor(window, 'innerWidth')!;
+    Object.defineProperty(window, 'innerWidth', {
+      value: innerWidth / 2,
+      configurable: true,
+    });
+    try {
+      window.dispatchEvent(new Event('resize'));
+      expect(service.scale()).toBe(2);
+      tick(100);
+
+      expect(service.scale()).toBe(1);
+    } finally {
+      Object.defineProperty(window, 'innerWidth', original);
     }
-  ));
+  }));
 });
