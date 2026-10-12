@@ -6,7 +6,7 @@ import { configureTestModule } from '@testing/test.setup';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
-import { ThemeService } from '@app/core/theme/theme.service';
+import { Theme, ThemeService } from '@app/core/theme/theme.service';
 import { ChoiceAnswerListComponent } from '@app/standalone/content-results/choice-results/choice-answer-list/choice-answer-list.component';
 import { BarChartComponent } from '@app/standalone/content-results/visualization/chart/bar-chart.component';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
@@ -92,6 +92,7 @@ describe('SortResultsComponent', () => {
           useValue: {
             getBarColors: () => PALETTE,
             getColor: (name: string) => name,
+            getCurrentTheme$: () => of(Theme.LIGHT),
           },
         },
         { provide: PresentationService, useValue: { getScale: () => 1 } },
