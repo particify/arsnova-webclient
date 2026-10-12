@@ -16,6 +16,7 @@ import {
   RoomUserAliasByRoomIdGql,
   SetRoomUserAliasGql,
 } from '@gql/generated/graphql';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 import { filter, map } from 'rxjs';
 
 @Component({
@@ -28,6 +29,7 @@ import { filter, map } from 'rxjs';
 export class ContentWaitingComponent extends FormComponent {
   private roomUserAliasByRoomId = inject(RoomUserAliasByRoomIdGql);
   private setRoomUserAlias = inject(SetRoomUserAliasGql);
+  private readonly mutations = mutationHelper();
 
   @Input() current?: number;
   @Input() totalCount?: number;
@@ -42,14 +44,18 @@ export class ContentWaitingComponent extends FormComponent {
 
   /**
    * Persists the alias for the room, either by accepting the proposal's `seed`
-   * or with a custom one. This can only be done once per room.
+   * or with a custom one. This can only be done once per room. A blank custom
+   * alias counts as none, so the proposal is accepted instead.
    */
   setAlias(): void {
-    this.disableForm();
     const roomId = this.roomId;
-    const changes = this.enteredAlias
-      ? { alias: this.enteredAlias }
-      : { seed: this.alias?.seed };
+    const alias = this.enteredAlias.trim();
+    const seed = this.alias?.seed;
+    if (!alias && seed == null) {
+      return;
+    }
+    this.disableForm();
+    const changes = alias ? { alias } : { seed };
     this.setRoomUserAlias
       .mutate({
         variables: { roomId, ...changes },
@@ -66,7 +72,11 @@ export class ContentWaitingComponent extends FormComponent {
           }
         },
       })
-      .subscribe(() => this.aliasSet.emit());
+      .pipe(this.mutations.reportErrors())
+      .subscribe({
+        next: () => this.aliasSet.emit(),
+        error: () => this.enableForm(),
+      });
   }
 
   /** Requests another proposal for an alias which is not persisted yet. */

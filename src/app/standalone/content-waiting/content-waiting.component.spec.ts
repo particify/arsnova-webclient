@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApolloCache } from '@apollo/client/core';
+import { ApolloCache, CombinedGraphQLErrors } from '@apollo/client';
+import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   RoomUserAlias,
   RoomUserAliasByRoomIdDocument,
@@ -8,7 +9,7 @@ import {
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ContentWaitingComponent } from './content-waiting.component';
 
 describe('ContentWaitingComponent', () => {
@@ -16,6 +17,7 @@ describe('ContentWaitingComponent', () => {
   let component: ContentWaitingComponent;
   let setRoomUserAlias: jasmine.SpyObj<SetRoomUserAliasGql>;
   let roomUserAliasByRoomId: jasmine.SpyObj<RoomUserAliasByRoomIdGql>;
+  let notificationService: jasmine.SpyObj<NotificationService>;
 
   const proposal: RoomUserAlias = {
     __typename: 'RoomUserAlias',
@@ -33,6 +35,10 @@ describe('ContentWaitingComponent', () => {
     roomUserAliasByRoomId = jasmine.createSpyObj('RoomUserAliasByRoomIdGql', [
       'fetch',
     ]);
+    notificationService = jasmine.createSpyObj('NotificationService', [
+      'showAdvanced',
+      'showOnRequestClientError',
+    ]);
     TestBed.overrideComponent(ContentWaitingComponent, {
       set: { template: '' },
     });
@@ -41,6 +47,7 @@ describe('ContentWaitingComponent', () => {
       [
         { provide: SetRoomUserAliasGql, useValue: setRoomUserAlias },
         { provide: RoomUserAliasByRoomIdGql, useValue: roomUserAliasByRoomId },
+        { provide: NotificationService, useValue: notificationService },
       ]
     ).compileComponents();
     fixture = TestBed.createComponent(ContentWaitingComponent);
@@ -66,6 +73,49 @@ describe('ContentWaitingComponent', () => {
       roomId: 'room-1',
       alias: 'Quiz Wizard',
     });
+  });
+
+  it('trims a custom alias', () => {
+    component.enteredAlias = '  Quiz Wizard  ';
+    component.setAlias();
+    expect(mutateOptions().variables).toEqual({
+      roomId: 'room-1',
+      alias: 'Quiz Wizard',
+    });
+  });
+
+  it('accepts the proposal when only whitespace was entered', () => {
+    component.enteredAlias = '   ';
+    component.setAlias();
+    expect(mutateOptions().variables).toEqual({ roomId: 'room-1', seed: 42 });
+  });
+
+  it('sends nothing without a custom alias or a proposal', () => {
+    fixture.componentRef.setInput('alias', { ...proposal, seed: null });
+    component.enteredAlias = ' ';
+    component.setAlias();
+    expect(setRoomUserAlias.mutate).not.toHaveBeenCalled();
+    expect(component.formDisabled).toBeFalse();
+  });
+
+  it('reports a rejected alias and lets the participant try again', () => {
+    setRoomUserAlias.mutate.and.returnValue(
+      throwError(
+        () =>
+          new CombinedGraphQLErrors({
+            errors: [
+              {
+                message: 'rejected',
+                extensions: { classification: 'BAD_REQUEST' },
+              },
+            ],
+          })
+      ) as never
+    );
+    component.enteredAlias = 'Taken';
+    component.setAlias();
+    expect(notificationService.showOnRequestClientError).toHaveBeenCalled();
+    expect(component.formDisabled).toBeFalse();
   });
 
   it('announces the alias once it is set', () => {
