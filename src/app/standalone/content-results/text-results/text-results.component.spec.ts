@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -37,14 +37,19 @@ function formatData(answersPublished: boolean): TextContentFormatData {
   };
 }
 
+function result(data: unknown) {
+  return { dataState: 'complete' as const, data };
+}
+
 function complete(data: unknown) {
-  return of({ dataState: 'complete' as const, data });
+  return of(result(data));
 }
 
 describe('TextResultsComponent', () => {
   let fixture: ComponentFixture<TextResultsComponent>;
   let answersByRoundId: jasmine.SpyObj<QuestionnaireTextAnswersByRoundIdGql>;
   let answerByRoundId: jasmine.SpyObj<QuestionnaireAnswerByRoundIdGql>;
+  let answers$: BehaviorSubject<unknown>;
   // Never emits unless a spec pushes into it, so the initial query result
   // stands for every spec that is not about live updates.
   let answersUpdated: Subject<unknown>;
@@ -61,13 +66,18 @@ describe('TextResultsComponent', () => {
       'QuestionnaireTextAnswersByRoundIdGql',
       ['watch']
     );
-    answersByRoundId.watch.and.returnValue({
-      valueChanges: complete({
+    answers$ = new BehaviorSubject<unknown>(
+      result({
         questionnaireTextAnswersByRoundId: [
           answer('a-1', 'First'),
           answer('a-2', 'Second'),
         ],
-      }),
+      })
+    );
+    // Writes land in the query like in Apollo's cache: as a new result.
+    answersByRoundId.watch.and.returnValue({
+      valueChanges: answers$,
+      updateQuery: (mapFn: () => unknown) => answers$.next(result(mapFn())),
     } as never);
 
     answerByRoundId = jasmine.createSpyObj('QuestionnaireAnswerByRoundIdGql', [
@@ -211,21 +221,48 @@ describe('TextResultsComponent', () => {
     expect(bodies()).toEqual(['First', 'Second']);
   });
 
-  it('merges live subscription emissions into the unrestricted list', () => {
+  it('shows nothing unrestricted when there is no round yet', () => {
+    setUp({ roundIds: [] });
+    expect(answersByRoundId.watch).not.toHaveBeenCalled();
+    expect(bodies()).toEqual([]);
+  });
+
+  function emitUpdate(answers: ReturnType<typeof answer>[]) {
+    answersUpdated.next({ data: { questionnaireTextAnswersUpdated: answers } });
+    fixture.detectChanges();
+  }
+
+  it('shows the pushed answers in the unrestricted list', () => {
     setUp();
     expect(bodies()).toEqual(['First', 'Second']);
 
-    answersUpdated.next({
-      data: {
-        questionnaireTextAnswersUpdated: [
-          answer('a-1', 'First'),
-          answer('a-2', 'Second'),
-          answer('a-3', 'Third'),
-        ],
-      },
-    });
-    fixture.detectChanges();
+    emitUpdate([
+      answer('a-1', 'First'),
+      answer('a-2', 'Second'),
+      answer('a-3', 'Third'),
+    ]);
 
     expect(bodies()).toEqual(['First', 'Second', 'Third']);
+  });
+
+  it('still reflects a refetch of the query after a push', () => {
+    setUp();
+    emitUpdate([answer('a-3', 'Third')]);
+
+    answers$.next(result({ questionnaireTextAnswersByRoundId: [] }));
+    fixture.detectChanges();
+
+    expect(bodies()).toEqual([]);
+  });
+
+  it('keeps the last answers when the updates fail', () => {
+    spyOn(console, 'error');
+    setUp();
+
+    answersUpdated.error(new Error('Subscription lost'));
+    fixture.detectChanges();
+
+    expect(bodies()).toEqual(['First', 'Second']);
+    expect(console.error).toHaveBeenCalled();
   });
 });

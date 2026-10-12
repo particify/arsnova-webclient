@@ -1,7 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, merge, Observable, of, share, switchMap, takeUntil } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
+import { updateOn } from '@gql/helper/update-on';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
   AnswerFragment,
@@ -72,22 +73,22 @@ export class TextResultsComponent {
     { initialValue: [] as AnswerFragment[] }
   );
 
-  private allUnhiddenAnswers(roundId: string): Observable<AnswerFragment[]> {
-    const initial$ = this.textAnswersByRoundId
-      .watch({ variables: { roundId } })
-      .valueChanges.pipe(
-        onlyCompleteData(),
-        map((r) => r.data?.questionnaireTextAnswersByRoundId ?? [])
-      );
-
-    const updates$ = this.textAnswersUpdated
-      .subscribe({ variables: { roundId } })
-      .pipe(
-        map((r) => r.data?.questionnaireTextAnswersUpdated ?? []),
-        share()
-      );
-
-    return merge(initial$.pipe(takeUntil(updates$)), updates$);
+  private allUnhiddenAnswers(roundId?: string): Observable<AnswerFragment[]> {
+    if (!roundId) {
+      return of([]);
+    }
+    return updateOn(
+      this.textAnswersByRoundId.watch({ variables: { roundId } }),
+      this.textAnswersUpdated.subscribe({ variables: { roundId } }),
+      (r) =>
+        r.data && {
+          questionnaireTextAnswersByRoundId:
+            r.data.questionnaireTextAnswersUpdated,
+        }
+    ).pipe(
+      onlyCompleteData(),
+      map((r) => r.data?.questionnaireTextAnswersByRoundId ?? [])
+    );
   }
 
   private ownAnswer(roundId?: string): Observable<AnswerFragment[]> {
