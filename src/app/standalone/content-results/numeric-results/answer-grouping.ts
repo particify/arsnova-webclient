@@ -8,19 +8,16 @@ const MAX_BARS = 15;
 const COMPACT_NOTATION_START = 10_000;
 
 /**
- * Buckets answers into at most `MAX_BARS` groups, reproducing the v3 chart
- * exactly — including two flaws, kept so that both versions stay comparable.
- * Changing either is a deliberate visual change; specs pin both.
+ * Buckets answers into at most `MAX_BARS` groups. A group counts the answers
+ * in `[groupStart, groupStart + groupSize)`, so a decimal answer lands in the
+ * group it falls into; the last group is closed at `maxNumber`. `groupEnd` is
+ * the last whole number of a group, for the labels.
  *
- * 1. The step sequence skips 5 and 50: `groupSize` is multiplied cumulatively
- *    by an alternating `[2, 5]`, so it runs 1, 2, 10, 20, 100, 200. A range of
- *    31 renders 4 bars where 7 were available.
- *    Proposal: step through `{1, 2, 5} × 10^k`.
- * 2. Decimal answers between buckets are dropped: bounds are inclusive and
- *    integer-shaped, so a group size of 10 covers [0, 9] and [10, 19] and an
- *    answer of 9.5 matches neither. Reachable, as correct number and tolerance
- *    are unconstrained decimals.
- *    Proposal: half-open intervals `[groupStart, groupStart + groupSize)`.
+ * The step sequence reproduces the v3 chart and skips 5 and 50: `groupSize`
+ * is multiplied cumulatively by an alternating `[2, 5]`, so it runs 1, 2, 10,
+ * 20, 100, 200. A range of 31 renders 4 bars where 7 were available.
+ * Changing it is a deliberate visual change; a spec pins it.
+ * Proposal: step through `{1, 2, 5} × 10^k`.
  */
 export function groupAnswerResults(
   minNumber: number,
@@ -45,28 +42,28 @@ export function groupAnswerResults(
     groups[groups.length - 1].groupEnd < maxNumber
   ) {
     const groupStart = initialGroupStart + groups.length * groupSize;
-    const groupEnd = groupStart + groupSize - 1;
+    const nextGroupStart = groupStart + groupSize;
+    const last = nextGroupStart > maxNumber;
     groups.push({
       groupStart,
-      groupEnd,
-      count: countAnswersInGroup(selectedNumbers, counts, groupStart, groupEnd),
+      groupEnd: last ? maxNumber : nextGroupStart - 1,
+      count: countAnswers(
+        selectedNumbers,
+        counts,
+        (n) => n >= groupStart && (last ? n <= maxNumber : n < nextGroupStart)
+      ),
     });
   }
   return groups;
 }
 
-function countAnswersInGroup(
+function countAnswers(
   selectedNumbers: number[],
   counts: number[],
-  groupStart: number,
-  groupEnd: number
+  inGroup: (n: number) => boolean
 ): number {
   return counts.reduce(
-    (sum, count, i) =>
-      sum +
-      (selectedNumbers[i] >= groupStart && selectedNumbers[i] <= groupEnd
-        ? count
-        : 0),
+    (sum, count, i) => sum + (inGroup(selectedNumbers[i]) ? count : 0),
     0
   );
 }

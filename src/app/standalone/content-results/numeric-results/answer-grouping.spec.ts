@@ -42,14 +42,14 @@ describe('groupAnswerResults', () => {
       [10, 11],
       [12, 13],
       [14, 15],
-      [16, 17],
+      [16, 16],
     ]);
   });
 
   it('aligns groups to a multiple of the group size', () => {
     const groups = bounds(3, 40);
     expect(groups[0]).toEqual([0, 9]);
-    expect(groups[groups.length - 1]).toEqual([40, 49]);
+    expect(groups[groups.length - 1]).toEqual([40, 40]);
   });
 
   it('covers a negative minimum', () => {
@@ -64,7 +64,7 @@ describe('groupAnswerResults', () => {
       [4, 5],
       [6, 7],
       [8, 9],
-      [10, 11],
+      [10, 10],
     ]);
   });
 
@@ -78,7 +78,7 @@ describe('groupAnswerResults', () => {
     expect(groupSize(1, 1501)).toBe(200);
   });
 
-  it('counts answers on both inclusive bounds of a group', () => {
+  it('counts answers from the start of a group up to the next start', () => {
     const groups = groupAnswerResults(0, 40, [0, 9, 10, 19], [1, 2, 4, 8]);
     expect(groups.slice(0, 2)).toEqual([
       { groupStart: 0, groupEnd: 9, count: 3 },
@@ -86,10 +86,18 @@ describe('groupAnswerResults', () => {
     ]);
   });
 
-  // Pinned, not aspirational: see limitation 2 on groupAnswerResults.
-  it('drops an answer that falls between two inclusive groups', () => {
+  it('counts a decimal answer in the group it falls into', () => {
     const groups = groupAnswerResults(0, 40, [9.5], [3]);
-    expect(groups.map((group) => group.count)).toEqual([0, 0, 0, 0, 0]);
+    expect(groups.map((group) => group.count)).toEqual([3, 0, 0, 0, 0]);
+  });
+
+  it('closes the last group at the maximum', () => {
+    const groups = groupAnswerResults(0, 40, [39.5, 40, 40.5], [1, 2, 4]);
+    expect(groups[groups.length - 1]).toEqual({
+      groupStart: 40,
+      groupEnd: 40,
+      count: 2,
+    });
   });
 
   it('keeps a count of zero for groups without answers', () => {
@@ -127,5 +135,10 @@ describe('groupTooltipTitles', () => {
     expect(groupTooltipTitles(groupAnswerResults(1, 16, [], []))[0]).toBe(
       '0–1'
     );
+  });
+
+  it('titles the last group with its closed end', () => {
+    const titles = groupTooltipTitles(groupAnswerResults(3, 45, [], []));
+    expect(titles[titles.length - 1]).toBe('40–45');
   });
 });
