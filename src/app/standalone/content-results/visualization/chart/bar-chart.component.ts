@@ -9,6 +9,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import {
   Chart,
@@ -61,9 +62,16 @@ export class BarChartComponent {
   private chart?: Chart;
 
   private readonly themeService = inject(ThemeService);
+  private readonly theme = toSignal(this.themeService.getCurrentTheme$());
 
-  bgColor = computed(() => this.themeService.getColor('surface'));
-  fgColor = computed(() => this.themeService.getColor('on-surface'));
+  bgColor = computed(() => {
+    this.theme();
+    return this.themeService.getColor('surface');
+  });
+  fgColor = computed(() => {
+    this.theme();
+    return this.themeService.getColor('on-surface');
+  });
 
   constructor() {
     afterRenderEffect((onCleanup) => {
@@ -88,6 +96,15 @@ export class BarChartComponent {
         existingDataset.data = newDataset.data;
         existingDataset.backgroundColor = newDataset.backgroundColor;
       });
+      this.chart.update();
+    });
+    effect(() => {
+      const options = this.options();
+      // Read by the data label formatter while the chart renders.
+      this.dataLabelMode();
+      this.totalValue();
+      if (!this.chart) return;
+      this.chart.options = options;
       this.chart.update();
     });
   }
