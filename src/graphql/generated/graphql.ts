@@ -1269,7 +1269,7 @@ export type Query = {
   >;
   questionnaireContentById?: Maybe<Content>;
   questionnaireContentsByQuestionnaireId?: Maybe<ContentConnection>;
-  questionnaireLeaderboardByQuestionnaireId?: Maybe<LeaderboardPage>;
+  questionnaireLeaderboardByQuestionnaireId: LeaderboardPage;
   questionnaireNumericRoundStatsByRoundId?: Maybe<NumericContentRoundStats>;
   questionnairePrioritizationRoundStatsByRoundId?: Maybe<PrioritizationContentRoundStats>;
   questionnairePublishedContentsByQuestionnaireId?: Maybe<ContentConnection>;
@@ -1753,7 +1753,7 @@ export type Subscription = {
   questionnaireBinaryRoundStatsUpdated?: Maybe<BinaryContentRoundStats>;
   questionnaireChoiceRoundStatsUpdated?: Maybe<ChoiceContentRoundStats>;
   questionnaireContentUpdated?: Maybe<Content>;
-  questionnaireLeaderboardUpdated?: Maybe<LeaderboardPage>;
+  questionnaireLeaderboardUpdated: LeaderboardPage;
   questionnaireNumericRoundStatsUpdated?: Maybe<NumericContentRoundStats>;
   questionnairePrioritizationRoundStatsUpdated?: Maybe<PrioritizationContentRoundStats>;
   questionnaireScaleRoundStatsUpdated?: Maybe<ScaleContentRoundStats>;
@@ -6365,7 +6365,7 @@ export type QuestionnaireLeaderboardByQuestionnaireIdQueryVariables = Exact<{
 
 export type QuestionnaireLeaderboardByQuestionnaireIdQuery = {
   __typename?: 'Query';
-  questionnaireLeaderboardByQuestionnaireId?: {
+  questionnaireLeaderboardByQuestionnaireId: {
     __typename?: 'LeaderboardPage';
     totalCount: number;
     entries: Array<{
@@ -6402,7 +6402,7 @@ export type QuestionnaireLeaderboardByQuestionnaireIdQuery = {
         correct: boolean;
       } | null;
     } | null;
-  } | null;
+  };
 };
 
 export type QuestionnaireBinaryRoundStatsByRoundIdQueryVariables = Exact<{
@@ -8474,7 +8474,7 @@ export type QuestionnaireLeaderboardUpdatedSubscriptionVariables = Exact<{
 
 export type QuestionnaireLeaderboardUpdatedSubscription = {
   __typename?: 'Subscription';
-  questionnaireLeaderboardUpdated?: {
+  questionnaireLeaderboardUpdated: {
     __typename?: 'LeaderboardPage';
     totalCount: number;
     entries: Array<{
@@ -8511,7 +8511,7 @@ export type QuestionnaireLeaderboardUpdatedSubscription = {
         correct: boolean;
       } | null;
     } | null;
-  } | null;
+  };
 };
 
 export type StartQuestionnaireContentMutationVariables = Exact<{
