@@ -1,0 +1,67 @@
+#!/bin/bash
+# Installs the headless Chromium expected by the Playwright of the project this is run from -
+# run it from that project's root - into $PLAYWRIGHT_BROWSERS_PATH (default: /opt/playwright),
+# and links $PLAYWRIGHT_BROWSERS_PATH/chrome-headless-shell to it for CHROME_BIN.
+#
+# A no-op without network access when that revision is already installed. If the download
+# fails, the link falls back to the newest revision present: Karma runs with any headless
+# Chromium, only Playwright E2E needs the exact revision. Fails only when Playwright is not
+# installed or no usable revision is left.
+set -euo pipefail
+
+BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-/opt/playwright}
+export PLAYWRIGHT_BROWSERS_PATH="$BROWSERS_PATH"
+LINK="$BROWSERS_PATH/chrome-headless-shell"
+
+if ! cli=$(yarn bin playwright 2>/dev/null) || [ ! -f "$cli" ]; then
+  echo "playwright not installed - run 'yarn install' first." >&2
+  exit 1
+fi
+# Under Yarn Plug'n'Play the CLI's own dependencies resolve through .pnp.cjs.
+node_args=()
+if [ -f .pnp.cjs ]; then
+  node_args=(-r ./.pnp.cjs)
+fi
+
+playwright() {
+  node "${node_args[@]}" "$cli" "$@"
+}
+
+# Prints the binary of a completely installed revision directory.
+binary_in() {
+  [ -f "$1/INSTALLATION_COMPLETE" ] || return 0
+  find "$1" -name chrome-headless-shell -type f -perm -u+x -print -quit
+}
+
+expected=$(playwright install --dry-run chromium-headless-shell |
+  awk '!found && $1 == "Install" && $2 == "location:" && $3 ~ /\/chromium_headless_shell-[0-9]+$/ {
+    print $3
+    found = 1
+  }')
+if [ -z "$expected" ]; then
+  echo "Could not determine the browser revision Playwright expects." >&2
+  exit 1
+fi
+
+# Playwright removes revisions no installed Playwright uses before it downloads, which would
+# leave nothing to fall back on offline, so that cleanup only runs once the download succeeded.
+if playwright install --no-remove chromium-headless-shell; then
+  playwright install chromium-headless-shell
+  binary=$(binary_in "$expected")
+else
+  echo "WARNING: could not install $expected; Playwright E2E tests will not run." >&2
+  binary=""
+  revisions=$(find "$BROWSERS_PATH" -maxdepth 1 -name 'chromium_headless_shell-*' -type d | sort -V -r)
+  for dir in $revisions; do
+    binary=$(binary_in "$dir")
+    [ -n "$binary" ] && break
+  done
+fi
+
+if [ -z "$binary" ]; then
+  echo "No usable chrome-headless-shell in $BROWSERS_PATH; unit tests will not run." >&2
+  exit 1
+fi
+
+ln -sfn "$binary" "$LINK"
+echo "Linked $LINK -> $binary"
