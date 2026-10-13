@@ -1,55 +1,56 @@
 @let _correct = correct();
-<div
-  cdkDropList
-  (cdkDropListDropped)="drop($event.previousIndex, $event.currentIndex)"
-  [cdkDropListDisabled]="disabled()"
-  [ngClass]="{
-    'correct-order': _correct === true,
-    'wrong-order': _correct === false,
-  }"
->
-  @for (answer of dragDroplist; track answer; let i = $index) {
-    <div
-      class="answer primary-shadow-focus"
-      cdkDrag
-      [cdkDragStartDelay]="{ touch: 200, mouse: 20 }"
-      [cdkDragPreviewClass]="'primary-shadow-always'"
-      [ngClass]="{ 'no-grab': disabled() }"
-      [attr.tabindex]="disabled() ? -1 : 0"
-      [attr.aria-disabled]="disabled()"
-      [attr.aria-label]="
-        'participant.answer.a11y-sort-item'
-          | transloco
-            : {
-                answer: answer.label,
-                index: i + 1,
-                length: answerOptions().length,
-              }
-      "
-      (keyup)="moveAnswer($event, i)"
-      #sortListItem
-    >
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
-        <mat-icon>drag_handle</mat-icon>
-        <app-rendered-text
-          [rawText]="answer.label"
-          [renderedText]="answer.labelRendered ?? undefined"
-          [dynamic]="dynamicRendering()"
-          [markdown]="false"
-        ></app-rendered-text>
+<div class="answer-container">
+  <div
+    cdkDropList
+    (cdkDropListDropped)="drop($event.previousIndex, $event.currentIndex)"
+    [cdkDropListDisabled]="disabled()"
+  >
+    @for (answer of dragDroplist; track answer; let i = $index) {
+      <div
+        class="answer primary-shadow-focus"
+        cdkDrag
+        [cdkDragStartDelay]="{ touch: 200, mouse: 20 }"
+        [cdkDragPreviewClass]="'primary-shadow-always'"
+        [ngClass]="{ 'no-grab': disabled() }"
+        [attr.tabindex]="disabled() ? -1 : 0"
+        [attr.aria-disabled]="disabled()"
+        [attr.aria-label]="
+          'participant.answer.a11y-sort-item'
+            | transloco
+              : {
+                  answer: answer.label,
+                  index: i + 1,
+                  length: answerOptions().length,
+                }
+        "
+        (keyup)="moveAnswer($event, i)"
+        #sortListItem
+      >
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+          <mat-icon>drag_handle</mat-icon>
+          <app-rendered-text
+            [rawText]="answer.label"
+            [renderedText]="answer.labelRendered ?? undefined"
+            [dynamic]="dynamicRendering()"
+            [markdown]="false"
+          ></app-rendered-text>
+        </div>
       </div>
-    </div>
-  }
-</div>
-@if (_correct !== undefined) {
-  <div fxLayout="row" fxLayoutAlign="center center">
-    <mat-icon
-      class="icon-indicator"
-      [ngClass]="_correct ? 'correct' : 'wrong'"
-      [attr.data-testid]="
-        _correct ? 'sort-answer-correct' : 'sort-answer-wrong'
-      "
-      >{{ _correct ? 'check' : 'close' }}</mat-icon
-    >
+    }
   </div>
-}
+  <div
+    class="solution invisible"
+    [ngClass]="{ visible: _correct !== undefined }"
+  >
+    @if (_correct !== undefined) {
+      <mat-icon
+        class="icon-indicator"
+        [ngClass]="_correct ? 'correct' : 'wrong'"
+        [attr.data-testid]="
+          _correct ? 'sort-answer-correct' : 'sort-answer-wrong'
+        "
+        >{{ _correct ? 'check' : 'close' }}</mat-icon
+      >
+    }
+  </div>
+</div>

@@ -160,8 +160,7 @@ describe('ContentSortAnswerComponent', () => {
     expect(
       fixture.debugElement.query(By.css('[data-testid="sort-answer-wrong"]'))
     ).toBeNull();
-    expect(fixture.debugElement.query(By.css('.correct-order'))).toBeNull();
-    expect(fixture.debugElement.query(By.css('.wrong-order'))).toBeNull();
+    expect(fixture.debugElement.query(By.css('.solution.visible'))).toBeNull();
   });
 
   it('marks a correct order', () => {
@@ -171,7 +170,9 @@ describe('ContentSortAnswerComponent', () => {
     expect(
       fixture.debugElement.query(By.css('[data-testid="sort-answer-correct"]'))
     ).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.correct-order'))).not.toBeNull();
+    expect(
+      fixture.debugElement.query(By.css('.solution.visible'))
+    ).not.toBeNull();
   });
 
   it('marks a wrong order', () => {
@@ -181,6 +182,8 @@ describe('ContentSortAnswerComponent', () => {
     expect(
       fixture.debugElement.query(By.css('[data-testid="sort-answer-wrong"]'))
     ).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.wrong-order'))).not.toBeNull();
+    expect(
+      fixture.debugElement.query(By.css('.solution.visible'))
+    ).not.toBeNull();
   });
 });

@@ -21,10 +21,14 @@ $option-padding: 0;
   color: var(--grey);
 }
 
-@include cwo.correctness-borders(
-  '.correct-order .answer',
-  '.wrong-order .answer'
-);
+// The correctness indicator is laid over the middle of the list, as in v3.
+.answer-container {
+  position: relative;
+}
+
+.solution {
+  pointer-events: none;
+}
 
 .no-grab {
   cursor: initial;
