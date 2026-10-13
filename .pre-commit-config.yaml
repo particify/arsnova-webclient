@@ -1,4 +1,14 @@
 repos:
+  - repo: local
+    hooks:
+      - id: yarn-install
+        name: Yarn install is current
+        language: system
+        entry: yarn install --immutable
+        always_run: true
+        pass_filenames: false
+        # Stops before the hooks below run tools from an install that does not match yarn.lock
+        fail_fast: true
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
@@ -19,11 +29,11 @@ repos:
         name: Prettier
         files: \.(cjs|css|html?|js|json|md|mjs|sass|scss|svg|ts|xml|ya?ml)$
         language: system
-        entry: yarn
+        entry: scripts/run-tool.sh
         args: [prettier, --write]
       - id: stylelint
         name: Stylelint
         files: \.(css|scss|sass)$
         language: system
-        entry: yarn
+        entry: scripts/run-tool.sh
         args: [stylelint, --fix]
