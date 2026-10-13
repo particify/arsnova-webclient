@@ -9,7 +9,11 @@
   >
     @let position = content().position;
     @let contentCount = questionnaire().contentCount;
-    @if (position != null && contentCount != null && waitingForStart()) {
+    @if (
+      position != null &&
+      contentCount != null &&
+      (waitingForStart() || waitingForAlias())
+    ) {
       <div fxFill>
         <app-content-waiting
           [current]="position + 1"

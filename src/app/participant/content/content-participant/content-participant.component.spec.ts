@@ -485,7 +485,7 @@ describe('ContentParticipantComponent', () => {
             questionnaire: {
               id: 'q-1',
               contentCount: 3,
-              leaderboardEnabled: true,
+              leaderboardEnabled: false,
               publishingMode: QuestionnairePublishingMode.Live,
             },
           },
@@ -514,7 +514,7 @@ describe('ContentParticipantComponent', () => {
             questionnaire: {
               id: 'q-1',
               contentCount: 3,
-              leaderboardEnabled: true,
+              leaderboardEnabled: false,
               publishingMode: QuestionnairePublishingMode.Live,
             },
           },
@@ -523,6 +523,47 @@ describe('ContentParticipantComponent', () => {
 
       expect(component.waitingForStart()).toBeFalse();
       expect(component.answeringLocked()).toBeTrue();
+      expect(
+        fixture.nativeElement.querySelector('app-content-waiting')
+      ).toBeNull();
+    });
+
+    it('asks for the alias of a leaderboard outside live mode', () => {
+      setUp(
+        { ...choiceContent, position: 0 },
+        {
+          inputs: {
+            questionnaire: {
+              id: 'q-1',
+              contentCount: 3,
+              leaderboardEnabled: true,
+            },
+            alias: { alias: 'Proposed alias', seed: 1 },
+          },
+        }
+      );
+
+      expect(component.waitingForAlias()).toBeTrue();
+      expect(
+        fixture.nativeElement.querySelector('app-content-waiting')
+      ).not.toBeNull();
+    });
+
+    it('lets a participant with an alias answer right away', () => {
+      setUp(
+        { ...choiceContent, position: 0 },
+        {
+          inputs: {
+            questionnaire: {
+              id: 'q-1',
+              contentCount: 3,
+              leaderboardEnabled: true,
+            },
+            alias: { id: 'alias-1', alias: 'Chosen alias', seed: 1 },
+          },
+        }
+      );
+
       expect(
         fixture.nativeElement.querySelector('app-content-waiting')
       ).toBeNull();

@@ -231,6 +231,14 @@ export class ContentParticipantComponent {
       !this.content().activeRound?.started
   );
 
+  /** A leaderboard needs the alias before the participant answers, as in v3. */
+  readonly waitingForAlias = computed(
+    () =>
+      !!this.questionnaire().leaderboardEnabled &&
+      !this.answer() &&
+      !this.alias()?.id
+  );
+
   readonly isLive = computed(
     () =>
       this.questionnaire().publishingMode === QuestionnairePublishingMode.Live
