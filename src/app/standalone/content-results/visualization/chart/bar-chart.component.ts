@@ -92,12 +92,17 @@ export class BarChartComponent {
       const data = this.chartData();
       if (!this.chart) return;
       this.chart.data.labels = data.labels;
-      this.chart.data.datasets = data.datasets.map((newDataset, i) => ({
-        ...this.chart!.data.datasets[i],
-        data: newDataset.data,
-        backgroundColor: newDataset.backgroundColor,
-        label: newDataset.label,
-      }));
+      // Chart.js keeps a dataset's bars only while the dataset object stays
+      // the same; a new object makes them grow in from zero again.
+      const datasets = this.chart.data.datasets;
+      data.datasets.forEach((newDataset, i) => {
+        if (datasets[i]) {
+          Object.assign(datasets[i], newDataset);
+        } else {
+          datasets.push({ ...newDataset });
+        }
+      });
+      datasets.length = data.datasets.length;
       this.chart.update();
     });
     effect(() => {

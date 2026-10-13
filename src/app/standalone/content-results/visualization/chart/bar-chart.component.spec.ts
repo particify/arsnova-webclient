@@ -104,6 +104,22 @@ describe('BarChartComponent', () => {
     expect(chart().data.datasets[0].data).toEqual([4, 0, 2]);
   });
 
+  it('keeps the bars of a dataset when its values change', async () => {
+    setUp(oneRound);
+    // Chart.js lays the bars out once the canvas is attached.
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    const bar = chart().getDatasetMeta(0).data[0];
+    expect(bar).toBeDefined();
+
+    fixture.componentRef.setInput('data', {
+      ...oneRound,
+      datasets: [{ values: [4, 0, 2], colors: ['red', 'green', 'blue'] }],
+    });
+    fixture.detectChanges();
+
+    expect(chart().getDatasetMeta(0).data[0]).toBe(bar);
+  });
+
   it('adds and removes a compared round', () => {
     setUp(oneRound);
 
