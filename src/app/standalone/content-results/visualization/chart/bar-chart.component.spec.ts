@@ -48,11 +48,17 @@ describe('BarChartComponent', () => {
     expect(chart.update).toHaveBeenCalled();
   });
 
-  it('updates the chart when the data label mode changes', () => {
+  it('keeps the bars when the data label mode changes', async () => {
+    // Chart.js lays the bars out once the canvas is attached.
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    const bar = chart.getDatasetMeta(0).data[0];
+    expect(bar).toBeDefined();
+
     fixture.componentRef.setInput('dataLabelMode', 'percent');
     fixture.detectChanges();
 
     expect(chart.update).toHaveBeenCalled();
+    expect(chart.getDatasetMeta(0).data[0]).toBe(bar);
   });
 
   it('recolours the chart when the theme changes', () => {

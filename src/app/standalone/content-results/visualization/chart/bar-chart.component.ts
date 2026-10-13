@@ -162,7 +162,12 @@ export class BarChartComponent {
           const values = context.dataset.data as number[];
           const value = values[context.dataIndex];
 
-          return this.formatDataLabel(value, values, this.totalValue());
+          // Chart.js formats while rendering, which may happen inside an
+          // effect; tracking these reads there would make the effect that
+          // created the chart destroy and rebuild it.
+          return untracked(() =>
+            this.formatDataLabel(value, values, this.totalValue())
+          );
         },
         color: this.fgColor(),
         anchor: 'end',
