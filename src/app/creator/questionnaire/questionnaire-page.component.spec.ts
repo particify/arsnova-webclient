@@ -244,6 +244,18 @@ describe('QuestionnairePageComponent (creator)', () => {
     });
   });
 
+  it('stays on the attributions instead of opening the first content', () => {
+    setUp(true, childRoute(':contentId', { contentId: 'c-2' }));
+    emitContents(contents);
+    router.navigate.calls.reset();
+
+    navigateTo(childRoute('attributions'));
+    fixture.detectChanges();
+
+    expect(component.selectedContentId()).toBeUndefined();
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
   it('shows the content list after a content has been edited', () => {
     setUp();
 

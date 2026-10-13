@@ -183,6 +183,7 @@ export class QuestionnairePageComponent {
   totalCorrect?: number;
   totalAbstentions?: number;
   showLeaderboard = false;
+  showAttributions = false;
   creationMode = false;
   editMode = false;
   selectedContentId = signal<string | undefined>(undefined);
@@ -238,6 +239,7 @@ export class QuestionnairePageComponent {
     const child = this.route.firstChild;
     const childPath = child?.snapshot.routeConfig?.path;
     this.showLeaderboard = childPath === 'leaderboard';
+    this.showAttributions = childPath === 'attributions';
     this.creationMode = childPath === 'create';
     this.editMode = !!childPath?.includes('edit');
     if (childPath === 'attributions' && this.isDesktop) {
@@ -273,6 +275,7 @@ export class QuestionnairePageComponent {
       this.isDesktop &&
       this.selectedContentId() === undefined &&
       !this.showLeaderboard &&
+      !this.showAttributions &&
       !this.creationMode &&
       !this.editMode &&
       this.contents().length > 0
