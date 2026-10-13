@@ -294,7 +294,9 @@ export class QuestionnairePageComponent {
   }
 
   private navigateToFirstContent() {
+    const questionnaire = this.questionnaire();
     if (
+      questionnaire &&
       this.isDesktop &&
       this.selectedContentId() === undefined &&
       !this.showLeaderboard &&
@@ -303,11 +305,26 @@ export class QuestionnairePageComponent {
       !this.editMode &&
       this.contents().length > 0
     ) {
-      this.router.navigate([this.contents()[0].id], {
-        relativeTo: this.route,
-        replaceUrl: true,
-      });
+      this.router.navigate(
+        [this.startedContentId(questionnaire) ?? this.contents()[0].id],
+        { relativeTo: this.route, replaceUrl: true }
+      );
     }
+  }
+
+  /** The content a live questionnaire is running, if it is one of the list. */
+  private startedContentId(questionnaire: Questionnaire): string | undefined {
+    const round = questionnaire.activeRound;
+    if (
+      questionnaire.publishingMode !== QuestionnairePublishingMode.Live ||
+      !round?.contentId ||
+      round.closed
+    ) {
+      return undefined;
+    }
+    return this.contents().some((c) => c.id === round.contentId)
+      ? round.contentId
+      : undefined;
   }
 
   generateExportFilename(extension: string): string {

@@ -24,6 +24,7 @@ import {
   DeleteQuestionnaireGql,
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
+  QuestionnairePublishingMode,
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
@@ -59,7 +60,8 @@ describe('QuestionnairePageComponent (creator)', () => {
   function setUp(
     isDesktop = true,
     child: unknown = null,
-    withTemplate = false
+    withTemplate = false,
+    questionnaire: Record<string, unknown> = {}
   ) {
     // Most of the logic exercised here is only wired to child components by
     // the template, so it is rendered only where the layout itself is tested.
@@ -88,7 +90,9 @@ describe('QuestionnairePageComponent (creator)', () => {
     ]);
     questionnaireById.watch.and.returnValue({
       valueChanges: of({
-        data: { questionnaireById: { id: 'q-1', name: 'Quiz' } },
+        data: {
+          questionnaireById: { id: 'q-1', name: 'Quiz', ...questionnaire },
+        },
       }),
     });
     const breakpointObserver = jasmine.createSpyObj('BreakpointObserver', [
@@ -171,6 +175,32 @@ describe('QuestionnairePageComponent (creator)', () => {
   it('shows the first content on desktop', () => {
     setUp();
 
+    emitContents(contents);
+
+    expect(router.navigate).toHaveBeenCalledWith(['c-1'], {
+      relativeTo: route,
+      replaceUrl: true,
+    });
+  });
+
+  it('shows the content a live questionnaire is running on desktop', () => {
+    setUp(true, null, false, {
+      publishingMode: QuestionnairePublishingMode.Live,
+      activeRound: { id: 'r-1', contentId: 'c-2', roundNo: 1, closed: false },
+    });
+    emitContents(contents);
+
+    expect(router.navigate).toHaveBeenCalledWith(['c-2'], {
+      relativeTo: route,
+      replaceUrl: true,
+    });
+  });
+
+  it('shows the first content once the live round is stopped', () => {
+    setUp(true, null, false, {
+      publishingMode: QuestionnairePublishingMode.Live,
+      activeRound: { id: 'r-1', contentId: 'c-2', roundNo: 1, closed: true },
+    });
     emitContents(contents);
 
     expect(router.navigate).toHaveBeenCalledWith(['c-1'], {
