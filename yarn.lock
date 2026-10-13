@@ -5949,6 +5949,7 @@ __metadata:
     "@analogjs/vite-plugin-angular": "npm:2.8.0"
     "@angular-devkit/architect": "npm:0.2202.2"
     "@angular-devkit/core": "npm:22.2.2"
+    "@angular-eslint/builder": "npm:22.5.0"
     "@angular/animations": "npm:22.2.2"
     "@angular/build": "npm:22.2.2"
     "@angular/cdk": "npm:22.2.2"
@@ -6036,6 +6037,13 @@ __metadata:
     vite: "npm:8.3.4"
     vite-tsconfig-paths: "npm:6.1.1"
     zone.js: "npm:0.16.3"
+  dependenciesMeta:
+    "@playwright/test":
+      unplugged: true
+    playwright:
+      unplugged: true
+    playwright-core:
+      unplugged: true
   languageName: unknown
   linkType: soft
 

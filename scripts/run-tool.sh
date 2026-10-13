@@ -1,8 +1,13 @@
 #!/bin/sh
-# Runs a tool from this repository's own Yarn project while keeping the caller's working
-# directory, so file arguments relative to it stay valid - including when this repository is
-# checked out as a subdirectory of another project and the caller works from that project's root.
+# Runs a tool from this repository's own Yarn project, so the tool and everything it loads come
+# from this repository's install alone - including when this repository is checked out as a
+# subdirectory of another project and the caller works from that project's root.
 # Expects the install to be current already.
+#
+# The tool runs with this repository as its working directory. Each argument naming a path that
+# exists relative to the caller's directory is passed as an absolute path; all others are passed
+# unchanged. So a path given as --option=path or as a glob stays relative to this repository, and
+# an argument that merely matches a file name in the caller's directory is translated too.
 #
 # Usage: scripts/run-tool.sh <tool> [args...]
 set -eu
@@ -13,9 +18,20 @@ if [ $# -eq 0 ]; then
 fi
 
 project_dir=$(cd "$(dirname "$0")/.." && pwd)
+caller_dir=$(pwd)
 
-# Yarn sets INIT_CWD to the --cwd directory, so the caller's directory is passed separately.
-# The shell runs in the project's Yarn environment, which is what resolves the tool's binary.
-RUN_TOOL_CWD=$(pwd)
-export RUN_TOOL_CWD
-exec yarn --cwd "$project_dir" exec 'cd "$RUN_TOOL_CWD" && "$@"' "$@"
+tool=$1
+shift
+count=$#
+while [ "$count" -gt 0 ]; do
+  arg=$1
+  shift
+  case $arg in
+    /*) ;;
+    *) if [ -e "$caller_dir/$arg" ]; then arg=$caller_dir/$arg; fi ;;
+  esac
+  set -- "$@" "$arg"
+  count=$((count - 1))
+done
+
+exec yarn --cwd "$project_dir" exec '"$@"' "$tool" "$@"

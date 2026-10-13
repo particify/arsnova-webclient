@@ -67,6 +67,7 @@
     "@analogjs/vite-plugin-angular": "2.8.0",
     "@angular-devkit/architect": "0.2202.2",
     "@angular-devkit/core": "22.2.2",
+    "@angular-eslint/builder": "22.5.0",
     "@angular/build": "22.2.2",
     "@angular/compiler-cli": "22.2.2",
     "@angular/language-service": "22.2.2",
@@ -115,5 +116,16 @@
     "typescript-eslint": "8.71.1",
     "vite": "8.3.4",
     "vite-tsconfig-paths": "6.1.1"
+  },
+  "dependenciesMeta": {
+    "@playwright/test": {
+      "unplugged": true
+    },
+    "playwright": {
+      "unplugged": true
+    },
+    "playwright-core": {
+      "unplugged": true
+    }
   }
 }
