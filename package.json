@@ -106,7 +106,7 @@
     "karma-viewport": "1.0.9",
     "ng-packagr": "21.2.7",
     "postcss": "8.5.29",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "sass-embedded": "1.105.1",
     "storybook": "10.6.1",
     "stylelint": "17.16.0",
