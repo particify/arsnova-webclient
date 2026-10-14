@@ -88,7 +88,7 @@
     "@typescript-eslint/eslint-plugin": "8.71.1",
     "@typescript-eslint/parser": "8.71.1",
     "@typescript-eslint/utils": "8.71.1",
-    "angular-eslint": "22.5.0",
+    "angular-eslint": "22.6.0",
     "css-loader": "7.1.5",
     "eslint": "10.12.0",
     "eslint-import-resolver-typescript": "4.4.5",
