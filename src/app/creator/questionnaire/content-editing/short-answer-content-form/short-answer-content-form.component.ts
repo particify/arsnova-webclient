@@ -29,6 +29,17 @@ import { mutationHelper } from '@gql/helper/mutation-helper';
 
 const TERM_LENGTH_LIMIT = 80;
 
+const NON_ALPHANUMERIC = /[^\p{Alphabetic}\p{Nd}]/gu;
+
+/**
+ * Mirrors the server's comparison form, so terms it would reject as blank or
+ * as repeating are caught here: lowercase, letters and digits only. Accents
+ * are kept, so "Köln" and "Koln" stay different terms.
+ */
+function normalizeTerm(term: string): string {
+  return term.toLowerCase().replace(NON_ALPHANUMERIC, '');
+}
+
 function sameTerms(terms: string[], others: string[]): boolean {
   return (
     terms.length === others.length &&
@@ -88,7 +99,9 @@ export class ShortAnswerContentFormComponent implements ContentForm<ShortAnswerC
   formatDataValid(): boolean {
     // The list is only rendered while editing; entering the preview validated it.
     return (
-      this.preview() || (this.answerList()?.isListValid(false, false) ?? false)
+      this.preview() ||
+      ((this.answerList()?.isListValid(false, false) ?? false) &&
+        this.areNormalizedTermsValid())
     );
   }
 
@@ -101,6 +114,24 @@ export class ShortAnswerContentFormComponent implements ContentForm<ShortAnswerC
         this.createContent(questionnaireId, body);
       }
     }
+  }
+
+  private areNormalizedTermsValid(): boolean {
+    const normalizedTerms = this.correctTerms().map(normalizeTerm);
+    let msgKey: string | undefined;
+    if (normalizedTerms.includes('')) {
+      msgKey = 'creator.content.short-answer-term-without-letters-or-digits';
+    } else if (new Set(normalizedTerms).size !== normalizedTerms.length) {
+      msgKey = 'creator.content.short-answer-terms-repeating';
+    }
+    if (msgKey) {
+      this.notificationService.showAdvanced(
+        this.translateService.translate(msgKey),
+        AdvancedSnackBarTypes.WARNING
+      );
+      return false;
+    }
+    return true;
   }
 
   private correctTerms(): string[] {

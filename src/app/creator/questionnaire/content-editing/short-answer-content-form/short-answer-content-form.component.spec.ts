@@ -185,6 +185,40 @@ describe('ShortAnswerContentFormComponent', () => {
     );
   });
 
+  it('rejects a blank term', () => {
+    setUp(formatData(['A', ' ']));
+    expect(component.formatDataValid()).toBe(false);
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+      'creator.content.short-answer-term-without-letters-or-digits',
+      AdvancedSnackBarTypes.WARNING
+    );
+  });
+
+  it('rejects a term without letters or digits', () => {
+    setUp(formatData(['Berlin', '?!']));
+    expect(component.formatDataValid()).toBe(false);
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+      'creator.content.short-answer-term-without-letters-or-digits',
+      AdvancedSnackBarTypes.WARNING
+    );
+  });
+
+  it('rejects terms repeating in normalized form', () => {
+    setUp(formatData(['Berlin', 'berlin!']));
+    expect(component.formatDataValid()).toBe(false);
+    expect(notificationService.showAdvanced).toHaveBeenCalledWith(
+      'creator.content.short-answer-terms-repeating',
+      AdvancedSnackBarTypes.WARNING
+    );
+  });
+
+  it('accepts terms that differ in letters or digits only', () => {
+    // The server keeps accents and non-Latin letters, so these stay apart.
+    setUp(formatData(['Frankfurt am Main', 'FFM', 'Köln', 'Koln', 'Ζ', '42']));
+    expect(component.formatDataValid()).toBe(true);
+    expect(notificationService.showAdvanced).not.toHaveBeenCalled();
+  });
+
   it('accepts a single non-empty term', () => {
     setUp(formatData(['Kotlin']));
     expect(component.formatDataValid()).toBe(true);

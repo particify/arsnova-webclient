@@ -93,6 +93,8 @@
     "delete-answers": "Antworten löschen",
     "need-answer": "Bitte gib eine Antwort ein.",
     "no-empty-fields-allowed": "Keine leeren Felder erlaubt.",
+    "short-answer-term-without-letters-or-digits": "Jede Antwort muss Buchstaben oder Ziffern enthalten.",
+    "short-answer-terms-repeating": "Die Antworten müssen sich in mehr als Groß- und Kleinschreibung, Leer- und Satzzeichen unterscheiden.",
     "max-options": "Es sind maximal {{max}} {{labels}} erlaubt.",
     "reset": "Zurücksetzen",
     "reset-all": "Alle Eingaben wurden zurückgesetzt.",

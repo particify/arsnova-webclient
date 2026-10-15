@@ -47,6 +47,8 @@
     "delete-answers": "Elimina le risposte",
     "need-answer": "Inserisci una risposta.",
     "no-empty-fields-allowed": "Non sono ammessi campi vuoti.",
+    "short-answer-term-without-letters-or-digits": "Ogni risposta deve contenere lettere o cifre.",
+    "short-answer-terms-repeating": "Le risposte devono differire per qualcosa in più di maiuscole, spazi e punteggiatura.",
     "max-options": "C'è un massimo di {{max}} {{labels}}.",
     "reset": "Azzeramento",
     "reset-all": "Tutte le voci sono state ripristinate.",

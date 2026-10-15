@@ -93,6 +93,8 @@
     "delete-answers": "Delete answers",
     "need-answer": "Please enter an answer.",
     "no-empty-fields-allowed": "No empty fields allowed.",
+    "short-answer-term-without-letters-or-digits": "Each answer must contain letters or digits.",
+    "short-answer-terms-repeating": "Answers must differ in more than case, spacing and punctuation.",
     "max-options": "There's a maximum of {{max}} {{labels}}.",
     "reset": "Reset",
     "reset-all": "All entries have been reset.",

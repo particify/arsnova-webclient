@@ -86,6 +86,8 @@
     "delete-option": "Eliminar {{label}}",
     "delete-answers": "Eliminar respuestas",
     "no-empty-fields-allowed": "No se permiten campos vacíos.",
+    "short-answer-term-without-letters-or-digits": "Cada respuesta debe contener letras o cifras.",
+    "short-answer-terms-repeating": "Las respuestas deben diferenciarse en algo más que mayúsculas, espacios y signos de puntuación.",
     "max-options": "El número máximo de {{labels}} es {{max}}.",
     "reset": "Reiniciar",
     "reset-all": "Se han reiniciado todas las entradas.",
