@@ -10,6 +10,8 @@ export interface QuestionnaireStateOptions {
   activeContentPosition?: number;
   activeRoundClosed?: boolean;
   answeredPositions?: number[];
+  /** Contents whose round ran before, besides the active one. */
+  startedPositions?: number[];
 }
 
 export function contentId(position: number): string {
@@ -22,6 +24,8 @@ function roundId(position: number): string {
 
 export class MockGraphqlApi {
   private state!: QuestionnaireStateOptions;
+  // A round stays started once it ran, even after another content took over.
+  private readonly startedPositions = new Set<number>();
   private readonly ws: MockGraphqlWs;
   private installed = false;
 
@@ -31,6 +35,10 @@ export class MockGraphqlApi {
 
   async mockQuestionnaire(options: QuestionnaireStateOptions) {
     this.state = options;
+    options.startedPositions?.forEach((position) =>
+      this.startedPositions.add(position)
+    );
+    this.trackStartedRound();
     if (this.installed) {
       return;
     }
@@ -54,6 +62,7 @@ export class MockGraphqlApi {
 
   async update(patch: Partial<QuestionnaireStateOptions>) {
     this.state = { ...this.state, ...patch };
+    this.trackStartedRound();
     await this.ws.push('QuestionnaireUpdated', {
       questionnaireUpdated: this.questionnaire(),
     });
@@ -80,12 +89,23 @@ export class MockGraphqlApi {
       : Array.from(Array(publishedUpToPosition + 1).keys());
   }
 
+  private trackStartedRound() {
+    const position = this.state.activeContentPosition;
+    if (this.state.publishingMode === 'LIVE' && position !== undefined) {
+      this.startedPositions.add(position);
+    }
+  }
+
   private contentRound(position: number) {
     return {
       __typename: 'Round',
       id: roundId(position),
       roundNo: 1,
       closed: this.isRoundClosed(position),
+      started:
+        this.state.publishingMode !== 'LIVE' ||
+        this.startedPositions.has(position),
+      answerable: !this.isRoundClosed(position),
     };
   }
 
@@ -227,11 +247,15 @@ export class MockGraphqlApi {
         };
       },
       CreateQuestionnaireChoiceAnswer: (variables) => {
-        const position = this.positionOfRound(variables.roundId);
+        const input = variables.input as {
+          roundId: string;
+          selectedChoiceIndexes: number[];
+        };
+        const position = this.positionOfRound(input.roundId);
         return {
           createQuestionnaireChoiceAnswer: this.answer(
             position,
-            variables.selectedChoiceIndexes as number[]
+            input.selectedChoiceIndexes
           ),
         };
       },

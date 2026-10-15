@@ -157,6 +157,8 @@ test.describe('participant questionnaire entry', () => {
       publishingMode: 'LIVE',
       publishedUpToPosition: 1,
       activeContentPosition: 1,
+      // The first content ran before the second was started.
+      startedPositions: [0],
       answeredPositions: [1],
     });
     const participant = new QuestionnairePage(page, baseURL);
@@ -172,6 +174,8 @@ test.describe('participant questionnaire entry', () => {
       publishingMode: 'LIVE',
       publishedUpToPosition: 1,
       activeContentPosition: 1,
+      // The first content ran before the second was started.
+      startedPositions: [0],
       activeRoundClosed: true,
     });
     const participant = new QuestionnairePage(page, baseURL);
