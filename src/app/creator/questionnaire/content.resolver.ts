@@ -13,7 +13,8 @@ import { catchError, map, of } from 'rxjs';
  * A resolver that returns the current content (Content).
  *
  * A content that cannot be read or no longer exists leads back to the room
- * instead of failing the navigation.
+ * instead of failing the navigation. It always asks the server, as release
+ * and permissions may have changed since the content was last cached.
  */
 export const contentResolver: ResolveFn<Content> = (
   route: ActivatedRouteSnapshot
@@ -26,6 +27,7 @@ export const contentResolver: ResolveFn<Content> = (
       variables: {
         id: route.params.contentId,
       },
+      fetchPolicy: 'network-only',
     })
     .pipe(
       map(

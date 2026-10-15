@@ -7,7 +7,7 @@ import {
   convertToParamMap,
 } from '@angular/router';
 import { QuestionnaireByIdGql } from '@gql/generated/graphql';
-import { Observable, firstValueFrom, of, throwError } from 'rxjs';
+import { Observable, firstValueFrom, of, tap, throwError } from 'rxjs';
 import { questionnaireResolver } from './questionnaire.resolver';
 
 function snapshot(
@@ -34,20 +34,48 @@ describe('questionnaireResolver', () => {
     });
   }
 
-  function resolve(fetch: Observable<unknown>) {
+  let questionnaireById: jasmine.SpyObj<QuestionnaireByIdGql>;
+
+  function provide(
+    fetch: (options: { fetchPolicy?: string }) => Observable<unknown>
+  ) {
+    questionnaireById = jasmine.createSpyObj('QuestionnaireByIdGql', ['fetch']);
+    questionnaireById.fetch.and.callFake(fetch as never);
     TestBed.configureTestingModule({
       providers: [
-        {
-          provide: QuestionnaireByIdGql,
-          useValue: { fetch: () => fetch },
-        },
+        { provide: QuestionnaireByIdGql, useValue: questionnaireById },
       ],
     });
+  }
+
+  function navigate() {
     return TestBed.runInInjectionContext(() =>
       firstValueFrom(
         questionnaireResolver(questionnaire, {} as never) as Observable<unknown>
       )
     );
+  }
+
+  function resolve(fetch: Observable<unknown>) {
+    provide(() => fetch);
+    return navigate();
+  }
+
+  /**
+   * Answers like Apollo's cache: once the server has returned data, a
+   * cache-first fetch gets that data back without asking the server again.
+   */
+  function cachingServer(...responses: Observable<unknown>[]) {
+    let cached: unknown;
+    let calls = 0;
+    const server = jasmine
+      .createSpy('server')
+      .and.callFake(() => responses[calls++].pipe(tap((r) => (cached = r))));
+    const fetch = (options: { fetchPolicy?: string }) =>
+      cached && (options.fetchPolicy ?? 'cache-first') === 'cache-first'
+        ? of(cached)
+        : (server() as Observable<unknown>);
+    return { fetch, server };
   }
 
   function redirectUrl(result: unknown): string {
@@ -69,6 +97,29 @@ describe('questionnaireResolver', () => {
 
   it('leads back to the room when the questionnaire does not exist', async () => {
     const result = await resolve(of({ data: { questionnaireById: null } }));
+    expect(redirectUrl(result)).toBe('/p/12345678');
+  });
+
+  it('always asks the server rather than the cache', async () => {
+    await resolve(of({ data: { questionnaireById: { id: 'q-1' } } }));
+    expect(questionnaireById.fetch).toHaveBeenCalledWith({
+      variables: { id: 'q-1' },
+      fetchPolicy: 'network-only',
+    });
+  });
+
+  it('leads back to the room when the server denies a questionnaire it allowed before', async () => {
+    const q = { id: 'q-1' };
+    const { fetch, server } = cachingServer(
+      of({ data: { questionnaireById: q } }),
+      throwError(() => new Error('Forbidden'))
+    );
+    provide(fetch);
+
+    expect(await navigate()).toBe(q);
+    const result = await navigate();
+
+    expect(server).toHaveBeenCalledTimes(2);
     expect(redirectUrl(result)).toBe('/p/12345678');
   });
 });

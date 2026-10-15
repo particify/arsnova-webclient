@@ -13,7 +13,8 @@ import { catchError, map, of } from 'rxjs';
  *
  * A questionnaire the user may not read, such as an unpublished one for a
  * participant, or one that no longer exists leads back to the room instead of
- * failing the navigation.
+ * failing the navigation. It always asks the server, as release and
+ * permissions may have changed since the questionnaire was last cached.
  */
 export const questionnaireResolver: ResolveFn<Questionnaire> = (
   route: ActivatedRouteSnapshot
@@ -26,6 +27,7 @@ export const questionnaireResolver: ResolveFn<Questionnaire> = (
       variables: {
         id: route.params['questionnaireId'],
       },
+      fetchPolicy: 'network-only',
     })
     .pipe(
       map(
