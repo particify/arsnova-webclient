@@ -1,4 +1,4 @@
 <app-content-wordcloud-answer
   [words]="words()"
-  [disabled]="!!answerFormatData()"
+  [disabled]="disabled() || !!answerFormatData()"
 ></app-content-wordcloud-answer>

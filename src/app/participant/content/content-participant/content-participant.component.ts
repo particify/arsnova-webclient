@@ -54,6 +54,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { Apollo, onlyCompleteData } from 'apollo-angular';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
+import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
 import { FORMAT_REGISTRY } from './format-registry';
 import { evictRoundStats } from '@gql/helper/evict-round-stats';
 import { AnswerForm } from '@app/participant/content/answer-form';
@@ -72,6 +73,7 @@ const NON_ANSWERABLE_FORMATS = [ContentType.Flashcard, ContentType.Slide];
 /** The answer forms that go inert once the round is over or has been answered. */
 const LOCKABLE_ANSWER_FORMS: Type<unknown>[] = [
   ContentChoiceParticipantComponent,
+  ContentWordcloudParticipantComponent,
 ];
 
 @Component({

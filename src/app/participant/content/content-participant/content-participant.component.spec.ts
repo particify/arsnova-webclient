@@ -269,6 +269,39 @@ describe('ContentParticipantComponent', () => {
     expect(cache.updateQuery).toHaveBeenCalled();
   });
 
+  it('locks the wordcloud answer form after an abstention', () => {
+    setUp(wordcloudContent, {
+      answer: { id: 'answer-1', result: AnswerResultState.Abstained },
+    });
+
+    expect(
+      answerForm(ContentWordcloudParticipantComponent).disabled()
+    ).toBeTrue();
+  });
+
+  it('locks the wordcloud answer form of a round that is over', () => {
+    const round = {
+      id: 'round-2',
+      roundNo: 1,
+      started: true,
+      closed: true,
+    };
+    setUp({ ...wordcloudContent, activeRound: round } as Content, {
+      inputs: {
+        questionnaire: {
+          id: 'q-1',
+          publishingMode: QuestionnairePublishingMode.Live,
+          activeRound: { ...round, contentId: 'c-2' },
+        },
+      },
+    });
+
+    expect(component.answeringLocked()).toBeTrue();
+    expect(
+      answerForm(ContentWordcloudParticipantComponent).disabled()
+    ).toBeTrue();
+  });
+
   describe('in its template', () => {
     const answer = { id: 'answer-1', result: AnswerResultState.Neutral };
     const statsPublished = { statsPublished: true };

@@ -44,6 +44,7 @@ export class ContentWordcloudParticipantComponent implements AnswerForm {
     AnswerResultState.Unanswered
   );
   readonly correctOptionsPublished = input<boolean>(false);
+  readonly disabled = input<boolean>(false);
   readonly answerCreated = output<Answer>();
   readonly words = linkedSignal(
     () =>
