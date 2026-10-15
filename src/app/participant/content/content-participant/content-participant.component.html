@@ -94,6 +94,10 @@
             >
               @if (loadingAnswer()) {
                 <app-loading-indicator></app-loading-indicator>
+              } @else if (answeringNotStarted()) {
+                <p class="answering-not-started">
+                  {{ 'participant.answer.answering-not-started' | transloco }}
+                </p>
               } @else {
                 <div>
                   <ng-container

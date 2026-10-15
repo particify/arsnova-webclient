@@ -333,6 +333,48 @@ describe('ContentParticipantComponent', () => {
       );
     });
 
+    it('shows that answering has not started without an active round', () => {
+      setUp({ ...choiceContent, activeRound: undefined });
+
+      expect(component.loadingAnswer()).toBeFalse();
+      expect(
+        fixture.nativeElement.querySelector('app-loading-indicator')
+      ).toBeNull();
+      expect(fixture.nativeElement.textContent).toContain(
+        'participant.answer.answering-not-started'
+      );
+      expect(answerByRoundId.watch).not.toHaveBeenCalled();
+    });
+
+    it('shows a slide without an active round', () => {
+      setUp({
+        ...choiceContent,
+        activeRound: undefined,
+        formatData: { format: ContentType.Slide },
+      } as Content);
+
+      expect(component.loadingAnswer()).toBeFalse();
+      expect(fixture.nativeElement.textContent).not.toContain(
+        'participant.answer.answering-not-started'
+      );
+    });
+
+    it('drops the answer of a round that is no longer active', () => {
+      setUp(choiceContent, { answer });
+      expect(component.answer()?.id).toBe('answer-1');
+
+      fixture.componentRef.setInput('content', {
+        ...choiceContent,
+        activeRound: undefined,
+      });
+      fixture.detectChanges();
+
+      expect(component.answer()).toBeUndefined();
+      expect(fixture.nativeElement.textContent).toContain(
+        'participant.answer.answering-not-started'
+      );
+    });
+
     it('lets participants of a live quiz wait without an answer', () => {
       setUp(
         { ...choiceContent, position: 0 },

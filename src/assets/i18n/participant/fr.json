@@ -16,6 +16,7 @@
     "a11y-last-content": "Il s'agit du dernier contenu de cette série de questions. Appuyez sur la touche 0 pour revenir à l'aperçu de la salle.",
     "a11y-sort-item": "Position {{index}} sur {{length}} :{{answer}}.",
     "abstain": "S'abstenir",
+    "answering-not-started": "Il n'est pas encore possible de répondre.",
     "at-least-one": "Veuillez sélectionner au moins une option.",
     "please-answer": "Veuillez entrer une réponse.",
     "please-one": "Veuillez sélectionner une option.",

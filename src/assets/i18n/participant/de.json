@@ -21,6 +21,7 @@
     "a11y-last-content": "Das war der letzte Inhalt dieser Fragenserie. Drücke die Taste 0, um zur Raumübersicht zurückzukehren.",
     "a11y-sort-item": "Position {{index}} von {{length}}: {{answer}}.",
     "abstain": "Enthalten",
+    "answering-not-started": "Die Beantwortung wurde noch nicht gestartet.",
     "at-least-one": "Bitte wähle mindestens eine Option.",
     "please-answer": "Bitte gib eine Antwort ein.",
     "please-one": "Bitte wähle eine Option.",

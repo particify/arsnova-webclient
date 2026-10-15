@@ -65,6 +65,8 @@ interface ContentActionTab {
   icon: string;
 }
 
+const NON_ANSWERABLE_FORMATS = [ContentType.Flashcard, ContentType.Slide];
+
 @Component({
   selector: 'app-content-participant',
   templateUrl: './content-participant.component.html',
@@ -163,7 +165,7 @@ export class ContentParticipantComponent {
             })
             .valueChanges.pipe(onlyCompleteData());
         }
-        return of();
+        return of(undefined);
       })
     )
   );
@@ -172,7 +174,16 @@ export class ContentParticipantComponent {
     () =>
       this.answerRef()?.data.questionnaireAnswerByRoundId as Answer | undefined
   );
-  readonly loadingAnswer = computed(() => this.answerRef()?.loading ?? true);
+  readonly loadingAnswer = computed(
+    () => !!this.content().activeRound && (this.answerRef()?.loading ?? true)
+  );
+
+  /** Whether the content takes answers but no round has been started for it yet. */
+  readonly answeringNotStarted = computed(
+    () =>
+      !this.content().activeRound &&
+      !NON_ANSWERABLE_FORMATS.includes(this.content().formatData.format)
+  );
 
   abstained = computed(
     () => this.answer()?.result === AnswerResultState.Abstained
