@@ -7,6 +7,7 @@ import { configureTestModule } from '@testing/test.setup';
 import { ContentService } from '@app/core/services/http/content.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import {
@@ -203,6 +204,19 @@ describe('ContentPresentationMenuComponent', () => {
     fixture.detectChanges();
 
     expect(component.canModifyAnswersOrRounds()).toBe(true);
+  });
+
+  it('judges the deadline by server time, not by a skewed local clock', () => {
+    // The local clock runs a minute ahead of the server.
+    const serverTime = ServerTimeService.prototype;
+    spyOnProperty(serverTime, 'averageOffset').and.returnValue(-60_000);
+    setUp(content(false));
+    rounds$.next(
+      roundsResponse(1, false, new Date(Date.now() - 30_000).toISOString())
+    );
+    fixture.detectChanges();
+
+    expect(component.canModifyAnswersOrRounds()).toBe(false);
   });
 
   it('falls back to the new round once the answers are deleted', () => {

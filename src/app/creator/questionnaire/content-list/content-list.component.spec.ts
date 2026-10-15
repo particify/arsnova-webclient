@@ -27,6 +27,7 @@ import {
   StopQuestionnaireContentGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { TranslocoService } from '@jsverse/transloco';
@@ -787,6 +788,20 @@ describe('ContentListComponent', () => {
         component.canModifyAnswersOrRounds({
           ...contents[1],
           activeRound: round(inSeconds(-1)),
+        } as Content)
+      ).toBeTrue();
+    });
+
+    it('judges the deadline by server time, not by a skewed local clock', () => {
+      // The local clock runs a minute ahead of the server.
+      const serverTime = ServerTimeService.prototype;
+      spyOnProperty(serverTime, 'averageOffset').and.returnValue(-60_000);
+      setUpRunning(inSeconds(-30));
+
+      expect(
+        component.isLiveRow({
+          ...contents[1],
+          activeRound: round(inSeconds(-30)),
         } as Content)
       ).toBeTrue();
     });

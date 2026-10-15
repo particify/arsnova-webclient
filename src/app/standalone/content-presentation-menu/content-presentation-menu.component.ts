@@ -17,6 +17,7 @@ import { RouterLink } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { ContentService } from '@app/core/services/http/content.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -52,6 +53,7 @@ import { isRoundOver } from '@app/standalone/countdown-timer/answering';
 export class ContentPresentationMenuComponent {
   private contentService = inject(ContentService);
   private presentationService = inject(PresentationService);
+  private serverTimeService = inject(ServerTimeService);
   private dialogService = inject(DialogService);
   private notificationService = inject(NotificationService);
   private translateService = inject(TranslocoService);
@@ -185,7 +187,11 @@ export class ContentPresentationMenuComponent {
     if (!this.isLiveMode()) {
       return true;
     }
-    return isRoundOver(this.currentRound(), Date.now(), this.isLiveMode());
+    return isRoundOver(
+      this.currentRound(),
+      this.serverTimeService.determineServerTime().getTime(),
+      this.isLiveMode()
+    );
   }
 
   deleteContentAnswers() {

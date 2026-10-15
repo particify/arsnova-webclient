@@ -25,6 +25,7 @@ import {
   StopQuestionnaireContentGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { NEVER, of } from 'rxjs';
@@ -291,6 +292,19 @@ describe('ContentsPageComponent', () => {
       );
 
       expect(component.roundOver()).toBeTrue();
+    });
+
+    it('judges the deadline by server time, not by a skewed local clock', () => {
+      // The local clock runs a minute ahead of the server.
+      const serverTime = ServerTimeService.prototype;
+      spyOnProperty(serverTime, 'averageOffset').and.returnValue(-60_000);
+      setUp(
+        questionnaire({
+          activeRound: round('2026-10-01T11:59:30Z'),
+        } as never)
+      );
+
+      expect(component.roundOver()).toBeFalse();
     });
 
     it('never considers a round over outside live mode', () => {

@@ -67,6 +67,7 @@ import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsa
 import { CountComponent } from '@app/standalone/count/count.component';
 import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { mutationHelper } from '@gql/helper/mutation-helper';
@@ -100,6 +101,7 @@ export class ContentsPageComponent {
   private readonly globalStorageService = inject(GlobalStorageService);
   private readonly location = inject(Location);
   private readonly router = inject(Router);
+  private readonly serverTimeService = inject(ServerTimeService);
   private readonly presentationService = inject(PresentationService);
   private readonly focusModeService = inject(FocusModeService);
   private readonly contentPublishService = inject(ContentPublishService);
@@ -220,7 +222,11 @@ export class ContentsPageComponent {
   readonly roundOver = linkedSignal({
     source: () => roundKey(this.questionnaire()?.activeRound),
     computation: () =>
-      isRoundOver(this.questionnaire()?.activeRound, Date.now(), this.isLive()),
+      isRoundOver(
+        this.questionnaire()?.activeRound,
+        this.serverTimeService.determineServerTime().getTime(),
+        this.isLive()
+      ),
   });
 
   protected readonly scale = this.presentationService.scale;

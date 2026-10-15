@@ -78,6 +78,7 @@ import { mutationHelper } from '@gql/helper/mutation-helper';
 import { filter, map, Observable, of, switchMap } from 'rxjs';
 import { RESULT_REGISTRY } from '@app/standalone/content-results/result-registry';
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import {
   answeringEndDate,
   isRoundOver as isRoundOverAt,
@@ -127,6 +128,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   private readonly contentPublishService = inject(ContentPublishService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
+  private readonly serverTimeService = inject(ServerTimeService);
   private readonly route = inject(ActivatedRoute);
   private readonly deleteContentById = inject(DeleteQuestionnaireContentGql);
   private readonly deleteAnswersByContentId = inject(
@@ -341,7 +343,11 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   }
 
   isRoundOver(round: Content['activeRound']): boolean {
-    return isRoundOverAt(round, Date.now(), this.isLiveMode());
+    return isRoundOverAt(
+      round,
+      this.serverTimeService.determineServerTime().getTime(),
+      this.isLiveMode()
+    );
   }
 
   onRoundCountdownFinished(): void {
