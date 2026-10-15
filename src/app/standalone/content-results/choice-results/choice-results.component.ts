@@ -90,15 +90,20 @@ export class ChoiceResultsComponent {
 
   readonly comparingRounds = computed(() => this.roundIds().length > 1);
   /**
-   * The respondents the shares of a multiple choice relate to. Only known for
-   * the active round, so other or compared rounds show shares of selections.
+   * The answer counts are only known for the active round, so they cannot be
+   * shown for another round or for a comparison.
    */
-  readonly respondentCount = computed(() => {
+  readonly showsActiveRoundOnly = computed(() => {
     const roundIds = this.roundIds();
-    return roundIds.length === 1 && roundIds[0] === this.activeRoundId()
-      ? this.answerCount() || undefined
-      : undefined;
+    return roundIds.length === 1 && roundIds[0] === this.activeRoundId();
   });
+  /**
+   * The respondents the shares of a multiple choice relate to. Other or
+   * compared rounds show shares of selections.
+   */
+  readonly respondentCount = computed(() =>
+    this.showsActiveRoundOnly() ? this.answerCount() || undefined : undefined
+  );
   readonly options = computed(() => this.formatData().options);
   readonly labels = computed(() =>
     this.options().map((_, index) => String.fromCharCode(65 + index))

@@ -9,8 +9,9 @@ import {
   model,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, switchMap } from 'rxjs';
+import { map, skip, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
+import { refetchOn } from '@gql/helper/refetch-on';
 import { MarkdownFeatureset } from '@app/core/services/http/formatting.service';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import {
@@ -69,13 +70,21 @@ export class ContentResultsComponent {
   isStandalone = input(false, { transform: booleanAttribute });
   allowAnswerModeration = input(false, { transform: booleanAttribute });
 
+  private readonly activeRoundId$ = toObservable(
+    computed(() => this.content().activeRound?.id)
+  );
+
   readonly rounds = toSignal(
     toObservable(computed(() => this.content().id)).pipe(
-      switchMap(
-        (contentId) =>
+      switchMap((contentId) =>
+        // A round started elsewhere, e.g. from a second screen, only shows up
+        // as the content's new active round.
+        refetchOn(
           this.questionnaireRoundsByContentId.watch({
             variables: { contentId },
-          }).valueChanges
+          }),
+          this.activeRoundId$.pipe(skip(1))
+        )
       ),
       onlyCompleteData(),
       map((r) => r.data.questionnaireRoundsByContentId ?? [])

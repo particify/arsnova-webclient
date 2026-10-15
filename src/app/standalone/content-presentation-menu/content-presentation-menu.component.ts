@@ -227,6 +227,11 @@ export class ContentPresentationMenuComponent {
       this.startQuestionnaireContentRound
         .mutate({
           variables: { contentId },
+          // A stored selection would keep the previous round on screen.
+          update: () =>
+            this.contentResultsService.clearPresentationSelectedRoundIds(
+              contentId
+            ),
           refetchQueries: [
             {
               query: QuestionnaireRoundsByContentIdDocument,

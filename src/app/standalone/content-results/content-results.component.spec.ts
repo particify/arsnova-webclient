@@ -8,6 +8,7 @@ import {
   ContentType,
   CurrentUserWithSettingsGql,
   QuestionnaireRoundsByContentIdGql,
+  Round,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentResultsComponent } from './content-results.component';
@@ -39,6 +40,7 @@ describe('ContentResultsComponent', () => {
   let fixture: ComponentFixture<ContentResultsComponent>;
   let component: ContentResultsComponent;
   let contentResultsService: ContentResultsService;
+  let refetchRounds: jasmine.Spy;
 
   interface SetUpOptions {
     content?: Partial<Content>;
@@ -51,6 +53,7 @@ describe('ContentResultsComponent', () => {
    * handed to the format's results component is exercised.
    */
   function setUp(options: SetUpOptions = {}) {
+    refetchRounds = jasmine.createSpy('refetch').and.resolveTo({});
     configureTestModule(
       [getTranslocoModule(), ContentResultsComponent],
       [
@@ -76,6 +79,7 @@ describe('ContentResultsComponent', () => {
                   ],
                 },
               }),
+              refetch: refetchRounds,
             }),
           },
         },
@@ -144,6 +148,32 @@ describe('ContentResultsComponent', () => {
     expect(
       (component.componentInputs() as { answerCount: number }).answerCount
     ).toBe(0);
+  });
+
+  it('reloads the rounds once another round of the content became active', () => {
+    setUp({ content: { activeRound: { id: 'round-1' } as Round } });
+    expect(refetchRounds).not.toHaveBeenCalled();
+
+    fixture.componentRef.setInput('content', {
+      ...choiceContent(),
+      activeRound: { id: 'round-2' } as Round,
+    });
+    fixture.detectChanges();
+
+    expect(refetchRounds).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the rounds while the same round stays active', () => {
+    setUp({ content: { activeRound: { id: 'round-1' } as Round } });
+
+    fixture.componentRef.setInput('content', {
+      ...choiceContent(),
+      answerCount: 5,
+      activeRound: { id: 'round-1' } as Round,
+    });
+    fixture.detectChanges();
+
+    expect(refetchRounds).not.toHaveBeenCalled();
   });
 
   it('lets a wordcloud ban keywords only where answers may be moderated', () => {

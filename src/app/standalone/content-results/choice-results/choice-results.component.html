@@ -1,5 +1,5 @@
 <div fxLayout="column">
-  @if (hasCorrectAnswer() && isPresentation()) {
+  @if (hasCorrectAnswer() && isPresentation() && showsActiveRoundOnly()) {
     <app-correct-answer-results
       [show]="showCorrect()"
       [answerCount]="answerCount()"

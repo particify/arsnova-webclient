@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PresentationService } from '@app/core/services/util/presentation.service';
 import { ThemeService } from '@app/core/theme/theme.service';
@@ -31,10 +32,15 @@ describe('ChoiceResultsComponent', () => {
       roundIds?: string[];
       answerCount?: number;
       activeRoundId?: string;
-    } = {}
+      isPresentation?: boolean;
+    } = {},
+    render = false
   ) {
+    // Rendering leaves out the child components, which have their own specs.
     TestBed.overrideComponent(ChoiceResultsComponent, {
-      set: { template: '' },
+      set: render
+        ? { imports: [], schemas: [NO_ERRORS_SCHEMA] }
+        : { template: '' },
     });
     stats$ = new Subject();
     updates$ = new Subject();
@@ -254,6 +260,41 @@ describe('ChoiceResultsComponent', () => {
       setUp({ options }, { ...counted, roundIds: ['round-1'] });
 
       expect(component.respondentCount()).toBeUndefined();
+    });
+  });
+
+  describe('share of correct answers', () => {
+    const presented = {
+      hasCorrectAnswer: true,
+      isPresentation: true,
+      answerCount: 4,
+      activeRoundId: 'round-2',
+    };
+
+    function correctShare(): Element | null {
+      return fixture.nativeElement.querySelector('app-correct-answer-results');
+    }
+
+    it('is shown for the active round', () => {
+      setUp({ options }, { ...presented, roundIds: ['round-2'] }, true);
+
+      expect(correctShare()).not.toBeNull();
+    });
+
+    it('is hidden for compared rounds, as it is only known for the active one', () => {
+      setUp(
+        { options },
+        { ...presented, roundIds: ['round-1', 'round-2'] },
+        true
+      );
+
+      expect(correctShare()).toBeNull();
+    });
+
+    it('is hidden for an earlier round, as it is only known for the active one', () => {
+      setUp({ options }, { ...presented, roundIds: ['round-1'] }, true);
+
+      expect(correctShare()).toBeNull();
     });
   });
 });

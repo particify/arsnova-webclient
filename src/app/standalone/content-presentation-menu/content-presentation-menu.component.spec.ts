@@ -232,6 +232,25 @@ describe('ContentPresentationMenuComponent', () => {
     );
   });
 
+  it('shows the new round instead of a previously selected one', () => {
+    setUp(content(true));
+    const contentResultsService = TestBed.inject(ContentResultsService);
+    contentResultsService.setPresentationSelectedRoundIds('content-1', [
+      'round-1',
+    ]);
+
+    component.startNewRound();
+    const confirmAction =
+      dialogService.openStartNewRoundDialog.calls.mostRecent().args[0];
+    confirmAction().subscribe();
+    const { update } = startRound.mutate.calls.mostRecent().args[0]!;
+    (update as unknown as () => void)();
+
+    expect(
+      contentResultsService.presentationSelectedRoundIds('content-1')
+    ).toBeUndefined();
+  });
+
   it('confirms the new round only after the dialog closed with a result', () => {
     setUp(content(true));
     const notificationService = TestBed.inject(
