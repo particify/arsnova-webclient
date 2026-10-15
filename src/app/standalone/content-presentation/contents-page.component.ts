@@ -11,6 +11,7 @@ import {
   viewChild,
   DestroyRef,
 } from '@angular/core';
+import { ApolloCache } from '@apollo/client';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -42,6 +43,7 @@ import {
   QuestionnaireByIdGql,
   QuestionnaireContentUpdatedGql,
   QuestionnairePublishingMode,
+  Round,
   StartQuestionnaireContentGql,
   StopQuestionnaireContentGql,
   UserUiSettings,
@@ -70,6 +72,23 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { mutationHelper } from '@gql/helper/mutation-helper';
+
+/**
+ * Opening a round starts it for good, but the start response does not carry
+ * the started flag the stepper tells a content which already ran by.
+ */
+function markRoundStarted(
+  cache: ApolloCache,
+  round?: Pick<Round, 'id' | 'closed'> | null
+) {
+  const id =
+    round && !round.closed
+      ? cache.identify({ __typename: 'Round', id: round.id })
+      : undefined;
+  if (id) {
+    cache.modify({ id, fields: { started: () => true } });
+  }
+}
 
 @Component({
   selector: 'app-contents-page',
@@ -435,7 +454,11 @@ export class ContentsPageComponent {
       return;
     }
     this.startQuestionnaireContent
-      .mutate({ variables: { contentId } })
+      .mutate({
+        variables: { contentId },
+        update: (cache, { data }) =>
+          markRoundStarted(cache, data?.startQuestionnaireContent.activeRound),
+      })
       .pipe(this.mutations.handleErrors())
       .subscribe();
   }

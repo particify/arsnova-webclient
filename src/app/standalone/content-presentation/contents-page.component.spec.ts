@@ -147,6 +147,40 @@ describe('ContentsPageComponent', () => {
     });
   });
 
+  describe('marking the started round', () => {
+    function startWithRound(closed: boolean) {
+      setUp();
+      component.startContent();
+      const cache = jasmine.createSpyObj('ApolloCache', ['identify', 'modify']);
+      cache.identify.and.callFake(
+        (o: { __typename: string; id: string }) => `${o.__typename}:${o.id}`
+      );
+      const mutate = gql.get(StartQuestionnaireContentGql)!;
+      const { update } = mutate.calls.mostRecent().args[0];
+      update(cache, {
+        data: {
+          startQuestionnaireContent: {
+            id: 'q-1',
+            activeRound: { id: 'r-1', roundNo: 1, closed },
+          },
+        },
+      });
+      return cache.modify;
+    }
+
+    it('marks the opened round as started, so the content does not wait again once left', () => {
+      const modify = startWithRound(false);
+
+      const { id, fields } = modify.calls.mostRecent().args[0];
+      expect(id).toBe('Round:r-1');
+      expect(fields.started(false)).toBeTrue();
+    });
+
+    it('leaves a round alone which did not open', () => {
+      expect(startWithRound(true)).not.toHaveBeenCalled();
+    });
+  });
+
   it('stops the running content of the questionnaire', () => {
     setUp();
 

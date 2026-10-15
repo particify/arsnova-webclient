@@ -121,4 +121,48 @@ describe('ContentStepperComponent', () => {
 
     expect(emitted).toEqual([1]);
   });
+
+  describe('in live mode', () => {
+    function rendered(selector: string): Element | null {
+      return fixture.nativeElement.querySelector(selector);
+    }
+
+    function presentLive(contents: Content[], startedContentId?: string) {
+      setUp();
+      fixture.componentRef.setInput('contents', contents);
+      fixture.componentRef.setInput('startIndex', 0);
+      fixture.componentRef.setInput('isLiveMode', true);
+      fixture.componentRef.setInput('startedContentId', startedContentId);
+      fixture.detectChanges();
+      // The step is only rendered once the stepper has adopted the start index.
+      fixture.detectChanges();
+    }
+
+    it('keeps a content which never ran waiting for its start', () => {
+      presentLive(
+        [{ ...content('c-1'), activeRound: { started: false } } as Content],
+        'c-2'
+      );
+
+      expect(rendered('app-content-step-info')).not.toBeNull();
+      expect(rendered('app-content-results')).toBeNull();
+    });
+
+    it('shows the content which is running', () => {
+      presentLive([content('c-1')], 'c-1');
+
+      expect(rendered('app-content-results')).not.toBeNull();
+      expect(rendered('app-content-step-info')).toBeNull();
+    });
+
+    it('shows a content which ran before instead of waiting for its start again', () => {
+      presentLive(
+        [{ ...content('c-1'), activeRound: { started: true } } as Content],
+        'c-2'
+      );
+
+      expect(rendered('app-content-results')).not.toBeNull();
+      expect(rendered('app-content-step-info')).toBeNull();
+    });
+  });
 });

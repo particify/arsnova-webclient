@@ -233,6 +233,39 @@ describe('QuestionnairePageComponent (live sync)', () => {
     expect(component.goToContent).not.toHaveBeenCalled();
   });
 
+  it('pulls a participant who navigated away back to a restarted round', () => {
+    setUp(
+      questionnaire({ activeRound: activeRound('c-0') } as never),
+      undefined,
+      'c-0'
+    );
+    component.currentStep = 2;
+
+    update(questionnaire({ activeRound: activeRound('c-0', true) } as never));
+    expect(component.goToContent).not.toHaveBeenCalled();
+
+    update(questionnaire({ activeRound: activeRound('c-0') } as never));
+    expect(component.goToContent).toHaveBeenCalledOnceWith(0);
+  });
+
+  it('leaves a participant who navigated away alone while the round runs', () => {
+    setUp(
+      questionnaire({ activeRound: activeRound('c-0') } as never),
+      undefined,
+      'c-0'
+    );
+    component.currentStep = 2;
+
+    update(
+      questionnaire({
+        activeRound: activeRound('c-0'),
+        name: 'Renamed',
+      } as never)
+    );
+
+    expect(component.goToContent).not.toHaveBeenCalled();
+  });
+
   it('reloads the published contents when the published range changes', () => {
     setUp(questionnaire({ activeRound: activeRound('c-0') } as never));
     const loads = (contentsGql.watch as jasmine.Spy).calls.count();

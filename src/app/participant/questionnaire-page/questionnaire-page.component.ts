@@ -248,7 +248,7 @@ export class QuestionnairePageComponent {
       : undefined;
   });
 
-  private readonly activeUnansweredContentId = computed(() => {
+  private readonly activeUnansweredRound = computed(() => {
     const round = this.questionnaireInLiveMode()?.activeRound;
     if (!round?.contentId || round.closed) {
       return undefined;
@@ -256,10 +256,12 @@ export class QuestionnairePageComponent {
     const result = this.answerResults().find(
       (r) => r.contentId === round.contentId
     );
-    return result?.result === AnswerResultState.Unanswered
-      ? round.contentId
-      : undefined;
+    return result?.result === AnswerResultState.Unanswered ? round : undefined;
   });
+
+  private readonly activeUnansweredContentId = computed(
+    () => this.activeUnansweredRound()?.contentId ?? undefined
+  );
 
   private readonly liveContentId = computed(
     () =>
@@ -280,6 +282,7 @@ export class QuestionnairePageComponent {
   started = false;
   currentStep?: number;
   private followedLiveContentId?: string;
+  private followedLiveRoundId?: string;
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
   private readonly contentFocusState = toSignal(
     this.focusModeService.getContentState()
@@ -360,19 +363,12 @@ export class QuestionnairePageComponent {
 
     effect(() => {
       const liveContentId = this.liveContentId();
+      const liveRoundId = this.activeUnansweredRound()?.id;
       if (!this.started || !this.stepper() || this.focusModeEnabled()) {
         return;
       }
-      if (!liveContentId || liveContentId === this.followedLiveContentId) {
-        return;
-      }
-      const index = this.getIndexOfContentById(liveContentId);
-      if (index < 0) {
-        return;
-      }
-      this.followedLiveContentId = liveContentId;
-      if (index !== this.currentStep) {
-        this.goToContent(index);
+      if (liveContentId) {
+        this.followLiveContent(liveContentId, liveRoundId);
       }
     });
 
@@ -402,6 +398,26 @@ export class QuestionnairePageComponent {
     if (!this.started) {
       this.initStepper(index);
     } else if (index !== this.currentStep) {
+      this.goToContent(index);
+    }
+  }
+
+  /**
+   * Follows each new live content and each (re)opened round once, so a
+   * participant who navigated away is not pulled back by every update.
+   */
+  private followLiveContent(contentId: string, roundId?: string) {
+    const isNewTarget =
+      contentId !== this.followedLiveContentId ||
+      (!!roundId && roundId !== this.followedLiveRoundId);
+    // Forgetting a closed round lets reopening it count as a new start.
+    this.followedLiveRoundId = roundId;
+    const index = this.getIndexOfContentById(contentId);
+    if (!isNewTarget || index < 0) {
+      return;
+    }
+    this.followedLiveContentId = contentId;
+    if (index !== this.currentStep) {
       this.goToContent(index);
     }
   }
@@ -531,6 +547,7 @@ export class QuestionnairePageComponent {
       this.currentStep = index;
       if (this.stepper()) this.stepper()?.init(index, this.contents()?.length);
       this.followedLiveContentId = this.liveContentId();
+      this.followedLiveRoundId = this.activeUnansweredRound()?.id;
       this.started = true;
     });
   }

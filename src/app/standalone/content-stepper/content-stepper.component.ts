@@ -57,6 +57,16 @@ export class ContentStepperComponent {
     });
   }
 
+  /**
+   * A live content waits for its start only once: going back to a content
+   * which already ran shows it again, not the waiting screen.
+   */
+  hasStarted(content: Content): boolean {
+    return (
+      content.id === this.startedContentId() || !!content.activeRound?.started
+    );
+  }
+
   updateIndex(index: number) {
     this.currentStep = index;
     this.contentResultsServive.setResultsVisible(false);
