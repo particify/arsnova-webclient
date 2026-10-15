@@ -44,6 +44,7 @@ export class ContentTextParticipantComponent implements AnswerForm {
     AnswerResultState.Unanswered
   );
   readonly correctOptionsPublished = input<boolean>(false);
+  readonly disabled = input<boolean>(false);
   readonly answerCreated = output<Answer>();
   readonly answer = linkedSignal(() => this.answerFormatData()?.body ?? '');
 

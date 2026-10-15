@@ -1,4 +1,4 @@
 <app-content-text-answer
   [(answer)]="answer"
-  [disabled]="!!answerFormatData()"
+  [disabled]="disabled() || !!answerFormatData()"
 ></app-content-text-answer>

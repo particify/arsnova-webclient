@@ -12,6 +12,8 @@ import {
   CreateQuestionnaireTextAnswerGql,
   TextContentFormatData,
 } from '@gql/generated/graphql';
+import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
+import { By } from '@angular/platform-browser';
 import { ContentTextParticipantComponent } from './content-text-participant.component';
 
 const contentFormatData: TextContentFormatData = {
@@ -101,5 +103,20 @@ describe('ContentTextParticipantComponent', () => {
     });
     fixture.detectChanges();
     expect(component.answer()).toBe('Previously given');
+  });
+
+  function textField(): ContentTextAnswerComponent {
+    return fixture.debugElement.query(By.directive(ContentTextAnswerComponent))
+      .componentInstance;
+  }
+
+  it('keeps the text field editable while answering is open', () => {
+    expect(textField().disabled()).toBeFalse();
+  });
+
+  it('locks the text field without an own text answer', () => {
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+    expect(textField().disabled()).toBeTrue();
   });
 });
