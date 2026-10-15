@@ -133,11 +133,6 @@ export class ContentsPageComponent {
     () => this.settings().showContentResultsDirectly || this.showResults()
   );
 
-  private readonly _questionnaireId = computed(
-    () =>
-      this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP) ??
-      this.questionnaireId()
-  );
   readonly hideControlBar = linkedSignal(() => this.noControlBar());
 
   readonly currentIndex = computed(() =>
@@ -181,13 +176,11 @@ export class ContentsPageComponent {
 
   constructor() {
     effect(() => {
+      this.globalStorageService.setItem(
+        STORAGE_KEYS.LAST_GROUP,
+        this.questionnaireId()
+      );
       // Use index from route if available. Otherwise use the stored index or 0 as fallback.
-      if (this._questionnaireId()) {
-        this.globalStorageService.setItem(
-          STORAGE_KEYS.LAST_GROUP,
-          this._questionnaireId()
-        );
-      }
       if (this.contents()?.length > 0 && this.stepper()) {
         if (!this.initialized) {
           const contentId = this.contentId();

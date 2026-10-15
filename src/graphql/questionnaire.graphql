@@ -3,6 +3,11 @@ fragment QuestionnaireSummary on Questionnaire {
   name
   type
   published
+  publishingMode
+  publishedUpToContent {
+    id
+    position
+  }
   contentCount
 }
 

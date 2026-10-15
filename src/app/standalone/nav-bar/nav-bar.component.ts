@@ -44,6 +44,7 @@ import {
   QnaState,
   QnaStateChangedGql,
   QuestionnairesByRoomIdGql,
+  QuestionnairePublishingMode,
   QuestionnairesChangedGql,
   QuestionnaireSummaryFragment,
   RoomStatsByIdGql,
@@ -71,6 +72,18 @@ export class NavBarItem {
     this.url = url;
     this.changeIndicator = changeIndicator;
   }
+}
+
+/**
+ * The contents a participant can reach. `contentCount` includes the ones a
+ * range or live questionnaire has not released yet.
+ */
+function releasedContentCount(questionnaire: QuestionnaireSummaryFragment) {
+  if (questionnaire.publishingMode === QuestionnairePublishingMode.All) {
+    return questionnaire.contentCount ?? 0;
+  }
+  const position = questionnaire.publishedUpToContent?.position;
+  return position == null ? 0 : position + 1;
 }
 
 @Component({
@@ -171,10 +184,24 @@ export class NavBarComponent implements OnInit, OnDestroy {
     () => this.questionnairesState().loading
   );
 
-  readonly activeQuestionnaire = linkedSignal(() => {
-    const id = this.route.snapshot.params.questionnaireId;
-    const first = this.questionnaires()[0];
-    return this.questionnaires().find((q) => q.id === id) ?? first;
+  /**
+   * The questionnaire shown by the child route, else the one active before the
+   * list was refetched, else the last visited one, else the first one.
+   */
+  readonly activeQuestionnaire = linkedSignal<
+    QuestionnaireSummaryFragment[],
+    QuestionnaireSummaryFragment
+  >({
+    source: () => this.questionnaires(),
+    computation: (questionnaires, previous) => {
+      const find = (id?: string) => questionnaires.find((q) => q.id === id);
+      return (
+        find(this.routedQuestionnaireId()) ??
+        find(previous?.value?.id) ??
+        find(this.globalStorageService.getItem(STORAGE_KEYS.LAST_GROUP)) ??
+        questionnaires[0]
+      );
+    },
   });
 
   destroyed$ = new Subject<void>();
@@ -189,7 +216,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   activeFeatures: string[] = [RoutingFeature.OVERVIEW];
   private changesSubscription?: Subscription;
   private statsChangesSubscription?: Subscription;
-  private publishedQuestionnaireIds?: Set<string>;
+  private releasedContentCounts?: Map<string, number>;
 
   userCount = toSignal(
     toObservable(this.roomId).pipe(
@@ -203,30 +230,39 @@ export class NavBarComponent implements OnInit, OnDestroy {
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
 
   constructor() {
-    let questionnaireId = this.routingService.questionnaireId;
-    if (questionnaireId === undefined) {
-      questionnaireId = this.globalStorageService.getItem(
-        STORAGE_KEYS.LAST_GROUP
-      );
-    } else {
+    const questionnaireId = this.routingService.questionnaireId;
+    if (questionnaireId !== undefined) {
       this.setGroupInSessionStorage(questionnaireId);
     }
     toObservable(this.questionnairesState).subscribe({
       next: ({ questionnaires, loading }) => {
         if (questionnaires.length > 0) {
-          this.setGroupInSessionStorage(
-            questionnaireId ?? questionnaires[0].id
-          );
           this.addContentFeatureItem(false);
         } else if (!loading) {
           this.removeContentFeatureItem();
         }
         this.getItems();
         if (!loading) {
-          this.announceNewlyPublishedQuestionnaires(questionnaires);
+          this.announceNewlyPublishedContents(questionnaires);
         }
       },
     });
+  }
+
+  /**
+   * The nav bar's own route is the room's, so the questionnaire is a param of a
+   * route further down.
+   */
+  private routedQuestionnaireId(): string | undefined {
+    let child = this.route.snapshot.firstChild;
+    while (child) {
+      const id = child.params['questionnaireId'];
+      if (id) {
+        return id;
+      }
+      child = child.firstChild;
+    }
+    return undefined;
   }
 
   ngOnDestroy(): void {
@@ -274,19 +310,25 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   /**
    * Flags the questionnaire item for participants once a questionnaire gets
-   * published. Route data's `userRole` keeps a creator's room preview quiet.
+   * published or a known one releases more contents. Route data's `userRole`
+   * keeps a creator's room preview quiet.
    */
-  private announceNewlyPublishedQuestionnaires(
+  private announceNewlyPublishedContents(
     questionnaires: QuestionnaireSummaryFragment[]
   ) {
-    const known = this.publishedQuestionnaireIds;
-    this.publishedQuestionnaireIds = new Set(questionnaires.map((q) => q.id));
+    const known = this.releasedContentCounts;
+    this.releasedContentCounts = new Map(
+      questionnaires.map((q) => [q.id, releasedContentCount(q)])
+    );
     if (!known || this.userRole() !== UserRole.PARTICIPANT) {
       return;
     }
-    const published = questionnaires.find((q) => !known.has(q.id));
-    if (published) {
-      this.toggleNews(RoutingFeature.CONTENTS, published);
+    const changed = questionnaires.find((q) => {
+      const knownCount = known.get(q.id);
+      return knownCount === undefined || releasedContentCount(q) > knownCount;
+    });
+    if (changed) {
+      this.toggleNews(RoutingFeature.CONTENTS, changed);
     }
   }
 

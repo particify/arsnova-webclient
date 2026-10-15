@@ -2418,7 +2418,13 @@ export type QuestionnaireSummaryFragment = {
   name: string;
   type: QuestionnaireType;
   published: boolean;
+  publishingMode: QuestionnairePublishingMode;
   contentCount?: number | null;
+  publishedUpToContent?: {
+    __typename?: 'Content';
+    id: string;
+    position?: number | null;
+  } | null;
 };
 
 export type QuestionnaireDetailsFragment = {
@@ -2578,7 +2584,13 @@ export type QuestionnairesByRoomIdQuery = {
     name: string;
     type: QuestionnaireType;
     published: boolean;
+    publishingMode: QuestionnairePublishingMode;
     contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
   }> | null;
 };
 
@@ -2594,7 +2606,13 @@ export type PublishedQuestionnairesByRoomIdQuery = {
     name: string;
     type: QuestionnaireType;
     published: boolean;
+    publishingMode: QuestionnairePublishingMode;
     contentCount?: number | null;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
   }> | null;
 };
 
@@ -4284,6 +4302,11 @@ export const QuestionnaireSummaryFragmentDoc = gql`
     name
     type
     published
+    publishingMode
+    publishedUpToContent {
+      id
+      position
+    }
     contentCount
   }
 `;

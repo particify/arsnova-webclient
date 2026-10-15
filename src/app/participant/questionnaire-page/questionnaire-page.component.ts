@@ -244,16 +244,12 @@ export class QuestionnairePageComponent {
     prevResults: ContentAnswerResult[],
     currentResults: ContentAnswerResult[]
   ) {
-    const addedIndex = currentResults.findLastIndex((u) =>
-      prevResults?.find(
-        (p) =>
-          p.result === AnswerResultState.Unanswered &&
-          u.result !== AnswerResultState.Unanswered
-      )
+    const answeredIndex = this.findNewlyAnsweredContentIndex(
+      prevResults,
+      currentResults
     );
     if (
-      prevResults?.length > 0 &&
-      addedIndex >= 0 &&
+      answeredIndex >= 0 &&
       !this.focusModeEnabled() &&
       this.started &&
       this.questionnaire().publishingMode !==
@@ -261,8 +257,12 @@ export class QuestionnairePageComponent {
       this.questionnaire().type !== QuestionnaireType.Quiz
     ) {
       setTimeout(() => {
-        if (addedIndex < this.contents().length - 1) {
-          this.nextContent();
+        const nextIndex = this.findNextUnansweredContentIndex(
+          currentResults,
+          answeredIndex
+        );
+        if (nextIndex >= 0) {
+          this.goToContent(nextIndex);
           setTimeout(() => {
             document.getElementById('step')?.focus();
           }, 200);
@@ -271,6 +271,37 @@ export class QuestionnairePageComponent {
         }
       }, 1000);
     }
+  }
+
+  private findNewlyAnsweredContentIndex(
+    prevResults: ContentAnswerResult[],
+    currentResults: ContentAnswerResult[]
+  ): number {
+    const wasUnanswered = new Set(
+      prevResults
+        .filter((r) => r.result === AnswerResultState.Unanswered)
+        .map((r) => r.contentId)
+    );
+    const answered = currentResults.find(
+      (r) =>
+        r.result !== AnswerResultState.Unanswered &&
+        wasUnanswered.has(r.contentId)
+    );
+    return answered ? this.getIndexOfContentById(answered.contentId) : -1;
+  }
+
+  private findNextUnansweredContentIndex(
+    results: ContentAnswerResult[],
+    after: number
+  ): number {
+    const unanswered = new Set(
+      results
+        .filter((r) => r.result === AnswerResultState.Unanswered)
+        .map((r) => r.contentId)
+    );
+    return this.contents().findIndex(
+      (c, i) => i > after && unanswered.has(c.id)
+    );
   }
 
   getIndexOfContentById(id: string): number {

@@ -13,12 +13,17 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { RoomSettingsService } from '@app/core/services/http/room-settings.service';
 import { RoomStatsService } from '@app/core/services/http/room-stats.service';
 import { RoomService } from '@app/core/services/http/room.service';
+import {
+  GlobalStorageService,
+  STORAGE_KEYS,
+} from '@app/core/services/util/global-storage.service';
 import { FocusModeService } from '@app/creator/_services/focus-mode.service';
 import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import {
   PublishedQuestionnairesByRoomIdGql,
   QnaStateChangedGql,
   QuestionnairesByRoomIdGql,
+  QuestionnairePublishingMode,
   QuestionnairesChangedGql,
   QuestionnaireSummaryFragment,
   QuestionnaireType,
@@ -37,6 +42,7 @@ describe('NavBarComponent', () => {
   let publishedQuestionnairesByRoomId: jasmine.SpyObj<PublishedQuestionnairesByRoomIdGql>;
   let roomSettingsService: jasmine.SpyObj<RoomSettingsService>;
   let focusModeService: jasmine.SpyObj<FocusModeService>;
+  let route: { snapshot: { params: object; firstChild?: unknown } };
 
   const quiz = {
     id: 'q-1',
@@ -96,6 +102,7 @@ describe('NavBarComponent', () => {
     ]);
     focusModeService.getState.and.returnValue(NEVER);
     focusModeService.getFocusModeEnabled.and.returnValue(of(false));
+    route = { snapshot: { params: {} } };
 
     configureTestModule(
       [
@@ -105,7 +112,7 @@ describe('NavBarComponent', () => {
       ],
       [
         provideNoopAnimations(),
-        { provide: ActivatedRoute, useValue: { snapshot: { params: {} } } },
+        { provide: ActivatedRoute, useValue: route },
         {
           provide: QuestionnairesByRoomIdGql,
           useValue: questionnairesByRoomId,
@@ -185,6 +192,18 @@ describe('NavBarComponent', () => {
 
   function query(selector: string): HTMLElement | null {
     return fixture.nativeElement.querySelector(selector);
+  }
+
+  /** Nests the questionnaire route below the room's, as the routing does. */
+  function routeToQuestionnaire(questionnaireId: string) {
+    route.snapshot.firstChild = {
+      params: {},
+      firstChild: { params: { questionnaireId }, firstChild: null },
+    };
+  }
+
+  function activeQuestionnaireId() {
+    return fixture.componentInstance.activeQuestionnaire()?.id;
   }
 
   it('has navigation buttons for the room overview and the Q&A', async () => {
@@ -389,5 +408,142 @@ describe('NavBarComponent', () => {
     emit([quiz, survey]);
 
     expect(query('#questionnaire-badge.show-news')).toBeNull();
+  });
+
+  /** A range-published questionnaire releasing up to `position`. */
+  function releasedUpTo(position: number, contentCount = 5) {
+    return {
+      ...quiz,
+      publishingMode: QuestionnairePublishingMode.UpTo,
+      publishedUpToContent: { id: `c-${position}`, position },
+      contentCount,
+    };
+  }
+
+  it('flags new released contents of a known questionnaire for participants', () => {
+    const emit = streamQuestionnaires(
+      publishedQuestionnairesByRoomId,
+      'publishedQuestionnairesByRoomId'
+    );
+    setUp(UserRole.PARTICIPANT);
+    emit([releasedUpTo(1)]);
+    expect(query('#questionnaire-badge.show-news')).toBeNull();
+
+    emit([releasedUpTo(2)]);
+
+    expect(query('#questionnaire-badge.show-news')).not.toBeNull();
+  });
+
+  it('flags new contents of a fully published questionnaire for participants', () => {
+    const emit = streamQuestionnaires(
+      publishedQuestionnairesByRoomId,
+      'publishedQuestionnairesByRoomId'
+    );
+    const all = { ...quiz, publishingMode: QuestionnairePublishingMode.All };
+    setUp(UserRole.PARTICIPANT);
+    emit([{ ...all, contentCount: 2 }]);
+
+    emit([{ ...all, contentCount: 3 }]);
+
+    expect(query('#questionnaire-badge.show-news')).not.toBeNull();
+  });
+
+  it('stays quiet when a known questionnaire gets an unreleased content', () => {
+    const emit = streamQuestionnaires(
+      publishedQuestionnairesByRoomId,
+      'publishedQuestionnairesByRoomId'
+    );
+    setUp(UserRole.PARTICIPANT);
+    emit([releasedUpTo(1, 3)]);
+
+    emit([releasedUpTo(1, 4)]);
+
+    expect(query('#questionnaire-badge.show-news')).toBeNull();
+  });
+
+  it('stays quiet when a known questionnaire releases fewer contents', () => {
+    const emit = streamQuestionnaires(
+      publishedQuestionnairesByRoomId,
+      'publishedQuestionnairesByRoomId'
+    );
+    setUp(UserRole.PARTICIPANT);
+    emit([releasedUpTo(2)]);
+
+    emit([releasedUpTo(1)]);
+
+    expect(query('#questionnaire-badge.show-news')).toBeNull();
+  });
+
+  it('activates the questionnaire of the child route', () => {
+    const emit = streamQuestionnaires(
+      questionnairesByRoomId,
+      'questionnairesByRoomId'
+    );
+    routeToQuestionnaire('q-2');
+    setUp(UserRole.OWNER);
+
+    emit([quiz, survey]);
+
+    expect(activeQuestionnaireId()).toBe('q-2');
+  });
+
+  it('keeps the active questionnaire when the list is refetched', () => {
+    const emit = streamQuestionnaires(
+      questionnairesByRoomId,
+      'questionnairesByRoomId'
+    );
+    setUp(UserRole.OWNER);
+    emit([quiz, survey]);
+    fixture.componentInstance.activeQuestionnaire.set(survey);
+
+    emit([{ ...quiz }, { ...survey }]);
+
+    expect(activeQuestionnaireId()).toBe('q-2');
+  });
+
+  it('activates the last visited questionnaire', () => {
+    const emit = streamQuestionnaires(
+      questionnairesByRoomId,
+      'questionnairesByRoomId'
+    );
+    setUp(UserRole.OWNER);
+    TestBed.inject(GlobalStorageService).setItem(
+      STORAGE_KEYS.LAST_GROUP,
+      'q-2'
+    );
+
+    emit([quiz, survey]);
+
+    expect(activeQuestionnaireId()).toBe('q-2');
+  });
+
+  it('ignores a last visited questionnaire that is not an ID of the room', () => {
+    const emit = streamQuestionnaires(
+      questionnairesByRoomId,
+      'questionnairesByRoomId'
+    );
+    TestBed.inject(GlobalStorageService).setItem(
+      STORAGE_KEYS.LAST_GROUP,
+      'Survey'
+    );
+    setUp(UserRole.OWNER);
+
+    emit([quiz, survey]);
+
+    expect(activeQuestionnaireId()).toBe('q-1');
+  });
+
+  it('leaves the last visited questionnaire alone when the list is refetched', () => {
+    const emit = streamQuestionnaires(
+      questionnairesByRoomId,
+      'questionnairesByRoomId'
+    );
+    setUp(UserRole.OWNER);
+    const storage = TestBed.inject(GlobalStorageService);
+    storage.setItem(STORAGE_KEYS.LAST_GROUP, 'q-2');
+
+    emit([quiz, survey]);
+
+    expect(storage.getItem(STORAGE_KEYS.LAST_GROUP)).toBe('q-2');
   });
 });
