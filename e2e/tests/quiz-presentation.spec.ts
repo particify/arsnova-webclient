@@ -140,14 +140,13 @@ test.describe('Presentation of a quiz', () => {
     await presentationModePage.stopContent();
     await expect(participant.getHintAfterAnswering()).toBeVisible();
     await presentationModePage.deleteContentAnswers();
-    // Deleting answers keeps the round as it is; the answer itself is gone.
+    // Deleting answers starts the content over with a fresh round, which
+    // waits for its start like the round of a new content.
     await expect(page.getByText('0 answers').first()).toBeVisible();
     await expect(page.getByText('1 / 2')).toBeVisible();
     await p.reload();
     await expect(participant.getHintAfterAnswering()).toBeHidden();
-    await expect(
-      participant.getHintAfterContentStoppedWithoutAnswering()
-    ).toBeVisible();
+    await expect(participant.getWaitingHint()).toBeVisible();
     await presentationModePage.exitPresentation();
     await context.close();
   });
