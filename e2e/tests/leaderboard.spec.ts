@@ -13,8 +13,8 @@ test.describe('quiz leaderboard', () => {
   const contexts: BrowserContext[] = [];
 
   /**
-   * Answers both contents, then joins the leaderboard under a nickname: a quiz
-   * that is not live asks for it on the overview's leaderboard tab.
+   * Joins the leaderboard under a nickname, then answers both contents: a
+   * leaderboard quiz asks for the nickname before the first answer.
    */
   async function play(
     browser: Browser,
@@ -29,6 +29,10 @@ test.describe('quiz leaderboard', () => {
       baseURL
     );
     await participant.goto(shortId, 'My quiz');
+    await Promise.all([
+      waitForOperation(participant.page, 'SetRoomUserAlias'),
+      participant.joinQuiz(nickname),
+    ]);
     await participant.answerContent([answers[0]]);
     await participant.goToNextContent();
     await expect(
@@ -37,10 +41,6 @@ test.describe('quiz leaderboard', () => {
     await participant.answerContent([answers[1]]);
     await participant.getGoToOverviewButton().click();
     await participant.switchToLeaderboardTab();
-    await Promise.all([
-      waitForOperation(participant.page, 'SetRoomUserAlias'),
-      participant.joinQuiz(nickname),
-    ]);
     return participant;
   }
 
