@@ -220,6 +220,7 @@ export class MockGraphqlApi {
       __typename: 'Answer',
       id: `answer-${position + 1}`,
       result: 'NEUTRAL',
+      hidden: false,
       formatData: {
         __typename: 'ChoiceAnswerFormatData',
         format: 'CHOICE',
