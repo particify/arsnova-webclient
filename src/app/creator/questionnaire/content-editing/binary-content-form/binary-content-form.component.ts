@@ -15,6 +15,9 @@ import { CoreModule } from '@app/core/core.module';
 import { FormComponent } from '@app/standalone/form/form.component';
 import { ContentForm } from '@app/creator/questionnaire/content-editing/content-form';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
+import { AnswerOption } from '@app/core/models/answer-option';
+import { SelectableAnswer } from '@app/core/models/selectable-answer';
+import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import {
   BinaryContentFormatData,
   CreateQuestionnaireBinaryContentGql,
@@ -30,7 +33,7 @@ import { mutationHelper } from '@gql/helper/mutation-helper';
     '../content-editing.component.scss',
     './binary-content-form.component.scss',
   ],
-  imports: [CoreModule],
+  imports: [CoreModule, ContentChoiceAnswerComponent],
 })
 export class BinaryContentFormComponent
   extends FormComponent
@@ -56,6 +59,11 @@ export class BinaryContentFormComponent
   answered = input(false);
   hasCorrectAnswer = input(false);
   submitted = output<void>();
+
+  /** The participant form's label keys, so the preview reads the same. */
+  readonly previewAnswers = ['answer.yes', 'answer.no'].map(
+    (label) => new SelectableAnswer(new AnswerOption(label), false)
+  );
 
   readonly correctAnswer = linkedSignal<
     boolean | null | undefined,

@@ -7,7 +7,10 @@ import {
   AdvancedSnackBarTypes,
   NotificationService,
 } from '@app/core/services/util/notification.service';
+import { FormattingService } from '@app/core/services/http/formatting.service';
+import { BROWSER_LANG } from '@app/core/services/util/language.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
+import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/content-choice-answer/content-choice-answer.component';
 import {
   BinaryContentFormatData,
   ContentType,
@@ -47,10 +50,16 @@ describe('BinaryContentFormComponent', () => {
     notificationService = jasmine.createSpyObj('NotificationService', [
       'showAdvanced',
     ]);
+    const formattingService = jasmine.createSpyObj('FormattingService', [
+      'postString',
+    ]);
+    formattingService.postString.and.returnValue(of({ html: '' }));
 
     configureTestModule(
       [getTranslocoModule(), BinaryContentFormComponent],
       [
+        { provide: BROWSER_LANG, useValue: 'en' },
+        { provide: FormattingService, useValue: formattingService },
         { provide: NotificationService, useValue: notificationService },
         {
           provide: QuestionnairePageService,
@@ -81,6 +90,12 @@ describe('BinaryContentFormComponent', () => {
   function radioGroup() {
     return fixture.debugElement.query(
       By.css('[data-testid="binary-correct-answer-group"]')
+    );
+  }
+
+  function answerPreview() {
+    return fixture.debugElement.query(
+      By.directive(ContentChoiceAnswerComponent)
     );
   }
 
@@ -121,6 +136,34 @@ describe('BinaryContentFormComponent', () => {
     setUp(null);
     wantCorrectAnswer();
     expect(radioGroup()).not.toBeNull();
+  });
+
+  it('previews the participant view instead of the correct answer options', () => {
+    setUp(formatData(true));
+    wantCorrectAnswer();
+    fixture.componentRef.setInput('preview', true);
+    fixture.detectChanges();
+
+    expect(radioGroup()).toBeNull();
+    expect(answerPreview()).not.toBeNull();
+    const preview: ContentChoiceAnswerComponent =
+      answerPreview().componentInstance;
+    expect(preview.answerOptions().map((o) => o.answerOption.label)).toEqual([
+      'answer.yes',
+      'answer.no',
+    ]);
+    expect(preview.translateOptions()).toBeTrue();
+    expect(preview.disabled()).toBeTrue();
+    // The preview must not give the correct answer away.
+    expect(preview.correctOptionIndexes()).toBeUndefined();
+  });
+
+  it('previews the participant view without a correct answer too', () => {
+    setUp(null);
+    fixture.componentRef.setInput('preview', true);
+    fixture.detectChanges();
+
+    expect(answerPreview()).not.toBeNull();
   });
 
   it('accepts an empty pick while no correct answer is wanted', () => {

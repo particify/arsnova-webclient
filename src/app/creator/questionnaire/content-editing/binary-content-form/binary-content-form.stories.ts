@@ -1,4 +1,5 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
+import { FormattingService } from '@app/core/services/http/formatting.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import {
   ContentType,
@@ -18,6 +19,7 @@ export default {
     moduleMetadata({
       imports: [BinaryContentFormComponent],
       providers: [
+        { provide: FormattingService, useValue: {} },
         {
           provide: QuestionnairePageService,
           useClass: QuestionnairePageService,
@@ -61,5 +63,14 @@ export const LockedByAnswers: Story = {
     contentId: 'content-1',
     hasCorrectAnswer: true,
     answered: true,
+  },
+};
+
+export const Preview: Story = {
+  args: {
+    formatData: formatData(true),
+    contentId: 'content-1',
+    hasCorrectAnswer: true,
+    preview: true,
   },
 };
