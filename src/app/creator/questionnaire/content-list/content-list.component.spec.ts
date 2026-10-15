@@ -27,7 +27,7 @@ import {
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { TranslocoService } from '@jsverse/transloco';
-import { Observable, of, throwError } from 'rxjs';
+import { NEVER, Observable, of, throwError } from 'rxjs';
 import { ContentListComponent } from './content-list.component';
 
 describe('ContentListComponent', () => {
@@ -452,6 +452,21 @@ describe('ContentListComponent', () => {
       component.dropPublishingDivider({ currentIndex: 4 } as never);
 
       expect(component.publishedContentId()).toBe('c-1');
+    });
+
+    it('unlocks the contents above the divider before publishing is confirmed', () => {
+      setUp(upTo(1));
+      mutation(PublishQuestionnaireUpToContentGql).and.returnValue(NEVER);
+
+      component.dropPublishingDivider({ currentIndex: 4 } as never);
+      fixture.detectChanges();
+
+      const locked = fixture.nativeElement.querySelectorAll(
+        '[data-testid="content-item"].locked-item'
+      );
+      expect(locked.length).toBe(1);
+      expect(component.isPublished(3)).toBeTrue();
+      expect(component.isPublished(4)).toBeFalse();
     });
 
     it('moves the divider by keyboard', () => {

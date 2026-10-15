@@ -178,6 +178,12 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     () => this.questionnaire().publishedUpToContent?.id
   );
 
+  /** Follows the divider, which moves before the server confirms it. */
+  readonly publishedUpToPosition = computed(() => {
+    const id = this.publishedContentId();
+    return this.contents().find((c) => c.id === id)?.position ?? undefined;
+  });
+
   contentTypes: string[] = Object.values(ContentType);
 
   activeMenuIndex?: number;
@@ -280,7 +286,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
       this.questionnaire().published,
       this.questionnaire().publishingMode,
       index,
-      this.questionnaire().publishedUpToContent?.position ?? undefined
+      this.publishedUpToPosition()
     );
   }
 
@@ -321,7 +327,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     index: number,
     indexIsNotPublishingIndex = true
   ): number {
-    const publishingIndex = this.questionnaire().publishedUpToContent?.position;
+    const publishingIndex = this.publishedUpToPosition();
     return (
       index -
       (this.isRangePublished() &&
@@ -337,8 +343,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     if (prev === current) {
       return;
     }
-    const oldPublishingIndex =
-      this.questionnaire().publishedUpToContent?.position;
+    const oldPublishingIndex = this.publishedUpToPosition();
     const prevContentIndex = this.getSortIndex(
       prev,
       prev !== oldPublishingIndex
@@ -367,9 +372,7 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     this.publishingChangeActive = false;
     this.publishingChangePosition = undefined;
     const newPublishingIndex = event.currentIndex - 1;
-    if (
-      this.questionnaire().publishedUpToContent?.position !== newPublishingIndex
-    ) {
+    if (this.publishedUpToPosition() !== newPublishingIndex) {
       this.updatePublishingRangeToIndex(newPublishingIndex);
     }
   }

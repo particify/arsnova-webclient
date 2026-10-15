@@ -349,9 +349,7 @@
               )
                 | transloco
                   : {
-                      index:
-                        (questionnaire().publishedUpToContent?.position ?? 0) +
-                        1,
+                      index: (publishedUpToPosition() ?? 0) + 1,
                     }
             "
             appHotkey="p"
