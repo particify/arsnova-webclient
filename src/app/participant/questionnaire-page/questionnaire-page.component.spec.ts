@@ -28,7 +28,7 @@ import {
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { BehaviorSubject, NEVER, Subject, map, of } from 'rxjs';
+import { BehaviorSubject, NEVER, Observable, Subject, map, of } from 'rxjs';
 import { QuestionnairePageComponent } from './questionnaire-page.component';
 
 // Any result other than unanswered counts as answered.
@@ -71,12 +71,27 @@ describe('QuestionnairePageComponent (live sync)', () => {
     };
   }
 
+  function contentsResponse() {
+    return {
+      dataState: 'complete',
+      data: {
+        questionnairePublishedContentsByQuestionnaireId: {
+          edges: contents.map((node) => ({ node })),
+        },
+      },
+    };
+  }
+
   function setUp(
     initial: Questionnaire,
     results: AnswerResultState[] = contents.map(
       () => AnswerResultState.Unanswered
     ),
-    contentId?: string
+    contentId?: string,
+    options: {
+      contents$?: Observable<unknown>;
+      enterForReal?: boolean;
+    } = {}
   ) {
     // The page's child components are irrelevant to the sync logic here.
     TestBed.overrideComponent(QuestionnairePageComponent, {
@@ -93,14 +108,7 @@ describe('QuestionnairePageComponent (live sync)', () => {
     });
     contentsGql = jasmine.createSpyObj('ContentsGql', ['watch']);
     (contentsGql.watch as jasmine.Spy).and.returnValue({
-      valueChanges: of({
-        dataState: 'complete',
-        data: {
-          questionnairePublishedContentsByQuestionnaireId: {
-            edges: contents.map((node) => ({ node })),
-          },
-        },
-      }),
+      valueChanges: options.contents$ ?? of(contentsResponse()),
     });
     const answerResultsGql = jasmine.createSpyObj('AnswerResultsGql', [
       'watch',
@@ -174,17 +182,23 @@ describe('QuestionnairePageComponent (live sync)', () => {
     component = fixture.componentInstance;
     // A stepper is required for following the live content; its own
     // behaviour is covered by its spec.
-    (component as unknown as { stepper: () => object }).stepper = () => ({});
+    (component as unknown as { stepper: () => object }).stepper = () => ({
+      init: () => {},
+    });
     fixture.componentRef.setInput('questionnaireId', 'q-1');
     fixture.componentRef.setInput('shortId', '12345678');
     fixture.componentRef.setInput('roomId', 'room-1');
     fixture.componentRef.setInput('settings', {} as UserUiSettings);
     fixture.componentRef.setInput('language', 'en');
     fixture.componentRef.setInput('contentId', contentId);
-    spyOn(component, 'initStepper').and.callFake((index: number) => {
-      component.currentStep = index;
-      component.started = true;
-    });
+    if (options.enterForReal) {
+      spyOn(component, 'initStepper').and.callThrough();
+    } else {
+      spyOn(component, 'initStepper').and.callFake((index: number) => {
+        component.currentStep = index;
+        component.started = true;
+      });
+    }
     spyOn(component, 'goToContent');
     fixture.detectChanges();
   }
@@ -247,6 +261,28 @@ describe('QuestionnairePageComponent (live sync)', () => {
     update(questionnaire({ activeRound: activeRound('c-0') } as never));
     expect(component.goToContent).toHaveBeenCalledOnceWith(0);
   });
+
+  it('enters a late joiner at the running content when the contents load last', fakeAsync(() => {
+    const contents$ = new Subject<unknown>();
+    setUp(
+      questionnaire({ activeRound: activeRound('c-1') } as never),
+      undefined,
+      'c-0',
+      { contents$, enterForReal: true }
+    );
+    tick();
+
+    contents$.next(contentsResponse());
+    fixture.detectChanges();
+    tick();
+
+    expect(router.navigate).toHaveBeenCalledWith(
+      ['p', '12345678', 'questionnaire', 'q-1', 'c-1'],
+      { replaceUrl: true }
+    );
+    flush();
+    expect(component.currentStep).toBe(1);
+  }));
 
   it('leaves a participant who navigated away alone while the round runs', () => {
     setUp(

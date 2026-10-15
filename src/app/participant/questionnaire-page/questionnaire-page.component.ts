@@ -283,6 +283,7 @@ export class QuestionnairePageComponent {
   currentStep?: number;
   private followedLiveContentId?: string;
   private followedLiveRoundId?: string;
+  private stepperInitPending = false;
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
   private readonly contentFocusState = toSignal(
     this.focusModeService.getContentState()
@@ -321,13 +322,15 @@ export class QuestionnairePageComponent {
   constructor() {
     let prevAnswerResults: ContentAnswerResult[] = [];
     effect(() => {
+      // Entering needs the contents: their query may answer after the results.
       if (
-        this.contentIndexes().length > 0 &&
+        this.contents().length > 0 &&
         this.answerResults().length > 0 &&
         !this.started
       ) {
         this.checkIfLastContentExists(this.route.snapshot.params.contentId);
-        if (this.stepper()) {
+        // The entry may already have chosen a content the URL does not show yet.
+        if (!this.stepperInitPending && this.stepper()) {
           this.initStepper(this.currentIndex());
         }
       }
@@ -543,13 +546,29 @@ export class QuestionnairePageComponent {
   }
 
   initStepper(index: number) {
+    this.stepperInitPending = true;
     setTimeout(() => {
+      this.stepperInitPending = false;
       this.currentStep = index;
       if (this.stepper()) this.stepper()?.init(index, this.contents()?.length);
-      this.followedLiveContentId = this.liveContentId();
-      this.followedLiveRoundId = this.activeUnansweredRound()?.id;
+      this.recordFollowedLiveContent(index);
       this.started = true;
     });
+  }
+
+  /**
+   * The live content counts as followed once entered, so it does not pull the
+   * participant again. A running round entered elsewhere is still to follow.
+   */
+  private recordFollowedLiveContent(enteredIndex: number) {
+    const round = this.activeUnansweredRound();
+    if (round && round.contentId !== this.contents()[enteredIndex]?.id) {
+      this.followedLiveContentId = undefined;
+      this.followedLiveRoundId = undefined;
+      return;
+    }
+    this.followedLiveContentId = this.liveContentId();
+    this.followedLiveRoundId = round?.id;
   }
 
   goToContent(index: number) {
