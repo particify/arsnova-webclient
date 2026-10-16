@@ -1,6 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { combineLatest, EMPTY, map, Observable, of, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
 import { updateOn } from '@gql/helper/update-on';
 import { TranslocoService } from '@jsverse/transloco';
@@ -71,7 +71,9 @@ export class NumericResultsComponent {
   ): Observable<NumericContentRoundStats | null | undefined> {
     return updateOn(
       this.roundStatsByRoundId.watch({ variables: { roundId } }),
-      this.numericRoundStatsUpdated.subscribe({ variables: { roundId } }),
+      this.isClosed(roundId)
+        ? EMPTY
+        : this.numericRoundStatsUpdated.subscribe({ variables: { roundId } }),
       (r) =>
         r.data && {
           questionnaireNumericRoundStatsByRoundId:
@@ -164,6 +166,11 @@ export class NumericResultsComponent {
     return (this.roundStatsList() ?? []).map(
       (roundStats) => roundStats?.[stat] ?? 0
     );
+  }
+
+  /** A closed round's answers cannot change, so it needs no updates. */
+  private isClosed(roundId: string): boolean {
+    return !!this.rounds().find((round) => round.id === roundId)?.closed;
   }
 
   private roundLabel(roundId: string): string {
