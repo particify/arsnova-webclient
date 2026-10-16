@@ -697,11 +697,11 @@ export type MutationCreateQuestionnaireAbstentionArgs = {
 };
 
 export type MutationCreateQuestionnaireBinaryAnswerArgs = {
-  input?: InputMaybe<CreateBinaryAnswerInput>;
+  input: CreateBinaryAnswerInput;
 };
 
 export type MutationCreateQuestionnaireBinaryContentArgs = {
-  input?: InputMaybe<CreateBinaryContentInput>;
+  input: CreateBinaryContentInput;
 };
 
 export type MutationCreateQuestionnaireChoiceAnswerArgs = {
@@ -969,7 +969,7 @@ export type MutationUpdateQuestionnaireArgs = {
 };
 
 export type MutationUpdateQuestionnaireBinaryContentArgs = {
-  input?: InputMaybe<UpdateBinaryContentInput>;
+  input: UpdateBinaryContentInput;
 };
 
 export type MutationUpdateQuestionnaireChoiceContentArgs = {
@@ -3059,6 +3059,11 @@ export type ContentDetailsFragment = {
   } | null;
   formatData:
     | {
+        __typename?: 'BinaryContentFormatData';
+        format: ContentType;
+        correctAnswer?: boolean | null;
+      }
+    | {
         __typename?: 'ChoiceContentFormatData';
         format: ContentType;
         correctOptionIndexes?: Array<number> | null;
@@ -3733,6 +3738,8 @@ export type CreateQuestionnaireBinaryContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireBinaryContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3742,7 +3749,6 @@ export type CreateQuestionnaireBinaryContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3837,6 +3843,8 @@ export type UpdateQuestionnaireBinaryContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireBinaryContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3846,7 +3854,6 @@ export type UpdateQuestionnaireBinaryContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -10936,10 +10943,10 @@ export class ToggleQuestionnairePublishedGql extends Apollo.Mutation<
 export const CreateQuestionnaireBinaryContentDocument = gql`
   mutation CreateQuestionnaireBinaryContent($input: CreateBinaryContentInput!) {
     createQuestionnaireBinaryContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -10958,10 +10965,10 @@ export class CreateQuestionnaireBinaryContentGql extends Apollo.Mutation<
 export const UpdateQuestionnaireBinaryContentDocument = gql`
   mutation UpdateQuestionnaireBinaryContent($input: UpdateBinaryContentInput!) {
     updateQuestionnaireBinaryContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({

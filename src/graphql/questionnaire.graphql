@@ -286,13 +286,13 @@ mutation ToggleQuestionnairePublished($id: UUID!, $published: Boolean!) {
 
 mutation CreateQuestionnaireBinaryContent($input: CreateBinaryContentInput!) {
   createQuestionnaireBinaryContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 mutation UpdateQuestionnaireBinaryContent($input: UpdateBinaryContentInput!) {
   updateQuestionnaireBinaryContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 

@@ -103,6 +103,7 @@ function binaryContent(): Content {
     hasCorrectAnswer: true,
     answerCount: 10,
     correctAnswerCount: 9,
+    hasAnswers: true,
     formatData: {
       __typename: 'BinaryContentFormatData',
       format: ContentType.Binary,
