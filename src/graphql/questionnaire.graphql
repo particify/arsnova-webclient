@@ -217,7 +217,7 @@ mutation CreateQuestionnaireFlashcardContent(
   $input: CreateFlashcardContentInput!
 ) {
   createQuestionnaireFlashcardContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -225,19 +225,19 @@ mutation UpdateQuestionnaireFlashcardContent(
   $input: UpdateFlashcardContentInput!
 ) {
   updateQuestionnaireFlashcardContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 mutation CreateQuestionnaireSlideContent($input: CreateSlideContentInput!) {
   createQuestionnaireSlideContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 mutation UpdateQuestionnaireSlideContent($input: UpdateSlideContentInput!) {
   updateQuestionnaireSlideContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 

@@ -25,6 +25,7 @@ function content(format: ContentType, hasCorrectAnswer: boolean): Content {
     hasCorrectAnswer,
     weight: null,
     answerCount: 0,
+    hasAnswers: false,
     abstentionCount: 0,
     correctAnswerCount: null,
     position: 0,

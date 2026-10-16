@@ -3195,6 +3195,8 @@ export type CreateQuestionnaireFlashcardContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireFlashcardContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3251,6 +3253,8 @@ export type UpdateQuestionnaireFlashcardContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireFlashcardContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3307,6 +3311,8 @@ export type CreateQuestionnaireSlideContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireSlideContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3363,6 +3369,8 @@ export type UpdateQuestionnaireSlideContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireSlideContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -6752,10 +6760,10 @@ export const CreateQuestionnaireFlashcardContentDocument = gql`
     $input: CreateFlashcardContentInput!
   ) {
     createQuestionnaireFlashcardContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -6776,10 +6784,10 @@ export const UpdateQuestionnaireFlashcardContentDocument = gql`
     $input: UpdateFlashcardContentInput!
   ) {
     updateQuestionnaireFlashcardContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -6798,10 +6806,10 @@ export class UpdateQuestionnaireFlashcardContentGql extends Apollo.Mutation<
 export const CreateQuestionnaireSlideContentDocument = gql`
   mutation CreateQuestionnaireSlideContent($input: CreateSlideContentInput!) {
     createQuestionnaireSlideContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -6820,10 +6828,10 @@ export class CreateQuestionnaireSlideContentGql extends Apollo.Mutation<
 export const UpdateQuestionnaireSlideContentDocument = gql`
   mutation UpdateQuestionnaireSlideContent($input: UpdateSlideContentInput!) {
     updateQuestionnaireSlideContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
