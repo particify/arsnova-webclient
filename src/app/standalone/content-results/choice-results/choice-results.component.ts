@@ -8,7 +8,7 @@ import {
   Round,
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
-import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { combineLatest, EMPTY, map, Observable, of, switchMap } from 'rxjs';
 import { updateOn } from '@gql/helper/update-on';
 import { TranslocoService } from '@jsverse/transloco';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
@@ -64,7 +64,9 @@ export class ChoiceResultsComponent {
   ): Observable<ChoiceContentRoundStats | null | undefined> {
     return updateOn(
       this.roundStatsByRoundId.watch({ variables: { roundId } }),
-      this.choiceRoundStatsUpdated.subscribe({ variables: { roundId } }),
+      this.isClosed(roundId)
+        ? EMPTY
+        : this.choiceRoundStatsUpdated.subscribe({ variables: { roundId } }),
       (r) =>
         r.data && {
           questionnaireChoiceRoundStatsByRoundId:
@@ -152,6 +154,11 @@ export class ChoiceResultsComponent {
         this.formatData().correctOptionIndexes?.includes(index) ?? false,
     }));
   });
+
+  /** A closed round's answers cannot change, so it needs no updates. */
+  private isClosed(roundId: string): boolean {
+    return !!this.rounds().find((round) => round.id === roundId)?.closed;
+  }
 
   private roundLabel(roundId: string): string {
     const roundNo = this.rounds().find(

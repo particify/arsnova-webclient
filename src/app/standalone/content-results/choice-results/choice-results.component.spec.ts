@@ -30,6 +30,7 @@ describe('ChoiceResultsComponent', () => {
       hasCorrectAnswer?: boolean;
       showCorrect?: boolean;
       roundIds?: string[];
+      rounds?: Round[];
       answerCount?: number;
       activeRoundId?: string;
       isPresentation?: boolean;
@@ -195,6 +196,39 @@ describe('ChoiceResultsComponent', () => {
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
     });
+  });
+
+  it('loads the stats of a closed round without listening to updates', () => {
+    setUp(
+      { options },
+      {
+        roundIds: ['round-1', 'round-2'],
+        rounds: [
+          { id: 'round-1', roundNo: 1, closed: true },
+          { id: 'round-2', roundNo: 2, closed: false },
+        ] as Round[],
+      }
+    );
+
+    expect(roundStats.watch).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+    expect(roundStatsUpdated.subscribe).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-2' },
+    });
+  });
+
+  it('keeps listening to a round closed while it is shown', () => {
+    setUp({ options });
+
+    fixture.componentRef.setInput('rounds', [
+      { id: 'round-1', roundNo: 1, closed: true },
+    ] as Round[]);
+    fixture.detectChanges();
+    emitUpdate([2, 2, 3]);
+
+    expect(roundStatsUpdated.subscribe).toHaveBeenCalledTimes(1);
+    expect(counts()).toEqual([2, 2, 3]);
   });
 
   it('shows the loaded stats and then each update', () => {
