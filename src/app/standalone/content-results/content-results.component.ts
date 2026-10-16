@@ -167,6 +167,7 @@ export class ContentResultsComponent {
     }),
     [ContentType.Sort]: () => ({
       ...this.scoringInputs(),
+      rounds: this.rounds(),
       visualizationUnitPercent:
         !!this.settings().contentVisualizationUnitPercent,
     }),

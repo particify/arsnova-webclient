@@ -7,7 +7,7 @@ import {
   untracked,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, of, switchMap } from 'rxjs';
+import { EMPTY, map, of, switchMap } from 'rxjs';
 import { onlyCompleteData } from 'apollo-angular';
 import { updateOn } from '@gql/helper/update-on';
 import { TranslocoService } from '@jsverse/transloco';
@@ -22,6 +22,7 @@ import {
   AnswerOption,
   QuestionnaireSortRoundStatsByRoundIdGql,
   QuestionnaireSortRoundStatsUpdatedGql,
+  Round,
   SortContentFormatData,
 } from '@gql/generated/graphql';
 import {
@@ -54,6 +55,8 @@ export class SortResultsComponent {
   );
 
   readonly roundIds = input.required<string[]>();
+  /** Tells which of the rounds are closed. */
+  readonly rounds = input<Round[]>([]);
   readonly formatData = input.required<SortContentFormatData>();
   readonly hasCorrectAnswer = input(false);
   readonly showCorrect = input(false);
@@ -79,7 +82,9 @@ export class SortResultsComponent {
         }
         return updateOn(
           this.roundStatsByRoundId.watch({ variables: { roundId } }),
-          this.roundStatsUpdated.subscribe({ variables: { roundId } }),
+          this.isClosed(roundId)
+            ? EMPTY
+            : this.roundStatsUpdated.subscribe({ variables: { roundId } }),
           (r) =>
             r.data && {
               questionnaireSortRoundStatsByRoundId:
@@ -181,5 +186,10 @@ export class SortResultsComponent {
     return combination.selectedChoiceIndexes
       .map((index) => positions[index] + 1)
       .join('-');
+  }
+
+  /** A closed round's answers cannot change, so it needs no updates. */
+  private isClosed(roundId: string): boolean {
+    return !!this.rounds().find((round) => round.id === roundId)?.closed;
   }
 }

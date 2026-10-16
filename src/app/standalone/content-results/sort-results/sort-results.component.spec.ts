@@ -14,6 +14,7 @@ import {
   ContentType,
   QuestionnaireSortRoundStatsByRoundIdGql,
   QuestionnaireSortRoundStatsUpdatedGql,
+  Round,
   SortContentFormatData,
   SortContentRoundStats,
 } from '@gql/generated/graphql';
@@ -60,12 +61,14 @@ describe('SortResultsComponent', () => {
   let stats$: BehaviorSubject<unknown>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
+  let subscribeStatsUpdated: jasmine.Spy;
   let statsByRoundId: jasmine.SpyObj<QuestionnaireSortRoundStatsByRoundIdGql>;
 
   function setUp(
     stats: SortContentRoundStats | null = roundStats([]),
     roundIds = ['round-1'],
-    data = formatData()
+    data = formatData(),
+    rounds?: Round[]
   ) {
     statsByRoundId = jasmine.createSpyObj(
       'QuestionnaireSortRoundStatsByRoundIdGql',
@@ -81,6 +84,9 @@ describe('SortResultsComponent', () => {
     } as never);
 
     statsUpdated = new Subject<unknown>();
+    subscribeStatsUpdated = jasmine
+      .createSpy('subscribe')
+      .and.callFake(() => statsUpdated.asObservable());
 
     configureTestModule(
       [getTranslocoModule(), SortResultsComponent],
@@ -91,7 +97,7 @@ describe('SortResultsComponent', () => {
         },
         {
           provide: QuestionnaireSortRoundStatsUpdatedGql,
-          useValue: { subscribe: () => statsUpdated.asObservable() },
+          useValue: { subscribe: subscribeStatsUpdated },
         },
         {
           provide: ThemeService,
@@ -121,7 +127,21 @@ describe('SortResultsComponent', () => {
     component = fixture.componentInstance;
     fixture.componentRef.setInput('formatData', data);
     fixture.componentRef.setInput('roundIds', roundIds);
+    if (rounds) {
+      fixture.componentRef.setInput('rounds', rounds);
+    }
     fixture.detectChanges();
+  }
+
+  function round(closed: boolean): Round {
+    return {
+      __typename: 'Round',
+      id: 'round-1',
+      roundNo: 1,
+      closed,
+      started: true,
+      answerable: !closed,
+    };
   }
 
   function reveal() {
@@ -366,6 +386,23 @@ describe('SortResultsComponent', () => {
     reveal();
     expect(optionOrder()).toEqual(['A', 'B', 'C', 'D']);
     expect(summary()).toBeUndefined();
+  });
+
+  it('loads the stats of a closed round without listening to updates', () => {
+    setUp(roundStats([]), ['round-1'], formatData(), [round(true)]);
+
+    expect(statsByRoundId.watch).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+    expect(subscribeStatsUpdated).not.toHaveBeenCalled();
+  });
+
+  it('listens to the updates of an open round', () => {
+    setUp(roundStats([]), ['round-1'], formatData(), [round(false)]);
+
+    expect(subscribeStatsUpdated).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-1' },
+    });
   });
 
   it('does not query stats for a content without a round yet', () => {

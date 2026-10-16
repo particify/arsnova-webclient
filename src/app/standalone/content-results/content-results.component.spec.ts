@@ -270,7 +270,7 @@ describe('ContentResultsComponent', () => {
     expect(inputs()['allowAnswerModeration']).toBe(true);
   });
 
-  it('hands a sort its correct-answer summary and the visualization unit', () => {
+  it('hands a sort its correct-answer summary, the visualization unit and the rounds', () => {
     setUp({
       content: sortContent(),
       showCorrect: true,
@@ -281,6 +281,7 @@ describe('ContentResultsComponent', () => {
     expect(inputs['correctAnswerCount']).toBe(2);
     expect(inputs['formatData']).toEqual(sortContent().formatData);
     expect(inputs['visualizationUnitPercent']).toBe(true);
-    expect('rounds' in inputs).toBe(false);
+    // The rounds tell which of them are closed and need no updates.
+    expect(inputs['rounds']).toEqual(component.rounds());
   });
 });
