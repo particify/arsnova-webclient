@@ -44,6 +44,7 @@ function shortAnswerContent(): Content {
     hasCorrectAnswer: true,
     answerCount: 5,
     correctAnswerCount: 4,
+    hasAnswers: true,
     abstentionCount: 1,
     formatData: {
       __typename: 'ShortAnswerContentFormatData',

@@ -652,11 +652,11 @@ export type MutationCreateQuestionnaireScaleContentArgs = {
 };
 
 export type MutationCreateQuestionnaireShortAnswerAnswerArgs = {
-  input?: InputMaybe<CreateShortAnswerAnswerInput>;
+  input: CreateShortAnswerAnswerInput;
 };
 
 export type MutationCreateQuestionnaireShortAnswerContentArgs = {
-  input?: InputMaybe<CreateShortAnswerContentInput>;
+  input: CreateShortAnswerContentInput;
 };
 
 export type MutationCreateQuestionnaireSlideContentArgs = {
@@ -893,7 +893,7 @@ export type MutationUpdateQuestionnaireScaleContentArgs = {
 };
 
 export type MutationUpdateQuestionnaireShortAnswerContentArgs = {
-  input?: InputMaybe<UpdateShortAnswerContentInput>;
+  input: UpdateShortAnswerContentInput;
 };
 
 export type MutationUpdateQuestionnaireSlideContentArgs = {
@@ -2881,6 +2881,11 @@ export type ContentDetailsFragment = {
         template: ScaleContentTemplate;
         neutralOption: boolean;
       }
+    | {
+        __typename?: 'ShortAnswerContentFormatData';
+        format: ContentType;
+        correctTerms: Array<string>;
+      }
     | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | {
         __typename?: 'TextContentFormatData';
@@ -3872,6 +3877,8 @@ export type CreateQuestionnaireShortAnswerContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireShortAnswerContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3881,7 +3888,6 @@ export type CreateQuestionnaireShortAnswerContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3951,6 +3957,8 @@ export type UpdateQuestionnaireShortAnswerContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireShortAnswerContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3960,7 +3968,6 @@ export type UpdateQuestionnaireShortAnswerContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -5323,7 +5330,6 @@ export type BanQuestionnaireShortAnswerContentKeywordMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -5484,7 +5490,6 @@ export type ResetBannedQuestionnaireShortAnswerContentKeywordsMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -8990,10 +8995,10 @@ export const CreateQuestionnaireShortAnswerContentDocument = gql`
     $input: CreateShortAnswerContentInput!
   ) {
     createQuestionnaireShortAnswerContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -9014,10 +9019,10 @@ export const UpdateQuestionnaireShortAnswerContentDocument = gql`
     $input: UpdateShortAnswerContentInput!
   ) {
     updateQuestionnaireShortAnswerContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({

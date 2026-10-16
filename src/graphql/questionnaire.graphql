@@ -277,7 +277,7 @@ mutation CreateQuestionnaireShortAnswerContent(
   $input: CreateShortAnswerContentInput!
 ) {
   createQuestionnaireShortAnswerContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -285,7 +285,7 @@ mutation UpdateQuestionnaireShortAnswerContent(
   $input: UpdateShortAnswerContentInput!
 ) {
   updateQuestionnaireShortAnswerContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
