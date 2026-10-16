@@ -1,4 +1,5 @@
 import { signal, Type } from '@angular/core';
+import { InMemoryCache } from '@apollo/client';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '@app/core/services/util/dialog.service';
@@ -19,6 +20,7 @@ import {
   QuestionnaireContentUpdatedGql,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
+  StartQuestionnaireContentDocument,
   StartQuestionnaireContentGql,
   StopQuestionnaireContentGql,
   UserUiSettings,
@@ -147,37 +149,39 @@ describe('ContentsPageComponent', () => {
     });
   });
 
-  describe('marking the started round', () => {
-    function startWithRound(closed: boolean) {
+  describe('the started round', () => {
+    it('leaves the started flag to the mutation result rather than patching the cache', () => {
       setUp();
+
       component.startContent();
-      const cache = jasmine.createSpyObj('ApolloCache', ['identify', 'modify']);
-      cache.identify.and.callFake(
-        (o: { __typename: string; id: string }) => `${o.__typename}:${o.id}`
-      );
+
       const mutate = gql.get(StartQuestionnaireContentGql)!;
-      const { update } = mutate.calls.mostRecent().args[0];
-      update(cache, {
-        data: {
+      expect(mutate.calls.mostRecent().args[0].update).toBeUndefined();
+    });
+
+    it('marks the opened round as started from the start response, so the content does not wait again once left', () => {
+      const cache = new InMemoryCache();
+
+      cache.write({
+        dataId: 'ROOT_MUTATION',
+        query: StartQuestionnaireContentDocument,
+        variables: { contentId: 'c-1' },
+        result: {
           startQuestionnaireContent: {
+            __typename: 'Questionnaire',
             id: 'q-1',
-            activeRound: { id: 'r-1', roundNo: 1, closed },
+            activeRound: {
+              __typename: 'Round',
+              id: 'r-1',
+              roundNo: 1,
+              closed: false,
+              started: true,
+            },
           },
         },
       });
-      return cache.modify;
-    }
 
-    it('marks the opened round as started, so the content does not wait again once left', () => {
-      const modify = startWithRound(false);
-
-      const { id, fields } = modify.calls.mostRecent().args[0];
-      expect(id).toBe('Round:r-1');
-      expect(fields.started(false)).toBeTrue();
-    });
-
-    it('leaves a round alone which did not open', () => {
-      expect(startWithRound(true)).not.toHaveBeenCalled();
+      expect(cache.extract()['Round:r-1']?.['started']).toBeTrue();
     });
   });
 

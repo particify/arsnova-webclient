@@ -3694,6 +3694,7 @@ export type StartQuestionnaireContentMutation = {
       id: string;
       roundNo: number;
       closed: boolean;
+      started: boolean;
     } | null;
   };
 };
@@ -6866,6 +6867,7 @@ export const StartQuestionnaireContentDocument = gql`
         id
         roundNo
         closed
+        started
       }
     }
   }
