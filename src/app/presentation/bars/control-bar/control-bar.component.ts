@@ -277,13 +277,15 @@ export class ControlBarComponent
         );
       }
     });
+    // The highlights follow the visibility both ways, so switching the
+    // results off has to reach them as well.
     effect(() => {
-      if (this.contentResultsVisible()) {
-        this.determineResultsItemHighlighted();
-      }
-      if (this.contentCorrectResultsVisible()) {
-        this.determineContentControlCorrect();
-      }
+      this.contentResultsVisible();
+      this.determineResultsItemHighlighted();
+    });
+    effect(() => {
+      this.contentCorrectResultsVisible();
+      this.determineCorrectItemHighlighted();
     });
   }
 

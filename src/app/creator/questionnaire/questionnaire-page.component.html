@@ -199,40 +199,39 @@
         }
       </div>
     </div>
-
-    @if (isDesktop) {
-      <div class="action-container">
-        <div
-          fxLayout="row"
-          fxLayoutAlign="center"
-          [ngStyle.lt-xl]="{
-            height: editMode || creationMode ? '100%' : '',
-          }"
-          [ngStyle.xl]="{
-            'max-height': editMode || creationMode ? '100%' : '',
-          }"
-        >
-          <mat-card class="action-card">
-            <router-outlet></router-outlet>
-          </mat-card>
-        </div>
+  }
+  @if (isDesktop) {
+    <div class="action-container">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="center"
+        [ngStyle.lt-xl]="{
+          height: editMode || creationMode ? '100%' : '',
+        }"
+        [ngStyle.xl]="{
+          'max-height': editMode || creationMode ? '100%' : '',
+        }"
+      >
+        <mat-card class="action-card">
+          <router-outlet></router-outlet>
+        </mat-card>
       </div>
-    } @else if (childActive) {
-      @if (loadingContents()) {
-        <app-loading-indicator></app-loading-indicator>
-      } @else {
-        <div fxLayout="column" fxLayoutGap="16px">
-          <div>
-            <app-back-button
-              [text]="'creator.content.back-to-series' | transloco"
-              [backRoute]="['.']"
-            ></app-back-button>
-          </div>
-          <mat-card>
-            <router-outlet></router-outlet>
-          </mat-card>
+    </div>
+  } @else if (childActive) {
+    @if (loadingContents()) {
+      <app-loading-indicator></app-loading-indicator>
+    } @else {
+      <div fxLayout="column" fxLayoutGap="16px">
+        <div>
+          <app-back-button
+            [text]="'creator.content.back-to-series' | transloco"
+            [backRoute]="['.']"
+          ></app-back-button>
         </div>
-      }
+        <mat-card>
+          <router-outlet></router-outlet>
+        </mat-card>
+      </div>
     }
   }
 </div>

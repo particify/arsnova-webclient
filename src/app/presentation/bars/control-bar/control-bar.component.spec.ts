@@ -153,4 +153,28 @@ describe('ControlBarComponent', () => {
     expect(hotkeyService.registerHotkey).toHaveBeenCalledTimes(registrations);
     fixture.destroy();
   }));
+
+  it('removes the highlights once the results are hidden again', fakeAsync(() => {
+    fixture.detectChanges();
+    const component = fixture.componentInstance;
+    component.evaluateContentState();
+    const item = (name: string) =>
+      component.groupItems.find((i) => i.name === name);
+    expect(item('correct')).toBeDefined();
+
+    contentResultsService.setResultsVisible(true);
+    contentResultsService.setCorrectResultsVisible(true);
+    fixture.detectChanges();
+    flush();
+    expect(item('results')?.highlighted).toBeTrue();
+    expect(item('correct')?.highlighted).toBeTrue();
+
+    contentResultsService.setResultsVisible(false);
+    contentResultsService.setCorrectResultsVisible(false);
+    fixture.detectChanges();
+    flush();
+    expect(item('results')?.highlighted).toBeFalse();
+    expect(item('correct')?.highlighted).toBeFalse();
+    fixture.destroy();
+  }));
 });

@@ -56,11 +56,15 @@ describe('QuestionnairePageComponent (creator)', () => {
     };
   }
 
-  function setUp(isDesktop = true, child: unknown = null, withMenu = false) {
-    // The template only wires the logic exercised here to child components,
-    // apart from the menu of the questionnaire.
+  function setUp(
+    isDesktop = true,
+    child: unknown = null,
+    withTemplate = false
+  ) {
+    // Most of the logic exercised here is only wired to child components by
+    // the template, so it is rendered only where the layout itself is tested.
     TestBed.overrideComponent(QuestionnairePageComponent, {
-      set: withMenu
+      set: withTemplate
         ? {
             imports: [
               MatIconButton,
@@ -363,6 +367,40 @@ describe('QuestionnairePageComponent (creator)', () => {
       STORAGE_KEYS.LAST_GROUP,
       'Quiz'
     );
+  });
+
+  function query(selector: string): HTMLElement | null {
+    return fixture.nativeElement.querySelector(selector);
+  }
+
+  it('shows the child view with a back button on mobile', () => {
+    setUp(false, childRoute(':contentId', { contentId: 'c-2' }), true);
+    emitContents(contents);
+    fixture.detectChanges();
+
+    expect(query('app-back-button')).not.toBeNull();
+    expect(query('router-outlet')).not.toBeNull();
+    expect(query('.group-container')).toBeNull();
+  });
+
+  it('shows only the content list on mobile without a child view', () => {
+    setUp(false, null, true);
+    emitContents(contents);
+    fixture.detectChanges();
+
+    expect(query('.group-container')).not.toBeNull();
+    expect(query('router-outlet')).toBeNull();
+    expect(query('app-back-button')).toBeNull();
+  });
+
+  it('shows the content list next to the child view on desktop', () => {
+    setUp(true, childRoute(':contentId', { contentId: 'c-2' }), true);
+    emitContents(contents);
+    fixture.detectChanges();
+
+    expect(query('.group-container')).not.toBeNull();
+    expect(query('.action-container router-outlet')).not.toBeNull();
+    expect(query('app-back-button')).toBeNull();
   });
 
   it('offers no CSV import or export while they are not available', async () => {
