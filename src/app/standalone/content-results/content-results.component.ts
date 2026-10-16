@@ -154,6 +154,7 @@ export class ContentResultsComponent {
     [ContentType.Numeric]: () => this.scoredChartInputs(),
     [ContentType.Prioritization]: () => ({
       formatData: this.content().formatData,
+      rounds: this.rounds(),
       visualizationUnitPercent:
         !!this.settings().contentVisualizationUnitPercent,
     }),

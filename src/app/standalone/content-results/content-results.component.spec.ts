@@ -305,7 +305,7 @@ describe('ContentResultsComponent', () => {
     expect(inputs['rounds']).toEqual(component.rounds());
   });
 
-  it('hands a prioritization its items and the visualization unit only', () => {
+  it('hands a prioritization its items, the visualization unit and the rounds only', () => {
     setUp({
       content: prioritizationContent(),
       showCorrect: true,
@@ -315,6 +315,6 @@ describe('ContentResultsComponent', () => {
     expect(inputs['formatData']).toEqual(prioritizationContent().formatData);
     expect(inputs['visualizationUnitPercent']).toBe(true);
     expect('showCorrect' in inputs).toBe(false);
-    expect('rounds' in inputs).toBe(false);
+    expect(inputs['rounds']).toEqual(component.rounds());
   });
 });

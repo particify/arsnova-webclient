@@ -12,6 +12,7 @@ import {
   PrioritizationContentRoundStats,
   QuestionnairePrioritizationRoundStatsByRoundIdGql,
   QuestionnairePrioritizationRoundStatsUpdatedGql,
+  Round,
 } from '@gql/generated/graphql';
 import { PrioritizationResultsComponent } from './prioritization-results.component';
 
@@ -48,10 +49,12 @@ describe('PrioritizationResultsComponent', () => {
   let statsByRoundId: jasmine.SpyObj<QuestionnairePrioritizationRoundStatsByRoundIdGql>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
+  let subscribeStatsUpdated: jasmine.Spy;
 
   function setUp(
     stats: PrioritizationContentRoundStats | null = roundStats([]),
-    labels?: string[]
+    labels?: string[],
+    rounds?: Round[]
   ) {
     statsByRoundId = jasmine.createSpyObj(
       'QuestionnairePrioritizationRoundStatsByRoundIdGql',
@@ -67,6 +70,9 @@ describe('PrioritizationResultsComponent', () => {
     } as never);
 
     statsUpdated = new Subject<unknown>();
+    subscribeStatsUpdated = jasmine
+      .createSpy('subscribe')
+      .and.callFake(() => statsUpdated.asObservable());
 
     configureTestModule(
       [getTranslocoModule(), PrioritizationResultsComponent],
@@ -77,7 +83,7 @@ describe('PrioritizationResultsComponent', () => {
         },
         {
           provide: QuestionnairePrioritizationRoundStatsUpdatedGql,
-          useValue: { subscribe: () => statsUpdated.asObservable() },
+          useValue: { subscribe: subscribeStatsUpdated },
         },
         {
           provide: ThemeService,
@@ -95,7 +101,21 @@ describe('PrioritizationResultsComponent', () => {
     component = fixture.componentInstance;
     fixture.componentRef.setInput('formatData', formatData(labels));
     fixture.componentRef.setInput('roundIds', ['round-1']);
+    if (rounds) {
+      fixture.componentRef.setInput('rounds', rounds);
+    }
     fixture.detectChanges();
+  }
+
+  function round(closed: boolean): Round {
+    return {
+      __typename: 'Round',
+      id: 'round-1',
+      roundNo: 1,
+      closed,
+      started: true,
+      answerable: !closed,
+    };
   }
 
   function barList(): BarListComponent | undefined {
@@ -204,6 +224,23 @@ describe('PrioritizationResultsComponent', () => {
 
     expect(bars()[0]).toEqual(['A', 30]);
     expect(console.error).toHaveBeenCalled();
+  });
+
+  it('loads the stats of a closed round without listening to updates', () => {
+    setUp(roundStats([]), undefined, [round(true)]);
+
+    expect(statsByRoundId.watch).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+    expect(subscribeStatsUpdated).not.toHaveBeenCalled();
+  });
+
+  it('listens to the updates of an open round', () => {
+    setUp(roundStats([]), undefined, [round(false)]);
+
+    expect(subscribeStatsUpdated).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-1' },
+    });
   });
 
   it('sends no query while the content has no round', () => {
