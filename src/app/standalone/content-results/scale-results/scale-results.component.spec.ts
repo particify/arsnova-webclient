@@ -12,6 +12,7 @@ import {
   ContentType,
   QuestionnaireScaleRoundStatsByRoundIdGql,
   QuestionnaireScaleRoundStatsUpdatedGql,
+  Round,
   ScaleContentFormatData,
   ScaleContentRoundStats,
   ScaleContentTemplate,
@@ -96,6 +97,7 @@ describe('ScaleResultsComponent', () => {
   let stats$: Map<string, BehaviorSubject<unknown>>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
+  let subscribeStatsUpdated: jasmine.Spy;
 
   interface SetUpOptions {
     stats?: ScaleContentRoundStats | null;
@@ -103,6 +105,7 @@ describe('ScaleResultsComponent', () => {
     contentFormatData?: ScaleContentFormatData;
     roundIds?: string[];
     language?: string;
+    rounds?: Round[];
   }
 
   function setUp(options: SetUpOptions = {}) {
@@ -132,6 +135,9 @@ describe('ScaleResultsComponent', () => {
     });
 
     statsUpdated = new Subject<unknown>();
+    subscribeStatsUpdated = jasmine
+      .createSpy('subscribe')
+      .and.callFake(() => statsUpdated.asObservable());
 
     configureTestModule(
       [
@@ -154,7 +160,7 @@ describe('ScaleResultsComponent', () => {
         },
         {
           provide: QuestionnaireScaleRoundStatsUpdatedGql,
-          useValue: { subscribe: () => statsUpdated.asObservable() },
+          useValue: { subscribe: subscribeStatsUpdated },
         },
         { provide: LikertScaleService, useValue: new LikertScaleService() },
         { provide: ThemeService, useValue: themeService },
@@ -169,10 +175,13 @@ describe('ScaleResultsComponent', () => {
       'formatData',
       options.contentFormatData ?? formatData()
     );
-    fixture.componentRef.setInput('rounds', [
-      { id: 'round-1', roundNo: 1 },
-      { id: 'round-2', roundNo: 2 },
-    ]);
+    fixture.componentRef.setInput(
+      'rounds',
+      options.rounds ?? [
+        { id: 'round-1', roundNo: 1 },
+        { id: 'round-2', roundNo: 2 },
+      ]
+    );
     fixture.componentRef.setInput('roundIds', options.roundIds ?? ['round-1']);
     fixture.componentRef.setInput('language', options.language);
     fixture.detectChanges();
@@ -322,6 +331,23 @@ describe('ScaleResultsComponent', () => {
     fixture.detectChanges();
 
     expect(chart()?.data().datasets[0].values).toEqual([0, 0, 0, 0, 0]);
+  });
+
+  it('loads the stats of a closed round without listening to updates', () => {
+    setUp({
+      roundIds: ['round-1', 'round-2'],
+      rounds: [
+        { id: 'round-1', roundNo: 1, closed: true },
+        { id: 'round-2', roundNo: 2, closed: false },
+      ] as Round[],
+    });
+
+    expect(statsByRoundId.watch).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+    expect(subscribeStatsUpdated).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-2' },
+    });
   });
 
   it('keeps the last stats when the updates fail', () => {

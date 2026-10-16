@@ -2,6 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   combineLatest,
+  EMPTY,
   forkJoin,
   map,
   Observable,
@@ -63,7 +64,9 @@ export class ScaleResultsComponent {
   ): Observable<ScaleContentRoundStats | null | undefined> {
     return updateOn(
       this.roundStatsByRoundId.watch({ variables: { roundId } }),
-      this.scaleRoundStatsUpdated.subscribe({ variables: { roundId } }),
+      this.isClosed(roundId)
+        ? EMPTY
+        : this.scaleRoundStatsUpdated.subscribe({ variables: { roundId } }),
       (r) =>
         r.data && {
           questionnaireScaleRoundStatsByRoundId:
@@ -150,6 +153,11 @@ export class ScaleResultsComponent {
       })),
     };
   });
+
+  /** A closed round's answers cannot change, so it needs no updates. */
+  private isClosed(roundId: string): boolean {
+    return !!this.rounds().find((round) => round.id === roundId)?.closed;
+  }
 
   private roundLabel(roundId: string): string {
     const roundNo = this.rounds().find(
