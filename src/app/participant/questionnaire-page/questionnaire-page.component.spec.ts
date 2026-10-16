@@ -28,7 +28,15 @@ import {
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { BehaviorSubject, NEVER, Observable, Subject, map, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  NEVER,
+  Observable,
+  Subject,
+  map,
+  of,
+  throwError,
+} from 'rxjs';
 import { QuestionnairePageComponent } from './questionnaire-page.component';
 
 // Any result other than unanswered counts as answered.
@@ -71,12 +79,12 @@ describe('QuestionnairePageComponent (live sync)', () => {
     };
   }
 
-  function contentsResponse() {
+  function contentsResponse(listed = contents) {
     return {
       dataState: 'complete',
       data: {
         questionnairePublishedContentsByQuestionnaireId: {
-          edges: contents.map((node) => ({ node })),
+          edges: listed.map((node) => ({ node })),
         },
       },
     };
@@ -91,6 +99,9 @@ describe('QuestionnairePageComponent (live sync)', () => {
     options: {
       contents$?: Observable<unknown>;
       enterForReal?: boolean;
+      questionnaireChanges$?: Observable<unknown>;
+      answerResults$?: Observable<unknown>;
+      focusState$?: Observable<unknown>;
     } = {}
   ) {
     // The page's child components are irrelevant to the sync logic here.
@@ -102,9 +113,9 @@ describe('QuestionnairePageComponent (live sync)', () => {
       'watch',
     ]);
     questionnaireById.watch.and.returnValue({
-      valueChanges: questionnaire$.pipe(
-        map((q) => ({ data: { questionnaireById: q } }))
-      ),
+      valueChanges:
+        options.questionnaireChanges$ ??
+        questionnaire$.pipe(map((q) => ({ data: { questionnaireById: q } }))),
     });
     contentsGql = jasmine.createSpyObj('ContentsGql', ['watch']);
     (contentsGql.watch as jasmine.Spy).and.returnValue({
@@ -113,15 +124,16 @@ describe('QuestionnairePageComponent (live sync)', () => {
     const answerResultsGql = jasmine.createSpyObj('AnswerResultsGql', [
       'watch',
     ]);
+    const resultsResponse = {
+      dataState: 'complete',
+      data: {
+        questionnaireContentAnswerResultsByQuestionnaireId: results.map(
+          (result, i) => ({ contentId: contents[i].id, result })
+        ),
+      },
+    };
     answerResultsGql.watch.and.returnValue({
-      valueChanges: of({
-        dataState: 'complete',
-        data: {
-          questionnaireContentAnswerResultsByQuestionnaireId: results.map(
-            (result, i) => ({ contentId: contents[i].id, result })
-          ),
-        },
-      }),
+      valueChanges: options.answerResults$ ?? of(resultsResponse),
     });
     const subscriptionGql = (name: string) => {
       const gql = jasmine.createSpyObj(name, ['subscribe']);
@@ -132,8 +144,12 @@ describe('QuestionnairePageComponent (live sync)', () => {
       'getFocusModeEnabled',
       'getContentState',
     ]);
-    focusModeService.getFocusModeEnabled.and.returnValue(of(false));
-    focusModeService.getContentState.and.returnValue(NEVER);
+    focusModeService.getFocusModeEnabled.and.returnValue(
+      of(!!options.focusState$)
+    );
+    focusModeService.getContentState.and.returnValue(
+      options.focusState$ ?? NEVER
+    );
     const authenticationService = jasmine.createSpyObj(
       'AuthenticationService',
       ['getCurrentAuthentication']
@@ -342,6 +358,78 @@ describe('QuestionnairePageComponent (live sync)', () => {
     );
 
     expect((contentsGql.watch as jasmine.Spy).calls.count()).toBe(loads);
+  });
+
+  it('keeps the stepper for a focused content until the contents list it', () => {
+    const contents$ = new BehaviorSubject<unknown>(
+      contentsResponse(contents.slice(0, 2))
+    );
+    const focusState$ = new Subject<unknown>();
+    setUp(
+      questionnaire({
+        publishedUpToContent: { id: 'c-1', position: 1 },
+      } as never),
+      undefined,
+      'c-1',
+      { contents$, focusState$ }
+    );
+    expect(component.currentIndex()).toBe(1);
+
+    // The focus mode navigates before the released contents arrive.
+    fixture.componentRef.setInput('contentId', 'c-2');
+    focusState$.next({ contentGroupId: 'q-1', contentId: 'c-2' });
+    update(
+      questionnaire({
+        publishedUpToContent: { id: 'c-2', position: 2 },
+      } as never)
+    );
+    expect(component.currentIndex()).toBe(1);
+    expect(component.goToContent).not.toHaveBeenCalled();
+
+    contents$.next(contentsResponse());
+    fixture.detectChanges();
+
+    expect(component.currentIndex()).toBe(2);
+    expect(component.goToContent).toHaveBeenCalledWith(2);
+  });
+
+  it('shows the series overview when routed to a content not listed on entry', () => {
+    setUp(questionnaire(), undefined, 'c-unknown');
+
+    expect(component.currentIndex()).toBe(-1);
+  });
+
+  it('stays readable when the questionnaire query fails', () => {
+    spyOn(console, 'error');
+    setUp(questionnaire(), undefined, undefined, {
+      questionnaireChanges$: throwError(() => new Error('Query failed')),
+    });
+
+    expect(() => component.questionnaire()).not.toThrow();
+    expect(component.questionnaire()).toBeUndefined();
+    expect(console.error).toHaveBeenCalled();
+  });
+
+  it('stays readable when the contents and answer results queries fail', () => {
+    spyOn(console, 'error');
+    const failure = throwError(() => new Error('Query failed'));
+    setUp(questionnaire(), undefined, undefined, {
+      contents$: failure,
+      answerResults$: failure,
+    });
+
+    expect(() => component.contents()).not.toThrow();
+    expect(() => component.answerResults()).not.toThrow();
+    expect(component.loadingContents()).toBeTrue();
+    expect(console.error).toHaveBeenCalledTimes(2);
+  });
+
+  it('enters with fewer answer results than contents', () => {
+    setUp(questionnaire({ publishingMode: QuestionnairePublishingMode.All }), [
+      Answered,
+    ]);
+
+    expect(component['getFirstUnansweredContentIndex']()).toBeUndefined();
   });
 
   it('offers a released content of a range-published questionnaire', () => {

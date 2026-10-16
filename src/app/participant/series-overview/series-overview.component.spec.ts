@@ -17,7 +17,7 @@ import {
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MockRouter } from '@testing/test-helpers';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { SeriesOverviewComponent } from './series-overview.component';
 
 describe('SeriesOverviewComponent', () => {
@@ -162,6 +162,31 @@ describe('SeriesOverviewComponent', () => {
 
     expect(component.hasScore()).toBeFalse();
     expect(query('#correct-info-chart')).toBeNull();
+  });
+
+  it('keeps the last score when refetching the results fails', () => {
+    setUp({
+      questionnaire: { correctOptionsPublished: true },
+      score: { achievedScore: 10, maxScore: 30 },
+    });
+    spyOn(console, 'error');
+    const answerResults = TestBed.inject(
+      QuestionnaireAnswerResultsByQuestionnaireIdGql
+    );
+    (answerResults.watch as jasmine.Spy).and.returnValue({
+      valueChanges: throwError(() => new Error('Query failed')),
+    });
+
+    fixture.componentRef.setInput('questionnaire', {
+      id: 'q-1',
+      type: QuestionnaireType.Mixed,
+      correctOptionsPublished: false,
+    } as Questionnaire);
+    fixture.detectChanges();
+
+    expect(() => component.score()).not.toThrow();
+    expect(component.score()).toBe(33);
+    expect(console.error).toHaveBeenCalled();
   });
 
   it('shows no charts for a series of slides only', () => {

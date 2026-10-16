@@ -53,7 +53,7 @@ import {
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { distinctUntilChanged, switchMap } from 'rxjs';
+import { catchError, distinctUntilChanged, EMPTY, switchMap } from 'rxjs';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 // const RELOAD_INTERVAL = 2250;
@@ -133,10 +133,17 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
           a.correctOptionsPublished === b.correctOptionsPublished
       ),
       switchMap((questionnaire) => {
-        return this.questionnaireAnswerResults.watch({
-          variables: { questionnaireId: questionnaire.id },
-          fetchPolicy: 'network-only',
-        }).valueChanges;
+        return this.questionnaireAnswerResults
+          .watch({
+            variables: { questionnaireId: questionnaire.id },
+            fetchPolicy: 'network-only',
+          })
+          .valueChanges.pipe(
+            catchError((error) => {
+              console.error('Questionnaire results query failed', error);
+              return EMPTY;
+            })
+          );
       })
     )
   );

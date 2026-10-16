@@ -150,6 +150,10 @@ export class QuestionnairePageComponent {
           .valueChanges.pipe(
             map((r) => r.data?.questionnaireById),
             filter((q): q is Questionnaire => !!q),
+            catchError((error) => {
+              console.error('Questionnaire query failed', error);
+              return EMPTY;
+            }),
             shareReplay({ bufferSize: 1, refCount: true })
           );
         // Participants may only read a published questionnaire.
@@ -177,7 +181,13 @@ export class QuestionnairePageComponent {
             variables: { questionnaireId: questionnaire.id },
             fetchPolicy: 'network-only',
           })
-          .valueChanges.pipe(onlyCompleteData());
+          .valueChanges.pipe(
+            onlyCompleteData(),
+            catchError((error) => {
+              console.error('Questionnaire contents query failed', error);
+              return EMPTY;
+            })
+          );
       })
     )
   );
@@ -214,7 +224,13 @@ export class QuestionnairePageComponent {
             variables: { questionnaireId: questionnaire.id },
             fetchPolicy: 'network-only',
           })
-          .valueChanges.pipe(onlyCompleteData());
+          .valueChanges.pipe(
+            onlyCompleteData(),
+            catchError((error) => {
+              console.error('Answer results query failed', error);
+              return EMPTY;
+            })
+          );
       })
     )
   );
@@ -288,9 +304,16 @@ export class QuestionnairePageComponent {
   private readonly contentFocusState = toSignal(
     this.focusModeService.getContentState()
   );
-  currentIndex = linkedSignal(() =>
-    this.contents().findIndex((c) => c.id === this.contentId())
-  );
+  // The focus mode routes to a content released in the same moment, ahead of
+  // the contents listing it; keeping the index keeps the stepper until then.
+  currentIndex = linkedSignal<{ index: number; contentId?: string }, number>({
+    source: () => ({
+      index: this.contents().findIndex((c) => c.id === this.contentId()),
+      contentId: this.contentId(),
+    }),
+    computation: ({ index, contentId }, previous) =>
+      index < 0 && contentId && previous ? previous.value : index,
+  });
 
   isFinished = computed(
     () =>
@@ -640,7 +663,9 @@ export class QuestionnairePageComponent {
   }
 
   private getFirstUnansweredContentIndex(): number | undefined {
-    for (let i = 0; i < this.contents().length; i++) {
+    // The contents may have been refetched before the answer results.
+    const count = Math.min(this.contents().length, this.answerResults().length);
+    for (let i = 0; i < count; i++) {
       const content = this.contents()[i];
       if (
         this.answerResults()[i].result === AnswerResultState.Unanswered &&
