@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnaireUpdatedGql,
 } from '@gql/generated/graphql';
@@ -9,9 +10,12 @@ import { ContentPresentationService } from './content-presentation.service';
 describe('ContentPresentationService', () => {
   let service: ContentPresentationService;
   let contentsGql: jasmine.SpyObj<QuestionnaireContentsByQuestionnaireIdGql>;
+  let questionnaire$: Subject<unknown>;
   let updated$: Subject<unknown>;
+  let questionnaireUpdated: jasmine.SpyObj<QuestionnaireUpdatedGql>;
 
   beforeEach(() => {
+    questionnaire$ = new Subject();
     updated$ = new Subject();
     contentsGql = jasmine.createSpyObj(
       'QuestionnaireContentsByQuestionnaireIdGql',
@@ -27,64 +31,103 @@ describe('ContentPresentationService', () => {
         },
       }),
     } as never);
+    const questionnaireById = jasmine.createSpyObj('QuestionnaireByIdGql', [
+      'watch',
+    ]);
+    questionnaireById.watch.and.returnValue({
+      valueChanges: questionnaire$,
+    });
+    questionnaireUpdated = jasmine.createSpyObj('QuestionnaireUpdatedGql', [
+      'subscribe',
+    ]);
+    questionnaireUpdated.subscribe.and.returnValue(updated$ as never);
     TestBed.configureTestingModule({
       providers: [
         {
           provide: QuestionnaireContentsByQuestionnaireIdGql,
           useValue: contentsGql,
         },
-        {
-          provide: QuestionnaireUpdatedGql,
-          useValue: { subscribe: () => updated$ },
-        },
+        { provide: QuestionnaireByIdGql, useValue: questionnaireById },
+        { provide: QuestionnaireUpdatedGql, useValue: questionnaireUpdated },
       ],
     });
     service = TestBed.inject(ContentPresentationService);
   });
 
-  function activeRound(id: string) {
-    updated$.next({
-      data: { questionnaireUpdated: { activeRound: { id } } },
+  /** An emission of the watched query, from the network or the cache. */
+  function questionnaireLoaded(activeRoundId?: string) {
+    questionnaire$.next({
+      data: {
+        questionnaireById: {
+          id: 'q-1',
+          activeRound: activeRoundId ? { id: activeRoundId } : null,
+        },
+      },
     });
     TestBed.tick();
   }
 
-  it('loads the contents of the questionnaire', () => {
+  function present() {
     service.setQuestionnaireId('q-1');
     TestBed.tick();
+  }
 
-    expect(contentsGql.watch).toHaveBeenCalledWith({
+  it('loads the contents of the questionnaire once it has loaded', () => {
+    present();
+    expect(contentsGql.watch).not.toHaveBeenCalled();
+
+    questionnaireLoaded('round-1');
+
+    expect(contentsGql.watch).toHaveBeenCalledOnceWith({
       variables: { questionnaireId: 'q-1' },
       fetchPolicy: 'network-only',
     });
     expect(service.contents().map((c) => c.id)).toEqual(['c-0', 'c-1']);
   });
 
-  it('reloads the contents whenever another round becomes active', () => {
-    service.setQuestionnaireId('q-1');
-    TestBed.tick();
-    activeRound('round-1');
-    const loads = contentsGql.watch.calls.count();
+  it('listens to the questionnaire updates', () => {
+    present();
 
-    activeRound('round-2');
-
-    expect(contentsGql.watch.calls.count()).toBe(loads + 1);
+    expect(questionnaireUpdated.subscribe).toHaveBeenCalledWith({
+      variables: { questionnaireId: 'q-1' },
+    });
   });
 
-  it('does not reload the contents for other questionnaire updates', () => {
-    service.setQuestionnaireId('q-1');
+  it('does not reload the contents for the first push', () => {
+    present();
+    questionnaireLoaded('round-1');
+
+    updated$.next({
+      data: {
+        questionnaireUpdated: { id: 'q-1', activeRound: { id: 'round-1' } },
+      },
+    });
     TestBed.tick();
-    activeRound('round-1');
-    const loads = contentsGql.watch.calls.count();
 
-    activeRound('round-1');
+    expect(contentsGql.watch).toHaveBeenCalledTimes(1);
+  });
 
-    expect(contentsGql.watch.calls.count()).toBe(loads);
+  it('reloads the contents whenever the questionnaire gets another active round', () => {
+    present();
+    questionnaireLoaded('round-1');
+
+    questionnaireLoaded('round-2');
+
+    expect(contentsGql.watch).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not reload the contents for other questionnaire changes', () => {
+    present();
+    questionnaireLoaded('round-1');
+
+    questionnaireLoaded('round-1');
+
+    expect(contentsGql.watch).toHaveBeenCalledTimes(1);
   });
 
   it('presents the content at the current index', () => {
-    service.setQuestionnaireId('q-1');
-    TestBed.tick();
+    present();
+    questionnaireLoaded('round-1');
 
     service.setCurrentContentIndex(1);
 

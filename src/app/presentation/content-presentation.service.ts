@@ -2,21 +2,49 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   Content,
+  Questionnaire,
+  QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnaireUpdatedGql,
 } from '@gql/generated/graphql';
-import { catchError, EMPTY, map, of, switchMap } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  filter,
+  ignoreElements,
+  map,
+  of,
+  switchMap,
+} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ContentPresentationService {
   private readonly contentsByQuestionnareId = inject(
     QuestionnaireContentsByQuestionnaireIdGql
   );
+  private readonly questionnaireById = inject(QuestionnaireByIdGql);
   private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
   private _questionnaireId = signal<string | undefined>(undefined);
   private _currentContentIndex = signal(0);
 
-  private readonly activeRoundId = toSignal(
+  private readonly questionnaire = toSignal(
+    toObservable(this._questionnaireId).pipe(
+      switchMap((id) => {
+        if (!id) {
+          return of(undefined);
+        }
+        return this.questionnaireById
+          .watch({ variables: { id } })
+          .valueChanges.pipe(
+            map((r) => r.data?.questionnaireById),
+            filter((n): n is Questionnaire => !!n)
+          );
+      })
+    )
+  );
+
+  /** The pushes land in the cache, and so in the watched questionnaire. */
+  private readonly questionnaireUpdates = toSignal(
     toObservable(this._questionnaireId).pipe(
       switchMap((questionnaireId) => {
         if (!questionnaireId) {
@@ -25,22 +53,26 @@ export class ContentPresentationService {
         return this.questionnaireUpdated
           .subscribe({ variables: { questionnaireId } })
           .pipe(
-            map((r) => r.data?.questionnaireUpdated?.activeRound?.id),
+            ignoreElements(),
             catchError(() => EMPTY)
           );
       })
     )
   );
 
-  private readonly contentsKey = computed(() =>
-    [this._questionnaireId(), this.activeRoundId()].join('|')
-  );
+  /** Only a new round leaves the contents referencing the previous one. */
+  private readonly contentsKey = computed(() => {
+    const questionnaire = this.questionnaire();
+    return questionnaire
+      ? [questionnaire.id, questionnaire.activeRound?.id].join('|')
+      : undefined;
+  });
 
   private readonly contentsResult = toSignal(
     toObservable(this.contentsKey).pipe(
-      switchMap(() => {
-        const questionnaireId = this._questionnaireId();
-        if (!questionnaireId) {
+      switchMap((key) => {
+        const questionnaireId = this.questionnaire()?.id;
+        if (!key || !questionnaireId) {
           return of();
         }
         return this.contentsByQuestionnareId.watch({

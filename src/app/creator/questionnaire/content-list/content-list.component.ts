@@ -10,6 +10,7 @@ import {
   computed,
   effect,
   linkedSignal,
+  signal,
 } from '@angular/core';
 import { ContentService } from '@app/core/services/http/content.service';
 import {
@@ -80,8 +81,10 @@ import { RESULT_REGISTRY } from '@app/standalone/content-results/result-registry
 import { CountdownTimerComponent } from '@app/standalone/countdown-timer/countdown-timer.component';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import {
+  AnsweringRound,
   answeringEndDate,
   isRoundOver as isRoundOverAt,
+  roundKey,
 } from '@app/standalone/countdown-timer/answering';
 
 @Component({
@@ -327,11 +330,21 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     return !!RESULT_REGISTRY[content.formatData.format].supportsRounds;
   }
 
+  /**
+   * The round whose countdown has run out. Time passing changes no data, so
+   * this is what lets the round-over state follow the countdown.
+   */
+  private readonly expiredRoundKey = signal<string | undefined>(undefined);
+
+  readonly activeRoundOver = computed(() =>
+    this.isRoundOver(this.questionnaire().activeRound)
+  );
+
   isLiveRow(content: Content): boolean {
     return (
       this.isLiveMode() &&
       this.questionnaire().activeRound?.id === content.activeRound?.id &&
-      !this.isRoundOver(this.questionnaire().activeRound)
+      !this.activeRoundOver()
     );
   }
 
@@ -343,6 +356,9 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   }
 
   isRoundOver(round: Content['activeRound']): boolean {
+    if (round && roundKey(round) === this.expiredRoundKey()) {
+      return this.isLiveMode();
+    }
     return isRoundOverAt(
       round,
       this.serverTimeService.determineServerTime().getTime(),
@@ -350,8 +366,8 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     );
   }
 
-  onRoundCountdownFinished(): void {
-    this.changeDetectorRef.detectChanges();
+  onRoundCountdownFinished(round: AnsweringRound | null | undefined): void {
+    this.expiredRoundKey.set(roundKey(round));
   }
 
   openedMenu(index: number) {

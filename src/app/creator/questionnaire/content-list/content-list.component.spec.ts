@@ -770,10 +770,17 @@ describe('ContentListComponent', () => {
 
     it('takes the live mark away once the countdown has finished', () => {
       setUpRunning(inSeconds(30));
-      jasmine.clock().mockDate(new Date(now.getTime() + 31_000));
+      const detectChanges = spyOn(
+        component['changeDetectorRef'],
+        'detectChanges'
+      ).and.callThrough();
 
-      component.onRoundCountdownFinished();
+      // The countdown finishes slightly ahead of the deadline.
+      component.onRoundCountdownFinished(round(inSeconds(30)));
 
+      expect(component.activeRoundOver()).toBeTrue();
+      expect(detectChanges).not.toHaveBeenCalled();
+      fixture.detectChanges();
       expect(countdowns().length).toBe(0);
       expect(fixture.nativeElement.textContent).not.toContain(
         'creator.content.live'
@@ -783,7 +790,12 @@ describe('ContentListComponent', () => {
     it('treats a round past its deadline as over', () => {
       setUpRunning(inSeconds(-1));
 
-      expect(component.isLiveRow(contents[1])).toBeFalse();
+      expect(
+        component.isLiveRow({
+          ...contents[1],
+          activeRound: round(inSeconds(-1)),
+        } as Content)
+      ).toBeFalse();
       expect(
         component.canModifyAnswersOrRounds({
           ...contents[1],
