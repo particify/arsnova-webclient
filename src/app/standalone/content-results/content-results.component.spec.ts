@@ -62,6 +62,7 @@ function sortContent(): Content {
     hasCorrectAnswer: true,
     answerCount: 6,
     correctAnswerCount: 2,
+    hasAnswers: true,
     formatData: {
       __typename: 'SortContentFormatData',
       format: ContentType.Sort,

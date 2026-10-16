@@ -310,13 +310,13 @@ mutation UpdateQuestionnaireShortAnswerContent(
 
 mutation CreateQuestionnaireSortContent($input: CreateSortContentInput!) {
   createQuestionnaireSortContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 mutation UpdateQuestionnaireSortContent($input: UpdateSortContentInput!) {
   updateQuestionnaireSortContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 

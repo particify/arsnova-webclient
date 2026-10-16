@@ -683,11 +683,11 @@ export type MutationCreateQuestionnaireSlideContentArgs = {
 };
 
 export type MutationCreateQuestionnaireSortAnswerArgs = {
-  input?: InputMaybe<CreateSortAnswerInput>;
+  input: CreateSortAnswerInput;
 };
 
 export type MutationCreateQuestionnaireSortContentArgs = {
-  input?: InputMaybe<CreateSortContentInput>;
+  input: CreateSortContentInput;
 };
 
 export type MutationCreateQuestionnaireTextAnswerArgs = {
@@ -928,7 +928,7 @@ export type MutationUpdateQuestionnaireSlideContentArgs = {
 };
 
 export type MutationUpdateQuestionnaireSortContentArgs = {
-  input?: InputMaybe<UpdateSortContentInput>;
+  input: UpdateSortContentInput;
 };
 
 export type MutationUpdateQuestionnaireTextContentArgs = {
@@ -2962,6 +2962,16 @@ export type ContentDetailsFragment = {
       }
     | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | {
+        __typename?: 'SortContentFormatData';
+        format: ContentType;
+        correctOrder?: Array<number> | null;
+        options: Array<{
+          __typename?: 'AnswerOption';
+          label: string;
+          labelRendered?: string | null;
+        }>;
+      }
+    | {
         __typename?: 'TextContentFormatData';
         format: ContentType;
         answersPublished: boolean;
@@ -4235,6 +4245,8 @@ export type CreateQuestionnaireSortContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireSortContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -4244,7 +4256,6 @@ export type CreateQuestionnaireSortContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -4324,6 +4335,8 @@ export type UpdateQuestionnaireSortContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireSortContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -4333,7 +4346,6 @@ export type UpdateQuestionnaireSortContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -9749,10 +9761,10 @@ export class UpdateQuestionnaireShortAnswerContentGql extends Apollo.Mutation<
 export const CreateQuestionnaireSortContentDocument = gql`
   mutation CreateQuestionnaireSortContent($input: CreateSortContentInput!) {
     createQuestionnaireSortContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -9771,10 +9783,10 @@ export class CreateQuestionnaireSortContentGql extends Apollo.Mutation<
 export const UpdateQuestionnaireSortContentDocument = gql`
   mutation UpdateQuestionnaireSortContent($input: UpdateSortContentInput!) {
     updateQuestionnaireSortContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
