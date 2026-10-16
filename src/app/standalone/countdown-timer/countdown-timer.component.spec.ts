@@ -12,6 +12,8 @@ import { CountdownTimerComponent } from './countdown-timer.component';
 
 const TIME_IS_UP = 'timer.time-is-up';
 
+declare const Zone: { current: { get(key: string): unknown } };
+
 describe('CountdownTimerComponent', () => {
   beforeEach(() => {
     configureTestModule([
@@ -50,6 +52,15 @@ describe('CountdownTimerComponent', () => {
     return fixture.nativeElement.querySelector('.progress');
   }
 
+  // fakeAsync does not complain about a periodic timer left running, so the
+  // fake zone is asked directly.
+  function pendingIntervals(): number {
+    const zoneSpec = Zone.current.get('FakeAsyncTestZoneSpec') as {
+      pendingPeriodicTimers: unknown[];
+    };
+    return zoneSpec.pendingPeriodicTimers.length;
+  }
+
   function spyOnFinished(fixture: ComponentFixture<CountdownTimerComponent>) {
     const spy = jasmine.createSpy('finished');
     fixture.componentInstance.finished.subscribe(spy);
@@ -78,6 +89,47 @@ describe('CountdownTimerComponent', () => {
 
     expect(finished).toHaveBeenCalledTimes(1);
     expect(renderedTime(fixture)).toBe(TIME_IS_UP);
+
+    discardPeriodicTasks();
+  }));
+
+  it('stops its interval once the countdown has finished', fakeAsync(() => {
+    const fixture = createComponent(new Date(Date.now() + 3000), 3);
+    const finished = spyOnFinished(fixture);
+
+    tick(10000);
+    fixture.detectChanges();
+
+    expect(finished).toHaveBeenCalledTimes(1);
+    expect(pendingIntervals()).toBe(0);
+  }));
+
+  it('starts no interval for an end date in the past', fakeAsync(() => {
+    const fixture = createComponent(new Date(Date.now() - 60000));
+
+    tick(2000);
+    fixture.detectChanges();
+
+    expect(renderedTime(fixture)).toBe('');
+    expect(pendingIntervals()).toBe(0);
+  }));
+
+  it('counts down again when a finished timer gets a future end date', fakeAsync(() => {
+    const fixture = createComponent(new Date(Date.now() + 2000), 2);
+    const finished = spyOnFinished(fixture);
+    tick(5000);
+    fixture.detectChanges();
+    expect(finished).toHaveBeenCalledTimes(1);
+
+    fixture.componentRef.setInput('endDate', new Date(Date.now() + 65000));
+    fixture.componentRef.setInput('duration', 65);
+    render(fixture);
+    expect(renderedTime(fixture)).toBe('01:05');
+
+    tick(2000);
+    fixture.detectChanges();
+
+    expect(renderedTime(fixture)).toBe('01:03');
 
     discardPeriodicTasks();
   }));

@@ -4,17 +4,17 @@ import {
   ElementRef,
   afterRenderEffect,
   computed,
+  effect,
   inject,
   input,
   linkedSignal,
   output,
+  untracked,
   viewChild,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CoreModule } from '@app/core/core.module';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import dayjs from 'dayjs';
-import { interval } from 'rxjs';
 
 const TIMER_UPDATE_INTERVAL = 1000;
 const DELAY_BUFFER = 250;
@@ -66,9 +66,18 @@ export class CountdownTimerComponent {
     viewChild<ElementRef<HTMLElement>>('progressBar');
 
   constructor() {
-    interval(TIMER_UPDATE_INTERVAL)
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.tick());
+    effect((onCleanup) => {
+      this.deadline();
+      if (untracked(() => this.timeLeft()) <= 0) {
+        return;
+      }
+      const timer = setInterval(() => {
+        if (!this.tick()) {
+          clearInterval(timer);
+        }
+      }, TIMER_UPDATE_INTERVAL);
+      onCleanup(() => clearInterval(timer));
+    });
 
     afterRenderEffect((onCleanup) => {
       this.deadline();
@@ -85,14 +94,14 @@ export class CountdownTimerComponent {
     });
   }
 
-  private tick(): void {
-    if (this.timeLeft() <= 0) {
-      return;
-    }
+  /** Returns whether the countdown is still running. */
+  private tick(): boolean {
     this.timeLeft.set(this.remainingTime());
-    if (this.timeLeft() <= 0) {
-      this.finished.emit();
+    if (this.timeLeft() > 0) {
+      return true;
     }
+    this.finished.emit();
+    return false;
   }
 
   private remainingTime(): number {
