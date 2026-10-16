@@ -23,7 +23,11 @@ describe('ChoiceResultsComponent', () => {
 
   function setUp(
     formatData: Partial<ChoiceContentFormatData>,
-    inputs: { hasCorrectAnswer?: boolean; showCorrect?: boolean } = {}
+    inputs: {
+      hasCorrectAnswer?: boolean;
+      showCorrect?: boolean;
+      roundClosed?: boolean;
+    } = {}
   ) {
     TestBed.overrideComponent(ChoiceResultsComponent, {
       set: { template: '' },
@@ -155,6 +159,26 @@ describe('ChoiceResultsComponent', () => {
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
     });
+  });
+
+  it('loads the stats of a closed round without listening to updates', () => {
+    setUp({ options }, { roundClosed: true });
+
+    expect(roundStats.watch).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+    expect(roundStatsUpdated.subscribe).not.toHaveBeenCalled();
+  });
+
+  it('keeps listening to a round closed while it is shown', () => {
+    setUp({ options });
+
+    fixture.componentRef.setInput('roundClosed', true);
+    fixture.detectChanges();
+    emitUpdate([2, 2, 3]);
+
+    expect(roundStatsUpdated.subscribe).toHaveBeenCalledTimes(1);
+    expect(component.selectionCounts()).toEqual([2, 2, 3]);
   });
 
   it('shows the loaded stats and then each update', () => {

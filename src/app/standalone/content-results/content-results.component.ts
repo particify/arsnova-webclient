@@ -65,8 +65,12 @@ export class ContentResultsComponent {
       roundId: this.content().activeRound?.id,
       resultsVisible: this.resultsVisible(),
     };
+    const chart = {
+      ...base,
+      roundClosed: !!this.content().activeRound?.closed,
+    };
     if (this.content().formatData.format === ContentType.Scale) {
-      return { ...base, language: this.language() };
+      return { ...chart, language: this.language() };
     }
     if (this.content().formatData.format === ContentType.Wordcloud) {
       return {
@@ -79,7 +83,7 @@ export class ContentResultsComponent {
     }
     if (this.content().formatData.format === ContentType.Choice) {
       return {
-        ...base,
+        ...chart,
         answersDirectlyBelowChart:
           !!this.settings().contentAnswersDirectlyBelowChart,
         visualizationUnitPercent:
@@ -91,7 +95,7 @@ export class ContentResultsComponent {
         answerCount: this.content().answerCount ?? 0,
       };
     }
-    return base;
+    return chart;
   });
 
   resultsVisible = computed(() => this.contentResultsService.resultsVisible());

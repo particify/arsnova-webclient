@@ -6,7 +6,7 @@ import {
   QuestionnaireChoiceRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
-import { map, switchMap } from 'rxjs';
+import { EMPTY, map, switchMap } from 'rxjs';
 import { updateOn } from '@gql/helper/update-on';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { ChoiceAnswerListComponent } from './choice-answer-list/choice-answer-list.component';
@@ -39,6 +39,8 @@ export class ChoiceResultsComponent {
     QuestionnaireChoiceRoundStatsUpdatedGql
   );
   readonly roundId = input.required<string>();
+  /** A closed round's answers cannot change, so it needs no updates. */
+  readonly roundClosed = input(false);
   readonly hasCorrectAnswer = input(false);
   readonly formatData = input.required<ChoiceContentFormatData>();
   /** The number of respondents, which the shares of a multiple choice relate to. */
@@ -56,7 +58,11 @@ export class ChoiceResultsComponent {
       switchMap((roundId) =>
         updateOn(
           this.roundStatsByRoundId.watch({ variables: { roundId } }),
-          this.choiceRoundStatsUpdated.subscribe({ variables: { roundId } }),
+          this.roundClosed()
+            ? EMPTY
+            : this.choiceRoundStatsUpdated.subscribe({
+                variables: { roundId },
+              }),
           (r) =>
             r.data && {
               questionnaireChoiceRoundStatsByRoundId:
