@@ -176,13 +176,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/architect@npm:0.2003.38":
-  version: 0.2003.38
-  resolution: "@angular-devkit/architect@npm:0.2003.38"
+"@angular-devkit/architect@npm:0.2003.39":
+  version: 0.2003.39
+  resolution: "@angular-devkit/architect@npm:0.2003.39"
   dependencies:
-    "@angular-devkit/core": "npm:20.3.38"
+    "@angular-devkit/core": "npm:20.3.39"
     rxjs: "npm:7.8.2"
-  checksum: 10c0/33b0f195e340c232ecbd8de6870d93a15e9d10ce449b07adb5f42492ce4b8fd6d71ad5d736b8fb4b1688cac538de6ff59061ca10c8cc4ba28753131cad0e5834
+  checksum: 10c0/1ba70ed9a36a21e40a7fa811dd92b44257c297069ac6df7309bf4b990b7242c02a06cac6c4001874f627f10132926d4d413be390240e375f5505a9a93af045fb
   languageName: node
   linkType: hard
 
@@ -321,9 +321,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/core@npm:20.3.38":
-  version: 20.3.38
-  resolution: "@angular-devkit/core@npm:20.3.38"
+"@angular-devkit/core@npm:20.3.39":
+  version: 20.3.39
+  resolution: "@angular-devkit/core@npm:20.3.39"
   dependencies:
     ajv: "npm:8.18.0"
     ajv-formats: "npm:3.0.1"
@@ -336,7 +336,7 @@ __metadata:
   peerDependenciesMeta:
     chokidar:
       optional: true
-  checksum: 10c0/a14e8067809b22f3a74d6c49987a0edeb30e58577efc82dbf55ca878e06092cf407b3a5dea786fa2614cf59971aadd7c150d57959d1d304a22888716d1cda3e0
+  checksum: 10c0/4334632b40b6195ae086f3e949ce11b291732276f3c5eaab45e9e939c271c8d5615935a8ac8c2a46316095c8fbc4eb939bb97e302b8e45f4f40532e718e855a5
   languageName: node
   linkType: hard
 
@@ -359,16 +359,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/schematics@npm:20.3.38":
-  version: 20.3.38
-  resolution: "@angular-devkit/schematics@npm:20.3.38"
+"@angular-devkit/schematics@npm:20.3.39":
+  version: 20.3.39
+  resolution: "@angular-devkit/schematics@npm:20.3.39"
   dependencies:
-    "@angular-devkit/core": "npm:20.3.38"
+    "@angular-devkit/core": "npm:20.3.39"
     jsonc-parser: "npm:3.3.1"
     magic-string: "npm:0.30.17"
     ora: "npm:8.2.0"
     rxjs: "npm:7.8.2"
-  checksum: 10c0/6ac788a8140888c7db5ccc8622cc742029f7be1ef3f1738b16f5c3d0fbe6334cfa941dfa6ff589e2cd3f1a3fdf3f0a8bd4c94a387fbf261a230c191740d385f5
+  checksum: 10c0/a238bbe58ee1f8384c508ff022186e58a402f98b88a9c7e891ca77f6ac2ff52993441e77fd1275f0d3368291664a0ba25a7f057915dc5081ec14931b322e3a1c
   languageName: node
   linkType: hard
 
@@ -490,12 +490,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/build@npm:20.3.38":
-  version: 20.3.38
-  resolution: "@angular/build@npm:20.3.38"
+"@angular/build@npm:20.3.39":
+  version: 20.3.39
+  resolution: "@angular/build@npm:20.3.39"
   dependencies:
     "@ampproject/remapping": "npm:2.3.0"
-    "@angular-devkit/architect": "npm:0.2003.38"
+    "@angular-devkit/architect": "npm:0.2003.39"
     "@babel/core": "npm:7.29.7"
     "@babel/helper-annotate-as-pure": "npm:7.27.3"
     "@babel/helper-split-export-declaration": "npm:7.24.7"
@@ -529,7 +529,7 @@ __metadata:
     "@angular/platform-browser": ^20.0.0
     "@angular/platform-server": ^20.0.0
     "@angular/service-worker": ^20.0.0
-    "@angular/ssr": ^20.3.38
+    "@angular/ssr": ^20.3.39
     karma: ^6.4.0
     less: ^4.2.0
     ng-packagr: ^20.0.0
@@ -566,7 +566,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10c0/f3304f4ac4b5cfdc45ed6be952befe221ad980894b5d9314caa1a9701546b0a4d925a0f5c3b4b6365769c81a0f69d187960a670ddb16bda975e2d50bbb68b5a6
+  checksum: 10c0/17df7e91958da595f64ca53719f9d3747ae151a07f50587b6fb619bd90f4e5578c69a3e37d69100d83d9430831cf812d6790e3ba21db1634ca79f36f63673a6b
   languageName: node
   linkType: hard
 
@@ -664,17 +664,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cli@npm:20.3.38":
-  version: 20.3.38
-  resolution: "@angular/cli@npm:20.3.38"
+"@angular/cli@npm:20.3.39":
+  version: 20.3.39
+  resolution: "@angular/cli@npm:20.3.39"
   dependencies:
-    "@angular-devkit/architect": "npm:0.2003.38"
-    "@angular-devkit/core": "npm:20.3.38"
-    "@angular-devkit/schematics": "npm:20.3.38"
+    "@angular-devkit/architect": "npm:0.2003.39"
+    "@angular-devkit/core": "npm:20.3.39"
+    "@angular-devkit/schematics": "npm:20.3.39"
     "@inquirer/prompts": "npm:7.8.2"
     "@listr2/prompt-adapter-inquirer": "npm:3.0.1"
-    "@modelcontextprotocol/sdk": "npm:1.30.0"
-    "@schematics/angular": "npm:20.3.38"
+    "@modelcontextprotocol/sdk": "npm:1.31.0"
+    "@schematics/angular": "npm:20.3.39"
     "@yarnpkg/lockfile": "npm:1.1.0"
     algoliasearch: "npm:5.35.0"
     ini: "npm:5.0.0"
@@ -688,7 +688,7 @@ __metadata:
     zod: "npm:4.1.13"
   bin:
     ng: bin/ng.js
-  checksum: 10c0/1759afc357031967e7864307f5f52d6c5e5fb25a0afab8893e0bcc2e74e7d80b48567bb2d42810c463486692352667c1b6226c15d4f65c709403e90662c6e25a
+  checksum: 10c0/30d5bcbed49c8ffb1e9fda3351f86863c7faf983a65ac8f3a4e3f781ea591f3991dd375aac21151eb12870ca54e6ef2367870b6eb75697e965f17782bb0943e1
   languageName: node
   linkType: hard
 
@@ -3629,9 +3629,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@modelcontextprotocol/sdk@npm:1.30.0":
-  version: 1.30.0
-  resolution: "@modelcontextprotocol/sdk@npm:1.30.0"
+"@modelcontextprotocol/sdk@npm:1.31.0":
+  version: 1.31.0
+  resolution: "@modelcontextprotocol/sdk@npm:1.31.0"
   dependencies:
     "@hono/node-server": "npm:^1.19.9 || ^2.0.5"
     ajv: "npm:^8.17.1"
@@ -3658,7 +3658,7 @@ __metadata:
       optional: true
     zod:
       optional: false
-  checksum: 10c0/6d12d5c88048b42b0d64906222f804eecbfc0aae02fc42a200d2438f037276cc7863510a8ce649e82c96d5972f62a58bfbdedf79624b0558a607738f5e58b97e
+  checksum: 10c0/2c4f011a765fb3346ec578455591d062008a842a0f6f8a763baa97b6a01e0f1febb97d1cc44024ee6d0761d43df56e9c71f72a37d47c7ea6aeb1c4f8be0f06d9
   languageName: node
   linkType: hard
 
@@ -4759,14 +4759,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@schematics/angular@npm:20.3.38":
-  version: 20.3.38
-  resolution: "@schematics/angular@npm:20.3.38"
+"@schematics/angular@npm:20.3.39":
+  version: 20.3.39
+  resolution: "@schematics/angular@npm:20.3.39"
   dependencies:
-    "@angular-devkit/core": "npm:20.3.38"
-    "@angular-devkit/schematics": "npm:20.3.38"
+    "@angular-devkit/core": "npm:20.3.39"
+    "@angular-devkit/schematics": "npm:20.3.39"
     jsonc-parser: "npm:3.3.1"
-  checksum: 10c0/5d5c7292a153c1e067a83723db25b89a840c11808fd845fc5b9e6ed5c20287d5e6ce2b32ee4dbec5c17779973b90312e4b6c3e2e78f34246510fd2e6794d381c
+  checksum: 10c0/38d496869fc0ec6820e6ed9d84c80c34a0d8879ef31db1648dc78b76c07fd0198588726518b0a39121625f34e6b9f4fe94023a985b6b50d73e364a3a74068b2b
   languageName: node
   linkType: hard
 
@@ -4853,28 +4853,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-docs@npm:9.1.20":
-  version: 9.1.20
-  resolution: "@storybook/addon-docs@npm:9.1.20"
+"@storybook/addon-docs@npm:9.1.21":
+  version: 9.1.21
+  resolution: "@storybook/addon-docs@npm:9.1.21"
   dependencies:
     "@mdx-js/react": "npm:^3.0.0"
-    "@storybook/csf-plugin": "npm:9.1.20"
+    "@storybook/csf-plugin": "npm:9.1.21"
     "@storybook/icons": "npm:^1.4.0"
-    "@storybook/react-dom-shim": "npm:9.1.20"
+    "@storybook/react-dom-shim": "npm:9.1.21"
     react: "npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
     react-dom: "npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
     ts-dedent: "npm:^2.0.0"
   peerDependencies:
-    storybook: ^9.1.20
-  checksum: 10c0/8f0569f0a985762bec3073121bcff2c2353e3d1b49be73a55d70bec3678c858c0f5d9ab731edb9e488fe7e4bb10b52b04f40812e05a6eb536766bbd5325f32f1
+    storybook: ^9.1.21
+  checksum: 10c0/402854ed218a320281f78d93148f917e3ed9ff146260ae0cd1e1a3483cdc41c60b0e6dff5c34524c836964ad409cd6623c8815629f6a089a36c32583dcd1d1d4
   languageName: node
   linkType: hard
 
-"@storybook/angular@npm:9.1.20":
-  version: 9.1.20
-  resolution: "@storybook/angular@npm:9.1.20"
+"@storybook/angular@npm:9.1.21":
+  version: 9.1.21
+  resolution: "@storybook/angular@npm:9.1.21"
   dependencies:
-    "@storybook/builder-webpack5": "npm:9.1.20"
+    "@storybook/builder-webpack5": "npm:9.1.21"
     "@storybook/global": "npm:^5.0.0"
     telejson: "npm:8.0.0"
     ts-dedent: "npm:^2.0.0"
@@ -4894,7 +4894,7 @@ __metadata:
     "@angular/platform-browser": ">=18.0.0 < 21.0.0"
     "@angular/platform-browser-dynamic": ">=18.0.0 < 21.0.0"
     rxjs: ^6.5.3 || ^7.4.0
-    storybook: ^9.1.20
+    storybook: ^9.1.21
     typescript: ^4.9.0 || ^5.0.0
     zone.js: ">=0.14.0"
   peerDependenciesMeta:
@@ -4904,15 +4904,15 @@ __metadata:
       optional: true
     zone.js:
       optional: true
-  checksum: 10c0/06372766f00fe7971439a44d300c5fadb111feb65ef5c9e4f53dcbd29e66e5df6b23607754e4e622c007202369d0f8624158c6d05379dc07412703210054de2e
+  checksum: 10c0/45ba3d833e5683a331c89a0746faa6ff87b513f3d69bd6028f577b551c0ecf3a18a6ca9a2e146af2e334131932c5a86ad25868dd67a05767ec441eebb7100e15
   languageName: node
   linkType: hard
 
-"@storybook/builder-webpack5@npm:9.1.20":
-  version: 9.1.20
-  resolution: "@storybook/builder-webpack5@npm:9.1.20"
+"@storybook/builder-webpack5@npm:9.1.21":
+  version: 9.1.21
+  resolution: "@storybook/builder-webpack5@npm:9.1.21"
   dependencies:
-    "@storybook/core-webpack": "npm:9.1.20"
+    "@storybook/core-webpack": "npm:9.1.21"
     case-sensitive-paths-webpack-plugin: "npm:^2.4.0"
     cjs-module-lexer: "npm:^1.2.3"
     css-loader: "npm:^6.7.1"
@@ -4928,33 +4928,33 @@ __metadata:
     webpack-hot-middleware: "npm:^2.25.1"
     webpack-virtual-modules: "npm:^0.6.0"
   peerDependencies:
-    storybook: ^9.1.20
+    storybook: ^9.1.21
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/49bc0e0da2bffad795afc57b2b06425d0bf2b3513c81efd578a4cff30927d0265bc6d32fc75f43bd2ace7a310edb3a76141fdc83817a0c34361a004176f0c5a1
+  checksum: 10c0/c04468fcdf1c8b617bc4a5ee69e9dcabd7c7542b3f6d33e5373747f279021b4d75baf1e0630491f8f530712fe497b6dada11d78edab954c94883bcd6b4d5d3e2
   languageName: node
   linkType: hard
 
-"@storybook/core-webpack@npm:9.1.20":
-  version: 9.1.20
-  resolution: "@storybook/core-webpack@npm:9.1.20"
+"@storybook/core-webpack@npm:9.1.21":
+  version: 9.1.21
+  resolution: "@storybook/core-webpack@npm:9.1.21"
   dependencies:
     ts-dedent: "npm:^2.0.0"
   peerDependencies:
-    storybook: ^9.1.20
-  checksum: 10c0/ca89001536d49def96de11de75bf03a16bad3f4f282b84f0662e42d09c791e01d5946f38c15dd4cd1d6fc612598f923de55e577ed6391b1b5a6702b639a10aae
+    storybook: ^9.1.21
+  checksum: 10c0/81f1c0e5a543656739764165a397987fcc6de8e2ef1751cc45cf90d15de94054491ff314e6d353fe99393b00fb0054496fb2567e60b226704533ff5ad22025eb
   languageName: node
   linkType: hard
 
-"@storybook/csf-plugin@npm:9.1.20":
-  version: 9.1.20
-  resolution: "@storybook/csf-plugin@npm:9.1.20"
+"@storybook/csf-plugin@npm:9.1.21":
+  version: 9.1.21
+  resolution: "@storybook/csf-plugin@npm:9.1.21"
   dependencies:
     unplugin: "npm:^1.3.1"
   peerDependencies:
-    storybook: ^9.1.20
-  checksum: 10c0/42642bf8252400f0b5a889e118dab3c35505ce539a57cdb51ae6fc335485de055d9b635db8cc8ae6d47a77ea5856cdf6880458c70b26b214ea48d44502a1bf57
+    storybook: ^9.1.21
+  checksum: 10c0/aa887106e6ca0e7fb063cd84404b10240a97d0af5739ed5bdcea27a9f5d59144cd0fd1ab122c62d3654d8e054abc5e48bbbfc033d54be0503e0d19806085d258
   languageName: node
   linkType: hard
 
@@ -4975,14 +4975,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-dom-shim@npm:9.1.20":
-  version: 9.1.20
-  resolution: "@storybook/react-dom-shim@npm:9.1.20"
+"@storybook/react-dom-shim@npm:9.1.21":
+  version: 9.1.21
+  resolution: "@storybook/react-dom-shim@npm:9.1.21"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
-    storybook: ^9.1.20
-  checksum: 10c0/73ee792f3c24d6dbbb8bfedf394ae6efb80d53704149406dc26cc0f564bbdbd83a35bc7fc8c80e58de7e897c75717eba8849a4970a297abe66dc32c1fffe0c7d
+    storybook: ^9.1.21
+  checksum: 10c0/e01656f82f738d85667739910ef7f1503196bb6e351cc7d4d08ac7c330d33f4f8a402a81cbc0ba61deaf313122e0f891d5fbfa43898b70f48841c5510f5c2a56
   languageName: node
   linkType: hard
 
@@ -6447,9 +6447,9 @@ __metadata:
     "@angular-eslint/schematics": "npm:20.3.0"
     "@angular-eslint/template-parser": "npm:20.3.0"
     "@angular/animations": "npm:20.3.33"
-    "@angular/build": "npm:20.3.38"
+    "@angular/build": "npm:20.3.39"
     "@angular/cdk": "npm:20.2.14"
-    "@angular/cli": "npm:20.3.38"
+    "@angular/cli": "npm:20.3.39"
     "@angular/common": "npm:20.3.33"
     "@angular/compiler": "npm:20.3.33"
     "@angular/compiler-cli": "npm:20.3.33"
@@ -6469,8 +6469,8 @@ __metadata:
     "@playwright/test": "npm:1.55.1"
     "@stomp/rx-stomp": "npm:2.1.0"
     "@stomp/stompjs": "npm:7.2.1"
-    "@storybook/addon-docs": "npm:9.1.20"
-    "@storybook/angular": "npm:9.1.20"
+    "@storybook/addon-docs": "npm:9.1.21"
+    "@storybook/angular": "npm:9.1.21"
     "@types/d3-cloud": "npm:1.2.9"
     "@types/jasmine": "npm:5.1.15"
     "@types/jasminewd2": "npm:2.0.13"
@@ -6491,7 +6491,7 @@ __metadata:
     eslint-plugin-import: "npm:2.32.0"
     eslint-plugin-jsdoc: "npm:59.1.0"
     eslint-plugin-prefer-arrow: "npm:1.2.3"
-    eslint-plugin-storybook: "npm:9.1.20"
+    eslint-plugin-storybook: "npm:9.1.21"
     is-docker: "npm:4.0.0"
     jasmine-core: "npm:5.10.0"
     jasmine-spec-reporter: "npm:7.0.0"
@@ -6509,7 +6509,7 @@ __metadata:
     prettier: "npm:3.6.2"
     prismjs: "npm:1.30.0"
     rxjs: "npm:7.8.2"
-    storybook: "npm:9.1.20"
+    storybook: "npm:9.1.21"
     stylelint: "npm:16.24.0"
     stylelint-config-standard-scss: "npm:15.0.1"
     ts-node: "npm:10.9.2"
@@ -8839,15 +8839,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-storybook@npm:9.1.20":
-  version: 9.1.20
-  resolution: "eslint-plugin-storybook@npm:9.1.20"
+"eslint-plugin-storybook@npm:9.1.21":
+  version: 9.1.21
+  resolution: "eslint-plugin-storybook@npm:9.1.21"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.8.1"
   peerDependencies:
     eslint: ">=8"
-    storybook: ^9.1.20
-  checksum: 10c0/5fa57e3953c6394ce329450af26e618a6a327e2a3a895c7cf2d0d78a50a01c46a6289295369cd28efa4941d7a30d746533a241716915c12de81e34541d044e85
+    storybook: ^9.1.21
+  checksum: 10c0/8afce62540a18238c201d4abe43549a40a47d6766d96075aead20da373e5d364b85dec44463c45638efb74f801c7e2e14236526867459748bf0e609930042e44
   languageName: node
   linkType: hard
 
@@ -14802,9 +14802,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook@npm:9.1.20":
-  version: 9.1.20
-  resolution: "storybook@npm:9.1.20"
+"storybook@npm:9.1.21":
+  version: 9.1.21
+  resolution: "storybook@npm:9.1.21"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
     "@testing-library/jest-dom": "npm:^6.6.3"
@@ -14825,7 +14825,7 @@ __metadata:
       optional: true
   bin:
     storybook: ./bin/index.cjs
-  checksum: 10c0/d510837e81297e83119a8cf827818231ff9c99299d7c4f29407a8317ac151803d8784d891fa1a4983be1998417abbcaad27cd21e47dd33f4da2d246014eb68cf
+  checksum: 10c0/aa898fae4dea384233c09efed12ce60e76fe49edc8721f4cd9a377c7d25437e19bce0d34cbecf2f152dfdb50989f63fb5bee03047b1b33cf9c4a0545cabc9a8f
   languageName: node
   linkType: hard
 
