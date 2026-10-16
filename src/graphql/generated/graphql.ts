@@ -2524,6 +2524,7 @@ export type CreatorContentDetailsFragment = {
   activeRound?: {
     __typename?: 'Round';
     id: string;
+    contentId?: string | null;
     roundNo: number;
     closed: boolean;
     started: boolean;

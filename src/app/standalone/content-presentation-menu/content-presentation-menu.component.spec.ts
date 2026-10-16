@@ -42,6 +42,7 @@ function content(
     hasCorrectAnswer: false,
     weight: null,
     answerCount: 0,
+    hasAnswers: false,
     abstentionCount: 0,
     correctAnswerCount: null,
     position: 0,
