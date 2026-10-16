@@ -9,7 +9,7 @@ import {
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { NEVER, of } from 'rxjs';
+import { NEVER, Observable, of, throwError } from 'rxjs';
 import { ContentGroupLeaderboardComponent } from './content-group-leaderboard.component';
 
 describe('ContentGroupLeaderboardComponent', () => {
@@ -23,14 +23,15 @@ describe('ContentGroupLeaderboardComponent', () => {
     totalCount: 1,
   };
 
-  function setUp(showAll: boolean) {
+  function setUp(
+    showAll: boolean,
+    valueChanges: Observable<unknown> = of({
+      dataState: 'complete',
+      data: { questionnaireLeaderboardByQuestionnaireId: leaderboardPage },
+    })
+  ) {
     byQuestionnaireId = jasmine.createSpyObj('ByQuestionnaireIdGql', ['watch']);
-    byQuestionnaireId.watch.and.returnValue({
-      valueChanges: of({
-        dataState: 'complete',
-        data: { questionnaireLeaderboardByQuestionnaireId: leaderboardPage },
-      }),
-    } as never);
+    byQuestionnaireId.watch.and.returnValue({ valueChanges } as never);
     const updated = jasmine.createSpyObj('UpdatedGql', ['subscribe']);
     updated.subscribe.and.returnValue(NEVER);
     announceService = jasmine.createSpyObj('AnnounceService', ['announce']);
@@ -77,6 +78,17 @@ describe('ContentGroupLeaderboardComponent', () => {
     setUp(false);
     expect(component.isLoading).toBeFalse();
     expect(component.leaderboardPage).toEqual(leaderboardPage);
+  });
+
+  it('stops loading when the ranking query fails', () => {
+    spyOn(console, 'error');
+    setUp(
+      false,
+      throwError(() => new Error('Query failed'))
+    );
+    expect(component.isLoading).toBeFalse();
+    expect(component.leaderboardPage).toEqual({ entries: [], totalCount: 0 });
+    expect(console.error).toHaveBeenCalled();
   });
 
   it('announces the leaderboard to screen readers', () => {

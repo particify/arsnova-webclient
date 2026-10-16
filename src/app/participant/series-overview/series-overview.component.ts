@@ -234,6 +234,11 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
               this.leaderboardByQuestionnaireId,
               this.leaderboardUpdated,
               { questionnaireId, limit: LEADERBOARD_DISPLAY_LIMIT }
+            ).pipe(
+              catchError((error) => {
+                console.error('Leaderboard query failed', error);
+                return EMPTY;
+              })
             )
           : of(undefined)
       )

@@ -57,6 +57,14 @@ describe('LeaderboardPageComponent', () => {
     });
   });
 
+  it('stops loading when the ranking query fails', () => {
+    spyOn(console, 'error');
+    initial$.error(new Error('Query failed'));
+    expect(component.isLoading).toBeFalse();
+    expect(component.leaderboardPage).toEqual({ entries: [], totalCount: 0 });
+    expect(console.error).toHaveBeenCalled();
+  });
+
   it('keeps loading until the ranking arrives', () => {
     expect(component.isLoading).toBeTrue();
     const leaderboardPage: LeaderboardPage = { entries: [], totalCount: 0 };

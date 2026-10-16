@@ -47,6 +47,7 @@ describe('SeriesOverviewComponent', () => {
     finished?: boolean;
     lastContentAnswered?: boolean;
     leaderboard?: LeaderboardPage;
+    leaderboardError?: boolean;
     alias?: RoomUserAlias;
   }
 
@@ -98,16 +99,14 @@ describe('SeriesOverviewComponent', () => {
       ['watch', 'fetch']
     );
     leaderboardByQuestionnaireId.fetch.and.returnValue(of({ data: {} }));
+    const leaderboard = options.leaderboard ?? { entries: [], totalCount: 0 };
     leaderboardByQuestionnaireId.watch.and.returnValue({
-      valueChanges: of({
-        dataState: 'complete',
-        data: {
-          questionnaireLeaderboardByQuestionnaireId: options.leaderboard ?? {
-            entries: [],
-            totalCount: 0,
-          },
-        },
-      }),
+      valueChanges: options.leaderboardError
+        ? throwError(() => new Error('Query failed'))
+        : of({
+            dataState: 'complete',
+            data: { questionnaireLeaderboardByQuestionnaireId: leaderboard },
+          }),
     });
     const leaderboardUpdated = jasmine.createSpyObj(
       'QuestionnaireLeaderboardUpdatedGql',
@@ -439,6 +438,22 @@ describe('SeriesOverviewComponent', () => {
         variables: { questionnaireId: 'q-1', limit: LEADERBOARD_DISPLAY_LIMIT },
         fetchPolicy: 'network-only',
       });
+    });
+
+    it('leaves the overview rendered when the ranking query fails', () => {
+      spyOn(console, 'error');
+      setUp({
+        questionnaire: { leaderboardEnabled: true, published: true },
+        leaderboardError: true,
+        alias,
+      });
+      expect(component.leaderboard()).toBeUndefined();
+      expect(component.leaderboardPosition()).toBeUndefined();
+      expect(console.error).toHaveBeenCalled();
+      expect(query('.header-text')?.textContent?.trim()).toBe(
+        'participant.content.continue-where-you-stopped'
+      );
+      expect(query('#progress-info-chart')).not.toBeNull();
     });
 
     it('keeps the ranking while the nickname stays the same', () => {

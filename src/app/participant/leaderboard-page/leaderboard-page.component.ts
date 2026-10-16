@@ -54,9 +54,15 @@ export class LeaderboardPageComponent implements OnInit {
       }
     )
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((page) => {
-        this.leaderboardPage = page;
-        this.isLoading = false;
+      .subscribe({
+        next: (page) => {
+          this.leaderboardPage = page;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Content leaderboard query failed', error);
+          this.isLoading = false;
+        },
       });
   }
 }

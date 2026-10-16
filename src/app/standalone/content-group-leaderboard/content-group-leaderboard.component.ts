@@ -56,9 +56,15 @@ export class ContentGroupLeaderboardComponent implements OnInit {
       }
     )
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((page) => {
-        this.leaderboardPage = page;
-        this.isLoading = false;
+      .subscribe({
+        next: (page) => {
+          this.leaderboardPage = page;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Leaderboard query failed', error);
+          this.isLoading = false;
+        },
       });
   }
 }
