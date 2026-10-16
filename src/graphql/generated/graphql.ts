@@ -219,6 +219,7 @@ export type Content = {
   correctAnswerCount?: Maybe<Scalars['Int']['output']>;
   duration?: Maybe<Scalars['Int']['output']>;
   formatData: ContentFormatData;
+  hasAnswers: Scalars['Boolean']['output'];
   hasCorrectAnswer?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   position?: Maybe<Scalars['Int']['output']>;
@@ -2489,6 +2490,7 @@ export type ContentDetailsFragment = {
 export type CreatorContentDetailsFragment = {
   __typename?: 'Content';
   correctAnswerCount?: number | null;
+  hasAnswers: boolean;
   id: string;
   body: string;
   bodyRendered?: string | null;
@@ -2663,6 +2665,7 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
       node: {
         __typename?: 'Content';
         correctAnswerCount?: number | null;
+        hasAnswers: boolean;
         id: string;
         body: string;
         bodyRendered?: string | null;
@@ -2820,6 +2823,7 @@ export type CreateQuestionnaireChoiceContentMutation = {
   createQuestionnaireChoiceContent?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -2869,6 +2873,7 @@ export type UpdateQuestionnaireChoiceContentMutation = {
   updateQuestionnaireChoiceContent?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -2918,6 +2923,7 @@ export type CreateQuestionnaireWordcloudContentMutation = {
   createQuestionnaireWordcloudContent?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -2967,6 +2973,7 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
   updateQuestionnaireWordcloudContent?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3016,6 +3023,7 @@ export type QuestionnaireContentByIdQuery = {
   questionnaireContentById?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3248,6 +3256,7 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
   banQuestionnaireWordcloudContentKeyword?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3298,6 +3307,7 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
   resetBannedQuestionnaireWordcloudContentKeywords?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3387,6 +3397,7 @@ export type DuplicateQuestionnaireContentMutation = {
   duplicateQuestionnaireContent?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3437,6 +3448,7 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
   copyQuestionnaireContentToQuestionnaire?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3487,6 +3499,7 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
   moveQuestionnaireContentToQuestionnaire?: {
     __typename?: 'Content';
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -4373,6 +4386,7 @@ export const CreatorContentDetailsFragmentDoc = gql`
   fragment CreatorContentDetails on Content {
     ...ContentDetails
     correctAnswerCount
+    hasAnswers
   }
   ${ContentDetailsFragmentDoc}
 `;

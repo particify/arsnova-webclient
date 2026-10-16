@@ -173,7 +173,7 @@ export class ContentEditingComponent {
       this.questionnaire().type === QuestionnaireType.Quiz
   );
 
-  readonly answered = computed(() => !!this.content()?.answerCount);
+  readonly answered = computed(() => !!this.content()?.hasAnswers);
 
   // Route data input below
   fixedHeight = input(false);

@@ -71,6 +71,7 @@ fragment ContentDetails on Content {
 fragment CreatorContentDetails on Content {
   ...ContentDetails
   correctAnswerCount
+  hasAnswers
 }
 
 fragment Answer on Answer {

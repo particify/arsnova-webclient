@@ -20,6 +20,7 @@ function choiceContent(): Content {
     hasCorrectAnswer: true,
     answerCount: 4,
     correctAnswerCount: 3,
+    hasAnswers: true,
     formatData: {
       __typename: 'ChoiceContentFormatData',
       format: ContentType.Choice,

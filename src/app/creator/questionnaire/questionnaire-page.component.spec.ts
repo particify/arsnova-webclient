@@ -282,6 +282,39 @@ describe('QuestionnairePageComponent (creator)', () => {
     );
   });
 
+  function openSettingsWith(nodes: Content[]): unknown {
+    setUp();
+    emitContents(nodes);
+    dialogService.openDialog.and.returnValue({
+      afterClosed: () => of(undefined),
+    } as never);
+
+    component.openSettings();
+
+    const config = dialogService.openDialog.calls.mostRecent().args[1] as {
+      data: { alreadyAnswered: boolean };
+    };
+    return config.data.alreadyAnswered;
+  }
+
+  it('tells the settings that answers exist once any content has them', () => {
+    expect(
+      openSettingsWith([
+        { id: 'c-1', hasAnswers: false, answerCount: 0 },
+        { id: 'c-2', hasAnswers: true, answerCount: 0 },
+      ] as Content[])
+    ).toBeTrue();
+  });
+
+  it('tells the settings that no answers exist without any content having them', () => {
+    expect(
+      openSettingsWith([
+        { id: 'c-1', hasAnswers: false, answerCount: 0 },
+        { id: 'c-2', hasAnswers: false, answerCount: 0 },
+      ] as Content[])
+    ).toBeFalse();
+  });
+
   it('resets the results of the questionnaire once confirmed', () => {
     setUp();
     const resetResults = TestBed.inject(

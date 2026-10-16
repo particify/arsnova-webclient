@@ -14,6 +14,7 @@ import { ContentPublishService } from '@app/core/services/util/content-publish.s
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { QuestionnairePageService } from '@app/creator/questionnaire/questionnaire-page.service';
 import {
+  Content,
   ContentType,
   Questionnaire,
   QuestionnaireType,
@@ -28,7 +29,7 @@ describe('ContentEditingComponent', () => {
   let fixture: ComponentFixture<ContentEditingComponent>;
   let component: ContentEditingComponent;
 
-  function setUp() {
+  function setUp(content?: Content) {
     // Only the form outlet and the body input matter to the reset under test.
     TestBed.overrideComponent(ContentEditingComponent, {
       set: {
@@ -87,6 +88,9 @@ describe('ContentEditingComponent', () => {
       type: QuestionnaireType.Mixed,
     } as Questionnaire);
     fixture.componentRef.setInput('language', 'en');
+    if (content) {
+      fixture.componentRef.setInput('content', content);
+    }
     fixture.detectChanges();
   }
 
@@ -174,4 +178,52 @@ describe('ContentEditingComponent', () => {
 
     expect(component.question()).toBe('');
   }));
+
+  describe('answer lock', () => {
+    function lockedWith(state: {
+      hasAnswers: boolean;
+      answerCount: number | null;
+      roundNo?: number;
+    }) {
+      setUp({
+        id: 'content-1',
+        body: 'Question',
+        answerCount: state.answerCount,
+        hasAnswers: state.hasAnswers,
+        activeRound: { id: 'round-1', roundNo: state.roundNo ?? 1 },
+        formatData: {
+          __typename: 'ChoiceContentFormatData',
+          format: ContentType.Choice,
+          multiple: false,
+          options: [],
+        },
+      } as unknown as Content);
+      const form = fixture.debugElement.query(
+        By.directive(ChoiceContentFormComponent)
+      ).componentInstance as ChoiceContentFormComponent;
+      return form.answered();
+    }
+
+    it('keeps a content without answers editable', () => {
+      expect(lockedWith({ hasAnswers: false, answerCount: 0 })).toBeFalse();
+    });
+
+    it('locks a content with answers in the active round', () => {
+      expect(lockedWith({ hasAnswers: true, answerCount: 3 })).toBeTrue();
+    });
+
+    it('locks a content whose answers are hidden or in other rounds', () => {
+      expect(lockedWith({ hasAnswers: true, answerCount: 0 })).toBeTrue();
+    });
+
+    it('locks a content with answers but no answer count', () => {
+      expect(lockedWith({ hasAnswers: true, answerCount: null })).toBeTrue();
+    });
+
+    it('keeps a new round editable after rounds without answers', () => {
+      expect(
+        lockedWith({ hasAnswers: false, answerCount: 0, roundNo: 2 })
+      ).toBeFalse();
+    });
+  });
 });

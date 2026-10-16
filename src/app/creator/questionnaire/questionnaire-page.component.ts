@@ -427,9 +427,7 @@ export class QuestionnairePageComponent {
         width: '600px',
         data: {
           questionnaire: { ...this.questionnaire() },
-          alreadyAnswered:
-            this.contents().filter((c) => c.answerCount && c.answerCount > 0)
-              .length > 0,
+          alreadyAnswered: this.contents().some((c) => c.hasAnswers),
         },
       }
     );
