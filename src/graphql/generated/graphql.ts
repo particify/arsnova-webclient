@@ -681,11 +681,11 @@ export type MutationCreateQuestionnaireNumericContentArgs = {
 };
 
 export type MutationCreateQuestionnairePrioritizationAnswerArgs = {
-  input?: InputMaybe<CreatePrioritizationAnswerInput>;
+  input: CreatePrioritizationAnswerInput;
 };
 
 export type MutationCreateQuestionnairePrioritizationContentArgs = {
-  input?: InputMaybe<CreatePrioritizationContentInput>;
+  input: CreatePrioritizationContentInput;
 };
 
 export type MutationCreateQuestionnaireScaleAnswerArgs = {
@@ -942,7 +942,7 @@ export type MutationUpdateQuestionnaireNumericContentArgs = {
 };
 
 export type MutationUpdateQuestionnairePrioritizationContentArgs = {
-  input?: InputMaybe<UpdatePrioritizationContentInput>;
+  input: UpdatePrioritizationContentInput;
 };
 
 export type MutationUpdateQuestionnaireScaleContentArgs = {
@@ -3016,6 +3016,16 @@ export type ContentDetailsFragment = {
         tolerance: number;
       }
     | {
+        __typename?: 'PrioritizationContentFormatData';
+        format: ContentType;
+        assignablePoints: number;
+        options: Array<{
+          __typename?: 'AnswerOption';
+          label: string;
+          labelRendered?: string | null;
+        }>;
+      }
+    | {
         __typename?: 'ScaleContentFormatData';
         format: ContentType;
         template: ScaleContentTemplate;
@@ -4031,6 +4041,8 @@ export type CreateQuestionnairePrioritizationContentMutation = {
   __typename?: 'Mutation';
   createQuestionnairePrioritizationContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -4040,7 +4052,6 @@ export type CreateQuestionnairePrioritizationContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -4130,6 +4141,8 @@ export type UpdateQuestionnairePrioritizationContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnairePrioritizationContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -4139,7 +4152,6 @@ export type UpdateQuestionnairePrioritizationContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -10407,10 +10419,10 @@ export const CreateQuestionnairePrioritizationContentDocument = gql`
     $input: CreatePrioritizationContentInput!
   ) {
     createQuestionnairePrioritizationContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -10431,10 +10443,10 @@ export const UpdateQuestionnairePrioritizationContentDocument = gql`
     $input: UpdatePrioritizationContentInput!
   ) {
     updateQuestionnairePrioritizationContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({

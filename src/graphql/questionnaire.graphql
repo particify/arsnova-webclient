@@ -300,7 +300,7 @@ mutation CreateQuestionnairePrioritizationContent(
   $input: CreatePrioritizationContentInput!
 ) {
   createQuestionnairePrioritizationContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
@@ -308,7 +308,7 @@ mutation UpdateQuestionnairePrioritizationContent(
   $input: UpdatePrioritizationContentInput!
 ) {
   updateQuestionnairePrioritizationContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 

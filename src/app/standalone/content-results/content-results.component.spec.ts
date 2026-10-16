@@ -82,6 +82,7 @@ function prioritizationContent(): Content {
     body: 'What should change?',
     hasCorrectAnswer: false,
     answerCount: 6,
+    hasAnswers: true,
     formatData: {
       __typename: 'PrioritizationContentFormatData',
       format: ContentType.Prioritization,
