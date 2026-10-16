@@ -346,7 +346,11 @@ export class QuestionnairePageComponent {
               .watch({ variables: { roomId } })
               .valueChanges.pipe(
                 onlyCompleteData(),
-                map((r) => r.data.roomUserAliasByRoomId)
+                map((r) => r.data.roomUserAliasByRoomId),
+                catchError((error) => {
+                  console.error('Room user alias query failed', error);
+                  return EMPTY;
+                })
               )
           : of(undefined)
       )

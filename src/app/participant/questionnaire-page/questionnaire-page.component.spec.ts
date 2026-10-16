@@ -693,6 +693,22 @@ describe('QuestionnairePageComponent (live sync)', () => {
       );
       expect(aliasGql.watch).toHaveBeenCalledTimes(1);
     });
+
+    it('stays readable when the alias query fails', () => {
+      setUp(questionnaire());
+      spyOn(console, 'error');
+      (aliasGql.watch as jasmine.Spy).and.returnValue({
+        valueChanges: new Observable((subscriber) =>
+          subscriber.error(new Error('Query failed'))
+        ),
+      });
+
+      update(questionnaire({ leaderboardEnabled: true }));
+
+      expect(() => component.alias()).not.toThrow();
+      expect(component.alias()).toBeUndefined();
+      expect(console.error).toHaveBeenCalled();
+    });
   });
 });
 
