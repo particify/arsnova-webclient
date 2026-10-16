@@ -48,7 +48,7 @@
             ) {
               <mat-expansion-panel
                 [expanded]="activeSettings() === 'user'"
-                (afterExpand)="updatePage('user')"
+                (opened)="updatePage('user')"
               >
                 <mat-expansion-panel-header noRipple>
                   <div fxLayout="column" fxLayoutGap="8px">
@@ -117,7 +117,7 @@
                   : 'user-profile.set-password';
               <mat-expansion-panel
                 [expanded]="activeSettings() === 'change-password'"
-                (afterExpand)="updatePage('change-password')"
+                (opened)="updatePage('change-password')"
               >
                 <mat-expansion-panel-header noRipple>
                   <div fxLayout="column" fxLayoutGap="8px">
@@ -187,7 +187,7 @@
           }
           <mat-expansion-panel
             [expanded]="activeSettings() === 'preferences'"
-            (afterExpand)="updatePage('preferences')"
+            (opened)="updatePage('preferences')"
           >
             <mat-expansion-panel-header noRipple>
               <div fxLayout="column" fxLayoutGap="8px">
@@ -242,7 +242,7 @@
           <mat-divider></mat-divider>
           <mat-expansion-panel
             [expanded]="activeSettings() === 'delete-account'"
-            (afterExpand)="updatePage('delete-account')"
+            (opened)="updatePage('delete-account')"
           >
             <mat-expansion-panel-header noRipple>
               <div fxLayout="column" fxLayoutGap="8px">

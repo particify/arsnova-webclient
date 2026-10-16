@@ -14,7 +14,7 @@
           [disabled]="setting.name === 'access' && !isOwner()"
           class="settings-panel"
           [expanded]="currentRoute === setting.name"
-          (afterExpand)="updateUrl(setting.name)"
+          (opened)="updateUrl(setting.name)"
         >
           <mat-expansion-panel-header
             [appHotkey]="setting.hotkey"
