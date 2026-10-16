@@ -228,13 +228,13 @@ mutation UpdateQuestionnaireChoiceContent($input: UpdateChoiceContentInput!) {
 
 mutation CreateQuestionnaireNumericContent($input: CreateNumericContentInput!) {
   createQuestionnaireNumericContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 mutation UpdateQuestionnaireNumericContent($input: UpdateNumericContentInput!) {
   updateQuestionnaireNumericContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 

@@ -592,11 +592,11 @@ export type MutationCreateQuestionnaireFlashcardContentArgs = {
 };
 
 export type MutationCreateQuestionnaireNumericAnswerArgs = {
-  input?: InputMaybe<CreateNumericAnswerInput>;
+  input: CreateNumericAnswerInput;
 };
 
 export type MutationCreateQuestionnaireNumericContentArgs = {
-  input?: InputMaybe<CreateNumericContentInput>;
+  input: CreateNumericContentInput;
 };
 
 export type MutationCreateQuestionnaireSlideContentArgs = {
@@ -821,7 +821,7 @@ export type MutationUpdateQuestionnaireFlashcardContentArgs = {
 };
 
 export type MutationUpdateQuestionnaireNumericContentArgs = {
-  input?: InputMaybe<UpdateNumericContentInput>;
+  input: UpdateNumericContentInput;
 };
 
 export type MutationUpdateQuestionnaireSlideContentArgs = {
@@ -2711,6 +2711,14 @@ export type ContentDetailsFragment = {
         format: ContentType;
         answer: string;
       }
+    | {
+        __typename?: 'NumericContentFormatData';
+        format: ContentType;
+        minNumber: number;
+        maxNumber: number;
+        correctNumber?: number | null;
+        tolerance: number;
+      }
     | { __typename?: 'ScaleContentFormatData'; format: ContentType }
     | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | {
@@ -3312,6 +3320,8 @@ export type CreateQuestionnaireNumericContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireNumericContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3321,7 +3331,6 @@ export type CreateQuestionnaireNumericContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -3381,6 +3390,8 @@ export type UpdateQuestionnaireNumericContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireNumericContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3390,7 +3401,6 @@ export type UpdateQuestionnaireNumericContentMutation = {
     weight?: number | null;
     answerCount?: number | null;
     abstentionCount?: number | null;
-    correctAnswerCount?: number | null;
     position?: number | null;
     activeRound?: {
       __typename?: 'Round';
@@ -7744,10 +7754,10 @@ export const CreateQuestionnaireNumericContentDocument = gql`
     $input: CreateNumericContentInput!
   ) {
     createQuestionnaireNumericContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -7768,10 +7778,10 @@ export const UpdateQuestionnaireNumericContentDocument = gql`
     $input: UpdateNumericContentInput!
   ) {
     updateQuestionnaireNumericContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
