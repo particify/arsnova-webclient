@@ -214,6 +214,12 @@ describe('SeriesOverviewComponent', () => {
     expect(component.hasAnsweredState(AnswerResultState.Neutral)).toBeTrue();
   });
 
+  it('shows no spinner while there are no results yet', () => {
+    setUp({ results: [], lastContentAnswered: true });
+
+    expect(component.isLoadingLastContent()).toBeFalse();
+  });
+
   it('shows a spinner for the last content while its answer is processed', () => {
     setUp({ lastContentAnswered: true });
 

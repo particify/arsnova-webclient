@@ -119,9 +119,7 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
 
   readonly isLoadingLastContent = computed(
     () =>
-      !!this.answerResults() &&
-      this.answerResults()[this.answerResults().length - 1].result ===
-        AnswerResultState.Unanswered &&
+      this.answerResults().at(-1)?.result === AnswerResultState.Unanswered &&
       this.hasAnsweredLastContent
   );
 
