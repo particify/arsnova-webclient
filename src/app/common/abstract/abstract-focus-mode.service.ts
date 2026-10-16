@@ -3,7 +3,9 @@ import { FocusEvent } from '@app/core/models/events/remote/focus-event';
 import { WsConnectorService } from '@app/core/services/websockets/ws-connector.service';
 import { HttpClient } from '@angular/common/http';
 import {
+  catchError,
   concat,
+  EMPTY,
   filter,
   map,
   Observable,
@@ -57,7 +59,11 @@ export abstract class AbstractFocusModeService implements OnDestroy {
       this.roomById.watch({ variables: { id } }).valueChanges.pipe(
         filter((r) => r.dataState === 'complete'),
         filter((r) => !!r.data),
-        map((r) => r.data.roomById?.focusModeEnabled ?? false)
+        map((r) => r.data.roomById?.focusModeEnabled ?? false),
+        catchError((error) => {
+          console.error('Focus mode query failed', error);
+          return EMPTY;
+        })
       )
     ),
     shareReplay(1)

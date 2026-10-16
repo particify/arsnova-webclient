@@ -12,12 +12,14 @@ import { WsConnectorService } from '@app/core/services/websockets/ws-connector.s
 import { RoomFocusModeEnabledByIdGql } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { NEVER } from 'rxjs';
+import { NEVER, Subject, throwError } from 'rxjs';
 import { FocusModeService } from './focus-mode.service';
 
 describe('FocusModeService', () => {
   let service: FocusModeService;
   let router: jasmine.SpyObj<Router>;
+  let roomId$: Subject<string>;
+  let roomFocusModeEnabledById: jasmine.SpyObj<RoomFocusModeEnabledByIdGql>;
 
   beforeEach(() => {
     router = jasmine.createSpyObj('Router', ['navigate']);
@@ -36,7 +38,12 @@ describe('FocusModeService', () => {
     const roomService = jasmine.createSpyObj('RoomService', [
       'getCurrentRoomIdStream',
     ]);
-    roomService.getCurrentRoomIdStream.and.returnValue(NEVER);
+    roomId$ = new Subject<string>();
+    roomService.getCurrentRoomIdStream.and.returnValue(roomId$);
+    roomFocusModeEnabledById = jasmine.createSpyObj(
+      'RoomFocusModeEnabledByIdGql',
+      ['watch']
+    );
 
     configureTestModule(
       [getTranslocoModule()],
@@ -58,9 +65,7 @@ describe('FocusModeService', () => {
         },
         {
           provide: RoomFocusModeEnabledByIdGql,
-          useValue: jasmine.createSpyObj('RoomFocusModeEnabledByIdGql', [
-            'watch',
-          ]),
+          useValue: roomFocusModeEnabledById,
         },
         {
           provide: NotificationService,
@@ -88,5 +93,20 @@ describe('FocusModeService', () => {
       'q-1',
       'content-1',
     ]);
+  });
+
+  it('keeps the focus mode state readable after its query fails', () => {
+    spyOn(console, 'error');
+    roomFocusModeEnabledById.watch.and.returnValue({
+      valueChanges: throwError(() => new Error('Query failed')),
+    } as unknown as ReturnType<RoomFocusModeEnabledByIdGql['watch']>);
+    const errorHandler = jasmine.createSpy('error');
+    service.getFocusModeEnabled().subscribe({ error: errorHandler });
+
+    roomId$.next('room-1');
+
+    expect(errorHandler).not.toHaveBeenCalled();
+    expect(() => service['focusModeEnabled']()).not.toThrow();
+    expect(console.error).toHaveBeenCalled();
   });
 });
