@@ -3587,6 +3587,8 @@ export type CreateQuestionnaireScaleContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireScaleContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3660,6 +3662,8 @@ export type UpdateQuestionnaireScaleContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireScaleContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -8272,10 +8276,10 @@ export class UpdateQuestionnaireNumericContentGql extends Apollo.Mutation<
 export const CreateQuestionnaireScaleContentDocument = gql`
   mutation CreateQuestionnaireScaleContent($input: CreateScaleContentInput!) {
     createQuestionnaireScaleContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -8294,10 +8298,10 @@ export class CreateQuestionnaireScaleContentGql extends Apollo.Mutation<
 export const UpdateQuestionnaireScaleContentDocument = gql`
   mutation UpdateQuestionnaireScaleContent($input: UpdateScaleContentInput!) {
     updateQuestionnaireScaleContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({

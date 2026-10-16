@@ -250,13 +250,13 @@ mutation UpdateQuestionnaireNumericContent($input: UpdateNumericContentInput!) {
 
 mutation CreateQuestionnaireScaleContent($input: CreateScaleContentInput!) {
   createQuestionnaireScaleContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 mutation UpdateQuestionnaireScaleContent($input: UpdateScaleContentInput!) {
   updateQuestionnaireScaleContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
