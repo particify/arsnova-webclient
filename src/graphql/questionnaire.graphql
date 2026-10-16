@@ -221,13 +221,13 @@ mutation UpdateQuestionnaireWordcloudContent(
 
 mutation CreateQuestionnaireTextContent($input: CreateTextContentInput!) {
   createQuestionnaireTextContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 
 mutation UpdateQuestionnaireTextContent($input: UpdateTextContentInput!) {
   updateQuestionnaireTextContent(input: $input) {
-    ...ContentDetails
+    ...CreatorContentDetails
   }
 }
 

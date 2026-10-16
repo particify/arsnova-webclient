@@ -3292,6 +3292,8 @@ export type CreateQuestionnaireTextContentMutation = {
   __typename?: 'Mutation';
   createQuestionnaireTextContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -3352,6 +3354,8 @@ export type UpdateQuestionnaireTextContentMutation = {
   __typename?: 'Mutation';
   updateQuestionnaireTextContent?: {
     __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     id: string;
     body: string;
     bodyRendered?: string | null;
@@ -7241,10 +7245,10 @@ export class UpdateQuestionnaireWordcloudContentGql extends Apollo.Mutation<
 export const CreateQuestionnaireTextContentDocument = gql`
   mutation CreateQuestionnaireTextContent($input: CreateTextContentInput!) {
     createQuestionnaireTextContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
@@ -7263,10 +7267,10 @@ export class CreateQuestionnaireTextContentGql extends Apollo.Mutation<
 export const UpdateQuestionnaireTextContentDocument = gql`
   mutation UpdateQuestionnaireTextContent($input: UpdateTextContentInput!) {
     updateQuestionnaireTextContent(input: $input) {
-      ...ContentDetails
+      ...CreatorContentDetails
     }
   }
-  ${ContentDetailsFragmentDoc}
+  ${CreatorContentDetailsFragmentDoc}
 `;
 
 @Injectable({
