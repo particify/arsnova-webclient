@@ -13,6 +13,7 @@ import {
   ContentType,
   QuestionnaireBinaryRoundStatsByRoundIdGql,
   QuestionnaireBinaryRoundStatsUpdatedGql,
+  Round,
 } from '@gql/generated/graphql';
 import { BinaryResultsComponent } from './binary-results.component';
 
@@ -63,6 +64,7 @@ describe('BinaryResultsComponent', () => {
   let stats$: Map<string, BehaviorSubject<unknown>>;
   // Inert unless a spec pushes into it, so the query result stands.
   let statsUpdated: Subject<unknown>;
+  let subscribeStatsUpdated: jasmine.Spy;
 
   interface SetUpOptions {
     stats?: BinaryContentRoundStats | null;
@@ -73,6 +75,7 @@ describe('BinaryResultsComponent', () => {
     hasCorrectAnswer?: boolean;
     showCorrect?: boolean;
     isPresentation?: boolean;
+    rounds?: Round[];
   }
 
   function setUp(options: SetUpOptions = {}) {
@@ -102,6 +105,9 @@ describe('BinaryResultsComponent', () => {
     });
 
     statsUpdated = new Subject<unknown>();
+    subscribeStatsUpdated = jasmine
+      .createSpy('subscribe')
+      .and.callFake(() => statsUpdated.asObservable());
 
     configureTestModule(
       [
@@ -124,7 +130,7 @@ describe('BinaryResultsComponent', () => {
         },
         {
           provide: QuestionnaireBinaryRoundStatsUpdatedGql,
-          useValue: { subscribe: () => statsUpdated.asObservable() },
+          useValue: { subscribe: subscribeStatsUpdated },
         },
         { provide: ThemeService, useValue: themeService },
         { provide: PresentationService, useValue: { scale: () => 1 } },
@@ -138,10 +144,13 @@ describe('BinaryResultsComponent', () => {
       'formatData',
       options.contentFormatData ?? formatData()
     );
-    fixture.componentRef.setInput('rounds', [
-      { id: 'round-1', roundNo: 1 },
-      { id: 'round-2', roundNo: 2 },
-    ]);
+    fixture.componentRef.setInput(
+      'rounds',
+      options.rounds ?? [
+        { id: 'round-1', roundNo: 1 },
+        { id: 'round-2', roundNo: 2 },
+      ]
+    );
     fixture.componentRef.setInput('roundIds', options.roundIds ?? ['round-1']);
     fixture.componentRef.setInput('language', options.language);
     fixture.componentRef.setInput(
@@ -374,6 +383,23 @@ describe('BinaryResultsComponent', () => {
     fixture.detectChanges();
 
     expect(chart()?.data().datasets[0].values).toEqual([0, 0]);
+  });
+
+  it('loads the stats of a closed round without listening to updates', () => {
+    setUp({
+      roundIds: ['round-1', 'round-2'],
+      rounds: [
+        { id: 'round-1', roundNo: 1, closed: true },
+        { id: 'round-2', roundNo: 2, closed: false },
+      ] as Round[],
+    });
+
+    expect(statsByRoundId.watch).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+    expect(subscribeStatsUpdated).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-2' },
+    });
   });
 
   it('keeps the last stats when the updates fail', () => {
