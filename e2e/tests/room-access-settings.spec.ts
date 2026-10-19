@@ -72,8 +72,10 @@ async function addModerator(page: Page, role?: string) {
     await page.getByLabel('Role', { exact: true }).click();
     await page.getByRole('option', { name: role }).click();
   }
-  await page.getByRole('button', { name: 'add user' }).click();
-  await page.waitForResponse(
-    (res) => !!res.request().postData()?.includes('UserByDisplayId') && res.ok()
-  );
+  await Promise.all([
+    page.waitForResponse(
+      (res) => !!res.request().postData()?.includes('GrantRoomRole') && res.ok()
+    ),
+    page.getByRole('button', { name: 'add user' }).click(),
+  ]);
 }
