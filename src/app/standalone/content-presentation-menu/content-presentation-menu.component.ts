@@ -17,6 +17,7 @@ import { RouterLink } from '@angular/router';
 import { CoreModule } from '@app/core/core.module';
 import { ContentService } from '@app/core/services/http/content.service';
 import { PresentationService } from '@app/core/services/util/presentation.service';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
 import {
   AdvancedSnackBarTypes,
@@ -41,6 +42,7 @@ import {
   sortedRoundNumbers,
   toggleRoundSelection,
 } from '@app/standalone/round-selector/round-selection';
+import { isRoundOver } from '@app/standalone/countdown-timer/answering';
 
 @Component({
   selector: 'app-content-presentation-menu',
@@ -51,6 +53,7 @@ import {
 export class ContentPresentationMenuComponent {
   private contentService = inject(ContentService);
   private presentationService = inject(PresentationService);
+  private serverTimeService = inject(ServerTimeService);
   private dialogService = inject(DialogService);
   private notificationService = inject(NotificationService);
   private translateService = inject(TranslocoService);
@@ -180,12 +183,15 @@ export class ContentPresentationMenuComponent {
     );
   }
 
-  hasClosedRound(): boolean {
+  canModifyAnswersOrRounds(): boolean {
     if (!this.isLiveMode()) {
       return true;
     }
-    const currentRound = this.currentRound();
-    return !!currentRound && currentRound.closed;
+    return isRoundOver(
+      this.currentRound(),
+      this.serverTimeService.determineServerTime().getTime(),
+      this.isLiveMode()
+    );
   }
 
   deleteContentAnswers() {

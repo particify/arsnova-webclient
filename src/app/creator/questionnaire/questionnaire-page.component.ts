@@ -72,6 +72,7 @@ import {
   QuestionnairePublishingMode,
   QuestionnaireRoundsByContentIdDocument,
   QuestionnaireType,
+  QuestionnaireUpdatedGql,
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
@@ -151,6 +152,7 @@ export class QuestionnairePageComponent {
   private readonly questionnaireContentUpdated = inject(
     CreatorQuestionnaireContentUpdatedGql
   );
+  private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
 
   readonly userRole = input.required<UserRole>();
   readonly roomId = input.required<string>();
@@ -168,11 +170,15 @@ export class QuestionnairePageComponent {
       )
     )
   );
+  private readonly contentsKey = computed(() =>
+    [this.questionnaireId(), this.questionnaire()?.activeRound?.id].join('|')
+  );
   readonly contentsResult = toSignal(
-    toObservable(this.questionnaireId).pipe(
-      switchMap((questionnaireId) => {
+    toObservable(this.contentsKey).pipe(
+      switchMap(() => {
         return this.contentsByQuestionnareId.watch({
-          variables: { questionnaireId: questionnaireId },
+          variables: { questionnaireId: this.questionnaireId() },
+          fetchPolicy: 'network-only',
         }).valueChanges;
       })
     )
@@ -181,6 +187,18 @@ export class QuestionnairePageComponent {
     toObservable(this.questionnaireId).pipe(
       switchMap((questionnaireId) =>
         this.questionnaireContentUpdated
+          .subscribe({ variables: { questionnaireId } })
+          .pipe(
+            ignoreElements(),
+            catchError(() => EMPTY)
+          )
+      )
+    )
+  );
+  private readonly questionnaireUpdates = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) =>
+        this.questionnaireUpdated
           .subscribe({ variables: { questionnaireId } })
           .pipe(
             ignoreElements(),

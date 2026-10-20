@@ -17,6 +17,7 @@ fragment Round on Round {
   roundNo
   closed
   started
+  answeringEndTime
   answerable
 }
 
@@ -95,6 +96,8 @@ fragment Answer on Answer {
       words
     }
   }
+  createdAt
+  durationMs
 }
 
 fragment ContentAnswerResult on ContentAnswerResult {

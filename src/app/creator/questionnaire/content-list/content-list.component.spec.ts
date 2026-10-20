@@ -27,6 +27,7 @@ import {
   StopQuestionnaireContentGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { TranslocoService } from '@jsverse/transloco';
@@ -711,6 +712,116 @@ describe('ContentListComponent', () => {
           formatData: { format: ContentType.Slide },
         } as Content)
       ).toBeFalse();
+    });
+  });
+
+  describe('countdown', () => {
+    const now = new Date('2026-10-01T12:00:00Z');
+    const inSeconds = (seconds: number) =>
+      new Date(now.getTime() + seconds * 1000).toISOString();
+    const round = (answeringEndTime?: string, answerable = true) => ({
+      id: 'round-1',
+      roundNo: 1,
+      closed: false,
+      answerable,
+      answeringEndTime,
+    });
+
+    function setUpRunning(answeringEndTime?: string, answerable = true) {
+      const activeRound = round(answeringEndTime, answerable);
+      setUp(
+        questionnaire({
+          publishingMode: QuestionnairePublishingMode.Live,
+          publishedUpToContent: { id: 'c-1', position: 1 } as Content,
+          activeRound: activeRound as Questionnaire['activeRound'],
+        }),
+        undefined,
+        contents.map((c) =>
+          c.id === 'c-1' ? ({ ...c, activeRound } as Content) : c
+        )
+      );
+    }
+
+    function countdowns() {
+      return fixture.nativeElement.querySelectorAll('app-countdown-timer');
+    }
+
+    beforeEach(() => {
+      jasmine.clock().install();
+      jasmine.clock().mockDate(now);
+    });
+
+    afterEach(() => jasmine.clock().uninstall());
+
+    it('counts down a running round with a deadline', () => {
+      setUpRunning(inSeconds(30));
+
+      expect(countdowns().length).toBeGreaterThan(0);
+    });
+
+    it('marks a running round without a deadline as live', () => {
+      setUpRunning();
+
+      expect(countdowns().length).toBe(0);
+      expect(fixture.nativeElement.textContent).toContain(
+        'creator.content.live'
+      );
+    });
+
+    it('takes the live mark away once the countdown has finished', () => {
+      setUpRunning(inSeconds(30));
+      const detectChanges = spyOn(
+        component['changeDetectorRef'],
+        'detectChanges'
+      ).and.callThrough();
+
+      // The countdown finishes slightly ahead of the deadline.
+      component.onRoundCountdownFinished(round(inSeconds(30)));
+
+      expect(component.activeRoundOver()).toBeTrue();
+      expect(detectChanges).not.toHaveBeenCalled();
+      fixture.detectChanges();
+      expect(countdowns().length).toBe(0);
+      expect(fixture.nativeElement.textContent).not.toContain(
+        'creator.content.live'
+      );
+    });
+
+    it('treats a round past its deadline as over', () => {
+      setUpRunning(inSeconds(-1));
+
+      expect(
+        component.isLiveRow({
+          ...contents[1],
+          activeRound: round(inSeconds(-1)),
+        } as Content)
+      ).toBeFalse();
+      expect(
+        component.canModifyAnswersOrRounds({
+          ...contents[1],
+          activeRound: round(inSeconds(-1)),
+        } as Content)
+      ).toBeTrue();
+    });
+
+    it('judges the deadline by server time, not by a skewed local clock', () => {
+      // The local clock runs a minute ahead of the server.
+      const serverTime = ServerTimeService.prototype;
+      spyOnProperty(serverTime, 'averageOffset').and.returnValue(-60_000);
+      setUpRunning(inSeconds(-30));
+
+      expect(
+        component.isLiveRow({
+          ...contents[1],
+          activeRound: round(inSeconds(-30)),
+        } as Content)
+      ).toBeTrue();
+    });
+
+    it('treats a round the backend no longer accepts answers for as over', () => {
+      setUpRunning(inSeconds(30), false);
+
+      expect(countdowns().length).toBe(0);
     });
   });
 });

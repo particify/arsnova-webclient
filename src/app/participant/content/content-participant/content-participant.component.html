@@ -69,10 +69,11 @@
             </nav>
           }
         </div>
-        @if (active() && _content.duration && !answeringLocked() && endDate) {
+        @let _endDate = endDate();
+        @if (active() && !answeringLocked() && _endDate) {
           <app-countdown-timer
-            [endDate]="endDate"
-            [duration]="_content.duration"
+            [endDate]="_endDate"
+            [duration]="_content.duration ?? undefined"
             (finished)="answeringLocked.set(true)"
             [borderRadius]="3"
           ></app-countdown-timer>

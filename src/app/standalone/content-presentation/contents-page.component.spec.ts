@@ -25,6 +25,7 @@ import {
   StopQuestionnaireContentGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { NEVER, of } from 'rxjs';
@@ -245,6 +246,77 @@ describe('ContentsPageComponent', () => {
     component.updateURL(1);
 
     expect(gql.get(PublishQuestionnaireUpToContentGql)).not.toHaveBeenCalled();
+  });
+
+  describe('countdown', () => {
+    const now = new Date('2026-10-01T12:00:00Z');
+    const round = (answeringEndTime?: string, answerable = true) => ({
+      id: 'round-1',
+      contentId: 'c-0',
+      closed: false,
+      answerable,
+      answeringEndTime,
+    });
+
+    beforeEach(() => {
+      jasmine.clock().install();
+      jasmine.clock().mockDate(now);
+    });
+
+    afterEach(() => jasmine.clock().uninstall());
+
+    it('counts down to the deadline of the presented content', () => {
+      const deadline = '2026-10-01T12:00:30Z';
+      contents[0].activeRound = round(deadline) as Content['activeRound'];
+      setUp();
+
+      expect(component.endDate()).toEqual(new Date(deadline));
+      delete contents[0].activeRound;
+    });
+
+    it('knows a running round is not over yet', () => {
+      setUp(
+        questionnaire({
+          activeRound: round('2026-10-01T12:00:30Z'),
+        } as never)
+      );
+
+      expect(component.roundOver()).toBeFalse();
+    });
+
+    it('knows a round past its deadline is over', () => {
+      setUp(
+        questionnaire({
+          activeRound: round('2026-10-01T11:59:59Z'),
+        } as never)
+      );
+
+      expect(component.roundOver()).toBeTrue();
+    });
+
+    it('judges the deadline by server time, not by a skewed local clock', () => {
+      // The local clock runs a minute ahead of the server.
+      const serverTime = ServerTimeService.prototype;
+      spyOnProperty(serverTime, 'averageOffset').and.returnValue(-60_000);
+      setUp(
+        questionnaire({
+          activeRound: round('2026-10-01T11:59:30Z'),
+        } as never)
+      );
+
+      expect(component.roundOver()).toBeFalse();
+    });
+
+    it('never considers a round over outside live mode', () => {
+      setUp(
+        questionnaire({
+          publishingMode: QuestionnairePublishingMode.UpTo,
+          activeRound: round('2026-10-01T11:59:59Z', false),
+        } as never)
+      );
+
+      expect(component.roundOver()).toBeFalse();
+    });
   });
 });
 

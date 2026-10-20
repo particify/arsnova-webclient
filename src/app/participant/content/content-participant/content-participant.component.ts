@@ -58,6 +58,12 @@ import { ContentWordcloudParticipantComponent } from '@app/participant/content/c
 import { FORMAT_REGISTRY } from './format-registry';
 import { evictRoundStats } from '@gql/helper/evict-round-stats';
 import { AnswerForm } from '@app/participant/content/answer-form';
+import {
+  answeringEndDate,
+  isRoundOver,
+  roundKey,
+} from '@app/standalone/countdown-timer/answering';
+import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { formatAnsweringDuration } from './answering-duration';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 
@@ -114,6 +120,7 @@ export class ContentParticipantComponent {
   private readonly cache = inject(Apollo).client.cache;
   private readonly createAbstention = inject(CreateQuestionnaireAbstentionGql);
   private readonly mutations = mutationHelper();
+  private readonly serverTimeService = inject(ServerTimeService);
 
   readonly formatComponent = computed(
     () => FORMAT_REGISTRY[this.content().formatData.format].component
@@ -207,12 +214,24 @@ export class ContentParticipantComponent {
       !this.content().activeRound?.started
   );
 
-  answeringLocked = linkedSignal(
+  readonly isLive = computed(
     () =>
-      this.questionnaire().publishingMode ===
-        QuestionnairePublishingMode.Live && this.content().activeRound?.closed
+      this.questionnaire().publishingMode === QuestionnairePublishingMode.Live
   );
-  endDate?: Date;
+
+  readonly endDate = computed(() =>
+    answeringEndDate(this.content().activeRound)
+  );
+
+  answeringLocked = linkedSignal({
+    source: () => roundKey(this.content().activeRound),
+    computation: () =>
+      isRoundOver(
+        this.content().activeRound,
+        this.serverTimeService.determineServerTime().getTime(),
+        this.isLive()
+      ),
+  });
 
   readonly answeringDuration = computed(() =>
     formatAnsweringDuration(this.answer()?.durationMs)
