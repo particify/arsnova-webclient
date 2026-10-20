@@ -53,6 +53,7 @@ import {
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { ContentBinaryParticipantComponent } from '@app/participant/content/content-binary-participant/content-binary-participant.component';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
 import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
 import { ContentPrioritizationParticipantComponent } from '@app/participant/content/content-prioritization-participant/content-prioritization-participant.component';
@@ -84,6 +85,7 @@ const NON_ANSWERABLE_FORMATS = [ContentType.Flashcard, ContentType.Slide];
 
 /** The answer forms that go inert once the round is over or has been answered. */
 const LOCKABLE_ANSWER_FORMS: Type<unknown>[] = [
+  ContentBinaryParticipantComponent,
   ContentChoiceParticipantComponent,
   ContentNumericParticipantComponent,
   ContentPrioritizationParticipantComponent,

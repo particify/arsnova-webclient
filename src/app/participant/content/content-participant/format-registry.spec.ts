@@ -1,4 +1,5 @@
 import { ContentType } from '@gql/generated/graphql';
+import { ContentBinaryParticipantComponent } from '@app/participant/content/content-binary-participant/content-binary-participant.component';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
 import { ContentPrioritizationParticipantComponent } from '@app/participant/content/content-prioritization-participant/content-prioritization-participant.component';
 import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
@@ -8,11 +9,7 @@ import { FORMAT_REGISTRY } from './format-registry';
 describe('FORMAT_REGISTRY', () => {
   const formatsWithoutComponent = [ContentType.Flashcard, ContentType.Slide];
 
-  /** Binary is a choice content. */
-  const formatsUsingTheChoiceComponent = [
-    ContentType.Binary,
-    ContentType.Choice,
-  ];
+  const formatsUsingTheChoiceComponent = [ContentType.Choice];
 
   it('has no participant component for Flashcard and Slide', () => {
     formatsWithoutComponent.forEach((format) => {
@@ -40,6 +37,12 @@ describe('FORMAT_REGISTRY', () => {
         .withContext(`${format} had an unexpected participant component`)
         .toBe(formatsUsingTheChoiceComponent.includes(format));
     });
+  });
+
+  it('has its own participant component for the binary format', () => {
+    expect(FORMAT_REGISTRY[ContentType.Binary].component).toBe(
+      ContentBinaryParticipantComponent
+    );
   });
 
   it('has its own participant component for the prioritization format', () => {

@@ -649,7 +649,9 @@
     "correct-answer-is": "La risposta corretta è",
     "correct-answers-are": "Le risposte corrette sono:",
     "have-answered-correctly": "hanno risposto correttamente",
-    "have-abstained": "si sono astenuti"
+    "have-abstained": "si sono astenuti",
+    "yes": "Sì",
+    "no": "No"
   },
   "timer": {
     "time-is-up": "Il tempo è scaduto"

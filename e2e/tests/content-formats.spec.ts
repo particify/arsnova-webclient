@@ -345,4 +345,35 @@ test.describe('content formats', () => {
       await expect(participant.getSubmitButton()).toBeEnabled();
     });
   });
+
+  test.describe('binary', () => {
+    test.beforeEach(async ({ page, baseURL }) => {
+      await createSeries(page, baseURL, 'Quiz');
+      await contentCreation.createBinaryContent('My binary content', 'Yes');
+    });
+
+    test('the correct answer is marked once published', async ({
+      browser,
+      baseURL,
+    }) => {
+      await publish();
+      const participant = await join(browser, baseURL);
+      await participant.answerContent(['No']);
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await expect(participant.getCorrectStateIcon('correct')).toBeVisible();
+      await expect(participant.getCorrectStateIcon('wrong')).toBeVisible();
+      await expectAnswerCount(1);
+    });
+
+    test('the correct answer is withheld until published', async ({
+      browser,
+      baseURL,
+    }) => {
+      await publish({ correctAnswers: false });
+      const participant = await join(browser, baseURL);
+      await participant.answerContent(['Yes']);
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await expect(participant.getCorrectStateIcon('correct')).toBeHidden();
+    });
+  });
 });

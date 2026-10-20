@@ -1,0 +1,31 @@
+<div fxLayout="column" fxLayoutGap="16px">
+  @if (hasCorrectAnswer() && isPresentation()) {
+    <app-correct-answer-results
+      [show]="showCorrect()"
+      [answerCount]="answerCount()"
+      [correctAnswerCount]="correctAnswerCount()"
+      [abstentionCount]="abstentionCount()"
+    />
+  }
+  @if (resultsVisible()) {
+    <app-bar-chart
+      [data]="visualizationData()"
+      [tooltipTitles]="labels()"
+      [scale]="scale()"
+      [showLegend]="!isPresentation()"
+      [showLabels]="true"
+      [alwaysShowXAxisLabels]="true"
+      [dataLabelMode]="visualizationUnitPercent() ? 'percent' : 'absolute'"
+    ></app-bar-chart>
+    @if (showCorrect() && hasCorrectAnswer()) {
+      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
+        <span class="info-text">{{
+          'answer.correct-answer-is' | transloco
+        }}</span>
+        <b class="correct-answer" data-testid="correct-answer">{{
+          correctLabel()
+        }}</b>
+      </div>
+    }
+  }
+</div>

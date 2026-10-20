@@ -73,11 +73,12 @@ describe('ContentGroupService', () => {
       ]);
     });
 
-    it('returns Choice, ShortAnswer, Sort, Numeric and Slide for Quiz', () => {
+    it('returns Choice, Binary, ShortAnswer, Sort, Numeric and Slide for Quiz', () => {
       expect(
         service.getContentFormatsOfQuestionnaireType(QuestionnaireType.Quiz)
       ).toEqual([
         ContentType.Choice,
+        ContentType.Binary,
         ContentType.ShortAnswer,
         ContentType.Sort,
         ContentType.Numeric,
@@ -85,12 +86,13 @@ describe('ContentGroupService', () => {
       ]);
     });
 
-    it('returns Choice, Scale, Text, Wordcloud, Prioritization, Numeric and Slide for Survey', () => {
+    it('returns Choice, Scale, Binary, Text, Wordcloud, Prioritization, Numeric and Slide for Survey', () => {
       expect(
         service.getContentFormatsOfQuestionnaireType(QuestionnaireType.Survey)
       ).toEqual([
         ContentType.Choice,
         ContentType.Scale,
+        ContentType.Binary,
         ContentType.Text,
         ContentType.Wordcloud,
         ContentType.Prioritization,

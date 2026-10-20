@@ -1,0 +1,7 @@
+<app-content-choice-answer
+  [(answerOptions)]="answerOptions"
+  [answered]="answered()"
+  [correctOptionIndexes]="correctOptionIndexes()"
+  [correctOptionsPublished]="correctOptionsPublished()"
+  [disabled]="disabled() || answered()"
+></app-content-choice-answer>

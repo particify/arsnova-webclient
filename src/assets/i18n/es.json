@@ -455,7 +455,9 @@
     "correct-answer-is": "La respuesta correcta es",
     "correct-answers-are": "La respuestas correctas son:",
     "have-answered-correctly": "han respondido correctamente",
-    "have-abstained": "se han abstenido"
+    "have-abstained": "se han abstenido",
+    "yes": "Sí",
+    "no": "No"
   },
   "survey": {
     "a11y-message": "Ahora estás en modo de retroalimentación en vivo.",

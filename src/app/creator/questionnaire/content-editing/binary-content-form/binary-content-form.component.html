@@ -1,0 +1,26 @@
+@if (preview()) {
+  <app-content-choice-answer
+    [answerOptions]="previewAnswers"
+    [disabled]="true"
+    [translateOptions]="true"
+  ></app-content-choice-answer>
+} @else if (hasCorrectAnswer()) {
+  <div class="format-container">
+    <span class="section-label">{{
+      'creator.content.correct-answer' | transloco
+    }}</span>
+    <mat-radio-group
+      class="binary-options"
+      [disabled]="formDisabled || answered()"
+      [(ngModel)]="correctAnswer"
+      data-testid="binary-correct-answer-group"
+    >
+      <mat-radio-button [value]="true" data-testid="binary-yes-option">{{
+        'creator.content.answer-yes' | transloco
+      }}</mat-radio-button>
+      <mat-radio-button [value]="false" data-testid="binary-no-option">{{
+        'creator.content.answer-no' | transloco
+      }}</mat-radio-button>
+    </mat-radio-group>
+  </div>
+}

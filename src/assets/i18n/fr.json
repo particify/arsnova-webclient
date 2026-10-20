@@ -238,7 +238,9 @@
     "correct-answer-is": "La bonne réponse est",
     "have-abstained": "s'est abstenu",
     "correct-answers-are": "Les réponses correctes sont :",
-    "have-answered-correctly": "ont répondu correctement"
+    "have-answered-correctly": "ont répondu correctement",
+    "yes": "Oui",
+    "no": "Non"
   },
   "comment-page": {
     "comment-sent": "Ton message a été publié.",

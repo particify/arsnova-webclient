@@ -95,6 +95,23 @@ function prioritizationContent(): Content {
   };
 }
 
+function binaryContent(): Content {
+  return {
+    __typename: 'Content',
+    id: 'content-5',
+    body: 'Is the earth round?',
+    hasCorrectAnswer: true,
+    answerCount: 10,
+    correctAnswerCount: 9,
+    hasAnswers: true,
+    formatData: {
+      __typename: 'BinaryContentFormatData',
+      format: ContentType.Binary,
+      correctAnswer: true,
+    },
+  };
+}
+
 describe('ContentResultsComponent', () => {
   let fixture: ComponentFixture<ContentResultsComponent>;
   let component: ContentResultsComponent;
@@ -316,5 +333,16 @@ describe('ContentResultsComponent', () => {
     expect(inputs['visualizationUnitPercent']).toBe(true);
     expect('showCorrect' in inputs).toBe(false);
     expect(inputs['rounds']).toEqual(component.rounds());
+  });
+
+  it('hands a binary the scored chart inputs and the room language', () => {
+    setUp({ content: binaryContent(), showCorrect: true });
+    fixture.componentRef.setInput('language', 'de');
+    const inputs = component.componentInputs() as Record<string, unknown>;
+    expect(inputs['showCorrect']).toBe(true);
+    expect(inputs['correctAnswerCount']).toBe(9);
+    expect(inputs['language']).toBe('de');
+    expect(inputs['rounds']).toEqual(component.rounds());
+    expect('answersDirectlyBelowChart' in inputs).toBe(false);
   });
 });

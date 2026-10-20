@@ -1,0 +1,10 @@
+/* A survey binary has no format-specific form, so the host must not take up
+   a row in the surrounding flex column. */
+:host:empty {
+  display: none;
+}
+
+.binary-options {
+  display: flex;
+  flex-direction: column;
+}

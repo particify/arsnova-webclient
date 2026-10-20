@@ -48,6 +48,10 @@ fragment ContentDetails on Content {
     ...Round
   }
   formatData {
+    ... on BinaryContentFormatData {
+      format
+      correctAnswer
+    }
     ... on ChoiceContentFormatData {
       format
       options {
@@ -125,6 +129,10 @@ fragment Answer on Answer {
   result
   hidden
   formatData {
+    ... on BinaryAnswerFormatData {
+      format
+      answer
+    }
     ... on ChoiceAnswerFormatData {
       format
       selectedChoiceIndexes
@@ -173,6 +181,10 @@ fragment QuestionnaireAnswerResult on QuestionnaireAnswerResult {
   scorableContentCount
   achievedScore
   maxScore
+}
+
+fragment BinaryContentRoundStats on BinaryContentRoundStats {
+  selectionCounts
 }
 
 fragment ChoiceContentRoundStats on ChoiceContentRoundStats {
@@ -269,6 +281,18 @@ mutation CreateQuestionnaire($input: CreateQuestionnaireInput!) {
 mutation ToggleQuestionnairePublished($id: UUID!, $published: Boolean!) {
   toggleQuestionnairePublished(id: $id, published: $published) {
     ...QuestionnaireDetails
+  }
+}
+
+mutation CreateQuestionnaireBinaryContent($input: CreateBinaryContentInput!) {
+  createQuestionnaireBinaryContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireBinaryContent($input: UpdateBinaryContentInput!) {
+  updateQuestionnaireBinaryContent(input: $input) {
+    ...CreatorContentDetails
   }
 }
 
@@ -438,6 +462,12 @@ query QuestionnaireAnswerResultsByQuestionnaireId($questionnaireId: UUID!) {
   }
 }
 
+query QuestionnaireBinaryRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireBinaryRoundStatsByRoundId(roundId: $roundId) {
+    ...BinaryContentRoundStats
+  }
+}
+
 query QuestionnaireChoiceRoundStatsByRoundId($roundId: UUID!) {
   questionnaireChoiceRoundStatsByRoundId(roundId: $roundId) {
     ...ChoiceContentRoundStats
@@ -482,6 +512,14 @@ query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
 
 query QuestionnaireTextAnswersByRoundId($roundId: UUID!) {
   questionnaireTextAnswersByRoundId(roundId: $roundId) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireBinaryAnswer($roundId: UUID!, $answer: Boolean!) {
+  createQuestionnaireBinaryAnswer(
+    input: { roundId: $roundId, answer: $answer }
+  ) {
     ...Answer
   }
 }
@@ -734,6 +772,12 @@ subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
     activeRound {
       ...Round
     }
+  }
+}
+
+subscription QuestionnaireBinaryRoundStatsUpdated($roundId: UUID!) {
+  questionnaireBinaryRoundStatsUpdated(roundId: $roundId) {
+    ...BinaryContentRoundStats
   }
 }
 

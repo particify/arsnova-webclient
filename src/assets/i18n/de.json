@@ -455,7 +455,9 @@
     "correct-answer-is": "Die richtige Antwort ist",
     "correct-answers-are": "Richtige Antworten sind:",
     "have-answered-correctly": "haben richtig geantwortet",
-    "have-abstained": "haben sich enthalten"
+    "have-abstained": "haben sich enthalten",
+    "yes": "Ja",
+    "no": "Nein"
   },
   "survey": {
     "a11y-message": "Du befindest dich jetzt im Live Feedback.",
