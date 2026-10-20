@@ -127,6 +127,19 @@ describe('WordcloudResultsComponent', () => {
     });
   });
 
+  it('sends no query while the content has no round', () => {
+    // Hidden, as there is nothing to render without a round.
+    setUp({ resultsVisible: false });
+    roundStats.watch.calls.reset();
+    roundStatsUpdated.subscribe.calls.reset();
+
+    fixture.componentRef.setInput('roundIds', []);
+    fixture.detectChanges();
+
+    expect(roundStats.watch).not.toHaveBeenCalled();
+    expect(roundStatsUpdated.subscribe).not.toHaveBeenCalled();
+  });
+
   it('pairs each word with its count for the list views', () => {
     setUp();
 

@@ -6,7 +6,7 @@ import {
   QuestionnaireWordcloudRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { Apollo, onlyCompleteData } from 'apollo-angular';
-import { map, switchMap } from 'rxjs';
+import { map, switchMap, of } from 'rxjs';
 import { mutationHelper } from '@gql/helper/mutation-helper';
 import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { ThemeService } from '@app/core/theme/theme.service';
@@ -59,8 +59,12 @@ export class WordcloudResultsComponent {
   readonly allowAnswerModeration = input(false);
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
-      switchMap((roundId) =>
-        updateRoundOn(
+      switchMap((roundId) => {
+        // A content without a round yet has no stats to load.
+        if (!roundId) {
+          return of(undefined);
+        }
+        return updateRoundOn(
           this.apollo.client,
           this.roundStatsByRoundId.watch({
             variables: { roundId },
@@ -75,8 +79,8 @@ export class WordcloudResultsComponent {
         ).pipe(
           onlyCompleteData(),
           map((r) => r.data?.questionnaireWordcloudRoundStatsByRoundId)
-        )
-      )
+        );
+      })
     )
   );
 
