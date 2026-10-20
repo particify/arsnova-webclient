@@ -1,17 +1,3 @@
-.wrong {
-  --mat-form-field-outlined-disabled-outline-color: var(--warn);
-  --mat-form-field-outlined-disabled-label-text-color: var(--warn);
-
-  color: var(--warn);
-}
-
-.correct {
-  --mat-form-field-outlined-disabled-outline-color: var(--success);
-  --mat-form-field-outlined-disabled-label-text-color: var(--success);
-
-  color: var(--success);
-}
-
 .form-field-indication {
   --mat-form-field-outlined-disabled-input-text-color: var(--on-surface);
 }

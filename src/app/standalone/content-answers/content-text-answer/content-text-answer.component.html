@@ -1,43 +1,28 @@
 <mat-form-field
   appearance="outline"
   class="form-field-indication no-field-hint"
-  [ngClass]="{
-    correct: givenAnswer && correct === true,
-    wrong: givenAnswer && correct === false,
-  }"
 >
   <mat-label>{{ 'answer.your-answer' | transloco }}</mat-label>
-  @if (minRows > 1) {
+  @if (minRows() > 1) {
     <textarea
-      #answer
       matInput
-      [value]="givenAnswer || ''"
-      [disabled]="disabled || givenAnswer"
-      (input)="inputEvent.emit(answer.value)"
+      [(ngModel)]="answer"
+      [disabled]="disabled()"
       name="answer"
       cdkTextareaAutosize
-      [cdkAutosizeMinRows]="minRows"
+      [cdkAutosizeMinRows]="minRows()"
       cdkAutosizeMaxRows="8"
-      [maxLength]="lengthLimit"
+      [maxLength]="lengthLimit()"
       dir="auto"
     ></textarea>
   } @else {
     <input
       matInput
-      #answer
-      [value]="givenAnswer || ''"
-      [disabled]="disabled || givenAnswer"
-      (input)="inputEvent.emit(answer.value)"
+      [(ngModel)]="answer"
+      [disabled]="disabled()"
       name="answer"
-      [maxLength]="lengthLimit"
+      [maxLength]="lengthLimit()"
       dir="auto"
     />
-  }
-  @if (givenAnswer && correct !== undefined) {
-    <mat-icon
-      matSuffix
-      [ngStyle]="{ color: correct ? 'var(--success)' : 'var(--warn)' }"
-      >{{ correct ? 'check' : 'close' }}</mat-icon
-    >
   }
 </mat-form-field>

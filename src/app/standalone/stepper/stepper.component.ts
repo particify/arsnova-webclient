@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -33,12 +34,6 @@ enum STEP_ANIMATION_STATE {
   NEXT_OUT = 'NEXT_OUT',
   PREV_IN = 'PREV_IN',
   PREV_OUT = 'PREV_OUT',
-}
-
-enum HEADER_ANIMATION_STATE {
-  LEFT = 'LEFT',
-  INIT = 'INIT',
-  RIGHT = 'RIGHT',
 }
 
 @Component({
@@ -79,30 +74,6 @@ enum HEADER_ANIMATION_STATE {
         animate(`${STEPPER_ANIMATION_DURATION / 2}ms ease-out`)
       ),
     ]),
-    trigger('slideHeader', [
-      state(
-        HEADER_ANIMATION_STATE.LEFT,
-        style({ transform: `translateX({{position}}%)` }),
-        {
-          params: { position: '0' },
-        }
-      ),
-      state(
-        HEADER_ANIMATION_STATE.INIT,
-        style({ transform: `translateX({{position}}%)` }),
-        {
-          params: { position: '0' },
-        }
-      ),
-      state(
-        HEADER_ANIMATION_STATE.RIGHT,
-        style({ transform: `translateX({{position}}%)` }),
-        {
-          params: { position: '0' },
-        }
-      ),
-      transition('* => *', animate(`${STEPPER_ANIMATION_DURATION}ms ease-out`)),
-    ]),
   ],
 })
 export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
@@ -110,6 +81,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   private hotkeyService = inject(HotkeyService);
   private translateService = inject(TranslocoService);
   private answerService = inject(ContentAnswerService);
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   answerResults = input<ContentAnswerResult[]>([]);
 
@@ -122,7 +94,8 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
   AnsweResultState = AnswerResultState;
   headerPos = 0;
   stepAnimationState = STEP_ANIMATION_STATE.CURRENT;
-  headerAnimationState = HEADER_ANIMATION_STATE.INIT;
+  // The header is placed with a bound transform; only step-by-step moves slide it.
+  slideHeader = false;
   private nextIndex = 0;
   private swipeXLocation = 0;
   private swipeTime = 0;
@@ -169,19 +142,27 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
       });
       return;
     }
-    this.onClick(index);
-    if (index > 2 && length > 5) {
-      const diff = index < length - 3 ? 2 : 5 - (length - 1 - index);
-      this.headerPos = index - diff;
-      this.moveHeaderRight();
-    }
+    this.nextIndex = index;
+    this.selectedIndex = index;
+    this.moveHeaderTo(this.centeredHeaderPos(index, length), false);
   }
 
   setHeaderPosition(stepIndex: number) {
-    if (this.listLength > 5) {
-      const lastHeaderPos = this.listLength - 5;
-      this.headerPos = stepIndex < lastHeaderPos ? stepIndex : lastHeaderPos;
+    this.moveHeaderTo(this.centeredHeaderPos(stepIndex, this.listLength), true);
+  }
+
+  // Both are called from outside the stepper's own events, e.g. from an effect.
+  private moveHeaderTo(headerPos: number, slide: boolean) {
+    this.slideHeader = slide;
+    this.headerPos = headerPos;
+    this.changeDetectorRef.markForCheck();
+  }
+
+  private centeredHeaderPos(index: number, length: number): number {
+    if (length <= 5) {
+      return 0;
     }
+    return Math.min(Math.max(index - 2, 0), length - 5);
   }
 
   swipe(event: TouchEvent, when: string): void {
@@ -250,12 +231,6 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
     this.newIndex.emit(index);
   }
 
-  headerAnimationDone() {
-    setTimeout(() => {
-      this.headerAnimationState = HEADER_ANIMATION_STATE.INIT;
-    });
-  }
-
   moveHeaderRight(clicked?: boolean) {
     if (
       this.headerPos > 0 &&
@@ -270,7 +245,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
       } else {
         this.headerPos--;
       }
-      this.headerAnimationState = HEADER_ANIMATION_STATE.RIGHT;
+      this.slideHeader = true;
     }
   }
 
@@ -288,7 +263,7 @@ export class StepperComponent extends CdkStepper implements OnInit, OnDestroy {
       } else {
         this.headerPos++;
       }
-      this.headerAnimationState = HEADER_ANIMATION_STATE.LEFT;
+      this.slideHeader = true;
     }
   }
 

@@ -30,11 +30,8 @@
         <div
           fxLayout="row"
           fxLayoutAlign="start center"
-          [@slideHeader]="{
-            value: headerAnimationState,
-            params: { position: headerPos * -20 },
-          }"
-          (@slideHeader.done)="headerAnimationDone()"
+          [style.transform]="'translateX(' + headerPos * -20 + '%)'"
+          [class.slide-header]="slideHeader"
         >
           <span class="fill-remaining-space"></span>
           @for (step of steps; track step; let i = $index) {

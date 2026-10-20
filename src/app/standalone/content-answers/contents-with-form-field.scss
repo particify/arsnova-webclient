@@ -1,0 +1,24 @@
+// Both mixins emit the class names their templates already use, so a consumer
+// includes them at the top level.
+
+@mixin correctness-indication {
+  .correct {
+    --mat-form-field-outlined-disabled-outline-color: var(--success);
+    --mat-form-field-outlined-disabled-label-text-color: var(--success);
+
+    color: var(--success);
+  }
+
+  .wrong {
+    --mat-form-field-outlined-disabled-outline-color: var(--warn);
+    --mat-form-field-outlined-disabled-label-text-color: var(--warn);
+
+    color: var(--warn);
+  }
+}
+
+@mixin form-field-indication {
+  .form-field-indication {
+    --mat-form-field-outlined-disabled-input-text-color: var(--on-surface);
+  }
+}

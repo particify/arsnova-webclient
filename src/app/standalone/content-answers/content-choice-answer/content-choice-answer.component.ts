@@ -48,9 +48,12 @@ export class ContentChoiceAnswerComponent {
     this.displayAnswers().map((answer, index) => {
       const checked = this.answered() && answer.checked;
       const correct = checked && this.isAnswerOptionCorrect(index);
+      // Without a correct option there is nothing a pick can be wrong against.
+      const scored = !!this.correctOptionIndexes()?.length;
       return {
         correct: correct && this.correctOptionsPublished(),
-        incorrect: checked && !correct && this.correctOptionsPublished(),
+        incorrect:
+          checked && !correct && scored && this.correctOptionsPublished(),
       };
     })
   );

@@ -1,4 +1,31 @@
+@use '../../../variables' as *;
+
 $option-padding-full: 14px;
+
+// Setting the border color is left to the consumer, since the correctness colors
+// below have to be able to win over it.
+@mixin option-box {
+  margin-top: $option-padding-full;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: $border-radius;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+// The selectors are passed in because each content type marks correctness on a
+// different element.
+@mixin correctness-borders($correct, $wrong) {
+  #{$correct} {
+    border-color: var(--success);
+  }
+
+  #{$wrong} {
+    border-color: var(--warn);
+  }
+}
 
 .solution {
   margin: -40px 0 0 -40px;

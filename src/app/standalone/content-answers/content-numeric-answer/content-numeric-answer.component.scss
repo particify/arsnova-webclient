@@ -1,21 +1,8 @@
+@use '../contents-with-form-field' as cwff;
+
+@include cwff.correctness-indication;
+@include cwff.form-field-indication;
+
 .answer-hint {
   font-size: 14px;
-}
-
-.form-field-indication {
-  --mat-form-field-outlined-disabled-input-text-color: var(--on-surface);
-}
-
-.wrong {
-  --mat-form-field-outlined-disabled-outline-color: var(--warn);
-  --mat-form-field-outlined-disabled-label-text-color: var(--warn);
-
-  color: var(--warn);
-}
-
-.correct {
-  --mat-form-field-outlined-disabled-outline-color: var(--success);
-  --mat-form-field-outlined-disabled-label-text-color: var(--success);
-
-  color: var(--success);
 }

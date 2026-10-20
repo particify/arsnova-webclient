@@ -8,6 +8,7 @@ import { ContentChoiceAnswerComponent } from '@app/standalone/content-answers/co
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 import { ContentFormatData, ContentType } from '@gql/generated/graphql';
+import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 
 @Component({
@@ -41,7 +42,7 @@ export class ContentPreviewComponent {
     [ContentType.ShortAnswer]: ContentChoiceAnswerComponent,
     [ContentType.Slide]: ContentChoiceAnswerComponent,
     [ContentType.Sort]: ContentChoiceAnswerComponent,
-    [ContentType.Text]: ContentChoiceAnswerComponent,
+    [ContentType.Text]: ContentTextAnswerComponent,
     [ContentType.Wordcloud]: ContentWordcloudAnswerComponent,
   };
 
@@ -60,6 +61,11 @@ export class ContentPreviewComponent {
           ),
           correctOptionIndexes: formatData.correctOptionIndexes ?? undefined,
           multipleAnswersAllowed: !!formatData.multiple,
+        };
+
+      case 'TextContentFormatData':
+        return {
+          disabled: true,
         };
 
       case 'WordcloudContentFormatData':

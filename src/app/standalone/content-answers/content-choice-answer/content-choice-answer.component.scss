@@ -10,28 +10,16 @@
 }
 
 .list-item {
-  margin-top: cwo.$option-padding-full;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 5px;
+  @include cwo.option-box;
+
   transition: border-color 300ms;
 
   &:not(.correct-answer, .wrong-answer, .primary-border-color) {
     border-color: var(--border);
   }
-
-  &:first-of-type {
-    margin-top: 0;
-  }
 }
 
-.correct-answer {
-  border-color: var(--success);
-}
-
-.wrong-answer {
-  border-color: var(--warn);
-}
+@include cwo.correctness-borders('.correct-answer', '.wrong-answer');
 
 .mat-mdc-radio-button,
 .mat-mdc-checkbox {
