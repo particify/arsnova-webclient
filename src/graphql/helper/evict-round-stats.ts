@@ -14,3 +14,30 @@ export function evictRoundStats(cache: ApolloCache, roundId: string) {
         : value,
   });
 }
+
+/** The root fields that cache what is known about the rounds of contents. */
+const ROUND_FIELDS = [
+  'questionnaireRoundsByContentId',
+  'questionnaireBinaryRoundStatsByRoundId',
+  'questionnaireChoiceRoundStatsByRoundId',
+  'questionnaireNumericRoundStatsByRoundId',
+  'questionnairePrioritizationRoundStatsByRoundId',
+  'questionnaireScaleRoundStatsByRoundId',
+  'questionnaireShortAnswerRoundStatsByRoundId',
+  'questionnaireSortRoundStatsByRoundId',
+  'questionnaireWordcloudRoundStatsByRoundId',
+];
+
+/**
+ * Forgets the rounds lists and round stats of every content, so watching
+ * views reload them once rounds have been replaced, e.g. by a reset.
+ *
+ * Rounds themselves stay, as contents still reference them until they are
+ * reloaded; the ones no longer reachable are collected.
+ */
+export function evictRounds(cache: ApolloCache) {
+  for (const fieldName of ROUND_FIELDS) {
+    cache.evict({ id: 'ROOT_QUERY', fieldName });
+  }
+  cache.gc();
+}

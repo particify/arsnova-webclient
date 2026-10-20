@@ -166,6 +166,13 @@ describe('ShortAnswerResultsComponent', () => {
     ]);
   });
 
+  it('checks cached stats with the server, as a reset may have replaced them', () => {
+    setUp();
+    expect(statsByRoundId.watch).toHaveBeenCalledWith(
+      jasmine.objectContaining({ fetchPolicy: 'cache-and-network' })
+    );
+  });
+
   it('zero-fills a count the server left out', () => {
     setUp({ stats: roundStats({ counts: [4] }) });
     expect(grid()?.answers.map((a) => a.count)).toEqual([4, 0, 0]);

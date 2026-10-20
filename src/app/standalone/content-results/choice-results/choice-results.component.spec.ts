@@ -9,6 +9,8 @@ import {
   QuestionnaireChoiceRoundStatsUpdatedGql,
   Round,
 } from '@gql/generated/graphql';
+import { CombinedGraphQLErrors } from '@apollo/client';
+import { Apollo } from 'apollo-angular';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { Subject } from 'rxjs';
@@ -192,9 +194,43 @@ describe('ChoiceResultsComponent', () => {
 
     expect(roundStats.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+    });
+  });
+
+  describe('on a deleted round', () => {
+    let refetchQueries: jasmine.Spy;
+
+    const notFound = new CombinedGraphQLErrors({
+      errors: [
+        {
+          message: 'Round not found',
+          extensions: { classification: 'NOT_FOUND' },
+        },
+      ],
+    });
+
+    beforeEach(() => {
+      setUp({ options });
+      refetchQueries = spyOn(
+        TestBed.inject(Apollo).client,
+        'refetchQueries'
+      ).and.resolveTo([] as never);
+    });
+
+    it('reloads the contents once its updates end', () => {
+      updates$.next({ data: undefined, error: notFound });
+
+      expect(refetchQueries).toHaveBeenCalledTimes(1);
+    });
+
+    it('reloads the contents once its stats cannot be loaded', () => {
+      stats$.next({ dataState: 'empty', data: undefined, error: notFound });
+
+      expect(refetchQueries).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -212,6 +248,7 @@ describe('ChoiceResultsComponent', () => {
 
     expect(roundStats.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledOnceWith({
       variables: { roundId: 'round-2' },
@@ -269,6 +306,7 @@ describe('ChoiceResultsComponent', () => {
 
     expect(roundStats.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-2' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
       variables: { roundId: 'round-2' },

@@ -1,8 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { combineLatest, EMPTY, map, Observable, of, switchMap } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
-import { updateOn } from '@gql/helper/update-on';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   NumericContentFormatData,
@@ -40,6 +40,7 @@ type NumericStat = keyof Pick<
   ],
 })
 export class NumericResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly themeService = inject(ThemeService);
   private readonly presentationService = inject(PresentationService);
   private readonly translateService = inject(TranslocoService);
@@ -69,8 +70,12 @@ export class NumericResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<NumericContentRoundStats | null | undefined> {
-    return updateOn(
-      this.roundStatsByRoundId.watch({ variables: { roundId } }),
+    return updateRoundOn(
+      this.apollo.client,
+      this.roundStatsByRoundId.watch({
+        variables: { roundId },
+        fetchPolicy: 'cache-and-network',
+      }),
       this.isClosed(roundId)
         ? EMPTY
         : this.numericRoundStatsUpdated.subscribe({ variables: { roundId } }),

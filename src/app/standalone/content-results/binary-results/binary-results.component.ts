@@ -10,8 +10,8 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
-import { updateOn } from '@gql/helper/update-on';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   BinaryContentFormatData,
@@ -41,6 +41,7 @@ const BINARY_OPTION_KEYS = ['answer.yes', 'answer.no'];
   imports: [BarChartComponent, CoreModule, CorrectAnswerResultsComponent],
 })
 export class BinaryResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly themeService = inject(ThemeService);
   private readonly presentationService = inject(PresentationService);
   private readonly translateService = inject(TranslocoService);
@@ -72,8 +73,12 @@ export class BinaryResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<BinaryContentRoundStats | null | undefined> {
-    return updateOn(
-      this.roundStatsByRoundId.watch({ variables: { roundId } }),
+    return updateRoundOn(
+      this.apollo.client,
+      this.roundStatsByRoundId.watch({
+        variables: { roundId },
+        fetchPolicy: 'cache-and-network',
+      }),
       this.isClosed(roundId)
         ? EMPTY
         : this.binaryRoundStatsUpdated.subscribe({ variables: { roundId } }),

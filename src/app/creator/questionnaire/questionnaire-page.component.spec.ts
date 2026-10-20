@@ -24,15 +24,29 @@ import {
   Content,
   DeleteQuestionnaireGql,
   QuestionnaireByIdGql,
+  QuestionnaireChoiceRoundStatsByRoundIdDocument,
+  QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnaireRoundsByContentIdDocument,
+  QuestionnaireRoundsByContentIdQuery,
   QuestionnairePublishingMode,
+  ResetQuestionnaireResultsDocument,
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
+import { ApolloClient, ApolloLink } from '@apollo/client';
+import { Apollo } from 'apollo-angular';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { BehaviorSubject, NEVER, Observable, Subject, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  NEVER,
+  Observable,
+  Subject,
+  from,
+  lastValueFrom,
+  of,
+} from 'rxjs';
 import { QuestionnairePageComponent } from './questionnaire-page.component';
 import { QuestionnairePageService } from './questionnaire-page.service';
 
@@ -368,7 +382,7 @@ describe('QuestionnairePageComponent (creator)', () => {
     expect(TestBed.inject(NotificationService).showAdvanced).toHaveBeenCalled();
   });
 
-  it('reloads every round once the results are reset', () => {
+  it('reloads the contents once the results are reset', () => {
     setUp();
     const resetResults = TestBed.inject(
       ResetQuestionnaireResultsGql
@@ -385,14 +399,154 @@ describe('QuestionnairePageComponent (creator)', () => {
         .args[4] as () => Observable<unknown>
     )().subscribe();
 
-    const { refetchQueries, update } =
+    const { refetchQueries, awaitRefetchQueries, update } =
       resetResults.mutate.calls.mostRecent().args[0]!;
     (update as unknown as () => void)();
 
-    expect(refetchQueries).toContain(QuestionnaireRoundsByContentIdDocument);
+    expect(refetchQueries).toEqual([
+      {
+        query: QuestionnaireContentsByQuestionnaireIdDocument,
+        variables: { questionnaireId: 'q-1' },
+      },
+    ]);
+    expect(awaitRefetchQueries).toBeTrue();
     expect(
       contentResultsService.presentationSelectedRoundIds('c-1')
     ).toBeUndefined();
+  });
+
+  describe('reset against the cache', () => {
+    let client: ApolloClient;
+    let roundId: string;
+
+    function round(id: string) {
+      return {
+        __typename: 'Round',
+        id,
+        contentId: 'c-1',
+        roundNo: 1,
+        closed: false,
+        started: true,
+        answeringEndTime: null,
+        answerable: true,
+      };
+    }
+
+    // The server deletes every round and starts each content over with a new one.
+    const responses: Record<string, () => unknown> = {
+      QuestionnaireRoundsByContentId: () => ({
+        questionnaireRoundsByContentId: [round(roundId)],
+      }),
+      QuestionnaireChoiceRoundStatsByRoundId: () => ({
+        questionnaireChoiceRoundStatsByRoundId: {
+          __typename: 'ChoiceContentRoundStats',
+          selectionCounts: roundId === 'round-old' ? [3, 1] : [0, 0],
+        },
+      }),
+      QuestionnaireContentsByQuestionnaireId: () => ({
+        questionnaireContentsByQuestionnaireId: {
+          __typename: 'QuestionnaireContentConnection',
+          edges: [
+            {
+              __typename: 'QuestionnaireContentEdge',
+              node: {
+                __typename: 'Content',
+                id: 'c-1',
+                body: 'Quiz question',
+                bodyRendered: null,
+                formatData: {
+                  __typename: 'SlideContentFormatData',
+                  format: 'SLIDE',
+                },
+                duration: null,
+                abstentionsAllowed: true,
+                hasCorrectAnswer: false,
+                weight: 1,
+                answerCount: 0,
+                abstentionCount: 0,
+                position: 0,
+                correctAnswerCount: 0,
+                hasAnswers: false,
+                activeRound: round(roundId),
+              },
+            },
+          ],
+        },
+      }),
+      ResetQuestionnaireResults: () => ({ resetQuestionnaireResults: true }),
+    };
+
+    async function roundIds() {
+      const { data } = await client.query<QuestionnaireRoundsByContentIdQuery>({
+        query: QuestionnaireRoundsByContentIdDocument,
+        variables: { contentId: 'c-1' },
+      });
+      return data?.questionnaireRoundsByContentId?.map((r) => r.id);
+    }
+
+    function cachedStats(id: string) {
+      return client.cache.readQuery({
+        query: QuestionnaireChoiceRoundStatsByRoundIdDocument,
+        variables: { roundId: id },
+      });
+    }
+
+    async function reset() {
+      const resetResults = TestBed.inject(
+        ResetQuestionnaireResultsGql
+      ) as unknown as jasmine.SpyObj<ResetQuestionnaireResultsGql>;
+      resetResults.mutate.and.callFake(
+        (options) =>
+          from(
+            client.mutate({
+              ...(options as object),
+              mutation: ResetQuestionnaireResultsDocument,
+            })
+          ) as never
+      );
+      dialogService.openDeleteDialog.and.returnValue({
+        afterClosed: () => of(false),
+      } as never);
+      component.deleteAllAnswers();
+      roundId = 'round-new';
+      await lastValueFrom(
+        (
+          dialogService.openDeleteDialog.calls.mostRecent()
+            .args[4] as () => Observable<unknown>
+        )()
+      );
+    }
+
+    beforeEach(async () => {
+      setUp();
+      roundId = 'round-old';
+      client = TestBed.inject(Apollo).client;
+      client.setLink(
+        new ApolloLink(
+          (operation) =>
+            of({ data: responses[operation.operationName!]() }) as never
+        )
+      );
+      // The presentation showed the results of the content before it was left.
+      expect(await roundIds()).toEqual(['round-old']);
+      await client.query({
+        query: QuestionnaireChoiceRoundStatsByRoundIdDocument,
+        variables: { roundId: 'round-old' },
+      });
+    });
+
+    it('replaces the cached rounds of contents not on screen', async () => {
+      await reset();
+
+      // Entering the presentation again reads the rounds like before.
+      expect(await roundIds()).toEqual(['round-new']);
+    });
+
+    it('forgets the stats of the deleted rounds', async () => {
+      await reset();
+
+      expect(cachedStats('round-old')).toBeNull();
+    });
   });
 
   it('keeps the results when resetting is cancelled', () => {

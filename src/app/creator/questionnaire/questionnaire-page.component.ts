@@ -37,6 +37,8 @@ import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-se
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { mutationHelper } from '@gql/helper/mutation-helper';
+import { evictRounds } from '@gql/helper/evict-round-stats';
+import { Apollo } from 'apollo-angular';
 import {
   switchMap,
   map,
@@ -44,6 +46,7 @@ import {
   catchError,
   ignoreElements,
   EMPTY,
+  tap,
 } from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
@@ -70,7 +73,6 @@ import {
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
-  QuestionnaireRoundsByContentIdDocument,
   QuestionnaireType,
   QuestionnaireUpdatedGql,
   ResetQuestionnaireResultsGql,
@@ -153,6 +155,7 @@ export class QuestionnairePageComponent {
     CreatorQuestionnaireContentUpdatedGql
   );
   private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
+  private readonly apollo = inject(Apollo);
 
   readonly userRole = input.required<UserRole>();
   readonly roomId = input.required<string>();
@@ -375,19 +378,23 @@ export class QuestionnairePageComponent {
         this.resetQuestionnaireResults
           .mutate({
             variables: { id: this.questionnaireId() },
-            // Every content starts over with a new round, which the results
-            // views only learn about from their refetched rounds.
             update: () =>
               this.contentResultsService.clearPresentationSelectedRoundIds(),
+            // Every content starts over with a new round, which the refetched
+            // contents reference as their active round.
             refetchQueries: [
               {
                 query: QuestionnaireContentsByQuestionnaireIdDocument,
                 variables: { questionnaireId: this.questionnaireId() },
               },
-              QuestionnaireRoundsByContentIdDocument,
             ],
+            awaitRefetchQueries: true,
           })
-          .pipe(this.mutations.reportErrors())
+          .pipe(
+            // The cached rounds and their stats are those of deleted rounds.
+            tap(() => evictRounds(this.apollo.client.cache)),
+            this.mutations.reportErrors()
+          )
     );
     dialogRef.afterClosed().subscribe({
       next: (result) => {

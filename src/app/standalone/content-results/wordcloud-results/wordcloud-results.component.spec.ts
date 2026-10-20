@@ -119,6 +119,7 @@ describe('WordcloudResultsComponent', () => {
 
     expect(roundStats.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(component.visualizationData()).toEqual({
       labels: ['Angular', 'Kotlin'],
@@ -143,6 +144,7 @@ describe('WordcloudResultsComponent', () => {
 
     expect(roundStats.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-2' },
+      fetchPolicy: 'cache-and-network',
     });
   });
 

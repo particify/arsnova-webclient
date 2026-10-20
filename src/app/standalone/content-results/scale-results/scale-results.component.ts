@@ -10,8 +10,8 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
-import { updateOn } from '@gql/helper/update-on';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   QuestionnaireScaleRoundStatsByRoundIdGql,
@@ -35,6 +35,7 @@ const NEUTRAL_COLOR_INDEX = 2;
   imports: [CoreModule, BarChartComponent],
 })
 export class ScaleResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly themeService = inject(ThemeService);
   private readonly presentationService = inject(PresentationService);
   private readonly translateService = inject(TranslocoService);
@@ -62,8 +63,12 @@ export class ScaleResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<ScaleContentRoundStats | null | undefined> {
-    return updateOn(
-      this.roundStatsByRoundId.watch({ variables: { roundId } }),
+    return updateRoundOn(
+      this.apollo.client,
+      this.roundStatsByRoundId.watch({
+        variables: { roundId },
+        fetchPolicy: 'cache-and-network',
+      }),
       this.isClosed(roundId)
         ? EMPTY
         : this.scaleRoundStatsUpdated.subscribe({ variables: { roundId } }),

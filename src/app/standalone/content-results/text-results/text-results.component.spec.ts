@@ -179,7 +179,10 @@ describe('TextResultsComponent', () => {
   it('queries the whole list when the answers are published', () => {
     setUp({ answersPublished: true, viewAsParticipant: true });
     expect(fixture.componentInstance.restricted()).toBe(false);
-    expect(answersByRoundId.watch).toHaveBeenCalled();
+    expect(answersByRoundId.watch).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
+    });
     expect(answerByRoundId.watch).not.toHaveBeenCalled();
     expect(bodies()).toEqual(['First', 'Second']);
   });

@@ -7,9 +7,9 @@ import {
   QuestionnaireChoiceRoundStatsUpdatedGql,
   Round,
 } from '@gql/generated/graphql';
-import { onlyCompleteData } from 'apollo-angular';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
 import { combineLatest, EMPTY, map, Observable, of, switchMap } from 'rxjs';
-import { updateOn } from '@gql/helper/update-on';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { TranslocoService } from '@jsverse/transloco';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { ChoiceAnswerListComponent } from './choice-answer-list/choice-answer-list.component';
@@ -33,6 +33,7 @@ import { BarChartComponent } from '@app/standalone/content-results/visualization
   ],
 })
 export class ChoiceResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly themeService = inject(ThemeService);
   private readonly roundStatsByRoundId = inject(
     QuestionnaireChoiceRoundStatsByRoundIdGql
@@ -62,8 +63,12 @@ export class ChoiceResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<ChoiceContentRoundStats | null | undefined> {
-    return updateOn(
-      this.roundStatsByRoundId.watch({ variables: { roundId } }),
+    return updateRoundOn(
+      this.apollo.client,
+      this.roundStatsByRoundId.watch({
+        variables: { roundId },
+        fetchPolicy: 'cache-and-network',
+      }),
       this.isClosed(roundId)
         ? EMPTY
         : this.choiceRoundStatsUpdated.subscribe({ variables: { roundId } }),

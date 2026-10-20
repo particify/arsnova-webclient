@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { EMPTY, map, of, switchMap } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
-import { updateOn } from '@gql/helper/update-on';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { TranslocoService } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { ContentAnswerService } from '@app/core/services/http/content-answer.service';
@@ -43,6 +43,7 @@ import {
   ],
 })
 export class SortResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly answerService = inject(ContentAnswerService);
   private readonly presentationService = inject(PresentationService);
   private readonly themeService = inject(ThemeService);
@@ -80,8 +81,12 @@ export class SortResultsComponent {
         if (!roundId) {
           return of(undefined);
         }
-        return updateOn(
-          this.roundStatsByRoundId.watch({ variables: { roundId } }),
+        return updateRoundOn(
+          this.apollo.client,
+          this.roundStatsByRoundId.watch({
+            variables: { roundId },
+            fetchPolicy: 'cache-and-network',
+          }),
           this.isClosed(roundId)
             ? EMPTY
             : this.roundStatsUpdated.subscribe({ variables: { roundId } }),

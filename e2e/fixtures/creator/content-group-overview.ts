@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 import { waitForOperation } from '@e2e/fixtures/shared/graphql';
 
 export class ContentGroupOverviewPage {
@@ -55,6 +55,32 @@ export class ContentGroupOverviewPage {
     await this.openSettings();
     await this.page.getByRole('radio', { name: 'range' }).click();
     await this.saveSettings();
+  }
+
+  /**
+   * Moves the end of the published range down by the given number of
+   * contents, with the keyboard, as its divider is dragged otherwise. The
+   * range starts at the first content.
+   */
+  async extendPublishedRange(contentCount: number) {
+    // Closing the settings dialog hands the focus back to its trigger.
+    await expect(this.page.getByRole('dialog')).toBeHidden();
+    const divider = this.page.getByLabel(/^Published up to the content \d+\./);
+    for (let end = 1; end <= contentCount; end++) {
+      await expect(divider).toHaveAttribute(
+        'aria-label',
+        new RegExp(`content ${end}\\.`)
+      );
+      await divider.focus();
+      await Promise.all([
+        waitForOperation(this.page, 'PublishQuestionnaireUpToContent'),
+        this.page.keyboard.press('Control+ArrowDown'),
+      ]);
+    }
+    await expect(divider).toHaveAttribute(
+      'aria-label',
+      new RegExp(`content ${contentCount + 1}\\.`)
+    );
   }
 
   async toggleLeaderboard() {
@@ -193,6 +219,15 @@ export class ContentGroupOverviewPage {
 
   async openGroupMoreMenu() {
     await this.page.getByTestId('group-more-menu').click();
+  }
+
+  async resetResults() {
+    await this.openGroupMoreMenu();
+    await this.page.getByRole('menuitem', { name: 'Reset results' }).click();
+    await Promise.all([
+      waitForOperation(this.page, 'ResetQuestionnaireResults'),
+      this.page.getByRole('button', { name: 'Delete' }).click(),
+    ]);
   }
 
   async deleteGroup(confirm = false) {
