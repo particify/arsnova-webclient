@@ -3,10 +3,12 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   BanQuestionnaireWordcloudContentKeywordGql,
   QuestionnaireWordcloudRoundStatsByRoundIdGql,
+  QuestionnaireWordcloudRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
 import { map, switchMap } from 'rxjs';
 import { mutationHelper } from '@gql/helper/mutation-helper';
+import { updateOn } from '@gql/helper/update-on';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { CoreModule } from '@app/core/core.module';
 import { WordcloudComponent } from '@app/standalone/content-results/visualization/wordcloud/wordcloud.component';
@@ -38,6 +40,9 @@ export class WordcloudResultsComponent {
   private readonly banKeyword = inject(
     BanQuestionnaireWordcloudContentKeywordGql
   );
+  private readonly wordcloudRoundStatsUpdated = inject(
+    QuestionnaireWordcloudRoundStatsUpdatedGql
+  );
   private readonly dialogService = inject(DialogService);
   private readonly translateService = inject(TranslocoService);
   private readonly notificationService = inject(NotificationService);
@@ -51,14 +56,20 @@ export class WordcloudResultsComponent {
   readonly allowAnswerModeration = input(false);
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
-      switchMap((roundId) => {
-        return this.roundStatsByRoundId
-          .watch({ variables: { roundId } })
-          .valueChanges.pipe(
-            onlyCompleteData(),
-            map((r) => r.data?.questionnaireWordcloudRoundStatsByRoundId)
-          );
-      })
+      switchMap((roundId) =>
+        updateOn(
+          this.roundStatsByRoundId.watch({ variables: { roundId } }),
+          this.wordcloudRoundStatsUpdated.subscribe({ variables: { roundId } }),
+          (r) =>
+            r.data && {
+              questionnaireWordcloudRoundStatsByRoundId:
+                r.data.questionnaireWordcloudRoundStatsUpdated,
+            }
+        ).pipe(
+          onlyCompleteData(),
+          map((r) => r.data?.questionnaireWordcloudRoundStatsByRoundId)
+        )
+      )
     )
   );
 

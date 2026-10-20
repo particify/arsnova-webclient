@@ -3553,6 +3553,32 @@ export type UpdateQuestionnaireContentOrderMutation = {
   } | null;
 };
 
+export type QuestionnaireChoiceRoundStatsUpdatedSubscriptionVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireChoiceRoundStatsUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireChoiceRoundStatsUpdated?: {
+    __typename?: 'ChoiceContentRoundStats';
+    selectionCounts?: Array<number> | null;
+  } | null;
+};
+
+export type QuestionnaireWordcloudRoundStatsUpdatedSubscriptionVariables =
+  Exact<{
+    roundId: Scalars['UUID']['input'];
+  }>;
+
+export type QuestionnaireWordcloudRoundStatsUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireWordcloudRoundStatsUpdated?: {
+    __typename?: 'WordcloudContentRoundStats';
+    words?: Array<string> | null;
+    counts?: Array<number> | null;
+  } | null;
+};
+
 export type RoomDetailsFragmentFragment = {
   __typename?: 'Room';
   id: string;
@@ -6538,6 +6564,49 @@ export class UpdateQuestionnaireContentOrderGql extends Apollo.Mutation<
   UpdateQuestionnaireContentOrderMutationVariables
 > {
   document = UpdateQuestionnaireContentOrderDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireChoiceRoundStatsUpdatedDocument = gql`
+  subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
+    questionnaireChoiceRoundStatsUpdated(roundId: $roundId) {
+      selectionCounts
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireChoiceRoundStatsUpdatedGql extends Apollo.Subscription<
+  QuestionnaireChoiceRoundStatsUpdatedSubscription,
+  QuestionnaireChoiceRoundStatsUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireChoiceRoundStatsUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireWordcloudRoundStatsUpdatedDocument = gql`
+  subscription QuestionnaireWordcloudRoundStatsUpdated($roundId: UUID!) {
+    questionnaireWordcloudRoundStatsUpdated(roundId: $roundId) {
+      words
+      counts
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireWordcloudRoundStatsUpdatedGql extends Apollo.Subscription<
+  QuestionnaireWordcloudRoundStatsUpdatedSubscription,
+  QuestionnaireWordcloudRoundStatsUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireWordcloudRoundStatsUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
