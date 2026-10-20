@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { NO_ERRORS_SCHEMA, Type } from '@angular/core';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA, Type } from '@angular/core';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -22,17 +22,32 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import {
   Content,
+  CreatorQuestionnaireContentUpdatedDocument,
   DeleteQuestionnaireGql,
   QuestionnaireByIdGql,
+  QuestionnaireChoiceRoundStatsByRoundIdDocument,
+  QuestionnaireContentsByQuestionnaireIdDocument,
   QuestionnaireContentsByQuestionnaireIdGql,
   QuestionnaireRoundsByContentIdDocument,
+  QuestionnaireRoundsByContentIdQuery,
   QuestionnairePublishingMode,
+  ResetQuestionnaireResultsDocument,
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
+import { ApolloClient, ApolloLink, gql, InMemoryCache } from '@apollo/client';
+import { Apollo } from 'apollo-angular';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { BehaviorSubject, NEVER, Observable, Subject, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  NEVER,
+  Observable,
+  Subject,
+  from,
+  lastValueFrom,
+  of,
+} from 'rxjs';
 import { QuestionnairePageComponent } from './questionnaire-page.component';
 import { QuestionnairePageService } from './questionnaire-page.service';
 
@@ -235,7 +250,7 @@ describe('QuestionnairePageComponent (creator)', () => {
 
     emitContents(contents);
 
-    expect(component.editMode).toBeTrue();
+    expect(component.editMode()).toBeTrue();
     expect(component.selectedContentId()).toBe('c-2');
     expect(router.navigate).not.toHaveBeenCalled();
   });
@@ -245,7 +260,7 @@ describe('QuestionnairePageComponent (creator)', () => {
 
     emitContents(contents);
 
-    expect(component.creationMode).toBeTrue();
+    expect(component.creationMode()).toBeTrue();
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
@@ -255,7 +270,7 @@ describe('QuestionnairePageComponent (creator)', () => {
 
     navigateTo(null);
 
-    expect(component.childActive).toBeFalse();
+    expect(component.childActive()).toBeFalse();
     expect(router.navigate).toHaveBeenCalledWith(['c-2'], {
       relativeTo: route,
       replaceUrl: true,
@@ -272,7 +287,7 @@ describe('QuestionnairePageComponent (creator)', () => {
     });
 
     navigateTo(childRoute('leaderboard'));
-    expect(component.showLeaderboard).toBeTrue();
+    expect(component.showLeaderboard()).toBeTrue();
 
     component.toggleLeaderboard();
     expect(router.navigate).toHaveBeenCalledWith(['.', 'c-2'], {
@@ -368,7 +383,7 @@ describe('QuestionnairePageComponent (creator)', () => {
     expect(TestBed.inject(NotificationService).showAdvanced).toHaveBeenCalled();
   });
 
-  it('reloads every round once the results are reset', () => {
+  it('reloads the contents once the results are reset', () => {
     setUp();
     const resetResults = TestBed.inject(
       ResetQuestionnaireResultsGql
@@ -385,14 +400,192 @@ describe('QuestionnairePageComponent (creator)', () => {
         .args[4] as () => Observable<unknown>
     )().subscribe();
 
-    const { refetchQueries, update } =
+    const { refetchQueries, awaitRefetchQueries, update } =
       resetResults.mutate.calls.mostRecent().args[0]!;
     (update as unknown as () => void)();
 
-    expect(refetchQueries).toContain(QuestionnaireRoundsByContentIdDocument);
+    expect(refetchQueries).toEqual([
+      {
+        query: QuestionnaireContentsByQuestionnaireIdDocument,
+        variables: { questionnaireId: 'q-1' },
+      },
+    ]);
+    expect(awaitRefetchQueries).toBeTrue();
     expect(
       contentResultsService.presentationSelectedRoundIds('c-1')
     ).toBeUndefined();
+  });
+
+  describe('reset against the cache', () => {
+    let client: ApolloClient;
+    let roundId: string;
+
+    function round(id: string) {
+      return {
+        __typename: 'Round',
+        id,
+        contentId: 'c-1',
+        roundNo: 1,
+        closed: false,
+        started: true,
+        answeringEndTime: null,
+        answerable: true,
+      };
+    }
+
+    // The server deletes every round and starts each content over with a new one.
+    const responses: Record<string, () => unknown> = {
+      QuestionnaireRoundsByContentId: () => ({
+        questionnaireRoundsByContentId: [round(roundId)],
+      }),
+      QuestionnaireChoiceRoundStatsByRoundId: () => ({
+        questionnaireChoiceRoundStatsByRoundId: {
+          __typename: 'ChoiceContentRoundStats',
+          selectionCounts: roundId === 'round-old' ? [3, 1] : [0, 0],
+        },
+      }),
+      QuestionnaireContentsByQuestionnaireId: () => ({
+        questionnaireContentsByQuestionnaireId: {
+          __typename: 'QuestionnaireContentConnection',
+          edges: [
+            {
+              __typename: 'QuestionnaireContentEdge',
+              node: {
+                __typename: 'Content',
+                id: 'c-1',
+                body: 'Quiz question',
+                bodyRendered: null,
+                formatData: {
+                  __typename: 'SlideContentFormatData',
+                  format: 'SLIDE',
+                },
+                duration: null,
+                abstentionsAllowed: true,
+                hasCorrectAnswer: false,
+                weight: 1,
+                answerCount: 0,
+                abstentionCount: 0,
+                position: 0,
+                correctAnswerCount: 0,
+                hasAnswers: false,
+                activeRound: round(roundId),
+              },
+            },
+          ],
+        },
+      }),
+      ResetQuestionnaireResults: () => ({ resetQuestionnaireResults: true }),
+    };
+
+    async function roundIds() {
+      const { data } = await client.query<QuestionnaireRoundsByContentIdQuery>({
+        query: QuestionnaireRoundsByContentIdDocument,
+        variables: { contentId: 'c-1' },
+      });
+      return data?.questionnaireRoundsByContentId?.map((r) => r.id);
+    }
+
+    function cachedStats(id: string) {
+      return client.cache.readQuery({
+        query: QuestionnaireChoiceRoundStatsByRoundIdDocument,
+        variables: { roundId: id },
+      });
+    }
+
+    async function reset() {
+      const resetResults = TestBed.inject(
+        ResetQuestionnaireResultsGql
+      ) as unknown as jasmine.SpyObj<ResetQuestionnaireResultsGql>;
+      resetResults.mutate.and.callFake(
+        (options) =>
+          from(
+            client.mutate({
+              ...(options as object),
+              mutation: ResetQuestionnaireResultsDocument,
+            })
+          ) as never
+      );
+      dialogService.openDeleteDialog.and.returnValue({
+        afterClosed: () => of(false),
+      } as never);
+      component.deleteAllAnswers();
+      roundId = 'round-new';
+      await lastValueFrom(
+        (
+          dialogService.openDeleteDialog.calls.mostRecent()
+            .args[4] as () => Observable<unknown>
+        )()
+      );
+    }
+
+    beforeEach(async () => {
+      setUp();
+      roundId = 'round-old';
+      client = TestBed.inject(Apollo).client;
+      client.setLink(
+        new ApolloLink(
+          (operation) =>
+            of({ data: responses[operation.operationName!]() }) as never
+        )
+      );
+      // The presentation showed the results of the content before it was left.
+      expect(await roundIds()).toEqual(['round-old']);
+      await client.query({
+        query: QuestionnaireChoiceRoundStatsByRoundIdDocument,
+        variables: { roundId: 'round-old' },
+      });
+    });
+
+    it('replaces the cached rounds of contents not on screen', async () => {
+      await reset();
+
+      // Entering the presentation again reads the rounds like before.
+      expect(await roundIds()).toEqual(['round-new']);
+    });
+
+    it('forgets the stats of the deleted rounds', async () => {
+      await reset();
+
+      expect(cachedStats('round-old')).toBeNull();
+    });
+  });
+
+  it('marks a content answered once its first answer is pushed', () => {
+    // The editor locks a content by its hasAnswers, read from the cached contents.
+    const answered = gql`
+      fragment Answered on Content {
+        id
+        hasAnswers
+      }
+    `;
+    const cache = new InMemoryCache();
+    cache.writeFragment({
+      fragment: answered,
+      data: { __typename: 'Content', id: 'c-1', hasAnswers: false },
+    });
+
+    cache.writeQuery({
+      query: CreatorQuestionnaireContentUpdatedDocument,
+      variables: { questionnaireId: 'q-1' },
+      data: {
+        questionnaireContentUpdated: {
+          __typename: 'Content',
+          id: 'c-1',
+          answerCount: 1,
+          abstentionCount: 0,
+          correctAnswerCount: 1,
+          hasAnswers: true,
+          activeRound: null,
+        },
+      },
+    });
+
+    expect(
+      cache.readFragment<{ hasAnswers: boolean }>({
+        fragment: answered,
+        id: 'Content:c-1',
+      })?.hasAnswers
+    ).toBeTrue();
   });
 
   it('keeps the results when resetting is cancelled', () => {
@@ -443,6 +636,49 @@ describe('QuestionnairePageComponent (creator)', () => {
     expect(query('.group-container')).not.toBeNull();
     expect(query('router-outlet')).toBeNull();
     expect(query('app-back-button')).toBeNull();
+  });
+
+  /**
+   * Without a strategy of its own, the AOT build compiles the page OnPush,
+   * while TestBed's recompilation of an overridden component defaults to Eager.
+   */
+  function compileAsBuilt() {
+    TestBed.overrideComponent(QuestionnairePageComponent, {
+      set: { changeDetection: ChangeDetectionStrategy.OnPush },
+    });
+  }
+
+  it('is compiled OnPush by the build', () => {
+    expect(
+      (QuestionnairePageComponent as unknown as { ɵcmp: { onPush: boolean } })
+        .ɵcmp.onPush
+    ).toBeTrue();
+  });
+
+  it('shows the creation on mobile as soon as it is navigated to', () => {
+    compileAsBuilt();
+    setUp(false, null, true);
+    emitContents(contents);
+    expect(query('.group-container')).not.toBeNull();
+
+    navigateTo(childRoute('create'));
+    fixture.detectChanges();
+
+    expect(query('router-outlet')).not.toBeNull();
+    expect(query('.group-container')).toBeNull();
+  });
+
+  it('shows the content list on mobile as soon as the creation is left', () => {
+    compileAsBuilt();
+    setUp(false, childRoute('create'), true);
+    emitContents(contents);
+    expect(query('router-outlet')).not.toBeNull();
+
+    navigateTo(null);
+    fixture.detectChanges();
+
+    expect(query('.group-container')).not.toBeNull();
+    expect(query('router-outlet')).toBeNull();
   });
 
   it('shows the content list next to the child view on desktop', () => {

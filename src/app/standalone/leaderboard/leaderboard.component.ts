@@ -6,7 +6,6 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CoreModule } from '@app/core/core.module';
-import { LeaderboardItem } from '@app/core/models/leaderboard-item';
 import { OrdinalPipe } from '@app/core/pipes/ordinal.pipe';
 import { MatTableDataSource } from '@angular/material/table';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -14,6 +13,7 @@ import {
   LeaderboardService,
   LeaderboardTableItem,
 } from '@app/core/services/util/leaderboard.service';
+import { LeaderboardPage } from '@gql/generated/graphql';
 
 @Component({
   imports: [CoreModule, OrdinalPipe, FlexLayoutModule],
@@ -25,7 +25,7 @@ import {
 export class LeaderboardComponent implements OnChanges {
   private leaderboardService = inject(LeaderboardService);
 
-  @Input({ required: true }) leaderboardItems: LeaderboardItem[] = [];
+  @Input({ required: true }) leaderboardPage!: LeaderboardPage;
   @Input() aliasId?: string;
   @Input() allowScrolling = false;
   @Input() showAll = false;
@@ -35,8 +35,7 @@ export class LeaderboardComponent implements OnChanges {
   ngOnChanges(): void {
     this.dataSource = new MatTableDataSource(
       this.leaderboardService.buildLeaderboardTableData(
-        this.leaderboardItems,
-        this.aliasId,
+        this.leaderboardPage,
         this.showAll
       )
     );

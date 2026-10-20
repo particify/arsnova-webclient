@@ -228,6 +228,30 @@ fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
   counts
 }
 
+# currentResult is only populated for content-scoped leaderboards.
+fragment LeaderboardEntry on LeaderboardEntry {
+  userAlias {
+    ...RoomUserAlias
+  }
+  score
+  position
+  currentResult {
+    points
+    durationMs
+    correct
+  }
+}
+
+fragment LeaderboardPage on LeaderboardPage {
+  entries {
+    ...LeaderboardEntry
+  }
+  ownEntry {
+    ...LeaderboardEntry
+  }
+  totalCount
+}
+
 query QuestionnairesByRoomId($roomId: UUID!) {
   questionnairesByRoomId(roomId: $roomId) {
     ...QuestionnaireSummary
@@ -459,6 +483,20 @@ query QuestionnaireAnswerResultsByQuestionnaireId($questionnaireId: UUID!) {
     questionnaireId: $questionnaireId
   ) {
     ...QuestionnaireAnswerResult
+  }
+}
+
+query QuestionnaireLeaderboardByQuestionnaireId(
+  $questionnaireId: UUID!
+  $contentId: UUID
+  $limit: Int
+) {
+  questionnaireLeaderboardByQuestionnaireId(
+    questionnaireId: $questionnaireId
+    contentId: $contentId
+    limit: $limit
+  ) {
+    ...LeaderboardPage
   }
 }
 
@@ -769,6 +807,7 @@ subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
     answerCount
     abstentionCount
     correctAnswerCount
+    hasAnswers
     activeRound {
       ...Round
     }
@@ -827,6 +866,20 @@ subscription QuestionnaireWordcloudRoundStatsUpdated($roundId: UUID!) {
 subscription QuestionnaireTextAnswersUpdated($roundId: UUID!) {
   questionnaireTextAnswersUpdated(roundId: $roundId) {
     ...Answer
+  }
+}
+
+subscription QuestionnaireLeaderboardUpdated(
+  $questionnaireId: UUID!
+  $contentId: UUID
+  $limit: Int
+) {
+  questionnaireLeaderboardUpdated(
+    questionnaireId: $questionnaireId
+    contentId: $contentId
+    limit: $limit
+  ) {
+    ...LeaderboardPage
   }
 }
 

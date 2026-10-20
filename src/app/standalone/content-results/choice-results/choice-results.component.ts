@@ -7,9 +7,10 @@ import {
   QuestionnaireChoiceRoundStatsUpdatedGql,
   Round,
 } from '@gql/generated/graphql';
-import { onlyCompleteData } from 'apollo-angular';
-import { combineLatest, EMPTY, map, Observable, of, switchMap } from 'rxjs';
-import { updateOn } from '@gql/helper/update-on';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
+import { updatesOnceOpen } from '@app/standalone/content-results/round-updates';
 import { TranslocoService } from '@jsverse/transloco';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { ChoiceAnswerListComponent } from './choice-answer-list/choice-answer-list.component';
@@ -33,6 +34,7 @@ import { BarChartComponent } from '@app/standalone/content-results/visualization
   ],
 })
 export class ChoiceResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly themeService = inject(ThemeService);
   private readonly roundStatsByRoundId = inject(
     QuestionnaireChoiceRoundStatsByRoundIdGql
@@ -44,6 +46,7 @@ export class ChoiceResultsComponent {
   private readonly translateService = inject(TranslocoService);
   readonly roundIds = input.required<string[]>();
   readonly rounds = input.required<Round[]>();
+  private readonly rounds$ = toObservable(this.rounds);
   readonly hasCorrectAnswer = input(false);
   readonly formatData = input.required<ChoiceContentFormatData>();
   readonly showCorrect = input(false);
@@ -62,11 +65,15 @@ export class ChoiceResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<ChoiceContentRoundStats | null | undefined> {
-    return updateOn(
-      this.roundStatsByRoundId.watch({ variables: { roundId } }),
-      this.isClosed(roundId)
-        ? EMPTY
-        : this.choiceRoundStatsUpdated.subscribe({ variables: { roundId } }),
+    return updateRoundOn(
+      this.apollo.client,
+      this.roundStatsByRoundId.watch({
+        variables: { roundId },
+        fetchPolicy: 'cache-and-network',
+      }),
+      updatesOnceOpen(this.rounds$, roundId, () =>
+        this.choiceRoundStatsUpdated.subscribe({ variables: { roundId } })
+      ),
       (r) =>
         r.data && {
           questionnaireChoiceRoundStatsByRoundId:
@@ -154,11 +161,6 @@ export class ChoiceResultsComponent {
         this.formatData().correctOptionIndexes?.includes(index) ?? false,
     }));
   });
-
-  /** A closed round's answers cannot change, so it needs no updates. */
-  private isClosed(roundId: string): boolean {
-    return !!this.rounds().find((round) => round.id === roundId)?.closed;
-  }
 
   private roundLabel(roundId: string): string {
     const roundNo = this.rounds().find(

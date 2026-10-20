@@ -124,7 +124,7 @@
                       (input)="updateTextContainsImage(questionInput.value)"
                       [(ngModel)]="question"
                       [attr.aria-label]="
-                        (created
+                        (created()
                           ? 'creator.content.a11y-content-created'
                           : 'creator.content.a11y-enter-body'
                         ) | transloco

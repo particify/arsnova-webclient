@@ -28,7 +28,7 @@ import {
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
-import { NEVER, of } from 'rxjs';
+import { BehaviorSubject, NEVER, of } from 'rxjs';
 import { ContentsPageComponent } from './contents-page.component';
 
 describe('ContentsPageComponent', () => {
@@ -41,6 +41,19 @@ describe('ContentsPageComponent', () => {
     (id, position) =>
       ({ id, position, formatData: { format: ContentType.Choice } }) as Content
   );
+
+  let contents$: BehaviorSubject<unknown>;
+
+  function contentsResult(loading: boolean) {
+    return {
+      loading,
+      data: {
+        questionnaireContentsByQuestionnaireId: {
+          edges: contents.map((node) => ({ node })),
+        },
+      },
+    };
+  }
 
   function questionnaire(overrides: Partial<Questionnaire> = {}) {
     return {
@@ -77,16 +90,8 @@ describe('ContentsPageComponent', () => {
       valueChanges: of({ data: { questionnaireById: q } }),
     });
     const contentsGql = jasmine.createSpyObj('ContentsGql', ['watch']);
-    contentsGql.watch.and.returnValue({
-      valueChanges: of({
-        loading: false,
-        data: {
-          questionnaireContentsByQuestionnaireId: {
-            edges: contents.map((node) => ({ node })),
-          },
-        },
-      }),
-    });
+    contents$ = new BehaviorSubject<unknown>(contentsResult(false));
+    contentsGql.watch.and.returnValue({ valueChanges: contents$ });
     contentUpdated = jasmine.createSpyObj('QuestionnaireContentUpdatedGql', [
       'subscribe',
     ]);
@@ -184,6 +189,27 @@ describe('ContentsPageComponent', () => {
 
       expect(cache.extract()['Round:r-1']?.['started']).toBeTrue();
     });
+  });
+
+  it('keeps the contents on screen while they are reloaded', () => {
+    setUp();
+    expect(component.loading()).toBeFalse();
+
+    // A refetch reports its progress along with the contents it has.
+    contents$.next(contentsResult(true));
+    TestBed.tick();
+
+    expect(component.loading()).toBeFalse();
+    expect(component.contents().length).toBe(3);
+  });
+
+  it('shows the loading state until the contents have arrived', () => {
+    setUp();
+
+    contents$.next({ loading: true, data: undefined });
+    TestBed.tick();
+
+    expect(component.loading()).toBeTrue();
   });
 
   it('stops the running content of the questionnaire', () => {

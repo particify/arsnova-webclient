@@ -9,14 +9,22 @@ import {
   model,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, skip, switchMap } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
+import {
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+} from 'rxjs';
+import { onlyCompleteData, QueryRef } from 'apollo-angular';
 import { refetchOn } from '@gql/helper/refetch-on';
 import { HotkeyAction } from '@app/core/directives/hotkey.directive';
 import {
   Content,
   ContentType,
   QuestionnaireRoundsByContentIdGql,
+  QuestionnaireRoundsByContentIdQuery,
+  QuestionnaireRoundsByContentIdQueryVariables,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -76,21 +84,44 @@ export class ContentResultsComponent {
 
   readonly rounds = toSignal(
     toObservable(computed(() => this.content().id)).pipe(
-      switchMap((contentId) =>
-        // A round started elsewhere, e.g. from a second screen, only shows up
-        // as the content's new active round.
-        refetchOn(
-          this.questionnaireRoundsByContentId.watch({
-            variables: { contentId },
-          }),
-          this.activeRoundId$.pipe(skip(1))
-        )
-      ),
+      switchMap((contentId) => {
+        const queryRef = this.questionnaireRoundsByContentId.watch({
+          variables: { contentId },
+        });
+        return refetchOn(queryRef, this.missingActiveRoundId$(queryRef));
+      }),
       onlyCompleteData(),
       map((r) => r.data.questionnaireRoundsByContentId ?? [])
     ),
     { initialValue: [] }
   );
+
+  /**
+   * The active round of the content while the rounds lack it: one started
+   * elsewhere, e.g. from a second screen, or one replacing cached rounds that
+   * a reset has deleted.
+   */
+  private missingActiveRoundId$(
+    queryRef: QueryRef<
+      QuestionnaireRoundsByContentIdQuery,
+      QuestionnaireRoundsByContentIdQueryVariables
+    >
+  ) {
+    return combineLatest([
+      this.activeRoundId$,
+      queryRef.valueChanges.pipe(onlyCompleteData()),
+    ]).pipe(
+      filter(
+        ([activeRoundId, r]) =>
+          !!activeRoundId &&
+          !r.data.questionnaireRoundsByContentId?.some(
+            (round) => round.id === activeRoundId
+          )
+      ),
+      map(([activeRoundId]) => activeRoundId),
+      distinctUntilChanged()
+    );
+  }
 
   readonly defaultRoundId = computed(() => {
     const rounds = this.rounds();

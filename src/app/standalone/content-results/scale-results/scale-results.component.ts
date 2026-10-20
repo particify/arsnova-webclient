@@ -2,7 +2,6 @@ import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   combineLatest,
-  EMPTY,
   forkJoin,
   map,
   Observable,
@@ -10,8 +9,9 @@ import {
   switchMap,
   take,
 } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
-import { updateOn } from '@gql/helper/update-on';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
+import { updatesOnceOpen } from '@app/standalone/content-results/round-updates';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   QuestionnaireScaleRoundStatsByRoundIdGql,
@@ -35,6 +35,7 @@ const NEUTRAL_COLOR_INDEX = 2;
   imports: [CoreModule, BarChartComponent],
 })
 export class ScaleResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly themeService = inject(ThemeService);
   private readonly presentationService = inject(PresentationService);
   private readonly translateService = inject(TranslocoService);
@@ -49,6 +50,7 @@ export class ScaleResultsComponent {
 
   readonly roundIds = input.required<string[]>();
   readonly rounds = input.required<Round[]>();
+  private readonly rounds$ = toObservable(this.rounds);
   readonly formatData = input.required<ScaleContentFormatData>();
   readonly resultsVisible = input(true);
   readonly visualizationUnitPercent = input(false);
@@ -62,11 +64,15 @@ export class ScaleResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<ScaleContentRoundStats | null | undefined> {
-    return updateOn(
-      this.roundStatsByRoundId.watch({ variables: { roundId } }),
-      this.isClosed(roundId)
-        ? EMPTY
-        : this.scaleRoundStatsUpdated.subscribe({ variables: { roundId } }),
+    return updateRoundOn(
+      this.apollo.client,
+      this.roundStatsByRoundId.watch({
+        variables: { roundId },
+        fetchPolicy: 'cache-and-network',
+      }),
+      updatesOnceOpen(this.rounds$, roundId, () =>
+        this.scaleRoundStatsUpdated.subscribe({ variables: { roundId } })
+      ),
       (r) =>
         r.data && {
           questionnaireScaleRoundStatsByRoundId:
@@ -153,11 +159,6 @@ export class ScaleResultsComponent {
       })),
     };
   });
-
-  /** A closed round's answers cannot change, so it needs no updates. */
-  private isClosed(roundId: string): boolean {
-    return !!this.rounds().find((round) => round.id === roundId)?.closed;
-  }
 
   private roundLabel(roundId: string): string {
     const roundNo = this.rounds().find(

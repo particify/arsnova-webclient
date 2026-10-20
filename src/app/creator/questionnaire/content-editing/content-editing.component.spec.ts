@@ -17,11 +17,13 @@ import {
   Content,
   ContentType,
   Questionnaire,
+  QuestionnaireContentByIdGql,
   QuestionnaireType,
   ScaleContentTemplate,
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
+import { Subject } from 'rxjs';
 import { ChoiceContentFormComponent } from './choice-content-form/choice-content-form.component';
 import { ContentEditingComponent } from './content-editing.component';
 import { WordcloudContentFormComponent } from './wordcloud-content-form/wordcloud-content-form.component';
@@ -51,7 +53,10 @@ describe('ContentEditingComponent', () => {
   let component: ContentEditingComponent;
 
   describe('after creating a content', () => {
+    let cachedContent$: Subject<unknown>;
+
     function setUp(content?: Content) {
+      cachedContent$ = new Subject();
       // Only the form outlet and the body input matter to the reset under test.
       TestBed.overrideComponent(ContentEditingComponent, {
         set: {
@@ -100,6 +105,10 @@ describe('ContentEditingComponent', () => {
           spyProvider(FormattingService, ['containsTextAnImage']),
           spyProvider(NotificationService, ['showAdvanced']),
           spyProvider(QuestionnairePageService, ['updateEditedContent']),
+          {
+            provide: QuestionnaireContentByIdGql,
+            useValue: { watch: () => ({ valueChanges: cachedContent$ }) },
+          },
         ]
       ).compileComponents();
 
@@ -234,6 +243,27 @@ describe('ContentEditingComponent', () => {
 
       it('locks a content with answers but no answer count', () => {
         expect(lockedWith({ hasAnswers: true, answerCount: null })).toBeTrue();
+      });
+
+      it('locks the content once its first answer arrives', () => {
+        expect(lockedWith({ hasAnswers: false, answerCount: 0 })).toBeFalse();
+
+        cachedContent$.next({
+          dataState: 'complete',
+          data: {
+            questionnaireContentById: {
+              ...component.content(),
+              answerCount: 1,
+              hasAnswers: true,
+            },
+          },
+        });
+        fixture.detectChanges();
+
+        const form = fixture.debugElement.query(
+          By.directive(ChoiceContentFormComponent)
+        ).componentInstance as ChoiceContentFormComponent;
+        expect(form.answered()).toBeTrue();
       });
 
       it('keeps a new round editable after rounds without answers', () => {

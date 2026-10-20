@@ -68,7 +68,10 @@ export class PresentationModePage {
     await this.hoverControlBar();
     await Promise.all([
       waitForOperation(this.page, 'StartQuestionnaireContent'),
-      this.page.getByRole('button', { name: 'start the content' }).click(),
+      this.page
+        .getByRole('button', { name: 'start the content' })
+        .first()
+        .click(),
     ]);
   }
 
@@ -76,13 +79,16 @@ export class PresentationModePage {
     await this.hoverControlBar();
     await Promise.all([
       waitForOperation(this.page, 'StopQuestionnaireContent'),
-      this.page.getByRole('button', { name: 'stop the content' }).click(),
+      this.page
+        .getByRole('button', { name: 'stop the content' })
+        .first()
+        .click(),
     ]);
   }
 
   async publishContent() {
-    await this.hoverControlBar();
-    await this.page.getByRole('button', { name: 'publish content' }).click();
+    // The action button fades in and out with the control bar; its hotkey does not.
+    await this.page.keyboard.press('p');
   }
 
   async openContentMoreMenu() {

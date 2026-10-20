@@ -10,14 +10,19 @@ import {
   Content,
   ContentAnswerResult,
   ContentType,
+  LeaderboardPage,
   Questionnaire,
   QuestionnaireAnswerResultsByQuestionnaireIdGql,
+  QuestionnaireLeaderboardByQuestionnaireIdGql,
+  QuestionnaireLeaderboardUpdatedGql,
   QuestionnaireType,
+  RoomUserAlias,
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { MockRouter } from '@testing/test-helpers';
-import { of, throwError } from 'rxjs';
+import { NEVER, of, throwError } from 'rxjs';
+import { LEADERBOARD_DISPLAY_LIMIT } from '@app/core/services/util/leaderboard.service';
 import { SeriesOverviewComponent } from './series-overview.component';
 
 describe('SeriesOverviewComponent', () => {
@@ -41,6 +46,9 @@ describe('SeriesOverviewComponent', () => {
     isPureInfoSeries?: boolean;
     finished?: boolean;
     lastContentAnswered?: boolean;
+    leaderboard?: LeaderboardPage;
+    leaderboardError?: boolean;
+    alias?: RoomUserAlias;
   }
 
   function setUp(options: SetUpOptions = {}) {
@@ -86,6 +94,25 @@ describe('SeriesOverviewComponent', () => {
       'getAnswerResultIcon',
     ]);
     answerService.getAnswerResultIcon.and.returnValue('check');
+    const leaderboardByQuestionnaireId = jasmine.createSpyObj(
+      'QuestionnaireLeaderboardByQuestionnaireIdGql',
+      ['watch', 'fetch']
+    );
+    leaderboardByQuestionnaireId.fetch.and.returnValue(of({ data: {} }));
+    const leaderboard = options.leaderboard ?? { entries: [], totalCount: 0 };
+    leaderboardByQuestionnaireId.watch.and.returnValue({
+      valueChanges: options.leaderboardError
+        ? throwError(() => new Error('Query failed'))
+        : of({
+            dataState: 'complete',
+            data: { questionnaireLeaderboardByQuestionnaireId: leaderboard },
+          }),
+    });
+    const leaderboardUpdated = jasmine.createSpyObj(
+      'QuestionnaireLeaderboardUpdatedGql',
+      ['subscribe']
+    );
+    leaderboardUpdated.subscribe.and.returnValue(NEVER);
 
     configureTestModule(
       [getTranslocoModule(), SeriesOverviewComponent],
@@ -100,6 +127,14 @@ describe('SeriesOverviewComponent', () => {
         { provide: ContentCarouselService, useValue: contentCarouselService },
         { provide: ContentAnswerService, useValue: answerService },
         { provide: FormattingService, useValue: { postString: () => of('') } },
+        {
+          provide: QuestionnaireLeaderboardByQuestionnaireIdGql,
+          useValue: leaderboardByQuestionnaireId,
+        },
+        {
+          provide: QuestionnaireLeaderboardUpdatedGql,
+          useValue: leaderboardUpdated,
+        },
       ]
     ).compileComponents();
 
@@ -122,6 +157,7 @@ describe('SeriesOverviewComponent', () => {
       )
     );
     fixture.componentRef.setInput('roomId', 'room-1');
+    fixture.componentRef.setInput('alias', options.alias);
     fixture.componentRef.setInput('finished', !!options.finished);
     fixture.componentRef.setInput(
       'isPureInfoSeries',
@@ -295,6 +331,140 @@ describe('SeriesOverviewComponent', () => {
       update({ name: 'Renamed' });
 
       expect(scoreQueries().count()).toBe(fetches);
+    });
+  });
+
+  describe('leaderboard', () => {
+    const alias: RoomUserAlias = { id: 'me', alias: 'Brave Otter', seed: 42 };
+
+    function leaderboardQueries() {
+      return (
+        TestBed.inject(QuestionnaireLeaderboardByQuestionnaireIdGql)
+          .watch as jasmine.Spy
+      ).calls;
+    }
+
+    function ranking(ownPosition: number, ownScore: number): LeaderboardPage {
+      return {
+        entries: [
+          { position: 1, score: 500, userAlias: { ...alias, id: 'a' } },
+          { position: ownPosition, score: ownScore, userAlias: alias },
+        ],
+        totalCount: 2,
+      };
+    }
+
+    beforeEach(() => {
+      // The points chart draws on a canvas after a delay; not under test here.
+      spyOn(
+        SeriesOverviewComponent.prototype as unknown as {
+          updatePointsChart: () => void;
+        },
+        'updatePointsChart'
+      );
+    });
+
+    it('is not requested without a leaderboard', () => {
+      setUp({ questionnaire: { published: true } });
+      expect(leaderboardQueries().count()).toBe(0);
+      expect(component.leaderboard()).toBeUndefined();
+    });
+
+    it('is not requested for an unpublished questionnaire', () => {
+      setUp({ questionnaire: { leaderboardEnabled: true, published: false } });
+      expect(leaderboardQueries().count()).toBe(0);
+    });
+
+    it('requests as many entries as are shown', () => {
+      setUp({ questionnaire: { leaderboardEnabled: true, published: true } });
+      expect(leaderboardQueries().mostRecent().args[0]).toEqual({
+        variables: { questionnaireId: 'q-1', limit: LEADERBOARD_DISPLAY_LIMIT },
+        fetchPolicy: 'cache-and-network',
+      });
+    });
+
+    it('finds the user in the ranking by alias', () => {
+      setUp({
+        questionnaire: { leaderboardEnabled: true, published: true },
+        leaderboard: ranking(2, 300),
+        alias,
+      });
+      expect(component.leaderboardPosition()).toBe(2);
+      expect(component.getTrophyIconColor()).toBe('silver');
+    });
+
+    it('takes the own entry the server reports below the cut', () => {
+      setUp({
+        questionnaire: { leaderboardEnabled: true, published: true },
+        leaderboard: {
+          ...ranking(2, 300),
+          ownEntry: { position: 57, score: 20, userAlias: alias },
+        },
+        alias,
+      });
+      expect(component.leaderboardPosition()).toBe(57);
+    });
+
+    it('charts the points against the leading score', () => {
+      setUp({
+        questionnaire: { leaderboardEnabled: true, published: true },
+        leaderboard: ranking(2, 300),
+        alias,
+      });
+      const chartData = (
+        component as unknown as { getPointChartData: () => number[] }
+      ).getPointChartData();
+      expect(chartData).toEqual([300, 200]);
+    });
+
+    function leaderboardFetches() {
+      return (
+        TestBed.inject(QuestionnaireLeaderboardByQuestionnaireIdGql)
+          .fetch as jasmine.Spy
+      ).calls;
+    }
+
+    it('fetches the ranking anew once a nickname is set', () => {
+      setUp({
+        questionnaire: { leaderboardEnabled: true, published: true },
+        leaderboard: ranking(2, 300),
+        alias: { ...alias, id: null },
+      });
+      expect(leaderboardFetches().count()).toBe(0);
+      fixture.componentRef.setInput('alias', alias);
+      fixture.detectChanges();
+      expect(leaderboardFetches().count()).toBe(1);
+      expect(leaderboardFetches().mostRecent().args[0]).toEqual({
+        variables: { questionnaireId: 'q-1', limit: LEADERBOARD_DISPLAY_LIMIT },
+        fetchPolicy: 'network-only',
+      });
+    });
+
+    it('leaves the overview rendered when the ranking query fails', () => {
+      spyOn(console, 'error');
+      setUp({
+        questionnaire: { leaderboardEnabled: true, published: true },
+        leaderboardError: true,
+        alias,
+      });
+      expect(component.leaderboard()).toBeUndefined();
+      expect(component.leaderboardPosition()).toBeUndefined();
+      expect(console.error).toHaveBeenCalled();
+      expect(query('.header-text')?.textContent?.trim()).toBe(
+        'participant.content.continue-where-you-stopped'
+      );
+      expect(query('#progress-info-chart')).not.toBeNull();
+    });
+
+    it('keeps the ranking while the nickname stays the same', () => {
+      setUp({
+        questionnaire: { leaderboardEnabled: true, published: true },
+        leaderboard: ranking(2, 300),
+        alias,
+      });
+      fixture.componentRef.setInput('alias', { ...alias });
+      fixture.detectChanges();
+      expect(leaderboardFetches().count()).toBe(0);
     });
   });
 });

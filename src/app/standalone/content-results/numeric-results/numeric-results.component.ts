@@ -1,8 +1,9 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { combineLatest, EMPTY, map, Observable, of, switchMap } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
-import { updateOn } from '@gql/helper/update-on';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
+import { updatesOnceOpen } from '@app/standalone/content-results/round-updates';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   NumericContentFormatData,
@@ -40,6 +41,7 @@ type NumericStat = keyof Pick<
   ],
 })
 export class NumericResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly themeService = inject(ThemeService);
   private readonly presentationService = inject(PresentationService);
   private readonly translateService = inject(TranslocoService);
@@ -52,6 +54,7 @@ export class NumericResultsComponent {
 
   readonly roundIds = input.required<string[]>();
   readonly rounds = input.required<Round[]>();
+  private readonly rounds$ = toObservable(this.rounds);
   readonly formatData = input.required<NumericContentFormatData>();
   readonly hasCorrectAnswer = input(false);
   readonly showCorrect = input(false);
@@ -69,11 +72,15 @@ export class NumericResultsComponent {
   private statsForRound(
     roundId: string
   ): Observable<NumericContentRoundStats | null | undefined> {
-    return updateOn(
-      this.roundStatsByRoundId.watch({ variables: { roundId } }),
-      this.isClosed(roundId)
-        ? EMPTY
-        : this.numericRoundStatsUpdated.subscribe({ variables: { roundId } }),
+    return updateRoundOn(
+      this.apollo.client,
+      this.roundStatsByRoundId.watch({
+        variables: { roundId },
+        fetchPolicy: 'cache-and-network',
+      }),
+      updatesOnceOpen(this.rounds$, roundId, () =>
+        this.numericRoundStatsUpdated.subscribe({ variables: { roundId } })
+      ),
       (r) =>
         r.data && {
           questionnaireNumericRoundStatsByRoundId:
@@ -166,11 +173,6 @@ export class NumericResultsComponent {
     return (this.roundStatsList() ?? []).map(
       (roundStats) => roundStats?.[stat] ?? 0
     );
-  }
-
-  /** A closed round's answers cannot change, so it needs no updates. */
-  private isClosed(roundId: string): boolean {
-    return !!this.rounds().find((round) => round.id === roundId)?.closed;
   }
 
   private roundLabel(roundId: string): string {

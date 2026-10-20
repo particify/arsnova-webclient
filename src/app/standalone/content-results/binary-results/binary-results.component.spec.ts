@@ -396,6 +396,7 @@ describe('BinaryResultsComponent', () => {
 
     expect(statsByRoundId.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(subscribeStatsUpdated).toHaveBeenCalledOnceWith({
       variables: { roundId: 'round-2' },

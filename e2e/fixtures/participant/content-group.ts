@@ -124,6 +124,10 @@ export class ContentGroupPage {
     return this.page.getByText("didn't answer in time");
   }
 
+  getWaitingHint() {
+    return this.page.getByText(/get ready/i);
+  }
+
   getFirstRadioButton() {
     return this.page.getByRole('radio').first();
   }

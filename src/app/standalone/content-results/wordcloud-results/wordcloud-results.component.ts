@@ -5,10 +5,10 @@ import {
   QuestionnaireWordcloudRoundStatsByRoundIdGql,
   QuestionnaireWordcloudRoundStatsUpdatedGql,
 } from '@gql/generated/graphql';
-import { onlyCompleteData } from 'apollo-angular';
-import { map, switchMap } from 'rxjs';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { map, switchMap, of } from 'rxjs';
 import { mutationHelper } from '@gql/helper/mutation-helper';
-import { updateOn } from '@gql/helper/update-on';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { ThemeService } from '@app/core/theme/theme.service';
 import { CoreModule } from '@app/core/core.module';
 import { WordcloudComponent } from '@app/standalone/content-results/visualization/wordcloud/wordcloud.component';
@@ -34,6 +34,7 @@ import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer
   ],
 })
 export class WordcloudResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly themeService = inject(ThemeService);
   private readonly roundStatsByRoundId = inject(
     QuestionnaireWordcloudRoundStatsByRoundIdGql
@@ -58,9 +59,17 @@ export class WordcloudResultsComponent {
   readonly allowAnswerModeration = input(false);
   readonly roundStats = toSignal(
     toObservable(this.roundId).pipe(
-      switchMap((roundId) =>
-        updateOn(
-          this.roundStatsByRoundId.watch({ variables: { roundId } }),
+      switchMap((roundId) => {
+        // A content without a round yet has no stats to load.
+        if (!roundId) {
+          return of(undefined);
+        }
+        return updateRoundOn(
+          this.apollo.client,
+          this.roundStatsByRoundId.watch({
+            variables: { roundId },
+            fetchPolicy: 'cache-and-network',
+          }),
           this.wordcloudRoundStatsUpdated.subscribe({ variables: { roundId } }),
           (r) =>
             r.data && {
@@ -70,8 +79,8 @@ export class WordcloudResultsComponent {
         ).pipe(
           onlyCompleteData(),
           map((r) => r.data?.questionnaireWordcloudRoundStatsByRoundId)
-        )
-      )
+        );
+      })
     )
   );
 

@@ -174,8 +174,11 @@ export class ContentsPageComponent {
   readonly contents = computed(() =>
     this.contentPresentationService.contents()
   );
-  readonly loading = computed(() =>
-    this.contentPresentationService.loadingContents()
+  /** A refetch in the background keeps the presented contents on screen. */
+  readonly loading = computed(
+    () =>
+      !!this.contentPresentationService.loadingContents() &&
+      this.contents().length === 0
   );
 
   readonly stepCount = computed(() => this.contents()?.length ?? 0);

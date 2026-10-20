@@ -1,15 +1,27 @@
 import { Injectable, inject } from '@angular/core';
-import { CurrentLeaderboardItem } from '@app/core/models/current-leaderboard-item';
-import { LeaderboardItem } from '@app/core/models/leaderboard-item';
-import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { ThemeService } from '@app/core/theme/theme.service';
+import {
+  LeaderboardEntry,
+  LeaderboardPage,
+  QuestionnaireLeaderboardByQuestionnaireIdGql,
+  QuestionnaireLeaderboardByQuestionnaireIdQueryVariables,
+  QuestionnaireLeaderboardUpdatedGql,
+  RoomUserAlias,
+} from '@gql/generated/graphql';
+import { Observable, map } from 'rxjs';
+import { onlyCompleteData } from 'apollo-angular';
+import { updateOn } from '@gql/helper/update-on';
 
-const DISPLAY_LIMIT = 10;
-const TABLE_LIMIT = 100;
+/** Rows a leaderboard shows before the user's own entry is appended. */
+export const LEADERBOARD_DISPLAY_LIMIT = 10;
+
+/** Upper bound the server clamps the requested page size to. */
+export const MAX_LEADERBOARD_LIMIT = 1000;
 
 export interface LeaderboardTableItem {
   position: number;
-  userAlias?: RoomUserAlias;
+  // Not set for participants who did not choose a nickname.
+  userAlias?: RoomUserAlias | null;
   score: number;
   color: string;
 }
@@ -20,117 +32,113 @@ export interface ContentLeaderboardTableItem extends LeaderboardTableItem {
   correct: boolean;
 }
 
+/**
+ * Streams the leaderboard of a question series, starting with the current state
+ * and continuing with server-pushed updates. Passing a `contentId` scopes the
+ * entries to that content and populates their `currentResult`.
+ *
+ * The server truncates the ranking to `limit` entries (100 by default) and
+ * reports the requesting user's own entry separately if it is cut off, so only
+ * request as many entries as are displayed.
+ *
+ * Requires read access to the questionnaire, which an unpublished questionnaire
+ * only grants to users with room write access.
+ */
+export function watchLeaderboard(
+  leaderboardByQuestionnaireId: QuestionnaireLeaderboardByQuestionnaireIdGql,
+  leaderboardUpdated: QuestionnaireLeaderboardUpdatedGql,
+  variables: QuestionnaireLeaderboardByQuestionnaireIdQueryVariables
+): Observable<LeaderboardPage> {
+  return updateOn(
+    // The cached page shows at once; the network answer keeps it current.
+    leaderboardByQuestionnaireId.watch({
+      variables,
+      fetchPolicy: 'cache-and-network',
+    }),
+    leaderboardUpdated.subscribe({ variables }),
+    (r) =>
+      r.data && {
+        questionnaireLeaderboardByQuestionnaireId:
+          r.data.questionnaireLeaderboardUpdated,
+      }
+  ).pipe(
+    onlyCompleteData(),
+    map((r) => r.data.questionnaireLeaderboardByQuestionnaireId)
+  );
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class LeaderboardService {
   private themeService = inject(ThemeService);
 
-  private determineLeaderboardPosition(
-    index: number,
-    item: LeaderboardItem,
-    tableItems: LeaderboardTableItem[]
-  ) {
-    return index > 0 && item.score === tableItems[index - 1].score
-      ? tableItems[index - 1].position
-      : index + 1;
-  }
-
-  private determineContentLeaderboardPosition(
-    index: number,
-    item: CurrentLeaderboardItem,
-    tableItems: ContentLeaderboardTableItem[]
-  ) {
-    if (tableItems.length === 0) {
-      return 1;
-    }
-    return (index > 0 &&
-      item.currentResult?.points === tableItems[index - 1]?.currentPoints) ||
-      (!item.currentResult?.points && !tableItems[index - 1]?.currentPoints)
-      ? tableItems[index - 1].position
-      : index + 1;
-  }
-
-  private showBelowList(
-    leaderboardItems: LeaderboardItem[] | CurrentLeaderboardItem[],
-    aliasId?: string,
-    allowScrolling = false
-  ): boolean {
-    if (aliasId && !allowScrolling) {
-      return !leaderboardItems
-        .slice(0, DISPLAY_LIMIT)
-        .map((l) => l.userAlias?.id)
-        .includes(aliasId);
-    }
-    return false;
-  }
-
-  private minimizeTableAndAddAliasItem(
-    tableItems: ContentLeaderboardTableItem[] | LeaderboardTableItem[],
-    leaderboardItems: LeaderboardItem[] | CurrentLeaderboardItem[],
-    aliasId?: string
-  ) {
-    const aliasItem = tableItems.find((t) => t.userAlias?.id === aliasId);
-    tableItems = tableItems.slice(0, DISPLAY_LIMIT);
-    if (this.showBelowList(leaderboardItems, aliasId) && aliasItem) {
-      tableItems.push(aliasItem);
-    }
-    return tableItems;
+  /** The requesting user's entry, wherever the page carries it. */
+  getOwnEntry(
+    page: LeaderboardPage,
+    aliasId?: string | null
+  ): LeaderboardEntry | undefined {
+    return (
+      page.ownEntry ??
+      (aliasId
+        ? page.entries.find((entry) => entry.userAlias?.id === aliasId)
+        : undefined)
+    );
   }
 
   buildLeaderboardTableData(
-    leaderboardItems: LeaderboardItem[],
-    aliasId?: string,
+    page: LeaderboardPage,
     showAll = false
   ): LeaderboardTableItem[] {
-    const tableItems: LeaderboardTableItem[] = [];
-    leaderboardItems.forEach((item, index) => {
-      if (index < TABLE_LIMIT) {
-        tableItems.push({
-          position: this.determineLeaderboardPosition(index, item, tableItems),
-          userAlias: item.userAlias,
-          score: item.score,
-          color: this.themeService.getTextColorFromSeed(item.userAlias?.seed),
-        });
-      }
-    });
+    const tableItems = page.entries.map((entry) => this.toTableItem(entry));
     if (showAll) {
       return tableItems;
-    } else {
-      return this.minimizeTableAndAddAliasItem(
-        tableItems,
-        leaderboardItems,
-        aliasId
-      );
     }
+    return this.limitToDisplayed(
+      tableItems,
+      page.ownEntry && this.toTableItem(page.ownEntry)
+    );
   }
 
   buildContentLeaderboardTableData(
-    leaderboardItems: CurrentLeaderboardItem[],
-    aliasId: string
+    page: LeaderboardPage
   ): ContentLeaderboardTableItem[] {
-    const tableItems: ContentLeaderboardTableItem[] = [];
-    leaderboardItems.forEach((item, index) => {
-      if (index < TABLE_LIMIT) {
-        tableItems.push({
-          position: this.determineContentLeaderboardPosition(
-            index,
-            item,
-            tableItems
-          ),
-          userAlias: item.userAlias,
-          score: item.score,
-          color: this.themeService.getTextColorFromSeed(item.userAlias?.seed),
-          currentPoints: item.currentResult?.points || 0,
-          currentDuration: item.currentResult?.durationMs || 0,
-          correct: item.currentResult?.correct,
-        });
-      }
-    });
-    return this.minimizeTableAndAddAliasItem(
-      tableItems,
-      leaderboardItems,
-      aliasId
-    ) as ContentLeaderboardTableItem[];
+    return this.limitToDisplayed(
+      page.entries.map((entry) => this.toContentTableItem(entry)),
+      page.ownEntry && this.toContentTableItem(page.ownEntry)
+    );
+  }
+
+  private toTableItem(entry: LeaderboardEntry): LeaderboardTableItem {
+    return {
+      position: entry.position,
+      userAlias: entry.userAlias,
+      score: entry.score,
+      color: this.themeService.getTextColorFromSeed(entry.userAlias?.seed),
+    };
+  }
+
+  private toContentTableItem(
+    entry: LeaderboardEntry
+  ): ContentLeaderboardTableItem {
+    return {
+      ...this.toTableItem(entry),
+      currentPoints: entry.currentResult?.points || 0,
+      currentDuration: entry.currentResult?.durationMs || 0,
+      correct: entry.currentResult?.correct ?? false,
+    };
+  }
+
+  // The server sends the user's own entry separately if the page does not reach
+  // that far, so that their row stays visible below the cut.
+  private limitToDisplayed<T extends LeaderboardTableItem>(
+    tableItems: T[],
+    ownItem?: T | null
+  ): T[] {
+    const displayed = tableItems.slice(0, LEADERBOARD_DISPLAY_LIMIT);
+    if (ownItem) {
+      displayed.push(ownItem);
+    }
+    return displayed;
   }
 }

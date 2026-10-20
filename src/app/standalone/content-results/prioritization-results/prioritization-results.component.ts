@@ -1,8 +1,9 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { EMPTY, map, of, switchMap } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
-import { updateOn } from '@gql/helper/update-on';
+import { map, of, switchMap } from 'rxjs';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
+import { updatesOnceOpen } from '@app/standalone/content-results/round-updates';
 import { CoreModule } from '@app/core/core.module';
 import {
   BarListComponent,
@@ -22,6 +23,7 @@ import {
   imports: [BarListComponent, CoreModule],
 })
 export class PrioritizationResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly roundStatsByRoundId = inject(
     QuestionnairePrioritizationRoundStatsByRoundIdGql
   );
@@ -32,6 +34,7 @@ export class PrioritizationResultsComponent {
   readonly roundIds = input.required<string[]>();
   /** Tells which of the rounds are closed. */
   readonly rounds = input<Round[]>([]);
+  private readonly rounds$ = toObservable(this.rounds);
   readonly formatData = input.required<PrioritizationContentFormatData>();
   readonly resultsVisible = input(true);
   /**
@@ -54,11 +57,15 @@ export class PrioritizationResultsComponent {
         if (!roundId) {
           return of(undefined);
         }
-        return updateOn(
-          this.roundStatsByRoundId.watch({ variables: { roundId } }),
-          this.isClosed(roundId)
-            ? EMPTY
-            : this.roundStatsUpdated.subscribe({ variables: { roundId } }),
+        return updateRoundOn(
+          this.apollo.client,
+          this.roundStatsByRoundId.watch({
+            variables: { roundId },
+            fetchPolicy: 'cache-and-network',
+          }),
+          updatesOnceOpen(this.rounds$, roundId, () =>
+            this.roundStatsUpdated.subscribe({ variables: { roundId } })
+          ),
           (r) =>
             r.data && {
               questionnairePrioritizationRoundStatsByRoundId:
@@ -86,9 +93,4 @@ export class PrioritizationResultsComponent {
       }))
       .sort((a, b) => b.value - a.value);
   });
-
-  /** A closed round's answers cannot change, so it needs no updates. */
-  private isClosed(roundId: string): boolean {
-    return !!this.rounds().find((round) => round.id === roundId)?.closed;
-  }
 }

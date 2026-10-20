@@ -393,8 +393,21 @@ describe('SortResultsComponent', () => {
 
     expect(statsByRoundId.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(subscribeStatsUpdated).not.toHaveBeenCalled();
+  });
+
+  it('starts the live updates once a closed round is reopened', () => {
+    setUp(roundStats([]), ['round-1'], formatData(), [round(true)]);
+
+    // Starting the content again reopens its round under the same id.
+    fixture.componentRef.setInput('rounds', [round(false)]);
+    fixture.detectChanges();
+
+    expect(subscribeStatsUpdated).toHaveBeenCalledOnceWith({
+      variables: { roundId: 'round-1' },
+    });
   });
 
   it('listens to the updates of an open round', () => {
