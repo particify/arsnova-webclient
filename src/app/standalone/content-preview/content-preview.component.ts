@@ -44,7 +44,7 @@ export class ContentPreviewComponent {
     [ContentType.Numeric]: ContentChoiceAnswerComponent,
     [ContentType.Prioritization]: ContentChoiceAnswerComponent,
     [ContentType.Scale]: ContentChoiceAnswerComponent,
-    [ContentType.ShortAnswer]: ContentChoiceAnswerComponent,
+    [ContentType.ShortAnswer]: ContentTextAnswerComponent,
     [ContentType.Slide]: undefined,
     [ContentType.Sort]: ContentChoiceAnswerComponent,
     [ContentType.Text]: ContentTextAnswerComponent,
@@ -66,6 +66,13 @@ export class ContentPreviewComponent {
           ),
           correctOptionIndexes: formatData.correctOptionIndexes ?? undefined,
           multipleAnswersAllowed: !!formatData.multiple,
+        };
+
+      case 'ShortAnswerContentFormatData':
+        return {
+          disabled: true,
+          minRows: 1,
+          lengthLimit: 80,
         };
 
       case 'TextContentFormatData':

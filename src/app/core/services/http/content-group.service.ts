@@ -135,7 +135,12 @@ export class ContentGroupService {
           ContentType.Slide,
         ];
       case QuestionnaireType.Quiz:
-        return [ContentType.Choice, ContentType.Numeric, ContentType.Slide];
+        return [
+          ContentType.Choice,
+          ContentType.ShortAnswer,
+          ContentType.Numeric,
+          ContentType.Slide,
+        ];
       case QuestionnaireType.Survey:
         return [
           ContentType.Choice,

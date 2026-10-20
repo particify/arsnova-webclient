@@ -55,4 +55,34 @@ describe('ContentTextAnswerComponent', () => {
     fixture.detectChanges();
     expect(textarea().maxLength).toBe(42);
   });
+
+  function formField(): HTMLElement {
+    return fixture.debugElement.query(By.css('mat-form-field')).nativeElement;
+  }
+
+  it('stays neutral while no correctness is given', () => {
+    expect(fixture.debugElement.query(By.css('mat-icon'))).toBeNull();
+    expect(formField().classList).not.toContain('correct');
+    expect(formField().classList).not.toContain('wrong');
+  });
+
+  it('marks itself correct and suffixes a check icon', () => {
+    fixture.componentRef.setInput('correct', true);
+    fixture.detectChanges();
+    expect(formField().classList).toContain('correct');
+    expect(
+      fixture.debugElement.query(By.css('[data-testid="text-answer-correct"]'))
+        .nativeElement.textContent
+    ).toBe('check');
+  });
+
+  it('marks itself wrong and suffixes a close icon', () => {
+    fixture.componentRef.setInput('correct', false);
+    fixture.detectChanges();
+    expect(formField().classList).toContain('wrong');
+    expect(
+      fixture.debugElement.query(By.css('[data-testid="text-answer-wrong"]'))
+        .nativeElement.textContent
+    ).toBe('close');
+  });
 });

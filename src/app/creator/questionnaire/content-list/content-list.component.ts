@@ -67,6 +67,7 @@ import {
   QuestionnairesByRoomIdGql,
   QuestionnaireSummaryFragment,
   QuestionnaireType,
+  ResetBannedQuestionnaireShortAnswerContentKeywordsGql,
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
   StartQuestionnaireContentGql,
   StartQuestionnaireContentRoundGql,
@@ -140,7 +141,10 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   private readonly deleteAnswersByContentId = inject(
     DeleteQuestionnaireAnswersByContentIdGql
   );
-  private readonly resetBannedKeywords = inject(
+  private readonly resetBannedShortAnswerKeywords = inject(
+    ResetBannedQuestionnaireShortAnswerContentKeywordsGql
+  );
+  private readonly resetBannedWordcloudKeywords = inject(
     ResetBannedQuestionnaireWordcloudContentKeywordsGql
   );
   private readonly duplicateQuestionnaireContent = inject(
@@ -218,6 +222,10 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
 
   ContentType: typeof ContentType = ContentType;
   QuestionnaireType = QuestionnaireType;
+  readonly formatsWithBannableAnswers = [
+    ContentType.ShortAnswer,
+    ContentType.Wordcloud,
+  ];
 
   iconList = computed(() => this.contentService.getTypeIcons());
 
@@ -388,21 +396,26 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
     this.activeContentId = contentId;
   }
 
-  resetBannedAnswers(contentId: string) {
-    this.resetBannedKeywords
-      .mutate({ variables: { contentId } })
-      .pipe(this.mutations.handleErrors())
-      .subscribe({
-        next: () => {
-          const msg = this.translateService.translate(
-            'creator.content.banned-keywords-reset'
-          );
-          this.notificationService.showAdvanced(
-            msg,
-            AdvancedSnackBarTypes.WARNING
-          );
-        },
-      });
+  resetBannedAnswers(contentId: string, format: ContentType) {
+    const reset$: Observable<unknown> =
+      format === ContentType.ShortAnswer
+        ? this.resetBannedShortAnswerKeywords.mutate({
+            variables: { contentId },
+          })
+        : this.resetBannedWordcloudKeywords.mutate({
+            variables: { contentId },
+          });
+    reset$.pipe(this.mutations.handleErrors()).subscribe({
+      next: () => {
+        const msg = this.translateService.translate(
+          'creator.content.banned-keywords-reset'
+        );
+        this.notificationService.showAdvanced(
+          msg,
+          AdvancedSnackBarTypes.WARNING
+        );
+      },
+    });
   }
 
   private getSortIndex(

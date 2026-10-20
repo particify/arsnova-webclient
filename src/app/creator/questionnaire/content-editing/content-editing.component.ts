@@ -60,6 +60,7 @@ import { FlashcardContentFormComponent } from './flashcard-content-form/flashcar
 import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
 import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
 import { ScaleContentFormComponent } from './scale-content-form/scale-content-form.component';
+import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
 import { TextContentFormComponent } from './text-content-form/text-content-form.component';
 
 interface ContentFormat {
@@ -129,6 +130,7 @@ export class ContentEditingComponent {
     | FlashcardContentFormComponent
     | NumericContentFormComponent
     | ScaleContentFormComponent
+    | ShortAnswerContentFormComponent
     | SlideContentFormComponent
     | TextContentFormComponent
     | undefined
@@ -145,6 +147,7 @@ export class ContentEditingComponent {
   });
 
   readonly componentInputs = computed(() => {
+    const format = this.selectedFormat()?.type;
     const base = {
       contentId: this.content()?.id,
       duration: this.duration(),
@@ -152,7 +155,7 @@ export class ContentEditingComponent {
       formatData: this.content()?.formatData,
       abstentionsAllowed: this.abstentionsAllowed(),
     };
-    if (this.selectedFormat()?.type === ContentType.Choice) {
+    if (format === ContentType.Choice) {
       return {
         ...base,
         multiple: this.multiple(),
@@ -161,7 +164,7 @@ export class ContentEditingComponent {
         hasCorrectAnswer: this.hasCorrectAnswer(),
       };
     }
-    if (this.selectedFormat()?.type === ContentType.Numeric) {
+    if (format === ContentType.Numeric) {
       return {
         ...base,
         weight: this.weight(),
@@ -169,12 +172,19 @@ export class ContentEditingComponent {
         hasCorrectAnswer: this.hasCorrectAnswer(),
       };
     }
-    if (this.selectedFormat()?.type === ContentType.Scale) {
+    if (format === ContentType.Scale) {
       return {
         ...base,
         neutralOption: this.neutralOption(),
         answered: this.answered(),
         language: this.language(),
+      };
+    }
+    if (format === ContentType.ShortAnswer) {
+      return {
+        ...base,
+        weight: this.weight(),
+        answered: this.answered(),
       };
     }
     return base;

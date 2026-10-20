@@ -7,7 +7,6 @@ describe('RESULT_REGISTRY', () => {
     ContentType.Binary,
     ContentType.Numeric,
     ContentType.Scale,
-    ContentType.ShortAnswer,
   ];
 
   const formatsWithoutComponent = [ContentType.Slide];

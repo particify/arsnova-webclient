@@ -131,6 +131,17 @@ export const ContentPreviewSlide: Story = {
   },
 };
 
+export const ContentPreviewShortAnswer: Story = {
+  args: {
+    ...baseArgs,
+    contentFormatData: {
+      __typename: 'ShortAnswerContentFormatData',
+      format: ContentType.ShortAnswer,
+      correctTerms: ['Paris'],
+    },
+  },
+};
+
 export const ContentPreviewText: Story = {
   args: {
     ...baseArgs,

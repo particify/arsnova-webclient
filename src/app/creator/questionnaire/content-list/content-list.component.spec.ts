@@ -1,5 +1,7 @@
 import { Type } from '@angular/core';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatMenuHarness } from '@angular/material/menu/testing';
 import { CombinedGraphQLErrors } from '@apollo/client';
 import { Router } from '@angular/router';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
@@ -22,6 +24,7 @@ import {
   QuestionnaireRoundsByContentIdDocument,
   QuestionnairesByRoomIdGql,
   QuestionnaireType,
+  ResetBannedQuestionnaireShortAnswerContentKeywordsGql,
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
   StartQuestionnaireContentGql,
   StartQuestionnaireContentRoundGql,
@@ -136,6 +139,7 @@ describe('ContentListComponent', () => {
         mutationSpy(DeleteQuestionnaireContentGql),
         mutationSpy(DuplicateQuestionnaireContentGql),
         mutationSpy(MoveQuestionnaireContentToQuestionnaireGql),
+        mutationSpy(ResetBannedQuestionnaireShortAnswerContentKeywordsGql),
         mutationSpy(ResetBannedQuestionnaireWordcloudContentKeywordsGql),
         mutationSpy(UpdateQuestionnaireContentOrderGql),
         mutationSpy(PublishQuestionnaireUpToContentGql),
@@ -893,5 +897,66 @@ describe('ContentListComponent', () => {
 
       expect(toggled()).not.toHaveBeenCalled();
     });
+  });
+
+  describe('banned answers', () => {
+    function listedWith(format: ContentType) {
+      return [{ ...contents[0], formatData: { format } } as Content];
+    }
+
+    async function menuItemTexts(): Promise<string[]> {
+      const menu = await TestbedHarnessEnvironment.loader(fixture).getHarness(
+        MatMenuHarness.with({ selector: '[data-testid="open-more-options-0"]' })
+      );
+      await menu.open();
+      return Promise.all((await menu.getItems()).map((item) => item.getText()));
+    }
+
+    it('resets the banned keywords of a wordcloud', () => {
+      setUp(questionnaire(), undefined, listedWith(ContentType.Wordcloud));
+
+      component.resetBannedAnswers('c-0', ContentType.Wordcloud);
+
+      expect(
+        mutation(ResetBannedQuestionnaireWordcloudContentKeywordsGql)
+      ).toHaveBeenCalledWith({ variables: { contentId: 'c-0' } });
+      expect(
+        mutation(ResetBannedQuestionnaireShortAnswerContentKeywordsGql)
+      ).not.toHaveBeenCalled();
+      expect(notificationService.showAdvanced).toHaveBeenCalled();
+    });
+
+    it('resets the banned answers of a short answer', () => {
+      setUp(questionnaire(), undefined, listedWith(ContentType.ShortAnswer));
+
+      component.resetBannedAnswers('c-0', ContentType.ShortAnswer);
+
+      expect(
+        mutation(ResetBannedQuestionnaireShortAnswerContentKeywordsGql)
+      ).toHaveBeenCalledWith({ variables: { contentId: 'c-0' } });
+      expect(
+        mutation(ResetBannedQuestionnaireWordcloudContentKeywordsGql)
+      ).not.toHaveBeenCalled();
+      expect(notificationService.showAdvanced).toHaveBeenCalled();
+    });
+
+    for (const [format, offered] of [
+      [ContentType.ShortAnswer, true],
+      [ContentType.Wordcloud, true],
+      [ContentType.Text, false],
+      [ContentType.Choice, false],
+    ] as const) {
+      it(`${offered ? 'offers' : 'does not offer'} the reset for ${format}`, async () => {
+        setUp(questionnaire(), undefined, listedWith(format));
+
+        const texts = await menuItemTexts();
+
+        expect(
+          texts.some((text) =>
+            text.includes('creator.content.reset-banned-answers')
+          )
+        ).toBe(offered);
+      });
+    }
   });
 });

@@ -176,6 +176,7 @@ export type AnswerFormatData =
   | ChoiceAnswerFormatData
   | NumericAnswerFormatData
   | ScaleAnswerFormatData
+  | ShortAnswerAnswerFormatData
   | TextAnswerFormatData
   | WordcloudAnswerFormatData;
 
@@ -254,6 +255,7 @@ export type ContentFormatData =
   | FlashcardContentFormatData
   | NumericContentFormatData
   | ScaleContentFormatData
+  | ShortAnswerContentFormatData
   | SlideContentFormatData
   | TextContentFormatData
   | WordcloudContentFormatData;
@@ -379,6 +381,20 @@ export type CreateScaleContentInput = {
   template: ScaleContentTemplate;
 };
 
+export type CreateShortAnswerAnswerInput = {
+  body: Scalars['String']['input'];
+  roundId: Scalars['UUID']['input'];
+};
+
+export type CreateShortAnswerContentInput = {
+  abstentionsAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  body: Scalars['String']['input'];
+  correctTerms: Array<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  questionnaireId: Scalars['UUID']['input'];
+  weight?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type CreateSlideContentInput = {
   body: Scalars['String']['input'];
   questionnaireId: Scalars['UUID']['input'];
@@ -444,6 +460,7 @@ export type Mutation = {
   adminDeleteUserById: Scalars['UUID']['output'];
   adminTransferRoom: AdminRoom;
   adminVerifyUserById: AdminUser;
+  banQuestionnaireShortAnswerContentKeyword?: Maybe<Content>;
   banQuestionnaireWordcloudContentKeyword?: Maybe<Content>;
   claimUnverifiedUser?: Maybe<User>;
   copyQuestionnaireContentToQuestionnaire?: Maybe<Content>;
@@ -460,6 +477,8 @@ export type Mutation = {
   createQuestionnaireNumericContent?: Maybe<Content>;
   createQuestionnaireScaleAnswer?: Maybe<Answer>;
   createQuestionnaireScaleContent?: Maybe<Content>;
+  createQuestionnaireShortAnswerAnswer?: Maybe<Answer>;
+  createQuestionnaireShortAnswerContent?: Maybe<Content>;
   createQuestionnaireSlideContent?: Maybe<Content>;
   createQuestionnaireTextAnswer?: Maybe<Answer>;
   createQuestionnaireTextContent?: Maybe<Content>;
@@ -490,6 +509,7 @@ export type Mutation = {
   requestUserPasswordReset?: Maybe<Scalars['Boolean']['output']>;
   requestUserPasswordSetup?: Maybe<Scalars['Boolean']['output']>;
   resendVerificationMail?: Maybe<Scalars['Boolean']['output']>;
+  resetBannedQuestionnaireShortAnswerContentKeywords?: Maybe<Content>;
   resetBannedQuestionnaireWordcloudContentKeywords?: Maybe<Content>;
   resetQuestionnaireResults?: Maybe<Scalars['Boolean']['output']>;
   resetUserPassword?: Maybe<User>;
@@ -516,6 +536,7 @@ export type Mutation = {
   updateQuestionnaireFlashcardContent?: Maybe<Content>;
   updateQuestionnaireNumericContent?: Maybe<Content>;
   updateQuestionnaireScaleContent?: Maybe<Content>;
+  updateQuestionnaireShortAnswerContent?: Maybe<Content>;
   updateQuestionnaireSlideContent?: Maybe<Content>;
   updateQuestionnaireTextContent?: Maybe<Content>;
   updateQuestionnaireWordcloudContent?: Maybe<Content>;
@@ -556,6 +577,11 @@ export type MutationAdminTransferRoomArgs = {
 
 export type MutationAdminVerifyUserByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type MutationBanQuestionnaireShortAnswerContentKeywordArgs = {
+  contentId: Scalars['UUID']['input'];
+  keyword: Scalars['String']['input'];
 };
 
 export type MutationBanQuestionnaireWordcloudContentKeywordArgs = {
@@ -623,6 +649,14 @@ export type MutationCreateQuestionnaireScaleAnswerArgs = {
 
 export type MutationCreateQuestionnaireScaleContentArgs = {
   input: CreateScaleContentInput;
+};
+
+export type MutationCreateQuestionnaireShortAnswerAnswerArgs = {
+  input: CreateShortAnswerAnswerInput;
+};
+
+export type MutationCreateQuestionnaireShortAnswerContentArgs = {
+  input: CreateShortAnswerContentInput;
 };
 
 export type MutationCreateQuestionnaireSlideContentArgs = {
@@ -735,6 +769,10 @@ export type MutationRejectQnaPostArgs = {
 
 export type MutationRequestUserPasswordResetArgs = {
   mailAddress: Scalars['String']['input'];
+};
+
+export type MutationResetBannedQuestionnaireShortAnswerContentKeywordsArgs = {
+  contentId: Scalars['UUID']['input'];
 };
 
 export type MutationResetBannedQuestionnaireWordcloudContentKeywordsArgs = {
@@ -852,6 +890,10 @@ export type MutationUpdateQuestionnaireNumericContentArgs = {
 
 export type MutationUpdateQuestionnaireScaleContentArgs = {
   input: UpdateScaleContentInput;
+};
+
+export type MutationUpdateQuestionnaireShortAnswerContentArgs = {
+  input: UpdateShortAnswerContentInput;
 };
 
 export type MutationUpdateQuestionnaireSlideContentArgs = {
@@ -1074,6 +1116,7 @@ export type Query = {
   questionnairePublishedContentsByQuestionnaireId?: Maybe<ContentConnection>;
   questionnaireRoundsByContentId?: Maybe<Array<Round>>;
   questionnaireScaleRoundStatsByRoundId?: Maybe<ScaleContentRoundStats>;
+  questionnaireShortAnswerRoundStatsByRoundId?: Maybe<ShortAnswerContentRoundStats>;
   questionnaireTextAnswersByRoundId?: Maybe<Array<Answer>>;
   questionnaireWordcloudRoundStatsByRoundId?: Maybe<WordcloudContentRoundStats>;
   questionnairesByRoomId?: Maybe<Array<Questionnaire>>;
@@ -1219,6 +1262,10 @@ export type QueryQuestionnaireRoundsByContentIdArgs = {
 };
 
 export type QueryQuestionnaireScaleRoundStatsByRoundIdArgs = {
+  roundId: Scalars['UUID']['input'];
+};
+
+export type QueryQuestionnaireShortAnswerRoundStatsByRoundIdArgs = {
   roundId: Scalars['UUID']['input'];
 };
 
@@ -1446,6 +1493,24 @@ export enum ScaleContentTemplate {
   Quality = 'QUALITY',
 }
 
+export type ShortAnswerAnswerFormatData = {
+  __typename?: 'ShortAnswerAnswerFormatData';
+  body: Scalars['String']['output'];
+  format: ContentType;
+};
+
+export type ShortAnswerContentFormatData = {
+  __typename?: 'ShortAnswerContentFormatData';
+  correctTerms: Array<Scalars['String']['output']>;
+  format: ContentType;
+};
+
+export type ShortAnswerContentRoundStats = {
+  __typename?: 'ShortAnswerContentRoundStats';
+  counts?: Maybe<Array<Scalars['Int']['output']>>;
+  texts?: Maybe<Array<Scalars['String']['output']>>;
+};
+
 export type SlideContentFormatData = {
   __typename?: 'SlideContentFormatData';
   format: ContentType;
@@ -1468,6 +1533,7 @@ export type Subscription = {
   questionnaireContentUpdated?: Maybe<Content>;
   questionnaireNumericRoundStatsUpdated?: Maybe<NumericContentRoundStats>;
   questionnaireScaleRoundStatsUpdated?: Maybe<ScaleContentRoundStats>;
+  questionnaireShortAnswerRoundStatsUpdated?: Maybe<ShortAnswerContentRoundStats>;
   questionnaireTextAnswersUpdated?: Maybe<Array<Answer>>;
   questionnaireUpdated?: Maybe<Questionnaire>;
   questionnaireWordcloudRoundStatsUpdated?: Maybe<WordcloudContentRoundStats>;
@@ -1531,6 +1597,10 @@ export type SubscriptionQuestionnaireNumericRoundStatsUpdatedArgs = {
 };
 
 export type SubscriptionQuestionnaireScaleRoundStatsUpdatedArgs = {
+  roundId: Scalars['UUID']['input'];
+};
+
+export type SubscriptionQuestionnaireShortAnswerRoundStatsUpdatedArgs = {
   roundId: Scalars['UUID']['input'];
 };
 
@@ -1620,6 +1690,15 @@ export type UpdateScaleContentInput = {
   id: Scalars['UUID']['input'];
   neutralOption: Scalars['Boolean']['input'];
   template: ScaleContentTemplate;
+};
+
+export type UpdateShortAnswerContentInput = {
+  abstentionsAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  body: Scalars['String']['input'];
+  correctTerms: Array<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['UUID']['input'];
+  weight?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateSlideContentInput = {
@@ -2802,6 +2881,11 @@ export type ContentDetailsFragment = {
         template: ScaleContentTemplate;
         neutralOption: boolean;
       }
+    | {
+        __typename?: 'ShortAnswerContentFormatData';
+        format: ContentType;
+        correctTerms: Array<string>;
+      }
     | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | {
         __typename?: 'TextContentFormatData';
@@ -2870,6 +2954,11 @@ export type CreatorContentDetailsFragment = {
         template: ScaleContentTemplate;
         neutralOption: boolean;
       }
+    | {
+        __typename?: 'ShortAnswerContentFormatData';
+        format: ContentType;
+        correctTerms: Array<string>;
+      }
     | { __typename?: 'SlideContentFormatData'; format: ContentType }
     | {
         __typename?: 'TextContentFormatData';
@@ -2905,6 +2994,11 @@ export type AnswerFragment = {
         __typename?: 'ScaleAnswerFormatData';
         format: ContentType;
         rating: number;
+      }
+    | {
+        __typename?: 'ShortAnswerAnswerFormatData';
+        format: ContentType;
+        body: string;
       }
     | { __typename?: 'TextAnswerFormatData'; format: ContentType; body: string }
     | {
@@ -2950,6 +3044,12 @@ export type NumericContentRoundStatsFragment = {
 
 export type ScaleContentRoundStatsFragment = {
   __typename?: 'ScaleContentRoundStats';
+  counts?: Array<number> | null;
+};
+
+export type ShortAnswerContentRoundStatsFragment = {
+  __typename?: 'ShortAnswerContentRoundStats';
+  texts?: Array<string> | null;
   counts?: Array<number> | null;
 };
 
@@ -3112,6 +3212,11 @@ export type QuestionnaireContentsByQuestionnaireIdQuery = {
               template: ScaleContentTemplate;
               neutralOption: boolean;
             }
+          | {
+              __typename?: 'ShortAnswerContentFormatData';
+              format: ContentType;
+              correctTerms: Array<string>;
+            }
           | { __typename?: 'SlideContentFormatData'; format: ContentType }
           | {
               __typename?: 'TextContentFormatData';
@@ -3191,6 +3296,11 @@ export type QuestionnairePublishedContentsByQuestionnaireIdQuery = {
               format: ContentType;
               template: ScaleContentTemplate;
               neutralOption: boolean;
+            }
+          | {
+              __typename?: 'ShortAnswerContentFormatData';
+              format: ContentType;
+              correctTerms: Array<string>;
             }
           | { __typename?: 'SlideContentFormatData'; format: ContentType }
           | {
@@ -3340,6 +3450,11 @@ export type CreateQuestionnaireChoiceContentMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -3414,6 +3529,11 @@ export type UpdateQuestionnaireChoiceContentMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3490,6 +3610,11 @@ export type CreateQuestionnaireNumericContentMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -3564,6 +3689,11 @@ export type UpdateQuestionnaireNumericContentMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3640,6 +3770,11 @@ export type CreateQuestionnaireScaleContentMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -3714,6 +3849,171 @@ export type UpdateQuestionnaireScaleContentMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'TextContentFormatData';
+          format: ContentType;
+          answersPublished: boolean;
+        }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type CreateQuestionnaireShortAnswerContentMutationVariables = Exact<{
+  input: CreateShortAnswerContentInput;
+}>;
+
+export type CreateQuestionnaireShortAnswerContentMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireShortAnswerContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | {
+          __typename?: 'NumericContentFormatData';
+          format: ContentType;
+          minNumber: number;
+          maxNumber: number;
+          correctNumber?: number | null;
+          tolerance: number;
+        }
+      | {
+          __typename?: 'ScaleContentFormatData';
+          format: ContentType;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'TextContentFormatData';
+          format: ContentType;
+          answersPublished: boolean;
+        }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type UpdateQuestionnaireShortAnswerContentMutationVariables = Exact<{
+  input: UpdateShortAnswerContentInput;
+}>;
+
+export type UpdateQuestionnaireShortAnswerContentMutation = {
+  __typename?: 'Mutation';
+  updateQuestionnaireShortAnswerContent?: {
+    __typename?: 'Content';
+    correctAnswerCount?: number | null;
+    hasAnswers: boolean;
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | {
+          __typename?: 'NumericContentFormatData';
+          format: ContentType;
+          minNumber: number;
+          maxNumber: number;
+          correctNumber?: number | null;
+          tolerance: number;
+        }
+      | {
+          __typename?: 'ScaleContentFormatData';
+          format: ContentType;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3790,6 +4090,11 @@ export type CreateQuestionnaireWordcloudContentMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -3864,6 +4169,11 @@ export type UpdateQuestionnaireWordcloudContentMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -3940,6 +4250,11 @@ export type CreateQuestionnaireTextContentMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -4014,6 +4329,11 @@ export type UpdateQuestionnaireTextContentMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4090,6 +4410,11 @@ export type CreateQuestionnaireFlashcardContentMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -4164,6 +4489,11 @@ export type UpdateQuestionnaireFlashcardContentMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4240,6 +4570,11 @@ export type CreateQuestionnaireSlideContentMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -4314,6 +4649,11 @@ export type UpdateQuestionnaireSlideContentMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -4390,6 +4730,11 @@ export type QuestionnaireContentByIdQuery = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -4432,6 +4777,11 @@ export type QuestionnaireAnswerByRoundIdQuery = {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
           rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
         }
       | {
           __typename?: 'TextAnswerFormatData';
@@ -4521,6 +4871,19 @@ export type QuestionnaireScaleRoundStatsByRoundIdQuery = {
   } | null;
 };
 
+export type QuestionnaireShortAnswerRoundStatsByRoundIdQueryVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireShortAnswerRoundStatsByRoundIdQuery = {
+  __typename?: 'Query';
+  questionnaireShortAnswerRoundStatsByRoundId?: {
+    __typename?: 'ShortAnswerContentRoundStats';
+    texts?: Array<string> | null;
+    counts?: Array<number> | null;
+  } | null;
+};
+
 export type QuestionnaireWordcloudRoundStatsByRoundIdQueryVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -4564,6 +4927,11 @@ export type QuestionnaireTextAnswersByRoundIdQuery = {
           rating: number;
         }
       | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
           body: string;
@@ -4605,6 +4973,11 @@ export type CreateQuestionnaireChoiceAnswerMutation = {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
           rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
         }
       | {
           __typename?: 'TextAnswerFormatData';
@@ -4651,6 +5024,11 @@ export type CreateQuestionnaireNumericAnswerMutation = {
           rating: number;
         }
       | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
           body: string;
@@ -4695,6 +5073,60 @@ export type CreateQuestionnaireScaleAnswerMutation = {
           rating: number;
         }
       | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'TextAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
+          __typename?: 'WordcloudAnswerFormatData';
+          format: ContentType;
+          words: Array<string>;
+        }
+      | null;
+  } | null;
+};
+
+export type CreateQuestionnaireShortAnswerAnswerMutationVariables = Exact<{
+  roundId: Scalars['UUID']['input'];
+  body: Scalars['String']['input'];
+}>;
+
+export type CreateQuestionnaireShortAnswerAnswerMutation = {
+  __typename?: 'Mutation';
+  createQuestionnaireShortAnswerAnswer?: {
+    __typename?: 'Answer';
+    id: string;
+    result: AnswerResultState;
+    hidden: boolean;
+    createdAt?: string | null;
+    durationMs?: number | null;
+    formatData?:
+      | {
+          __typename?: 'ChoiceAnswerFormatData';
+          format: ContentType;
+          selectedChoiceIndexes: Array<number>;
+        }
+      | {
+          __typename?: 'NumericAnswerFormatData';
+          format: ContentType;
+          selectedNumber: number;
+        }
+      | {
+          __typename?: 'ScaleAnswerFormatData';
+          format: ContentType;
+          rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
           body: string;
@@ -4736,6 +5168,11 @@ export type CreateQuestionnaireWordcloudAnswerMutation = {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
           rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
         }
       | {
           __typename?: 'TextAnswerFormatData';
@@ -4782,6 +5219,11 @@ export type CreateQuestionnaireTextAnswerMutation = {
           rating: number;
         }
       | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
           body: string;
@@ -4825,6 +5267,11 @@ export type CreateQuestionnaireAbstentionMutation = {
           rating: number;
         }
       | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
+        }
+      | {
           __typename?: 'TextAnswerFormatData';
           format: ContentType;
           body: string;
@@ -4863,6 +5310,85 @@ export type DeleteQuestionnaireAnswersByContentIdMutationVariables = Exact<{
 export type DeleteQuestionnaireAnswersByContentIdMutation = {
   __typename?: 'Mutation';
   deleteQuestionnaireAnswersByContentId?: boolean | null;
+};
+
+export type BanQuestionnaireShortAnswerContentKeywordMutationVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+  keyword: Scalars['String']['input'];
+}>;
+
+export type BanQuestionnaireShortAnswerContentKeywordMutation = {
+  __typename?: 'Mutation';
+  banQuestionnaireShortAnswerContentKeyword?: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | {
+          __typename?: 'NumericContentFormatData';
+          format: ContentType;
+          minNumber: number;
+          maxNumber: number;
+          correctNumber?: number | null;
+          tolerance: number;
+        }
+      | {
+          __typename?: 'ScaleContentFormatData';
+          format: ContentType;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'TextContentFormatData';
+          format: ContentType;
+          answersPublished: boolean;
+        }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
 };
 
 export type BanQuestionnaireWordcloudContentKeywordMutationVariables = Exact<{
@@ -4926,6 +5452,90 @@ export type BanQuestionnaireWordcloudContentKeywordMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
+      | { __typename?: 'SlideContentFormatData'; format: ContentType }
+      | {
+          __typename?: 'TextContentFormatData';
+          format: ContentType;
+          answersPublished: boolean;
+        }
+      | {
+          __typename?: 'WordcloudContentFormatData';
+          format: ContentType;
+          maxAnswers: number;
+        };
+  } | null;
+};
+
+export type ResetBannedQuestionnaireShortAnswerContentKeywordsMutationVariables =
+  Exact<{
+    contentId: Scalars['UUID']['input'];
+  }>;
+
+export type ResetBannedQuestionnaireShortAnswerContentKeywordsMutation = {
+  __typename?: 'Mutation';
+  resetBannedQuestionnaireShortAnswerContentKeywords?: {
+    __typename?: 'Content';
+    id: string;
+    body: string;
+    bodyRendered?: string | null;
+    duration?: number | null;
+    abstentionsAllowed?: boolean | null;
+    hasCorrectAnswer?: boolean | null;
+    weight?: number | null;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    position?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+      answeringEndTime?: string | null;
+      answerable: boolean;
+    } | null;
+    formatData:
+      | {
+          __typename?: 'ChoiceContentFormatData';
+          format: ContentType;
+          correctOptionIndexes?: Array<number> | null;
+          multiple?: boolean | null;
+          options: Array<{
+            __typename?: 'AnswerOption';
+            label: string;
+            labelRendered?: string | null;
+          }>;
+        }
+      | {
+          __typename?: 'FlashcardContentFormatData';
+          format: ContentType;
+          answer: string;
+        }
+      | {
+          __typename?: 'NumericContentFormatData';
+          format: ContentType;
+          minNumber: number;
+          maxNumber: number;
+          correctNumber?: number | null;
+          tolerance: number;
+        }
+      | {
+          __typename?: 'ScaleContentFormatData';
+          format: ContentType;
+          template: ScaleContentTemplate;
+          neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -5003,6 +5613,11 @@ export type ResetBannedQuestionnaireWordcloudContentKeywordsMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -5078,6 +5693,11 @@ export type ToggleQuestionnaireTextContentAnswersPublishedMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -5121,6 +5741,11 @@ export type ToggleQuestionnaireTextAnswerHiddenMutation = {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
           rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
         }
       | {
           __typename?: 'TextAnswerFormatData';
@@ -5247,6 +5872,11 @@ export type DuplicateQuestionnaireContentMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -5323,6 +5953,11 @@ export type CopyQuestionnaireContentToQuestionnaireMutation = {
           template: ScaleContentTemplate;
           neutralOption: boolean;
         }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
+        }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
           __typename?: 'TextContentFormatData';
@@ -5398,6 +6033,11 @@ export type MoveQuestionnaireContentToQuestionnaireMutation = {
           format: ContentType;
           template: ScaleContentTemplate;
           neutralOption: boolean;
+        }
+      | {
+          __typename?: 'ShortAnswerContentFormatData';
+          format: ContentType;
+          correctTerms: Array<string>;
         }
       | { __typename?: 'SlideContentFormatData'; format: ContentType }
       | {
@@ -5547,6 +6187,20 @@ export type QuestionnaireScaleRoundStatsUpdatedSubscription = {
   } | null;
 };
 
+export type QuestionnaireShortAnswerRoundStatsUpdatedSubscriptionVariables =
+  Exact<{
+    roundId: Scalars['UUID']['input'];
+  }>;
+
+export type QuestionnaireShortAnswerRoundStatsUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireShortAnswerRoundStatsUpdated?: {
+    __typename?: 'ShortAnswerContentRoundStats';
+    texts?: Array<string> | null;
+    counts?: Array<number> | null;
+  } | null;
+};
+
 export type QuestionnaireWordcloudRoundStatsUpdatedSubscriptionVariables =
   Exact<{
     roundId: Scalars['UUID']['input'];
@@ -5589,6 +6243,11 @@ export type QuestionnaireTextAnswersUpdatedSubscription = {
           __typename?: 'ScaleAnswerFormatData';
           format: ContentType;
           rating: number;
+        }
+      | {
+          __typename?: 'ShortAnswerAnswerFormatData';
+          format: ContentType;
+          body: string;
         }
       | {
           __typename?: 'TextAnswerFormatData';
@@ -6530,6 +7189,10 @@ export const ContentDetailsFragmentDoc = gql`
         template
         neutralOption
       }
+      ... on ShortAnswerContentFormatData {
+        format
+        correctTerms
+      }
       ... on TextContentFormatData {
         format
         answersPublished
@@ -6582,6 +7245,10 @@ export const AnswerFragmentDoc = gql`
         format
         rating
       }
+      ... on ShortAnswerAnswerFormatData {
+        format
+        body
+      }
       ... on TextAnswerFormatData {
         format
         body
@@ -6630,6 +7297,12 @@ export const NumericContentRoundStatsFragmentDoc = gql`
 `;
 export const ScaleContentRoundStatsFragmentDoc = gql`
   fragment ScaleContentRoundStats on ScaleContentRoundStats {
+    counts
+  }
+`;
+export const ShortAnswerContentRoundStatsFragmentDoc = gql`
+  fragment ShortAnswerContentRoundStats on ShortAnswerContentRoundStats {
+    texts
     counts
   }
 `;
@@ -8317,6 +8990,54 @@ export class UpdateQuestionnaireScaleContentGql extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const CreateQuestionnaireShortAnswerContentDocument = gql`
+  mutation CreateQuestionnaireShortAnswerContent(
+    $input: CreateShortAnswerContentInput!
+  ) {
+    createQuestionnaireShortAnswerContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireShortAnswerContentGql extends Apollo.Mutation<
+  CreateQuestionnaireShortAnswerContentMutation,
+  CreateQuestionnaireShortAnswerContentMutationVariables
+> {
+  document = CreateQuestionnaireShortAnswerContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UpdateQuestionnaireShortAnswerContentDocument = gql`
+  mutation UpdateQuestionnaireShortAnswerContent(
+    $input: UpdateShortAnswerContentInput!
+  ) {
+    updateQuestionnaireShortAnswerContent(input: $input) {
+      ...CreatorContentDetails
+    }
+  }
+  ${CreatorContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class UpdateQuestionnaireShortAnswerContentGql extends Apollo.Mutation<
+  UpdateQuestionnaireShortAnswerContentMutation,
+  UpdateQuestionnaireShortAnswerContentMutationVariables
+> {
+  document = UpdateQuestionnaireShortAnswerContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const CreateQuestionnaireWordcloudContentDocument = gql`
   mutation CreateQuestionnaireWordcloudContent(
     $input: CreateWordcloudContentInput!
@@ -8661,6 +9382,28 @@ export class QuestionnaireScaleRoundStatsByRoundIdGql extends Apollo.Query<
     super(apollo);
   }
 }
+export const QuestionnaireShortAnswerRoundStatsByRoundIdDocument = gql`
+  query QuestionnaireShortAnswerRoundStatsByRoundId($roundId: UUID!) {
+    questionnaireShortAnswerRoundStatsByRoundId(roundId: $roundId) {
+      ...ShortAnswerContentRoundStats
+    }
+  }
+  ${ShortAnswerContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireShortAnswerRoundStatsByRoundIdGql extends Apollo.Query<
+  QuestionnaireShortAnswerRoundStatsByRoundIdQuery,
+  QuestionnaireShortAnswerRoundStatsByRoundIdQueryVariables
+> {
+  document = QuestionnaireShortAnswerRoundStatsByRoundIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const QuestionnaireWordcloudRoundStatsByRoundIdDocument = gql`
   query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
     questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
@@ -8773,6 +9516,33 @@ export class CreateQuestionnaireScaleAnswerGql extends Apollo.Mutation<
   CreateQuestionnaireScaleAnswerMutationVariables
 > {
   document = CreateQuestionnaireScaleAnswerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreateQuestionnaireShortAnswerAnswerDocument = gql`
+  mutation CreateQuestionnaireShortAnswerAnswer(
+    $roundId: UUID!
+    $body: String!
+  ) {
+    createQuestionnaireShortAnswerAnswer(
+      input: { roundId: $roundId, body: $body }
+    ) {
+      ...Answer
+    }
+  }
+  ${AnswerFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateQuestionnaireShortAnswerAnswerGql extends Apollo.Mutation<
+  CreateQuestionnaireShortAnswerAnswerMutation,
+  CreateQuestionnaireShortAnswerAnswerMutationVariables
+> {
+  document = CreateQuestionnaireShortAnswerAnswerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -8903,6 +9673,34 @@ export class DeleteQuestionnaireAnswersByContentIdGql extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const BanQuestionnaireShortAnswerContentKeywordDocument = gql`
+  mutation BanQuestionnaireShortAnswerContentKeyword(
+    $contentId: UUID!
+    $keyword: String!
+  ) {
+    banQuestionnaireShortAnswerContentKeyword(
+      contentId: $contentId
+      keyword: $keyword
+    ) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class BanQuestionnaireShortAnswerContentKeywordGql extends Apollo.Mutation<
+  BanQuestionnaireShortAnswerContentKeywordMutation,
+  BanQuestionnaireShortAnswerContentKeywordMutationVariables
+> {
+  document = BanQuestionnaireShortAnswerContentKeywordDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const BanQuestionnaireWordcloudContentKeywordDocument = gql`
   mutation BanQuestionnaireWordcloudContentKeyword(
     $contentId: UUID!
@@ -8926,6 +9724,30 @@ export class BanQuestionnaireWordcloudContentKeywordGql extends Apollo.Mutation<
   BanQuestionnaireWordcloudContentKeywordMutationVariables
 > {
   document = BanQuestionnaireWordcloudContentKeywordDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ResetBannedQuestionnaireShortAnswerContentKeywordsDocument = gql`
+  mutation ResetBannedQuestionnaireShortAnswerContentKeywords(
+    $contentId: UUID!
+  ) {
+    resetBannedQuestionnaireShortAnswerContentKeywords(contentId: $contentId) {
+      ...ContentDetails
+    }
+  }
+  ${ContentDetailsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ResetBannedQuestionnaireShortAnswerContentKeywordsGql extends Apollo.Mutation<
+  ResetBannedQuestionnaireShortAnswerContentKeywordsMutation,
+  ResetBannedQuestionnaireShortAnswerContentKeywordsMutationVariables
+> {
+  document = ResetBannedQuestionnaireShortAnswerContentKeywordsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -9315,6 +10137,28 @@ export class QuestionnaireScaleRoundStatsUpdatedGql extends Apollo.Subscription<
   QuestionnaireScaleRoundStatsUpdatedSubscriptionVariables
 > {
   document = QuestionnaireScaleRoundStatsUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireShortAnswerRoundStatsUpdatedDocument = gql`
+  subscription QuestionnaireShortAnswerRoundStatsUpdated($roundId: UUID!) {
+    questionnaireShortAnswerRoundStatsUpdated(roundId: $roundId) {
+      ...ShortAnswerContentRoundStats
+    }
+  }
+  ${ShortAnswerContentRoundStatsFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireShortAnswerRoundStatsUpdatedGql extends Apollo.Subscription<
+  QuestionnaireShortAnswerRoundStatsUpdatedSubscription,
+  QuestionnaireShortAnswerRoundStatsUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireShortAnswerRoundStatsUpdatedDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

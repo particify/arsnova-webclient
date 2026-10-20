@@ -36,6 +36,24 @@ function choiceContent(): Content {
   };
 }
 
+function shortAnswerContent(): Content {
+  return {
+    __typename: 'Content',
+    id: 'content-2',
+    body: 'Capital of France?',
+    hasCorrectAnswer: true,
+    answerCount: 5,
+    correctAnswerCount: 4,
+    hasAnswers: true,
+    abstentionCount: 1,
+    formatData: {
+      __typename: 'ShortAnswerContentFormatData',
+      format: ContentType.ShortAnswer,
+      correctTerms: ['Paris'],
+    },
+  };
+}
+
 describe('ContentResultsComponent', () => {
   let fixture: ComponentFixture<ContentResultsComponent>;
   let component: ContentResultsComponent;
@@ -43,7 +61,7 @@ describe('ContentResultsComponent', () => {
   let refetchRounds: jasmine.Spy;
 
   interface SetUpOptions {
-    content?: Partial<Content>;
+    content?: Content;
     isPresentation?: boolean;
     showCorrect?: boolean;
   }
@@ -90,10 +108,10 @@ describe('ContentResultsComponent', () => {
 
     fixture = TestBed.createComponent(ContentResultsComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('content', {
-      ...choiceContent(),
-      ...options.content,
-    });
+    fixture.componentRef.setInput(
+      'content',
+      options.content ?? choiceContent()
+    );
     fixture.componentRef.setInput('settings', {} as UserUiSettings);
     fixture.componentRef.setInput('isPresentation', !!options.isPresentation);
     fixture.componentRef.setInput('showCorrect', !!options.showCorrect);
@@ -144,14 +162,22 @@ describe('ContentResultsComponent', () => {
   });
 
   it('counts no answers while the count is withheld from the participant', () => {
-    setUp({ content: { answerCount: null, correctAnswerCount: null } });
+    setUp({
+      content: {
+        ...choiceContent(),
+        answerCount: null,
+        correctAnswerCount: null,
+      },
+    });
     expect(
       (component.componentInputs() as { answerCount: number }).answerCount
     ).toBe(0);
   });
 
   it('reloads the rounds once another round of the content became active', () => {
-    setUp({ content: { activeRound: { id: 'round-1' } as Round } });
+    setUp({
+      content: { ...choiceContent(), activeRound: { id: 'round-1' } as Round },
+    });
     expect(refetchRounds).not.toHaveBeenCalled();
 
     fixture.componentRef.setInput('content', {
@@ -164,7 +190,9 @@ describe('ContentResultsComponent', () => {
   });
 
   it('keeps the rounds while the same round stays active', () => {
-    setUp({ content: { activeRound: { id: 'round-1' } as Round } });
+    setUp({
+      content: { ...choiceContent(), activeRound: { id: 'round-1' } as Round },
+    });
 
     fixture.componentRef.setInput('content', {
       ...choiceContent(),
@@ -192,5 +220,28 @@ describe('ContentResultsComponent', () => {
 
     fixture.componentRef.setInput('allowAnswerModeration', true);
     expect(allowAnswerModeration()).toBeTrue();
+  });
+
+  it('hands a short answer its correct-answer summary without chart inputs', () => {
+    setUp({ content: shortAnswerContent(), showCorrect: true });
+    const inputs = component.componentInputs() as Record<string, unknown>;
+    expect(inputs['showCorrect']).toBe(true);
+    expect(inputs['hasCorrectAnswer']).toBe(true);
+    expect(inputs['answerCount']).toBe(5);
+    expect(inputs['correctAnswerCount']).toBe(4);
+    expect(inputs['abstentionCount']).toBe(1);
+    expect(inputs['formatData']).toEqual(shortAnswerContent().formatData);
+    expect('rounds' in inputs).toBe(false);
+    expect('visualizationUnitPercent' in inputs).toBe(false);
+  });
+
+  it('lets a short answer ban answers only where answers may be moderated', () => {
+    setUp({ content: shortAnswerContent() });
+    const inputs = () => component.componentInputs() as Record<string, unknown>;
+    expect(inputs()['contentId']).toBe(shortAnswerContent().id);
+    expect(inputs()['allowAnswerModeration']).toBe(false);
+
+    fixture.componentRef.setInput('allowAnswerModeration', true);
+    expect(inputs()['allowAnswerModeration']).toBe(true);
   });
 });

@@ -55,6 +55,8 @@
     "duplicate-series-name": "Il existe déjà une série de questions portant ce nom.",
     "content-group-update-failed": "Quelque chose n'a pas fonctionné. Peut-être que la série de questions est déjà présente ?",
     "no-empty-fields-allowed": "Aucun champ vide n'est autorisé.",
+    "short-answer-term-without-letters-or-digits": "Chaque réponse doit contenir des lettres ou des chiffres.",
+    "short-answer-terms-repeating": "Les réponses doivent se distinguer par plus que la casse, les espaces et la ponctuation.",
     "reset": "Réinitialiser",
     "reset-all": "Toutes les entrées ont été réinitialisées.",
     "yes": "Oui",

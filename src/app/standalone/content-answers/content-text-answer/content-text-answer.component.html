@@ -1,6 +1,10 @@
 <mat-form-field
   appearance="outline"
   class="form-field-indication no-field-hint"
+  [ngClass]="{
+    correct: correct() === true,
+    wrong: correct() === false,
+  }"
 >
   <mat-label>{{ 'answer.your-answer' | transloco }}</mat-label>
   @if (minRows() > 1) {
@@ -24,5 +28,16 @@
       [maxLength]="lengthLimit()"
       dir="auto"
     />
+  }
+  @let _correct = correct();
+  @if (_correct !== undefined) {
+    <mat-icon
+      matSuffix
+      [ngClass]="_correct ? 'correct' : 'wrong'"
+      [attr.data-testid]="
+        _correct ? 'text-answer-correct' : 'text-answer-wrong'
+      "
+      >{{ _correct ? 'check' : 'close' }}</mat-icon
+    >
   }
 </mat-form-field>

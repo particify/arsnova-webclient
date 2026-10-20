@@ -69,6 +69,10 @@ fragment ContentDetails on Content {
       template
       neutralOption
     }
+    ... on ShortAnswerContentFormatData {
+      format
+      correctTerms
+    }
     ... on TextContentFormatData {
       format
       answersPublished
@@ -117,6 +121,10 @@ fragment Answer on Answer {
       format
       rating
     }
+    ... on ShortAnswerAnswerFormatData {
+      format
+      body
+    }
     ... on TextAnswerFormatData {
       format
       body
@@ -160,6 +168,11 @@ fragment NumericContentRoundStats on NumericContentRoundStats {
 }
 
 fragment ScaleContentRoundStats on ScaleContentRoundStats {
+  counts
+}
+
+fragment ShortAnswerContentRoundStats on ShortAnswerContentRoundStats {
+  texts
   counts
 }
 
@@ -256,6 +269,22 @@ mutation CreateQuestionnaireScaleContent($input: CreateScaleContentInput!) {
 
 mutation UpdateQuestionnaireScaleContent($input: UpdateScaleContentInput!) {
   updateQuestionnaireScaleContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireShortAnswerContent(
+  $input: CreateShortAnswerContentInput!
+) {
+  createQuestionnaireShortAnswerContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireShortAnswerContent(
+  $input: UpdateShortAnswerContentInput!
+) {
+  updateQuestionnaireShortAnswerContent(input: $input) {
     ...CreatorContentDetails
   }
 }
@@ -364,6 +393,12 @@ query QuestionnaireScaleRoundStatsByRoundId($roundId: UUID!) {
   }
 }
 
+query QuestionnaireShortAnswerRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireShortAnswerRoundStatsByRoundId(roundId: $roundId) {
+    ...ShortAnswerContentRoundStats
+  }
+}
+
 query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
   questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
     ...WordcloudContentRoundStats
@@ -401,6 +436,14 @@ mutation CreateQuestionnaireScaleAnswer($roundId: UUID!, $rating: Int!) {
   }
 }
 
+mutation CreateQuestionnaireShortAnswerAnswer($roundId: UUID!, $body: String!) {
+  createQuestionnaireShortAnswerAnswer(
+    input: { roundId: $roundId, body: $body }
+  ) {
+    ...Answer
+  }
+}
+
 mutation CreateQuestionnaireWordcloudAnswer(
   $input: CreateWordcloudAnswerInput!
 ) {
@@ -433,6 +476,18 @@ mutation DeleteQuestionnaireAnswersByContentId($contentId: UUID!) {
   deleteQuestionnaireAnswersByContentId(contentId: $contentId)
 }
 
+mutation BanQuestionnaireShortAnswerContentKeyword(
+  $contentId: UUID!
+  $keyword: String!
+) {
+  banQuestionnaireShortAnswerContentKeyword(
+    contentId: $contentId
+    keyword: $keyword
+  ) {
+    ...ContentDetails
+  }
+}
+
 mutation BanQuestionnaireWordcloudContentKeyword(
   $contentId: UUID!
   $keyword: String!
@@ -442,6 +497,12 @@ mutation BanQuestionnaireWordcloudContentKeyword(
     keyword: $keyword
   ) {
     ...CreatorContentDetails
+  }
+}
+
+mutation ResetBannedQuestionnaireShortAnswerContentKeywords($contentId: UUID!) {
+  resetBannedQuestionnaireShortAnswerContentKeywords(contentId: $contentId) {
+    ...ContentDetails
   }
 }
 
@@ -594,6 +655,12 @@ subscription QuestionnaireNumericRoundStatsUpdated($roundId: UUID!) {
 subscription QuestionnaireScaleRoundStatsUpdated($roundId: UUID!) {
   questionnaireScaleRoundStatsUpdated(roundId: $roundId) {
     ...ScaleContentRoundStats
+  }
+}
+
+subscription QuestionnaireShortAnswerRoundStatsUpdated($roundId: UUID!) {
+  questionnaireShortAnswerRoundStatsUpdated(roundId: $roundId) {
+    ...ShortAnswerContentRoundStats
   }
 }
 
