@@ -292,7 +292,7 @@ export class ContentEditingComponent {
   textContainsImage = false;
   HintType = HintType;
   isLoading = true;
-  created = false;
+  readonly created = signal(false);
   QuestionnaireType = QuestionnaireType;
   questionMaxLength = 2000;
 
@@ -408,9 +408,9 @@ export class ContentEditingComponent {
     setTimeout(() => {
       this.bodyInput().nativeElement.focus();
     });
-    this.created = true;
+    this.created.set(true);
     setTimeout(() => {
-      this.created = false;
+      this.created.set(false);
     }, 300);
   }
 

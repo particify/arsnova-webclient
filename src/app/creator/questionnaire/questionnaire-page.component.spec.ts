@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { NO_ERRORS_SCHEMA, Type } from '@angular/core';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA, Type } from '@angular/core';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -250,7 +250,7 @@ describe('QuestionnairePageComponent (creator)', () => {
 
     emitContents(contents);
 
-    expect(component.editMode).toBeTrue();
+    expect(component.editMode()).toBeTrue();
     expect(component.selectedContentId()).toBe('c-2');
     expect(router.navigate).not.toHaveBeenCalled();
   });
@@ -260,7 +260,7 @@ describe('QuestionnairePageComponent (creator)', () => {
 
     emitContents(contents);
 
-    expect(component.creationMode).toBeTrue();
+    expect(component.creationMode()).toBeTrue();
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
@@ -270,7 +270,7 @@ describe('QuestionnairePageComponent (creator)', () => {
 
     navigateTo(null);
 
-    expect(component.childActive).toBeFalse();
+    expect(component.childActive()).toBeFalse();
     expect(router.navigate).toHaveBeenCalledWith(['c-2'], {
       relativeTo: route,
       replaceUrl: true,
@@ -287,7 +287,7 @@ describe('QuestionnairePageComponent (creator)', () => {
     });
 
     navigateTo(childRoute('leaderboard'));
-    expect(component.showLeaderboard).toBeTrue();
+    expect(component.showLeaderboard()).toBeTrue();
 
     component.toggleLeaderboard();
     expect(router.navigate).toHaveBeenCalledWith(['.', 'c-2'], {
@@ -636,6 +636,49 @@ describe('QuestionnairePageComponent (creator)', () => {
     expect(query('.group-container')).not.toBeNull();
     expect(query('router-outlet')).toBeNull();
     expect(query('app-back-button')).toBeNull();
+  });
+
+  /**
+   * Without a strategy of its own, the AOT build compiles the page OnPush,
+   * while TestBed's recompilation of an overridden component defaults to Eager.
+   */
+  function compileAsBuilt() {
+    TestBed.overrideComponent(QuestionnairePageComponent, {
+      set: { changeDetection: ChangeDetectionStrategy.OnPush },
+    });
+  }
+
+  it('is compiled OnPush by the build', () => {
+    expect(
+      (QuestionnairePageComponent as unknown as { ɵcmp: { onPush: boolean } })
+        .ɵcmp.onPush
+    ).toBeTrue();
+  });
+
+  it('shows the creation on mobile as soon as it is navigated to', () => {
+    compileAsBuilt();
+    setUp(false, null, true);
+    emitContents(contents);
+    expect(query('.group-container')).not.toBeNull();
+
+    navigateTo(childRoute('create'));
+    fixture.detectChanges();
+
+    expect(query('router-outlet')).not.toBeNull();
+    expect(query('.group-container')).toBeNull();
+  });
+
+  it('shows the content list on mobile as soon as the creation is left', () => {
+    compileAsBuilt();
+    setUp(false, childRoute('create'), true);
+    emitContents(contents);
+    expect(query('router-outlet')).not.toBeNull();
+
+    navigateTo(null);
+    fixture.detectChanges();
+
+    expect(query('.group-container')).not.toBeNull();
+    expect(query('router-outlet')).toBeNull();
   });
 
   it('shows the content list next to the child view on desktop', () => {

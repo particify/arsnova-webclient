@@ -7,6 +7,7 @@ import {
   inject,
   input,
   signal,
+  untracked,
 } from '@angular/core';
 import {
   takeUntilDestroyed,
@@ -229,13 +230,13 @@ export class QuestionnairePageComponent {
   QuestionnaireType = QuestionnaireType;
   totalCorrect?: number;
   totalAbstentions?: number;
-  showLeaderboard = false;
+  readonly showLeaderboard = signal(false);
   showAttributions = false;
-  creationMode = false;
-  editMode = false;
+  readonly creationMode = signal(false);
+  readonly editMode = signal(false);
   selectedContentId = signal<string | undefined>(undefined);
-  isDesktop?: boolean;
-  childActive = false;
+  readonly isDesktop = signal<boolean | undefined>(undefined);
+  readonly childActive = signal(false);
 
   constructor() {
     this.router.events
@@ -254,11 +255,17 @@ export class QuestionnairePageComponent {
       });
     effect(() => {
       if (!this.loadingContents()) {
-        this.determinateRouteState();
-        this.navigateToFirstContent();
-        if (this.contents().length === 0 && this.isDesktop) {
-          this.openCreation();
-        }
+        // The route state is kept current by the router events and the
+        // breakpoint, so only the contents and the selection drive this.
+        this.contents();
+        this.selectedContentId();
+        untracked(() => {
+          this.determinateRouteState();
+          this.navigateToFirstContent();
+          if (this.contents().length === 0 && this.isDesktop()) {
+            this.openCreation();
+          }
+        });
       }
       if (this.questionnaire()) {
         this.globalStorageService.setItem(
@@ -270,12 +277,12 @@ export class QuestionnairePageComponent {
     this.breakpointObserver
       .observe(['(min-width: 1000px)'])
       .subscribe((changes) => {
-        const temp = this.isDesktop;
-        this.isDesktop = changes.matches;
+        const temp = this.isDesktop();
+        this.isDesktop.set(changes.matches);
         if (temp !== undefined && temp !== changes.matches) {
           this.determinateRouteState();
           this.navigateToFirstContent();
-          if (this.contents().length === 0 && this.isDesktop) {
+          if (this.contents().length === 0 && this.isDesktop()) {
             this.openCreation();
           }
         }
@@ -285,14 +292,14 @@ export class QuestionnairePageComponent {
   private determinateRouteState() {
     const child = this.route.firstChild;
     const childPath = child?.snapshot.routeConfig?.path;
-    this.showLeaderboard = childPath === 'leaderboard';
+    this.showLeaderboard.set(childPath === 'leaderboard');
     this.showAttributions = childPath === 'attributions';
-    this.creationMode = childPath === 'create';
-    this.editMode = !!childPath?.includes('edit');
-    if (childPath === 'attributions' && this.isDesktop) {
+    this.creationMode.set(childPath === 'create');
+    this.editMode.set(!!childPath?.includes('edit'));
+    if (childPath === 'attributions' && this.isDesktop()) {
       this.selectedContentId.set(undefined);
     }
-    this.childActive = !!child;
+    this.childActive.set(!!child);
     this.evaluateRouteStateChild(child, childPath);
   }
 
@@ -301,7 +308,7 @@ export class QuestionnairePageComponent {
     path: string | undefined
   ) {
     if (!route) {
-      if (this.selectedContentId() !== undefined && this.isDesktop) {
+      if (this.selectedContentId() !== undefined && this.isDesktop()) {
         this.router.navigate([this.selectedContentId()], {
           relativeTo: this.route,
           replaceUrl: true,
@@ -321,12 +328,12 @@ export class QuestionnairePageComponent {
     const questionnaire = this.questionnaire();
     if (
       questionnaire &&
-      this.isDesktop &&
+      this.isDesktop() &&
       this.selectedContentId() === undefined &&
-      !this.showLeaderboard &&
+      !this.showLeaderboard() &&
       !this.showAttributions &&
-      !this.creationMode &&
-      !this.editMode &&
+      !this.creationMode() &&
+      !this.editMode() &&
       this.contents().length > 0
     ) {
       this.router.navigate(
@@ -541,7 +548,7 @@ export class QuestionnairePageComponent {
 
   toggleLeaderboard() {
     const url = ['.'];
-    if (this.showLeaderboard) {
+    if (this.showLeaderboard()) {
       const selectedContentId = this.selectedContentId();
       if (selectedContentId !== undefined) {
         url.push(selectedContentId);
@@ -552,7 +559,7 @@ export class QuestionnairePageComponent {
     this.router.navigate(url, {
       relativeTo: this.route,
     });
-    this.showLeaderboard = !this.showLeaderboard;
+    this.showLeaderboard.update((shown) => !shown);
   }
 
   private openCreation() {
