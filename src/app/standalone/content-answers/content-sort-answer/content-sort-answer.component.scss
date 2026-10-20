@@ -15,8 +15,19 @@ $option-padding: 0;
   }
 }
 
-.mat-icon {
+// Scoped to the drag handle so the shared correctness colors reach the
+// indicator, which sits outside the list.
+.answer .mat-icon {
   color: var(--grey);
+}
+
+// The correctness indicator is laid over the middle of the list, as in v3.
+.answer-container {
+  position: relative;
+}
+
+.solution {
+  pointer-events: none;
 }
 
 .no-grab {

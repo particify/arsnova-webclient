@@ -7,6 +7,7 @@ import { SlideContentFormComponent } from './slide-content-form/slide-content-fo
 import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
 import { ScaleContentFormComponent } from './scale-content-form/scale-content-form.component';
 import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
+import { SortContentFormComponent } from './sort-content-form/sort-content-form.component';
 import { TextContentFormComponent } from './text-content-form/text-content-form.component';
 
 export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
@@ -35,7 +36,7 @@ export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
     component: SlideContentFormComponent,
   },
   [ContentType.Sort]: {
-    component: ChoiceContentFormComponent,
+    component: SortContentFormComponent,
   },
   [ContentType.Text]: {
     component: TextContentFormComponent,

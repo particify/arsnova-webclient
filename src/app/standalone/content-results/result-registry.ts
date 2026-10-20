@@ -6,6 +6,7 @@ import { FlashcardResultsComponent } from './flashcard-results/flashcard-results
 import { NumericResultsComponent } from './numeric-results/numeric-results.component';
 import { ScaleResultsComponent } from './scale-results/scale-results.component';
 import { ShortAnswerResultsComponent } from './short-answer-results/short-answer-results.component';
+import { SortResultsComponent } from './sort-results/sort-results.component';
 import { TextResultsComponent } from './text-results/text-results.component';
 
 export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
@@ -39,7 +40,7 @@ export const RESULT_REGISTRY: Record<ContentType, ResultDefinition> = {
   },
   [ContentType.Slide]: {},
   [ContentType.Sort]: {
-    component: ChoiceResultsComponent,
+    component: SortResultsComponent,
   },
   [ContentType.Text]: {
     component: TextResultsComponent,

@@ -221,4 +221,93 @@ test.describe('content formats', () => {
       await expect(participant.getHintAfterAbstaining()).toBeVisible();
     });
   });
+
+  test.describe('sort', () => {
+    const correctOrder = ['Mercury', 'Venus', 'Earth', 'Mars'];
+
+    /**
+     * Brings the items into the given order with the keyboard. The order the
+     * participant starts from is a shuffle of the shuffled storage order, so it
+     * is read from the page rather than assumed.
+     */
+    async function arrange(page: Page, order: string[]) {
+      const items = page.locator('app-content-sort-answer [cdkdrag]');
+      const labels = async () =>
+        (await items.allInnerTexts()).map((text) =>
+          text.replace('drag_handle', '').trim()
+        );
+      // The list re-renders and refocuses after every move, so the next move is
+      // always derived from the order shown now.
+      await expect(async () => {
+        const shown = await labels();
+        const target = shown.findIndex((label, i) => label !== order[i]);
+        if (target >= 0) {
+          await items.nth(shown.indexOf(order[target])).focus();
+          await page.keyboard.press('ArrowUp');
+        }
+        expect(await labels()).toEqual(order);
+      }).toPass({ timeout: 20000 });
+    }
+
+    test.beforeEach(async ({ page, baseURL }) => {
+      await createSeries(page, baseURL, 'Quiz');
+      await contentCreation.createSortContent('My sort content', correctOrder);
+    });
+
+    test('the creator order is the correct one', async ({
+      browser,
+      baseURL,
+    }) => {
+      await publish();
+      const participant = await join(browser, baseURL);
+      await arrange(participant.page, correctOrder);
+      await participant.getSubmitButton().click();
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await expect(
+        participant.page.getByTestId('sort-answer-correct')
+      ).toBeVisible();
+      await expectAnswerCount(1);
+    });
+
+    test('another order is wrong', async ({ browser, baseURL }) => {
+      await publish();
+      const participant = await join(browser, baseURL);
+      await arrange(participant.page, [...correctOrder].reverse());
+      await participant.getSubmitButton().click();
+      await expect(
+        participant.page.getByTestId('sort-answer-wrong')
+      ).toBeVisible();
+    });
+
+    test('the correct order is withheld until correct answers are published', async ({
+      browser,
+      baseURL,
+    }) => {
+      await publish({ correctAnswers: false });
+      const participant = await join(browser, baseURL);
+      await arrange(participant.page, correctOrder);
+      await participant.getSubmitButton().click();
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await expect(
+        participant.page.getByTestId('sort-answer-correct')
+      ).toBeHidden();
+    });
+
+    test('editing keeps the creator order', async () => {
+      // Reloaded so the order comes from the server, not the creation form.
+      await creatorPage.reload();
+      const contentItem = creatorPage.getByTestId('content-item').first();
+      await contentItem.hover();
+      await contentItem
+        .getByRole('button')
+        .filter({ hasText: /^edit$/ })
+        .click();
+      await creatorPage.waitForURL(/\/edit\/[^/]+$/);
+      for (const [index, label] of correctOrder.entries()) {
+        await expect(
+          creatorPage.getByPlaceholder('item ' + (index + 1))
+        ).toHaveValue(label);
+      }
+    });
+  });
 });

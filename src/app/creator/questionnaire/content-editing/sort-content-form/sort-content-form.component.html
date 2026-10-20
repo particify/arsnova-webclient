@@ -1,0 +1,21 @@
+@if (preview()) {
+  <app-content-sort-answer
+    [answerOptions]="previewItems()"
+    [dynamicRendering]="true"
+    [disabled]="true"
+  ></app-content-sort-answer>
+} @else {
+  <div class="format-container">
+    <span class="section-label">{{ 'creator.content.order' | transloco }}</span>
+    <app-answer-option-list
+      [answers]="displayAnswers()"
+      (answersChange)="displayAnswers.set($event)"
+      [allowDeletion]="!locked()"
+      [disabled]="locked()"
+      [sortable]="true"
+      [minimumAnswerCount]="2"
+      optionLabel="sort-item"
+      optionLabels="sort-items"
+    ></app-answer-option-list>
+  </div>
+}

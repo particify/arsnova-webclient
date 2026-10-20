@@ -142,6 +142,21 @@ export const ContentPreviewShortAnswer: Story = {
   },
 };
 
+export const ContentPreviewSort: Story = {
+  args: {
+    ...baseArgs,
+    contentFormatData: {
+      __typename: 'SortContentFormatData',
+      format: ContentType.Sort,
+      options: [
+        { __typename: 'AnswerOption', label: 'Earth' },
+        { __typename: 'AnswerOption', label: 'Mercury' },
+        { __typename: 'AnswerOption', label: 'Mars' },
+      ],
+    },
+  },
+};
+
 export const ContentPreviewText: Story = {
   args: {
     ...baseArgs,

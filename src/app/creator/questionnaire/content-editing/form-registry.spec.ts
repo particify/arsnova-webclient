@@ -2,14 +2,14 @@ import { ContentType } from '@gql/generated/graphql';
 import { ChoiceContentFormComponent } from './choice-content-form/choice-content-form.component';
 import { FORM_REGISTRY } from './form-registry';
 import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
+import { SortContentFormComponent } from './sort-content-form/sort-content-form.component';
 
 describe('FORM_REGISTRY', () => {
-  /** Binary is a choice content; Prioritization and Sort still lack a form. */
+  /** Binary is a choice content; Prioritization still lacks a form. */
   const formatsUsingTheChoiceForm = [
     ContentType.Binary,
     ContentType.Choice,
     ContentType.Prioritization,
-    ContentType.Sort,
   ];
 
   it('has a form component for every format', () => {
@@ -31,6 +31,12 @@ describe('FORM_REGISTRY', () => {
   it('has its own form for the short answer format', () => {
     expect(FORM_REGISTRY[ContentType.ShortAnswer].component).toBe(
       ShortAnswerContentFormComponent
+    );
+  });
+
+  it('has its own form for the sort format', () => {
+    expect(FORM_REGISTRY[ContentType.Sort].component).toBe(
+      SortContentFormComponent
     );
   });
 });

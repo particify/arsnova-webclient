@@ -165,6 +165,12 @@ export class ContentResultsComponent {
       contentId: this.content().id,
       allowAnswerModeration: this.allowAnswerModeration(),
     }),
+    [ContentType.Sort]: () => ({
+      ...this.scoringInputs(),
+      rounds: this.rounds(),
+      visualizationUnitPercent:
+        !!this.settings().contentVisualizationUnitPercent,
+    }),
     [ContentType.Text]: () => ({
       formatData: this.content().formatData,
       allowAnswerModeration: this.allowAnswerModeration(),

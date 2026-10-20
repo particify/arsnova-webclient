@@ -9,6 +9,7 @@ import { LanguageContextDirective } from '@app/core/directives/language-context.
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 import { ContentFormatData, ContentType } from '@gql/generated/graphql';
 import { ContentTextAnswerComponent } from '@app/standalone/content-answers/content-text-answer/content-text-answer.component';
+import { ContentSortAnswerComponent } from '@app/standalone/content-answers/content-sort-answer/content-sort-answer.component';
 import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
 
 @Component({
@@ -46,7 +47,7 @@ export class ContentPreviewComponent {
     [ContentType.Scale]: ContentChoiceAnswerComponent,
     [ContentType.ShortAnswer]: ContentTextAnswerComponent,
     [ContentType.Slide]: undefined,
-    [ContentType.Sort]: ContentChoiceAnswerComponent,
+    [ContentType.Sort]: ContentSortAnswerComponent,
     [ContentType.Text]: ContentTextAnswerComponent,
     [ContentType.Wordcloud]: ContentWordcloudAnswerComponent,
   };
@@ -73,6 +74,12 @@ export class ContentPreviewComponent {
           disabled: true,
           minRows: 1,
           lengthLimit: 80,
+        };
+
+      case 'SortContentFormatData':
+        return {
+          answerOptions: formatData.options,
+          disabled: true,
         };
 
       case 'TextContentFormatData':

@@ -73,6 +73,14 @@ fragment ContentDetails on Content {
       format
       correctTerms
     }
+    ... on SortContentFormatData {
+      format
+      correctOrder
+      options {
+        label
+        labelRendered
+      }
+    }
     ... on TextContentFormatData {
       format
       answersPublished
@@ -125,6 +133,10 @@ fragment Answer on Answer {
       format
       body
     }
+    ... on SortAnswerFormatData {
+      format
+      selectedChoiceIndexes
+    }
     ... on TextAnswerFormatData {
       format
       body
@@ -174,6 +186,13 @@ fragment ScaleContentRoundStats on ScaleContentRoundStats {
 fragment ShortAnswerContentRoundStats on ShortAnswerContentRoundStats {
   texts
   counts
+}
+
+fragment SortContentRoundStats on SortContentRoundStats {
+  combinations {
+    selectedChoiceIndexes
+    count
+  }
 }
 
 fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
@@ -289,6 +308,18 @@ mutation UpdateQuestionnaireShortAnswerContent(
   }
 }
 
+mutation CreateQuestionnaireSortContent($input: CreateSortContentInput!) {
+  createQuestionnaireSortContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireSortContent($input: UpdateSortContentInput!) {
+  updateQuestionnaireSortContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
 mutation CreateQuestionnaireWordcloudContent(
   $input: CreateWordcloudContentInput!
 ) {
@@ -399,6 +430,12 @@ query QuestionnaireShortAnswerRoundStatsByRoundId($roundId: UUID!) {
   }
 }
 
+query QuestionnaireSortRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireSortRoundStatsByRoundId(roundId: $roundId) {
+    ...SortContentRoundStats
+  }
+}
+
 query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
   questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
     ...WordcloudContentRoundStats
@@ -439,6 +476,17 @@ mutation CreateQuestionnaireScaleAnswer($roundId: UUID!, $rating: Int!) {
 mutation CreateQuestionnaireShortAnswerAnswer($roundId: UUID!, $body: String!) {
   createQuestionnaireShortAnswerAnswer(
     input: { roundId: $roundId, body: $body }
+  ) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireSortAnswer(
+  $roundId: UUID!
+  $selectedChoiceIndexes: [Int!]!
+) {
+  createQuestionnaireSortAnswer(
+    input: { roundId: $roundId, selectedChoiceIndexes: $selectedChoiceIndexes }
   ) {
     ...Answer
   }
@@ -661,6 +709,12 @@ subscription QuestionnaireScaleRoundStatsUpdated($roundId: UUID!) {
 subscription QuestionnaireShortAnswerRoundStatsUpdated($roundId: UUID!) {
   questionnaireShortAnswerRoundStatsUpdated(roundId: $roundId) {
     ...ShortAnswerContentRoundStats
+  }
+}
+
+subscription QuestionnaireSortRoundStatsUpdated($roundId: UUID!) {
+  questionnaireSortRoundStatsUpdated(roundId: $roundId) {
+    ...SortContentRoundStats
   }
 }
 
