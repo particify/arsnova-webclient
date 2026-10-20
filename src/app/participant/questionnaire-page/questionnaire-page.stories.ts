@@ -23,7 +23,10 @@ import {
   AnswerResultType,
 } from '@app/core/models/answer-result';
 import { ContentService } from '@app/core/services/http/content.service';
-import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
+import {
+  RoomUserAliasByRoomIdGql,
+  SetRoomUserAliasGql,
+} from '@gql/generated/graphql';
 import { ContentFocusState } from '@app/core/models/events/remote/content-focus-state';
 import { ContentState } from '@app/core/models/content-state';
 import { ContentChoice } from '@app/core/models/content-choice';
@@ -232,7 +235,25 @@ class MockContentService {
   }
 }
 
-class MockRoomUserAliasService {}
+const roomUserAliasByRoomIdGqlMock = {
+  watch: () => ({
+    valueChanges: of({
+      dataState: 'complete',
+      data: {
+        roomUserAliasByRoomId: { id: null, alias: 'Happy Hippo', seed: 2222 },
+      },
+    }),
+  }),
+};
+
+const setRoomUserAliasGqlMock = {
+  mutate: () =>
+    of({
+      data: {
+        setRoomUserAlias: { id: '1', alias: 'Happy Hippo', seed: 2222 },
+      },
+    }),
+};
 
 export default {
   component: QuestionnairePageComponent,
@@ -283,8 +304,12 @@ export default {
           useClass: MockContentService,
         },
         {
-          provide: RoomUserAliasService,
-          useClass: MockRoomUserAliasService,
+          provide: RoomUserAliasByRoomIdGql,
+          useValue: roomUserAliasByRoomIdGqlMock,
+        },
+        {
+          provide: SetRoomUserAliasGql,
+          useValue: setRoomUserAliasGqlMock,
         },
         LikertScaleService,
         {

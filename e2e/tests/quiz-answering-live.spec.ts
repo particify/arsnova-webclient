@@ -49,6 +49,8 @@ test.describe('live quiz with MC and short answer content', () => {
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My quiz');
+    // Start only once the participant waits, so the start is a live update.
+    await expect(p.getByTestId('content-step-info')).toBeVisible();
     await contentGroupOverview.startContent('My choice content', 0);
     await participant.answerContent(['b']);
     await expect(participant.getHintAfterAnswering()).toBeVisible();
@@ -60,6 +62,8 @@ test.describe('live quiz with MC and short answer content', () => {
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My quiz');
+    // Start only once the participant waits, so the start is a live update.
+    await expect(p.getByTestId('content-step-info')).toBeVisible();
     await contentGroupOverview.startContent('My choice content', 0);
     await participant.answerContent(['c']);
     await expect(participant.getHintAfterAnswering()).toBeVisible();
@@ -75,6 +79,8 @@ test.describe('live quiz with MC and short answer content', () => {
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My quiz');
+    // Start only once the participant waits, so the start is a live update.
+    await expect(p.getByTestId('content-step-info')).toBeVisible();
     await contentGroupOverview.startContent('My choice content', 0);
     await participant.answerContent(['c']);
     await contentGroupOverview.stopContent(0);
@@ -90,6 +96,8 @@ test.describe('live quiz with MC and short answer content', () => {
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My quiz');
+    // Start only once the participant waits, so the start is a live update.
+    await expect(p.getByTestId('content-step-info')).toBeVisible();
     await contentGroupOverview.startContent('My choice content', 0);
     await participant.answerContent();
     await expect(participant.getHintAfterAbstaining()).toBeVisible();
@@ -101,6 +109,8 @@ test.describe('live quiz with MC and short answer content', () => {
     const p = await context.newPage();
     const participant = new ParticipantContentGroupPage(p, baseURL);
     await participant.goto(shortId, 'My quiz');
+    // Start only once the participant waits, so the start is a live update.
+    await expect(p.getByTestId('content-step-info')).toBeVisible();
     await contentGroupOverview.startContent('My choice content', 0);
     await expect(participant.getSubmitButton()).toBeVisible();
     await contentGroupOverview.stopContent(0);

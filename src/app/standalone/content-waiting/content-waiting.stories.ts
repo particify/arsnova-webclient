@@ -1,23 +1,33 @@
 import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
 import { AuthenticatedUser } from '@app/core/models/authenticated-user';
 import { ContentWaitingComponent } from '@app/standalone/content-waiting/content-waiting.component';
 import { ContentStepInfoComponent } from '@app/standalone/content-step-info/content-step-info.component';
 import { LoadingButtonComponent } from '@app/standalone/loading-button/loading-button.component';
-import { RoomUserAlias } from '@app/core/models/room-user-alias';
-import { RoomUserAliasService } from '@app/core/services/http/room-user-alias.service';
+import {
+  RoomUserAliasByRoomIdGql,
+  SetRoomUserAliasGql,
+} from '@gql/generated/graphql';
 
-class MockRoomUserAliasService {
-  updateAlias(): Observable<RoomUserAlias> {
-    return of({ id: '1', alias: 'My Alias', seed: 1111 });
-  }
+const roomUserAliasByRoomIdGqlMock = {
+  fetch: () =>
+    of({
+      data: {
+        roomUserAliasByRoomId: { id: null, alias: 'Happy Hippo', seed: 2222 },
+      },
+    }),
+};
 
-  generateAlias(): Observable<RoomUserAlias> {
-    return of({ id: '1', alias: 'Happy Hippo', seed: 2222 });
-  }
-}
+const setRoomUserAliasGqlMock = {
+  mutate: () =>
+    of({
+      data: {
+        setRoomUserAlias: { id: '1', alias: 'My Alias', seed: 1111 },
+      },
+    }),
+};
 
 class MockAuthenticationService {
   getCurrentAuthentication() {
@@ -38,8 +48,12 @@ export default {
       ],
       providers: [
         {
-          provide: RoomUserAliasService,
-          useClass: MockRoomUserAliasService,
+          provide: RoomUserAliasByRoomIdGql,
+          useValue: roomUserAliasByRoomIdGqlMock,
+        },
+        {
+          provide: SetRoomUserAliasGql,
+          useValue: setRoomUserAliasGqlMock,
         },
         {
           provide: AuthenticationService,
@@ -65,7 +79,7 @@ export const ContentWaitingParticipant: Story = {
     current: 1,
     totalCount: 5,
     roomId: 'roomId',
-    alias: { id: '', alias: 'Happy Hippo', seed: 2222 },
+    alias: { id: null, alias: 'Happy Hippo', seed: 2222 },
   },
 };
 

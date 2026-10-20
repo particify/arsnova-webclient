@@ -585,6 +585,7 @@ export type Mutation = {
   resetUserPassword?: Maybe<User>;
   revokeRoomMembership: RoomMembership;
   revokeRoomRole: RoomMember;
+  setRoomUserAlias: RoomUserAlias;
   startQna: Qna;
   startQuestionnaireContent: Questionnaire;
   startQuestionnaireContentRound: Round;
@@ -893,6 +894,10 @@ export type MutationRevokeRoomMembershipArgs = {
 export type MutationRevokeRoomRoleArgs = {
   roomId: Scalars['UUID']['input'];
   userId: Scalars['UUID']['input'];
+};
+
+export type MutationSetRoomUserAliasArgs = {
+  input: SetRoomUserAliasInput;
 };
 
 export type MutationStartQnaArgs = {
@@ -1256,6 +1261,7 @@ export type Query = {
   roomMembershipById?: Maybe<RoomMembership>;
   roomMembershipByShortId?: Maybe<RoomMembership>;
   roomMemberships?: Maybe<RoomMembershipConnection>;
+  roomUserAliasByRoomId: RoomUserAlias;
   rooms?: Maybe<RoomConnection>;
   roomsByUserId?: Maybe<RoomMembershipConnection>;
   userByDisplayId?: Maybe<User>;
@@ -1451,6 +1457,10 @@ export type QueryRoomMembershipsArgs = {
   query?: InputMaybe<RoomQueryInput>;
 };
 
+export type QueryRoomUserAliasByRoomIdArgs = {
+  roomId: Scalars['UUID']['input'];
+};
+
 export type QueryRoomsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -1591,6 +1601,14 @@ export type RoomStats = {
   id: Scalars['ID']['output'];
 };
 
+export type RoomUserAlias = {
+  __typename?: 'RoomUserAlias';
+  alias: Scalars['String']['output'];
+  /** Not set for aliases which have not been persisted yet. */
+  id?: Maybe<Scalars['ID']['output']>;
+  seed: Scalars['Int']['output'];
+};
+
 export type Round = {
   __typename?: 'Round';
   answerable: Scalars['Boolean']['output'];
@@ -1634,6 +1652,12 @@ export enum ScaleContentTemplate {
   Probability = 'PROBABILITY',
   Quality = 'QUALITY',
 }
+
+export type SetRoomUserAliasInput = {
+  alias?: InputMaybe<Scalars['String']['input']>;
+  roomId: Scalars['UUID']['input'];
+  seed?: InputMaybe<Scalars['Int']['input']>;
+};
 
 export type ShortAnswerAnswerFormatData = {
   __typename?: 'ShortAnswerAnswerFormatData';
@@ -8442,6 +8466,13 @@ export type RoomMemberFragment = {
   };
 };
 
+export type RoomUserAliasFragment = {
+  __typename?: 'RoomUserAlias';
+  id?: string | null;
+  alias: string;
+  seed: number;
+};
+
 export type RoomIdByShortIdQueryVariables = Exact<{
   shortId: Scalars['String']['input'];
 }>;
@@ -8881,6 +8912,36 @@ export type RevokeRoomMembershipMutation = {
   revokeRoomMembership: {
     __typename?: 'RoomMembership';
     room: { __typename?: 'Room'; id: string };
+  };
+};
+
+export type RoomUserAliasByRoomIdQueryVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+}>;
+
+export type RoomUserAliasByRoomIdQuery = {
+  __typename?: 'Query';
+  roomUserAliasByRoomId: {
+    __typename?: 'RoomUserAlias';
+    id?: string | null;
+    alias: string;
+    seed: number;
+  };
+};
+
+export type SetRoomUserAliasMutationVariables = Exact<{
+  roomId: Scalars['UUID']['input'];
+  alias?: InputMaybe<Scalars['String']['input']>;
+  seed?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type SetRoomUserAliasMutation = {
+  __typename?: 'Mutation';
+  setRoomUserAlias: {
+    __typename?: 'RoomUserAlias';
+    id?: string | null;
+    alias: string;
+    seed: number;
   };
 };
 
@@ -9437,6 +9498,13 @@ export const RoomMemberFragmentDoc = gql`
       verified
     }
     role
+  }
+`;
+export const RoomUserAliasFragmentDoc = gql`
+  fragment RoomUserAlias on RoomUserAlias {
+    id
+    alias
+    seed
   }
 `;
 export const AdminUserByIdDocument = gql`
@@ -13353,6 +13421,50 @@ export class RevokeRoomMembershipGql extends Apollo.Mutation<
   RevokeRoomMembershipMutationVariables
 > {
   document = RevokeRoomMembershipDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const RoomUserAliasByRoomIdDocument = gql`
+  query RoomUserAliasByRoomId($roomId: UUID!) {
+    roomUserAliasByRoomId(roomId: $roomId) {
+      ...RoomUserAlias
+    }
+  }
+  ${RoomUserAliasFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class RoomUserAliasByRoomIdGql extends Apollo.Query<
+  RoomUserAliasByRoomIdQuery,
+  RoomUserAliasByRoomIdQueryVariables
+> {
+  document = RoomUserAliasByRoomIdDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetRoomUserAliasDocument = gql`
+  mutation SetRoomUserAlias($roomId: UUID!, $alias: String, $seed: Int) {
+    setRoomUserAlias(input: { roomId: $roomId, alias: $alias, seed: $seed }) {
+      ...RoomUserAlias
+    }
+  }
+  ${RoomUserAliasFragmentDoc}
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SetRoomUserAliasGql extends Apollo.Mutation<
+  SetRoomUserAliasMutation,
+  SetRoomUserAliasMutationVariables
+> {
+  document = SetRoomUserAliasDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

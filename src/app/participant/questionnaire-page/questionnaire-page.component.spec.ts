@@ -25,6 +25,7 @@ import {
   QuestionnairePublishingMode,
   QuestionnaireType,
   QuestionnaireUpdatedGql,
+  RoomUserAliasByRoomIdGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { configureTestModule } from '@testing/test.setup';
@@ -245,6 +246,7 @@ describe('QuestionnairePageComponent (live sync)', () => {
   let notificationService: jasmine.SpyObj<NotificationService>;
   let snackBarAction$: Subject<void>;
   let router: Router;
+  let aliasGql: jasmine.SpyObj<{ watch: unknown }>;
 
   const contents = ['c-0', 'c-1', 'c-2'].map(
     (id, position) =>
@@ -351,6 +353,20 @@ describe('QuestionnairePageComponent (live sync)', () => {
     authenticationService.getCurrentAuthentication.and.returnValue(
       of({ userId: 'user-1' })
     );
+    aliasGql = jasmine.createSpyObj('RoomUserAliasByRoomIdGql', ['watch']);
+    (aliasGql.watch as jasmine.Spy).and.returnValue({
+      valueChanges: of({
+        dataState: 'complete',
+        data: {
+          roomUserAliasByRoomId: {
+            __typename: 'RoomUserAlias',
+            id: null,
+            alias: 'Brave Otter',
+            seed: 42,
+          },
+        },
+      }),
+    });
     snackBarAction$ = new Subject();
     notificationService = jasmine.createSpyObj('NotificationService', ['show']);
     notificationService.show.and.returnValue({
@@ -381,6 +397,7 @@ describe('QuestionnairePageComponent (live sync)', () => {
         },
         { provide: AuthenticationService, useValue: authenticationService },
         { provide: NotificationService, useValue: notificationService },
+        { provide: RoomUserAliasByRoomIdGql, useValue: aliasGql },
         spyProvider(AnnounceService, ['announce']),
         spyProvider(ContentCarouselService, ['isLastContentAnswered']),
       ]
@@ -646,6 +663,52 @@ describe('QuestionnairePageComponent (live sync)', () => {
     snackBarAction$.next();
 
     expect(component.goToContent).toHaveBeenCalledWith(1);
+  });
+
+  describe('room user alias', () => {
+    it('looks up no alias without a leaderboard', () => {
+      setUp(questionnaire());
+      expect(aliasGql.watch).not.toHaveBeenCalled();
+      expect(component.alias()).toBeUndefined();
+    });
+
+    it('offers the alias of the room once the leaderboard is enabled', () => {
+      setUp(questionnaire());
+      update(questionnaire({ leaderboardEnabled: true }));
+      expect(aliasGql.watch).toHaveBeenCalledOnceWith({
+        variables: { roomId: 'room-1' },
+      });
+      expect(component.alias()).toEqual(
+        jasmine.objectContaining({ id: null, alias: 'Brave Otter', seed: 42 })
+      );
+    });
+
+    it('does not look the alias up again for an unrelated change', () => {
+      setUp(questionnaire({ leaderboardEnabled: true }));
+      update(
+        questionnaire({
+          leaderboardEnabled: true,
+          publishedUpToContent: { id: 'c-1', position: 1 },
+        } as never)
+      );
+      expect(aliasGql.watch).toHaveBeenCalledTimes(1);
+    });
+
+    it('stays readable when the alias query fails', () => {
+      setUp(questionnaire());
+      spyOn(console, 'error');
+      (aliasGql.watch as jasmine.Spy).and.returnValue({
+        valueChanges: new Observable((subscriber) =>
+          subscriber.error(new Error('Query failed'))
+        ),
+      });
+
+      update(questionnaire({ leaderboardEnabled: true }));
+
+      expect(() => component.alias()).not.toThrow();
+      expect(component.alias()).toBeUndefined();
+      expect(console.error).toHaveBeenCalled();
+    });
   });
 });
 

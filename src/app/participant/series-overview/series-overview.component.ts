@@ -24,7 +24,6 @@ import { RoutingFeature } from '@app/core/models/routing-feature.enum';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { HintType } from '@app/core/models/hint-type.enum';
 import { LeaderboardItem } from '@app/core/models/leaderboard-item';
-import { RoomUserAlias } from '@app/core/models/room-user-alias';
 import { provideTranslocoScope, TranslocoPipe } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
@@ -50,6 +49,7 @@ import {
   QuestionnaireType,
   ContentType,
   QuestionnaireAnswerResultsByQuestionnaireIdGql,
+  RoomUserAlias,
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
