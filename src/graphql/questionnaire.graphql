@@ -64,6 +64,14 @@ fragment ContentDetails on Content {
       correctNumber
       tolerance
     }
+    ... on PrioritizationContentFormatData {
+      format
+      options {
+        label
+        labelRendered
+      }
+      assignablePoints
+    }
     ... on ScaleContentFormatData {
       format
       template
@@ -125,6 +133,10 @@ fragment Answer on Answer {
       format
       selectedNumber
     }
+    ... on PrioritizationAnswerFormatData {
+      format
+      assignedPoints
+    }
     ... on ScaleAnswerFormatData {
       format
       rating
@@ -177,6 +189,10 @@ fragment NumericContentRoundStats on NumericContentRoundStats {
   minimum
   maximum
   correctAnswerFraction
+}
+
+fragment PrioritizationContentRoundStats on PrioritizationContentRoundStats {
+  assignedPoints
 }
 
 fragment ScaleContentRoundStats on ScaleContentRoundStats {
@@ -276,6 +292,22 @@ mutation CreateQuestionnaireNumericContent($input: CreateNumericContentInput!) {
 
 mutation UpdateQuestionnaireNumericContent($input: UpdateNumericContentInput!) {
   updateQuestionnaireNumericContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnairePrioritizationContent(
+  $input: CreatePrioritizationContentInput!
+) {
+  createQuestionnairePrioritizationContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnairePrioritizationContent(
+  $input: UpdatePrioritizationContentInput!
+) {
+  updateQuestionnairePrioritizationContent(input: $input) {
     ...CreatorContentDetails
   }
 }
@@ -418,6 +450,12 @@ query QuestionnaireNumericRoundStatsByRoundId($roundId: UUID!) {
   }
 }
 
+query QuestionnairePrioritizationRoundStatsByRoundId($roundId: UUID!) {
+  questionnairePrioritizationRoundStatsByRoundId(roundId: $roundId) {
+    ...PrioritizationContentRoundStats
+  }
+}
+
 query QuestionnaireScaleRoundStatsByRoundId($roundId: UUID!) {
   questionnaireScaleRoundStatsByRoundId(roundId: $roundId) {
     ...ScaleContentRoundStats
@@ -460,6 +498,17 @@ mutation CreateQuestionnaireNumericAnswer(
 ) {
   createQuestionnaireNumericAnswer(
     input: { roundId: $roundId, selectedNumber: $selectedNumber }
+  ) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnairePrioritizationAnswer(
+  $roundId: UUID!
+  $assignedPoints: [Int!]!
+) {
+  createQuestionnairePrioritizationAnswer(
+    input: { roundId: $roundId, assignedPoints: $assignedPoints }
   ) {
     ...Answer
   }
@@ -697,6 +746,12 @@ subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
 subscription QuestionnaireNumericRoundStatsUpdated($roundId: UUID!) {
   questionnaireNumericRoundStatsUpdated(roundId: $roundId) {
     ...NumericContentRoundStats
+  }
+}
+
+subscription QuestionnairePrioritizationRoundStatsUpdated($roundId: UUID!) {
+  questionnairePrioritizationRoundStatsUpdated(roundId: $roundId) {
+    ...PrioritizationContentRoundStats
   }
 }
 

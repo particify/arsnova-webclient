@@ -85,7 +85,7 @@ describe('ContentGroupService', () => {
       ]);
     });
 
-    it('returns Choice, Scale, Text, Wordcloud, Numeric and Slide for Survey', () => {
+    it('returns Choice, Scale, Text, Wordcloud, Prioritization, Numeric and Slide for Survey', () => {
       expect(
         service.getContentFormatsOfQuestionnaireType(QuestionnaireType.Survey)
       ).toEqual([
@@ -93,6 +93,7 @@ describe('ContentGroupService', () => {
         ContentType.Scale,
         ContentType.Text,
         ContentType.Wordcloud,
+        ContentType.Prioritization,
         ContentType.Numeric,
         ContentType.Slide,
       ]);
@@ -185,6 +186,24 @@ describe('ContentGroupService', () => {
         service.isContentCompatibleWithQuestionnaireType(
           content(ContentType.ShortAnswer, true),
           QuestionnaireType.Survey
+        )
+      ).toBeFalse();
+    });
+
+    it('accepts a prioritization content in a Survey series', () => {
+      expect(
+        service.isContentCompatibleWithQuestionnaireType(
+          content(ContentType.Prioritization, false),
+          QuestionnaireType.Survey
+        )
+      ).toBeTrue();
+    });
+
+    it('rejects a prioritization content in a Quiz series', () => {
+      expect(
+        service.isContentCompatibleWithQuestionnaireType(
+          content(ContentType.Prioritization, false),
+          QuestionnaireType.Quiz
         )
       ).toBeFalse();
     });

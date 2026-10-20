@@ -1,0 +1,23 @@
+@if (preview()) {
+  <app-content-prioritization-answer
+    [answerOptions]="previewItems()"
+    [assignablePoints]="assignablePoints()"
+    [dynamicRendering]="true"
+    [disabled]="true"
+  ></app-content-prioritization-answer>
+} @else {
+  <div class="format-container">
+    <span class="section-label">{{
+      'creator.content.items-for-prioritization' | transloco
+    }}</span>
+    <app-answer-option-list
+      [answers]="displayAnswers()"
+      (answersChange)="displayAnswers.set($event)"
+      [allowDeletion]="!locked()"
+      [disabled]="locked()"
+      [minimumAnswerCount]="2"
+      optionLabel="item"
+      optionLabels="items"
+    ></app-answer-option-list>
+  </div>
+}

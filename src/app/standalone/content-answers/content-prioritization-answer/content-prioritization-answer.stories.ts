@@ -2,10 +2,8 @@ import { Meta, moduleMetadata, StoryObj } from '@storybook/angular';
 
 import { ContentPrioritizationAnswerComponent } from './content-prioritization-answer.component';
 
-import { AnswerOption } from '@app/core/models/answer-option';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { FormattingService } from '@app/core/services/http/formatting.service';
-import { AnswerWithPoints } from '@app/core/models/answer-with-points';
 
 class MockFormattingService {}
 
@@ -29,18 +27,42 @@ export default {
 type Story = StoryObj<ContentPrioritizationAnswerComponent>;
 
 const answerOptions = [
-  new AnswerWithPoints(new AnswerOption('answer 1'), 0),
-  new AnswerWithPoints(new AnswerOption('answer 2'), 0),
-  new AnswerWithPoints(new AnswerOption('answer 3'), 0),
-  new AnswerWithPoints(new AnswerOption('answer 4'), 0),
+  { label: '*answer 1*', labelRendered: '<b>answer 1</b>' },
+  { label: 'answer 2' },
+  { label: 'answer 3' },
+  { label: 'answer 4' },
 ];
-
-answerOptions[0].answerOption.renderedLabel = '<b>answer 1</b>';
 
 export const ContentPrioritizationAnswer: Story = {
   args: {
     answerOptions: answerOptions,
     assignablePoints: 100,
-    isDisabled: false,
+    assignedPoints: [40, 30, 20, 10],
+    disabled: false,
+  },
+};
+
+export const Unassigned: Story = {
+  args: {
+    answerOptions: answerOptions,
+    assignablePoints: 100,
+    assignedPoints: [],
+  },
+};
+
+export const OverBudget: Story = {
+  args: {
+    answerOptions: answerOptions,
+    assignablePoints: 100,
+    assignedPoints: [60, 40, 20, 0],
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    answerOptions: answerOptions,
+    assignablePoints: 100,
+    assignedPoints: [40, 30, 20, 10],
+    disabled: true,
   },
 };

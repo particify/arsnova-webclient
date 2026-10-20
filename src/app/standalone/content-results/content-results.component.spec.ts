@@ -75,6 +75,26 @@ function sortContent(): Content {
   };
 }
 
+function prioritizationContent(): Content {
+  return {
+    __typename: 'Content',
+    id: 'content-4',
+    body: 'What should change?',
+    hasCorrectAnswer: false,
+    answerCount: 6,
+    hasAnswers: true,
+    formatData: {
+      __typename: 'PrioritizationContentFormatData',
+      format: ContentType.Prioritization,
+      assignablePoints: 100,
+      options: [
+        { __typename: 'AnswerOption', label: 'More exercises' },
+        { __typename: 'AnswerOption', label: 'Shorter lectures' },
+      ],
+    },
+  };
+}
+
 describe('ContentResultsComponent', () => {
   let fixture: ComponentFixture<ContentResultsComponent>;
   let component: ContentResultsComponent;
@@ -282,6 +302,19 @@ describe('ContentResultsComponent', () => {
     expect(inputs['formatData']).toEqual(sortContent().formatData);
     expect(inputs['visualizationUnitPercent']).toBe(true);
     // The rounds tell which of them are closed and need no updates.
+    expect(inputs['rounds']).toEqual(component.rounds());
+  });
+
+  it('hands a prioritization its items, the visualization unit and the rounds only', () => {
+    setUp({
+      content: prioritizationContent(),
+      showCorrect: true,
+      settings: { contentVisualizationUnitPercent: true } as UserUiSettings,
+    });
+    const inputs = component.componentInputs() as Record<string, unknown>;
+    expect(inputs['formatData']).toEqual(prioritizationContent().formatData);
+    expect(inputs['visualizationUnitPercent']).toBe(true);
+    expect('showCorrect' in inputs).toBe(false);
     expect(inputs['rounds']).toEqual(component.rounds());
   });
 });

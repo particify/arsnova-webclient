@@ -148,6 +148,7 @@ export class ContentGroupService {
           ContentType.Scale,
           ContentType.Text,
           ContentType.Wordcloud,
+          ContentType.Prioritization,
           ContentType.Numeric,
           ContentType.Slide,
         ];

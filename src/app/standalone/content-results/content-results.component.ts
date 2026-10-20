@@ -152,6 +152,12 @@ export class ContentResultsComponent {
     }),
     [ContentType.Flashcard]: () => ({ formatData: this.content().formatData }),
     [ContentType.Numeric]: () => this.scoredChartInputs(),
+    [ContentType.Prioritization]: () => ({
+      formatData: this.content().formatData,
+      rounds: this.rounds(),
+      visualizationUnitPercent:
+        !!this.settings().contentVisualizationUnitPercent,
+    }),
     [ContentType.Scale]: () => ({
       rounds: this.rounds(),
       formatData: this.content().formatData,

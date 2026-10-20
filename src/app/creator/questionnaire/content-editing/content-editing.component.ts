@@ -59,6 +59,7 @@ import { WordcloudContentFormComponent } from './wordcloud-content-form/wordclou
 import { FlashcardContentFormComponent } from './flashcard-content-form/flashcard-content-form.component';
 import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
 import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
+import { PrioritizationContentFormComponent } from './prioritization-content-form/prioritization-content-form.component';
 import { ScaleContentFormComponent } from './scale-content-form/scale-content-form.component';
 import { ShortAnswerContentFormComponent } from './short-answer-content-form/short-answer-content-form.component';
 import { SortContentFormComponent } from './sort-content-form/sort-content-form.component';
@@ -130,6 +131,7 @@ export class ContentEditingComponent {
     | WordcloudContentFormComponent
     | FlashcardContentFormComponent
     | NumericContentFormComponent
+    | PrioritizationContentFormComponent
     | ScaleContentFormComponent
     | ShortAnswerContentFormComponent
     | SlideContentFormComponent
@@ -172,6 +174,12 @@ export class ContentEditingComponent {
         weight: this.weight(),
         answered: this.answered(),
         hasCorrectAnswer: this.hasCorrectAnswer(),
+      };
+    }
+    if (format === ContentType.Prioritization) {
+      return {
+        ...base,
+        answered: this.answered(),
       };
     }
     if (format === ContentType.Scale) {

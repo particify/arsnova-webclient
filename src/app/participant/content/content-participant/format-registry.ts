@@ -2,6 +2,7 @@ import { Type } from '@angular/core';
 import { ContentType } from '@gql/generated/graphql';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
 import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
+import { ContentPrioritizationParticipantComponent } from '@app/participant/content/content-prioritization-participant/content-prioritization-participant.component';
 import { ContentScaleParticipantComponent } from '@app/participant/content/content-scale-participant/content-scale-participant.component';
 import { ContentShortAnswerParticipantComponent } from '@app/participant/content/content-short-answer-participant/content-short-answer-participant.component';
 import { ContentSortParticipantComponent } from '@app/participant/content/content-sort-participant/content-sort-participant.component';
@@ -20,7 +21,7 @@ export const FORMAT_REGISTRY: Record<ContentType, FormatDefinition> = {
     component: ContentNumericParticipantComponent,
   },
   [ContentType.Prioritization]: {
-    component: ContentChoiceParticipantComponent,
+    component: ContentPrioritizationParticipantComponent,
   },
   [ContentType.Scale]: {
     component: ContentScaleParticipantComponent,

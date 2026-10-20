@@ -22,6 +22,10 @@ import {
 } from 'chart.js';
 
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {
+  DataLabelMode,
+  dataLabel,
+} from '@app/standalone/content-results/visualization/data-label';
 import { VisualizationData } from '@app/standalone/content-results/visualization/visualization-data';
 import { ThemeService } from '@app/core/theme/theme.service';
 
@@ -67,7 +71,7 @@ export class BarChartComponent {
   tooltipTitles = input<string[] | undefined>(undefined);
   scale = input(1);
   totalValue = input<number | undefined>(undefined);
-  dataLabelMode = input<'absolute' | 'percent'>('absolute');
+  dataLabelMode = input<DataLabelMode>('absolute');
   canvas = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
   private chart?: Chart;
 
@@ -211,14 +215,7 @@ export class BarChartComponent {
     roundData: number[],
     count?: number
   ): string {
-    let label: string;
     const total = count ?? roundData.reduce((a, b) => a + b, 0);
-    if (this.dataLabelMode() === 'percent') {
-      value = total ? (value / total) * 100 : 0;
-      label = value.toFixed(0) + '\u202F%';
-    } else {
-      label = value.toString();
-    }
-    return label;
+    return dataLabel(value, total, this.dataLabelMode());
   }
 }
