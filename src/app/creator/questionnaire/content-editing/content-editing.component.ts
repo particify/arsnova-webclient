@@ -51,8 +51,12 @@ import {
   Content,
   ContentType,
   Questionnaire,
+  QuestionnaireContentByIdGql,
   QuestionnaireType,
 } from '@gql/generated/graphql';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { onlyCompleteData } from 'apollo-angular';
+import { map, of, switchMap } from 'rxjs';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { RenderedTextComponent } from '@app/standalone/rendered-text/rendered-text.component';
 import { FORM_REGISTRY } from './form-registry';
@@ -124,6 +128,7 @@ export class ContentEditingComponent {
   private readonly contentGroupService = inject(ContentGroupService);
   private readonly notificationService = inject(NotificationService);
   private readonly contentPublishService = inject(ContentPublishService);
+  private readonly contentById = inject(QuestionnaireContentByIdGql);
 
   private readonly formComponentOutlet =
     viewChild<NgComponentOutlet>(NgComponentOutlet);
@@ -253,7 +258,29 @@ export class ContentEditingComponent {
       this.questionnaire().type === QuestionnaireType.Quiz
   );
 
-  readonly answered = computed(() => !!this.content()?.hasAnswers);
+  /**
+   * The content as cached, where live answers arrive while the editor is
+   * open. Only the lock follows it: the form keeps what it was seeded with,
+   * as every pushed answer count would otherwise re-seed it.
+   */
+  private readonly cachedContent = toSignal(
+    toObservable(computed(() => this.content()?.id)).pipe(
+      switchMap((id) =>
+        id
+          ? this.contentById
+              .watch({ variables: { id }, fetchPolicy: 'cache-first' })
+              .valueChanges.pipe(
+                onlyCompleteData(),
+                map((r) => r.data.questionnaireContentById)
+              )
+          : of(undefined)
+      )
+    )
+  );
+
+  readonly answered = computed(
+    () => !!(this.cachedContent()?.hasAnswers ?? this.content()?.hasAnswers)
+  );
 
   // Route data input below
   fixedHeight = input(false);
@@ -265,7 +292,7 @@ export class ContentEditingComponent {
   textContainsImage = false;
   HintType = HintType;
   isLoading = true;
-  created = false;
+  readonly created = signal(false);
   QuestionnaireType = QuestionnaireType;
   questionMaxLength = 2000;
 
@@ -381,9 +408,9 @@ export class ContentEditingComponent {
     setTimeout(() => {
       this.bodyInput().nativeElement.focus();
     });
-    this.created = true;
+    this.created.set(true);
     setTimeout(() => {
-      this.created = false;
+      this.created.set(false);
     }, 300);
   }
 

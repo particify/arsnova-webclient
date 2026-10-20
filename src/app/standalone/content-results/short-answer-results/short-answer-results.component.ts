@@ -1,8 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { map, of, switchMap } from 'rxjs';
-import { onlyCompleteData } from 'apollo-angular';
-import { updateOn } from '@gql/helper/update-on';
+import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { updateRoundOn } from '@gql/helper/recover-deleted-round';
 import { TranslocoService } from '@jsverse/transloco';
 import { CoreModule } from '@app/core/core.module';
 import { TextStatistic } from '@app/core/models/text-statistic';
@@ -33,6 +33,7 @@ import { mutationHelper } from '@gql/helper/mutation-helper';
   ],
 })
 export class ShortAnswerResultsComponent {
+  private readonly apollo = inject(Apollo);
   private readonly roundStatsByRoundId = inject(
     QuestionnaireShortAnswerRoundStatsByRoundIdGql
   );
@@ -68,8 +69,12 @@ export class ShortAnswerResultsComponent {
         if (!roundId) {
           return of(undefined);
         }
-        return updateOn(
-          this.roundStatsByRoundId.watch({ variables: { roundId } }),
+        return updateRoundOn(
+          this.apollo.client,
+          this.roundStatsByRoundId.watch({
+            variables: { roundId },
+            fetchPolicy: 'cache-and-network',
+          }),
           this.roundStatsUpdated.subscribe({ variables: { roundId } }),
           (r) =>
             r.data && {

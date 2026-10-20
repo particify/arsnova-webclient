@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { configureTestModule } from '@testing/test.setup';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -117,6 +117,21 @@ describe('ContentResultsComponent', () => {
   let component: ContentResultsComponent;
   let contentResultsService: ContentResultsService;
   let refetchRounds: jasmine.Spy;
+  let rounds$: BehaviorSubject<ReturnType<typeof roundsResult>>;
+
+  function roundsResult(roundIds: string[]) {
+    return {
+      dataState: 'complete' as const,
+      data: {
+        questionnaireRoundsByContentId: roundIds.map((id, i) => ({
+          __typename: 'Round' as const,
+          id,
+          roundNo: i + 1,
+          closed: false,
+        })),
+      },
+    };
+  }
 
   interface SetUpOptions {
     content?: Content;
@@ -130,7 +145,15 @@ describe('ContentResultsComponent', () => {
    * handed to the format's results component is exercised.
    */
   function setUp(options: SetUpOptions = {}) {
-    refetchRounds = jasmine.createSpy('refetch').and.resolveTo({});
+    rounds$ = new BehaviorSubject(roundsResult(['round-1']));
+    // Like the server, the reloaded rounds include the active round.
+    refetchRounds = jasmine.createSpy('refetch').and.callFake(() => {
+      const activeRoundId = component.content().activeRound?.id;
+      if (activeRoundId) {
+        rounds$.next(roundsResult(['round-1', activeRoundId]));
+      }
+      return Promise.resolve({});
+    });
     configureTestModule(
       [getTranslocoModule(), ContentResultsComponent],
       [
@@ -143,19 +166,7 @@ describe('ContentResultsComponent', () => {
           provide: QuestionnaireRoundsByContentIdGql,
           useValue: {
             watch: () => ({
-              valueChanges: of({
-                dataState: 'complete' as const,
-                data: {
-                  questionnaireRoundsByContentId: [
-                    {
-                      __typename: 'Round',
-                      id: 'round-1',
-                      roundNo: 1,
-                      closed: false,
-                    },
-                  ],
-                },
-              }),
+              valueChanges: rounds$,
               refetch: refetchRounds,
             }),
           },
@@ -249,6 +260,17 @@ describe('ContentResultsComponent', () => {
     fixture.detectChanges();
 
     expect(refetchRounds).toHaveBeenCalledTimes(1);
+  });
+
+  it('reloads cached rounds that predate the active round of the content', () => {
+    // A reset replaced round-1, which is all the cached rounds still know.
+    setUp({
+      isPresentation: true,
+      content: { ...choiceContent(), activeRound: { id: 'round-2' } as Round },
+    });
+
+    expect(refetchRounds).toHaveBeenCalledTimes(1);
+    expect(component.componentInputs()['roundIds']).toEqual(['round-2']);
   });
 
   it('keeps the rounds while the same round stays active', () => {

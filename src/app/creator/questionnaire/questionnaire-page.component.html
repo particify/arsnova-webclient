@@ -1,5 +1,5 @@
 <div fxFill fxLayout="row" class="page-container">
-  @if (isDesktop || !childActive) {
+  @if (isDesktop() || !childActive()) {
     <div fxLayout="column" fxLayoutGap="12px" class="group-container">
       <div class="group-actions-container" fxLayout="column" fxLayoutGap="16px">
         <div fxLayout="column" fxLayoutGap="16px">
@@ -12,9 +12,9 @@
               mat-raised-button
               color="primary"
               [routerLink]="'create'"
-              [disabled]="creationMode || isModerator()"
+              [disabled]="creationMode() || isModerator()"
               appHotkey="1"
-              [appHotkeyDisabled]="creationMode || isModerator()"
+              [appHotkeyDisabled]="creationMode() || isModerator()"
               [appHotkeyTitle]="'creator.room-page.create-content' | transloco"
             >
               <mat-icon>add</mat-icon>
@@ -33,7 +33,7 @@
                     [matTooltip]="'content.leaderboard' | transloco"
                     (click)="toggleLeaderboard()"
                     [ngClass]="{
-                      'primary-variant on-primary-variant': showLeaderboard,
+                      'primary-variant on-primary-variant': showLeaderboard(),
                     }"
                     data-testid="leaderboard-btn"
                   >
@@ -203,16 +203,16 @@
       </div>
     </div>
   }
-  @if (isDesktop) {
+  @if (isDesktop()) {
     <div class="action-container">
       <div
         fxLayout="row"
         fxLayoutAlign="center"
         [ngStyle.lt-xl]="{
-          height: editMode || creationMode ? '100%' : '',
+          height: editMode() || creationMode() ? '100%' : '',
         }"
         [ngStyle.xl]="{
-          'max-height': editMode || creationMode ? '100%' : '',
+          'max-height': editMode() || creationMode() ? '100%' : '',
         }"
       >
         <mat-card class="action-card">
@@ -220,7 +220,7 @@
         </mat-card>
       </div>
     </div>
-  } @else if (childActive) {
+  } @else if (childActive()) {
     @if (loadingContents()) {
       <app-loading-indicator></app-loading-indicator>
     } @else {

@@ -9,6 +9,8 @@ import {
   QuestionnaireChoiceRoundStatsUpdatedGql,
   Round,
 } from '@gql/generated/graphql';
+import { CombinedGraphQLErrors } from '@apollo/client';
+import { Apollo } from 'apollo-angular';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { Subject } from 'rxjs';
@@ -107,6 +109,21 @@ describe('ChoiceResultsComponent', () => {
     fixture.detectChanges();
   }
 
+  it('starts the live updates once a closed round is reopened', () => {
+    setUp({ options }, { rounds: [{ id: 'round-1', closed: true } as Round] });
+    expect(roundStatsUpdated.subscribe).not.toHaveBeenCalled();
+
+    // Starting the content again reopens its round under the same id.
+    fixture.componentRef.setInput('rounds', [
+      { id: 'round-1', closed: false } as Round,
+    ]);
+    fixture.detectChanges();
+
+    expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+  });
+
   it('passes both the raw and the rendered label to the answer list', () => {
     setUp({ options: [{ label: '**A**', labelRendered: '<p><b>A</b></p>' }] });
 
@@ -192,9 +209,43 @@ describe('ChoiceResultsComponent', () => {
 
     expect(roundStats.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+    });
+  });
+
+  describe('on a deleted round', () => {
+    let refetchQueries: jasmine.Spy;
+
+    const notFound = new CombinedGraphQLErrors({
+      errors: [
+        {
+          message: 'Round not found',
+          extensions: { classification: 'NOT_FOUND' },
+        },
+      ],
+    });
+
+    beforeEach(() => {
+      setUp({ options });
+      refetchQueries = spyOn(
+        TestBed.inject(Apollo).client,
+        'refetchQueries'
+      ).and.resolveTo([] as never);
+    });
+
+    it('reloads the contents once its updates end', () => {
+      updates$.next({ data: undefined, error: notFound });
+
+      expect(refetchQueries).toHaveBeenCalledTimes(1);
+    });
+
+    it('reloads the contents once its stats cannot be loaded', () => {
+      stats$.next({ dataState: 'empty', data: undefined, error: notFound });
+
+      expect(refetchQueries).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -212,6 +263,7 @@ describe('ChoiceResultsComponent', () => {
 
     expect(roundStats.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-1' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledOnceWith({
       variables: { roundId: 'round-2' },
@@ -269,6 +321,7 @@ describe('ChoiceResultsComponent', () => {
 
     expect(roundStats.watch).toHaveBeenCalledWith({
       variables: { roundId: 'round-2' },
+      fetchPolicy: 'cache-and-network',
     });
     expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
       variables: { roundId: 'round-2' },

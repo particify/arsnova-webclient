@@ -807,6 +807,7 @@ subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
     answerCount
     abstentionCount
     correctAnswerCount
+    hasAnswers
     activeRound {
       ...Round
     }
