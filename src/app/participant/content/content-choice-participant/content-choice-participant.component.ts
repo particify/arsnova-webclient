@@ -46,6 +46,7 @@ export class ContentChoiceParticipantComponent implements AnswerForm {
   readonly correctOptionsPublished = input<boolean>(false);
   readonly answerCreated = output<Answer>();
   readonly language = input<string | undefined>();
+  readonly disabled = input<boolean>(false);
 
   readonly answerOptions = linkedSignal(() =>
     this.contentFormatData().options.map(

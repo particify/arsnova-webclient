@@ -39,7 +39,7 @@ describe('ContentParticipantComponent', () => {
   let component: ContentParticipantComponent;
   let answerByRoundId: jasmine.SpyObj<QuestionnaireAnswerByRoundIdGql>;
   let createAbstention: jasmine.SpyObj<CreateQuestionnaireAbstentionGql>;
-  let cache: { updateQuery: jasmine.Spy };
+  let cache: { modify: jasmine.Spy; updateQuery: jasmine.Spy };
 
   const choiceContent = {
     id: 'c-1',
@@ -116,7 +116,7 @@ describe('ContentParticipantComponent', () => {
         },
       }) as never
     );
-    cache = jasmine.createSpyObj('InMemoryCache', ['updateQuery']);
+    cache = jasmine.createSpyObj('InMemoryCache', ['modify', 'updateQuery']);
     const focusModeService = jasmine.createSpyObj('FocusModeService', [
       'getFocusModeEnabled',
     ]);
@@ -269,6 +269,39 @@ describe('ContentParticipantComponent', () => {
     expect(cache.updateQuery).toHaveBeenCalled();
   });
 
+  it('locks the wordcloud answer form after an abstention', () => {
+    setUp(wordcloudContent, {
+      answer: { id: 'answer-1', result: AnswerResultState.Abstained },
+    });
+
+    expect(
+      answerForm(ContentWordcloudParticipantComponent).disabled()
+    ).toBeTrue();
+  });
+
+  it('locks the wordcloud answer form of a round that is over', () => {
+    const round = {
+      id: 'round-2',
+      roundNo: 1,
+      started: true,
+      closed: true,
+    };
+    setUp({ ...wordcloudContent, activeRound: round } as Content, {
+      inputs: {
+        questionnaire: {
+          id: 'q-1',
+          publishingMode: QuestionnairePublishingMode.Live,
+          activeRound: { ...round, contentId: 'c-2' },
+        },
+      },
+    });
+
+    expect(component.answeringLocked()).toBeTrue();
+    expect(
+      answerForm(ContentWordcloudParticipantComponent).disabled()
+    ).toBeTrue();
+  });
+
   describe('in its template', () => {
     const answer = { id: 'answer-1', result: AnswerResultState.Neutral };
     const statsPublished = { statsPublished: true };
@@ -393,6 +426,61 @@ describe('ContentParticipantComponent', () => {
       expect(
         fixture.nativeElement.querySelector('app-content-waiting')
       ).not.toBeNull();
+    });
+
+    it('stops waiting once the round has started', () => {
+      setUp(
+        {
+          ...choiceContent,
+          position: 0,
+          activeRound: { id: 'round-1', roundNo: 1, started: true },
+        } as Content,
+        {
+          inputs: {
+            questionnaire: {
+              id: 'q-1',
+              contentCount: 3,
+              leaderboardEnabled: true,
+              publishingMode: QuestionnairePublishingMode.Live,
+            },
+          },
+        }
+      );
+
+      expect(
+        fixture.nativeElement.querySelector('app-content-waiting')
+      ).toBeNull();
+    });
+
+    it('locks a stopped round instead of waiting for its start', () => {
+      setUp(
+        {
+          ...choiceContent,
+          position: 0,
+          activeRound: {
+            id: 'round-1',
+            roundNo: 1,
+            started: true,
+            closed: true,
+          },
+        } as Content,
+        {
+          inputs: {
+            questionnaire: {
+              id: 'q-1',
+              contentCount: 3,
+              leaderboardEnabled: true,
+              publishingMode: QuestionnairePublishingMode.Live,
+            },
+          },
+        }
+      );
+
+      expect(component.waitingForStart()).toBeFalse();
+      expect(component.answeringLocked()).toBeTrue();
+      expect(
+        fixture.nativeElement.querySelector('app-content-waiting')
+      ).toBeNull();
     });
 
     it('stops waiting once answered', () => {

@@ -9,6 +9,8 @@ import {
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
 import { of, throwError } from 'rxjs';
+import { ContentWordcloudAnswerComponent } from '@app/standalone/content-answers/content-wordcloud-answer/content-wordcloud-answer.component';
+import { By } from '@angular/platform-browser';
 import { ContentWordcloudParticipantComponent } from './content-wordcloud-participant.component';
 
 describe('ContentWordcloudParticipantComponent', () => {
@@ -17,11 +19,17 @@ describe('ContentWordcloudParticipantComponent', () => {
   let createAnswer: jasmine.SpyObj<CreateQuestionnaireWordcloudAnswerGql>;
   let notificationService: jasmine.SpyObj<NotificationService>;
 
-  function setUp() {
+  function setUp(keepTemplate = false) {
     // Submitting is tested here; the input fields have their own specs.
-    TestBed.overrideComponent(ContentWordcloudParticipantComponent, {
-      set: { template: '', imports: [] },
-    });
+    if (keepTemplate) {
+      TestBed.overrideComponent(ContentWordcloudAnswerComponent, {
+        set: { template: '', imports: [] },
+      });
+    } else {
+      TestBed.overrideComponent(ContentWordcloudParticipantComponent, {
+        set: { template: '', imports: [] },
+      });
+    }
     createAnswer = jasmine.createSpyObj(
       'CreateQuestionnaireWordcloudAnswerGql',
       ['mutate']
@@ -123,5 +131,27 @@ describe('ContentWordcloudParticipantComponent', () => {
     component.submitAnswer();
 
     expect(notificationService.showOnRequestClientError).toHaveBeenCalled();
+  });
+
+  describe('its input fields', () => {
+    function fields(): ContentWordcloudAnswerComponent {
+      return fixture.debugElement.query(
+        By.directive(ContentWordcloudAnswerComponent)
+      ).componentInstance;
+    }
+
+    it('stay editable while answering is open', () => {
+      setUp(true);
+
+      expect(fields().disabled()).toBeFalse();
+    });
+
+    it('lock without an own wordcloud answer', () => {
+      setUp(true);
+      fixture.componentRef.setInput('disabled', true);
+      fixture.detectChanges();
+
+      expect(fields().disabled()).toBeTrue();
+    });
   });
 });

@@ -91,6 +91,7 @@ export class ContentGroupOverviewPage {
     leaderboard?: boolean;
     statistics?: boolean;
     correctAnswers?: boolean;
+    publishingMode?: 'All' | 'Range';
   }) {
     const labels: [keyof typeof settings, string][] = [
       ['liveMode', 'contents are presented live'],
@@ -104,6 +105,11 @@ export class ContentGroupOverviewPage {
       if (value !== undefined) {
         await this.page.getByRole('switch', { name: label }).setChecked(value);
       }
+    }
+    if (settings.publishingMode) {
+      await this.page
+        .getByRole('radio', { name: settings.publishingMode, exact: true })
+        .check();
     }
     await this.saveSettings();
   }

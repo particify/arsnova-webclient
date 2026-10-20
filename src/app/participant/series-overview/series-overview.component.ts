@@ -53,7 +53,7 @@ import {
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
+import { catchError, distinctUntilChanged, EMPTY, switchMap } from 'rxjs';
 
 // Max time for updating db (5000) - navigation delay (500) / 2
 // const RELOAD_INTERVAL = 2250;
@@ -123,12 +123,27 @@ export class SeriesOverviewComponent implements OnInit, OnDestroy {
       this.hasAnsweredLastContent
   );
 
+  // The score stays neutral for participants until the correct answers are
+  // published, so publishing them has to fetch it anew.
   private readonly answerResultsResult = toSignal(
     toObservable(this.questionnaire).pipe(
+      distinctUntilChanged(
+        (a, b) =>
+          a.id === b.id &&
+          a.correctOptionsPublished === b.correctOptionsPublished
+      ),
       switchMap((questionnaire) => {
-        return this.questionnaireAnswerResults.watch({
-          variables: { questionnaireId: questionnaire.id },
-        }).valueChanges;
+        return this.questionnaireAnswerResults
+          .watch({
+            variables: { questionnaireId: questionnaire.id },
+            fetchPolicy: 'network-only',
+          })
+          .valueChanges.pipe(
+            catchError((error) => {
+              console.error('Questionnaire results query failed', error);
+              return EMPTY;
+            })
+          );
       })
     )
   );

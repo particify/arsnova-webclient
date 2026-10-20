@@ -3,6 +3,7 @@ import {
   MatSnackBar,
   MatSnackBarConfig,
   MatSnackBarRef,
+  TextOnlySnackBar,
 } from '@angular/material/snack-bar';
 import {
   LOADING_ICON,
@@ -54,7 +55,11 @@ export class NotificationService {
   public snackRef: any;
   isPresentation = false;
 
-  show(message: string, action?: string, config?: MatSnackBarConfig) {
+  show(
+    message: string,
+    action?: string,
+    config?: MatSnackBarConfig
+  ): MatSnackBarRef<TextOnlySnackBar> {
     const defaultConfig: MatSnackBarConfig = {
       duration: action ? 25000 : 5000,
       panelClass: ['snackbar'],
@@ -66,6 +71,7 @@ export class NotificationService {
       action,
       Object.assign({}, defaultConfig, config)
     );
+    return this.snackRef;
   }
 
   showAdvanced(

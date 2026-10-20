@@ -37,6 +37,7 @@ export class ContentStepperComponent {
   contents = input.required<Content[]>();
   settings = input.required<UserUiSettings>();
   startIndex = input.required<number>();
+  startedContentId = input<string>();
 
   hideControls = input(false, { transform: booleanAttribute });
   showStepInfo = input(true);
@@ -54,6 +55,16 @@ export class ContentStepperComponent {
         this.currentStep = this.startIndex();
       }
     });
+  }
+
+  /**
+   * A live content waits for its start only once: going back to a content
+   * which already ran shows it again, not the waiting screen.
+   */
+  hasStarted(content: Content): boolean {
+    return (
+      content.id === this.startedContentId() || !!content.activeRound?.started
+    );
   }
 
   updateIndex(index: number) {

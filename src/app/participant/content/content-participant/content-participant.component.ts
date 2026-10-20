@@ -4,6 +4,7 @@ import {
   DestroyRef,
   OutputRefSubscription,
   Signal,
+  Type,
   computed,
   effect,
   inject,
@@ -33,7 +34,6 @@ import { FlexModule } from '@angular/flex-layout';
 import { MatCard } from '@angular/material/card';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { CoreModule } from '@app/core/core.module';
-import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { LanguageContextDirective } from '@app/core/directives/language-context.directive';
 import { LanguageDirectionPipe } from '@app/core/pipes/language-direction.pipe';
 import {
@@ -53,7 +53,10 @@ import {
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { Apollo, onlyCompleteData } from 'apollo-angular';
+import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
+import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
 import { FORMAT_REGISTRY } from './format-registry';
+import { evictRoundStats } from '@gql/helper/evict-round-stats';
 import { AnswerForm } from '@app/participant/content/answer-form';
 import { formatAnsweringDuration } from './answering-duration';
 import { mutationHelper } from '@gql/helper/mutation-helper';
@@ -66,6 +69,12 @@ interface ContentActionTab {
 }
 
 const NON_ANSWERABLE_FORMATS = [ContentType.Flashcard, ContentType.Slide];
+
+/** The answer forms that go inert once the round is over or has been answered. */
+const LOCKABLE_ANSWER_FORMS: Type<unknown>[] = [
+  ContentChoiceParticipantComponent,
+  ContentWordcloudParticipantComponent,
+];
 
 @Component({
   selector: 'app-content-participant',
@@ -100,7 +109,6 @@ const NON_ANSWERABLE_FORMATS = [ContentType.Flashcard, ContentType.Slide];
 export class ContentParticipantComponent {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
-  private readonly contentPublishService = inject(ContentPublishService);
   private readonly focusModeService = inject(FocusModeService);
   private readonly answerByRoundId = inject(QuestionnaireAnswerByRoundIdGql);
   private readonly cache = inject(Apollo).client.cache;
@@ -120,9 +128,11 @@ export class ContentParticipantComponent {
       contentFormatData: this.content().formatData,
       correctOptionsPublished: this.correctOptionsPublished(),
     };
-    if (this.content()?.formatData.format === ContentType.Choice) {
+    const formatComponent = this.formatComponent();
+    if (formatComponent && LOCKABLE_ANSWER_FORMS.includes(formatComponent)) {
       return {
         ...base,
+        disabled: this.answeringLocked() || !!this.answer(),
       };
     }
     return base;
@@ -189,6 +199,21 @@ export class ContentParticipantComponent {
     () => this.answer()?.result === AnswerResultState.Abstained
   );
 
+  readonly waitingForStart = computed(
+    () =>
+      this.questionnaire().publishingMode ===
+        QuestionnairePublishingMode.Live &&
+      !this.answer() &&
+      !this.content().activeRound?.started
+  );
+
+  answeringLocked = linkedSignal(
+    () =>
+      this.questionnaire().publishingMode ===
+        QuestionnairePublishingMode.Live && this.content().activeRound?.closed
+  );
+  endDate?: Date;
+
   readonly answeringDuration = computed(() =>
     formatAnsweringDuration(this.answer()?.durationMs)
   );
@@ -199,11 +224,8 @@ export class ContentParticipantComponent {
   HotkeyAction = HotkeyAction;
 
   selectedRoute = '';
-  endDate?: Date;
-  answeringLocked = false;
   QuestionnaireType = QuestionnaireType;
   QuestionnairePublishingMode = QuestionnairePublishingMode;
-  waitForCountdown = true;
 
   readonly focusModeEnabled = toSignal(
     this.focusModeService.getFocusModeEnabled()
@@ -267,6 +289,10 @@ export class ContentParticipantComponent {
 
   setAnswer(answer: Answer) {
     this.answer.set(answer);
+    const roundId = this.content().activeRound?.id;
+    if (roundId) {
+      evictRoundStats(this.cache, roundId);
+    }
     this.cache.updateQuery<{
       questionnaireContentAnswerResultsByQuestionnaireId: ContentAnswerResult[];
     }>(
@@ -319,15 +345,5 @@ export class ContentParticipantComponent {
     }
     const urlTree = this.router.createUrlTree(urlList);
     this.location.replaceState(this.router.serializeUrl(urlTree));
-  }
-
-  showWaitingArea(): boolean {
-    return (
-      !this.answer() &&
-      this.contentPublishService.isLive(this.questionnaire()) &&
-      !this.endDate &&
-      !!this.questionnaire().leaderboardEnabled &&
-      !this.alias()?.id
-    );
   }
 }

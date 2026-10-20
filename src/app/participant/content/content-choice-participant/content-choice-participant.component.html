@@ -1,7 +1,7 @@
 <app-content-choice-answer
   [answerOptions]="answerOptionsWithAnswer()"
   [correctOptionIndexes]="contentFormatData().correctOptionIndexes ?? undefined"
-  [disabled]="!!result() && result() !== 'UNANSWERED'"
+  [disabled]="(!!result() && result() !== 'UNANSWERED') || disabled()"
   [multipleAnswersAllowed]="!!contentFormatData().multiple"
   [correctOptionsPublished]="correctOptionsPublished()"
   [language]="language()"

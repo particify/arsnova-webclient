@@ -22,15 +22,28 @@ import {
   STORAGE_KEYS,
 } from '@app/core/services/util/global-storage.service';
 import { Location } from '@angular/common';
-import { filter, map, switchMap, take } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  filter,
+  ignoreElements,
+  map,
+  switchMap,
+  take,
+} from 'rxjs';
 import {
   CARD_WIDTH,
   PresentationService,
 } from '@app/core/services/util/presentation.service';
 import {
   ContentType,
+  PublishQuestionnaireUpToContentGql,
   Questionnaire,
   QuestionnaireByIdGql,
+  QuestionnaireContentUpdatedGql,
+  QuestionnairePublishingMode,
+  StartQuestionnaireContentGql,
+  StopQuestionnaireContentGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentPresentationState } from '@app/core/models/events/content-presentation-state';
@@ -56,6 +69,7 @@ import { AnswerResponseCounts } from '@app/core/models/answer-response-counts';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
 import { ContentPresentationService } from '@app/presentation/content-presentation.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { mutationHelper } from '@gql/helper/mutation-helper';
 
 @Component({
   selector: 'app-contents-page',
@@ -89,11 +103,21 @@ export class ContentsPageComponent {
   private readonly hotkeyService = inject(HotkeyService);
   private readonly dialogService = inject(DialogService);
   private readonly notificationService = inject(NotificationService);
+  private readonly mutations = mutationHelper();
   private readonly contentPresentationService = inject(
     ContentPresentationService
   );
   private readonly destroyRef = inject(DestroyRef);
+  private readonly startQuestionnaireContent = inject(
+    StartQuestionnaireContentGql
+  );
+  private readonly stopQuestionnaireContent = inject(
+    StopQuestionnaireContentGql
+  );
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
+  private readonly publishQuestionnaireContentUpTo = inject(
+    PublishQuestionnaireUpToContentGql
+  );
 
   // Route data input below
   readonly showStepInfo = input(false, { transform: booleanAttribute });
@@ -105,9 +129,29 @@ export class ContentsPageComponent {
   readonly noControlBar = input(false, { transform: booleanAttribute });
   readonly questionnaireId = input.required<string>();
   readonly contentId = input<string>();
-
   readonly settings = input.required<UserUiSettings>();
   readonly language = input.required<string>();
+
+  private readonly questionnaireContentUpdated = inject(
+    QuestionnaireContentUpdatedGql
+  );
+
+  /**
+   * Feeds incoming answer counts into the cache, which the presented contents
+   * and so the answer counter are watched from.
+   */
+  private readonly contentUpdates = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) =>
+        this.questionnaireContentUpdated
+          .subscribe({ variables: { questionnaireId } })
+          .pipe(
+            ignoreElements(),
+            catchError(() => EMPTY)
+          )
+      )
+    )
+  );
 
   readonly questionnaire = toSignal(
     toObservable(this.questionnaireId).pipe(
@@ -143,6 +187,27 @@ export class ContentsPageComponent {
     this.contentPresentationService.currentContent()
   );
 
+  readonly startedContentId = computed(
+    () => this.questionnaire()?.activeRound?.contentId
+  );
+
+  readonly isPublished = computed(() => {
+    const questionnaire = this.questionnaire();
+    if (questionnaire) {
+      return this.contentPublishService.isIndexPublished(
+        questionnaire.published ?? false,
+        questionnaire.publishingMode,
+        this.currentIndex(),
+        questionnaire.publishedUpToContent?.position ?? undefined
+      );
+    }
+  });
+
+  readonly isLive = computed(
+    () =>
+      this.questionnaire()?.publishingMode === QuestionnairePublishingMode.Live
+  );
+
   protected readonly scale = this.presentationService.scale;
 
   protected readonly containerStyle = computed(() => {
@@ -166,7 +231,6 @@ export class ContentsPageComponent {
   attributions: ContentLicenseAttribution[] = [];
   endDate?: Date;
   showLeaderboard = false;
-  answeringLocked = false;
   isPublishing = false;
 
   private hotkeyRefs: symbol[] = [];
@@ -259,14 +323,15 @@ export class ContentsPageComponent {
   }
 
   updateRoute() {
+    const content = this.content();
+    if (!content) {
+      return;
+    }
     const currentPath = this.contentId() ? '..' : '.';
-    const urlTree = this.router.createUrlTree(
-      [currentPath, this.content().id],
-      {
-        relativeTo: this.route,
-        queryParams: this.route.snapshot.queryParams,
-      }
-    );
+    const urlTree = this.router.createUrlTree([currentPath, content.id], {
+      relativeTo: this.route,
+      queryParams: this.route.snapshot.queryParams,
+    });
     this.location.replaceState(this.router.serializeUrl(urlTree));
   }
 
@@ -312,21 +377,12 @@ export class ContentsPageComponent {
     const publishingIndex =
       this.questionnaire()?.publishedUpToContent?.position;
     if (
-      this.isLiveMode() &&
+      this.isLive() &&
       !this.isPublished() &&
-      (publishingIndex == null || index > publishingIndex) &&
-      this.answeringLocked
+      (publishingIndex == null || index > publishingIndex)
     ) {
       this.publishCurrentContent();
     }
-  }
-
-  startCountdown(): void {
-    this.presentationService.startContent(this.questionnaireId());
-  }
-
-  stopCountdown(): void {
-    this.presentationService.stopContent();
   }
 
   updateStateChange() {
@@ -357,23 +413,37 @@ export class ContentsPageComponent {
     }
   }
 
-  isPublished(): boolean {
-    const questionnaire = this.questionnaire();
-    return (
-      !!questionnaire &&
-      this.contentPublishService.isIndexPublished(
-        questionnaire,
-        this.currentIndex()
-      )
-    );
-  }
-
   publishCurrentContent(): void {
-    // TODO: Publish current content
+    const contentId = this.content()?.id;
+    if (!contentId) {
+      return;
+    }
+    this.publishQuestionnaireContentUpTo
+      .mutate({
+        variables: {
+          questionnaireId: this.questionnaireId(),
+          contentId: contentId,
+        },
+      })
+      .pipe(this.mutations.handleErrors())
+      .subscribe();
   }
 
-  isLiveMode(): boolean {
-    const questionnaire = this.questionnaire();
-    return !!questionnaire && this.contentPublishService.isLive(questionnaire);
+  startContent() {
+    const contentId = this.content()?.id;
+    if (!contentId) {
+      return;
+    }
+    this.startQuestionnaireContent
+      .mutate({ variables: { contentId } })
+      .pipe(this.mutations.handleErrors())
+      .subscribe();
+  }
+
+  stopContent() {
+    this.stopQuestionnaireContent
+      .mutate({ variables: { questionnaireId: this.questionnaireId() } })
+      .pipe(this.mutations.handleErrors())
+      .subscribe();
   }
 }

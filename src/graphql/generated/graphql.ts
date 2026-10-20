@@ -2444,6 +2444,13 @@ export type QuestionnaireDetailsFragment = {
     id: string;
     position?: number | null;
   } | null;
+  activeRound?: {
+    __typename?: 'Round';
+    id: string;
+    contentId?: string | null;
+    roundNo: number;
+    closed: boolean;
+  } | null;
 };
 
 export type ContentDetailsFragment = {
@@ -2649,6 +2656,13 @@ export type QuestionnaireByIdQuery = {
       id: string;
       position?: number | null;
     } | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+    } | null;
   } | null;
 };
 
@@ -2785,6 +2799,13 @@ export type CreateQuestionnaireMutation = {
       id: string;
       position?: number | null;
     } | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+    } | null;
   };
 };
 
@@ -2810,6 +2831,13 @@ export type ToggleQuestionnairePublishedMutation = {
       __typename?: 'Content';
       id: string;
       position?: number | null;
+    } | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
     } | null;
   };
 };
@@ -3385,6 +3413,13 @@ export type UpdateQuestionnaireMutation = {
       id: string;
       position?: number | null;
     } | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+    } | null;
   };
 };
 
@@ -3553,6 +3588,72 @@ export type UpdateQuestionnaireContentOrderMutation = {
   } | null;
 };
 
+export type QuestionnaireUpdatedSubscriptionVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireUpdated?: {
+    __typename?: 'Questionnaire';
+    id: string;
+    publishingMode: QuestionnairePublishingMode;
+    publishedUpToContent?: {
+      __typename?: 'Content';
+      id: string;
+      position?: number | null;
+    } | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      contentId?: string | null;
+      roundNo: number;
+      closed: boolean;
+    } | null;
+  } | null;
+};
+
+export type QuestionnaireContentUpdatedSubscriptionVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type QuestionnaireContentUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireContentUpdated?: {
+    __typename?: 'Content';
+    id: string;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+    } | null;
+  } | null;
+};
+
+export type CreatorQuestionnaireContentUpdatedSubscriptionVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type CreatorQuestionnaireContentUpdatedSubscription = {
+  __typename?: 'Subscription';
+  questionnaireContentUpdated?: {
+    __typename?: 'Content';
+    id: string;
+    answerCount?: number | null;
+    abstentionCount?: number | null;
+    correctAnswerCount?: number | null;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+    } | null;
+  } | null;
+};
+
 export type QuestionnaireChoiceRoundStatsUpdatedSubscriptionVariables = Exact<{
   roundId: Scalars['UUID']['input'];
 }>;
@@ -3577,6 +3678,57 @@ export type QuestionnaireWordcloudRoundStatsUpdatedSubscription = {
     words?: Array<string> | null;
     counts?: Array<number> | null;
   } | null;
+};
+
+export type StartQuestionnaireContentMutationVariables = Exact<{
+  contentId: Scalars['UUID']['input'];
+}>;
+
+export type StartQuestionnaireContentMutation = {
+  __typename?: 'Mutation';
+  startQuestionnaireContent: {
+    __typename?: 'Questionnaire';
+    id: string;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+      started: boolean;
+    } | null;
+  };
+};
+
+export type StopQuestionnaireContentMutationVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+}>;
+
+export type StopQuestionnaireContentMutation = {
+  __typename?: 'Mutation';
+  stopQuestionnaireContent: {
+    __typename?: 'Questionnaire';
+    id: string;
+    activeRound?: {
+      __typename?: 'Round';
+      id: string;
+      roundNo: number;
+      closed: boolean;
+    } | null;
+  };
+};
+
+export type PublishQuestionnaireUpToContentMutationVariables = Exact<{
+  questionnaireId: Scalars['UUID']['input'];
+  contentId: Scalars['UUID']['input'];
+}>;
+
+export type PublishQuestionnaireUpToContentMutation = {
+  __typename?: 'Mutation';
+  publishQuestionnaireUpToContent: {
+    __typename?: 'Questionnaire';
+    id: string;
+    publishedUpToContent?: { __typename?: 'Content'; id: string } | null;
+  };
 };
 
 export type RoomDetailsFragmentFragment = {
@@ -4359,6 +4511,12 @@ export const QuestionnaireDetailsFragmentDoc = gql`
     publishedUpToContent {
       id
       position
+    }
+    activeRound {
+      id
+      contentId
+      roundNo
+      closed
     }
     statisticsPublished
     correctOptionsPublished
@@ -6569,6 +6727,95 @@ export class UpdateQuestionnaireContentOrderGql extends Apollo.Mutation<
     super(apollo);
   }
 }
+export const QuestionnaireUpdatedDocument = gql`
+  subscription QuestionnaireUpdated($questionnaireId: UUID!) {
+    questionnaireUpdated(questionnaireId: $questionnaireId) {
+      id
+      publishingMode
+      publishedUpToContent {
+        id
+        position
+      }
+      activeRound {
+        id
+        contentId
+        roundNo
+        closed
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireUpdatedGql extends Apollo.Subscription<
+  QuestionnaireUpdatedSubscription,
+  QuestionnaireUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const QuestionnaireContentUpdatedDocument = gql`
+  subscription QuestionnaireContentUpdated($questionnaireId: UUID!) {
+    questionnaireContentUpdated(questionnaireId: $questionnaireId) {
+      id
+      answerCount
+      abstentionCount
+      activeRound {
+        id
+        roundNo
+        closed
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuestionnaireContentUpdatedGql extends Apollo.Subscription<
+  QuestionnaireContentUpdatedSubscription,
+  QuestionnaireContentUpdatedSubscriptionVariables
+> {
+  document = QuestionnaireContentUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const CreatorQuestionnaireContentUpdatedDocument = gql`
+  subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
+    questionnaireContentUpdated(questionnaireId: $questionnaireId) {
+      id
+      answerCount
+      abstentionCount
+      correctAnswerCount
+      activeRound {
+        id
+        roundNo
+        closed
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreatorQuestionnaireContentUpdatedGql extends Apollo.Subscription<
+  CreatorQuestionnaireContentUpdatedSubscription,
+  CreatorQuestionnaireContentUpdatedSubscriptionVariables
+> {
+  document = CreatorQuestionnaireContentUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
 export const QuestionnaireChoiceRoundStatsUpdatedDocument = gql`
   subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
     questionnaireChoiceRoundStatsUpdated(roundId: $roundId) {
@@ -6607,6 +6854,89 @@ export class QuestionnaireWordcloudRoundStatsUpdatedGql extends Apollo.Subscript
   QuestionnaireWordcloudRoundStatsUpdatedSubscriptionVariables
 > {
   document = QuestionnaireWordcloudRoundStatsUpdatedDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const StartQuestionnaireContentDocument = gql`
+  mutation StartQuestionnaireContent($contentId: UUID!) {
+    startQuestionnaireContent(contentId: $contentId) {
+      id
+      activeRound {
+        id
+        roundNo
+        closed
+        started
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class StartQuestionnaireContentGql extends Apollo.Mutation<
+  StartQuestionnaireContentMutation,
+  StartQuestionnaireContentMutationVariables
+> {
+  document = StartQuestionnaireContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const StopQuestionnaireContentDocument = gql`
+  mutation StopQuestionnaireContent($questionnaireId: UUID!) {
+    stopQuestionnaireContent(questionnaireId: $questionnaireId) {
+      id
+      activeRound {
+        id
+        roundNo
+        closed
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class StopQuestionnaireContentGql extends Apollo.Mutation<
+  StopQuestionnaireContentMutation,
+  StopQuestionnaireContentMutationVariables
+> {
+  document = StopQuestionnaireContentDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const PublishQuestionnaireUpToContentDocument = gql`
+  mutation PublishQuestionnaireUpToContent(
+    $questionnaireId: UUID!
+    $contentId: UUID!
+  ) {
+    publishQuestionnaireUpToContent(
+      questionnaireId: $questionnaireId
+      contentId: $contentId
+    ) {
+      id
+      publishedUpToContent {
+        id
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PublishQuestionnaireUpToContentGql extends Apollo.Mutation<
+  PublishQuestionnaireUpToContentMutation,
+  PublishQuestionnaireUpToContentMutationVariables
+> {
+  document = PublishQuestionnaireUpToContentDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

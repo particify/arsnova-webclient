@@ -8,8 +8,7 @@
   @for (content of contents(); track content.id; let i = $index) {
     <cdk-step>
       <div fxLayoutAlign="center" id="step">
-        @if (!showStepInfo() || !isLiveMode()) {
-          <!--|| content.state.answeringEndTime) { -->
+        @if (!showStepInfo() || !isLiveMode() || hasStarted(content)) {
           <mat-card [ngClass]="{ 'no-card-appearance': hideControls() }">
             @if (currentStep === undefined) {
               <app-loading-indicator></app-loading-indicator>

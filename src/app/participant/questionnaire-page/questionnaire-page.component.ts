@@ -20,7 +20,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AnnounceService } from '@app/core/services/util/announce.service';
 import { Location } from '@angular/common';
 import { AuthenticationService } from '@app/core/services/http/authentication.service';
-import { map, switchMap } from 'rxjs';
+import {
+  catchError,
+  distinctUntilChanged,
+  EMPTY,
+  filter,
+  ignoreElements,
+  map,
+  merge,
+  shareReplay,
+  switchMap,
+  take,
+} from 'rxjs';
 import { ContentCarouselService } from '@app/core/services/util/content-carousel.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { ContentLicenseAttribution } from '@app/core/models/content-license-attribution';
@@ -44,16 +55,34 @@ import {
   AnswerResultState,
   Content,
   Questionnaire,
+  QuestionnaireByIdGql,
   QuestionnaireContentAnswerResultsByQuestionnaireIdGql,
+  QuestionnaireContentUpdatedGql,
   QuestionnairePublishedContentsByQuestionnaireIdGql,
   QuestionnairePublishingMode,
+  QuestionnaireUpdatedGql,
   UserUiSettings,
   QuestionnaireType,
   ContentType,
 } from '@gql/generated/graphql';
+import { NotificationService } from '@app/core/services/util/notification.service';
+import { onlyCompleteData } from 'apollo-angular';
 
 function setDefaultTrue(value: boolean | undefined): boolean {
   return value ?? true;
+}
+
+function publishedContentsKey(questionnaire: Questionnaire): string {
+  return [
+    questionnaire.published,
+    questionnaire.publishingMode,
+    questionnaire.publishedUpToContent?.id,
+    questionnaire.contentCount,
+    questionnaire.activeRound?.id,
+    questionnaire.activeRound?.closed,
+    // Solutions are withheld from participants until they are published.
+    questionnaire.correctOptionsPublished,
+  ].join('|');
 }
 
 @Component({
@@ -90,11 +119,17 @@ export class QuestionnairePageComponent {
   private readonly answerResultsByQuestionnaireId = inject(
     QuestionnaireContentAnswerResultsByQuestionnaireIdGql
   );
+  private readonly questionnaireUpdated = inject(QuestionnaireUpdatedGql);
+  private readonly questionnaireById = inject(QuestionnaireByIdGql);
+  private readonly questionnaireContentUpdated = inject(
+    QuestionnaireContentUpdatedGql
+  );
+  private readonly notificationService = inject(NotificationService);
 
   stepper = viewChild(StepperComponent);
 
   // Route data input below
-  questionnaire = input.required<Questionnaire>();
+  questionnaireId = input.required<string>();
   shortId = input.required<string>();
   roomId = input.required<string>();
   settings = input.required<UserUiSettings>();
@@ -103,24 +138,99 @@ export class QuestionnairePageComponent {
   showStepper = input(true, { transform: setDefaultTrue });
   language = input.required<string>();
   contentId = input<string>();
+  // Set by the dedicated overview route to suppress the entry jump to the
+  // content a live series is currently at.
+  overview = input(false);
+
+  readonly questionnaire = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((id) => {
+        const questionnaire$ = this.questionnaireById
+          .watch({ variables: { id } })
+          .valueChanges.pipe(
+            map((r) => r.data?.questionnaireById),
+            filter((q): q is Questionnaire => !!q),
+            catchError((error) => {
+              console.error('Questionnaire query failed', error);
+              return EMPTY;
+            }),
+            shareReplay({ bufferSize: 1, refCount: true })
+          );
+        // Participants may only read a published questionnaire.
+        const updates$ = questionnaire$.pipe(
+          map((q) => q.published),
+          distinctUntilChanged(),
+          switchMap((published) =>
+            published ? this.questionnaireUpdates(id) : EMPTY
+          )
+        );
+        return merge(updates$, questionnaire$);
+      })
+    )
+  );
 
   private readonly contentsResult = toSignal(
     toObservable(this.questionnaire).pipe(
+      filter((q): q is Questionnaire => !!q),
+      distinctUntilChanged(
+        (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
+      ),
       switchMap((questionnaire) => {
-        return this.contentsByQuestionnareId.watch({
-          variables: { questionnaireId: questionnaire.id },
-          fetchPolicy: 'network-only',
-        }).valueChanges;
+        return this.contentsByQuestionnareId
+          .watch({
+            variables: { questionnaireId: questionnaire.id },
+            fetchPolicy: 'network-only',
+          })
+          .valueChanges.pipe(
+            onlyCompleteData(),
+            catchError((error) => {
+              console.error('Questionnaire contents query failed', error);
+              return EMPTY;
+            })
+          );
       })
+    )
+  );
+
+  // Feeds the answer counts into the normalized contents; only readable while
+  // the questionnaire is published.
+  private readonly contentUpdates = toSignal(
+    toObservable(this.questionnaire).pipe(
+      filter((q): q is Questionnaire => !!q),
+      map((q) => (q.published ? q.id : undefined)),
+      distinctUntilChanged(),
+      switchMap((questionnaireId) =>
+        questionnaireId
+          ? this.questionnaireContentUpdated
+              .subscribe({ variables: { questionnaireId } })
+              .pipe(
+                ignoreElements(),
+                catchError(() => EMPTY)
+              )
+          : EMPTY
+      )
     )
   );
 
   private readonly answerResultsResult = toSignal(
     toObservable(this.questionnaire).pipe(
+      filter((q): q is Questionnaire => !!q),
+      distinctUntilChanged(
+        (a, b) => publishedContentsKey(a) === publishedContentsKey(b)
+      ),
       switchMap((questionnaire) => {
-        return this.answerResultsByQuestionnaireId.watch({
-          variables: { questionnaireId: questionnaire.id },
-        }).valueChanges;
+        return this.answerResultsByQuestionnaireId
+          .watch({
+            variables: { questionnaireId: questionnaire.id },
+            fetchPolicy: 'network-only',
+          })
+          .valueChanges.pipe(
+            onlyCompleteData(),
+            catchError((error) => {
+              console.error('Answer results query failed', error);
+              return EMPTY;
+            })
+          );
       })
     )
   );
@@ -132,9 +242,7 @@ export class QuestionnairePageComponent {
     return results.filter((r): r is ContentAnswerResult => !!r);
   });
 
-  readonly loadingAnswerResults = computed(
-    () => this.answerResultsResult()?.loading
-  );
+  readonly loadingAnswerResults = computed(() => !this.answerResultsResult());
 
   readonly contents = computed(() => {
     const edges =
@@ -143,10 +251,38 @@ export class QuestionnairePageComponent {
     return edges?.map((e) => e?.node).filter((n): n is Content => !!n) ?? [];
   });
 
-  readonly loadingContents = computed(() => this.contentsResult()?.loading);
+  readonly loadingContents = computed(() => !this.contentsResult());
 
   readonly contentIndexes = computed(() =>
-    Array.from(Array(this.questionnaire().contentCount).keys())
+    Array.from(Array(this.questionnaire()?.contentCount ?? 0).keys())
+  );
+
+  private readonly questionnaireInLiveMode = computed(() => {
+    const questionnaire = this.questionnaire();
+    return questionnaire?.publishingMode === QuestionnairePublishingMode.Live
+      ? questionnaire
+      : undefined;
+  });
+
+  private readonly activeUnansweredRound = computed(() => {
+    const round = this.questionnaireInLiveMode()?.activeRound;
+    if (!round?.contentId || round.closed) {
+      return undefined;
+    }
+    const result = this.answerResults().find(
+      (r) => r.contentId === round.contentId
+    );
+    return result?.result === AnswerResultState.Unanswered ? round : undefined;
+  });
+
+  private readonly activeUnansweredContentId = computed(
+    () => this.activeUnansweredRound()?.contentId ?? undefined
+  );
+
+  private readonly liveContentId = computed(
+    () =>
+      this.activeUnansweredContentId() ??
+      this.questionnaireInLiveMode()?.publishedUpToContent?.id
   );
 
   readonly userId = toSignal(
@@ -161,13 +297,23 @@ export class QuestionnairePageComponent {
 
   started = false;
   currentStep?: number;
+  private followedLiveContentId?: string;
+  private followedLiveRoundId?: string;
+  private stepperInitPending = false;
   focusModeEnabled = toSignal(this.focusModeService.getFocusModeEnabled());
   private readonly contentFocusState = toSignal(
     this.focusModeService.getContentState()
   );
-  currentIndex = linkedSignal(() =>
-    this.contents().findIndex((c) => c.id === this.contentId())
-  );
+  // The focus mode routes to a content released in the same moment, ahead of
+  // the contents listing it; keeping the index keeps the stepper until then.
+  currentIndex = linkedSignal<{ index: number; contentId?: string }, number>({
+    source: () => ({
+      index: this.contents().findIndex((c) => c.id === this.contentId()),
+      contentId: this.contentId(),
+    }),
+    computation: ({ index, contentId }, previous) =>
+      index < 0 && contentId && previous ? previous.value : index,
+  });
 
   isFinished = computed(
     () =>
@@ -184,16 +330,30 @@ export class QuestionnairePageComponent {
   attributions: ContentLicenseAttribution[] = [];
   alias?: RoomUserAlias;
 
+  private questionnaireUpdates(questionnaireId: string) {
+    return this.questionnaireUpdated
+      .subscribe({ variables: { questionnaireId } })
+      .pipe(
+        ignoreElements(),
+        catchError((error) => {
+          console.error('Questionnaire subscription failed', error);
+          return EMPTY;
+        })
+      );
+  }
+
   constructor() {
     let prevAnswerResults: ContentAnswerResult[] = [];
     effect(() => {
+      // Entering needs the contents: their query may answer after the results.
       if (
-        this.contentIndexes().length > 0 &&
+        this.contents().length > 0 &&
         this.answerResults().length > 0 &&
         !this.started
       ) {
         this.checkIfLastContentExists(this.route.snapshot.params.contentId);
-        if (this.stepper()) {
+        // The entry may already have chosen a content the URL does not show yet.
+        if (!this.stepperInitPending && this.stepper()) {
           this.initStepper(this.currentIndex());
         }
       }
@@ -206,7 +366,7 @@ export class QuestionnairePageComponent {
     let prevQuestionnaireId: string | undefined;
     effect(() => {
       // The component is reused when the route switches to another questionnaire.
-      const questionnaireId = this.questionnaire().id;
+      const questionnaireId = this.questionnaireId();
       if (prevQuestionnaireId && questionnaireId !== prevQuestionnaireId) {
         this.started = false;
       }
@@ -219,12 +379,40 @@ export class QuestionnairePageComponent {
       if (
         !this.focusModeEnabled() ||
         !state ||
-        state.contentGroupId !== this.questionnaire().id ||
+        state.contentGroupId !== this.questionnaireId() ||
         contents.length === 0
       ) {
         return;
       }
       untracked(() => this.followFocusedContent(state.contentId));
+    });
+
+    effect(() => {
+      const liveContentId = this.liveContentId();
+      const liveRoundId = this.activeUnansweredRound()?.id;
+      if (!this.started || !this.stepper() || this.focusModeEnabled()) {
+        return;
+      }
+      if (liveContentId) {
+        this.followLiveContent(liveContentId, liveRoundId);
+      }
+    });
+
+    let prevPublishedUpToContentId: string | undefined;
+    effect(() => {
+      const questionnaire = this.questionnaire();
+      const publishedUpToContentId = questionnaire?.publishedUpToContent?.id;
+      if (
+        this.started &&
+        !this.focusModeEnabled() &&
+        questionnaire?.publishingMode === QuestionnairePublishingMode.UpTo &&
+        prevPublishedUpToContentId !== undefined &&
+        publishedUpToContentId !== undefined &&
+        publishedUpToContentId !== prevPublishedUpToContentId
+      ) {
+        this.offerReleasedContent(publishedUpToContentId);
+      }
+      prevPublishedUpToContentId = publishedUpToContentId;
     });
   }
 
@@ -240,6 +428,42 @@ export class QuestionnairePageComponent {
     }
   }
 
+  /**
+   * Follows each new live content and each (re)opened round once, so a
+   * participant who navigated away is not pulled back by every update.
+   */
+  private followLiveContent(contentId: string, roundId?: string) {
+    const isNewTarget =
+      contentId !== this.followedLiveContentId ||
+      (!!roundId && roundId !== this.followedLiveRoundId);
+    // Forgetting a closed round lets reopening it count as a new start.
+    this.followedLiveRoundId = roundId;
+    const index = this.getIndexOfContentById(contentId);
+    if (!isNewTarget || index < 0) {
+      return;
+    }
+    this.followedLiveContentId = contentId;
+    if (index !== this.currentStep) {
+      this.goToContent(index);
+    }
+  }
+
+  private offerReleasedContent(releasedContentId: string) {
+    this.notificationService
+      .show(
+        this.translateService.translate('participant.answer.state-changed'),
+        this.translateService.translate('participant.answer.load')
+      )
+      .onAction()
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        const index = this.getIndexOfContentById(releasedContentId);
+        if (index >= 0) {
+          this.goToContent(index);
+        }
+      });
+  }
+
   evaluateAnswerResultsState(
     prevResults: ContentAnswerResult[],
     currentResults: ContentAnswerResult[]
@@ -252,9 +476,9 @@ export class QuestionnairePageComponent {
       answeredIndex >= 0 &&
       !this.focusModeEnabled() &&
       this.started &&
-      this.questionnaire().publishingMode !==
+      this.questionnaire()?.publishingMode !==
         QuestionnairePublishingMode.Live &&
-      this.questionnaire().type !== QuestionnaireType.Quiz
+      this.questionnaire()?.type !== QuestionnaireType.Quiz
     ) {
       setTimeout(() => {
         const nextIndex = this.findNextUnansweredContentIndex(
@@ -315,23 +539,59 @@ export class QuestionnairePageComponent {
   }
 
   checkIfLastContentExists(contentId?: string) {
-    // Since `null >= 0` is `true` trough a type coercion with `ToPrimitive() this muste be checked seperately
-    const index = this.contents().findIndex((c) => c.id === contentId);
-    if (index !== undefined && (index == 0 || index > 0)) {
-      this.initStepper(index);
-    } else {
-      if (!this.focusModeEnabled()) {
-        this.getInitialStep();
-      }
+    if (this.overview()) {
+      this.started = true;
+      return;
     }
+    if (this.enterAtActiveLiveContent()) {
+      return;
+    }
+    const index = this.contents().findIndex((c) => c.id === contentId);
+    if (index >= 0) {
+      this.initStepper(index);
+      return;
+    }
+    if (this.focusModeEnabled()) {
+      return;
+    }
+    const liveContentId = this.liveContentId();
+    const liveIndex = liveContentId
+      ? this.getIndexOfContentById(liveContentId)
+      : -1;
+    if (liveIndex >= 0) {
+      this.initStepper(liveIndex);
+      this.router.navigate(this.contentUrl(liveContentId), {
+        replaceUrl: true,
+      });
+      return;
+    }
+    this.getInitialStep();
   }
 
   initStepper(index: number) {
+    this.stepperInitPending = true;
     setTimeout(() => {
+      this.stepperInitPending = false;
       this.currentStep = index;
       if (this.stepper()) this.stepper()?.init(index, this.contents()?.length);
+      this.recordFollowedLiveContent(index);
       this.started = true;
     });
+  }
+
+  /**
+   * The live content counts as followed once entered, so it does not pull the
+   * participant again. A running round entered elsewhere is still to follow.
+   */
+  private recordFollowedLiveContent(enteredIndex: number) {
+    const round = this.activeUnansweredRound();
+    if (round && round.contentId !== this.contents()[enteredIndex]?.id) {
+      this.followedLiveContentId = undefined;
+      this.followedLiveRoundId = undefined;
+      return;
+    }
+    this.followedLiveContentId = this.liveContentId();
+    this.followedLiveRoundId = round?.id;
   }
 
   goToContent(index: number) {
@@ -344,14 +604,38 @@ export class QuestionnairePageComponent {
     if (this.currentStep !== index) {
       this.currentStep = index || 0;
       const content = this.contents().find((c) => c.position === index);
-      this.replaceUrl([
-        'p',
-        this.shortId(),
-        'questionnaire',
-        this.questionnaire().id,
-        content?.id,
-      ]);
+      this.replaceUrl(this.contentUrl(content?.id));
     }
+  }
+
+  private questionnaireUrl(...segments: string[]): string[] {
+    return [
+      'p',
+      this.shortId(),
+      'questionnaire',
+      this.questionnaireId(),
+      ...segments,
+    ];
+  }
+
+  private contentUrl(contentId?: string): string[] {
+    return this.questionnaireUrl(...(contentId ? [contentId] : []));
+  }
+
+  private enterAtActiveLiveContent(): boolean {
+    const activeContentId = this.activeUnansweredContentId();
+    if (!activeContentId || this.focusModeEnabled()) {
+      return false;
+    }
+    const activeIndex = this.getIndexOfContentById(activeContentId);
+    if (activeIndex < 0) {
+      return false;
+    }
+    this.initStepper(activeIndex);
+    this.router.navigate(this.contentUrl(activeContentId), {
+      replaceUrl: true,
+    });
+    return true;
   }
 
   private getInitialStep() {
@@ -364,8 +648,10 @@ export class QuestionnairePageComponent {
     ) {
       this.initStepper(firstIndex || 0);
       this.router.navigate(
-        ['.', this.contents().find((c) => c.position === firstIndex)?.id],
-        { relativeTo: this.route, replaceUrl: true }
+        this.contentUrl(
+          this.contents().find((c) => c.position === firstIndex)?.id
+        ),
+        { replaceUrl: true }
       );
     }
   }
@@ -377,7 +663,9 @@ export class QuestionnairePageComponent {
   }
 
   private getFirstUnansweredContentIndex(): number | undefined {
-    for (let i = 0; i < this.contents().length; i++) {
+    // The contents may have been refetched before the answer results.
+    const count = Math.min(this.contents().length, this.answerResults().length);
+    for (let i = 0; i < count; i++) {
       const content = this.contents()[i];
       if (
         this.answerResults()[i].result === AnswerResultState.Unanswered &&
@@ -402,7 +690,9 @@ export class QuestionnairePageComponent {
   }
 
   goToOverview() {
-    this.router.navigate(['..'], { relativeTo: this.route, replaceUrl: true });
+    this.router.navigate(this.questionnaireUrl('overview'), {
+      replaceUrl: true,
+    });
   }
 
   replaceUrl(url: any[]) {

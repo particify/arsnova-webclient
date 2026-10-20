@@ -36,7 +36,14 @@ import { CreateContentGroupTemplateComponent } from '@app/creator/questionnaire/
 import { QuestionnaireSettingsComponent } from '@app/standalone/questionnaire-settings/questionnaire-settings.component';
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { mutationHelper } from '@gql/helper/mutation-helper';
-import { switchMap, map, filter } from 'rxjs';
+import {
+  switchMap,
+  map,
+  filter,
+  catchError,
+  ignoreElements,
+  EMPTY,
+} from 'rxjs';
 import { FlexModule } from '@angular/flex-layout';
 import { LoadingIndicatorComponent } from '@app/standalone/loading-indicator/loading-indicator.component';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -55,6 +62,7 @@ import { MatCard } from '@angular/material/card';
 import { BackButtonComponent } from '@app/standalone/back-button/back-button.component';
 import {
   Content,
+  CreatorQuestionnaireContentUpdatedGql,
   DeleteQuestionnaireGql,
   Questionnaire,
   QuestionnaireContentsByQuestionnaireIdDocument,
@@ -137,6 +145,9 @@ export class QuestionnairePageComponent {
     ResetQuestionnaireResultsGql
   );
   private readonly questionnaireById = inject(QuestionnaireByIdGql);
+  private readonly questionnaireContentUpdated = inject(
+    CreatorQuestionnaireContentUpdatedGql
+  );
 
   readonly userRole = input.required<UserRole>();
   readonly roomId = input.required<string>();
@@ -161,6 +172,18 @@ export class QuestionnairePageComponent {
           variables: { questionnaireId: questionnaireId },
         }).valueChanges;
       })
+    )
+  );
+  private readonly contentUpdates = toSignal(
+    toObservable(this.questionnaireId).pipe(
+      switchMap((questionnaireId) =>
+        this.questionnaireContentUpdated
+          .subscribe({ variables: { questionnaireId } })
+          .pipe(
+            ignoreElements(),
+            catchError(() => EMPTY)
+          )
+      )
     )
   );
   readonly contents = computed(() => {
@@ -271,7 +294,9 @@ export class QuestionnairePageComponent {
   }
 
   private navigateToFirstContent() {
+    const questionnaire = this.questionnaire();
     if (
+      questionnaire &&
       this.isDesktop &&
       this.selectedContentId() === undefined &&
       !this.showLeaderboard &&
@@ -280,11 +305,26 @@ export class QuestionnairePageComponent {
       !this.editMode &&
       this.contents().length > 0
     ) {
-      this.router.navigate([this.contents()[0].id], {
-        relativeTo: this.route,
-        replaceUrl: true,
-      });
+      this.router.navigate(
+        [this.startedContentId(questionnaire) ?? this.contents()[0].id],
+        { relativeTo: this.route, replaceUrl: true }
+      );
     }
+  }
+
+  /** The content a live questionnaire is running, if it is one of the list. */
+  private startedContentId(questionnaire: Questionnaire): string | undefined {
+    const round = questionnaire.activeRound;
+    if (
+      questionnaire.publishingMode !== QuestionnairePublishingMode.Live ||
+      !round?.contentId ||
+      round.closed
+    ) {
+      return undefined;
+    }
+    return this.contents().some((c) => c.id === round.contentId)
+      ? round.contentId
+      : undefined;
   }
 
   generateExportFilename(extension: string): string {
@@ -444,8 +484,8 @@ export class QuestionnairePageComponent {
     });
   }
 
-  handleActiveContentChanged(id?: string): void {
-    if (this.selectedContentId() !== id && !this.childActive) {
+  navToContent(id: string): void {
+    if (this.selectedContentId() !== id) {
       this.router.navigate(['.', id], { relativeTo: this.route });
     }
   }
