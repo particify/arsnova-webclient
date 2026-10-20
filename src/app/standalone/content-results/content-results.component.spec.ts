@@ -7,6 +7,7 @@ import {
   Content,
   ContentType,
   CurrentUserWithSettingsGql,
+  QuestionnaireRoundsByContentIdGql,
   Round,
   UserUiSettings,
 } from '@gql/generated/graphql';
@@ -39,6 +40,7 @@ describe('ContentResultsComponent', () => {
   let fixture: ComponentFixture<ContentResultsComponent>;
   let component: ContentResultsComponent;
   let contentResultsService: ContentResultsService;
+  let refetchRounds: jasmine.Spy;
 
   interface SetUpOptions {
     content?: Partial<Content>;
@@ -51,6 +53,7 @@ describe('ContentResultsComponent', () => {
    * handed to the format's results component is exercised.
    */
   function setUp(options: SetUpOptions = {}) {
+    refetchRounds = jasmine.createSpy('refetch').and.resolveTo({});
     configureTestModule(
       [getTranslocoModule(), ContentResultsComponent],
       [
@@ -58,6 +61,27 @@ describe('ContentResultsComponent', () => {
         {
           provide: CurrentUserWithSettingsGql,
           useValue: { fetch: () => of({ data: {} }) },
+        },
+        {
+          provide: QuestionnaireRoundsByContentIdGql,
+          useValue: {
+            watch: () => ({
+              valueChanges: of({
+                dataState: 'complete' as const,
+                data: {
+                  questionnaireRoundsByContentId: [
+                    {
+                      __typename: 'Round',
+                      id: 'round-1',
+                      roundNo: 1,
+                      closed: false,
+                    },
+                  ],
+                },
+              }),
+              refetch: refetchRounds,
+            }),
+          },
         },
       ]
     ).compileComponents();
@@ -126,31 +150,30 @@ describe('ContentResultsComponent', () => {
     ).toBe(0);
   });
 
-  function roundClosed() {
-    return (component.componentInputs() as { roundClosed?: boolean })
-      .roundClosed;
-  }
-
-  function round(closed: boolean): Round {
-    return {
-      __typename: 'Round',
-      id: 'round-1',
-      roundNo: 1,
-      closed,
-      started: true,
-      answerable: !closed,
-    };
-  }
-
-  it('tells a chart format whether its round is closed', () => {
-    setUp({ content: { activeRound: round(true) } });
-    expect(roundClosed()).toBeTrue();
+  it('reloads the rounds once another round of the content became active', () => {
+    setUp({ content: { activeRound: { id: 'round-1' } as Round } });
+    expect(refetchRounds).not.toHaveBeenCalled();
 
     fixture.componentRef.setInput('content', {
       ...choiceContent(),
-      activeRound: round(false),
+      activeRound: { id: 'round-2' } as Round,
     });
-    expect(roundClosed()).toBeFalse();
+    fixture.detectChanges();
+
+    expect(refetchRounds).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the rounds while the same round stays active', () => {
+    setUp({ content: { activeRound: { id: 'round-1' } as Round } });
+
+    fixture.componentRef.setInput('content', {
+      ...choiceContent(),
+      answerCount: 5,
+      activeRound: { id: 'round-1' } as Round,
+    });
+    fixture.detectChanges();
+
+    expect(refetchRounds).not.toHaveBeenCalled();
   });
 
   it('lets a wordcloud ban keywords only where answers may be moderated', () => {

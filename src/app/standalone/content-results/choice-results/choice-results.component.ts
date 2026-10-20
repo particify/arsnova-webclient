@@ -2,12 +2,15 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   ChoiceContentFormatData,
+  ChoiceContentRoundStats,
   QuestionnaireChoiceRoundStatsByRoundIdGql,
   QuestionnaireChoiceRoundStatsUpdatedGql,
+  Round,
 } from '@gql/generated/graphql';
 import { onlyCompleteData } from 'apollo-angular';
-import { EMPTY, map, switchMap } from 'rxjs';
+import { combineLatest, EMPTY, map, Observable, of, switchMap } from 'rxjs';
 import { updateOn } from '@gql/helper/update-on';
+import { TranslocoService } from '@jsverse/transloco';
 import { CorrectAnswerResultsComponent } from '@app/standalone/correct-answer-results/correct-answer-results.component';
 import { ChoiceAnswerListComponent } from './choice-answer-list/choice-answer-list.component';
 import {
@@ -38,46 +41,70 @@ export class ChoiceResultsComponent {
   private readonly choiceRoundStatsUpdated = inject(
     QuestionnaireChoiceRoundStatsUpdatedGql
   );
-  readonly roundId = input.required<string>();
-  /** A closed round's answers cannot change, so it needs no updates. */
-  readonly roundClosed = input(false);
+  private readonly translateService = inject(TranslocoService);
+  readonly roundIds = input.required<string[]>();
+  readonly rounds = input.required<Round[]>();
   readonly hasCorrectAnswer = input(false);
   readonly formatData = input.required<ChoiceContentFormatData>();
-  /** The number of respondents, which the shares of a multiple choice relate to. */
-  readonly answerCount = input(0);
   readonly showCorrect = input(false);
   readonly resultsVisible = input(true);
   readonly answersDirectlyBelowChart = input(false);
   readonly visualizationUnitPercent = input(false);
   readonly isPresentation = input(false);
+  readonly answerCount = input(0);
+  readonly correctAnswerCount = input(0);
+  readonly abstentionCount = input(0);
+  readonly activeRoundId = input<string>();
   readonly scale = computed(() =>
     this.isPresentation() ? this.presentationService.scale() : 1
   );
-  readonly roundStats = toSignal(
-    toObservable(this.roundId).pipe(
-      switchMap((roundId) =>
-        updateOn(
-          this.roundStatsByRoundId.watch({ variables: { roundId } }),
-          this.roundClosed()
-            ? EMPTY
-            : this.choiceRoundStatsUpdated.subscribe({
-                variables: { roundId },
-              }),
-          (r) =>
-            r.data && {
-              questionnaireChoiceRoundStatsByRoundId:
-                r.data.questionnaireChoiceRoundStatsUpdated,
-            }
-        ).pipe(
-          onlyCompleteData(),
-          map((r) => r.data?.questionnaireChoiceRoundStatsByRoundId)
-        )
+
+  private statsForRound(
+    roundId: string
+  ): Observable<ChoiceContentRoundStats | null | undefined> {
+    return updateOn(
+      this.roundStatsByRoundId.watch({ variables: { roundId } }),
+      this.isClosed(roundId)
+        ? EMPTY
+        : this.choiceRoundStatsUpdated.subscribe({ variables: { roundId } }),
+      (r) =>
+        r.data && {
+          questionnaireChoiceRoundStatsByRoundId:
+            r.data.questionnaireChoiceRoundStatsUpdated,
+        }
+    ).pipe(
+      onlyCompleteData(),
+      map((r) => r.data?.questionnaireChoiceRoundStatsByRoundId)
+    );
+  }
+
+  readonly roundStatsList = toSignal(
+    toObservable(this.roundIds).pipe(
+      switchMap((roundIds) =>
+        roundIds.length
+          ? combineLatest(
+              roundIds.map((roundId) => this.statsForRound(roundId))
+            )
+          : of([])
       )
     )
   );
 
-  readonly selectionCounts = computed(
-    () => this.roundStats()?.selectionCounts ?? []
+  readonly comparingRounds = computed(() => this.roundIds().length > 1);
+  /**
+   * The answer counts are only known for the active round, so they cannot be
+   * shown for another round or for a comparison.
+   */
+  readonly showsActiveRoundOnly = computed(() => {
+    const roundIds = this.roundIds();
+    return roundIds.length === 1 && roundIds[0] === this.activeRoundId();
+  });
+  /**
+   * The respondents the shares of a multiple choice relate to. Other or
+   * compared rounds show shares of selections.
+   */
+  readonly respondentCount = computed(() =>
+    this.showsActiveRoundOnly() ? this.answerCount() || undefined : undefined
   );
   readonly options = computed(() => this.formatData().options);
   readonly labels = computed(() =>
@@ -104,26 +131,44 @@ export class ChoiceResultsComponent {
       correctIndexes.includes(index) ? (correctColor ?? color) : wrongColor
     );
   });
-  readonly visualizationData = computed(() => ({
-    labels: this.labels(),
-    datasets: [
-      {
-        values: this.selectionCounts(),
+  readonly visualizationData = computed(() => {
+    const stats = this.roundStatsList() ?? [];
+    return {
+      labels: this.labels(),
+      datasets: this.roundIds().map((roundId, i) => ({
+        values: stats[i]?.selectionCounts ?? [],
         colors: this.colors(),
-      },
-    ],
-  }));
-  readonly answerItems = computed(() =>
-    this.options().map((option, index) => ({
+        label: this.comparingRounds() ? this.roundLabel(roundId) : undefined,
+      })),
+    };
+  });
+  readonly answerItems = computed(() => {
+    const selectionCounts = this.roundStatsList()?.[0]?.selectionCounts ?? [];
+    return this.options().map((option, index) => ({
       index,
       labelLetter: this.labels()[index],
       label: option.label,
       labelRendered: option.labelRendered ?? undefined,
-      count: this.selectionCounts()[index] ?? 0,
+      count: selectionCounts[index] ?? 0,
       isCorrect:
         this.formatData().correctOptionIndexes?.includes(index) ?? false,
-    }))
-  );
+    }));
+  });
+
+  /** A closed round's answers cannot change, so it needs no updates. */
+  private isClosed(roundId: string): boolean {
+    return !!this.rounds().find((round) => round.id === roundId)?.closed;
+  }
+
+  private roundLabel(roundId: string): string {
+    const roundNo = this.rounds().find(
+      (round) => round.id === roundId
+    )?.roundNo;
+    return (
+      this.translateService.translate('content.round') +
+      (roundNo != null ? ' ' + roundNo : '')
+    );
+  }
 
   visualizationType = signal(VisualizationType.WORDCLOUD);
   VisualizationType = VisualizationType;

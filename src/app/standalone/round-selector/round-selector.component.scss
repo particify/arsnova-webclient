@@ -1,0 +1,8 @@
+@use '../../../variables' as *;
+
+.round-button {
+  padding: $spacing $spacing-1;
+  height: 100%;
+  border-radius: 20px;
+  background-color: var(--surface);
+}

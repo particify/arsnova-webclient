@@ -11,6 +11,15 @@ fragment QuestionnaireSummary on Questionnaire {
   contentCount
 }
 
+fragment Round on Round {
+  id
+  contentId
+  roundNo
+  closed
+  started
+  answerable
+}
+
 fragment QuestionnaireDetails on Questionnaire {
   id
   name
@@ -22,10 +31,7 @@ fragment QuestionnaireDetails on Questionnaire {
     position
   }
   activeRound {
-    id
-    contentId
-    roundNo
-    closed
+    ...Round
   }
   statisticsPublished
   correctOptionsPublished
@@ -38,11 +44,7 @@ fragment ContentDetails on Content {
   body
   bodyRendered
   activeRound {
-    id
-    roundNo
-    closed
-    started
-    answerable
+    ...Round
   }
   formatData {
     ... on ChoiceContentFormatData {
@@ -372,10 +374,7 @@ subscription QuestionnaireUpdated($questionnaireId: UUID!) {
       position
     }
     activeRound {
-      id
-      contentId
-      roundNo
-      closed
+      ...Round
     }
   }
 }
@@ -386,9 +385,7 @@ subscription QuestionnaireContentUpdated($questionnaireId: UUID!) {
     answerCount
     abstentionCount
     activeRound {
-      id
-      roundNo
-      closed
+      ...Round
     }
   }
 }
@@ -400,9 +397,7 @@ subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
     abstentionCount
     correctAnswerCount
     activeRound {
-      id
-      roundNo
-      closed
+      ...Round
     }
   }
 }
@@ -424,11 +419,14 @@ mutation StartQuestionnaireContent($contentId: UUID!) {
   startQuestionnaireContent(contentId: $contentId) {
     id
     activeRound {
-      id
-      roundNo
-      closed
-      started
+      ...Round
     }
+  }
+}
+
+mutation StartQuestionnaireContentRound($contentId: UUID!) {
+  startQuestionnaireContentRound(contentId: $contentId) {
+    ...Round
   }
 }
 
@@ -436,10 +434,14 @@ mutation StopQuestionnaireContent($questionnaireId: UUID!) {
   stopQuestionnaireContent(questionnaireId: $questionnaireId) {
     id
     activeRound {
-      id
-      roundNo
-      closed
+      ...Round
     }
+  }
+}
+
+query QuestionnaireRoundsByContentId($contentId: UUID!) {
+  questionnaireRoundsByContentId(contentId: $contentId) {
+    ...Round
   }
 }
 

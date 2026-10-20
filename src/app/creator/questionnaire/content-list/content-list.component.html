@@ -214,12 +214,14 @@
                               'creator.content.stop-content-to-delete-answers'
                                 | transloco
                             "
-                            [matTooltipDisabled]="true"
+                            [matTooltipDisabled]="
+                              canModifyAnswersOrRounds(content)
+                            "
                           >
                             <button
                               mat-menu-item
                               (click)="deleteAnswers(content)"
-                              [disabled]="true"
+                              [disabled]="!canModifyAnswersOrRounds(content)"
                             >
                               <mat-icon>clear_all</mat-icon>
                               <span>{{
@@ -228,26 +230,21 @@
                             </button>
                           </div>
                         }
-                        @if (
-                          hasFormatRounds(content.formatData.format) &&
-                          !isLiveMode()
-                        ) {
+                        @if (supportsRounds(content)) {
                           <div
                             [matTooltip]="
-                              'creator.content.starting-new-round-not-possible'
+                              'creator.content.stop-content-to-start-new-round'
                                 | transloco
                             "
                             [matTooltipDisabled]="
-                              content.activeRound?.roundNo === 1
+                              canModifyAnswersOrRounds(content)
                             "
                             matTooltipPosition="before"
                           >
                             <button
                               mat-menu-item
-                              [disabled]="
-                                content.activeRound &&
-                                content.activeRound.roundNo > 1
-                              "
+                              (click)="startNewRound(content.id)"
+                              [disabled]="!canModifyAnswersOrRounds(content)"
                             >
                               <mat-icon>replay</mat-icon>
                               {{

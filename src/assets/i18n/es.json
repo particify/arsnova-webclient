@@ -500,8 +500,6 @@
     "a11y-type-likert": "Likert",
     "a11y-type-text": "Texto",
     "a11y-choice-evaluation": "Respuesta {{label}}: {{answer}}.",
-    "a11y-multiple-round-counts": "{{countRoundA}} respuestas en ronda 1, {{countRoundB}} respuestas en ronda 2",
-    "a11y-single-round-count": "{{count}} respuestas",
     "a11y-text-evaluation": "{{count}} personas han respondido con {{answer}}.",
     "a11y-no-more-answers": "No hay más respuestas. Presiona la tecla de flecha derecha para ir a la siguiente.",
     "a11y-correct": "La respuesta es correcta.",

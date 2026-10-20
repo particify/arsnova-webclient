@@ -36,6 +36,9 @@ export class ContentResultsService {
   private readonly _activeWordcloudVisualization = signal<string>(
     VisualizationType.WORDCLOUD
   );
+  private readonly _presentationSelectedRoundIdsByContentId = signal<
+    Record<string, string[]>
+  >({});
 
   readonly resultsVisible = computed(() => this._resultsVisible());
   readonly correctResultsVisible = computed(() =>
@@ -54,5 +57,28 @@ export class ContentResultsService {
 
   setActiveWordcloudVizualization(visualization: string) {
     this._activeWordcloudVisualization.set(visualization);
+  }
+
+  presentationSelectedRoundIds(contentId: string): string[] | undefined {
+    return this._presentationSelectedRoundIdsByContentId()[contentId];
+  }
+
+  /** Forgets the selection of a content, or of every content without one. */
+  clearPresentationSelectedRoundIds(contentId?: string) {
+    this._presentationSelectedRoundIdsByContentId.update((byContentId) => {
+      if (!contentId) {
+        return {};
+      }
+      const others = { ...byContentId };
+      delete others[contentId];
+      return others;
+    });
+  }
+
+  setPresentationSelectedRoundIds(contentId: string, roundIds: string[]) {
+    this._presentationSelectedRoundIdsByContentId.update((byContentId) => ({
+      ...byContentId,
+      [contentId]: roundIds,
+    }));
   }
 }

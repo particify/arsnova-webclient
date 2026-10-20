@@ -5,6 +5,7 @@ import { ContentGroupService } from '@app/core/services/http/content-group.servi
 import { ContentService } from '@app/core/services/http/content.service';
 import { FormattingService } from '@app/core/services/http/formatting.service';
 import { DialogService } from '@app/core/services/util/dialog.service';
+import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import {
   Content,
@@ -17,10 +18,12 @@ import {
   PublishQuestionnaireUpToContentGql,
   Questionnaire,
   QuestionnairePublishingMode,
+  QuestionnaireRoundsByContentIdDocument,
   QuestionnairesByRoomIdGql,
   QuestionnaireType,
   ResetBannedQuestionnaireWordcloudContentKeywordsGql,
   StartQuestionnaireContentGql,
+  StartQuestionnaireContentRoundGql,
   StopQuestionnaireContentGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
@@ -106,6 +109,7 @@ describe('ContentListComponent', () => {
     dialogService = jasmine.createSpyObj('DialogService', [
       'openDeleteDialog',
       'openQuestionnaireCreationDialog',
+      'openStartNewRoundDialog',
     ]);
     notificationService = jasmine.createSpyObj('NotificationService', [
       'showAdvanced',
@@ -133,6 +137,7 @@ describe('ContentListComponent', () => {
         mutationSpy(UpdateQuestionnaireContentOrderGql),
         mutationSpy(PublishQuestionnaireUpToContentGql),
         mutationSpy(StartQuestionnaireContentGql),
+        mutationSpy(StartQuestionnaireContentRoundGql),
         mutationSpy(StopQuestionnaireContentGql),
       ]
     ).compileComponents();
@@ -406,6 +411,33 @@ describe('ContentListComponent', () => {
     ).toContain({ index: 2 });
   });
 
+  it('reloads the rounds of the content once its answers are deleted', () => {
+    setUp();
+    const contentResultsService = TestBed.inject(ContentResultsService);
+    contentResultsService.setPresentationSelectedRoundIds(contents[1].id, [
+      'round-1',
+      'round-2',
+    ]);
+
+    component.deleteAnswers(contents[1]);
+    (
+      dialogService.openDeleteDialog.calls.mostRecent()
+        .args[4] as () => Observable<unknown>
+    )().subscribe();
+    const { refetchQueries, update } = mutation(
+      DeleteQuestionnaireAnswersByContentIdGql
+    ).calls.mostRecent().args[0];
+    (update as () => void)();
+
+    expect(refetchQueries).toContain({
+      query: QuestionnaireRoundsByContentIdDocument,
+      variables: { contentId: contents[1].id },
+    });
+    expect(
+      contentResultsService.presentationSelectedRoundIds(contents[1].id)
+    ).toBeUndefined();
+  });
+
   describe('publishing range', () => {
     const upTo = (position: number) =>
       questionnaire({
@@ -607,6 +639,78 @@ describe('ContentListComponent', () => {
       );
 
       expect(liveRows()).toEqual([]);
+    });
+  });
+
+  describe('rounds', () => {
+    const live = questionnaire({
+      publishingMode: QuestionnairePublishingMode.Live,
+    });
+    const withRound = (closed: boolean) =>
+      ({
+        ...contents[0],
+        activeRound: { id: 'round-1', roundNo: 1, closed, answerable: !closed },
+      }) as Content;
+
+    it('starts a new round once confirmed', () => {
+      setUp();
+      const started = jasmine.createSpy('startedContentChanged');
+      component.startedContentChanged.subscribe(started);
+      dialogService.openStartNewRoundDialog.and.returnValue({
+        afterClosed: () => of(true),
+      } as never);
+
+      component.startNewRound('c-1');
+
+      const confirmAction =
+        dialogService.openStartNewRoundDialog.calls.mostRecent()
+          .args[0] as () => Observable<unknown>;
+      confirmAction().subscribe();
+      expect(
+        mutation(StartQuestionnaireContentRoundGql).calls.mostRecent().args[0]
+          .variables
+      ).toEqual({ contentId: 'c-1' });
+      expect(started).toHaveBeenCalledWith('c-1');
+      expect(notificationService.showAdvanced).toHaveBeenCalled();
+    });
+
+    it('starts no round when cancelled', () => {
+      setUp();
+      const started = jasmine.createSpy('startedContentChanged');
+      component.startedContentChanged.subscribe(started);
+      dialogService.openStartNewRoundDialog.and.returnValue({
+        afterClosed: () => of(false),
+      } as never);
+
+      component.startNewRound('c-1');
+
+      expect(started).not.toHaveBeenCalled();
+    });
+
+    it('allows changing answers and rounds freely outside live mode', () => {
+      setUp();
+
+      expect(component.canModifyAnswersOrRounds(withRound(false))).toBeTrue();
+    });
+
+    it('allows changing answers and rounds in live mode only after a round', () => {
+      setUp(live);
+
+      expect(component.canModifyAnswersOrRounds(withRound(false))).toBeFalse();
+      expect(component.canModifyAnswersOrRounds(withRound(true))).toBeTrue();
+      expect(component.canModifyAnswersOrRounds(contents[0])).toBeFalse();
+    });
+
+    it('offers rounds only for formats whose results support them', () => {
+      setUp();
+
+      expect(component.supportsRounds(contents[0])).toBeTrue();
+      expect(
+        component.supportsRounds({
+          ...contents[0],
+          formatData: { format: ContentType.Slide },
+        } as Content)
+      ).toBeFalse();
     });
   });
 });

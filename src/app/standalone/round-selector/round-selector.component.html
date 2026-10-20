@@ -1,0 +1,21 @@
+@if (rounds().length > 1) {
+  <button
+    mat-fab
+    color="undefined"
+    extended
+    class="round-button action-button"
+    [matMenuTriggerFor]="roundMenu"
+    [matTooltip]="translationKey() | transloco: { rounds: roundsLabel() }"
+  >
+    {{ 'content.round' | transloco }}&nbsp;{{ roundsLabel() }}
+  </button>
+  <mat-menu #roundMenu="matMenu">
+    @for (round of rounds(); track round.id) {
+      <button mat-menu-item (click)="toggleRound(round.id)">
+        <span [ngClass]="{ 'selected-menu-item': isSelected(round.id) }">
+          {{ 'content.round' | transloco }}&nbsp;{{ round.roundNo }}
+        </span>
+      </button>
+    }
+  </mat-menu>
+}

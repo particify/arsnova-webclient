@@ -68,6 +68,37 @@ test.describe('participant questionnaire live sync', () => {
     await expect(participant.getFirstRadioButton()).toBeDisabled();
   });
 
+  test('restarting the same round keeps existing answers, a new round clears them', async ({
+    page,
+    baseURL,
+  }) => {
+    await mockGraphqlApi.mockQuestionnaire({
+      publishingMode: 'LIVE',
+      contentCount: 2,
+      publishedUpToPosition: 0,
+      activeContentPosition: 0,
+      answeredPositions: [0],
+    });
+    const participant = new QuestionnairePage(page, baseURL);
+    await participant.goto(SHORT_ID, MOCK_QUESTIONNAIRE_ID);
+    await expect(participant.getHintAfterAnswering()).toBeVisible();
+
+    await mockGraphqlApi.update({ activeRoundClosed: true });
+    await expect(participant.getSubmitButton()).toBeHidden();
+
+    await mockGraphqlApi.update({ activeRoundClosed: false });
+    await expect(participant.getHintAfterAnswering()).toBeVisible();
+    await expect(participant.getFirstRadioButton()).toBeDisabled();
+
+    await mockGraphqlApi.update({
+      roundCounts: { 0: 2 },
+      answeredPositions: [],
+    });
+    await expect(participant.getHintAfterAnswering()).toBeHidden();
+    await expect(participant.getSubmitButton()).toBeVisible();
+    await expect(participant.getFirstRadioButton()).toBeEnabled();
+  });
+
   test('starting the next content moves the participant along', async ({
     page,
     baseURL,

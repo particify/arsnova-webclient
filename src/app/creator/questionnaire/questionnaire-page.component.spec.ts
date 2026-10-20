@@ -19,11 +19,13 @@ import {
 import { LocalFileService } from '@app/core/services/util/local-file.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { RoutingService } from '@app/core/services/util/routing.service';
+import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import {
   Content,
   DeleteQuestionnaireGql,
   QuestionnaireByIdGql,
   QuestionnaireContentsByQuestionnaireIdGql,
+  QuestionnaireRoundsByContentIdDocument,
   QuestionnairePublishingMode,
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
@@ -366,7 +368,7 @@ describe('QuestionnairePageComponent (creator)', () => {
     expect(TestBed.inject(NotificationService).showAdvanced).toHaveBeenCalled();
   });
 
-  it('drops the cached round stats once the results are reset', () => {
+  it('reloads every round once the results are reset', () => {
     setUp();
     const resetResults = TestBed.inject(
       ResetQuestionnaireResultsGql
@@ -375,35 +377,22 @@ describe('QuestionnairePageComponent (creator)', () => {
     dialogService.openDeleteDialog.and.returnValue({
       afterClosed: () => of(false),
     } as never);
+    const contentResultsService = TestBed.inject(ContentResultsService);
+    contentResultsService.setPresentationSelectedRoundIds('c-1', ['round-1']);
     component.deleteAllAnswers();
     (
       dialogService.openDeleteDialog.calls.mostRecent()
         .args[4] as () => Observable<unknown>
     )().subscribe();
 
-    const cache = jasmine.createSpyObj('ApolloCache', ['modify']);
-    const update = resetResults.mutate.calls.mostRecent().args[0]!
-      .update as unknown as (cache: unknown) => void;
-    update(cache);
-    const { id, fields } = cache.modify.calls.mostRecent().args[0];
-    expect(id).toBe('ROOT_QUERY');
-    const DELETE = {};
-    const modifier = fields as (
-      value: unknown,
-      details: { fieldName: string; DELETE: unknown }
-    ) => unknown;
+    const { refetchQueries, update } =
+      resetResults.mutate.calls.mostRecent().args[0]!;
+    (update as unknown as () => void)();
+
+    expect(refetchQueries).toContain(QuestionnaireRoundsByContentIdDocument);
     expect(
-      modifier('stats', {
-        fieldName: 'questionnaireChoiceRoundStatsByRoundId',
-        DELETE,
-      })
-    ).toBe(DELETE);
-    expect(
-      modifier('contents', {
-        fieldName: 'questionnaireContentsByQuestionnaireId',
-        DELETE,
-      })
-    ).toBe('contents');
+      contentResultsService.presentationSelectedRoundIds('c-1')
+    ).toBeUndefined();
   });
 
   it('keeps the results when resetting is cancelled', () => {

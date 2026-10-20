@@ -14,7 +14,7 @@ import { CoreModule } from '@app/core/core.module';
 import { WordcloudComponent } from '@app/standalone/content-results/visualization/wordcloud/wordcloud.component';
 import { AnswerListComponent } from '@app/standalone/answer-list/answer-list.component';
 import { DialogService } from '@app/core/services/util/dialog.service';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
   AdvancedSnackBarTypes,
   NotificationService,
@@ -30,6 +30,7 @@ import { AnswerGridListComponent } from '@app/standalone/answer-grid-list/answer
     WordcloudComponent,
     AnswerListComponent,
     AnswerGridListComponent,
+    TranslocoPipe,
   ],
 })
 export class WordcloudResultsComponent {
@@ -49,7 +50,8 @@ export class WordcloudResultsComponent {
   private readonly mutations = mutationHelper();
 
   readonly contentId = input.required<string>();
-  readonly roundId = input.required<string>();
+  readonly roundIds = input.required<string[]>();
+  private readonly roundId = computed(() => this.roundIds()[0]);
   readonly resultsVisible = input(true);
   readonly rotateWords = input(false);
   readonly visualizationType = input(VisualizationType.WORDCLOUD);
@@ -72,6 +74,8 @@ export class WordcloudResultsComponent {
       )
     )
   );
+
+  readonly hasAnswers = computed(() => !!this.roundStats()?.words?.length);
 
   readonly visualizationData = computed(() => ({
     labels: this.roundStats()?.words ?? [],

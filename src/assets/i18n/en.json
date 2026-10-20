@@ -500,8 +500,6 @@
     "a11y-type-likert": "Likert",
     "a11y-type-text": "Text",
     "a11y-choice-evaluation": "Answer {{label}}: {{answer}}.",
-    "a11y-multiple-round-counts": "{{countRoundA}} answers in round 1, {{countRoundB}} answers in round 2",
-    "a11y-single-round-count": "{{count}} answers",
     "a11y-text-evaluation": "{{count}} persons have answered with {{answer}}.",
     "a11y-no-more-answers": "There are no more answers. Press the right arrow key to go to the next one.",
     "a11y-correct": "The answer is correct.",

@@ -50,6 +50,7 @@ export class BarChartComponent {
       datasets: data.datasets.map((ds) => ({
         data: ds.values,
         backgroundColor: ds.colors ?? [],
+        label: ds.label,
       })),
     };
   });
@@ -91,11 +92,17 @@ export class BarChartComponent {
       const data = this.chartData();
       if (!this.chart) return;
       this.chart.data.labels = data.labels;
+      // Chart.js keeps a dataset's bars only while the dataset object stays
+      // the same; a new object makes them grow in from zero again.
+      const datasets = this.chart.data.datasets;
       data.datasets.forEach((newDataset, i) => {
-        const existingDataset = this.chart!.data.datasets[i];
-        existingDataset.data = newDataset.data;
-        existingDataset.backgroundColor = newDataset.backgroundColor;
+        if (datasets[i]) {
+          Object.assign(datasets[i], newDataset);
+        } else {
+          datasets.push({ ...newDataset });
+        }
       });
+      datasets.length = data.datasets.length;
       this.chart.update();
     });
     effect(() => {
@@ -154,7 +161,7 @@ export class BarChartComponent {
 
     plugins: {
       legend: {
-        display: this.showLegend(),
+        display: this.showLegend() || this.data().datasets.length > 1,
       },
 
       datalabels: {

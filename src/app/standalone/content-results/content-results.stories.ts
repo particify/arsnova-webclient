@@ -10,23 +10,14 @@ import {
   ContentType,
   CurrentUserWithSettingsGql,
   QuestionnaireChoiceRoundStatsByRoundIdGql,
+  QuestionnaireRoundsByContentIdGql,
   QuestionnaireWordcloudRoundStatsByRoundIdGql,
   UserUiSettings,
 } from '@gql/generated/graphql';
 import { ContentResultsService } from './content-results.service';
 
 class MockContentService {
-  getAnswersDeleted() {
-    return of('deletedContentId');
-  }
-
-  getRoundStarted() {
-    return of();
-  }
-
-  hasFormatRounds() {
-    return true;
-  }
+  updateAnswerCounts() {}
 }
 
 class MockPresentationService {
@@ -57,14 +48,42 @@ const currentUserWithSettingsGqlMock = {
     }),
 };
 
-const questionnaireChoiceRoundStatsByRoundIdGqlMock = {
+const questionnaireRoundsByContentIdGqlMock = {
   watch: () => ({
     valueChanges: of({
       dataState: 'complete',
       data: {
+        questionnaireRoundsByContentId: [
+          {
+            __typename: 'Round',
+            id: 'round-1',
+            contentId: null,
+            roundNo: 1,
+            closed: true,
+          },
+          {
+            __typename: 'Round',
+            id: 'round-2',
+            contentId: null,
+            roundNo: 2,
+            closed: true,
+          },
+        ],
+      },
+    }),
+  }),
+};
+
+const questionnaireChoiceRoundStatsByRoundIdGqlMock = {
+  watch: ({ variables }: { variables: { roundId: string } }) => ({
+    valueChanges: of({
+      data: {
         questionnaireChoiceRoundStatsByRoundId: {
           __typename: 'ChoiceContentRoundStats',
-          selectionCounts: [10, 25, 15, 50],
+          selectionCounts:
+            variables.roundId === 'round-2'
+              ? [5, 30, 10, 20]
+              : [10, 25, 15, 50],
         },
       },
     }),
@@ -72,14 +91,18 @@ const questionnaireChoiceRoundStatsByRoundIdGqlMock = {
 };
 
 const questionnaireWordcloudRoundStatsByRoundIdGqlMock = {
-  watch: () => ({
+  watch: ({ variables }: { variables: { roundId: string } }) => ({
     valueChanges: of({
       dataState: 'complete',
       data: {
         questionnaireWordcloudRoundStatsByRoundId: {
           __typename: 'WordcloudContentRoundStats',
-          words: ['Angular', 'TypeScript', 'GraphQL', 'Storybook'],
-          counts: [40, 30, 20, 10],
+          words:
+            variables.roundId === 'round-2'
+              ? ['Signals', 'Angular', 'Zoneless']
+              : ['Angular', 'TypeScript', 'GraphQL', 'Storybook'],
+          counts:
+            variables.roundId === 'round-2' ? [25, 20, 15] : [40, 30, 20, 10],
         },
       },
     }),
@@ -123,6 +146,10 @@ export default {
           useValue: currentUserWithSettingsGqlMock,
         },
         {
+          provide: QuestionnaireRoundsByContentIdGql,
+          useValue: questionnaireRoundsByContentIdGqlMock,
+        },
+        {
           provide: QuestionnaireChoiceRoundStatsByRoundIdGql,
           useValue: questionnaireChoiceRoundStatsByRoundIdGqlMock,
         },
@@ -142,7 +169,6 @@ export default {
 type Story = StoryObj<ContentResultsComponent>;
 
 const baseArgs = {
-  roundId: 'roundId',
   active: true,
   directShow: true,
   isPresentation: false,
@@ -151,11 +177,20 @@ const baseArgs = {
   showCorrect: false,
 };
 
+const activeRound = {
+  __typename: 'Round' as const,
+  id: 'round-2',
+  contentId: null,
+  roundNo: 2,
+  closed: true,
+};
+
 const createChoiceContent = (multiple = false): Content => ({
   __typename: 'Content',
   id: multiple ? 'mc-multiple' : 'mc-single',
   body: multiple ? 'Multiple Choice Content' : 'Single Choice Content',
   bodyRendered: '<p>Choice Content</p>',
+  activeRound,
   formatData: {
     __typename: 'ChoiceContentFormatData',
     format: ContentType.Choice,
@@ -175,6 +210,7 @@ const wordcloudContent: Content = {
   id: 'wordcloud-content',
   body: 'Wordcloud Content',
   bodyRendered: '<p>Wordcloud Content</p>',
+  activeRound,
   formatData: {
     __typename: 'WordcloudContentFormatData',
     format: ContentType.Wordcloud,

@@ -1,5 +1,7 @@
 @if (resultsVisible()) {
-  @if (visualizationType() === VisualizationType.WORDCLOUD) {
+  @if (!hasAnswers()) {
+    <p class="hint-sm">{{ 'statistic.no-answers' | transloco }}</p>
+  } @else if (visualizationType() === VisualizationType.WORDCLOUD) {
     <app-wordcloud [data]="visualizationData()" [rotateWords]="rotateWords()">
     </app-wordcloud>
   } @else {
