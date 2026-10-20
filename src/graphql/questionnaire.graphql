@@ -66,6 +66,8 @@ fragment ContentDetails on Content {
     }
     ... on ScaleContentFormatData {
       format
+      template
+      neutralOption
     }
     ... on TextContentFormatData {
       format
@@ -111,6 +113,10 @@ fragment Answer on Answer {
       format
       selectedNumber
     }
+    ... on ScaleAnswerFormatData {
+      format
+      rating
+    }
     ... on TextAnswerFormatData {
       format
       body
@@ -151,6 +157,10 @@ fragment NumericContentRoundStats on NumericContentRoundStats {
   minimum
   maximum
   correctAnswerFraction
+}
+
+fragment ScaleContentRoundStats on ScaleContentRoundStats {
+  counts
 }
 
 fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
@@ -234,6 +244,18 @@ mutation CreateQuestionnaireNumericContent($input: CreateNumericContentInput!) {
 
 mutation UpdateQuestionnaireNumericContent($input: UpdateNumericContentInput!) {
   updateQuestionnaireNumericContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireScaleContent($input: CreateScaleContentInput!) {
+  createQuestionnaireScaleContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireScaleContent($input: UpdateScaleContentInput!) {
+  updateQuestionnaireScaleContent(input: $input) {
     ...CreatorContentDetails
   }
 }
@@ -336,6 +358,12 @@ query QuestionnaireNumericRoundStatsByRoundId($roundId: UUID!) {
   }
 }
 
+query QuestionnaireScaleRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireScaleRoundStatsByRoundId(roundId: $roundId) {
+    ...ScaleContentRoundStats
+  }
+}
+
 query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
   questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
     ...WordcloudContentRoundStats
@@ -360,6 +388,14 @@ mutation CreateQuestionnaireNumericAnswer(
 ) {
   createQuestionnaireNumericAnswer(
     input: { roundId: $roundId, selectedNumber: $selectedNumber }
+  ) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireScaleAnswer($roundId: UUID!, $rating: Int!) {
+  createQuestionnaireScaleAnswer(
+    input: { roundId: $roundId, rating: $rating }
   ) {
     ...Answer
   }
@@ -552,6 +588,12 @@ subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
 subscription QuestionnaireNumericRoundStatsUpdated($roundId: UUID!) {
   questionnaireNumericRoundStatsUpdated(roundId: $roundId) {
     ...NumericContentRoundStats
+  }
+}
+
+subscription QuestionnaireScaleRoundStatsUpdated($roundId: UUID!) {
+  questionnaireScaleRoundStatsUpdated(roundId: $roundId) {
+    ...ScaleContentRoundStats
   }
 }
 

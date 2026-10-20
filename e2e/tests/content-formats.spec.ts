@@ -17,6 +17,7 @@ test.describe('content formats', () => {
   let contentCreation: ContentCreationPage;
   let contentGroupOverview: ContentGroupOverviewPage;
   let participantContext: BrowserContext | undefined;
+  let seriesType: string;
 
   async function createSeries(
     page: Page,
@@ -24,6 +25,7 @@ test.describe('content formats', () => {
     type: string
   ) {
     creatorPage = page;
+    seriesType = type;
     roomSettings = new RoomSettingsPage(page, baseURL);
     contentCreation = new ContentCreationPage(page, baseURL);
     contentGroupOverview = new ContentGroupOverviewPage(page, baseURL);
@@ -39,7 +41,8 @@ test.describe('content formats', () => {
   async function publish(settings: { correctAnswers?: boolean } = {}) {
     await contentGroupOverview.configure({
       liveMode: false,
-      leaderboard: false,
+      // Only quizzes have a leaderboard, which would ask for a nickname first.
+      leaderboard: seriesType === 'Quiz' ? false : undefined,
       ...settings,
     });
     await contentGroupOverview.publishContentGroup();
@@ -133,6 +136,30 @@ test.describe('content formats', () => {
         participant.page.getByText('The correct answer is')
       ).toBeHidden();
       await expect(verdict(participant, 'check')).toBeHidden();
+    });
+  });
+
+  test.describe('likert', () => {
+    test.beforeEach(async ({ page, baseURL }) => {
+      await createSeries(page, baseURL, 'Survey');
+      await contentCreation.createLikertContent(
+        'My likert content',
+        'Agreement'
+      );
+      await publish();
+    });
+
+    test('an answer reaches the creator', async ({ browser, baseURL }) => {
+      const participant = await join(browser, baseURL);
+      await participant.answerLikertContent('Strongly agree');
+      await expect(participant.getHintAfterAnswering()).toBeVisible();
+      await expectAnswerCount(1);
+    });
+
+    test('a participant can abstain', async ({ browser, baseURL }) => {
+      const participant = await join(browser, baseURL);
+      await participant.answerLikertContent();
+      await expect(participant.getHintAfterAbstaining()).toBeVisible();
     });
   });
 });

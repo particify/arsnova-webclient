@@ -60,20 +60,18 @@ export class ContentCreationPage {
       const optionInput = this.page.getByPlaceholder(
         optionLabel + ' ' + (index + 1)
       );
-      if (optionInput) {
-        await optionInput.fill(option);
-      } else {
-        await this.page.getByRole('button', { name: 'Add option' }).click();
-        const optionInput = this.page.getByPlaceholder(
-          optionLabel + (index + 1)
-        );
-        if (optionInput) {
-          await optionInput.fill(option);
-        }
+      if (!(await optionInput.isVisible())) {
+        // Enter adds the next field, but only once the previous value has
+        // been taken over, which can lag under load.
+        await this.page.getByRole('button', { name: /^Add / }).click();
       }
-      await this.page.waitForTimeout(50);
+      await optionInput.fill(option);
       if (index < options.length - 1) {
         await this.page.keyboard.press('Enter');
+        await this.page
+          .getByPlaceholder(optionLabel + ' ' + (index + 2))
+          .waitFor({ timeout: 2000 })
+          .catch(() => undefined);
       }
     }
     if (correctOptions !== undefined) {

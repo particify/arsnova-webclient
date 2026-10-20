@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 import { waitForOperation } from '@e2e/fixtures/shared/graphql';
 
 export class PresentationModePage {
@@ -20,9 +20,10 @@ export class PresentationModePage {
 
   async hoverControlBar() {
     // Move mouse to bottom to ensure control bar is visible
+    const viewport = this.page.viewportSize();
     await this.page.mouse.move(
-      100,
-      (this.page.viewportSize()?.height ?? 500) - 50
+      (viewport?.width ?? 1000) / 2,
+      (viewport?.height ?? 500) - 50
     );
   }
 
@@ -85,8 +86,17 @@ export class PresentationModePage {
   }
 
   async openContentMoreMenu() {
-    await this.hoverControlBar();
-    await this.page.getByRole('button', { name: 'more' }).click();
+    // The control bar slides out of view unless hovered, so the menu is opened
+    // with its hotkey. Until the presented content has loaded, it opens an
+    // empty placeholder; retry until a real menu item shows.
+    const firstItem = this.page.getByRole('menuitem').first();
+    await expect(async () => {
+      // Escape would leave the presentation, so the menu is only toggled open.
+      if (!(await firstItem.isVisible())) {
+        await this.page.keyboard.press('m');
+      }
+      await expect(firstItem).toBeVisible({ timeout: 2000 });
+    }).toPass({ timeout: 15000 });
   }
 
   async startNewRound() {

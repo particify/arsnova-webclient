@@ -1,0 +1,7 @@
+<app-content-choice-answer
+  [(answerOptions)]="answerOptions"
+  [answered]="answered()"
+  [disabled]="disabled() || answered()"
+  [language]="language()"
+  [translateOptions]="translateLabels()"
+></app-content-choice-answer>

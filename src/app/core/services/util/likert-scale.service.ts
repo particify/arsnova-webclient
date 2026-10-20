@@ -28,7 +28,27 @@ const scaleOptionLabels = new Map([
   ],
 ]);
 
+export interface ScaleOptions {
+  /** Most positive first, so an index matches a rating. */
+  labels: string[];
+  /** False where the labels are symbols, which must not reach transloco. */
+  translate: boolean;
+}
+
 export class LikertScaleService {
+  /**
+   * Takes a string: the generated `ScaleContentTemplate` shares these values
+   * but not the type.
+   */
+  getOptions(template: string, neutralOption: boolean): ScaleOptions {
+    const optionCount = neutralOption ? 5 : 4;
+    const likertTemplate = template as LikertScaleTemplate;
+    return {
+      labels: this.getOptionLabels(likertTemplate, optionCount) ?? [],
+      translate: !this.getStaticOptionLabels(likertTemplate, optionCount),
+    };
+  }
+
   getOptionLabels(template: LikertScaleTemplate, optionCount: number) {
     const labels = this.getStaticOptionLabels(template, optionCount);
     const scaleOption = scaleOptions.get(optionCount);
