@@ -1,0 +1,17 @@
+@use '../../../../variables' as *;
+
+.info-text {
+  color: var(--on-surface-light);
+  font-size: $xs-font-size;
+}
+
+.correct-number {
+  color: var(--success);
+  font-size: 28px;
+}
+
+.statistics-container {
+  padding: $spacing-3;
+  border-radius: 8px;
+  border: 1px solid var(--grey-lighter);
+}

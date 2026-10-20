@@ -200,4 +200,30 @@ describe('BarChartComponent', () => {
 
     expect(dataLabel(0, 0)).toBe('0 %');
   });
+
+  it('keeps the x-axis labels legible without a legend when asked to', () => {
+    setUp(oneRound, { alwaysShowXAxisLabels: true });
+
+    const x = chart().config.options?.scales?.['x'] as {
+      ticks: { color: string };
+    };
+    expect(x.ticks.color).toBe('on-surface');
+  });
+
+  it('offers no tooltips without titles for the bars', () => {
+    setUp(oneRound);
+
+    expect(chart().config.options?.plugins?.tooltip?.enabled).toBeFalse();
+  });
+
+  it('titles a tooltip with the title of its bar', () => {
+    setUp(oneRound, { tooltipTitles: ['one', 'two', 'three'] });
+
+    const tooltip = chart().config.options?.plugins?.tooltip as {
+      enabled: boolean;
+      callbacks: { title: (items: { dataIndex: number }[]) => string };
+    };
+    expect(tooltip.enabled).toBeTrue();
+    expect(tooltip.callbacks.title([{ dataIndex: 1 }])).toBe('two');
+  });
 });

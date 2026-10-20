@@ -4,6 +4,7 @@ import { ChoiceContentFormComponent } from './choice-content-form/choice-content
 import { WordcloudContentFormComponent } from './wordcloud-content-form/wordcloud-content-form.component';
 import { FlashcardContentFormComponent } from './flashcard-content-form/flashcard-content-form.component';
 import { SlideContentFormComponent } from './slide-content-form/slide-content-form.component';
+import { NumericContentFormComponent } from './numeric-content-form/numeric-content-form.component';
 import { TextContentFormComponent } from './text-content-form/text-content-form.component';
 
 export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
@@ -17,7 +18,7 @@ export const FORM_REGISTRY: Record<ContentType, FormDefinition> = {
     component: FlashcardContentFormComponent,
   },
   [ContentType.Numeric]: {
-    component: ChoiceContentFormComponent,
+    component: NumericContentFormComponent,
   },
   [ContentType.Prioritization]: {
     component: ChoiceContentFormComponent,

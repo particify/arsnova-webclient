@@ -119,25 +119,29 @@ export class ContentResultsComponent {
     () => !!this.resultComponent().supportsRoundComparison
   );
 
+  private readonly scoringInputs = computed(() => ({
+    rounds: this.rounds(),
+    visualizationUnitPercent: !!this.settings().contentVisualizationUnitPercent,
+    isPresentation: this.isPresentation(),
+    showCorrect: this.correctRevealed(),
+    hasCorrectAnswer: this.content()?.hasCorrectAnswer,
+    formatData: this.content().formatData,
+    answerCount: this.content().answerCount ?? 0,
+    correctAnswerCount: this.content().correctAnswerCount ?? 0,
+    abstentionCount: this.content().abstentionCount ?? 0,
+  }));
+
   private readonly formatInputs: Partial<
     Record<ContentType, () => Record<string, unknown>>
   > = {
     [ContentType.Choice]: () => ({
-      rounds: this.rounds(),
+      ...this.scoringInputs(),
       answersDirectlyBelowChart:
         !!this.settings().contentAnswersDirectlyBelowChart,
-      visualizationUnitPercent:
-        !!this.settings().contentVisualizationUnitPercent,
-      isPresentation: this.isPresentation(),
-      showCorrect: this.correctRevealed(),
-      hasCorrectAnswer: this.content()?.hasCorrectAnswer,
-      formatData: this.content().formatData,
-      answerCount: this.content().answerCount ?? 0,
-      correctAnswerCount: this.content().correctAnswerCount ?? 0,
-      abstentionCount: this.content().abstentionCount ?? 0,
       activeRoundId: this.content().activeRound?.id,
     }),
     [ContentType.Flashcard]: () => ({ formatData: this.content().formatData }),
+    [ContentType.Numeric]: () => this.scoringInputs(),
     [ContentType.Scale]: () => ({
       rounds: this.rounds(),
       language: this.language(),

@@ -1,6 +1,7 @@
 import { Type } from '@angular/core';
 import { ContentType } from '@gql/generated/graphql';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
+import { ContentNumericParticipantComponent } from '@app/participant/content/content-numeric-participant/content-numeric-participant.component';
 import { ContentTextParticipantComponent } from '@app/participant/content/content-text-participant/content-text-participant.component';
 import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
 
@@ -13,7 +14,7 @@ export const FORMAT_REGISTRY: Record<ContentType, FormatDefinition> = {
   },
   [ContentType.Flashcard]: {},
   [ContentType.Numeric]: {
-    component: ContentChoiceParticipantComponent,
+    component: ContentNumericParticipantComponent,
   },
   [ContentType.Prioritization]: {
     component: ContentChoiceParticipantComponent,

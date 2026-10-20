@@ -177,12 +177,12 @@ export class ContentCreationPage {
     }
     if (correct !== undefined) {
       await this.page
-        .getByLabel('Correct answer', { exact: true })
+        .getByTestId('numeric-correct-number-input')
         .fill(correct.toString());
     }
     if (tolerance !== undefined) {
       await this.page
-        .getByLabel('Tolerance (optional)', { exact: true })
+        .getByTestId('numeric-tolerance-input')
         .fill(tolerance.toString());
     }
     await this.submitContent();

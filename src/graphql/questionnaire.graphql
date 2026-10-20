@@ -57,6 +57,13 @@ fragment ContentDetails on Content {
       correctOptionIndexes
       multiple
     }
+    ... on NumericContentFormatData {
+      format
+      minNumber
+      maxNumber
+      correctNumber
+      tolerance
+    }
     ... on ScaleContentFormatData {
       format
     }
@@ -100,6 +107,10 @@ fragment Answer on Answer {
       format
       selectedChoiceIndexes
     }
+    ... on NumericAnswerFormatData {
+      format
+      selectedNumber
+    }
     ... on TextAnswerFormatData {
       format
       body
@@ -128,6 +139,18 @@ fragment QuestionnaireAnswerResult on QuestionnaireAnswerResult {
 
 fragment ChoiceContentRoundStats on ChoiceContentRoundStats {
   selectionCounts
+}
+
+fragment NumericContentRoundStats on NumericContentRoundStats {
+  selectedNumbers
+  counts
+  mean
+  median
+  standardDeviation
+  variance
+  minimum
+  maximum
+  correctAnswerFraction
 }
 
 fragment WordcloudContentRoundStats on WordcloudContentRoundStats {
@@ -199,6 +222,18 @@ mutation CreateQuestionnaireChoiceContent($input: CreateChoiceContentInput!) {
 
 mutation UpdateQuestionnaireChoiceContent($input: UpdateChoiceContentInput!) {
   updateQuestionnaireChoiceContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation CreateQuestionnaireNumericContent($input: CreateNumericContentInput!) {
+  createQuestionnaireNumericContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireNumericContent($input: UpdateNumericContentInput!) {
+  updateQuestionnaireNumericContent(input: $input) {
     ...CreatorContentDetails
   }
 }
@@ -295,6 +330,12 @@ query QuestionnaireChoiceRoundStatsByRoundId($roundId: UUID!) {
   }
 }
 
+query QuestionnaireNumericRoundStatsByRoundId($roundId: UUID!) {
+  questionnaireNumericRoundStatsByRoundId(roundId: $roundId) {
+    ...NumericContentRoundStats
+  }
+}
+
 query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
   questionnaireWordcloudRoundStatsByRoundId(roundId: $roundId) {
     ...WordcloudContentRoundStats
@@ -309,6 +350,17 @@ query QuestionnaireTextAnswersByRoundId($roundId: UUID!) {
 
 mutation CreateQuestionnaireChoiceAnswer($input: CreateChoiceAnswerInput!) {
   createQuestionnaireChoiceAnswer(input: $input) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireNumericAnswer(
+  $roundId: UUID!
+  $selectedNumber: Float!
+) {
+  createQuestionnaireNumericAnswer(
+    input: { roundId: $roundId, selectedNumber: $selectedNumber }
+  ) {
     ...Answer
   }
 }
@@ -494,6 +546,12 @@ subscription CreatorQuestionnaireContentUpdated($questionnaireId: UUID!) {
 subscription QuestionnaireChoiceRoundStatsUpdated($roundId: UUID!) {
   questionnaireChoiceRoundStatsUpdated(roundId: $roundId) {
     selectionCounts
+  }
+}
+
+subscription QuestionnaireNumericRoundStatsUpdated($roundId: UUID!) {
+  questionnaireNumericRoundStatsUpdated(roundId: $roundId) {
+    ...NumericContentRoundStats
   }
 }
 

@@ -1,0 +1,56 @@
+@let _correctNumber = correctNumber();
+<div fxLayout="column" fxLayoutGap="16px">
+  @if (hasCorrectAnswer() && isPresentation()) {
+    <app-correct-answer-results
+      [show]="showCorrect()"
+      [answerCount]="answerCount()"
+      [correctAnswerCount]="correctAnswerCount()"
+      [abstentionCount]="abstentionCount()"
+    />
+  }
+  @if (resultsVisible()) {
+    <app-bar-chart
+      [data]="visualizationData()"
+      [tooltipTitles]="tooltipTitles()"
+      [scale]="scale()"
+      [showLegend]="!isPresentation()"
+      [showLabels]="true"
+      [alwaysShowXAxisLabels]="true"
+      [dataLabelMode]="visualizationUnitPercent() ? 'percent' : 'absolute'"
+    ></app-bar-chart>
+    @if (showCorrect() && _correctNumber != null) {
+      <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="4px">
+        <span class="info-text">{{
+          'answer.correct-answer-is' | transloco
+        }}</span>
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+          <b class="correct-number" data-testid="correct-number">{{
+            _correctNumber | localizeDecimalSeperator
+          }}</b>
+          @let _tolerance = tolerance();
+          @if (_tolerance) {
+            <span
+              >&plusmn;&nbsp;{{ _tolerance | localizeDecimalSeperator }}</span
+            >
+          }
+        </div>
+      </div>
+    } @else {
+      <div
+        class="statistics-container"
+        fxLayout="row wrap"
+        fxLayoutAlign="space-between"
+        fxLayoutGap="1em"
+      >
+        @for (statInfo of statInfos; track statInfo) {
+          <app-statistic-info
+            [label]="statInfo"
+            [round]="statRound()"
+            [data]="statData(statInfo)"
+            [hasAnswers]="hasAnswers()"
+          ></app-statistic-info>
+        }
+      </div>
+    }
+  }
+</div>
