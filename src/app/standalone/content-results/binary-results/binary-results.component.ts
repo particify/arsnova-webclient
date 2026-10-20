@@ -2,7 +2,6 @@ import { Component, computed, inject, input } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   combineLatest,
-  EMPTY,
   forkJoin,
   map,
   Observable,
@@ -12,6 +11,7 @@ import {
 } from 'rxjs';
 import { Apollo, onlyCompleteData } from 'apollo-angular';
 import { updateRoundOn } from '@gql/helper/recover-deleted-round';
+import { updatesOnceOpen } from '@app/standalone/content-results/round-updates';
 import { TranslocoService } from '@jsverse/transloco';
 import {
   BinaryContentFormatData,
@@ -55,6 +55,7 @@ export class BinaryResultsComponent {
 
   readonly roundIds = input.required<string[]>();
   readonly rounds = input.required<Round[]>();
+  private readonly rounds$ = toObservable(this.rounds);
   readonly formatData = input.required<BinaryContentFormatData>();
   readonly hasCorrectAnswer = input(false);
   readonly showCorrect = input(false);
@@ -79,9 +80,9 @@ export class BinaryResultsComponent {
         variables: { roundId },
         fetchPolicy: 'cache-and-network',
       }),
-      this.isClosed(roundId)
-        ? EMPTY
-        : this.binaryRoundStatsUpdated.subscribe({ variables: { roundId } }),
+      updatesOnceOpen(this.rounds$, roundId, () =>
+        this.binaryRoundStatsUpdated.subscribe({ variables: { roundId } })
+      ),
       (r) =>
         r.data && {
           questionnaireBinaryRoundStatsByRoundId:
@@ -168,11 +169,6 @@ export class BinaryResultsComponent {
       ? undefined
       : this.labels()[correctAnswer ? 0 : 1];
   });
-
-  /** A closed round's answers cannot change, so it needs no updates. */
-  private isClosed(roundId: string): boolean {
-    return !!this.rounds().find((round) => round.id === roundId)?.closed;
-  }
 
   private roundLabel(roundId: string): string {
     const roundNo = this.rounds().find(

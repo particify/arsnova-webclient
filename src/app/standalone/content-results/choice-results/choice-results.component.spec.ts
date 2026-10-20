@@ -109,6 +109,21 @@ describe('ChoiceResultsComponent', () => {
     fixture.detectChanges();
   }
 
+  it('starts the live updates once a closed round is reopened', () => {
+    setUp({ options }, { rounds: [{ id: 'round-1', closed: true } as Round] });
+    expect(roundStatsUpdated.subscribe).not.toHaveBeenCalled();
+
+    // Starting the content again reopens its round under the same id.
+    fixture.componentRef.setInput('rounds', [
+      { id: 'round-1', closed: false } as Round,
+    ]);
+    fixture.detectChanges();
+
+    expect(roundStatsUpdated.subscribe).toHaveBeenCalledWith({
+      variables: { roundId: 'round-1' },
+    });
+  });
+
   it('passes both the raw and the rendered label to the answer list', () => {
     setUp({ options: [{ label: '**A**', labelRendered: '<p><b>A</b></p>' }] });
 
