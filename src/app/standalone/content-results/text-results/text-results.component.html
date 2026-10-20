@@ -1,0 +1,11 @@
+@if (resultsVisible()) {
+  @if (!hasAnswers()) {
+    <p class="hint-sm">{{ 'statistic.no-answers' | transloco }}</p>
+  } @else {
+    <app-text-answer-list
+      [answers]="listData()"
+      [hidingAllowed]="allowAnswerModeration()"
+      (hideClicked)="hideAnswer($event)"
+    ></app-text-answer-list>
+  }
+}

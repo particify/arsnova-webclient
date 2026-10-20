@@ -45,6 +45,7 @@ test.describe('participant answer survey', () => {
       false
     );
     await contentCreation.createWordcloudContent('My wordcloud content', 2);
+    await contentCreation.createTextContent('My open question content');
     const contentGroupOverview = new ContentGroupOverviewPage(page, baseURL);
     await contentGroupOverview.configure({ liveMode: false });
     await contentGroupOverview.publishContentGroup();
@@ -89,12 +90,27 @@ test.describe('participant answer survey', () => {
     await participant.answerContent(['answer 1']);
     await expect(page.getByText('My wordcloud content')).toBeVisible();
     await participant.answerWordcloudContent(['blue']);
+    await expect(page.getByText('My open question content')).toBeVisible();
+    await participant.answerTextContent('xyz');
     await expect(page.getByText('thanks for your participation')).toBeVisible();
     await expect(page.getByText('you are in 1st place')).toBeHidden();
     await expect(page.getByText('points')).toBeHidden();
-    await expect(page.getByText('2 / 2')).toBeVisible();
+    await expect(page.getByText('3 / 3')).toBeVisible();
     await expect(page.getByText('My choice content')).toBeVisible();
     await expect(page.getByText('My wordcloud content')).toBeVisible();
+    await expect(page.getByText('My open question content')).toBeVisible();
+  });
+
+  test('answer text content', async ({ browser, baseURL }) => {
+    await joinAsParticipant(browser, baseURL, 3);
+    await participant.answerTextContent('xyz');
+    await expect(participant.getHintAfterAnswering()).toBeVisible();
+  });
+
+  test('abstain on text content', async ({ browser, baseURL }) => {
+    await joinAsParticipant(browser, baseURL, 3);
+    await participant.answerTextContent();
+    await expect(participant.getHintAfterAbstaining()).toBeVisible();
   });
 
   test('creator sees the answers in the results', async ({

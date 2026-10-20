@@ -62,6 +62,7 @@ fragment ContentDetails on Content {
     }
     ... on TextContentFormatData {
       format
+      answersPublished
     }
     ... on WordcloudContentFormatData {
       format
@@ -93,10 +94,15 @@ fragment CreatorContentDetails on Content {
 fragment Answer on Answer {
   id
   result
+  hidden
   formatData {
     ... on ChoiceAnswerFormatData {
       format
       selectedChoiceIndexes
+    }
+    ... on TextAnswerFormatData {
+      format
+      body
     }
     ... on WordcloudAnswerFormatData {
       format
@@ -213,6 +219,18 @@ mutation UpdateQuestionnaireWordcloudContent(
   }
 }
 
+mutation CreateQuestionnaireTextContent($input: CreateTextContentInput!) {
+  createQuestionnaireTextContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
+mutation UpdateQuestionnaireTextContent($input: UpdateTextContentInput!) {
+  updateQuestionnaireTextContent(input: $input) {
+    ...CreatorContentDetails
+  }
+}
+
 mutation CreateQuestionnaireFlashcardContent(
   $input: CreateFlashcardContentInput!
 ) {
@@ -283,6 +301,12 @@ query QuestionnaireWordcloudRoundStatsByRoundId($roundId: UUID!) {
   }
 }
 
+query QuestionnaireTextAnswersByRoundId($roundId: UUID!) {
+  questionnaireTextAnswersByRoundId(roundId: $roundId) {
+    ...Answer
+  }
+}
+
 mutation CreateQuestionnaireChoiceAnswer($input: CreateChoiceAnswerInput!) {
   createQuestionnaireChoiceAnswer(input: $input) {
     ...Answer
@@ -293,6 +317,12 @@ mutation CreateQuestionnaireWordcloudAnswer(
   $input: CreateWordcloudAnswerInput!
 ) {
   createQuestionnaireWordcloudAnswer(input: $input) {
+    ...Answer
+  }
+}
+
+mutation CreateQuestionnaireTextAnswer($roundId: UUID!, $body: String!) {
+  createQuestionnaireTextAnswer(input: { roundId: $roundId, body: $body }) {
     ...Answer
   }
 }
@@ -330,6 +360,27 @@ mutation BanQuestionnaireWordcloudContentKeyword(
 mutation ResetBannedQuestionnaireWordcloudContentKeywords($contentId: UUID!) {
   resetBannedQuestionnaireWordcloudContentKeywords(contentId: $contentId) {
     ...CreatorContentDetails
+  }
+}
+
+mutation ToggleQuestionnaireTextContentAnswersPublished(
+  $contentId: UUID!
+  $published: Boolean!
+) {
+  toggleQuestionnaireTextContentAnswersPublished(
+    contentId: $contentId
+    published: $published
+  ) {
+    ...ContentDetails
+  }
+}
+
+mutation ToggleQuestionnaireTextAnswerHidden(
+  $answerId: UUID!
+  $hidden: Boolean!
+) {
+  toggleQuestionnaireTextAnswerHidden(answerId: $answerId, hidden: $hidden) {
+    ...Answer
   }
 }
 
@@ -450,6 +501,12 @@ subscription QuestionnaireWordcloudRoundStatsUpdated($roundId: UUID!) {
   questionnaireWordcloudRoundStatsUpdated(roundId: $roundId) {
     words
     counts
+  }
+}
+
+subscription QuestionnaireTextAnswersUpdated($roundId: UUID!) {
+  questionnaireTextAnswersUpdated(roundId: $roundId) {
+    ...Answer
   }
 }
 

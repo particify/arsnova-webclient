@@ -50,6 +50,7 @@ import { PulsatingCircleComponent } from '@app/standalone/pulsating-circle/pulsa
 import { A11yRenderedBodyPipe } from '@app/core/pipes/a11y-rendered-body.pipe';
 import {
   Content,
+  ContentFormatData,
   ContentType,
   CopyQuestionnaireContentToQuestionnaireGql,
   DeleteQuestionnaireAnswersByContentIdGql,
@@ -70,6 +71,8 @@ import {
   StartQuestionnaireContentGql,
   StartQuestionnaireContentRoundGql,
   StopQuestionnaireContentGql,
+  TextContentFormatData,
+  ToggleQuestionnaireTextContentAnswersPublishedGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
 import { ContentPublishService } from '@app/core/services/util/content-publish.service';
@@ -164,6 +167,9 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
   );
   private readonly publishQuestionnaireContentUpTo = inject(
     PublishQuestionnaireUpToContentGql
+  );
+  private readonly toggleTextContentAnswersPublished = inject(
+    ToggleQuestionnaireTextContentAnswersPublishedGql
   );
 
   publishingDivider = viewChild<ElementRef>('publishingDivider');
@@ -516,6 +522,25 @@ export class ContentListComponent extends DragDropBaseComponent<Content> {
       content,
       groupType
     );
+  }
+
+  isText(formatData: ContentFormatData): formatData is TextContentFormatData {
+    return formatData.__typename === 'TextContentFormatData';
+  }
+
+  toggleTextAnswersPublished(content: Content) {
+    if (!this.isText(content.formatData)) {
+      return;
+    }
+    this.toggleTextContentAnswersPublished
+      .mutate({
+        variables: {
+          contentId: content.id,
+          published: !content.formatData.answersPublished,
+        },
+      })
+      .pipe(this.mutations.handleErrors())
+      .subscribe();
   }
 
   duplicateContent(id: string) {

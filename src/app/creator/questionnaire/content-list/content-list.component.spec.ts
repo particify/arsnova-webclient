@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CombinedGraphQLErrors } from '@apollo/client';
 import { Router } from '@angular/router';
 import { ContentGroupService } from '@app/core/services/http/content-group.service';
 import { ContentService } from '@app/core/services/http/content.service';
@@ -25,6 +26,7 @@ import {
   StartQuestionnaireContentGql,
   StartQuestionnaireContentRoundGql,
   StopQuestionnaireContentGql,
+  ToggleQuestionnaireTextContentAnswersPublishedGql,
   UpdateQuestionnaireContentOrderGql,
 } from '@gql/generated/graphql';
 import { ServerTimeService } from '@app/core/services/util/server-time.service';
@@ -140,6 +142,7 @@ describe('ContentListComponent', () => {
         mutationSpy(StartQuestionnaireContentGql),
         mutationSpy(StartQuestionnaireContentRoundGql),
         mutationSpy(StopQuestionnaireContentGql),
+        mutationSpy(ToggleQuestionnaireTextContentAnswersPublishedGql),
       ]
     ).compileComponents();
 
@@ -822,6 +825,73 @@ describe('ContentListComponent', () => {
       setUpRunning(inSeconds(30), false);
 
       expect(countdowns().length).toBe(0);
+    });
+  });
+
+  describe('text answers', () => {
+    const text = (answersPublished: boolean) =>
+      ({
+        ...contents[0],
+        formatData: {
+          __typename: 'TextContentFormatData',
+          format: ContentType.Text,
+          answersPublished,
+        },
+      }) as Content;
+
+    function toggled() {
+      return mutation(ToggleQuestionnaireTextContentAnswersPublishedGql);
+    }
+
+    it('publishes the answers of a text content', () => {
+      setUp();
+
+      component.toggleTextAnswersPublished(text(false));
+
+      expect(toggled().calls.mostRecent().args[0].variables).toEqual({
+        contentId: 'c-0',
+        published: true,
+      });
+    });
+
+    it('withdraws published answers of a text content', () => {
+      setUp();
+
+      component.toggleTextAnswersPublished(text(true));
+
+      expect(toggled().calls.mostRecent().args[0].variables).toEqual({
+        contentId: 'c-0',
+        published: false,
+      });
+    });
+
+    it('reports a failed toggle', () => {
+      setUp();
+      toggled().and.returnValue(
+        throwError(
+          () =>
+            new CombinedGraphQLErrors({
+              errors: [
+                {
+                  message: 'failed',
+                  extensions: { classification: 'BAD_REQUEST' },
+                },
+              ],
+            })
+        )
+      );
+
+      component.toggleTextAnswersPublished(text(false));
+
+      expect(notificationService.showOnRequestClientError).toHaveBeenCalled();
+    });
+
+    it('ignores contents of other formats', () => {
+      setUp();
+
+      component.toggleTextAnswersPublished(contents[0]);
+
+      expect(toggled()).not.toHaveBeenCalled();
     });
   });
 });

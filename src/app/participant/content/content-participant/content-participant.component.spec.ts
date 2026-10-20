@@ -6,6 +6,7 @@ import { FormattingService } from '@app/core/services/http/formatting.service';
 import { NotificationService } from '@app/core/services/util/notification.service';
 import { FocusModeService } from '@app/participant/_services/focus-mode.service';
 import { ContentChoiceParticipantComponent } from '@app/participant/content/content-choice-participant/content-choice-participant.component';
+import { ContentTextParticipantComponent } from '@app/participant/content/content-text-participant/content-text-participant.component';
 import { ContentWordcloudParticipantComponent } from '@app/participant/content/content-wordcloud-participant/content-wordcloud-participant.component';
 import {
   Answer,
@@ -15,6 +16,7 @@ import {
   ContentType,
   CreateQuestionnaireAbstentionGql,
   CreateQuestionnaireChoiceAnswerGql,
+  CreateQuestionnaireTextAnswerGql,
   CreateQuestionnaireWordcloudAnswerGql,
   CurrentUserWithSettingsGql,
   Questionnaire,
@@ -60,6 +62,14 @@ describe('ContentParticipantComponent', () => {
     formatData: { format: ContentType.Wordcloud, maxAnswers: 3 },
   } as Content;
 
+  const textContent = {
+    id: 'c-3',
+    body: 'Why?',
+    abstentionsAllowed: true,
+    activeRound: { id: 'round-3', roundNo: 1 },
+    formatData: { format: ContentType.Text },
+  } as Content;
+
   interface SetUpOptions {
     answer?: Partial<Answer>;
     inputs?: Record<string, unknown>;
@@ -88,6 +98,7 @@ describe('ContentParticipantComponent', () => {
     for (const child of [
       ContentChoiceParticipantComponent,
       ContentResultsComponent,
+      ContentTextParticipantComponent,
       ContentWordcloudParticipantComponent,
     ]) {
       TestBed.overrideComponent(child, { set: { template: '', imports: [] } });
@@ -140,6 +151,10 @@ describe('ContentParticipantComponent', () => {
         {
           provide: CreateQuestionnaireChoiceAnswerGql,
           useValue: mutationSpy('CreateQuestionnaireChoiceAnswerGql'),
+        },
+        {
+          provide: CreateQuestionnaireTextAnswerGql,
+          useValue: mutationSpy('CreateQuestionnaireTextAnswerGql'),
         },
         {
           provide: CreateQuestionnaireWordcloudAnswerGql,
@@ -300,6 +315,36 @@ describe('ContentParticipantComponent', () => {
     expect(
       answerForm(ContentWordcloudParticipantComponent).disabled()
     ).toBeTrue();
+  });
+
+  it('locks the text answer form after an abstention', () => {
+    setUp(textContent, {
+      answer: { id: 'answer-1', result: AnswerResultState.Abstained },
+    });
+
+    expect(answerForm(ContentTextParticipantComponent).disabled()).toBeTrue();
+  });
+
+  it('locks the text answer form of a round that is over', () => {
+    const round = {
+      id: 'round-3',
+      roundNo: 1,
+      started: true,
+      closed: true,
+      answerable: false,
+    };
+    setUp({ ...textContent, activeRound: round } as Content, {
+      inputs: {
+        questionnaire: {
+          id: 'q-1',
+          publishingMode: QuestionnairePublishingMode.Live,
+          activeRound: { ...round, contentId: 'c-3' },
+        },
+      },
+    });
+
+    expect(component.answeringLocked()).toBeTrue();
+    expect(answerForm(ContentTextParticipantComponent).disabled()).toBeTrue();
   });
 
   describe('in its template', () => {
