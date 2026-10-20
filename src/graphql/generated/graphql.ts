@@ -8277,6 +8277,7 @@ export type CreatorQuestionnaireContentUpdatedSubscription = {
     answerCount?: number | null;
     abstentionCount?: number | null;
     correctAnswerCount?: number | null;
+    hasAnswers: boolean;
     activeRound?: {
       __typename?: 'Round';
       id: string;
@@ -12741,6 +12742,7 @@ export const CreatorQuestionnaireContentUpdatedDocument = gql`
       answerCount
       abstentionCount
       correctAnswerCount
+      hasAnswers
       activeRound {
         ...Round
       }

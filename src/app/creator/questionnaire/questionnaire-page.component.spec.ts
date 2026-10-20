@@ -22,6 +22,7 @@ import { RoutingService } from '@app/core/services/util/routing.service';
 import { ContentResultsService } from '@app/standalone/content-results/content-results.service';
 import {
   Content,
+  CreatorQuestionnaireContentUpdatedDocument,
   DeleteQuestionnaireGql,
   QuestionnaireByIdGql,
   QuestionnaireChoiceRoundStatsByRoundIdDocument,
@@ -34,7 +35,7 @@ import {
   ResetQuestionnaireResultsGql,
   ToggleQuestionnairePublishedGql,
 } from '@gql/generated/graphql';
-import { ApolloClient, ApolloLink } from '@apollo/client';
+import { ApolloClient, ApolloLink, gql, InMemoryCache } from '@apollo/client';
 import { Apollo } from 'apollo-angular';
 import { configureTestModule } from '@testing/test.setup';
 import { getTranslocoModule } from '@testing/transloco-testing.module';
@@ -547,6 +548,44 @@ describe('QuestionnairePageComponent (creator)', () => {
 
       expect(cachedStats('round-old')).toBeNull();
     });
+  });
+
+  it('marks a content answered once its first answer is pushed', () => {
+    // The editor locks a content by its hasAnswers, read from the cached contents.
+    const answered = gql`
+      fragment Answered on Content {
+        id
+        hasAnswers
+      }
+    `;
+    const cache = new InMemoryCache();
+    cache.writeFragment({
+      fragment: answered,
+      data: { __typename: 'Content', id: 'c-1', hasAnswers: false },
+    });
+
+    cache.writeQuery({
+      query: CreatorQuestionnaireContentUpdatedDocument,
+      variables: { questionnaireId: 'q-1' },
+      data: {
+        questionnaireContentUpdated: {
+          __typename: 'Content',
+          id: 'c-1',
+          answerCount: 1,
+          abstentionCount: 0,
+          correctAnswerCount: 1,
+          hasAnswers: true,
+          activeRound: null,
+        },
+      },
+    });
+
+    expect(
+      cache.readFragment<{ hasAnswers: boolean }>({
+        fragment: answered,
+        id: 'Content:c-1',
+      })?.hasAnswers
+    ).toBeTrue();
   });
 
   it('keeps the results when resetting is cancelled', () => {
